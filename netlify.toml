@@ -1,0 +1,8 @@
+[build]
+  command = "pnpm --filter client build"
+  publish = "client/dist"
+
+[dev]
+  command = "pnpm --filter client dev"
+  port = 3000
+  targetPort = 3000

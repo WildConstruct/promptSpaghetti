@@ -1,0 +1,11 @@
+{
+  "name": "@promptscape/cli",
+  "version": "0.1.0-alpha",
+  "bin": {
+    "promptgraph": "cli.js"
+  },
+  "private": true,
+  "dependencies": {
+    "commander": "^11.0.0"
+  }
+}

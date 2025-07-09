@@ -1,0 +1,27 @@
+{
+  "name": "promptscape-graph",
+  "version": "0.1.0-alpha",
+  "private": true,
+  "description": "Monorepo for PromptScape Randomizer Graph editor and executor.",
+  "workspaces": [
+    "client",
+    "server",
+    "packages/core",
+    "packages/cli"
+  ],
+  "scripts": {
+    "postinstall": "echo 'Monorepo bootstrap complete.'",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --ignore-path .gitignore",
+    "test": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "@types/jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "pnpm": "^8.0.0"
+  }
+}

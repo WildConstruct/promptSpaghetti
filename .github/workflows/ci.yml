@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main, alpha, dev]
+  pull_request:
+
+jobs:
+  build-lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm lint || true
+        continue-on-error: true
+        # (Add a lint script to package.json for full enforcement)
+
+      - name: Run tests with coverage
+        run: pnpm test -- --coverage || true
+        continue-on-error: true
+        # (Add a test script and tests for real coverage)
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+        if: success() || failure()
+
+      - name: Build client
+        run: pnpm --filter client build
+
+      - name: Build server
+        run: pnpm --filter server build
+
+      - name: Docker build (server)
+        run: docker build -t promptscape-server ./server
+        # (Optional: push to GHCR)

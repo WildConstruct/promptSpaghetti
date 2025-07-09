@@ -1,0 +1,10 @@
+{
+  "name": "@promptscape/core",
+  "version": "0.1.0-alpha",
+  "main": "index.ts",
+  "types": "index.ts",
+  "private": true,
+  "dependencies": {
+    "zod": "^3.0.0"
+  }
+}
