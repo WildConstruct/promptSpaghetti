@@ -146,6 +146,27 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
             onConnect={onConnect}
             onNodeClick={onNodeClick}
             fitView
+            nodeTypes={{
+              default: (props) => (
+                <div
+                  style={{
+                    background: '#23272f',
+                    color: '#fff',
+                    border: '1.5px solid #444',
+                    borderRadius: 8,
+                    padding: 8,
+                    minWidth: 80,
+                    minHeight: 40,
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+                    cursor: 'move',
+                  }}
+                  {...props}
+                >
+                  {props.data?.label ?? props.id}
+                </div>
+              )
+            }}
+            nodesDraggable={true}
           >
             <MiniMap />
             <Controls />
