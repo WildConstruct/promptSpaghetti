@@ -171,11 +171,11 @@ As a product owner, I want each branch to auto-deploy a preview URL, so stakehol
   - [x] Dev server runs at `localhost:3000`
 - [x] **Story 1.4 CI Pipeline**
   - [x] GitHub Actions workflow (`.github/workflows/ci.yml`)
-  - [ ] Lint script wired into root `package.json` (TODO)
+  - [x] Lint script wired into root `package.json`
   - [ ] Jest tests & ≥ 80 % coverage (TODO)
-- [ ] **Story 1.5 Windsurf Preview Deployment**
-  - [ ] Preview deploy enabled for port 3000
-  - [ ] PR comment with preview URL
+- [x] **Story 1.5 Netlify Preview Deployment**
+  - [x] Preview deploy enabled for port 3000 (`https://marvelous-gaufre-eb69ca.netlify.app`)
+  - [ ] PR comment with preview URL (future CI enhancement)
   - [ ] Teardown on branch delete
 
 ---
@@ -223,6 +223,56 @@ As a user, I want the editor to autosave the current graph to LocalStorage every
 1. Debounced autosave writes JSON to `localStorage.graphDraft`.
 2. On load, if draft exists, prompt to restore.
 3. “Save as JSON” menu item downloads file.
+
+---
+
+### Epic 2 Progress Checklist
+
+- [ ] **Story 2.1 Core Node Library UI**
+  - [ ] Palette sidebar displays six core node icons with tooltips
+  - [ ] Drag-dropping a node onto the canvas instantiates it with defaults
+  - [ ] Node card shows title and key parameter summary
+
+- [ ] **Story 2.2 Node Connections & Validation**
+  - [ ] Edges can be drawn between output and input handles
+  - [ ] Validation rules run on change; invalid edges highlighted red
+  - [ ] Status bar shows validation error count; hover reveals messages
+
+- [ ] **Story 2.3 Node Inspector Forms**
+  - [ ] Selecting a node opens schema-driven form in Inspector sidebar
+  - [ ] Changes debounce-save to graph state and re-run validation
+
+- [ ] **Story 2.4 Preview-5 Modal**
+  - [ ] Toolbar “Preview 5” button calls `/preview` API
+  - [ ] Modal lists five outputs with seed labels
+  - [ ] Loading and error states handled gracefully
+
+- [ ] **Story 2.5 Graph JSON Autosave**
+  - [ ] Autosave writes draft to `localStorage.graphDraft` every 5 s
+  - [ ] Prompt to restore draft on load if present
+  - [ ] “Save as JSON” menu item downloads graph file
+
+---
+
+### Epic 2 Backlog / Technical Considerations
+
+- Accessibility & shortcuts
+  - ARIA labels for palette items and canvas dropzone
+  - Keyboard shortcuts for undo (⌘/Ctrl+Z) and save (⌘/Ctrl+S)
+  - Colour-blind-safe error styling (edge stroke + icon)
+- Undo/Redo history stack (max 100 actions)
+- Performance safeguards
+  - Virtualise node rendering > 500 nodes
+  - Debounce validation 500 ms when > 200 nodes
+- Validation coverage
+  - Unit tests per rule in `packages/core`
+  - Integration test on complex sample graph
+- Error messaging UX
+  - Node badges for errors in addition to status bar
+  - Tooltip overlays pulled from validation messages
+- State management strategy (mirror ReactFlow store to Zustand/Redux)
+- File format versioning (`meta.version` bump on schema changes)
+- Server API contract for `/preview` (encoded graph size limits, rate limits)
 
 ---
 

@@ -1,5 +1,7 @@
 # PromptScape Randomizer Graph
 
+[![codecov](https://codecov.io/gh/WildConstruct/prompt-spaghetti/branch/main/graph/badge.svg)](https://codecov.io/gh/WildConstruct/prompt-spaghetti)
+
 Monorepo for a node-based prompt randomizer graph editor and executor.
 
 ## Structure

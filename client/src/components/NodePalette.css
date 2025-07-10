@@ -1,0 +1,21 @@
+.node-palette {
+  width: 180px;
+  background: #f7f7f7;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+  font-family: sans-serif;
+}
+
+.palette-item {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  cursor: grab;
+  user-select: none;
+}
+
+.palette-item:active {
+  cursor: grabbing;
+}
