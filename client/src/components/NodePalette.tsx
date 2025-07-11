@@ -20,15 +20,19 @@ export default function NodePalette() {
     <aside className="node-palette">
       <h4>Node Library</h4>
       {NODE_TYPES.map((type) => (
-        <div
+        <button
           key={type}
           className="palette-item"
           onDragStart={(event) => onDragStart(event, type)}
           draggable
           title={type}
+          role="button"
+          tabIndex={0}
+          aria-label={`Add ${type} node`}
+          style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', padding: 0 }}
         >
           {type}
-        </div>
+        </button>
       ))}
     </aside>
   );

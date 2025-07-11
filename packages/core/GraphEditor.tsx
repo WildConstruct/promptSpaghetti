@@ -4,6 +4,15 @@ import "reactflow/dist/style.css";
 import { InspectorSidebar } from "./InspectorSidebar";
 import { nodeSchemas } from "./nodeSchemas";
 import { z } from "zod";
+import { Palette, NodeMeta } from "./Palette";
+import {
+  WeightedChoiceIcon,
+  ConcatIcon,
+  OutputIcon,
+  IncludeIcon,
+  SetVariableIcon,
+  GetVariableIcon,
+} from "./icons";
 
 
 // Types for node and edge validation errors
@@ -25,6 +34,45 @@ const defaultValidateConnection = (edges: Edge[], nodes: Node[]): ValidationErro
 
 import { PreviewModal } from "./PreviewModal";
 
+const NODE_TYPES: NodeMeta[] = [
+  {
+    id: "WeightedChoice",
+    label: "WeightedChoice",
+    icon: WeightedChoiceIcon,
+    tooltip: "Branch with weighted options",
+  },
+  {
+    id: "Concat",
+    label: "Concat",
+    icon: ConcatIcon,
+    tooltip: "Concatenate child prompts",
+  },
+  {
+    id: "Output",
+    label: "Output",
+    icon: OutputIcon,
+    tooltip: "Final output node",
+  },
+  {
+    id: "Include",
+    label: "Include",
+    icon: IncludeIcon,
+    tooltip: "Include another bundle",
+  },
+  {
+    id: "SetVariable",
+    label: "SetVariable",
+    icon: SetVariableIcon,
+    tooltip: "Set a variable",
+  },
+  {
+    id: "GetVariable",
+    label: "GetVariable",
+    icon: GetVariableIcon,
+    tooltip: "Read a variable",
+  },
+];
+
 export const GraphEditor: React.FC<GraphEditorProps> = ({
   initialNodes,
   initialEdges,
@@ -32,8 +80,13 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
 }) => {
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const [showRestorePrompt, setShowRestorePrompt] = useState(false);
+  const [restoreDraft, setRestoreDraft] = useState<{nodes: Node[]; edges: Edge[];}|null>(null);
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+
+  // Palette collapsed state
+  const [paletteCollapsed, setPaletteCollapsed] = useState(false);
 
   // Preview-5 modal state
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -53,9 +106,70 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
     []
   );
 
+  // Handle node drag from palette
+  const handlePaletteDragStart = (nodeId: string) => {
+    // No-op: drag data set in Palette, handled on drop
+  };
+
+  // Handle drop on canvas: create node of given type at position
+  const handleDrop = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+      const nodeType = event.dataTransfer.getData('application/node-type');
+      if (!nodeType || !(nodeType in nodeSchemas)) return;
+      const reactFlowBounds = (event.target as HTMLElement).getBoundingClientRect();
+      const position = {
+        x: event.clientX - reactFlowBounds.left,
+        y: event.clientY - reactFlowBounds.top,
+      };
+      // Use Zod schema to get default params
+      const schema = nodeSchemas[nodeType];
+      const params = schema.parse({});
+      const newNode: Node = {
+        id: `${nodeType}-${Date.now()}`,
+        type: "default",
+        position,
+        data: { ...params },
+        selected: false,
+      };
+      setNodes((nds) => [...nds, newNode]);
+    },
+    []
+  );
+
+  // Allow drop on canvas
+  const handleDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+  }, []);
+
   // Node click handler
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     setSelectedNodeId(node.id);
+  }, []);
+
+  // Autosave graph every 5s
+  React.useEffect(() => {
+    const save = () => {
+      const draft = JSON.stringify({ nodes, edges });
+      localStorage.setItem('graphDraft', draft);
+    };
+    const interval = setInterval(save, 5000);
+    return () => clearInterval(interval);
+  }, [nodes, edges]);
+
+  // Prompt to restore draft on mount
+  React.useEffect(() => {
+    const draft = localStorage.getItem('graphDraft');
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft);
+        if (Array.isArray(parsed.nodes) && Array.isArray(parsed.edges)) {
+          setRestoreDraft(parsed);
+          setShowRestorePrompt(true);
+        }
+      } catch {}
+    }
   }, []);
 
   // Run validation on edge or node change
@@ -136,16 +250,50 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
 
   return (
     <ReactFlowProvider>
-      <div style={{ height: 600, width: "100%", position: "relative", display: "flex" }}>
-        <div style={{ flex: 1, position: "relative" }}>
+      <div style={{ position: "relative", width: "100%", height: "100%" }}>
+        {showRestorePrompt && restoreDraft && (
+          <div style={{
+            position: 'absolute',
+            zIndex: 10,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(20,20,20,0.92)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <div style={{ background: '#23262b', padding: 32, borderRadius: 12, boxShadow: '0 2px 8px #0008' }}>
+              <h3 style={{ color: '#fff', marginBottom: 12 }}>Restore draft?</h3>
+              <p style={{ color: '#ccc', marginBottom: 24 }}>A saved graph draft was found. Restore it?</p>
+              <button onClick={() => {
+                setNodes(restoreDraft.nodes);
+                setEdges(restoreDraft.edges);
+                setShowRestorePrompt(false);
+              }} style={{ marginRight: 16 }}>Restore</button>
+              <button onClick={() => setShowRestorePrompt(false)}>Dismiss</button>
+            </div>
+          </div>
+        )}
+        <div style={{ display: 'flex', height: '100%' }}>
+          <Palette
+            nodes={NODE_TYPES}
+            collapsed={paletteCollapsed}
+            onToggle={() => setPaletteCollapsed((c) => !c)}
+            onDragStart={handlePaletteDragStart}
+          />
+        <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
           <ReactFlow
             nodes={nodes}
-            edges={edges.map((edge) => ({ ...edge, style: getEdgeStyle(edge) }))}
+            edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onNodeClick={onNodeClick}
             fitView
+            style={{ background: '#20232a', height: '100%' }}
             nodeTypes={{
               default: (props) => (
                 <div
@@ -160,81 +308,83 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
                     boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
                     cursor: 'move',
                   }}
-                  {...props}
+                  aria-label={(() => {
+                    const label = props.data?.label ?? props.id;
+                    const summary = Object.entries(props.data || {})
+                      .filter(([k]) => k !== 'label')
+                      .map(([k, v]) => `${k}: ${String(v)}`)
+                      .join(', ');
+                    return summary ? `${label}. ${summary}` : label;
+                  })()}
                 >
-                  {props.data?.label ?? props.id}
+                  <div style={{ fontWeight: 600 }}>{props.data?.label ?? props.id}</div>
+                  <div style={{ fontSize: 12, color: '#ccc', marginTop: 2 }}>
+                    {Object.entries(props.data || {})
+                      .filter(([k]) => k !== 'label')
+                      .map(([k, v]) => (
+                        <span key={k} style={{ marginRight: 8 }}>{k}: {String(v)}</span>
+                      ))}
+                  </div>
                 </div>
               )
             }}
-            nodesDraggable={true}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
           >
-            <MiniMap />
+            <Background color="#333" gap={16} />
+            <MiniMap nodeColor={() => '#363a45'} maskColor="#181b21BB" />
             <Controls />
-            <Background />
           </ReactFlow>
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #eee", padding: 8, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              {errorCount === 0 ? "No errors" : `${errorCount} error${errorCount > 1 ? "s" : ""}`}
-              {errorCount > 0 && (
-                <span style={{ marginLeft: 16 }}>
-                  {errors.map((err) => (
-                    <span key={err.edgeId} style={{ color: "#f00", marginRight: 8 }} title={err.message}>
-                      {err.message}
-                    </span>
-                  ))}
-                </span>
-              )}
-            </div>
-            <button
-              onClick={async () => {
-                setPreviewOpen(true);
-                setPreviewLoading(true);
-                setPreviewError(null);
-                setPreviewResults([]);
-                try {
-                  // Example payload: send current nodes/edges
-                  const res = await fetch("/server/preview", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ nodes, edges, count: 5 })
-                  });
-                  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                  const data = await res.json();
-                  // Expect: { results: Array<{ output: string, seed: number }> }
-                  setPreviewResults(data.results || []);
-                } catch (err: any) {
-                  setPreviewError(err.message || "Failed to fetch preview");
-                  setPreviewResults([
-                    { output: "[Mock output 1]", seed: 123 },
-                    { output: "[Mock output 2]", seed: 124 },
-                    { output: "[Mock output 3]", seed: 125 },
-                    { output: "[Mock output 4]", seed: 126 },
-                    { output: "[Mock output 5]", seed: 127 },
-                  ]);
-                } finally {
-                  setPreviewLoading(false);
-                }
-              }}
-              style={{ marginLeft: 16, padding: '6px 16px', background: '#007bff', color: '#fff', border: 'none', borderRadius: 4, fontWeight: 500, cursor: 'pointer' }}
-            >
-              Preview 5
-            </button>
-          </div>
         </div>
-        <InspectorSidebar
-          node={selectedNode}
-          schema={selectedSchema}
-          onChange={handleInspectorChange}
-        />
-        <PreviewModal
-          open={previewOpen}
-          loading={previewLoading}
-          error={previewError}
-          results={previewResults}
-          onClose={() => setPreviewOpen(false)}
-        />
       </div>
-    </ReactFlowProvider>
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #eee", padding: 8, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div aria-live="polite">
+          <button
+            onClick={() => {
+              const blob = new Blob([
+                JSON.stringify({ nodes, edges }, null, 2)
+              ], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'graph.json';
+              document.body.appendChild(a);
+              a.click();
+              setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              }, 0);
+            }}
+            style={{ marginRight: 16, padding: '6px 16px', background: '#eee', color: '#23272f', border: '1px solid #ccc', borderRadius: 4, fontWeight: 500, cursor: 'pointer' }}
+          >
+            Save as JSON
+          </button>
+          {errorCount === 0 ? "No errors" : `${errorCount} error${errorCount > 1 ? "s" : ""}`}
+          {errorCount > 0 && (
+            <span style={{ marginLeft: 16 }}>
+              {errors.map((err) => (
+                <span key={err.edgeId} style={{ color: "#f00", marginRight: 8 }} title={err.message}>
+                  {err.message}
+                </span>
+              ))}
+            </span>
+          )}
+        </div>
+      </div>
+      <InspectorSidebar
+        node={selectedNode}
+        schema={selectedSchema}
+        onChange={handleInspectorChange}
+      />
+      <PreviewModal
+        open={previewOpen}
+        loading={previewLoading}
+        error={previewError}
+        results={previewResults}
+        onClose={() => setPreviewOpen(false)}
+      />
+    </div>
+  </ReactFlowProvider>
   );
 };
 

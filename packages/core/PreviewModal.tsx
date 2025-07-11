@@ -16,7 +16,7 @@ interface PreviewModalProps {
 export const PreviewModal: React.FC<PreviewModalProps> = ({ open, loading, error, results, onClose }) => {
   if (!open) return null;
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0,0,0,0.4)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div role="dialog" aria-modal="true" style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0,0,0,0.4)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div style={{ background: "#fff", borderRadius: 8, padding: 24, minWidth: 400, maxWidth: 600 }}>
         <h2>Preview 5 Results</h2>
         {loading && <div>Loading...</div>}
