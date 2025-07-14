@@ -16,6 +16,38 @@ export interface InspectorSidebarProps {
 }
 
 export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema, onChange }) => {
+  const [values, setValues] = React.useState<Record<string, unknown>>({});
+  const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
+  const debounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(() => {
+    if (node) {
+      setValues({ ...node.data });
+      setFieldErrors({});
+    }
+  }, [node]);
+
+  const updateField = (key: string, val: unknown) => {
+    const newVals = { ...values, [key]: val };
+    setValues(newVals);
+
+    // Validate single field via schema.pick
+    if (schema) {
+      const fieldSchema: any = (schema as any).shape?.[key] ?? (schema as any)._def?.shape?.()[key];
+      if (fieldSchema) {
+        const parsed = fieldSchema.safeParse(val);
+        setFieldErrors((prev) => ({ ...prev, [key]: parsed.success ? "" : parsed.error.issues[0]?.message || "Invalid" }));
+      }
+    }
+
+    // Call immediately for responsiveness
+    onChange({ [key]: val });
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      onChange({ [key]: val });
+    }, 300);
+  };
+
   if (!node || !schema) {
     return (
       <aside style={{ padding: 16, width: 320, borderLeft: "1px solid #eee", background: "#fafbfc", height: "100%" }}>
@@ -55,10 +87,19 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
               <input
                 id={`field-${key}`}
                 type={zodType._def.typeName === "ZodNumber" ? "number" : "text"}
-                value={value}
-                onChange={e => onChange({ [key]: zodType._def.typeName === "ZodNumber" ? Number(e.target.value) : e.target.value })}
-                style={{ width: "100%", padding: 6, border: "1px solid #ccc", borderRadius: 4 }}
+                value={
+                  ((): any => {
+                    const v = values[key];
+                    if (v === undefined || v === null) {
+                      return zodType._def.typeName === "ZodNumber" ? 0 : "";
+                    }
+                    return v as any;
+                  })()
+                }
+                onChange={e => updateField(key, zodType._def.typeName === "ZodNumber" ? Number(e.target.value) : e.target.value)}
+                style={{ width: "100%", padding: 6, border: fieldErrors[key] ? "1px solid #f00" : "1px solid #ccc", borderRadius: 4 }}
               />
+              {fieldErrors[key] && <div style={{ color: "#f00", fontSize: 12 }}>{fieldErrors[key]}</div>}
             </div>
           );
         })}

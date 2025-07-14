@@ -3,8 +3,10 @@ import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, 
 import "reactflow/dist/style.css";
 import { InspectorSidebar } from "./InspectorSidebar";
 import { nodeSchemas } from "./nodeSchemas";
-import { z } from "zod";
+
 import { Palette, NodeMeta } from "./Palette";
+import { validateConnection as coreValidateConnection, ValidationError as ConnError } from "./validation";
+import { useGraphStore } from "./graphStore";
 import {
   WeightedChoiceIcon,
   ConcatIcon,
@@ -33,6 +35,7 @@ const defaultValidateConnection = (edges: Edge[], nodes: Node[]): ValidationErro
 };
 
 import { PreviewModal } from "./PreviewModal";
+import { usePreviewSeeds } from "./usePreviewSeeds";
 
 const NODE_TYPES: NodeMeta[] = [
   {
@@ -81,8 +84,8 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [showRestorePrompt, setShowRestorePrompt] = useState(false);
-  const [restoreDraft, setRestoreDraft] = useState<{nodes: Node[]; edges: Edge[];}|null>(null);
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [restoreDraft, setRestoreDraft] = useState<{ nodes: Node[]; edges: Edge[]; } | null>(null);
+  const [errors, setErrors] = useState<ConnError[]>([]);
   const [statusMessage, setStatusMessage] = useState<string>("");
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
@@ -136,17 +139,64 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
 
   // Preview-5 modal state
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewLoading, setPreviewLoading] = useState(false);
-  const [previewError, setPreviewError] = useState<string | null>(null);
-  const [previewResults, setPreviewResults] = useState<{ output: string; seed: number }[]>([]);
+  const { loading: previewLoading, error: previewError, results: previewResults, runPreview, cancelPreview } = usePreviewSeeds();
+  // Debounce management: track last graph change time
+  const lastChangeRef = React.useRef<number>(Date.now());
+  const previewTimeoutRef = React.useRef<number | null>(null);
+
+  // Highlighted nodes & edges from preview result hover
+  const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
+  const [highlightEdgeIds, setHighlightEdgeIds] = useState<Set<string>>(new Set());
+  // usePreviewSeeds now exposes aggregateError via error field per-seed; keep as is for compatibility
+
+
+  // Recompute validation errors when edges or nodes change
+  React.useEffect(() => {
+    const errs = coreValidateConnection(edges, nodes);
+    setErrors(errs);
+  }, [edges, nodes]);
+
+  // Derive styled edges and error count for rendering
+  // Apply highlight styles
+  const styledNodes = React.useMemo(
+    () =>
+      nodes.map((n) => {
+        const highlight = highlightNodeIds.has(n.id)
+          ? { border: '2px solid #ffd700' }
+          : {};
+        return { ...n, style: { ...n.style, ...highlight } };
+      }),
+    [nodes, highlightNodeIds]
+  );
+
+  const styledEdges = React.useMemo(
+    () =>
+      edges.map((e) => {
+        const base = errors.find((err) => err.edgeId === e.id)
+          ? { stroke: 'red', strokeWidth: 2 }
+          : {};
+        const highlight = highlightEdgeIds.has(e.id)
+          ? { stroke: '#ffd700', strokeWidth: 3 }
+          : {};
+        return { ...e, style: { ...e.style, ...base, ...highlight } };
+      }),
+    [edges, errors, highlightEdgeIds]
+  );
+  const errorCount = errors.length;
+
+  // Selected node & schema for inspector
+  const selectedNode = nodes.find((n) => n.id === selectedNodeId) || null;
+  const selectedSchema = selectedNode && selectedNode.type ? nodeSchemas[selectedNode.type as keyof typeof nodeSchemas] ?? null : null;
+
+  const handleInspectorChange = (partial: Record<string, unknown>) => {
+    if (!selectedNode) return;
+    updateNode(selectedNode.id, partial);
+  };
 
   // Edge drag handler
   const onConnect: OnConnect = useCallback(
     (connection: Connection) => {
-      setEdges((eds) => {
-        const newEdges = addEdge(connection, eds);
-        return newEdges;
-      });
+      setEdges((eds) => addEdge(connection, eds));
     },
     []
   );
@@ -157,6 +207,8 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   };
 
   // Handle drop on canvas: create node of given type at position
+  const { addNode, updateNode } = useGraphStore();
+
   const handleDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
@@ -177,7 +229,8 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
         data: { ...params },
         selected: false,
       };
-      setNodes((nds) => [...nds, newNode]);
+      addNode(newNode);
+      setNodes((prev) => [...prev, newNode]);
     },
     []
   );
@@ -213,7 +266,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
           setRestoreDraft(parsed);
           setShowRestorePrompt(true);
         }
-      } catch {}
+      } catch { }
     }
   }, []);
 
@@ -261,41 +314,9 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Highlight invalid edges
-  const getEdgeStyle = (edge: Edge) => {
-    const error = errors.find((e) => e.edgeId === edge.id);
-    return error ? { stroke: "#f00", strokeWidth: 2 } : {};
-  };
 
-  // Status bar with error count
-  const errorCount = errors.length;
 
-  // Find selected node and schema
-  const selectedNode = nodes.find((n) => n.id === selectedNodeId) || null;
-  const selectedSchema = selectedNode && selectedNode.type ? nodeSchemas[selectedNode.type] ?? null : null;
 
-  // Debounced form change handler
-  const debounceTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const handleInspectorChange = (partial: Record<string, unknown>) => {
-    if (!selectedNode) return;
-    setNodes((nds) =>
-      nds.map((n) =>
-        n.id === selectedNode.id
-          ? { ...n, data: { ...n.data, ...partial } }
-          : n
-      )
-    );
-    // run validation immediately so external validators update synchronously
-    runValidation(edges, nodes.map((n) =>
-      n.id === selectedNode.id ? { ...n, data: { ...n.data, ...partial } } : n
-    ));
-    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
-    debounceTimeout.current = setTimeout(() => {
-      runValidation(edges, nodes.map((n) =>
-        n.id === selectedNode.id ? { ...n, data: { ...n.data, ...partial } } : n
-      ));
-    }, 300);
-  };
 
   return (
     <ReactFlowProvider>
@@ -339,11 +360,18 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
             onDragStart={handlePaletteDragStart}
           />
           <div style={{ flex: 1, position: 'relative', minWidth: 0 }} data-testid="react-flow-canvas-wrapper">
-            <ReactFlow data-testid="react-flow-canvas"
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
+            <ReactFlow
+              nodes={styledNodes}
+              edges={styledEdges}
+              data-testid="react-flow-canvas"
+              onNodesChange={(changes) => {
+                lastChangeRef.current = Date.now();
+                onNodesChange(changes);
+              }}
+              onEdgesChange={(changes) => {
+                lastChangeRef.current = Date.now();
+                onEdgesChange(changes);
+              }}
               onConnect={onConnect}
               onNodeClick={onNodeClick}
               fitView
@@ -357,56 +385,94 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
               <Controls />
             </ReactFlow>
           </div>
-      </div>
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #eee", padding: 8, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div aria-live="polite">
-            {statusMessage && <span style={{ marginRight: 16 }}>{statusMessage}</span>}
-          <button
-            onClick={() => {
-              const blob = new Blob([
-                JSON.stringify({ nodes, edges }, null, 2)
-              ], { type: 'application/json' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = 'graph.json';
-              document.body.appendChild(a);
-              a.click();
-              setTimeout(() => {
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-              }, 0);
-            }}
-            style={{ marginRight: 16, padding: '6px 16px', background: '#eee', color: '#23272f', border: '1px solid #ccc', borderRadius: 4, fontWeight: 500, cursor: 'pointer' }}
-          >
-            Save as JSON
-          </button>
-          {errorCount === 0 ? "No errors" : `${errorCount} error${errorCount > 1 ? "s" : ""}`}
-          {errorCount > 0 && (
-            <span style={{ marginLeft: 16 }}>
-              {errors.map((err) => (
-                <span key={err.edgeId} style={{ color: "#f00", marginRight: 8 }} title={err.message}>
-                  {err.message}
-                </span>
-              ))}
-            </span>
-          )}
         </div>
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #eee", padding: 8, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div aria-live="polite">
+            {statusMessage && <span style={{ marginRight: 16 }}>{statusMessage}</span>}
+            <button
+              onClick={() => {
+                const now = Date.now();
+                const sinceChange = now - lastChangeRef.current;
+                const run = () => {
+                  runPreview({ nodes, edges });
+                  setPreviewOpen(true);
+                };
+                if (sinceChange < 500) {
+                  if (previewTimeoutRef.current) clearTimeout(previewTimeoutRef.current);
+                  previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
+                } else {
+                  run();
+                }
+              }}
+              style={{ marginRight: 16, padding: '6px 16px', background: '#eee', color: '#23272f', border: '1px solid #ccc', borderRadius: 4, fontWeight: 500, cursor: 'pointer' }}
+            >
+              Preview
+            </button>
+            <button
+              onClick={() => {
+                const blob = new Blob([
+                  JSON.stringify({ nodes, edges }, null, 2)
+                ], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'graph.json';
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                }, 0);
+              }}
+              style={{ marginRight: 16, padding: '6px 16px', background: '#eee', color: '#23272f', border: '1px solid #ccc', borderRadius: 4, fontWeight: 500, cursor: 'pointer' }}
+            >
+              Save as JSON
+            </button>
+            {errorCount === 0 ? "No errors" : `${errorCount} error${errorCount > 1 ? "s" : ""}`}
+            {errorCount > 0 && (
+              <span style={{ marginLeft: 16 }}>
+                {errors.map((err) => (
+                  <span key={err.edgeId} style={{ color: "#f00", marginRight: 8 }} title={err.message}>
+                    {err.message}
+                  </span>
+                ))}
+              </span>
+            )}
+          </div>
+        </div>
+        <InspectorSidebar
+          node={selectedNode}
+          schema={selectedSchema}
+          onChange={handleInspectorChange}
+        />
+        <PreviewModal
+          open={previewOpen}
+          loading={previewLoading}
+          error={previewError}
+          results={previewResults}
+          onClose={() => {
+            cancelPreview();
+            setPreviewOpen(false);
+            setHighlightEdgeIds(new Set());
+            setHighlightNodeIds(new Set());
+          }}
+          onCancel={cancelPreview}
+          onResultHover={(idx) => {
+            const res = previewResults[idx];
+            if (res?.usedEdgeIds) {
+              setHighlightEdgeIds(new Set(res.usedEdgeIds));
+            } else {
+              setHighlightEdgeIds(new Set());
+            }
+            if (res?.usedNodeIds) {
+              setHighlightNodeIds(new Set(res.usedNodeIds));
+            } else {
+              setHighlightNodeIds(new Set());
+            }
+          }}
+        />
       </div>
-      <InspectorSidebar
-        node={selectedNode}
-        schema={selectedSchema}
-        onChange={handleInspectorChange}
-      />
-      <PreviewModal
-        open={previewOpen}
-        loading={previewLoading}
-        error={previewError}
-        results={previewResults}
-        onClose={() => setPreviewOpen(false)}
-      />
-    </div>
-  </ReactFlowProvider>
+    </ReactFlowProvider>
   );
 };
 

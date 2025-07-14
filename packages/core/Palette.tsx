@@ -12,7 +12,7 @@ interface PaletteProps {
   nodes: NodeMeta[];
   collapsed: boolean;
   onToggle: () => void;
-  onDragStart: (nodeId: string) => void;
+  onDragStart?: (nodeId: string) => void;
 }
 
 export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, onDragStart }) => {
@@ -59,7 +59,10 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
             aria-label={`${node.label} - ${node.tooltip}`.trim()}
             aria-describedby={`tooltip-${node.id}`}
             aria-grabbed="false"
-            onDragStart={() => onDragStart(node.id)}
+            onDragStart={(e) => {
+              e.dataTransfer?.setData?.('application/node-type', node.id);
+              onDragStart?.(node.id);
+            }}
             title={node.tooltip}
             style={{
               display: 'flex',
@@ -75,7 +78,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                onDragStart(node.id);
+                onDragStart?.(node.id);
               }
             }}
           >

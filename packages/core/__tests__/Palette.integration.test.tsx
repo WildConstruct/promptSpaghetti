@@ -1,5 +1,7 @@
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
+import '@testing-library/jest-dom/extend-expect';
+import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+
 import { GraphEditor } from "../GraphEditor";
 import { Node, Edge } from "reactflow";
 
@@ -25,7 +27,7 @@ describe("Palette sidebar integration", () => {
       "SetVariable",
       "GetVariable"
     ].forEach(label => {
-      expect(getPaletteItem(label)).toBeInTheDocument();
+      expect(getPaletteItem(label)).toBeTruthy();
     });
   });
 
@@ -34,9 +36,9 @@ describe("Palette sidebar integration", () => {
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
     );
     const concatBtn = getPaletteItem("Concat");
-    expect(concatBtn).toHaveAttribute('aria-label', expect.stringContaining('Concatenate'));
+    expect(concatBtn.getAttribute('aria-label')).toMatch(/Concatenate/i);
     concatBtn.focus();
-    expect(concatBtn).toHaveFocus();
+    expect(document.activeElement).toBe(concatBtn);
     fireEvent.keyDown(concatBtn, { key: 'Enter' });
     // No error should be thrown; drag is handled by mouse, but keyboard triggers are wired
   });
@@ -47,7 +49,7 @@ describe("Palette sidebar integration", () => {
     );
     const outputBtn = getPaletteItem("Output");
     // Simulate drag and drop
-    fireEvent.dragStart(outputBtn);
+    fireEvent.dragStart(outputBtn, { dataTransfer: { setData: jest.fn() } } as any);
     // Simulate drop on the canvas (ReactFlow)
     const canvas = screen.getByTestId('react-flow-canvas');
     fireEvent.drop(canvas, {
@@ -58,6 +60,6 @@ describe("Palette sidebar integration", () => {
       clientY: 150,
     });
     // After drop, Output node should appear
-    expect(await screen.findByText('Output')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText('Output')).toBeTruthy(), { timeout: 1000 });
   });
 });
