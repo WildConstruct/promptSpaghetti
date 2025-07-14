@@ -8,6 +8,7 @@
     "target": "esnext",
     "moduleResolution": "node",
     "skipLibCheck": true,
+    "types": ["jest", "node"],
     "strict": true,
     "forceConsistentCasingInFileNames": true
   },

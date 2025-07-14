@@ -1,6 +1,10 @@
+/// <reference types="@testing-library/jest-dom" />
+
 import '@testing-library/jest-dom';
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+// @ts-ignore
+import userEvent from "@testing-library/user-event";
 import { GraphEditor } from "../GraphEditor";
 import { nodeSchemas } from "../nodeSchemas";
 import { Edge } from "../index";
@@ -21,19 +25,20 @@ describe("GraphEditor integration: InspectorSidebar", () => {
       />
     );
 
-    // Click node with label 'Concat' (should open InspectorSidebar)
-    const concatNode = await screen.findByText("Concat");
+        // Click node with label 'Concat' (should open InspectorSidebar)
+    const concatNode = await screen.findByTestId('node-n1');
     fireEvent.click(concatNode);
 
     // InspectorSidebar should show form for 'Concat' node
-    expect(screen.getByText(/Concat Properties/)).toBeInTheDocument();
-    const delimiterInput = screen.getByLabelText("delimiter");
-    expect(delimiterInput).toHaveValue(", ");
+    await screen.findByText(/Concat Properties/);
+    const delimiterInput = await screen.findByLabelText(/delimiter/i);
+    expect((delimiterInput as HTMLInputElement).value).toBe(", ");
 
     // Change delimiter field
-    fireEvent.change(delimiterInput, { target: { value: "; " } });
+    await userEvent.clear(delimiterInput);
+    await userEvent.type(delimiterInput, "; ");
     await waitFor(() => {
-      expect(delimiterInput).toHaveValue("; ");
+      expect((delimiterInput as HTMLInputElement).value).toBe("; ");
     });
   });
 
@@ -46,10 +51,11 @@ describe("GraphEditor integration: InspectorSidebar", () => {
         validateConnection={validateConnection}
       />
     );
-    const concatNode = await screen.findByText("Concat");
+    const concatNode = await screen.findByTestId('node-n1');
     fireEvent.click(concatNode);
-    const delimiterInput = screen.getByLabelText("delimiter");
-    fireEvent.change(delimiterInput, { target: { value: "|" } });
+    const delimiterInput = await screen.findByLabelText(/delimiter/i);
+    await userEvent.clear(delimiterInput);
+    await userEvent.type(delimiterInput, "|");
     // Wait for debounce (300ms)
     await waitFor(() => {
       expect(validateConnection).toHaveBeenCalled();

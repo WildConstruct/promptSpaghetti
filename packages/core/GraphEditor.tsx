@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange } from "reactflow";
 import "reactflow/dist/style.css";
 import { InspectorSidebar } from "./InspectorSidebar";
@@ -83,17 +83,62 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   const [showRestorePrompt, setShowRestorePrompt] = useState(false);
   const [restoreDraft, setRestoreDraft] = useState<{nodes: Node[]; edges: Edge[];}|null>(null);
   const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [statusMessage, setStatusMessage] = useState<string>("");
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   // Palette collapsed state
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
+
+  // Node types mapping (stable)
+  const nodeTypes = useMemo(() => {
+    const NodeRender: React.FC<any> = (props) => (
+      <div
+        role="button"
+        data-testid={`node-${props.id}`}
+
+        tabIndex={0}
+        onClick={() => setSelectedNodeId(props.id)}
+        style={{
+          cursor: 'pointer',
+          background: '#23272f',
+          color: '#fff',
+          border: '1.5px solid #444',
+          borderRadius: 8,
+          padding: 8,
+          minWidth: 80,
+          minHeight: 40,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+        }}
+        aria-label={(() => {
+          const label = props.data?.label ?? props.id;
+          const summary = Object.entries(props.data || {})
+            .filter(([k]) => k !== 'label')
+            .map(([k, v]) => `${k}: ${String(v)}`)
+            .join(', ');
+          return summary ? `${label}. ${summary}` : label;
+        })()}
+      >
+        <div style={{ fontWeight: 600 }}>{props.data?.label ?? props.id}</div>
+        <div style={{ fontSize: 12, color: '#ccc', marginTop: 2 }}>
+          {Object.entries(props.data || {}).map(([k, v]) => (
+            <span key={k} style={{ marginRight: 8 }}>{k}: {String(v)}</span>
+          ))}
+        </div>
+      </div>
+    );
+    const map: Record<string, any> = { default: NodeRender };
+    NODE_TYPES.forEach((t) => {
+      map[t.id] = NodeRender;
+      map[t.id.toLowerCase()] = NodeRender;
+    });
+    return map;
+  }, []);
 
   // Preview-5 modal state
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [previewError, setPreviewError] = useState<string | null>(null);
   const [previewResults, setPreviewResults] = useState<{ output: string; seed: number }[]>([]);
-
 
   // Edge drag handler
   const onConnect: OnConnect = useCallback(
@@ -240,6 +285,10 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
           : n
       )
     );
+    // run validation immediately so external validators update synchronously
+    runValidation(edges, nodes.map((n) =>
+      n.id === selectedNode.id ? { ...n, data: { ...n.data, ...partial } } : n
+    ));
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
     debounceTimeout.current = setTimeout(() => {
       runValidation(edges, nodes.map((n) =>
@@ -264,16 +313,21 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-          }}>
+          }} data-testid="restore-draft-modal">
             <div style={{ background: '#23262b', padding: 32, borderRadius: 12, boxShadow: '0 2px 8px #0008' }}>
-              <h3 style={{ color: '#fff', marginBottom: 12 }}>Restore draft?</h3>
+              <h3 style={{ color: '#fff', marginBottom: 12 }}>Restore unsaved graph draft?</h3>
               <p style={{ color: '#ccc', marginBottom: 24 }}>A saved graph draft was found. Restore it?</p>
               <button onClick={() => {
                 setNodes(restoreDraft.nodes);
                 setEdges(restoreDraft.edges);
                 setShowRestorePrompt(false);
+                setStatusMessage('Draft Restored');
+                setTimeout(() => setStatusMessage(''), 3000);
               }} style={{ marginRight: 16 }}>Restore</button>
-              <button onClick={() => setShowRestorePrompt(false)}>Dismiss</button>
+              <button onClick={() => {
+                setShowRestorePrompt(false);
+                localStorage.removeItem('graphDraft');
+              }}>Dismiss</button>
             </div>
           </div>
         )}
@@ -284,61 +338,29 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
             onToggle={() => setPaletteCollapsed((c) => !c)}
             onDragStart={handlePaletteDragStart}
           />
-        <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onNodeClick={onNodeClick}
-            fitView
-            style={{ background: '#20232a', height: '100%' }}
-            nodeTypes={{
-              default: (props) => (
-                <div
-                  style={{
-                    background: '#23272f',
-                    color: '#fff',
-                    border: '1.5px solid #444',
-                    borderRadius: 8,
-                    padding: 8,
-                    minWidth: 80,
-                    minHeight: 40,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
-                    cursor: 'move',
-                  }}
-                  aria-label={(() => {
-                    const label = props.data?.label ?? props.id;
-                    const summary = Object.entries(props.data || {})
-                      .filter(([k]) => k !== 'label')
-                      .map(([k, v]) => `${k}: ${String(v)}`)
-                      .join(', ');
-                    return summary ? `${label}. ${summary}` : label;
-                  })()}
-                >
-                  <div style={{ fontWeight: 600 }}>{props.data?.label ?? props.id}</div>
-                  <div style={{ fontSize: 12, color: '#ccc', marginTop: 2 }}>
-                    {Object.entries(props.data || {})
-                      .filter(([k]) => k !== 'label')
-                      .map(([k, v]) => (
-                        <span key={k} style={{ marginRight: 8 }}>{k}: {String(v)}</span>
-                      ))}
-                  </div>
-                </div>
-              )
-            }}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-          >
-            <Background color="#333" gap={16} />
-            <MiniMap nodeColor={() => '#363a45'} maskColor="#181b21BB" />
-            <Controls />
-          </ReactFlow>
-        </div>
+          <div style={{ flex: 1, position: 'relative', minWidth: 0 }} data-testid="react-flow-canvas-wrapper">
+            <ReactFlow data-testid="react-flow-canvas"
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onNodeClick={onNodeClick}
+              fitView
+              style={{ background: '#20232a', height: '100%' }}
+              nodeTypes={nodeTypes}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+            >
+              <Background color="#333" gap={16} />
+              <MiniMap nodeColor={() => '#363a45'} maskColor="#181b21BB" />
+              <Controls />
+            </ReactFlow>
+          </div>
       </div>
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #eee", padding: 8, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div aria-live="polite">
+            {statusMessage && <span style={{ marginRight: 16 }}>{statusMessage}</span>}
           <button
             onClick={() => {
               const blob = new Blob([

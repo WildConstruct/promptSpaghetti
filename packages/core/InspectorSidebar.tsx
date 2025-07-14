@@ -24,13 +24,22 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
     );
   }
 
-  // Generate form fields from schema
+  // Generate form fields from schema (support different Zod versions)
   let shape: Record<string, ZodTypeAny> = {};
-  if (schema && "shape" in schema) {
-    shape = (schema as any).shape;
-  } else if (schema && (schema as any)._def && (schema as any)._def.shape) {
-    // fallback for older Zod versions
-    shape = (schema as any)._def.shape();
+  if (schema) {
+    const maybeShape: any = (schema as any).shape;
+    if (typeof maybeShape === 'function') {
+      try {
+        shape = maybeShape();
+      } catch {
+        shape = {} as any;
+      }
+    } else if (maybeShape) {
+      shape = maybeShape;
+    } else if ((schema as any)._def?.shape) {
+      const s = (schema as any)._def.shape;
+      shape = typeof s === 'function' ? s() : s;
+    }
   }
 
   return (

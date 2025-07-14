@@ -56,7 +56,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
             role="button"
             tabIndex={0}
             draggable
-            aria-label={node.tooltip}
+            aria-label={`${node.label} - ${node.tooltip}`.trim()}
             aria-describedby={`tooltip-${node.id}`}
             aria-grabbed="false"
             onDragStart={() => onDragStart(node.id)}
@@ -82,7 +82,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
             {/* Visually hidden span for screen readers with tooltip */}
             <span id={`tooltip-${node.id}`} style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>{node.tooltip}</span>
             <span style={{ fontSize: 22, width: 28, textAlign: 'center' }}>{node.icon}</span>
-            {!collapsed && <span style={{ fontWeight: 500 }}>{node.label}</span>}
+
           </div>
         ))}
       </div>
