@@ -55,6 +55,54 @@ This plan captures Epic-2 delivery items plus the immediate **Must-Fix** actions
 - [x] Add docs: update source-tree.md and architecture notes
 - [x] Mark story complete in plan when all subtasks pass CI
 
+
+## Epic 3 – Executor & Integration
+| # | Story | Owner | Status |
+|---|-------|-------|--------|
+| 3.1 | **Deterministic Graph Executor** – seeded DFS traversal in `server/engine.ts` |  | [ ] Todo |
+| 3.2 | **CLI Wrapper** – `promptgraph exec graph.json --seed` |  | [ ] Todo |
+| 3.3 | **Export to GeneratorBundle** – `exporter.ts` transforms graph |  | [ ] Todo |
+| 3.4 | **Import Legacy Bundle** – bidirectional converter |  | [ ] Todo |
+| 3.5 | **Determinism Test Matrix** – golden-file snapshots across seeds |  | [ ] Todo |
+| 3.6 | **Preview API Endpoint** – Fastify `POST /preview` |  | [ ] Todo |
+
+> Blockers flagged by PO report are listed inline per story.
+
+### Story 3.1 – Deterministic Graph Executor Subtasks
+- [ ] Scaffold `server/engine.ts` and supporting types
+- [ ] Implement DFS traversal with injected PRNG (seedrandom)
+- [ ] Unit tests ≥ 90 % branch coverage
+- [ ] Benchmark sample graph performance (<500 ms)
+- [ ] Add executor dependencies to root `package.json`
+
+### Story 3.2 – CLI Wrapper Subtasks
+- [ ] Create `packages/cli/index.ts` with Commander setup
+- [ ] Support `exec` command, `--seed`, help flags
+- [ ] Exit codes 0/1/2 as per acceptance criteria
+- [ ] Integration test invoking via `npx`
+
+### Story 3.3 – Export to GeneratorBundle Subtasks
+- [ ] Implement `exporter.ts` converting graph JSON → bundle
+- [ ] Validate against Randomizer Engine JSON-schema
+- [ ] Integration test: graph → export → engine output match
+
+### Story 3.4 – Import Legacy Bundle Subtasks
+- [ ] Implement `bundleToGraph` converter
+- [ ] Round-trip test (graph→export→import)
+- [ ] Document limitations in README
+
+### Story 3.5 – Determinism Test Matrix Subtasks
+- [ ] Create Jest parameterized test across seeds 1-50
+- [ ] Snapshot outputs; failing diff fails CI
+- [ ] Add coverage thresholds to `jest.config.js`
+
+### Story 3.6 – Preview API Endpoint Subtasks
+- [ ] Add Fastify route `POST /preview`
+- [ ] Wire to executor (3.1) with `runs=N` param
+- [ ] Response schema `{seed, output}[]`
+- [ ] Add feature flag + rollback notes
+- [ ] CI pipeline step to deploy preview env
+
 ---
 ## 2. Must-Fix Items (Blockers Before Sprint-2 Kickoff)
 | # | Task | Owner | Due | Status |
