@@ -1,12 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import ReactFlow, {
+import {
+  ReactFlow,
   Background,
   Controls,
   ReactFlowProvider,
   Node,
   Edge,
   useReactFlow,
-} from 'react-flow-renderer';
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 import NodePalette from './components/NodePalette';
 import GraphNode from './components/GraphNode';
 import StatusBar from './components/StatusBar';
