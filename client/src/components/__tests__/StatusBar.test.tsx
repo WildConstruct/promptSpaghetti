@@ -9,7 +9,7 @@ describe('StatusBar Component', () => {
    */
   test('shows no errors message when errorCount is 0', () => {
     render(<StatusBar errorCount={0} />);
-    expect(screen.getByText('No errors')).toBeInTheDocument();
+    expect(screen.getByText('✅ No errors')).toBeInTheDocument();
   });
 
   /**

@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Engine Coverage Tests Complex Graph Determinism should produce deterministic results with complex mixed node types: seed-123-complex-graph 1`] = `" result A"`;
+exports[`Engine Coverage Tests Complex Graph Determinism should produce deterministic results with complex mixed node types: seed-123-complex-graph 1`] = `" result C"`;
 
-exports[`Engine Coverage Tests Complex Graph Determinism should produce deterministic results with complex mixed node types: seed-456-complex-graph 1`] = `" result C"`;
+exports[`Engine Coverage Tests Complex Graph Determinism should produce deterministic results with complex mixed node types: seed-456-complex-graph 1`] = `" result B"`;

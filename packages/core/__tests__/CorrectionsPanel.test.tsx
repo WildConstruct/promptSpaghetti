@@ -21,7 +21,7 @@ jest.mock('../correctionsStore', () => ({
 }));
 
 const mockStore = {
-  rules: [],
+  rules: [] as any[],
   addRule: jest.fn(),
   updateRule: jest.fn(),
   deleteRule: jest.fn(),
@@ -32,7 +32,7 @@ const mockStore = {
 };
 
 beforeEach(() => {
-  (useCorrectionsStore as jest.Mock).mockReturnValue(mockStore);
+  (useCorrectionsStore as unknown as jest.Mock).mockReturnValue(mockStore);
   jest.clearAllMocks();
 });
 
@@ -155,8 +155,12 @@ describe('CorrectionsPanel', () => {
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     
-    const checkbox = screen.getByRole('checkbox');
-    fireEvent.click(checkbox);
+    // Find the checkbox next to the rule name
+    const ruleContainer = screen.getByText('Test Rule').closest('div');
+    const checkbox = ruleContainer?.querySelector('input[type="checkbox"]');
+    if (checkbox) {
+      fireEvent.click(checkbox);
+    }
     
     expect(mockStore.toggleRule).toHaveBeenCalledWith('1');
   });
@@ -186,7 +190,7 @@ describe('CorrectionsPanel', () => {
       replaceWith: 'replace',
       isRegex: false,
       isActive: true,
-      priority: 0,
+      priority: 1,
     });
   });
 

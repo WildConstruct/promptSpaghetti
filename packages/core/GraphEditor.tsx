@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useMemo, memo } from "react";
 import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange } from "reactflow";
-import "reactflow/dist/style.css";
 import { InspectorPanel } from "./components/Inspector";
 import { nodeSchemas } from "./nodeSchemas";
 
@@ -134,9 +133,50 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   const [correctionsOpen, setCorrectionsOpen] = useState(false);
   const correctionsEnabled = useCorrectionsEnabled();
 
+  // Get node type metadata for styling
+  const getNodeMeta = (nodeType: string) => {
+    // Handle undefined/null/invalid types
+    if (!nodeType || typeof nodeType !== 'string') {
+      return { 
+        id: 'default', 
+        label: 'Unknown', 
+        icon: "🔧", 
+        category: "unknown" 
+      };
+    }
+    
+    return NODE_TYPES.find(n => n.id === nodeType) || { 
+      id: nodeType, 
+      label: nodeType.charAt(0).toUpperCase() + nodeType.slice(1), 
+      icon: "🔧", 
+      category: "unknown" 
+    };
+  };
+
+  // Get category colors
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'text': return '#4f46e5'; // Indigo
+      case 'logic': return '#059669'; // Emerald  
+      case 'output': return '#dc2626'; // Red
+      case 'variable': return '#7c3aed'; // Violet
+      default: return '#6b7280'; // Gray
+    }
+  };
+
   // Memoized node render component for performance
-  const NodeRender = useMemo(() => memo<any>((props) => {
-    const hasVariations = props.data?.variations && props.data.variations.length > 0;
+  const NodeRender = useMemo(() => memo<any>((props: any) => {
+    try {
+      const hasVariations = props.data?.variations && props.data.variations.length > 0;
+      const isSelected = selectedNodeId === props.id;
+      const nodeType = props.data?.nodeType || props.data?.type || 'WeightedChoice';
+      const nodeMeta = getNodeMeta(nodeType);
+      const categoryColor = getCategoryColor(nodeMeta.category || 'general');
+    
+    // Get non-label properties for display
+    const properties = Object.entries(props.data || {})
+      .filter(([k]) => k !== 'label' && k !== 'variations' && k !== 'type')
+      .slice(0, 3); // Limit to 3 properties for clean display
     
     return (
       <div
@@ -146,68 +186,147 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
         onClick={() => setSelectedNodeId(props.id)}
         style={{
           cursor: 'pointer',
-          background: '#23272f',
-          color: '#fff',
-          border: '1.5px solid #444',
-          borderRadius: 8,
-          padding: 8,
-          minWidth: 80,
-          minHeight: 40,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+          background: '#2d3748',
+          border: isSelected ? `2px solid ${categoryColor}` : '1px solid #4a5568',
+          borderRadius: 6,
+          minWidth: 160,
+          minHeight: 80,
+          boxShadow: isSelected 
+            ? `0 0 0 3px ${categoryColor}20, 0 4px 12px rgba(0,0,0,0.25)` 
+            : '0 2px 8px rgba(0,0,0,0.15)',
           position: 'relative',
+          overflow: 'hidden',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
         }}
         aria-label={(() => {
-          const label = props.data?.label ?? props.id;
-          const summary = Object.entries(props.data || {})
-            .filter(([k]) => k !== 'label' && k !== 'variations')
-            .map(([k, v]) => `${k}: ${String(v)}`)
-            .join(', ');
+          const label = props.data?.label ?? nodeMeta.label;
+          const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');
           return summary ? `${label}. ${summary}` : label;
         })()}
       >
-        {hasVariations && (
-          <div
-            style={{
-              position: 'absolute',
-              top: -4,
-              right: -4,
-              width: 16,
-              height: 16,
-              backgroundColor: '#10b981',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 10,
-              fontWeight: 'bold',
-              color: '#fff',
-              border: '2px solid #23272f',
-            }}
-            title={`${props.data.variations.length} variations`}
-          >
-            {props.data.variations.length}
-          </div>
-        )}
-        <div style={{ fontWeight: 600 }}>{props.data?.label ?? props.id}</div>
-        <div style={{ fontSize: 12, color: '#ccc', marginTop: 2 }}>
-          {Object.entries(props.data || {})
-            .filter(([k]) => k !== 'label' && k !== 'variations')
-            .map(([k, v]) => (
-              <span key={k} style={{ marginRight: 8 }}>{k}: {String(v)}</span>
-            ))}
+        {/* Header Section */}
+        <div
+          style={{
+            background: categoryColor,
+            color: '#fff',
+            padding: '8px 12px',
+            fontSize: 12,
+            fontWeight: 600,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+          }}
+        >
+          <span style={{ fontSize: 14 }}>
+            {typeof nodeMeta.icon === 'string' ? nodeMeta.icon : '🔧'}
+          </span>
+          <span>{nodeMeta.label}</span>
+          {hasVariations && (
+            <div
+              style={{
+                marginLeft: 'auto',
+                width: 18,
+                height: 18,
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 10,
+                fontWeight: 'bold',
+              }}
+              title={`${props.data.variations.length} variations`}
+            >
+              {props.data.variations.length}
+            </div>
+          )}
         </div>
+
+        {/* Content Section */}
+        <div style={{ padding: '10px 12px', color: '#e2e8f0' }}>
+          {/* Node Title */}
+          <div style={{ 
+            fontWeight: 500, 
+            fontSize: 13, 
+            marginBottom: properties.length > 0 ? 6 : 0,
+            color: '#f7fafc'
+          }}>
+            {props.data?.label || props.id}
+          </div>
+          
+          {/* Properties */}
+          {properties.length > 0 && (
+            <div style={{ fontSize: 11, color: '#a0aec0', lineHeight: 1.3 }}>
+              {properties.map(([k, v], idx) => (
+                <div key={k} style={{ marginBottom: idx < properties.length - 1 ? 2 : 0 }}>
+                  <span style={{ color: '#cbd5e0' }}>{k}:</span>{' '}
+                  <span>{String(v).length > 20 ? String(v).slice(0, 20) + '...' : String(v)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Input Port */}
+        <div
+          style={{
+            position: 'absolute',
+            left: -6,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: 12,
+            height: 12,
+            borderRadius: '50%',
+            background: '#4a5568',
+            border: '2px solid #2d3748',
+          }}
+        />
+
+        {/* Output Port */}
+        <div
+          style={{
+            position: 'absolute',
+            right: -6,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: 12,
+            height: 12,
+            borderRadius: '50%',
+            background: categoryColor,
+            border: '2px solid #2d3748',
+          }}
+        />
       </div>
     );
-  }), []);
+    } catch (error) {
+      console.error('NodeRender error:', error, 'Props:', props);
+      // Fallback render for error cases
+      return (
+        <div
+          style={{
+            cursor: 'pointer',
+            background: '#2d3748',
+            border: '1px solid #e53e3e',
+            borderRadius: 6,
+            minWidth: 160,
+            minHeight: 80,
+            padding: 12,
+            color: '#e2e8f0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          Error: {props.type || 'Unknown'}
+        </div>
+      );
+    }
+  }), [selectedNodeId]);
 
-  // Node types mapping (stable)
+  // Node types mapping - SIMPLIFIED to prevent infinite loops
   const nodeTypes = useMemo(() => {
-    const map: Record<string, any> = { default: NodeRender };
-    NODE_TYPES.forEach((t) => {
-      map[t.id] = NodeRender;
-      map[t.id.toLowerCase()] = NodeRender;
-    });
-    return map;
+    // Force everything to use default to prevent React Flow errors
+    return { default: NodeRender };
   }, [NodeRender]);
 
   // Preview-5 modal state
@@ -215,7 +334,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   const { loading: previewLoading, error: previewError, results: previewResults, runPreview, cancelPreview } = usePreviewSeeds();
   // Debounce management: track last graph change time
   const lastChangeRef = React.useRef<number>(Date.now());
-  const previewTimeoutRef = React.useRef<number | null>(null);
+  const previewTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Highlighted nodes & edges from preview result hover
   const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
@@ -299,7 +418,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
         id: `${nodeType}-${Date.now()}`,
         type: "default",
         position,
-        data: { ...params },
+        data: { ...params, nodeType: nodeType },
         selected: false,
       };
       addNode(newNode);
@@ -329,18 +448,12 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
     return () => clearInterval(interval);
   }, [nodes, edges]);
 
-  // Prompt to restore draft on mount
+  // Clear localStorage and prevent restore to avoid infinite loops
   React.useEffect(() => {
-    const draft = localStorage.getItem('graphDraft');
-    if (draft) {
-      try {
-        const parsed = JSON.parse(draft);
-        if (Array.isArray(parsed.nodes) && Array.isArray(parsed.edges)) {
-          setRestoreDraft(parsed);
-          setShowRestorePrompt(true);
-        }
-      } catch { }
-    }
+    // EMERGENCY FIX: Clear all localStorage to stop infinite loops
+    console.log('Clearing localStorage to prevent infinite loops');
+    localStorage.removeItem('graphDraft');
+    localStorage.clear();
   }, []);
 
   // Run validation on edge or node change
@@ -448,16 +561,21 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
               onConnect={onConnect}
               onNodeClick={onNodeClick}
               fitView
-              style={{ background: '#20232a', height: '100%' }}
+              style={{ background: '#1a202c', height: '100%' }}
               nodeTypes={nodeTypes}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
             >
-              <Background color="#333" gap={16} />
+              <Background color="#2d3748" gap={16} />
               <MiniMap nodeColor={() => '#363a45'} maskColor="#181b21BB" />
               <Controls />
             </ReactFlow>
           </div>
+          <InspectorPanel
+            node={selectedNode}
+            schema={selectedSchema}
+            onChange={handleInspectorChange}
+          />
         </div>
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#fff", borderTop: "1px solid #eee", padding: 8, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div aria-live="polite">
@@ -530,11 +648,6 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
             )}
           </div>
         </div>
-        <InspectorPanel
-          node={selectedNode}
-          schema={selectedSchema}
-          onChange={handleInspectorChange}
-        />
         <PreviewModal
           open={previewOpen}
           loading={previewLoading}

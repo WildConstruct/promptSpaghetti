@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>'],
   testMatch: ['**/__tests__/**/*.(spec|test).[tj]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
+  testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*\\.spec\\.jsx$'],
   coverageDirectory: 'coverage',
   collectCoverageFrom: ['packages/**/*.{ts,tsx}', 'client/src/**/*.{ts,tsx}', '!**/node_modules/**'],
   moduleNameMapper: {

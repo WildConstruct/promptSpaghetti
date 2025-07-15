@@ -1,6 +1,6 @@
 import { NodeData, NodeType, VariationConfig } from "../types/NodeTypes";
 
-export const createDefaultNodeData = (type: NodeType): Partial<NodeData> => {
+export const createDefaultNodeData = (type: NodeType): NodeData => {
   const baseData = {
     label: type,
     id: `${type}-${Date.now()}`,
@@ -100,7 +100,13 @@ export const createDefaultNodeData = (type: NodeType): Partial<NodeData> => {
       };
 
     default:
-      return baseData;
+      // This should never happen, but provide a fallback
+      return {
+        ...baseData,
+        type: "Output",
+        prompt: "",
+        outputFormat: "text",
+      } as NodeData;
   }
 };
 
@@ -154,15 +160,15 @@ export const getRandomVariation = (nodeData: NodeData, seed?: number): string =>
   if (variations.length === 0) return nodeData.label;
   
   // Use seed for deterministic randomness if provided
-  const randomIndex = seed 
-    ? Math.floor((seed % variations.length))
+  const randomIndex = seed !== undefined
+    ? Math.floor((Math.abs(seed) + 1) % variations.length)
     : Math.floor(Math.random() * variations.length);
   
   return variations[randomIndex];
 };
 
 export const hasVariations = (nodeData: NodeData): boolean => {
-  return nodeData.variations && nodeData.variations.length > 0;
+  return Boolean(nodeData.variations && nodeData.variations.length > 0);
 };
 
 export const getVariationCount = (nodeData: NodeData): number => {
@@ -220,12 +226,12 @@ export const cloneNodeData = (nodeData: NodeData): NodeData => {
   return JSON.parse(JSON.stringify(nodeData));
 };
 
-export const mergeNodeData = (
-  original: NodeData,
-  updates: Partial<NodeData>
-): NodeData => {
+export const mergeNodeData = <T extends NodeData>(
+  original: T,
+  updates: Partial<T>
+): T => {
   return {
     ...original,
     ...updates,
-  };
+  } as T;
 };

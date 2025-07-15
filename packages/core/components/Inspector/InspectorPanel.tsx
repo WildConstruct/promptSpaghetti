@@ -71,8 +71,8 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         style={{
           width: collapsed ? 40 : width,
           minWidth: collapsed ? 40 : minWidth,
-          borderLeft: "1px solid #e0e0e0",
-          background: "#fafbfc",
+          borderLeft: "1px solid #4a5568",
+          background: "#1a202c",
           height: "100%",
           display: "flex",
           flexDirection: "column",
@@ -82,15 +82,15 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         <div
           style={{
             padding: "12px 16px",
-            borderBottom: "1px solid #e0e0e0",
+            borderBottom: "1px solid #4a5568",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            background: "#f5f6f7",
+            background: "#2d3748",
           }}
         >
           {!collapsed && (
-            <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: "#333" }}>
+            <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: "#e2e8f0" }}>
               Inspector
             </h3>
           )}
@@ -101,7 +101,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
               border: "none",
               cursor: "pointer",
               fontSize: 16,
-              color: "#666",
+              color: "#a0aec0",
               padding: 4,
             }}
             title={collapsed ? "Expand Inspector" : "Collapse Inspector"}
@@ -112,7 +112,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         {!collapsed && (
           <div style={{ 
             padding: 16, 
-            color: "#666", 
+            color: "#a0aec0", 
             fontStyle: "italic",
             textAlign: "center",
             marginTop: 40
@@ -143,8 +143,8 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
       style={{
         width: collapsed ? 40 : width,
         minWidth: collapsed ? 40 : minWidth,
-        borderLeft: "1px solid #e0e0e0",
-        background: "#fafbfc",
+        borderLeft: "1px solid #4a5568",
+        background: "#1a202c",
         height: "100%",
         display: "flex",
         flexDirection: "column",
@@ -154,15 +154,15 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
       <div
         style={{
           padding: "12px 16px",
-          borderBottom: "1px solid #e0e0e0",
+          borderBottom: "1px solid #4a5568",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          background: "#f5f6f7",
+          background: "#2d3748",
         }}
       >
         {!collapsed && (
-          <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: "#333" }}>
+          <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: "#e2e8f0" }}>
             {node.data?.label || node.type} Inspector
           </h3>
         )}
@@ -175,7 +175,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                 border: "none",
                 cursor: "pointer",
                 fontSize: 16,
-                color: "#666",
+                color: "#a0aec0",
                 padding: 4,
               }}
               title="Close Inspector"
@@ -190,7 +190,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
               border: "none",
               cursor: "pointer",
               fontSize: 16,
-              color: "#666",
+              color: "#a0aec0",
               padding: 4,
             }}
             title={collapsed ? "Expand Inspector" : "Collapse Inspector"}

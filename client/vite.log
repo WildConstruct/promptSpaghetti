@@ -1,0 +1,35 @@
+
+  VITE v5.4.19  ready in 104 ms
+
+  ➜  Local:   http://localhost:3001/
+  ➜  Network: http://192.168.1.238:3001/
+  ➜  Network: http://192.168.1.191:3001/
+3:01:00 PM [vite] hmr update /src/App.tsx
+3:01:13 PM [vite] hmr update /src/App.tsx
+3:01:27 PM [vite] hmr update /src/App.tsx
+3:03:46 PM [vite] hmr update /src/App.tsx
+3:03:59 PM [vite] hmr update /src/App.tsx
+3:04:20 PM [vite] hmr update /src/App.tsx
+3:04:29 PM [vite] hmr update /src/App.tsx
+3:09:39 PM [vite] hmr update /src/App.tsx
+3:09:54 PM [vite] hmr update /src/App.tsx
+3:10:05 PM [vite] hmr update /src/App.tsx
+3:10:15 PM [vite] hmr update /src/App.tsx
+3:10:26 PM [vite] hmr update /src/App.tsx
+3:10:37 PM [vite] hmr update /src/App.tsx
+3:11:00 PM [vite] hmr update /src/App.tsx
+3:13:24 PM [vite] hmr update /src/App.tsx
+3:13:34 PM [vite] hmr update /src/App.tsx
+3:13:41 PM [vite] hmr update /src/App.tsx
+3:13:52 PM [vite] hmr update /src/App.tsx
+3:14:09 PM [vite] hmr update /src/App.tsx
+3:14:23 PM [vite] hmr update /src/App.tsx
+3:17:06 PM [vite] hmr update /src/App.tsx
+3:17:16 PM [vite] hmr update /src/App.tsx
+3:17:29 PM [vite] hmr update /src/App.tsx
+3:25:49 PM [vite] hmr update /src/App.tsx
+3:43:50 PM [vite] hmr update /src/App.tsx
+4:27:03 PM [vite] changed tsconfig file detected: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+4:44:02 PM [vite] hmr update /src/App.tsx
+4:49:31 PM [vite] hmr update /src/App.tsx
+5:29:19 PM [vite] hmr update /src/App.tsx

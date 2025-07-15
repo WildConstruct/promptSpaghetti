@@ -1,5 +1,5 @@
 import React from "react";
-import { ZodSchema, ZodTypeAny } from "zod";
+import { ZodSchema, ZodTypeAny, z } from "zod";
 
 /**
  * InspectorSidebar
@@ -86,17 +86,20 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
               <label htmlFor={`field-${key}`} style={{ display: "block", fontWeight: 500, marginBottom: 4 }}>{key}</label>
               <input
                 id={`field-${key}`}
-                type={zodType._def.typeName === "ZodNumber" ? "number" : "text"}
+                type={(zodType as any)._def?.typeName === "ZodNumber" ? "number" : "text"}
                 value={
                   ((): any => {
                     const v = values[key];
                     if (v === undefined || v === null) {
-                      return zodType._def.typeName === "ZodNumber" ? 0 : "";
+                      return (zodType as any)._def?.typeName === "ZodNumber" ? 0 : "";
                     }
                     return v as any;
                   })()
                 }
-                onChange={e => updateField(key, zodType._def.typeName === "ZodNumber" ? Number(e.target.value) : e.target.value)}
+                onChange={e => {
+                  const isNumber = zodType instanceof z.ZodNumber || (zodType as any)._def?.typeName === "ZodNumber";
+                  updateField(key, isNumber ? Number(e.target.value) : e.target.value);
+                }}
                 style={{ width: "100%", padding: 6, border: fieldErrors[key] ? "1px solid #f00" : "1px solid #ccc", borderRadius: 4 }}
               />
               {fieldErrors[key] && <div style={{ color: "#f00", fontSize: 12 }}>{fieldErrors[key]}</div>}

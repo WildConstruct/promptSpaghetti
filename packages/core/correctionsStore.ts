@@ -99,7 +99,12 @@ export const useCorrectionsStore = create<CorrectionsState>()(
         },
         
         applyCorrections: (text: string) => {
-          const { rules, isEnabled } = get();
+          const { rules } = get();
+          
+          // Check if corrections are enabled dynamically
+          const isEnabled = process.env.NODE_ENV === 'development' || 
+                           process.env.REACT_APP_ENABLE_CORRECTIONS === 'true' ||
+                           process.env.ENABLE_CORRECTIONS === 'true';
           
           if (!isEnabled) return text;
           

@@ -44,6 +44,8 @@ describe('promptgraph CLI', () => {
   const missingPath = path.resolve(__dirname, 'fixtures', 'nonexistent.json');
   const originalConsoleLog = console.log;
   const originalConsoleError = console.error;
+  const originalStdoutWrite = process.stdout.write;
+  const originalStderrWrite = process.stderr.write;
   let consoleOutput: string[] = [];
   
   // Mock graph content for testing
@@ -70,6 +72,20 @@ describe('promptgraph CLI', () => {
       consoleOutput.push(args.join(' '));
     });
     
+    // Mock stdout/stderr to capture Commander.js help output
+    process.stdout.write = jest.fn((chunk) => {
+      if (typeof chunk === 'string') {
+        consoleOutput.push(chunk);
+      }
+      return true;
+    });
+    process.stderr.write = jest.fn((chunk) => {
+      if (typeof chunk === 'string') {
+        consoleOutput.push(chunk);
+      }
+      return true;
+    });
+    
     // Setup fs mocks for each test
     (fs.existsSync as jest.Mock).mockImplementation((path) => {
       return path === graphPath;
@@ -94,6 +110,8 @@ describe('promptgraph CLI', () => {
   afterEach(() => {
     console.log = originalConsoleLog;
     console.error = originalConsoleError;
+    process.stdout.write = originalStdoutWrite;
+    process.stderr.write = originalStderrWrite;
     jest.clearAllMocks();
   });
   

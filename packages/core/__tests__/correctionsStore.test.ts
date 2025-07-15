@@ -6,6 +6,8 @@ const originalEnv = process.env;
 
 beforeEach(() => {
   process.env = { ...originalEnv };
+  // Enable corrections for tests
+  process.env.NODE_ENV = 'development';
   // Clear the store before each test
   useCorrectionsStore.getState().clearAllRules();
 });

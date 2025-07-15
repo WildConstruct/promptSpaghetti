@@ -1,20 +1,24 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`GraphNode Component matches snapshot 1`] = `
 <div>
   <div
-    style="padding: 10px; border: 1px solid rgb(153, 153, 153); border-radius: 4px; background: rgb(255, 255, 255);"
+    style="padding: 12px; border: 1px solid rgb(102, 102, 102); border-radius: 6px; background: rgb(58, 58, 58); color: rgb(224, 224, 224); min-width: 120px; font-size: 14px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: all 0.2s ease;"
   >
     <strong>
       Test Node
     </strong>
     <div
-      data-testid="handle-target-top"
-      style="border-radius: 0;"
+      class="react-flow__handle react-flow__handle-top nodrag nopan target connectable connectablestart connectableend connectionindicator"
+      data-handlepos="top"
+      data-id="null-null-target"
+      style="border-radius: 3px; width: 8px; height: 8px; background-color: rgb(102, 102, 102); border: 2px solid rgb(224, 224, 224);"
     />
     <div
-      data-testid="handle-source-bottom"
-      style="border-radius: 0;"
+      class="react-flow__handle react-flow__handle-bottom nodrag nopan source connectable connectablestart connectableend connectionindicator"
+      data-handlepos="bottom"
+      data-id="null-null-source"
+      style="border-radius: 3px; width: 8px; height: 8px; background-color: rgb(102, 102, 102); border: 2px solid rgb(224, 224, 224);"
     />
   </div>
 </div>

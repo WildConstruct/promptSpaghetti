@@ -95,18 +95,18 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
         </label>
         <input
           id={`field-${key}`}
-          type={zodType._def.typeName === "ZodNumber" ? "number" : "text"}
+          type={(zodType as any)._def?.typeName === "ZodNumber" ? "number" : "text"}
           value={
             (() => {
               const v = values[key];
               if (v === undefined || v === null) {
-                return zodType._def.typeName === "ZodNumber" ? 0 : "";
+                return (zodType as any)._def?.typeName === "ZodNumber" ? 0 : "";
               }
               return v as any;
             })()
           }
           onChange={(e) => {
-            const newValue = zodType._def.typeName === "ZodNumber" 
+            const newValue = (zodType as any)._def?.typeName === "ZodNumber" 
               ? Number(e.target.value) 
               : e.target.value;
             updateField(key, newValue);

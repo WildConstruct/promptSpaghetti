@@ -1,8 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { jest } from '@jest/globals';
 import GraphNode from '../GraphNode';
-import { NodeProps } from 'reactflow';
+import { NodeProps, ReactFlowProvider } from 'reactflow';
 
 // Mock the reactflow module
 jest.mock('reactflow', () => ({
@@ -14,7 +15,8 @@ jest.mock('reactflow', () => ({
     Bottom: 'bottom',
     Left: 'left',
     Right: 'right'
-  }
+  },
+  ReactFlowProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
 }));
 
 // Create a complete mock NodeProps object to avoid TypeScript errors
@@ -37,7 +39,11 @@ describe('GraphNode Component', () => {
   test('renders node with correct label', () => {
     const testLabel = 'Test Node';
     const nodeProps = createMockNodeProps(testLabel);
-    render(<GraphNode {...nodeProps} />);
+    render(
+      <ReactFlowProvider>
+        <GraphNode {...nodeProps} />
+      </ReactFlowProvider>
+    );
     
     expect(screen.getByText(testLabel)).toBeInTheDocument();
   });
@@ -47,10 +53,27 @@ describe('GraphNode Component', () => {
    */
   test('renders input and output handles', () => {
     const nodeProps = createMockNodeProps('Test Node');
-    render(<GraphNode {...nodeProps} />);
+    render(
+      <ReactFlowProvider>
+        <GraphNode {...nodeProps} />
+      </ReactFlowProvider>
+    );
     
-    expect(screen.getByTestId('handle-target-top')).toBeInTheDocument();
-    expect(screen.getByTestId('handle-source-bottom')).toBeInTheDocument();
+    // Verify node text is present
+    expect(screen.getByText('Test Node')).toBeInTheDocument();
+    
+    // Find handle elements by their class names
+    const container = screen.getByText('Test Node').closest('div');
+    expect(container).not.toBeNull();
+    
+    if (container) {
+      // Find handles using more specific queries within the container
+      const targetHandle = container.querySelector('.react-flow__handle-top');
+      const sourceHandle = container.querySelector('.react-flow__handle-bottom');
+      
+      expect(targetHandle).not.toBeNull();
+      expect(sourceHandle).not.toBeNull();
+    }
   });
   
   /**
@@ -58,7 +81,11 @@ describe('GraphNode Component', () => {
    */
   test('matches snapshot', () => {
     const nodeProps = createMockNodeProps('Test Node');
-    const { container } = render(<GraphNode {...nodeProps} />);
+    const { container } = render(
+      <ReactFlowProvider>
+        <GraphNode {...nodeProps} />
+      </ReactFlowProvider>
+    );
     expect(container).toMatchSnapshot();
   });
 });

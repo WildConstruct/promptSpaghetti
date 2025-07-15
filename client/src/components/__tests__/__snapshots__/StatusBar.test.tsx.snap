@@ -3,9 +3,9 @@
 exports[`StatusBar Component matches snapshot 1`] = `
 <div>
   <div
-    style="height: 30px; background: rgb(245, 245, 245); border-top: 1px solid rgb(221, 221, 221); display: flex; align-items: center; padding-left: 10px; font-family: sans-serif; font-size: 12px;"
+    style="height: 32px; background: rgb(42, 42, 42); border-top: 1px solid #444; display: flex; align-items: center; padding-left: 12px; font-family: sans-serif; font-size: 13px; color: rgb(255, 107, 107); font-weight: 500;"
   >
-    Validation Errors: 2
+    ⚠️ Validation Errors: 2
   </div>
 </div>
 `;

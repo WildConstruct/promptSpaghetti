@@ -59,7 +59,11 @@ describe("Palette sidebar integration", () => {
       clientX: 150,
       clientY: 150,
     });
-    // After drop, Output node should appear
-    await waitFor(() => expect(screen.getByText('Output')).toBeTruthy(), { timeout: 1000 });
+    // After drop, Output node should appear on the canvas
+    await waitFor(() => {
+      const canvas = screen.getByTestId('react-flow-canvas');
+      const outputNodeInCanvas = canvas.querySelector('[data-testid*="node-"]');
+      expect(outputNodeInCanvas).toBeTruthy();
+    }, { timeout: 1000 });
   });
 });

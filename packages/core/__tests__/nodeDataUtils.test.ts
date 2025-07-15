@@ -9,11 +9,12 @@ import {
   getVariationCount,
   validateNodeData,
 } from '../utils/nodeDataUtils';
+import { SubjectNodeData, WeightedChoiceNodeData, ActionNodeData } from '../types/NodeTypes';
 
 describe('nodeDataUtils', () => {
   describe('createDefaultNodeData', () => {
     it('creates default data for Subject node', () => {
-      const data = createDefaultNodeData('Subject');
+      const data = createDefaultNodeData('Subject') as SubjectNodeData;
       expect(data.type).toBe('Subject');
       expect(data.subjects).toEqual(['subject']);
       expect(data.singularForm).toBe('subject');
@@ -21,14 +22,14 @@ describe('nodeDataUtils', () => {
     });
 
     it('creates default data for WeightedChoice node', () => {
-      const data = createDefaultNodeData('WeightedChoice');
+      const data = createDefaultNodeData('WeightedChoice') as WeightedChoiceNodeData;
       expect(data.type).toBe('WeightedChoice');
       expect(data.weights).toEqual([1]);
       expect(data.options).toEqual(['option']);
     });
 
     it('creates default data for Action node', () => {
-      const data = createDefaultNodeData('Action');
+      const data = createDefaultNodeData('Action') as ActionNodeData;
       expect(data.type).toBe('Action');
       expect(data.actions).toEqual(['action']);
       expect(data.tense).toBe('present');
@@ -36,11 +37,14 @@ describe('nodeDataUtils', () => {
   });
 
   describe('variation management', () => {
-    const mockNode = {
+    const mockNode: SubjectNodeData = {
       id: 'test',
       label: 'Test',
       type: 'Subject' as const,
       variations: ['var1', 'var2'],
+      subjects: ['test'],
+      singularForm: 'test',
+      pluralForm: 'tests',
     };
 
     it('adds variation to node', () => {
@@ -65,18 +69,24 @@ describe('nodeDataUtils', () => {
   });
 
   describe('variation utilities', () => {
-    const nodeWithVariations = {
+    const nodeWithVariations: SubjectNodeData = {
       id: 'test',
       label: 'Test',
       type: 'Subject' as const,
       variations: ['apple', 'banana', 'cherry'],
+      subjects: ['test'],
+      singularForm: 'test',
+      pluralForm: 'tests',
     };
 
-    const nodeWithoutVariations = {
+    const nodeWithoutVariations: SubjectNodeData = {
       id: 'test',
       label: 'Test',
       type: 'Subject' as const,
       variations: [],
+      subjects: ['test'],
+      singularForm: 'test',
+      pluralForm: 'tests',
     };
 
     it('detects if node has variations', () => {
@@ -105,11 +115,14 @@ describe('nodeDataUtils', () => {
 
   describe('validation', () => {
     it('validates valid node data', () => {
-      const validNode = {
+      const validNode: SubjectNodeData = {
         id: 'test',
         label: 'Test Node',
         type: 'Subject' as const,
         variations: ['var1'],
+        subjects: ['test'],
+        singularForm: 'test',
+        pluralForm: 'tests',
       };
 
       const result = validateNodeData(validNode);
@@ -118,11 +131,14 @@ describe('nodeDataUtils', () => {
     });
 
     it('validates invalid node data', () => {
-      const invalidNode = {
+      const invalidNode: SubjectNodeData = {
         id: '',
         label: '',
         type: 'Subject' as const,
         variations: [],
+        subjects: ['test'],
+        singularForm: 'test',
+        pluralForm: 'tests',
       };
 
       const result = validateNodeData(invalidNode);
