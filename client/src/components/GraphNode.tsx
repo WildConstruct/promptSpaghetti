@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 
-export default function GraphNode({ data }: NodeProps) {
+const GraphNode = memo(({ data }: NodeProps) => {
   return (
     <div style={{ 
       padding: 12, 
@@ -40,4 +40,8 @@ export default function GraphNode({ data }: NodeProps) {
       />
     </div>
   );
-}
+});
+
+GraphNode.displayName = 'GraphNode';
+
+export default GraphNode;

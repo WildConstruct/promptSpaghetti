@@ -122,4 +122,78 @@ This plan captures Epic-2 delivery items plus the immediate **Must-Fix** actions
 4. Spike branch for validation engine prototype (MF-5).
 
 ---
+
+## Epic 4 – Alpha Hardening & DX Polish
+
+**Epic Goal**: Stabilise the MVP for wider team use: improve performance, add key developer-experience niceties, deploy to Vercel production, and finalize documentation.
+
+| # | Story | Owner | Status |
+|---|-------|-------|--------|
+| 4.1 | **Performance Profiling & Tuning** – profile executor & canvas with large graphs, optimise hotspots | Claude | [x] Complete |
+| 4.2 | **Corrections Manager Feature Flag** – enable Corrections Store panel for find/replace rules | Claude | [x] Complete |
+| 4.3 | **Vercel Production Deploy** – auto-deploy main branch to Vercel with CDN optimization | Claude | [x] Complete |
+| 4.4 | **Documentation & Onboarding** – comprehensive README, architecture docs, content authoring guide | Claude | [x] Complete |
+| 4.5 | **QA Sign-off & Release Notes** – validate Alpha features, publish release notes, version bump | Claude | [x] Complete |
+
+### Story 4.1 – Performance Profiling & Tuning Subtasks
+- [ ] Create Playwright performance test script for 250-node graph
+- [ ] Implement React.memo optimization for node components
+- [ ] Add canvas virtualization for large graphs (>500 nodes)
+- [ ] Profile executor with performance.now() timing
+- [ ] Consider Web Worker for heavy computation offloading
+- [ ] Document performance metrics in `docs/PERF.md`
+- [ ] Set up continuous performance monitoring in CI
+- [ ] Memory usage profiling and optimization
+- [ ] FPS monitoring during canvas interactions
+- [ ] Bundle size analysis and optimization
+
+### Story 4.2 – Corrections Manager Feature Flag Subtasks
+- [ ] Add `ENABLE_CORRECTIONS` environment variable support
+- [ ] Create Corrections Store panel UI component
+- [ ] Implement in-memory corrections store with Zustand
+- [ ] Add CRUD operations for find/replace rules
+- [ ] Integrate corrections with graph execution pipeline
+- [ ] Add unit tests for corrections functionality
+- [ ] Document corrections feature in user guide
+- [ ] Add feature flag configuration to deployment
+- [ ] Create migration path for corrections data
+- [ ] Add accessibility support for corrections UI
+
+### Story 4.3 – Vercel Production Deploy Subtasks
+- [ ] Configure Vercel project and GitHub integration
+- [ ] Set up environment variables in Vercel dashboard
+- [ ] Convert server API to Vercel Edge Functions
+- [ ] Configure build settings for monorepo deployment
+- [ ] Set up custom domain and SSL certificates
+- [ ] Add production environment monitoring
+- [ ] Configure CDN caching strategies
+- [ ] Set up error tracking and logging
+- [ ] Add health check endpoints
+- [ ] Document deployment procedures
+
+### Story 4.4 – Documentation & Onboarding Subtasks
+- [ ] Update README with comprehensive quick start guide
+- [ ] Create `docs/architecture.md` with data flow diagrams
+- [ ] Write `docs/content_authoring.md` for grammar conventions
+- [ ] Document API endpoints in `docs/api_contract.md`
+- [ ] Create developer onboarding checklist
+- [ ] Add code examples and tutorials
+- [ ] Document troubleshooting common issues
+- [ ] Create video walkthrough for key features
+- [ ] Add contributing guidelines
+- [ ] Document release process and versioning
+
+### Story 4.5 – QA Sign-off & Release Notes Subtasks
+- [ ] Create comprehensive QA testing checklist
+- [ ] Execute end-to-end testing scenarios
+- [ ] Validate all Epic 1-3 features work correctly
+- [ ] Test cross-browser compatibility
+- [ ] Verify accessibility compliance (WCAG 2.1 AA)
+- [ ] Security audit and vulnerability scanning
+- [ ] Performance regression testing
+- [ ] Draft release notes with features and limitations
+- [ ] Create migration guide from previous versions
+- [ ] Version bump to v0.1.0-alpha and git tag
+
+---
 _This file is maintained by **Sarah – Product Owner**.  Please update statuses daily._

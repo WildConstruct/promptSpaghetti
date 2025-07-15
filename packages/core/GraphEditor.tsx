@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useState, useMemo, memo } from "react";
 import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange } from "reactflow";
 import "reactflow/dist/style.css";
 import { InspectorSidebar } from "./InspectorSidebar";
@@ -36,6 +36,8 @@ const defaultValidateConnection = (edges: Edge[], nodes: Node[]): ValidationErro
 
 import { PreviewModal } from "./PreviewModal";
 import { usePreviewSeeds } from "./usePreviewSeeds";
+import { CorrectionsPanel } from "./CorrectionsPanel";
+import { useCorrectionsEnabled } from "./correctionsStore";
 
 const NODE_TYPES: NodeMeta[] = [
   {
@@ -91,51 +93,56 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
 
   // Palette collapsed state
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
+  
+  // Corrections panel state
+  const [correctionsOpen, setCorrectionsOpen] = useState(false);
+  const correctionsEnabled = useCorrectionsEnabled();
+
+  // Memoized node render component for performance
+  const NodeRender = useMemo(() => memo<any>((props) => (
+    <div
+      role="button"
+      data-testid={`node-${props.id}`}
+      tabIndex={0}
+      onClick={() => setSelectedNodeId(props.id)}
+      style={{
+        cursor: 'pointer',
+        background: '#23272f',
+        color: '#fff',
+        border: '1.5px solid #444',
+        borderRadius: 8,
+        padding: 8,
+        minWidth: 80,
+        minHeight: 40,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+      }}
+      aria-label={(() => {
+        const label = props.data?.label ?? props.id;
+        const summary = Object.entries(props.data || {})
+          .filter(([k]) => k !== 'label')
+          .map(([k, v]) => `${k}: ${String(v)}`)
+          .join(', ');
+        return summary ? `${label}. ${summary}` : label;
+      })()}
+    >
+      <div style={{ fontWeight: 600 }}>{props.data?.label ?? props.id}</div>
+      <div style={{ fontSize: 12, color: '#ccc', marginTop: 2 }}>
+        {Object.entries(props.data || {}).map(([k, v]) => (
+          <span key={k} style={{ marginRight: 8 }}>{k}: {String(v)}</span>
+        ))}
+      </div>
+    </div>
+  )), []);
 
   // Node types mapping (stable)
   const nodeTypes = useMemo(() => {
-    const NodeRender: React.FC<any> = (props) => (
-      <div
-        role="button"
-        data-testid={`node-${props.id}`}
-
-        tabIndex={0}
-        onClick={() => setSelectedNodeId(props.id)}
-        style={{
-          cursor: 'pointer',
-          background: '#23272f',
-          color: '#fff',
-          border: '1.5px solid #444',
-          borderRadius: 8,
-          padding: 8,
-          minWidth: 80,
-          minHeight: 40,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
-        }}
-        aria-label={(() => {
-          const label = props.data?.label ?? props.id;
-          const summary = Object.entries(props.data || {})
-            .filter(([k]) => k !== 'label')
-            .map(([k, v]) => `${k}: ${String(v)}`)
-            .join(', ');
-          return summary ? `${label}. ${summary}` : label;
-        })()}
-      >
-        <div style={{ fontWeight: 600 }}>{props.data?.label ?? props.id}</div>
-        <div style={{ fontSize: 12, color: '#ccc', marginTop: 2 }}>
-          {Object.entries(props.data || {}).map(([k, v]) => (
-            <span key={k} style={{ marginRight: 8 }}>{k}: {String(v)}</span>
-          ))}
-        </div>
-      </div>
-    );
     const map: Record<string, any> = { default: NodeRender };
     NODE_TYPES.forEach((t) => {
       map[t.id] = NodeRender;
       map[t.id.toLowerCase()] = NodeRender;
     });
     return map;
-  }, []);
+  }, [NodeRender]);
 
   // Preview-5 modal state
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -428,6 +435,23 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
             >
               Save as JSON
             </button>
+            {correctionsEnabled && (
+              <button
+                onClick={() => setCorrectionsOpen(true)}
+                style={{ 
+                  marginRight: 16, 
+                  padding: '6px 16px', 
+                  background: correctionsOpen ? '#4a5568' : '#eee', 
+                  color: correctionsOpen ? '#fff' : '#23272f', 
+                  border: '1px solid #ccc', 
+                  borderRadius: 4, 
+                  fontWeight: 500, 
+                  cursor: 'pointer' 
+                }}
+              >
+                Corrections
+              </button>
+            )}
             {errorCount === 0 ? "No errors" : `${errorCount} error${errorCount > 1 ? "s" : ""}`}
             {errorCount > 0 && (
               <span style={{ marginLeft: 16 }}>
@@ -470,6 +494,10 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
               setHighlightNodeIds(new Set());
             }
           }}
+        />
+        <CorrectionsPanel
+          isOpen={correctionsOpen}
+          onClose={() => setCorrectionsOpen(false)}
         />
       </div>
     </ReactFlowProvider>

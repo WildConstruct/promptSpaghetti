@@ -1,25 +1,42 @@
 # Technical Architecture – PromptScape Randomizer Graph
 
-_Version 0.1 · 2025-07-09_
+_Version 0.2 · 2025-07-15_
 
-> This document translates the PRD goals into a concrete, technology-oriented view. It will serve backend & frontend engineers as the single source of truth when implementing Epics 1-4.
+> This document provides a comprehensive technical architecture overview, updated for Epic 4 implementation including performance optimizations, corrections system, and production deployment.
 
 ## 1. High-Level System Diagram
 ```
-┌──────────────┐          HTTP/WS           ┌──────────────┐
-│   Browser    │ ─────────────────────────▶ │   Node API   │
-│  (React)     │◀─────────────────────────  │ (Fastify)    │
-└──────────────┘          JSON              └──────────────┘
-     │  ▲                                        │
-     │  │ webpack dev / Vercel CDN              │
-     ▼  │                                        ▼
-┌──────────────┐   File I/O / Stdin            ┌──────────────┐
-│ React-Flow   │ ───────────────────────────▶ │  CLI Runner  │
-│ Canvas + UI  │                              │  (npx)       │
-└──────────────┘                              └──────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                        User Interface                          │
+├─────────────────────────────────────────────────────────────────┤
+│                     React Frontend                             │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐  │
+│  │   Graph Editor  │ │   Inspector     │ │    Palette      │  │
+│  │   (React-Flow)  │ │   (Zod Forms)   │ │   (Drag/Drop)   │  │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                      Core Library                              │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐  │
+│  │  Schema Layer   │ │  Runtime Engine │ │  State Manager  │  │
+│  │   (Zod Types)   │ │   (Execution)   │ │   (Zustand)     │  │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                     API Services                               │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐  │
+│  │   Graph API     │ │   Export API    │ │    CLI Tool     │  │
+│  │   (Fastify)     │ │   (Bundler)     │ │   (Commander)   │  │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘  │
+├─────────────────────────────────────────────────────────────────┤
+│                     Infrastructure                             │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐  │
+│  │     Vercel      │ │   LocalStorage  │ │   File System   │  │
+│  │   (Deployment)  │ │   (Autosave)    │ │   (CLI Usage)   │  │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
 ```
-• **Monorepo** with three packages: `client`, `server`, `cli` (sym-linked to server engine)  
-• *Optional*: `python_executor` micro-service added in Phase-1
+• **Monorepo** with packages: `client`, `server`, `core`, `cli`  
+• **Production Ready**: Vercel deployment with Edge Functions
+• **Performance Optimized**: React.memo, virtualization, debouncing
 
 ## 2. Runtime Component Responsibilities
 | Component | Tech | Responsibilities |

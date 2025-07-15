@@ -49,3 +49,12 @@ jobs:
       - name: Docker build (server)
         run: docker build -t promptscape-server ./server
         # (Optional: push to GHCR)
+
+      - name: Performance tests
+        run: |
+          pnpm --filter client dev &
+          sleep 10
+          npx playwright test --project=chromium
+          pkill -f "vite"
+        continue-on-error: true
+        # Performance tests as separate job to avoid blocking main CI
