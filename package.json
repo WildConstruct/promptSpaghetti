@@ -12,7 +12,8 @@
   "scripts": {
     "postinstall": "echo 'Monorepo bootstrap complete.'",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx --ignore-path .gitignore",
-    "test": "jest --coverage --testPathPattern=packages/core/"
+    "test": "jest --coverage --testPathPattern=packages/core/",
+    "build": "cd client && npm install && npm run build"
   },
   "devDependencies": {
     "@types/jest": "^29.0.0",

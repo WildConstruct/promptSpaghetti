@@ -1,7 +1,10 @@
 [build]
-  command = "pnpm install && pnpm --filter client build"
+  command = "npm run build"
   publish = "client/dist"
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- client/"
+
+[build.environment]
+  NPM_FLAGS = "--prefix=client"
+  NODE_VERSION = "18.12.1"
 
 [dev]
   command = "pnpm --filter client dev"
