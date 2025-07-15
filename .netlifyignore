@@ -1,0 +1,17 @@
+# Ignore monorepo files that confuse Netlify
+package.json
+pnpm-workspace.yaml
+pnpm-lock.yaml
+node_modules/
+server/
+packages/
+docs/
+tests/
+*.md
+.eslintrc*
+.prettier*
+tsconfig*.json
+jest.config.js
+jest.setup.js
+
+# Only build the client directory
