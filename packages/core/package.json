@@ -5,8 +5,8 @@
   "types": "index.ts",
   "private": true,
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "reactflow": "^11.11.4",
     "seedrandom": "^3.0.5",
     "zod": "^3.0.0"
