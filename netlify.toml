@@ -1,9 +1,8 @@
 [build]
-  command = "npm run build"
+  command = "cd client && npm ci && npm run build"
   publish = "client/dist"
 
 [build.environment]
-  NPM_FLAGS = "--prefix=client"
   NODE_VERSION = "18.12.1"
 
 [dev]
