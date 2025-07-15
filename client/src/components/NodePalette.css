@@ -1,21 +1,43 @@
 .node-palette {
   width: 180px;
-  background: #f7f7f7;
-  border-right: 1px solid #ddd;
+  background: #2a2a2a;
+  border-right: 1px solid #444;
   padding: 10px;
   font-family: sans-serif;
+  color: #e0e0e0;
+}
+
+.node-palette h4 {
+  color: #e0e0e0;
+  margin-top: 0;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
 }
 
 .palette-item {
-  background: #fff;
-  border: 1px solid #ccc;
+  background: #3a3a3a;
+  border: 1px solid #555;
   border-radius: 4px;
-  padding: 6px 8px;
-  margin-bottom: 6px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
   cursor: grab;
   user-select: none;
+  color: #e0e0e0;
+  transition: all 0.2s ease;
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+}
+
+.palette-item:hover {
+  background: #4a4a4a;
+  border-color: #666;
+  transform: translateY(-1px);
 }
 
 .palette-item:active {
   cursor: grabbing;
+  background: #5a5a5a;
+  transform: translateY(0);
 }

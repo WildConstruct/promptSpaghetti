@@ -8,17 +8,19 @@ export default function StatusBar({ errorCount }: Props) {
   return (
     <div
       style={{
-        height: 30,
-        background: '#f5f5f5',
-        borderTop: '1px solid #ddd',
+        height: 32,
+        background: '#2a2a2a',
+        borderTop: '1px solid #444',
         display: 'flex',
         alignItems: 'center',
-        paddingLeft: 10,
+        paddingLeft: 12,
         fontFamily: 'sans-serif',
-        fontSize: 12,
+        fontSize: 13,
+        color: errorCount > 0 ? '#ff6b6b' : '#4CAF50',
+        fontWeight: 500,
       }}
     >
-      {errorCount > 0 ? `Validation Errors: ${errorCount}` : 'No errors'}
+      {errorCount > 0 ? `⚠️ Validation Errors: ${errorCount}` : '✅ No errors'}
     </div>
   );
 }
