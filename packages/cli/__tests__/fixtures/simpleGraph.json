@@ -1,0 +1,17 @@
+{
+  "seed": 123,
+  "nodes": [
+    {
+      "id": "wc1",
+      "type": "WeightedChoice",
+      "choices": [
+        { "value": "hi", "weight": 1 }
+      ]
+    },
+    {
+      "id": "out",
+      "type": "Output",
+      "inputs": ["wc1"]
+    }
+  ]
+}

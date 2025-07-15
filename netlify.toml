@@ -1,9 +1,10 @@
 [build]
-  command = "cd client && npm ci && npm run build"
+  command = "npm install -g pnpm@latest && pnpm install --frozen-lockfile && pnpm --filter client build"
   publish = "client/dist"
 
 [build.environment]
   NODE_VERSION = "18.12.1"
+  NPM_FLAGS = "--legacy-peer-deps"
 
 [dev]
   command = "pnpm --filter client dev"

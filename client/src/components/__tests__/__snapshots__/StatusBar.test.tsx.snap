@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StatusBar Component matches snapshot 1`] = `
+<div>
+  <div
+    style="height: 30px; background: rgb(245, 245, 245); border-top: 1px solid rgb(221, 221, 221); display: flex; align-items: center; padding-left: 10px; font-family: sans-serif; font-size: 12px;"
+  >
+    Validation Errors: 2
+  </div>
+</div>
+`;

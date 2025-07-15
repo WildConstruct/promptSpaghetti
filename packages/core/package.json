@@ -12,7 +12,6 @@
     "zod": "^3.0.0"
   },
   "devDependencies": {
-    
     "@testing-library/react": "^14.0.0",
     "@testing-library/jest-dom": "5.16.5",
     "@types/seedrandom": "^2.1.7",
