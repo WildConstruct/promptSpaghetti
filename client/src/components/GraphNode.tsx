@@ -1,5 +1,5 @@
 import React from 'react';
-import { Handle, Position, NodeProps } from 'react-flow-renderer';
+import { Handle, Position, NodeProps } from 'reactflow';
 
 export default function GraphNode({ data }: NodeProps) {
   return (

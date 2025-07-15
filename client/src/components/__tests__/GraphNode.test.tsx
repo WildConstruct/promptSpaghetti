@@ -2,10 +2,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GraphNode from '../GraphNode';
-import { NodeProps } from 'react-flow-renderer';
+import { NodeProps } from 'reactflow';
 
-// Mock the react-flow-renderer module
-jest.mock('react-flow-renderer', () => ({
+// Mock the reactflow module
+jest.mock('reactflow', () => ({
   Handle: ({ type, position, style }: { type: string, position: string, style: object }) => (
     <div data-testid={`handle-${type}-${position}`} style={style} />
   ),
