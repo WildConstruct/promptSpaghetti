@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo, memo } from "react";
 import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange } from "reactflow";
 import "reactflow/dist/style.css";
-import { InspectorSidebar } from "./InspectorSidebar";
+import { InspectorPanel } from "./components/Inspector";
 import { nodeSchemas } from "./nodeSchemas";
 
 import { Palette, NodeMeta } from "./Palette";
@@ -40,41 +40,77 @@ import { CorrectionsPanel } from "./CorrectionsPanel";
 import { useCorrectionsEnabled } from "./correctionsStore";
 
 const NODE_TYPES: NodeMeta[] = [
+  // Text Node Types
+  {
+    id: "Subject",
+    label: "Subject",
+    icon: "👤",
+    tooltip: "Text subject with grammatical forms",
+    category: "text",
+  },
+  {
+    id: "Connector",
+    label: "Connector",
+    icon: "🔗",
+    tooltip: "Grammar connector between elements",
+    category: "text",
+  },
+  {
+    id: "Attribute",
+    label: "Attribute",
+    icon: "🏷️",
+    tooltip: "Descriptive attribute for nouns",
+    category: "text",
+  },
+  {
+    id: "Action",
+    label: "Action",
+    icon: "⚡",
+    tooltip: "Action verb with tense options",
+    category: "text",
+  },
+  // Original Node Types
   {
     id: "WeightedChoice",
     label: "WeightedChoice",
     icon: WeightedChoiceIcon,
     tooltip: "Branch with weighted options",
+    category: "logic",
   },
   {
     id: "Concat",
     label: "Concat",
     icon: ConcatIcon,
     tooltip: "Concatenate child prompts",
+    category: "logic",
   },
   {
     id: "Output",
     label: "Output",
     icon: OutputIcon,
     tooltip: "Final output node",
+    category: "output",
   },
   {
     id: "Include",
     label: "Include",
     icon: IncludeIcon,
     tooltip: "Include another bundle",
+    category: "logic",
   },
   {
     id: "SetVariable",
     label: "SetVariable",
     icon: SetVariableIcon,
     tooltip: "Set a variable",
+    category: "variable",
   },
   {
     id: "GetVariable",
     label: "GetVariable",
     icon: GetVariableIcon,
     tooltip: "Read a variable",
+    category: "variable",
   },
 ];
 
@@ -99,40 +135,70 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   const correctionsEnabled = useCorrectionsEnabled();
 
   // Memoized node render component for performance
-  const NodeRender = useMemo(() => memo<any>((props) => (
-    <div
-      role="button"
-      data-testid={`node-${props.id}`}
-      tabIndex={0}
-      onClick={() => setSelectedNodeId(props.id)}
-      style={{
-        cursor: 'pointer',
-        background: '#23272f',
-        color: '#fff',
-        border: '1.5px solid #444',
-        borderRadius: 8,
-        padding: 8,
-        minWidth: 80,
-        minHeight: 40,
-        boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
-      }}
-      aria-label={(() => {
-        const label = props.data?.label ?? props.id;
-        const summary = Object.entries(props.data || {})
-          .filter(([k]) => k !== 'label')
-          .map(([k, v]) => `${k}: ${String(v)}`)
-          .join(', ');
-        return summary ? `${label}. ${summary}` : label;
-      })()}
-    >
-      <div style={{ fontWeight: 600 }}>{props.data?.label ?? props.id}</div>
-      <div style={{ fontSize: 12, color: '#ccc', marginTop: 2 }}>
-        {Object.entries(props.data || {}).map(([k, v]) => (
-          <span key={k} style={{ marginRight: 8 }}>{k}: {String(v)}</span>
-        ))}
+  const NodeRender = useMemo(() => memo<any>((props) => {
+    const hasVariations = props.data?.variations && props.data.variations.length > 0;
+    
+    return (
+      <div
+        role="button"
+        data-testid={`node-${props.id}`}
+        tabIndex={0}
+        onClick={() => setSelectedNodeId(props.id)}
+        style={{
+          cursor: 'pointer',
+          background: '#23272f',
+          color: '#fff',
+          border: '1.5px solid #444',
+          borderRadius: 8,
+          padding: 8,
+          minWidth: 80,
+          minHeight: 40,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+          position: 'relative',
+        }}
+        aria-label={(() => {
+          const label = props.data?.label ?? props.id;
+          const summary = Object.entries(props.data || {})
+            .filter(([k]) => k !== 'label' && k !== 'variations')
+            .map(([k, v]) => `${k}: ${String(v)}`)
+            .join(', ');
+          return summary ? `${label}. ${summary}` : label;
+        })()}
+      >
+        {hasVariations && (
+          <div
+            style={{
+              position: 'absolute',
+              top: -4,
+              right: -4,
+              width: 16,
+              height: 16,
+              backgroundColor: '#10b981',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 10,
+              fontWeight: 'bold',
+              color: '#fff',
+              border: '2px solid #23272f',
+            }}
+            title={`${props.data.variations.length} variations`}
+          >
+            {props.data.variations.length}
+          </div>
+        )}
+        <div style={{ fontWeight: 600 }}>{props.data?.label ?? props.id}</div>
+        <div style={{ fontSize: 12, color: '#ccc', marginTop: 2 }}>
+          {Object.entries(props.data || {})
+            .filter(([k]) => k !== 'label' && k !== 'variations')
+            .map(([k, v]) => (
+              <span key={k} style={{ marginRight: 8 }}>{k}: {String(v)}</span>
+            ))}
+        </div>
       </div>
-    </div>
-  )), []);
+    );
+  }), []);
 
   // Node types mapping (stable)
   const nodeTypes = useMemo(() => {
@@ -464,7 +530,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
             )}
           </div>
         </div>
-        <InspectorSidebar
+        <InspectorPanel
           node={selectedNode}
           schema={selectedSchema}
           onChange={handleInspectorChange}
