@@ -96,18 +96,19 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
         <input
           id={`field-${key}`}
           type={(zodType as any)._def?.typeName === "ZodNumber" ? "number" : "text"}
-          value={String(values[key] ?? "")}
+          defaultValue={String(values[key] ?? "")}
+          key={`${key}-${node?.id}`} // Force re-render when node changes
           onChange={(e) => {
-            e.stopPropagation(); // Prevent React Flow from capturing the event
+            e.stopPropagation();
             const newValue = (zodType as any)._def?.typeName === "ZodNumber" 
               ? Number(e.target.value) 
               : e.target.value;
-            // Update local state immediately for responsive UI
+            // Update local state for validation
             setValues(prev => ({ ...prev, [key]: newValue }));
             updateField(key, newValue);
           }}
           onKeyDown={(e) => {
-            e.stopPropagation(); // Prevent React Flow keyboard handling
+            e.stopPropagation();
           }}
           onFocus={(e) => {
             e.stopPropagation();
