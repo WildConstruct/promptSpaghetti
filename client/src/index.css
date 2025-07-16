@@ -63,16 +63,49 @@ body {
   border: 1px solid #4CAF50;
 }
 
-/* Node styling - Minimal overrides to prevent white borders */
+/* Node styling - Safari-compatible overrides */
 .react-flow__node {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .react-flow__node.selected {
   background: transparent !important;
   box-shadow: none !important;
+}
+
+/* Safari-specific node content visibility */
+.react-flow__node > div {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Force Safari to show node content */
+@supports (-webkit-appearance: none) {
+  .react-flow__node {
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    isolation: isolate;
+  }
+  
+  .react-flow__node > div > div {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #f7fafc !important;
+  }
 }
 
 /* Handle/port styling for better visibility - Safari compatible */

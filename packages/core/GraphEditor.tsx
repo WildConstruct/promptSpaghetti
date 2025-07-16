@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useMemo, useRef } from "react";
-import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange, ConnectionLineType } from "reactflow";
+import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange, ConnectionLineType, useReactFlow } from "reactflow";
 import { InspectorPanel } from "./components/Inspector";
 import { NodeRenderer } from "./components/NodeRenderer";
 import { StatusBar } from "./components/StatusBar";
@@ -106,7 +106,8 @@ const NODE_TYPES: NodeMeta[] = [
   },
 ];
 
-export const GraphEditor: React.FC<GraphEditorProps> = ({
+// Inner component that has access to React Flow instance
+const GraphEditorInner: React.FC<GraphEditorProps> = ({
   initialNodes,
   initialEdges,
   validateConnection,
@@ -121,6 +122,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   const [dragPreview, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
   
   const correctionsEnabled = useCorrectionsEnabled();
+  const reactFlowInstance = useReactFlow();
 
   // Custom hooks
   const { getNodeMeta, getCategoryColor } = useNodeUtils({ nodeTypes: NODE_TYPES });
@@ -192,11 +194,13 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
       event.preventDefault();
       const nodeType = event.dataTransfer.getData('application/node-type');
       if (!nodeType || !(nodeType in nodeSchemas)) return;
-      const reactFlowBounds = (event.target as HTMLElement).getBoundingClientRect();
-      const position = {
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
-      };
+      
+      // Use React Flow's screenToFlowPosition for accurate positioning
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      
       // Use Zod schema to get default params
       const schema = nodeSchemas[nodeType];
       const params = schema.parse({});
@@ -210,7 +214,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
       addNode(newNode);
       setNodes((prev) => [...prev, newNode]);
     },
-    []
+    [reactFlowInstance, addNode]
   );
 
   // Allow drop on canvas
@@ -262,7 +266,6 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
 
 
   return (
-    <ReactFlowProvider>
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
         <RestorePrompt
           show={showRestorePrompt}
@@ -444,6 +447,14 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
           onClose={() => setCorrectionsOpen(false)}
         />
       </div>
+  );
+};
+
+// Wrapper component with ReactFlowProvider
+export const GraphEditor: React.FC<GraphEditorProps> = (props) => {
+  return (
+    <ReactFlowProvider>
+      <GraphEditorInner {...props} />
     </ReactFlowProvider>
   );
 };
