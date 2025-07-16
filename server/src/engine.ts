@@ -21,6 +21,7 @@ import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/Weighted
 import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional';
 import { SequentialNode, createSequencePattern } from '../../packages/core/runtime/nodes/Sequential';
 import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/nodes/Markov';
+import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform';
 
 /**
  * Execute a graph and return the output(s) from all Output nodes (ordered by id).
@@ -78,7 +79,7 @@ export async function executeGraph(graph: Graph): Promise<string[]> {
  * Check if a node type is an advanced node that requires AdvancedExecutionContext
  */
 function isAdvancedNodeType(nodeType: string): boolean {
-  const advancedNodeTypes = ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov'];
+  const advancedNodeTypes = ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov', 'PythonTransform'];
   return advancedNodeTypes.includes(nodeType);
 }
 
@@ -143,6 +144,16 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
         transitionMatrix,
         node.markovConfig || {}
       );
+    
+    // Epic 8 Python Integration
+    case 'PythonTransform':
+      return new PythonTransformNode(node.id, {
+        code: node.code,
+        timeout: node.timeout,
+        memoryLimit: node.memoryLimit,
+        allowedModules: node.allowedModules,
+        pythonConfig: node.pythonConfig
+      });
     
     default:
       // Exhaustive check

@@ -16,6 +16,8 @@ export const NodeTypeEnum = z.enum([
   'Conditional',
   'Sequential',
   'Markov',
+  // Epic 8 Python Integration
+  'PythonTransform',
 ]);
 
 export const BaseNode = z.object({
@@ -113,6 +115,23 @@ export const MarkovNodeSchema = BaseNode.extend({
   }).optional(),
 });
 
+// Epic 8 Python Integration
+export const PythonTransformNodeSchema = BaseNode.extend({
+  type: z.literal('PythonTransform'),
+  code: z.string(),
+  timeout: z.number().positive().optional(),
+  memoryLimit: z.string().optional(),
+  allowedModules: z.array(z.string()).optional(),
+  pythonConfig: z.object({
+    strictMode: z.boolean().optional(),
+    enableCaching: z.boolean().optional(),
+    executorUrl: z.string().optional(),
+    retryAttempts: z.number().min(0).optional(),
+    fallbackBehavior: z.enum(['error', 'skip', 'default']).optional(),
+    defaultOutput: z.string().optional(),
+  }).optional(),
+});
+
 export const AnyNodeSchema = z.discriminatedUnion('type', [
   WeightedChoiceNodeSchema,
   ConcatNodeSchema,
@@ -125,6 +144,8 @@ export const AnyNodeSchema = z.discriminatedUnion('type', [
   ConditionalNodeSchema,
   SequentialNodeSchema,
   MarkovNodeSchema,
+  // Epic 8 Python Integration
+  PythonTransformNodeSchema,
 ]);
 
 export const GraphSchema = z.object({

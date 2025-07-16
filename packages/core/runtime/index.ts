@@ -98,7 +98,8 @@ function seededRandom(seed: string | number): number {
 
 // Re-export all advanced node capabilities
 export * from './advanced';
-export * from './io-system';
 
-// Note: Advanced node implementations are exported from their specific files
-// to avoid circular dependencies during testing
+/* ----------------------------- Python Integration (Epic 8) ------------------------------ */
+
+// Re-export Python integration capabilities
+export * from './nodes/PythonTransform';

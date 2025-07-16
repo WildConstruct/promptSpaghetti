@@ -31,6 +31,9 @@ from .executor import PythonExecutor
 from .security import SecurityValidator
 from .auth import verify_jwt_token
 from .monitoring import setup_monitoring, setup_tracing, ExecutionMonitor
+from .performance_monitor import performance_monitor, start_performance_monitoring, stop_performance_monitoring
+from .performance_optimizer import performance_optimizer, start_performance_optimization, stop_performance_optimization
+from .dashboard import dashboard_router
 
 # Configure structured logging
 structlog.configure(
@@ -187,6 +190,10 @@ async def lifespan(app: FastAPI):
     setup_monitoring(app)
     setup_tracing(app)
     
+    # Start performance monitoring and optimization
+    await start_performance_monitoring()
+    await start_performance_optimization(performance_monitor)
+    
     logger.info("python_executor_ready")
     
     yield
@@ -194,6 +201,9 @@ async def lifespan(app: FastAPI):
     logger.info("python_executor_shutting_down")
     
     # Cleanup
+    await stop_performance_optimization()
+    await stop_performance_monitoring()
+    
     if executor:
         await executor.shutdown()
 
@@ -226,6 +236,9 @@ app.add_middleware(
 # Rate limiting
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Include dashboard router
+app.include_router(dashboard_router)
 
 
 # Authentication dependency
@@ -290,9 +303,14 @@ async def execute_code(
     try:
         user_id = user.get('user_id', 'unknown')
         
-        # Start execution monitoring
-        with ExecutionMonitor(execute_request.execution_id, user_id) as monitor:
-            logger.info(
+        # Start execution monitoring with performance measurement
+        async with performance_monitor.measure_execution(
+            execute_request.execution_id, 
+            execute_request.code, 
+            execute_request.input
+        ) as perf_metrics:
+            with ExecutionMonitor(execute_request.execution_id, user_id) as monitor:
+                logger.info(
                 "execution_started",
                 execution_id=execute_request.execution_id,
                 code_hash=hashlib.md5(execute_request.code.encode()).hexdigest(),
@@ -587,6 +605,72 @@ async def health_check():
 async def get_metrics():
     """Prometheus metrics endpoint"""
     return generate_latest()
+
+
+@app.get("/v1/performance/metrics")
+async def get_performance_metrics(user: dict = Depends(verify_token)):
+    """Get current performance metrics"""
+    return performance_monitor.get_current_metrics()
+
+
+@app.get("/v1/performance/history")
+async def get_performance_history(hours: int = 24, user: dict = Depends(verify_token)):
+    """Get historical performance metrics"""
+    return performance_monitor.get_historical_metrics(hours)
+
+
+@app.get("/v1/performance/trends")
+async def get_performance_trends(hours: int = 24, user: dict = Depends(verify_token)):
+    """Get performance trends over time"""
+    return performance_monitor.get_performance_trends(hours)
+
+
+@app.get("/v1/performance/recommendations")
+async def get_performance_recommendations(user: dict = Depends(verify_token)):
+    """Get performance optimization recommendations"""
+    return performance_monitor.get_optimization_recommendations()
+
+
+@app.get("/v1/optimization/settings")
+async def get_optimization_settings(user: dict = Depends(verify_token)):
+    """Get current optimization settings"""
+    return performance_optimizer.get_current_settings()
+
+
+@app.get("/v1/optimization/history")
+async def get_optimization_history(limit: int = 100, user: dict = Depends(verify_token)):
+    """Get optimization history"""
+    return performance_optimizer.get_optimization_history(limit)
+
+
+@app.get("/v1/optimization/summary")
+async def get_optimization_summary(user: dict = Depends(verify_token)):
+    """Get optimization summary"""
+    return performance_optimizer.get_optimization_summary()
+
+
+@app.post("/v1/optimization/config")
+async def update_optimization_config(
+    config: dict, 
+    user: dict = Depends(verify_token)
+):
+    """Update optimization configuration"""
+    performance_optimizer.update_config(config)
+    return {"status": "success", "message": "Configuration updated"}
+
+
+@app.post("/v1/optimization/manual")
+async def manual_optimization(
+    optimization_type: str,
+    value: Any,
+    user: dict = Depends(verify_token)
+):
+    """Manually apply an optimization"""
+    success = performance_optimizer.manual_optimize(optimization_type, value)
+    return {
+        "status": "success" if success else "error",
+        "message": "Optimization applied" if success else "Failed to apply optimization"
+    }
 
 
 # Error handlers

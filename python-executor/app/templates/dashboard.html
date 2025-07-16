@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ dashboard_title }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .metric-card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        .metric-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .status-good { color: #27ae60; }
+        .status-warning { color: #f39c12; }
+        .status-error { color: #e74c3c; }
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            transition: width 0.3s ease;
+        }
+        .recommendations {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .recommendation {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 10px 0;
+        }
+        .recommendation.high { border-left-color: #e74c3c; }
+        .recommendation.medium { border-left-color: #f39c12; }
+        .recommendation.low { border-left-color: #27ae60; }
+        .refresh-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .refresh-btn:hover {
+            background: #2980b9;
+        }
+        .footer {
+            text-align: center;
+            color: #7f8c8d;
+            margin-top: 40px;
+            padding: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ dashboard_title }}</h1>
+            <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Data</button>
+            <span id="last-updated" style="float: right; color: #7f8c8d;"></span>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Execution Performance</h3>
+                <div class="metric-value" id="avg-duration">--</div>
+                <div class="metric-label">Average Duration (seconds)</div>
+                <div class="metric-value" id="success-rate">--</div>
+                <div class="metric-label">Success Rate (%)</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>System Resources</h3>
+                <div class="metric-value" id="cpu-usage">--</div>
+                <div class="metric-label">CPU Usage (%)</div>
+                <div class="metric-value" id="memory-usage">--</div>
+                <div class="metric-label">Memory Usage (%)</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>Execution Stats</h3>
+                <div class="metric-value" id="total-executions">--</div>
+                <div class="metric-label">Total Executions (Last Hour)</div>
+                <div class="metric-value" id="error-rate">--</div>
+                <div class="metric-label">Error Rate (%)</div>
+            </div>
+
+            <div class="metric-card">
+                <h3>Optimization Status</h3>
+                <div class="metric-value" id="optimization-count">--</div>
+                <div class="metric-label">Total Optimizations</div>
+                <div class="metric-value" id="optimization-success">--</div>
+                <div class="metric-label">Success Rate (%)</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>Performance Trends (Last 24 Hours)</h3>
+            <div id="performance-chart" class="loading">Loading performance data...</div>
+        </div>
+
+        <div class="recommendations">
+            <h3>Performance Recommendations</h3>
+            <div id="recommendations-list" class="loading">Loading recommendations...</div>
+        </div>
+
+        <div class="footer">
+            <p>Python Executor Performance Dashboard - Updated every 30 seconds</p>
+        </div>
+    </div>
+
+    <script>
+        let metricsData = {};
+        let trendsData = {};
+        
+        async function fetchMetrics() {
+            try {
+                const response = await fetch('/dashboard/api/metrics');
+                metricsData = await response.json();
+                updateMetricsDisplay();
+            } catch (error) {
+                console.error('Failed to fetch metrics:', error);
+            }
+        }
+        
+        async function fetchTrends() {
+            try {
+                const response = await fetch('/dashboard/api/trends');
+                trendsData = await response.json();
+                updateTrendsDisplay();
+            } catch (error) {
+                console.error('Failed to fetch trends:', error);
+            }
+        }
+        
+        function updateMetricsDisplay() {
+            const perfMetrics = metricsData.performance_metrics?.execution_metrics || {};
+            const sysMetrics = metricsData.performance_metrics?.system_metrics || {};
+            const optSummary = metricsData.optimization_summary || {};
+            
+            // Update execution performance
+            document.getElementById('avg-duration').textContent = 
+                (perfMetrics.average_duration || 0).toFixed(3);
+            document.getElementById('success-rate').textContent = 
+                ((1 - (perfMetrics.error_rate || 0)) * 100).toFixed(1);
+            
+            // Update system resources
+            document.getElementById('cpu-usage').textContent = 
+                (sysMetrics.cpu_percent || 0).toFixed(1);
+            document.getElementById('memory-usage').textContent = 
+                (sysMetrics.memory_percent || 0).toFixed(1);
+            
+            // Update execution stats
+            document.getElementById('total-executions').textContent = 
+                perfMetrics.total_executions || 0;
+            document.getElementById('error-rate').textContent = 
+                ((perfMetrics.error_rate || 0) * 100).toFixed(1);
+            
+            // Update optimization status
+            document.getElementById('optimization-count').textContent = 
+                optSummary.total_optimizations || 0;
+            document.getElementById('optimization-success').textContent = 
+                ((optSummary.success_rate || 0) * 100).toFixed(1);
+            
+            // Update timestamp
+            document.getElementById('last-updated').textContent = 
+                'Last updated: ' + new Date().toLocaleTimeString();
+        }
+        
+        function updateTrendsDisplay() {
+            const recommendations = trendsData.recommendations || [];
+            const recommendationsList = document.getElementById('recommendations-list');
+            
+            if (recommendations.length === 0) {
+                recommendationsList.innerHTML = '<p>No performance recommendations at this time.</p>';
+                return;
+            }
+            
+            recommendationsList.innerHTML = recommendations.map(rec => `
+                <div class="recommendation ${rec.severity}">
+                    <strong>${rec.type}:</strong> ${rec.message}
+                    <br><small>Action: ${rec.action}</small>
+                </div>
+            `).join('');
+        }
+        
+        function refreshData() {
+            fetchMetrics();
+            fetchTrends();
+        }
+        
+        // Initial load
+        refreshData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(refreshData, 30000);
+    </script>
+</body>
+</html>

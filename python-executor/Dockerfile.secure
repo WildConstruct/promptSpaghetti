@@ -1,0 +1,148 @@
+# Enhanced secure Docker build for Python Executor Service
+# Story 8.1.3: Advanced sandboxed execution environment
+
+# Build stage
+FROM python:3.11-slim as builder
+
+# Set build arguments
+ARG BUILD_DATE
+ARG VERSION=1.0.0
+ARG VCS_REF
+
+# Set metadata labels
+LABEL org.opencontainers.image.title="Python Executor Service - Secure"
+LABEL org.opencontainers.image.description="Advanced secure Python code execution service"
+LABEL org.opencontainers.image.version=${VERSION}
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+LABEL org.opencontainers.image.revision=${VCS_REF}
+LABEL org.opencontainers.image.vendor="PromptSpaghetti"
+LABEL org.opencontainers.image.licenses="MIT"
+
+# Install system dependencies for building (minimal set)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Production stage with enhanced security
+FROM python:3.11-slim as production
+
+# Install only essential runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    procps \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create non-root user with minimal privileges
+RUN groupadd -r -g 1000 executor && \
+    useradd -r -g executor -u 1000 -d /app -s /bin/false executor
+
+# Copy virtual environment from builder stage
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Set working directory
+WORKDIR /app
+
+# Copy application code with proper ownership
+COPY --chown=executor:executor app/ ./app/
+COPY --chown=executor:executor openapi.yaml ./
+COPY --chown=executor:executor security/ ./security/
+
+# Create necessary directories with strict permissions
+RUN mkdir -p /app/logs /app/cache /app/tmp && \
+    chown -R executor:executor /app && \
+    chmod -R 750 /app && \
+    chmod -R 700 /app/tmp && \
+    chmod -R 600 /app/security
+
+# Remove unnecessary files and capabilities
+RUN find /app -type f -name "*.pyc" -delete && \
+    find /app -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+
+# Set environment variables with security hardening
+ENV PYTHONPATH=/app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONSAFEPATH=1
+ENV PYTHONHASHSEED=random
+ENV PYTHONHTTPSVERIFY=1
+ENV PYTHONIOENCODING=utf-8
+
+# Application configuration
+ENV PORT=8001
+ENV WORKERS=1
+ENV LOG_LEVEL=info
+ENV MAX_MEMORY_MB=256
+ENV MAX_EXECUTION_TIME=30
+ENV ENABLE_METRICS=true
+ENV ENABLE_TRACING=true
+
+# Security configuration
+ENV SANDBOX_MODE=strict
+ENV ENABLE_SECCOMP=true
+ENV ENABLE_APPARMOR=true
+ENV DISABLE_NETWORK=true
+ENV READONLY_FILESYSTEM=true
+
+# Remove package manager and other tools
+RUN apt-get purge -y \
+    apt \
+    dpkg \
+    && apt-get autoremove -y \
+    && rm -rf /var/cache/apt/* \
+    && rm -rf /usr/share/doc/* \
+    && rm -rf /usr/share/man/*
+
+# Health check with timeout
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f --max-time 5 http://localhost:${PORT}/health || exit 1
+
+# Switch to non-root user
+USER executor
+
+# Expose port
+EXPOSE ${PORT}
+
+# Use exec form for proper signal handling
+CMD ["sh", "-c", "exec gunicorn app.main:app -w ${WORKERS} -k uvicorn.workers.UvicornWorker -b 0.0.0.0:${PORT} --log-level ${LOG_LEVEL} --timeout 60 --keep-alive 2 --max-requests 500 --max-requests-jitter 50 --preload --worker-connections 100"]
+
+# Secure development stage
+FROM production as development
+
+# Switch to root only for development dependencies
+USER root
+
+# Install minimal development tools
+RUN pip install --no-cache-dir \
+    pytest==7.4.0 \
+    pytest-asyncio==0.21.1 \
+    pytest-cov==4.1.0 \
+    black==23.7.0 \
+    isort==5.12.0 \
+    flake8==6.0.0 \
+    mypy==1.5.1 \
+    safety==2.3.4
+
+# Create secure development entrypoint
+RUN echo '#!/bin/bash\nset -e\nexport PYTHONPATH=/app\nif [ "$1" = "dev" ]; then\n    exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --reload --log-level debug\nelif [ "$1" = "test" ]; then\n    exec pytest -v --cov=app --cov-report=term-missing\nelif [ "$1" = "security-test" ]; then\n    exec python -m pytest tests/security/ -v\nelse\n    exec "$@"\nfi' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh && \
+    chown executor:executor /entrypoint.sh
+
+# Switch back to executor user
+USER executor
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["dev"]
