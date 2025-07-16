@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ZodSchema, ZodTypeAny } from "zod";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { VariationList } from "./VariationList";
@@ -19,6 +19,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
   const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
   const [specificPropsCollapsed, setSpecificPropsCollapsed] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const uncontrolledTestRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (node) {
@@ -113,10 +114,12 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
           onFocus={(e) => {
             e.stopPropagation();
             e.target.style.borderColor = "#4CAF50";
+            console.log('FOCUS: Field focused', key);
           }}
           onBlur={(e) => {
             e.stopPropagation();
             e.target.style.borderColor = error ? "#ef4444" : "#4a5568";
+            console.log('BLUR: Field blurred', key);
           }}
           style={{
             width: "100%",
@@ -131,12 +134,6 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
             pointerEvents: "auto",
             userSelect: "text",
             WebkitUserSelect: "text",
-          }}
-          onFocus={(e) => {
-            e.target.style.borderColor = "#4CAF50";
-          }}
-          onBlur={(e) => {
-            e.target.style.borderColor = error ? "#ef4444" : "#4a5568";
           }}
         />
         {error && (
@@ -155,6 +152,68 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
 
   return (
     <div>
+      {/* DEBUG TEST INPUT */}
+      <div style={{ padding: "16px 20px 8px", background: "#2d3748", margin: "8px", borderRadius: 4 }}>
+        <label style={{ display: "block", fontSize: 12, fontWeight: 600, marginBottom: 4, color: "#e2e8f0" }}>
+          DEBUG Test Input:
+        </label>
+        <input
+          type="text"
+          placeholder="Can you type here?"
+          style={{
+            width: "100%",
+            padding: "8px 12px",
+            border: "1px solid #4a5568",
+            borderRadius: 6,
+            fontSize: 14,
+            background: "#374151",
+            color: "#e2e8f0",
+            outline: "none",
+          }}
+          onFocus={(e) => {
+            console.log('DEBUG: Test input focused');
+            e.target.style.borderColor = "#4CAF50";
+          }}
+          onBlur={(e) => {
+            console.log('DEBUG: Test input blurred');
+            e.target.style.borderColor = "#4a5568";
+          }}
+          onChange={(e) => {
+            console.log('DEBUG: Test input changed:', e.target.value);
+          }}
+        />
+        
+        <label style={{ display: "block", fontSize: 12, fontWeight: 600, marginBottom: 4, color: "#e2e8f0", marginTop: 12 }}>
+          UNCONTROLLED Test Input (with ref):
+        </label>
+        <input
+          ref={uncontrolledTestRef}
+          type="text"
+          placeholder="Try typing here (uncontrolled)"
+          style={{
+            width: "100%",
+            padding: "8px 12px",
+            border: "1px solid #4a5568",
+            borderRadius: 6,
+            fontSize: 14,
+            background: "#374151",
+            color: "#e2e8f0",
+            outline: "none",
+          }}
+          onFocus={(e) => {
+            console.log('DEBUG: Uncontrolled input focused');
+            e.target.style.borderColor = "#4CAF50";
+          }}
+          onBlur={(e) => {
+            console.log('DEBUG: Uncontrolled input blurred');
+            e.target.style.borderColor = "#4a5568";
+          }}
+          onChange={(e) => {
+            console.log('DEBUG: Uncontrolled input changed:', e.target.value);
+          }}
+        />
+      </div>
+      
       {commonFields.length > 0 && (
         <CollapsibleSection
           title="Common Properties"

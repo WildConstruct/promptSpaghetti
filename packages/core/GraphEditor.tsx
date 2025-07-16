@@ -319,10 +319,25 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
               panOnDrag={[1, 2]} // Pan with left or middle mouse button
               selectionOnDrag={false} // Disable box selection on drag
               zoomOnDoubleClick={false} // Disable double-click zoom
-              // Keyboard shortcuts - disable when form inputs are focused
-              deleteKeyCode={null} // Disable delete key to prevent conflicts with form inputs
-              multiSelectionKeyCode={["Shift", "Control", "Meta"]} // Multi-select with Shift/Ctrl/Cmd
-              zoomActivationKeyCode={["Control", "Meta"]} // Zoom with Ctrl/Cmd + scroll
+              // Keyboard shortcuts - completely disable all keyboard handling
+              deleteKeyCode={null} // Disable delete key completely
+              multiSelectionKeyCode={null} // Disable multi-selection
+              zoomActivationKeyCode={null} // Disable zoom activation
+              // Disable all keyboard event capturing
+              onKeyDown={(e) => {
+                // Check if the event target is inside an input or textarea
+                const target = e.target as HTMLElement;
+                const isFormElement = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT';
+                const isInInspector = target.closest('aside') !== null;
+                
+                if (isFormElement || isInInspector) {
+                  // Don't capture keyboard events for form elements or inspector
+                  return;
+                }
+                
+                // Only handle keyboard events for canvas interaction
+                e.stopPropagation();
+              }}
               // Connection line style - Clean 90-degree lines
               connectionLineStyle={{ stroke: '#4a5568', strokeWidth: 2 }}
               connectionLineType={ConnectionLineType.Step}

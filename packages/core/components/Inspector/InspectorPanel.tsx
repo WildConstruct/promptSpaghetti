@@ -78,6 +78,15 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
           flexDirection: "column",
           transition: collapsed ? "width 0.2s ease" : "none",
         }}
+        onKeyDown={(e) => {
+          e.stopPropagation();
+        }}
+        onKeyUp={(e) => {
+          e.stopPropagation();
+        }}
+        onKeyPress={(e) => {
+          e.stopPropagation();
+        }}
       >
         <div
           style={{
@@ -149,6 +158,15 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         display: "flex",
         flexDirection: "column",
         transition: collapsed ? "width 0.2s ease" : "none",
+      }}
+      onKeyDown={(e) => {
+        e.stopPropagation();
+      }}
+      onKeyUp={(e) => {
+        e.stopPropagation();
+      }}
+      onKeyPress={(e) => {
+        e.stopPropagation();
       }}
     >
       <div

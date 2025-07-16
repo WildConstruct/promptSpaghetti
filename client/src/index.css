@@ -108,12 +108,19 @@ body {
   }
 }
 
-/* Ensure form inputs work properly */
+/* Ensure form inputs work properly - AGGRESSIVE FIXES */
 input, textarea, select {
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
   -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  position: relative !important;
+  z-index: 9999 !important;
+  background: #2d3748 !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #4a5568 !important;
+  outline: none !important;
 }
 
 /* Inspector panel should not interfere with inputs */
@@ -121,6 +128,31 @@ aside input, aside textarea, aside select {
   pointer-events: auto !important;
   user-select: text !important;
   -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  position: relative !important;
+  z-index: 9999 !important;
+  background: #2d3748 !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #4a5568 !important;
+  outline: none !important;
+}
+
+/* Force inputs to be interactive */
+input:focus, textarea:focus, select:focus {
+  pointer-events: auto !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  border-color: #4CAF50 !important;
+  background: #374151 !important;
+}
+
+/* Prevent React Flow from interfering */
+.react-flow input, .react-flow textarea, .react-flow select {
+  pointer-events: auto !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  z-index: 9999 !important;
 }
 
 /* Handle/port styling for better visibility - Safari compatible */
