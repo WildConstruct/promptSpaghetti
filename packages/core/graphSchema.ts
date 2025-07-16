@@ -11,6 +11,11 @@ export const NodeTypeEnum = z.enum([
   'Include',
   'SetVariable',
   'GetVariable',
+  // Epic 7 Advanced Node Types
+  'WeightedAdvanced',
+  'Conditional',
+  'Sequential',
+  'Markov',
 ]);
 
 export const BaseNode = z.object({
@@ -50,6 +55,64 @@ export const GetVariableNodeSchema = BaseNode.extend({
   key: z.string(),
 });
 
+// Epic 7 Advanced Node Schemas
+export const WeightedAdvancedNodeSchema = BaseNode.extend({
+  type: z.literal('WeightedAdvanced'),
+  choices: z.array(
+    z.object({ value: z.string(), weight: z.number().min(0) })
+  ).optional(),
+  distributionConfig: z.object({
+    type: z.enum(['linear', 'exponential', 'gaussian', 'custom']),
+    parameters: z.record(z.number()).optional(),
+    normalize: z.boolean().optional(),
+    minWeight: z.number().min(0).optional(),
+  }).optional(),
+});
+
+export const ConditionalNodeSchema = BaseNode.extend({
+  type: z.literal('Conditional'),
+  branches: z.array(
+    z.object({
+      condition: z.string(),
+      output: z.string(),
+      label: z.string().optional()
+    })
+  ).optional(),
+  defaultOutput: z.string().optional(),
+  conditionalConfig: z.object({
+    allowVariableAccess: z.boolean().optional(),
+    strictMode: z.boolean().optional(),
+    customFunctions: z.record(z.any()).optional()
+  }).optional(),
+});
+
+export const SequentialNodeSchema = BaseNode.extend({
+  type: z.literal('Sequential'),
+  sequence: z.array(z.string()).optional(),
+  pattern: z.object({
+    type: z.enum(['linear', 'cyclical', 'random', 'weighted']),
+    config: z.object({
+      weights: z.array(z.number()).optional(),
+      allowRepeats: z.boolean().optional(),
+      custom: z.record(z.any()).optional()
+    }).optional()
+  }).optional(),
+});
+
+export const MarkovNodeSchema = BaseNode.extend({
+  type: z.literal('Markov'),
+  states: z.array(z.string()).optional(),
+  transitions: z.record(z.record(z.number())).optional(),
+  initialState: z.string().optional(),
+  markovConfig: z.object({
+    maxTransitions: z.number().positive().optional(),
+    normalizeProbabilities: z.boolean().optional(),
+    terminationStates: z.array(z.string()).optional(),
+    detectLoops: z.boolean().optional(),
+    custom: z.record(z.any()).optional()
+  }).optional(),
+});
+
 export const AnyNodeSchema = z.discriminatedUnion('type', [
   WeightedChoiceNodeSchema,
   ConcatNodeSchema,
@@ -57,6 +120,11 @@ export const AnyNodeSchema = z.discriminatedUnion('type', [
   IncludeNodeSchema,
   SetVariableNodeSchema,
   GetVariableNodeSchema,
+  // Epic 7 Advanced Nodes
+  WeightedAdvancedNodeSchema,
+  ConditionalNodeSchema,
+  SequentialNodeSchema,
+  MarkovNodeSchema,
 ]);
 
 export const GraphSchema = z.object({
