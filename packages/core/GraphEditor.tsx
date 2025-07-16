@@ -118,6 +118,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [correctionsOpen, setCorrectionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
+  const [dragPreview, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
   
   const correctionsEnabled = useCorrectionsEnabled();
 
@@ -231,6 +232,12 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
       setNodes((nds) => {
         return nds.map((node) => {
           const change = changes.find((c) => 'id' in c && c.id === node.id);
+          // Show drag preview for drag operations
+          if (change && 'position' in change && change.dragging) {
+            setDragPreview({ node: {...node, ...change}, position: change.position || node.position });
+          } else if (change && 'dragging' in change && !change.dragging) {
+            setDragPreview(null);
+          }
           return change ? { ...node, ...change } : node;
         });
       });

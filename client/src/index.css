@@ -75,7 +75,7 @@ body {
   box-shadow: none !important;
 }
 
-/* Handle/port styling for better visibility */
+/* Handle/port styling for better visibility - Safari compatible */
 .react-flow__handle {
   width: 12px !important;
   height: 12px !important;
@@ -85,10 +85,14 @@ body {
   opacity: 1 !important;
   z-index: 10 !important;
   visibility: visible !important;
+  -webkit-appearance: none;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .react-flow__handle:hover {
-  transform: scale(1.2);
+  -webkit-transform: scale(1.2) translateZ(0);
+  transform: scale(1.2) translateZ(0);
   border-color: #4CAF50 !important;
   background: #5a6578 !important;
 }

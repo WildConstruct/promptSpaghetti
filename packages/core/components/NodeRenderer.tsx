@@ -62,16 +62,22 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           zIndex: 1,
           pointerEvents: 'auto',
           display: 'block',
+          WebkitTransform: 'translateZ(0)',
+          transform: 'translateZ(0)',
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden',
         }}
         onMouseEnter={(e) => {
           if (!selected) {
-            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.WebkitTransform = 'translateY(-2px) translateZ(0)';
+            e.currentTarget.style.transform = 'translateY(-2px) translateZ(0)';
             e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
           }
         }}
         onMouseLeave={(e) => {
           if (!selected) {
-            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.WebkitTransform = 'translateY(0) translateZ(0)';
+            e.currentTarget.style.transform = 'translateY(0) translateZ(0)';
             e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
           }
         }}

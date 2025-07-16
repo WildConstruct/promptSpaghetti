@@ -87,7 +87,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
             fontSize: 12,
             fontWeight: 600,
             marginBottom: 4,
-            color: "#333",
+            color: "#e2e8f0",
             textTransform: "capitalize",
           }}
         >
@@ -114,18 +114,19 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
           style={{
             width: "100%",
             padding: "8px 12px",
-            border: error ? "1px solid #ef4444" : "1px solid #d1d5db",
+            border: error ? "1px solid #ef4444" : "1px solid #4a5568",
             borderRadius: 6,
             fontSize: 14,
-            background: "#fff",
+            background: "#2d3748",
+            color: "#e2e8f0",
             outline: "none",
             transition: "border-color 0.2s",
           }}
           onFocus={(e) => {
-            e.target.style.borderColor = "#3b82f6";
+            e.target.style.borderColor = "#4CAF50";
           }}
           onBlur={(e) => {
-            e.target.style.borderColor = error ? "#ef4444" : "#d1d5db";
+            e.target.style.borderColor = error ? "#ef4444" : "#4a5568";
           }}
         />
         {error && (

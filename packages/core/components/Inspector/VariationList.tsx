@@ -143,7 +143,7 @@ export const VariationList: React.FC<VariationListProps> = ({
         <label style={{ 
           fontSize: 12, 
           fontWeight: 600, 
-          color: "#333" 
+          color: "#e2e8f0" 
         }}>
           Variations ({variations.length})
         </label>
@@ -272,9 +272,9 @@ export const VariationList: React.FC<VariationListProps> = ({
       <div style={{ 
         maxHeight: 200, 
         overflowY: "auto",
-        border: "1px solid #e5e7eb",
+        border: "1px solid #4a5568",
         borderRadius: 6,
-        background: "#fff",
+        background: "#2d3748",
       }}>
         {variations.length === 0 ? (
           <div style={{

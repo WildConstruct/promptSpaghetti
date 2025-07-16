@@ -205,8 +205,8 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
         </div>
 
         <div style={{ 
-          background: "#fff", 
-          border: "1px solid #e5e7eb", 
+          background: "#2d3748", 
+          border: "1px solid #4a5568", 
           borderRadius: 6,
           minHeight: 100,
         }}>
