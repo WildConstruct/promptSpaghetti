@@ -35,7 +35,16 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         role="button"
         data-testid={`node-${id}`}
         tabIndex={0}
-        onClick={() => onSelect(id)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect(id);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect(id);
+          }
+        }}
         style={{
           cursor: 'pointer',
           background: '#2d3748',
@@ -49,6 +58,19 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           position: 'relative',
           overflow: 'hidden',
           fontFamily: 'system-ui, -apple-system, sans-serif',
+          transition: 'all 0.2s ease',
+        }}
+        onMouseEnter={(e) => {
+          if (!selected) {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!selected) {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+          }
         }}
         aria-label={(() => {
           const label = data?.label ?? nodeMeta.label;
@@ -123,14 +145,15 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         <Handle
           type="target"
           position={Position.Left}
+          id="target"
           style={{
-            left: -6,
             width: 12,
             height: 12,
             borderRadius: '50%',
             background: '#4a5568',
             border: '2px solid #2d3748',
             cursor: 'crosshair',
+            zIndex: 10,
           }}
           isConnectable={true}
         />
@@ -139,14 +162,15 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         <Handle
           type="source"
           position={Position.Right}
+          id="source"
           style={{
-            right: -6,
             width: 12,
             height: 12,
             borderRadius: '50%',
             background: categoryColor,
             border: '2px solid #2d3748',
             cursor: 'crosshair',
+            zIndex: 10,
           }}
           isConnectable={true}
         />

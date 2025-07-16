@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useMemo, useRef } from "react";
-import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange } from "reactflow";
+import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange, ConnectionLineType } from "reactflow";
 import { InspectorPanel } from "./components/Inspector";
 import { NodeRenderer } from "./components/NodeRenderer";
 import { StatusBar } from "./components/StatusBar";
@@ -163,7 +163,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
 
   // Selected node & schema for inspector
   const selectedNode = nodes.find((n) => n.id === selectedNodeId) || null;
-  const selectedSchema = selectedNode && selectedNode.type ? nodeSchemas[selectedNode.type as keyof typeof nodeSchemas] ?? null : null;
+  const selectedSchema = selectedNode && selectedNode.data?.nodeType ? nodeSchemas[selectedNode.data.nodeType as keyof typeof nodeSchemas] ?? null : null;
 
   const handleInspectorChange = (partial: Record<string, unknown>) => {
     if (!selectedNode) return;
@@ -299,6 +299,10 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
               nodeTypes={nodeTypes}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
+              // Node interaction
+              nodesDraggable={true}
+              nodesConnectable={true}
+              elementsSelectable={true}
               // Standard 3D-style mouse controls
               panOnScroll={false} // Disable scroll to pan
               zoomOnScroll={true} // Enable scroll to zoom (standard 3D behavior)
@@ -311,7 +315,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
               zoomActivationKeyCode={["Control", "Meta"]} // Zoom with Ctrl/Cmd + scroll
               // Connection line style
               connectionLineStyle={{ stroke: '#4a5568', strokeWidth: 2 }}
-              connectionLineType="smoothstep"
+              connectionLineType={ConnectionLineType.SmoothStep}
               // Default zoom/pan settings
               minZoom={0.1}
               maxZoom={4}

@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactFlowProvider } from "reactflow";
-import { GraphEditor } from "../../packages/core";
+import { GraphEditor } from "./core";
 import "reactflow/dist/style.css";
 
 /**
