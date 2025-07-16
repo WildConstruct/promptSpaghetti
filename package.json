@@ -3,11 +3,27 @@
   "version": "0.1.0-alpha",
   "private": true,
   "description": "Monorepo for PromptScape Randomizer Graph editor and executor.",
+  "workspaces": [
+    "client",
+    "packages/*",
+    "server"
+  ],
   "scripts": {
     "postinstall": "echo 'Monorepo bootstrap complete.'",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx --ignore-path .gitignore",
     "test": "jest --coverage",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build",
+    "check:deps": "node tests/build-verification/scripts/quick-check.js",
+    "clean:modules": "rimraf node_modules client/node_modules packages/*/node_modules",
+    "fix:deps": "npm run clean:modules && npm install && cd client && npm install",
+    "verify:build": "npm run check:deps && npm run test"
+  },
+  "dependencies": {
+    "zod": "^3.22.4",
+    "seedrandom": "^3.0.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "reactflow": "^11.11.4"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",
@@ -21,10 +37,9 @@
     "jest": "^29.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.0.0",
-    "reactflow": "^11.11.4",
-    "seedrandom": "^3.0.5",
     "ts-jest": "^29.0.0",
     "typescript": "^5.0.0",
-    "zod": "^4.0.5"
+    "rimraf": "^5.0.0",
+    "chalk": "^4.1.2"
   }
 }
