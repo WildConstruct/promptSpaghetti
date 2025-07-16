@@ -170,7 +170,14 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
 
   const handleInspectorChange = (partial: Record<string, unknown>) => {
     if (!selectedNode) return;
+    // Update the graph store
     updateNode(selectedNode.id, partial);
+    // Also update local React state immediately for UI responsiveness
+    setNodes(prev => prev.map(n => 
+      n.id === selectedNode.id 
+        ? { ...n, data: { ...n.data, ...partial } }
+        : n
+    ));
   };
 
   // Edge drag handler
