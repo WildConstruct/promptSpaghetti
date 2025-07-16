@@ -20,9 +20,6 @@ export const NodeRenderer = memo<NodeRendererProps>(({
   getCategoryColor,
 }) => {
   try {
-    // Debug: Log node data to console
-    console.log('NodeRenderer:', { id, data, selected });
-    
     const hasVariations = data?.variations && data.variations.length > 0;
     const nodeType = data?.nodeType || data?.type || 'WeightedChoice';
     const nodeMeta = getNodeMeta(nodeType);
@@ -123,23 +120,24 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         </div>
 
         {/* Content Section */}
-        <div style={{ padding: '10px 12px', color: '#e2e8f0' }}>
+        <div style={{ padding: '10px 12px', color: '#e2e8f0', minHeight: '40px' }}>
           {/* Node Title */}
           <div style={{ 
-            fontWeight: 500, 
-            fontSize: 13, 
+            fontWeight: 600, 
+            fontSize: 14, 
             marginBottom: properties.length > 0 ? 6 : 0,
-            color: '#f7fafc'
+            color: '#f7fafc',
+            lineHeight: 1.2
           }}>
-            {data?.label || id}
+            {data?.label || nodeMeta.label || nodeType || id}
           </div>
           
           {/* Properties */}
           {properties.length > 0 && (
-            <div style={{ fontSize: 11, color: '#a0aec0', lineHeight: 1.3 }}>
+            <div style={{ fontSize: 11, color: '#a0aec0', lineHeight: 1.4 }}>
               {properties.map(([k, v], idx) => (
                 <div key={k} style={{ marginBottom: idx < properties.length - 1 ? 2 : 0 }}>
-                  <span style={{ color: '#cbd5e0' }}>{k}:</span>{' '}
+                  <span style={{ color: '#cbd5e0', fontWeight: 500 }}>{k}:</span>{' '}
                   <span>{String(v).length > 20 ? String(v).slice(0, 20) + '...' : String(v)}</span>
                 </div>
               ))}

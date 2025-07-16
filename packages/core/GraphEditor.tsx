@@ -313,9 +313,15 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
               deleteKeyCode={["Delete", "Backspace"]} // Delete selected nodes
               multiSelectionKeyCode={["Shift", "Control", "Meta"]} // Multi-select with Shift/Ctrl/Cmd
               zoomActivationKeyCode={["Control", "Meta"]} // Zoom with Ctrl/Cmd + scroll
-              // Connection line style
+              // Connection line style - Clean 90-degree lines
               connectionLineStyle={{ stroke: '#4a5568', strokeWidth: 2 }}
-              connectionLineType={ConnectionLineType.SmoothStep}
+              connectionLineType={ConnectionLineType.Step}
+              // Default edge options for clean 90-degree connections
+              defaultEdgeOptions={{
+                type: 'step',
+                style: { stroke: '#666', strokeWidth: 2 },
+                markerEnd: { type: 'arrowclosed', color: '#666' }
+              }}
               // Default zoom/pan settings
               minZoom={0.1}
               maxZoom={4}

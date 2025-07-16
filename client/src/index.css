@@ -18,14 +18,17 @@ body {
 /* Override React Flow default styles for dark mode */
 .react-flow__edge-path {
   stroke: #666;
+  stroke-width: 2px;
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
   stroke: #4CAF50;
+  stroke-width: 2px;
 }
 
 .react-flow__connection-path {
   stroke: #666;
+  stroke-width: 2px;
 }
 
 .react-flow__controls {
@@ -60,14 +63,11 @@ body {
   border: 1px solid #4CAF50;
 }
 
-/* Node styling - Override React Flow defaults while maintaining functionality */
+/* Node styling - Minimal overrides to prevent white borders */
 .react-flow__node {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
-  position: relative !important;
-  pointer-events: auto !important;
-  overflow: visible !important;
 }
 
 .react-flow__node.selected {
