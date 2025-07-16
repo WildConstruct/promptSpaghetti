@@ -1,0 +1,165 @@
+# Prometheus alerting rules for Python Executor Service
+
+groups:
+  - name: python_executor_alerts
+    rules:
+      # High error rate alert
+      - alert: HighExecutionErrorRate
+        expr: |
+          (
+            rate(python_executor_executions_total{status="failure"}[5m]) /
+            rate(python_executor_executions_total[5m])
+          ) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "High execution error rate in Python Executor"
+          description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+
+      # Critical error rate alert
+      - alert: CriticalExecutionErrorRate
+        expr: |
+          (
+            rate(python_executor_executions_total{status="failure"}[5m]) /
+            rate(python_executor_executions_total[5m])
+          ) > 0.5
+        for: 1m
+        labels:
+          severity: critical
+          service: python-executor
+        annotations:
+          summary: "Critical execution error rate in Python Executor"
+          description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+
+      # High response time alert
+      - alert: HighResponseTime
+        expr: |
+          histogram_quantile(0.95, 
+            rate(python_executor_request_duration_seconds_bucket[5m])
+          ) > 2.0
+        for: 3m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "High response time in Python Executor"
+          description: "95th percentile response time is {{ $value }}s"
+
+      # Service down alert
+      - alert: ServiceDown
+        expr: up{job="python-executor"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: python-executor
+        annotations:
+          summary: "Python Executor service is down"
+          description: "Python Executor service has been down for more than 1 minute"
+
+      # High memory usage alert
+      - alert: HighMemoryUsage
+        expr: |
+          (
+            python_executor_memory_usage_bytes > 1073741824
+          )
+        for: 5m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "High memory usage in Python Executor"
+          description: "Memory usage is {{ $value | humanizeBytes }}"
+
+      # High active executions alert
+      - alert: HighActiveExecutions
+        expr: python_executor_active_executions > 50
+        for: 2m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "High number of active executions"
+          description: "{{ $value }} executions are currently active"
+
+      # Rate limiting alert
+      - alert: HighRateLimitHits
+        expr: |
+          rate(python_executor_rate_limit_hits_total[5m]) > 10
+        for: 2m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "High rate limit violations"
+          description: "Rate limit violations: {{ $value }} per second"
+
+      # Security violations alert
+      - alert: SecurityViolations
+        expr: |
+          rate(python_executor_security_violations_total[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          service: python-executor
+        annotations:
+          summary: "Security violations detected"
+          description: "Security violations detected: {{ $value }} per second"
+
+      # Authentication failures alert
+      - alert: HighAuthFailures
+        expr: |
+          rate(python_executor_auth_failures_total[5m]) > 5
+        for: 1m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "High authentication failure rate"
+          description: "Authentication failures: {{ $value }} per second"
+
+  - name: system_alerts
+    rules:
+      # Disk space alert
+      - alert: LowDiskSpace
+        expr: |
+          (
+            node_filesystem_avail_bytes{mountpoint="/"} /
+            node_filesystem_size_bytes{mountpoint="/"}
+          ) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "Low disk space"
+          description: "Disk space is below 10%: {{ $value | humanizePercentage }} remaining"
+
+      # High CPU usage alert
+      - alert: HighCpuUsage
+        expr: |
+          (
+            100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+          ) > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value }}%"
+
+      # High memory usage alert (system level)
+      - alert: HighSystemMemoryUsage
+        expr: |
+          (
+            1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)
+          ) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: python-executor
+        annotations:
+          summary: "High system memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }}"

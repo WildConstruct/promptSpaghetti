@@ -1,0 +1,522 @@
+openapi: 3.0.3
+info:
+  title: Python Executor Service
+  description: |
+    Secure Python code execution service for prompt-spaghetti node graphs.
+    
+    This service provides sandboxed execution of Python code with resource monitoring,
+    security validation, and comprehensive error handling.
+  version: 1.0.0
+  contact:
+    name: PromptSpaghetti Development Team
+    url: https://github.com/promptspaghetti/python-executor
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8001
+    description: Local development server
+  - url: https://api-staging.promptspaghetti.com/python-executor
+    description: Staging environment
+  - url: https://api.promptspaghetti.com/python-executor
+    description: Production environment
+
+paths:
+  /v1/execute:
+    post:
+      summary: Execute Python code
+      description: |
+        Execute Python code in a secure, sandboxed environment with resource monitoring.
+        
+        The code must define a `transform` function that accepts input data and returns
+        the transformed result. The execution environment has restricted access to system
+        resources and only allows approved Python modules.
+      operationId: executeCode
+      tags:
+        - Execution
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteRequest'
+            examples:
+              simple_transform:
+                summary: Simple text transformation
+                value:
+                  code: |
+                    def transform(input_text):
+                        return input_text.upper()
+                  input: "hello world"
+                  timeout: 30
+                  execution_id: "node-abc123-exec-456"
+              complex_transform:
+                summary: Complex transformation with modules
+                value:
+                  code: |
+                    import re
+                    import json
+                    
+                    def transform(input_data):
+                        # Parse JSON input
+                        data = json.loads(input_data)
+                        
+                        # Extract and clean text
+                        text = data.get('text', '')
+                        cleaned = re.sub(r'[^\w\s]', '', text)
+                        
+                        return {
+                            'original': text,
+                            'cleaned': cleaned,
+                            'word_count': len(cleaned.split())
+                        }
+                  input: '{"text": "Hello, World! How are you?"}'
+                  timeout: 60
+                  memory_limit: "256MB"
+                  allowed_modules: ["re", "json", "datetime"]
+                  execution_id: "node-def789-exec-123"
+      responses:
+        '200':
+          description: Code executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteResponse'
+              examples:
+                success_response:
+                  summary: Successful execution
+                  value:
+                    success: true
+                    result: "HELLO WORLD"
+                    execution_time: 0.045
+                    memory_used: "12MB"
+                    warnings: []
+                    metadata:
+                      execution_id: "node-abc123-exec-456"
+                      python_version: "3.11.0"
+                      modules_imported: ["re"]
+        '400':
+          description: Invalid request or code validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validation_error:
+                  summary: Code validation failed
+                  value:
+                    success: false
+                    error:
+                      type: "ValidationError"
+                      message: "Code contains prohibited operations: eval"
+                      code: "CODE_VALIDATION_FAILED"
+                      details:
+                        prohibited_operations: ["eval"]
+                        line: 3
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          headers:
+            Retry-After:
+              description: Seconds to wait before retry
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during execution
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                execution_error:
+                  summary: Python execution failed
+                  value:
+                    success: false
+                    error:
+                      type: "ExecutionError"
+                      message: "NameError: name 'undefined_var' is not defined"
+                      code: "EXECUTION_FAILED"
+                      line: 3
+                      traceback: "Traceback (most recent call last):\n  File \"<string>\", line 3, in transform\nNameError: name 'undefined_var' is not defined"
+                    execution_time: 0.012
+                    metadata:
+                      execution_id: "node-abc123-exec-456"
+
+  /health:
+    get:
+      summary: Health check
+      description: Check the health status of the Python executor service
+      operationId: healthCheck
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: "healthy"
+                python_version: "3.11.0"
+                active_executions: 0
+                system_info:
+                  memory_usage_percent: 45.2
+                  cpu_usage_percent: 12.8
+                  disk_usage_percent: 67.1
+                uptime_seconds: 86400
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /metrics:
+    get:
+      summary: Prometheus metrics
+      description: Expose metrics for monitoring and alerting
+      operationId: getMetrics
+      tags:
+        - Monitoring
+      responses:
+        '200':
+          description: Metrics in Prometheus format
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |
+                # HELP python_executor_requests_total Total requests to Python executor
+                # TYPE python_executor_requests_total counter
+                python_executor_requests_total{method="POST",endpoint="/v1/execute",status="200"} 1234
+                
+                # HELP python_executor_execution_seconds Time spent executing Python code
+                # TYPE python_executor_execution_seconds histogram
+                python_executor_execution_seconds_bucket{le="0.1"} 500
+                python_executor_execution_seconds_bucket{le="0.5"} 800
+                python_executor_execution_seconds_bucket{le="1.0"} 950
+                python_executor_execution_seconds_bucket{le="+Inf"} 1000
+
+  /v1/validate:
+    post:
+      summary: Validate Python code without execution
+      description: |
+        Validate Python code for security and syntax without executing it.
+        Useful for providing real-time feedback in code editors.
+      operationId: validateCode
+      tags:
+        - Validation
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateRequest'
+      responses:
+        '200':
+          description: Validation completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token issued by the main application
+
+  schemas:
+    ExecuteRequest:
+      type: object
+      required:
+        - code
+        - input
+        - execution_id
+      properties:
+        code:
+          type: string
+          description: Python code to execute. Must define a 'transform' function.
+          example: |
+            def transform(input_text):
+                return input_text.upper()
+        input:
+          description: Input data to pass to the transform function
+          oneOf:
+            - type: string
+            - type: object
+            - type: array
+          example: "hello world"
+        execution_id:
+          type: string
+          description: Unique identifier for this execution request
+          pattern: '^[a-zA-Z0-9\-_]{1,64}$'
+          example: "node-abc123-exec-456"
+        timeout:
+          type: integer
+          description: Maximum execution time in seconds
+          minimum: 1
+          maximum: 300
+          default: 30
+          example: 30
+        memory_limit:
+          type: string
+          description: Maximum memory usage (e.g., "128MB", "1GB")
+          pattern: '^[0-9]+[KMGT]?B$'
+          default: "128MB"
+          example: "256MB"
+        allowed_modules:
+          type: array
+          items:
+            type: string
+          description: List of Python modules allowed for import
+          default: ["re", "json", "datetime", "math", "random"]
+          example: ["re", "json", "datetime"]
+        context:
+          type: object
+          description: Additional context data available during execution
+          additionalProperties: true
+          example:
+            user_id: "user123"
+            environment: "production"
+
+    ExecuteResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Whether the execution completed successfully
+        result:
+          description: The output from the transform function
+          oneOf:
+            - type: string
+            - type: object
+            - type: array
+            - type: number
+            - type: boolean
+        execution_time:
+          type: number
+          description: Time taken to execute the code in seconds
+          minimum: 0
+          example: 0.045
+        memory_used:
+          type: string
+          description: Peak memory usage during execution
+          example: "12MB"
+        warnings:
+          type: array
+          items:
+            type: string
+          description: Non-fatal warnings during execution
+          example: ["Deprecated function used", "Large memory allocation"]
+        metadata:
+          type: object
+          properties:
+            execution_id:
+              type: string
+              example: "node-abc123-exec-456"
+            python_version:
+              type: string
+              example: "3.11.0"
+            modules_imported:
+              type: array
+              items:
+                type: string
+              example: ["re", "json"]
+            cache_hit:
+              type: boolean
+              description: Whether result was served from cache
+              example: false
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: object
+          required:
+            - type
+            - message
+            - code
+          properties:
+            type:
+              type: string
+              enum: ["ValidationError", "ExecutionError", "TimeoutError", "MemoryError", "SecurityError", "AuthenticationError", "RateLimitError"]
+              example: "ExecutionError"
+            message:
+              type: string
+              description: Human-readable error message
+              example: "NameError: name 'undefined_var' is not defined"
+            code:
+              type: string
+              description: Machine-readable error code
+              enum: ["CODE_VALIDATION_FAILED", "EXECUTION_FAILED", "EXECUTION_TIMEOUT", "MEMORY_LIMIT_EXCEEDED", "SECURITY_VIOLATION", "INVALID_TOKEN", "RATE_LIMIT_EXCEEDED"]
+              example: "EXECUTION_FAILED"
+            line:
+              type: integer
+              description: Line number where error occurred (if applicable)
+              minimum: 1
+              example: 3
+            traceback:
+              type: string
+              description: Full Python traceback (for debugging)
+              example: "Traceback (most recent call last):\n  File \"<string>\", line 3, in transform\nNameError: name 'undefined_var' is not defined"
+            details:
+              type: object
+              description: Additional error-specific details
+              additionalProperties: true
+        execution_time:
+          type: number
+          description: Time spent before error occurred
+          minimum: 0
+          example: 0.012
+        metadata:
+          type: object
+          properties:
+            execution_id:
+              type: string
+              example: "node-abc123-exec-456"
+
+    ValidateRequest:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          description: Python code to validate
+        allowed_modules:
+          type: array
+          items:
+            type: string
+          description: List of allowed modules for validation
+          default: ["re", "json", "datetime", "math", "random"]
+
+    ValidateResponse:
+      type: object
+      required:
+        - valid
+      properties:
+        valid:
+          type: boolean
+          description: Whether the code passed validation
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: ["SyntaxError", "SecurityError", "ImportError"]
+              message:
+                type: string
+              line:
+                type: integer
+        warnings:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+              line:
+                type: integer
+        metadata:
+          type: object
+          properties:
+            complexity_score:
+              type: integer
+              description: Code complexity score (1-10)
+            estimated_execution_time:
+              type: number
+              description: Estimated execution time in seconds
+            imports_detected:
+              type: array
+              items:
+                type: string
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: ["healthy", "unhealthy", "degraded"]
+        python_version:
+          type: string
+          example: "3.11.0"
+        active_executions:
+          type: integer
+          minimum: 0
+          example: 0
+        system_info:
+          type: object
+          properties:
+            memory_usage_percent:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 45.2
+            cpu_usage_percent:
+              type: number
+              minimum: 0
+              example: 12.8
+            disk_usage_percent:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 67.1
+        uptime_seconds:
+          type: integer
+          minimum: 0
+          example: 86400
+        checks:
+          type: object
+          description: Detailed health check results
+          additionalProperties:
+            type: object
+            properties:
+              healthy:
+                type: boolean
+              message:
+                type: string
+              last_check:
+                type: string
+                format: date-time
+
+tags:
+  - name: Execution
+    description: Python code execution endpoints
+  - name: Validation
+    description: Code validation and analysis
+  - name: Health
+    description: Service health and status
+  - name: Monitoring
+    description: Metrics and monitoring endpoints
