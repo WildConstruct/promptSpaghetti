@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BaseNodeEditor, BaseNodeEditorProps } from "../BaseNodeEditor";
 import { TextFieldEditor } from "../TextFieldEditor";
-import { TextAreaEditor } from "../TextAreaEditor";
+import { EnhancedTextAreaEditor } from "../EnhancedTextAreaEditor";
 import { SelectEditor, SelectOption } from "../SelectEditor";
 import { CollapsibleSection } from "../CollapsibleSection";
 
@@ -200,7 +200,7 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
         collapsed={wrappingCollapsed}
         onToggle={() => setWrappingCollapsed(!wrappingCollapsed)}
       >
-        <TextAreaEditor
+        <EnhancedTextAreaEditor
           label="Prefix"
           value={prefix}
           fieldKey="prefix"
@@ -208,9 +208,11 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
           onChange={(value) => handleFieldChange("prefix", value)}
           placeholder="Text to add before concatenated result..."
           rows={2}
+          enableInlineCorrections={true}
+          showCorrectionHighlights={true}
         />
 
-        <TextAreaEditor
+        <EnhancedTextAreaEditor
           label="Suffix"
           value={suffix}
           fieldKey="suffix"
@@ -218,6 +220,8 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
           onChange={(value) => handleFieldChange("suffix", value)}
           placeholder="Text to add after concatenated result..."
           rows={2}
+          enableInlineCorrections={true}
+          showCorrectionHighlights={true}
         />
       </CollapsibleSection>
 

@@ -5,6 +5,7 @@ import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
 import { initDatabase, healthCheck } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
+import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -87,6 +88,17 @@ try {
   console.error('Failed to initialize database:', error);
   process.exit(1);
 }
+
+// Initialize extension system on startup
+(async () => {
+  try {
+    await ExtensionLifecycleManager.getInstance().initialize();
+    console.log('Extension system initialized successfully');
+  } catch (error) {
+    console.error('Failed to initialize extension system:', error);
+    // Don't exit - extension system is not critical for basic functionality
+  }
+})();
 
 // We'll add CORS support after installing the dependency
 // For now, we'll use a simple CORS header

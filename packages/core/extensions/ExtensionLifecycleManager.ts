@@ -31,6 +31,13 @@ export class ExtensionLifecycleManager {
   }
 
   /**
+   * Static helper to get active extensions
+   */
+  public static getActiveExtensions(): BaseExtension[] {
+    return ExtensionLifecycleManager.getInstance().getExtensionsByState(ExtensionLifecycleState.ACTIVE);
+  }
+
+  /**
    * Initialize the lifecycle manager
    */
   public async initialize(): Promise<void> {

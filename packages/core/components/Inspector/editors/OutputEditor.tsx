@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BaseNodeEditor, BaseNodeEditorProps } from "../BaseNodeEditor";
 import { TextFieldEditor } from "../TextFieldEditor";
-import { TextAreaEditor } from "../TextAreaEditor";
+import { EnhancedTextAreaEditor } from "../EnhancedTextAreaEditor";
 import { SelectEditor, SelectOption } from "../SelectEditor";
 import { CollapsibleSection } from "../CollapsibleSection";
 
@@ -77,7 +77,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
           placeholder="Enter output label..."
         />
 
-        <TextAreaEditor
+        <EnhancedTextAreaEditor
           label="Output Template"
           value={template}
           fieldKey="template"
@@ -87,6 +87,8 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
           rows={4}
           showWordCount
           autoResize
+          enableInlineCorrections={true}
+          showCorrectionHighlights={true}
         />
       </CollapsibleSection>
 

@@ -23,6 +23,10 @@ import { SequentialNode, createSequencePattern } from '../../packages/core/runti
 import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/nodes/Markov';
 import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform';
 
+// Epic 8.4 Extension System imports
+import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
+import { BaseExtension, NodeExtension } from '../../packages/core/extensions/interfaces/ExtensionInterfaces';
+
 /**
  * Execute a graph and return the output(s) from all Output nodes (ordered by id).
  * Automatically detects and supports both basic and advanced nodes.
@@ -80,7 +84,29 @@ export async function executeGraph(graph: Graph): Promise<string[]> {
  */
 function isAdvancedNodeType(nodeType: string): boolean {
   const advancedNodeTypes = ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov', 'PythonTransform'];
-  return advancedNodeTypes.includes(nodeType);
+  
+  // Check built-in advanced nodes
+  if (advancedNodeTypes.includes(nodeType)) {
+    return true;
+  }
+  
+  // Check extension nodes - assume extensions might use advanced features
+  try {
+    const extensions = ExtensionLifecycleManager.getActiveExtensions();
+    for (const extension of extensions) {
+      if (extension.extensionType === 'node') {
+        const nodeExtension = extension as NodeExtension;
+        const nodeTypes = nodeExtension.getNodeTypes();
+        if (nodeTypes.some(type => type.id === nodeType)) {
+          return true; // Assume extension nodes use advanced context for safety
+        }
+      }
+    }
+  } catch (error) {
+    // Ignore errors in extension checking
+  }
+  
+  return false;
 }
 
 function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
@@ -156,8 +182,47 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
       });
     
     default:
+      // Epic 8.4 Extension System - Try to find extension nodes
+      const extensionNode = tryCreateExtensionNode(node, resolvedInputs);
+      if (extensionNode) {
+        return extensionNode;
+      }
       // Exhaustive check
       const _exhaustive: never = node;
       throw new Error(`Unsupported node type ${(node as any).type}`);
+  }
+}
+
+/**
+ * Try to create a runtime node from an extension
+ */
+function tryCreateExtensionNode(node: Node, resolvedInputs: any[]): RuntimeNode<any> | null {
+  try {
+    // Get all active node extensions
+    const extensions = ExtensionLifecycleManager.getActiveExtensions();
+    
+    for (const extension of extensions) {
+      if (extension.extensionType === 'node') {
+        const nodeExtension = extension as NodeExtension;
+        const nodeTypes = nodeExtension.getNodeTypes();
+        
+        // Check if this extension provides the node type
+        const nodeTypeInfo = nodeTypes.find(type => type.id === node.type);
+        if (nodeTypeInfo) {
+          // Create the extension node instance
+          const extensionNode = nodeExtension.createNode(node.type, node.id, node.data || {});
+          
+          // Wrap in a RuntimeNode adapter if needed
+          if (extensionNode && typeof extensionNode.run === 'function') {
+            return extensionNode as RuntimeNode<any>;
+          }
+        }
+      }
+    }
+    
+    return null;
+  } catch (error) {
+    console.warn(`Failed to create extension node for type ${node.type}:`, error);
+    return null;
   }
 }

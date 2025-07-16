@@ -10,6 +10,10 @@ interface StatusBarProps {
   onCorrections?: () => void;
   correctionsEnabled?: boolean;
   correctionsOpen?: boolean;
+  onStats?: () => void;
+  statsOpen?: boolean;
+  onExtensions?: () => void;
+  extensionsOpen?: boolean;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
@@ -20,6 +24,10 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   onCorrections,
   correctionsEnabled = false,
   correctionsOpen = false,
+  onStats,
+  statsOpen = false,
+  onExtensions,
+  extensionsOpen = false,
 }) => {
   const errorCount = errors.length;
 
@@ -87,6 +95,42 @@ export const StatusBar: React.FC<StatusBarProps> = ({
             }}
           >
             Corrections
+          </button>
+        )}
+        
+        {correctionsEnabled && onStats && (
+          <button
+            onClick={onStats}
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: statsOpen ? '#4a5568' : '#eee', 
+              color: statsOpen ? '#fff' : '#23272f', 
+              border: '1px solid #ccc', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            📊 Stats
+          </button>
+        )}
+        
+        {onExtensions && (
+          <button
+            onClick={onExtensions}
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: extensionsOpen ? '#4a5568' : '#eee', 
+              color: extensionsOpen ? '#fff' : '#23272f', 
+              border: '1px solid #ccc', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            🧩 Extensions
           </button>
         )}
         

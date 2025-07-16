@@ -10,6 +10,8 @@ import { useGraphStore } from "./graphStore";
 import { PreviewModal } from "./PreviewModal";
 import { usePreviewSeeds } from "./usePreviewSeeds";
 import { ResponsiveCorrectionsPanel } from "./ResponsiveCorrectionsPanel";
+import { CorrectionsStatsDashboard } from "./components/CorrectionsStatsDashboard";
+import { ExtensionManagerPanel } from "./components/ExtensionManager/ExtensionManagerPanel";
 import { useCorrectionsEnabled } from "./correctionsStore";
 import { useValidation } from "./hooks/useValidation";
 import { useAutosave } from "./hooks/useAutosave";
@@ -118,6 +120,8 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [correctionsOpen, setCorrectionsOpen] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(false);
+  const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [dragPreview, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
   
@@ -437,6 +441,10 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
           onCorrections={() => setCorrectionsOpen(true)}
           correctionsEnabled={correctionsEnabled}
           correctionsOpen={correctionsOpen}
+          onStats={() => setStatsOpen(true)}
+          statsOpen={statsOpen}
+          onExtensions={() => setExtensionsOpen(true)}
+          extensionsOpen={extensionsOpen}
         />
         <PreviewModal
           open={previewOpen}
@@ -467,6 +475,14 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         <ResponsiveCorrectionsPanel
           isOpen={correctionsOpen}
           onClose={() => setCorrectionsOpen(false)}
+        />
+        <CorrectionsStatsDashboard
+          isOpen={statsOpen}
+          onClose={() => setStatsOpen(false)}
+        />
+        <ExtensionManagerPanel
+          isOpen={extensionsOpen}
+          onClose={() => setExtensionsOpen(false)}
         />
       </div>
   );

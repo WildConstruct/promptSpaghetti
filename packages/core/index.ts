@@ -32,3 +32,16 @@ export { Palette } from './Palette';
 export { PreviewModal } from './PreviewModal';
 export { nodeSchemas } from './nodeSchemas';
 export { useGraphStore } from './graphStore';
+
+// Epic 8.2 - Corrections Manager GA exports
+export { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel';
+export { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
+export { WorkflowManager } from './components/WorkflowManager';
+export { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel';
+export { EnhancedTextAreaEditor } from './components/Inspector/EnhancedTextAreaEditor';
+export { NotificationSystem } from './components/NotificationSystem';
+export * from './correctionsStore';
+
+// Epic 8.4 - Extension System Architecture exports
+export * from './extensions';
+export * from './components/ExtensionManager';
