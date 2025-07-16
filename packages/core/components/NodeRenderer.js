@@ -1,0 +1,121 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { memo } from "react";
+import { Handle, Position } from "reactflow";
+export const NodeRenderer = memo(({ id, data, selected = false, onSelect, getNodeMeta, getCategoryColor, }) => {
+    try {
+        const hasVariations = data?.variations && data.variations.length > 0;
+        const nodeType = data?.nodeType || data?.type || 'WeightedChoice';
+        const nodeMeta = getNodeMeta(nodeType);
+        const categoryColor = getCategoryColor(nodeMeta.category || 'general');
+        // Get non-label properties for display
+        const properties = Object.entries(data || {})
+            .filter(([k]) => k !== 'label' && k !== 'variations' && k !== 'type')
+            .slice(0, 3); // Limit to 3 properties for clean display
+        return (_jsxs("div", { role: "button", "data-testid": `node-${id}`, tabIndex: 0, onClick: (e) => {
+                e.stopPropagation();
+                onSelect(id);
+            }, onKeyDown: (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onSelect(id);
+                }
+            }, style: {
+                cursor: 'pointer',
+                background: '#2d3748',
+                border: selected ? `2px solid ${categoryColor}` : '1px solid #4a5568',
+                borderRadius: 6,
+                minWidth: 160,
+                minHeight: 80,
+                boxShadow: selected
+                    ? `0 0 0 3px ${categoryColor}20, 0 4px 12px rgba(0,0,0,0.25)`
+                    : '0 2px 8px rgba(0,0,0,0.15)',
+                position: 'relative',
+                overflow: 'visible',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                transition: 'all 0.2s ease',
+                zIndex: 1,
+                pointerEvents: 'auto',
+                display: 'block',
+                WebkitTransform: 'translateZ(0)',
+                transform: 'translateZ(0)',
+                WebkitBackfaceVisibility: 'hidden',
+                backfaceVisibility: 'hidden',
+            }, onMouseEnter: (e) => {
+                if (!selected) {
+                    e.currentTarget.style.WebkitTransform = 'translateY(-2px) translateZ(0)';
+                    e.currentTarget.style.transform = 'translateY(-2px) translateZ(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+                }
+            }, onMouseLeave: (e) => {
+                if (!selected) {
+                    e.currentTarget.style.WebkitTransform = 'translateY(0) translateZ(0)';
+                    e.currentTarget.style.transform = 'translateY(0) translateZ(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+                }
+            }, "aria-label": (() => {
+                const label = data?.label ?? nodeMeta.label;
+                const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');
+                return summary ? `${label}. ${summary}` : label;
+            })(), children: [_jsxs("div", { style: {
+                        background: categoryColor,
+                        color: '#fff',
+                        padding: '8px 12px',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6,
+                    }, children: [_jsx("span", { style: { fontSize: 14 }, children: typeof nodeMeta.icon === 'string' ? nodeMeta.icon : '🔧' }), _jsx("span", { children: nodeMeta.label }), hasVariations && (_jsx("div", { style: {
+                                marginLeft: 'auto',
+                                width: 18,
+                                height: 18,
+                                backgroundColor: 'rgba(255,255,255,0.2)',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: 10,
+                                fontWeight: 'bold',
+                            }, title: `${data.variations.length} variations`, children: data.variations.length }))] }), _jsxs("div", { style: { padding: '10px 12px', color: '#e2e8f0', minHeight: '40px' }, children: [_jsx("div", { style: {
+                                fontWeight: 600,
+                                fontSize: 14,
+                                marginBottom: properties.length > 0 ? 6 : 0,
+                                color: '#f7fafc',
+                                lineHeight: 1.2
+                            }, children: data?.label || nodeMeta.label || nodeType || id }), properties.length > 0 && (_jsx("div", { style: { fontSize: 11, color: '#a0aec0', lineHeight: 1.4 }, children: properties.map(([k, v], idx) => (_jsxs("div", { style: { marginBottom: idx < properties.length - 1 ? 2 : 0 }, children: [_jsxs("span", { style: { color: '#cbd5e0', fontWeight: 500 }, children: [k, ":"] }), ' ', _jsx("span", { children: String(v).length > 20 ? String(v).slice(0, 20) + '...' : String(v) })] }, k))) }))] }), _jsx(Handle, { type: "target", position: Position.Left, id: "target", style: {
+                        width: 12,
+                        height: 12,
+                        borderRadius: '50%',
+                        background: '#4a5568',
+                        border: '2px solid #2d3748',
+                        cursor: 'crosshair',
+                        zIndex: 10,
+                    }, isConnectable: true }), _jsx(Handle, { type: "source", position: Position.Right, id: "source", style: {
+                        width: 12,
+                        height: 12,
+                        borderRadius: '50%',
+                        background: categoryColor,
+                        border: '2px solid #2d3748',
+                        cursor: 'crosshair',
+                        zIndex: 10,
+                    }, isConnectable: true })] }));
+    }
+    catch (error) {
+        console.error('NodeRenderer error:', error, 'Props:', { id, data });
+        // Fallback render for error cases
+        return (_jsxs("div", { style: {
+                cursor: 'pointer',
+                background: '#2d3748',
+                border: '1px solid #e53e3e',
+                borderRadius: 6,
+                minWidth: 160,
+                minHeight: 80,
+                padding: 12,
+                color: '#e2e8f0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }, children: ["Error: ", data?.nodeType || data?.type || 'Unknown'] }));
+    }
+});
+NodeRenderer.displayName = 'NodeRenderer';

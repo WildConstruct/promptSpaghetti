@@ -1,0 +1,36 @@
+{
+  "manifest_version": "1.0",
+  "id": "text-processor",
+  "name": "Advanced Text Processor",
+  "version": "1.0.0",
+  "description": "Advanced text processing extension with multiple transformation options",
+  "author": "PromptSpaghetti Team",
+  "extension_type": "node",
+  "capabilities": {
+    "provides": ["text-processing", "data-transformation"],
+    "requires": ["runtime-nodes", "advanced-nodes"]
+  },
+  "dependencies": {
+    "system_version": "^1.0.0"
+  },
+  "permissions": ["data-processing"],
+  "runtime": {
+    "entry_point": "dist/index.js",
+    "node_types": ["TextProcessorNode", "RegexProcessorNode", "TextAnalyzerNode"]
+  },
+  "security": {
+    "sandbox": {
+      "enabled": true
+    },
+    "content_security_policy": "default-src 'self'"
+  },
+  "compatibility": {
+    "min_system_version": "1.0.0",
+    "platforms": ["web", "desktop"],
+    "browsers": {
+      "chrome": ">=90",
+      "firefox": ">=88",
+      "safari": ">=14"
+    }
+  }
+}

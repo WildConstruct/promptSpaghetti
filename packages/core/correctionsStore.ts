@@ -12,6 +12,25 @@ export interface CorrectionRule {
   priority: number;
   createdAt: Date;
   updatedAt: Date;
+  
+  // Lifecycle management
+  status: 'draft' | 'published' | 'deprecated';
+  approvedBy?: string;
+  approvedAt?: Date;
+  deprecatedAt?: Date;
+  deprecationReason?: string;
+  
+  // Workflow features
+  suggestedBy?: string;
+  suggestionReason?: string;
+  category?: string;
+  tags?: string[];
+  
+  // Usage statistics
+  usageCount?: number;
+  lastUsedAt?: Date;
+  effectivenessScore?: number;
+  userRating?: number;
 }
 
 interface CorrectionsState {
@@ -26,9 +45,40 @@ interface CorrectionsState {
   reorderRules: (fromIndex: number, toIndex: number) => void;
   clearAllRules: () => void;
   
+  // Lifecycle management
+  approveRule: (id: string, approvedBy: string) => void;
+  deprecateRule: (id: string, reason: string) => void;
+  suggestRule: (rule: Omit<CorrectionRule, 'id' | 'createdAt' | 'updatedAt'>, suggestedBy: string, reason: string) => void;
+  
   // Application
   applyCorrections: (text: string) => string;
   getActiveRules: () => CorrectionRule[];
+  getDraftRules: () => CorrectionRule[];
+  getPublishedRules: () => CorrectionRule[];
+  
+  // Workflow features
+  notificationSettings: {
+    onRuleUpdates: boolean;
+    onEffectivenessAlerts: boolean;
+    onSuggestions: boolean;
+  };
+  notifications: Notification[];
+  
+  // Notification actions
+  addNotification: (notification: Omit<Notification, 'id' | 'timestamp'>) => void;
+  dismissNotification: (id: string) => void;
+  clearNotifications: () => void;
+}
+
+export interface Notification {
+  id: string;
+  type: 'info' | 'warning' | 'error' | 'success';
+  title: string;
+  message: string;
+  timestamp: Date;
+  isRead: boolean;
+  actionUrl?: string;
+  ruleId?: string;
 }
 
 export const useCorrectionsStore = create<CorrectionsState>()(
@@ -38,17 +88,36 @@ export const useCorrectionsStore = create<CorrectionsState>()(
         rules: [],
         isEnabled: process.env.NODE_ENV === 'development' || process.env.ENABLE_CORRECTIONS === 'true',
         
+        // Notification system
+        notificationSettings: {
+          onRuleUpdates: true,
+          onEffectivenessAlerts: true,
+          onSuggestions: true,
+        },
+        notifications: [],
+        
         addRule: (ruleData) => {
           const newRule: CorrectionRule = {
             ...ruleData,
             id: `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             createdAt: new Date(),
             updatedAt: new Date(),
+            status: 'draft',
+            usageCount: 0,
+            tags: ruleData.tags || [],
           };
           
           set((state) => ({
             rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority),
           }));
+          
+          // Add notification for new rule
+          get().addNotification({
+            type: 'info',
+            title: 'New Rule Created',
+            message: `Rule "${newRule.name}" has been created and is in draft status.`,
+            ruleId: newRule.id,
+          });
         },
         
         updateRule: (id, updates) => {
@@ -128,7 +197,120 @@ export const useCorrectionsStore = create<CorrectionsState>()(
         
         getActiveRules: () => {
           const { rules } = get();
-          return rules.filter((rule) => rule.isActive).sort((a, b) => a.priority - b.priority);
+          return rules.filter((rule) => rule.isActive && rule.status === 'published').sort((a, b) => a.priority - b.priority);
+        },
+        
+        getDraftRules: () => {
+          const { rules } = get();
+          return rules.filter((rule) => rule.status === 'draft');
+        },
+        
+        getPublishedRules: () => {
+          const { rules } = get();
+          return rules.filter((rule) => rule.status === 'published');
+        },
+        
+        // Lifecycle management
+        approveRule: (id: string, approvedBy: string) => {
+          set((state) => ({
+            rules: state.rules.map(rule => 
+              rule.id === id 
+                ? { 
+                    ...rule, 
+                    status: 'published' as const,
+                    approvedBy,
+                    approvedAt: new Date(),
+                    updatedAt: new Date(),
+                  }
+                : rule
+            ),
+          }));
+          
+          const rule = get().rules.find(r => r.id === id);
+          if (rule) {
+            get().addNotification({
+              type: 'success',
+              title: 'Rule Approved',
+              message: `Rule "${rule.name}" has been approved and is now active.`,
+              ruleId: id,
+            });
+          }
+        },
+        
+        deprecateRule: (id: string, reason: string) => {
+          set((state) => ({
+            rules: state.rules.map(rule => 
+              rule.id === id 
+                ? { 
+                    ...rule, 
+                    status: 'deprecated' as const,
+                    deprecatedAt: new Date(),
+                    deprecationReason: reason,
+                    isActive: false,
+                    updatedAt: new Date(),
+                  }
+                : rule
+            ),
+          }));
+          
+          const rule = get().rules.find(r => r.id === id);
+          if (rule) {
+            get().addNotification({
+              type: 'warning',
+              title: 'Rule Deprecated',
+              message: `Rule "${rule.name}" has been deprecated: ${reason}`,
+              ruleId: id,
+            });
+          }
+        },
+        
+        suggestRule: (ruleData, suggestedBy: string, reason: string) => {
+          const newRule: CorrectionRule = {
+            ...ruleData,
+            id: `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            status: 'draft',
+            suggestedBy,
+            suggestionReason: reason,
+            usageCount: 0,
+            tags: ruleData.tags || [],
+          };
+          
+          set((state) => ({
+            rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority),
+          }));
+          
+          get().addNotification({
+            type: 'info',
+            title: 'New Rule Suggested',
+            message: `Rule "${newRule.name}" has been suggested: ${reason}`,
+            ruleId: newRule.id,
+          });
+        },
+        
+        // Notification system
+        addNotification: (notificationData) => {
+          const notification: Notification = {
+            ...notificationData,
+            id: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            timestamp: new Date(),
+            isRead: false,
+          };
+          
+          set((state) => ({
+            notifications: [notification, ...state.notifications].slice(0, 50), // Keep only last 50
+          }));
+        },
+        
+        dismissNotification: (id: string) => {
+          set((state) => ({
+            notifications: state.notifications.filter(n => n.id !== id),
+          }));
+        },
+        
+        clearNotifications: () => {
+          set({ notifications: [] });
         },
       }),
       {

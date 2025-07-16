@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { executeGraph } from './engine';
 import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
+import { initDatabase, healthCheck } from './database/connection';
+import { correctionsRoutes } from './routes/corrections';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -77,6 +79,15 @@ const server = Fastify({
   logger: true
 });
 
+// Initialize database on startup
+try {
+  initDatabase();
+  console.log('Database initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize database:', error);
+  process.exit(1);
+}
+
 // We'll add CORS support after installing the dependency
 // For now, we'll use a simple CORS header
 server.addHook('onRequest', (request, reply, done) => {
@@ -90,6 +101,19 @@ server.addHook('onRequest', (request, reply, done) => {
 server.get('/', async (request, reply) => {
   return { status: 'PromptScape API running' };
 });
+
+// Health check endpoint
+server.get('/health', async (request, reply) => {
+  const dbHealthy = healthCheck();
+  return { 
+    status: dbHealthy ? 'healthy' : 'unhealthy',
+    database: dbHealthy ? 'connected' : 'disconnected',
+    timestamp: new Date().toISOString()
+  };
+});
+
+// Register corrections routes
+server.register(correctionsRoutes, { prefix: '/api/corrections' });
 
 // Legacy GET preview endpoint (dummy data for backwards compatibility)
 server.get('/preview', async (request, reply) => {

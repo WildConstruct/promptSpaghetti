@@ -9,7 +9,7 @@ import { Palette, NodeMeta } from "./Palette";
 import { useGraphStore } from "./graphStore";
 import { PreviewModal } from "./PreviewModal";
 import { usePreviewSeeds } from "./usePreviewSeeds";
-import { CorrectionsPanel } from "./CorrectionsPanel";
+import { ResponsiveCorrectionsPanel } from "./ResponsiveCorrectionsPanel";
 import { useCorrectionsEnabled } from "./correctionsStore";
 import { useValidation } from "./hooks/useValidation";
 import { useAutosave } from "./hooks/useAutosave";
@@ -464,7 +464,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
             }
           }}
         />
-        <CorrectionsPanel
+        <ResponsiveCorrectionsPanel
           isOpen={correctionsOpen}
           onClose={() => setCorrectionsOpen(false)}
         />

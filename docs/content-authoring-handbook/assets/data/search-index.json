@@ -1,0 +1,209 @@
+[
+  {
+    "title": "Introduction & Overview",
+    "url": "part1-foundation/01-introduction.html",
+    "content": "Welcome to the Content Authoring Handbook for Prompt Spaghetti! This comprehensive guide will teach you how to create, manage, and optimize content generators using our powerful node-based system. Prompt Spaghetti is a sophisticated content generation system that combines visual node-based editing, deterministic randomization, modular architecture, rich rule system, and professional tooling. Learn about generators, nodes, rules, deterministic execution, and variable context.",
+    "type": "chapter",
+    "difficulty": "beginner",
+    "part": "part1",
+    "keywords": ["introduction", "overview", "getting started", "prompt spaghetti", "content generation", "node-based", "deterministic", "generators", "basics"]
+  },
+  {
+    "title": "Architecture & Core Concepts",
+    "url": "part1-foundation/02-architecture.html",
+    "content": "Understanding the architecture of Prompt Spaghetti is crucial for creating effective generators. This chapter explores the system's design, execution model, and core concepts that power content generation. Learn about the modular layered architecture, visual editor, runtime engine, schema layer, generator engine, execution model, node-based graph system, variable context and scoping, execution flow and rule resolution, performance considerations, security and sandboxing, and integration points.",
+    "type": "chapter",
+    "difficulty": "intermediate",
+    "part": "part1",
+    "keywords": ["architecture", "concepts", "engine", "execution", "nodes", "runtime", "performance", "security", "integration", "design"]
+  },
+  {
+    "title": "Generator JSON Schema Reference",
+    "url": "part1-foundation/03-schema-reference.html",
+    "content": "This chapter provides a complete reference for the Generator JSON format, which serves as both the storage format and the interchange format for Prompt Spaghetti generators. Learn about schema overview, metadata structure, grammar rules definition, variables and their types, entry points and execution, include patterns and modularization, node type definitions, advanced schema features, validation rules, migration and compatibility.",
+    "type": "reference",
+    "difficulty": "intermediate",
+    "part": "part1",
+    "keywords": ["schema", "json", "reference", "format", "metadata", "grammar", "variables", "validation", "compatibility", "structure"]
+  },
+  {
+    "title": "Basic Generator Creation",
+    "url": "part2-content-development/04-basic-generator.html",
+    "content": "Welcome to hands-on generator creation! This chapter walks you through building your first generators, from simple random selections to more sophisticated content generation patterns. Learn your first generator, understanding rules and variations, basic randomization patterns, testing your generator, common mistakes to avoid, and building a complete example with a fantasy shop generator.",
+    "type": "chapter",
+    "difficulty": "beginner",
+    "part": "part2",
+    "keywords": ["basic", "generator", "creation", "tutorial", "first", "rules", "variations", "randomization", "testing", "examples"]
+  },
+  {
+    "title": "Interactive Tutorial",
+    "url": "part4-practical-guides/14-interactive-tutorial.html",
+    "content": "Welcome to the interactive tutorial! This chapter combines theory with hands-on practice using live examples you can edit and test directly in your browser. Learn with hello world example, random selection, weighted choices, variables and context, modularization with includes, interactive exercises including restaurant menu, weather report, and story prompt generators.",
+    "type": "example",
+    "difficulty": "beginner",
+    "part": "part4",
+    "keywords": ["tutorial", "interactive", "examples", "hands-on", "practice", "live", "exercises", "browser", "editing", "testing"]
+  },
+  {
+    "title": "Expansion Recipes for LLMs",
+    "url": "part4-practical-guides/15-expansion-recipes.html",
+    "content": "This chapter provides comprehensive patterns and recipes for Large Language Models (LLMs) to effectively expand and enhance generator content. These patterns are derived from real-world usage and optimized for AI-assisted content development. Learn about LLM content expansion, basic expansion patterns, advanced expansion patterns, modularization patterns, slot-based content assembly, style and tone matching, common LLM expansion tasks, quality assurance patterns, optimization strategies, and integration workflows.",
+    "type": "chapter",
+    "difficulty": "advanced",
+    "part": "part4",
+    "keywords": ["llm", "expansion", "recipes", "patterns", "ai", "content", "development", "language models", "automation", "optimization"]
+  },
+  {
+    "title": "Quick Reference Tables",
+    "url": "part6-reference-materials/22-quick-reference.html",
+    "content": "This chapter provides quick-lookup tables for common generator development tasks. Keep this handy while building generators! Includes modifier reference table, node type reference, variable functions reference, grammar pattern quick reference, common rule structures, file organization reference, performance guidelines, debugging checklist, keyboard shortcuts, and error messages quick fix.",
+    "type": "reference",
+    "difficulty": "all",
+    "part": "part6",
+    "keywords": ["reference", "tables", "quick", "lookup", "modifiers", "nodes", "variables", "patterns", "debugging", "shortcuts"]
+  },
+  {
+    "title": "Advanced Rule Syntax",
+    "url": "part2-content-development/05-advanced-rules.html",
+    "content": "Master advanced rule syntax for complex content generation. Learn about weighted rules and probability calculations, conditional logic, variable manipulation, nested rule evaluation, complex selection patterns, and rule composition strategies. Understand how to create sophisticated generators with advanced features.",
+    "type": "chapter",
+    "difficulty": "advanced",
+    "part": "part2",
+    "keywords": ["advanced", "rules", "syntax", "weighted", "conditional", "probability", "variables", "nested", "complex", "composition"]
+  },
+  {
+    "title": "Modularization & Organization",
+    "url": "part2-content-development/06-modularization.html",
+    "content": "Learn how to organize and modularize large generators for maintainability and reusability. Understand when to split generators, the include pattern, managing meta merge arrays, organizing large projects, dependency management, and best practices for maintainability.",
+    "type": "chapter",
+    "difficulty": "intermediate",
+    "part": "part2",
+    "keywords": ["modularization", "organization", "includes", "maintenance", "dependencies", "structure", "large projects", "reusability"]
+  },
+  {
+    "title": "Engine API Documentation",
+    "url": "part3-engine-reference/09-api-documentation.html",
+    "content": "Complete API reference for the Prompt Spaghetti engine. Learn about JavaScript API, TypeScript definitions, Python API, core methods and properties, event system, and extension points. Essential for developers integrating with the engine.",
+    "type": "reference",
+    "difficulty": "advanced",
+    "part": "part3",
+    "keywords": ["api", "documentation", "engine", "javascript", "typescript", "python", "methods", "events", "extensions", "developers"]
+  },
+  {
+    "title": "Modifier System",
+    "url": "part3-engine-reference/10-modifier-system.html",
+    "content": "Understanding and using the modifier system for text transformations. Learn about built-in modifiers, creating custom modifiers, modifier chaining, performance considerations, and common modifier patterns. Master text processing in your generators.",
+    "type": "chapter",
+    "difficulty": "intermediate",
+    "part": "part3",
+    "keywords": ["modifiers", "text", "transformations", "custom", "chaining", "performance", "processing", "built-in", "patterns"]
+  },
+  {
+    "title": "Variable System",
+    "url": "part3-engine-reference/11-variable-system.html",
+    "content": "Master the variable system for dynamic content generation. Learn about variable types and scoping, SetVariable and GetVariable nodes, context propagation, variable interpolation, and advanced variable techniques. Essential for complex generators.",
+    "type": "chapter",
+    "difficulty": "intermediate",
+    "part": "part3",
+    "keywords": ["variables", "scoping", "context", "interpolation", "dynamic", "setVariable", "getVariable", "propagation", "techniques"]
+  },
+  {
+    "title": "Testing & Quality Assurance",
+    "url": "part4-practical-guides/16-testing-qa.html",
+    "content": "Comprehensive guide to testing generators and ensuring quality. Learn about unit testing generators, integration testing, manual QA workflows, automated testing strategies, coverage and metrics, and quality assurance best practices.",
+    "type": "chapter",
+    "difficulty": "intermediate",
+    "part": "part4",
+    "keywords": ["testing", "quality", "assurance", "unit tests", "integration", "qa", "workflows", "automation", "coverage", "metrics"]
+  },
+  {
+    "title": "Custom Extensions",
+    "url": "part5-advanced-topics/18-custom-extensions.html",
+    "content": "Learn to create custom extensions for Prompt Spaghetti. Understand extension architecture, creating custom nodes, plugin system, lifecycle hooks, and distribution and packaging. Extend the system with your own functionality.",
+    "type": "chapter",
+    "difficulty": "advanced",
+    "part": "part5",
+    "keywords": ["extensions", "custom", "nodes", "plugins", "architecture", "lifecycle", "hooks", "distribution", "packaging", "functionality"]
+  },
+  {
+    "title": "Security Best Practices",
+    "url": "part5-advanced-topics/19-security.html",
+    "content": "Essential security practices for generator development. Learn about input sanitization, preventing injection attacks, sandboxing considerations, safe pattern detection, security checklist, and protecting against vulnerabilities.",
+    "type": "chapter",
+    "difficulty": "advanced",
+    "part": "part5",
+    "keywords": ["security", "practices", "sanitization", "injection", "sandboxing", "vulnerabilities", "protection", "checklist", "safety"]
+  },
+  {
+    "title": "Integration Patterns",
+    "url": "part5-advanced-topics/20-integration.html",
+    "content": "Patterns for integrating Prompt Spaghetti with other systems. Learn about server-side integration, client-side integration, API integration, batch processing, real-time applications, and integration best practices.",
+    "type": "chapter",
+    "difficulty": "advanced",
+    "part": "part5",
+    "keywords": ["integration", "patterns", "server", "client", "api", "batch", "real-time", "applications", "systems", "best practices"]
+  },
+  {
+    "title": "Templates & Boilerplates",
+    "url": "part6-reference-materials/23-templates.html",
+    "content": "Ready-to-use templates and boilerplates for common generator types. Includes basic generator template, advanced generator template, test suite template, extension template, and integration templates. Accelerate your development.",
+    "type": "reference",
+    "difficulty": "all",
+    "part": "part6",
+    "keywords": ["templates", "boilerplates", "starter", "basic", "advanced", "test", "extension", "integration", "development", "acceleration"]
+  },
+  {
+    "title": "Common Pitfalls & Solutions",
+    "url": "part6-reference-materials/24-pitfalls.html",
+    "content": "Learn from common mistakes and their solutions. Comprehensive pitfall/fix table, performance anti-patterns, security vulnerabilities, design mistakes, and migration issues. Avoid common problems and troubleshoot effectively.",
+    "type": "reference",
+    "difficulty": "all",
+    "part": "part6",
+    "keywords": ["pitfalls", "solutions", "mistakes", "problems", "troubleshooting", "performance", "anti-patterns", "vulnerabilities", "migration"]
+  },
+  {
+    "title": "Conditional Logic",
+    "url": "part3-engine-reference/12-conditional-logic.html",
+    "content": "Master conditional logic for dynamic generator behavior. Learn about conditional node types, expression evaluation, security framework, complex conditions, and best practices for conditional generation.",
+    "type": "chapter",
+    "difficulty": "advanced",
+    "part": "part3",
+    "keywords": ["conditional", "logic", "expressions", "evaluation", "security", "conditions", "dynamic", "behavior", "branching"]
+  },
+  {
+    "title": "Performance Optimization",
+    "url": "part3-engine-reference/13-performance.html",
+    "content": "Optimize generator performance for large-scale use. Learn about execution performance, memory management, caching strategies, large generator optimization, and profiling and benchmarking techniques.",
+    "type": "chapter",
+    "difficulty": "advanced",
+    "part": "part3",
+    "keywords": ["performance", "optimization", "execution", "memory", "caching", "large-scale", "profiling", "benchmarking", "efficiency"]
+  },
+  {
+    "title": "Simple Greeting Generator",
+    "url": "assets/examples/simple-greeting.json",
+    "content": "A basic generator demonstrating fundamental concepts. Simple example showing grammar rules, random selection, and basic structure. Perfect for beginners learning the basics.",
+    "type": "example",
+    "difficulty": "beginner",
+    "part": "examples",
+    "keywords": ["simple", "greeting", "basic", "fundamental", "beginner", "example", "grammar", "structure"]
+  },
+  {
+    "title": "Character Generator",
+    "url": "assets/examples/character-generator.json",
+    "content": "Intermediate generator showing weighted choices, variables, and modularization. Demonstrates character creation with names, classes, epithets, and variable usage. Great for learning intermediate concepts.",
+    "type": "example",
+    "difficulty": "intermediate",
+    "part": "examples",
+    "keywords": ["character", "generator", "weighted", "variables", "modularization", "intermediate", "names", "classes", "epithets"]
+  },
+  {
+    "title": "Advanced Story Prompt Generator",
+    "url": "assets/examples/advanced-story-prompt.json",
+    "content": "Advanced generator demonstrating conditionals, complex variables, and Epic 7 node types. Shows conditional logic, sequential patterns, Markov chains, and weighted advanced features.",
+    "type": "example",
+    "difficulty": "advanced",
+    "part": "examples",
+    "keywords": ["story", "prompt", "advanced", "conditionals", "complex", "epic7", "markov", "sequential", "patterns"]
+  }
+]
