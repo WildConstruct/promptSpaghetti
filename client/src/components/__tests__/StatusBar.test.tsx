@@ -18,7 +18,7 @@ describe('StatusBar Component', () => {
   test('shows correct error count when errors exist', () => {
     const errorCount = 3;
     render(<StatusBar errorCount={errorCount} />);
-    expect(screen.getByText(`Validation Errors: ${errorCount}`)).toBeInTheDocument();
+    expect(screen.getByText(`⚠️ Validation Errors: ${errorCount}`)).toBeInTheDocument();
   });
 
   /**
@@ -29,9 +29,9 @@ describe('StatusBar Component', () => {
     const statusBarDiv = container.firstChild as HTMLElement;
     
     expect(statusBarDiv).toHaveStyle({
-      background: '#f5f5f5',
-      borderTop: '1px solid #ddd',
-      height: '30px'
+      background: '#2a2a2a',
+      borderTop: '1px solid #444',
+      height: '32px'
     });
   });
   

@@ -180,3 +180,119 @@ _This file is maintained by **Sarah – Product Owner**.  Please update statuses
 | **Next QA Tasks** | • Validate bug-fix tests (`NodeSelectionFixes`) once mock compiles.<br>• Expand integration tests for inspector panel once compile is clean. |
 
 > *Logged by Quinn – QA/Dev on 2025-07-15*
+
+---
+
+## 📋 Inspector Component Refactoring Plan – 2025-07-15
+
+**Goal**: Refactor the existing inline inspector functionality from App.tsx into a proper modular component architecture as originally planned in Epic 5. 
+
+### Phase 1: Core Component Extraction
+
+| # | Task | Dependencies | Est. Complexity |
+|---|------|-------------|----------------|
+| 1.1 | Create `components/Inspector` directory structure | None | Low |
+| 1.2 | Create `InspectorPanel.tsx` container component | 1.1 | Medium |
+| 1.3 | Extract inspector panel styles from App.tsx | 1.2 | Low |
+| 1.4 | Implement panel resize and collapse functionality | 1.2, 1.3 | Medium |
+| 1.5 | Set up React context for inspector state management | 1.2 | Medium |
+| 1.6 | Create basic TypeScript interfaces for inspector props | None | Medium |
+| 1.7 | Update App.tsx to reference new InspectorPanel component | 1.1-1.6 | Medium |
+| 1.8 | Test basic inspector rendering with existing functionality | 1.7 | Medium |
+
+### Phase 2: Base Editor Components
+
+| # | Task | Dependencies | Est. Complexity |
+|---|------|-------------|----------------|
+| 2.1 | Create `BaseNodeEditor.tsx` component | 1.1-1.8 | Medium |
+| 2.2 | Create `TextFieldEditor.tsx` reusable component | 2.1 | Low |
+| 2.3 | Create `TextAreaEditor.tsx` reusable component | 2.1 | Low |
+| 2.4 | Create `SelectEditor.tsx` reusable component | 2.1 | Medium |
+| 2.5 | Create editor layout components (sections, headers) | 2.1 | Low |
+| 2.6 | Add shared form validation utilities | 2.1-2.5 | Medium |
+| 2.7 | Implement common editor functionality in BaseNodeEditor | 2.1-2.6 | Medium |
+| 2.8 | Test base editor components in isolation | 2.1-2.7 | Medium |
+
+### Phase 3: Node-Type Specific Editors
+
+| # | Task | Dependencies | Est. Complexity |
+|---|------|-------------|----------------|
+| 3.1 | Create `WeightedChoiceEditor.tsx` component | 2.1-2.8 | Medium |
+| 3.2 | Create `OutputEditor.tsx` component | 2.1-2.8 | Medium |
+| 3.3 | Create `ConcatEditor.tsx` component | 2.1-2.8 | Medium |
+| 3.4 | Create `VariableEditor.tsx` component (for Set/Get) | 2.1-2.8 | Medium |
+| 3.5 | Create `SubjectEditor.tsx` component | 2.1-2.8 | Medium |
+| 3.6 | Create `ActionEditor.tsx` component | 2.1-2.8 | Medium |
+| 3.7 | Create `AttributeEditor.tsx` component | 2.1-2.8 | Medium |
+| 3.8 | Create `ConnectorEditor.tsx` component | 2.1-2.8 | Medium |
+| 3.9 | Implement node type detection and editor selection logic | 3.1-3.8 | Medium |
+| 3.10 | Test each node-type editor in isolation | 3.1-3.9 | High |
+
+### Phase 4: Node Data Model Enhancement
+
+| # | Task | Dependencies | Est. Complexity |
+|---|------|-------------|----------------|
+| 4.1 | Create `types/NodeTypes.ts` with extended interfaces | None | Medium |
+| 4.2 | Define `BaseNodeData` interface with common properties | 4.1 | Medium |
+| 4.3 | Define specialized interfaces for each node type | 4.1, 4.2 | Medium |
+| 4.4 | Create node data factory functions | 4.1-4.3 | Medium |
+| 4.5 | Add serialization/deserialization utilities | 4.1-4.4 | Medium |
+| 4.6 | Create migration utilities for existing node data | 4.1-4.5 | Medium |
+| 4.7 | Update editors to use type-safe interfaces | 4.1-4.6, 3.1-3.9 | Medium |
+| 4.8 | Test data model with various node types | 4.1-4.7 | Medium |
+
+### Phase 5: Variation Entry System
+
+| # | Task | Dependencies | Est. Complexity |
+|---|------|-------------|----------------|
+| 5.1 | Create `VariationList.tsx` component | 2.1-2.8 | High |
+| 5.2 | Implement inline editing for list items | 5.1 | Medium |
+| 5.3 | Add quick entry via comma-separated text input | 5.1, 5.2 | Medium |
+| 5.4 | Add delete and add functionality for variations | 5.1-5.3 | Medium |
+| 5.5 | Implement drag-and-drop reordering (optional) | 5.1-5.4 | High |
+| 5.6 | Create visual indicator for nodes with variations | 5.1-5.5 | Medium |
+| 5.7 | Implement validation for variation entries | 5.1-5.6 | Medium |
+| 5.8 | Integrate variation system with node-type editors | 5.1-5.7, 3.1-3.10 | High |
+| 5.9 | Test variation system components | 5.1-5.8 | High |
+
+### Phase 6: Preview & Text Generation
+
+| # | Task | Dependencies | Est. Complexity |
+|---|------|-------------|----------------|
+| 6.1 | Create `Preview.tsx` component | 2.1-2.8 | High |
+| 6.2 | Implement text randomization engine | 6.1 | High |
+| 6.3 | Add live updates when node properties change | 6.1, 6.2 | Medium |
+| 6.4 | Create preview settings controls | 6.1-6.3 | Medium |
+| 6.5 | Implement preview refresh functionality | 6.1-6.4 | Medium |
+| 6.6 | Add visual highlighting for variations used | 6.1-6.5 | Medium |
+| 6.7 | Integrate preview with inspector panel | 6.1-6.6, 1.1-1.8 | Medium |
+| 6.8 | Test preview generation with various inputs | 6.1-6.7 | High |
+
+### Phase 7: Integration & Testing
+
+| # | Task | Dependencies | Est. Complexity |
+|---|------|-------------|----------------|
+| 7.1 | Update App.tsx to use all new inspector components | All previous | High |
+| 7.2 | Fix existing failing tests for node selection | 7.1 | High |
+| 7.3 | Create unit tests for InspectorPanel components | 7.1, 7.2 | Medium |
+| 7.4 | Create integration tests for inspector and ReactFlow | 7.1-7.3 | High |
+| 7.5 | Create tests for variation system | 7.1-7.4 | Medium |
+| 7.6 | Create tests for preview functionality | 7.1-7.5 | Medium |
+| 7.7 | Performance testing for large graphs | 7.1-7.6 | Medium |
+| 7.8 | Visual regression testing for inspector UI | 7.1-7.7 | Medium |
+
+### Implementation Order
+1. Phases 1-2: Core infrastructure and base components
+2. Phase 3-4: Node-type specific editors and data model
+3. Phase 5: Variation entry system
+4. Phase 6: Preview functionality
+5. Phase 7: Integration and testing
+
+### Dependencies
+- React 17+
+- TypeScript 4.5+
+- ReactFlow (existing dependency)
+- react-dnd (optional, for drag-and-drop)
+- jest, React Testing Library (for testing)
+
+> *Planned by Product Owner on 2025-07-15*

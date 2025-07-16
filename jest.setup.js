@@ -1,41 +1,79 @@
 require('@testing-library/jest-dom');
-global.ResizeObserver = class {
-  observe() {}
+
+// Enhanced ResizeObserver mock for ReactFlow
+global.ResizeObserver = class ResizeObserver {
+  constructor(callback) {
+    this.callback = callback;
+  }
+  observe(target) {
+    // Simulate initial observation
+    this.callback([{ target, contentRect: { width: 800, height: 600 } }], this);
+  }
   unobserve() {}
   disconnect() {}
 };
 
-// Mock reactflow components for JSDOM tests
-jest.mock('reactflow', () => {
-  const React = require('react');
-  return {
-    __esModule: true,
-    ReactFlowProvider: (props) => React.createElement('div', null, props.children),
-    ReactFlow: (props) => {
-      const { children, onDrop, onDragOver, nodes = [], onNodeClick } = props;
-      return React.createElement(
-        'div',
-        { 'data-testid': 'react-flow-canvas', onDrop, onDragOver },
-        [
-          ...(Array.isArray(nodes) ? nodes.map((n) => React.createElement('div', {
-            key: n.id,
-            'data-testid': `node-${n.id}`,
-            onClick: (e) => onNodeClick && onNodeClick(e, n)
-          }, n.data?.label || n.id)) : []),
-          children,
-        ]
-      );
-    },
-    Handle: () => null,
-    Position: {},
-    Background: () => null,
-    Controls: () => null,
-    MiniMap: () => null,
-    Panel: () => null,
-    useNodesState: () => [[], () => {}, () => {}],
-    useEdgesState: () => [[], () => {}, () => {}],
-  };
+// DOMMatrix mock for ReactFlow transforms
+global.DOMMatrixReadOnly = class DOMMatrixReadOnly {
+  constructor(transform) {
+    const scaleMatch = transform?.match(/scale\(([0-9.]+)\)/);
+    this.m22 = scaleMatch ? parseFloat(scaleMatch[1]) : 1;
+  }
+};
+
+// Enhanced HTMLElement properties for ReactFlow
+Object.defineProperties(global.HTMLElement.prototype, {
+  offsetHeight: { 
+    get() { return parseFloat(this.style.height) || 600; } 
+  },
+  offsetWidth: { 
+    get() { return parseFloat(this.style.width) || 800; } 
+  },
+  scrollWidth: { 
+    get() { return parseFloat(this.style.width) || 800; } 
+  },
+  scrollHeight: { 
+    get() { return parseFloat(this.style.height) || 600; } 
+  },
 });
+
+// SVG getBBox mock for ReactFlow
+global.SVGElement.prototype.getBBox = () => ({ 
+  x: 0, y: 0, width: 100, height: 50 
+});
+
+// Enhanced MouseEvent and DragEvent for better event simulation
+Object.defineProperty(global, 'MouseEvent', {
+  value: class MouseEvent extends Event {
+    constructor(type, eventInit = {}) {
+      super(type, eventInit);
+      this.clientX = eventInit.clientX || 0;
+      this.clientY = eventInit.clientY || 0;
+      this.pageX = eventInit.pageX || eventInit.clientX || 0;
+      this.pageY = eventInit.pageY || eventInit.clientY || 0;
+      this.button = eventInit.button || 0;
+      this.buttons = eventInit.buttons || 1;
+    }
+  }
+});
+
+// Mock getComputedStyle for better CSS testing
+const originalGetComputedStyle = global.getComputedStyle;
+global.getComputedStyle = (element) => {
+  const computed = originalGetComputedStyle(element);
+  // If element has inline styles, prefer those for testing
+  if (element.style) {
+    return new Proxy(computed, {
+      get(target, prop) {
+        if (element.style[prop]) {
+          return element.style[prop];
+        }
+        return target[prop];
+      }
+    });
+  }
+  return computed;
+};
 
 // Lightweight stub for @testing-library/user-event to satisfy tests without external package
 jest.mock('@testing-library/user-event', () => ({

@@ -33,3 +33,570 @@
 4:44:02 PM [vite] hmr update /src/App.tsx
 4:49:31 PM [vite] hmr update /src/App.tsx
 5:29:19 PM [vite] hmr update /src/App.tsx
+5:36:04 PM [vite] hmr update /src/App.tsx
+5:38:06 PM [vite] hmr update /src/App.tsx
+5:38:35 PM [vite] hmr update /src/App.tsx
+5:42:21 PM [vite] hmr update /src/App.tsx
+5:46:11 PM [vite] hmr update /src/App.tsx
+6:26:14 PM [vite] hmr update /src/App.tsx
+6:26:59 PM [vite] hmr update /src/App.tsx
+6:28:42 PM [vite] hmr update /src/App.tsx
+6:33:39 PM [vite] hmr update /src/App.tsx
+6:35:49 PM [vite] hmr update /src/App.tsx
+6:39:21 PM [vite] hmr update /src/App.tsx
+6:42:30 PM [vite] hmr update /src/App.tsx
+6:45:00 PM [vite] hmr update /src/App.tsx
+6:48:25 PM [vite] hmr update /src/App.tsx
+6:48:25 PM [vite] Internal server error: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx: Unexpected token, expected "," (305:6)
+
+  303 |       // Select the newly created node
+  304 |       setTimeout(() => syncNodeSelection(newNode.id), 50);
+> 305 |     } else {
+      |       ^
+  306 |       console.error('ReactFlow wrapper reference is not available');
+  307 |     }
+  308 |   }, [project, syncNodeSelection, nodes]);
+  Plugin: vite:react-babel
+  File: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:305:6
+  303|        // Select the newly created node
+  304|        setTimeout(() => syncNodeSelection(newNode.id), 50);
+  305|      } else {
+     |        ^
+  306|        console.error('ReactFlow wrapper reference is not available');
+  307|      }
+      at constructor (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6627:19)
+      at TypeScriptParserMixin.unexpected (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6647:16)
+      at TypeScriptParserMixin.expect (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6927:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11238:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11181:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11115:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9353:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11089:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11080:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11061:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11041:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9852:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10894:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10899:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10876:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10826:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9801:20)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:39
+      at TypeScriptParserMixin.allowInAnd (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12422:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:17)
+      at TypeScriptParserMixin.parseVar (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13384:91)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13230:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9493:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12851:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseBlock (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13297:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12101:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12087:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9248:18)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13445:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12404:14)
+      at TypeScriptParserMixin.parseFunction (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13444:10)
+      at TypeScriptParserMixin.parseFunctionStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13125:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12791:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12744:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseProgram (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12625:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12615:25)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14492:10)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10144:18)
+      at parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14526:38)
+      at parser (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/core/lib/parser/index.js:41:34)
+6:49:18 PM [vite] hmr update /src/App.tsx
+6:49:18 PM [vite] Internal server error: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx: Unexpected token, expected "," (301:6)
+
+  299 |       // Select the newly created node
+  300 |       setTimeout(() => syncNodeSelection(newNode.id), 50);
+> 301 |     } else {
+      |       ^
+  302 |       console.error('ReactFlow wrapper reference is not available');
+  303 |     }
+  304 |   }, [project, syncNodeSelection, nodes]);
+  Plugin: vite:react-babel
+  File: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:301:6
+  299|        // Select the newly created node
+  300|        setTimeout(() => syncNodeSelection(newNode.id), 50);
+  301|      } else {
+     |        ^
+  302|        console.error('ReactFlow wrapper reference is not available');
+  303|      }
+      at constructor (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6627:19)
+      at TypeScriptParserMixin.unexpected (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6647:16)
+      at TypeScriptParserMixin.expect (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6927:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11238:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11181:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11115:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9353:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11089:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11080:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11061:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11041:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9852:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10894:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10899:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10876:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10826:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9801:20)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:39
+      at TypeScriptParserMixin.allowInAnd (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12422:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:17)
+      at TypeScriptParserMixin.parseVar (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13384:91)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13230:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9493:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12851:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseBlock (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13297:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12101:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12087:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9248:18)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13445:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12404:14)
+      at TypeScriptParserMixin.parseFunction (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13444:10)
+      at TypeScriptParserMixin.parseFunctionStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13125:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12791:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12744:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseProgram (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12625:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12615:25)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14492:10)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10144:18)
+      at parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14526:38)
+      at parser (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/core/lib/parser/index.js:41:34)
+6:50:22 PM [vite] hmr update /src/App.tsx
+6:50:22 PM [vite] Internal server error: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx: Unexpected token, expected "," (308:6)
+
+  306 |       // Select the newly created node
+  307 |       setTimeout(() => syncNodeSelection(newNode.id), 50);
+> 308 |     } else {
+      |       ^
+  309 |       console.error('ReactFlow wrapper reference is not available');
+  310 |     }
+  311 |   }, [project, syncNodeSelection, nodes]);
+  Plugin: vite:react-babel
+  File: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:308:6
+  306|        // Select the newly created node
+  307|        setTimeout(() => syncNodeSelection(newNode.id), 50);
+  308|      } else {
+     |        ^
+  309|        console.error('ReactFlow wrapper reference is not available');
+  310|      }
+      at constructor (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6627:19)
+      at TypeScriptParserMixin.unexpected (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6647:16)
+      at TypeScriptParserMixin.expect (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6927:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11238:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11181:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11115:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9353:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11089:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11080:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11061:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11041:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9852:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10894:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10899:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10876:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10826:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9801:20)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:39
+      at TypeScriptParserMixin.allowInAnd (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12422:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:17)
+      at TypeScriptParserMixin.parseVar (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13384:91)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13230:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9493:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12851:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseBlock (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13297:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12101:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12087:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9248:18)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13445:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12404:14)
+      at TypeScriptParserMixin.parseFunction (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13444:10)
+      at TypeScriptParserMixin.parseFunctionStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13125:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12791:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12744:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseProgram (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12625:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12615:25)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14492:10)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10144:18)
+      at parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14526:38)
+      at parser (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/core/lib/parser/index.js:41:34)
+6:53:23 PM [vite] hmr update /src/App.tsx
+6:53:23 PM [vite] Internal server error: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx: Unexpected token, expected "," (308:6)
+
+  306 |       // Select the newly created node
+  307 |       setTimeout(() => setSelectedNodeId(newNode.id), 50);
+> 308 |     } else {
+      |       ^
+  309 |       console.error('ReactFlow wrapper reference is not available');
+  310 |     }
+  311 |   }, [reactFlowWrapper, reactFlowInstance, setNodes, setSelectedNodeId]);
+  Plugin: vite:react-babel
+  File: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:308:6
+  306|        // Select the newly created node
+  307|        setTimeout(() => setSelectedNodeId(newNode.id), 50);
+  308|      } else {
+     |        ^
+  309|        console.error('ReactFlow wrapper reference is not available');
+  310|      }
+      at constructor (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6627:19)
+      at TypeScriptParserMixin.unexpected (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6647:16)
+      at TypeScriptParserMixin.expect (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6927:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11238:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11181:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11115:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9353:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11089:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11080:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11061:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11041:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9852:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10894:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10899:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10876:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10826:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9801:20)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:39
+      at TypeScriptParserMixin.allowInAnd (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12422:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:17)
+      at TypeScriptParserMixin.parseVar (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13384:91)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13230:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9493:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12851:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseBlock (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13297:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12101:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12087:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9248:18)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13445:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12404:14)
+      at TypeScriptParserMixin.parseFunction (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13444:10)
+      at TypeScriptParserMixin.parseFunctionStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13125:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12791:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12744:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseProgram (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12625:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12615:25)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14492:10)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10144:18)
+      at parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14526:38)
+      at parser (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/core/lib/parser/index.js:41:34)
+6:54:09 PM [vite] hmr update /src/App.tsx
+6:54:09 PM [vite] Internal server error: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx: Unexpected token, expected "," (308:6)
+
+  306 |       // Select the newly created node
+  307 |       setTimeout(() => setSelectedNodeId(newNode.id), 50);
+> 308 |     } else {
+      |       ^
+  309 |       console.error('ReactFlow wrapper reference is not available');
+  310 |     }
+  311 |   }, [reactFlowWrapperRef, screenToFlowPosition, setNodes, setSelectedNodeId]);
+  Plugin: vite:react-babel
+  File: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:308:6
+  306|        // Select the newly created node
+  307|        setTimeout(() => setSelectedNodeId(newNode.id), 50);
+  308|      } else {
+     |        ^
+  309|        console.error('ReactFlow wrapper reference is not available');
+  310|      }
+      at constructor (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6627:19)
+      at TypeScriptParserMixin.unexpected (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6647:16)
+      at TypeScriptParserMixin.expect (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6927:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11238:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11181:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11115:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9353:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11089:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11080:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11061:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11041:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9852:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10894:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10899:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10876:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10826:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9801:20)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:39
+      at TypeScriptParserMixin.allowInAnd (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12422:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:17)
+      at TypeScriptParserMixin.parseVar (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13384:91)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13230:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9493:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12851:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseBlock (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13297:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12101:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12087:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9248:18)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13445:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12404:14)
+      at TypeScriptParserMixin.parseFunction (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13444:10)
+      at TypeScriptParserMixin.parseFunctionStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13125:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12791:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12744:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseProgram (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12625:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12615:25)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14492:10)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10144:18)
+      at parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14526:38)
+      at parser (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/core/lib/parser/index.js:41:34)
+6:54:57 PM [vite] hmr update /src/App.tsx
+6:54:57 PM [vite] Internal server error: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx: Unexpected token, expected "," (309:6)
+
+  307 |       // Select the newly created node
+  308 |       setTimeout(() => setSelectedNodeId(newNode.id), 50);
+> 309 |     } else {
+      |       ^
+  310 |       console.error('ReactFlow wrapper reference is not available');
+  311 |     }
+  312 |   }, [reactFlowWrapperRef, screenToFlowPosition, setNodes, setSelectedNodeId]);
+  Plugin: vite:react-babel
+  File: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:309:6
+  307|        // Select the newly created node
+  308|        setTimeout(() => setSelectedNodeId(newNode.id), 50);
+  309|      } else {
+     |        ^
+  310|        console.error('ReactFlow wrapper reference is not available');
+  311|      }
+      at constructor (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6627:19)
+      at TypeScriptParserMixin.unexpected (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6647:16)
+      at TypeScriptParserMixin.expect (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6927:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11238:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11181:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11115:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9353:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11089:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11080:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11061:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11041:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9852:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10894:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10899:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10876:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10826:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9801:20)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:39
+      at TypeScriptParserMixin.allowInAnd (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12422:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:17)
+      at TypeScriptParserMixin.parseVar (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13384:91)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13230:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9493:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12851:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseBlock (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13297:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12101:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12087:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9248:18)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13445:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12404:14)
+      at TypeScriptParserMixin.parseFunction (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13444:10)
+      at TypeScriptParserMixin.parseFunctionStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13125:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12791:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12744:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseProgram (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12625:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12615:25)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14492:10)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10144:18)
+      at parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14526:38)
+      at parser (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/core/lib/parser/index.js:41:34)
+6:55:16 PM [vite] hmr update /src/App.tsx
+6:55:16 PM [vite] Internal server error: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx: Unexpected token, expected "," (308:6)
+
+  306 |       // Select the newly created node
+  307 |       setTimeout(() => setSelectedNodeId(newNode.id), 50);
+> 308 |     } else {
+      |       ^
+  309 |       console.error('ReactFlow wrapper reference is not available');
+  310 |     }
+  311 |   }, [reactFlowWrapperRef, screenToFlowPosition, setNodes, setSelectedNodeId]);
+  Plugin: vite:react-babel
+  File: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:308:6
+  306|        // Select the newly created node
+  307|        setTimeout(() => setSelectedNodeId(newNode.id), 50);
+  308|      } else {
+     |        ^
+  309|        console.error('ReactFlow wrapper reference is not available');
+  310|      }
+      at constructor (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6627:19)
+      at TypeScriptParserMixin.unexpected (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6647:16)
+      at TypeScriptParserMixin.expect (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6927:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11238:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11181:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11115:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9353:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11089:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11080:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11061:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11041:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9852:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10894:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10899:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10876:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10826:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9801:20)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:39
+      at TypeScriptParserMixin.allowInAnd (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12422:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:17)
+      at TypeScriptParserMixin.parseVar (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13384:91)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13230:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9493:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12851:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseBlock (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13297:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12101:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12087:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9248:18)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13445:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12404:14)
+      at TypeScriptParserMixin.parseFunction (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13444:10)
+      at TypeScriptParserMixin.parseFunctionStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13125:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12791:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12744:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseProgram (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12625:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12615:25)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14492:10)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10144:18)
+      at parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14526:38)
+      at parser (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/core/lib/parser/index.js:41:34)
+6:55:39 PM [vite] hmr update /src/App.tsx
+6:55:39 PM [vite] Internal server error: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx: Unexpected token, expected "," (308:6)
+
+  306 |       // Select the newly created node
+  307 |       setTimeout(() => setSelectedNodeId(newNode.id), 50);
+> 308 |     } else {
+      |       ^
+  309 |       console.error('ReactFlow wrapper reference is not available');
+  310 |     }
+  311 |   }, [reactFlowWrapperRef, screenToFlowPosition, setNodes, setSelectedNodeId]);
+  Plugin: vite:react-babel
+  File: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:308:6
+  306|        // Select the newly created node
+  307|        setTimeout(() => setSelectedNodeId(newNode.id), 50);
+  308|      } else {
+     |        ^
+  309|        console.error('ReactFlow wrapper reference is not available');
+  310|      }
+      at constructor (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6627:19)
+      at TypeScriptParserMixin.unexpected (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6647:16)
+      at TypeScriptParserMixin.expect (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:6927:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11238:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11181:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11115:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9353:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11089:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11080:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11061:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:11041:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9852:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10894:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10899:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10876:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10826:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9801:20)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:39
+      at TypeScriptParserMixin.allowInAnd (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12422:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10795:17)
+      at TypeScriptParserMixin.parseVar (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13384:91)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13230:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9493:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12851:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12747:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseBlock (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13297:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12101:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12087:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9248:18)
+      at /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13445:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12404:14)
+      at TypeScriptParserMixin.parseFunction (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13444:10)
+      at TypeScriptParserMixin.parseFunctionStatement (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13125:17)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12791:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:9527:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12767:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12744:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13316:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:13309:10)
+      at TypeScriptParserMixin.parseProgram (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12625:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:12615:25)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14492:10)
+      at TypeScriptParserMixin.parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:10144:18)
+      at parse (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/parser/lib/index.js:14526:38)
+      at parser (/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/node_modules/@babel/core/lib/parser/index.js:41:34)
+6:56:22 PM [vite] hmr update /src/App.tsx
+7:00:16 PM [vite] hmr update /src/App.tsx
+7:29:41 PM [vite] hmr update /src/App.tsx
+7:42:05 PM [vite] hmr update /src/App.tsx
+9:13:43 PM [vite] hmr update /src/App.tsx
+9:13:43 PM [vite] ✨ new dependencies optimized: zustand/middleware
+9:13:43 PM [vite] ✨ optimized dependencies changed. reloading
+9:14:25 PM [vite] hmr update /src/App.tsx
+9:14:49 PM [vite] hmr update /src/App.tsx
+9:16:01 PM [vite] hmr update /src/App.tsx

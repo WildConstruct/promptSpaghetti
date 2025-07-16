@@ -3,7 +3,8 @@ export default {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^reactflow$': '<rootDir>/__mocks__/reactflow.tsx'
   },
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {

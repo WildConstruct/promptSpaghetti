@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { CorrectionsPanel } from '../CorrectionsPanel';
 import { useCorrectionsStore } from '../correctionsStore';
 
@@ -138,7 +139,7 @@ describe('CorrectionsPanel', () => {
     expect(screen.getByText('REGEX')).toBeInTheDocument();
   });
 
-  it('should toggle rule when checkbox is clicked', () => {
+  it('should toggle rule when checkbox is clicked', async () => {
     mockStore.rules = [
       {
         id: '1',
@@ -155,13 +156,16 @@ describe('CorrectionsPanel', () => {
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     
-    // Find the checkbox next to the rule name
-    const ruleContainer = screen.getByText('Test Rule').closest('div');
-    const checkbox = ruleContainer?.querySelector('input[type="checkbox"]');
-    if (checkbox) {
-      fireEvent.click(checkbox);
-    }
+    // Find the specific checkbox for our rule (the first one)
+    const checkboxes = screen.getAllByRole('checkbox');
+    const ruleCheckbox = checkboxes[0]; // The first checkbox should be for our Test Rule
+    expect(ruleCheckbox).toBeInTheDocument();
+    expect(ruleCheckbox).toBeChecked(); // Should be checked initially since isActive is true
     
+    // Use userEvent for more realistic interaction
+    await userEvent.click(ruleCheckbox);
+    
+    // Verify the store method was called
     expect(mockStore.toggleRule).toHaveBeenCalledWith('1');
   });
 

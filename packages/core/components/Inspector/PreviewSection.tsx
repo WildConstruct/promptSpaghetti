@@ -6,18 +6,27 @@ export interface PreviewSectionProps {
   node: any;
 }
 
+interface PreviewExample {
+  text: string;
+  highlightInfo?: {
+    selectedVariation: string;
+    selectedIndex: number;
+    totalVariations: number;
+  };
+}
+
 export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
   const [previewCollapsed, setPreviewCollapsed] = useState(false);
   const [numExamples, setNumExamples] = useState(3);
   const [seed, setSeed] = useState(12345);
-  const [examples, setExamples] = useState<string[]>([]);
+  const [examples, setExamples] = useState<PreviewExample[]>([]);
 
   // Generate preview examples based on node type and data
   const generateExamples = useMemo(() => {
     if (!node || !node.data) return [];
 
     const { type, data } = node;
-    const results: string[] = [];
+    const results: PreviewExample[] = [];
 
     // Check if node has variations and use them
     const nodeHasVariations = hasVariations(data);
@@ -26,10 +35,18 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
     for (let i = 0; i < numExamples; i++) {
       const currentSeed = seed + i;
       let example = "";
+      let highlightInfo: PreviewExample['highlightInfo'] = undefined;
 
       if (nodeHasVariations) {
-        // Use variations if available
-        example = getRandomVariation(data, currentSeed);
+        // Use variations if available with highlight info
+        const variations = data.variations || [];
+        const randomIndex = Math.floor((Math.abs(currentSeed) + 1) % variations.length);
+        example = variations[randomIndex];
+        highlightInfo = {
+          selectedVariation: example,
+          selectedIndex: randomIndex,
+          totalVariations: variations.length,
+        };
       } else {
         // Fallback to type-specific generation
         switch (type) {
@@ -114,7 +131,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
         }
       }
 
-      results.push(example);
+      results.push({ text: example, highlightInfo });
     }
 
     return results;
@@ -209,7 +226,23 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
                     color: "#374151",
                   }}
                 >
-                  {example}
+                  <div style={{ marginBottom: example.highlightInfo ? 4 : 0 }}>
+                    {example.text}
+                  </div>
+                  {example.highlightInfo && (
+                    <div style={{
+                      fontSize: 10,
+                      color: "#6b7280",
+                      fontStyle: "italic",
+                      background: "#fef3c7",
+                      padding: "2px 6px",
+                      borderRadius: 3,
+                      display: "inline-block",
+                      border: "1px solid #f59e0b",
+                    }}>
+                      Variation {example.highlightInfo.selectedIndex + 1} of {example.highlightInfo.totalVariations}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

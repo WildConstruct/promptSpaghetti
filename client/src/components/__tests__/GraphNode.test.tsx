@@ -8,7 +8,13 @@ import { NodeProps, ReactFlowProvider } from 'reactflow';
 // Mock the reactflow module
 jest.mock('reactflow', () => ({
   Handle: ({ type, position, style }: { type: string, position: string, style: object }) => (
-    <div data-testid={`handle-${type}-${position}`} style={style} />
+    <div 
+      data-testid={`handle-${type}-${position}`} 
+      className={`react-flow__handle-${position} react-flow__handle nodrag nopan ${type} connectable connectablestart connectableend connectionindicator`}
+      data-handlepos={position}
+      data-id={`null-null-${type}`}
+      style={style} 
+    />
   ),
   Position: {
     Top: 'top',

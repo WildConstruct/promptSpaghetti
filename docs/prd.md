@@ -393,4 +393,205 @@ These items will be groomed and scheduled after v0.1.0-alpha release.
 
 ---
 
+## 11 · Epic 6 — Project Management & UI Enhancements
+
+**Epic Goal**  
+Implement core project management features for saving/loading graph files, import/export functionality, and UI enhancements that improve workflow efficiency, including ctrl-click node palette access and intelligent wire-node interactions.
+
+### Story 6.1  Project File Structure & Management
+As a prompt artist, I want to save my graph projects to files and open them later, so that I can maintain a library of prompt templates and continue my work across sessions.
+
+**Acceptance Criteria**
+1. "Save Project" and "Open Project" options in the main menu/toolbar.
+2. Project files (.psg format) store the complete graph state, including node positions and connections.
+3. Confirmation dialog if attempting to open a new project with unsaved changes.
+4. Recently opened projects list in the file menu (last 5).
+
+### Story 6.2  Import & Export System
+As a prompt artist, I want to import and export my graphs in various formats, so that I can share them with colleagues or integrate them with other tools.
+
+**Acceptance Criteria**
+1. Export options: JSON (raw), PNG (visual representation), Text (generated prompts).
+2. Import accepts .psg files and valid JSON graph structures.
+3. Import validation with clear error messaging for invalid files.
+4. Progress indicator for large file imports/exports.
+
+### Story 6.3  Ctrl-Click Node Palette Access
+As a prompt artist, I want to ctrl-click anywhere on the canvas to open the node palette at that position, so that I can add nodes more efficiently without dragging from the side panel.
+
+**Acceptance Criteria**
+1. Ctrl-click (Cmd-click on macOS) on empty canvas space opens node palette at cursor position.
+2. Selected node appears at the clicked position.
+3. Feature can be toggled on/off in settings.
+4. Tooltip/onboarding hint to educate users about this feature.
+
+### Story 6.4  Intelligent Wire-Node Interactions
+As a prompt artist, I want to drop a node onto an existing wire and be presented with options to disconnect or splice, so that I can modify my graph structure more intuitively.
+
+**Acceptance Criteria**
+1. Visual feedback when dragging a node over a wire (highlight or glow effect).
+2. Contextual menu appears when dropping a node on a wire with options:
+   - "Splice" - Insert the node into the connection, creating two edges.
+   - "Replace" - Remove the edge and allow manual connections.
+   - "Cancel" - Abort the operation.
+3. Preview of the resulting connection when hovering over each option.
+4. Undo support for all wire-node interactions.
+
+---
+
+### Epic 6 Progress Checklist
+
+- [ ] **Story 6.1 Project File Structure & Management**
+  - [ ] "Save Project" and "Open Project" functionality implemented
+  - [ ] .psg file format defined and documented
+  - [ ] Confirmation dialog for unsaved changes
+  - [ ] Recent projects list implemented
+
+- [ ] **Story 6.2 Import & Export System**
+  - [ ] Export to JSON, PNG, and Text formats
+  - [ ] Import validation and error handling
+  - [ ] Progress indicators for file operations
+
+- [ ] **Story 6.3 Ctrl-Click Node Palette Access**
+  - [ ] Ctrl-click detection on canvas
+  - [ ] Node palette appears at cursor position
+  - [ ] Settings toggle implemented
+  - [ ] User onboarding for the feature
+
+- [ ] **Story 6.4 Intelligent Wire-Node Interactions**
+  - [ ] Wire highlight effect when node hovers over
+  - [ ] Contextual menu with splice/replace options
+  - [ ] Preview of resulting connections
+  - [ ] Undo/redo support for wire interactions
+
+---
+
+### Epic 6 Backlog / Technical Considerations
+
+- Project file considerations:
+  - Version control compatibility (.psg format should be text-based, not binary)
+  - Auto-recovery from browser crashes or session timeouts
+  - Cloud storage integration options (future enhancement)
+- Performance optimizations:
+  - Efficient serialization for large graphs
+  - Throttling visual feedback during drag operations
+- Accessibility improvements:
+  - Keyboard shortcuts for frequent operations
+  - Screen reader support for contextual menus
+- User experience refinements:
+  - Animation smoothness during splice operations
+  - Intuitive visual cues for drag-and-drop interactions
+
+---
+
+## 12 · Epic 7 — Advanced Node Capabilities & User Experience
+
+**Epic Goal**  
+Enhance the core capabilities of the graph editor with advanced node types, improved palette organization, and fine-grained control settings to empower prompt artists with more powerful and flexible graph authoring tools.
+
+### Story 7.1  Advanced Rule Node Implementation
+As a prompt artist, I want access to advanced rule nodes (`Weighted`, `Conditional`, `Sequential`, `Markov`) that match engine capabilities, so that I can create more sophisticated and dynamic prompt structures.
+
+**Acceptance Criteria**
+1. Four new node types implemented with corresponding runtime classes in the executor:
+   - `Weighted`: Probability-based branching beyond simple choices
+   - `Conditional`: If-then-else logic based on variable values
+   - `Sequential`: Ordered traversal of child nodes with history tracking
+   - `Markov`: State transition with memory of previous selections
+2. Each node includes appropriate configuration controls in the Inspector panel.
+3. Documentation for each node type with usage examples.
+4. Test suite covering all node behaviors and edge cases.
+
+### Story 7.2  Palette Categorization System
+As a prompt artist, I want the node palette organized into logical categories with tabs, so that I can efficiently find nodes as the library grows beyond 12 node types.
+
+**Acceptance Criteria**
+1. Palette UI redesigned with category tabs at the top.
+2. Initial categories include: Basic, Flow Control, Variables, Advanced Rules.
+3. Visual indicators show which categories contain which nodes.
+4. Search functionality to quickly find nodes across categories.
+5. User-customizable favorites section for most frequently used nodes.
+
+### Story 7.3  Advanced Settings Modal
+As a prompt artist, I want an Advanced Settings modal that gives me fine-grained control over seed, sampling, and execution parameters, so that I can precisely tune how my prompts are generated.
+
+**Acceptance Criteria**
+1. Modal accessible from main toolbar with gear icon.
+2. Settings include:
+   - Seed override with manual entry field and "Randomize" button
+   - Sampling temperature slider (0.1-2.0)
+   - Run count selector (1-50) for preview generation
+   - Batch execution options
+3. Settings persist across sessions in LocalStorage.
+4. Changes take immediate effect on preview generation.
+5. Reset to defaults button for each setting group.
+
+### Story 7.4  Advanced Node Documentation & Examples
+As a prompt artist, I want comprehensive documentation and examples for the advanced nodes, so that I can understand their use cases and implement them effectively in my graphs.
+
+**Acceptance Criteria**
+1. Interactive documentation with live examples for each advanced node.
+2. Tooltip help text available directly in the UI.
+3. Example graphs demonstrating practical applications.
+4. Compatibility notes with the executor and export formats.
+5. Performance considerations and best practices.
+
+---
+
+### Epic 7 Progress Checklist
+
+- [ ] **Story 7.1 Advanced Rule Node Implementation**
+  - [ ] `Weighted` node implementation
+  - [ ] `Conditional` node implementation
+  - [ ] `Sequential` node implementation
+  - [ ] `Markov` node implementation
+  - [ ] Inspector panel controls for all nodes
+  - [ ] Runtime executor support
+  - [ ] Comprehensive test coverage
+
+- [ ] **Story 7.2 Palette Categorization System**
+  - [ ] Category tabs UI implementation
+  - [ ] Node organization into categories
+  - [ ] Visual indicators and badging
+  - [ ] Search functionality
+  - [ ] Favorites section
+
+- [ ] **Story 7.3 Advanced Settings Modal**
+  - [ ] Modal UI implementation
+  - [ ] Seed override functionality
+  - [ ] Sampling temperature controls
+  - [ ] Run count selector
+  - [ ] Settings persistence
+  - [ ] Default reset functionality
+
+- [ ] **Story 7.4 Advanced Node Documentation & Examples**
+  - [ ] Documentation for each node type
+  - [ ] Interactive examples
+  - [ ] Tooltip integration
+  - [ ] Example graphs
+  - [ ] Best practices documentation
+
+---
+
+### Epic 7 Backlog / Technical Considerations
+
+- Advanced node execution performance
+  - Optimization strategies for complex node types
+  - Caching mechanisms for repeated evaluations
+  - Profiling tools for identifying bottlenecks
+- Palette UI responsiveness
+  - Smooth transitions between categories
+  - Optimized rendering for large node libraries
+  - Touch-friendly controls for tablet usage
+- Settings integration
+  - API for extending settings by plugins
+  - Export/import of settings presets
+  - Command-line equivalents for all UI settings
+- Documentation system
+  - Version-specific documentation
+  - User contribution workflow for examples
+  - Analytics to identify most-viewed documentation
+
+---
+
 *PRD complete – ready for hand-off to UX Expert and Architect agents.*

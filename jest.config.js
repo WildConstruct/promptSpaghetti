@@ -8,7 +8,8 @@ module.exports = {
   coverageDirectory: 'coverage',
   collectCoverageFrom: ['packages/**/*.{ts,tsx}', 'client/src/**/*.{ts,tsx}', '!**/node_modules/**'],
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^reactflow$': '<rootDir>/client/__mocks__/reactflow.tsx'
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
 };

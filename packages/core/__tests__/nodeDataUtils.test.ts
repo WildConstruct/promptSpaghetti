@@ -7,7 +7,7 @@ import {
   getRandomVariation,
   hasVariations,
   getVariationCount,
-  validateNodeData,
+  validateNodeDataLegacy,
 } from '../utils/nodeDataUtils';
 import { SubjectNodeData, WeightedChoiceNodeData, ActionNodeData } from '../types/NodeTypes';
 
@@ -125,7 +125,7 @@ describe('nodeDataUtils', () => {
         pluralForm: 'tests',
       };
 
-      const result = validateNodeData(validNode);
+      const result = validateNodeDataLegacy(validNode);
       expect(result.valid).toBe(true);
       expect(result.errors).toEqual([]);
     });
@@ -141,7 +141,7 @@ describe('nodeDataUtils', () => {
         pluralForm: 'tests',
       };
 
-      const result = validateNodeData(invalidNode);
+      const result = validateNodeDataLegacy(invalidNode);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Node label is required');
       expect(result.errors).toContain('Node ID is required');
@@ -156,7 +156,7 @@ describe('nodeDataUtils', () => {
         weights: [1], // Mismatch with options length
       };
 
-      const result = validateNodeData(invalidWeightedChoice);
+      const result = validateNodeDataLegacy(invalidWeightedChoice);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Number of options must match number of weights');
     });
@@ -170,7 +170,7 @@ describe('nodeDataUtils', () => {
         value: 'test',
       };
 
-      const result = validateNodeData(invalidSetVariable);
+      const result = validateNodeDataLegacy(invalidSetVariable);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Variable name is required');
     });

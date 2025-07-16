@@ -1,115 +1,21 @@
-import { NodeData, NodeType, VariationConfig } from "../types/NodeTypes";
+import { 
+  NodeData, 
+  NodeType, 
+  VariationConfig, 
+  createNodeData,
+  WeightedChoiceNodeData,
+  SetVariableNodeData,
+  GetVariableNodeData,
+  IncludeNodeData
+} from "../types/NodeTypes";
 
+// Legacy function - delegates to new factory system
 export const createDefaultNodeData = (type: NodeType): NodeData => {
-  const baseData = {
-    label: type,
-    id: `${type}-${Date.now()}`,
-    variations: [],
-    description: "",
-    tags: [],
-    category: "general",
-  };
-
-  switch (type) {
-    case "Subject":
-      return {
-        ...baseData,
-        type: "Subject",
-        subjects: ["subject"],
-        singularForm: "subject",
-        pluralForm: "subjects",
-        defaultWeight: 1,
-      };
-
-    case "Connector":
-      return {
-        ...baseData,
-        type: "Connector",
-        connectors: ["and"],
-        grammarType: "coordinating",
-        position: "between",
-      };
-
-    case "Attribute":
-      return {
-        ...baseData,
-        type: "Attribute",
-        attributes: ["attribute"],
-        targetNoun: "",
-        adjectiveType: "descriptive",
-        position: "before",
-      };
-
-    case "Action":
-      return {
-        ...baseData,
-        type: "Action",
-        actions: ["action"],
-        tense: "present",
-        voice: "active",
-        intensity: "medium",
-      };
-
-    case "WeightedChoice":
-      return {
-        ...baseData,
-        type: "WeightedChoice",
-        weights: [1],
-        options: ["option"],
-      };
-
-    case "Concat":
-      return {
-        ...baseData,
-        type: "Concat",
-        delimiter: ", ",
-        formatType: "sentence",
-      };
-
-    case "Output":
-      return {
-        ...baseData,
-        type: "Output",
-        prompt: "",
-        outputFormat: "text",
-      };
-
-    case "Include":
-      return {
-        ...baseData,
-        type: "Include",
-        ref: "",
-        includeType: "bundle",
-      };
-
-    case "SetVariable":
-      return {
-        ...baseData,
-        type: "SetVariable",
-        name: "",
-        value: "",
-        variableType: "string",
-      };
-
-    case "GetVariable":
-      return {
-        ...baseData,
-        type: "GetVariable",
-        name: "",
-        defaultValue: "",
-      };
-
-    default:
-      // This should never happen, but provide a fallback
-      return {
-        ...baseData,
-        type: "Output",
-        prompt: "",
-        outputFormat: "text",
-      } as NodeData;
-  }
+  const id = `${type}-${Date.now()}`;
+  return createNodeData(type, id);
 };
 
+// Variation management utilities
 export const addVariationToNode = (nodeData: NodeData, variation: string): NodeData => {
   const currentVariations = nodeData.variations || [];
   return {
@@ -175,7 +81,20 @@ export const getVariationCount = (nodeData: NodeData): number => {
   return nodeData.variations?.length || 0;
 };
 
-export const validateNodeData = (nodeData: NodeData): { valid: boolean; errors: string[] } => {
+// Legacy validation function - uses new validation system
+export const validateNodeDataLegacyWrapper = (nodeData: NodeData): { valid: boolean; errors: string[] } => {
+  // Import the new validation function to avoid conflicts
+  const { validateNodeData: newValidate } = require("../types/NodeTypes");
+  const errors = newValidate(nodeData);
+  
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+};
+
+// Legacy validation with old interface for backward compatibility
+export const validateNodeDataLegacy = (nodeData: NodeData): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
   
   if (!nodeData.label || nodeData.label.trim() === "") {
@@ -186,32 +105,36 @@ export const validateNodeData = (nodeData: NodeData): { valid: boolean; errors: 
     errors.push("Node ID is required");
   }
   
-  // Type-specific validation
+  // Type-specific validation with new field names
   switch (nodeData.type) {
     case "WeightedChoice":
-      if (nodeData.options.length !== nodeData.weights.length) {
-        errors.push("Number of options must match number of weights");
+      const wcData = nodeData as WeightedChoiceNodeData;
+      if (wcData.choices && wcData.weights && wcData.choices.length !== wcData.weights.length) {
+        errors.push("Number of choices must match number of weights");
       }
-      if (nodeData.weights.some(w => w <= 0)) {
+      if (wcData.weights && wcData.weights.some(w => w <= 0)) {
         errors.push("All weights must be positive numbers");
       }
       break;
       
     case "SetVariable":
-      if (!nodeData.name || nodeData.name.trim() === "") {
+      const setVarData = nodeData as SetVariableNodeData;
+      if (!setVarData.variableName || setVarData.variableName.trim() === "") {
         errors.push("Variable name is required");
       }
       break;
       
     case "GetVariable":
-      if (!nodeData.name || nodeData.name.trim() === "") {
+      const getVarData = nodeData as GetVariableNodeData;
+      if (!getVarData.variableName || getVarData.variableName.trim() === "") {
         errors.push("Variable name is required");
       }
       break;
       
     case "Include":
-      if (!nodeData.ref || nodeData.ref.trim() === "") {
-        errors.push("Reference is required");
+      const includeData = nodeData as IncludeNodeData;
+      if (!includeData.name || includeData.name.trim() === "") {
+        errors.push("Include name is required");
       }
       break;
   }
@@ -234,4 +157,31 @@ export const mergeNodeData = <T extends NodeData>(
     ...original,
     ...updates,
   } as T;
+};
+
+// Migration utilities for upgrading old node data
+export const migrateNodeData = (oldNodeData: any): NodeData | null => {
+  try {
+    // If it's already in the new format, return as-is
+    if (oldNodeData.id && oldNodeData.type && oldNodeData.label) {
+      return oldNodeData as NodeData;
+    }
+
+    // Create new node data from scratch if migration is needed
+    const type = oldNodeData.type as NodeType;
+    const id = oldNodeData.id || `${type}-${Date.now()}`;
+    const label = oldNodeData.label || type;
+    
+    const newData = createNodeData(type, id, label);
+    
+    // Migrate variations if they exist
+    if (oldNodeData.variations) {
+      newData.variations = oldNodeData.variations;
+    }
+    
+    return newData;
+  } catch (error) {
+    console.warn("Failed to migrate node data:", error);
+    return null;
+  }
 };
