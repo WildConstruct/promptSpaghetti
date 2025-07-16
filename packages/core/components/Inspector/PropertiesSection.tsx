@@ -96,20 +96,27 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
         <input
           id={`field-${key}`}
           type={(zodType as any)._def?.typeName === "ZodNumber" ? "number" : "text"}
-          value={
-            (() => {
-              const v = values[key];
-              if (v === undefined || v === null) {
-                return (zodType as any)._def?.typeName === "ZodNumber" ? 0 : "";
-              }
-              return v as any;
-            })()
-          }
+          value={String(values[key] ?? "")}
           onChange={(e) => {
+            e.stopPropagation(); // Prevent React Flow from capturing the event
+            console.log('Input change event:', key, e.target.value); // Debug logging
             const newValue = (zodType as any)._def?.typeName === "ZodNumber" 
               ? Number(e.target.value) 
               : e.target.value;
+            // Update local state immediately for responsive UI
+            setValues(prev => ({ ...prev, [key]: newValue }));
             updateField(key, newValue);
+          }}
+          onKeyDown={(e) => {
+            e.stopPropagation(); // Prevent React Flow keyboard handling
+          }}
+          onFocus={(e) => {
+            e.stopPropagation();
+            e.target.style.borderColor = "#4CAF50";
+          }}
+          onBlur={(e) => {
+            e.stopPropagation();
+            e.target.style.borderColor = error ? "#ef4444" : "#4a5568";
           }}
           style={{
             width: "100%",
@@ -121,6 +128,9 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
             color: "#e2e8f0",
             outline: "none",
             transition: "border-color 0.2s",
+            pointerEvents: "auto",
+            userSelect: "text",
+            WebkitUserSelect: "text",
           }}
           onFocus={(e) => {
             e.target.style.borderColor = "#4CAF50";

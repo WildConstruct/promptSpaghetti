@@ -319,8 +319,8 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
               panOnDrag={[1, 2]} // Pan with left or middle mouse button
               selectionOnDrag={false} // Disable box selection on drag
               zoomOnDoubleClick={false} // Disable double-click zoom
-              // Keyboard shortcuts
-              deleteKeyCode={["Delete", "Backspace"]} // Delete selected nodes
+              // Keyboard shortcuts - disable when form inputs are focused
+              deleteKeyCode={null} // Disable delete key to prevent conflicts with form inputs
               multiSelectionKeyCode={["Shift", "Control", "Meta"]} // Multi-select with Shift/Ctrl/Cmd
               zoomActivationKeyCode={["Control", "Meta"]} // Zoom with Ctrl/Cmd + scroll
               // Connection line style - Clean 90-degree lines
