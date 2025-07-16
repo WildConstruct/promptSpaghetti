@@ -93,3 +93,12 @@ import seedrandom from 'seedrandom';
 function seededRandom(seed: string | number): number {
   return seedrandom(String(seed))();
 }
+
+/* ----------------------------- Advanced Nodes (Epic 7) ------------------------------ */
+
+// Re-export all advanced node capabilities
+export * from './advanced';
+export * from './io-system';
+
+// Note: Advanced node implementations are exported from their specific files
+// to avoid circular dependencies during testing

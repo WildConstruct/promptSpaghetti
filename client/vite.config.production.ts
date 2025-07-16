@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-// https://vitejs.dev/config/
+// Production config for Netlify builds
+// Assumes core files are copied to src/core
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -26,16 +27,9 @@ export default defineConfig({
     strictPort: true
   },
   resolve: {
-    alias: {
-      '@promptscape/core': path.resolve(__dirname, '../packages/core'),
-    },
-    dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow']
+    // No alias needed in production - core files are local
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand', 'seedrandom']
-  },
-  define: {
-    // Ensure process.env is available for any Node.js checks
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand']
   }
 });
