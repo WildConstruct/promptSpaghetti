@@ -152,7 +152,7 @@ export const VariationList: React.FC<VariationListProps> = ({
             onClick={() => setQuickEntryMode(!quickEntryMode)}
             style={{
               background: "none",
-              border: "1px solid #d1d5db",
+              border: "1px solid #4a5568",
               borderRadius: 4,
               padding: "2px 8px",
               fontSize: 11,
@@ -176,10 +176,12 @@ export const VariationList: React.FC<VariationListProps> = ({
               width: "100%",
               height: 80,
               padding: "8px 12px",
-              border: "1px solid #d1d5db",
+              border: "1px solid #4a5568",
               borderRadius: 6,
               fontSize: 14,
               resize: "vertical",
+              background: "#2d3748",
+              color: "#e2e8f0",
               fontFamily: "inherit",
             }}
           />
@@ -209,11 +211,12 @@ export const VariationList: React.FC<VariationListProps> = ({
                 setQuickEntryText("");
               }}
               style={{
-                background: "#f3f4f6",
-                border: "1px solid #d1d5db",
+                background: "#4a5568",
+                border: "1px solid #4a5568",
                 borderRadius: 4,
                 padding: "6px 12px",
                 fontSize: 12,
+                color: "#e2e8f0",
                 cursor: "pointer",
               }}
             >
@@ -244,10 +247,12 @@ export const VariationList: React.FC<VariationListProps> = ({
               style={{
                 flex: 1,
                 padding: "8px 12px",
-                border: "1px solid #d1d5db",
+                border: "1px solid #4a5568",
                 borderRadius: 6,
                 fontSize: 14,
                 outline: "none",
+                background: "#2d3748",
+                color: "#e2e8f0",
               }}
             />
             <button
@@ -298,8 +303,8 @@ export const VariationList: React.FC<VariationListProps> = ({
                 display: "flex",
                 alignItems: "center",
                 padding: "8px 12px",
-                borderBottom: index < variations.length - 1 ? "1px solid #f3f4f6" : "none",
-                background: dragOverIndex === index ? "#f0f9ff" : "transparent",
+                borderBottom: index < variations.length - 1 ? "1px solid #4a5568" : "none",
+                background: dragOverIndex === index ? "#4a5568" : "transparent",
                 opacity: draggedIndex === index ? 0.5 : 1,
                 cursor: "move",
               }}

@@ -180,22 +180,24 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
                 style={{
                   width: 60,
                   padding: "4px 8px",
-                  border: "1px solid #d1d5db",
+                  border: "1px solid #4a5568",
                   borderRadius: 4,
                   fontSize: 12,
+                  background: "#2d3748",
+                  color: "#e2e8f0",
                 }}
               />
             </div>
             <button
               onClick={refreshExamples}
               style={{
-                background: "#f3f4f6",
-                border: "1px solid #d1d5db",
+                background: "#4a5568",
+                border: "1px solid #4a5568",
                 borderRadius: 4,
                 padding: "4px 8px",
                 fontSize: 12,
+                color: "#e2e8f0",
                 cursor: "pointer",
-                color: "#374151",
               }}
               title="Refresh examples"
             >
@@ -217,13 +219,13 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
                   key={index}
                   style={{
                     padding: "8px 12px",
-                    background: "#f9fafb",
-                    border: "1px solid #e5e7eb",
+                    background: "#374151",
+                    border: "1px solid #4a5568",
                     borderRadius: 4,
                     marginBottom: index < examples.length - 1 ? 8 : 0,
                     fontFamily: "monospace",
                     fontSize: 13,
-                    color: "#374151",
+                    color: "#e2e8f0",
                   }}
                 >
                   <div style={{ marginBottom: example.highlightInfo ? 4 : 0 }}>
@@ -234,7 +236,7 @@ export const PreviewSection: React.FC<PreviewSectionProps> = ({ node }) => {
                       fontSize: 10,
                       color: "#6b7280",
                       fontStyle: "italic",
-                      background: "#fef3c7",
+                      background: "#4a5568",
                       padding: "2px 6px",
                       borderRadius: 3,
                       display: "inline-block",

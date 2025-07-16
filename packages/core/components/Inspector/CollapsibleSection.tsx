@@ -14,15 +14,15 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
   children,
 }) => {
   return (
-    <div style={{ borderBottom: "1px solid #e5e7eb" }}>
+    <div style={{ borderBottom: "1px solid #4a5568" }}>
       <button
         onClick={onToggle}
         style={{
           width: "100%",
           padding: "12px 16px",
-          background: "#f9fafb",
+          background: "#374151",
           border: "none",
-          borderBottom: collapsed ? "none" : "1px solid #e5e7eb",
+          borderBottom: collapsed ? "none" : "1px solid #4a5568",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
@@ -30,13 +30,13 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
           outline: "none",
           fontSize: 13,
           fontWeight: 600,
-          color: "#374151",
+          color: "#e2e8f0",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = "#f3f4f6";
+          e.currentTarget.style.background = "#4a5568";
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.background = "#f9fafb";
+          e.currentTarget.style.background = "#374151";
         }}
       >
         <span>{title}</span>
@@ -45,7 +45,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
             transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)",
             transition: "transform 0.2s ease",
             fontSize: 12,
-            color: "#6b7280",
+            color: "#a0aec0",
           }}
         >
           ▼
