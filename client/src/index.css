@@ -60,11 +60,14 @@ body {
   border: 1px solid #4CAF50;
 }
 
-/* Node styling - Remove default React Flow node backgrounds and borders */
+/* Node styling - Override React Flow defaults while maintaining functionality */
 .react-flow__node {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
+  position: relative !important;
+  pointer-events: auto !important;
+  overflow: visible !important;
 }
 
 .react-flow__node.selected {
@@ -104,4 +107,17 @@ body {
   0% {
     stroke-dashoffset: 10;
   }
+}
+
+/* React Flow container fixes */
+.react-flow {
+  /* Don't override overflow - let React Flow handle it */
+}
+
+.react-flow__viewport {
+  /* Don't override overflow - let React Flow handle it */
+}
+
+.react-flow__nodes {
+  /* Don't override overflow - let React Flow handle it */
 }

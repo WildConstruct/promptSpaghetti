@@ -279,7 +279,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
             onToggle={() => setPaletteCollapsed((c) => !c)}
             onDragStart={handlePaletteDragStart}
           />
-          <div style={{ flex: 1, position: 'relative', minWidth: 0 }} data-testid="react-flow-canvas-wrapper">
+          <div style={{ flex: 1, position: 'relative', overflow: 'visible' }} data-testid="react-flow-canvas-wrapper">
             <ReactFlow
               nodes={styledNodes}
               edges={styledEdges}

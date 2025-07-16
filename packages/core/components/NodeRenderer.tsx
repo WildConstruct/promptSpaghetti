@@ -20,6 +20,9 @@ export const NodeRenderer = memo<NodeRendererProps>(({
   getCategoryColor,
 }) => {
   try {
+    // Debug: Log node data to console
+    console.log('NodeRenderer:', { id, data, selected });
+    
     const hasVariations = data?.variations && data.variations.length > 0;
     const nodeType = data?.nodeType || data?.type || 'WeightedChoice';
     const nodeMeta = getNodeMeta(nodeType);
@@ -56,9 +59,12 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             ? `0 0 0 3px ${categoryColor}20, 0 4px 12px rgba(0,0,0,0.25)` 
             : '0 2px 8px rgba(0,0,0,0.15)',
           position: 'relative',
-          overflow: 'hidden',
+          overflow: 'visible',
           fontFamily: 'system-ui, -apple-system, sans-serif',
           transition: 'all 0.2s ease',
+          zIndex: 1,
+          pointerEvents: 'auto',
+          display: 'block',
         }}
         onMouseEnter={(e) => {
           if (!selected) {
