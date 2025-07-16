@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Node } from "reactflow";
+import { Node, Handle, Position } from "reactflow";
 import { NodeMeta } from "../Palette";
 
 interface NodeRendererProps {
@@ -119,34 +119,36 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           )}
         </div>
 
-        {/* Input Port */}
-        <div
+        {/* Input Handle - React Flow connection point */}
+        <Handle
+          type="target"
+          position={Position.Left}
           style={{
-            position: 'absolute',
             left: -6,
-            top: '50%',
-            transform: 'translateY(-50%)',
             width: 12,
             height: 12,
             borderRadius: '50%',
             background: '#4a5568',
             border: '2px solid #2d3748',
+            cursor: 'crosshair',
           }}
+          isConnectable={true}
         />
 
-        {/* Output Port */}
-        <div
+        {/* Output Handle - React Flow connection point */}
+        <Handle
+          type="source"
+          position={Position.Right}
           style={{
-            position: 'absolute',
             right: -6,
-            top: '50%',
-            transform: 'translateY(-50%)',
             width: 12,
             height: 12,
             borderRadius: '50%',
             background: categoryColor,
             border: '2px solid #2d3748',
+            cursor: 'crosshair',
           }}
+          isConnectable={true}
         />
       </div>
     );

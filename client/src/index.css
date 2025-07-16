@@ -59,3 +59,46 @@ body {
   background: rgba(76, 175, 80, 0.1);
   border: 1px solid #4CAF50;
 }
+
+/* Node styling - Remove default React Flow node backgrounds and borders */
+.react-flow__node {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.react-flow__node.selected {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Handle/port styling for better visibility */
+.react-flow__handle {
+  width: 12px !important;
+  height: 12px !important;
+  background: #4a5568 !important;
+  border: 2px solid #2d3748 !important;
+  transition: all 0.2s ease;
+}
+
+.react-flow__handle:hover {
+  transform: scale(1.2);
+  border-color: #4CAF50 !important;
+  background: #5a6578 !important;
+}
+
+.react-flow__handle.connecting {
+  background: #4CAF50 !important;
+  border-color: #4CAF50 !important;
+}
+
+/* Connection line while dragging */
+.react-flow__connection {
+  animation: dashdraw 0.5s linear infinite;
+}
+
+@keyframes dashdraw {
+  0% {
+    stroke-dashoffset: 10;
+  }
+}

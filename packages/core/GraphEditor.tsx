@@ -117,6 +117,7 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [correctionsOpen, setCorrectionsOpen] = useState(false);
+  const [showControls, setShowControls] = useState(false);
   
   const correctionsEnabled = useCorrectionsEnabled();
 
@@ -298,11 +299,60 @@ export const GraphEditor: React.FC<GraphEditorProps> = ({
               nodeTypes={nodeTypes}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
+              // Standard 3D-style mouse controls
+              panOnScroll={false} // Disable scroll to pan
+              zoomOnScroll={true} // Enable scroll to zoom (standard 3D behavior)
+              panOnDrag={[1, 2]} // Pan with left or middle mouse button
+              selectionOnDrag={false} // Disable box selection on drag
+              zoomOnDoubleClick={false} // Disable double-click zoom
+              // Keyboard shortcuts
+              deleteKeyCode={["Delete", "Backspace"]} // Delete selected nodes
+              multiSelectionKeyCode={["Shift", "Control", "Meta"]} // Multi-select with Shift/Ctrl/Cmd
+              zoomActivationKeyCode={["Control", "Meta"]} // Zoom with Ctrl/Cmd + scroll
+              // Connection line style
+              connectionLineStyle={{ stroke: '#4a5568', strokeWidth: 2 }}
+              connectionLineType="smoothstep"
+              // Default zoom/pan settings
+              minZoom={0.1}
+              maxZoom={4}
+              defaultViewport={{ x: 0, y: 0, zoom: 1 }}
             >
               <Background color="#2d3748" gap={16} />
               <MiniMap nodeColor={() => '#363a45'} maskColor="#181b21BB" />
               <Controls />
             </ReactFlow>
+            
+            {/* Mouse Controls Help Overlay */}
+            <div style={{
+              position: 'absolute',
+              bottom: 10,
+              right: 10,
+              background: 'rgba(42, 42, 42, 0.9)',
+              border: '1px solid #444',
+              borderRadius: 4,
+              padding: 8,
+              fontSize: 11,
+              color: '#a0aec0',
+              cursor: 'pointer',
+              userSelect: 'none',
+            }}
+            onClick={() => setShowControls(!showControls)}
+            >
+              <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>
+                🖱️ Controls {showControls ? '▼' : '▶'}
+              </div>
+              {showControls && (
+                <div style={{ marginTop: 8, lineHeight: 1.6 }}>
+                  <div><b>Pan:</b> Left-click + drag on canvas</div>
+                  <div><b>Zoom:</b> Mouse wheel / trackpad scroll</div>
+                  <div><b>Select:</b> Click node</div>
+                  <div><b>Multi-select:</b> Shift/Ctrl + Click</div>
+                  <div><b>Connect:</b> Drag from output port</div>
+                  <div><b>Delete:</b> Select + Delete/Backspace</div>
+                  <div><b>Alternative Pan:</b> Middle-click + drag</div>
+                </div>
+              )}
+            </div>
           </div>
           <InspectorPanel
             node={selectedNode}
