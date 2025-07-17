@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { X, AlertCircle, Info } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { ValidationMessage } from '../common/ValidationMessage';
+import { TargetingRuleBuilder } from './targeting/TargetingRuleBuilder';
+import './targeting/TargetingRuleBuilder.css';
 
 interface CreateToggleModalProps {
   isOpen: boolean;
@@ -301,20 +303,38 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({
       case 'segmentation':
         return (
           <div className="form-group">
-            <label>Segmentation Rules</label>
+            <label>Targeting Rules</label>
             <div className="segmentation-editor">
-              <p className="form-help">
-                Advanced rule configuration will be available after creation
-              </p>
-              <input
-                type="text"
-                placeholder="Default value when no rules match"
-                value={formData.value.defaultValue || ''}
-                onChange={(e) => setFormData(prev => ({
+              <TargetingRuleBuilder
+                initialRules={formData.value.rules || []}
+                onRulesChange={(rules) => setFormData(prev => ({
                   ...prev,
-                  value: { rules: [], defaultValue: e.target.value }
+                  value: { ...prev.value, rules }
                 }))}
+                onTestRule={async (rules) => {
+                  // Mock test implementation
+                  return {
+                    matches: true,
+                    userCount: Math.floor(Math.random() * 5000) + 100
+                  };
+                }}
               />
+              
+              <div className="default-value-section">
+                <label>Default Value</label>
+                <input
+                  type="text"
+                  placeholder="Value when no rules match (e.g., false, disabled)"
+                  value={formData.value.defaultValue || ''}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    value: { ...prev.value, defaultValue: e.target.value }
+                  }))}
+                />
+                <div className="form-help">
+                  This value will be used when none of the targeting rules match the user
+                </div>
+              </div>
             </div>
           </div>
         );

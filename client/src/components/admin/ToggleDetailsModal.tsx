@@ -15,10 +15,15 @@ import {
   Shield,
   Eye,
   Code,
-  Settings
+  Settings,
+  Users,
+  Target
 } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
+import { UserPreviewTool } from './targeting/UserPreviewTool';
+import './targeting/UserPreviewTool.css';
+import './targeting/TargetingModalExtensions.css';
 
 interface ToggleDetailsModalProps {
   isOpen: boolean;
@@ -79,7 +84,8 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
   const [toggle, setToggle] = useState<ToggleDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'config' | 'audit' | 'dependencies'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'config' | 'audit' | 'dependencies' | 'targeting'>('overview');
+  const [showUserPreview, setShowUserPreview] = useState(false);
 
   useEffect(() => {
     if (isOpen && toggleId) {
@@ -270,6 +276,13 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
                 >
                   <Code size={16} />
                   Dependencies
+                </button>
+                <button
+                  className={`tab ${activeTab === 'targeting' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('targeting')}
+                >
+                  <Target size={16} />
+                  Targeting
                 </button>
               </div>
 
@@ -494,10 +507,126 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
                     </div>
                   </div>
                 )}
+
+                {activeTab === 'targeting' && (
+                  <div className="targeting-tab">
+                    <div className="targeting-overview">
+                      <div className="targeting-stats">
+                        <div className="stat-card">
+                          <h4>Targeting Rules</h4>
+                          <div className="stat-value">{toggle.scopes.length}</div>
+                          <p>Active scoping rules</p>
+                        </div>
+                        
+                        <div className="stat-card">
+                          <h4>Estimated Reach</h4>
+                          <div className="stat-value">~2.5K</div>
+                          <p>Users affected</p>
+                        </div>
+                      </div>
+                      
+                      <div className="targeting-actions">
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => setShowUserPreview(true)}
+                        >
+                          <Users size={16} />
+                          Preview User Experience
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="targeting-rules-section">
+                      <h4>Targeting Rules</h4>
+                      {toggle.scopes.length > 0 ? (
+                        <div className="targeting-rules-list">
+                          {toggle.scopes.map((scope, index) => (
+                            <div key={scope.id} className="targeting-rule-item">
+                              <div className="rule-header">
+                                <div className="rule-priority">
+                                  <Badge color="blue">Priority {scope.priority}</Badge>
+                                </div>
+                                <div className="rule-date">
+                                  Added {new Date(scope.createdAt).toLocaleDateString()}
+                                </div>
+                              </div>
+                              
+                              <div className="rule-content">
+                                <h5>Rule {index + 1}</h5>
+                                <div className="rule-description">
+                                  {scope.rule.description || 'No description provided'}
+                                </div>
+                                
+                                <div className="rule-conditions">
+                                  <h6>Conditions:</h6>
+                                  <pre className="rule-json">
+                                    {JSON.stringify(scope.rule, null, 2)}
+                                  </pre>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="empty-targeting">
+                          <Target size={32} />
+                          <h5>No Targeting Rules</h5>
+                          <p>This toggle applies to all users without any targeting restrictions.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="targeting-segments-section">
+                      <h4>Related Segments</h4>
+                      <p className="section-description">
+                        User segments that might be relevant for this toggle
+                      </p>
+                      
+                      <div className="segments-grid">
+                        {/* Mock segments - replace with actual data */}
+                        <div className="segment-card">
+                          <div className="segment-info">
+                            <h5>Beta Users</h5>
+                            <p>Users who opted into beta testing</p>
+                            <div className="segment-stats">
+                              <span>~1,250 users</span>
+                              <Badge color="green">Active</Badge>
+                            </div>
+                          </div>
+                          <button className="btn btn-secondary btn-sm">
+                            Apply Segment
+                          </button>
+                        </div>
+                        
+                        <div className="segment-card">
+                          <div className="segment-info">
+                            <h5>Premium Users</h5>
+                            <p>Users with premium subscriptions</p>
+                            <div className="segment-stats">
+                              <span>~5,680 users</span>
+                              <Badge color="green">Active</Badge>
+                            </div>
+                          </div>
+                          <button className="btn btn-secondary btn-sm">
+                            Apply Segment
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           ) : null}
         </div>
+
+        {/* User Preview Tool */}
+        <UserPreviewTool
+          isOpen={showUserPreview}
+          onClose={() => setShowUserPreview(false)}
+          toggleId={toggleId}
+          rules={toggle?.scopes.map(scope => scope.rule).flat() || []}
+        />
       </div>
     </div>
   );
