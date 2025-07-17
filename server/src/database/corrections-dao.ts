@@ -12,6 +12,8 @@ import {
   CreateCorrectionSetInput,
   RuleUsageStats,
   PerformanceMetrics,
+  WorkflowStateHistory,
+  WorkflowNotification,
 } from './models';
 
 /**
@@ -36,8 +38,10 @@ export class CorrectionsDAO {
     const stmt = this.db.prepare(`
       INSERT INTO correction_rules (
         uuid, name, description, find_pattern, replace_with, is_regex, is_active, priority,
-        user_id, project_id, scope, created_by, updated_by
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        user_id, project_id, scope, created_by, updated_by,
+        workflow_state, suggested_by, suggestion_reason, suggestion_date, category, tags,
+        usage_count, effectiveness_score
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     
     const result = stmt.run(
@@ -53,7 +57,15 @@ export class CorrectionsDAO {
       input.project_id || null,
       input.scope,
       input.user_id,
-      input.user_id
+      input.user_id,
+      input.workflow_state || 'draft',
+      input.suggested_by || null,
+      input.suggestion_reason || null,
+      input.suggested_by ? now : null,
+      input.category || null,
+      input.tags ? JSON.stringify(input.tags) : null,
+      0, // usage_count starts at 0
+      0.0 // effectiveness_score starts at 0
     );
     
     const rule = this.getRuleById(result.lastInsertRowid as number);
@@ -120,6 +132,9 @@ export class CorrectionsDAO {
         if (key === 'is_regex' || key === 'is_active') {
           updates.push(`${key} = ?`);
           values.push(value ? 1 : 0);
+        } else if (key === 'tags') {
+          updates.push(`${key} = ?`);
+          values.push(JSON.stringify(value));
         } else {
           updates.push(`${key} = ?`);
           values.push(value);
@@ -238,6 +253,298 @@ export class CorrectionsDAO {
     
     const searchTerm = `%${query}%`;
     return stmt.all(userId, searchTerm, searchTerm, searchTerm) as CorrectionRule[];
+  }
+
+  // ========== WORKFLOW MANAGEMENT ==========
+
+  /**
+   * Get rules by workflow state
+   */
+  getRulesByWorkflowState(userId: number, state: 'draft' | 'published' | 'deprecated'): CorrectionRule[] {
+    const stmt = this.db.prepare(`
+      SELECT * FROM correction_rules 
+      WHERE user_id = ? AND workflow_state = ?
+      ORDER BY priority ASC, created_at DESC
+    `);
+    
+    return stmt.all(userId, state) as CorrectionRule[];
+  }
+
+  /**
+   * Approve a draft rule
+   */
+  approveRule(ruleId: number, approvedBy: number, comment?: string): CorrectionRule | null {
+    const rule = this.getRuleById(ruleId);
+    if (!rule || rule.workflow_state !== 'draft') {
+      return null;
+    }
+
+    const now = new Date().toISOString();
+    const stmt = this.db.prepare(`
+      UPDATE correction_rules 
+      SET workflow_state = 'published', 
+          approved_by = ?, 
+          approved_at = ?,
+          is_active = 1,
+          updated_by = ?, 
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `);
+    
+    stmt.run(approvedBy, now, approvedBy, ruleId);
+    
+    const updatedRule = this.getRuleById(ruleId);
+    if (updatedRule) {
+      // Create workflow history entry
+      this.createWorkflowHistoryEntry(ruleId, 'draft', 'published', approvedBy, comment || 'Rule approved');
+      
+      // Create history entry
+      this.createHistoryEntry(updatedRule, 'updated', 'Rule approved and published', approvedBy);
+      
+      // Create notification
+      this.createWorkflowNotification(
+        rule.user_id,
+        ruleId,
+        'rule_approved',
+        'Rule Approved',
+        `Your rule "${rule.name}" has been approved and published.`
+      );
+    }
+    
+    return updatedRule;
+  }
+
+  /**
+   * Deprecate a published rule
+   */
+  deprecateRule(ruleId: number, deprecatedBy: number, reason: string): CorrectionRule | null {
+    const rule = this.getRuleById(ruleId);
+    if (!rule || rule.workflow_state !== 'published') {
+      return null;
+    }
+
+    const now = new Date().toISOString();
+    const stmt = this.db.prepare(`
+      UPDATE correction_rules 
+      SET workflow_state = 'deprecated', 
+          deprecated_at = ?,
+          deprecation_reason = ?,
+          is_active = 0,
+          updated_by = ?, 
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `);
+    
+    stmt.run(now, reason, deprecatedBy, ruleId);
+    
+    const updatedRule = this.getRuleById(ruleId);
+    if (updatedRule) {
+      // Create workflow history entry
+      this.createWorkflowHistoryEntry(ruleId, 'published', 'deprecated', deprecatedBy, reason);
+      
+      // Create history entry
+      this.createHistoryEntry(updatedRule, 'updated', `Rule deprecated: ${reason}`, deprecatedBy);
+      
+      // Create notification
+      this.createWorkflowNotification(
+        rule.user_id,
+        ruleId,
+        'rule_deprecated',
+        'Rule Deprecated',
+        `Your rule "${rule.name}" has been deprecated. Reason: ${reason}`
+      );
+    }
+    
+    return updatedRule;
+  }
+
+  /**
+   * Bulk approve multiple rules
+   */
+  bulkApproveRules(ruleIds: number[], approvedBy: number): number {
+    let approvedCount = 0;
+    
+    const transaction = this.db.transaction((ids: number[]) => {
+      ids.forEach(id => {
+        const result = this.approveRule(id, approvedBy, 'Bulk approval');
+        if (result) {
+          approvedCount++;
+        }
+      });
+    });
+    
+    try {
+      transaction(ruleIds);
+    } catch (error) {
+      console.error('Bulk approval failed:', error);
+      throw error;
+    }
+    
+    return approvedCount;
+  }
+
+  /**
+   * Bulk deprecate multiple rules
+   */
+  bulkDeprecateRules(ruleIds: number[], deprecatedBy: number, reason: string): number {
+    let deprecatedCount = 0;
+    
+    const transaction = this.db.transaction((ids: number[]) => {
+      ids.forEach(id => {
+        const result = this.deprecateRule(id, deprecatedBy, reason);
+        if (result) {
+          deprecatedCount++;
+        }
+      });
+    });
+    
+    try {
+      transaction(ruleIds);
+    } catch (error) {
+      console.error('Bulk deprecation failed:', error);
+      throw error;
+    }
+    
+    return deprecatedCount;
+  }
+
+  /**
+   * Get suggested rules
+   */
+  getSuggestedRules(userId: number): CorrectionRule[] {
+    const stmt = this.db.prepare(`
+      SELECT * FROM correction_rules 
+      WHERE user_id = ? AND suggested_by IS NOT NULL AND workflow_state = 'draft'
+      ORDER BY suggestion_date DESC
+    `);
+    
+    return stmt.all(userId) as CorrectionRule[];
+  }
+
+  /**
+   * Record rule usage
+   */
+  recordRuleUsage(ruleId: number): void {
+    const now = new Date().toISOString();
+    const stmt = this.db.prepare(`
+      UPDATE correction_rules 
+      SET usage_count = usage_count + 1,
+          last_used_at = ?
+      WHERE id = ?
+    `);
+    
+    stmt.run(now, ruleId);
+  }
+
+  /**
+   * Update rule effectiveness score
+   */
+  updateRuleEffectiveness(ruleId: number, score: number): void {
+    const stmt = this.db.prepare(`
+      UPDATE correction_rules 
+      SET effectiveness_score = ?
+      WHERE id = ?
+    `);
+    
+    stmt.run(score, ruleId);
+  }
+
+  /**
+   * Create workflow history entry
+   */
+  private createWorkflowHistoryEntry(
+    ruleId: number,
+    previousState: string | null,
+    newState: string,
+    changedBy: number,
+    changeReason: string,
+    metadata?: any
+  ): void {
+    const stmt = this.db.prepare(`
+      INSERT INTO workflow_state_history (
+        rule_id, previous_state, new_state, changed_by, change_reason, metadata
+      ) VALUES (?, ?, ?, ?, ?, ?)
+    `);
+    
+    stmt.run(
+      ruleId,
+      previousState,
+      newState,
+      changedBy,
+      changeReason,
+      metadata ? JSON.stringify(metadata) : null
+    );
+  }
+
+  /**
+   * Create workflow notification
+   */
+  private createWorkflowNotification(
+    userId: number,
+    ruleId: number | null,
+    notificationType: string,
+    title: string,
+    message: string,
+    actionUrl?: string,
+    metadata?: any
+  ): void {
+    const stmt = this.db.prepare(`
+      INSERT INTO workflow_notifications (
+        user_id, rule_id, notification_type, title, message, action_url, metadata
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `);
+    
+    stmt.run(
+      userId,
+      ruleId,
+      notificationType,
+      title,
+      message,
+      actionUrl || null,
+      metadata ? JSON.stringify(metadata) : null
+    );
+  }
+
+  /**
+   * Get unread notifications for a user
+   */
+  getUnreadNotifications(userId: number, limit: number = 50): WorkflowNotification[] {
+    const stmt = this.db.prepare(`
+      SELECT * FROM workflow_notifications 
+      WHERE user_id = ? AND is_read = 0
+      ORDER BY created_at DESC
+      LIMIT ?
+    `);
+    
+    return stmt.all(userId, limit) as WorkflowNotification[];
+  }
+
+  /**
+   * Mark notification as read
+   */
+  markNotificationAsRead(notificationId: number, userId: number): boolean {
+    const now = new Date().toISOString();
+    const stmt = this.db.prepare(`
+      UPDATE workflow_notifications 
+      SET is_read = 1, read_at = ?
+      WHERE id = ? AND user_id = ?
+    `);
+    
+    const result = stmt.run(now, notificationId, userId);
+    return result.changes > 0;
+  }
+
+  /**
+   * Get workflow state history for a rule
+   */
+  getWorkflowHistory(ruleId: number): WorkflowStateHistory[] {
+    const stmt = this.db.prepare(`
+      SELECT * FROM workflow_state_history 
+      WHERE rule_id = ?
+      ORDER BY changed_at DESC
+    `);
+    
+    return stmt.all(ruleId) as WorkflowStateHistory[];
   }
 
   // ========== HISTORY TRACKING ==========
