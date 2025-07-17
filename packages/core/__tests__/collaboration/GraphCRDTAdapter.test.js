@@ -12,6 +12,9 @@ jest.mock('../../../crdt-research/src/graph-sync', () => ({
             deleteNode: jest.fn(),
             addEdge: jest.fn(),
             deleteEdge: jest.fn(),
+            getNode: jest.fn().mockImplementation((nodeId) => 
+                nodeId === 'nonexistent' ? null : { id: nodeId, type: 'WeightedChoice', data: {} }
+            ),
             getNodes: jest.fn().mockReturnValue([]),
             getEdges: jest.fn().mockReturnValue([]),
             observe: jest.fn(),

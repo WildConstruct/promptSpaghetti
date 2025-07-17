@@ -66,50 +66,80 @@ export class YGraph extends Y.AbstractType<any> {
    * Add a node to the graph
    */
   addNode(node: CRDTNode): void {
-    this.doc?.transact(() => {
+    // If doc is available, use transaction
+    if (this.doc) {
+      this.doc.transact(() => {
+        this.nodes.set(node.id, node);
+      });
+    } else {
+      // Direct set for testing
       this.nodes.set(node.id, node);
-    });
+    }
   }
 
   /**
    * Update a node in the graph
    */
   updateNode(nodeId: string, updates: Partial<CRDTNode>): void {
-    this.doc?.transact(() => {
+    if (this.doc) {
+      this.doc.transact(() => {
+        const node = this.nodes.get(nodeId);
+        if (node) {
+          this.nodes.set(nodeId, { ...node, ...updates });
+        }
+      });
+    } else {
       const node = this.nodes.get(nodeId);
       if (node) {
         this.nodes.set(nodeId, { ...node, ...updates });
       }
-    });
+    }
   }
 
   /**
    * Delete a node from the graph
    */
   deleteNode(nodeId: string): void {
-    this.doc?.transact(() => {
-      // Delete the node
+    if (this.doc) {
+      this.doc.transact(() => {
+        // Delete the node
+        this.nodes.delete(nodeId);
+        
+        // Delete all connected edges
+        this.edges.forEach((edge, edgeId) => {
+          if (edge.source === nodeId || edge.target === nodeId) {
+            this.edges.delete(edgeId);
+          }
+        });
+      });
+    } else {
+      // Direct operations for testing
       this.nodes.delete(nodeId);
-      
-      // Delete all connected edges
       this.edges.forEach((edge, edgeId) => {
         if (edge.source === nodeId || edge.target === nodeId) {
           this.edges.delete(edgeId);
         }
       });
-    });
+    }
   }
 
   /**
    * Add an edge to the graph
    */
   addEdge(edge: CRDTEdge): void {
-    this.doc?.transact(() => {
-      // Verify source and target nodes exist
+    if (this.doc) {
+      this.doc.transact(() => {
+        // Verify source and target nodes exist
+        if (this.nodes.has(edge.source) && this.nodes.has(edge.target)) {
+          this.edges.set(edge.id, edge);
+        }
+      });
+    } else {
+      // Direct operations for testing
       if (this.nodes.has(edge.source) && this.nodes.has(edge.target)) {
         this.edges.set(edge.id, edge);
       }
-    });
+    }
   }
 
   /**
@@ -128,9 +158,13 @@ export class YGraph extends Y.AbstractType<any> {
    * Delete an edge from the graph
    */
   deleteEdge(edgeId: string): void {
-    this.doc?.transact(() => {
+    if (this.doc) {
+      this.doc.transact(() => {
+        this.edges.delete(edgeId);
+      });
+    } else {
       this.edges.delete(edgeId);
-    });
+    }
   }
 
   /**

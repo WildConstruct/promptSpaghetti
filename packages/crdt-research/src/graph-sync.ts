@@ -19,8 +19,24 @@ export class GraphSyncHandler {
 
   constructor(documentId: string, userId: string) {
     this.doc = new Y.Doc();
+    
+    // Create YGraph and properly integrate it with the document
+    const graphMap = this.doc.getMap('graph');
     this.graph = new YGraph();
-    this.doc.getMap('graph').set('root', this.graph);
+    
+    // Get the maps from the document for proper integration
+    const nodesMap = this.doc.getMap('nodes');
+    const edgesMap = this.doc.getMap('edges');
+    
+    // Replace the YGraph's maps with document-integrated ones
+    this.graph.nodes = nodesMap as Y.Map<CRDTNode>;
+    this.graph.edges = edgesMap as Y.Map<CRDTEdge>;
+    
+    // Set the document reference on the graph
+    (this.graph as any).doc = this.doc;
+    
+    // Store reference to graph
+    graphMap.set('root', this.graph);
     
     this.awareness = new Map();
     this.syncState = {

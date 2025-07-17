@@ -351,6 +351,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: true,
     isActive: true,
     priority: 1,
+    status: 'published',
   },
   {
     name: 'Fix Trailing Whitespace',
@@ -360,6 +361,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: true,
     isActive: true,
     priority: 2,
+    status: 'published',
   },
   {
     name: 'Fix Leading Whitespace',
@@ -369,6 +371,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: true,
     isActive: true,
     priority: 3,
+    status: 'published',
   },
   {
     name: 'Common Typo: "teh" → "the"',
@@ -378,6 +381,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: false,
     isActive: true,
     priority: 10,
+    status: 'published',
   },
   {
     name: 'Common Typo: "recieve" → "receive"',
@@ -387,5 +391,6 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: false,
     isActive: true,
     priority: 11,
+    status: 'published',
   },
 ];
