@@ -174,6 +174,7 @@ export interface TargetMetadata {
   quality: QualityScore;
   warnings: ValidationResult[];
   transformations: TransformationLog[];
+  apiParameters?: Record<string, any>;
 }
 
 export interface TransformationLog {
@@ -370,5 +371,17 @@ export class AdaptorError extends PromptTargetingError {
   constructor(message: string, public adaptorId: string) {
     super(message, 'ADAPTOR_ERROR', { adaptorId }, true);
     this.name = 'AdaptorError';
+  }
+}
+
+export class TranslationError extends PromptTargetingError {
+  constructor(
+    message: string,
+    code: string,
+    details?: Record<string, any>,
+    recoverable: boolean = true
+  ) {
+    super(message, code, details, recoverable);
+    this.name = 'TranslationError';
   }
 }

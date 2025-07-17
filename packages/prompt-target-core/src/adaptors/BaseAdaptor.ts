@@ -82,6 +82,8 @@ export abstract class BaseAdaptor implements ModelAdaptor {
 
       return allResults;
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      
       this.metrics.counter('adaptor.validate.error', 1, { 
         adaptor: this.id,
         platform: this.platform 
@@ -90,10 +92,10 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       this.logger.error('Validation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: error.message
+        error: errorMessage
       });
       
-      throw new ValidationError(`Validation failed: ${error.message}`, []);
+      throw new ValidationError(`Validation failed: ${errorMessage}`, []);
     } finally {
       timer.end();
     }
@@ -163,6 +165,8 @@ export abstract class BaseAdaptor implements ModelAdaptor {
 
       return result;
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      
       this.metrics.counter('adaptor.transform.error', 1, { 
         adaptor: this.id,
         platform: this.platform 
@@ -171,14 +175,14 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       this.logger.error('Transformation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: error.message
+        error: errorMessage
       });
       
       if (error instanceof ValidationError || error instanceof TransformationError) {
         throw error;
       }
       
-      throw new TransformationError(`Transformation failed: ${error.message}`);
+      throw new TransformationError(`Transformation failed: ${errorMessage}`);
     } finally {
       timer.end();
     }
@@ -194,10 +198,11 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       
       return this.calculateQualityScore(graph, capabilities, validationResults);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.warn('Quality estimation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: error.message
+        error: errorMessage
       });
       
       // Return a low quality score if estimation fails
@@ -395,7 +400,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       nodeId?: string;
       edgeId?: string;
       autoFixable?: boolean;
-      suggestions?: Array<{ type: string; description: string }>;
+      suggestions?: Array<{ type: 'fix' | 'alternative' | 'workaround'; description: string }>;
     } = {}
   ): ValidationResult {
     return {
