@@ -1,34 +1,31 @@
-/**
- * Extension Manager Components - Epic 8.4 Story 8.4.5
- * Central export point for all extension manager UI components
- */
-export { ExtensionManagerPanel } from './ExtensionManagerPanel';
-export { ExtensionListView } from './ExtensionListView';
-export { ExtensionDetailView } from './ExtensionDetailView';
-export { ExtensionSearchFilter } from './ExtensionSearchFilter';
-export { ExtensionInstallDialog } from './ExtensionInstallDialog';
-export { ExtensionConfigurationPanel } from './ExtensionConfigurationPanel';
-export { ExtensionMarketplace } from './ExtensionMarketplace';
-export { useExtensionManagerStore } from './ExtensionManagerStore';
-// Component utilities and constants
-export const ExtensionManagerConstants = {
-    // View modes
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExtensionManagerEvents = exports.DefaultExtensionManagerConfig = exports.ExtensionManagerUtils = exports.ExtensionManagerConstants = exports.useExtensionManagerStore = exports.ExtensionMarketplace = exports.ExtensionConfigurationPanel = exports.ExtensionInstallDialog = exports.ExtensionSearchFilter = exports.ExtensionDetailView = exports.ExtensionListView = exports.ExtensionManagerPanel = void 0;
+var ExtensionManagerPanel_1 = require("./ExtensionManagerPanel");
+Object.defineProperty(exports, "ExtensionManagerPanel", { enumerable: true, get: function () { return ExtensionManagerPanel_1.ExtensionManagerPanel; } });
+var ExtensionListView_1 = require("./ExtensionListView");
+Object.defineProperty(exports, "ExtensionListView", { enumerable: true, get: function () { return ExtensionListView_1.ExtensionListView; } });
+var ExtensionDetailView_1 = require("./ExtensionDetailView");
+Object.defineProperty(exports, "ExtensionDetailView", { enumerable: true, get: function () { return ExtensionDetailView_1.ExtensionDetailView; } });
+var ExtensionSearchFilter_1 = require("./ExtensionSearchFilter");
+Object.defineProperty(exports, "ExtensionSearchFilter", { enumerable: true, get: function () { return ExtensionSearchFilter_1.ExtensionSearchFilter; } });
+var ExtensionInstallDialog_1 = require("./ExtensionInstallDialog");
+Object.defineProperty(exports, "ExtensionInstallDialog", { enumerable: true, get: function () { return ExtensionInstallDialog_1.ExtensionInstallDialog; } });
+var ExtensionConfigurationPanel_1 = require("./ExtensionConfigurationPanel");
+Object.defineProperty(exports, "ExtensionConfigurationPanel", { enumerable: true, get: function () { return ExtensionConfigurationPanel_1.ExtensionConfigurationPanel; } });
+var ExtensionMarketplace_1 = require("./ExtensionMarketplace");
+Object.defineProperty(exports, "ExtensionMarketplace", { enumerable: true, get: function () { return ExtensionMarketplace_1.ExtensionMarketplace; } });
+var ExtensionManagerStore_1 = require("./ExtensionManagerStore");
+Object.defineProperty(exports, "useExtensionManagerStore", { enumerable: true, get: function () { return ExtensionManagerStore_1.useExtensionManagerStore; } });
+exports.ExtensionManagerConstants = {
     VIEW_MODES: ['installed', 'marketplace', 'settings'],
-    // Extension statuses
     EXTENSION_STATUSES: ['enabled', 'disabled', 'error', 'loading'],
-    // Filter options
     FILTER_TYPES: ['all', 'node', 'ui', 'transform', 'storage'],
     SORT_OPTIONS: ['name', 'version', 'lastUpdated', 'size'],
-    // Install methods
     INSTALL_METHODS: ['file', 'url', 'dev'],
-    // Configuration tabs
     CONFIG_TABS: ['general', 'advanced', 'security']
 };
-// Extension Manager Hooks and Utilities
-export const ExtensionManagerUtils = {
-    /**
-     * Get extension type icon
-     */
+exports.ExtensionManagerUtils = {
     getExtensionIcon(type) {
         switch (type) {
             case 'node': return '🔧';
@@ -38,9 +35,6 @@ export const ExtensionManagerUtils = {
             default: return '📦';
         }
     },
-    /**
-     * Get status icon for extension
-     */
     getStatusIcon(status) {
         if (status.hasErrors)
             return '❌';
@@ -50,9 +44,6 @@ export const ExtensionManagerUtils = {
             return '✅';
         return '⭕';
     },
-    /**
-     * Get human-readable status text
-     */
     getStatusText(status) {
         if (status.hasErrors)
             return 'Error';
@@ -62,9 +53,6 @@ export const ExtensionManagerUtils = {
             return 'Enabled';
         return 'Disabled';
     },
-    /**
-     * Format download count for display
-     */
     formatDownloads(downloads) {
         if (downloads < 1000)
             return downloads.toString();
@@ -72,9 +60,6 @@ export const ExtensionManagerUtils = {
             return `${(downloads / 1000).toFixed(1)}K`;
         return `${(downloads / 1000000).toFixed(1)}M`;
     },
-    /**
-     * Format file size for display
-     */
     formatFileSize(bytes) {
         if (bytes < 1024)
             return `${bytes} B`;
@@ -82,15 +67,9 @@ export const ExtensionManagerUtils = {
             return `${(bytes / 1024).toFixed(1)} KB`;
         return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     },
-    /**
-     * Validate extension name for development
-     */
     validateExtensionName(name) {
         return /^[a-z0-9-]+$/.test(name) && name.length >= 3 && name.length <= 50;
     },
-    /**
-     * Get permission description
-     */
     getPermissionDescription(permission) {
         const descriptions = {
             'data-processing': 'Access and process data within the application',
@@ -104,9 +83,6 @@ export const ExtensionManagerUtils = {
         };
         return descriptions[permission] || 'Access to system functionality';
     },
-    /**
-     * Check if permission is dangerous
-     */
     isDangerousPermission(permission) {
         const dangerousPermissions = [
             'file-system-write',
@@ -118,31 +94,24 @@ export const ExtensionManagerUtils = {
         return dangerousPermissions.includes(permission);
     }
 };
-// Default extension manager configuration
-export const DefaultExtensionManagerConfig = {
-    // UI settings
+exports.DefaultExtensionManagerConfig = {
     defaultView: 'installed',
     defaultViewMode: 'list',
     extensionsPerPage: 20,
-    // Search and filter settings
     searchDebounceMs: 300,
     defaultSortBy: 'name',
     showCategories: true,
-    // Installation settings
     allowDevExtensions: false,
     requireManualApproval: true,
     autoCheckUpdates: true,
-    // Security settings
     enableSandboxing: true,
     validateManifests: true,
     checkCompatibility: true,
-    // Performance settings
     maxConcurrentInstalls: 3,
     installTimeout: 30000,
-    updateCheckInterval: 3600000 // 1 hour
+    updateCheckInterval: 3600000
 };
-// Extension manager event types
-export const ExtensionManagerEvents = {
+exports.ExtensionManagerEvents = {
     EXTENSION_INSTALLED: 'extension-installed',
     EXTENSION_UNINSTALLED: 'extension-uninstalled',
     EXTENSION_ENABLED: 'extension-enabled',
@@ -153,3 +122,4 @@ export const ExtensionManagerEvents = {
     SEARCH_PERFORMED: 'search-performed',
     FILTER_CHANGED: 'filter-changed'
 };
+//# sourceMappingURL=index.js.map

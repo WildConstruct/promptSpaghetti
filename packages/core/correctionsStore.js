@@ -1,9 +1,11 @@
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DEFAULT_CORRECTION_RULES = exports.useCorrectionsEnabled = exports.useCorrectionsStore = void 0;
+const zustand_1 = require("zustand");
+const middleware_1 = require("zustand/middleware");
+exports.useCorrectionsStore = (0, zustand_1.create)()((0, middleware_1.devtools)((0, middleware_1.persist)((set, get) => ({
     rules: [],
     isEnabled: process.env.NODE_ENV === 'development' || process.env.ENABLE_CORRECTIONS === 'true',
-    // Notification system
     notificationSettings: {
         onRuleUpdates: true,
         onEffectivenessAlerts: true,
@@ -23,7 +25,6 @@ export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
         set((state) => ({
             rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority),
         }));
-        // Add notification for new rule
         get().addNotification({
             type: 'info',
             title: 'New Rule Created',
@@ -55,7 +56,6 @@ export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
             const newRules = [...state.rules];
             const [movedRule] = newRules.splice(fromIndex, 1);
             newRules.splice(toIndex, 0, movedRule);
-            // Update priorities to match new order
             return {
                 rules: newRules.map((rule, index) => ({
                     ...rule,
@@ -70,7 +70,6 @@ export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
     },
     applyCorrections: (text) => {
         const { rules } = get();
-        // Check if corrections are enabled dynamically
         const isEnabled = process.env.NODE_ENV === 'development' ||
             process.env.REACT_APP_ENABLE_CORRECTIONS === 'true' ||
             process.env.ENABLE_CORRECTIONS === 'true';
@@ -107,7 +106,6 @@ export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
         const { rules } = get();
         return rules.filter((rule) => rule.status === 'published');
     },
-    // Lifecycle management
     approveRule: (id, approvedBy) => {
         set((state) => ({
             rules: state.rules.map(rule => rule.id === id
@@ -175,7 +173,6 @@ export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
             ruleId: newRule.id,
         });
     },
-    // Notification system
     addNotification: (notificationData) => {
         const notification = {
             ...notificationData,
@@ -184,7 +181,7 @@ export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
             isRead: false,
         };
         set((state) => ({
-            notifications: [notification, ...state.notifications].slice(0, 50), // Keep only last 50
+            notifications: [notification, ...state.notifications].slice(0, 50),
         }));
     },
     dismissNotification: (id) => {
@@ -197,23 +194,20 @@ export const useCorrectionsStore = create()(devtools(persist((set, get) => ({
     },
 }), {
     name: 'corrections-store',
-    // Only persist if corrections are enabled
     skipHydration: !process.env.ENABLE_CORRECTIONS,
 }), {
     name: 'corrections-store',
 }));
-// Helper function to escape special regex characters
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
-// Hook to check if corrections feature is enabled
-export const useCorrectionsEnabled = () => {
+const useCorrectionsEnabled = () => {
     return process.env.NODE_ENV === 'development' ||
         process.env.REACT_APP_ENABLE_CORRECTIONS === 'true' ||
         process.env.ENABLE_CORRECTIONS === 'true';
 };
-// Default correction rules for common issues
-export const DEFAULT_CORRECTION_RULES = [
+exports.useCorrectionsEnabled = useCorrectionsEnabled;
+exports.DEFAULT_CORRECTION_RULES = [
     {
         name: 'Fix Double Spaces',
         description: 'Remove double spaces',
@@ -260,3 +254,4 @@ export const DEFAULT_CORRECTION_RULES = [
         priority: 11,
     },
 ];
+//# sourceMappingURL=correctionsStore.js.map

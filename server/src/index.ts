@@ -5,6 +5,7 @@ import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
 import { initDatabase, healthCheck } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
+import { randomizerRoutes } from './routes/randomizer';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
@@ -179,6 +180,9 @@ server.get('/ws/documents/:documentId/users', async (request, reply) => {
 
 // Register corrections routes
 server.register(correctionsRoutes, { prefix: '/api/corrections' });
+
+// Register randomizer routes
+server.register(randomizerRoutes, { prefix: '/api/randomizer' });
 
 // Legacy GET preview endpoint (dummy data for backwards compatibility)
 server.get('/preview', async (request, reply) => {

@@ -1,17 +1,30 @@
-// packages/core/runtime/index.ts
-// Runtime node classes for deterministic graph execution.
-// Each class exposes an async `run` method that takes input/context
-// and returns output plus possibly mutated context.
-// These are thin stubs for now; they will be fully implemented in later tasks.
-export class RuntimeNode {
-    id;
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GetVariableNode = exports.SetVariableNode = exports.IncludeNode = exports.OutputNode = exports.ConcatNode = exports.WeightedChoiceNode = exports.RuntimeNode = void 0;
+class RuntimeNode {
     constructor(id) {
         this.id = id;
     }
 }
-/* ------------------------- Core node runtimes ------------------------- */
-export class WeightedChoiceNode extends RuntimeNode {
-    choices;
+exports.RuntimeNode = RuntimeNode;
+class WeightedChoiceNode extends RuntimeNode {
     constructor(id, choices) {
         super(id);
         this.choices = choices;
@@ -27,8 +40,8 @@ export class WeightedChoiceNode extends RuntimeNode {
         return this.choices[this.choices.length - 1].value;
     }
 }
-export class ConcatNode extends RuntimeNode {
-    inputs;
+exports.WeightedChoiceNode = WeightedChoiceNode;
+class ConcatNode extends RuntimeNode {
     constructor(id, inputs) {
         super(id);
         this.inputs = inputs;
@@ -37,8 +50,8 @@ export class ConcatNode extends RuntimeNode {
         return this.inputs.join('');
     }
 }
-export class OutputNode extends RuntimeNode {
-    input;
+exports.ConcatNode = ConcatNode;
+class OutputNode extends RuntimeNode {
     constructor(id, input) {
         super(id);
         this.input = input;
@@ -47,9 +60,8 @@ export class OutputNode extends RuntimeNode {
         return this.input;
     }
 }
-export class IncludeNode extends RuntimeNode {
-    name;
-    lookup;
+exports.OutputNode = OutputNode;
+class IncludeNode extends RuntimeNode {
     constructor(id, name, lookup) {
         super(id);
         this.name = name;
@@ -59,9 +71,8 @@ export class IncludeNode extends RuntimeNode {
         return this.lookup[this.name];
     }
 }
-export class SetVariableNode extends RuntimeNode {
-    key;
-    value;
+exports.IncludeNode = IncludeNode;
+class SetVariableNode extends RuntimeNode {
     constructor(id, key, value) {
         super(id);
         this.key = key;
@@ -71,8 +82,8 @@ export class SetVariableNode extends RuntimeNode {
         ctx.variables[this.key] = this.value;
     }
 }
-export class GetVariableNode extends RuntimeNode {
-    key;
+exports.SetVariableNode = SetVariableNode;
+class GetVariableNode extends RuntimeNode {
     constructor(id, key) {
         super(id);
         this.key = key;
@@ -81,14 +92,11 @@ export class GetVariableNode extends RuntimeNode {
         return ctx.variables[this.key];
     }
 }
-/* ----------------------------- Utilities ------------------------------ */
-import seedrandom from 'seedrandom';
+exports.GetVariableNode = GetVariableNode;
+const seedrandom_1 = __importDefault(require("seedrandom"));
 function seededRandom(seed) {
-    return seedrandom(String(seed))();
+    return (0, seedrandom_1.default)(String(seed))();
 }
-/* ----------------------------- Advanced Nodes (Epic 7) ------------------------------ */
-// Re-export all advanced node capabilities
-export * from './advanced';
-/* ----------------------------- Python Integration (Epic 8) ------------------------------ */
-// Re-export Python integration capabilities
-export * from './nodes/PythonTransform';
+__exportStar(require("./advanced"), exports);
+__exportStar(require("./nodes/PythonTransform"), exports);
+//# sourceMappingURL=index.js.map

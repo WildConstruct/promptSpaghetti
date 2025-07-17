@@ -1,11 +1,11 @@
-/**
- * TypeScript client for Python Executor Service
- * Epic 8 Story 8.1.4: Main application integration
- */
-export class PythonExecutorClientError extends Error {
-    code;
-    statusCode;
-    details;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pythonExecutorClient = exports.PythonExecutorClient = exports.PythonExecutorClientError = void 0;
+exports.createPythonExecutorClient = createPythonExecutorClient;
+exports.isPythonExecutorAvailable = isPythonExecutorAvailable;
+exports.executePythonCode = executePythonCode;
+exports.validatePythonCode = validatePythonCode;
+class PythonExecutorClientError extends Error {
     constructor(message, code, statusCode, details) {
         super(message);
         this.code = code;
@@ -14,10 +14,10 @@ export class PythonExecutorClientError extends Error {
         this.name = 'PythonExecutorClientError';
     }
 }
-export class PythonExecutorClient {
-    config;
-    requestId = 0;
+exports.PythonExecutorClientError = PythonExecutorClientError;
+class PythonExecutorClient {
     constructor(config = {}) {
+        this.requestId = 0;
         this.config = {
             baseUrl: config.baseUrl || 'http://localhost:8001',
             timeout: config.timeout || 30000,
@@ -31,9 +31,6 @@ export class PythonExecutorClient {
             ...config,
         };
     }
-    /**
-     * Execute Python code using the executor service
-     */
     async execute(request) {
         const requestId = this.generateRequestId();
         const executeRequest = {
@@ -53,7 +50,6 @@ export class PythonExecutorClient {
                 },
             });
             const result = await response.json();
-            // Log metrics if enabled
             if (this.config.enableMetrics) {
                 this.logMetrics(requestId, 'execute', result);
             }
@@ -64,9 +60,6 @@ export class PythonExecutorClient {
             throw error;
         }
     }
-    /**
-     * Validate Python code without executing it
-     */
     async validate(request) {
         const requestId = this.generateRequestId();
         const validateRequest = {
@@ -84,7 +77,6 @@ export class PythonExecutorClient {
                 },
             });
             const result = await response.json();
-            // Log metrics if enabled
             if (this.config.enableMetrics) {
                 this.logMetrics(requestId, 'validate', result);
             }
@@ -95,9 +87,6 @@ export class PythonExecutorClient {
             throw error;
         }
     }
-    /**
-     * Check if the Python executor service is healthy
-     */
     async health() {
         const requestId = this.generateRequestId();
         try {
@@ -115,9 +104,6 @@ export class PythonExecutorClient {
             throw error;
         }
     }
-    /**
-     * Get service metrics
-     */
     async metrics() {
         const requestId = this.generateRequestId();
         try {
@@ -135,21 +121,12 @@ export class PythonExecutorClient {
             throw error;
         }
     }
-    /**
-     * Update client configuration
-     */
     updateConfig(config) {
         this.config = { ...this.config, ...config };
     }
-    /**
-     * Get current configuration
-     */
     getConfig() {
         return { ...this.config };
     }
-    /**
-     * Make HTTP request with retry logic
-     */
     async makeRequest(endpoint, options) {
         const url = `${this.config.baseUrl}${endpoint}`;
         let lastError = null;
@@ -177,36 +154,24 @@ export class PythonExecutorClient {
             }
             catch (error) {
                 lastError = error;
-                // Don't retry on certain errors
                 if (error instanceof PythonExecutorClientError &&
                     (error.statusCode === 400 || error.statusCode === 401 || error.statusCode === 403)) {
                     throw error;
                 }
-                // Don't retry on the last attempt
                 if (attempt === this.config.retryAttempts) {
                     throw error;
                 }
-                // Wait before retrying
                 await this.sleep(this.config.retryDelay * Math.pow(2, attempt));
             }
         }
         throw lastError;
     }
-    /**
-     * Generate unique request ID
-     */
     generateRequestId() {
         return `req_${Date.now()}_${++this.requestId}`;
     }
-    /**
-     * Sleep for specified milliseconds
-     */
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-    /**
-     * Log metrics for monitoring
-     */
     logMetrics(requestId, operation, result) {
         const metrics = {
             requestId,
@@ -218,12 +183,8 @@ export class PythonExecutorClient {
             cacheHit: result.cache_hit,
             securityViolations: result.sandbox_violations,
         };
-        // In a real application, you would send these metrics to a monitoring service
         console.log('PythonExecutor Metrics:', metrics);
     }
-    /**
-     * Handle and log errors
-     */
     handleError(error, operation, requestId) {
         const errorInfo = {
             requestId,
@@ -232,28 +193,19 @@ export class PythonExecutorClient {
             error: error.message,
             stack: error.stack,
         };
-        // In a real application, you would send these errors to a monitoring service
         console.error('PythonExecutor Error:', errorInfo);
     }
 }
-/**
- * Default instance with common configuration
- */
-export const pythonExecutorClient = new PythonExecutorClient({
+exports.PythonExecutorClient = PythonExecutorClient;
+exports.pythonExecutorClient = new PythonExecutorClient({
     baseUrl: process.env.PYTHON_EXECUTOR_URL || 'http://localhost:8001',
     apiKey: process.env.PYTHON_EXECUTOR_API_KEY,
     enableMetrics: process.env.NODE_ENV !== 'production',
 });
-/**
- * Factory function for creating configured clients
- */
-export function createPythonExecutorClient(config) {
+function createPythonExecutorClient(config) {
     return new PythonExecutorClient(config);
 }
-/**
- * Utility function to check if the service is available
- */
-export async function isPythonExecutorAvailable(baseUrl) {
+async function isPythonExecutorAvailable(baseUrl) {
     try {
         const client = new PythonExecutorClient({ baseUrl });
         await client.health();
@@ -263,22 +215,17 @@ export async function isPythonExecutorAvailable(baseUrl) {
         return false;
     }
 }
-/**
- * Utility function to execute Python code with default settings
- */
-export async function executePythonCode(code, inputData, options = {}) {
-    return pythonExecutorClient.execute({
+async function executePythonCode(code, inputData, options = {}) {
+    return exports.pythonExecutorClient.execute({
         code,
         input_data: inputData,
         ...options,
     });
 }
-/**
- * Utility function to validate Python code
- */
-export async function validatePythonCode(code, options = {}) {
-    return pythonExecutorClient.validate({
+async function validatePythonCode(code, options = {}) {
+    return exports.pythonExecutorClient.validate({
         code,
         ...options,
     });
 }
+//# sourceMappingURL=python-executor-client.js.map

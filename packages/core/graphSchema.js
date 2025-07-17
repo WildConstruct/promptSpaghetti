@@ -1,132 +1,127 @@
-// packages/core/graphSchema.ts
-// Shared Zod schema for a graph JSON used by both UI and executor.
-// Nodes are stored in an object keyed by node id for O(1) lookup.
-import { z } from 'zod';
-export const NodeTypeEnum = z.enum([
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GraphSchema = exports.AnyNodeSchema = exports.PythonTransformNodeSchema = exports.MarkovNodeSchema = exports.SequentialNodeSchema = exports.ConditionalNodeSchema = exports.WeightedAdvancedNodeSchema = exports.GetVariableNodeSchema = exports.SetVariableNodeSchema = exports.IncludeNodeSchema = exports.OutputNodeSchema = exports.ConcatNodeSchema = exports.WeightedChoiceNodeSchema = exports.BaseNode = exports.NodeTypeEnum = void 0;
+const zod_1 = require("zod");
+exports.NodeTypeEnum = zod_1.z.enum([
     'WeightedChoice',
     'Concat',
     'Output',
     'Include',
     'SetVariable',
     'GetVariable',
-    // Epic 7 Advanced Node Types
     'WeightedAdvanced',
     'Conditional',
     'Sequential',
     'Markov',
-    // Epic 8 Python Integration
     'PythonTransform',
 ]);
-export const BaseNode = z.object({
-    id: z.string(),
-    type: NodeTypeEnum,
-    inputs: z.array(z.string()).optional(), // ids of upstream nodes (ordered)
+exports.BaseNode = zod_1.z.object({
+    id: zod_1.z.string(),
+    type: exports.NodeTypeEnum,
+    inputs: zod_1.z.array(zod_1.z.string()).optional(),
 });
-export const WeightedChoiceNodeSchema = BaseNode.extend({
-    type: z.literal('WeightedChoice'),
-    choices: z.array(z.object({ value: z.string(), weight: z.number().positive() })),
+exports.WeightedChoiceNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('WeightedChoice'),
+    choices: zod_1.z.array(zod_1.z.object({ value: zod_1.z.string(), weight: zod_1.z.number().positive() })),
 });
-export const ConcatNodeSchema = BaseNode.extend({
-    type: z.literal('Concat'),
+exports.ConcatNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('Concat'),
 });
-export const OutputNodeSchema = BaseNode.extend({
-    type: z.literal('Output'),
+exports.OutputNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('Output'),
 });
-export const IncludeNodeSchema = BaseNode.extend({
-    type: z.literal('Include'),
-    name: z.string(),
+exports.IncludeNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('Include'),
+    name: zod_1.z.string(),
 });
-export const SetVariableNodeSchema = BaseNode.extend({
-    type: z.literal('SetVariable'),
-    key: z.string(),
-    value: z.any(),
+exports.SetVariableNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('SetVariable'),
+    key: zod_1.z.string(),
+    value: zod_1.z.any(),
 });
-export const GetVariableNodeSchema = BaseNode.extend({
-    type: z.literal('GetVariable'),
-    key: z.string(),
+exports.GetVariableNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('GetVariable'),
+    key: zod_1.z.string(),
 });
-// Epic 7 Advanced Node Schemas
-export const WeightedAdvancedNodeSchema = BaseNode.extend({
-    type: z.literal('WeightedAdvanced'),
-    choices: z.array(z.object({ value: z.string(), weight: z.number().min(0) })).optional(),
-    distributionConfig: z.object({
-        type: z.enum(['linear', 'exponential', 'gaussian', 'custom']),
-        parameters: z.record(z.number()).optional(),
-        normalize: z.boolean().optional(),
-        minWeight: z.number().min(0).optional(),
+exports.WeightedAdvancedNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('WeightedAdvanced'),
+    choices: zod_1.z.array(zod_1.z.object({ value: zod_1.z.string(), weight: zod_1.z.number().min(0) })).optional(),
+    distributionConfig: zod_1.z.object({
+        type: zod_1.z.enum(['linear', 'exponential', 'gaussian', 'custom']),
+        parameters: zod_1.z.record(zod_1.z.number()).optional(),
+        normalize: zod_1.z.boolean().optional(),
+        minWeight: zod_1.z.number().min(0).optional(),
     }).optional(),
 });
-export const ConditionalNodeSchema = BaseNode.extend({
-    type: z.literal('Conditional'),
-    branches: z.array(z.object({
-        condition: z.string(),
-        output: z.string(),
-        label: z.string().optional()
+exports.ConditionalNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('Conditional'),
+    branches: zod_1.z.array(zod_1.z.object({
+        condition: zod_1.z.string(),
+        output: zod_1.z.string(),
+        label: zod_1.z.string().optional()
     })).optional(),
-    defaultOutput: z.string().optional(),
-    conditionalConfig: z.object({
-        allowVariableAccess: z.boolean().optional(),
-        strictMode: z.boolean().optional(),
-        customFunctions: z.record(z.any()).optional()
+    defaultOutput: zod_1.z.string().optional(),
+    conditionalConfig: zod_1.z.object({
+        allowVariableAccess: zod_1.z.boolean().optional(),
+        strictMode: zod_1.z.boolean().optional(),
+        customFunctions: zod_1.z.record(zod_1.z.any()).optional()
     }).optional(),
 });
-export const SequentialNodeSchema = BaseNode.extend({
-    type: z.literal('Sequential'),
-    sequence: z.array(z.string()).optional(),
-    pattern: z.object({
-        type: z.enum(['linear', 'cyclical', 'random', 'weighted']),
-        config: z.object({
-            weights: z.array(z.number()).optional(),
-            allowRepeats: z.boolean().optional(),
-            custom: z.record(z.any()).optional()
+exports.SequentialNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('Sequential'),
+    sequence: zod_1.z.array(zod_1.z.string()).optional(),
+    pattern: zod_1.z.object({
+        type: zod_1.z.enum(['linear', 'cyclical', 'random', 'weighted']),
+        config: zod_1.z.object({
+            weights: zod_1.z.array(zod_1.z.number()).optional(),
+            allowRepeats: zod_1.z.boolean().optional(),
+            custom: zod_1.z.record(zod_1.z.any()).optional()
         }).optional()
     }).optional(),
 });
-export const MarkovNodeSchema = BaseNode.extend({
-    type: z.literal('Markov'),
-    states: z.array(z.string()).optional(),
-    transitions: z.record(z.record(z.number())).optional(),
-    initialState: z.string().optional(),
-    markovConfig: z.object({
-        maxTransitions: z.number().positive().optional(),
-        normalizeProbabilities: z.boolean().optional(),
-        terminationStates: z.array(z.string()).optional(),
-        detectLoops: z.boolean().optional(),
-        custom: z.record(z.any()).optional()
+exports.MarkovNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('Markov'),
+    states: zod_1.z.array(zod_1.z.string()).optional(),
+    transitions: zod_1.z.record(zod_1.z.record(zod_1.z.number())).optional(),
+    initialState: zod_1.z.string().optional(),
+    markovConfig: zod_1.z.object({
+        maxTransitions: zod_1.z.number().positive().optional(),
+        normalizeProbabilities: zod_1.z.boolean().optional(),
+        terminationStates: zod_1.z.array(zod_1.z.string()).optional(),
+        detectLoops: zod_1.z.boolean().optional(),
+        custom: zod_1.z.record(zod_1.z.any()).optional()
     }).optional(),
 });
-// Epic 8 Python Integration
-export const PythonTransformNodeSchema = BaseNode.extend({
-    type: z.literal('PythonTransform'),
-    code: z.string(),
-    timeout: z.number().positive().optional(),
-    memoryLimit: z.string().optional(),
-    allowedModules: z.array(z.string()).optional(),
-    pythonConfig: z.object({
-        strictMode: z.boolean().optional(),
-        enableCaching: z.boolean().optional(),
-        executorUrl: z.string().optional(),
-        retryAttempts: z.number().min(0).optional(),
-        fallbackBehavior: z.enum(['error', 'skip', 'default']).optional(),
-        defaultOutput: z.string().optional(),
+exports.PythonTransformNodeSchema = exports.BaseNode.extend({
+    type: zod_1.z.literal('PythonTransform'),
+    code: zod_1.z.string(),
+    timeout: zod_1.z.number().positive().optional(),
+    memoryLimit: zod_1.z.string().optional(),
+    allowedModules: zod_1.z.array(zod_1.z.string()).optional(),
+    pythonConfig: zod_1.z.object({
+        strictMode: zod_1.z.boolean().optional(),
+        enableCaching: zod_1.z.boolean().optional(),
+        executorUrl: zod_1.z.string().optional(),
+        retryAttempts: zod_1.z.number().min(0).optional(),
+        fallbackBehavior: zod_1.z.enum(['error', 'skip', 'default']).optional(),
+        defaultOutput: zod_1.z.string().optional(),
     }).optional(),
 });
-export const AnyNodeSchema = z.discriminatedUnion('type', [
-    WeightedChoiceNodeSchema,
-    ConcatNodeSchema,
-    OutputNodeSchema,
-    IncludeNodeSchema,
-    SetVariableNodeSchema,
-    GetVariableNodeSchema,
-    // Epic 7 Advanced Nodes
-    WeightedAdvancedNodeSchema,
-    ConditionalNodeSchema,
-    SequentialNodeSchema,
-    MarkovNodeSchema,
-    // Epic 8 Python Integration
-    PythonTransformNodeSchema,
+exports.AnyNodeSchema = zod_1.z.discriminatedUnion('type', [
+    exports.WeightedChoiceNodeSchema,
+    exports.ConcatNodeSchema,
+    exports.OutputNodeSchema,
+    exports.IncludeNodeSchema,
+    exports.SetVariableNodeSchema,
+    exports.GetVariableNodeSchema,
+    exports.WeightedAdvancedNodeSchema,
+    exports.ConditionalNodeSchema,
+    exports.SequentialNodeSchema,
+    exports.MarkovNodeSchema,
+    exports.PythonTransformNodeSchema,
 ]);
-export const GraphSchema = z.object({
-    nodes: z.array(AnyNodeSchema),
-    seed: z.union([z.string(), z.number()]).optional(),
+exports.GraphSchema = zod_1.z.object({
+    nodes: zod_1.z.array(exports.AnyNodeSchema),
+    seed: zod_1.z.union([zod_1.z.string(), zod_1.z.number()]).optional(),
 });
+//# sourceMappingURL=graphSchema.js.map

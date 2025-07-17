@@ -4,7 +4,7 @@ import { WorkspaceId, ProjectId, UserId, ResourceId } from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
 
 // Extended Yjs types for workspace collaboration
-export interface Y.Graph extends Y.Map<any> {
+export interface YGraph extends Y.Map<any> {
   // Graph-specific methods and properties
 }
 
@@ -146,7 +146,7 @@ export class WorkspaceStateSync extends EventEmitter {
     projectId: ProjectId,
     resourceId: ResourceId,
     userId: UserId
-  ): Promise<Y.Graph> {
+  ): Promise<YGraph> {
     const key = this.getSyncKey(workspaceId, projectId, resourceId);
     
     let ydoc = this.ydocs.get(key);
@@ -168,8 +168,8 @@ export class WorkspaceStateSync extends EventEmitter {
     
     this.syncStates.set(key, syncState);
 
-    // Create Y.Graph for graph resources
-    const ygraph = ydoc.getMap('graph') as Y.Graph;
+    // Create YGraph for graph resources
+    const ygraph = ydoc.getMap('graph') as YGraph;
     await this.loadResourceData(resourceId, ygraph);
 
     this.emit('resource_sync_initialized', { workspaceId, projectId, resourceId, userId });
@@ -447,11 +447,11 @@ export class WorkspaceStateSync extends EventEmitter {
     }
   }
 
-  private async loadResourceData(resourceId: ResourceId, ygraph: Y.Graph): Promise<void> {
-    // Load resource data from database into Y.Graph
+  private async loadResourceData(resourceId: ResourceId, ygraph: YGraph): Promise<void> {
+    // Load resource data from database into YGraph
     const resource = await this.dao.getResource(resourceId);
     if (resource && resource.content) {
-      // Load graph content into Y.Graph
+      // Load graph content into YGraph
       if (resource.content.nodes) {
         const ynodes = ygraph.get('nodes') as Y.Map<any> || new Y.Map();
         for (const [nodeId, nodeData] of Object.entries(resource.content.nodes)) {

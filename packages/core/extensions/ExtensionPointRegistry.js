@@ -1,10 +1,8 @@
-/**
- * Extension Point Registry - Epic 8.4 Story 8.4.1
- * Central registry for all extension points in the Prompt Spaghetti system
- */
-import { z } from 'zod';
-// Extension Point Categories
-export var ExtensionPointCategory;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extensionPointRegistry = exports.ExtensionPointRegistry = exports.ExtensionPointSchema = exports.ExtensionPointPriority = exports.ExtensionPointLifecycle = exports.ExtensionPointCategory = void 0;
+const zod_1 = require("zod");
+var ExtensionPointCategory;
 (function (ExtensionPointCategory) {
     ExtensionPointCategory["RUNTIME"] = "runtime";
     ExtensionPointCategory["UI"] = "ui";
@@ -14,83 +12,76 @@ export var ExtensionPointCategory;
     ExtensionPointCategory["VALIDATION"] = "validation";
     ExtensionPointCategory["VISUALIZATION"] = "visualization";
     ExtensionPointCategory["STORAGE"] = "storage";
-})(ExtensionPointCategory || (ExtensionPointCategory = {}));
-// Extension Point Lifecycle
-export var ExtensionPointLifecycle;
+})(ExtensionPointCategory || (exports.ExtensionPointCategory = ExtensionPointCategory = {}));
+var ExtensionPointLifecycle;
 (function (ExtensionPointLifecycle) {
     ExtensionPointLifecycle["EXPERIMENTAL"] = "experimental";
     ExtensionPointLifecycle["STABLE"] = "stable";
     ExtensionPointLifecycle["DEPRECATED"] = "deprecated";
     ExtensionPointLifecycle["REMOVED"] = "removed";
-})(ExtensionPointLifecycle || (ExtensionPointLifecycle = {}));
-// Extension Point Priority
-export var ExtensionPointPriority;
+})(ExtensionPointLifecycle || (exports.ExtensionPointLifecycle = ExtensionPointLifecycle = {}));
+var ExtensionPointPriority;
 (function (ExtensionPointPriority) {
     ExtensionPointPriority["CRITICAL"] = "critical";
     ExtensionPointPriority["HIGH"] = "high";
     ExtensionPointPriority["MEDIUM"] = "medium";
     ExtensionPointPriority["LOW"] = "low";
-})(ExtensionPointPriority || (ExtensionPointPriority = {}));
-// Extension Point Definition Schema
-export const ExtensionPointSchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    description: z.string(),
-    category: z.nativeEnum(ExtensionPointCategory),
-    priority: z.nativeEnum(ExtensionPointPriority),
-    lifecycle: z.nativeEnum(ExtensionPointLifecycle),
-    version: z.string(),
-    location: z.object({
-        file: z.string(),
-        line: z.number().optional(),
-        function: z.string().optional()
+})(ExtensionPointPriority || (exports.ExtensionPointPriority = ExtensionPointPriority = {}));
+exports.ExtensionPointSchema = zod_1.z.object({
+    id: zod_1.z.string(),
+    name: zod_1.z.string(),
+    description: zod_1.z.string(),
+    category: zod_1.z.nativeEnum(ExtensionPointCategory),
+    priority: zod_1.z.nativeEnum(ExtensionPointPriority),
+    lifecycle: zod_1.z.nativeEnum(ExtensionPointLifecycle),
+    version: zod_1.z.string(),
+    location: zod_1.z.object({
+        file: zod_1.z.string(),
+        line: zod_1.z.number().optional(),
+        function: zod_1.z.string().optional()
     }),
-    interfaces: z.array(z.object({
-        name: z.string(),
-        description: z.string(),
-        parameters: z.array(z.object({
-            name: z.string(),
-            type: z.string(),
-            required: z.boolean(),
-            description: z.string(),
-            defaultValue: z.any().optional()
+    interfaces: zod_1.z.array(zod_1.z.object({
+        name: zod_1.z.string(),
+        description: zod_1.z.string(),
+        parameters: zod_1.z.array(zod_1.z.object({
+            name: zod_1.z.string(),
+            type: zod_1.z.string(),
+            required: zod_1.z.boolean(),
+            description: zod_1.z.string(),
+            defaultValue: zod_1.z.any().optional()
         })),
-        returnType: z.string(),
-        examples: z.array(z.string()).optional()
+        returnType: zod_1.z.string(),
+        examples: zod_1.z.array(zod_1.z.string()).optional()
     })),
-    dependencies: z.array(z.string()).optional(),
-    examples: z.array(z.object({
-        name: z.string(),
-        description: z.string(),
-        code: z.string(),
-        language: z.string()
+    dependencies: zod_1.z.array(zod_1.z.string()).optional(),
+    examples: zod_1.z.array(zod_1.z.object({
+        name: zod_1.z.string(),
+        description: zod_1.z.string(),
+        code: zod_1.z.string(),
+        language: zod_1.z.string()
     })).optional(),
-    constraints: z.object({
-        performance: z.object({
-            maxExecutionTime: z.number().optional(),
-            maxMemoryUsage: z.number().optional()
+    constraints: zod_1.z.object({
+        performance: zod_1.z.object({
+            maxExecutionTime: zod_1.z.number().optional(),
+            maxMemoryUsage: zod_1.z.number().optional()
         }).optional(),
-        security: z.object({
-            permissions: z.array(z.string()).optional(),
-            sandboxed: z.boolean().optional()
+        security: zod_1.z.object({
+            permissions: zod_1.z.array(zod_1.z.string()).optional(),
+            sandboxed: zod_1.z.boolean().optional()
         }).optional()
     }).optional(),
-    metadata: z.object({
-        addedIn: z.string(),
-        deprecatedIn: z.string().optional(),
-        removedIn: z.string().optional(),
-        replacedBy: z.string().optional()
+    metadata: zod_1.z.object({
+        addedIn: zod_1.z.string(),
+        deprecatedIn: zod_1.z.string().optional(),
+        removedIn: zod_1.z.string().optional(),
+        replacedBy: zod_1.z.string().optional()
     })
 });
-/**
- * Extension Point Registry - manages all extension points
- */
-export class ExtensionPointRegistry {
-    static instance;
-    extensionPoints = new Map();
-    categoryIndex = new Map();
-    locationIndex = new Map();
+class ExtensionPointRegistry {
     constructor() {
+        this.extensionPoints = new Map();
+        this.categoryIndex = new Map();
+        this.locationIndex = new Map();
         this.initializeRegistry();
     }
     static getInstance() {
@@ -99,75 +90,44 @@ export class ExtensionPointRegistry {
         }
         return ExtensionPointRegistry.instance;
     }
-    /**
-     * Register an extension point
-     */
     register(extensionPoint) {
-        // Validate extension point
-        const validated = ExtensionPointSchema.parse(extensionPoint);
-        // Store in main registry
+        const validated = exports.ExtensionPointSchema.parse(extensionPoint);
         this.extensionPoints.set(validated.id, validated);
-        // Update category index
         if (!this.categoryIndex.has(validated.category)) {
             this.categoryIndex.set(validated.category, new Set());
         }
         this.categoryIndex.get(validated.category).add(validated.id);
-        // Update location index
         if (!this.locationIndex.has(validated.location.file)) {
             this.locationIndex.set(validated.location.file, new Set());
         }
         this.locationIndex.get(validated.location.file).add(validated.id);
     }
-    /**
-     * Get extension point by ID
-     */
     get(id) {
         return this.extensionPoints.get(id);
     }
-    /**
-     * Get all extension points
-     */
     getAll() {
         return Array.from(this.extensionPoints.values());
     }
-    /**
-     * Get extension points by category
-     */
     getByCategory(category) {
         const ids = this.categoryIndex.get(category) || new Set();
         return Array.from(ids).map(id => this.extensionPoints.get(id));
     }
-    /**
-     * Get extension points by priority
-     */
     getByPriority(priority) {
         return this.getAll().filter(ep => ep.priority === priority);
     }
-    /**
-     * Get extension points by lifecycle status
-     */
     getByLifecycle(lifecycle) {
         return this.getAll().filter(ep => ep.lifecycle === lifecycle);
     }
-    /**
-     * Get extension points by file location
-     */
     getByLocation(file) {
         const ids = this.locationIndex.get(file) || new Set();
         return Array.from(ids).map(id => this.extensionPoints.get(id));
     }
-    /**
-     * Search extension points
-     */
     search(query) {
         const lowercaseQuery = query.toLowerCase();
         return this.getAll().filter(ep => ep.name.toLowerCase().includes(lowercaseQuery) ||
             ep.description.toLowerCase().includes(lowercaseQuery) ||
             ep.id.toLowerCase().includes(lowercaseQuery));
     }
-    /**
-     * Get extension point statistics
-     */
     getStatistics() {
         const stats = {
             total: this.extensionPoints.size,
@@ -175,7 +135,6 @@ export class ExtensionPointRegistry {
             byPriority: {},
             byLifecycle: {}
         };
-        // Initialize counters
         Object.values(ExtensionPointCategory).forEach(cat => {
             stats.byCategory[cat] = 0;
         });
@@ -185,7 +144,6 @@ export class ExtensionPointRegistry {
         Object.values(ExtensionPointLifecycle).forEach(lc => {
             stats.byLifecycle[lc] = 0;
         });
-        // Count
         this.getAll().forEach(ep => {
             stats.byCategory[ep.category]++;
             stats.byPriority[ep.priority]++;
@@ -193,9 +151,6 @@ export class ExtensionPointRegistry {
         });
         return stats;
     }
-    /**
-     * Validate extension point compatibility
-     */
     validateCompatibility(extensionPointId, version) {
         const extensionPoint = this.get(extensionPointId);
         if (!extensionPoint) {
@@ -207,7 +162,6 @@ export class ExtensionPointRegistry {
         }
         const warnings = [];
         const errors = [];
-        // Check lifecycle status
         if (extensionPoint.lifecycle === ExtensionPointLifecycle.DEPRECATED) {
             warnings.push(`Extension point ${extensionPointId} is deprecated`);
             if (extensionPoint.metadata.replacedBy) {
@@ -217,7 +171,6 @@ export class ExtensionPointRegistry {
         if (extensionPoint.lifecycle === ExtensionPointLifecycle.REMOVED) {
             errors.push(`Extension point ${extensionPointId} has been removed`);
         }
-        // Check version compatibility
         if (extensionPoint.metadata.removedIn && this.compareVersions(version, extensionPoint.metadata.removedIn) >= 0) {
             errors.push(`Extension point ${extensionPointId} is not available in version ${version}`);
         }
@@ -227,11 +180,7 @@ export class ExtensionPointRegistry {
             errors
         };
     }
-    /**
-     * Initialize the registry with core extension points
-     */
     initializeRegistry() {
-        // Runtime Extension Points
         this.register({
             id: 'runtime.node.custom',
             name: 'Custom Runtime Node',
@@ -331,7 +280,6 @@ class CustomNode extends RuntimeNode<string> {
                 addedIn: '1.0.0'
             }
         });
-        // UI Extension Points
         this.register({
             id: 'ui.inspector.editor',
             name: 'Inspector Node Editor',
@@ -372,7 +320,6 @@ class CustomNode extends RuntimeNode<string> {
                 addedIn: '1.0.0'
             }
         });
-        // Schema Extension Points
         this.register({
             id: 'schema.node.validation',
             name: 'Node Schema Validation',
@@ -407,7 +354,6 @@ class CustomNode extends RuntimeNode<string> {
                 addedIn: '1.0.0'
             }
         });
-        // API Extension Points
         this.register({
             id: 'api.endpoint.custom',
             name: 'Custom API Endpoint',
@@ -449,9 +395,6 @@ class CustomNode extends RuntimeNode<string> {
             }
         });
     }
-    /**
-     * Compare version strings
-     */
     compareVersions(version1, version2) {
         const v1parts = version1.split('.').map(Number);
         const v2parts = version2.split('.').map(Number);
@@ -466,5 +409,6 @@ class CustomNode extends RuntimeNode<string> {
         return 0;
     }
 }
-// Export singleton instance
-export const extensionPointRegistry = ExtensionPointRegistry.getInstance();
+exports.ExtensionPointRegistry = ExtensionPointRegistry;
+exports.extensionPointRegistry = ExtensionPointRegistry.getInstance();
+//# sourceMappingURL=ExtensionPointRegistry.js.map

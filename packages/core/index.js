@@ -1,30 +1,84 @@
-// Shared types and engine placeholder
-// Export new components and types
-export * from './components/Inspector';
-export * from './types/NodeTypes';
-export * from './utils/nodeDataUtils';
-export { GraphEditor } from './GraphEditor';
-// Legacy InspectorSidebar removed - use InspectorPanel from ./components/Inspector instead
-export { Palette } from './Palette';
-export { PreviewModal } from './PreviewModal';
-export { nodeSchemas } from './nodeSchemas';
-export { useGraphStore } from './graphStore';
-// Epic 8.2 - Corrections Manager GA exports
-export { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel';
-export { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
-export { WorkflowManager } from './components/WorkflowManager';
-export { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel';
-export { EnhancedTextAreaEditor } from './components/Inspector/EnhancedTextAreaEditor';
-export { NotificationSystem } from './components/NotificationSystem';
-export * from './correctionsStore';
-// Epic 8.4 - Extension System Architecture exports (avoid conflicts)
-export { ExtensionLifecycleManager } from './extensions/ExtensionLifecycleManager';
-export { ExtensionPointRegistry } from './extensions/ExtensionPointRegistry';
-export { ExtensionLifecycleState, ExtensionErrorType, ExtensionError, ExtensionManifestSchema } from './extensions/interfaces/ExtensionInterfaces';
-export { NodeCategory
-// Skip NodeDefinition to avoid conflict 
- } from './extensions/interfaces/NodeExtension';
-export * from './extensions/interfaces/UIExtension';
-export * from './extensions/interfaces/TransformExtension';
-export * from './extensions/interfaces/StorageExtension';
-export * from './components/ExtensionManager';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LLMRandomizerSystem = exports.RandomizerSystem = exports.RandomizerWorkflow = exports.GraphPreview = exports.RandomizerPanel = exports.UserAvatars = exports.CollaborationStatus = exports.CollaborativePresence = exports.useCollaborationStatus = exports.useNodeCollaborators = exports.useCollaborativeReactFlow = exports.useCollaborativeActions = exports.useCollaborativeGraph = exports.useLocalPresence = exports.useConnectionStatus = exports.useConnectedUsers = exports.useCollaborationEnabled = exports.useCollaborativeGraphStore = exports.createCollaborativeGraph = exports.GraphCRDTAdapter = exports.NodeCategory = exports.ExtensionManifestSchema = exports.ExtensionError = exports.ExtensionErrorType = exports.ExtensionLifecycleState = exports.ExtensionPointRegistry = exports.ExtensionLifecycleManager = exports.NotificationSystem = exports.EnhancedTextAreaEditor = exports.MobileCorrectionsPanel = exports.WorkflowManager = exports.CorrectionsStatsDashboard = exports.ResponsiveCorrectionsPanel = exports.useGraphStore = exports.nodeSchemas = exports.PreviewModal = exports.Palette = exports.GraphEditor = void 0;
+__exportStar(require("./components/Inspector"), exports);
+__exportStar(require("./types/NodeTypes"), exports);
+__exportStar(require("./utils/nodeDataUtils"), exports);
+var GraphEditor_1 = require("./GraphEditor");
+Object.defineProperty(exports, "GraphEditor", { enumerable: true, get: function () { return GraphEditor_1.GraphEditor; } });
+var Palette_1 = require("./Palette");
+Object.defineProperty(exports, "Palette", { enumerable: true, get: function () { return Palette_1.Palette; } });
+var PreviewModal_1 = require("./PreviewModal");
+Object.defineProperty(exports, "PreviewModal", { enumerable: true, get: function () { return PreviewModal_1.PreviewModal; } });
+var nodeSchemas_1 = require("./nodeSchemas");
+Object.defineProperty(exports, "nodeSchemas", { enumerable: true, get: function () { return nodeSchemas_1.nodeSchemas; } });
+var graphStore_1 = require("./graphStore");
+Object.defineProperty(exports, "useGraphStore", { enumerable: true, get: function () { return graphStore_1.useGraphStore; } });
+var ResponsiveCorrectionsPanel_1 = require("./ResponsiveCorrectionsPanel");
+Object.defineProperty(exports, "ResponsiveCorrectionsPanel", { enumerable: true, get: function () { return ResponsiveCorrectionsPanel_1.ResponsiveCorrectionsPanel; } });
+var CorrectionsStatsDashboard_1 = require("./components/CorrectionsStatsDashboard");
+Object.defineProperty(exports, "CorrectionsStatsDashboard", { enumerable: true, get: function () { return CorrectionsStatsDashboard_1.CorrectionsStatsDashboard; } });
+var WorkflowManager_1 = require("./components/WorkflowManager");
+Object.defineProperty(exports, "WorkflowManager", { enumerable: true, get: function () { return WorkflowManager_1.WorkflowManager; } });
+var MobileCorrectionsPanel_1 = require("./components/MobileCorrectionsPanel");
+Object.defineProperty(exports, "MobileCorrectionsPanel", { enumerable: true, get: function () { return MobileCorrectionsPanel_1.MobileCorrectionsPanel; } });
+var EnhancedTextAreaEditor_1 = require("./components/Inspector/EnhancedTextAreaEditor");
+Object.defineProperty(exports, "EnhancedTextAreaEditor", { enumerable: true, get: function () { return EnhancedTextAreaEditor_1.EnhancedTextAreaEditor; } });
+var NotificationSystem_1 = require("./components/NotificationSystem");
+Object.defineProperty(exports, "NotificationSystem", { enumerable: true, get: function () { return NotificationSystem_1.NotificationSystem; } });
+__exportStar(require("./correctionsStore"), exports);
+var ExtensionLifecycleManager_1 = require("./extensions/ExtensionLifecycleManager");
+Object.defineProperty(exports, "ExtensionLifecycleManager", { enumerable: true, get: function () { return ExtensionLifecycleManager_1.ExtensionLifecycleManager; } });
+var ExtensionPointRegistry_1 = require("./extensions/ExtensionPointRegistry");
+Object.defineProperty(exports, "ExtensionPointRegistry", { enumerable: true, get: function () { return ExtensionPointRegistry_1.ExtensionPointRegistry; } });
+var ExtensionInterfaces_1 = require("./extensions/interfaces/ExtensionInterfaces");
+Object.defineProperty(exports, "ExtensionLifecycleState", { enumerable: true, get: function () { return ExtensionInterfaces_1.ExtensionLifecycleState; } });
+Object.defineProperty(exports, "ExtensionErrorType", { enumerable: true, get: function () { return ExtensionInterfaces_1.ExtensionErrorType; } });
+Object.defineProperty(exports, "ExtensionError", { enumerable: true, get: function () { return ExtensionInterfaces_1.ExtensionError; } });
+Object.defineProperty(exports, "ExtensionManifestSchema", { enumerable: true, get: function () { return ExtensionInterfaces_1.ExtensionManifestSchema; } });
+var NodeExtension_1 = require("./extensions/interfaces/NodeExtension");
+Object.defineProperty(exports, "NodeCategory", { enumerable: true, get: function () { return NodeExtension_1.NodeCategory; } });
+__exportStar(require("./extensions/interfaces/UIExtension"), exports);
+__exportStar(require("./extensions/interfaces/TransformExtension"), exports);
+__exportStar(require("./extensions/interfaces/StorageExtension"), exports);
+__exportStar(require("./components/ExtensionManager"), exports);
+var GraphCRDTAdapter_1 = require("./collaboration/GraphCRDTAdapter");
+Object.defineProperty(exports, "GraphCRDTAdapter", { enumerable: true, get: function () { return GraphCRDTAdapter_1.GraphCRDTAdapter; } });
+Object.defineProperty(exports, "createCollaborativeGraph", { enumerable: true, get: function () { return GraphCRDTAdapter_1.createCollaborativeGraph; } });
+var collaborativeGraphStore_1 = require("./collaboration/collaborativeGraphStore");
+Object.defineProperty(exports, "useCollaborativeGraphStore", { enumerable: true, get: function () { return collaborativeGraphStore_1.useCollaborativeGraphStore; } });
+Object.defineProperty(exports, "useCollaborationEnabled", { enumerable: true, get: function () { return collaborativeGraphStore_1.useCollaborationEnabled; } });
+Object.defineProperty(exports, "useConnectedUsers", { enumerable: true, get: function () { return collaborativeGraphStore_1.useConnectedUsers; } });
+Object.defineProperty(exports, "useConnectionStatus", { enumerable: true, get: function () { return collaborativeGraphStore_1.useConnectionStatus; } });
+Object.defineProperty(exports, "useLocalPresence", { enumerable: true, get: function () { return collaborativeGraphStore_1.useLocalPresence; } });
+Object.defineProperty(exports, "useCollaborativeGraph", { enumerable: true, get: function () { return collaborativeGraphStore_1.useCollaborativeGraph; } });
+Object.defineProperty(exports, "useCollaborativeActions", { enumerable: true, get: function () { return collaborativeGraphStore_1.useCollaborativeActions; } });
+var useCollaborativeReactFlow_1 = require("./collaboration/useCollaborativeReactFlow");
+Object.defineProperty(exports, "useCollaborativeReactFlow", { enumerable: true, get: function () { return useCollaborativeReactFlow_1.useCollaborativeReactFlow; } });
+Object.defineProperty(exports, "useNodeCollaborators", { enumerable: true, get: function () { return useCollaborativeReactFlow_1.useNodeCollaborators; } });
+Object.defineProperty(exports, "useCollaborationStatus", { enumerable: true, get: function () { return useCollaborativeReactFlow_1.useCollaborationStatus; } });
+var CollaborativePresence_1 = require("./collaboration/CollaborativePresence");
+Object.defineProperty(exports, "CollaborativePresence", { enumerable: true, get: function () { return CollaborativePresence_1.CollaborativePresence; } });
+Object.defineProperty(exports, "CollaborationStatus", { enumerable: true, get: function () { return CollaborativePresence_1.CollaborationStatus; } });
+Object.defineProperty(exports, "UserAvatars", { enumerable: true, get: function () { return CollaborativePresence_1.UserAvatars; } });
+var llm_randomizer_1 = require("./llm-randomizer");
+Object.defineProperty(exports, "RandomizerPanel", { enumerable: true, get: function () { return llm_randomizer_1.RandomizerPanel; } });
+Object.defineProperty(exports, "GraphPreview", { enumerable: true, get: function () { return llm_randomizer_1.GraphPreview; } });
+Object.defineProperty(exports, "RandomizerWorkflow", { enumerable: true, get: function () { return llm_randomizer_1.RandomizerWorkflow; } });
+Object.defineProperty(exports, "RandomizerSystem", { enumerable: true, get: function () { return llm_randomizer_1.RandomizerSystem; } });
+Object.defineProperty(exports, "LLMRandomizerSystem", { enumerable: true, get: function () { return llm_randomizer_1.LLMRandomizerSystem; } });
+//# sourceMappingURL=index.js.map
