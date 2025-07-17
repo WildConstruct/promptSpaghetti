@@ -24,6 +24,7 @@ import { AnalyticsWebSocketServer } from './websocket/AnalyticsWebSocketServer';
 import { authRoutes, jwtAuthMiddleware } from './auth/routes';
 import { buildAuthConfig, CORS_CONFIG } from './auth/config';
 import { marketplaceRoutes } from './marketplace/routes';
+import { featureToggleRoutes } from './routes/feature-toggles';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -334,6 +335,14 @@ try {
   console.log('Marketplace routes registered successfully');
 } catch (error) {
   console.error('Failed to register marketplace routes:', error);
+}
+
+// Register feature toggle routes (Epic 17.1)
+try {
+  server.register(featureToggleRoutes, { prefix: '/api/feature-toggles' });
+  console.log('Feature toggle routes registered successfully');
+} catch (error) {
+  console.error('Failed to register feature toggle routes:', error);
 }
 
 // Setup analytics WebSocket server
