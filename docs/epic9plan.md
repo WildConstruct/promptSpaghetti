@@ -480,3 +480,366 @@ This document provides granular implementation plans for each story in Epic 9, b
 - Progressive feature rollout starting with core collaboration features
 - Load testing with simulated user behavior to identify scaling issues early
 - Security audit before enabling enterprise collaboration features
+
+## Architecture Overview
+
+### Microservices Architecture
+The Epic 9 implementation adopts a microservices architecture to ensure scalability, maintainability, and independent deployment:
+
+#### Core Services
+1. **Collaboration Service** (`collaboration-service`)
+   - Purpose: Real-time CRDT-based graph editing and user presence
+   - Technology: Node.js, Yjs, WebSocket (`ws` library)
+   - Responsibilities: CRDT operations, WebSocket management, user presence tracking
+   - Scale: Horizontally scalable via consistent hashing by document ID
+
+2. **Workspace Service** (`workspace-service`)
+   - Purpose: Workspace and project management, RBAC
+   - Technology: Node.js, PostgreSQL, Redis
+   - Responsibilities: User management, access control, activity feed, notifications
+   - Scale: Stateless service with database clustering
+
+3. **Versioning Service** (`versioning-service`)
+   - Purpose: Version history, branching, and comparison
+   - Technology: Node.js, PostgreSQL, S3-compatible storage
+   - Responsibilities: Snapshot management, diff generation, branch operations
+   - Scale: Background workers for diff computation
+
+4. **Workflow Service** (`workflow-service`)
+   - Purpose: Workflow orchestration and audit
+   - Technology: Node.js, PostgreSQL, Redis
+   - Responsibilities: State management, approval processes, locking, audit trails
+   - Scale: Event-driven architecture with message queues
+
+#### Infrastructure Components
+- **NATS JetStream**: Message broker for service communication and event streaming
+- **Redis**: Caching layer for presence, locks, and session management
+- **PostgreSQL**: Primary database for persistent data
+- **S3-Compatible Storage**: Object storage for snapshots and large artifacts
+- **Prometheus + Grafana**: Monitoring and observability
+- **OpenTelemetry**: Distributed tracing
+
+### Component Interaction Diagram
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        C[Client Application]
+    end
+    
+    subgraph "Gateway Layer"
+        G[API Gateway]
+        WSG[WebSocket Gateway]
+    end
+    
+    subgraph "Core Services"
+        CS[Collaboration Service]
+        WS[Workspace Service]
+        VS[Versioning Service]
+        WFS[Workflow Service]
+    end
+    
+    subgraph "Infrastructure"
+        N[NATS JetStream]
+        R[Redis]
+        P[PostgreSQL]
+        S3[S3 Storage]
+    end
+    
+    C --> G
+    C --> WSG
+    G --> WS
+    G --> VS
+    G --> WFS
+    WSG --> CS
+    
+    CS --> N
+    CS --> R
+    WS --> P
+    WS --> N
+    VS --> P
+    VS --> S3
+    VS --> N
+    WFS --> P
+    WFS --> R
+    WFS --> N
+```
+
+### Data Flow Architecture
+```mermaid
+sequenceDiagram
+    participant Client
+    participant WSGateway as WS Gateway
+    participant CollabService as Collaboration Service
+    participant WorkspaceService as Workspace Service
+    participant NATS
+    participant Redis
+    participant PostgreSQL
+    
+    Note over Client,PostgreSQL: Real-time Collaboration Flow
+    Client->>WSGateway: WebSocket Connection + JWT
+    WSGateway->>WorkspaceService: Validate Token & Permissions
+    WorkspaceService->>PostgreSQL: Check ACL
+    WSGateway->>CollabService: Forward Connection
+    CollabService->>Redis: Update Presence
+    CollabService->>Client: Send Current State
+    
+    Client->>CollabService: Y.Update (Edit Operation)
+    CollabService->>CollabService: Apply CRDT Operation
+    CollabService->>NATS: Publish Change Event
+    CollabService->>Redis: Update Presence
+    CollabService->>Client: Broadcast to All Clients
+    
+    Note over NATS,PostgreSQL: Async Processing
+    NATS->>WorkspaceService: Activity Event
+    WorkspaceService->>PostgreSQL: Record Activity
+    NATS->>+VersioningService: Snapshot Trigger
+    VersioningService->>S3: Store Snapshot
+    VersioningService->>PostgreSQL: Update Version History
+```
+
+## Technical Specifications
+
+### Story 9.1 - Real-Time Collaboration Foundation
+
+#### CRDT Implementation Details
+- **Engine**: Yjs with custom `Y.Graph` type for graph-specific operations
+- **Transport**: Binary WebSocket frames (33% more efficient than JSON)
+- **Operations**: Node creation/deletion, edge connection/disconnection, property updates, position changes
+- **Conflict Resolution**: Last-writer-wins for scalar properties, merge for complex objects
+
+#### WebSocket Architecture
+- **Connection Management**: Sticky load balancing by document ID
+- **Authentication**: JWT validation on connection with role-based permissions
+- **Rate Limiting**: Per-connection rate limiting to prevent abuse
+- **Heartbeat**: Configurable heartbeat interval for connection health
+
+#### Performance Targets
+- **Latency**: <100ms for operation propagation
+- **Throughput**: 1000 operations/second per document
+- **Concurrency**: 100 simultaneous users per document
+- **Memory**: <1GB per 10,000 active documents
+
+### Story 9.2 - Collaborative Workspace
+
+#### Database Schema Details
+```sql
+-- Core workspace tables
+CREATE TABLE workspaces (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    owner_id UUID NOT NULL REFERENCES users(id),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    settings JSONB DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE projects (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE resources (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    type VARCHAR(50) NOT NULL, -- 'graph', 'file', 'template'
+    name VARCHAR(255) NOT NULL,
+    content_uri TEXT, -- S3 URI for large content
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- RBAC tables
+CREATE TABLE acl_roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    permissions BIGINT NOT NULL, -- Bitmask for permissions
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE acl_assignments (
+    user_id UUID NOT NULL REFERENCES users(id),
+    role_id UUID NOT NULL REFERENCES acl_roles(id) ON DELETE CASCADE,
+    scope_id UUID NOT NULL, -- workspace_id or project_id
+    scope_type VARCHAR(20) NOT NULL, -- 'workspace' or 'project'
+    granted_at TIMESTAMP DEFAULT NOW(),
+    PRIMARY KEY (user_id, role_id, scope_id, scope_type)
+);
+
+-- Activity and notifications
+CREATE TABLE activity_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    actor_id UUID NOT NULL REFERENCES users(id),
+    type VARCHAR(50) NOT NULL,
+    payload JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE notifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id),
+    event_id UUID NOT NULL REFERENCES activity_events(id),
+    read_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+#### Permission System
+- **Permissions Bitmask**: 
+  - `READ = 1`, `WRITE = 2`, `DELETE = 4`, `ADMIN = 8`
+  - `COMMENT = 16`, `APPROVE = 32`, `MANAGE_USERS = 64`
+- **Default Roles**: Owner, Admin, Editor, Viewer, Commenter
+- **Inheritance**: Workspace permissions inherit to projects unless overridden
+
+### Story 9.3 - Version History & Comparison
+
+#### Versioning Architecture
+- **Snapshot Storage**: Compressed Yjs state in S3 with metadata in PostgreSQL
+- **Diff Algorithm**: Graph-aware diff using node/edge matching with position tolerance
+- **Trigger Points**: Manual snapshots, time-based (every 5 minutes), size-based (1MB changes)
+- **Retention Policy**: Configurable retention with automatic cleanup
+
+#### Version Schema
+```sql
+CREATE TABLE version_snapshots (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    branch VARCHAR(100) DEFAULT 'main',
+    s3_uri TEXT NOT NULL,
+    created_by UUID NOT NULL REFERENCES users(id),
+    commit_message TEXT,
+    size_bytes BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE version_diffs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    from_snapshot_id UUID NOT NULL REFERENCES version_snapshots(id),
+    to_snapshot_id UUID NOT NULL REFERENCES version_snapshots(id),
+    diff_summary JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE branches (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    head_snapshot_id UUID REFERENCES version_snapshots(id),
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(project_id, name)
+);
+```
+
+### Story 9.4 - Workflow Orchestration
+
+#### State Machine Design
+- **States**: draft, review, approved, published, archived
+- **Transitions**: Configurable rules with role-based permissions
+- **Metadata**: State timestamps, transition reasons, approver information
+- **Notifications**: Automatic notifications on state changes
+
+#### Locking Mechanism
+- **Lock Types**: Read locks, write locks, exclusive locks
+- **Scope**: Document-level, node-level, or custom regions
+- **TTL**: Configurable timeout with automatic release
+- **Implementation**: Redis SETNX with heartbeat renewal
+
+## Testing Strategy
+
+### Unit Testing
+- **CRDT Operations**: Comprehensive test suite for conflict resolution scenarios
+- **Graph Algorithms**: Test suite for diff computation and matching algorithms
+- **Permission System**: Role-based access control validation
+- **State Transitions**: Workflow state machine testing
+
+### Integration Testing
+- **Service Communication**: End-to-end message flow testing
+- **Database Transactions**: Multi-service transaction consistency
+- **Real-time Updates**: WebSocket message delivery and ordering
+- **File Storage**: S3 integration for snapshots and exports
+
+### Performance Testing
+- **Load Testing**: Artillery-based testing with 50+ concurrent users
+- **Stress Testing**: Large graph performance (10,000+ nodes)
+- **Memory Testing**: Memory usage under sustained load
+- **Network Testing**: Latency and throughput measurement
+
+### End-to-End Testing
+- **User Workflows**: Complete collaboration scenarios
+- **Browser Compatibility**: Cross-browser testing for WebSocket features
+- **Mobile Testing**: Touch and responsive behavior
+- **Offline Testing**: Offline operation and synchronization
+
+### Chaos Testing
+- **Service Failures**: Graceful degradation testing
+- **Network Partitions**: Split-brain scenario handling
+- **Data Corruption**: Recovery from corrupted state
+- **Load Spikes**: Sudden traffic surge handling
+
+## Security Considerations
+
+### Authentication & Authorization
+- **JWT Tokens**: Short-lived tokens with refresh mechanism
+- **Role-Based Access**: Granular permissions with audit trails
+- **API Security**: Rate limiting and request validation
+- **Session Management**: Secure session handling with timeout
+
+### Data Protection
+- **Encryption**: At-rest and in-transit encryption
+- **Data Isolation**: Tenant-level data separation
+- **Audit Logging**: Comprehensive audit trail for compliance
+- **Backup Security**: Encrypted backups with access controls
+
+### Network Security
+- **TLS Termination**: End-to-end encryption for WebSocket connections
+- **CORS Policy**: Strict cross-origin resource sharing
+- **Rate Limiting**: Protection against DDoS and abuse
+- **Input Validation**: Comprehensive input sanitization
+
+## Monitoring & Observability
+
+### Metrics Collection
+- **Application Metrics**: Request latency, error rates, throughput
+- **Business Metrics**: User engagement, document activity, collaboration patterns
+- **Infrastructure Metrics**: CPU, memory, disk, network usage
+- **Custom Metrics**: CRDT operation counts, conflict resolution frequency
+
+### Distributed Tracing
+- **OpenTelemetry**: End-to-end request tracing across services
+- **Correlation IDs**: Request tracking through microservices
+- **Performance Profiling**: Bottleneck identification and optimization
+- **Error Tracking**: Exception tracking and alerting
+
+### Alerting
+- **SLA Monitoring**: Uptime and performance SLA tracking
+- **Error Rate Alerts**: Threshold-based error rate monitoring
+- **Resource Alerts**: CPU, memory, and disk usage alerts
+- **Business Alerts**: Unusual activity patterns and security events
+
+## Deployment Strategy
+
+### Infrastructure as Code
+- **Terraform**: Infrastructure provisioning and management
+- **Kubernetes**: Container orchestration and scaling
+- **Helm Charts**: Application deployment and configuration
+- **CI/CD Pipeline**: Automated testing and deployment
+
+### Environment Strategy
+- **Development**: Local development with Docker Compose
+- **Staging**: Production-like environment for integration testing
+- **Production**: High-availability deployment with monitoring
+- **Disaster Recovery**: Cross-region backup and failover
+
+### Rollout Plan
+- **Phase 1**: Core collaboration features (Stories 9.1-9.2)
+- **Phase 2**: Version history and comparison (Story 9.3)
+- **Phase 3**: Workflow orchestration (Story 9.4)
+- **Phase 4**: Enterprise features and optimization
