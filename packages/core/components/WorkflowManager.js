@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useCorrectionsStore } from '../correctionsStore';
 export const WorkflowManager = ({ isOpen, onClose }) => {
     const { rules, getDraftRules, getPublishedRules, approveRule, deprecateRule, suggestRule, updateRule, deleteRule, } = useCorrectionsStore();

@@ -1,4 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
+import React from "react";
 import { ReactFlowProvider } from "reactflow";
 import { GraphEditor } from "./core";
 import "reactflow/dist/style.css";

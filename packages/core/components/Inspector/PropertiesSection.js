@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { VariationList } from "./VariationList";
 export const PropertiesSection = ({ node, schema, onChange, }) => {

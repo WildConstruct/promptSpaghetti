@@ -1,4 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
+// @ts-nocheck
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import '@testing-library/jest-dom';
 import { PreviewModal } from "../PreviewModal";

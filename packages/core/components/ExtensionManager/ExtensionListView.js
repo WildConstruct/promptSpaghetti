@@ -1,4 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/**
+ * Extension List View - Epic 8.4 Story 8.4.5
+ * List view component for installed extensions
+ */
+import React from 'react';
 export const ExtensionListView = ({ extensions, selectedExtension, getExtensionStatus, onExtensionSelect, onToggleExtension, onUninstallExtension, onUpdateExtension, onConfigureExtension }) => {
     const getExtensionIcon = (type) => {
         switch (type) {

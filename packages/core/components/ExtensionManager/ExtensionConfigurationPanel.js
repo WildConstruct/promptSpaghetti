@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Extension Configuration Panel - Epic 8.4 Story 8.4.5
  * Configuration interface for individual extensions
  */
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 export const ExtensionConfigurationPanel = ({ extension, onSave, onCancel }) => {
     const [config, setConfig] = useState({});
     const [errors, setErrors] = useState({});

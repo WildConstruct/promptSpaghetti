@@ -1,4 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import React from 'react';
 import { jest } from '@jest/globals';
 export const ReactFlow = ({ nodes, edges, onNodeClick, onDrop, onDragOver, onPaneClick, children, style, className, ...props }) => {
     const handleDrop = (e) => {

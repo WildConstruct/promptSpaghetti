@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { executeGraph, initializeAnalytics } from './engine';
 import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
-import { initDatabase, healthCheck } from './database/connection';
+import { initDatabase, healthCheck, getDatabase } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
 import { analyticsRoutes } from './routes/analytics';
 import { AnalyticsDashboard } from './analytics/AnalyticsDashboard';
@@ -15,6 +15,7 @@ import { PerformanceDashboard } from './performance/PerformanceDashboard';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
+import { AnalyticsWebSocketServer } from './websocket/AnalyticsWebSocketServer';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -205,6 +206,7 @@ let performanceDashboard: PerformanceDashboard;
 let analyticsDAO: AnalyticsDAO;
 let costTracker: CostTracker;
 let analyticsDashboard: AnalyticsDashboard;
+let analyticsWebSocketServer: AnalyticsWebSocketServer;
 
 try {
   const db = getDatabase();
@@ -242,6 +244,13 @@ try {
   // Pass analytics collector to WebSocket server
   wsServer.analyticsCollector = serverAnalyticsCollector;
 
+  // Initialize analytics WebSocket server
+  analyticsWebSocketServer = new AnalyticsWebSocketServer(
+    serverAnalyticsCollector,
+    analyticsDashboard,
+    costTracker
+  );
+
   console.log('Server analytics system fully initialized');
 } catch (error) {
   console.error('Failed to initialize server analytics system:', error);
@@ -256,6 +265,11 @@ if (analyticsDashboard && costTracker) {
   server.register(async (fastify) => {
     await analyticsRoutes(fastify, analyticsDashboard, costTracker);
   }, { prefix: '/api' });
+}
+
+// Setup analytics WebSocket server
+if (analyticsWebSocketServer) {
+  analyticsWebSocketServer.setupWebSocketServer(server);
 }
 
 // Legacy GET preview endpoint (dummy data for backwards compatibility)
@@ -398,6 +412,9 @@ const start = async () => {
 process.on('SIGTERM', async () => {
   console.log('Received SIGTERM, shutting down gracefully');
   await wsServer.stop();
+  if (analyticsWebSocketServer) {
+    analyticsWebSocketServer.stop();
+  }
   await server.close();
   process.exit(0);
 });
@@ -405,6 +422,9 @@ process.on('SIGTERM', async () => {
 process.on('SIGINT', async () => {
   console.log('Received SIGINT, shutting down gracefully');
   await wsServer.stop();
+  if (analyticsWebSocketServer) {
+    analyticsWebSocketServer.stop();
+  }
   await server.close();
   process.exit(0);
 });
