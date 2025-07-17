@@ -2,6 +2,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { MarketplaceService } from './marketplace.service';
 import { RecommendationService } from './recommendation.service';
+import { submissionRoutes } from './submission.routes';
 import { Pool } from 'pg';
 import { 
   SearchFilters,
@@ -24,6 +25,9 @@ interface AuthenticatedRequest extends FastifyRequest {
 export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) {
   const marketplaceService = new MarketplaceService(dbPool);
   const recommendationService = new RecommendationService(dbPool);
+
+  // Register submission routes
+  await submissionRoutes(fastify);
 
   // Helper function to check if user has required role
   const hasRole = (user: any, requiredRoles: string[]): boolean => {
