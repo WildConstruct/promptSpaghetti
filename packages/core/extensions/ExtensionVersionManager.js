@@ -1,15 +1,7 @@
-/**
- * Extension Version Manager - Epic 8.4 Story 8.4.4
- * Comprehensive versioning and compatibility management for extensions
- */
-// Semantic Version Class
-export class SemanticVersion {
-    major;
-    minor;
-    patch;
-    prerelease;
-    build;
-    raw;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extensionVersionManager = exports.ExtensionVersionManager = exports.VersionRange = exports.SemanticVersion = void 0;
+class SemanticVersion {
     constructor(version) {
         this.raw = version;
         const parsed = this.parseVersion(version);
@@ -19,9 +11,6 @@ export class SemanticVersion {
         this.prerelease = parsed.prerelease;
         this.build = parsed.build;
     }
-    /**
-     * Parse version string into components
-     */
     parseVersion(version) {
         const semverRegex = /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
         const match = version.match(semverRegex);
@@ -36,11 +25,7 @@ export class SemanticVersion {
             build: match[5] ? match[5].split('.') : []
         };
     }
-    /**
-     * Compare this version with another
-     */
     compareTo(other) {
-        // Compare major.minor.patch
         if (this.major !== other.major) {
             return this.major - other.major;
         }
@@ -50,14 +35,12 @@ export class SemanticVersion {
         if (this.patch !== other.patch) {
             return this.patch - other.patch;
         }
-        // Compare prerelease
         if (this.prerelease.length === 0 && other.prerelease.length > 0) {
-            return 1; // Release version > prerelease
+            return 1;
         }
         if (this.prerelease.length > 0 && other.prerelease.length === 0) {
-            return -1; // Prerelease < release version
+            return -1;
         }
-        // Both have prerelease, compare them
         for (let i = 0; i < Math.max(this.prerelease.length, other.prerelease.length); i++) {
             const a = this.prerelease[i];
             const b = other.prerelease[i];
@@ -78,15 +61,9 @@ export class SemanticVersion {
         }
         return 0;
     }
-    /**
-     * Check if this version is compatible with a range
-     */
     satisfies(range) {
         return VersionRange.parse(range).satisfies(this);
     }
-    /**
-     * Get next version for different release types
-     */
     getNextVersion(releaseType) {
         switch (releaseType) {
             case 'major':
@@ -110,34 +87,21 @@ export class SemanticVersion {
                 throw new Error(`Unknown release type: ${releaseType}`);
         }
     }
-    /**
-     * Check if this is a prerelease version
-     */
     isPrerelease() {
         return this.prerelease.length > 0;
     }
-    /**
-     * Check if this is a stable version
-     */
     isStable() {
         return !this.isPrerelease();
     }
-    /**
-     * Get version string
-     */
     toString() {
         return this.raw;
     }
 }
-// Version Range Class
-export class VersionRange {
-    ranges;
+exports.SemanticVersion = SemanticVersion;
+class VersionRange {
     constructor(ranges) {
         this.ranges = ranges;
     }
-    /**
-     * Parse range string into VersionRange
-     */
     static parse(range) {
         const orParts = range.split('||').map(part => part.trim());
         const ranges = [];
@@ -152,11 +116,7 @@ export class VersionRange {
         }
         return new VersionRange(ranges);
     }
-    /**
-     * Parse single comparator
-     */
     static parseComparator(comp) {
-        // Handle tilde range (~1.2.3)
         if (comp.startsWith('~')) {
             const version = new SemanticVersion(comp.substring(1));
             return {
@@ -171,7 +131,6 @@ export class VersionRange {
                 }
             };
         }
-        // Handle caret range (^1.2.3)
         if (comp.startsWith('^')) {
             const version = new SemanticVersion(comp.substring(1));
             return {
@@ -182,7 +141,6 @@ export class VersionRange {
                 }
             };
         }
-        // Handle comparison operators
         const operators = ['>=', '<=', '>', '<', '='];
         for (const op of operators) {
             if (comp.startsWith(op)) {
@@ -204,7 +162,6 @@ export class VersionRange {
                 };
             }
         }
-        // Exact match
         const version = new SemanticVersion(comp);
         return {
             operator: '=',
@@ -212,34 +169,25 @@ export class VersionRange {
             satisfies: (v) => v.compareTo(version) === 0
         };
     }
-    /**
-     * Check if version satisfies this range
-     */
     satisfies(version) {
         return this.ranges.some(rangeSet => rangeSet.every(comparator => comparator.satisfies(version)));
     }
-    /**
-     * Get string representation
-     */
     toString() {
         return this.ranges.map(rangeSet => rangeSet.map(comp => `${comp.operator}${comp.version}`).join(' ')).join(' || ');
     }
 }
-// Extension Version Manager
-export class ExtensionVersionManager {
-    static instance;
-    versionCache = new Map();
-    compatibilityCache = new Map();
-    constructor() { }
+exports.VersionRange = VersionRange;
+class ExtensionVersionManager {
+    constructor() {
+        this.versionCache = new Map();
+        this.compatibilityCache = new Map();
+    }
     static getInstance() {
         if (!ExtensionVersionManager.instance) {
             ExtensionVersionManager.instance = new ExtensionVersionManager();
         }
         return ExtensionVersionManager.instance;
     }
-    /**
-     * Parse and validate version
-     */
     parseVersion(version) {
         if (this.versionCache.has(version)) {
             return this.versionCache.get(version);
@@ -248,9 +196,6 @@ export class ExtensionVersionManager {
         this.versionCache.set(version, parsed);
         return parsed;
     }
-    /**
-     * Check compatibility between extensions
-     */
     checkCompatibility(extension, systemVersion, availableExtensions) {
         const cacheKey = `${extension.id}-${extension.version}-${systemVersion}`;
         if (this.compatibilityCache.has(cacheKey)) {
@@ -260,13 +205,9 @@ export class ExtensionVersionManager {
         this.compatibilityCache.set(cacheKey, result);
         return result;
     }
-    /**
-     * Perform actual compatibility check
-     */
     performCompatibilityCheck(extension, systemVersion, availableExtensions) {
         const issues = [];
         const warnings = [];
-        // Check system version compatibility
         const systemCheck = this.checkSystemCompatibility(extension, systemVersion);
         if (!systemCheck.compatible) {
             issues.push({
@@ -277,7 +218,6 @@ export class ExtensionVersionManager {
                 requiredVersion: extension.dependencies?.system || '1.0.0'
             });
         }
-        // Check extension dependencies
         if (extension.dependencies?.extensions) {
             for (const [depId, versionRange] of Object.entries(extension.dependencies.extensions)) {
                 const depExtension = availableExtensions.get(depId);
@@ -305,7 +245,6 @@ export class ExtensionVersionManager {
                 }
             }
         }
-        // Check for circular dependencies
         const circularDeps = this.findCircularDependencies(extension, availableExtensions);
         if (circularDeps.length > 0) {
             issues.push({
@@ -315,7 +254,6 @@ export class ExtensionVersionManager {
                 circularPath: circularDeps
             });
         }
-        // Check for deprecated dependencies
         if (extension.dependencies?.extensions) {
             for (const [depId, versionRange] of Object.entries(extension.dependencies.extensions)) {
                 const depExtension = availableExtensions.get(depId);
@@ -332,12 +270,8 @@ export class ExtensionVersionManager {
             extensionVersion: extension.version
         };
     }
-    /**
-     * Check system version compatibility
-     */
     checkSystemCompatibility(extension, systemVersion) {
         const systemVer = this.parseVersion(systemVersion);
-        // Check minimum system version
         if (extension.compatibility?.min_system_version) {
             const minVer = this.parseVersion(extension.compatibility.min_system_version);
             if (systemVer.compareTo(minVer) < 0) {
@@ -347,7 +281,6 @@ export class ExtensionVersionManager {
                 };
             }
         }
-        // Check maximum system version
         if (extension.compatibility?.max_system_version) {
             const maxVer = this.parseVersion(extension.compatibility.max_system_version);
             if (systemVer.compareTo(maxVer) > 0) {
@@ -359,9 +292,6 @@ export class ExtensionVersionManager {
         }
         return { compatible: true };
     }
-    /**
-     * Find circular dependencies
-     */
     findCircularDependencies(extension, availableExtensions, visited = new Set(), path = []) {
         if (visited.has(extension.id)) {
             const circularStart = path.indexOf(extension.id);
@@ -382,9 +312,6 @@ export class ExtensionVersionManager {
         }
         return [];
     }
-    /**
-     * Get upgrade path for extension
-     */
     getUpgradePath(currentVersion, targetVersion, availableVersions) {
         const current = this.parseVersion(currentVersion);
         const target = this.parseVersion(targetVersion);
@@ -421,9 +348,6 @@ export class ExtensionVersionManager {
             estimatedDuration: this.estimateDuration(steps)
         };
     }
-    /**
-     * Get upgrade step type
-     */
     getUpgradeStepType(from, to) {
         if (from.major !== to.major)
             return 'major';
@@ -433,9 +357,6 @@ export class ExtensionVersionManager {
             return 'patch';
         return 'prerelease';
     }
-    /**
-     * Assess upgrade risk
-     */
     assessUpgradeRisk(from, to, type) {
         if (type === 'major')
             return 'high';
@@ -447,9 +368,6 @@ export class ExtensionVersionManager {
             return 'high';
         return 'low';
     }
-    /**
-     * Get recommended actions for upgrade
-     */
     getRecommendedActions(type, risk) {
         const actions = [];
         if (type === 'major') {
@@ -473,9 +391,6 @@ export class ExtensionVersionManager {
         }
         return actions;
     }
-    /**
-     * Calculate total risk for upgrade path
-     */
     calculateTotalRisk(steps) {
         const riskScores = { low: 1, medium: 2, high: 3 };
         const totalScore = steps.reduce((sum, step) => sum + riskScores[step.risk], 0);
@@ -486,11 +401,8 @@ export class ExtensionVersionManager {
             return 'medium';
         return 'low';
     }
-    /**
-     * Estimate upgrade duration
-     */
     estimateDuration(steps) {
-        const durations = { patch: 15, minor: 30, major: 120, prerelease: 60 }; // minutes
+        const durations = { patch: 15, minor: 30, major: 120, prerelease: 60 };
         const totalMinutes = steps.reduce((sum, step) => sum + durations[step.type], 0);
         if (totalMinutes < 60)
             return `${totalMinutes} minutes`;
@@ -498,13 +410,11 @@ export class ExtensionVersionManager {
             return `${Math.round(totalMinutes / 60)} hours`;
         return `${Math.round(totalMinutes / 1440)} days`;
     }
-    /**
-     * Clear caches
-     */
     clearCaches() {
         this.versionCache.clear();
         this.compatibilityCache.clear();
     }
 }
-// Export singleton
-export const extensionVersionManager = ExtensionVersionManager.getInstance();
+exports.ExtensionVersionManager = ExtensionVersionManager;
+exports.extensionVersionManager = ExtensionVersionManager.getInstance();
+//# sourceMappingURL=ExtensionVersionManager.js.map
