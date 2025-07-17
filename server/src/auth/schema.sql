@@ -50,21 +50,57 @@ CREATE TABLE IF NOT EXISTS user_preferences (
     UNIQUE(user_id, category)
 );
 
--- Linked accounts - OAuth provider connections
-CREATE TABLE IF NOT EXISTS linked_accounts (
+-- OAuth accounts - OAuth provider connections
+CREATE TABLE IF NOT EXISTS oauth_accounts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    provider VARCHAR(50) NOT NULL, -- 'google', 'github', 'microsoft', etc.
-    provider_account_id VARCHAR(255) NOT NULL,
-    provider_email VARCHAR(255),
+    provider VARCHAR(50) NOT NULL CHECK (provider IN ('google', 'github', 'microsoft')),
+    oauth_id VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
+    picture TEXT,
     access_token TEXT,
     refresh_token TEXT,
-    expires_at TIMESTAMP WITH TIME ZONE,
-    token_type VARCHAR(50) DEFAULT 'Bearer',
-    scope TEXT,
+    token_expires_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(provider, provider_account_id)
+    UNIQUE(provider, oauth_id)
+);
+
+-- OAuth states - for CSRF protection during OAuth flow
+CREATE TABLE IF NOT EXISTS oauth_states (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    state VARCHAR(255) UNIQUE NOT NULL,
+    data JSONB NOT NULL,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- API tokens - long-lived tokens for API access
+CREATE TABLE IF NOT EXISTS api_tokens (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(255),
+    scopes JSONB NOT NULL DEFAULT '[]',
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    last_used_at TIMESTAMP WITH TIME ZONE,
+    revoked BOOLEAN DEFAULT FALSE,
+    revoked_at TIMESTAMP WITH TIME ZONE
+);
+
+-- User uploads - file uploads (avatars, documents, etc.)
+CREATE TABLE IF NOT EXISTS user_uploads (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    filename VARCHAR(255) NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(100) NOT NULL,
+    size INTEGER NOT NULL,
+    upload_type VARCHAR(50) NOT NULL, -- 'avatar', 'document', etc.
+    url VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    deleted_at TIMESTAMP WITH TIME ZONE
 );
 
 -- Sessions - active user sessions
@@ -214,8 +250,22 @@ CREATE INDEX IF NOT EXISTS idx_user_preferences_user_id ON user_preferences(user
 CREATE INDEX IF NOT EXISTS idx_user_preferences_category ON user_preferences(category);
 CREATE INDEX IF NOT EXISTS idx_user_preferences_settings ON user_preferences USING GIN(settings);
 
-CREATE INDEX IF NOT EXISTS idx_linked_accounts_user_id ON linked_accounts(user_id);
-CREATE INDEX IF NOT EXISTS idx_linked_accounts_provider ON linked_accounts(provider, provider_account_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_accounts_user_id ON oauth_accounts(user_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_accounts_provider ON oauth_accounts(provider);
+CREATE INDEX IF NOT EXISTS idx_oauth_accounts_oauth_id ON oauth_accounts(oauth_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_accounts_email ON oauth_accounts(email);
+
+CREATE INDEX IF NOT EXISTS idx_oauth_states_state ON oauth_states(state);
+CREATE INDEX IF NOT EXISTS idx_oauth_states_expires_at ON oauth_states(expires_at);
+
+CREATE INDEX IF NOT EXISTS idx_api_tokens_user_id ON api_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_api_tokens_expires_at ON api_tokens(expires_at);
+CREATE INDEX IF NOT EXISTS idx_api_tokens_revoked ON api_tokens(revoked);
+
+CREATE INDEX IF NOT EXISTS idx_user_uploads_user_id ON user_uploads(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_uploads_upload_type ON user_uploads(upload_type);
+CREATE INDEX IF NOT EXISTS idx_user_uploads_created_at ON user_uploads(created_at);
+CREATE INDEX IF NOT EXISTS idx_user_uploads_deleted_at ON user_uploads(deleted_at);
 
 CREATE INDEX IF NOT EXISTS idx_user_sessions_user_id ON user_sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_sessions_token ON user_sessions(session_token);
