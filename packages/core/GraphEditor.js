@@ -252,7 +252,7 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection, }) =
                                 defaultEdgeOptions: {
                                     type: 'step',
                                     style: { stroke: '#666', strokeWidth: 2 },
-                                    markerEnd: { type: 'arrowclosed', color: '#666' }
+                                    markerEnd: { type: 'arrow', color: '#666' }
                                 }, 
                                 // Default zoom/pan settings
                                 minZoom: 0.1, maxZoom: 4, defaultViewport: { x: 0, y: 0, zoom: 1 }, children: [_jsx(Background, { color: "#2d3748", gap: 16 }), _jsx(MiniMap, { nodeColor: () => '#363a45', maskColor: "#181b21BB" }), _jsx(Controls, {})] }), _jsxs("div", { style: {
