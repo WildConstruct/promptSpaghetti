@@ -1,12 +1,27 @@
-// Type guards
-export function isRuntimeNodeType(type) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isRuntimeNodeType = isRuntimeNodeType;
+exports.isUINodeType = isUINodeType;
+exports.createBaseNodeData = createBaseNodeData;
+exports.createWeightedChoiceNodeData = createWeightedChoiceNodeData;
+exports.createConcatNodeData = createConcatNodeData;
+exports.createOutputNodeData = createOutputNodeData;
+exports.createIncludeNodeData = createIncludeNodeData;
+exports.createSetVariableNodeData = createSetVariableNodeData;
+exports.createGetVariableNodeData = createGetVariableNodeData;
+exports.createSubjectNodeData = createSubjectNodeData;
+exports.createActionNodeData = createActionNodeData;
+exports.createNodeData = createNodeData;
+exports.serializeForRuntime = serializeForRuntime;
+exports.deserializeFromRuntime = deserializeFromRuntime;
+exports.validateNodeData = validateNodeData;
+function isRuntimeNodeType(type) {
     return ["WeightedChoice", "Concat", "Output", "Include", "SetVariable", "GetVariable"].includes(type);
 }
-export function isUINodeType(type) {
+function isUINodeType(type) {
     return ["Subject", "Connector", "Attribute", "Action"].includes(type);
 }
-// Node data factory functions
-export function createBaseNodeData(id, label) {
+function createBaseNodeData(id, label) {
     return {
         id,
         label,
@@ -19,7 +34,7 @@ export function createBaseNodeData(id, label) {
         contextHints: [],
     };
 }
-export function createWeightedChoiceNodeData(id, label = "Weighted Choice") {
+function createWeightedChoiceNodeData(id, label = "Weighted Choice") {
     return {
         ...createBaseNodeData(id, label),
         type: "WeightedChoice",
@@ -27,7 +42,7 @@ export function createWeightedChoiceNodeData(id, label = "Weighted Choice") {
         weights: [],
     };
 }
-export function createConcatNodeData(id, label = "Concat") {
+function createConcatNodeData(id, label = "Concat") {
     return {
         ...createBaseNodeData(id, label),
         type: "Concat",
@@ -37,7 +52,7 @@ export function createConcatNodeData(id, label = "Concat") {
         preserveOrder: true,
     };
 }
-export function createOutputNodeData(id, label = "Output") {
+function createOutputNodeData(id, label = "Output") {
     return {
         ...createBaseNodeData(id, label),
         type: "Output",
@@ -46,7 +61,7 @@ export function createOutputNodeData(id, label = "Output") {
         destination: "stdout",
     };
 }
-export function createIncludeNodeData(id, label = "Include") {
+function createIncludeNodeData(id, label = "Include") {
     return {
         ...createBaseNodeData(id, label),
         type: "Include",
@@ -54,7 +69,7 @@ export function createIncludeNodeData(id, label = "Include") {
         includeType: "template",
     };
 }
-export function createSetVariableNodeData(id, label = "Set Variable") {
+function createSetVariableNodeData(id, label = "Set Variable") {
     return {
         ...createBaseNodeData(id, label),
         type: "SetVariable",
@@ -66,7 +81,7 @@ export function createSetVariableNodeData(id, label = "Set Variable") {
         allowOverwrite: true,
     };
 }
-export function createGetVariableNodeData(id, label = "Get Variable") {
+function createGetVariableNodeData(id, label = "Get Variable") {
     return {
         ...createBaseNodeData(id, label),
         type: "GetVariable",
@@ -77,7 +92,7 @@ export function createGetVariableNodeData(id, label = "Get Variable") {
         required: false,
     };
 }
-export function createSubjectNodeData(id, label = "Subject") {
+function createSubjectNodeData(id, label = "Subject") {
     return {
         ...createBaseNodeData(id, label),
         type: "Subject",
@@ -88,7 +103,7 @@ export function createSubjectNodeData(id, label = "Subject") {
         baseForm: "",
     };
 }
-export function createActionNodeData(id, label = "Action") {
+function createActionNodeData(id, label = "Action") {
     return {
         ...createBaseNodeData(id, label),
         type: "Action",
@@ -100,8 +115,7 @@ export function createActionNodeData(id, label = "Action") {
         adverbVariations: [],
     };
 }
-// Factory function dispatcher
-export function createNodeData(type, id, label) {
+function createNodeData(type, id, label) {
     switch (type) {
         case "WeightedChoice":
             return createWeightedChoiceNodeData(id, label);
@@ -122,17 +136,14 @@ export function createNodeData(type, id, label) {
         case "Connector":
         case "Attribute":
         default:
-            // Fallback for unimplemented types
             return {
                 ...createBaseNodeData(id, label || type),
                 type: type,
             };
     }
 }
-// Convert UI node data to runtime-compatible format
-export function serializeForRuntime(nodeData) {
+function serializeForRuntime(nodeData) {
     if (!isRuntimeNodeType(nodeData.type)) {
-        // UI-only nodes cannot be serialized for runtime
         return null;
     }
     const base = {
@@ -149,9 +160,9 @@ export function serializeForRuntime(nodeData) {
                 })),
             };
         case "Concat":
-            return base; // Concat nodes are handled by the runtime with input connections
+            return base;
         case "Output":
-            return base; // Output nodes are handled by the runtime
+            return base;
         case "Include":
             return {
                 ...base,
@@ -172,8 +183,7 @@ export function serializeForRuntime(nodeData) {
             return base;
     }
 }
-// Convert runtime node data back to UI format
-export function deserializeFromRuntime(runtimeData) {
+function deserializeFromRuntime(runtimeData) {
     if (!isRuntimeNodeType(runtimeData.type)) {
         return null;
     }
@@ -212,8 +222,7 @@ export function deserializeFromRuntime(runtimeData) {
             return null;
     }
 }
-// Validation utilities
-export function validateNodeData(nodeData) {
+function validateNodeData(nodeData) {
     const errors = [];
     if (!nodeData.id) {
         errors.push("Node ID is required");
@@ -224,7 +233,6 @@ export function validateNodeData(nodeData) {
     if (!nodeData.label) {
         errors.push("Node label is required");
     }
-    // Type-specific validation
     if (nodeData.type === "WeightedChoice") {
         const data = nodeData;
         if (!data.choices || data.choices.length === 0) {
@@ -248,3 +256,4 @@ export function validateNodeData(nodeData) {
     }
     return errors;
 }
+//# sourceMappingURL=NodeTypes.js.map

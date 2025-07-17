@@ -1,15 +1,11 @@
-/**
- * Extension Compatibility Checker - Epic 8.4 Story 8.4.4
- * Advanced compatibility checking and resolution for extensions
- */
-import { SemanticVersion, VersionRange } from './ExtensionVersionManager';
-// Compatibility Checker
-export class ExtensionCompatibilityChecker {
-    static instance;
-    compatibilityRules = new Map();
-    platformFeatures = new Map();
-    systemCapabilities;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extensionCompatibilityChecker = exports.ExtensionCompatibilityChecker = void 0;
+const ExtensionVersionManager_1 = require("./ExtensionVersionManager");
+class ExtensionCompatibilityChecker {
     constructor() {
+        this.compatibilityRules = new Map();
+        this.platformFeatures = new Map();
         this.systemCapabilities = this.initializeSystemCapabilities();
         this.initializeDefaultRules();
     }
@@ -19,9 +15,6 @@ export class ExtensionCompatibilityChecker {
         }
         return ExtensionCompatibilityChecker.instance;
     }
-    /**
-     * Comprehensive compatibility check
-     */
     checkExtensionCompatibility(extension, context) {
         const result = {
             compatible: true,
@@ -34,7 +27,6 @@ export class ExtensionCompatibilityChecker {
             permissionCheck: this.checkPermissionCompatibility(extension, context),
             securityCheck: this.checkSecurityCompatibility(extension, context)
         };
-        // Aggregate results
         const checks = [result.systemCheck, result.dependencyCheck, result.platformCheck, result.permissionCheck, result.securityCheck];
         for (const check of checks) {
             result.issues.push(...check.issues);
@@ -43,20 +35,15 @@ export class ExtensionCompatibilityChecker {
                 result.compatible = false;
             }
         }
-        // Generate recommendations
         result.recommendations = this.generateRecommendations(result);
         return result;
     }
-    /**
-     * Check system compatibility
-     */
     checkSystemCompatibility(extension, context) {
         const issues = [];
         const warnings = [];
-        // Check system version
-        const systemVersion = new SemanticVersion(context.systemVersion);
+        const systemVersion = new ExtensionVersionManager_1.SemanticVersion(context.systemVersion);
         if (extension.compatibility?.min_system_version) {
-            const minVersion = new SemanticVersion(extension.compatibility.min_system_version);
+            const minVersion = new ExtensionVersionManager_1.SemanticVersion(extension.compatibility.min_system_version);
             if (systemVersion.compareTo(minVersion) < 0) {
                 issues.push({
                     type: 'system-version',
@@ -68,7 +55,7 @@ export class ExtensionCompatibilityChecker {
             }
         }
         if (extension.compatibility?.max_system_version) {
-            const maxVersion = new SemanticVersion(extension.compatibility.max_system_version);
+            const maxVersion = new ExtensionVersionManager_1.SemanticVersion(extension.compatibility.max_system_version);
             if (systemVersion.compareTo(maxVersion) > 0) {
                 issues.push({
                     type: 'system-version',
@@ -79,7 +66,6 @@ export class ExtensionCompatibilityChecker {
                 });
             }
         }
-        // Check system capabilities
         if (extension.capabilities?.requires) {
             for (const capability of extension.capabilities.requires) {
                 if (!this.systemCapabilities.available.includes(capability)) {
@@ -98,9 +84,6 @@ export class ExtensionCompatibilityChecker {
             warnings
         };
     }
-    /**
-     * Check dependency compatibility
-     */
     checkDependencyCompatibility(extension, context) {
         const issues = [];
         const warnings = [];
@@ -119,9 +102,8 @@ export class ExtensionCompatibilityChecker {
                 });
                 continue;
             }
-            // Check version compatibility
-            const depVersion = new SemanticVersion(depExtension.version);
-            const range = VersionRange.parse(versionRange);
+            const depVersion = new ExtensionVersionManager_1.SemanticVersion(depExtension.version);
+            const range = ExtensionVersionManager_1.VersionRange.parse(versionRange);
             if (!range.satisfies(depVersion)) {
                 issues.push({
                     type: 'version-mismatch',
@@ -132,18 +114,15 @@ export class ExtensionCompatibilityChecker {
                     requiredVersion: versionRange
                 });
             }
-            // Check for deprecated dependencies
             if (depExtension.compatibility?.deprecated) {
                 warnings.push(`Dependency ${depId} is deprecated: ${depExtension.compatibility.deprecationMessage || 'No longer maintained'}`);
             }
-            // Check transitive dependencies
             const transitiveCheck = this.checkTransitiveDependencies(depExtension, context, [extension.id]);
             if (!transitiveCheck.compatible) {
                 issues.push(...transitiveCheck.issues);
                 warnings.push(...transitiveCheck.warnings);
             }
         }
-        // Check for circular dependencies
         const circularPath = this.findCircularDependencies(extension, context.availableExtensions);
         if (circularPath.length > 0) {
             issues.push({
@@ -159,13 +138,9 @@ export class ExtensionCompatibilityChecker {
             warnings
         };
     }
-    /**
-     * Check platform compatibility
-     */
     checkPlatformCompatibility(extension, context) {
         const issues = [];
         const warnings = [];
-        // Check platform support
         if (extension.compatibility?.platforms) {
             if (!extension.compatibility.platforms.includes(context.platform)) {
                 issues.push({
@@ -177,7 +152,6 @@ export class ExtensionCompatibilityChecker {
                 });
             }
         }
-        // Check browser compatibility
         if (extension.compatibility?.browsers && context.browserInfo) {
             for (const [browser, requiredVersion] of Object.entries(extension.compatibility.browsers)) {
                 const currentVersion = context.browserInfo[browser];
@@ -185,8 +159,8 @@ export class ExtensionCompatibilityChecker {
                     warnings.push(`Browser ${browser} support not detected`);
                     continue;
                 }
-                const range = VersionRange.parse(requiredVersion);
-                const browserVersion = new SemanticVersion(currentVersion);
+                const range = ExtensionVersionManager_1.VersionRange.parse(requiredVersion);
+                const browserVersion = new ExtensionVersionManager_1.SemanticVersion(currentVersion);
                 if (!range.satisfies(browserVersion)) {
                     issues.push({
                         type: 'version-mismatch',
@@ -198,7 +172,6 @@ export class ExtensionCompatibilityChecker {
                 }
             }
         }
-        // Check platform features
         if (extension.capabilities?.requires) {
             for (const capability of extension.capabilities.requires) {
                 const feature = this.platformFeatures.get(capability);
@@ -218,9 +191,6 @@ export class ExtensionCompatibilityChecker {
             warnings
         };
     }
-    /**
-     * Check permission compatibility
-     */
     checkPermissionCompatibility(extension, context) {
         const issues = [];
         const warnings = [];
@@ -236,7 +206,6 @@ export class ExtensionCompatibilityChecker {
                     dependencyId: permission
                 });
             }
-            // Check for dangerous permissions
             if (this.isDangerousPermission(permission)) {
                 warnings.push(`Extension requests dangerous permission: ${permission}`);
             }
@@ -247,13 +216,9 @@ export class ExtensionCompatibilityChecker {
             warnings
         };
     }
-    /**
-     * Check security compatibility
-     */
     checkSecurityCompatibility(extension, context) {
         const issues = [];
         const warnings = [];
-        // Check CSP compatibility
         if (extension.security?.content_security_policy) {
             if (!this.validateCSP(extension.security.content_security_policy)) {
                 issues.push({
@@ -263,7 +228,6 @@ export class ExtensionCompatibilityChecker {
                 });
             }
         }
-        // Check sandbox settings
         if (extension.security?.sandbox) {
             if (!extension.security.sandbox.enabled) {
                 warnings.push('Extension runs without sandbox protection');
@@ -272,7 +236,6 @@ export class ExtensionCompatibilityChecker {
         else {
             warnings.push('No sandbox configuration specified');
         }
-        // Check trusted domains
         if (extension.security?.trusted_domains) {
             for (const domain of extension.security.trusted_domains) {
                 if (!this.isTrustedDomain(domain)) {
@@ -286,9 +249,6 @@ export class ExtensionCompatibilityChecker {
             warnings
         };
     }
-    /**
-     * Check transitive dependencies
-     */
     checkTransitiveDependencies(extension, context, visited = []) {
         const issues = [];
         const warnings = [];
@@ -297,13 +257,12 @@ export class ExtensionCompatibilityChecker {
         }
         for (const [depId, versionRange] of Object.entries(extension.dependencies.extensions)) {
             if (visited.includes(depId)) {
-                continue; // Skip already visited to avoid infinite recursion
+                continue;
             }
             const depExtension = context.availableExtensions.get(depId);
             if (!depExtension) {
-                continue; // Already handled in main dependency check
+                continue;
             }
-            // Recursively check dependencies
             const transitiveCheck = this.checkTransitiveDependencies(depExtension, context, [...visited, extension.id]);
             issues.push(...transitiveCheck.issues);
             warnings.push(...transitiveCheck.warnings);
@@ -314,9 +273,6 @@ export class ExtensionCompatibilityChecker {
             warnings
         };
     }
-    /**
-     * Find circular dependencies
-     */
     findCircularDependencies(extension, availableExtensions, visited = new Set(), path = []) {
         if (visited.has(extension.id)) {
             const circularStart = path.indexOf(extension.id);
@@ -337,17 +293,12 @@ export class ExtensionCompatibilityChecker {
         }
         return [];
     }
-    /**
-     * Generate recommendations based on compatibility issues
-     */
     generateRecommendations(result) {
         const recommendations = [];
-        // System version recommendations
         const systemIssues = result.issues.filter(i => i.type === 'system-version');
         if (systemIssues.length > 0) {
             recommendations.push('Consider upgrading system to meet version requirements');
         }
-        // Dependency recommendations
         const depIssues = result.issues.filter(i => i.type === 'missing-dependency');
         if (depIssues.length > 0) {
             recommendations.push('Install missing dependencies before activating extension');
@@ -356,12 +307,10 @@ export class ExtensionCompatibilityChecker {
         if (versionIssues.length > 0) {
             recommendations.push('Update dependencies to compatible versions');
         }
-        // Circular dependency recommendations
         const circularIssues = result.issues.filter(i => i.type === 'circular-dependency');
         if (circularIssues.length > 0) {
             recommendations.push('Resolve circular dependencies by refactoring extension architecture');
         }
-        // Security recommendations
         if (result.warnings.some(w => w.includes('dangerous permission'))) {
             recommendations.push('Review dangerous permissions and ensure they are necessary');
         }
@@ -370,15 +319,9 @@ export class ExtensionCompatibilityChecker {
         }
         return recommendations;
     }
-    /**
-     * Add custom compatibility rule
-     */
     addCompatibilityRule(rule) {
         this.compatibilityRules.set(rule.id, rule);
     }
-    /**
-     * Check if permission is dangerous
-     */
     isDangerousPermission(permission) {
         const dangerousPermissions = [
             'file-system-write',
@@ -389,20 +332,13 @@ export class ExtensionCompatibilityChecker {
         ];
         return dangerousPermissions.includes(permission);
     }
-    /**
-     * Validate CSP
-     */
     validateCSP(csp) {
-        // Basic CSP validation
         const hasDefaultSrc = csp.includes('default-src');
         const hasScriptSrc = csp.includes('script-src');
         const hasUnsafeEval = csp.includes("'unsafe-eval'");
         const hasUnsafeInline = csp.includes("'unsafe-inline'");
         return (hasDefaultSrc || hasScriptSrc) && !hasUnsafeEval && !hasUnsafeInline;
     }
-    /**
-     * Check if domain is trusted
-     */
     isTrustedDomain(domain) {
         const trustedDomains = [
             'localhost',
@@ -412,9 +348,6 @@ export class ExtensionCompatibilityChecker {
         ];
         return trustedDomains.includes(domain) || domain.endsWith('.example.com');
     }
-    /**
-     * Initialize system capabilities
-     */
     initializeSystemCapabilities() {
         return {
             available: [
@@ -429,9 +362,6 @@ export class ExtensionCompatibilityChecker {
             platform: 'web'
         };
     }
-    /**
-     * Initialize default compatibility rules
-     */
     initializeDefaultRules() {
         this.addCompatibilityRule({
             id: 'semver-compatibility',
@@ -439,7 +369,7 @@ export class ExtensionCompatibilityChecker {
             description: 'Ensures extensions follow semantic versioning',
             check: (extension) => {
                 try {
-                    new SemanticVersion(extension.version);
+                    new ExtensionVersionManager_1.SemanticVersion(extension.version);
                     return { compatible: true, issues: [] };
                 }
                 catch (error) {
@@ -482,5 +412,6 @@ export class ExtensionCompatibilityChecker {
         });
     }
 }
-// Export singleton
-export const extensionCompatibilityChecker = ExtensionCompatibilityChecker.getInstance();
+exports.ExtensionCompatibilityChecker = ExtensionCompatibilityChecker;
+exports.extensionCompatibilityChecker = ExtensionCompatibilityChecker.getInstance();
+//# sourceMappingURL=ExtensionCompatibilityChecker.js.map

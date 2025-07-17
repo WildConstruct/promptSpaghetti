@@ -1,71 +1,73 @@
-import { z } from "zod";
-// Base schema for all node types
-const baseNodeSchema = z.object({
-    label: z.string().default("Node"),
-    id: z.string().default(""),
-    variations: z.array(z.string()).default([]),
-    description: z.string().default(""),
-    tags: z.array(z.string()).default([]),
-    category: z.string().default("general"),
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.nodeSchemas = void 0;
+const zod_1 = require("zod");
+const baseNodeSchema = zod_1.z.object({
+    label: zod_1.z.string().default("Node"),
+    id: zod_1.z.string().default(""),
+    variations: zod_1.z.array(zod_1.z.string()).default([]),
+    description: zod_1.z.string().default(""),
+    tags: zod_1.z.array(zod_1.z.string()).default([]),
+    category: zod_1.z.string().default("general"),
 });
-// Enhanced schemas for each node type
-export const nodeSchemas = {
+exports.nodeSchemas = {
     Subject: baseNodeSchema.extend({
-        type: z.literal("Subject").default("Subject"),
-        subjects: z.array(z.string()).default(["subject"]),
-        singularForm: z.string().default("subject"),
-        pluralForm: z.string().default("subjects"),
-        defaultWeight: z.number().default(1),
+        type: zod_1.z.literal("Subject").default("Subject"),
+        subjects: zod_1.z.array(zod_1.z.string()).default(["subject"]),
+        singularForm: zod_1.z.string().default("subject"),
+        pluralForm: zod_1.z.string().default("subjects"),
+        defaultWeight: zod_1.z.number().default(1),
     }),
     Connector: baseNodeSchema.extend({
-        type: z.literal("Connector").default("Connector"),
-        connectors: z.array(z.string()).default(["and"]),
-        grammarType: z.enum(["coordinating", "subordinating", "correlative"]).default("coordinating"),
-        position: z.enum(["before", "after", "between"]).default("between"),
+        type: zod_1.z.literal("Connector").default("Connector"),
+        connectors: zod_1.z.array(zod_1.z.string()).default(["and"]),
+        grammarType: zod_1.z.enum(["coordinating", "subordinating", "correlative"]).default("coordinating"),
+        position: zod_1.z.enum(["before", "after", "between"]).default("between"),
     }),
     Attribute: baseNodeSchema.extend({
-        type: z.literal("Attribute").default("Attribute"),
-        attributes: z.array(z.string()).default(["attribute"]),
-        targetNoun: z.string().default(""),
-        adjectiveType: z.enum(["descriptive", "quantitative", "demonstrative"]).default("descriptive"),
-        position: z.enum(["before", "after"]).default("before"),
+        type: zod_1.z.literal("Attribute").default("Attribute"),
+        attributes: zod_1.z.array(zod_1.z.string()).default(["attribute"]),
+        targetNoun: zod_1.z.string().default(""),
+        adjectiveType: zod_1.z.enum(["descriptive", "quantitative", "demonstrative"]).default("descriptive"),
+        position: zod_1.z.enum(["before", "after"]).default("before"),
     }),
     Action: baseNodeSchema.extend({
-        type: z.literal("Action").default("Action"),
-        actions: z.array(z.string()).default(["action"]),
-        tense: z.enum(["present", "past", "future"]).default("present"),
-        voice: z.enum(["active", "passive"]).default("active"),
-        intensity: z.enum(["low", "medium", "high"]).default("medium"),
+        type: zod_1.z.literal("Action").default("Action"),
+        actions: zod_1.z.array(zod_1.z.string()).default(["action"]),
+        tense: zod_1.z.enum(["present", "past", "future"]).default("present"),
+        voice: zod_1.z.enum(["active", "passive"]).default("active"),
+        intensity: zod_1.z.enum(["low", "medium", "high"]).default("medium"),
     }),
     WeightedChoice: baseNodeSchema.extend({
-        type: z.literal("WeightedChoice").default("WeightedChoice"),
-        weights: z.array(z.number()).default([1]),
-        options: z.array(z.string()).default(["option"]),
+        type: zod_1.z.literal("WeightedChoice").default("WeightedChoice"),
+        weights: zod_1.z.array(zod_1.z.number()).default([1]),
+        options: zod_1.z.array(zod_1.z.string()).default(["option"]),
     }),
     Concat: baseNodeSchema.extend({
-        type: z.literal("Concat").default("Concat"),
-        delimiter: z.string().default(", "),
-        formatType: z.enum(["sentence", "list", "paragraph"]).default("sentence"),
+        type: zod_1.z.literal("Concat").default("Concat"),
+        delimiter: zod_1.z.string().default(", "),
+        formatType: zod_1.z.enum(["sentence", "list", "paragraph"]).default("sentence"),
     }),
     Output: baseNodeSchema.extend({
-        type: z.literal("Output").default("Output"),
-        prompt: z.string().default(""),
-        outputFormat: z.enum(["text", "markdown", "json"]).default("text"),
+        type: zod_1.z.literal("Output").default("Output"),
+        prompt: zod_1.z.string().default(""),
+        outputFormat: zod_1.z.enum(["text", "markdown", "json"]).default("text"),
     }),
     Include: baseNodeSchema.extend({
-        type: z.literal("Include").default("Include"),
-        ref: z.string().default(""),
-        includeType: z.enum(["bundle", "template", "component"]).default("bundle"),
+        type: zod_1.z.literal("Include").default("Include"),
+        ref: zod_1.z.string().default(""),
+        includeType: zod_1.z.enum(["bundle", "template", "component"]).default("bundle"),
     }),
     SetVariable: baseNodeSchema.extend({
-        type: z.literal("SetVariable").default("SetVariable"),
-        name: z.string().default(""),
-        value: z.string().default(""),
-        variableType: z.enum(["string", "number", "boolean", "object"]).default("string"),
+        type: zod_1.z.literal("SetVariable").default("SetVariable"),
+        name: zod_1.z.string().default(""),
+        value: zod_1.z.string().default(""),
+        variableType: zod_1.z.enum(["string", "number", "boolean", "object"]).default("string"),
     }),
     GetVariable: baseNodeSchema.extend({
-        type: z.literal("GetVariable").default("GetVariable"),
-        name: z.string().default(""),
-        defaultValue: z.string().default(""),
+        type: zod_1.z.literal("GetVariable").default("GetVariable"),
+        name: zod_1.z.string().default(""),
+        defaultValue: zod_1.z.string().default(""),
     }),
 };
+//# sourceMappingURL=nodeSchemas.js.map

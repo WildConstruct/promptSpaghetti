@@ -97,3 +97,12 @@ export {
   CollaborationStatus,
   UserAvatars
 } from './collaboration/CollaborativePresence';
+
+// Epic 12 - LLM Agent Randomizer System exports
+export { 
+  RandomizerPanel,
+  GraphPreview,
+  RandomizerWorkflow,
+  RandomizerSystem,
+  LLMRandomizerSystem
+} from './llm-randomizer';

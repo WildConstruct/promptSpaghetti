@@ -1,42 +1,61 @@
-// packages/core/runtime/advanced.ts
-// Advanced runtime node base classes and enhanced execution context for Epic 7
-import { RuntimeNode } from './index';
-import seedrandom from 'seedrandom';
-/**
- * Abstract base class for all advanced rule nodes in Epic 7
- * Extends the proven RuntimeNode architecture with enhanced capabilities
- */
-export class AdvancedRuntimeNode extends RuntimeNode {
-    config;
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SerializationHelpers = exports.AdvancedRuntimeNodeWithIO = exports.ValidationHelpers = exports.AdvancedExecutionUtils = exports.AdvancedRuntimeNode = void 0;
+const index_1 = require("./index");
+const seedrandom_1 = __importDefault(require("seedrandom"));
+class AdvancedRuntimeNode extends index_1.RuntimeNode {
     constructor(id, config) {
         super(id);
         this.config = config;
     }
-    /**
-     * Get the current state for this node from the execution context
-     */
     getState(ctx) {
         return ctx.nodeStates.get(this.id);
     }
-    /**
-     * Set the current state for this node in the execution context
-     */
     setState(ctx, state) {
         ctx.nodeStates.set(this.id, state);
     }
-    /**
-     * Create a seeded random number generator for this node
-     * Uses node ID and execution context for deterministic behavior
-     */
     createSeededRNG(seed, nodeSpecificSeed) {
         const combinedSeed = nodeSpecificSeed
             ? `${seed}-${this.id}-${nodeSpecificSeed}`
             : `${seed}-${this.id}`;
-        return seedrandom(combinedSeed);
+        return (0, seedrandom_1.default)(combinedSeed);
     }
-    /**
-     * Check if a result is cached and return it, or cache a new result
-     */
     withCache(ctx, key, computation) {
         if (!this.config.cacheable) {
             return computation();
@@ -49,16 +68,10 @@ export class AdvancedRuntimeNode extends RuntimeNode {
         ctx.cache.set(cacheKey, result);
         return result;
     }
-    /**
-     * Record performance metrics for this node execution
-     */
     recordPerformanceMetric(ctx, metric, value) {
         const key = `${this.id}-${metric}`;
         ctx.executionMeta.performanceMetrics.set(key, value);
     }
-    /**
-     * Measure execution time of a function and record it
-     */
     measureExecution(ctx, operation, fn) {
         const start = performance.now();
         const result = fn();
@@ -66,27 +79,15 @@ export class AdvancedRuntimeNode extends RuntimeNode {
         this.recordPerformanceMetric(ctx, `${operation}_duration_ms`, duration);
         return result;
     }
-    /**
-     * Get configuration for this node
-     */
     getConfig() {
         return { ...this.config };
     }
-    /**
-     * Check if this node is compatible with basic execution context
-     * Advanced nodes should gracefully degrade when possible
-     */
     isCompatibleWithBasicContext() {
         return !this.config.stateful;
     }
 }
-/**
- * Utility functions for working with advanced execution contexts
- */
-export class AdvancedExecutionUtils {
-    /**
-     * Create an enhanced execution context from a basic one
-     */
+exports.AdvancedRuntimeNode = AdvancedRuntimeNode;
+class AdvancedExecutionUtils {
     static enhanceContext(basicCtx) {
         return {
             ...basicCtx,
@@ -100,9 +101,6 @@ export class AdvancedExecutionUtils {
             }
         };
     }
-    /**
-     * Clear stateful data from context (for cleanup between executions)
-     */
     static clearExecutionState(ctx) {
         ctx.nodeStates.clear();
         ctx.cache.clear();
@@ -111,16 +109,10 @@ export class AdvancedExecutionUtils {
         ctx.executionMeta.performanceMetrics.clear();
         ctx.executionMeta.startTime = performance.now();
     }
-    /**
-     * Check for potential infinite loops in stateful node execution
-     */
     static detectInfiniteLoop(ctx, nodeId) {
-        const MAX_DEPTH = 1000; // Configurable limit
+        const MAX_DEPTH = 1000;
         return ctx.evaluationDepth > MAX_DEPTH;
     }
-    /**
-     * Get execution statistics from the context
-     */
     static getExecutionStats(ctx) {
         const totalDuration = performance.now() - ctx.executionMeta.startTime;
         const nodesExecuted = ctx.executionMeta.nodeExecutionOrder.length;
@@ -134,10 +126,8 @@ export class AdvancedExecutionUtils {
         };
     }
 }
-/**
- * Standard validation helpers for advanced nodes
- */
-export class ValidationHelpers {
+exports.AdvancedExecutionUtils = AdvancedExecutionUtils;
+class ValidationHelpers {
     static createValidResult() {
         return { valid: true, errors: [], warnings: [] };
     }
@@ -175,43 +165,29 @@ export class ValidationHelpers {
         return errors;
     }
 }
-/**
- * Enhanced AdvancedRuntimeNode with I/O system integration
- */
-export class AdvancedRuntimeNodeWithIO extends AdvancedRuntimeNode {
-    ioHandler; // Will be imported from io-system
+exports.ValidationHelpers = ValidationHelpers;
+class AdvancedRuntimeNodeWithIO extends AdvancedRuntimeNode {
     constructor(id, config, ioSpec) {
         super(id, config);
         if (ioSpec) {
-            // Dynamic import to avoid circular dependency
-            import('./io-system').then(({ AdvancedIOHandler }) => {
+            Promise.resolve().then(() => __importStar(require('./io-system'))).then(({ AdvancedIOHandler }) => {
                 this.ioHandler = new AdvancedIOHandler(ioSpec);
             });
         }
     }
-    /**
-     * Validate node configuration including I/O specification
-     */
     validate() {
         const baseValidation = this.validateNodeConfig();
         if (!this.ioHandler) {
             return baseValidation;
         }
-        // Additional I/O validation would go here
         return baseValidation;
     }
-    /**
-     * Base node configuration validation
-     */
     validateNodeConfig() {
-        // Override in subclasses for node-specific validation
         return ValidationHelpers.createValidResult();
     }
 }
-/**
- * Standard node data serialization helpers
- */
-export class SerializationHelpers {
+exports.AdvancedRuntimeNodeWithIO = AdvancedRuntimeNodeWithIO;
+class SerializationHelpers {
     static createAdvancedNodeData(id, type, config, data) {
         return {
             id,
@@ -250,3 +226,5 @@ export class SerializationHelpers {
             : ValidationHelpers.createValidResult();
     }
 }
+exports.SerializationHelpers = SerializationHelpers;
+//# sourceMappingURL=advanced.js.map
