@@ -127,7 +127,7 @@ export class PythonExecutorClient {
 
       return result;
     } catch (error) {
-      this.handleError(error, 'execute', requestId);
+      this.handleError(error instanceof Error ? error : new Error(String(error)), 'execute', requestId);
       throw error;
     }
   }
@@ -163,7 +163,7 @@ export class PythonExecutorClient {
 
       return result;
     } catch (error) {
-      this.handleError(error, 'validate', requestId);
+      this.handleError(error instanceof Error ? error : new Error(String(error)), 'validate', requestId);
       throw error;
     }
   }
@@ -185,7 +185,7 @@ export class PythonExecutorClient {
 
       return await response.json();
     } catch (error) {
-      this.handleError(error, 'health', requestId);
+      this.handleError(error instanceof Error ? error : new Error(String(error)), 'health', requestId);
       throw error;
     }
   }
@@ -207,7 +207,7 @@ export class PythonExecutorClient {
 
       return await response.text();
     } catch (error) {
-      this.handleError(error, 'metrics', requestId);
+      this.handleError(error instanceof Error ? error : new Error(String(error)), 'metrics', requestId);
       throw error;
     }
   }

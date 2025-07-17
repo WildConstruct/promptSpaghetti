@@ -2,6 +2,14 @@
 // Story 12.2 - LLM Agent Script Development
 // Public API exports for LLM agent system
 
+// Import types for union type definitions
+import type { OpenAIAgentConfig, GraphGenerationRequest, GenerationResult } from './scripts/openai-agent';
+import type { AnthropicAgentConfig, ClaudeGenerationRequest, ClaudeGenerationResult } from './scripts/anthropic-agent';
+import type { GeminiAgentConfig, GeminiGenerationRequest, GeminiGenerationResult } from './scripts/gemini-agent';
+import { generateGraphWithOpenAI } from './scripts/openai-agent';
+import { generateGraphWithClaude } from './scripts/anthropic-agent';
+import { generateGraphWithGemini } from './scripts/gemini-agent';
+
 // OpenAI Agent
 export {
   OpenAIGraphAgent,

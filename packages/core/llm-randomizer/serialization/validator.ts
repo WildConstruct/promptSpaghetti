@@ -91,7 +91,7 @@ export class FormatValidator {
    * Parse the serialized content into structured data
    */
   private static parseContent(content: string): ParsedGraph {
-    const lines = content.split('\n').map(line => line.trim());
+    const lines = content.split('\n');
     const parsed: ParsedGraph = {
       version: '',
       nodes: [],
@@ -104,20 +104,21 @@ export class FormatValidator {
     let propsDepth = 0;
 
     for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
+      const rawLine = lines[i];
+      const trimmedLine = rawLine.trim();
       
-      if (!line || line.startsWith('#')) continue; // Skip empty lines and comments
+      if (!trimmedLine || trimmedLine.startsWith('#')) continue; // Skip empty lines and comments
 
       // Detect section boundaries
-      if (line === '---NODES---') {
+      if (trimmedLine === '---NODES---') {
         currentSection = 'nodes';
         continue;
       }
-      if (line === '---EDGES---') {
+      if (trimmedLine === '---EDGES---') {
         currentSection = 'edges';
         continue;
       }
-      if (line === '---END---') {
+      if (trimmedLine === '---END---') {
         if (currentNode) {
           if (Object.keys(currentProps).length > 0) {
             currentNode.props = currentProps;
@@ -129,7 +130,7 @@ export class FormatValidator {
 
       // Parse header section
       if (currentSection === 'header') {
-        const [key, ...valueParts] = line.split(':');
+        const [key, ...valueParts] = trimmedLine.split(':');
         const value = valueParts.join(':').trim();
         
         if (key === 'version') {
@@ -145,7 +146,7 @@ export class FormatValidator {
       // Parse nodes section
       if (currentSection === 'nodes') {
         // Check if this is a new node (no leading whitespace and ends with colon)
-        if (!line.startsWith(' ') && line.endsWith(':')) {
+        if (!rawLine.startsWith(' ') && trimmedLine.endsWith(':')) {
           // Save previous node
           if (currentNode) {
             if (Object.keys(currentProps).length > 0) {
@@ -156,7 +157,7 @@ export class FormatValidator {
           
           // Start new node
           currentNode = {
-            id: line.slice(0, -1), // Remove colon
+            id: trimmedLine.slice(0, -1), // Remove colon
             type: '',
             props: {}
           };
@@ -166,19 +167,20 @@ export class FormatValidator {
         }
 
         // Parse node properties
-        if (currentNode && line.startsWith('  ')) {
-          const [key, ...valueParts] = line.substring(2).split(':');
+        if (currentNode && rawLine.startsWith('  ')) {
+          const propLine = rawLine.substring(2);
+          const [key, ...valueParts] = propLine.split(':');
           const value = valueParts.join(':').trim();
 
-          if (key === 'type') {
+          if (key.trim() === 'type') {
             currentNode.type = value;
-          } else if (key === 'inputs') {
+          } else if (key.trim() === 'inputs') {
             currentNode.inputs = this.parseArrayValue(value);
-          } else if (key === 'props') {
+          } else if (key.trim() === 'props') {
             propsDepth = 1;
-          } else if (propsDepth > 0 && line.startsWith('    ')) {
+          } else if (propsDepth > 0 && rawLine.startsWith('    ')) {
             // Property under props
-            const propKey = key;
+            const propKey = key.trim();
             currentProps[propKey] = this.parseValue(value);
           }
         }
@@ -187,8 +189,8 @@ export class FormatValidator {
 
       // Parse edges section
       if (currentSection === 'edges') {
-        if (line.includes(' -> ')) {
-          const [source, target] = line.split(' -> ').map(s => s.trim());
+        if (trimmedLine.includes(' -> ')) {
+          const [source, target] = trimmedLine.split(' -> ').map(s => s.trim());
           parsed.edges.push({ source, target });
         }
         continue;

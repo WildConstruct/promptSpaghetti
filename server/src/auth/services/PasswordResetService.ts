@@ -1,6 +1,6 @@
 import { randomBytes, createHash } from 'crypto';
 import { z } from 'zod';
-import { DatabaseService } from './DatabaseService';
+import { DatabaseService } from '../database/DatabaseService';
 import { EmailService } from './EmailService';
 import { AuditService } from './AuditService';
 import { RateLimitService } from './RateLimitService';

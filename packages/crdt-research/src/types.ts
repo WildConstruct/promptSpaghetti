@@ -2,7 +2,18 @@
  * Core types for CRDT research
  */
 
-import { NodeData, Edge } from '@promptgraph/core';
+// Define types locally to avoid cross-package dependencies
+export interface NodeData {
+  [key: string]: any;
+}
+
+export interface Edge {
+  id: string;
+  source: string;
+  target: string;
+  type?: string;
+  data?: any;
+}
 
 /**
  * Unique identifier for a peer in the collaborative session
@@ -79,15 +90,6 @@ export interface CRDTEdge {
   deleted?: boolean;
 }
 
-/**
- * Synchronization message between peers
- */
-export interface SyncMessage {
-  type: 'operation' | 'state' | 'request';
-  peerId: PeerId;
-  timestamp: LogicalTimestamp;
-  payload: unknown;
-}
 
 /**
  * Conflict resolution strategy
@@ -133,7 +135,7 @@ export interface SyncState {
 }
 
 /**
- * Enhanced sync message with more types
+ * Synchronization message between peers
  */
 export interface SyncMessage {
   type: 'sync' | 'update' | 'awareness' | 'operation' | 'state' | 'request';

@@ -117,6 +117,7 @@ export const useCorrectionsStore = create<CorrectionsState>()(
             title: 'New Rule Created',
             message: `Rule "${newRule.name}" has been created and is in draft status.`,
             ruleId: newRule.id,
+            isRead: false,
           });
         },
         
@@ -233,6 +234,7 @@ export const useCorrectionsStore = create<CorrectionsState>()(
               title: 'Rule Approved',
               message: `Rule "${rule.name}" has been approved and is now active.`,
               ruleId: id,
+              isRead: false,
             });
           }
         },
@@ -260,6 +262,7 @@ export const useCorrectionsStore = create<CorrectionsState>()(
               title: 'Rule Deprecated',
               message: `Rule "${rule.name}" has been deprecated: ${reason}`,
               ruleId: id,
+              isRead: false,
             });
           }
         },
@@ -286,6 +289,7 @@ export const useCorrectionsStore = create<CorrectionsState>()(
             title: 'New Rule Suggested',
             message: `Rule "${newRule.name}" has been suggested: ${reason}`,
             ruleId: newRule.id,
+            isRead: false,
           });
         },
         
@@ -347,6 +351,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: true,
     isActive: true,
     priority: 1,
+    status: 'published',
   },
   {
     name: 'Fix Trailing Whitespace',
@@ -356,6 +361,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: true,
     isActive: true,
     priority: 2,
+    status: 'published',
   },
   {
     name: 'Fix Leading Whitespace',
@@ -365,6 +371,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: true,
     isActive: true,
     priority: 3,
+    status: 'published',
   },
   {
     name: 'Common Typo: "teh" → "the"',
@@ -374,6 +381,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: false,
     isActive: true,
     priority: 10,
+    status: 'published',
   },
   {
     name: 'Common Typo: "recieve" → "receive"',
@@ -383,5 +391,6 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     isRegex: false,
     isActive: true,
     priority: 11,
+    status: 'published',
   },
 ];

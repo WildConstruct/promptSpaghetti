@@ -3,6 +3,14 @@
  * Epic 10.2.3 - Validation Rules System with Severity Levels
  */
 
+// Import types needed for factory function
+import { 
+  ValidationRulesEngine,
+  ValidationSeverity,
+  ValidationCategory,
+  ValidationEngineConfig
+} from './ValidationRulesEngine';
+
 // Export main validation engine
 export {
   ValidationRulesEngine,

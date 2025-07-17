@@ -7,11 +7,13 @@ import * as Y from 'yjs';
 import * as encoding from 'lib0/encoding';
 import * as decoding from 'lib0/decoding';
 import { YGraph } from './y-graph';
-import { SyncState, SyncMessage, UserPresence } from './types';
+import { SyncState, SyncMessage, UserPresence, CRDTNode, CRDTEdge } from './types';
 
 export class GraphSyncHandler {
   private doc: Y.Doc;
   private graph: YGraph;
+  private nodes: Y.Map<CRDTNode>;
+  private edges: Y.Map<CRDTEdge>;
   private awareness: Map<string, UserPresence>;
   private syncState: SyncState;
   private onUpdate?: (update: Uint8Array, origin: any) => void;
@@ -19,8 +21,18 @@ export class GraphSyncHandler {
 
   constructor(documentId: string, userId: string) {
     this.doc = new Y.Doc();
+    
+    // Get the maps from the document
+    this.nodes = this.doc.getMap('nodes');
+    this.edges = this.doc.getMap('edges');
+    
+    // Create YGraph and assign the document-integrated maps
     this.graph = new YGraph();
-    this.doc.getMap('graph').set('root', this.graph);
+    this.graph.nodes = this.nodes;
+    this.graph.edges = this.edges;
+    
+    // Set the document reference on the graph
+    (this.graph as any).doc = this.doc;
     
     this.awareness = new Map();
     this.syncState = {

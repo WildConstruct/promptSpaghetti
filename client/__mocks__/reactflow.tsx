@@ -2,16 +2,36 @@ import React from 'react';
 import { jest } from '@jest/globals';
 
 // Very small subset of the public API that App and our tests actually use.
-export interface Position { x: number; y: number }
-export interface Viewport extends Position { zoom: number }
+export interface XYPosition { x: number; y: number }
+export interface Viewport extends XYPosition { zoom: number }
 export interface Node<T = any> {
   id: string;
-  position: Position;
+  position: XYPosition;
   data: T;
   selected?: boolean;
 }
 export interface Edge {
   id: string;
+}
+
+// Add missing enum exports
+export enum ConnectionLineType {
+  Bezier = 'default',
+  Straight = 'straight',
+  Step = 'step',
+  SmoothStep = 'smoothstep',
+}
+
+export enum MarkerType {
+  Arrow = 'arrow',
+  ArrowClosed = 'arrowclosed',
+}
+
+export enum Position {
+  Left = 'left',
+  Top = 'top',
+  Right = 'right',
+  Bottom = 'bottom',
 }
 
 interface ReactFlowProps {

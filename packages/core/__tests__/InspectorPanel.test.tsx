@@ -43,7 +43,7 @@ describe('InspectorPanel', () => {
   it('renders inspector panel with node data', () => {
     render(<InspectorPanel {...defaultProps} />);
     
-    expect(screen.getByText('Test Node Inspector')).toBeInTheDocument();
+    expect(screen.getByText('Test Node Properties')).toBeInTheDocument();
   });
 
   it('shows empty state when no node selected', () => {
@@ -86,7 +86,7 @@ describe('InspectorPanel', () => {
     render(<InspectorPanel {...defaultProps} />);
     
     // The resize handle should be present (look for a more specific selector)
-    const inspectorPanel = screen.getByText('Test Node Inspector').closest('aside');
+    const inspectorPanel = screen.getByText('Test Node Properties').closest('aside');
     expect(inspectorPanel).toBeInTheDocument();
   });
 });
