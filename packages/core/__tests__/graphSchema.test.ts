@@ -53,6 +53,23 @@ describe("graphSchema validation", () => {
         case "GetVariable":
           node.key = "x";
           break;
+        case "WeightedAdvanced":
+          node.choices = [{ value: "A", weight: 1 }];
+          break;
+        case "Conditional":
+          node.branches = [{ condition: "true", output: "test" }];
+          break;
+        case "Sequential":
+          node.sequence = ["A", "B", "C"];
+          break;
+        case "Markov":
+          node.states = ["start", "end"];
+          node.transitions = { "start": { "end": 1.0 } };
+          node.initialState = "start";
+          break;
+        case "PythonTransform":
+          node.code = "output = input_data";
+          break;
         // Concat, Output need no extra fields
       }
       const out = GraphSchema.safeParse({ nodes: [node] });

@@ -41,7 +41,7 @@ describe('PerformanceTestSuite', () => {
         expect(scenario.userCount).toBeGreaterThan(0);
         expect(scenario.duration).toBeGreaterThan(0);
         expect(scenario.operationRate).toBeGreaterThan(0);
-        expect(scenario.operationTypes).toHaveLength(expect.any(Number));
+        expect(scenario.operationTypes.length).toBeGreaterThan(0);
         expect(scenario.documentComplexity).toBeDefined();
       });
     });

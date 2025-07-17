@@ -32,12 +32,8 @@ export class YGraph extends Y.AbstractType<any> {
    */
   _copy(): YGraph {
     const copy = new YGraph();
-    this.nodes.forEach((node, id) => {
-      copy.nodes.set(id, { ...node });
-    });
-    this.edges.forEach((edge, id) => {
-      copy.edges.set(id, { ...edge });
-    });
+    // The maps will be replaced with document-integrated ones
+    // so we don't need to copy data here
     return copy;
   }
 
@@ -45,21 +41,10 @@ export class YGraph extends Y.AbstractType<any> {
    * Write the graph to an update encoder (required by Yjs)
    */
   _write(encoder: any): void {
+    // Since we're using standard Y.Maps, we don't need custom serialization
+    // The maps will handle their own serialization
     encoder.writeTypeRef(YGraph);
-    
-    // Write nodes
-    encoder.writeVarUint(this.nodes.size);
-    this.nodes.forEach((node, id) => {
-      encoder.writeString(id);
-      encoder.writeJSON(node);
-    });
-    
-    // Write edges
-    encoder.writeVarUint(this.edges.size);
-    this.edges.forEach((edge, id) => {
-      encoder.writeString(id);
-      encoder.writeJSON(edge);
-    });
+    encoder.writeVarUint(0); // No custom data
   }
 
   /**

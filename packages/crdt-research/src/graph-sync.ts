@@ -7,11 +7,13 @@ import * as Y from 'yjs';
 import * as encoding from 'lib0/encoding';
 import * as decoding from 'lib0/decoding';
 import { YGraph } from './y-graph';
-import { SyncState, SyncMessage, UserPresence } from './types';
+import { SyncState, SyncMessage, UserPresence, CRDTNode, CRDTEdge } from './types';
 
 export class GraphSyncHandler {
   private doc: Y.Doc;
   private graph: YGraph;
+  private nodes: Y.Map<CRDTNode>;
+  private edges: Y.Map<CRDTEdge>;
   private awareness: Map<string, UserPresence>;
   private syncState: SyncState;
   private onUpdate?: (update: Uint8Array, origin: any) => void;
@@ -20,23 +22,17 @@ export class GraphSyncHandler {
   constructor(documentId: string, userId: string) {
     this.doc = new Y.Doc();
     
-    // Create YGraph and properly integrate it with the document
-    const graphMap = this.doc.getMap('graph');
+    // Get the maps from the document
+    this.nodes = this.doc.getMap('nodes');
+    this.edges = this.doc.getMap('edges');
+    
+    // Create YGraph and assign the document-integrated maps
     this.graph = new YGraph();
-    
-    // Get the maps from the document for proper integration
-    const nodesMap = this.doc.getMap('nodes');
-    const edgesMap = this.doc.getMap('edges');
-    
-    // Replace the YGraph's maps with document-integrated ones
-    this.graph.nodes = nodesMap as Y.Map<CRDTNode>;
-    this.graph.edges = edgesMap as Y.Map<CRDTEdge>;
+    this.graph.nodes = this.nodes;
+    this.graph.edges = this.edges;
     
     // Set the document reference on the graph
     (this.graph as any).doc = this.doc;
-    
-    // Store reference to graph
-    graphMap.set('root', this.graph);
     
     this.awareness = new Map();
     this.syncState = {
