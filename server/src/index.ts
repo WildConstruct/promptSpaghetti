@@ -8,6 +8,8 @@ import { correctionsRoutes } from './routes/corrections';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
+import { authRoutes, jwtAuthMiddleware } from './auth/routes';
+import { buildAuthConfig, CORS_CONFIG } from './auth/config';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -82,6 +84,10 @@ const server = Fastify({
   logger: true
 });
 
+// Build authentication configuration
+const authConfig = buildAuthConfig();
+server.decorate('authConfig', authConfig);
+
 // WebSocket server configuration
 const wsConfig: WSServerConfig = {
   port: process.env.WS_PORT ? parseInt(process.env.WS_PORT) : 8001,
@@ -116,12 +122,30 @@ try {
   }
 })();
 
-// We'll add CORS support after installing the dependency
-// For now, we'll use a simple CORS header
+// Enhanced CORS configuration for authentication
 server.addHook('onRequest', (request, reply, done) => {
-  reply.header('Access-Control-Allow-Origin', '*');
-  reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  reply.header('Access-Control-Allow-Headers', 'Content-Type');
+  const origin = request.headers.origin;
+  const allowedOrigins = CORS_CONFIG.origin;
+  
+  if (Array.isArray(allowedOrigins)) {
+    if (allowedOrigins.includes('*') || (origin && allowedOrigins.includes(origin))) {
+      reply.header('Access-Control-Allow-Origin', origin || '*');
+    }
+  } else if (allowedOrigins === '*' || allowedOrigins === origin) {
+    reply.header('Access-Control-Allow-Origin', origin || allowedOrigins);
+  }
+  
+  reply.header('Access-Control-Allow-Methods', CORS_CONFIG.methods.join(', '));
+  reply.header('Access-Control-Allow-Headers', CORS_CONFIG.allowedHeaders.join(', '));
+  reply.header('Access-Control-Expose-Headers', CORS_CONFIG.exposedHeaders.join(', '));
+  reply.header('Access-Control-Allow-Credentials', CORS_CONFIG.credentials.toString());
+  
+  // Handle preflight requests
+  if (request.method === 'OPTIONS') {
+    reply.code(204).send();
+    return;
+  }
+  
   done();
 });
 
@@ -176,6 +200,12 @@ server.get('/ws/documents/:documentId/users', async (request, reply) => {
     timestamp: new Date().toISOString()
   };
 });
+
+// Register authentication routes
+server.register(authRoutes, { prefix: '/auth' });
+
+// Register JWT authentication middleware
+server.register(jwtAuthMiddleware);
 
 // Register corrections routes
 server.register(correctionsRoutes, { prefix: '/api/corrections' });
