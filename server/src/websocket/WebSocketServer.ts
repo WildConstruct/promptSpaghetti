@@ -17,6 +17,11 @@ import {
   PresenceUpdatePayloadSchema
 } from './types';
 
+// Epic 13 Analytics Integration
+import { AnalyticsCollector, AnalyticsEventType } from '../analytics/AnalyticsCollector';
+import { AnalyticsDAO } from '../database/analytics-dao';
+import { getDatabase } from '../database/connection';
+
 export class WebSocketServer extends EventEmitter {
   private wss: WebSocket.Server | null = null;
   private connectionManager: ConnectionManager;
@@ -25,6 +30,10 @@ export class WebSocketServer extends EventEmitter {
   private syncManager: SynchronizationManager;
   private config: WSServerConfig;
   private messageHandlers: Map<string, (connectionId: string, payload: any) => void> = new Map();
+  
+  // Epic 13 Analytics Integration
+  public analyticsCollector: AnalyticsCollector | null = null;
+  private analyticsDAO: AnalyticsDAO | null = null;
 
   constructor(config: WSServerConfig) {
     super();
@@ -74,6 +83,36 @@ export class WebSocketServer extends EventEmitter {
     this.setupPresenceManagerEvents();
     this.setupConflictResolverEvents();
     this.setupSyncManagerEvents();
+    
+    // Initialize analytics if enabled
+    this.initializeAnalytics();
+  }
+
+  /**
+   * Initialize analytics collection for WebSocket interactions
+   */
+  private initializeAnalytics(): void {
+    try {
+      const db = getDatabase();
+      this.analyticsDAO = new AnalyticsDAO(db);
+      
+      this.analyticsCollector = new AnalyticsCollector({
+        enabled: process.env.WS_ANALYTICS_ENABLED !== 'false',
+        sampleRate: parseFloat(process.env.WS_ANALYTICS_SAMPLE_RATE || '1.0'),
+        privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true'
+      });
+
+      // Set up event storage handler
+      this.analyticsCollector.on('events_flushed', (events) => {
+        if (this.analyticsDAO) {
+          events.forEach((event: any) => this.analyticsDAO.storeEvent(event));
+        }
+      });
+
+      console.log('WebSocket analytics collection initialized');
+    } catch (error) {
+      console.error('Failed to initialize WebSocket analytics:', error);
+    }
   }
 
   /**
@@ -279,6 +318,20 @@ export class WebSocketServer extends EventEmitter {
         const authPayload = AuthPayloadSchema.parse(payload);
         const success = await this.connectionManager.authenticateConnection(connectionId, authPayload);
         
+        // Track authentication event
+        if (this.analyticsCollector) {
+          this.analyticsCollector.recordUserInteraction(
+            success ? AnalyticsEventType.USER_SESSION_START : AnalyticsEventType.ERROR_OCCURRENCE,
+            authPayload.documentId || 'unknown',
+            {
+              connectionId,
+              userId: authPayload.userId,
+              authenticationSuccess: success,
+              interactionType: 'authentication'
+            }
+          );
+        }
+        
         this.sendToConnection(connectionId, {
           type: 'auth_response',
           payload: { 
@@ -354,6 +407,24 @@ export class WebSocketServer extends EventEmitter {
         
         if (!connectionInfo || !connectionInfo.documentId) {
           return;
+        }
+
+        // Track graph update interaction
+        if (this.analyticsCollector) {
+          const interactionType = this.determineInteractionType(updatePayload);
+          this.analyticsCollector.recordUserInteraction(
+            interactionType,
+            connectionInfo.documentId,
+            {
+              connectionId,
+              userId: connectionInfo.userId,
+              updateType: updatePayload.type,
+              nodeId: updatePayload.nodeId,
+              nodeType: updatePayload.nodeType,
+              component: 'graph_editor',
+              canvasPosition: updatePayload.position
+            }
+          );
         }
 
         // Initialize document if it doesn't exist
@@ -832,5 +903,34 @@ export class WebSocketServer extends EventEmitter {
     }
 
     return true;
+  }
+
+  /**
+   * Determine the analytics event type based on the graph update payload
+   */
+  private determineInteractionType(updatePayload: any): AnalyticsEventType {
+    switch (updatePayload.type) {
+      case 'node_created':
+      case 'add_node':
+        return AnalyticsEventType.NODE_CREATED;
+      case 'node_updated':
+      case 'update_node':
+        return AnalyticsEventType.NODE_UPDATED;
+      case 'node_deleted':
+      case 'delete_node':
+        return AnalyticsEventType.NODE_DELETED;
+      case 'connection_created':
+      case 'add_connection':
+        return AnalyticsEventType.CONNECTION_CREATED;
+      case 'connection_deleted':
+      case 'delete_connection':
+        return AnalyticsEventType.CONNECTION_DELETED;
+      case 'canvas_pan':
+      case 'canvas_zoom':
+      case 'canvas_interaction':
+        return AnalyticsEventType.CANVAS_INTERACTION;
+      default:
+        return AnalyticsEventType.CANVAS_INTERACTION;
+    }
   }
 }

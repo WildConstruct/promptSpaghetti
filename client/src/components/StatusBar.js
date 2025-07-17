@@ -1,4 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
+import React from 'react';
 export default function StatusBar({ errorCount }) {
     return (_jsx("div", { style: {
             height: 32,

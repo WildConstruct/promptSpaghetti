@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useCorrectionsStore, DEFAULT_CORRECTION_RULES, useCorrectionsEnabled } from './correctionsStore';
 import { WorkflowManager } from './components/WorkflowManager';
 import { NotificationSystem } from './components/NotificationSystem';

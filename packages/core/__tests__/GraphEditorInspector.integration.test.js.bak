@@ -1,6 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 /// <reference types="@testing-library/jest-dom" />
 import '@testing-library/jest-dom';
+import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 // @ts-ignore
 import userEvent from "@testing-library/user-event";

@@ -1,4 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+/**
+ * Extension Search Filter - Epic 8.4 Story 8.4.5
+ * Search and filter controls for extension manager
+ */
+import React from 'react';
 export const ExtensionSearchFilter = ({ searchQuery, onSearchChange, filterOptions, onFilterChange, viewMode }) => {
     const handleFilterChange = (key, value) => {
         onFilterChange({

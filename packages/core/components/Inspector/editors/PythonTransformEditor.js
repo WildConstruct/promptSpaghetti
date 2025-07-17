@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { TextFieldEditor } from "../TextFieldEditor";
 import { TextAreaEditor } from "../TextAreaEditor";
 import { SelectEditor } from "../SelectEditor";

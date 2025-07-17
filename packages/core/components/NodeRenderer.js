@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { memo } from "react";
+import React, { memo } from "react";
 import { Handle, Position } from "reactflow";
 export const NodeRenderer = memo(({ id, data, selected = false, onSelect, getNodeMeta, getCategoryColor, }) => {
     try {

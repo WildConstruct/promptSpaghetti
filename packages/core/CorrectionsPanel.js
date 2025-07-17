@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useCorrectionsStore, DEFAULT_CORRECTION_RULES, useCorrectionsEnabled } from './correctionsStore';
 export const CorrectionsPanel = ({ isOpen, onClose }) => {
     const isEnabled = useCorrectionsEnabled();

@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Extension Detail View - Epic 8.4 Story 8.4.5
  * Detailed view component for individual extensions
  */
-import { useState } from 'react';
+import React, { useState } from 'react';
 export const ExtensionDetailView = ({ extension, status, viewMode, onToggle, onUninstall, onUpdate, onConfigure, onInstall, onClose }) => {
     const [activeTab, setActiveTab] = useState('overview');
     const getExtensionIcon = (type) => {

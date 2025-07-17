@@ -1,5 +1,6 @@
 // server/src/engine.ts
 // Deterministic depth-first graph executor (Story 3.1)
+// Epic 13 - Enhanced with comprehensive analytics collection
 
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 import {
@@ -16,6 +17,12 @@ import {
   AdvancedExecutionUtils,
 } from '../../packages/core/runtime';
 
+// Epic 13 Analytics Integration
+import { AnalyticsCollector, AnalyticsEventType } from './analytics/AnalyticsCollector';
+import { AnalyticsDAO } from './database/analytics-dao';
+import { getDatabase } from './database/connection';
+import { v4 as uuidv4 } from 'uuid';
+
 // Import advanced nodes directly to avoid circular dependencies
 import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/WeightedAdvanced';
 import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional';
@@ -28,56 +35,231 @@ import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { BaseExtension, NodeExtension } from '../../packages/core/extensions/interfaces/ExtensionInterfaces';
 
+// Global analytics collector instance
+let analyticsCollector: AnalyticsCollector | null = null;
+let analyticsDAO: AnalyticsDAO | null = null;
+
+/**
+ * Initialize analytics collection for execution engine
+ */
+export function initializeAnalytics(): void {
+  try {
+    const db = getDatabase();
+    analyticsDAO = new AnalyticsDAO(db);
+    analyticsDAO.initializeSchema();
+    
+    analyticsCollector = new AnalyticsCollector({
+      enabled: process.env.ANALYTICS_ENABLED !== 'false',
+      sampleRate: parseFloat(process.env.ANALYTICS_SAMPLE_RATE || '1.0'),
+      privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true'
+    });
+
+    // Set up event storage handler
+    analyticsCollector.on('events_flushed', (events) => {
+      if (analyticsDAO) {
+        events.forEach((event: any) => analyticsDAO.storeEvent(event));
+      }
+    });
+
+    console.log('Analytics collection initialized for execution engine');
+  } catch (error) {
+    console.error('Failed to initialize analytics:', error);
+  }
+}
+
 /**
  * Execute a graph and return the output(s) from all Output nodes (ordered by id).
  * Automatically detects and supports both basic and advanced nodes.
+ * Epic 13 - Enhanced with comprehensive analytics collection.
  */
-export async function executeGraph(graph: Graph): Promise<string[]> {
-  // Check if graph contains advanced nodes
-  const hasAdvancedNodes = graph.nodes.some(node => isAdvancedNodeType(node.type));
+export async function executeGraph(graph: Graph, sessionId?: string, userId?: number): Promise<string[]> {
+  const graphId = graph.id || uuidv4();
+  const executionId = uuidv4();
+  const currentSessionId = sessionId || uuidv4();
+  const startTime = Date.now();
   
-  // Create appropriate execution context
-  const ctx = hasAdvancedNodes 
-    ? AdvancedExecutionUtils.enhanceContext({ 
-        variables: {}, 
-        seed: graph.seed ?? Date.now() 
-      })
-    : { variables: {}, seed: graph.seed ?? Date.now() } as ExecutionContext;
+  // Record graph execution start
+  if (analyticsCollector) {
+    analyticsCollector.recordGraphExecutionStart(
+      graphId,
+      graph.nodes.length,
+      graph.edges?.length || 0,
+      graph.seed
+    );
+  }
 
-  const nodeMap = new Map<string, Node>();
-  graph.nodes.forEach((n) => nodeMap.set(n.id, n));
+  try {
+    // Check if graph contains advanced nodes
+    const hasAdvancedNodes = graph.nodes.some(node => isAdvancedNodeType(node.type));
+    
+    // Create appropriate execution context
+    const ctx = hasAdvancedNodes 
+      ? AdvancedExecutionUtils.enhanceContext({ 
+          variables: {}, 
+          seed: graph.seed ?? Date.now() 
+        })
+      : { variables: {}, seed: graph.seed ?? Date.now() } as ExecutionContext;
 
-  const memo = new Map<string, any>();
+    const nodeMap = new Map<string, Node>();
+    graph.nodes.forEach((n) => nodeMap.set(n.id, n));
 
-  async function dfs(nodeId: string): Promise<any> {
-    if (memo.has(nodeId)) return memo.get(nodeId);
-    const node = nodeMap.get(nodeId);
-    if (!node) throw new Error(`Node ${nodeId} not found`);
+    const memo = new Map<string, any>();
 
-    // Resolve inputs first (depth-first)
-    const resolvedInputs: any[] = [];
-    if (node.inputs) {
-      for (const inId of node.inputs) {
-        resolvedInputs.push(await dfs(inId));
+    async function dfs(nodeId: string): Promise<any> {
+      if (memo.has(nodeId)) return memo.get(nodeId);
+      const node = nodeMap.get(nodeId);
+      if (!node) throw new Error(`Node ${nodeId} not found`);
+
+      // Record node execution start
+      const nodeStartTime = Date.now();
+      if (analyticsCollector) {
+        analyticsCollector.recordEvent({
+          id: uuidv4(),
+          type: AnalyticsEventType.NODE_EXECUTION_START,
+          timestamp: nodeStartTime,
+          sessionId: currentSessionId,
+          userId,
+          metadata: {
+            nodeId,
+            nodeType: node.type,
+            graphId,
+            executionId
+          }
+        });
+      }
+
+      try {
+        // Resolve inputs first (depth-first)
+        const resolvedInputs: any[] = [];
+        if (node.inputs) {
+          for (const inId of node.inputs) {
+            resolvedInputs.push(await dfs(inId));
+          }
+        }
+
+        // Instantiate runtime node per type
+        const runtime = createRuntime(node, resolvedInputs);
+        const result = await runtime.run(ctx as any); // Cast needed for context compatibility
+        memo.set(nodeId, result);
+
+        // Record successful node execution
+        const nodeEndTime = Date.now();
+        const executionTimeMs = nodeEndTime - nodeStartTime;
+        
+        if (analyticsCollector) {
+          analyticsCollector.recordNodeExecution(
+            nodeId,
+            node.type,
+            graphId,
+            executionTimeMs,
+            true, // success
+            JSON.stringify(resolvedInputs).length,
+            JSON.stringify(result).length
+          );
+        }
+
+        return result;
+      } catch (error) {
+        // Record failed node execution
+        const nodeEndTime = Date.now();
+        const executionTimeMs = nodeEndTime - nodeStartTime;
+        
+        if (analyticsCollector) {
+          analyticsCollector.recordNodeExecution(
+            nodeId,
+            node.type,
+            graphId,
+            executionTimeMs,
+            false, // success
+            undefined,
+            undefined,
+            error instanceof Error ? error.message : String(error)
+          );
+        }
+        
+        throw error;
       }
     }
 
-    // Instantiate runtime node per type
-    const runtime = createRuntime(node, resolvedInputs);
-    const result = await runtime.run(ctx as any); // Cast needed for context compatibility
-    memo.set(nodeId, result);
-    return result;
-  }
-
-  // Evaluate all output nodes in insertion order
-  const outputs: string[] = [];
-  for (const n of graph.nodes) {
-    if (n.type === 'Output') {
-      const value = await dfs(n.id);
-      outputs.push(value);
+    // Evaluate all output nodes in insertion order
+    const outputs: string[] = [];
+    for (const n of graph.nodes) {
+      if (n.type === 'Output') {
+        const value = await dfs(n.id);
+        outputs.push(value);
+      }
     }
+
+    // Record successful graph execution
+    const endTime = Date.now();
+    const executionTimeMs = endTime - startTime;
+    const totalOutputLength = outputs.reduce((sum, output) => sum + output.length, 0);
+
+    if (analyticsCollector) {
+      analyticsCollector.recordGraphExecutionComplete(
+        graphId,
+        executionTimeMs,
+        totalOutputLength,
+        graph.nodes.length,
+        graph.edges?.length || 0
+      );
+    }
+
+    // Store graph execution record in database
+    if (analyticsDAO) {
+      analyticsDAO.storeGraphExecution({
+        executionId,
+        graphId,
+        sessionId: currentSessionId,
+        userId,
+        startTime,
+        endTime,
+        executionTimeMs,
+        nodeCount: graph.nodes.length,
+        connectionCount: graph.edges?.length || 0,
+        success: true,
+        outputLength: totalOutputLength,
+        seedValue: graph.seed
+      });
+    }
+
+    return outputs;
+
+  } catch (error) {
+    // Record failed graph execution
+    const endTime = Date.now();
+    const executionTimeMs = endTime - startTime;
+
+    if (analyticsCollector) {
+      analyticsCollector.recordGraphExecutionError(
+        graphId,
+        error instanceof Error ? error.message : String(error),
+        graph.nodes.length,
+        graph.edges?.length || 0,
+        executionTimeMs
+      );
+    }
+
+    // Store failed graph execution record in database
+    if (analyticsDAO) {
+      analyticsDAO.storeGraphExecution({
+        executionId,
+        graphId,
+        sessionId: currentSessionId,
+        userId,
+        startTime,
+        endTime,
+        executionTimeMs,
+        nodeCount: graph.nodes.length,
+        connectionCount: graph.edges?.length || 0,
+        success: false,
+        errorMessage: error instanceof Error ? error.message : String(error),
+        seedValue: graph.seed
+      });
+    }
+
+    throw error;
   }
-  return outputs;
 }
 
 /**
