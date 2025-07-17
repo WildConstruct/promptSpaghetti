@@ -1,6 +1,6 @@
 # Epic 11 - Authentication & User Management Implementation Plan
 
-This document provides granular implementation plans for each story in Epic 11, breaking down tasks into specific, actionable items for development.
+This document provides granular implementation plans for each story in Epic 11, breaking down tasks into specific, actionable items for development. For architectural rationale and design details, see [Epic 11 Detailed Design](epic11details.md).
 
 ## Story 11.1 - Authentication Foundation
 

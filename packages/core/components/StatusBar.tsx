@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Edge, Node } from "reactflow";
 import { ValidationError } from "../validation";
+import { WebSocketStatusIcon, WebSocketDetails } from "./WebSocketStatus";
+import { ConnectionState } from "../websocket/WebSocketClient";
 
 interface StatusBarProps {
   statusMessage: string;
@@ -14,6 +16,12 @@ interface StatusBarProps {
   statsOpen?: boolean;
   onExtensions?: () => void;
   extensionsOpen?: boolean;
+  // WebSocket props
+  connectionState?: ConnectionState;
+  queuedMessages?: number;
+  onClearQueue?: () => void;
+  onReconnect?: () => void;
+  onDisconnect?: () => void;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
@@ -28,8 +36,29 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   statsOpen = false,
   onExtensions,
   extensionsOpen = false,
+  connectionState,
+  queuedMessages = 0,
+  onClearQueue,
+  onReconnect,
+  onDisconnect,
 }) => {
   const errorCount = errors.length;
+  const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
+  const wsDetailsRef = useRef<HTMLDivElement>(null);
+
+  // Close WebSocket details when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wsDetailsRef.current && !wsDetailsRef.current.contains(event.target as Node)) {
+        setShowWebSocketDetails(false);
+      }
+    };
+
+    if (showWebSocketDetails) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showWebSocketDetails]);
 
   return (
     <div style={{ 
@@ -148,6 +177,39 @@ export const StatusBar: React.FC<StatusBarProps> = ({
               </span>
             ))}
           </span>
+        )}
+      </div>
+
+      {/* Right side - WebSocket status */}
+      <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+        {connectionState && (
+          <>
+            <WebSocketStatusIcon 
+              connectionState={connectionState}
+              onClick={() => setShowWebSocketDetails(!showWebSocketDetails)}
+            />
+            
+            {showWebSocketDetails && (
+              <div 
+                ref={wsDetailsRef}
+                style={{
+                  position: 'absolute',
+                  bottom: '100%',
+                  right: 0,
+                  marginBottom: 8,
+                  zIndex: 1000
+                }}
+              >
+                <WebSocketDetails
+                  connectionState={connectionState}
+                  queuedMessages={queuedMessages}
+                  onClearQueue={onClearQueue}
+                  onReconnect={onReconnect}
+                  onDisconnect={onDisconnect}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

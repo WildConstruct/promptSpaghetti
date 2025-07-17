@@ -131,7 +131,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
         <input
-          type=\"checkbox\"
+          type="checkbox"
           checked={selectedRules.has(rule.id)}
           onChange={() => toggleRuleSelection(rule.id)}
           style={{ cursor: 'pointer' }}
@@ -471,7 +471,7 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
               <textarea
                 value={deprecationReason}
                 onChange={(e) => setDeprecationReason(e.target.value)}
-                placeholder=\"Enter reason for deprecation...\"
+                placeholder="Enter reason for deprecation..."
                 style={{
                   width: '100%',
                   height: '80px',

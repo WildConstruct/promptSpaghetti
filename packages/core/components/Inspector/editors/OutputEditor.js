@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from "react";
 import { TextFieldEditor } from "../TextFieldEditor";
-import { TextAreaEditor } from "../TextAreaEditor";
+import { EnhancedTextAreaEditor } from "../EnhancedTextAreaEditor";
 import { SelectEditor } from "../SelectEditor";
 import { CollapsibleSection } from "../CollapsibleSection";
 const OUTPUT_FORMATS = [
@@ -46,7 +46,7 @@ export const OutputEditor = (props) => {
         const newTransformations = transformations.filter((_, i) => i !== index);
         onChange({ transformations: newTransformations });
     };
-    return (_jsxs("div", { className: "output-editor", children: [_jsxs(CollapsibleSection, { title: "Basic Properties", collapsed: basicPropsCollapsed, onToggle: () => setBasicPropsCollapsed(!basicPropsCollapsed), children: [_jsx(TextFieldEditor, { label: "Label", value: label, fieldKey: "label", zodType: null, onChange: (value) => handleFieldChange("label", value), placeholder: "Enter output label..." }), _jsx(TextAreaEditor, { label: "Output Template", value: template, fieldKey: "template", zodType: null, onChange: (value) => handleFieldChange("template", value), placeholder: "Enter output template... Use {input} to reference connected node output.", rows: 4, showWordCount: true, autoResize: true })] }), _jsxs(CollapsibleSection, { title: "Output Configuration", collapsed: outputConfigCollapsed, onToggle: () => setOutputConfigCollapsed(!outputConfigCollapsed), children: [_jsx(SelectEditor, { label: "Format", value: format, fieldKey: "format", options: OUTPUT_FORMATS, zodType: null, onChange: (value) => handleFieldChange("format", value) }), _jsx(SelectEditor, { label: "Destination", value: destination, fieldKey: "destination", options: OUTPUT_DESTINATIONS, zodType: null, onChange: (value) => handleFieldChange("destination", value) }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { style: {
+    return (_jsxs("div", { className: "output-editor", children: [_jsxs(CollapsibleSection, { title: "Basic Properties", collapsed: basicPropsCollapsed, onToggle: () => setBasicPropsCollapsed(!basicPropsCollapsed), children: [_jsx(TextFieldEditor, { label: "Label", value: label, fieldKey: "label", zodType: null, onChange: (value) => handleFieldChange("label", value), placeholder: "Enter output label..." }), _jsx(EnhancedTextAreaEditor, { label: "Output Template", value: template, fieldKey: "template", zodType: null, onChange: (value) => handleFieldChange("template", value), placeholder: "Enter output template... Use {input} to reference connected node output.", rows: 4, showWordCount: true, autoResize: true, enableInlineCorrections: true, showCorrectionHighlights: true })] }), _jsxs(CollapsibleSection, { title: "Output Configuration", collapsed: outputConfigCollapsed, onToggle: () => setOutputConfigCollapsed(!outputConfigCollapsed), children: [_jsx(SelectEditor, { label: "Format", value: format, fieldKey: "format", options: OUTPUT_FORMATS, zodType: null, onChange: (value) => handleFieldChange("format", value) }), _jsx(SelectEditor, { label: "Destination", value: destination, fieldKey: "destination", options: OUTPUT_DESTINATIONS, zodType: null, onChange: (value) => handleFieldChange("destination", value) }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { style: {
                                     display: "flex",
                                     alignItems: "center",
                                     gap: 8,

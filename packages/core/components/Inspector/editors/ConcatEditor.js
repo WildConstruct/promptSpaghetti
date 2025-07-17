@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useState } from "react";
 import { TextFieldEditor } from "../TextFieldEditor";
-import { TextAreaEditor } from "../TextAreaEditor";
+import { EnhancedTextAreaEditor } from "../EnhancedTextAreaEditor";
 import { SelectEditor } from "../SelectEditor";
 import { CollapsibleSection } from "../CollapsibleSection";
 const SEPARATOR_PRESETS = [
@@ -90,7 +90,7 @@ export const ConcatEditor = (props) => {
                                             width: 14,
                                             height: 14,
                                             cursor: "pointer",
-                                        } }), "Preserve input order"] })] })] }), _jsxs(CollapsibleSection, { title: "Wrapping", collapsed: wrappingCollapsed, onToggle: () => setWrappingCollapsed(!wrappingCollapsed), children: [_jsx(TextAreaEditor, { label: "Prefix", value: prefix, fieldKey: "prefix", zodType: null, onChange: (value) => handleFieldChange("prefix", value), placeholder: "Text to add before concatenated result...", rows: 2 }), _jsx(TextAreaEditor, { label: "Suffix", value: suffix, fieldKey: "suffix", zodType: null, onChange: (value) => handleFieldChange("suffix", value), placeholder: "Text to add after concatenated result...", rows: 2 })] }), _jsx(CollapsibleSection, { title: "Preview", collapsed: previewCollapsed, onToggle: () => setPreviewCollapsed(!previewCollapsed), children: _jsxs("div", { style: {
+                                        } }), "Preserve input order"] })] })] }), _jsxs(CollapsibleSection, { title: "Wrapping", collapsed: wrappingCollapsed, onToggle: () => setWrappingCollapsed(!wrappingCollapsed), children: [_jsx(EnhancedTextAreaEditor, { label: "Prefix", value: prefix, fieldKey: "prefix", zodType: null, onChange: (value) => handleFieldChange("prefix", value), placeholder: "Text to add before concatenated result...", rows: 2, enableInlineCorrections: true, showCorrectionHighlights: true }), _jsx(EnhancedTextAreaEditor, { label: "Suffix", value: suffix, fieldKey: "suffix", zodType: null, onChange: (value) => handleFieldChange("suffix", value), placeholder: "Text to add after concatenated result...", rows: 2, enableInlineCorrections: true, showCorrectionHighlights: true })] }), _jsx(CollapsibleSection, { title: "Preview", collapsed: previewCollapsed, onToggle: () => setPreviewCollapsed(!previewCollapsed), children: _jsxs("div", { style: {
                         background: "#1a202c",
                         border: "1px solid #4a5568",
                         borderRadius: 4,

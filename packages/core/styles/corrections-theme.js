@@ -1,4 +1,4 @@
-// Theme configuration for corrections UI components
+import { jsx as _jsx } from "react/jsx-runtime";
 export const darkTheme = {
     colors: {
         primary: '#63b3ed',
@@ -121,16 +121,8 @@ export const CorrectionsThemeProvider = ({ children, initialTheme = 'dark' }) =>
     const toggleTheme = () => {
         setIsDark(!isDark);
     };
-    return value = {};
-    {
-        theme, isDark, toggleTheme;
-    }
+    return (_jsx(CorrectionsThemeContext.Provider, { value: { theme, isDark, toggleTheme }, children: children }));
 };
- >
-    { children }
-    < /CorrectionsThemeContext.Provider>;
-;
-;
 export const useCorrectionsTheme = () => {
     const context = useContext(CorrectionsThemeContext);
     if (!context) {

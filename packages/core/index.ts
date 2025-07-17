@@ -42,6 +42,58 @@ export { EnhancedTextAreaEditor } from './components/Inspector/EnhancedTextAreaE
 export { NotificationSystem } from './components/NotificationSystem';
 export * from './correctionsStore';
 
-// Epic 8.4 - Extension System Architecture exports
-export * from './extensions';
+// Epic 8.4 - Extension System Architecture exports (avoid conflicts)
+export { ExtensionLifecycleManager } from './extensions/ExtensionLifecycleManager';
+export { ExtensionPointRegistry } from './extensions/ExtensionPointRegistry';
+export { 
+  BaseExtension, 
+  ExtensionHealthStatus, 
+  ExtensionContext, 
+  ExtensionLogger,
+  ExtensionStorage,
+  ExtensionEventEmitter,
+  ExtensionRuntime,
+  ExtensionUIContext,
+  ExtensionAPIContext,
+  SystemInfo,
+  PerformanceMetrics,
+  ExtensionLifecycleState,
+  ExtensionErrorType,
+  ExtensionError,
+  ExtensionValidationResult,
+  ExtensionManifestSchema,
+  ExtensionManifest
+} from './extensions/interfaces/ExtensionInterfaces';
+export { 
+  NodeExtension,
+  NodeCategory
+  // Skip NodeDefinition to avoid conflict 
+} from './extensions/interfaces/NodeExtension';
+export * from './extensions/interfaces/UIExtension';
+export * from './extensions/interfaces/TransformExtension';
+export * from './extensions/interfaces/StorageExtension';
 export * from './components/ExtensionManager';
+
+// Epic 9.1.2 - Collaborative Editing exports
+export { GraphCRDTAdapter, createCollaborativeGraph } from './collaboration/GraphCRDTAdapter';
+export type { CollaborativeGraphOptions } from './collaboration/GraphCRDTAdapter';
+export { 
+  useCollaborativeGraphStore,
+  useCollaborationEnabled,
+  useConnectedUsers,
+  useConnectionStatus,
+  useLocalPresence,
+  useCollaborativeGraph,
+  useCollaborativeActions
+} from './collaboration/collaborativeGraphStore';
+export type { UserPresence, CollaborativeGraphState } from './collaboration/collaborativeGraphStore';
+export { 
+  useCollaborativeReactFlow,
+  useNodeCollaborators,
+  useCollaborationStatus
+} from './collaboration/useCollaborativeReactFlow';
+export { 
+  CollaborativePresence,
+  CollaborationStatus,
+  UserAvatars
+} from './collaboration/CollaborativePresence';

@@ -11,6 +11,8 @@ import { useGraphStore } from "./graphStore";
 import { PreviewModal } from "./PreviewModal";
 import { usePreviewSeeds } from "./usePreviewSeeds";
 import { ResponsiveCorrectionsPanel } from "./ResponsiveCorrectionsPanel";
+import { CorrectionsStatsDashboard } from "./components/CorrectionsStatsDashboard";
+import { ExtensionManagerPanel } from "./components/ExtensionManager/ExtensionManagerPanel";
 import { useCorrectionsEnabled } from "./correctionsStore";
 import { useValidation } from "./hooks/useValidation";
 import { useAutosave } from "./hooks/useAutosave";
@@ -98,6 +100,8 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection, }) =
     const [selectedNodeId, setSelectedNodeId] = useState(null);
     const [paletteCollapsed, setPaletteCollapsed] = useState(false);
     const [correctionsOpen, setCorrectionsOpen] = useState(false);
+    const [statsOpen, setStatsOpen] = useState(false);
+    const [extensionsOpen, setExtensionsOpen] = useState(false);
     const [showControls, setShowControls] = useState(false);
     const [dragPreview, setDragPreview] = useState(null);
     const correctionsEnabled = useCorrectionsEnabled();
@@ -292,7 +296,7 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection, }) =
                         document.body.removeChild(a);
                         URL.revokeObjectURL(url);
                     }, 0);
-                }, onCorrections: () => setCorrectionsOpen(true), correctionsEnabled: correctionsEnabled, correctionsOpen: correctionsOpen }), _jsx(PreviewModal, { open: previewOpen, loading: previewLoading, error: previewError, results: previewResults, onClose: () => {
+                }, onCorrections: () => setCorrectionsOpen(true), correctionsEnabled: correctionsEnabled, correctionsOpen: correctionsOpen, onStats: () => setStatsOpen(true), statsOpen: statsOpen, onExtensions: () => setExtensionsOpen(true), extensionsOpen: extensionsOpen }), _jsx(PreviewModal, { open: previewOpen, loading: previewLoading, error: previewError, results: previewResults, onClose: () => {
                     cancelPreview();
                     setPreviewOpen(false);
                     setHighlightEdgeIds(new Set());
@@ -311,7 +315,7 @@ const GraphEditorInner = ({ initialNodes, initialEdges, validateConnection, }) =
                     else {
                         setHighlightNodeIds(new Set());
                     }
-                } }), _jsx(ResponsiveCorrectionsPanel, { isOpen: correctionsOpen, onClose: () => setCorrectionsOpen(false) })] }));
+                } }), _jsx(ResponsiveCorrectionsPanel, { isOpen: correctionsOpen, onClose: () => setCorrectionsOpen(false) }), _jsx(CorrectionsStatsDashboard, { isOpen: statsOpen, onClose: () => setStatsOpen(false) }), extensionsOpen && (_jsx(ExtensionManagerPanel, { onClose: () => setExtensionsOpen(false) }))] }));
 };
 // Wrapper component with ReactFlowProvider
 export const GraphEditor = (props) => {

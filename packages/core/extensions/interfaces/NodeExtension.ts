@@ -11,9 +11,11 @@ import { RuntimeNode, AdvancedRuntimeNode, ExecutionContext, AdvancedExecutionCo
 export interface NodeExtension extends BaseExtension {
   readonly extensionType: 'node';
   
-  // Node registration
+  // Node registration (supporting both legacy and new method names)
   getNodeDefinitions(): NodeDefinition[];
+  getNodeTypes(): NodeDefinition[]; // Legacy method name used by engine
   createNodeInstance(nodeType: string, nodeId: string, config: any): RuntimeNode<any>;
+  createNode(nodeType: string, nodeId: string, config: any): RuntimeNode<any>; // Legacy method name used by engine
   
   // Schema validation
   validateNodeConfig(nodeType: string, config: any): ExtensionValidationResult;

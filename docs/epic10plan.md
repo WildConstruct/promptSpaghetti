@@ -1,6 +1,6 @@
 # Epic 10 - Prompt Targeting System Implementation Plan
 
-This document provides granular implementation plans for each story in Epic 10, breaking down tasks into specific, actionable items for development.
+This document provides granular implementation plans for each story in Epic 10, breaking down tasks into specific, actionable items for development. For architectural rationale and design details, see [Epic 10 Detailed Design](epic10details.md).
 
 ## Story 10.1 - Prompt Targeting System Design
 

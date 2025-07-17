@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export const StatusBar = ({ statusMessage, errors, onPreview, onSaveJson, onCorrections, correctionsEnabled = false, correctionsOpen = false, }) => {
+export const StatusBar = ({ statusMessage, errors, onPreview, onSaveJson, onCorrections, correctionsEnabled = false, correctionsOpen = false, onStats, statsOpen = false, onExtensions, extensionsOpen = false, }) => {
     const errorCount = errors.length;
     return (_jsx("div", { style: {
             position: "absolute",
@@ -40,5 +40,23 @@ export const StatusBar = ({ statusMessage, errors, onPreview, onSaveJson, onCorr
                         borderRadius: 4,
                         fontWeight: 500,
                         cursor: 'pointer'
-                    }, children: "Corrections" })), errorCount === 0 ? "No errors" : `${errorCount} error${errorCount > 1 ? "s" : ""}`, errorCount > 0 && (_jsx("span", { style: { marginLeft: 16 }, children: errors.map((err) => (_jsx("span", { style: { color: "#f00", marginRight: 8 }, title: err.message, children: err.message }, err.edgeId))) }))] }) }));
+                    }, children: "Corrections" })), correctionsEnabled && onStats && (_jsx("button", { onClick: onStats, style: {
+                        marginRight: 16,
+                        padding: '6px 16px',
+                        background: statsOpen ? '#4a5568' : '#eee',
+                        color: statsOpen ? '#fff' : '#23272f',
+                        border: '1px solid #ccc',
+                        borderRadius: 4,
+                        fontWeight: 500,
+                        cursor: 'pointer'
+                    }, children: "\uD83D\uDCCA Stats" })), onExtensions && (_jsx("button", { onClick: onExtensions, style: {
+                        marginRight: 16,
+                        padding: '6px 16px',
+                        background: extensionsOpen ? '#4a5568' : '#eee',
+                        color: extensionsOpen ? '#fff' : '#23272f',
+                        border: '1px solid #ccc',
+                        borderRadius: 4,
+                        fontWeight: 500,
+                        cursor: 'pointer'
+                    }, children: "\uD83E\uDDE9 Extensions" })), errorCount === 0 ? "No errors" : `${errorCount} error${errorCount > 1 ? "s" : ""}`, errorCount > 0 && (_jsx("span", { style: { marginLeft: 16 }, children: errors.map((err) => (_jsx("span", { style: { color: "#f00", marginRight: 8 }, title: err.message, children: err.message }, err.edgeId))) }))] }) }));
 };

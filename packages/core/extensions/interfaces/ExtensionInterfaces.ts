@@ -14,6 +14,7 @@ export interface BaseExtension {
   readonly author: string;
   readonly dependencies: string[];
   readonly permissions: string[];
+  readonly extensionType: string; // Extension type identifier (e.g., 'node', 'ui', 'transform', 'storage')
   
   // Lifecycle methods
   initialize(): Promise<void>;
@@ -356,3 +357,9 @@ export const ExtensionManifestSchema = z.object({
 });
 
 export type ExtensionManifest = z.infer<typeof ExtensionManifestSchema>;
+
+// Re-export specific extension types
+export { NodeExtension, NodeDefinition, NodeCategory } from './NodeExtension';
+export { UIExtension } from './UIExtension';
+export { TransformExtension } from './TransformExtension';
+export { StorageExtension } from './StorageExtension';

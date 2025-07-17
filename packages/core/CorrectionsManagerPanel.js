@@ -1,9 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useCorrectionsStore, DEFAULT_CORRECTION_RULES, useCorrectionsEnabled } from './correctionsStore';
+import { WorkflowManager } from './components/WorkflowManager';
+import { NotificationSystem } from './components/NotificationSystem';
 export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
     const isEnabled = useCorrectionsEnabled();
-    const { rules, addRule, updateRule, deleteRule, toggleRule, reorderRules, clearAllRules, applyCorrections, } = useCorrectionsStore();
+    const { rules, addRule, updateRule, deleteRule, toggleRule, reorderRules, clearAllRules, applyCorrections, getDraftRules, getPublishedRules, approveRule, deprecateRule, notifications, } = useCorrectionsStore();
     // UI State
     const [editingRule, setEditingRule] = useState(null);
     const [selectedRules, setSelectedRules] = useState(new Set());
@@ -14,6 +16,7 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [showImportExport, setShowImportExport] = useState(false);
     const [showStats, setShowStats] = useState(false);
+    const [showWorkflow, setShowWorkflow] = useState(false);
     const [testText, setTestText] = useState('');
     // New rule form state
     const [newRule, setNewRule] = useState({
@@ -24,6 +27,8 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
         isRegex: false,
         isActive: true,
         priority: rules.length,
+        category: '',
+        tags: [],
     });
     // Import/Export state
     const [importContent, setImportContent] = useState('');
@@ -66,6 +71,15 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
                 break;
             case 'text':
                 filtered = filtered.filter(rule => !rule.isRegex);
+                break;
+            case 'draft':
+                filtered = filtered.filter(rule => rule.status === 'draft');
+                break;
+            case 'published':
+                filtered = filtered.filter(rule => rule.status === 'published');
+                break;
+            case 'deprecated':
+                filtered = filtered.filter(rule => rule.status === 'deprecated');
                 break;
         }
         // Apply sorting
@@ -271,7 +285,7 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
                                             border: '1px solid #444',
                                             borderRadius: '4px',
                                             fontSize: '12px',
-                                        }, children: [_jsx("option", { value: "all", children: "All Rules" }), _jsx("option", { value: "active", children: "Active" }), _jsx("option", { value: "inactive", children: "Inactive" }), _jsx("option", { value: "regex", children: "Regex" }), _jsx("option", { value: "text", children: "Text" })] }), _jsxs("select", { value: sortType, onChange: (e) => setSortType(e.target.value), style: {
+                                        }, children: [_jsx("option", { value: "all", children: "All Rules" }), _jsx("option", { value: "active", children: "Active" }), _jsx("option", { value: "inactive", children: "Inactive" }), _jsx("option", { value: "regex", children: "Regex" }), _jsx("option", { value: "text", children: "Text" }), _jsx("option", { value: "draft", children: "Draft" }), _jsx("option", { value: "published", children: "Published" }), _jsx("option", { value: "deprecated", children: "Deprecated" })] }), _jsxs("select", { value: sortType, onChange: (e) => setSortType(e.target.value), style: {
                                             padding: '6px 8px',
                                             background: '#2a2e37',
                                             color: '#fff',
@@ -333,7 +347,29 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
                                             borderRadius: '4px',
                                             fontSize: '12px',
                                             cursor: 'pointer',
-                                        }, children: "Stats" })] })] }), showImportExport && (_jsxs("div", { style: {
+                                        }, children: "Stats" }), _jsxs("button", { onClick: () => setShowWorkflow(!showWorkflow), style: {
+                                            padding: '6px 12px',
+                                            background: '#63b3ed',
+                                            color: '#fff',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            fontSize: '12px',
+                                            cursor: 'pointer',
+                                            position: 'relative',
+                                        }, children: ["Workflow", getDraftRules().length > 0 && (_jsx("span", { style: {
+                                                    position: 'absolute',
+                                                    top: '-4px',
+                                                    right: '-4px',
+                                                    background: '#fbb040',
+                                                    color: '#1a202c',
+                                                    borderRadius: '50%',
+                                                    width: '16px',
+                                                    height: '16px',
+                                                    fontSize: '10px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                }, children: getDraftRules().length }))] })] })] }), showImportExport && (_jsxs("div", { style: {
                             padding: '16px',
                             background: '#1e2228',
                             borderBottom: '1px solid #444',
@@ -456,7 +492,17 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
                                                                 borderRadius: '2px',
                                                                 fontSize: '10px',
                                                                 fontWeight: 500
-                                                            }, children: "REGEX" }))] }), _jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [_jsx("button", { onClick: () => setEditingRule(rule), style: {
+                                                            }, children: "REGEX" })), rule.status && (_jsx("span", { style: {
+                                                                background: rule.status === 'draft' ? '#fbb040' :
+                                                                    rule.status === 'published' ? '#68d391' :
+                                                                        rule.status === 'deprecated' ? '#e53e3e' : '#a0aec0',
+                                                                color: '#1a202c',
+                                                                padding: '2px 6px',
+                                                                borderRadius: '2px',
+                                                                fontSize: '10px',
+                                                                fontWeight: 500,
+                                                                marginLeft: '4px'
+                                                            }, children: rule.status.toUpperCase() }))] }), _jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [_jsx("button", { onClick: () => setEditingRule(rule), style: {
                                                                 background: 'none',
                                                                 border: 'none',
                                                                 color: '#63b3ed',
@@ -598,5 +644,5 @@ export const CorrectionsManagerPanel = ({ isOpen, onClose }) => {
                                                 flex: 1,
                                                 fontSize: '14px',
                                                 fontWeight: 500,
-                                            }, children: "Cancel" })] })] })] }) }))] }));
+                                            }, children: "Cancel" })] })] })] }) })), _jsx(WorkflowManager, { isOpen: showWorkflow, onClose: () => setShowWorkflow(false) }), _jsx(NotificationSystem, { position: "top-right", maxVisible: 3, autoHideDuration: 5000 })] }));
 };

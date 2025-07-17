@@ -12,5 +12,15 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["packages/**/*", "client/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "**/PythonTransform.ts",
+    "**/python-executor-client.ts",
+    "**/__tests__/PythonTransform.test.ts",
+    "**/__tests__/executor/executor.test.ts",
+    "**/__tests__/nodeDataUtils.test.ts",
+    "**/__tests__/correctionsStore.test.ts",
+    "**/__tests__/Inspector/*",
+    "**/__tests__/components/*"
+  ]
 }

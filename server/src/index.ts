@@ -6,6 +6,8 @@ import { validateGraph } from './graphValidator';
 import { initDatabase, healthCheck } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
+import { WebSocketServer } from './websocket/WebSocketServer';
+import { WSServerConfig } from './websocket/types';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -80,6 +82,20 @@ const server = Fastify({
   logger: true
 });
 
+// WebSocket server configuration
+const wsConfig: WSServerConfig = {
+  port: process.env.WS_PORT ? parseInt(process.env.WS_PORT) : 8001,
+  heartbeatInterval: 30000, // 30 seconds
+  connectionTimeout: 60000, // 60 seconds
+  maxConnections: 1000,
+  enableAuthentication: process.env.ENABLE_WS_AUTH === 'true',
+  jwtSecret: process.env.JWT_SECRET,
+  corsOrigins: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['*']
+};
+
+// Create WebSocket server
+const wsServer = new WebSocketServer(wsConfig);
+
 // Initialize database on startup
 try {
   initDatabase();
@@ -117,9 +133,46 @@ server.get('/', async (request, reply) => {
 // Health check endpoint
 server.get('/health', async (request, reply) => {
   const dbHealthy = healthCheck();
+  const wsMetrics = wsServer.getHealthMetrics();
+  const wsHealthy = wsMetrics.totalConnections >= 0; // Basic check that WS server is responding
+  
   return { 
-    status: dbHealthy ? 'healthy' : 'unhealthy',
+    status: (dbHealthy && wsHealthy) ? 'healthy' : 'unhealthy',
     database: dbHealthy ? 'connected' : 'disconnected',
+    websocket: {
+      status: wsHealthy ? 'healthy' : 'unhealthy',
+      connections: wsMetrics.totalConnections,
+      activeDocuments: wsMetrics.activeDocuments,
+      uptime: wsMetrics.uptime
+    },
+    timestamp: new Date().toISOString()
+  };
+});
+
+// WebSocket status endpoint
+server.get('/ws/status', async (request, reply) => {
+  const metrics = wsServer.getHealthMetrics();
+  const sessions = wsServer.getDocumentSessions();
+  const presenceStats = wsServer.getPresenceStats();
+  
+  return {
+    status: 'running',
+    metrics,
+    sessions,
+    presence: presenceStats,
+    timestamp: new Date().toISOString()
+  };
+});
+
+// Get users in a specific document
+server.get('/ws/documents/:documentId/users', async (request, reply) => {
+  const { documentId } = request.params as { documentId: string };
+  const users = wsServer.getDocumentUsers(documentId);
+  
+  return {
+    documentId,
+    users,
+    count: users.length,
     timestamp: new Date().toISOString()
   };
 });
@@ -232,10 +285,46 @@ const start = async () => {
     const address = server.server.address();
     const portInfo = typeof address === 'string' ? address : address?.port || port;
     console.log(`API listening at ${portInfo}`);
+
+    // Start WebSocket server
+    try {
+      await wsServer.start();
+      console.log(`WebSocket server started on port ${wsConfig.port}`);
+      
+      // Set up WebSocket event handlers
+      wsServer.on('graph_update', (documentId, updatePayload, connectionInfo) => {
+        console.log(`Graph update for document ${documentId} by user ${connectionInfo.userId}`);
+        // TODO: Implement CRDT persistence here when CRDT integration is ready
+      });
+
+      wsServer.on('error', (error) => {
+        console.error('WebSocket server error:', error);
+      });
+
+    } catch (wsError) {
+      console.error('Failed to start WebSocket server:', wsError);
+      // Continue without WebSocket functionality for now
+    }
+
   } catch (err) {
     server.log.error(err);
     process.exit(1);
   }
 };
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  console.log('Received SIGTERM, shutting down gracefully');
+  await wsServer.stop();
+  await server.close();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  console.log('Received SIGINT, shutting down gracefully');
+  await wsServer.stop();
+  await server.close();
+  process.exit(0);
+});
 
 start();

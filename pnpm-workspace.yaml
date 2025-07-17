@@ -3,3 +3,4 @@ packages:
   - 'server'
   - 'packages/core'
   - 'packages/cli'
+  - 'packages/crdt-research'

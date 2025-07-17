@@ -356,7 +356,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
               defaultEdgeOptions={{
                 type: 'step',
                 style: { stroke: '#666', strokeWidth: 2 },
-                markerEnd: { type: 'arrowclosed', color: '#666' }
+                markerEnd: { type: 'arrow', color: '#666' }
               }}
               // Default zoom/pan settings
               minZoom={0.1}
@@ -480,10 +480,11 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
           isOpen={statsOpen}
           onClose={() => setStatsOpen(false)}
         />
-        <ExtensionManagerPanel
-          isOpen={extensionsOpen}
-          onClose={() => setExtensionsOpen(false)}
-        />
+        {extensionsOpen && (
+          <ExtensionManagerPanel
+            onClose={() => setExtensionsOpen(false)}
+          />
+        )}
       </div>
   );
 };

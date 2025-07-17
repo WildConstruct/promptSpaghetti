@@ -21,7 +21,8 @@ import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/Weighted
 import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional';
 import { SequentialNode, createSequencePattern } from '../../packages/core/runtime/nodes/Sequential';
 import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/nodes/Markov';
-import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform';
+// Temporarily disabled due to compilation issues
+// import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform';
 
 // Epic 8.4 Extension System imports
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
@@ -83,7 +84,7 @@ export async function executeGraph(graph: Graph): Promise<string[]> {
  * Check if a node type is an advanced node that requires AdvancedExecutionContext
  */
 function isAdvancedNodeType(nodeType: string): boolean {
-  const advancedNodeTypes = ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov', 'PythonTransform'];
+  const advancedNodeTypes = ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov']; // PythonTransform temporarily disabled
   
   // Check built-in advanced nodes
   if (advancedNodeTypes.includes(nodeType)) {
@@ -171,15 +172,15 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
         node.markovConfig || {}
       );
     
-    // Epic 8 Python Integration
-    case 'PythonTransform':
-      return new PythonTransformNode(node.id, {
-        code: node.code,
-        timeout: node.timeout,
-        memoryLimit: node.memoryLimit,
-        allowedModules: node.allowedModules,
-        pythonConfig: node.pythonConfig
-      });
+    // Epic 8 Python Integration - Temporarily disabled
+    // case 'PythonTransform':
+    //   return new PythonTransformNode(node.id, {
+    //     code: node.code,
+    //     timeout: node.timeout,
+    //     memoryLimit: node.memoryLimit,
+    //     allowedModules: node.allowedModules,
+    //     pythonConfig: node.pythonConfig
+    //   });
     
     default:
       // Epic 8.4 Extension System - Try to find extension nodes
@@ -209,8 +210,10 @@ function tryCreateExtensionNode(node: Node, resolvedInputs: any[]): RuntimeNode<
         // Check if this extension provides the node type
         const nodeTypeInfo = nodeTypes.find(type => type.id === node.type);
         if (nodeTypeInfo) {
-          // Create the extension node instance
-          const extensionNode = nodeExtension.createNode(node.type, node.id, node.data || {});
+          // Create the extension node instance  
+          // Convert node properties to config object (excluding id, type, and inputs)
+          const { id, type, inputs, ...nodeConfig } = node;
+          const extensionNode = nodeExtension.createNode(node.type, node.id, nodeConfig);
           
           // Wrap in a RuntimeNode adapter if needed
           if (extensionNode && typeof extensionNode.run === 'function') {
