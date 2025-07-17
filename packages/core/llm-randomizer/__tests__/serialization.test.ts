@@ -111,7 +111,7 @@ describe('Epic 12 - LLM Serialization Format', () => {
         expect(result).toContain('type: WeightedAdvanced');
         expect(result).toContain('choices:');
         expect(result).toContain('distribution:');
-        expect(result).toContain('type: exponential');
+        expect(result).toContain('type: "exponential"');
       });
 
       test('should serialize Conditional node', () => {
@@ -192,7 +192,7 @@ describe('Epic 12 - LLM Serialization Format', () => {
         
         expect(result).toContain('type: Markov');
         expect(result).toContain('states:');
-        expect(result).toContain('initial: start');
+        expect(result).toContain('initialState: start');
       });
 
       test('should serialize PythonTransform node', () => {

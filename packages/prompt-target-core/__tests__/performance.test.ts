@@ -1,10 +1,10 @@
 import { MappingEngine, OpenAIGPTAdaptor, MidjourneyAdaptor } from '../src/index';
 import { ConsoleLogger, MemoryCache, MemoryMetrics } from '../src/utils/index';
 describe('Performance Benchmarks', () => {
-    let engine;
-    let logger;
-    let cache;
-    let metrics;
+    let engine: MappingEngine;
+    let logger: ConsoleLogger;
+    let cache: MemoryCache;
+    let metrics: MemoryMetrics;
     beforeEach(() => {
         logger = new ConsoleLogger('Benchmark');
         cache = new MemoryCache();
