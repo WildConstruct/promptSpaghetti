@@ -89,28 +89,40 @@ This document provides granular implementation plans for each story in Epic 11, 
 - Frontend component: `/client/src/components/auth/LoginForm.tsx`
 - Rate limiting: `/server/src/auth/services/RateLimitService.ts`
 - Audit logging: `/server/src/auth/services/AuditService.ts`
-- [ ] Implement account recovery
-  - [ ] Create forgotten username recovery
-  - [ ] Add account unlock mechanism
-  - [ ] Implement security questions (optional)
-  - [ ] Create account recovery analytics
 
-#### 11.1.4 Password Reset Implementation (2 days)
-- [ ] Implement password reset backend
-  - [ ] Create password reset token generation
-  - [ ] Add secure email delivery of reset links
-  - [ ] Implement token verification and expiration
-  - [ ] Add password reset activity logging
-- [ ] Build password reset frontend
-  - [ ] Create password reset request form
-  - [ ] Implement reset token verification UI
-  - [ ] Add new password form with validation
-  - [ ] Create success/error states and messaging
-- [ ] Add security measures
-  - [ ] Implement rate limiting for reset requests
-  - [ ] Add notification for password changes
-  - [ ] Create audit trail for reset activities
-  - [ ] Implement suspicious activity detection
+- [x] Implement account recovery
+  - [x] Create forgotten username recovery
+  - [x] Add account unlock mechanism
+  - [ ] Implement security questions (optional)
+  - [x] Create account recovery analytics
+
+**Account Recovery Implementation:**
+- Component: `/client/src/components/auth/AccountRecovery.tsx`
+- Analytics hooks: `/client/src/hooks/useLoginAnalytics.ts`
+
+#### 11.1.4 Password Reset Implementation (2 days) ✅ **COMPLETE**
+- [x] Implement password reset backend
+  - [x] Create password reset token generation
+  - [x] Add secure email delivery of reset links
+  - [x] Implement token verification and expiration
+  - [x] Add password reset activity logging
+- [x] Build password reset frontend
+  - [x] Create password reset request form
+  - [x] Implement reset token verification UI
+  - [x] Add new password form with validation
+  - [x] Create success/error states and messaging
+- [x] Add security measures
+  - [x] Implement rate limiting for reset requests
+  - [x] Add notification for password changes
+  - [x] Create audit trail for reset activities
+  - [x] Implement suspicious activity detection
+
+**Implementation:**
+- Backend service: `/server/src/auth/services/PasswordResetService.ts`
+- Frontend component: `/client/src/components/auth/PasswordResetForm.tsx`
+- Frontend page: `/client/src/pages/PasswordResetPage.tsx`
+- Hook: `/client/src/hooks/usePasswordReset.ts`
+- Email service: `/server/src/auth/services/EmailService.ts`
 
 #### 11.1.5 OAuth Integration (3 days)
 - [ ] Research and select OAuth providers
