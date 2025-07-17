@@ -247,30 +247,53 @@ export interface PublicUser {
 }
 
 // OAuth provider types
-export interface OAuthProvider {
-  name: string;
-  clientId: string;
-  clientSecret: string;
-  authorizeUrl: string;
-  tokenUrl: string;
-  userInfoUrl: string;
-  scope: string[];
-  redirectUri: string;
-}
+export type OAuthProvider = 'google' | 'github' | 'microsoft';
 
-export interface OAuthCallbackRequest {
-  code: string;
-  state: string;
-  provider: string;
+export interface OAuthTokenResponse {
+  access_token: string;
+  refresh_token?: string;
+  expires_in?: number;
+  token_type: string;
+  scope?: string;
 }
 
 export interface OAuthUserInfo {
   id: string;
   email: string;
   name?: string;
-  firstName?: string;
-  lastName?: string;
-  avatarUrl?: string;
+  picture?: string;
+  verified?: boolean;
+}
+
+export interface OAuthCallbackRequest {
+  code: string;
+  state: string;
+  provider: OAuthProvider;
+}
+
+export interface OAuthProviderConfig {
+  clientId: string;
+  clientSecret: string;
+  redirectUri: string;
+  scopes: string[];
+  authorizationUrl: string;
+  tokenUrl: string;
+  userInfoUrl: string;
+}
+
+export interface OAuthAccount {
+  id: string;
+  userId: string;
+  provider: OAuthProvider;
+  oauthId: string;
+  email: string;
+  name?: string;
+  picture?: string;
+  accessToken: string;
+  refreshToken?: string;
+  tokenExpiresAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 // Rate limiting types
@@ -345,7 +368,11 @@ export interface AuthConfig {
   database: AuthDatabaseConfig;
   redis: RedisConfig;
   security: SecurityConfig;
-  oauthProviders: Record<string, OAuthProvider>;
+  oauth: {
+    google: OAuthProviderConfig;
+    github: OAuthProviderConfig;
+    microsoft: OAuthProviderConfig;
+  };
   emailService?: {
     apiKey: string;
     fromEmail: string;

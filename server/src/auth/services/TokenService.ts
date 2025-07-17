@@ -23,7 +23,7 @@ export class TokenService implements ITokenService {
     this.loadKeys();
   }
 
-  async generateAccessToken(user: User): Promise<string> {
+  async generateAccessToken(user: User, scopes?: string[]): Promise<string> {
     const payload: Omit<JWTPayload, 'iat' | 'exp'> = {
       sub: user.id,
       email: user.email,
@@ -35,12 +35,47 @@ export class TokenService implements ITokenService {
       aud: this.config.jwtAudience,
     };
 
+    // Add scopes if provided (for API tokens)
+    if (scopes && scopes.length > 0) {
+      (payload as any).scopes = scopes;
+    }
+
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
       expiresIn: JWT_CONFIG.accessTokenExpiry,
     });
 
     return token;
+  }
+
+  async generateApiToken(
+    user: User,
+    scopes: string[],
+    expiresIn: string = '90d',
+    name?: string
+  ): Promise<{ token: string; tokenId: string }> {
+    const tokenId = require('crypto').randomUUID();
+    
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      type: 'api',
+      scopes,
+      tokenId,
+      name,
+      iss: this.config.jwtIssuer,
+      aud: this.config.jwtAudience,
+    };
+
+    const token = jwt.sign(payload, this.privateKey, {
+      algorithm: JWT_CONFIG.algorithm,
+      expiresIn,
+    });
+
+    // Store API token in database for tracking
+    await this.storeApiToken(user.id, tokenId, token, scopes, name, expiresIn);
+
+    return { token, tokenId };
   }
 
   async generateRefreshToken(user: User): Promise<string> {
@@ -184,8 +219,94 @@ export class TokenService implements ITokenService {
       WHERE user_id = $1 AND revoked = false
     `, [userId]);
 
+    // Revoke all API tokens for user
+    await this.db.query(`
+      UPDATE api_tokens 
+      SET revoked = true, revoked_at = NOW() 
+      WHERE user_id = $1 AND revoked = false
+    `, [userId]);
+
     // Add user to blacklist in Redis (expires in 24 hours - longer than our longest token)
     await this.redis.setex(`user_tokens_revoked:${userId}`, 24 * 60 * 60, Date.now().toString());
+  }
+
+  async revokeSessionTokens(sessionId: string): Promise<void> {
+    // Revoke session tokens
+    await this.db.query(`
+      UPDATE user_sessions 
+      SET revoked = true, revoked_at = NOW() 
+      WHERE id = $1
+    `, [sessionId]);
+  }
+
+  async revokeApiToken(tokenId: string): Promise<void> {
+    await this.db.query(`
+      UPDATE api_tokens 
+      SET revoked = true, revoked_at = NOW() 
+      WHERE id = $1
+    `, [tokenId]);
+  }
+
+  async getUserApiTokens(userId: string): Promise<any[]> {
+    const result = await this.db.query(`
+      SELECT id, name, scopes, expires_at, created_at, last_used_at, revoked
+      FROM api_tokens
+      WHERE user_id = $1
+      ORDER BY created_at DESC
+    `, [userId]);
+
+    return result.rows.map(row => ({
+      id: row.id,
+      name: row.name,
+      scopes: row.scopes,
+      expiresAt: row.expires_at,
+      createdAt: row.created_at,
+      lastUsedAt: row.last_used_at,
+      revoked: row.revoked,
+    }));
+  }
+
+  async validateApiToken(token: string): Promise<boolean> {
+    try {
+      const payload = await this.verifyAccessToken(token);
+      
+      if ((payload as any).type !== 'api') {
+        return false;
+      }
+
+      // Check if API token exists and is not revoked
+      const result = await this.db.query(`
+        SELECT id FROM api_tokens 
+        WHERE id = $1 AND revoked = false AND expires_at > NOW()
+      `, [(payload as any).tokenId]);
+
+      if (result.rows.length === 0) {
+        return false;
+      }
+
+      // Update last used timestamp
+      await this.db.query(`
+        UPDATE api_tokens 
+        SET last_used_at = NOW() 
+        WHERE id = $1
+      `, [(payload as any).tokenId]);
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async hasScope(token: string, requiredScope: string): Promise<boolean> {
+    try {
+      const payload = await this.verifyAccessToken(token);
+      const scopes = (payload as any).scopes || [];
+      
+      // Check for exact scope match or wildcard
+      return scopes.includes(requiredScope) || scopes.includes('*');
+    } catch (error) {
+      return false;
+    }
   }
 
   async isTokenRevoked(token: string): Promise<boolean> {
@@ -239,6 +360,23 @@ export class TokenService implements ITokenService {
       SET revoked = true, revoked_at = NOW() 
       WHERE user_id = $1 AND refresh_token = $2
     `, [userId, token]);
+  }
+
+  private async storeApiToken(
+    userId: string,
+    tokenId: string,
+    token: string,
+    scopes: string[],
+    name?: string,
+    expiresIn?: string
+  ): Promise<void> {
+    const decoded = jwt.decode(token) as any;
+    const expiresAt = new Date(decoded.exp * 1000);
+
+    await this.db.query(`
+      INSERT INTO api_tokens (id, user_id, name, scopes, expires_at)
+      VALUES ($1, $2, $3, $4, $5)
+    `, [tokenId, userId, name, JSON.stringify(scopes), expiresAt]);
   }
 
   private async getUserRoles(userId: string): Promise<string[]> {
