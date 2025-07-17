@@ -1,10 +1,8 @@
-/**
- * Core Extension Interfaces - Epic 8.4 Story 8.4.2
- * Defines the fundamental interfaces that all extensions must implement
- */
-import { z } from 'zod';
-// Extension Lifecycle States
-export var ExtensionLifecycleState;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NodeCategory = exports.ExtensionManifestSchema = exports.ExtensionError = exports.ExtensionErrorType = exports.ExtensionLifecycleState = void 0;
+const zod_1 = require("zod");
+var ExtensionLifecycleState;
 (function (ExtensionLifecycleState) {
     ExtensionLifecycleState["UNINITIALIZED"] = "uninitialized";
     ExtensionLifecycleState["INITIALIZING"] = "initializing";
@@ -15,9 +13,8 @@ export var ExtensionLifecycleState;
     ExtensionLifecycleState["DEACTIVATED"] = "deactivated";
     ExtensionLifecycleState["ERROR"] = "error";
     ExtensionLifecycleState["DISPOSED"] = "disposed";
-})(ExtensionLifecycleState || (ExtensionLifecycleState = {}));
-// Extension Error Types
-export var ExtensionErrorType;
+})(ExtensionLifecycleState || (exports.ExtensionLifecycleState = ExtensionLifecycleState = {}));
+var ExtensionErrorType;
 (function (ExtensionErrorType) {
     ExtensionErrorType["INITIALIZATION_ERROR"] = "initialization_error";
     ExtensionErrorType["ACTIVATION_ERROR"] = "activation_error";
@@ -26,12 +23,8 @@ export var ExtensionErrorType;
     ExtensionErrorType["DEPENDENCY_ERROR"] = "dependency_error";
     ExtensionErrorType["PERMISSION_ERROR"] = "permission_error";
     ExtensionErrorType["VALIDATION_ERROR"] = "validation_error";
-})(ExtensionErrorType || (ExtensionErrorType = {}));
-// Extension Error
-export class ExtensionError extends Error {
-    type;
-    extensionId;
-    cause;
+})(ExtensionErrorType || (exports.ExtensionErrorType = ExtensionErrorType = {}));
+class ExtensionError extends Error {
     constructor(type, extensionId, message, cause) {
         super(message);
         this.type = type;
@@ -40,45 +33,39 @@ export class ExtensionError extends Error {
         this.name = 'ExtensionError';
     }
 }
-// Extension Manifest Schema (will be used in Story 8.4.3)
-export const ExtensionManifestSchema = z.object({
-    id: z.string().regex(/^[a-zA-Z0-9-_.]+$/),
-    name: z.string().min(1),
-    version: z.string().regex(/^\d+\.\d+\.\d+$/),
-    description: z.string().min(1),
-    author: z.string().min(1),
-    license: z.string().min(1),
-    // Engine requirements
-    engines: z.object({
-        promptSpaghetti: z.string(),
-        node: z.string().optional()
+exports.ExtensionError = ExtensionError;
+exports.ExtensionManifestSchema = zod_1.z.object({
+    id: zod_1.z.string().regex(/^[a-zA-Z0-9-_.]+$/),
+    name: zod_1.z.string().min(1),
+    version: zod_1.z.string().regex(/^\d+\.\d+\.\d+$/),
+    description: zod_1.z.string().min(1),
+    author: zod_1.z.string().min(1),
+    license: zod_1.z.string().min(1),
+    engines: zod_1.z.object({
+        promptSpaghetti: zod_1.z.string(),
+        node: zod_1.z.string().optional()
     }),
-    // Dependencies
-    dependencies: z.array(z.string()).optional(),
-    optionalDependencies: z.array(z.string()).optional(),
-    // Permissions
-    permissions: z.array(z.string()).optional(),
-    // Entry points
-    main: z.string().optional(),
-    browser: z.string().optional(),
-    // Extension points
-    contributes: z.object({
-        nodes: z.array(z.string()).optional(),
-        commands: z.array(z.string()).optional(),
-        menus: z.array(z.string()).optional(),
-        themes: z.array(z.string()).optional(),
-        languages: z.array(z.string()).optional()
+    dependencies: zod_1.z.array(zod_1.z.string()).optional(),
+    optionalDependencies: zod_1.z.array(zod_1.z.string()).optional(),
+    permissions: zod_1.z.array(zod_1.z.string()).optional(),
+    main: zod_1.z.string().optional(),
+    browser: zod_1.z.string().optional(),
+    contributes: zod_1.z.object({
+        nodes: zod_1.z.array(zod_1.z.string()).optional(),
+        commands: zod_1.z.array(zod_1.z.string()).optional(),
+        menus: zod_1.z.array(zod_1.z.string()).optional(),
+        themes: zod_1.z.array(zod_1.z.string()).optional(),
+        languages: zod_1.z.array(zod_1.z.string()).optional()
     }).optional(),
-    // Metadata
-    repository: z.string().optional(),
-    homepage: z.string().optional(),
-    bugs: z.string().optional(),
-    keywords: z.array(z.string()).optional(),
-    // Configuration
-    configuration: z.object({
-        type: z.literal('object'),
-        properties: z.record(z.any())
+    repository: zod_1.z.string().optional(),
+    homepage: zod_1.z.string().optional(),
+    bugs: zod_1.z.string().optional(),
+    keywords: zod_1.z.array(zod_1.z.string()).optional(),
+    configuration: zod_1.z.object({
+        type: zod_1.z.literal('object'),
+        properties: zod_1.z.record(zod_1.z.any())
     }).optional()
 });
-// Re-export specific extension types
-export { NodeCategory } from './NodeExtension';
+var NodeExtension_1 = require("./NodeExtension");
+Object.defineProperty(exports, "NodeCategory", { enumerable: true, get: function () { return NodeExtension_1.NodeCategory; } });
+//# sourceMappingURL=ExtensionInterfaces.js.map

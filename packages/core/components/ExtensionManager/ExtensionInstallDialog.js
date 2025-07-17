@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Extension Install Dialog - Epic 8.4 Story 8.4.5
  * Dialog for installing extensions from files or URLs
  */
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { parseExtensionManifest } from '../../extensions/ExtensionManifest';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 export const ExtensionInstallDialog = ({ onInstall, onCancel }) => {

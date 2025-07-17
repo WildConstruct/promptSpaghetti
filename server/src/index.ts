@@ -1,6 +1,6 @@
 import Fastify, { FastifyRequest } from 'fastify';
 import { z } from 'zod';
-import { executeGraph } from './engine';
+import { executeGraph, initializeAnalytics } from './engine';
 import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
 import { initDatabase, healthCheck, getDatabase, runMigrations } from './database/connection';
@@ -9,9 +9,20 @@ import { workspaceRoutes } from './routes/workspace';
 import { workflowRoutes } from './routes/workflow';
 import { approvalRoutes } from './routes/approval';
 import lockingRoutes from './routes/locking';
+import { randomizerRoutes } from './routes/randomizer';
+import { analyticsRoutes } from './routes/analytics';
+import { AnalyticsDashboard } from './analytics/AnalyticsDashboard';
+import { AnalyticsCollector } from './analytics/AnalyticsCollector';
+import { CostTracker } from './analytics/CostTracker';
+import { AnalyticsDAO } from './database/analytics-dao';
+import { MetricsCollector } from './performance/MetricsCollector';
+import { PerformanceDashboard } from './performance/PerformanceDashboard';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
+import { AnalyticsWebSocketServer } from './websocket/AnalyticsWebSocketServer';
+import { authRoutes, jwtAuthMiddleware } from './auth/routes';
+import { buildAuthConfig, CORS_CONFIG } from './auth/config';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -50,8 +61,15 @@ type PreviewResponse = z.infer<typeof PreviewResponseSchema>;
 
 /**
  * Generate multiple outputs from a graph using different seeds
+ * Epic 13 - Enhanced with analytics tracking for preview executions
  */
-export async function generatePreviewOutputs(graph: Graph, runs: number, seedStart: number): Promise<Array<{seed: number, output: string}>> {
+export async function generatePreviewOutputs(
+  graph: Graph, 
+  runs: number, 
+  seedStart: number,
+  sessionId?: string,
+  userId?: number
+): Promise<Array<{seed: number, output: string}>> {
   const results = [];
   
   // Generate outputs for each seed
@@ -63,7 +81,7 @@ export async function generatePreviewOutputs(graph: Graph, runs: number, seedSta
     };
     
     try {
-      const outputs = await executeGraph(graphWithSeed);
+      const outputs = await executeGraph(graphWithSeed, sessionId, userId);
       // Use the first output as the preview result
       results.push({
         seed,
@@ -85,6 +103,10 @@ export async function generatePreviewOutputs(graph: Graph, runs: number, seedSta
 const server = Fastify({
   logger: true
 });
+
+// Build authentication configuration
+const authConfig = buildAuthConfig();
+server.decorate('authConfig', authConfig);
 
 // WebSocket server configuration
 const wsConfig: WSServerConfig = {
@@ -116,6 +138,14 @@ try {
   process.exit(1);
 }
 
+// Initialize analytics collection
+try {
+  initializeAnalytics();
+  console.log('Analytics system initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize analytics:', error);
+}
+
 // Initialize extension system on startup
 (async () => {
   try {
@@ -127,12 +157,30 @@ try {
   }
 })();
 
-// We'll add CORS support after installing the dependency
-// For now, we'll use a simple CORS header
+// Enhanced CORS configuration for authentication
 server.addHook('onRequest', (request, reply, done) => {
-  reply.header('Access-Control-Allow-Origin', '*');
-  reply.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  reply.header('Access-Control-Allow-Headers', 'Content-Type');
+  const origin = request.headers.origin;
+  const allowedOrigins = CORS_CONFIG.origin;
+  
+  if (Array.isArray(allowedOrigins)) {
+    if (allowedOrigins.includes('*') || (origin && allowedOrigins.includes(origin))) {
+      reply.header('Access-Control-Allow-Origin', origin || '*');
+    }
+  } else if (allowedOrigins === '*' || allowedOrigins === origin) {
+    reply.header('Access-Control-Allow-Origin', origin || allowedOrigins);
+  }
+  
+  reply.header('Access-Control-Allow-Methods', CORS_CONFIG.methods.join(', '));
+  reply.header('Access-Control-Allow-Headers', CORS_CONFIG.allowedHeaders.join(', '));
+  reply.header('Access-Control-Expose-Headers', CORS_CONFIG.exposedHeaders.join(', '));
+  reply.header('Access-Control-Allow-Credentials', CORS_CONFIG.credentials.toString());
+  
+  // Handle preflight requests
+  if (request.method === 'OPTIONS') {
+    reply.code(204).send();
+    return;
+  }
+  
   done();
 });
 
@@ -188,6 +236,69 @@ server.get('/ws/documents/:documentId/users', async (request, reply) => {
   };
 });
 
+// Register authentication routes
+server.register(authRoutes, { prefix: '/auth' });
+
+// Register JWT authentication middleware
+server.register(jwtAuthMiddleware);
+
+// Initialize additional analytics components
+let metricsCollector: MetricsCollector;
+let performanceDashboard: PerformanceDashboard;
+let analyticsDAO: AnalyticsDAO;
+let costTracker: CostTracker;
+let analyticsDashboard: AnalyticsDashboard;
+let analyticsWebSocketServer: AnalyticsWebSocketServer;
+
+try {
+  const db = getDatabase();
+  
+  // Initialize metrics and performance dashboard
+  metricsCollector = new MetricsCollector();
+  performanceDashboard = new PerformanceDashboard(metricsCollector);
+  
+  // Create analytics DAO (separate from engine's instance for server-specific features)
+  analyticsDAO = new AnalyticsDAO(db);
+  
+  // Create a new analytics collector for server-specific analytics
+  const serverAnalyticsCollector = new AnalyticsCollector({
+    enabled: process.env.ANALYTICS_ENABLED !== 'false',
+    sampleRate: parseFloat(process.env.ANALYTICS_SAMPLE_RATE || '1.0'),
+    privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true'
+  });
+  
+  costTracker = new CostTracker(serverAnalyticsCollector, analyticsDAO);
+  analyticsDashboard = new AnalyticsDashboard(
+    performanceDashboard,
+    serverAnalyticsCollector,
+    analyticsDAO,
+    costTracker
+  );
+
+  // Set up analytics event storage
+  serverAnalyticsCollector.on('events_flushed', (events) => {
+    events.forEach((event: any) => analyticsDAO.storeEvent(event));
+  });
+
+  // Start analytics dashboard
+  analyticsDashboard.start();
+
+  // Pass analytics collector to WebSocket server
+  wsServer.analyticsCollector = serverAnalyticsCollector;
+
+  // Initialize analytics WebSocket server
+  analyticsWebSocketServer = new AnalyticsWebSocketServer(
+    serverAnalyticsCollector,
+    analyticsDashboard,
+    costTracker
+  );
+
+  console.log('Server analytics system fully initialized');
+} catch (error) {
+  console.error('Failed to initialize server analytics system:', error);
+  // Don't exit - allow server to run without analytics
+}
+
 // Register corrections routes
 server.register(correctionsRoutes, { prefix: '/api/corrections' });
 
@@ -202,6 +313,21 @@ server.register(approvalRoutes, { prefix: '/api/approval' });
 
 // Register locking routes
 server.register(lockingRoutes, { prefix: '/api/locking' });
+
+// Register randomizer routes
+server.register(randomizerRoutes, { prefix: '/api/randomizer' });
+
+// Register analytics routes
+if (analyticsDashboard && costTracker) {
+  server.register(async (fastify) => {
+    await analyticsRoutes(fastify, analyticsDashboard, costTracker);
+  }, { prefix: '/api' });
+}
+
+// Setup analytics WebSocket server
+if (analyticsWebSocketServer) {
+  analyticsWebSocketServer.setupWebSocketServer(server);
+}
 
 // Legacy GET preview endpoint (dummy data for backwards compatibility)
 server.get('/preview', async (request, reply) => {
@@ -218,6 +344,7 @@ server.get('/preview', async (request, reply) => {
 // New POST preview endpoint that actually runs the executor
 server.post<{
   Body: PreviewRequest;
+  Headers: { 'x-session-id'?: string; 'x-user-id'?: string };
 }>('/preview', {
   schema: {
     body: {
@@ -277,8 +404,11 @@ server.post<{
         return;
       }
       
-      // Generate previews
-      const results = await generatePreviewOutputs(graph, runs, seedStart);
+      // Generate previews with analytics tracking
+      const sessionId = request.headers['x-session-id'];
+      const userId = request.headers['x-user-id'] ? parseInt(request.headers['x-user-id']) : undefined;
+      
+      const results = await generatePreviewOutputs(graph, runs, seedStart, sessionId, userId);
       
       return { results };
     } catch (error: unknown) {
@@ -339,6 +469,9 @@ const start = async () => {
 process.on('SIGTERM', async () => {
   console.log('Received SIGTERM, shutting down gracefully');
   await wsServer.stop();
+  if (analyticsWebSocketServer) {
+    analyticsWebSocketServer.stop();
+  }
   await server.close();
   process.exit(0);
 });
@@ -346,6 +479,9 @@ process.on('SIGTERM', async () => {
 process.on('SIGINT', async () => {
   console.log('Received SIGINT, shutting down gracefully');
   await wsServer.stop();
+  if (analyticsWebSocketServer) {
+    analyticsWebSocketServer.stop();
+  }
   await server.close();
   process.exit(0);
 });

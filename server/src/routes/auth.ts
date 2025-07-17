@@ -1,524 +1,603 @@
+// Epic 11 Authentication Routes
+// REST API endpoints for authentication with comprehensive security
+
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { z } from 'zod';
-import { AuthService } from '../services/auth-service.js';
-import { WorkspaceDAO } from '../database/workspace-dao.js';
+import { AuthenticationService } from '../auth/AuthenticationService';
+import { LoginService } from '../auth/services/LoginService';
+import { UserService } from '../auth/services/UserService';
+import { RegistrationService } from '../auth/services/RegistrationService';
+import { PasswordResetService } from '../auth/services/PasswordResetService';
+import { RateLimitService } from '../auth/services/RateLimitService';
+import { RATE_LIMIT_RULES } from '../auth/config';
 
-// Request Schemas
-const OAuthProviderConfigSchema = z.object({
-  provider: z.enum(['google', 'github', 'microsoft', 'okta', 'auth0']),
-  clientId: z.string(),
-  clientSecret: z.string(),
-  redirectUri: z.string(),
-  scope: z.string().optional(),
-  domain: z.string().optional(),
-});
-
-const OAuthCallbackSchema = z.object({
-  code: z.string(),
-  state: z.string().optional(),
-  error: z.string().optional(),
-});
-
-const LoginSchema = z.object({
+// Request schemas
+const LoginRequestSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
-  mfaToken: z.string().optional(),
+  password: z.string().min(8).max(128),
+  rememberMe: z.boolean().default(false),
+  deviceInfo: z.object({
+    fingerprint: z.string().optional(),
+    userAgent: z.string().optional(),
+    language: z.string().optional(),
+    timezone: z.string().optional(),
+  }).optional(),
 });
 
-const MFAVerificationSchema = z.object({
-  token: z.string().length(6),
+const RefreshTokenRequestSchema = z.object({
+  refreshToken: z.string(),
 });
 
-const SessionRefreshSchema = z.object({
-  sessionId: z.string(),
+const UnlockAccountRequestSchema = z.object({
+  email: z.string().email(),
+  unlockToken: z.string(),
+});
+
+const RequestUnlockRequestSchema = z.object({
+  email: z.string().email(),
+});
+
+const LogoutRequestSchema = z.object({
+  sessionId: z.string().optional(),
 });
 
 interface AuthenticatedRequest extends FastifyRequest {
   user?: {
     id: string;
     email: string;
-    permissions: string[];
-    workspaceId?: string;
+    roles: string[];
   };
 }
 
-export default async function authRoutes(fastify: FastifyInstance) {
-  const workspaceDAO = new WorkspaceDAO(fastify.pg);
-  const authService = new AuthService(workspaceDAO, process.env.JWT_SECRET || 'default-secret');
+export async function authRoutes(fastify: FastifyInstance) {
+  const authService = fastify.authService as AuthenticationService;
+  const loginService = authService.getService('login') as LoginService;
+  const userService = authService.getService('user') as UserService;
+  const registrationService = authService.getService('registration') as RegistrationService;
+  const passwordResetService = authService.getService('passwordReset') as PasswordResetService;
+  const rateLimitService = authService.getService('rateLimit') as RateLimitService;
 
-  // Initialize OAuth providers from environment
-  await initializeOAuthProviders(authService);
-
-  // Authentication middleware
-  async function authenticate(request: AuthenticatedRequest, reply: FastifyReply) {
-    try {
-      const authHeader = request.headers.authorization;
-      if (!authHeader?.startsWith('Bearer ')) {
-        throw new Error('Missing authorization header');
-      }
-
-      const token = authHeader.substring(7);
-      const payload = await authService.verifyJWT(token);
-      
-      // Validate session
-      const session = await authService.validateSession(payload.sessionId);
-      if (!session) {
-        throw new Error('Invalid session');
-      }
-
-      request.user = {
-        id: session.userId,
-        email: payload.email,
-        permissions: session.permissions,
-        workspaceId: session.workspaceId,
-      };
-    } catch (error) {
-      reply.status(401).send({ error: 'Unauthorized' });
-    }
-  }
-
-  // OAuth Configuration Routes
-  fastify.post('/auth/oauth/configure', {
-    schema: {
-      body: OAuthProviderConfigSchema,
-      response: {
-        200: z.object({ success: z.boolean() }),
-        400: z.object({ error: z.string() }),
-      },
+  // Helper function to extract client context
+  const getClientContext = (request: FastifyRequest) => ({
+    ipAddress: request.ip,
+    userAgent: request.headers['user-agent'],
+    geoLocation: {
+      country: request.headers['cf-ipcountry'] as string, // Cloudflare header
+      timezone: request.headers['cf-timezone'] as string,
     },
-  }, async (request, reply) => {
-    try {
-      await authService.registerOAuthProvider(request.body);
-      reply.send({ success: true });
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
-    }
+    fingerprint: (request.headers['x-fingerprint'] || '') as string,
   });
 
-  // OAuth Authorization URL
-  fastify.get('/auth/oauth/:provider/authorize', {
+  // Login endpoint
+  fastify.post('/api/auth/login', {
     schema: {
-      params: z.object({ provider: z.string() }),
-      querystring: z.object({ state: z.string().optional() }),
+      body: LoginRequestSchema,
       response: {
-        200: z.object({ authUrl: z.string() }),
-        400: z.object({ error: z.string() }),
-      },
-    },
-  }, async (request, reply) => {
-    try {
-      const { provider } = request.params as { provider: string };
-      const { state } = request.query as { state?: string };
-      
-      const authUrl = await authService.getAuthorizationUrl(provider, state);
-      reply.send({ authUrl });
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
-    }
-  });
-
-  // OAuth Callback Handler
-  fastify.get('/auth/oauth/:provider/callback', {
-    schema: {
-      params: z.object({ provider: z.string() }),
-      querystring: OAuthCallbackSchema,
-    },
-  }, async (request, reply) => {
-    try {
-      const { provider } = request.params as { provider: string };
-      const { code, state, error } = request.query as z.infer<typeof OAuthCallbackSchema>;
-
-      if (error) {
-        throw new Error(`OAuth error: ${error}`);
-      }
-
-      if (!code) {
-        throw new Error('Authorization code not provided');
-      }
-
-      // Exchange code for token
-      const tokenResponse = await authService.exchangeCodeForToken(provider, code, state);
-      
-      // Get user info
-      const userInfo = await authService.getUserInfo(provider, tokenResponse.access_token);
-      
-      // Find or create user
-      let user = await workspaceDAO.findUserByEmail(userInfo.email);
-      if (!user) {
-        user = await workspaceDAO.createUser({
-          email: userInfo.email,
-          name: userInfo.name,
-          avatar: userInfo.picture,
-          authProvider: provider,
-          authProviderId: userInfo.id,
-        });
-      }
-
-      // Create session
-      const sessionId = await authService.createSession(user.id);
-      
-      // Generate JWT
-      const jwt = await authService.generateJWT({
-        userId: user.id,
-        email: user.email,
-        sessionId,
-      });
-
-      // Set secure cookie and redirect
-      reply
-        .setCookie('auth_token', jwt, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
-          maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        })
-        .redirect('/dashboard');
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
-    }
-  });
-
-  // Traditional Login
-  fastify.post('/auth/login', {
-    schema: {
-      body: LoginSchema,
-      response: {
-        200: z.object({ 
-          token: z.string(),
+        200: z.object({
+          accessToken: z.string(),
+          refreshToken: z.string(),
           user: z.object({
             id: z.string(),
             email: z.string(),
-            name: z.string(),
+            emailVerified: z.boolean(),
+            createdAt: z.string(),
+            lastLoginAt: z.string().nullable(),
+            roles: z.array(z.string()),
+            permissions: z.array(z.string()),
           }),
-          mfaRequired: z.boolean().optional(),
+          expiresAt: z.string(),
+          sessionId: z.string(),
         }),
-        400: z.object({ error: z.string() }),
-        401: z.object({ error: z.string() }),
+        400: z.object({ message: z.string() }),
+        401: z.object({ message: z.string() }),
+        429: z.object({ message: z.string() }),
       },
     },
-  }, async (request, reply) => {
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { email, password, mfaToken } = request.body;
+      const body = LoginRequestSchema.parse(request.body);
+      const context = getClientContext(request);
+
+      // Rate limiting check
+      const rateLimitResult = await rateLimitService.checkIPRateLimit(
+        context.ipAddress,
+        'login',
+        RATE_LIMIT_RULES.login
+      );
+
+      if (!rateLimitResult.allowed) {
+        return reply.status(429).send({
+          message: 'Too many login attempts. Please try again later.',
+        });
+      }
+
+      const result = await loginService.login(body, context);
       
-      // Find user
-      const user = await workspaceDAO.findUserByEmail(email);
-      if (!user) {
-        reply.status(401).send({ error: 'Invalid credentials' });
-        return;
-      }
-
-      // Verify password (assuming password hash is stored)
-      // This would need to be implemented in the user model
-      const isValidPassword = true; // Placeholder
-      if (!isValidPassword) {
-        reply.status(401).send({ error: 'Invalid credentials' });
-        return;
-      }
-
-      // Check MFA if enabled
-      const mfaConfig = await authService.getMFAConfig?.(user.id);
-      if (mfaConfig?.enabled) {
-        if (!mfaToken) {
-          reply.send({ 
-            token: '', 
-            user: { id: user.id, email: user.email, name: user.name },
-            mfaRequired: true 
-          });
-          return;
-        }
-
-        const isMFAValid = await authService.verifyMFA(user.id, mfaToken);
-        if (!isMFAValid) {
-          reply.status(401).send({ error: 'Invalid MFA token' });
-          return;
-        }
-      }
-
-      // Create session and JWT
-      const sessionId = await authService.createSession(user.id);
-      const jwt = await authService.generateJWT({
-        userId: user.id,
-        email: user.email,
-        sessionId,
+      // Set secure HTTP-only cookies for tokens
+      reply.setCookie('accessToken', result.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 60 * 1000, // 15 minutes
       });
 
-      reply.send({
-        token: jwt,
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        },
-        mfaRequired: false,
+      reply.setCookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: body.rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000, // 30 days or 1 day
       });
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
+
+      return {
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        user: result.user,
+        expiresAt: result.expiresAt.toISOString(),
+        sessionId: result.sessionId,
+      };
+    } catch (error: any) {
+      if (error.message.includes('Invalid email or password')) {
+        return reply.status(401).send({ message: 'Invalid email or password' });
+      }
+      if (error.message.includes('Account is locked')) {
+        return reply.status(401).send({ message: error.message });
+      }
+      if (error.message.includes('Account is not active')) {
+        return reply.status(401).send({ message: error.message });
+      }
+      if (error.message.includes('Too many login attempts')) {
+        return reply.status(429).send({ message: error.message });
+      }
+      
+      fastify.log.error('Login error:', error);
+      return reply.status(400).send({ message: 'Login failed' });
     }
   });
 
-  // Logout
-  fastify.post('/auth/logout', {
-    preHandler: authenticate,
+  // Logout endpoint
+  fastify.post('/api/auth/logout', {
     schema: {
+      body: LogoutRequestSchema,
       response: {
-        200: z.object({ success: z.boolean() }),
+        200: z.object({ message: z.string() }),
       },
     },
-  }, async (request: AuthenticatedRequest, reply) => {
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
-      const authHeader = request.headers.authorization;
-      if (authHeader?.startsWith('Bearer ')) {
-        const token = authHeader.substring(7);
-        const payload = await authService.verifyJWT(token);
-        await authService.revokeSession(payload.sessionId);
+      const body = LogoutRequestSchema.parse(request.body);
+      const context = getClientContext(request);
+
+      if (request.user) {
+        await loginService.logout(request.user.id, body.sessionId, context);
       }
 
-      reply
-        .clearCookie('auth_token')
-        .send({ success: true });
-    } catch (error) {
-      reply.send({ success: true }); // Always succeed logout
+      // Clear cookies
+      reply.clearCookie('accessToken');
+      reply.clearCookie('refreshToken');
+
+      return { message: 'Logged out successfully' };
+    } catch (error: any) {
+      fastify.log.error('Logout error:', error);
+      return { message: 'Logged out successfully' }; // Always return success for logout
     }
   });
 
-  // Session Refresh
-  fastify.post('/auth/refresh', {
+  // Refresh token endpoint
+  fastify.post('/api/auth/refresh', {
     schema: {
-      body: SessionRefreshSchema,
+      body: RefreshTokenRequestSchema,
       response: {
-        200: z.object({ token: z.string() }),
-        401: z.object({ error: z.string() }),
-      },
-    },
-  }, async (request, reply) => {
-    try {
-      const { sessionId } = request.body;
-      
-      const newSessionId = await authService.refreshSession(sessionId);
-      const session = await authService.validateSession(newSessionId);
-      
-      if (!session) {
-        reply.status(401).send({ error: 'Invalid session' });
-        return;
-      }
-
-      const user = await workspaceDAO.findUserById(session.userId);
-      if (!user) {
-        reply.status(401).send({ error: 'User not found' });
-        return;
-      }
-
-      const jwt = await authService.generateJWT({
-        userId: user.id,
-        email: user.email,
-        sessionId: newSessionId,
-      });
-
-      reply.send({ token: jwt });
-    } catch (error) {
-      reply.status(401).send({ error: (error as Error).message });
-    }
-  });
-
-  // MFA Setup
-  fastify.post('/auth/mfa/enable', {
-    preHandler: authenticate,
-    schema: {
-      response: {
-        200: z.object({ 
-          secret: z.string(),
-          backupCodes: z.array(z.string()),
-          qrCode: z.string(),
+        200: z.object({
+          accessToken: z.string(),
+          refreshToken: z.string(),
         }),
-        400: z.object({ error: z.string() }),
+        401: z.object({ message: z.string() }),
       },
     },
-  }, async (request: AuthenticatedRequest, reply) => {
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      if (!request.user) {
-        reply.status(401).send({ error: 'Unauthorized' });
-        return;
+      const body = RefreshTokenRequestSchema.parse(request.body);
+      const context = getClientContext(request);
+
+      const tokens = await loginService.refreshSession(body.refreshToken, context);
+
+      // Update cookies
+      reply.setCookie('accessToken', tokens.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 60 * 1000, // 15 minutes
+      });
+
+      reply.setCookie('refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+      });
+
+      return tokens;
+    } catch (error: any) {
+      fastify.log.error('Token refresh error:', error);
+      return reply.status(401).send({ message: 'Invalid or expired refresh token' });
+    }
+  });
+
+  // Request account unlock
+  fastify.post('/api/auth/request-unlock', {
+    schema: {
+      body: RequestUnlockRequestSchema,
+      response: {
+        200: z.object({ message: z.string() }),
+        400: z.object({ message: z.string() }),
+        429: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const body = RequestUnlockRequestSchema.parse(request.body);
+      const context = getClientContext(request);
+
+      // Rate limiting for unlock requests
+      const rateLimitResult = await rateLimitService.checkIPRateLimit(
+        context.ipAddress,
+        'unlock_request',
+        { maxAttempts: 3, windowMs: 300000 } // 3 attempts per 5 minutes
+      );
+
+      if (!rateLimitResult.allowed) {
+        return reply.status(429).send({
+          message: 'Too many unlock requests. Please try again later.',
+        });
       }
 
-      const { secret, backupCodes } = await authService.enableMFA(request.user.id);
+      // Check if user exists
+      const user = await userService.getUserByEmail(body.email);
+      if (!user) {
+        // Don't reveal if email exists, but still return success
+        return { message: 'If your account exists, unlock instructions have been sent to your email.' };
+      }
+
+      // Only send unlock email if account is actually locked
+      if (user.accountLocked && user.lockedUntil && user.lockedUntil > new Date()) {
+        const unlockToken = `unlock_${user.id}_${user.email}`; // In production, use a secure token
+        
+        // Send unlock email (implementation would call EmailService)
+        await authService.getService('email').sendAccountUnlockRequest(user.email, {
+          displayName: user.displayName,
+          unlockToken,
+          unlockUrl: `${process.env.FRONTEND_URL}/auth/unlock?token=${unlockToken}&email=${encodeURIComponent(user.email)}`,
+          expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+        });
+      }
+
+      return { message: 'If your account exists, unlock instructions have been sent to your email.' };
+    } catch (error: any) {
+      fastify.log.error('Request unlock error:', error);
+      return reply.status(400).send({ message: 'Failed to process unlock request' });
+    }
+  });
+
+  // Unlock account with token
+  fastify.post('/api/auth/unlock-account', {
+    schema: {
+      body: UnlockAccountRequestSchema,
+      response: {
+        200: z.object({ message: z.string() }),
+        400: z.object({ message: z.string() }),
+        401: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const body = UnlockAccountRequestSchema.parse(request.body);
+      const context = getClientContext(request);
+
+      await loginService.unlockAccount(body.email, body.unlockToken, context);
+
+      return { message: 'Your account has been successfully unlocked. You can now sign in.' };
+    } catch (error: any) {
+      if (error.message.includes('Invalid unlock request') || error.message.includes('Invalid or expired unlock token')) {
+        return reply.status(401).send({ message: 'Invalid or expired unlock token' });
+      }
       
-      // Generate QR code URL for authenticator apps
-      const qrCode = `otpauth://totp/PromptGraph:${request.user.email}?secret=${secret}&issuer=PromptGraph`;
-
-      reply.send({ secret, backupCodes, qrCode });
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
+      fastify.log.error('Unlock account error:', error);
+      return reply.status(400).send({ message: 'Failed to unlock account' });
     }
   });
 
-  // MFA Verification
-  fastify.post('/auth/mfa/verify', {
-    preHandler: authenticate,
-    schema: {
-      body: MFAVerificationSchema,
-      response: {
-        200: z.object({ valid: z.boolean() }),
-        400: z.object({ error: z.string() }),
-      },
-    },
-  }, async (request: AuthenticatedRequest, reply) => {
-    try {
-      if (!request.user) {
-        reply.status(401).send({ error: 'Unauthorized' });
-        return;
-      }
-
-      const { token } = request.body;
-      const isValid = await authService.verifyMFA(request.user.id, token);
-
-      reply.send({ valid: isValid });
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
-    }
-  });
-
-  // MFA Disable
-  fastify.post('/auth/mfa/disable', {
-    preHandler: authenticate,
-    schema: {
-      response: {
-        200: z.object({ success: z.boolean() }),
-        400: z.object({ error: z.string() }),
-      },
-    },
-  }, async (request: AuthenticatedRequest, reply) => {
-    try {
-      if (!request.user) {
-        reply.status(401).send({ error: 'Unauthorized' });
-        return;
-      }
-
-      await authService.disableMFA(request.user.id);
-      reply.send({ success: true });
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
-    }
-  });
-
-  // User Profile
-  fastify.get('/auth/profile', {
-    preHandler: authenticate,
+  // Get current user profile
+  fastify.get('/api/auth/me', {
+    preValidation: [fastify.authenticate], // Requires authentication middleware
     schema: {
       response: {
         200: z.object({
           id: z.string(),
           email: z.string(),
-          name: z.string(),
-          avatar: z.string().optional(),
+          emailVerified: z.boolean(),
+          createdAt: z.string(),
+          lastLoginAt: z.string().nullable(),
+          roles: z.array(z.string()),
           permissions: z.array(z.string()),
-          workspaces: z.array(z.object({
-            id: z.string(),
-            name: z.string(),
-            role: z.string(),
-          })),
         }),
-        401: z.object({ error: z.string() }),
+        401: z.object({ message: z.string() }),
       },
     },
-  }, async (request: AuthenticatedRequest, reply) => {
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) {
+      return reply.status(401).send({ message: 'Unauthorized' });
+    }
+
     try {
-      if (!request.user) {
-        reply.status(401).send({ error: 'Unauthorized' });
-        return;
-      }
-
-      const user = await workspaceDAO.findUserById(request.user.id);
+      const user = await userService.getUserById(request.user.id);
       if (!user) {
-        reply.status(401).send({ error: 'User not found' });
-        return;
+        return reply.status(401).send({ message: 'User not found' });
       }
 
-      const workspaces = await workspaceDAO.getUserWorkspaces(user.id);
-
-      reply.send({
+      return {
         id: user.id,
         email: user.email,
-        name: user.name,
-        avatar: user.avatar,
-        permissions: request.user.permissions,
-        workspaces: workspaces.map(w => ({
-          id: w.id,
-          name: w.name,
-          role: w.role,
-        })),
-      });
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt.toISOString(),
+        lastLoginAt: user.lastLoginAt?.toISOString() || null,
+        roles: ['user'], // Would fetch actual roles
+        permissions: ['graphs:create:own'], // Would fetch actual permissions
+      };
+    } catch (error: any) {
+      fastify.log.error('Get user profile error:', error);
+      return reply.status(401).send({ message: 'Failed to get user profile' });
     }
   });
 
-  // Session Management
-  fastify.get('/auth/sessions', {
-    preHandler: authenticate,
+  // Get login analytics (admin only)
+  fastify.get('/api/auth/analytics', {
+    preValidation: [fastify.authenticate], // Requires authentication middleware
     schema: {
+      querystring: z.object({
+        timeframe: z.enum(['day', 'week', 'month']).default('week'),
+      }),
       response: {
-        200: z.array(z.object({
-          sessionId: z.string(),
-          createdAt: z.date(),
-          lastActive: z.date(),
-          userAgent: z.string(),
-          ipAddress: z.string(),
-        })),
-        401: z.object({ error: z.string() }),
+        200: z.object({
+          totalAttempts: z.number(),
+          successfulLogins: z.number(),
+          failedAttempts: z.number(),
+          successRate: z.number(),
+          topFailureReasons: z.array(z.object({
+            reason: z.string(),
+            count: z.number(),
+            percentage: z.number(),
+          })),
+          suspiciousActivity: z.array(z.object({
+            type: z.string(),
+            description: z.string(),
+            count: z.number(),
+            severity: z.enum(['low', 'medium', 'high']),
+          })),
+          deviceAnalysis: z.object({
+            newDevices: z.number(),
+            returningDevices: z.number(),
+            suspiciousDevices: z.number(),
+          }),
+        }),
+        401: z.object({ message: z.string() }),
+        403: z.object({ message: z.string() }),
       },
     },
-  }, async (request: AuthenticatedRequest, reply) => {
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    // TODO: Add admin role check
+    // if (!request.user?.roles.includes('admin')) {
+    //   return reply.status(403).send({ message: 'Insufficient permissions' });
+    // }
+
     try {
-      if (!request.user) {
-        reply.status(401).send({ error: 'Unauthorized' });
-        return;
+      const query = z.object({ timeframe: z.enum(['day', 'week', 'month']).default('week') }).parse(request.query);
+      
+      const analytics = await loginService.getLoginAnalytics(query.timeframe);
+      return analytics;
+    } catch (error: any) {
+      fastify.log.error('Get analytics error:', error);
+      return reply.status(400).send({ message: 'Failed to get analytics' });
+    }
+  });
+
+  // Validate session endpoint
+  fastify.get('/api/auth/validate', {
+    preValidation: [fastify.authenticate],
+    schema: {
+      response: {
+        200: z.object({
+          valid: z.boolean(),
+          user: z.object({
+            id: z.string(),
+            email: z.string(),
+            roles: z.array(z.string()),
+          }),
+        }),
+        401: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) {
+      return reply.status(401).send({ message: 'Invalid session' });
+    }
+
+    return {
+      valid: true,
+      user: request.user,
+    };
+  });
+
+  // Password reset request
+  fastify.post('/api/auth/password-reset/request', {
+    schema: {
+      body: z.object({
+        email: z.string().email(),
+        captchaToken: z.string().optional(),
+      }),
+      response: {
+        200: z.object({
+          success: z.boolean(),
+          message: z.string(),
+          estimatedDelivery: z.string().optional(),
+        }),
+        400: z.object({ message: z.string() }),
+        429: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const body = request.body as { email: string; captchaToken?: string };
+      const context = getClientContext(request);
+
+      const passwordResetRequest = {
+        email: body.email,
+        captchaToken: body.captchaToken,
+        clientInfo: {
+          userAgent: context.userAgent,
+          ipAddress: context.ipAddress,
+          fingerprint: context.fingerprint,
+        },
+      };
+
+      const result = await passwordResetService.requestPasswordReset(passwordResetRequest);
+
+      return {
+        success: result.success,
+        message: result.message,
+        estimatedDelivery: result.estimatedDelivery?.toISOString(),
+      };
+    } catch (error: any) {
+      fastify.log.error('Password reset request error:', error);
+      return reply.status(400).send({ message: error.message || 'Failed to process password reset request' });
+    }
+  });
+
+  // Validate password reset token
+  fastify.get('/api/auth/password-reset/validate/:token', {
+    schema: {
+      params: z.object({
+        token: z.string().min(1),
+      }),
+      response: {
+        200: z.object({
+          valid: z.boolean(),
+          error: z.string().optional(),
+          canRetry: z.boolean().optional(),
+          email: z.string().optional(),
+          tokenExpiresAt: z.string().optional(),
+        }),
+        400: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const params = request.params as { token: string };
+      const validation = await passwordResetService.validatePasswordResetToken(params.token);
+
+      return {
+        valid: validation.valid,
+        error: validation.error,
+        canRetry: validation.canRetry,
+        email: validation.email,
+        tokenExpiresAt: validation.tokenExpiresAt?.toISOString(),
+      };
+    } catch (error: any) {
+      fastify.log.error('Password reset token validation error:', error);
+      return reply.status(400).send({ message: 'Failed to validate password reset token' });
+    }
+  });
+
+  // Confirm password reset
+  fastify.post('/api/auth/password-reset/confirm', {
+    schema: {
+      body: z.object({
+        token: z.string().min(1),
+        newPassword: z.string().min(8).max(128),
+        confirmPassword: z.string().min(8).max(128),
+      }),
+      response: {
+        200: z.object({
+          success: z.boolean(),
+          message: z.string(),
+        }),
+        400: z.object({ message: z.string() }),
+        429: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const body = request.body as {
+        token: string;
+        newPassword: string;
+        confirmPassword: string;
+      };
+      const context = getClientContext(request);
+
+      const confirmation = {
+        token: body.token,
+        newPassword: body.newPassword,
+        confirmPassword: body.confirmPassword,
+        clientInfo: {
+          userAgent: context.userAgent,
+          ipAddress: context.ipAddress,
+          fingerprint: context.fingerprint,
+        },
+      };
+
+      const result = await passwordResetService.confirmPasswordReset(confirmation);
+
+      return {
+        success: result.success,
+        message: result.message,
+      };
+    } catch (error: any) {
+      fastify.log.error('Password reset confirmation error:', error);
+      
+      if (error.message.includes('rate limit') || error.message.includes('too many')) {
+        return reply.status(429).send({ message: error.message });
       }
-
-      const sessions = await authService.getUserSessions?.(request.user.id) || [];
-      reply.send(sessions);
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
+      
+      return reply.status(400).send({ message: error.message || 'Failed to reset password' });
     }
   });
 
-  fastify.delete('/auth/sessions/:sessionId', {
-    preHandler: authenticate,
+  // Health check for auth service
+  fastify.get('/api/auth/health', {
     schema: {
-      params: z.object({ sessionId: z.string() }),
       response: {
-        200: z.object({ success: z.boolean() }),
-        400: z.object({ error: z.string() }),
+        200: z.object({
+          status: z.string(),
+          timestamp: z.string(),
+          services: z.object({
+            database: z.string(),
+            redis: z.string(),
+            authentication: z.string(),
+          }),
+        }),
       },
     },
-  }, async (request: AuthenticatedRequest, reply) => {
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { sessionId } = request.params as { sessionId: string };
-      await authService.revokeSession(sessionId);
-      reply.send({ success: true });
-    } catch (error) {
-      reply.status(400).send({ error: (error as Error).message });
+      const health = await authService.getHealthStatus();
+      
+      return {
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        services: health,
+      };
+    } catch (error: any) {
+      fastify.log.error('Health check error:', error);
+      return {
+        status: 'unhealthy',
+        timestamp: new Date().toISOString(),
+        services: {
+          database: 'error',
+          redis: 'error',
+          authentication: 'error',
+        },
+      };
     }
   });
 }
 
-// Initialize OAuth providers from environment variables
-async function initializeOAuthProviders(authService: AuthService) {
-  const providers = ['google', 'github', 'microsoft', 'okta', 'auth0'];
-  
-  for (const provider of providers) {
-    const clientId = process.env[`${provider.toUpperCase()}_CLIENT_ID`];
-    const clientSecret = process.env[`${provider.toUpperCase()}_CLIENT_SECRET`];
-    const redirectUri = process.env[`${provider.toUpperCase()}_REDIRECT_URI`];
-    
-    if (clientId && clientSecret && redirectUri) {
-      await authService.registerOAuthProvider({
-        provider: provider as any,
-        clientId,
-        clientSecret,
-        redirectUri,
-        scope: process.env[`${provider.toUpperCase()}_SCOPE`],
-        domain: process.env[`${provider.toUpperCase()}_DOMAIN`],
-      });
-    }
-  }
-}
+export default authRoutes;

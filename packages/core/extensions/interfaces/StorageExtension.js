@@ -1,10 +1,8 @@
-/**
- * Storage Extension Interface - Epic 8.4 Story 8.4.2
- * Defines interfaces for extending the storage and persistence system
- */
-import { z } from 'zod';
-// Storage Types
-export var StorageType;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StorageExtensionHelpers = exports.StorageType = void 0;
+const zod_1 = require("zod");
+var StorageType;
 (function (StorageType) {
     StorageType["MEMORY"] = "memory";
     StorageType["FILE"] = "file";
@@ -17,9 +15,8 @@ export var StorageType;
     StorageType["TIME_SERIES"] = "time_series";
     StorageType["SEARCH"] = "search";
     StorageType["CUSTOM"] = "custom";
-})(StorageType || (StorageType = {}));
-// Storage Extension Helper Functions
-export var StorageExtensionHelpers;
+})(StorageType || (exports.StorageType = StorageType = {}));
+var StorageExtensionHelpers;
 (function (StorageExtensionHelpers) {
     function createStorageProvider(config) {
         return {
@@ -29,10 +26,12 @@ export var StorageExtensionHelpers;
             version: config.version || '1.0.0',
             type: config.type || StorageType.CUSTOM,
             providerClass: config.providerClass || class {
-                id = config.id || 'custom-storage';
-                name = config.name || 'Custom Storage';
-                type = config.type || StorageType.CUSTOM;
-                version = config.version || '1.0.0';
+                constructor() {
+                    this.id = config.id || 'custom-storage';
+                    this.name = config.name || 'Custom Storage';
+                    this.type = config.type || StorageType.CUSTOM;
+                    this.version = config.version || '1.0.0';
+                }
                 async connect() { }
                 async disconnect() { }
                 isConnected() { return true; }
@@ -62,7 +61,7 @@ export var StorageExtensionHelpers;
                 async initialize() { }
                 async dispose() { }
             },
-            configSchema: config.configSchema || z.object({}),
+            configSchema: config.configSchema || zod_1.z.object({}),
             ui: config.ui || {},
             runtime: config.runtime || {},
             capabilities: config.capabilities || {
@@ -95,4 +94,5 @@ export var StorageExtensionHelpers;
         };
     }
     StorageExtensionHelpers.createStorageProvider = createStorageProvider;
-})(StorageExtensionHelpers || (StorageExtensionHelpers = {}));
+})(StorageExtensionHelpers || (exports.StorageExtensionHelpers = StorageExtensionHelpers = {}));
+//# sourceMappingURL=StorageExtension.js.map

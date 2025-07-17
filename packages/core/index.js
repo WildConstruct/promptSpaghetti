@@ -28,3 +28,10 @@ export * from './extensions/interfaces/UIExtension';
 export * from './extensions/interfaces/TransformExtension';
 export * from './extensions/interfaces/StorageExtension';
 export * from './components/ExtensionManager';
+// Epic 9.1.2 - Collaborative Editing exports
+export { GraphCRDTAdapter, createCollaborativeGraph } from './collaboration/GraphCRDTAdapter';
+export { useCollaborativeGraphStore, useCollaborationEnabled, useConnectedUsers, useConnectionStatus, useLocalPresence, useCollaborativeGraph, useCollaborativeActions } from './collaboration/collaborativeGraphStore';
+export { useCollaborativeReactFlow, useNodeCollaborators, useCollaborationStatus } from './collaboration/useCollaborativeReactFlow';
+export { CollaborativePresence, CollaborationStatus, UserAvatars } from './collaboration/CollaborativePresence';
+// Epic 13 - Analytics System exports
+export { RandomizerPanel, GraphPreview, RandomizerWorkflow, RandomizerSystem, LLMRandomizerSystem } from './llm-randomizer';

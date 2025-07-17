@@ -1,4 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import React from "react";
 export const PreviewModal = ({ open, loading, error, results, onClose, onCancel, onResultHover }) => {
     if (!open)
         return null;

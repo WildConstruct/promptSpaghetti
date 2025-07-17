@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Extension Marketplace - Epic 8.4 Story 8.4.5
  * Marketplace view for discovering and installing extensions
  */
-import { useState } from 'react';
+import React, { useState } from 'react';
 export const ExtensionMarketplace = ({ extensions, selectedExtension, onExtensionSelect, onInstallExtension }) => {
     const [viewMode, setViewMode] = useState('grid');
     const [selectedCategory, setSelectedCategory] = useState('all');
