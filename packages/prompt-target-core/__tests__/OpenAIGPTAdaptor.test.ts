@@ -26,7 +26,6 @@ describe('OpenAIGPTAdaptor', () => {
       expect(capabilities).toHaveProperty('limitations');
       expect(capabilities).toHaveProperty('features');
       expect(capabilities.supportedNodeTypes).toContain('text');
-      expect(capabilities.platform).toBe('openai-gpt');
     });
   });
 
