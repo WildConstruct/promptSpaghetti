@@ -27,6 +27,12 @@ import {
   UpdateComment,
   Notification,
   CreateNotification,
+  User,
+  CreateUser,
+  UpdateUser,
+  UserSession,
+  CreateUserSession,
+  OAuthState,
   WorkspaceWithMembership,
   ProjectWithStats,
   UserWithRoles,
@@ -1239,5 +1245,456 @@ export class WorkspaceDAO {
       read_at: undefined,
       delivered_at: new Date(now),
     };
+  }
+
+  // ====== USER AUTHENTICATION OPERATIONS ======
+
+  async createUser(data: CreateUser): Promise<User> {
+    const id = uuidv4();
+    const now = new Date().toISOString();
+
+    const stmt = this.db.prepare(`
+      INSERT INTO users (
+        id, email, name, avatar, password_hash, auth_provider, 
+        auth_provider_id, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      id,
+      data.email,
+      data.name,
+      data.avatar || null,
+      null, // password_hash will be set separately if needed
+      data.auth_provider || 'local',
+      data.auth_provider_id || null,
+      now,
+      now
+    );
+
+    return this.findUserById(id)!;
+  }
+
+  async findUserById(id: string): Promise<User | null> {
+    const stmt = this.db.prepare('SELECT * FROM users WHERE id = ? AND deactivated_at IS NULL');
+    const row = stmt.get(id) as any;
+    
+    if (!row) return null;
+
+    return {
+      id: row.id,
+      email: row.email,
+      name: row.name,
+      avatar: row.avatar,
+      password_hash: row.password_hash,
+      auth_provider: row.auth_provider,
+      auth_provider_id: row.auth_provider_id,
+      email_verified: Boolean(row.email_verified),
+      mfa_enabled: Boolean(row.mfa_enabled),
+      mfa_secret: row.mfa_secret,
+      backup_codes: row.backup_codes ? JSON.parse(row.backup_codes) : [],
+      last_login_at: row.last_login_at ? new Date(row.last_login_at) : undefined,
+      created_at: new Date(row.created_at),
+      updated_at: new Date(row.updated_at),
+      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null,
+    };
+  }
+
+  async findUserByEmail(email: string): Promise<User | null> {
+    const stmt = this.db.prepare('SELECT * FROM users WHERE email = ? AND deactivated_at IS NULL');
+    const row = stmt.get(email) as any;
+    
+    if (!row) return null;
+
+    return {
+      id: row.id,
+      email: row.email,
+      name: row.name,
+      avatar: row.avatar,
+      password_hash: row.password_hash,
+      auth_provider: row.auth_provider,
+      auth_provider_id: row.auth_provider_id,
+      email_verified: Boolean(row.email_verified),
+      mfa_enabled: Boolean(row.mfa_enabled),
+      mfa_secret: row.mfa_secret,
+      backup_codes: row.backup_codes ? JSON.parse(row.backup_codes) : [],
+      last_login_at: row.last_login_at ? new Date(row.last_login_at) : undefined,
+      created_at: new Date(row.created_at),
+      updated_at: new Date(row.updated_at),
+      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null,
+    };
+  }
+
+  async findUserByAuthProvider(provider: string, providerId: string): Promise<User | null> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM users 
+      WHERE auth_provider = ? AND auth_provider_id = ? AND deactivated_at IS NULL
+    `);
+    const row = stmt.get(provider, providerId) as any;
+    
+    if (!row) return null;
+
+    return {
+      id: row.id,
+      email: row.email,
+      name: row.name,
+      avatar: row.avatar,
+      password_hash: row.password_hash,
+      auth_provider: row.auth_provider,
+      auth_provider_id: row.auth_provider_id,
+      email_verified: Boolean(row.email_verified),
+      mfa_enabled: Boolean(row.mfa_enabled),
+      mfa_secret: row.mfa_secret,
+      backup_codes: row.backup_codes ? JSON.parse(row.backup_codes) : [],
+      last_login_at: row.last_login_at ? new Date(row.last_login_at) : undefined,
+      created_at: new Date(row.created_at),
+      updated_at: new Date(row.updated_at),
+      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null,
+    };
+  }
+
+  async updateUser(id: string, data: UpdateUser): Promise<User | null> {
+    const now = new Date().toISOString();
+    const updates: string[] = [];
+    const values: any[] = [];
+
+    if (data.name !== undefined) {
+      updates.push('name = ?');
+      values.push(data.name);
+    }
+    if (data.avatar !== undefined) {
+      updates.push('avatar = ?');
+      values.push(data.avatar);
+    }
+    if (data.email_verified !== undefined) {
+      updates.push('email_verified = ?');
+      values.push(data.email_verified);
+    }
+
+    if (updates.length === 0) {
+      return this.findUserById(id);
+    }
+
+    updates.push('updated_at = ?');
+    values.push(now);
+    values.push(id);
+
+    const stmt = this.db.prepare(`
+      UPDATE users SET ${updates.join(', ')} WHERE id = ?
+    `);
+    stmt.run(...values);
+
+    return this.findUserById(id);
+  }
+
+  async updateUserPassword(id: string, passwordHash: string): Promise<void> {
+    const stmt = this.db.prepare(`
+      UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?
+    `);
+    stmt.run(passwordHash, new Date().toISOString(), id);
+  }
+
+  async updateUserMFA(id: string, mfaEnabled: boolean, mfaSecret?: string, backupCodes?: string[]): Promise<void> {
+    const stmt = this.db.prepare(`
+      UPDATE users SET 
+        mfa_enabled = ?, 
+        mfa_secret = ?, 
+        backup_codes = ?, 
+        updated_at = ? 
+      WHERE id = ?
+    `);
+    stmt.run(
+      mfaEnabled,
+      mfaSecret || null,
+      backupCodes ? JSON.stringify(backupCodes) : null,
+      new Date().toISOString(),
+      id
+    );
+  }
+
+  async updateUserLastLogin(id: string): Promise<void> {
+    const stmt = this.db.prepare(`
+      UPDATE users SET last_login_at = ? WHERE id = ?
+    `);
+    stmt.run(new Date().toISOString(), id);
+  }
+
+  async deactivateUser(id: string): Promise<void> {
+    const stmt = this.db.prepare(`
+      UPDATE users SET deactivated_at = ? WHERE id = ?
+    `);
+    stmt.run(new Date().toISOString(), id);
+  }
+
+  // ====== USER SESSION OPERATIONS ======
+
+  async createUserSession(data: CreateUserSession): Promise<UserSession> {
+    const id = uuidv4();
+    const now = new Date().toISOString();
+
+    const stmt = this.db.prepare(`
+      INSERT INTO user_sessions (
+        id, user_id, session_token, expires_at, user_agent, ip_address,
+        created_at, last_active_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      id,
+      data.user_id,
+      data.session_token,
+      data.expires_at.toISOString(),
+      data.user_agent || null,
+      data.ip_address || null,
+      now,
+      now
+    );
+
+    return {
+      id,
+      user_id: data.user_id,
+      session_token: data.session_token,
+      expires_at: data.expires_at,
+      user_agent: data.user_agent,
+      ip_address: data.ip_address,
+      created_at: new Date(now),
+      last_active_at: new Date(now),
+    };
+  }
+
+  async findUserSessionByToken(token: string): Promise<UserSession | null> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM user_sessions 
+      WHERE session_token = ? AND expires_at > ?
+    `);
+    const row = stmt.get(token, new Date().toISOString()) as any;
+    
+    if (!row) return null;
+
+    return {
+      id: row.id,
+      user_id: row.user_id,
+      session_token: row.session_token,
+      expires_at: new Date(row.expires_at),
+      user_agent: row.user_agent,
+      ip_address: row.ip_address,
+      created_at: new Date(row.created_at),
+      last_active_at: new Date(row.last_active_at),
+    };
+  }
+
+  async updateSessionActivity(sessionId: string): Promise<void> {
+    const stmt = this.db.prepare(`
+      UPDATE user_sessions SET last_active_at = ? WHERE id = ?
+    `);
+    stmt.run(new Date().toISOString(), sessionId);
+  }
+
+  async deleteUserSession(sessionId: string): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM user_sessions WHERE id = ?');
+    stmt.run(sessionId);
+  }
+
+  async deleteUserSessionByToken(token: string): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM user_sessions WHERE session_token = ?');
+    stmt.run(token);
+  }
+
+  async deleteAllUserSessions(userId: string): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM user_sessions WHERE user_id = ?');
+    stmt.run(userId);
+  }
+
+  async getUserSessions(userId: string): Promise<UserSession[]> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM user_sessions 
+      WHERE user_id = ? AND expires_at > ?
+      ORDER BY last_active_at DESC
+    `);
+    const rows = stmt.all(userId, new Date().toISOString()) as any[];
+
+    return rows.map(row => ({
+      id: row.id,
+      user_id: row.user_id,
+      session_token: row.session_token,
+      expires_at: new Date(row.expires_at),
+      user_agent: row.user_agent,
+      ip_address: row.ip_address,
+      created_at: new Date(row.created_at),
+      last_active_at: new Date(row.last_active_at),
+    }));
+  }
+
+  async cleanupExpiredSessions(): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM user_sessions WHERE expires_at <= ?');
+    stmt.run(new Date().toISOString());
+  }
+
+  // ====== OAUTH STATE OPERATIONS ======
+
+  async createOAuthState(state: string, provider: string, redirectUri: string, workspaceId?: string): Promise<OAuthState> {
+    const id = uuidv4();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const now = new Date().toISOString();
+
+    const stmt = this.db.prepare(`
+      INSERT INTO oauth_states (
+        id, state, provider, redirect_uri, workspace_id, expires_at, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      id,
+      state,
+      provider,
+      redirectUri,
+      workspaceId || null,
+      expiresAt.toISOString(),
+      now
+    );
+
+    return {
+      id,
+      state,
+      provider: provider as any,
+      redirect_uri: redirectUri,
+      workspace_id: workspaceId,
+      expires_at: expiresAt,
+      created_at: new Date(now),
+    };
+  }
+
+  async findOAuthState(state: string): Promise<OAuthState | null> {
+    const stmt = this.db.prepare(`
+      SELECT * FROM oauth_states 
+      WHERE state = ? AND expires_at > ?
+    `);
+    const row = stmt.get(state, new Date().toISOString()) as any;
+    
+    if (!row) return null;
+
+    return {
+      id: row.id,
+      state: row.state,
+      provider: row.provider,
+      redirect_uri: row.redirect_uri,
+      workspace_id: row.workspace_id,
+      expires_at: new Date(row.expires_at),
+      created_at: new Date(row.created_at),
+    };
+  }
+
+  async deleteOAuthState(state: string): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM oauth_states WHERE state = ?');
+    stmt.run(state);
+  }
+
+  async cleanupExpiredOAuthStates(): Promise<void> {
+    const stmt = this.db.prepare('DELETE FROM oauth_states WHERE expires_at <= ?');
+    stmt.run(new Date().toISOString());
+  }
+
+  // ====== SECURITY AUDIT OPERATIONS ======
+
+  async logSecurityEvent(
+    userId: string | null,
+    eventType: string,
+    details: Record<string, any> = {},
+    ipAddress?: string,
+    userAgent?: string,
+    workspaceId?: string
+  ): Promise<void> {
+    const id = uuidv4();
+    const now = new Date().toISOString();
+
+    const stmt = this.db.prepare(`
+      INSERT INTO security_audit_log (
+        id, user_id, event_type, details, ip_address, user_agent, workspace_id, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      id,
+      userId,
+      eventType,
+      JSON.stringify(details),
+      ipAddress || null,
+      userAgent || null,
+      workspaceId || null,
+      now
+    );
+  }
+
+  async getSecurityAuditLog(
+    userId?: string,
+    eventTypes?: string[],
+    startDate?: Date,
+    endDate?: Date,
+    limit: number = 100
+  ): Promise<any[]> {
+    let query = 'SELECT * FROM security_audit_log WHERE 1=1';
+    const params: any[] = [];
+
+    if (userId) {
+      query += ' AND user_id = ?';
+      params.push(userId);
+    }
+
+    if (eventTypes && eventTypes.length > 0) {
+      query += ` AND event_type IN (${eventTypes.map(() => '?').join(', ')})`;
+      params.push(...eventTypes);
+    }
+
+    if (startDate) {
+      query += ' AND created_at >= ?';
+      params.push(startDate.toISOString());
+    }
+
+    if (endDate) {
+      query += ' AND created_at <= ?';
+      params.push(endDate.toISOString());
+    }
+
+    query += ' ORDER BY created_at DESC LIMIT ?';
+    params.push(limit);
+
+    const stmt = this.db.prepare(query);
+    const rows = stmt.all(...params) as any[];
+
+    return rows.map(row => ({
+      id: row.id,
+      user_id: row.user_id,
+      event_type: row.event_type,
+      details: JSON.parse(row.details),
+      ip_address: row.ip_address,
+      user_agent: row.user_agent,
+      workspace_id: row.workspace_id,
+      created_at: new Date(row.created_at),
+    }));
+  }
+
+  // ====== USER WORKSPACE OPERATIONS ======
+
+  async getUserWorkspaces(userId: string): Promise<Array<{
+    id: string;
+    name: string;
+    role: string;
+    permissions: number;
+  }>> {
+    const stmt = this.db.prepare(`
+      SELECT w.id, w.name, um.role, um.permissions
+      FROM workspaces w
+      JOIN user_memberships um ON w.id = um.workspace_id
+      WHERE um.user_id = ? AND w.archived_at IS NULL
+      ORDER BY w.name
+    `);
+    
+    const rows = stmt.all(userId) as any[];
+    return rows.map(row => ({
+      id: row.id,
+      name: row.name,
+      role: row.role,
+      permissions: row.permissions,
+    }));
   }
 }

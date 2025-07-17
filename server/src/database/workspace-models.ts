@@ -1,6 +1,7 @@
 /**
  * Epic 9.2.1 - Workspace Data Models
  * TypeScript models for collaborative workspace functionality
+ * Enhanced with Epic 9.2.2 - Authentication and Access Control
  */
 
 import { z } from 'zod';
@@ -53,6 +54,69 @@ export const ROLE_PERMISSIONS = {
   COMMENTER: PERMISSIONS.WORKSPACE_READ | PERMISSIONS.PROJECT_READ | PERMISSIONS.RESOURCE_READ | 
              PERMISSIONS.COMMENT_READ | PERMISSIONS.COMMENT_WRITE | PERMISSIONS.ACTIVITY_READ,
 } as const;
+
+// User authentication and profile schemas
+export const UserSchema = z.object({
+  id: z.string().uuid(),
+  email: z.string().email(),
+  name: z.string().min(1).max(255),
+  avatar: z.string().url().optional(),
+  password_hash: z.string().optional(), // For local auth
+  auth_provider: z.enum(['local', 'google', 'github', 'microsoft', 'okta', 'auth0']).default('local'),
+  auth_provider_id: z.string().optional(), // External provider user ID
+  email_verified: z.boolean().default(false),
+  mfa_enabled: z.boolean().default(false),
+  mfa_secret: z.string().optional(),
+  backup_codes: z.array(z.string()).default([]),
+  last_login_at: z.date().optional(),
+  created_at: z.date(),
+  updated_at: z.date(),
+  deactivated_at: z.date().nullable(),
+});
+
+export const CreateUserSchema = z.object({
+  email: z.string().email(),
+  name: z.string().min(1).max(255),
+  avatar: z.string().url().optional(),
+  password: z.string().min(8).optional(), // For local auth
+  auth_provider: z.enum(['local', 'google', 'github', 'microsoft', 'okta', 'auth0']).default('local'),
+  auth_provider_id: z.string().optional(),
+});
+
+export const UpdateUserSchema = z.object({
+  name: z.string().min(1).max(255).optional(),
+  avatar: z.string().url().optional(),
+  email_verified: z.boolean().optional(),
+});
+
+export const UserSessionSchema = z.object({
+  id: z.string().uuid(),
+  user_id: z.string().uuid(),
+  session_token: z.string(),
+  expires_at: z.date(),
+  user_agent: z.string().optional(),
+  ip_address: z.string().optional(),
+  created_at: z.date(),
+  last_active_at: z.date(),
+});
+
+export const CreateUserSessionSchema = z.object({
+  user_id: z.string().uuid(),
+  session_token: z.string(),
+  expires_at: z.date(),
+  user_agent: z.string().optional(),
+  ip_address: z.string().optional(),
+});
+
+export const OAuthStateSchema = z.object({
+  id: z.string().uuid(),
+  state: z.string(),
+  provider: z.enum(['google', 'github', 'microsoft', 'okta', 'auth0']),
+  redirect_uri: z.string().url(),
+  workspace_id: z.string().uuid().optional(),
+  expires_at: z.date(),
+  created_at: z.date(),
+});
 
 // Zod schemas for validation
 export const WorkspaceSchema = z.object({
@@ -296,6 +360,16 @@ export type UpdateComment = z.infer<typeof UpdateCommentSchema>;
 
 export type Notification = z.infer<typeof NotificationSchema>;
 export type CreateNotification = z.infer<typeof CreateNotificationSchema>;
+
+// User and authentication type exports
+export type User = z.infer<typeof UserSchema>;
+export type CreateUser = z.infer<typeof CreateUserSchema>;
+export type UpdateUser = z.infer<typeof UpdateUserSchema>;
+
+export type UserSession = z.infer<typeof UserSessionSchema>;
+export type CreateUserSession = z.infer<typeof CreateUserSessionSchema>;
+
+export type OAuthState = z.infer<typeof OAuthStateSchema>;
 
 // Helper types
 export interface WorkspaceWithMembership extends Workspace {
