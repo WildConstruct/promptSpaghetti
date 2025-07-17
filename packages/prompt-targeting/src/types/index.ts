@@ -6,7 +6,7 @@
 import { z } from 'zod';
 
 // Re-export PromptGraph type from core package
-export type { PromptGraph } from '@prompt-graph/core';
+export type { PromptGraph } from '../../../core/types';
 
 /**
  * Platform-specific capabilities and constraints

@@ -1,5 +1,13 @@
 require('@testing-library/jest-dom');
 
+// TextEncoder/TextDecoder polyfill for Node.js environment
+if (typeof TextEncoder === 'undefined') {
+  global.TextEncoder = require('util').TextEncoder;
+}
+if (typeof TextDecoder === 'undefined') {
+  global.TextDecoder = require('util').TextDecoder;
+}
+
 // Enhanced ResizeObserver mock for ReactFlow
 global.ResizeObserver = class ResizeObserver {
   constructor(callback) {
