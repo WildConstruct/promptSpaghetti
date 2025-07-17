@@ -50,6 +50,27 @@ export interface CorrectionRule {
   validation_status: 'valid' | 'invalid' | 'warning';
   validation_message?: string;
   last_used_at?: string;
+  
+  // Workflow state management
+  workflow_state: 'draft' | 'published' | 'deprecated';
+  approved_by?: number;
+  approved_at?: string;
+  deprecated_at?: string;
+  deprecation_reason?: string;
+  
+  // Workflow suggestion fields
+  suggested_by?: string;
+  suggestion_reason?: string;
+  suggestion_date?: string;
+  
+  // Categorization and tagging
+  category?: string;
+  tags?: string; // JSON array as string
+  
+  // Usage tracking
+  usage_count: number;
+  effectiveness_score: number;
+  user_rating?: number;
 }
 
 export interface CorrectionRuleHistory {
@@ -182,6 +203,13 @@ export const CreateCorrectionRuleSchema = z.object({
   user_id: z.number().int().positive().default(1),
   project_id: z.number().int().positive().optional(),
   scope: z.enum(['global', 'project', 'private']).default('private'),
+  
+  // Workflow fields
+  workflow_state: z.enum(['draft', 'published', 'deprecated']).default('draft'),
+  suggested_by: z.string().optional(),
+  suggestion_reason: z.string().optional(),
+  category: z.string().max(100).optional(),
+  tags: z.array(z.string()).optional(), // Will be JSON stringified
 });
 
 export const UpdateCorrectionRuleSchema = z.object({
@@ -195,6 +223,13 @@ export const UpdateCorrectionRuleSchema = z.object({
   scope: z.enum(['global', 'project', 'private']).optional(),
   validation_status: z.enum(['valid', 'invalid', 'warning']).optional(),
   validation_message: z.string().optional(),
+  
+  // Workflow fields
+  workflow_state: z.enum(['draft', 'published', 'deprecated']).optional(),
+  deprecation_reason: z.string().optional(),
+  category: z.string().max(100).optional(),
+  tags: z.array(z.string()).optional(), // Will be JSON stringified
+  user_rating: z.number().min(0).max(5).optional(),
 });
 
 export const CreateCorrectionSetSchema = z.object({
@@ -217,11 +252,37 @@ export const UpdateUserPreferencesSchema = z.object({
   advanced_settings: z.string().optional(),
 });
 
+// Workflow operation schemas
+export const ApproveRuleSchema = z.object({
+  rule_id: z.number().int().positive(),
+  approved_by: z.number().int().positive(),
+  comment: z.string().optional(),
+});
+
+export const DeprecateRuleSchema = z.object({
+  rule_id: z.number().int().positive(),
+  deprecated_by: z.number().int().positive(),
+  reason: z.string().min(1),
+});
+
+export const CreateNotificationSchema = z.object({
+  user_id: z.number().int().positive(),
+  rule_id: z.number().int().positive().optional(),
+  notification_type: z.string().min(1),
+  title: z.string().min(1).max(255),
+  message: z.string().min(1),
+  action_url: z.string().url().optional(),
+  metadata: z.object({}).passthrough().optional(),
+});
+
 // Type definitions for API
 export type CreateCorrectionRuleInput = z.infer<typeof CreateCorrectionRuleSchema>;
 export type UpdateCorrectionRuleInput = z.infer<typeof UpdateCorrectionRuleSchema>;
 export type CreateCorrectionSetInput = z.infer<typeof CreateCorrectionSetSchema>;
 export type UpdateUserPreferencesInput = z.infer<typeof UpdateUserPreferencesSchema>;
+export type ApproveRuleInput = z.infer<typeof ApproveRuleSchema>;
+export type DeprecateRuleInput = z.infer<typeof DeprecateRuleSchema>;
+export type CreateNotificationInput = z.infer<typeof CreateNotificationSchema>;
 
 // Statistics aggregation types
 export interface RuleUsageStats {
@@ -282,6 +343,33 @@ export interface PerformanceMetrics {
   excellent_rules: number; // Rules with quality_score >= 80
   good_rules: number; // Rules with quality_score 60-79
   poor_rules: number; // Rules with quality_score < 60
+}
+
+// Workflow state history tracking
+export interface WorkflowStateHistory {
+  id: number;
+  rule_id: number;
+  previous_state?: 'draft' | 'published' | 'deprecated';
+  new_state: 'draft' | 'published' | 'deprecated';
+  changed_by: number;
+  changed_at: string;
+  change_reason?: string;
+  metadata?: string; // JSON string
+}
+
+// Workflow notifications
+export interface WorkflowNotification {
+  id: number;
+  user_id: number;
+  rule_id?: number;
+  notification_type: string;
+  title: string;
+  message: string;
+  is_read: boolean;
+  action_url?: string;
+  metadata?: string; // JSON string
+  created_at: string;
+  read_at?: string;
 }
 
 // Migration tracking

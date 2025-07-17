@@ -6,6 +6,7 @@ import { validateGraph } from './graphValidator';
 import { initDatabase, healthCheck, getDatabase, runMigrations } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
 import { workspaceRoutes } from './routes/workspace';
+import { workflowRoutes } from './routes/workflow';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
@@ -190,6 +191,9 @@ server.register(correctionsRoutes, { prefix: '/api/corrections' });
 
 // Register workspace routes
 server.register(workspaceRoutes, { prefix: '/api' });
+
+// Register workflow routes
+server.register(workflowRoutes, { prefix: '/api/workflow' });
 
 // Legacy GET preview endpoint (dummy data for backwards compatibility)
 server.get('/preview', async (request, reply) => {
