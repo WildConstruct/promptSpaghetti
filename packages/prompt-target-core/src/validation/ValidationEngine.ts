@@ -70,6 +70,11 @@ export class ValidationEngine {
         Array.from(report.platformResults.values())
       );
 
+      // Add structural and custom results to each platform result
+      report.platformResults.forEach((platformResult, platform) => {
+        platformResult.results.unshift(...structuralResults, ...customResults);
+      });
+
       // Aggregate results
       this.aggregateResults(report, structuralResults, customResults);
       
@@ -157,7 +162,12 @@ export class ValidationEngine {
         autoFixable: true,
         suggestions: [{
           type: 'fix',
-          description: 'Connect components or remove isolated nodes'
+          description: 'Connect disconnected components or remove isolated nodes',
+          action: {
+            type: 'node_modify',
+            targetId: 'disconnected-components',
+            changes: {}
+          }
         }]
       });
     }
@@ -181,7 +191,7 @@ export class ValidationEngine {
           autoFixable: true,
           suggestions: [{
             type: 'fix',
-            description: 'Connect node to graph or remove it',
+            description: 'Remove orphaned node or connect it to the graph',
             action: {
               type: 'node_remove',
               targetId: node.id,
@@ -407,45 +417,77 @@ export class ValidationEngine {
   private generateAutoFixSuggestions(report: ValidationReport): AutoFixSuggestion[] {
     const suggestions: AutoFixSuggestion[] = [];
 
-    // Collect all auto-fixable issues
+    // Collect all auto-fixable issues from all platform results
     const autoFixableIssues: ValidationResult[] = [];
     
     report.platformResults.forEach(platformResult => {
-      autoFixableIssues.push(
-        ...platformResult.results.filter(r => r.autoFixable && r.suggestions)
-      );
+      const fixableResults = platformResult.results.filter(r => r.autoFixable);
+      autoFixableIssues.push(...fixableResults);
     });
 
-    // Group by fix type and create suggestions
+    // Group by issue type and create suggestions
     const fixGroups = new Map<string, ValidationResult[]>();
     
     autoFixableIssues.forEach(issue => {
-      issue.suggestions?.forEach(suggestion => {
-        if (suggestion.action) {
-          const key = `${suggestion.action.type}:${suggestion.action.targetId}`;
+      if (issue.suggestions && issue.suggestions.length > 0) {
+        issue.suggestions.forEach(suggestion => {
+          let key: string;
+          
+          if (suggestion.action && suggestion.action.targetId) {
+            key = `${suggestion.action.type}:${suggestion.action.targetId}`;
+          } else {
+            // Fallback grouping by issue type for suggestions without actions
+            key = `${issue.type}:${issue.severity}:${suggestion.type}`;
+          }
+          
           if (!fixGroups.has(key)) {
             fixGroups.set(key, []);
           }
           fixGroups.get(key)!.push(issue);
+        });
+      } else {
+        // Create default suggestion for auto-fixable issues without explicit suggestions
+        const key = `${issue.type}:${issue.severity}:default`;
+        if (!fixGroups.has(key)) {
+          fixGroups.set(key, []);
         }
-      });
+        fixGroups.get(key)!.push(issue);
+      }
     });
 
+    // Generate suggestions from groups
     fixGroups.forEach((issues, key) => {
       const firstIssue = issues[0];
-      const firstSuggestion = firstIssue.suggestions?.[0];
+      let suggestion: any;
       
-      if (firstSuggestion?.action) {
-        suggestions.push({
-          id: `autofix-${key}`,
-          type: firstSuggestion.type,
-          description: firstSuggestion.description,
-          action: firstSuggestion.action,
-          affectedIssues: issues.map(i => i.id),
-          confidence: this.calculateFixConfidence(issues),
-          impact: this.assessFixImpact(issues)
-        });
+      if (firstIssue.suggestions && firstIssue.suggestions.length > 0) {
+        suggestion = firstIssue.suggestions[0];
+      } else {
+        // Create default suggestion
+        suggestion = {
+          type: 'fix',
+          description: `Fix ${issues.length} ${firstIssue.type}${issues.length > 1 ? 's' : ''}`,
+          action: {
+            type: 'node_modify',
+            targetId: firstIssue.nodeId || firstIssue.edgeId || 'unknown',
+            changes: {}
+          }
+        };
       }
+      
+      suggestions.push({
+        id: `autofix-${key.replace(/:/g, '-')}`,
+        type: suggestion.type || 'fix',
+        description: suggestion.description,
+        action: suggestion.action || {
+          type: 'node_modify',
+          targetId: 'unknown',
+          changes: {}
+        },
+        affectedIssues: issues.map(i => i.id),
+        confidence: this.calculateFixConfidence(issues),
+        impact: this.assessFixImpact(issues)
+      });
     });
 
     return suggestions;

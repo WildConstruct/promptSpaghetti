@@ -387,7 +387,7 @@ export function createPromptTargetingExample(): PromptTargetingExample {
 }
 
 // CLI runner if executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (typeof require !== 'undefined' && require.main === module) {
   const example = createPromptTargetingExample();
   example.runAllExamples().catch(console.error);
 }
