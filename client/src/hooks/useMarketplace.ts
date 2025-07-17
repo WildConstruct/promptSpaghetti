@@ -260,6 +260,92 @@ export const useMarketplace = (): MarketplaceState & MarketplaceActions => {
     }
   }, []);
 
+  // Recommendation methods
+  const getPersonalizedRecommendations = useCallback(async (limit: number = 10) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/recommendations/personalized?limit=${limit}`, {
+        headers: getAuthHeaders()
+      });
+
+      const data = await handleApiResponse(response);
+      return data.templates || [];
+    } catch (error) {
+      console.error('Failed to get personalized recommendations:', error);
+      return [];
+    }
+  }, []);
+
+  const getTrendingTemplates = useCallback(async (timeWindow: number = 7, limit: number = 10) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/recommendations/trending?timeWindow=${timeWindow}&limit=${limit}`, {
+        headers: getAuthHeaders()
+      });
+
+      const data = await handleApiResponse(response);
+      return data.templates || [];
+    } catch (error) {
+      console.error('Failed to get trending templates:', error);
+      return [];
+    }
+  }, []);
+
+  const getSimilarTemplates = useCallback(async (templateId: string, limit: number = 5) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/templates/${templateId}/similar?limit=${limit}`, {
+        headers: getAuthHeaders()
+      });
+
+      const data = await handleApiResponse(response);
+      return data.templates || [];
+    } catch (error) {
+      console.error('Failed to get similar templates:', error);
+      return [];
+    }
+  }, []);
+
+  const getNewUserRecommendations = useCallback(async (limit: number = 10) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/recommendations/new-user?limit=${limit}`, {
+        headers: getAuthHeaders()
+      });
+
+      const data = await handleApiResponse(response);
+      return data.templates || [];
+    } catch (error) {
+      console.error('Failed to get new user recommendations:', error);
+      return [];
+    }
+  }, []);
+
+  const getCategoryRecommendations = useCallback(async (categoryId: string, limit: number = 10, exclude: string[] = []) => {
+    try {
+      const excludeParam = exclude.length > 0 ? `&exclude=${exclude.join(',')}` : '';
+      const response = await fetch(`${API_BASE_URL}/categories/${categoryId}/recommendations?limit=${limit}${excludeParam}`, {
+        headers: getAuthHeaders()
+      });
+
+      const data = await handleApiResponse(response);
+      return data.templates || [];
+    } catch (error) {
+      console.error('Failed to get category recommendations:', error);
+      return [];
+    }
+  }, []);
+
+  const getSearchBasedRecommendations = useCallback(async (limit: number = 10) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/recommendations/search-based?limit=${limit}`, {
+        headers: getAuthHeaders()
+      });
+
+      const data = await handleApiResponse(response);
+      return data.templates || [];
+    } catch (error) {
+      console.error('Failed to get search-based recommendations:', error);
+      return [];
+    }
+  }, []);
+
   return {
     ...state,
     searchTemplates,
@@ -269,6 +355,13 @@ export const useMarketplace = (): MarketplaceState & MarketplaceActions => {
     previewTemplate,
     purchaseTemplate,
     clearError,
-    reset
+    reset,
+    // Recommendation methods
+    getPersonalizedRecommendations,
+    getTrendingTemplates,
+    getSimilarTemplates,
+    getNewUserRecommendations,
+    getCategoryRecommendations,
+    getSearchBasedRecommendations
   };
 };

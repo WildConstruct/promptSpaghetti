@@ -1,6 +1,8 @@
 // Epic 16 Marketplace Service Layer
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { MarketplaceDAO } from './dao';
+import { ElasticsearchService } from './elasticsearch.service';
+import { ClaudePreviewService } from './claude-preview.service';
 import { 
   MarketplaceTemplate, 
   TemplateVersion, 
@@ -26,9 +28,13 @@ import * as crypto from 'crypto';
 @Injectable()
 export class MarketplaceService {
   private dao: MarketplaceDAO;
+  private elasticsearch: ElasticsearchService;
+  private claudePreview: ClaudePreviewService;
 
   constructor(private pool: Pool) {
     this.dao = new MarketplaceDAO(pool);
+    this.elasticsearch = new ElasticsearchService(pool);
+    this.claudePreview = new ClaudePreviewService(pool);
   }
 
   // Template operations
@@ -95,6 +101,25 @@ export class MarketplaceService {
       throw new NotFoundException('Template not found');
     }
 
+    // Update Elasticsearch index if template is listed
+    if (updatedTemplate.status === TemplateStatus.LISTED) {
+      try {
+        const fullTemplate = await this.dao.getTemplate(id);
+        if (fullTemplate) {
+          await this.elasticsearch.indexTemplate(fullTemplate);
+        }
+      } catch (error) {
+        console.error('Failed to update Elasticsearch index:', error);
+      }
+    } else if (updatedTemplate.status === TemplateStatus.ARCHIVED) {
+      // Remove from index if archived
+      try {
+        await this.elasticsearch.removeTemplate(id);
+      } catch (error) {
+        console.error('Failed to remove from Elasticsearch index:', error);
+      }
+    }
+
     return updatedTemplate;
   }
 
@@ -114,7 +139,23 @@ export class MarketplaceService {
   }
 
   async searchTemplates(filters: SearchFilters, userId?: string): Promise<SearchResult> {
-    const result = await this.dao.searchTemplates(filters);
+    // Use Elasticsearch for advanced search, fallback to PostgreSQL
+    let result: SearchResult;
+    
+    try {
+      const esResult = await this.elasticsearch.searchTemplates(filters);
+      result = {
+        templates: esResult.templates,
+        total: esResult.total,
+        page: filters.page || 1,
+        limit: filters.limit || 20,
+        has_more: ((filters.page || 1) * (filters.limit || 20)) < esResult.total,
+        aggregations: esResult.aggregations
+      };
+    } catch (error) {
+      console.error('Elasticsearch search failed, falling back to PostgreSQL:', error);
+      result = await this.dao.searchTemplates(filters);
+    }
 
     // Record search event
     if (userId) {
@@ -135,6 +176,15 @@ export class MarketplaceService {
     }
 
     return result;
+  }
+
+  async getSearchSuggestions(query: string, limit: number = 10): Promise<string[]> {
+    try {
+      return await this.elasticsearch.getSearchSuggestions(query, limit);
+    } catch (error) {
+      console.error('Failed to get search suggestions:', error);
+      return [];
+    }
   }
 
   // Version management
@@ -326,50 +376,21 @@ export class MarketplaceService {
 
   // Preview system
   async previewTemplate(userId: string, request: PreviewRequest): Promise<PreviewResponse> {
-    const template = await this.dao.getTemplate(request.template_id);
-    
-    if (!template) {
-      throw new NotFoundException('Template not found');
+    try {
+      return await this.claudePreview.generatePreview(userId, request);
+    } catch (error) {
+      console.error('Preview generation failed:', error);
+      throw new BadRequestException(error instanceof Error ? error.message : 'Preview generation failed');
     }
+  }
 
-    if (template.status !== TemplateStatus.LISTED) {
-      throw new BadRequestException('Template preview not available');
+  async getPreviewMetadata(templateId: string, versionId?: string): Promise<any> {
+    try {
+      return await this.claudePreview.getPreviewMetadata(templateId, versionId);
+    } catch (error) {
+      console.error('Failed to get preview metadata:', error);
+      throw new NotFoundException(error instanceof Error ? error.message : 'Preview metadata not available');
     }
-
-    const versionId = request.version_id || template.current_version_id;
-    if (!versionId) {
-      throw new BadRequestException('No version available for preview');
-    }
-
-    const version = await this.dao.getVersion(versionId);
-    if (!version) {
-      throw new NotFoundException('Version not found');
-    }
-
-    // Record preview event
-    await this.dao.recordEvent({
-      event_type: EventType.PREVIEW,
-      user_id: userId,
-      template_id: request.template_id,
-      version_id: versionId,
-      metadata: { claude_model: request.claude_model_override || version.claude_model }
-    });
-
-    // TODO: Implement actual Claude API preview with IP protection
-    // For now, return a mock response
-    const mockResponse: PreviewResponse = {
-      output: '[PREVIEW] This is a sample output from the template. Purchase to see full results.',
-      cost_estimate: version.token_per_run_estimate * 0.002, // Mock cost calculation
-      quality_score: 4.2,
-      token_usage: {
-        input_tokens: 150,
-        output_tokens: 75
-      },
-      cached: false,
-      redacted_sections: ['sensitive_prompt_section', 'proprietary_logic']
-    };
-
-    return mockResponse;
   }
 
   // Categories

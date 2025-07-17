@@ -1,6 +1,7 @@
 // Epic 16 Marketplace Fastify Routes
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { MarketplaceService } from './marketplace.service';
+import { RecommendationService } from './recommendation.service';
 import { Pool } from 'pg';
 import { 
   SearchFilters,
@@ -22,6 +23,7 @@ interface AuthenticatedRequest extends FastifyRequest {
 
 export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) {
   const marketplaceService = new MarketplaceService(dbPool);
+  const recommendationService = new RecommendationService(dbPool);
 
   // Helper function to check if user has required role
   const hasRole = (user: any, requiredRoles: string[]): boolean => {
@@ -59,6 +61,30 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     } catch (error) {
       fastify.log.error(error);
       return reply.status(400).send({ error: error instanceof Error ? error.message : 'Unknown error' });
+    }
+  });
+
+  // Search suggestions endpoint
+  fastify.get('/search/suggestions', {
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          q: { type: 'string', minLength: 1 },
+          limit: { type: 'integer', minimum: 1, maximum: 20, default: 10 }
+        },
+        required: ['q']
+      }
+    }
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    const { q, limit = 10 } = request.query as any;
+
+    try {
+      const suggestions = await marketplaceService.getSearchSuggestions(q, limit);
+      return reply.send({ suggestions });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch search suggestions' });
     }
   });
 
@@ -384,6 +410,39 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
     }
   });
 
+  // Preview metadata endpoint
+  fastify.get('/templates/:id/preview-metadata', {
+    schema: {
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' }
+        },
+        required: ['id']
+      },
+      querystring: {
+        type: 'object',
+        properties: {
+          version_id: { type: 'string', format: 'uuid' }
+        }
+      }
+    }
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    const { id } = request.params as { id: string };
+    const { version_id } = request.query as any;
+
+    try {
+      const metadata = await marketplaceService.getPreviewMetadata(id, version_id);
+      return reply.send(metadata);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('not found')) {
+        return reply.status(404).send({ error: 'Template not found' });
+      }
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch preview metadata' });
+    }
+  });
+
   // Preview endpoint
   fastify.post('/templates/:id/preview', {
     preHandler: fastify.auth([fastify.verifyJWT]),
@@ -473,6 +532,166 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
       }
       fastify.log.error(error);
       return reply.status(500).send({ error: 'Failed to fetch analytics' });
+    }
+  });
+
+  // Recommendation endpoints
+  fastify.get('/recommendations/personalized', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 },
+          exclude_owned: { type: 'boolean', default: true }
+        }
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    const { limit = 10, exclude_owned = true } = request.query as any;
+
+    try {
+      const recommendations = await recommendationService.getPersonalizedRecommendations(
+        user.id, 
+        limit, 
+        exclude_owned
+      );
+      return reply.send({ templates: recommendations });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch personalized recommendations' });
+    }
+  });
+
+  fastify.get('/templates/:id/similar', {
+    schema: {
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' }
+        },
+        required: ['id']
+      },
+      querystring: {
+        type: 'object',
+        properties: {
+          limit: { type: 'integer', minimum: 1, maximum: 20, default: 5 }
+        }
+      }
+    }
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    const { id } = request.params as { id: string };
+    const { limit = 5 } = request.query as any;
+
+    try {
+      const similarTemplates = await recommendationService.getSimilarTemplates(id, limit);
+      return reply.send({ templates: similarTemplates });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch similar templates' });
+    }
+  });
+
+  fastify.get('/recommendations/trending', {
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          timeWindow: { type: 'integer', minimum: 1, maximum: 30, default: 7 },
+          limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 }
+        }
+      }
+    }
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    const { timeWindow = 7, limit = 10 } = request.query as any;
+
+    try {
+      const trendingTemplates = await recommendationService.getTrendingTemplates(timeWindow, limit);
+      return reply.send({ templates: trendingTemplates });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch trending templates' });
+    }
+  });
+
+  fastify.get('/recommendations/new-user', {
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 }
+        }
+      }
+    }
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    const { limit = 10 } = request.query as any;
+
+    try {
+      const recommendations = await recommendationService.getNewUserRecommendations(limit);
+      return reply.send({ templates: recommendations });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch new user recommendations' });
+    }
+  });
+
+  fastify.get('/categories/:id/recommendations', {
+    schema: {
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid' }
+        },
+        required: ['id']
+      },
+      querystring: {
+        type: 'object',
+        properties: {
+          limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 },
+          exclude: { type: 'string' } // comma-separated template IDs
+        }
+      }
+    }
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    const { id } = request.params as { id: string };
+    const { limit = 10, exclude } = request.query as any;
+    
+    const excludeTemplateIds = exclude ? exclude.split(',').map((id: string) => id.trim()) : [];
+
+    try {
+      const recommendations = await recommendationService.getCategoryRecommendations(
+        id, 
+        limit, 
+        excludeTemplateIds
+      );
+      return reply.send({ templates: recommendations });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch category recommendations' });
+    }
+  });
+
+  fastify.get('/recommendations/search-based', {
+    preHandler: fastify.auth([fastify.verifyJWT]),
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          limit: { type: 'integer', minimum: 1, maximum: 50, default: 10 }
+        }
+      }
+    }
+  }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    const { limit = 10 } = request.query as any;
+
+    try {
+      const recommendations = await recommendationService.getSearchBasedRecommendations(user.id, limit);
+      return reply.send({ templates: recommendations });
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Failed to fetch search-based recommendations' });
     }
   });
 
