@@ -19,6 +19,7 @@ import { WSServerConfig } from './websocket/types';
 import { AnalyticsWebSocketServer } from './websocket/AnalyticsWebSocketServer';
 import { authRoutes, jwtAuthMiddleware } from './auth/routes';
 import { buildAuthConfig, CORS_CONFIG } from './auth/config';
+import { marketplaceRoutes } from './marketplace/routes';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -299,6 +300,17 @@ if (analyticsDashboard && costTracker) {
   server.register(async (fastify) => {
     await analyticsRoutes(fastify, analyticsDashboard, costTracker);
   }, { prefix: '/api' });
+}
+
+// Register marketplace routes
+try {
+  const db = getDatabase();
+  server.register(async (fastify) => {
+    await marketplaceRoutes(fastify, db);
+  }, { prefix: '/api/marketplace' });
+  console.log('Marketplace routes registered successfully');
+} catch (error) {
+  console.error('Failed to register marketplace routes:', error);
 }
 
 // Setup analytics WebSocket server
