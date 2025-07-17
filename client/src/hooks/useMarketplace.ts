@@ -63,12 +63,13 @@ interface MarketplaceState {
 }
 
 interface MarketplaceActions {
-  searchTemplates: (filters: SearchFilters) => Promise<void>;
+  searchTemplates: (filters: SearchFilters, append?: boolean) => Promise<void>;
   loadCategories: () => Promise<void>;
   loadFeaturedTemplates: () => Promise<void>;
   getTemplate: (id: string) => Promise<Template | null>;
   previewTemplate: (id: string, options?: any) => Promise<any>;
   purchaseTemplate: (id: string, options?: any) => Promise<any>;
+  getSearchSuggestions: (query: string) => Promise<string[]>;
   clearError: () => void;
   reset: () => void;
 }
@@ -139,7 +140,7 @@ export const useMarketplace = (): MarketplaceState & MarketplaceActions => {
     });
   }, []);
 
-  const searchTemplates = useCallback(async (filters: SearchFilters) => {
+  const searchTemplates = useCallback(async (filters: SearchFilters, append: boolean = false) => {
     const requestId = ++requestIdRef.current;
     setLoading(true);
     clearError();
@@ -167,7 +168,10 @@ export const useMarketplace = (): MarketplaceState & MarketplaceActions => {
       if (requestId === requestIdRef.current) {
         setState(prev => ({
           ...prev,
-          templates: data,
+          templates: append ? {
+            ...data,
+            templates: [...prev.templates.templates, ...data.templates]
+          } : data,
           loading: false
         }));
       }
@@ -332,6 +336,24 @@ export const useMarketplace = (): MarketplaceState & MarketplaceActions => {
     }
   }, []);
 
+  const getSearchSuggestions = useCallback(async (query: string): Promise<string[]> => {
+    if (!query.trim() || query.length < 2) {
+      return [];
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/search/suggestions?q=${encodeURIComponent(query)}`, {
+        headers: getAuthHeaders()
+      });
+
+      const data = await handleApiResponse(response);
+      return data.suggestions || [];
+    } catch (error) {
+      console.error('Failed to get search suggestions:', error);
+      return [];
+    }
+  }, []);
+
   const getSearchBasedRecommendations = useCallback(async (limit: number = 10) => {
     try {
       const response = await fetch(`${API_BASE_URL}/recommendations/search-based?limit=${limit}`, {
@@ -354,6 +376,7 @@ export const useMarketplace = (): MarketplaceState & MarketplaceActions => {
     getTemplate,
     previewTemplate,
     purchaseTemplate,
+    getSearchSuggestions,
     clearError,
     reset,
     // Recommendation methods
