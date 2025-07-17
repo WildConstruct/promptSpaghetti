@@ -3,8 +3,9 @@ import { z } from 'zod';
 import { executeGraph } from './engine';
 import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
-import { initDatabase, healthCheck } from './database/connection';
+import { initDatabase, healthCheck, getDatabase, runMigrations } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
+import { workspaceRoutes } from './routes/workspace';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
@@ -98,7 +99,14 @@ const wsServer = new WebSocketServer(wsConfig);
 
 // Initialize database on startup
 try {
-  initDatabase();
+  const db = initDatabase();
+  
+  // Run migrations
+  runMigrations();
+  
+  // Make database available to fastify routes
+  server.decorate('db', db);
+  
   console.log('Database initialized successfully');
 } catch (error) {
   console.error('Failed to initialize database:', error);
@@ -179,6 +187,9 @@ server.get('/ws/documents/:documentId/users', async (request, reply) => {
 
 // Register corrections routes
 server.register(correctionsRoutes, { prefix: '/api/corrections' });
+
+// Register workspace routes
+server.register(workspaceRoutes, { prefix: '/api' });
 
 // Legacy GET preview endpoint (dummy data for backwards compatibility)
 server.get('/preview', async (request, reply) => {

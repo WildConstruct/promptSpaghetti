@@ -146,7 +146,21 @@ export function runMigrations(): boolean {
     
     console.log('Current database version:', currentVersion?.version || 'none');
     
-    // Add future migration logic here
+    // Run workspace schema migration
+    const workspaceMigrationApplied = db.prepare('SELECT 1 FROM migrations WHERE version = ?').get('002_workspace_schema');
+    if (!workspaceMigrationApplied) {
+      console.log('Applying workspace schema migration...');
+      const migrationPath = join(__dirname, 'migrations', '002_workspace_schema.sql');
+      try {
+        const migrationSQL = readFileSync(migrationPath, 'utf8');
+        db.exec(migrationSQL);
+        db.prepare('INSERT INTO migrations (version) VALUES (?)').run('002_workspace_schema');
+        console.log('Workspace schema migration applied successfully');
+      } catch (migrationError) {
+        console.error('Failed to apply workspace migration:', migrationError);
+        // Don't return false here - let other migrations continue
+      }
+    }
     
     return true;
   } catch (error) {
