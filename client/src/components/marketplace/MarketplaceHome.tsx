@@ -1,9 +1,10 @@
 // Epic 16 Marketplace - Home Page Component
 import React, { useState, useEffect } from 'react';
-import { SearchBar } from './SearchBar';
+import { EnhancedSearchBar } from './EnhancedSearchBar';
 import { TemplateCard } from './TemplateCard';
 import { CategoryNav } from './CategoryNav';
 import { FeaturedTemplates } from './FeaturedTemplates';
+import { AdvancedFilters } from './AdvancedFilters';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { useMarketplace } from '../../hooks/useMarketplace';
 import './MarketplaceHome.css';
@@ -17,6 +18,17 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'relevance' | 'popularity' | 'newest' | 'price_asc' | 'price_desc' | 'rating'>('relevance');
   const [priceFilter, setPriceFilter] = useState<'all' | 'free' | 'paid'>('all');
+  const [advancedFilters, setAdvancedFilters] = useState({
+    categories: [] as string[],
+    tags: [] as string[],
+    priceRange: {} as { min?: number; max?: number },
+    rating: 0,
+    complexity: 'all' as 'beginner' | 'intermediate' | 'advanced' | 'all',
+    compatibility: [] as string[],
+    isFree: null as boolean | null,
+    isAiGenerated: null as boolean | null,
+    sortBy: 'relevance' as 'relevance' | 'price_asc' | 'price_desc' | 'rating' | 'popularity' | 'newest' | 'oldest'
+  });
 
   const {
     templates,
@@ -39,14 +51,20 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
   useEffect(() => {
     // Trigger search when filters change
     handleSearch();
-  }, [searchQuery, selectedCategory, sortBy, priceFilter]);
+  }, [searchQuery, selectedCategory, sortBy, priceFilter, advancedFilters]);
 
   const handleSearch = () => {
     const filters = {
       query: searchQuery || undefined,
-      categories: selectedCategory ? [selectedCategory] : undefined,
-      sort_by: sortBy,
-      is_free: priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
+      categories: selectedCategory ? [selectedCategory] : 
+                 advancedFilters.categories.length > 0 ? advancedFilters.categories : undefined,
+      tags: advancedFilters.tags.length > 0 ? advancedFilters.tags : undefined,
+      price_min: advancedFilters.priceRange.min,
+      price_max: advancedFilters.priceRange.max,
+      rating_min: advancedFilters.rating > 0 ? advancedFilters.rating : undefined,
+      sort_by: advancedFilters.sortBy !== 'relevance' ? advancedFilters.sortBy : sortBy,
+      is_free: advancedFilters.isFree !== null ? advancedFilters.isFree : 
+               priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
       page: 1,
       limit: 20
     };
@@ -85,7 +103,7 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
           <h1>Discover Powerful Prompt Templates</h1>
           <p>Find, preview, and purchase high-quality prompt templates from our community of creators</p>
           
-          <SearchBar
+          <EnhancedSearchBar
             value={searchQuery}
             onChange={setSearchQuery}
             placeholder="Search templates, categories, or tags..."
@@ -106,6 +124,17 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
           />
         )}
       </section>
+
+      {/* Advanced Filters */}
+      <AdvancedFilters
+        filters={advancedFilters}
+        onFiltersChange={setAdvancedFilters}
+        availableCategories={categories}
+        availableTags={[
+          'writing', 'coding', 'marketing', 'education', 'business', 'creative',
+          'analysis', 'research', 'email', 'social-media', 'content', 'customer-service'
+        ]}
+      />
 
       {/* Main Content */}
       <div className="main-content">
@@ -212,7 +241,18 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
             <div className="load-more-section">
               <button 
                 onClick={() => {
-                  // TODO: Implement pagination
+                  const nextPage = templates.page + 1;
+                  const filters = {
+                    query: searchQuery || undefined,
+                    categories: selectedCategory ? [selectedCategory] : undefined,
+                    sort_by: sortBy,
+                    is_free: priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
+                    page: nextPage,
+                    limit: 20
+                  };
+                  
+                  // Load more templates by appending to existing results
+                  searchTemplates(filters, true); // true indicates append mode
                 }}
                 className="load-more-button"
                 disabled={loading}
