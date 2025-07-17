@@ -1,6 +1,7 @@
 import {
   Capabilities,
   PromptGraph,
+  PromptNode,
   ValidationResult,
   TargetPrompt,
   TransformOptions,

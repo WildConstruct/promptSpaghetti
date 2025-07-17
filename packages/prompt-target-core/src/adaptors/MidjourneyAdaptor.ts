@@ -1,6 +1,7 @@
 import {
   Capabilities,
   PromptGraph,
+  PromptNode,
   ValidationResult,
   TargetPrompt,
   TransformOptions,
@@ -686,9 +687,114 @@ export class MidjourneyAdaptor extends BaseAdaptor {
     };
   }
 
-  // Reuse parameter validation and normalization from base class
-  private validateParameter = super.validateParameter;
-  private normalizeParameter = super.normalizeParameter;
-  private extractParameters = super.extractParameters;
-  private generateTranslationId = super.generateTranslationId;
+  /**
+   * Validate a parameter value against its specification
+   */
+  private validateParameter(
+    name: string,
+    value: any,
+    spec: ParameterSpec
+  ): ValidationResult | null {
+    // Implement parameter validation logic
+    if (spec.type === 'number') {
+      if (typeof value !== 'number' || isNaN(value)) {
+        return this.createValidationResult(
+          `invalid-param-${name}`,
+          'error',
+          'medium',
+          `Invalid number value for parameter "${name}"`,
+          {
+            description: `Expected number, got ${typeof value}`,
+            autoFixable: true
+          }
+        );
+      }
+      
+      if (spec.min !== undefined && value < spec.min) {
+        return this.createValidationResult(
+          `param-too-low-${name}`,
+          'warning',
+          'low',
+          `Parameter "${name}" value too low`,
+          {
+            description: `Value ${value} is below minimum ${spec.min}`,
+            autoFixable: true
+          }
+        );
+      }
+      
+      if (spec.max !== undefined && value > spec.max) {
+        return this.createValidationResult(
+          `param-too-high-${name}`,
+          'warning',
+          'low',
+          `Parameter "${name}" value too high`,
+          {
+            description: `Value ${value} is above maximum ${spec.max}`,
+            autoFixable: true
+          }
+        );
+      }
+    }
+    
+    if (spec.type === 'enum' && spec.options) {
+      if (!spec.options.includes(value)) {
+        return this.createValidationResult(
+          `invalid-enum-${name}`,
+          'error',
+          'medium',
+          `Invalid enum value for parameter "${name}"`,
+          {
+            description: `Value "${value}" not in allowed options: ${spec.options.join(', ')}`,
+            autoFixable: true
+          }
+        );
+      }
+    }
+    
+    return null;
+  }
+
+  /**
+   * Normalize parameter value according to its specification
+   */
+  private normalizeParameter(value: any, spec: ParameterSpec): any {
+    if (spec.type === 'number') {
+      const num = Number(value);
+      if (isNaN(num)) return spec.default;
+      
+      if (spec.min !== undefined) return Math.max(spec.min, num);
+      if (spec.max !== undefined) return Math.min(spec.max, num);
+      
+      return num;
+    }
+    
+    if (spec.type === 'enum' && spec.options) {
+      return spec.options.includes(value) ? value : spec.default;
+    }
+    
+    return value;
+  }
+
+  /**
+   * Extract parameters from graph nodes
+   */
+  private extractParameters(graph: PromptGraph): Record<string, any> {
+    const parameters: Record<string, any> = {};
+    
+    graph.nodes.forEach(node => {
+      if (node.data.parameters) {
+        Object.assign(parameters, node.data.parameters);
+      }
+    });
+    
+    return parameters;
+  }
+
+  /**
+   * Generate a unique translation ID
+   */
+  private generateTranslationId(): string {
+    return `${this.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
 }

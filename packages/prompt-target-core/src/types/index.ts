@@ -372,3 +372,15 @@ export class AdaptorError extends PromptTargetingError {
     this.name = 'AdaptorError';
   }
 }
+
+export class TranslationError extends PromptTargetingError {
+  constructor(
+    message: string,
+    code: string,
+    details?: Record<string, any>,
+    recoverable: boolean = true
+  ) {
+    super(message, code, details, recoverable);
+    this.name = 'TranslationError';
+  }
+}

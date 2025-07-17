@@ -212,18 +212,20 @@ export class MappingEngine {
 
     } catch (error) {
       const totalTime = Date.now() - startTime;
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorType = error instanceof Error ? error.constructor.name : 'UnknownError';
       
       this.logger.error('Translation failed', {
         requestId,
         graphId: request.graph.id,
         targetPlatform: request.targetPlatform,
-        error: error.message,
+        error: errorMessage,
         duration: totalTime
       });
 
       this.metrics.counter('mapping_engine.translation.error', 1, {
         platform: request.targetPlatform,
-        error_type: error.constructor.name
+        error_type: errorType
       });
 
       if (error instanceof PromptTargetingError) {
@@ -235,7 +237,8 @@ export class MappingEngine {
             code: error.code,
             message: error.message,
             details: error.details,
-            recoverable: error.recoverable
+            recoverable: error.recoverable,
+            name: error.name
           },
           timing: {
             total: totalTime,
@@ -254,8 +257,9 @@ export class MappingEngine {
         error: {
           code: 'UNEXPECTED_ERROR',
           message: 'An unexpected error occurred during translation',
-          details: { originalError: error.message },
-          recoverable: true
+          details: { originalError: errorMessage },
+          recoverable: true,
+          name: 'UnexpectedError'
         },
         timing: {
           total: totalTime,
@@ -351,9 +355,10 @@ export class MappingEngine {
         return cached;
       }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.warn('Cache lookup failed', {
         cacheKey,
-        error: error.message
+        error: errorMessage
       });
     }
     
@@ -375,9 +380,10 @@ export class MappingEngine {
       
       this.logger.debug('Result cached', { cacheKey });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.warn('Cache storage failed', {
         cacheKey,
-        error: error.message
+        error: errorMessage
       });
     }
   }

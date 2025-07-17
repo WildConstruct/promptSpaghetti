@@ -93,9 +93,10 @@ export class ValidationEngine {
       return report;
 
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Graph validation failed', {
         graphId: graph.id,
-        error: error.message
+        error: errorMessage
       });
 
       this.metrics.counter('validation.failed', 1);
@@ -224,9 +225,10 @@ export class ValidationEngine {
         const ruleResults = await rule.validate(graph);
         results.push(...ruleResults);
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
         this.logger.warn('Custom rule validation failed', {
           ruleId: rule.id,
-          error: error.message
+          error: errorMessage
         });
       }
     }
@@ -259,10 +261,11 @@ export class ValidationEngine {
         duration: Date.now() - startTime
       };
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Platform validation failed', {
         platform: adaptor.platform,
         adaptorId: adaptor.id,
-        error: error.message
+        error: errorMessage
       });
 
       return {
@@ -274,7 +277,7 @@ export class ValidationEngine {
           type: 'error',
           severity: 'critical',
           message: 'Platform validation failed',
-          description: error.message,
+          description: errorMessage,
           autoFixable: false
         }],
         capabilities: {
@@ -317,14 +320,14 @@ export class ValidationEngine {
     const platformFeatures = new Map<Platform, Set<string>>();
 
     platformResults.forEach(result => {
-      const features = new Set(
+      const features = new Set<string>(
         result.capabilities.features
-          .filter(f => f.supported)
-          .map(f => f.name)
+          .filter((f: any) => f.supported)
+          .map((f: any) => f.name)
       );
       
       platformFeatures.set(result.platform, features);
-      features.forEach(f => allFeatures.add(f));
+      features.forEach((f: string) => allFeatures.add(f));
     });
 
     allFeatures.forEach(feature => {
@@ -351,7 +354,7 @@ export class ValidationEngine {
     const nodeTypeSupport = new Map<string, Platform[]>();
     
     platformResults.forEach(result => {
-      result.capabilities.supportedNodeTypes.forEach(nodeType => {
+      result.capabilities.supportedNodeTypes.forEach((nodeType: any) => {
         if (!nodeTypeSupport.has(nodeType)) {
           nodeTypeSupport.set(nodeType, []);
         }
