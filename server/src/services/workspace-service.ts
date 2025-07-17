@@ -344,31 +344,254 @@ export class WorkspaceService {
     userId: string,
     filter: ActivityEventFilter = {},
     pagination: PaginationOptions = {}
-  ): Promise<PaginatedResult<ActivityEvent>> {
+  ): Promise<PaginatedResult<ActivityEventWithActorInfo>> {
     // Check access
     const hasAccess = await this.checkWorkspaceAccess(workspaceId, userId, PERMISSIONS.ACTIVITY_READ);
     if (!hasAccess) {
       throw new Error('Access denied to activity feed');
     }
 
-    // Implementation would go here - for now return empty
-    return {
-      data: [],
-      pagination: {
-        page: 1,
-        limit: 20,
-        total: 0,
-        total_pages: 0,
-        has_next: false,
-        has_prev: false,
-      },
-    };
+    return this.dao.getActivityFeed(workspaceId, filter, pagination);
   }
 
-  // ====== COMMENTS ======
+  async getActivityEventById(eventId: string, userId: string): Promise<ActivityEventWithActorInfo | null> {
+    const event = await this.dao.getActivityEventById(eventId);
+    if (!event) return null;
+
+    // Check access to the workspace
+    const hasAccess = await this.checkWorkspaceAccess(event.workspace_id, userId, PERMISSIONS.ACTIVITY_READ);
+    if (!hasAccess) {
+      throw new Error('Access denied to activity event');
+    }
+
+    return event;
+  }
+
+  async getActivityEventTypes(workspaceId: string, userId: string): Promise<string[]> {
+    // Check access
+    const hasAccess = await this.checkWorkspaceAccess(workspaceId, userId, PERMISSIONS.ACTIVITY_READ);
+    if (!hasAccess) {
+      throw new Error('Access denied to workspace');
+    }
+
+    return this.dao.getActivityEventTypes(workspaceId);
+  }
+
+  async getActivityStats(
+    workspaceId: string,
+    userId: string,
+    days = 30
+  ): Promise<{
+    total_events: number;
+    events_by_type: Record<string, number>;
+    events_by_day: Array<{ date: string; count: number }>;
+    most_active_users: Array<{ user_id: string; count: number }>;
+  }> {
+    // Check access
+    const hasAccess = await this.checkWorkspaceAccess(workspaceId, userId, PERMISSIONS.ACTIVITY_READ);
+    if (!hasAccess) {
+      throw new Error('Access denied to workspace activity stats');
+    }
+
+    return this.dao.getActivityStats(workspaceId, days);
+  }
+
+  async getProjectActivityFeed(
+    projectId: string,
+    userId: string,
+    pagination: PaginationOptions = {}
+  ): Promise<PaginatedResult<ActivityEventWithActorInfo>> {
+    const project = await this.dao.getProject(projectId);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    // Check access
+    const hasAccess = await this.checkWorkspaceAccess(
+      project.workspace_id,
+      userId,
+      PERMISSIONS.ACTIVITY_READ
+    );
+    if (!hasAccess) {
+      throw new Error('Access denied to project activity');
+    }
+
+    return this.dao.getActivityFeed(
+      project.workspace_id,
+      { project_id: projectId },
+      pagination
+    );
+  }
+
+  async getUserActivityFeed(
+    workspaceId: string,
+    targetUserId: string,
+    requestingUserId: string,
+    pagination: PaginationOptions = {}
+  ): Promise<PaginatedResult<ActivityEventWithActorInfo>> {
+    // Check access
+    const hasAccess = await this.checkWorkspaceAccess(workspaceId, requestingUserId, PERMISSIONS.ACTIVITY_READ);
+    if (!hasAccess) {
+      throw new Error('Access denied to workspace activity');
+    }
+
+    return this.dao.getActivityFeed(
+      workspaceId,
+      { actor_id: targetUserId },
+      pagination
+    );
+  }
+
+  // ====== COMMENT OPERATIONS ======
 
   async createComment(data: CreateComment): Promise<Comment> {
-    const resource = await this.dao.getResource(data.resource_id);
+    // Validate content
+    if (!data.content || !data.content.trim()) {
+      throw new Error('Comment content is required');
+    }
+
+    // Check permissions based on workspace access
+    const hasAccess = await this.checkWorkspaceAccess(
+      data.workspace_id,
+      data.author_id,
+      PERMISSIONS.COMMENT_WRITE
+    );
+    if (!hasAccess) {
+      throw new Error('Insufficient permissions to create comments');
+    }
+
+    // If this is a reply, validate parent comment exists
+    if (data.parent_comment_id) {
+      const parentComment = await this.dao.getComment(data.parent_comment_id);
+      if (!parentComment) {
+        throw new Error('Parent comment not found');
+      }
+      if (parentComment.workspace_id !== data.workspace_id) {
+        throw new Error('Parent comment is not in the same workspace');
+      }
+    }
+
+    const comment = await this.dao.createComment(data);
+
+    // Send notifications for mentions and replies
+    if (data.parent_comment_id) {
+      const parentComment = await this.dao.getComment(data.parent_comment_id);
+      if (parentComment && parentComment.author_id !== data.author_id) {
+        // Notify parent comment author
+        await this.createNotification({
+          user_id: parentComment.author_id,
+          workspace_id: data.workspace_id,
+          notification_type: 'comment_reply',
+          title: 'New reply to your comment',
+          message: `${data.author_id} replied to your comment`,
+          action_url: `/workspaces/${data.workspace_id}/comments/${comment.id}`,
+          priority: 'normal',
+        });
+      }
+    }
+
+    return comment;
+  }
+
+  async updateComment(
+    commentId: string,
+    updates: UpdateComment,
+    userId: string
+  ): Promise<Comment | null> {
+    const comment = await this.dao.getComment(commentId);
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+
+    // Only author can edit their comments, or users with admin permissions
+    if (comment.author_id !== userId) {
+      const hasAccess = await this.checkWorkspaceAccess(
+        comment.workspace_id,
+        userId,
+        PERMISSIONS.COMMENT_DELETE
+      );
+      if (!hasAccess) {
+        throw new Error('Insufficient permissions to edit this comment');
+      }
+    }
+
+    if (updates.content && !updates.content.trim()) {
+      throw new Error('Comment content cannot be empty');
+    }
+
+    return this.dao.updateComment(commentId, userId, updates);
+  }
+
+  async deleteComment(commentId: string, userId: string): Promise<boolean> {
+    const comment = await this.dao.getComment(commentId);
+    if (!comment) {
+      return false;
+    }
+
+    // Only author can delete their comments, or users with admin permissions
+    if (comment.author_id !== userId) {
+      const hasAccess = await this.checkWorkspaceAccess(
+        comment.workspace_id,
+        userId,
+        PERMISSIONS.COMMENT_DELETE
+      );
+      if (!hasAccess) {
+        throw new Error('Insufficient permissions to delete this comment');
+      }
+    }
+
+    return this.dao.deleteComment(commentId, userId);
+  }
+
+  async getCommentsByTarget(
+    workspaceId: string,
+    targetType: string,
+    targetId: string,
+    userId: string,
+    options: PaginationOptions = {}
+  ): Promise<PaginatedResult<Comment>> {
+    // Check read permissions
+    const hasAccess = await this.checkWorkspaceAccess(
+      workspaceId,
+      userId,
+      PERMISSIONS.COMMENT_READ
+    );
+    if (!hasAccess) {
+      throw new Error('Insufficient permissions to view comments');
+    }
+
+    return this.dao.getCommentsByTarget(workspaceId, targetType, targetId, options);
+  }
+
+  async getCommentReplies(
+    commentId: string,
+    userId: string,
+    options: PaginationOptions = {}
+  ): Promise<PaginatedResult<Comment>> {
+    const comment = await this.dao.getComment(commentId);
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+
+    // Check read permissions
+    const hasAccess = await this.checkWorkspaceAccess(
+      comment.workspace_id,
+      userId,
+      PERMISSIONS.COMMENT_READ
+    );
+    if (!hasAccess) {
+      throw new Error('Insufficient permissions to view comment replies');
+    }
+
+    return this.dao.getCommentReplies(commentId, options);
+  }
+
+  async getCommentsByResource(
+    resourceId: string,
+    userId: string,
+    options: PaginationOptions = {}
+  ): Promise<PaginatedResult<Comment>> {
+    const resource = await this.dao.getResource(resourceId);
     if (!resource) {
       throw new Error('Resource not found');
     }
@@ -378,52 +601,47 @@ export class WorkspaceService {
       throw new Error('Project not found');
     }
 
-    // Check permissions
+    // Check read permissions
     const hasAccess = await this.checkWorkspaceAccess(
       project.workspace_id,
-      data.author_id,
+      userId,
+      PERMISSIONS.COMMENT_READ
+    );
+    if (!hasAccess) {
+      throw new Error('Insufficient permissions to view comments');
+    }
+
+    return this.dao.getCommentsByResource(resourceId, options);
+  }
+
+  async resolveComment(
+    commentId: string,
+    userId: string,
+    resolved: boolean = true
+  ): Promise<Comment | null> {
+    const comment = await this.dao.getComment(commentId);
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+
+    // Check permissions
+    const hasAccess = await this.checkWorkspaceAccess(
+      comment.workspace_id,
+      userId,
       PERMISSIONS.COMMENT_WRITE
     );
     if (!hasAccess) {
-      throw new Error('Insufficient permissions to comment');
+      throw new Error('Insufficient permissions to resolve comments');
     }
 
-    if (!data.content_markdown.trim()) {
-      throw new Error('Comment content is required');
-    }
-
-    return this.dao.createComment(data);
-  }
-
-  async updateComment(
-    id: string,
-    data: UpdateComment,
-    userId: string
-  ): Promise<Comment | null> {
-    const comment = await this.dao.getComment(id);
-    if (!comment) return null;
-
-    // Only author can edit their comments, or users with delete permission
-    if (comment.author_id !== userId) {
-      const resource = await this.dao.getResource(comment.resource_id);
-      if (resource) {
-        const project = await this.dao.getProject(resource.project_id);
-        if (project) {
-          const hasAccess = await this.checkWorkspaceAccess(
-            project.workspace_id,
-            userId,
-            PERMISSIONS.COMMENT_DELETE
-          );
-          if (!hasAccess) {
-            throw new Error('Insufficient permissions to edit this comment');
-          }
-        }
-      }
-    }
-
-    // Implementation would update the comment and return it
-    // For now, return the existing comment
-    return comment;
+    return this.dao.updateComment(commentId, userId, {
+      metadata: {
+        ...comment.metadata,
+        resolved,
+        resolved_by: resolved ? userId : undefined,
+        resolved_at: resolved ? new Date().toISOString() : undefined,
+      },
+    });
   }
 
   // ====== PERMISSION CHECKING ======

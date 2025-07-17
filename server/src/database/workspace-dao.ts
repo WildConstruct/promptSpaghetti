@@ -621,6 +621,210 @@ export class WorkspaceDAO {
     };
   }
 
+  async getActivityFeed(
+    workspaceId: string,
+    filter: ActivityEventFilter = {},
+    pagination: PaginationOptions = {}
+  ): Promise<PaginatedResult<ActivityEventWithActorInfo>> {
+    const { page = 1, limit = 20, sort_by = 'created_at', sort_order = 'desc' } = pagination;
+    const offset = (page - 1) * limit;
+
+    let whereClause = `WHERE ae.workspace_id = ?`;
+    const params: any[] = [workspaceId];
+
+    if (filter.project_id) {
+      whereClause += ` AND ae.project_id = ?`;
+      params.push(filter.project_id);
+    }
+
+    if (filter.actor_id) {
+      whereClause += ` AND ae.actor_id = ?`;
+      params.push(filter.actor_id);
+    }
+
+    if (filter.event_types && filter.event_types.length > 0) {
+      const placeholders = filter.event_types.map(() => '?').join(',');
+      whereClause += ` AND ae.event_type IN (${placeholders})`;
+      params.push(...filter.event_types);
+    }
+
+    if (filter.from_date) {
+      whereClause += ` AND ae.created_at >= ?`;
+      params.push(filter.from_date.toISOString());
+    }
+
+    if (filter.to_date) {
+      whereClause += ` AND ae.created_at <= ?`;
+      params.push(filter.to_date.toISOString());
+    }
+
+    const countStmt = this.db.prepare(`
+      SELECT COUNT(*) as total
+      FROM activity_events ae
+      ${whereClause}
+    `);
+
+    const dataStmt = this.db.prepare(`
+      SELECT 
+        ae.id, ae.workspace_id, ae.project_id, ae.resource_id, ae.actor_id,
+        ae.event_type, ae.event_data, ae.aggregation_key, ae.created_at,
+        p.name as project_name,
+        r.name as resource_name, r.type as resource_type
+      FROM activity_events ae
+      LEFT JOIN projects p ON ae.project_id = p.id
+      LEFT JOIN resources r ON ae.resource_id = r.id
+      ${whereClause}
+      ORDER BY ae.${sort_by} ${sort_order.toUpperCase()}
+      LIMIT ? OFFSET ?
+    `);
+
+    const { total } = countStmt.get(...params) as { total: number };
+    const rows = dataStmt.all(...params, limit, offset) as any[];
+
+    const data: ActivityEventWithActorInfo[] = rows.map(row => ({
+      id: row.id,
+      workspace_id: row.workspace_id,
+      project_id: row.project_id,
+      resource_id: row.resource_id,
+      actor_id: row.actor_id,
+      event_type: row.event_type,
+      event_data: JSON.parse(row.event_data || '{}'),
+      aggregation_key: row.aggregation_key,
+      created_at: new Date(row.created_at),
+      actor_name: `User ${row.actor_id}`, // TODO: Get actual user name
+      project_name: row.project_name,
+      resource_name: row.resource_name,
+      resource_type: row.resource_type,
+    }));
+
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total,
+        total_pages: Math.ceil(total / limit),
+        has_next: page * limit < total,
+        has_prev: page > 1,
+      },
+    };
+  }
+
+  async getActivityEventById(id: string): Promise<ActivityEventWithActorInfo | null> {
+    const stmt = this.db.prepare(`
+      SELECT 
+        ae.id, ae.workspace_id, ae.project_id, ae.resource_id, ae.actor_id,
+        ae.event_type, ae.event_data, ae.aggregation_key, ae.created_at,
+        p.name as project_name,
+        r.name as resource_name, r.type as resource_type
+      FROM activity_events ae
+      LEFT JOIN projects p ON ae.project_id = p.id
+      LEFT JOIN resources r ON ae.resource_id = r.id
+      WHERE ae.id = ?
+    `);
+
+    const row = stmt.get(id) as any;
+    if (!row) return null;
+
+    return {
+      id: row.id,
+      workspace_id: row.workspace_id,
+      project_id: row.project_id,
+      resource_id: row.resource_id,
+      actor_id: row.actor_id,
+      event_type: row.event_type,
+      event_data: JSON.parse(row.event_data || '{}'),
+      aggregation_key: row.aggregation_key,
+      created_at: new Date(row.created_at),
+      actor_name: `User ${row.actor_id}`, // TODO: Get actual user name
+      project_name: row.project_name,
+      resource_name: row.resource_name,
+      resource_type: row.resource_type,
+    };
+  }
+
+  async getActivityEventTypes(workspaceId: string): Promise<string[]> {
+    const stmt = this.db.prepare(`
+      SELECT DISTINCT event_type
+      FROM activity_events
+      WHERE workspace_id = ?
+      ORDER BY event_type
+    `);
+
+    const rows = stmt.all(workspaceId) as { event_type: string }[];
+    return rows.map(row => row.event_type);
+  }
+
+  async getActivityStats(workspaceId: string, days = 30): Promise<{
+    total_events: number;
+    events_by_type: Record<string, number>;
+    events_by_day: Array<{ date: string; count: number }>;
+    most_active_users: Array<{ user_id: string; count: number }>;
+  }> {
+    const since = new Date();
+    since.setDate(since.getDate() - days);
+
+    // Total events
+    const totalStmt = this.db.prepare(`
+      SELECT COUNT(*) as total
+      FROM activity_events
+      WHERE workspace_id = ? AND created_at >= ?
+    `);
+    const { total } = totalStmt.get(workspaceId, since.toISOString()) as { total: number };
+
+    // Events by type
+    const typeStmt = this.db.prepare(`
+      SELECT event_type, COUNT(*) as count
+      FROM activity_events
+      WHERE workspace_id = ? AND created_at >= ?
+      GROUP BY event_type
+      ORDER BY count DESC
+    `);
+    const typeRows = typeStmt.all(workspaceId, since.toISOString()) as any[];
+    const eventsByType = typeRows.reduce((acc, row) => {
+      acc[row.event_type] = row.count;
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Events by day
+    const dayStmt = this.db.prepare(`
+      SELECT 
+        DATE(created_at) as date,
+        COUNT(*) as count
+      FROM activity_events
+      WHERE workspace_id = ? AND created_at >= ?
+      GROUP BY DATE(created_at)
+      ORDER BY date
+    `);
+    const dayRows = dayStmt.all(workspaceId, since.toISOString()) as any[];
+    const eventsByDay = dayRows.map(row => ({
+      date: row.date,
+      count: row.count,
+    }));
+
+    // Most active users
+    const userStmt = this.db.prepare(`
+      SELECT actor_id as user_id, COUNT(*) as count
+      FROM activity_events
+      WHERE workspace_id = ? AND created_at >= ?
+      GROUP BY actor_id
+      ORDER BY count DESC
+      LIMIT 10
+    `);
+    const userRows = userStmt.all(workspaceId, since.toISOString()) as any[];
+    const mostActiveUsers = userRows.map(row => ({
+      user_id: row.user_id,
+      count: row.count,
+    }));
+
+    return {
+      total_events: total,
+      events_by_type: eventsByType,
+      events_by_day: eventsByDay,
+      most_active_users: mostActiveUsers,
+    };
+  }
+
   // ====== COMMENT OPERATIONS ======
 
   async createComment(data: CreateComment): Promise<Comment> {
@@ -629,39 +833,41 @@ export class WorkspaceDAO {
 
     const stmt = this.db.prepare(`
       INSERT INTO comments (
-        id, resource_id, parent_id, author_id, content_markdown, 
-        target_type, target_data, status, created_at, updated_at
+        id, workspace_id, project_id, resource_id, parent_comment_id, author_id, 
+        content, target_type, target_id, metadata, created_at, updated_at
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, 'active', ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     stmt.run(
       id,
+      data.workspace_id,
+      data.project_id,
       data.resource_id,
-      data.parent_id || null,
+      data.parent_comment_id || null,
       data.author_id,
-      data.content_markdown,
-      data.target_type || null,
-      JSON.stringify(data.target_data || {}),
+      data.content,
+      data.target_type,
+      data.target_id,
+      JSON.stringify(data.metadata || {}),
       now,
       now
     );
 
-    const resource = await this.getResource(data.resource_id);
-    if (resource) {
-      const project = await this.getProject(resource.project_id);
-      if (project) {
-        // Log activity
-        await this.createActivityEvent({
-          workspace_id: project.workspace_id,
-          project_id: project.id,
-          resource_id: data.resource_id,
-          actor_id: data.author_id,
-          event_type: 'comment.created',
-          event_data: { target_type: data.target_type },
-        });
-      }
-    }
+    // Log activity
+    await this.createActivityEvent({
+      workspace_id: data.workspace_id,
+      project_id: data.project_id,
+      resource_id: data.resource_id,
+      actor_id: data.author_id,
+      event_type: 'comment.created',
+      event_data: { 
+        comment_id: id,
+        target_type: data.target_type,
+        target_id: data.target_id,
+        content_preview: data.content.substring(0, 100)
+      },
+    });
 
     return this.getComment(id)!;
   }
@@ -669,23 +875,325 @@ export class WorkspaceDAO {
   async getComment(id: string): Promise<Comment | null> {
     const stmt = this.db.prepare(`
       SELECT 
-        id, resource_id, parent_id, author_id, content_markdown, content_html,
-        target_type, target_data, status, edited_at, resolved_by, resolved_at,
-        created_at, updated_at
-      FROM comments
-      WHERE id = ?
+        c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
+        c.author_id, c.content, c.target_type, c.target_id, c.metadata,
+        c.created_at, c.updated_at, c.deleted_at,
+        u.username as author_name, u.email as author_email,
+        COUNT(replies.id) as reply_count
+      FROM comments c
+      LEFT JOIN users u ON c.author_id = u.id
+      LEFT JOIN comments replies ON replies.parent_comment_id = c.id AND replies.deleted_at IS NULL
+      WHERE c.id = ? AND c.deleted_at IS NULL
+      GROUP BY c.id
     `);
 
     const row = stmt.get(id) as any;
     if (!row) return null;
 
     return {
-      ...row,
-      target_data: JSON.parse(row.target_data || '{}'),
-      edited_at: row.edited_at ? new Date(row.edited_at) : undefined,
-      resolved_at: row.resolved_at ? new Date(row.resolved_at) : undefined,
+      id: row.id,
+      workspace_id: row.workspace_id,
+      project_id: row.project_id,
+      resource_id: row.resource_id,
+      parent_comment_id: row.parent_comment_id,
+      author_id: row.author_id,
+      author_name: row.author_name,
+      author_email: row.author_email,
+      content: row.content,
+      target_type: row.target_type,
+      target_id: row.target_id,
+      metadata: JSON.parse(row.metadata || '{}'),
+      reply_count: parseInt(row.reply_count) || 0,
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at),
+    };
+  }
+
+  async updateComment(commentId: string, userId: string, updates: UpdateComment): Promise<Comment | null> {
+    // Check if user can update this comment
+    const existingComment = await this.getComment(commentId);
+    if (!existingComment || existingComment.author_id !== userId) {
+      return null;
+    }
+
+    const { content, metadata } = updates;
+    
+    const stmt = this.db.prepare(`
+      UPDATE comments 
+      SET content = COALESCE(?, content),
+          metadata = COALESCE(?, metadata),
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ? AND author_id = ? AND deleted_at IS NULL
+    `);
+    
+    const result = stmt.run(
+      content,
+      metadata ? JSON.stringify(metadata) : null,
+      commentId,
+      userId
+    );
+
+    if (result.changes === 0) return null;
+
+    // Log activity
+    await this.createActivityEvent({
+      workspace_id: existingComment.workspace_id,
+      project_id: existingComment.project_id,
+      resource_id: existingComment.resource_id,
+      actor_id: userId,
+      event_type: 'comment.updated',
+      event_data: {
+        comment_id: commentId,
+        target_type: existingComment.target_type,
+        target_id: existingComment.target_id
+      },
+    });
+
+    return this.getComment(commentId);
+  }
+
+  async deleteComment(commentId: string, userId: string): Promise<boolean> {
+    const existingComment = await this.getComment(commentId);
+    if (!existingComment || existingComment.author_id !== userId) {
+      return false;
+    }
+
+    const stmt = this.db.prepare(`
+      UPDATE comments 
+      SET deleted_at = CURRENT_TIMESTAMP
+      WHERE id = ? AND author_id = ? AND deleted_at IS NULL
+    `);
+    
+    const result = stmt.run(commentId, userId);
+
+    if (result.changes > 0) {
+      // Log activity
+      await this.createActivityEvent({
+        workspace_id: existingComment.workspace_id,
+        project_id: existingComment.project_id,
+        resource_id: existingComment.resource_id,
+        actor_id: userId,
+        event_type: 'comment.deleted',
+        event_data: {
+          comment_id: commentId,
+          target_type: existingComment.target_type,
+          target_id: existingComment.target_id
+        },
+      });
+    }
+
+    return result.changes > 0;
+  }
+
+  async getCommentsByTarget(
+    workspaceId: string,
+    targetType: string,
+    targetId: string,
+    options: PaginationOptions = {}
+  ): Promise<PaginatedResult<Comment>> {
+    const { page = 1, limit = 20, sort_by = 'created_at', sort_order = 'desc' } = options;
+    const offset = (page - 1) * limit;
+
+    // Get top-level comments first
+    const commentsSql = `
+      SELECT 
+        c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
+        c.author_id, c.content, c.target_type, c.target_id, c.metadata,
+        c.created_at, c.updated_at,
+        u.username as author_name, u.email as author_email,
+        COUNT(replies.id) as reply_count
+      FROM comments c
+      LEFT JOIN users u ON c.author_id = u.id
+      LEFT JOIN comments replies ON replies.parent_comment_id = c.id AND replies.deleted_at IS NULL
+      WHERE c.workspace_id = ? 
+        AND c.target_type = ? 
+        AND c.target_id = ?
+        AND c.parent_comment_id IS NULL
+        AND c.deleted_at IS NULL
+      GROUP BY c.id
+      ORDER BY c.${sort_by} ${sort_order.toUpperCase()}
+      LIMIT ? OFFSET ?
+    `;
+
+    const totalSql = `
+      SELECT COUNT(*) as total
+      FROM comments
+      WHERE workspace_id = ? 
+        AND target_type = ? 
+        AND target_id = ?
+        AND parent_comment_id IS NULL
+        AND deleted_at IS NULL
+    `;
+
+    const rows = this.db.prepare(commentsSql).all(workspaceId, targetType, targetId, limit, offset) as any[];
+    const totalResult = this.db.prepare(totalSql).get(workspaceId, targetType, targetId) as any;
+
+    const comments: Comment[] = rows.map(row => ({
+      id: row.id,
+      workspace_id: row.workspace_id,
+      project_id: row.project_id,
+      resource_id: row.resource_id,
+      parent_comment_id: row.parent_comment_id,
+      author_id: row.author_id,
+      author_name: row.author_name,
+      author_email: row.author_email,
+      content: row.content,
+      target_type: row.target_type,
+      target_id: row.target_id,
+      metadata: JSON.parse(row.metadata || '{}'),
+      reply_count: parseInt(row.reply_count) || 0,
+      created_at: new Date(row.created_at),
+      updated_at: new Date(row.updated_at),
+    }));
+
+    const total = totalResult.total;
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: comments,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: totalPages,
+        has_next: page < totalPages,
+        has_prev: page > 1
+      }
+    };
+  }
+
+  async getCommentReplies(
+    commentId: string,
+    options: PaginationOptions = {}
+  ): Promise<PaginatedResult<Comment>> {
+    const { page = 1, limit = 10, sort_by = 'created_at', sort_order = 'asc' } = options;
+    const offset = (page - 1) * limit;
+
+    const repliesSql = `
+      SELECT 
+        c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
+        c.author_id, c.content, c.target_type, c.target_id, c.metadata,
+        c.created_at, c.updated_at,
+        u.username as author_name, u.email as author_email,
+        0 as reply_count
+      FROM comments c
+      LEFT JOIN users u ON c.author_id = u.id
+      WHERE c.parent_comment_id = ? 
+        AND c.deleted_at IS NULL
+      ORDER BY c.${sort_by} ${sort_order.toUpperCase()}
+      LIMIT ? OFFSET ?
+    `;
+
+    const totalSql = `
+      SELECT COUNT(*) as total
+      FROM comments
+      WHERE parent_comment_id = ? AND deleted_at IS NULL
+    `;
+
+    const rows = this.db.prepare(repliesSql).all(commentId, limit, offset) as any[];
+    const totalResult = this.db.prepare(totalSql).get(commentId) as any;
+
+    const replies: Comment[] = rows.map(row => ({
+      id: row.id,
+      workspace_id: row.workspace_id,
+      project_id: row.project_id,
+      resource_id: row.resource_id,
+      parent_comment_id: row.parent_comment_id,
+      author_id: row.author_id,
+      author_name: row.author_name,
+      author_email: row.author_email,
+      content: row.content,
+      target_type: row.target_type,
+      target_id: row.target_id,
+      metadata: JSON.parse(row.metadata || '{}'),
+      reply_count: 0,
+      created_at: new Date(row.created_at),
+      updated_at: new Date(row.updated_at),
+    }));
+
+    const total = totalResult.total;
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: replies,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: totalPages,
+        has_next: page < totalPages,
+        has_prev: page > 1
+      }
+    };
+  }
+
+  async getCommentsByResource(
+    resourceId: string,
+    options: PaginationOptions = {}
+  ): Promise<PaginatedResult<Comment>> {
+    const { page = 1, limit = 20, sort_by = 'created_at', sort_order = 'desc' } = options;
+    const offset = (page - 1) * limit;
+
+    const commentsSql = `
+      SELECT 
+        c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
+        c.author_id, c.content, c.target_type, c.target_id, c.metadata,
+        c.created_at, c.updated_at,
+        u.username as author_name, u.email as author_email,
+        COUNT(replies.id) as reply_count
+      FROM comments c
+      LEFT JOIN users u ON c.author_id = u.id
+      LEFT JOIN comments replies ON replies.parent_comment_id = c.id AND replies.deleted_at IS NULL
+      WHERE c.resource_id = ? 
+        AND c.parent_comment_id IS NULL
+        AND c.deleted_at IS NULL
+      GROUP BY c.id
+      ORDER BY c.${sort_by} ${sort_order.toUpperCase()}
+      LIMIT ? OFFSET ?
+    `;
+
+    const totalSql = `
+      SELECT COUNT(*) as total
+      FROM comments
+      WHERE resource_id = ? 
+        AND parent_comment_id IS NULL
+        AND deleted_at IS NULL
+    `;
+
+    const rows = this.db.prepare(commentsSql).all(resourceId, limit, offset) as any[];
+    const totalResult = this.db.prepare(totalSql).get(resourceId) as any;
+
+    const comments: Comment[] = rows.map(row => ({
+      id: row.id,
+      workspace_id: row.workspace_id,
+      project_id: row.project_id,
+      resource_id: row.resource_id,
+      parent_comment_id: row.parent_comment_id,
+      author_id: row.author_id,
+      author_name: row.author_name,
+      author_email: row.author_email,
+      content: row.content,
+      target_type: row.target_type,
+      target_id: row.target_id,
+      metadata: JSON.parse(row.metadata || '{}'),
+      reply_count: parseInt(row.reply_count) || 0,
+      created_at: new Date(row.created_at),
+      updated_at: new Date(row.updated_at),
+    }));
+
+    const total = totalResult.total;
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: comments,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: totalPages,
+        has_next: page < totalPages,
+        has_prev: page > 1
+      }
     };
   }
 

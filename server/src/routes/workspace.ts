@@ -489,6 +489,220 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     }
   });
 
+  // ====== ACTIVITY FEED ENDPOINTS ======
+
+  // GET /api/workspaces/:workspaceId/activity - Get workspace activity feed
+  fastify.get<{
+    Params: z.infer<typeof WorkspaceParamSchema>;
+    Querystring: {
+      page?: number;
+      limit?: number;
+      sort_by?: string;
+      sort_order?: 'asc' | 'desc';
+      project_id?: string;
+      actor_id?: string;
+      event_types?: string;
+      from_date?: string;
+      to_date?: string;
+    };
+  }>('/workspaces/:workspaceId/activity', {
+    schema: {
+      params: WorkspaceParamSchema,
+      querystring: z.object({
+        page: z.coerce.number().min(1).optional().default(1),
+        limit: z.coerce.number().min(1).max(100).optional().default(20),
+        sort_by: z.enum(['created_at', 'event_type']).optional().default('created_at'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
+        project_id: z.string().uuid().optional(),
+        actor_id: z.string().optional(),
+        event_types: z.string().optional(),
+        from_date: z.string().optional(),
+        to_date: z.string().optional(),
+      }),
+      response: {
+        200: z.object({
+          data: z.array(z.any()),
+          pagination: z.any(),
+        }),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const { event_types, from_date, to_date, ...pagination } = request.query;
+      
+      const filter: any = {};
+      if (request.query.project_id) filter.project_id = request.query.project_id;
+      if (request.query.actor_id) filter.actor_id = request.query.actor_id;
+      if (event_types) filter.event_types = event_types.split(',');
+      if (from_date) filter.from_date = new Date(from_date);
+      if (to_date) filter.to_date = new Date(to_date);
+      
+      const result = await workspaceService.getActivityFeed(
+        request.params.workspaceId,
+        userId,
+        filter,
+        pagination
+      );
+      
+      return result;
+    } catch (error) {
+      if (error.message.includes('Access denied')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to fetch activity feed', message: error.message });
+      }
+    }
+  });
+
+  // GET /api/workspaces/:workspaceId/activity/stats - Get activity statistics
+  fastify.get<{
+    Params: z.infer<typeof WorkspaceParamSchema>;
+    Querystring: {
+      days?: number;
+    };
+  }>('/workspaces/:workspaceId/activity/stats', {
+    schema: {
+      params: WorkspaceParamSchema,
+      querystring: z.object({
+        days: z.coerce.number().min(1).max(365).optional().default(30),
+      }),
+      response: {
+        200: z.object({
+          total_events: z.number(),
+          events_by_type: z.record(z.number()),
+          events_by_day: z.array(z.object({
+            date: z.string(),
+            count: z.number(),
+          })),
+          most_active_users: z.array(z.object({
+            user_id: z.string(),
+            count: z.number(),
+          })),
+        }),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const stats = await workspaceService.getActivityStats(
+        request.params.workspaceId,
+        userId,
+        request.query.days
+      );
+      
+      return stats;
+    } catch (error) {
+      if (error.message.includes('Access denied')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to fetch activity stats', message: error.message });
+      }
+    }
+  });
+
+  // GET /api/workspaces/:workspaceId/activity/types - Get available event types
+  fastify.get<{
+    Params: z.infer<typeof WorkspaceParamSchema>;
+  }>('/workspaces/:workspaceId/activity/types', {
+    schema: {
+      params: WorkspaceParamSchema,
+      response: {
+        200: z.array(z.string()),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const types = await workspaceService.getActivityEventTypes(
+        request.params.workspaceId,
+        userId
+      );
+      
+      return types;
+    } catch (error) {
+      if (error.message.includes('Access denied')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to fetch event types', message: error.message });
+      }
+    }
+  });
+
+  // GET /api/projects/:projectId/activity - Get project activity feed
+  fastify.get<{
+    Params: { projectId: string };
+    Querystring: {
+      page?: number;
+      limit?: number;
+      sort_by?: string;
+      sort_order?: 'asc' | 'desc';
+    };
+  }>('/projects/:projectId/activity', {
+    schema: {
+      params: z.object({ projectId: z.string().uuid() }),
+      querystring: z.object({
+        page: z.coerce.number().min(1).optional().default(1),
+        limit: z.coerce.number().min(1).max(100).optional().default(20),
+        sort_by: z.enum(['created_at', 'event_type']).optional().default('created_at'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
+      }),
+      response: {
+        200: z.object({
+          data: z.array(z.any()),
+          pagination: z.any(),
+        }),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const result = await workspaceService.getProjectActivityFeed(
+        request.params.projectId,
+        userId,
+        request.query
+      );
+      
+      return result;
+    } catch (error) {
+      if (error.message.includes('Access denied')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to fetch project activity', message: error.message });
+      }
+    }
+  });
+
+  // GET /api/activity/:id - Get specific activity event
+  fastify.get<{
+    Params: z.infer<typeof UUIDParamSchema>;
+  }>('/activity/:id', {
+    schema: {
+      params: UUIDParamSchema,
+      response: {
+        200: z.any(),
+        404: z.object({ error: z.string() }),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const event = await workspaceService.getActivityEventById(request.params.id, userId);
+      
+      if (!event) {
+        return reply.code(404).send({ error: 'Activity event not found' });
+      }
+      
+      return event;
+    } catch (error) {
+      if (error.message.includes('Access denied')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to fetch activity event', message: error.message });
+      }
+    }
+  });
+
   // ====== COMMENT ENDPOINTS ======
 
   // POST /api/resources/:resourceId/comments - Create comment
@@ -625,6 +839,314 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       return { message: 'Notification marked as read' };
     } catch (error) {
       reply.code(500).send({ error: 'Failed to mark notification as read', message: error.message });
+    }
+  });
+
+  // ====== COMMENT ENDPOINTS ======
+
+  // POST /api/comments - Create a new comment
+  fastify.post<{
+    Body: z.infer<typeof CreateCommentSchema>;
+  }>('/comments', {
+    schema: {
+      body: CreateCommentSchema,
+      response: {
+        201: CommentSchema,
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const commentData = { ...request.body, author_id: userId };
+      
+      const comment = await workspaceService.createComment(commentData);
+      
+      reply.code(201).send(comment);
+    } catch (error) {
+      if (error.message.includes('permissions')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else if (error.message.includes('not found')) {
+        reply.code(404).send({ error: 'Resource not found', message: error.message });
+      } else if (error.message.includes('required') || error.message.includes('invalid')) {
+        reply.code(400).send({ error: 'Validation error', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to create comment', message: error.message });
+      }
+    }
+  });
+
+  // GET /api/comments/:commentId - Get a specific comment
+  fastify.get<{
+    Params: z.infer<typeof UUIDParamSchema>;
+  }>('/comments/:id', {
+    schema: {
+      params: UUIDParamSchema,
+      response: {
+        200: CommentSchema,
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const comment = await workspaceService.getComment(request.params.id);
+      
+      if (!comment) {
+        return reply.code(404).send({ error: 'Comment not found' });
+      }
+
+      // Check read permissions
+      const hasAccess = await workspaceService.checkWorkspaceAccess(
+        comment.workspace_id,
+        userId,
+        PERMISSIONS.COMMENT_READ
+      );
+      if (!hasAccess) {
+        return reply.code(403).send({ error: 'Access denied' });
+      }
+      
+      return comment;
+    } catch (error) {
+      reply.code(500).send({ error: 'Failed to fetch comment', message: error.message });
+    }
+  });
+
+  // PUT /api/comments/:commentId - Update a comment
+  fastify.put<{
+    Params: z.infer<typeof UUIDParamSchema>;
+    Body: z.infer<typeof UpdateCommentSchema>;
+  }>('/comments/:id', {
+    schema: {
+      params: UUIDParamSchema,
+      body: UpdateCommentSchema,
+      response: {
+        200: CommentSchema,
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const comment = await workspaceService.updateComment(
+        request.params.id,
+        request.body,
+        userId
+      );
+      
+      if (!comment) {
+        return reply.code(404).send({ error: 'Comment not found' });
+      }
+      
+      return comment;
+    } catch (error) {
+      if (error.message.includes('permissions')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else if (error.message.includes('not found')) {
+        reply.code(404).send({ error: 'Comment not found', message: error.message });
+      } else if (error.message.includes('cannot be empty')) {
+        reply.code(400).send({ error: 'Validation error', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to update comment', message: error.message });
+      }
+    }
+  });
+
+  // DELETE /api/comments/:commentId - Delete a comment
+  fastify.delete<{
+    Params: z.infer<typeof UUIDParamSchema>;
+  }>('/comments/:id', {
+    schema: {
+      params: UUIDParamSchema,
+      response: {
+        200: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const success = await workspaceService.deleteComment(request.params.id, userId);
+      
+      if (!success) {
+        return reply.code(404).send({ error: 'Comment not found' });
+      }
+      
+      return { message: 'Comment deleted successfully' };
+    } catch (error) {
+      if (error.message.includes('permissions')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to delete comment', message: error.message });
+      }
+    }
+  });
+
+  // GET /api/comments/:commentId/replies - Get comment replies
+  fastify.get<{
+    Params: z.infer<typeof UUIDParamSchema>;
+    Querystring: {
+      page?: number;
+      limit?: number;
+      sort_by?: string;
+      sort_order?: 'asc' | 'desc';
+    };
+  }>('/comments/:id/replies', {
+    schema: {
+      params: UUIDParamSchema,
+      querystring: z.object({
+        page: z.coerce.number().min(1).optional().default(1),
+        limit: z.coerce.number().min(1).max(50).optional().default(10),
+        sort_by: z.enum(['created_at']).optional().default('created_at'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('asc'),
+      }),
+      response: {
+        200: PaginatedResponseSchema(CommentSchema),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const result = await workspaceService.getCommentReplies(
+        request.params.id,
+        userId,
+        request.query
+      );
+      
+      return result;
+    } catch (error) {
+      if (error.message.includes('permissions')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else if (error.message.includes('not found')) {
+        reply.code(404).send({ error: 'Comment not found', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to fetch comment replies', message: error.message });
+      }
+    }
+  });
+
+  // GET /api/workspaces/:workspaceId/comments - Get comments by target
+  fastify.get<{
+    Params: z.infer<typeof WorkspaceParamSchema>;
+    Querystring: {
+      target_type: string;
+      target_id: string;
+      page?: number;
+      limit?: number;
+      sort_by?: string;
+      sort_order?: 'asc' | 'desc';
+    };
+  }>('/workspaces/:workspaceId/comments', {
+    schema: {
+      params: WorkspaceParamSchema,
+      querystring: z.object({
+        target_type: z.string(),
+        target_id: z.string(),
+        page: z.coerce.number().min(1).optional().default(1),
+        limit: z.coerce.number().min(1).max(100).optional().default(20),
+        sort_by: z.enum(['created_at']).optional().default('created_at'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
+      }),
+      response: {
+        200: PaginatedResponseSchema(CommentSchema),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const { target_type, target_id, ...pagination } = request.query;
+      
+      const result = await workspaceService.getCommentsByTarget(
+        request.params.workspaceId,
+        target_type,
+        target_id,
+        userId,
+        pagination
+      );
+      
+      return result;
+    } catch (error) {
+      if (error.message.includes('permissions')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to fetch comments', message: error.message });
+      }
+    }
+  });
+
+  // GET /api/resources/:resourceId/comments - Get resource comments
+  fastify.get<{
+    Params: { resourceId: string };
+    Querystring: {
+      page?: number;
+      limit?: number;
+      sort_by?: string;
+      sort_order?: 'asc' | 'desc';
+    };
+  }>('/resources/:resourceId/comments', {
+    schema: {
+      params: z.object({ resourceId: z.string().uuid() }),
+      querystring: z.object({
+        page: z.coerce.number().min(1).optional().default(1),
+        limit: z.coerce.number().min(1).max(100).optional().default(20),
+        sort_by: z.enum(['created_at']).optional().default('created_at'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
+      }),
+      response: {
+        200: PaginatedResponseSchema(CommentSchema),
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const result = await workspaceService.getCommentsByResource(
+        request.params.resourceId,
+        userId,
+        request.query
+      );
+      
+      return result;
+    } catch (error) {
+      if (error.message.includes('permissions')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else if (error.message.includes('not found')) {
+        reply.code(404).send({ error: 'Resource not found', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to fetch resource comments', message: error.message });
+      }
+    }
+  });
+
+  // PUT /api/comments/:commentId/resolve - Resolve/unresolve a comment
+  fastify.put<{
+    Params: z.infer<typeof UUIDParamSchema>;
+    Body: { resolved: boolean };
+  }>('/comments/:id/resolve', {
+    schema: {
+      params: UUIDParamSchema,
+      body: z.object({ resolved: z.boolean() }),
+      response: {
+        200: CommentSchema,
+      },
+    },
+  }, async (request, reply) => {
+    try {
+      const userId = getCurrentUser(request);
+      const comment = await workspaceService.resolveComment(
+        request.params.id,
+        userId,
+        request.body.resolved
+      );
+      
+      if (!comment) {
+        return reply.code(404).send({ error: 'Comment not found' });
+      }
+      
+      return comment;
+    } catch (error) {
+      if (error.message.includes('permissions')) {
+        reply.code(403).send({ error: 'Access denied', message: error.message });
+      } else if (error.message.includes('not found')) {
+        reply.code(404).send({ error: 'Comment not found', message: error.message });
+      } else {
+        reply.code(500).send({ error: 'Failed to resolve comment', message: error.message });
+      }
     }
   });
 }
