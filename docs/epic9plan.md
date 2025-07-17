@@ -18,10 +18,11 @@ This document provides granular implementation plans for each story in Epic 9, b
 - **Story 9.2.6**: ✅ **COMPLETED** - Project Templates
 - **Story 9.3.1**: ✅ **COMPLETED** - Version History Implementation
 - **Story 9.3.2**: ✅ **COMPLETED** - Visual Diff Tool
+- **Story 9.3.3**: ✅ **COMPLETED** - Version Restoration
 
 **🎉 Epic 9.1 Foundation: 7/7 Stories Complete (100%)**
 **🎉 Epic 9.2 Workspace: 5/6 Stories Complete, 1 Partial (92% complete)**
-**🎉 Epic 9.3 Version History: 2/6 Stories Complete (33% complete)**
+**🎉 Epic 9.3 Version History: 3/6 Stories Complete (50% complete)**
 
 ## Story 9.1 - Real-Time Collaboration Foundation
 
@@ -309,21 +310,27 @@ This document provides granular implementation plans for each story in Epic 9, b
   - [x] TypeScript types (comprehensive type definitions for all comparison interfaces)
 
 #### 9.3.3 Version Restoration (3 days)
-- [ ] Design restoration process
-  - [ ] Create restoration workflow
-  - [ ] Define strategy for conflicts with current state
-  - [ ] Plan for partial restoration
-  - [ ] Design user confirmation and preview
-- [ ] Implement version restoration
-  - [ ] Create restoration operation generator
-  - [ ] Add conflict detection and resolution
-  - [ ] Implement state rebuilding from version
-  - [ ] Add restoration logging and tracking
-- [ ] Build restoration UI
-  - [ ] Create restoration wizard
-  - [ ] Add preview capability
-  - [ ] Implement confirmation dialogs
-  - [ ] Create success/failure reporting
+- [x] Design restoration process
+  - [x] Create restoration workflow (RestorationService with comprehensive workflow)
+  - [x] Define strategy for conflicts with current state (3-way merge with user resolution)
+  - [x] Plan for partial restoration (selective node/edge restoration)
+  - [x] Design user confirmation and preview (RestorationPreview with conflict highlighting)
+- [x] Implement version restoration
+  - [x] Create restoration operation generator (RestorationOperationGenerator)
+  - [x] Add conflict detection and resolution (ConflictResolver with merge strategies)
+  - [x] Implement state rebuilding from version (VersionStateRebuilder)
+  - [x] Add restoration logging and tracking (restoration_attempts table)
+- [x] Build restoration UI
+  - [x] Create restoration wizard (RestorationWizard with step-by-step flow)
+  - [x] Add preview capability (RestorationPreview component)
+  - [x] Implement confirmation dialogs (RestorationConfirmation)
+  - [x] Create success/failure reporting (RestoreProgressPanel)
+- [x] Additional Implementation
+  - [x] Database schema (006_version_restoration.sql)
+  - [x] Data models and validation (Zod schemas for restoration operations)
+  - [x] Service layer (RestorationService with complete workflow)
+  - [x] REST API (12+ endpoints for restoration operations)
+  - [x] TypeScript types (comprehensive type definitions for restoration interfaces)
 
 #### 9.3.4 Change Attribution (2 days)
 - [ ] Design attribution tracking
