@@ -89,6 +89,20 @@ CREATE TABLE IF NOT EXISTS api_tokens (
     revoked_at TIMESTAMP WITH TIME ZONE
 );
 
+-- User uploads - file uploads (avatars, documents, etc.)
+CREATE TABLE IF NOT EXISTS user_uploads (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    filename VARCHAR(255) NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(100) NOT NULL,
+    size INTEGER NOT NULL,
+    upload_type VARCHAR(50) NOT NULL, -- 'avatar', 'document', etc.
+    url VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    deleted_at TIMESTAMP WITH TIME ZONE
+);
+
 -- Sessions - active user sessions
 CREATE TABLE IF NOT EXISTS user_sessions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -247,6 +261,11 @@ CREATE INDEX IF NOT EXISTS idx_oauth_states_expires_at ON oauth_states(expires_a
 CREATE INDEX IF NOT EXISTS idx_api_tokens_user_id ON api_tokens(user_id);
 CREATE INDEX IF NOT EXISTS idx_api_tokens_expires_at ON api_tokens(expires_at);
 CREATE INDEX IF NOT EXISTS idx_api_tokens_revoked ON api_tokens(revoked);
+
+CREATE INDEX IF NOT EXISTS idx_user_uploads_user_id ON user_uploads(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_uploads_upload_type ON user_uploads(upload_type);
+CREATE INDEX IF NOT EXISTS idx_user_uploads_created_at ON user_uploads(created_at);
+CREATE INDEX IF NOT EXISTS idx_user_uploads_deleted_at ON user_uploads(deleted_at);
 
 CREATE INDEX IF NOT EXISTS idx_user_sessions_user_id ON user_sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_sessions_token ON user_sessions(session_token);
