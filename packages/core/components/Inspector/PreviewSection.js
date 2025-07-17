@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { hasVariations } from "../../utils/nodeDataUtils";
 export const PreviewSection = ({ node }) => {

@@ -1,4 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import React from "react";
 export const RestorePrompt = ({ show, draft, onRestore, onDismiss, }) => {
     if (!show || !draft) {
         return null;

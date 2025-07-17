@@ -1,4 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
+// @ts-nocheck
+import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { GraphEditor } from "../GraphEditor";

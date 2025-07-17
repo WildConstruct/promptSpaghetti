@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState } from "react";
+import React, { useState } from "react";
 import { TextFieldEditor } from "../TextFieldEditor";
 import { VariationList } from "../VariationList";
 import { CollapsibleSection } from "../CollapsibleSection";

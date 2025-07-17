@@ -1,5 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import '@testing-library/jest-dom';
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { InspectorSidebar } from "../InspectorSidebar";
 import { z } from "zod";
