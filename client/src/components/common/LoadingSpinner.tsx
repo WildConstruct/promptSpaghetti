@@ -1,23 +1,68 @@
+// Common Loading Spinner Component
 import React from 'react';
+import './LoadingSpinner.css';
 
 interface LoadingSpinnerProps {
   size?: 'small' | 'medium' | 'large';
+  variant?: 'default' | 'dots' | 'pulse';
+  message?: string;
   className?: string;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'medium',
-  className = '' 
+  variant = 'default',
+  message,
+  className = ''
 }) => {
-  const sizeClasses = {
-    small: 'w-4 h-4',
-    medium: 'w-8 h-8',
-    large: 'w-12 h-12'
+  const renderSpinner = () => {
+    switch (variant) {
+      case 'dots':
+        return (
+          <div className="spinner-dots">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+          </div>
+        );
+      
+      case 'pulse':
+        return (
+          <div className="spinner-pulse">
+            <div className="pulse-ring"></div>
+            <div className="pulse-ring"></div>
+            <div className="pulse-ring"></div>
+          </div>
+        );
+      
+      default:
+        return (
+          <div className="spinner-circle">
+            <svg className="circular" viewBox="25 25 50 50">
+              <circle
+                className="path"
+                cx="50"
+                cy="50"
+                r="20"
+                fill="none"
+                strokeWidth="2"
+                strokeMiterlimit="10"
+              />
+            </svg>
+          </div>
+        );
+    }
   };
 
   return (
-    <div className={`${sizeClasses[size]} ${className}`}>
-      <div className="animate-spin rounded-full border-b-2 border-gray-900 h-full w-full"></div>
+    <div className={`loading-spinner ${size} ${variant} ${className}`} role="status" aria-live="polite">
+      {renderSpinner()}
+      {message && (
+        <span className="loading-message" aria-label={message}>
+          {message}
+        </span>
+      )}
+      <span className="sr-only">Loading...</span>
     </div>
   );
 };
