@@ -11,5 +11,22 @@ module.exports = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^reactflow$': '<rootDir>/client/__mocks__/reactflow.tsx'
   },
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  transform: {
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      useESM: true
+    }],
+    '^.+\\.(js|jsx)$': ['babel-jest', {
+      presets: [
+        ['@babel/preset-env', {
+          targets: { node: 'current' },
+          modules: 'commonjs'
+        }],
+        ['@babel/preset-react', {
+          runtime: 'automatic'
+        }]
+      ]
+    }]
+  }
 };
