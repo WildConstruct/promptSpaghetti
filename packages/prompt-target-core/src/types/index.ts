@@ -174,6 +174,7 @@ export interface TargetMetadata {
   quality: QualityScore;
   warnings: ValidationResult[];
   transformations: TransformationLog[];
+  apiParameters?: Record<string, any>;
 }
 
 export interface TransformationLog {
