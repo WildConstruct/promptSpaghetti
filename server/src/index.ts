@@ -1,10 +1,17 @@
 import Fastify, { FastifyRequest } from 'fastify';
 import { z } from 'zod';
-import { executeGraph } from './engine';
+import { executeGraph, initializeAnalytics } from './engine';
 import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
 import { initDatabase, healthCheck } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
+import { analyticsRoutes } from './routes/analytics';
+import { AnalyticsDashboard } from './analytics/AnalyticsDashboard';
+import { AnalyticsCollector } from './analytics/AnalyticsCollector';
+import { CostTracker } from './analytics/CostTracker';
+import { AnalyticsDAO } from './database/analytics-dao';
+import { MetricsCollector } from './performance/MetricsCollector';
+import { PerformanceDashboard } from './performance/PerformanceDashboard';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
@@ -46,8 +53,15 @@ type PreviewResponse = z.infer<typeof PreviewResponseSchema>;
 
 /**
  * Generate multiple outputs from a graph using different seeds
+ * Epic 13 - Enhanced with analytics tracking for preview executions
  */
-export async function generatePreviewOutputs(graph: Graph, runs: number, seedStart: number): Promise<Array<{seed: number, output: string}>> {
+export async function generatePreviewOutputs(
+  graph: Graph, 
+  runs: number, 
+  seedStart: number,
+  sessionId?: string,
+  userId?: number
+): Promise<Array<{seed: number, output: string}>> {
   const results = [];
   
   // Generate outputs for each seed
@@ -59,7 +73,7 @@ export async function generatePreviewOutputs(graph: Graph, runs: number, seedSta
     };
     
     try {
-      const outputs = await executeGraph(graphWithSeed);
+      const outputs = await executeGraph(graphWithSeed, sessionId, userId);
       // Use the first output as the preview result
       results.push({
         seed,
@@ -103,6 +117,14 @@ try {
 } catch (error) {
   console.error('Failed to initialize database:', error);
   process.exit(1);
+}
+
+// Initialize analytics collection
+try {
+  initializeAnalytics();
+  console.log('Analytics system initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize analytics:', error);
 }
 
 // Initialize extension system on startup
@@ -177,8 +199,64 @@ server.get('/ws/documents/:documentId/users', async (request, reply) => {
   };
 });
 
+// Initialize additional analytics components
+let metricsCollector: MetricsCollector;
+let performanceDashboard: PerformanceDashboard;
+let analyticsDAO: AnalyticsDAO;
+let costTracker: CostTracker;
+let analyticsDashboard: AnalyticsDashboard;
+
+try {
+  const db = getDatabase();
+  
+  // Initialize metrics and performance dashboard
+  metricsCollector = new MetricsCollector();
+  performanceDashboard = new PerformanceDashboard(metricsCollector);
+  
+  // Create analytics DAO (separate from engine's instance for server-specific features)
+  analyticsDAO = new AnalyticsDAO(db);
+  
+  // Create a new analytics collector for server-specific analytics
+  const serverAnalyticsCollector = new AnalyticsCollector({
+    enabled: process.env.ANALYTICS_ENABLED !== 'false',
+    sampleRate: parseFloat(process.env.ANALYTICS_SAMPLE_RATE || '1.0'),
+    privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true'
+  });
+  
+  costTracker = new CostTracker(serverAnalyticsCollector, analyticsDAO);
+  analyticsDashboard = new AnalyticsDashboard(
+    performanceDashboard,
+    serverAnalyticsCollector,
+    analyticsDAO,
+    costTracker
+  );
+
+  // Set up analytics event storage
+  serverAnalyticsCollector.on('events_flushed', (events) => {
+    events.forEach((event: any) => analyticsDAO.storeEvent(event));
+  });
+
+  // Start analytics dashboard
+  analyticsDashboard.start();
+
+  // Pass analytics collector to WebSocket server
+  wsServer.analyticsCollector = serverAnalyticsCollector;
+
+  console.log('Server analytics system fully initialized');
+} catch (error) {
+  console.error('Failed to initialize server analytics system:', error);
+  // Don't exit - allow server to run without analytics
+}
+
 // Register corrections routes
 server.register(correctionsRoutes, { prefix: '/api/corrections' });
+
+// Register analytics routes
+if (analyticsDashboard && costTracker) {
+  server.register(async (fastify) => {
+    await analyticsRoutes(fastify, analyticsDashboard, costTracker);
+  }, { prefix: '/api' });
+}
 
 // Legacy GET preview endpoint (dummy data for backwards compatibility)
 server.get('/preview', async (request, reply) => {
@@ -195,6 +273,7 @@ server.get('/preview', async (request, reply) => {
 // New POST preview endpoint that actually runs the executor
 server.post<{
   Body: PreviewRequest;
+  Headers: { 'x-session-id'?: string; 'x-user-id'?: string };
 }>('/preview', {
   schema: {
     body: {
@@ -254,8 +333,11 @@ server.post<{
         return;
       }
       
-      // Generate previews
-      const results = await generatePreviewOutputs(graph, runs, seedStart);
+      // Generate previews with analytics tracking
+      const sessionId = request.headers['x-session-id'];
+      const userId = request.headers['x-user-id'] ? parseInt(request.headers['x-user-id']) : undefined;
+      
+      const results = await generatePreviewOutputs(graph, runs, seedStart, sessionId, userId);
       
       return { results };
     } catch (error: unknown) {
