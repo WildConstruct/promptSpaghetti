@@ -128,6 +128,25 @@ export class RateLimitService implements IRateLimitService {
     return this.checkRateLimit(key, rule);
   }
 
+  // Generic rate limiting with custom key (for PasswordResetService)
+  async checkLimit(
+    key: string,
+    maxAttempts: number,
+    windowSeconds: number
+  ): Promise<void> {
+    const rule: RateLimitRule = {
+      window: windowSeconds,
+      max: maxAttempts,
+    };
+
+    const result = await this.checkRateLimit(key, rule);
+    
+    if (!result.allowed) {
+      const resetInMinutes = Math.ceil((result.resetTime.getTime() - Date.now()) / (1000 * 60));
+      throw new Error(`Rate limit exceeded. Try again in ${resetInMinutes} minutes.`);
+    }
+  }
+
   // Adaptive rate limiting based on response times
   async adaptiveRateLimit(
     key: string,

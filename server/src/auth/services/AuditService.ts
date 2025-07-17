@@ -1,7 +1,7 @@
 // Epic 11 Audit Service
 // Security audit logging and compliance tracking
 
-import { IAuditService, AuditLog, AuthConfig } from '../types';
+import { IAuditService, AuditLog, AuthConfig, SecurityEvent } from '../types';
 import { DatabaseService } from '../database/DatabaseService';
 
 export class AuditService implements IAuditService {
@@ -50,6 +50,24 @@ export class AuditService implements IAuditService {
       console.error('Failed to log audit event:', error, event);
       // Don't throw - audit logging should not break the main flow
     }
+  }
+
+  // Enhanced security event logging for password reset and other security actions
+  async logSecurityEvent(event: SecurityEvent): Promise<void> {
+    return this.logEvent({
+      userId: event.userId || undefined,
+      action: event.type,
+      resourceType: 'authentication',
+      details: {
+        securityEventType: event.type,
+        success: event.success,
+        email: event.email,
+        ...event.metadata,
+      },
+      ipAddress: event.ipAddress,
+      userAgent: event.userAgent,
+      severity: event.success ? 'info' : 'warning',
+    });
   }
 
   async getAuditLogs(filters: {

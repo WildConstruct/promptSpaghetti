@@ -20,6 +20,8 @@ import { UserService } from './services/UserService';
 import { TokenService } from './services/TokenService';
 import { AuditService } from './services/AuditService';
 import { RateLimitService } from './services/RateLimitService';
+import { PasswordResetService } from './services/PasswordResetService';
+import { EmailService } from './services/EmailService';
 import { DatabaseService } from './database/DatabaseService';
 import { RedisService } from './database/RedisService';
 
@@ -31,6 +33,8 @@ export class AuthenticationService {
   private tokenService: TokenService;
   private auditService: AuditService;
   private rateLimitService: RateLimitService;
+  private passwordResetService: PasswordResetService;
+  private emailService: EmailService;
   private dbService: DatabaseService;
   private redisService: RedisService;
 
@@ -46,6 +50,13 @@ export class AuthenticationService {
     this.userService = new UserService(config, this.dbService, this.auditService);
     this.tokenService = new TokenService(config, this.redisService, this.dbService);
     this.rateLimitService = new RateLimitService(this.redisService);
+    this.emailService = new EmailService(config);
+    this.passwordResetService = new PasswordResetService(
+      this.dbService,
+      this.emailService,
+      this.auditService,
+      this.rateLimitService
+    );
   }
 
   async initialize(): Promise<void> {
@@ -627,6 +638,53 @@ export class AuthenticationService {
   private hashEmail(email: string): string {
     const crypto = require('crypto');
     return crypto.createHash('sha256').update(email.toLowerCase()).digest('hex');
+  }
+
+  // Service registry for accessing individual services
+  getService(serviceName: string): any {
+    switch (serviceName) {
+      case 'user':
+        return this.userService;
+      case 'token':
+        return this.tokenService;
+      case 'audit':
+        return this.auditService;
+      case 'rateLimit':
+        return this.rateLimitService;
+      case 'passwordReset':
+        return this.passwordResetService;
+      case 'email':
+        return this.emailService;
+      case 'database':
+        return this.dbService;
+      case 'redis':
+        return this.redisService;
+      default:
+        throw new Error(`Unknown service: ${serviceName}`);
+    }
+  }
+
+  async getHealthStatus(): Promise<{ database: string; redis: string; authentication: string }> {
+    try {
+      // Check database connectivity
+      const dbStatus = await this.dbService.query('SELECT 1 as health');
+      const dbHealth = dbStatus.rows.length > 0 ? 'healthy' : 'unhealthy';
+
+      // Check Redis connectivity
+      const redisHealth = this.redisService.isConnected() ? 'healthy' : 'unhealthy';
+
+      return {
+        database: dbHealth,
+        redis: redisHealth,
+        authentication: 'healthy',
+      };
+    } catch (error) {
+      return {
+        database: 'unhealthy',
+        redis: 'unhealthy',
+        authentication: 'unhealthy',
+      };
+    }
   }
 
   async shutdown(): Promise<void> {

@@ -408,3 +408,67 @@ export interface IAuditService {
     offset?: number;
   }): Promise<AuditLog[]>;
 }
+
+// Enhanced password reset types for Story 11.1.4
+export interface PasswordResetToken {
+  userId: string;
+  hashedToken: string;
+  expiresAt: Date;
+  usedAt?: Date;
+  revokedAt?: Date;
+  createdAt: Date;
+}
+
+export interface PasswordResetRequest {
+  email: string;
+  captchaToken?: string;
+  clientInfo: {
+    userAgent: string;
+    ipAddress: string;
+    fingerprint?: string;
+  };
+}
+
+export interface PasswordResetResponse {
+  success: boolean;
+  message: string;
+  estimatedDelivery?: Date;
+}
+
+export interface PasswordResetValidation {
+  valid: boolean;
+  error?: string;
+  canRetry?: boolean;
+  userId?: string;
+  email?: string;
+  tokenExpiresAt?: Date;
+}
+
+export interface PasswordResetConfirmation {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+  clientInfo: {
+    userAgent: string;
+    ipAddress: string;
+    fingerprint?: string;
+  };
+}
+
+export interface PasswordResetAttempt {
+  timestamp: Date;
+  ipAddress: string;
+  userAgent: string;
+  completed: boolean;
+  revoked: boolean;
+}
+
+export interface SecurityEvent {
+  type: string;
+  userId?: string;
+  email?: string;
+  ipAddress: string;
+  userAgent: string;
+  success: boolean;
+  metadata?: Record<string, any>;
+}

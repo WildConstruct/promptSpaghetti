@@ -108,4 +108,26 @@ export class DatabaseService {
       waitingCount: this.pool.waitingCount,
     };
   }
+
+  // Get a client from the pool for manual transaction handling
+  async getClient(): Promise<PoolClient> {
+    return await this.pool.connect();
+  }
+
+  // User database operations for PasswordResetService
+  async findUserByEmail(email: string): Promise<any | null> {
+    const result = await this.query(
+      'SELECT * FROM users WHERE email = $1 AND status = $2',
+      [email.toLowerCase(), 'active']
+    );
+    return result.rows.length > 0 ? result.rows[0] : null;
+  }
+
+  async findUserById(id: string): Promise<any | null> {
+    const result = await this.query(
+      'SELECT * FROM users WHERE id = $1',
+      [id]
+    );
+    return result.rows.length > 0 ? result.rows[0] : null;
+  }
 }

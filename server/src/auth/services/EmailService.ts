@@ -149,6 +149,46 @@ export class EmailService {
     await this.sendEmail(email, template);
   }
 
+  // Enhanced password reset methods for PasswordResetService
+  async sendPasswordResetEmail(data: {
+    to: string;
+    firstName: string;
+    resetUrl: string;
+    expiresAt: Date;
+    ipAddress: string;
+    userAgent: string;
+  }): Promise<void> {
+    const template = this.renderEmailTemplate('passwordReset', {
+      email: data.to,
+      displayName: data.firstName,
+      resetUrl: data.resetUrl,
+      expiryHours: Math.floor((data.expiresAt.getTime() - Date.now()) / (1000 * 60 * 60)),
+      ipAddress: data.ipAddress,
+      userAgent: data.userAgent,
+      timestamp: new Date(),
+    });
+
+    await this.sendEmail(data.to, template);
+  }
+
+  async sendPasswordResetConfirmationEmail(data: {
+    to: string;
+    firstName: string;
+    timestamp: Date;
+    ipAddress: string;
+    userAgent: string;
+  }): Promise<void> {
+    const template = this.renderEmailTemplate('passwordChanged', {
+      email: data.to,
+      displayName: data.firstName,
+      timestamp: data.timestamp,
+      ipAddress: data.ipAddress,
+      userAgent: data.userAgent,
+    });
+
+    await this.sendEmail(data.to, template);
+  }
+
   private async sendEmail(email: string, template: EmailTemplate): Promise<void> {
     if (!this.config.emailService) {
       console.log('Email service not configured. Would send email:');

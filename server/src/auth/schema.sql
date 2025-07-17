@@ -174,6 +174,20 @@ CREATE TABLE IF NOT EXISTS user_invitations (
     metadata JSONB -- additional invitation context
 );
 
+-- Password reset tokens - secure password reset management
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    hashed_token VARCHAR(255) UNIQUE NOT NULL,
+    ip_address INET,
+    user_agent TEXT,
+    fingerprint VARCHAR(255),
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    used_at TIMESTAMP WITH TIME ZONE,
+    revoked_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Audit logs - security and compliance audit trail
 CREATE TABLE IF NOT EXISTS audit_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -225,6 +239,10 @@ CREATE INDEX IF NOT EXISTS idx_team_members_user_id ON team_members(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_invitations_email ON user_invitations(email);
 CREATE INDEX IF NOT EXISTS idx_user_invitations_token ON user_invitations(token);
 CREATE INDEX IF NOT EXISTS idx_user_invitations_expires_at ON user_invitations(expires_at);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_user_id ON password_reset_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_hashed_token ON password_reset_tokens(hashed_token);
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_expires_at ON password_reset_tokens(expires_at);
 
 CREATE INDEX IF NOT EXISTS idx_audit_logs_user_id ON audit_logs(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);

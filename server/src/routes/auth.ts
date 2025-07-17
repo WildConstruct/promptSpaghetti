@@ -7,6 +7,7 @@ import { AuthenticationService } from '../auth/AuthenticationService';
 import { LoginService } from '../auth/services/LoginService';
 import { UserService } from '../auth/services/UserService';
 import { RegistrationService } from '../auth/services/RegistrationService';
+import { PasswordResetService } from '../auth/services/PasswordResetService';
 import { RateLimitService } from '../auth/services/RateLimitService';
 import { RATE_LIMIT_RULES } from '../auth/config';
 
@@ -53,6 +54,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   const loginService = authService.getService('login') as LoginService;
   const userService = authService.getService('user') as UserService;
   const registrationService = authService.getService('registration') as RegistrationService;
+  const passwordResetService = authService.getService('passwordReset') as PasswordResetService;
   const rateLimitService = authService.getService('rateLimit') as RateLimitService;
 
   // Helper function to extract client context
@@ -422,6 +424,140 @@ export async function authRoutes(fastify: FastifyInstance) {
       valid: true,
       user: request.user,
     };
+  });
+
+  // Password reset request
+  fastify.post('/api/auth/password-reset/request', {
+    schema: {
+      body: z.object({
+        email: z.string().email(),
+        captchaToken: z.string().optional(),
+      }),
+      response: {
+        200: z.object({
+          success: z.boolean(),
+          message: z.string(),
+          estimatedDelivery: z.string().optional(),
+        }),
+        400: z.object({ message: z.string() }),
+        429: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const body = request.body as { email: string; captchaToken?: string };
+      const context = getClientContext(request);
+
+      const passwordResetRequest = {
+        email: body.email,
+        captchaToken: body.captchaToken,
+        clientInfo: {
+          userAgent: context.userAgent,
+          ipAddress: context.ipAddress,
+          fingerprint: context.fingerprint,
+        },
+      };
+
+      const result = await passwordResetService.requestPasswordReset(passwordResetRequest);
+
+      return {
+        success: result.success,
+        message: result.message,
+        estimatedDelivery: result.estimatedDelivery?.toISOString(),
+      };
+    } catch (error: any) {
+      fastify.log.error('Password reset request error:', error);
+      return reply.status(400).send({ message: error.message || 'Failed to process password reset request' });
+    }
+  });
+
+  // Validate password reset token
+  fastify.get('/api/auth/password-reset/validate/:token', {
+    schema: {
+      params: z.object({
+        token: z.string().min(1),
+      }),
+      response: {
+        200: z.object({
+          valid: z.boolean(),
+          error: z.string().optional(),
+          canRetry: z.boolean().optional(),
+          email: z.string().optional(),
+          tokenExpiresAt: z.string().optional(),
+        }),
+        400: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const params = request.params as { token: string };
+      const validation = await passwordResetService.validatePasswordResetToken(params.token);
+
+      return {
+        valid: validation.valid,
+        error: validation.error,
+        canRetry: validation.canRetry,
+        email: validation.email,
+        tokenExpiresAt: validation.tokenExpiresAt?.toISOString(),
+      };
+    } catch (error: any) {
+      fastify.log.error('Password reset token validation error:', error);
+      return reply.status(400).send({ message: 'Failed to validate password reset token' });
+    }
+  });
+
+  // Confirm password reset
+  fastify.post('/api/auth/password-reset/confirm', {
+    schema: {
+      body: z.object({
+        token: z.string().min(1),
+        newPassword: z.string().min(8).max(128),
+        confirmPassword: z.string().min(8).max(128),
+      }),
+      response: {
+        200: z.object({
+          success: z.boolean(),
+          message: z.string(),
+        }),
+        400: z.object({ message: z.string() }),
+        429: z.object({ message: z.string() }),
+      },
+    },
+  }, async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const body = request.body as {
+        token: string;
+        newPassword: string;
+        confirmPassword: string;
+      };
+      const context = getClientContext(request);
+
+      const confirmation = {
+        token: body.token,
+        newPassword: body.newPassword,
+        confirmPassword: body.confirmPassword,
+        clientInfo: {
+          userAgent: context.userAgent,
+          ipAddress: context.ipAddress,
+          fingerprint: context.fingerprint,
+        },
+      };
+
+      const result = await passwordResetService.confirmPasswordReset(confirmation);
+
+      return {
+        success: result.success,
+        message: result.message,
+      };
+    } catch (error: any) {
+      fastify.log.error('Password reset confirmation error:', error);
+      
+      if (error.message.includes('rate limit') || error.message.includes('too many')) {
+        return reply.status(429).send({ message: error.message });
+      }
+      
+      return reply.status(400).send({ message: error.message || 'Failed to reset password' });
+    }
   });
 
   // Health check for auth service
