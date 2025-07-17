@@ -76,20 +76,25 @@ global.getComputedStyle = (element) => {
 };
 
 // Lightweight stub for @testing-library/user-event to satisfy tests without external package
-jest.mock('@testing-library/user-event', () => ({
-  __esModule: true,
-  default: {
-    click: async (el) => el.dispatchEvent(new MouseEvent('click', { bubbles: true })),
-    type: async (el, text) => {
-      el.value = (el.value || '') + text;
-      el.dispatchEvent(new Event('input', { bubbles: true }));
+jest.mock('@testing-library/user-event', () => {
+  const mockMouseEvent = global.MouseEvent;
+  const mockEvent = global.Event;
+  
+  return {
+    __esModule: true,
+    default: {
+      click: async (el) => el.dispatchEvent(new mockMouseEvent('click', { bubbles: true })),
+      type: async (el, text) => {
+        el.value = (el.value || '') + text;
+        el.dispatchEvent(new mockEvent('input', { bubbles: true }));
+      },
+      clear: async (el) => {
+        el.value = '';
+        el.dispatchEvent(new mockEvent('input', { bubbles: true }));
+      },
     },
-    clear: async (el) => {
-      el.value = '';
-      el.dispatchEvent(new Event('input', { bubbles: true }));
-    },
-  },
-}), { virtual: true });
+  };
+}, { virtual: true });
 
 // Mock URL.createObjectURL / revokeObjectURL to silence JSDOM navigation warnings
 if (!global.URL.createObjectURL) {

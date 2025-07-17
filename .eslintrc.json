@@ -3,24 +3,53 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "node": true
+    "node": true,
+    "jest": true
   },
   "extends": [
-    "eslint:recommended"
+    "eslint:recommended",
+    "@typescript-eslint/recommended"
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2021,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
+  "plugins": [
+    "@typescript-eslint",
+    "react"
+  ],
   "rules": {
-    "no-unused-vars": "warn",
-    "no-console": "warn"
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "no-console": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx"],
       "rules": {
         "no-undef": "off"
+      }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true,
+        "jest": true
+      },
+      "parserOptions": {
+        "ecmaVersion": 2021,
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "jsx": true
+        }
       }
     }
   ]
