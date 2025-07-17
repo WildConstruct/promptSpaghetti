@@ -7,6 +7,7 @@ import { initDatabase, healthCheck, getDatabase, runMigrations } from './databas
 import { correctionsRoutes } from './routes/corrections';
 import { workspaceRoutes } from './routes/workspace';
 import { workflowRoutes } from './routes/workflow';
+import { approvalRoutes } from './routes/approval';
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
 import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
@@ -194,6 +195,9 @@ server.register(workspaceRoutes, { prefix: '/api' });
 
 // Register workflow routes
 server.register(workflowRoutes, { prefix: '/api/workflow' });
+
+// Register approval routes
+server.register(approvalRoutes, { prefix: '/api/approval' });
 
 // Legacy GET preview endpoint (dummy data for backwards compatibility)
 server.get('/preview', async (request, reply) => {
