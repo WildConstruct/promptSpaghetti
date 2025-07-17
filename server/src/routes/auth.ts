@@ -65,6 +65,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       country: request.headers['cf-ipcountry'] as string, // Cloudflare header
       timezone: request.headers['cf-timezone'] as string,
     },
+    fingerprint: (request.headers['x-fingerprint'] || '') as string,
   });
 
   // Login endpoint

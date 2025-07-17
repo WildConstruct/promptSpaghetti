@@ -3,8 +3,12 @@ import { z } from 'zod';
 import { executeGraph, initializeAnalytics } from './engine';
 import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
-import { initDatabase, healthCheck, getDatabase } from './database/connection';
+import { initDatabase, healthCheck, getDatabase, runMigrations } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
+import { workspaceRoutes } from './routes/workspace';
+import { workflowRoutes } from './routes/workflow';
+import { approvalRoutes } from './routes/approval';
+import lockingRoutes from './routes/locking';
 import { randomizerRoutes } from './routes/randomizer';
 import { analyticsRoutes } from './routes/analytics';
 import { AnalyticsDashboard } from './analytics/AnalyticsDashboard';
@@ -120,7 +124,14 @@ const wsServer = new WebSocketServer(wsConfig);
 
 // Initialize database on startup
 try {
-  initDatabase();
+  const db = initDatabase();
+  
+  // Run migrations
+  runMigrations();
+  
+  // Make database available to fastify routes
+  server.decorate('db', db);
+  
   console.log('Database initialized successfully');
 } catch (error) {
   console.error('Failed to initialize database:', error);
@@ -290,6 +301,18 @@ try {
 
 // Register corrections routes
 server.register(correctionsRoutes, { prefix: '/api/corrections' });
+
+// Register workspace routes
+server.register(workspaceRoutes, { prefix: '/api' });
+
+// Register workflow routes
+server.register(workflowRoutes, { prefix: '/api/workflow' });
+
+// Register approval routes
+server.register(approvalRoutes, { prefix: '/api/approval' });
+
+// Register locking routes
+server.register(lockingRoutes, { prefix: '/api/locking' });
 
 // Register randomizer routes
 server.register(randomizerRoutes, { prefix: '/api/randomizer' });

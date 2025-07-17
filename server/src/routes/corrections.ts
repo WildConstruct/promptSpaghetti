@@ -333,6 +333,309 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
     }
   });
 
+  // ========== WORKFLOW MANAGEMENT ==========
+
+  /**
+   * GET /api/corrections/workflow/:state
+   * Get rules by workflow state
+   */
+  fastify.get<{ Params: { state: string } }>('/workflow/:state', async (request, reply) => {
+    try {
+      const state = request.params.state as 'draft' | 'published' | 'deprecated';
+      if (!['draft', 'published', 'deprecated'].includes(state)) {
+        return reply.status(400).send({ 
+          success: false, 
+          error: 'Invalid workflow state' 
+        });
+      }
+      
+      const userId = 1; // TODO: Get from authentication
+      const rules = dao.getRulesByWorkflowState(userId, state);
+      
+      return { success: true, data: rules };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to fetch rules by workflow state' 
+      });
+    }
+  });
+
+  /**
+   * POST /api/corrections/rules/:id/approve
+   * Approve a draft rule
+   */
+  fastify.post<{ Params: RuleIdParams; Body: { comment?: string } }>('/rules/:id/approve', async (request, reply) => {
+    try {
+      const { id } = RuleIdParamsSchema.parse(request.params);
+      const { comment } = request.body || {};
+      const approvedBy = 1; // TODO: Get from authentication
+      
+      const result = dao.approveRule(id, approvedBy, comment);
+      
+      if (!result) {
+        return reply.status(404).send({ 
+          success: false, 
+          error: 'Rule not found or not in draft state' 
+        });
+      }
+      
+      return { success: true, data: result };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to approve rule' 
+      });
+    }
+  });
+
+  /**
+   * POST /api/corrections/rules/:id/deprecate
+   * Deprecate a published rule
+   */
+  fastify.post<{ Params: RuleIdParams; Body: { reason: string } }>('/rules/:id/deprecate', async (request, reply) => {
+    try {
+      const { id } = RuleIdParamsSchema.parse(request.params);
+      const { reason } = request.body;
+      
+      if (!reason) {
+        return reply.status(400).send({ 
+          success: false, 
+          error: 'Deprecation reason is required' 
+        });
+      }
+      
+      const deprecatedBy = 1; // TODO: Get from authentication
+      const result = dao.deprecateRule(id, deprecatedBy, reason);
+      
+      if (!result) {
+        return reply.status(404).send({ 
+          success: false, 
+          error: 'Rule not found or not in published state' 
+        });
+      }
+      
+      return { success: true, data: result };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to deprecate rule' 
+      });
+    }
+  });
+
+  /**
+   * POST /api/corrections/rules/bulk-approve
+   * Bulk approve multiple rules
+   */
+  fastify.post<{ Body: { ruleIds: number[] } }>('/rules/bulk-approve', async (request, reply) => {
+    try {
+      const { ruleIds } = request.body;
+      
+      if (!ruleIds || !Array.isArray(ruleIds) || ruleIds.length === 0) {
+        return reply.status(400).send({ 
+          success: false, 
+          error: 'Rule IDs array is required' 
+        });
+      }
+      
+      const approvedBy = 1; // TODO: Get from authentication
+      const approvedCount = dao.bulkApproveRules(ruleIds, approvedBy);
+      
+      return { 
+        success: true, 
+        data: { 
+          approvedCount, 
+          totalCount: ruleIds.length 
+        } 
+      };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to bulk approve rules' 
+      });
+    }
+  });
+
+  /**
+   * POST /api/corrections/rules/bulk-deprecate
+   * Bulk deprecate multiple rules
+   */
+  fastify.post<{ Body: { ruleIds: number[]; reason: string } }>('/rules/bulk-deprecate', async (request, reply) => {
+    try {
+      const { ruleIds, reason } = request.body;
+      
+      if (!ruleIds || !Array.isArray(ruleIds) || ruleIds.length === 0) {
+        return reply.status(400).send({ 
+          success: false, 
+          error: 'Rule IDs array is required' 
+        });
+      }
+      
+      if (!reason) {
+        return reply.status(400).send({ 
+          success: false, 
+          error: 'Deprecation reason is required' 
+        });
+      }
+      
+      const deprecatedBy = 1; // TODO: Get from authentication
+      const deprecatedCount = dao.bulkDeprecateRules(ruleIds, deprecatedBy, reason);
+      
+      return { 
+        success: true, 
+        data: { 
+          deprecatedCount, 
+          totalCount: ruleIds.length 
+        } 
+      };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to bulk deprecate rules' 
+      });
+    }
+  });
+
+  /**
+   * GET /api/corrections/rules/suggested
+   * Get suggested rules
+   */
+  fastify.get('/rules/suggested', async (request, reply) => {
+    try {
+      const userId = 1; // TODO: Get from authentication
+      const rules = dao.getSuggestedRules(userId);
+      
+      return { success: true, data: rules };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to fetch suggested rules' 
+      });
+    }
+  });
+
+  /**
+   * POST /api/corrections/rules/:id/record-usage
+   * Record rule usage
+   */
+  fastify.post<{ Params: RuleIdParams }>('/rules/:id/record-usage', async (request, reply) => {
+    try {
+      const { id } = RuleIdParamsSchema.parse(request.params);
+      dao.recordRuleUsage(id);
+      
+      return { success: true };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to record rule usage' 
+      });
+    }
+  });
+
+  /**
+   * PATCH /api/corrections/rules/:id/effectiveness
+   * Update rule effectiveness score
+   */
+  fastify.patch<{ Params: RuleIdParams; Body: { score: number } }>('/rules/:id/effectiveness', async (request, reply) => {
+    try {
+      const { id } = RuleIdParamsSchema.parse(request.params);
+      const { score } = request.body;
+      
+      if (typeof score !== 'number' || score < 0 || score > 100) {
+        return reply.status(400).send({ 
+          success: false, 
+          error: 'Score must be a number between 0 and 100' 
+        });
+      }
+      
+      dao.updateRuleEffectiveness(id, score);
+      
+      return { success: true };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to update rule effectiveness' 
+      });
+    }
+  });
+
+  /**
+   * GET /api/corrections/workflow/:id/history
+   * Get workflow history for a rule
+   */
+  fastify.get<{ Params: RuleIdParams }>('/workflow/:id/history', async (request, reply) => {
+    try {
+      const { id } = RuleIdParamsSchema.parse(request.params);
+      const history = dao.getWorkflowHistory(id);
+      
+      return { success: true, data: history };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to fetch workflow history' 
+      });
+    }
+  });
+
+  /**
+   * GET /api/corrections/notifications
+   * Get unread notifications for a user
+   */
+  fastify.get<{ Querystring: { limit?: string } }>('/notifications', async (request, reply) => {
+    try {
+      const userId = 1; // TODO: Get from authentication
+      const limit = request.query.limit ? parseInt(request.query.limit, 10) : 50;
+      
+      const notifications = dao.getUnreadNotifications(userId, limit);
+      
+      return { success: true, data: notifications };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to fetch notifications' 
+      });
+    }
+  });
+
+  /**
+   * PATCH /api/corrections/notifications/:id/read
+   * Mark notification as read
+   */
+  fastify.patch<{ Params: { id: string } }>('/notifications/:id/read', async (request, reply) => {
+    try {
+      const notificationId = parseInt(request.params.id, 10);
+      const userId = 1; // TODO: Get from authentication
+      
+      const success = dao.markNotificationAsRead(notificationId, userId);
+      
+      if (!success) {
+        return reply.status(404).send({ 
+          success: false, 
+          error: 'Notification not found' 
+        });
+      }
+      
+      return { success: true };
+    } catch (error) {
+      fastify.log.error(error);
+      return reply.status(500).send({ 
+        success: false, 
+        error: 'Failed to mark notification as read' 
+      });
+    }
+  });
+
   // ========== STATISTICS ==========
 
   /**

@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import { readFileSync } from 'fs';
+import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 
 // Database instance
@@ -141,16 +141,72 @@ export function runMigrations(): boolean {
       )
     `);
     
-    // Check current version
-    const currentVersion = db.prepare('SELECT version FROM migrations ORDER BY applied_at DESC LIMIT 1').get();
+    // Get list of applied migrations
+    const appliedMigrations = db.prepare('SELECT version FROM migrations').all() as { version: string }[];
+    const appliedVersions = new Set(appliedMigrations.map(m => m.version));
     
-    console.log('Current database version:', currentVersion?.version || 'none');
+    console.log('Applied migrations:', appliedVersions.size ? Array.from(appliedVersions).join(', ') : 'none');
     
-    // Add future migration logic here
+    // Get all migration files
+    const migrationsDir = join(__dirname, 'migrations');
+    let migrationFiles: string[] = [];
+    
+    try {
+      migrationFiles = readdirSync(migrationsDir)
+        .filter(file => file.endsWith('.sql'))
+        .sort(); // Sort to ensure migrations run in order
+    } catch (error) {
+      console.log('No migrations directory found, skipping migrations');
+      return true;
+    }
+    
+    // Run migrations that haven't been applied
+    let appliedCount = 0;
+    for (const file of migrationFiles) {
+      const version = file.replace('.sql', '');
+      
+      if (!appliedVersions.has(version)) {
+        console.log(`Applying migration: ${version}...`);
+        const migrationPath = join(migrationsDir, file);
+        
+        try {
+          const migrationSQL = readFileSync(migrationPath, 'utf8');
+          
+          // Run migration in a transaction
+          const transaction = db.transaction(() => {
+            // Execute all statements in the migration file
+            const statements = migrationSQL
+              .split(';')
+              .map(s => s.trim())
+              .filter(s => s.length > 0);
+            
+            for (const statement of statements) {
+              db.exec(statement + ';');
+            }
+            
+            // Record migration as applied
+            db.prepare('INSERT INTO migrations (version) VALUES (?)').run(version);
+          });
+          
+          transaction();
+          console.log(`Migration ${version} applied successfully`);
+          appliedCount++;
+        } catch (migrationError) {
+          console.error(`Failed to apply migration ${version}:`, migrationError);
+          // Continue with other migrations but log the error
+        }
+      }
+    }
+    
+    if (appliedCount > 0) {
+      console.log(`Applied ${appliedCount} migration(s)`);
+    } else {
+      console.log('All migrations are up to date');
+    }
     
     return true;
   } catch (error) {
-    console.error('Migration failed:', error);
+    console.error('Migration runner failed:', error);
     return false;
   }
 }

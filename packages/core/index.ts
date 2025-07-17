@@ -98,6 +98,24 @@ export {
   UserAvatars
 } from './collaboration/CollaborativePresence';
 
+// Epic 9.4 - Workflow Orchestration exports
+export { WorkflowStateManager } from './components/WorkflowStateManager';
+export { WorkflowStateIndicator, WorkflowStateBadge } from './components/WorkflowStateIndicator';
+export { WorkflowTransitionControls } from './components/WorkflowTransitionControls';
+export { WorkflowHistoryVisualization } from './components/WorkflowHistoryVisualization';
+export { AuditTrailViewer } from './components/AuditTrailViewer';
+export { ApiIntegrationManager } from './components/ApiIntegrationManager';
+export { ScheduledExecutionManager } from './components/ScheduledExecutionManager';
+export { useWorkflowStore } from './stores/workflowStore';
+export type { 
+  WorkflowState, 
+  WorkflowTransition, 
+  WorkflowApproval, 
+  WorkflowLock, 
+  WorkflowHistoryEntry, 
+  WorkflowStatistics 
+} from './stores/workflowStore';
+
 // Epic 12 - LLM Agent Randomizer System exports
 export { 
   RandomizerPanel,
