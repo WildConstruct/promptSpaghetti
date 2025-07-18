@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-07-18T15:04:15.343Z",
+  "metrics": [],
+  "results": {
+    "frontend": {
+      "bundleSize": 0,
+      "buildTime": 0
+    },
+    "backend": {},
+    "system": {
+      "testTime": 0,
+      "coverage": {},
+      "lintTime": 0,
+      "eslintErrors": 0,
+      "eslintWarnings": 0,
+      "memoryBaseline": {
+        "rss": 48881664,
+        "heapTotal": 5820416,
+        "heapUsed": 4757680,
+        "external": 1619553,
+        "arrayBuffers": 13995
+      },
+      "memoryPeak": {
+        "rss": 186351616,
+        "heapTotal": 141365248,
+        "heapUsed": 94335240,
+        "external": 1616113,
+        "arrayBuffers": 10515
+      },
+      "memoryAfterCleanup": {
+        "rss": 186351616,
+        "heapTotal": 141365248,
+        "heapUsed": 94335464,
+        "external": 1616113,
+        "arrayBuffers": 10515
+      }
+    },
+    "summary": {}
+  },
+  "summary": {
+    "totalTests": 0,
+    "passedTests": 0,
+    "failedTests": 0,
+    "overallScore": 100
+  }
+}
