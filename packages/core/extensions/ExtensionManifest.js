@@ -440,4 +440,9 @@ class ExtensionManifestValidator {
 exports.ExtensionManifestValidator = ExtensionManifestValidator;
 exports.extensionManifestParser = ExtensionManifestParser.getInstance();
 exports.extensionManifestValidator = ExtensionManifestValidator.getInstance();
+
+// Add missing export for parseExtensionManifest
+exports.parseExtensionManifest = function(manifestData) {
+    return exports.extensionManifestParser.parseManifest(manifestData);
+};
 //# sourceMappingURL=ExtensionManifest.js.map
