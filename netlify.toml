@@ -2,6 +2,8 @@
   # Don't set base, build from root to handle monorepo properly
   command = "corepack enable && corepack prepare pnpm@8.15.4 --activate && pnpm install --frozen-lockfile && pnpm --filter client build"
   publish = "client/dist"
+  # Disable auto-detection to prevent npm from being used
+  ignore = "false"
 
 [build.environment]
   NODE_VERSION = "20"
