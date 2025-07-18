@@ -102,6 +102,34 @@ EOF
     sed -i.bak '46,76s/^/\/\/ /' src/core/index.ts
     rm -f src/core/index.ts.bak
   fi
+  
+  # Fix CommonJS/ES6 module issues
+  echo "=== Fixing module exports ==="
+  
+  # Add ES6 export to validation.js
+  if [ -f "src/core/validation.js" ]; then
+    echo "" >> src/core/validation.js
+    echo "// ES6 export for vite" >> src/core/validation.js
+    echo "export { validateConnection };" >> src/core/validation.js
+  fi
+  
+  # Add ES6 export to usePreviewSeeds.js if needed
+  if [ -f "src/core/usePreviewSeeds.js" ]; then
+    if ! grep -q "export { usePreviewSeeds }" src/core/usePreviewSeeds.js; then
+      echo "" >> src/core/usePreviewSeeds.js
+      echo "// ES6 export for vite" >> src/core/usePreviewSeeds.js
+      echo "export { usePreviewSeeds };" >> src/core/usePreviewSeeds.js
+    fi
+  fi
+  
+  # Add ES6 export to nodeSchemas.js if needed
+  if [ -f "src/core/nodeSchemas.js" ]; then
+    if ! grep -q "export { nodeSchemas }" src/core/nodeSchemas.js; then
+      echo "" >> src/core/nodeSchemas.js
+      echo "// ES6 export for vite" >> src/core/nodeSchemas.js
+      echo "export { nodeSchemas };" >> src/core/nodeSchemas.js
+    fi
+  fi
 fi
 
 # Run the original build
