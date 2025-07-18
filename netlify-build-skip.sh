@@ -226,54 +226,152 @@ echo "=== Updating CSS import in App.tsx ==="
 sed -i.bak "/import \"reactflow\/dist\/style.css\";/a\\
 import \"./core/inspector-fixes-${TIMESTAMP}.css\";" src/App.tsx
 
-# Fix the VariationList component to use trash icon and better styles
-echo "=== Patching VariationList for better visibility ==="
-if [ -f "src/core/components/Inspector/VariationList.tsx" ]; then
-  python3 << 'PYTHON_SCRIPT'
-import re
+# Replace the entire VariationList component with a fixed version
+echo "=== Replacing VariationList with fixed version ==="
+cat > src/core/components/Inspector/VariationList.tsx << 'EOF'
+import React, { useState, useRef, useEffect } from "react";
+import { useGraphStore } from "../../graphStore";
 
-# Read the file
-with open('src/core/components/Inspector/VariationList.tsx', 'r') as f:
-    content = f.read()
+export interface VariationListProps {
+  nodeId: string;
+  variations: string[];
+  onAdd?: (variation: string) => void;
+  onRemove?: (index: number) => void;
+  onUpdate?: (index: number, newValue: string) => void;
+  onReorder?: (fromIndex: number, toIndex: number) => void;
+  maxVariations?: number;
+  placeholder?: string;
+  allowQuickEntry?: boolean;
+}
 
-# Replace × with trash icon
-content = content.replace('×', '🗑️')
+export const VariationList: React.FC<VariationListProps> = ({
+  nodeId,
+  variations,
+  onAdd,
+  onRemove,
+  onUpdate,
+  onReorder,
+  maxVariations = 50,
+  placeholder = "Add a variation...",
+  allowQuickEntry = true,
+}) => {
+  const [newVariation, setNewVariation] = useState("");
+  const { addVariation, removeVariation, updateVariation, reorderVariations } = useGraphStore();
 
-# Fix the text color in variation items (line ~335)
-content = re.sub(
-    r'color:\s*"#718096"',
-    'color: "#e2e8f0"',
-    content
-)
+  const handleAdd = () => {
+    if (!newVariation.trim() || variations.length >= maxVariations) return;
+    if (onAdd) {
+      onAdd(newVariation.trim());
+    } else {
+      addVariation(nodeId, newVariation.trim());
+    }
+    setNewVariation("");
+  };
 
-# Fix the remove button style
-content = re.sub(
-    r'(style=\{\{[^}]*color:\s*"#ef4444"[^}]*fontSize:\s*14[^}]*\}\})',
-    '''style={{
-                  background: "#ef4444",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 4,
-                  cursor: "pointer",
-                  fontSize: 16,
-                  marginLeft: 8,
-                  padding: "4px 8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  minWidth: 32,
-                  height: 32,
-                }}''',
-    content
-)
+  const handleRemove = (index: number) => {
+    if (onRemove) {
+      onRemove(index);
+    } else {
+      removeVariation(nodeId, index);
+    }
+  };
 
-# Write back
-with open('src/core/components/Inspector/VariationList.tsx', 'w') as f:
-    f.write(content)
+  return (
+    <div>
+      <div style={{ marginBottom: 12, display: "flex", gap: 8 }}>
+        <input
+          type="text"
+          value={newVariation}
+          onChange={(e) => setNewVariation(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAdd();
+            }
+          }}
+          placeholder={placeholder}
+          style={{
+            flex: 1,
+            padding: "8px 12px",
+            border: "1px solid #4a5568",
+            borderRadius: 6,
+            fontSize: 14,
+            background: "#1a202c",
+            color: "#e2e8f0",
+          }}
+        />
+        <button
+          onClick={handleAdd}
+          disabled={!newVariation.trim() || variations.length >= maxVariations}
+          style={{
+            background: newVariation.trim() && variations.length < maxVariations ? "#3b82f6" : "#4a5568",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            padding: "8px 16px",
+            fontSize: 14,
+            cursor: newVariation.trim() && variations.length < maxVariations ? "pointer" : "not-allowed",
+            fontWeight: 500,
+          }}
+        >
+          Add
+        </button>
+      </div>
 
-print("VariationList patched successfully")
-PYTHON_SCRIPT
-fi
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {variations.map((variation, index) => (
+          <div
+            key={index}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "8px 12px",
+              background: "#2d3748",
+              borderRadius: 6,
+              border: "1px solid #4a5568",
+            }}
+          >
+            <span style={{ flex: 1, color: "#e2e8f0", fontSize: 14 }}>
+              {variation}
+            </span>
+            <button
+              onClick={() => handleRemove(index)}
+              style={{
+                background: "#ef4444",
+                color: "#fff",
+                border: "none",
+                borderRadius: 4,
+                cursor: "pointer",
+                fontSize: 18,
+                width: 32,
+                height: 32,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              title="Remove variation"
+              aria-label="Remove variation"
+            >
+              🗑️
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {variations.length === 0 && (
+        <div style={{
+          textAlign: "center",
+          padding: 20,
+          color: "#718096",
+          fontSize: 14,
+        }}>
+          No variations yet. Add one above!
+        </div>
+      )}
+    </div>
+  );
+};
+EOF
 
 # Create stub components for any remaining references
 echo "=== Creating stub components for runtime errors ==="
