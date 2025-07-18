@@ -3,7 +3,7 @@
 # Exit on error
 set -e
 
-echo "=== Netlify Build Script ==="
+echo "=== Netlify Fast Build Script ==="
 echo "Node version: $(node --version)"
 echo "NPM version: $(npm --version)"
 
@@ -17,7 +17,7 @@ fi
 echo "=== Cleaning cached dependencies ==="
 rm -rf node_modules client/node_modules packages/*/node_modules || true
 
-# Install pnpm if not already installed
+# Check for pnpm
 echo "=== Checking for pnpm ==="
 if ! command -v pnpm &> /dev/null; then
     echo "pnpm not found, installing..."
@@ -26,25 +26,18 @@ else
     echo "pnpm is already installed"
 fi
 
-# Verify pnpm installation
 echo "pnpm version: $(pnpm --version)"
 
-# Install dependencies from root
-echo "=== Installing dependencies with pnpm ==="
-# Install without frozen lockfile to avoid version conflicts
-# Add --reporter=append-only to avoid interactive output
-# Add --prefer-offline to use cache when possible
-pnpm install --no-frozen-lockfile --reporter=append-only --prefer-offline
-
-echo "=== Dependencies installed successfully ==="
-echo "=== Current directory: $(pwd) ==="
-echo "=== Listing workspace packages: ==="
-ls -la packages/*/package.json || true
-
-# Build the client
-echo "=== Building client ==="
+# Install only production dependencies for the client
+echo "=== Installing client production dependencies only ==="
 cd client
+pnpm install --prod --no-optional --no-frozen-lockfile --reporter=append-only
+
+echo "=== Building client ==="
 pnpm build
 
 echo "=== Build complete ==="
+echo "=== Listing dist contents ==="
 ls -la dist/
+
+echo "=== Build successful! ==="
