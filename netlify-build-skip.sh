@@ -97,6 +97,23 @@ with open('src/core/GraphEditor.tsx', 'w') as f:
 
 print("GraphEditor.tsx cleaned successfully")
 PYTHON_SCRIPT
+
+  # Add a fix to sync Zustand store changes with React Flow state
+  echo "=== Adding store sync to GraphEditor.tsx ==="
+  sed -i.bak '/const { addNode, updateNode } = useGraphStore();/a\
+\
+  // Sync Zustand store changes with local React Flow state\
+  const storeNodes = useGraphStore(state => state.nodes);\
+  useEffect(() => {\
+    if (storeNodes.length > 0) {\
+      setNodes(storeNodes);\
+    }\
+  }, [storeNodes]);' src/core/GraphEditor.tsx
+  
+  # Also need to import useEffect if not already imported
+  sed -i.bak 's/import React, { useCallback, useState, useMemo, useRef }/import React, { useCallback, useState, useMemo, useRef, useEffect }/' src/core/GraphEditor.tsx
+  
+  rm -f src/core/GraphEditor.tsx.bak
 fi
 
 # Create stub components for any remaining references
@@ -526,7 +543,8 @@ export default function App() {
       position: { x: 500, y: 200 },
       data: { 
         nodeType: 'Output',
-        label: 'Output Node'
+        label: 'Output Node',
+        variations: []
       }
     }
   ];
