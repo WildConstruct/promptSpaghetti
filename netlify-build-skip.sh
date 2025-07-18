@@ -67,15 +67,30 @@ done
 # Fix index.ts - comment out problematic exports
 if [ -f "src/core/index.ts" ]; then
   echo "=== Fixing index.ts exports ==="
-  # Comment out Epic 8.2 exports (lines 36-44)
-  sed -i.bak '36,44s/^/\/\/ /' src/core/index.ts
-  # Comment out Epic 8.4 exports (lines 45-76)
-  sed -i.bak '45,76s/^/\/\/ /' src/core/index.ts
-  # Comment out Epic 12 exports - look for the Epic 12 comment and comment out the export block
-  sed -i.bak '/Epic 12.*exports/,/^}/ s/^/\/\/ /' src/core/index.ts
-  # Also comment out any other problematic export blocks
-  sed -i.bak '/export.*{.*RandomizerPanel/,/^}/ s/^/\/\/ /' src/core/index.ts
-  sed -i.bak '/export.*from.*llm-randomizer/d' src/core/index.ts
+  # Instead of line-based commenting, let's use a more targeted approach
+  # First, let's see what the file looks like
+  echo "Current index.ts line count: $(wc -l < src/core/index.ts)"
+  
+  # Comment out Epic 8.2 exports (usually around lines 36-44)
+  sed -i.bak '/Epic 8.2.*exports/,/^};*$/ s/^/\/\/ /' src/core/index.ts
+  
+  # Comment out Epic 8.4 exports 
+  sed -i.bak '/Epic 8.4.*exports/,/^};*$/ s/^/\/\/ /' src/core/index.ts
+  
+  # Comment out Epic 9 collaboration exports
+  sed -i.bak '/Epic 9.*Collaborative/,/^};*$/ s/^/\/\/ /' src/core/index.ts
+  
+  # Comment out Epic 12 exports
+  sed -i.bak '/Epic 12.*exports/,/^};*$/ s/^/\/\/ /' src/core/index.ts
+  
+  # Remove any lines importing from deleted directories
+  sed -i.bak '/from.*collaboration\//d' src/core/index.ts
+  sed -i.bak '/from.*llm-randomizer\//d' src/core/index.ts
+  sed -i.bak '/from.*extensions\//d' src/core/index.ts
+  sed -i.bak '/from.*WorkflowManager/d' src/core/index.ts
+  sed -i.bak '/from.*ResponsiveCorrectionsPanel/d' src/core/index.ts
+  sed -i.bak '/from.*correctionsStore/d' src/core/index.ts
+  
   rm -f src/core/index.ts.bak
 fi
 
