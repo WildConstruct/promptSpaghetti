@@ -98,17 +98,34 @@ cat > src/core/graphStore.js << 'EOF'
 // Stub for graphStore
 import { create } from 'zustand';
 
-export const useGraphStore = create(() => ({
+export const useGraphStore = create((set) => ({
   nodes: [],
   edges: [],
-  setNodes: () => {},
-  setEdges: () => {},
-  updateNode: () => {},
-  deleteNode: () => {},
-  addNode: () => {},
-  updateEdge: () => {},
-  deleteEdge: () => {},
-  addEdge: () => {}
+  setNodes: (nodes) => set({ nodes }),
+  setEdges: (edges) => set({ edges }),
+  updateNode: (nodeId, data) => set((state) => ({
+    nodes: state.nodes.map(node => 
+      node.id === nodeId ? { ...node, data: { ...node.data, ...data } } : node
+    )
+  })),
+  deleteNode: (nodeId) => set((state) => ({
+    nodes: state.nodes.filter(node => node.id !== nodeId),
+    edges: state.edges.filter(edge => edge.source !== nodeId && edge.target !== nodeId)
+  })),
+  addNode: (node) => set((state) => ({
+    nodes: [...state.nodes, node]
+  })),
+  updateEdge: (edgeId, data) => set((state) => ({
+    edges: state.edges.map(edge => 
+      edge.id === edgeId ? { ...edge, ...data } : edge
+    )
+  })),
+  deleteEdge: (edgeId) => set((state) => ({
+    edges: state.edges.filter(edge => edge.id !== edgeId)
+  })),
+  addEdge: (edge) => set((state) => ({
+    edges: [...state.edges, edge]
+  }))
 }));
 EOF
 
@@ -218,6 +235,22 @@ for ext in tsx ts jsx js; do
     # Comment out randomizer.css import if it exists
     sed -i.bak 's/import.*randomizer\.css.*/\/\/ &/' "src/App.$ext"
     rm -f "src/App.$ext.bak"
+  fi
+done
+
+# Convert any remaining CommonJS files to ES6
+echo "=== Converting CommonJS to ES6 ==="
+find src/core -name "*.js" -type f | while read file; do
+  if grep -q "require(" "$file" 2>/dev/null || grep -q "module.exports" "$file" 2>/dev/null; then
+    echo "Converting CommonJS in: $file"
+    # Replace require statements with imports (basic conversion)
+    sed -i.bak 's/const \([a-zA-Z_][a-zA-Z0-9_]*\) = require(\(.*\));/import \1 from \2;/g' "$file"
+    sed -i.bak 's/const { \(.*\) } = require(\(.*\));/import { \1 } from \2;/g' "$file"
+    # Replace module.exports with export default
+    sed -i.bak 's/module\.exports = /export default /g' "$file"
+    # Replace exports.something with export const something
+    sed -i.bak 's/exports\.\([a-zA-Z_][a-zA-Z0-9_]*\) = /export const \1 = /g' "$file"
+    rm -f "${file}.bak"
   fi
 done
 
