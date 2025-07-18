@@ -197,12 +197,19 @@ rm -f src/core/graphStore.js
 # Create minimal stubs for essential functionality
 cat > src/core/validation.js << 'EOF'
 // Stub for validation module
-export function validateConnection() {
-  return true; // Always valid for now
+export function validateConnection(edges, nodes) {
+  return []; // Return empty array of errors
 }
 
-export function validateGraph() {
+export function validateGraph(nodes, edges) {
   return []; // No errors
+}
+
+export class ValidationError {
+  constructor(message, type = 'error') {
+    this.message = message;
+    this.type = type;
+  }
 }
 EOF
 
@@ -248,21 +255,64 @@ export function usePreviewSeeds() {
     results: [],
     loading: false,
     error: null,
-    execute: () => {}
+    runPreview: () => {},
+    cancelPreview: () => {}
   };
 }
 EOF
 
 cat > src/core/nodeSchemas.js << 'EOF'
-// Stub for nodeSchemas
+// Stub for nodeSchemas with complete definitions
 export const nodeSchemas = {
   WeightedChoice: {
     name: "Weighted Choice",
-    fields: []
+    fields: [],
+    parse: (data) => ({ ...data, variations: data.variations || [] })
   },
   Output: {
     name: "Output",
-    fields: []
+    fields: [],
+    parse: (data) => ({ ...data })
+  },
+  Concat: {
+    name: "Concatenate",
+    fields: [],
+    parse: (data) => ({ ...data })
+  },
+  Include: {
+    name: "Include",
+    fields: [],
+    parse: (data) => ({ ...data, bundle: data.bundle || '' })
+  },
+  SetVariable: {
+    name: "Set Variable",
+    fields: [],
+    parse: (data) => ({ ...data, variableName: data.variableName || '', value: data.value || '' })
+  },
+  GetVariable: {
+    name: "Get Variable",
+    fields: [],
+    parse: (data) => ({ ...data, variableName: data.variableName || '' })
+  },
+  Subject: {
+    name: "Subject",
+    fields: [],
+    parse: (data) => ({ ...data })
+  },
+  Action: {
+    name: "Action",
+    fields: [],
+    parse: (data) => ({ ...data })
+  },
+  Attribute: {
+    name: "Attribute",
+    fields: [],
+    parse: (data) => ({ ...data })
+  },
+  Connector: {
+    name: "Connector",
+    fields: [],
+    parse: (data) => ({ ...data })
   }
 };
 EOF
