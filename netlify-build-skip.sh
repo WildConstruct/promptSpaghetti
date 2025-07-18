@@ -38,14 +38,29 @@ rm -rf src/core/components/Inspector/EnhancedTextAreaEditor*
 # Clean up imports in files
 echo "=== Cleaning up imports ==="
 
-# Remove/comment imports from GraphEditor.tsx
-if [ -f "src/core/GraphEditor.tsx" ]; then
-  sed -i.bak '/ResponsiveCorrectionsPanel/d' src/core/GraphEditor.tsx
-  sed -i.bak '/CorrectionsStatsDashboard/d' src/core/GraphEditor.tsx
-  sed -i.bak '/ExtensionManagerPanel/d' src/core/GraphEditor.tsx
-  sed -i.bak '/useCorrectionsEnabled/d' src/core/GraphEditor.tsx
-  rm -f src/core/GraphEditor.tsx.bak
-fi
+# Remove/comment imports from GraphEditor files (could be .tsx or .js after build process)
+for ext in tsx ts jsx js; do
+  if [ -f "src/core/GraphEditor.$ext" ]; then
+    echo "Cleaning imports from GraphEditor.$ext"
+    # Remove import lines
+    sed -i.bak '/import.*ResponsiveCorrectionsPanel/d' "src/core/GraphEditor.$ext"
+    sed -i.bak '/import.*CorrectionsStatsDashboard/d' "src/core/GraphEditor.$ext"
+    sed -i.bak '/import.*ExtensionManagerPanel/d' "src/core/GraphEditor.$ext"
+    sed -i.bak '/import.*useCorrectionsEnabled/d' "src/core/GraphEditor.$ext"
+    sed -i.bak '/import.*correctionsStore/d' "src/core/GraphEditor.$ext"
+    
+    # Also remove any JSX references to these components
+    sed -i.bak '/<ResponsiveCorrectionsPanel/d' "src/core/GraphEditor.$ext"
+    sed -i.bak '/<CorrectionsStatsDashboard/d' "src/core/GraphEditor.$ext"  
+    sed -i.bak '/<ExtensionManagerPanel/d' "src/core/GraphEditor.$ext"
+    
+    # Remove any lines using these components or hooks
+    sed -i.bak '/useCorrectionsEnabled/d' "src/core/GraphEditor.$ext"
+    sed -i.bak '/correctionsEnabled/d' "src/core/GraphEditor.$ext"
+    
+    rm -f "src/core/GraphEditor.$ext.bak"
+  fi
+done
 
 # Fix index.ts - comment out problematic exports
 if [ -f "src/core/index.ts" ]; then
