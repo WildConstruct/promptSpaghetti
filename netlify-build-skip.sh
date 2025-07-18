@@ -71,6 +71,35 @@ if [ -f "src/core/index.ts" ]; then
   rm -f src/core/index.ts.bak
 fi
 
+# Fix CommonJS/ES6 compatibility issues
+echo "=== Fixing module compatibility ==="
+
+# Add ES6 exports to CommonJS files that need them
+if [ -f "src/core/validation.js" ]; then
+  # Check if it's a CommonJS file that needs ES6 export
+  if grep -q "exports.validateConnection" src/core/validation.js && ! grep -q "export { validateConnection }" src/core/validation.js; then
+    echo "" >> src/core/validation.js
+    echo "// ES6 export for vite compatibility" >> src/core/validation.js
+    echo "export { validateConnection };" >> src/core/validation.js
+  fi
+fi
+
+if [ -f "src/core/usePreviewSeeds.js" ]; then
+  if grep -q "exports.usePreviewSeeds" src/core/usePreviewSeeds.js && ! grep -q "export { usePreviewSeeds }" src/core/usePreviewSeeds.js; then
+    echo "" >> src/core/usePreviewSeeds.js
+    echo "// ES6 export for vite compatibility" >> src/core/usePreviewSeeds.js
+    echo "export { usePreviewSeeds };" >> src/core/usePreviewSeeds.js
+  fi
+fi
+
+if [ -f "src/core/nodeSchemas.js" ]; then
+  if grep -q "exports.nodeSchemas" src/core/nodeSchemas.js && ! grep -q "export { nodeSchemas }" src/core/nodeSchemas.js; then
+    echo "" >> src/core/nodeSchemas.js
+    echo "// ES6 export for vite compatibility" >> src/core/nodeSchemas.js
+    echo "export { nodeSchemas };" >> src/core/nodeSchemas.js
+  fi
+fi
+
 # Run the original build
 echo "=== Running build-standalone.js ==="
 node build-standalone.js
