@@ -18,14 +18,16 @@
   },
   "rules": {
     "no-unused-vars": "warn",
-    "no-console": "warn"
-  },
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "no-undef": "off"
-      }
-    }
-  ]
+    "no-console": "warn",
+    "complexity": ["warn", 10],
+    "max-depth": ["warn", 4],
+    "max-lines": ["warn", 300],
+    "max-lines-per-function": ["warn", 50],
+    "max-params": ["warn", 4],
+    "camelcase": ["error", { "properties": "never" }],
+    "prefer-const": "error",
+    "no-var": "error",
+    "no-await-in-loop": "warn",
+    "prefer-promise-reject-errors": "error"
+  }
 }
