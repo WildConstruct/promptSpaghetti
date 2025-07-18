@@ -1,7 +1,8 @@
 [build]
   # Build from root to handle monorepo properly
   base = ""
-  command = "npm install -g pnpm@8.15.4 && pnpm install --frozen-lockfile && cd client && pnpm build"
+  # Clear any cached dependencies first
+  command = "rm -rf node_modules client/node_modules packages/*/node_modules && npm install -g pnpm@8.15.4 && pnpm install --frozen-lockfile && cd client && pnpm build"
   publish = "client/dist"
 
 [build.environment]
@@ -17,6 +18,8 @@
   VITE_FEATURE_FLAGS_ENABLED = "true"
   # Disable framework detection
   NETLIFY_USE_YARN = "false"
+  # Cache bust to force fresh build
+  NETLIFY_CACHE_BUST = "v1"
 
 [dev]
   command = "pnpm --filter client dev"
