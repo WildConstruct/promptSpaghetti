@@ -61,10 +61,17 @@ if [ -f "src/core/GraphEditor.tsx" ]; then
   # Also remove the JSX usage of these components
   sed -i.bak '/<ResponsiveCorrectionsPanel/,/\/>/d' src/core/GraphEditor.tsx
   sed -i.bak '/<CorrectionsStatsDashboard/,/\/>/d' src/core/GraphEditor.tsx
-  sed -i.bak '/<ExtensionManagerPanel/,/\/>/d' src/core/GraphEditor.tsx
+  
+  # For ExtensionManagerPanel, we need to remove the entire conditional block
+  sed -i.bak '/{extensionsOpen && (/,/)}/d' src/core/GraphEditor.tsx
   
   # Remove the correctionsEnabled usage
   sed -i.bak '/const correctionsEnabled = useCorrectionsEnabled/d' src/core/GraphEditor.tsx
+  
+  # Remove state variables for corrections, stats, and extensions
+  sed -i.bak '/const \[correctionsOpen, setCorrectionsOpen\]/d' src/core/GraphEditor.tsx
+  sed -i.bak '/const \[statsOpen, setStatsOpen\]/d' src/core/GraphEditor.tsx
+  sed -i.bak '/const \[extensionsOpen, setExtensionsOpen\]/d' src/core/GraphEditor.tsx
   
   # Fix the StatusBar props that reference corrections
   sed -i.bak '/correctionsEnabled={correctionsEnabled}/d' src/core/GraphEditor.tsx
