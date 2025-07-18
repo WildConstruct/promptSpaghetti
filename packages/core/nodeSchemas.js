@@ -70,4 +70,8 @@ exports.nodeSchemas = {
         defaultValue: zod_1.z.string().default(""),
     }),
 };
+
+// ES6 export for build compatibility
+export { nodeSchemas };
+
 //# sourceMappingURL=nodeSchemas.js.map
