@@ -4,12 +4,12 @@
   # Skip automatic installation and use our build script
   command = "./netlify-build.sh"
   publish = "client/dist"
-  # Skip Netlify's automatic dependency installation
-  environment = { NPM_FLAGS = "--version" }
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_CONFIG_LEGACY_PEER_DEPS = "true"
+  # Skip Netlify's automatic dependency installation
+  NPM_FLAGS = "--version"
   # Production API URL - Update this to your actual API endpoint
   VITE_API_URL = "https://api.promptscape.app"
   # Enable analytics in production
