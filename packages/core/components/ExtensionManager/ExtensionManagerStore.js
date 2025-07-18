@@ -346,7 +346,5 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
     }
 }));
 
-// ES6 export for build compatibility
-export const useExtensionManagerStore = exports.useExtensionManagerStore;
 
 //# sourceMappingURL=ExtensionManagerStore.js.map

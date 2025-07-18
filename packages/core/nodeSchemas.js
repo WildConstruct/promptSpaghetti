@@ -71,7 +71,5 @@ exports.nodeSchemas = {
     }),
 };
 
-// ES6 export for build compatibility
-export { nodeSchemas };
 
 //# sourceMappingURL=nodeSchemas.js.map

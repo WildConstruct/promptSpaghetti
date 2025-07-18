@@ -441,13 +441,5 @@ exports.ExtensionManifestValidator = ExtensionManifestValidator;
 exports.extensionManifestParser = ExtensionManifestParser.getInstance();
 exports.extensionManifestValidator = ExtensionManifestValidator.getInstance();
 
-// Add missing export for parseExtensionManifest
-exports.parseExtensionManifest = function(manifestData) {
-    return exports.extensionManifestParser.parseManifest(manifestData);
-};
-
-// ES6 export for build compatibility
-export const parseExtensionManifest = exports.parseExtensionManifest;
-export const ExtensionManifest = exports.ExtensionManifestSchema;
 
 //# sourceMappingURL=ExtensionManifest.js.map

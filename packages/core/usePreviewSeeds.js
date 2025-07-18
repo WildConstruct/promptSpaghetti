@@ -62,7 +62,5 @@ const usePreviewSeeds = () => {
 };
 exports.usePreviewSeeds = usePreviewSeeds;
 
-// ES6 export for build compatibility
-export { usePreviewSeeds };
 
 //# sourceMappingURL=usePreviewSeeds.js.map
