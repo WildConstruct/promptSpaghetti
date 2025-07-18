@@ -34,6 +34,8 @@ rm -rf src/core/components/MobileCorrectionsPanel*
 rm -rf src/core/components/NotificationSystem*
 rm -rf src/core/correctionsStore*
 rm -rf src/core/components/Inspector/EnhancedTextAreaEditor*
+rm -rf src/core/collaboration
+rm -rf src/core/llm-randomizer
 
 # Clean up imports in files
 echo "=== Cleaning up imports ==="
@@ -238,21 +240,13 @@ for ext in tsx ts jsx js; do
   fi
 done
 
-# Convert any remaining CommonJS files to ES6
-echo "=== Converting CommonJS to ES6 ==="
-find src/core -name "*.js" -type f | while read file; do
-  if grep -q "require(" "$file" 2>/dev/null || grep -q "module.exports" "$file" 2>/dev/null; then
-    echo "Converting CommonJS in: $file"
-    # Replace require statements with imports (basic conversion)
-    sed -i.bak 's/const \([a-zA-Z_][a-zA-Z0-9_]*\) = require(\(.*\));/import \1 from \2;/g' "$file"
-    sed -i.bak 's/const { \(.*\) } = require(\(.*\));/import { \1 } from \2;/g' "$file"
-    # Replace module.exports with export default
-    sed -i.bak 's/module\.exports = /export default /g' "$file"
-    # Replace exports.something with export const something
-    sed -i.bak 's/exports\.\([a-zA-Z_][a-zA-Z0-9_]*\) = /export const \1 = /g' "$file"
-    rm -f "${file}.bak"
-  fi
-done
+# Comment out Epic 9 collaboration exports from index.ts
+if [ -f "src/core/index.ts" ]; then
+  echo "=== Commenting out collaboration exports ==="
+  sed -i.bak '/Epic 9.*exports/,/^}/ s/^/\/\/ /' src/core/index.ts
+  sed -i.bak '/collaboration\//d' src/core/index.ts
+  rm -f src/core/index.ts.bak
+fi
 
 # Run the original build
 echo "=== Running build-standalone.js ==="
