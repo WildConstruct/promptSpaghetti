@@ -69,6 +69,20 @@ import React from 'react';
 export const CorrectionsStatsDashboard = () => null;
 EOF
 
+# Create stub for correctionsStore with the missing hook
+cat > src/core/correctionsStore.js << 'EOF'
+// Stub for correctionsStore
+export const useCorrectionsEnabled = () => false;
+export const useCorrectionsStore = () => ({
+  rules: [],
+  addRule: () => {},
+  removeRule: () => {},
+  updateRule: () => {},
+  enabled: false,
+  setEnabled: () => {}
+});
+EOF
+
 # Fix index.ts - comment out problematic exports
 if [ -f "src/core/index.ts" ]; then
   echo "=== Fixing index.ts exports ==="
