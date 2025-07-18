@@ -37,37 +37,25 @@ rm -rf src/core/components/Inspector/EnhancedTextAreaEditor*
 rm -rf src/core/collaboration
 rm -rf src/core/llm-randomizer
 
-# Clean up imports in files
+# Clean up imports in files - simpler approach
 echo "=== Cleaning up imports ==="
 
-# Remove/comment imports from GraphEditor files (could be .tsx or .js after build process)
-for ext in tsx ts jsx js; do
-  if [ -f "src/core/GraphEditor.$ext" ]; then
-    echo "Cleaning imports from GraphEditor.$ext"
-    # Remove import lines
-    sed -i.bak '/import.*ResponsiveCorrectionsPanel/d' "src/core/GraphEditor.$ext"
-    sed -i.bak '/import.*CorrectionsStatsDashboard/d' "src/core/GraphEditor.$ext"
-    sed -i.bak '/import.*ExtensionManagerPanel/d' "src/core/GraphEditor.$ext"
-    sed -i.bak '/import.*useCorrectionsEnabled/d' "src/core/GraphEditor.$ext"
-    sed -i.bak '/import.*correctionsStore/d' "src/core/GraphEditor.$ext"
-    
-    # Remove the entire JSX elements and any conditional rendering
-    sed -i.bak '/<ResponsiveCorrectionsPanel/,/\/ResponsiveCorrectionsPanel>/d' "src/core/GraphEditor.$ext"
-    sed -i.bak '/<CorrectionsStatsDashboard/,/\/CorrectionsStatsDashboard>/d' "src/core/GraphEditor.$ext"  
-    sed -i.bak '/<ExtensionManagerPanel/,/\/ExtensionManagerPanel>/d' "src/core/GraphEditor.$ext"
-    
-    # Comment out any lines that reference these components
-    sed -i.bak 's/.*ResponsiveCorrectionsPanel.*/\/\/ &/' "src/core/GraphEditor.$ext"
-    sed -i.bak 's/.*CorrectionsStatsDashboard.*/\/\/ &/' "src/core/GraphEditor.$ext"
-    sed -i.bak 's/.*ExtensionManagerPanel.*/\/\/ &/' "src/core/GraphEditor.$ext"
-    
-    # Remove any lines using these components or hooks
-    sed -i.bak '/useCorrectionsEnabled/d' "src/core/GraphEditor.$ext"
-    sed -i.bak '/correctionsEnabled/d' "src/core/GraphEditor.$ext"
-    
-    rm -f "src/core/GraphEditor.$ext.bak"
-  fi
-done
+# Just remove the compiled JS files that have issues
+rm -f src/core/GraphEditor.js
+rm -f src/core/GraphEditor.jsx
+
+# The TypeScript files will be handled by the build process
+
+# Clean up GraphEditor.tsx more carefully
+if [ -f "src/core/GraphEditor.tsx" ]; then
+  echo "=== Cleaning GraphEditor.tsx ==="
+  # Remove import lines
+  sed -i.bak '/import.*ResponsiveCorrectionsPanel/d' src/core/GraphEditor.tsx
+  sed -i.bak '/import.*CorrectionsStatsDashboard/d' src/core/GraphEditor.tsx
+  sed -i.bak '/import.*ExtensionManagerPanel/d' src/core/GraphEditor.tsx
+  sed -i.bak '/import.*useCorrectionsEnabled/d' src/core/GraphEditor.tsx
+  rm -f src/core/GraphEditor.tsx.bak
+fi
 
 # Create stub components for any remaining references
 echo "=== Creating stub components for runtime errors ==="
