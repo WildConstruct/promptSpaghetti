@@ -49,40 +49,54 @@ rm -f src/core/GraphEditor.jsx
 
 # The TypeScript files will be handled by the build process
 
-# Clean up GraphEditor.tsx more carefully
+# Clean up GraphEditor.tsx with a Python script for more precise editing
 if [ -f "src/core/GraphEditor.tsx" ]; then
-  echo "=== Cleaning GraphEditor.tsx ==="
-  # Remove import lines
-  sed -i.bak '/import.*ResponsiveCorrectionsPanel/d' src/core/GraphEditor.tsx
-  sed -i.bak '/import.*CorrectionsStatsDashboard/d' src/core/GraphEditor.tsx
-  sed -i.bak '/import.*ExtensionManagerPanel/d' src/core/GraphEditor.tsx
-  sed -i.bak '/import.*useCorrectionsEnabled/d' src/core/GraphEditor.tsx
-  
-  # Also remove the JSX usage of these components
-  sed -i.bak '/<ResponsiveCorrectionsPanel/,/\/>/d' src/core/GraphEditor.tsx
-  sed -i.bak '/<CorrectionsStatsDashboard/,/\/>/d' src/core/GraphEditor.tsx
-  
-  # For ExtensionManagerPanel, we need to remove the entire conditional block
-  sed -i.bak '/{extensionsOpen && (/,/)}/d' src/core/GraphEditor.tsx
-  
-  # Remove the correctionsEnabled usage
-  sed -i.bak '/const correctionsEnabled = useCorrectionsEnabled/d' src/core/GraphEditor.tsx
-  
-  # Remove state variables for corrections, stats, and extensions
-  sed -i.bak '/const \[correctionsOpen, setCorrectionsOpen\]/d' src/core/GraphEditor.tsx
-  sed -i.bak '/const \[statsOpen, setStatsOpen\]/d' src/core/GraphEditor.tsx
-  sed -i.bak '/const \[extensionsOpen, setExtensionsOpen\]/d' src/core/GraphEditor.tsx
-  
-  # Fix the StatusBar props that reference corrections
-  sed -i.bak '/correctionsEnabled={correctionsEnabled}/d' src/core/GraphEditor.tsx
-  sed -i.bak 's/onCorrections={() => setCorrectionsOpen(true)}/\/\/ onCorrections removed/g' src/core/GraphEditor.tsx
-  sed -i.bak 's/correctionsOpen={correctionsOpen}/\/\/ correctionsOpen removed/g' src/core/GraphEditor.tsx
-  sed -i.bak 's/onStats={() => setStatsOpen(true)}/\/\/ onStats removed/g' src/core/GraphEditor.tsx
-  sed -i.bak 's/statsOpen={statsOpen}/\/\/ statsOpen removed/g' src/core/GraphEditor.tsx
-  sed -i.bak 's/onExtensions={() => setExtensionsOpen(true)}/\/\/ onExtensions removed/g' src/core/GraphEditor.tsx
-  sed -i.bak 's/extensionsOpen={extensionsOpen}/\/\/ extensionsOpen removed/g' src/core/GraphEditor.tsx
-  
-  rm -f src/core/GraphEditor.tsx.bak
+  echo "=== Cleaning GraphEditor.tsx with Python ==="
+  python3 << 'PYTHON_SCRIPT'
+import re
+
+# Read the file
+with open('src/core/GraphEditor.tsx', 'r') as f:
+    content = f.read()
+
+# Remove imports
+content = re.sub(r'import.*ResponsiveCorrectionsPanel.*\n', '', content)
+content = re.sub(r'import.*CorrectionsStatsDashboard.*\n', '', content)
+content = re.sub(r'import.*ExtensionManagerPanel.*\n', '', content)
+content = re.sub(r'import.*useCorrectionsEnabled.*\n', '', content)
+
+# Remove state declarations
+content = re.sub(r'const \[correctionsOpen, setCorrectionsOpen\].*;\n', '', content)
+content = re.sub(r'const \[statsOpen, setStatsOpen\].*;\n', '', content)
+content = re.sub(r'const \[extensionsOpen, setExtensionsOpen\].*;\n', '', content)
+content = re.sub(r'const correctionsEnabled = useCorrectionsEnabled.*;\n', '', content)
+
+# Remove JSX components - use more precise regex
+# Remove ResponsiveCorrectionsPanel
+content = re.sub(r'<ResponsiveCorrectionsPanel[\s\S]*?\/>\s*', '', content)
+
+# Remove CorrectionsStatsDashboard
+content = re.sub(r'<CorrectionsStatsDashboard[\s\S]*?\/>\s*', '', content)
+
+# Remove the entire extensionsOpen conditional block
+content = re.sub(r'\{extensionsOpen && \(\s*<ExtensionManagerPanel[\s\S]*?\/>\s*\)\}\s*', '', content)
+
+# Clean up StatusBar props
+# Remove entire prop lines
+content = re.sub(r'correctionsEnabled=\{correctionsEnabled\}\s*\n', '', content)
+content = re.sub(r'onCorrections=\{[^}]+\}\s*\n', '', content)
+content = re.sub(r'correctionsOpen=\{correctionsOpen\}\s*\n', '', content)
+content = re.sub(r'onStats=\{[^}]+\}\s*\n', '', content)
+content = re.sub(r'statsOpen=\{statsOpen\}\s*\n', '', content)
+content = re.sub(r'onExtensions=\{[^}]+\}\s*\n', '', content)
+content = re.sub(r'extensionsOpen=\{extensionsOpen\}\s*\n', '', content)
+
+# Write the cleaned content back
+with open('src/core/GraphEditor.tsx', 'w') as f:
+    f.write(content)
+
+print("GraphEditor.tsx cleaned successfully")
+PYTHON_SCRIPT
 fi
 
 # Create stub components for any remaining references
