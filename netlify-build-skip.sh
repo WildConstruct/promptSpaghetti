@@ -226,6 +226,193 @@ echo "=== Updating CSS import in App.tsx ==="
 sed -i.bak "/import \"reactflow\/dist\/style.css\";/a\\
 import \"./core/inspector-fixes-${TIMESTAMP}.css\";" src/App.tsx
 
+# Create a WeightedChoiceEditor component
+echo "=== Creating WeightedChoiceEditor component ==="
+cat > src/core/components/Inspector/editors/WeightedChoiceEditor.tsx << 'EOF'
+import React, { useState } from "react";
+
+export const WeightedChoiceEditor = ({ node, onChange }) => {
+  const choices = node.data?.choices || [];
+  const [newValue, setNewValue] = useState("");
+  const [newWeight, setNewWeight] = useState("1");
+
+  const handleAdd = () => {
+    if (!newValue.trim()) return;
+    const updatedChoices = [...choices, { value: newValue.trim(), weight: parseFloat(newWeight) || 1 }];
+    onChange({ choices: updatedChoices });
+    setNewValue("");
+    setNewWeight("1");
+  };
+
+  const handleRemove = (index) => {
+    const updatedChoices = choices.filter((_, i) => i !== index);
+    onChange({ choices: updatedChoices });
+  };
+
+  const handleUpdateWeight = (index, weight) => {
+    const updatedChoices = [...choices];
+    updatedChoices[index] = { ...updatedChoices[index], weight: parseFloat(weight) || 1 };
+    onChange({ choices: updatedChoices });
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <label style={{ display: "block", fontSize: 12, fontWeight: 600, marginBottom: 4, color: "#e2e8f0" }}>
+          Label
+        </label>
+        <input
+          type="text"
+          value={node.data?.label || ""}
+          onChange={(e) => onChange({ label: e.target.value })}
+          style={{
+            width: "100%",
+            padding: "8px 12px",
+            border: "1px solid #4a5568",
+            borderRadius: 6,
+            fontSize: 14,
+            background: "#2d3748",
+            color: "#e2e8f0",
+          }}
+        />
+      </div>
+
+      <div style={{ marginBottom: 16 }}>
+        <label style={{ display: "block", fontSize: 12, fontWeight: 600, marginBottom: 8, color: "#e2e8f0" }}>
+          Weighted Choices
+        </label>
+        
+        <div style={{ marginBottom: 12, display: "flex", gap: 8 }}>
+          <input
+            type="text"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleAdd();
+              }
+            }}
+            placeholder="Add a choice..."
+            style={{
+              flex: 1,
+              padding: "8px 12px",
+              border: "1px solid #4a5568",
+              borderRadius: 6,
+              fontSize: 14,
+              background: "#1a202c",
+              color: "#e2e8f0",
+            }}
+          />
+          <input
+            type="number"
+            value={newWeight}
+            onChange={(e) => setNewWeight(e.target.value)}
+            placeholder="Weight"
+            style={{
+              width: 80,
+              padding: "8px 12px",
+              border: "1px solid #4a5568",
+              borderRadius: 6,
+              fontSize: 14,
+              background: "#1a202c",
+              color: "#e2e8f0",
+            }}
+          />
+          <button
+            onClick={handleAdd}
+            disabled={!newValue.trim()}
+            style={{
+              background: newValue.trim() ? "#3b82f6" : "#4a5568",
+              color: "#fff",
+              border: "none",
+              borderRadius: 6,
+              padding: "8px 16px",
+              fontSize: 14,
+              cursor: newValue.trim() ? "pointer" : "not-allowed",
+              fontWeight: 500,
+            }}
+          >
+            Add
+          </button>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {choices.map((choice, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "8px 12px",
+                background: "#2d3748",
+                borderRadius: 6,
+                border: "1px solid #4a5568",
+                gap: 8,
+              }}
+            >
+              <span style={{ flex: 1, color: "#e2e8f0", fontSize: 14 }}>
+                {choice.value}
+              </span>
+              <input
+                type="number"
+                value={choice.weight}
+                onChange={(e) => handleUpdateWeight(index, e.target.value)}
+                style={{
+                  width: 60,
+                  padding: "4px 8px",
+                  border: "1px solid #4a5568",
+                  borderRadius: 4,
+                  fontSize: 14,
+                  background: "#1a202c",
+                  color: "#e2e8f0",
+                  textAlign: "center",
+                }}
+              />
+              <button
+                onClick={() => handleRemove(index)}
+                style={{
+                  background: "#ef4444",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor: "pointer",
+                  fontSize: 18,
+                  width: 32,
+                  height: 32,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                title="Remove choice"
+              >
+                🗑️
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {choices.length === 0 && (
+          <div style={{
+            textAlign: "center",
+            padding: 20,
+            color: "#718096",
+            fontSize: 14,
+          }}>
+            No choices yet. Add one above!
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default WeightedChoiceEditor;
+EOF
+
+# Export it from editors index
+echo "export { WeightedChoiceEditor } from './WeightedChoiceEditor';" >> src/core/components/Inspector/editors/index.js
+
 # Replace the entire VariationList component with a fixed version
 echo "=== Replacing VariationList with fixed version ==="
 cat > src/core/components/Inspector/VariationList.tsx << 'EOF'
@@ -655,10 +842,28 @@ const createMockSchema = (fields) => {
 };
 
 export const nodeSchemas = {
-  WeightedChoice: createMockSchema([
-    { name: 'label', type: 'string' },
-    { name: 'variations', type: 'variations' }
-  ]),
+  WeightedChoice: {
+    ...createMockSchema([
+      { name: 'label', type: 'string' }
+    ]),
+    // WeightedChoice uses choices, not variations
+    shape: {
+      label: z.string(),
+      choices: z.array(z.object({
+        value: z.string(),
+        weight: z.number()
+      }))
+    },
+    _def: {
+      shape: () => ({
+        label: z.string(),
+        choices: z.array(z.object({
+          value: z.string(),
+          weight: z.number()
+        }))
+      })
+    }
+  },
   Output: createMockSchema([
     { name: 'label', type: 'string' }
   ]),
@@ -815,7 +1020,11 @@ export default function App() {
       data: { 
         nodeType: 'WeightedChoice',
         label: 'Welcome Node',
-        variations: ['Hello', 'Welcome', 'Greetings']
+        choices: [
+          { value: 'Hello', weight: 1 },
+          { value: 'Welcome', weight: 2 },
+          { value: 'Greetings', weight: 1 }
+        ]
       }
     },
     {
