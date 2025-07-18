@@ -636,18 +636,18 @@ export default function App() {
   // Add global styles for better visibility
   useEffect(() => {
     const style = document.createElement('style');
-    style.innerHTML = \`
-      /* Force light text on dark backgrounds in inspector */
-      aside div[style*="color"] { color: #e2e8f0 !important; }
-      aside input { background: #1a202c !important; color: #e2e8f0 !important; }
-      aside button[title*="Remove"] { 
-        background: #e53e3e !important; 
-        width: 32px !important; 
-        height: 32px !important;
-        border-radius: 4px !important;
-        font-size: 16px !important;
-      }
-    \`;
+    style.innerHTML = [
+      '/* Force light text on dark backgrounds in inspector */',
+      'aside div[style*="color"] { color: #e2e8f0 !important; }',
+      'aside input { background: #1a202c !important; color: #e2e8f0 !important; }',
+      'aside button[title*="Remove"] {',
+      '  background: #e53e3e !important;',
+      '  width: 32px !important;',
+      '  height: 32px !important;',
+      '  border-radius: 4px !important;',
+      '  font-size: 16px !important;',
+      '}'
+    ].join('\\n');
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
