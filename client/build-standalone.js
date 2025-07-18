@@ -50,6 +50,12 @@ if (fs.existsSync(appPath)) {
 }
 
 console.log('Running production build...');
-execSync('vite build --config vite.config.production.ts', { stdio: 'inherit' });
+// Try safe config first, fall back to regular if it fails
+try {
+  execSync('vite build --config vite.config.production-safe.ts', { stdio: 'inherit' });
+} catch (e) {
+  console.log('Safe config failed, trying regular config...');
+  execSync('vite build --config vite.config.production.ts', { stdio: 'inherit' });
+}
 
 console.log('Standalone build complete!');
