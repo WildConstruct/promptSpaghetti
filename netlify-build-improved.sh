@@ -52,12 +52,17 @@ rm -rf client/node_modules || echo "No client/node_modules to remove"
 rm -rf packages/*/node_modules || echo "No packages/*/node_modules to remove"
 echo "Cleanup complete"
 
-# Install pnpm globally
-echo "=== Installing pnpm globally ==="
-npm install -g pnpm@10.13.1 || {
-    echo "Failed to install pnpm globally, trying with npx"
-    exit 1
-}
+# Install pnpm globally if not already installed
+echo "=== Checking for pnpm ==="
+if ! command -v pnpm &> /dev/null; then
+    echo "pnpm not found, installing globally..."
+    npm install -g pnpm@10.13.1 || {
+        echo "Failed to install pnpm globally"
+        exit 1
+    }
+else
+    echo "pnpm is already installed at: $(which pnpm)"
+fi
 
 # Verify pnpm installation
 echo "=== Verifying pnpm installation ==="

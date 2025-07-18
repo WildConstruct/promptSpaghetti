@@ -17,9 +17,14 @@ fi
 echo "=== Cleaning cached dependencies ==="
 rm -rf node_modules client/node_modules packages/*/node_modules || true
 
-# Install pnpm
-echo "=== Installing pnpm ==="
-npm install -g pnpm@10.13.1
+# Install pnpm if not already installed
+echo "=== Checking for pnpm ==="
+if ! command -v pnpm &> /dev/null; then
+    echo "pnpm not found, installing..."
+    npm install -g pnpm@10.13.1
+else
+    echo "pnpm is already installed"
+fi
 
 # Verify pnpm installation
 echo "pnpm version: $(pnpm --version)"
