@@ -1,8 +1,9 @@
 // Epic 16 Marketplace - Template Card Component
-import React from 'react';
+import React, { useState } from 'react';
 import { StarRating } from './StarRating';
 import { PriceDisplay } from './PriceDisplay';
 import { Badge } from '../common/Badge';
+import { PreviewModal } from './PreviewModal';
 import './TemplateCard.css';
 
 interface Template {
@@ -41,6 +42,8 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
   showStats = true,
   className = ''
 }) => {
+  const [showPreview, setShowPreview] = useState(false);
+  
   const {
     title,
     description,
@@ -67,14 +70,15 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
 
   const handlePreviewClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // TODO: Open preview modal
-    console.log('Preview template:', template.id);
+    setShowPreview(true);
   };
 
   const handleOwnerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // TODO: Navigate to creator profile
-    console.log('View creator:', owner?.id);
+    // Navigate to creator profile
+    if (owner?.id) {
+      window.location.href = `/creators/${owner.id}`;
+    }
   };
 
   return (
@@ -237,6 +241,14 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
           )}
         </div>
       </div>
+      
+      {/* Preview Modal */}
+      {showPreview && (
+        <PreviewModal
+          templateId={template.id}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </div>
   );
 };

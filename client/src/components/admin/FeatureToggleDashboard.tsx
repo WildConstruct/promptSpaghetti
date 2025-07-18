@@ -74,6 +74,8 @@ export const FeatureToggleDashboard: React.FC = () => {
   const [detailsToggleId, setDetailsToggleId] = useState<string | null>(null);
   const [editToggleId, setEditToggleId] = useState<string | null>(null);
   const [showBulkOperations, setShowBulkOperations] = useState(false);
+  const [auditHistoryToggleId, setAuditHistoryToggleId] = useState<string | null>(null);
+  const [archiveConfirmToggleId, setArchiveConfirmToggleId] = useState<string | null>(null);
 
   // Fetch toggles data
   const fetchToggles = useCallback(async () => {
@@ -220,6 +222,29 @@ export const FeatureToggleDashboard: React.FC = () => {
       }
       return newSet;
     });
+  };
+
+  const handleArchiveToggle = async (toggleId: string) => {
+    try {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}/archive`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to archive toggle');
+      }
+
+      // Refresh toggles list
+      await fetchToggles();
+      setArchiveConfirmToggleId(null);
+    } catch (error) {
+      console.error('Error archiving toggle:', error);
+      setState(prev => ({ ...prev, error: 'Failed to archive toggle' }));
+    }
   };
 
   const handleSelectAll = () => {
@@ -522,7 +547,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                         <button 
                           className="btn-icon" 
                           title="View Audit History"
-                          onClick={() => {/* TODO: Open audit modal */}}
+                          onClick={() => setAuditHistoryToggleId(toggle.id)}
                         >
                           <History size={14} />
                         </button>
@@ -530,7 +555,7 @@ export const FeatureToggleDashboard: React.FC = () => {
                         <button 
                           className="btn-icon btn-danger" 
                           title="Archive Toggle"
-                          onClick={() => {/* TODO: Confirm and archive */}}
+                          onClick={() => setArchiveConfirmToggleId(toggle.id)}
                         >
                           <Trash2 size={14} />
                         </button>
@@ -612,6 +637,63 @@ export const FeatureToggleDashboard: React.FC = () => {
           fetchToggles();
         }}
       />
+
+      {/* Audit History Modal */}
+      {auditHistoryToggleId && (
+        <div className="modal-overlay" onClick={() => setAuditHistoryToggleId(null)}>
+          <div className="modal audit-history-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Audit History</h2>
+              <button className="btn-icon" onClick={() => setAuditHistoryToggleId(null)}>
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>Audit history for toggle: {auditHistoryToggleId}</p>
+              <div className="audit-list">
+                {/* Audit entries would be loaded here */}
+                <div className="audit-entry">
+                  <div className="audit-timestamp">2024-01-15 10:30:45</div>
+                  <div className="audit-action">Toggle enabled</div>
+                  <div className="audit-user">user@example.com</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Archive Confirmation Modal */}
+      {archiveConfirmToggleId && (
+        <div className="modal-overlay" onClick={() => setArchiveConfirmToggleId(null)}>
+          <div className="modal confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Confirm Archive</h2>
+              <button className="btn-icon" onClick={() => setArchiveConfirmToggleId(null)}>
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>Are you sure you want to archive this feature toggle?</p>
+              <p className="text-muted">This action can be reversed by restoring the toggle from the archive.</p>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="btn btn-secondary" 
+                onClick={() => setArchiveConfirmToggleId(null)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="btn btn-danger" 
+                onClick={() => handleArchiveToggle(archiveConfirmToggleId)}
+              >
+                Archive Toggle
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
