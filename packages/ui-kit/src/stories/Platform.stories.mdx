@@ -1,0 +1,290 @@
+# Platform Adapters
+
+import { Meta, Story, Canvas } from '@storybook/blocks';
+
+<Meta title="Platform/Overview" />
+
+# Platform Adapters
+
+The UI Kit provides platform-specific adapters that allow components to work seamlessly across different environments while providing platform-optimized functionality.
+
+## Platform Types
+
+### Web Platform
+- **Browser APIs**: Full access to DOM, localStorage, clipboard
+- **Keyboard Shortcuts**: Ctrl+Z for undo, Ctrl+C for copy, etc.
+- **Mouse Interactions**: Hover states, right-click context menus
+- **File System**: File downloads, drag-and-drop uploads
+- **Navigation**: window.open, history management
+
+### Mobile Platform  
+- **Touch Interactions**: Tap, long press, pinch-to-zoom gestures
+- **Haptic Feedback**: Light, medium, and heavy vibration patterns
+- **Device Features**: Camera, contacts, native sharing
+- **Responsive UI**: Touch-friendly sizes, swipe gestures
+- **Performance**: Optimized rendering for mobile devices
+
+### Desktop Platform
+- **Native Menus**: Context menus, keyboard shortcuts
+- **File System**: Full file system access, drag-and-drop
+- **Window Management**: Multiple windows, always on top
+- **System Integration**: Notifications, system tray
+- **Performance**: Hardware acceleration, multi-threading
+
+## Usage
+
+### Basic Setup
+
+```tsx
+import { PlatformProvider, usePlatformAdapter } from '@prompt-spaghetti/ui-kit';
+
+function App() {
+  return (
+    <PlatformProvider platform="web">
+      <MyComponent />
+    </PlatformProvider>
+  );
+}
+
+function MyComponent() {
+  const adapter = usePlatformAdapter();
+  
+  const handleCopy = async () => {
+    await adapter.copyToClipboard('Hello World');
+  };
+  
+  return (
+    <button {...adapter.handlePress(handleCopy)}>
+      Copy Text
+    </button>
+  );
+}
+```
+
+### Automatic Platform Detection
+
+```tsx
+// Platform is automatically detected if not specified
+<PlatformProvider>
+  <App />
+</PlatformProvider>
+```
+
+## Platform-Specific Features
+
+### Event Handling
+
+Different platforms handle user interactions differently:
+
+```tsx
+const adapter = usePlatformAdapter();
+
+// Returns appropriate event handlers for the platform
+const pressHandlers = adapter.handlePress(onClick);
+// Web: { onClick, onKeyDown }
+// Mobile: { onPress }
+// Desktop: { onClick, onKeyDown, contextMenu }
+
+const longPressHandlers = adapter.handleLongPress(onLongPress);
+// Web: { onMouseDown, onMouseUp, onMouseLeave }
+// Mobile: { onLongPress }
+// Desktop: { onMouseDown, onContextMenu }
+```
+
+### Device Features
+
+```tsx
+// Haptic feedback (mobile only)
+adapter.hapticFeedback('medium');
+
+// Copy to clipboard (all platforms)
+await adapter.copyToClipboard('text');
+
+// Share content (mobile/desktop)
+await adapter.shareContent({
+  title: 'Share Title',
+  text: 'Content to share',
+  url: 'https://example.com'
+});
+
+// File operations
+const content = await adapter.readFile(file);
+await adapter.writeFile('filename.txt', content);
+```
+
+### Storage
+
+Platform-appropriate storage mechanisms:
+
+```tsx
+// Web: localStorage
+// Mobile: AsyncStorage
+// Desktop: File system or app data
+
+await adapter.setStorageItem('key', 'value');
+const value = await adapter.getStorageItem('key');
+await adapter.removeStorageItem('key');
+```
+
+### Layout Measurements
+
+```tsx
+const measurements = await adapter.measureElement(elementRef.current);
+// Returns: { width, height, x, y }
+```
+
+## Platform-Specific Components
+
+### Web Components
+
+```tsx
+import { WebButton, WebInput, WebModal } from '@prompt-spaghetti/ui-kit/web';
+
+<WebButton href="https://example.com" target="_blank">
+  Open Link
+</WebButton>
+
+<WebInput 
+  autoComplete="email"
+  spellCheck={true}
+  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+/>
+```
+
+### React Native Components
+
+```tsx
+import { RNButton, RNInput, RNModal } from '@prompt-spaghetti/ui-kit/react-native';
+
+<RNButton 
+  hapticFeedback="light"
+  accessibilityHint="Opens settings screen"
+>
+  Settings
+</RNButton>
+
+<RNInput
+  keyboardType="email-address"
+  returnKeyType="done"
+  autoCapitalize="none"
+/>
+```
+
+## Responsive Design
+
+Platform adapters work with the responsive design system:
+
+```tsx
+import { useResponsive, usePlatform } from '@prompt-spaghetti/ui-kit';
+
+function ResponsiveComponent() {
+  const { isMobile, isTablet, isDesktop } = useResponsive();
+  const { platform } = usePlatform();
+  
+  if (platform === 'mobile' || isMobile) {
+    return <MobileLayout />;
+  }
+  
+  return <DesktopLayout />;
+}
+```
+
+## Configuration
+
+### Platform Capabilities
+
+You can override platform capabilities:
+
+```tsx
+<PlatformProvider 
+  platform="web"
+  capabilities={{
+    touchSupport: true,
+    hoverSupport: false,
+    maxViewportWidth: 768
+  }}
+>
+  <App />
+</PlatformProvider>
+```
+
+### Custom Adapters
+
+Create custom platform adapters:
+
+```tsx
+class CustomAdapter implements PlatformAdapter {
+  handlePress = (callback) => ({ onClick: callback });
+  // ... implement other methods
+}
+
+// Use with provider
+<PlatformProvider adapter={new CustomAdapter()}>
+  <App />
+</PlatformProvider>
+```
+
+## Best Practices
+
+1. **Use Platform Adapters**: Always use platform adapters for device features
+2. **Test Across Platforms**: Test components on different platforms
+3. **Graceful Degradation**: Handle missing platform features gracefully
+4. **Performance**: Consider platform-specific performance optimizations
+5. **Accessibility**: Ensure accessibility across all platforms
+
+## Examples
+
+### Cross-Platform Button
+
+```tsx
+function CrossPlatformButton({ onPress, children }) {
+  const adapter = usePlatformAdapter();
+  
+  return (
+    <button 
+      {...adapter.handlePress(() => {
+        adapter.hapticFeedback('light');
+        onPress?.();
+      })}
+      style={{
+        minHeight: 44, // Touch-friendly size
+        cursor: adapter.capabilities.hoverSupport ? 'pointer' : 'default'
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+### Platform-Aware Modal
+
+```tsx
+function PlatformModal({ isOpen, onClose, children }) {
+  const { platform } = usePlatform();
+  
+  if (platform === 'mobile') {
+    return (
+      <RNModal 
+        animationType="slide"
+        presentationStyle="pageSheet"
+        visible={isOpen}
+        onRequestClose={onClose}
+      >
+        {children}
+      </RNModal>
+    );
+  }
+  
+  return (
+    <WebModal
+      isOpen={isOpen}
+      onClose={onClose}
+      backdrop="clickable"
+      keyboard={true}
+    >
+      {children}
+    </WebModal>
+  );
+}
+```

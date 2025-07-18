@@ -9,7 +9,18 @@
     "skipLibCheck": true,
     "strict": true,
     "types": ["jest", "@testing-library/jest-dom", "seedrandom"],
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@prompt-spaghetti/graph-core": ["packages/graph-core/src"],
+      "@prompt-spaghetti/ui-kit": ["packages/ui-kit/src"],
+      "@prompt-spaghetti/analytics-sdk": ["packages/analytics-sdk/src"],
+      "@prompt-spaghetti/claude-sdk": ["packages/claude-sdk/src"]
+    }
   },
   "include": ["packages/**/*", "client/**/*"],
   "exclude": [

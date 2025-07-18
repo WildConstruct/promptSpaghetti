@@ -6,17 +6,25 @@
   "workspaces": [
     "client",
     "packages/*",
-    "server"
+    "server",
+    "apps/*"
   ],
   "scripts": {
     "postinstall": "echo 'Monorepo bootstrap complete.'",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx --ignore-path .gitignore",
     "test": "jest --coverage",
-    "build": "cd client && npm install && npm run build",
+    "build": "turbo run build",
+    "build:web": "cd client && npm install && npm run build",
+    "dev": "turbo run dev --parallel",
+    "dev:web": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
     "check:deps": "node tests/build-verification/scripts/quick-check.js",
-    "clean:modules": "rimraf node_modules client/node_modules packages/*/node_modules",
+    "clean:modules": "rimraf node_modules client/node_modules packages/*/node_modules apps/*/node_modules",
     "fix:deps": "npm run clean:modules && npm install && cd client && npm install",
-    "verify:build": "npm run check:deps && npm run test"
+    "verify:build": "npm run check:deps && npm run test",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -26,6 +34,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "turbo": "^1.13.0",
     "@ant-design/icons": "^6.0.0",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
@@ -44,6 +53,7 @@
     "chalk": "^4.1.2",
     "eslint": "^8.0.0",
     "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.0.0",
     "jest-environment-jsdom": "^29.7.0",
@@ -60,6 +70,8 @@
     "semver": "^7.7.2",
     "ts-jest": "^29.0.0",
     "typescript": "^5.0.0",
-    "yjs": "^13.6.27"
+    "yjs": "^13.6.27",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0"
   }
 }

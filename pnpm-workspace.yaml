@@ -4,3 +4,7 @@ packages:
   - 'packages/core'
   - 'packages/cli'
   - 'packages/crdt-research'
+  - 'packages/graph-core'
+  - 'packages/ui-kit'
+  - 'packages/analytics-sdk'
+  - 'packages/claude-sdk'
