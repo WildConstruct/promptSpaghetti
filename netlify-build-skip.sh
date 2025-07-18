@@ -16,120 +16,44 @@ fi
 # Use the original build script but skip the problematic extensions
 cd client
 
-# Remove problematic extension files before copying
-echo "=== Preparing core files ==="
-if [ -d "../packages/core" ]; then
-  # Create a temp copy
-  cp -r ../packages/core ../packages/core-temp
-  
-  # Remove problematic files
-  rm -rf ../packages/core-temp/components/ExtensionManager
-  rm -rf ../packages/core-temp/extensions
-  rm -rf ../packages/core-temp/components/WorkflowManager*
-  
-  # Copy the cleaned version
-  rm -rf src/core
-  cp -r ../packages/core-temp src/core
-  
-  # Clean up
-  rm -rf ../packages/core-temp
-  
-  # Create stub components for missing imports
-  echo "=== Creating stub components ==="
-  
-  # Create ExtensionManager stub
-  mkdir -p src/core/components/ExtensionManager
-  cat > src/core/components/ExtensionManager/ExtensionManagerPanel.tsx << 'EOF'
-import React from 'react';
-export const ExtensionManagerPanel = () => null;
-EOF
-  
-  # Create WorkflowManager stub
-  cat > src/core/components/WorkflowManager.tsx << 'EOF'
-import React from 'react';
-export const WorkflowManager = () => null;
-EOF
-  
-  # Create extension stubs
-  mkdir -p src/core/extensions
-  cat > src/core/extensions/ExtensionLifecycleManager.ts << 'EOF'
-export class ExtensionLifecycleManager {
-  constructor() {}
-}
-EOF
-  
-  # Create interface stubs
-  mkdir -p src/core/extensions/interfaces
-  cat > src/core/extensions/interfaces/ExtensionInterfaces.ts << 'EOF'
-export interface ExtensionManifest {}
-export const ExtensionManifestSchema = {};
-export class BaseExtension {}
-export interface ExtensionHealthStatus {}
-export interface ExtensionContext {}
-export class ExtensionLogger {}
-export class ExtensionStorage {}
-export class ExtensionEventEmitter {}
-export interface ExtensionRuntime {}
-export interface ExtensionUIContext {}
-export interface ExtensionAPIContext {}
-export interface SystemInfo {}
-export interface PerformanceMetrics {}
-export type ExtensionLifecycleState = string;
-export type ExtensionErrorType = string;
-export class ExtensionError extends Error {}
-export interface ExtensionValidationResult {}
-EOF
-  
-  cat > src/core/extensions/interfaces/NodeExtension.ts << 'EOF'
-export interface NodeExtension {}
-export interface NodeCategory {}
-EOF
-  
-  cat > src/core/extensions/interfaces/UIExtension.ts << 'EOF'
-export interface UIExtension {}
-EOF
-  
-  cat > src/core/extensions/interfaces/TransformExtension.ts << 'EOF'
-export interface TransformExtension {}
-EOF
-  
-  cat > src/core/extensions/interfaces/StorageExtension.ts << 'EOF'
-export interface StorageExtension {}
-EOF
-  
-  # Fix index.ts - just comment out the extension export block
-  if [ -f "src/core/index.ts" ]; then
-    sed -i.bak '46,76s/^/\/\/ /' src/core/index.ts
-    rm -f src/core/index.ts.bak
-  fi
-  
-  # Fix CommonJS/ES6 module issues
-  echo "=== Fixing module exports ==="
-  
-  # Add ES6 export to validation.js
-  if [ -f "src/core/validation.js" ]; then
-    echo "" >> src/core/validation.js
-    echo "// ES6 export for vite" >> src/core/validation.js
-    echo "export { validateConnection };" >> src/core/validation.js
-  fi
-  
-  # Add ES6 export to usePreviewSeeds.js if needed
-  if [ -f "src/core/usePreviewSeeds.js" ]; then
-    if ! grep -q "export { usePreviewSeeds }" src/core/usePreviewSeeds.js; then
-      echo "" >> src/core/usePreviewSeeds.js
-      echo "// ES6 export for vite" >> src/core/usePreviewSeeds.js
-      echo "export { usePreviewSeeds };" >> src/core/usePreviewSeeds.js
-    fi
-  fi
-  
-  # Add ES6 export to nodeSchemas.js if needed
-  if [ -f "src/core/nodeSchemas.js" ]; then
-    if ! grep -q "export { nodeSchemas }" src/core/nodeSchemas.js; then
-      echo "" >> src/core/nodeSchemas.js
-      echo "// ES6 export for vite" >> src/core/nodeSchemas.js
-      echo "export { nodeSchemas };" >> src/core/nodeSchemas.js
-    fi
-  fi
+# Remove src/core if it exists to start fresh
+rm -rf src/core
+
+# Copy core files
+echo "=== Copying core files ==="
+cp -r ../packages/core src/
+
+# Remove problematic files after copying
+echo "=== Removing problematic files ==="
+rm -rf src/core/components/ExtensionManager
+rm -rf src/core/extensions
+rm -rf src/core/components/WorkflowManager*
+rm -rf src/core/ResponsiveCorrectionsPanel*
+rm -rf src/core/components/CorrectionsStatsDashboard*
+rm -rf src/core/components/MobileCorrectionsPanel*
+rm -rf src/core/components/NotificationSystem*
+rm -rf src/core/correctionsStore*
+rm -rf src/core/components/Inspector/EnhancedTextAreaEditor*
+
+# Clean up imports in files
+echo "=== Cleaning up imports ==="
+
+# Remove/comment imports from GraphEditor.tsx
+if [ -f "src/core/GraphEditor.tsx" ]; then
+  sed -i.bak '/ResponsiveCorrectionsPanel/d' src/core/GraphEditor.tsx
+  sed -i.bak '/CorrectionsStatsDashboard/d' src/core/GraphEditor.tsx
+  sed -i.bak '/ExtensionManagerPanel/d' src/core/GraphEditor.tsx
+  sed -i.bak '/useCorrectionsEnabled/d' src/core/GraphEditor.tsx
+  rm -f src/core/GraphEditor.tsx.bak
+fi
+
+# Fix index.ts - comment out problematic exports
+if [ -f "src/core/index.ts" ]; then
+  # Comment out Epic 8.2 exports (lines 36-44)
+  sed -i.bak '36,44s/^/\/\/ /' src/core/index.ts
+  # Comment out Epic 8.4 exports (lines 45-76)
+  sed -i.bak '45,76s/^/\/\/ /' src/core/index.ts
+  rm -f src/core/index.ts.bak
 fi
 
 # Run the original build
