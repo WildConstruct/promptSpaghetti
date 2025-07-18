@@ -61,8 +61,28 @@ export class IncludeNode extends RuntimeNode<string> {
     super(id);
   }
 
-  run(): string {
-    return this.lookup[this.name];
+  run(ctx: ExecutionContext): string {
+    // Security: Validate lookup object and key
+    if (!this.lookup || typeof this.lookup !== 'object') {
+      return ctx.variables['defaultText'] || '';
+    }
+    
+    // Security: Prevent prototype pollution and dangerous property access
+    if (this.name.includes('__proto__') || 
+        this.name.includes('constructor') || 
+        this.name.includes('prototype') ||
+        !Object.prototype.hasOwnProperty.call(this.lookup, this.name)) {
+      return ctx.variables['defaultText'] || '';
+    }
+    
+    const result = this.lookup[this.name];
+    
+    // Security: Ensure result is a safe string
+    if (typeof result !== 'string') {
+      return ctx.variables['defaultText'] || '';
+    }
+    
+    return result;
   }
 }
 
@@ -72,7 +92,35 @@ export class SetVariableNode extends RuntimeNode<void> {
   }
 
   run(ctx: ExecutionContext): void {
-    ctx.variables[this.key] = this.value;
+    // Security: Validate key for dangerous patterns
+    if (this.key.includes('__proto__') || 
+        this.key.includes('constructor') || 
+        this.key.includes('prototype') ||
+        typeof this.key !== 'string' ||
+        this.key.length === 0) {
+      return; // Silently ignore dangerous keys
+    }
+    
+    // Security: Validate value is safe
+    if (this.value === null || this.value === undefined) {
+      ctx.variables[this.key] = this.value;
+      return;
+    }
+    
+    // Only allow safe primitive types and simple objects/arrays
+    const valueType = typeof this.value;
+    if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
+      ctx.variables[this.key] = this.value;
+    } else if (Array.isArray(this.value)) {
+      // Deep clone to prevent reference pollution
+      ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
+    } else if (valueType === 'object') {
+      // Deep clone to prevent reference pollution
+      ctx.variables[this.key] = JSON.parse(JSON.stringify(this.value));
+    } else {
+      // Reject functions and other dangerous types
+      return;
+    }
   }
 }
 
@@ -82,6 +130,20 @@ export class GetVariableNode extends RuntimeNode<any> {
   }
 
   run(ctx: ExecutionContext): any {
+    // Security: Validate key for dangerous patterns
+    if (this.key.includes('__proto__') || 
+        this.key.includes('constructor') || 
+        this.key.includes('prototype') ||
+        typeof this.key !== 'string' ||
+        this.key.length === 0) {
+      return undefined; // Return undefined for dangerous keys
+    }
+    
+    // Security: Only return value if it exists as own property
+    if (!Object.prototype.hasOwnProperty.call(ctx.variables, this.key)) {
+      return undefined;
+    }
+    
     return ctx.variables[this.key];
   }
 }

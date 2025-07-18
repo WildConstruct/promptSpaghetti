@@ -3,6 +3,7 @@
 // Nodes are stored in an object keyed by node id for O(1) lookup.
 
 import { z } from 'zod';
+import { SecureValidation } from './validation/security';
 
 export const NodeTypeEnum = z.enum([
   'WeightedChoice',
@@ -43,13 +44,13 @@ export const OutputNodeSchema = BaseNode.extend({
 
 export const IncludeNodeSchema = BaseNode.extend({
   type: z.literal('Include'),
-  name: z.string(),
+  name: SecureValidation.safePropertyKey(),
 });
 
 export const SetVariableNodeSchema = BaseNode.extend({
   type: z.literal('SetVariable'),
-  key: z.string(),
-  value: z.any(),
+  key: SecureValidation.safePropertyKey(),
+  value: SecureValidation.safeValue(),
 });
 
 export const GetVariableNodeSchema = BaseNode.extend({
@@ -75,16 +76,16 @@ export const ConditionalNodeSchema = BaseNode.extend({
   type: z.literal('Conditional'),
   branches: z.array(
     z.object({
-      condition: z.string(),
-      output: z.string(),
-      label: z.string().optional()
+      condition: SecureValidation.safeExpression(),
+      output: SecureValidation.safeString(),
+      label: SecureValidation.safeString().optional()
     })
   ).optional(),
-  defaultOutput: z.string().optional(),
+  defaultOutput: SecureValidation.safeString().optional(),
   conditionalConfig: z.object({
     allowVariableAccess: z.boolean().optional(),
     strictMode: z.boolean().optional(),
-    customFunctions: z.record(z.any()).optional()
+    customFunctions: z.record(SecureValidation.safeValue()).optional()
   }).optional(),
 });
 
