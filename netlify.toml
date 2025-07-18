@@ -1,9 +1,8 @@
 [build]
-  # Don't set base, build from root to handle monorepo properly
-  command = "corepack enable && corepack prepare pnpm@8.15.4 --activate && pnpm install --frozen-lockfile && pnpm --filter client build"
+  # Build from root to handle monorepo properly
+  base = ""
+  command = "npm install -g pnpm@8.15.4 && pnpm install --frozen-lockfile && cd client && pnpm build"
   publish = "client/dist"
-  # Disable auto-detection to prevent npm from being used
-  ignore = "false"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -16,8 +15,11 @@
   VITE_DEBUG_MODE = "false"
   # Enable feature flags
   VITE_FEATURE_FLAGS_ENABLED = "true"
+  # Disable framework detection
+  NETLIFY_USE_YARN = "false"
 
 [dev]
   command = "pnpm --filter client dev"
   port = 3000
   targetPort = 3000
+  framework = "#custom"
