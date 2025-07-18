@@ -54,7 +54,7 @@ echo "Cleanup complete"
 
 # Install pnpm globally
 echo "=== Installing pnpm globally ==="
-npm install -g pnpm@8.15.4 || {
+npm install -g pnpm@10.13.1 || {
     echo "Failed to install pnpm globally, trying with npx"
     exit 1
 }

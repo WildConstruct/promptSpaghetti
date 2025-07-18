@@ -1,0 +1,4 @@
+
+> @prompt-spaghetti/graph-core@0.1.0 typecheck /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/graph-core
+> tsc --noEmit
+
