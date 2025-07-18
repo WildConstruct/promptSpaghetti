@@ -23,6 +23,9 @@ rm -rf src/core
 echo "=== Copying core files ==="
 cp -r ../packages/core src/
 
+# Create an empty randomizer.css if it doesn't exist to avoid import errors
+touch src/randomizer.css
+
 # Remove problematic files after copying
 echo "=== Removing problematic files ==="
 rm -rf src/core/components/ExtensionManager
@@ -54,6 +57,24 @@ if [ -f "src/core/GraphEditor.tsx" ]; then
   sed -i.bak '/import.*CorrectionsStatsDashboard/d' src/core/GraphEditor.tsx
   sed -i.bak '/import.*ExtensionManagerPanel/d' src/core/GraphEditor.tsx
   sed -i.bak '/import.*useCorrectionsEnabled/d' src/core/GraphEditor.tsx
+  
+  # Also remove the JSX usage of these components
+  sed -i.bak '/<ResponsiveCorrectionsPanel/,/\/>/d' src/core/GraphEditor.tsx
+  sed -i.bak '/<CorrectionsStatsDashboard/,/\/>/d' src/core/GraphEditor.tsx
+  sed -i.bak '/<ExtensionManagerPanel/,/\/>/d' src/core/GraphEditor.tsx
+  
+  # Remove the correctionsEnabled usage
+  sed -i.bak '/const correctionsEnabled = useCorrectionsEnabled/d' src/core/GraphEditor.tsx
+  
+  # Fix the StatusBar props that reference corrections
+  sed -i.bak '/correctionsEnabled={correctionsEnabled}/d' src/core/GraphEditor.tsx
+  sed -i.bak 's/onCorrections={() => setCorrectionsOpen(true)}/\/\/ onCorrections removed/g' src/core/GraphEditor.tsx
+  sed -i.bak 's/correctionsOpen={correctionsOpen}/\/\/ correctionsOpen removed/g' src/core/GraphEditor.tsx
+  sed -i.bak 's/onStats={() => setStatsOpen(true)}/\/\/ onStats removed/g' src/core/GraphEditor.tsx
+  sed -i.bak 's/statsOpen={statsOpen}/\/\/ statsOpen removed/g' src/core/GraphEditor.tsx
+  sed -i.bak 's/onExtensions={() => setExtensionsOpen(true)}/\/\/ onExtensions removed/g' src/core/GraphEditor.tsx
+  sed -i.bak 's/extensionsOpen={extensionsOpen}/\/\/ extensionsOpen removed/g' src/core/GraphEditor.tsx
+  
   rm -f src/core/GraphEditor.tsx.bak
 fi
 
@@ -82,6 +103,36 @@ export const useCorrectionsStore = () => ({
   setEnabled: () => {}
 });
 EOF
+
+# Also create a modified StatusBar component that doesn't expect corrections props
+if [ -f "src/core/components/StatusBar.tsx" ] || [ -f "src/core/components/StatusBar.jsx" ]; then
+  echo "=== Patching StatusBar component ==="
+  # Create a wrapper that filters out the corrections-related props
+  cat > src/core/components/StatusBarWrapper.jsx << 'EOF'
+import React from 'react';
+import { StatusBar as OriginalStatusBar } from './StatusBar';
+
+export const StatusBar = (props) => {
+  // Filter out corrections-related props
+  const { 
+    correctionsEnabled, 
+    correctionsOpen, 
+    onCorrections,
+    statsOpen,
+    onStats,
+    extensionsOpen,
+    onExtensions,
+    ...cleanProps 
+  } = props;
+  
+  return <OriginalStatusBar {...cleanProps} />;
+};
+EOF
+  
+  # Update imports to use the wrapper
+  sed -i.bak 's/import { StatusBar }/import { StatusBar as OriginalStatusBar }/g' src/core/index.ts
+  echo "export { StatusBar } from './components/StatusBarWrapper';" >> src/core/index.ts
+fi
 
 # Fix index.ts - comment out problematic exports
 if [ -f "src/core/index.ts" ]; then
@@ -259,18 +310,34 @@ export function getNodeLabel(node) {
 }
 EOF
 
-# Fix App.js/tsx imports
+# Fix App.js/tsx imports and remove randomizer functionality
 for ext in tsx ts jsx js; do
   if [ -f "src/App.$ext" ]; then
-    echo "=== Fixing App.$ext imports ==="
-    # Remove RandomizerPanel from the import
-    sed -i.bak 's/, RandomizerPanel//g' "src/App.$ext"
-    sed -i.bak 's/RandomizerPanel, //g' "src/App.$ext"
-    # Remove any JSX usage of RandomizerPanel
-    sed -i.bak '/<RandomizerPanel/d' "src/App.$ext"
-    # Comment out randomizer.css import if it exists
-    sed -i.bak 's/import.*randomizer\.css.*/\/\/ &/' "src/App.$ext"
-    rm -f "src/App.$ext.bak"
+    echo "=== Fixing App.$ext imports and removing randomizer ==="
+    # Create a simplified App that only shows the GraphEditor
+    cat > "src/App.$ext" << 'EOF'
+import React from "react";
+import { ReactFlowProvider } from "reactflow";
+import { GraphEditor } from "./core";
+import "reactflow/dist/style.css";
+
+/**
+ * Main client application component.
+ * Simplified to only show the graph editor.
+ */
+export default function App() {
+  return (
+    <ReactFlowProvider>
+      <div style={{ width: "100vw", height: "100vh" }}>
+        <GraphEditor 
+          initialNodes={[]}
+          initialEdges={[]}
+        />
+      </div>
+    </ReactFlowProvider>
+  );
+}
+EOF
   fi
 done
 
