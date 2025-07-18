@@ -1,8 +1,8 @@
 [build]
   # Build from root to handle monorepo properly
   base = ""
-  # Clear any cached dependencies first
-  command = "rm -rf node_modules client/node_modules packages/*/node_modules && npm install -g pnpm@8.15.4 && pnpm install --frozen-lockfile && cd client && pnpm build"
+  # Use a build script for better control
+  command = "./netlify-build.sh"
   publish = "client/dist"
 
 [build.environment]
