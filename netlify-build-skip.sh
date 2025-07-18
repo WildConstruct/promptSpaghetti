@@ -276,6 +276,71 @@ export const useGraphStore = create((set) => ({
   })),
   addEdge: (edge) => set((state) => ({
     edges: [...state.edges, edge]
+  })),
+  // Variation-related methods
+  addVariation: (nodeId, variation) => set((state) => ({
+    nodes: state.nodes.map(node => {
+      if (node.id === nodeId) {
+        const variations = node.data.variations || [];
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            variations: [...variations, variation]
+          }
+        };
+      }
+      return node;
+    })
+  })),
+  removeVariation: (nodeId, index) => set((state) => ({
+    nodes: state.nodes.map(node => {
+      if (node.id === nodeId) {
+        const variations = [...(node.data.variations || [])];
+        variations.splice(index, 1);
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            variations
+          }
+        };
+      }
+      return node;
+    })
+  })),
+  updateVariation: (nodeId, index, newValue) => set((state) => ({
+    nodes: state.nodes.map(node => {
+      if (node.id === nodeId) {
+        const variations = [...(node.data.variations || [])];
+        variations[index] = newValue;
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            variations
+          }
+        };
+      }
+      return node;
+    })
+  })),
+  reorderVariations: (nodeId, fromIndex, toIndex) => set((state) => ({
+    nodes: state.nodes.map(node => {
+      if (node.id === nodeId) {
+        const variations = [...(node.data.variations || [])];
+        const [removed] = variations.splice(fromIndex, 1);
+        variations.splice(toIndex, 0, removed);
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            variations
+          }
+        };
+      }
+      return node;
+    })
   }))
 }));
 EOF
