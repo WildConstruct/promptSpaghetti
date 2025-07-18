@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useRef } from 'react';
-import { ExtensionManifest, parseExtensionManifest } from '../../extensions/ExtensionManifest';
+import { ExtensionManifest, parseExtensionManifest } from '../../extensions/ExtensionManifest-simple';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 
 export interface ExtensionInstallDialogProps {
