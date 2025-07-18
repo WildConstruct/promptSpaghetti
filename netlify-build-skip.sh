@@ -167,21 +167,12 @@ export { InspectorPanel } from './InspectorPanel';
 EOF
 fi
 
-# Fix or create nodeDataUtils if it's missing exports
-if [ -f "src/core/utils/nodeDataUtils.js" ]; then
-  echo "=== Checking nodeDataUtils.js exports ==="
-  # Check if hasVariations is exported
-  if ! grep -q "export.*hasVariations" src/core/utils/nodeDataUtils.js; then
-    echo "" >> src/core/utils/nodeDataUtils.js
-    echo "// Add missing export for hasVariations" >> src/core/utils/nodeDataUtils.js
-    echo "export function hasVariations(node) { return false; }" >> src/core/utils/nodeDataUtils.js
-  fi
-else
-  # Create the file if it doesn't exist
-  echo "=== Creating nodeDataUtils.js ==="
-  mkdir -p src/core/utils
-  cat > src/core/utils/nodeDataUtils.js << 'EOF'
-// Stub for nodeDataUtils
+# Remove and recreate nodeDataUtils to ensure proper ES6 exports
+echo "=== Recreating nodeDataUtils.js ==="
+rm -f src/core/utils/nodeDataUtils.js
+mkdir -p src/core/utils
+cat > src/core/utils/nodeDataUtils.js << 'EOF'
+// Stub for nodeDataUtils with ES6 exports
 export function hasVariations(node) {
   return false;
 }
@@ -199,8 +190,15 @@ export function updateNodeData(node, updates) {
     }
   };
 }
+
+export function getNodeVariations(node) {
+  return [];
+}
+
+export function getNodeLabel(node) {
+  return node?.data?.label || node?.type || 'Node';
+}
 EOF
-fi
 
 # Run the original build
 echo "=== Running build-standalone.js ==="
