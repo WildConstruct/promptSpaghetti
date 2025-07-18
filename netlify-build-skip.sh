@@ -146,14 +146,22 @@ fi
 # Add CSS fixes for better contrast and visibility
 echo "=== Creating CSS fixes for better visibility ==="
 cat > src/core/inspector-fixes.css << 'EOF'
-/* Fix variation list contrast */
-.variation-item {
+/* Fix variation list contrast with more specific selectors */
+div[style*="background: rgb(45, 55, 72)"],
+div[style*="background:#2d3748"] {
   background-color: #2d3748 !important;
   color: #e2e8f0 !important;
-  border: 1px solid #4a5568 !important;
 }
 
-.variation-item input {
+/* Fix all text in variation items */
+div[style*="color: rgb(113, 128, 150)"],
+div[style*="color:#718096"] {
+  color: #e2e8f0 !important;
+}
+
+/* Fix variation item inputs */
+input[style*="background: rgb(26, 32, 44)"],
+input[style*="background:#1a202c"] {
   background-color: #1a202c !important;
   color: #e2e8f0 !important;
   border: 1px solid #4a5568 !important;
@@ -168,14 +176,36 @@ aside textarea {
   border: 1px solid #4a5568 !important;
 }
 
-/* Fix variation remove button */
-.variation-item button {
+/* Style remove button as trash can */
+button[title*="Remove"],
+button[aria-label*="Remove"] {
   background-color: #e53e3e !important;
   color: white !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+
+button[title*="Remove"]:hover,
+button[aria-label*="Remove"]:hover {
+  background-color: #c53030 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Force text color in all variation-related divs */
+aside div {
+  color: #e2e8f0 !important;
 }
 
 /* Ensure proper spacing */
-.variation-list {
+div[style*="gap"] {
   gap: 8px !important;
 }
 EOF
@@ -183,6 +213,16 @@ EOF
 # Import the CSS in App.tsx
 sed -i.bak '/import "reactflow\/dist\/style.css";/a\
 import "./core/inspector-fixes.css";' src/App.tsx
+
+# Fix the VariationList component to use trash icon instead of X
+echo "=== Fixing VariationList to use trash icon ==="
+if [ -f "src/core/components/Inspector/VariationList.tsx" ]; then
+  # Replace the × with a trash can emoji 🗑️
+  sed -i.bak 's/×/🗑️/g' src/core/components/Inspector/VariationList.tsx
+  # Also update any "X" text to trash icon
+  sed -i.bak 's/">X</">🗑️</g' src/core/components/Inspector/VariationList.tsx
+  rm -f src/core/components/Inspector/VariationList.tsx.bak
+fi
 
 # Create stub components for any remaining references
 echo "=== Creating stub components for runtime errors ==="
@@ -583,7 +623,7 @@ if [ -f "src/App.tsx" ]; then
   echo "=== Fixing App.tsx imports and removing randomizer ==="
   # Create a simplified App that only shows the GraphEditor
   cat > "src/App.tsx" << 'EOF'
-import React from "react";
+import React, { useEffect } from "react";
 import { ReactFlowProvider } from "reactflow";
 import { GraphEditor } from "./core";
 import "reactflow/dist/style.css";
@@ -593,6 +633,25 @@ import "reactflow/dist/style.css";
  * Simplified to only show the graph editor.
  */
 export default function App() {
+  // Add global styles for better visibility
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = \`
+      /* Force light text on dark backgrounds in inspector */
+      aside div[style*="color"] { color: #e2e8f0 !important; }
+      aside input { background: #1a202c !important; color: #e2e8f0 !important; }
+      aside button[title*="Remove"] { 
+        background: #e53e3e !important; 
+        width: 32px !important; 
+        height: 32px !important;
+        border-radius: 4px !important;
+        font-size: 16px !important;
+      }
+    \`;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
   // Sample initial nodes to demonstrate the editor is working
   const initialNodes = [
     {
