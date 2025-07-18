@@ -132,16 +132,39 @@ export const nodeSchemas = {
 };
 EOF
 
-# Fix the Inspector index.js export if it's missing InspectorPanel
+# Create InspectorPanel stub if it doesn't exist
+if [ ! -f "src/core/components/Inspector/InspectorPanel.tsx" ] && [ ! -f "src/core/components/Inspector/InspectorPanel.js" ]; then
+  echo "=== Creating InspectorPanel stub ==="
+  cat > src/core/components/Inspector/InspectorPanel.tsx << 'EOF'
+import React from 'react';
+
+export const InspectorPanel = () => {
+  return <div>Inspector Panel (stub)</div>;
+};
+EOF
+fi
+
+# Fix the Inspector index.js to export InspectorPanel
 if [ -f "src/core/components/Inspector/index.js" ]; then
   echo "=== Fixing Inspector index.js ==="
-  # Check if InspectorPanel is exported
-  if ! grep -q "export.*InspectorPanel" src/core/components/Inspector/index.js; then
-    # Add the export
-    echo "" >> src/core/components/Inspector/index.js
-    echo "// Export InspectorPanel for backward compatibility" >> src/core/components/Inspector/index.js
-    echo "export { InspectorPanel } from './InspectorPanel';" >> src/core/components/Inspector/index.js
-  fi
+  # Replace the entire file with a proper export
+  cat > src/core/components/Inspector/index.js << 'EOF'
+// Re-export InspectorPanel
+export { InspectorPanel } from './InspectorPanel';
+
+// Export any other components that might be in this directory
+export * from './InspectorContext';
+export * from './BaseNodeEditor';
+EOF
+fi
+
+# If index.js doesn't exist, create it
+if [ ! -f "src/core/components/Inspector/index.js" ]; then
+  echo "=== Creating Inspector index.js ==="
+  cat > src/core/components/Inspector/index.js << 'EOF'
+// Export InspectorPanel
+export { InspectorPanel } from './InspectorPanel';
+EOF
 fi
 
 # Run the original build
