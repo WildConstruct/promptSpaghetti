@@ -132,6 +132,18 @@ export const nodeSchemas = {
 };
 EOF
 
+# Fix the Inspector index.js export if it's missing InspectorPanel
+if [ -f "src/core/components/Inspector/index.js" ]; then
+  echo "=== Fixing Inspector index.js ==="
+  # Check if InspectorPanel is exported
+  if ! grep -q "export.*InspectorPanel" src/core/components/Inspector/index.js; then
+    # Add the export
+    echo "" >> src/core/components/Inspector/index.js
+    echo "// Export InspectorPanel for backward compatibility" >> src/core/components/Inspector/index.js
+    echo "export { InspectorPanel } from './InspectorPanel';" >> src/core/components/Inspector/index.js
+  fi
+fi
+
 # Run the original build
 echo "=== Running build-standalone.js ==="
 node build-standalone.js
