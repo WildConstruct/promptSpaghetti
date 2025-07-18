@@ -9,15 +9,15 @@ export interface WeightedChoiceEditorProps extends Omit<BaseNodeEditorProps, 'ch
 }
 
 export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
+  const { nodeData, onChange, nodeId } = props;
   
   // WeightedChoice specific fields
   const choices = (nodeData.choices as string[]) || [];
   const weights = (nodeData.weights as number[]) || [];
-  const label = (nodeData.label as string) || "";
+  const name = (nodeData.name as string) || (nodeData.label as string) || "WeightedChoice";
 
   // State for collapsible sections
-  const [basicPropsCollapsed, setBasicPropsCollapsed] = useState(false);
+  const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
   const [choicesCollapsed, setChoicesCollapsed] = useState(false);
   const [previewCollapsed, setPreviewCollapsed] = useState(true);
 
@@ -35,8 +35,8 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
     onChange({ weights: newWeights });
   };
 
-  const handleLabelChange = (value: unknown) => {
-    onChange({ label: value as string });
+  const handleNameChange = (value: unknown) => {
+    onChange({ name: value as string, label: value as string });
   };
 
   return (
@@ -44,16 +44,16 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
       {/* Basic Properties */}
       <CollapsibleSection 
         title="Basic Properties" 
-        collapsed={basicPropsCollapsed}
-        onToggle={() => setBasicPropsCollapsed(!basicPropsCollapsed)}
+        collapsed={commonPropsCollapsed}
+        onToggle={() => setCommonPropsCollapsed(!commonPropsCollapsed)}
       >
         <TextFieldEditor
-          label="Label"
-          value={label}
-          fieldKey="label"
+          label="Name"
+          value={name}
+          fieldKey="name"
           zodType={null as any}
-          onChange={handleLabelChange}
-          placeholder="Enter node label..."
+          onChange={handleNameChange}
+          placeholder="Enter node name..."
         />
       </CollapsibleSection>
 
