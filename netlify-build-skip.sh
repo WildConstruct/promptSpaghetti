@@ -34,8 +34,10 @@ if [ -d "../packages/core" ]; then
   # Clean up
   rm -rf ../packages/core-temp
   
-  # Also fix the index.ts to remove imports of deleted files
-  echo "=== Fixing index.ts imports ==="
+  # Fix imports in various files
+  echo "=== Fixing imports in core files ==="
+  
+  # Fix index.ts
   if [ -f "src/core/index.ts" ]; then
     # Comment out lines that reference deleted components
     sed -i.bak 's/.*WorkflowManager.*/\/\/ &/' src/core/index.ts
@@ -48,6 +50,28 @@ if [ -d "../packages/core" ]; then
     
     rm -f src/core/index.ts.bak
   fi
+  
+  # Fix GraphEditor.js
+  if [ -f "src/core/GraphEditor.js" ]; then
+    echo "=== Fixing GraphEditor.js imports ==="
+    # Comment out ExtensionManagerPanel import
+    sed -i.bak 's/.*ExtensionManagerPanel.*/\/\/ &/' src/core/GraphEditor.js
+    # Comment out any JSX that uses ExtensionManagerPanel
+    sed -i.bak 's/.*<ExtensionManagerPanel.*/\/\/ &/' src/core/GraphEditor.js
+    sed -i.bak 's/.*ExtensionManagerPanel>.*/\/\/ &/' src/core/GraphEditor.js
+    rm -f src/core/GraphEditor.js.bak
+  fi
+  
+  # Fix any other files that might import extension components
+  find src/core -name "*.js" -o -name "*.jsx" -o -name "*.ts" -o -name "*.tsx" | while read file; do
+    if grep -q "ExtensionManager\|WorkflowManager\|extensions\/" "$file" 2>/dev/null; then
+      echo "Fixing imports in: $file"
+      sed -i.bak 's/.*ExtensionManager.*/\/\/ &/' "$file"
+      sed -i.bak 's/.*WorkflowManager.*/\/\/ &/' "$file"
+      sed -i.bak 's/.*extensions\/.*/\/\/ &/' "$file"
+      rm -f "${file}.bak"
+    fi
+  done
 fi
 
 # Run the original build
