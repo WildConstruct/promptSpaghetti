@@ -6,6 +6,14 @@ set -e
 echo "=== Netlify Skip Build Script ==="
 echo "Node version: $(node --version)"
 echo "NPM version: $(npm --version)"
+echo "Build timestamp: $(date)"
+
+# Clear any cached build artifacts
+echo "=== Clearing build cache ==="
+rm -rf node_modules/.cache
+rm -rf .parcel-cache
+rm -rf dist
+rm -rf build
 
 # Restore the real package.json
 echo "=== Restoring real package.json ==="
@@ -145,7 +153,10 @@ fi
 
 # Add CSS fixes for better contrast and visibility
 echo "=== Creating CSS fixes for better visibility ==="
-cat > src/core/inspector-fixes.css << 'EOF'
+# Add timestamp to CSS filename to bust cache
+TIMESTAMP=$(date +%s)
+CSS_FILE="src/core/inspector-fixes-${TIMESTAMP}.css"
+cat > "$CSS_FILE" << 'EOF'
 /* Fix variation list contrast with more specific selectors */
 div[style*="background: rgb(45, 55, 72)"],
 div[style*="background:#2d3748"] {
@@ -210,9 +221,10 @@ div[style*="gap"] {
 }
 EOF
 
-# Import the CSS in App.tsx
-sed -i.bak '/import "reactflow\/dist\/style.css";/a\
-import "./core/inspector-fixes.css";' src/App.tsx
+# Import the CSS in App.tsx with dynamic filename
+echo "=== Updating CSS import in App.tsx ==="
+sed -i.bak "/import \"reactflow\/dist\/style.css\";/a\\
+import \"./core/inspector-fixes-${TIMESTAMP}.css\";" src/App.tsx
 
 # Fix the VariationList component to use trash icon and better styles
 echo "=== Patching VariationList for better visibility ==="

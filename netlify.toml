@@ -21,7 +21,7 @@
   # Disable framework detection
   NETLIFY_USE_YARN = "false"
   # Cache bust to force fresh build
-  NETLIFY_CACHE_BUST = "v1"
+  NETLIFY_CACHE_BUST = "v2-visibility-fixes"
 
 [dev]
   command = "pnpm --filter client dev"
