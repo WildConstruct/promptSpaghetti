@@ -20,7 +20,8 @@ echo "pnpm version: $(pnpm --version)"
 
 # Install dependencies from root
 echo "=== Installing dependencies with pnpm ==="
-pnpm install --frozen-lockfile
+# Install without frozen lockfile to avoid version conflicts
+pnpm install --no-frozen-lockfile
 
 # Build the client
 echo "=== Building client ==="
