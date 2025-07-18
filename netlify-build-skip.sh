@@ -310,12 +310,12 @@ export function getNodeLabel(node) {
 }
 EOF
 
-# Fix App.js/tsx imports and remove randomizer functionality
-for ext in tsx ts jsx js; do
-  if [ -f "src/App.$ext" ]; then
-    echo "=== Fixing App.$ext imports and removing randomizer ==="
-    # Create a simplified App that only shows the GraphEditor
-    cat > "src/App.$ext" << 'EOF'
+# Fix App.tsx imports and remove randomizer functionality
+# Only handle .tsx file since that's what the project uses
+if [ -f "src/App.tsx" ]; then
+  echo "=== Fixing App.tsx imports and removing randomizer ==="
+  # Create a simplified App that only shows the GraphEditor
+  cat > "src/App.tsx" << 'EOF'
 import React from "react";
 import { ReactFlowProvider } from "reactflow";
 import { GraphEditor } from "./core";
@@ -338,8 +338,10 @@ export default function App() {
   );
 }
 EOF
-  fi
-done
+fi
+
+# Remove any .js versions that might have been created
+rm -f src/App.js src/App.jsx
 
 # Comment out Epic 9 collaboration exports from index.ts
 if [ -f "src/core/index.ts" ]; then
