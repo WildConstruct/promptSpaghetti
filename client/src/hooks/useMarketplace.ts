@@ -1,5 +1,6 @@
 // Epic 16 Marketplace - Custom React Hook
 import { useState, useCallback, useRef } from 'react';
+import { API_URL } from '../config/environment';
 
 // Types
 interface SearchFilters {
@@ -74,7 +75,7 @@ interface MarketplaceActions {
   reset: () => void;
 }
 
-const API_BASE_URL = '/api/marketplace';
+const API_BASE_URL = `${API_URL}/api/marketplace`;
 
 // Helper function to get auth headers
 const getAuthHeaders = (): HeadersInit => {

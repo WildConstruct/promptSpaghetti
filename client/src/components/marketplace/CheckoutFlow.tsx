@@ -15,7 +15,7 @@ import { PriceDisplay } from './PriceDisplay';
 import './CheckoutFlow.css';
 
 // Initialize Stripe
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY!);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
 
 interface CheckoutFlowProps {
   onBack: () => void;

@@ -1,11 +1,19 @@
 [build]
-  base = "client"
-  command = "npm install --no-audit && npm run build"
-  publish = "dist"
+  # Don't set base, build from root to handle monorepo properly
+  command = "corepack enable && corepack prepare pnpm@8.15.4 --activate && pnpm install --frozen-lockfile && pnpm --filter client build"
+  publish = "client/dist"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_CONFIG_LEGACY_PEER_DEPS = "true"
+  # Production API URL - Update this to your actual API endpoint
+  VITE_API_URL = "https://api.promptscape.app"
+  # Enable analytics in production
+  VITE_ANALYTICS_ENABLED = "true"
+  # Disable debug mode in production
+  VITE_DEBUG_MODE = "false"
+  # Enable feature flags
+  VITE_FEATURE_FLAGS_ENABLED = "true"
 
 [dev]
   command = "pnpm --filter client dev"
