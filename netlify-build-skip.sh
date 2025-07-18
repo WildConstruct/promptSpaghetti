@@ -206,6 +206,21 @@ export function getNodeLabel(node) {
 }
 EOF
 
+# Fix App.js/tsx imports
+for ext in tsx ts jsx js; do
+  if [ -f "src/App.$ext" ]; then
+    echo "=== Fixing App.$ext imports ==="
+    # Remove RandomizerPanel from the import
+    sed -i.bak 's/, RandomizerPanel//g' "src/App.$ext"
+    sed -i.bak 's/RandomizerPanel, //g' "src/App.$ext"
+    # Remove any JSX usage of RandomizerPanel
+    sed -i.bak '/<RandomizerPanel/d' "src/App.$ext"
+    # Comment out randomizer.css import if it exists
+    sed -i.bak 's/import.*randomizer\.css.*/\/\/ &/' "src/App.$ext"
+    rm -f "src/App.$ext.bak"
+  fi
+done
+
 # Run the original build
 echo "=== Running build-standalone.js ==="
 node build-standalone.js
