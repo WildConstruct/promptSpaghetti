@@ -18,4 +18,8 @@ function validateConnection(edges, nodes) {
     });
     return errors;
 }
+
+// ES6 export for build compatibility
+export { validateConnection };
+
 //# sourceMappingURL=validation.js.map
