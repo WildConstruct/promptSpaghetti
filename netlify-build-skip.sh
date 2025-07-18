@@ -214,14 +214,53 @@ EOF
 sed -i.bak '/import "reactflow\/dist\/style.css";/a\
 import "./core/inspector-fixes.css";' src/App.tsx
 
-# Fix the VariationList component to use trash icon instead of X
-echo "=== Fixing VariationList to use trash icon ==="
+# Fix the VariationList component to use trash icon and better styles
+echo "=== Patching VariationList for better visibility ==="
 if [ -f "src/core/components/Inspector/VariationList.tsx" ]; then
-  # Replace the × with a trash can emoji 🗑️
-  sed -i.bak 's/×/🗑️/g' src/core/components/Inspector/VariationList.tsx
-  # Also update any "X" text to trash icon
-  sed -i.bak 's/">X</">🗑️</g' src/core/components/Inspector/VariationList.tsx
-  rm -f src/core/components/Inspector/VariationList.tsx.bak
+  python3 << 'PYTHON_SCRIPT'
+import re
+
+# Read the file
+with open('src/core/components/Inspector/VariationList.tsx', 'r') as f:
+    content = f.read()
+
+# Replace × with trash icon
+content = content.replace('×', '🗑️')
+
+# Fix the text color in variation items (line ~335)
+content = re.sub(
+    r'color:\s*"#718096"',
+    'color: "#e2e8f0"',
+    content
+)
+
+# Fix the remove button style
+content = re.sub(
+    r'(style=\{\{[^}]*color:\s*"#ef4444"[^}]*fontSize:\s*14[^}]*\}\})',
+    '''style={{
+                  background: "#ef4444",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor: "pointer",
+                  fontSize: 16,
+                  marginLeft: 8,
+                  padding: "4px 8px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minWidth: 32,
+                  height: 32,
+                }}''',
+    content
+)
+
+# Write back
+with open('src/core/components/Inspector/VariationList.tsx', 'w') as f:
+    f.write(content)
+
+print("VariationList patched successfully")
+PYTHON_SCRIPT
 fi
 
 # Create stub components for any remaining references
@@ -638,15 +677,20 @@ export default function App() {
     const style = document.createElement('style');
     style.innerHTML = [
       '/* Force light text on dark backgrounds in inspector */',
-      'aside div[style*="color"] { color: #e2e8f0 !important; }',
-      'aside input { background: #1a202c !important; color: #e2e8f0 !important; }',
+      'aside * { color: #e2e8f0 !important; }',
+      'aside input, aside textarea { background: #1a202c !important; color: #e2e8f0 !important; border: 1px solid #4a5568 !important; }',
       'aside button[title*="Remove"] {',
-      '  background: #e53e3e !important;',
+      '  background: #ef4444 !important;',
+      '  color: white !important;',
       '  width: 32px !important;',
       '  height: 32px !important;',
       '  border-radius: 4px !important;',
       '  font-size: 16px !important;',
-      '}'
+      '  border: none !important;',
+      '}',
+      '/* Fix dark text on dark background */',
+      'div[style*="color: rgb(113, 128, 150)"] { color: #e2e8f0 !important; }',
+      'div[style*="#718096"] { color: #e2e8f0 !important; }'
     ].join('\\n');
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
