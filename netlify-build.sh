@@ -7,6 +7,12 @@ echo "=== Netlify Build Script ==="
 echo "Node version: $(node --version)"
 echo "NPM version: $(npm --version)"
 
+# Restore the real package.json
+echo "=== Restoring real package.json ==="
+if [ -f package.json.real ]; then
+  mv package.json.real package.json
+fi
+
 # Clean any existing modules to avoid cache issues
 echo "=== Cleaning cached dependencies ==="
 rm -rf node_modules client/node_modules packages/*/node_modules || true

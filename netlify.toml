@@ -1,9 +1,11 @@
 [build]
   # Build from root to handle monorepo properly
   base = ""
-  # Use a build script for better control
+  # Skip automatic installation and use our build script
   command = "./netlify-build.sh"
   publish = "client/dist"
+  # Skip Netlify's automatic dependency installation
+  environment = { NPM_FLAGS = "--version" }
 
 [build.environment]
   NODE_VERSION = "20"
