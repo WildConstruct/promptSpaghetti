@@ -113,8 +113,76 @@ PYTHON_SCRIPT
   # Also need to import useEffect if not already imported
   sed -i.bak 's/import React, { useCallback, useState, useMemo, useRef }/import React, { useCallback, useState, useMemo, useRef, useEffect }/' src/core/GraphEditor.tsx
   
+  # Fix PropertiesSection to show variations for all nodes that support them
+  echo "=== Fixing PropertiesSection to show variations ==="
+  if [ -f "src/core/components/Inspector/PropertiesSection.tsx" ]; then
+    # Add a check to show variations section for nodes with variations field
+    sed -i.bak '/return (/,/^  );/ {
+      /<\/CollapsibleSection>/a\
+\
+      {(shape.variations || node.data?.variations) && (\
+        <CollapsibleSection\
+          title="Text Variations"\
+          collapsed={false}\
+          onToggle={() => {}}\
+        >\
+          <div style={{ padding: "16px 20px 8px" }}>\
+            <VariationList\
+              nodeId={node.id}\
+              variations={values.variations || []}\
+              placeholder="Add a text variation..."\
+              allowQuickEntry={true}\
+            />\
+          </div>\
+        </CollapsibleSection>\
+      )}
+    }' src/core/components/Inspector/PropertiesSection.tsx
+    rm -f src/core/components/Inspector/PropertiesSection.tsx.bak
+  fi
+  
   rm -f src/core/GraphEditor.tsx.bak
 fi
+
+# Add CSS fixes for better contrast and visibility
+echo "=== Creating CSS fixes for better visibility ==="
+cat > src/core/inspector-fixes.css << 'EOF'
+/* Fix variation list contrast */
+.variation-item {
+  background-color: #2d3748 !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #4a5568 !important;
+}
+
+.variation-item input {
+  background-color: #1a202c !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #4a5568 !important;
+}
+
+/* Fix inspector input contrast */
+aside input[type="text"],
+aside input[type="number"],
+aside textarea {
+  background-color: #1a202c !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #4a5568 !important;
+}
+
+/* Fix variation remove button */
+.variation-item button {
+  background-color: #e53e3e !important;
+  color: white !important;
+}
+
+/* Ensure proper spacing */
+.variation-list {
+  gap: 8px !important;
+}
+EOF
+
+# Import the CSS in App.tsx
+sed -i.bak '/import "reactflow\/dist\/style.css";/a\
+import "./core/inspector-fixes.css";' src/App.tsx
 
 # Create stub components for any remaining references
 echo "=== Creating stub components for runtime errors ==="
