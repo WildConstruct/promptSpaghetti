@@ -2,7 +2,7 @@
   # Build from root to handle monorepo properly
   base = ""
   # Skip automatic installation and use our build script
-  command = "./netlify-build-npm.sh"
+  command = "./netlify-build-esbuild.sh"
   publish = "client/dist"
 
 [build.environment]
