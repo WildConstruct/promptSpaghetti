@@ -51,10 +51,15 @@ for ext in tsx ts jsx js; do
     sed -i.bak '/import.*useCorrectionsEnabled/d' "src/core/GraphEditor.$ext"
     sed -i.bak '/import.*correctionsStore/d' "src/core/GraphEditor.$ext"
     
-    # Also remove any JSX references to these components
-    sed -i.bak '/<ResponsiveCorrectionsPanel/d' "src/core/GraphEditor.$ext"
-    sed -i.bak '/<CorrectionsStatsDashboard/d' "src/core/GraphEditor.$ext"  
-    sed -i.bak '/<ExtensionManagerPanel/d' "src/core/GraphEditor.$ext"
+    # Remove the entire JSX elements and any conditional rendering
+    sed -i.bak '/<ResponsiveCorrectionsPanel/,/\/ResponsiveCorrectionsPanel>/d' "src/core/GraphEditor.$ext"
+    sed -i.bak '/<CorrectionsStatsDashboard/,/\/CorrectionsStatsDashboard>/d' "src/core/GraphEditor.$ext"  
+    sed -i.bak '/<ExtensionManagerPanel/,/\/ExtensionManagerPanel>/d' "src/core/GraphEditor.$ext"
+    
+    # Comment out any lines that reference these components
+    sed -i.bak 's/.*ResponsiveCorrectionsPanel.*/\/\/ &/' "src/core/GraphEditor.$ext"
+    sed -i.bak 's/.*CorrectionsStatsDashboard.*/\/\/ &/' "src/core/GraphEditor.$ext"
+    sed -i.bak 's/.*ExtensionManagerPanel.*/\/\/ &/' "src/core/GraphEditor.$ext"
     
     # Remove any lines using these components or hooks
     sed -i.bak '/useCorrectionsEnabled/d' "src/core/GraphEditor.$ext"
@@ -63,6 +68,18 @@ for ext in tsx ts jsx js; do
     rm -f "src/core/GraphEditor.$ext.bak"
   fi
 done
+
+# Create stub components for any remaining references
+echo "=== Creating stub components for runtime errors ==="
+cat > src/core/ResponsiveCorrectionsPanel.jsx << 'EOF'
+import React from 'react';
+export const ResponsiveCorrectionsPanel = () => null;
+EOF
+
+cat > src/core/components/CorrectionsStatsDashboard.jsx << 'EOF'
+import React from 'react';
+export const CorrectionsStatsDashboard = () => null;
+EOF
 
 # Fix index.ts - comment out problematic exports
 if [ -f "src/core/index.ts" ]; then
