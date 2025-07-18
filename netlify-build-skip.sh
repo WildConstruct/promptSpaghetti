@@ -71,69 +71,45 @@ if [ -f "src/core/index.ts" ]; then
   rm -f src/core/index.ts.bak
 fi
 
-# Create a custom vite config for netlify build
-echo "=== Creating custom vite config ==="
-cat > vite.config.netlify.ts << 'EOF'
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+# Create ES6 wrapper modules for CommonJS files
+echo "=== Creating ES6 wrappers ==="
 
-// Custom plugin to handle CommonJS modules
-const commonjsCompatibility = () => {
-  return {
-    name: 'commonjs-compatibility',
-    transform(code, id) {
-      // Handle validation.js
-      if (id.endsWith('validation.js') && code.includes('exports.validateConnection')) {
-        return code + '\nexport { validateConnection };';
-      }
-      // Handle usePreviewSeeds.js
-      if (id.endsWith('usePreviewSeeds.js') && code.includes('exports.usePreviewSeeds')) {
-        return code + '\nexport { usePreviewSeeds };';
-      }
-      // Handle nodeSchemas.js
-      if (id.endsWith('nodeSchemas.js') && code.includes('exports.nodeSchemas')) {
-        return code + '\nexport { nodeSchemas };';
-      }
-      return null;
-    }
-  };
-};
-
-export default defineConfig({
-  plugins: [react(), commonjsCompatibility()],
-  server: {
-    port: 3000,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  build: {
-    rollupOptions: {
-      onwarn(warning, warn) {
-        // Suppress circular dependency warnings
-        if (warning.code === 'CIRCULAR_DEPENDENCY') {
-          return;
-        }
-        warn(warning);
-      }
-    }
-  }
-});
+# Create validation wrapper
+if [ -f "src/core/validation.js" ]; then
+  mv src/core/validation.js src/core/validation-commonjs.js
+  cat > src/core/validation.js << 'EOF'
+// ES6 wrapper for CommonJS validation module
+import * as validationModule from './validation-commonjs.js';
+export const validateConnection = validationModule.validateConnection || validationModule.default?.validateConnection;
+export default validationModule.default || validationModule;
 EOF
+fi
 
-# Run build with custom config
-echo "=== Running build with custom config ==="
-npx vite build --config vite.config.netlify.ts
+# Create usePreviewSeeds wrapper
+if [ -f "src/core/usePreviewSeeds.js" ]; then
+  mv src/core/usePreviewSeeds.js src/core/usePreviewSeeds-commonjs.js
+  cat > src/core/usePreviewSeeds.js << 'EOF'
+// ES6 wrapper for CommonJS usePreviewSeeds module
+import * as usePreviewSeedsModule from './usePreviewSeeds-commonjs.js';
+export const usePreviewSeeds = usePreviewSeedsModule.usePreviewSeeds || usePreviewSeedsModule.default?.usePreviewSeeds;
+export default usePreviewSeedsModule.default || usePreviewSeedsModule;
+EOF
+fi
+
+# Create nodeSchemas wrapper
+if [ -f "src/core/nodeSchemas.js" ]; then
+  mv src/core/nodeSchemas.js src/core/nodeSchemas-commonjs.js
+  cat > src/core/nodeSchemas.js << 'EOF'
+// ES6 wrapper for CommonJS nodeSchemas module
+import * as nodeSchemasModule from './nodeSchemas-commonjs.js';
+export const nodeSchemas = nodeSchemasModule.nodeSchemas || nodeSchemasModule.default?.nodeSchemas;
+export default nodeSchemasModule.default || nodeSchemasModule;
+EOF
+fi
+
+# Run the original build
+echo "=== Running build-standalone.js ==="
+node build-standalone.js
 
 echo "=== Build complete! ==="
 ls -la dist/
