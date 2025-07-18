@@ -200,6 +200,10 @@ cat > src/core/validation.js << 'EOF'
 export function validateConnection() {
   return true; // Always valid for now
 }
+
+export function validateGraph() {
+  return []; // No errors
+}
 EOF
 
 cat > src/core/graphStore.js << 'EOF'
@@ -347,12 +351,44 @@ import "reactflow/dist/style.css";
  * Simplified to only show the graph editor.
  */
 export default function App() {
+  // Sample initial nodes to demonstrate the editor is working
+  const initialNodes = [
+    {
+      id: 'welcome-1',
+      type: 'default',
+      position: { x: 250, y: 100 },
+      data: { 
+        nodeType: 'WeightedChoice',
+        label: 'Welcome Node',
+        variations: ['Hello', 'Welcome', 'Greetings']
+      }
+    },
+    {
+      id: 'output-1',
+      type: 'default',
+      position: { x: 500, y: 200 },
+      data: { 
+        nodeType: 'Output',
+        label: 'Output Node'
+      }
+    }
+  ];
+  
+  const initialEdges = [
+    {
+      id: 'e1-2',
+      source: 'welcome-1',
+      target: 'output-1',
+      type: 'step'
+    }
+  ];
+
   return (
     <ReactFlowProvider>
       <div style={{ width: "100vw", height: "100vh" }}>
         <GraphEditor 
-          initialNodes={[]}
-          initialEdges={[]}
+          initialNodes={initialNodes}
+          initialEdges={initialEdges}
         />
       </div>
     </ReactFlowProvider>
