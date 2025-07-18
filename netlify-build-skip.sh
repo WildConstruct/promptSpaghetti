@@ -37,11 +37,15 @@ if [ -d "../packages/core" ]; then
   # Also fix the index.ts to remove imports of deleted files
   echo "=== Fixing index.ts imports ==="
   if [ -f "src/core/index.ts" ]; then
-    # Comment out or remove imports for deleted components
-    sed -i.bak '/WorkflowManager/d' src/core/index.ts
-    sed -i.bak '/ExtensionLifecycleManager/d' src/core/index.ts
-    sed -i.bak '/ExtensionManager/d' src/core/index.ts
-    sed -i.bak '/extensions\//d' src/core/index.ts
+    # Comment out lines that reference deleted components
+    sed -i.bak 's/.*WorkflowManager.*/\/\/ &/' src/core/index.ts
+    sed -i.bak 's/.*ExtensionLifecycleManager.*/\/\/ &/' src/core/index.ts
+    sed -i.bak 's/.*ExtensionManager.*/\/\/ &/' src/core/index.ts
+    sed -i.bak 's/.*extensions\/.*/\/\/ &/' src/core/index.ts
+    
+    # Comment out the entire problematic export block (lines 46-76)
+    sed -i.bak '46,76s/^/\/\/ /' src/core/index.ts
+    
     rm -f src/core/index.ts.bak
   fi
 fi
