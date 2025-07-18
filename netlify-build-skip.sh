@@ -33,6 +33,17 @@ if [ -d "../packages/core" ]; then
   
   # Clean up
   rm -rf ../packages/core-temp
+  
+  # Also fix the index.ts to remove imports of deleted files
+  echo "=== Fixing index.ts imports ==="
+  if [ -f "src/core/index.ts" ]; then
+    # Comment out or remove imports for deleted components
+    sed -i.bak '/WorkflowManager/d' src/core/index.ts
+    sed -i.bak '/ExtensionLifecycleManager/d' src/core/index.ts
+    sed -i.bak '/ExtensionManager/d' src/core/index.ts
+    sed -i.bak '/extensions\//d' src/core/index.ts
+    rm -f src/core/index.ts.bak
+  fi
 fi
 
 # Run the original build
