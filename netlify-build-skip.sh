@@ -71,38 +71,69 @@ if [ -f "src/core/index.ts" ]; then
   rm -f src/core/index.ts.bak
 fi
 
-# Fix CommonJS/ES6 compatibility issues
-echo "=== Fixing module compatibility ==="
+# Create a custom vite config for netlify build
+echo "=== Creating custom vite config ==="
+cat > vite.config.netlify.ts << 'EOF'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
-# Add ES6 exports to CommonJS files that need them
-if [ -f "src/core/validation.js" ]; then
-  # Check if it's a CommonJS file that needs ES6 export
-  if grep -q "exports.validateConnection" src/core/validation.js && ! grep -q "export { validateConnection }" src/core/validation.js; then
-    echo "" >> src/core/validation.js
-    echo "// ES6 export for vite compatibility" >> src/core/validation.js
-    echo "export { validateConnection };" >> src/core/validation.js
-  fi
-fi
+// Custom plugin to handle CommonJS modules
+const commonjsCompatibility = () => {
+  return {
+    name: 'commonjs-compatibility',
+    transform(code, id) {
+      // Handle validation.js
+      if (id.endsWith('validation.js') && code.includes('exports.validateConnection')) {
+        return code + '\nexport { validateConnection };';
+      }
+      // Handle usePreviewSeeds.js
+      if (id.endsWith('usePreviewSeeds.js') && code.includes('exports.usePreviewSeeds')) {
+        return code + '\nexport { usePreviewSeeds };';
+      }
+      // Handle nodeSchemas.js
+      if (id.endsWith('nodeSchemas.js') && code.includes('exports.nodeSchemas')) {
+        return code + '\nexport { nodeSchemas };';
+      }
+      return null;
+    }
+  };
+};
 
-if [ -f "src/core/usePreviewSeeds.js" ]; then
-  if grep -q "exports.usePreviewSeeds" src/core/usePreviewSeeds.js && ! grep -q "export { usePreviewSeeds }" src/core/usePreviewSeeds.js; then
-    echo "" >> src/core/usePreviewSeeds.js
-    echo "// ES6 export for vite compatibility" >> src/core/usePreviewSeeds.js
-    echo "export { usePreviewSeeds };" >> src/core/usePreviewSeeds.js
-  fi
-fi
+export default defineConfig({
+  plugins: [react(), commonjsCompatibility()],
+  server: {
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  build: {
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Suppress circular dependency warnings
+        if (warning.code === 'CIRCULAR_DEPENDENCY') {
+          return;
+        }
+        warn(warning);
+      }
+    }
+  }
+});
+EOF
 
-if [ -f "src/core/nodeSchemas.js" ]; then
-  if grep -q "exports.nodeSchemas" src/core/nodeSchemas.js && ! grep -q "export { nodeSchemas }" src/core/nodeSchemas.js; then
-    echo "" >> src/core/nodeSchemas.js
-    echo "// ES6 export for vite compatibility" >> src/core/nodeSchemas.js
-    echo "export { nodeSchemas };" >> src/core/nodeSchemas.js
-  fi
-fi
-
-# Run the original build
-echo "=== Running build-standalone.js ==="
-node build-standalone.js
+# Run build with custom config
+echo "=== Running build with custom config ==="
+npx vite build --config vite.config.netlify.ts
 
 echo "=== Build complete! ==="
 ls -la dist/
