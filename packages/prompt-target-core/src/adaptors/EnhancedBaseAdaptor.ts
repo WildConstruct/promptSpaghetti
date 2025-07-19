@@ -117,9 +117,10 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         platform: this.platform
       });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Adaptor initialization failed', {
         adaptorId: this.id,
-        error: error.message
+        error: errorMessage
       });
 
       this.metrics.counter('adaptor.initialize.error', 1, {
@@ -127,7 +128,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         platform: this.platform
       });
 
-      throw new TransformationError(`Initialization failed: ${error.message}`, undefined, 'initialize');
+      throw new TransformationError(`Initialization failed: ${errorMessage}`, undefined, 'initialize');
     }
   }
 
@@ -173,7 +174,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         details.capabilities.available = true;
       } catch (error) {
         details.capabilities.available = false;
-        details.capabilities.errorMessage = error.message;
+        details.capabilities.errorMessage = error instanceof Error ? error.message : String(error);
       }
 
       const healthy = details.connectivity.reachable && 
@@ -197,9 +198,10 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
 
       return status;
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Health check failed', {
         adaptorId: this.id,
-        error: error.message
+        error: errorMessage
       });
 
       return {
@@ -209,7 +211,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         details: {
           connectivity: {
             reachable: false,
-            errorMessage: error.message
+            errorMessage: errorMessage
           },
           capabilities: { available: false },
           configuration: { valid: false },
@@ -275,7 +277,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
                 type: 'error',
                 severity: 'high',
                 message: `Validation stage "${stage.name}" failed`,
-                description: error.message,
+                description: error instanceof Error ? error.message : String(error),
                 autoFixable: false
               });
             }
@@ -288,7 +290,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       allResults.push(...adaptorResults);
 
       // Post-processing hook
-      if (this.afterValidate) {
+      // afterValidate hook - override in subclasses if needed
+      if ('afterValidate' in this && typeof this.afterValidate === 'function') {
         allResults = await this.afterValidate(processedGraph, allResults);
       }
 
@@ -322,17 +325,18 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         platform: this.platform 
       });
       
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Validation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: error.message
+        error: errorMessage
       });
       
       if (error instanceof ValidationError) {
         throw error;
       }
       
-      throw new ValidationError(`Validation failed: ${error.message}`, []);
+      throw new ValidationError(`Validation failed: ${errorMessage}`, []);
     } finally {
       timer.end();
     }
@@ -367,7 +371,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
 
       // Pre-processing hook
       let processedGraph = graph;
-      if (this.beforeTransform) {
+      // beforeTransform hook - override in subclasses if needed
+      if ('beforeTransform' in this && typeof this.beforeTransform === 'function') {
         processedGraph = await this.beforeTransform(graph);
       }
 
@@ -433,7 +438,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
             
             if (stage.required) {
               throw new TransformationError(
-                `Required transformation stage "${stage.name}" failed: ${error.message}`,
+                `Required transformation stage "${stage.name}" failed: ${error instanceof Error ? error.message : String(error)}`,
                 undefined,
                 stage.name
               );
@@ -460,7 +465,8 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       }
 
       // Post-processing hook
-      if (this.afterTransform) {
+      // afterTransform hook - override in subclasses if needed  
+      if ('afterTransform' in this && typeof this.afterTransform === 'function') {
         result = await this.afterTransform(processedGraph, result);
       }
 
@@ -497,17 +503,18 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         platform: this.platform 
       });
       
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.error('Transformation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: error.message
+        error: errorMessage
       });
       
       if (error instanceof ValidationError || error instanceof TransformationError) {
         throw error;
       }
       
-      throw new TransformationError(`Transformation failed: ${error.message}`);
+      throw new TransformationError(`Transformation failed: ${errorMessage}`);
     } finally {
       timer.end();
     }
@@ -526,7 +533,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
       this.logger.warn('Quality estimation failed', {
         adaptorId: this.id,
         graphId: graph.id,
-        error: error.message
+        error: error instanceof Error ? error.message : String(error)
       });
       
       // Return a low quality score if estimation fails

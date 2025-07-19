@@ -76,7 +76,7 @@ export class PasswordResetService {
         // Log attempt for non-existent user
         await this.audit.logSecurityEvent({
           type: 'PASSWORD_RESET_INVALID_EMAIL',
-          userId: null,
+          userId: undefined,
           email,
           ipAddress: clientInfo.ipAddress,
           userAgent: clientInfo.userAgent,
@@ -106,7 +106,7 @@ export class PasswordResetService {
 
       if (activeTokens.length >= this.MAX_TOKENS_PER_USER) {
         // Revoke oldest token
-        await this.revokeToken(activeTokens[0].token);
+        await this.revokeToken(activeTokens[0].hashedToken);
       }
 
       // Generate secure token
@@ -142,7 +142,7 @@ export class PasswordResetService {
     } catch (error) {
       await this.audit.logSecurityEvent({
         type: 'PASSWORD_RESET_ERROR',
-        userId: null,
+        userId: undefined,
         email: request.email,
         ipAddress: request.clientInfo.ipAddress,
         userAgent: request.clientInfo.userAgent,
@@ -212,8 +212,8 @@ export class PasswordResetService {
       if (!validation.valid || !validation.userId) {
         await this.audit.logSecurityEvent({
           type: 'PASSWORD_RESET_INVALID_TOKEN',
-          userId: null,
-          email: null,
+          userId: undefined,
+          email: undefined,
           ipAddress: clientInfo.ipAddress,
           userAgent: clientInfo.userAgent,
           success: false,
@@ -282,8 +282,8 @@ export class PasswordResetService {
       
       await this.audit.logSecurityEvent({
         type: 'PASSWORD_RESET_FAILED',
-        userId: null,
-        email: null,
+        userId: undefined,
+        email: undefined,
         ipAddress: confirmation.clientInfo.ipAddress,
         userAgent: confirmation.clientInfo.userAgent,
         success: false,

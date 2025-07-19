@@ -1,20 +1,33 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GraphCRDTAdapter = void 0;
-exports.createCollaborativeGraph = createCollaborativeGraph;
-const graph_sync_1 = require("../../crdt-research/src/graph-sync");
-class GraphCRDTAdapter {
+/**
+ * Graph CRDT Adapter - Epic 9.1.2
+ * Bridges existing graph schema with CRDT collaborative editing
+ */
+import { GraphSyncHandler } from '../../crdt-research/src/graph-sync';
+/**
+ * Adapter that wraps the existing graph model with CRDT capabilities
+ */
+export class GraphCRDTAdapter {
+    syncHandler;
+    yGraph;
+    options;
+    currentGraph;
+    isUpdating = false;
     constructor(options, initialGraph) {
-        this.isUpdating = false;
         this.options = options;
-        this.syncHandler = new graph_sync_1.GraphSyncHandler(options.documentId, options.userId);
+        this.syncHandler = new GraphSyncHandler(options.documentId, options.userId);
         this.yGraph = this.syncHandler.getGraph();
+        // Initialize with existing graph if provided
         this.currentGraph = initialGraph || { nodes: [], edges: [] };
+        // Set up observers
         this.setupObservers();
+        // Import initial graph to CRDT
         if (initialGraph) {
             this.importGraph(initialGraph);
         }
     }
+    /**
+     * Convert existing Node to CRDTNode
+     */
     toCRDTNode(node) {
         return {
             id: node.id,
@@ -28,6 +41,9 @@ class GraphCRDTAdapter {
             }
         };
     }
+    /**
+     * Convert existing Edge to CRDTEdge
+     */
     toCRDTEdge(edge, sourceNode, targetNode) {
         return {
             id: edge.id,
@@ -42,12 +58,16 @@ class GraphCRDTAdapter {
             }
         };
     }
+    /**
+     * Convert CRDTNode back to existing Node format
+     */
     fromCRDTNode(crdtNode) {
         const baseNode = {
             id: crdtNode.id,
             type: crdtNode.type,
             inputs: crdtNode.metadata.inputs || []
         };
+        // Add type-specific properties based on node type
         switch (crdtNode.type) {
             case 'WeightedChoice':
                 return {
@@ -85,12 +105,16 @@ class GraphCRDTAdapter {
                     name: crdtNode.data.name || ''
                 };
             default:
+                // For unknown types, preserve original data
                 return {
                     ...baseNode,
                     ...crdtNode.data
                 };
         }
     }
+    /**
+     * Convert CRDTEdge back to existing Edge format
+     */
     fromCRDTEdge(crdtEdge) {
         return {
             id: crdtEdge.id,
@@ -100,50 +124,77 @@ class GraphCRDTAdapter {
             targetHandle: crdtEdge.targetHandle
         };
     }
+    /**
+     * Extract position from existing node (assuming UI stores position separately)
+     */
     extractPosition(node) {
+        // For now, return default position
+        // In real implementation, this would extract from React Flow node data
         return { x: 0, y: 0 };
     }
+    /**
+     * Extract node data excluding schema fields
+     */
     extractNodeData(node) {
         const { id, type, inputs, ...data } = node;
         return data;
     }
+    /**
+     * Extract node metadata
+     */
     extractNodeMetadata(node) {
         return {
             created: Date.now(),
             lastModified: Date.now()
         };
     }
+    /**
+     * Extract edge metadata
+     */
     extractEdgeMetadata(edge) {
         return {
             created: Date.now()
         };
     }
+    /**
+     * Setup CRDT observers to sync changes back to graph
+     */
     setupObservers() {
+        // Observe CRDT changes and update current graph
         this.yGraph.observe((event) => {
             if (!this.isUpdating) {
                 this.syncToGraph();
             }
         });
+        // Observe document updates for network sync
         this.syncHandler.onDocumentUpdate((update, origin) => {
+            // Handle remote updates
             if (origin !== this.options.userId) {
                 this.syncToGraph();
             }
         });
+        // Observe user presence
         this.syncHandler.onAwarenessChange((awareness) => {
             if (this.options.onUserPresence) {
                 this.options.onUserPresence(awareness);
             }
         });
     }
+    /**
+     * Import existing graph into CRDT
+     */
     importGraph(graph) {
         this.isUpdating = true;
         try {
+            // Create a map of nodes for edge validation
             const nodeMap = new Map();
             graph.nodes.forEach(node => nodeMap.set(node.id, node));
+            // Import nodes
             graph.nodes.forEach(node => {
                 const crdtNode = this.toCRDTNode(node);
                 this.yGraph.addNode(crdtNode);
             });
+            // Import edges
             graph.edges.forEach(edge => {
                 const sourceNode = nodeMap.get(edge.source);
                 const targetNode = nodeMap.get(edge.target);
@@ -157,6 +208,9 @@ class GraphCRDTAdapter {
             this.isUpdating = false;
         }
     }
+    /**
+     * Sync CRDT state back to current graph
+     */
     syncToGraph() {
         const nodes = this.yGraph.getNodes().map(node => this.fromCRDTNode(node));
         const edges = this.yGraph.getEdges().map(edge => this.fromCRDTEdge(edge));
@@ -165,9 +219,15 @@ class GraphCRDTAdapter {
             this.options.onGraphChange(this.currentGraph);
         }
     }
+    /**
+     * Public API: Get current graph state
+     */
     getGraph() {
         return { ...this.currentGraph };
     }
+    /**
+     * Public API: Add a node collaboratively
+     */
     addNode(node, position) {
         const crdtNode = this.toCRDTNode(node);
         if (position) {
@@ -178,6 +238,9 @@ class GraphCRDTAdapter {
         this.isUpdating = false;
         this.syncToGraph();
     }
+    /**
+     * Public API: Update a node collaboratively
+     */
     updateNode(nodeId, updates) {
         const existingNode = this.yGraph.getNode(nodeId);
         if (!existingNode)
@@ -191,12 +254,18 @@ class GraphCRDTAdapter {
         this.isUpdating = false;
         this.syncToGraph();
     }
+    /**
+     * Public API: Delete a node collaboratively
+     */
     deleteNode(nodeId) {
         this.isUpdating = true;
         this.yGraph.deleteNode(nodeId);
         this.isUpdating = false;
         this.syncToGraph();
     }
+    /**
+     * Public API: Add an edge collaboratively
+     */
     addEdge(edge) {
         const sourceNode = this.currentGraph.nodes.find(n => n.id === edge.source);
         const targetNode = this.currentGraph.nodes.find(n => n.id === edge.target);
@@ -208,32 +277,57 @@ class GraphCRDTAdapter {
             this.syncToGraph();
         }
     }
+    /**
+     * Public API: Delete an edge collaboratively
+     */
     deleteEdge(edgeId) {
         this.isUpdating = true;
         this.yGraph.deleteEdge(edgeId);
         this.isUpdating = false;
         this.syncToGraph();
     }
+    /**
+     * Public API: Update node position (for React Flow integration)
+     */
     updateNodePosition(nodeId, position) {
         this.isUpdating = true;
         this.yGraph.updateNode(nodeId, { position });
         this.isUpdating = false;
+        // Don't sync to graph for position-only updates to avoid feedback loops
     }
+    /**
+     * Public API: Set user presence
+     */
     setUserPresence(presence) {
         this.syncHandler.setLocalPresence(presence);
     }
+    /**
+     * Public API: Get sync state
+     */
     getSyncState() {
         return this.syncHandler.getSyncState();
     }
+    /**
+     * Public API: Apply remote update
+     */
     applyRemoteUpdate(update) {
         this.syncHandler.applyUpdate(update);
     }
+    /**
+     * Public API: Get document state for initial sync
+     */
     getDocumentState() {
         return this.syncHandler.getStateAsUpdate();
     }
+    /**
+     * Public API: Create snapshot
+     */
     createSnapshot() {
         return this.syncHandler.createSnapshot();
     }
+    /**
+     * Public API: Get performance metrics
+     */
     getMetrics() {
         return {
             documentSize: this.syncHandler.getDocumentSize(),
@@ -242,12 +336,16 @@ class GraphCRDTAdapter {
             syncState: this.syncHandler.getSyncState()
         };
     }
+    /**
+     * Cleanup resources
+     */
     destroy() {
         this.syncHandler.destroy();
     }
 }
-exports.GraphCRDTAdapter = GraphCRDTAdapter;
-function createCollaborativeGraph(options, initialGraph) {
+/**
+ * Factory function to create collaborative graph adapter
+ */
+export function createCollaborativeGraph(options, initialGraph) {
     return new GraphCRDTAdapter(options, initialGraph);
 }
-//# sourceMappingURL=GraphCRDTAdapter.js.map

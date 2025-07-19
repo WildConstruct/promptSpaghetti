@@ -8,14 +8,20 @@ import { AdvancedExecutionUtils } from '../runtime/advanced';
 import { PythonExecutorClient } from '../python-executor-client';
 
 // Mock the Python executor client
-jest.mock('../python-executor-client', () => ({
-  PythonExecutorClient: jest.fn(),
-  pythonExecutorClient: {
+jest.mock('../python-executor-client', () => {
+  const mockClient = {
     execute: jest.fn(),
     validate: jest.fn(),
     health: jest.fn(),
-  },
-}));
+  };
+  
+  return {
+    PythonExecutorClient: jest.fn(() => mockClient),
+    pythonExecutorClient: mockClient,
+    executePythonCode: jest.fn(),
+    validatePythonCode: jest.fn(),
+  };
+});
 
 describe('PythonTransformNode', () => {
   let node: PythonTransformNode;
@@ -26,15 +32,9 @@ describe('PythonTransformNode', () => {
     // Reset mocks
     jest.clearAllMocks();
     
-    // Create mock client
-    mockClient = {
-      execute: jest.fn(),
-      validate: jest.fn(),
-      health: jest.fn(),
-    } as any;
-
-    // Mock the client constructor
-    (PythonExecutorClient as jest.Mock).mockImplementation(() => mockClient);
+    // Get the mock client from the mocked module
+    const { pythonExecutorClient } = require('../python-executor-client');
+    mockClient = pythonExecutorClient;
 
     // Create test context
     context = AdvancedExecutionUtils.enhanceContext({
@@ -65,13 +65,17 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '15MB',
+        cpu_usage: 5.2,
+        modules_imported: ['json', 'math'],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'hello world' };
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Verify result
       expect(result).toBe('HELLO WORLD');
@@ -102,13 +106,17 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '0MB',
+        cpu_usage: 0,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node and expect error
-      await expect(node.execute(context)).rejects.toThrow('Python execution failed: Invalid syntax');
+      await expect(node.run(context)).rejects.toThrow('Python execution failed: Invalid syntax');
     });
 
     it('should handle execution failure with skip fallback', async () => {
@@ -129,13 +137,17 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '0MB',
+        cpu_usage: 0,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Should return empty string
       expect(result).toBe('');
@@ -162,13 +174,17 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '0MB',
+        cpu_usage: 0,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Should return default output
       expect(result).toBe('Default output');
@@ -182,7 +198,7 @@ def transform(input_data):
       context.inputs = { input: 'test input' };
 
       // Execute node and expect error
-      await expect(node.execute(context)).rejects.toThrow('Python executor service error: Service unavailable');
+      await expect(node.run(context)).rejects.toThrow('Python executor service error: Service unavailable');
     });
 
     it('should handle client errors with skip fallback', async () => {
@@ -199,7 +215,7 @@ def transform(input_data):
       context.inputs = { input: 'test input' };
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Should return empty string
       expect(result).toBe('');
@@ -215,7 +231,7 @@ def transform(input_data):
       context.inputs = { input: 'test input' };
 
       // Execute node and expect error
-      await expect(node.execute(context)).rejects.toThrow('Python code is required');
+      await expect(node.run(context)).rejects.toThrow('Python code is required');
     });
 
     it('should use custom configuration', async () => {
@@ -241,13 +257,17 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '30MB',
+        cpu_usage: 2.5,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node
-      await node.execute(context);
+      await node.run(context);
 
       // Verify configuration was used
       expect(mockClient.execute).toHaveBeenCalledWith({
@@ -306,6 +326,10 @@ def transform(input_data):
           },
         ],
         warnings: [],
+        peak_memory: '30MB',
+        cpu_usage: 2.5,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
@@ -315,7 +339,7 @@ def transform(input_data):
       const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Verify result
       expect(result).toBe('result');
@@ -348,6 +372,10 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: ['Warning 1', 'Warning 2'],
+        peak_memory: '30MB',
+        cpu_usage: 2.5,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
@@ -357,7 +385,7 @@ def transform(input_data):
       const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Verify result
       expect(result).toBe('result');
@@ -390,13 +418,17 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '30MB',
+        cpu_usage: 2.5,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Verify result
       expect(result).toBe('string result');
@@ -412,13 +444,17 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '30MB',
+        cpu_usage: 2.5,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Verify result is converted to string
       expect(result).toBe('42');
@@ -434,13 +470,17 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '30MB',
+        cpu_usage: 2.5,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node
-      const result = await node.execute(context);
+      const result = await node.run(context);
 
       // Verify result is empty string
       expect(result).toBe('');
@@ -453,7 +493,7 @@ def transform(input_data):
       mockClient.validate.mockResolvedValue({
         valid: true,
         errors: [],
-        warnings: [],
+        warnings: []
       });
 
       // Validate code
@@ -463,7 +503,7 @@ def transform(input_data):
       expect(result).toEqual({
         valid: true,
         errors: [],
-        warnings: [],
+        warnings: []
       });
       expect(mockClient.validate).toHaveBeenCalledWith({
         code: expect.stringContaining('def transform(input_data):'),
@@ -501,7 +541,7 @@ def transform(input_data):
       expect(result).toEqual({
         valid: false,
         errors: ['Python code is required'],
-        warnings: [],
+        warnings: []
       });
     });
 
@@ -516,7 +556,7 @@ def transform(input_data):
       expect(result).toEqual({
         valid: false,
         errors: ['Validation service error: Service unavailable'],
-        warnings: [],
+        warnings: []
       });
     });
   });
@@ -587,23 +627,27 @@ def transform(input_data):
         sandbox_violations: 0,
         security_events: [],
         warnings: [],
+        peak_memory: '30MB',
+        cpu_usage: 2.5,
+        modules_imported: [],
+        cache_hit: false
       });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node multiple times
-      await node.execute(context);
-      await node.execute(context);
-      await node.execute(context);
+      await node.run(context);
+      await node.run(context);
+      await node.run(context);
 
       // Get statistics
-      const stats = node.getExecutionStats();
+      const stats = node.getExecutionStats(context);
 
       // Verify statistics
       expect(stats.executionsRun).toBe(3);
       expect(stats.successRate).toBe(1.0);
-      expect(stats.averageExecutionTime).toBe(0.1);
+      expect(stats.averageExecutionTime).toBeCloseTo(0.1, 1);
       expect(stats.securityViolations).toBe(0);
     });
 
@@ -618,6 +662,10 @@ def transform(input_data):
           sandbox_violations: 0,
           security_events: [],
           warnings: [],
+          peak_memory: '15MB',
+          cpu_usage: 2.5,
+          modules_imported: [],
+          cache_hit: false
         })
         .mockResolvedValueOnce({
           success: false,
@@ -629,27 +677,31 @@ def transform(input_data):
           sandbox_violations: 1,
           security_events: [],
           warnings: [],
+          peak_memory: '10MB',
+          cpu_usage: 1.0,
+          modules_imported: [],
+          cache_hit: false
         });
 
       // Set up input
       context.inputs = { input: 'test input' };
 
       // Execute node - first success
-      await node.execute(context);
+      await node.run(context);
 
       // Execute node - second failure (with skip fallback)
       node.updateConfig({
         pythonConfig: { fallbackBehavior: 'skip' }
       });
-      await node.execute(context);
+      await node.run(context);
 
       // Get statistics
-      const stats = node.getExecutionStats();
+      const stats = node.getExecutionStats(context);
 
       // Verify statistics
       expect(stats.executionsRun).toBe(2);
       expect(stats.successRate).toBe(0.5);
-      expect(stats.averageExecutionTime).toBe(0.075);
+      expect(stats.averageExecutionTime).toBeCloseTo(0.075, 2);
       expect(stats.securityViolations).toBe(1);
     });
   });

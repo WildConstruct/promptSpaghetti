@@ -1,8 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TransformExtensionHelpers = exports.TransformType = void 0;
-const zod_1 = require("zod");
-var TransformType;
+/**
+ * Transform Extension Interface - Epic 8.4 Story 8.4.2
+ * Defines interfaces for extending the data transformation system
+ */
+import { z } from 'zod';
+// Transform Types
+export var TransformType;
 (function (TransformType) {
     TransformType["TEXT"] = "text";
     TransformType["JSON"] = "json";
@@ -13,8 +15,9 @@ var TransformType;
     TransformType["BOOLEAN"] = "boolean";
     TransformType["DATE"] = "date";
     TransformType["CUSTOM"] = "custom";
-})(TransformType || (exports.TransformType = TransformType = {}));
-var TransformExtensionHelpers;
+})(TransformType || (TransformType = {}));
+// Transform Extension Helper Functions
+export var TransformExtensionHelpers;
 (function (TransformExtensionHelpers) {
     function createTransformDefinition(config) {
         return {
@@ -24,26 +27,24 @@ var TransformExtensionHelpers;
             version: config.version || '1.0.0',
             type: config.type || TransformType.CUSTOM,
             transformClass: config.transformClass || class {
-                constructor() {
-                    this.id = config.id || 'custom-transform';
-                    this.name = config.name || 'Custom Transform';
-                    this.type = config.type || TransformType.CUSTOM;
-                    this.version = config.version || '1.0.0';
-                }
+                id = config.id || 'custom-transform';
+                name = config.name || 'Custom Transform';
+                type = config.type || TransformType.CUSTOM;
+                version = config.version || '1.0.0';
                 transform(input) { return input; }
                 validateInput() { return { valid: true, errors: [], warnings: [] }; }
                 validateOutput() { return { valid: true, errors: [], warnings: [] }; }
-                getInputSchema() { return zod_1.z.any(); }
-                getOutputSchema() { return zod_1.z.any(); }
+                getInputSchema() { return z.any(); }
+                getOutputSchema() { return z.any(); }
                 getConfiguration() { return {}; }
                 setConfiguration() { }
                 getMetadata() { return { author: 'Unknown', license: 'MIT' }; }
                 async initialize() { }
                 async dispose() { }
             },
-            inputSchema: config.inputSchema || zod_1.z.any(),
-            outputSchema: config.outputSchema || zod_1.z.any(),
-            configSchema: config.configSchema || zod_1.z.object({}),
+            inputSchema: config.inputSchema || z.any(),
+            outputSchema: config.outputSchema || z.any(),
+            configSchema: config.configSchema || z.object({}),
             ui: config.ui || {},
             runtime: config.runtime || {},
             pipeline: config.pipeline || {},
@@ -57,12 +58,14 @@ var TransformExtensionHelpers;
     function validateTransformDefinition(definition) {
         const errors = [];
         const warnings = [];
+        // Basic validation
         if (!definition.id)
             errors.push('Transform ID is required');
         if (!definition.name)
             errors.push('Transform name is required');
         if (!definition.transformClass)
             errors.push('Transform class is required');
+        // Schema validation
         if (!definition.inputSchema)
             errors.push('Input schema is required');
         if (!definition.outputSchema)
@@ -128,5 +131,4 @@ var TransformExtensionHelpers;
         };
     }
     TransformExtensionHelpers.createTransformRegistry = createTransformRegistry;
-})(TransformExtensionHelpers || (exports.TransformExtensionHelpers = TransformExtensionHelpers = {}));
-//# sourceMappingURL=TransformExtension.js.map
+})(TransformExtensionHelpers || (TransformExtensionHelpers = {}));

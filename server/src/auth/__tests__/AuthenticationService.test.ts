@@ -12,6 +12,49 @@ process.env.DB_USER = 'test_user';
 process.env.DB_PASSWORD = 'test_password';
 process.env.REDIS_HOST = 'localhost';
 
+// Mock the TokenService to avoid JWT key loading issues
+jest.mock('../services/TokenService', () => {
+  return {
+    TokenService: jest.fn().mockImplementation(() => ({
+      generateAccessToken: jest.fn().mockResolvedValue('mock-access-token'),
+      generateRefreshToken: jest.fn().mockResolvedValue('mock-refresh-token'),
+      verifyAccessToken: jest.fn().mockResolvedValue({
+        sub: 'user-123',
+        email: 'test@example.com',
+        roles: [],
+        permissions: [],
+      }),
+      revokeAllUserTokens: jest.fn().mockResolvedValue(undefined),
+    })),
+  };
+});
+
+// Mock DatabaseService
+jest.mock('../database/DatabaseService', () => {
+  return {
+    DatabaseService: jest.fn().mockImplementation(() => ({
+      query: jest.fn().mockResolvedValue({ rows: [{ health: 1 }] }),
+      healthCheck: jest.fn().mockResolvedValue(true),
+      connect: jest.fn().mockResolvedValue(undefined),
+      disconnect: jest.fn().mockResolvedValue(undefined),
+    })),
+  };
+});
+
+// Mock RedisService
+jest.mock('../database/RedisService', () => {
+  return {
+    RedisService: jest.fn().mockImplementation(() => ({
+      get: jest.fn().mockResolvedValue(null),
+      set: jest.fn().mockResolvedValue('OK'),
+      del: jest.fn().mockResolvedValue(1),
+      healthCheck: jest.fn().mockResolvedValue(true),
+      connect: jest.fn().mockResolvedValue(undefined),
+      disconnect: jest.fn().mockResolvedValue(undefined),
+    })),
+  };
+});
+
 describe('AuthenticationService', () => {
   let authService: AuthenticationService;
   let config: any;
@@ -22,6 +65,57 @@ describe('AuthenticationService', () => {
     
     // Mock database and Redis connections for testing
     jest.spyOn(authService, 'initialize').mockResolvedValue();
+    
+    // Mock internal methods
+    jest.spyOn(authService as any, 'toPublicUser').mockImplementation(async (user: any) => ({
+      id: user.id,
+      email: user.email,
+      emailVerified: user.emailVerified,
+      createdAt: user.createdAt,
+      roles: [],
+      permissions: [],
+    }));
+    
+    jest.spyOn(authService as any, 'createSession').mockResolvedValue('session-123');
+    
+    // Mock all internal services
+    (authService as any).userService = {
+      createUser: jest.fn(),
+      getUserByEmail: jest.fn(),
+      getUserById: jest.fn(),
+      updateUser: jest.fn(),
+      verifyPassword: jest.fn(),
+      requestPasswordReset: jest.fn(),
+      resetPassword: jest.fn(),
+    };
+    
+    (authService as any).rateLimitService = {
+      checkIPRateLimit: jest.fn(),
+      checkUserRateLimit: jest.fn(),
+    };
+    
+    (authService as any).auditService = {
+      logEvent: jest.fn(),
+    };
+    
+    (authService as any).tokenService = {
+      generateAccessToken: jest.fn().mockResolvedValue('access-token'),
+      generateRefreshToken: jest.fn().mockResolvedValue('refresh-token'),
+      verifyAccessToken: jest.fn(),
+      revokeAllUserTokens: jest.fn(),
+    };
+    
+    (authService as any).dbService = {
+      query: jest.fn(),
+      healthCheck: jest.fn(),
+    };
+    
+    (authService as any).redisService = {
+      get: jest.fn(),
+      set: jest.fn(),
+      del: jest.fn(),
+      healthCheck: jest.fn(),
+    };
   });
 
   afterAll(async () => {
@@ -41,23 +135,17 @@ describe('AuthenticationService', () => {
         status: 'active' as const,
       };
 
-      // Mock user service methods
-      jest.spyOn(authService as any, 'userService', 'get').mockReturnValue({
-        createUser: jest.fn().mockResolvedValue(mockUser),
+      // Configure mocked services
+      (authService as any).userService.createUser.mockResolvedValue(mockUser);
+      
+      (authService as any).rateLimitService.checkIPRateLimit.mockResolvedValue({
+        allowed: true,
+        remaining: 4,
+        resetTime: new Date(),
+        totalRequests: 1,
       });
-
-      jest.spyOn(authService as any, 'rateLimitService', 'get').mockReturnValue({
-        checkIPRateLimit: jest.fn().mockResolvedValue({
-          allowed: true,
-          remaining: 4,
-          resetTime: new Date(),
-          totalRequests: 1,
-        }),
-      });
-
-      jest.spyOn(authService as any, 'auditService', 'get').mockReturnValue({
-        logEvent: jest.fn().mockResolvedValue(undefined),
-      });
+      
+      (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       const request = {
         email: 'test@example.com',
@@ -70,15 +158,7 @@ describe('AuthenticationService', () => {
         userAgent: 'Test Agent',
       };
 
-      // Mock toPublicUser method
-      jest.spyOn(authService as any, 'toPublicUser').mockResolvedValue({
-        id: mockUser.id,
-        email: mockUser.email,
-        emailVerified: mockUser.emailVerified,
-        createdAt: mockUser.createdAt,
-        roles: [],
-        permissions: [],
-      });
+      // toPublicUser is already mocked in beforeAll
 
       const result = await authService.register(request, context);
 
@@ -99,20 +179,16 @@ describe('AuthenticationService', () => {
         userAgent: 'Test Agent',
       };
 
-      // Mock rate limiting to pass
-      jest.spyOn(authService as any, 'rateLimitService', 'get').mockReturnValue({
-        checkIPRateLimit: jest.fn().mockResolvedValue({
-          allowed: true,
-          remaining: 4,
-          resetTime: new Date(),
-          totalRequests: 1,
-        }),
+      // Configure mocked services
+      (authService as any).rateLimitService.checkIPRateLimit.mockResolvedValue({
+        allowed: true,
+        remaining: 4,
+        resetTime: new Date(),
+        totalRequests: 1,
       });
 
       // Mock user service to throw password validation error
-      jest.spyOn(authService as any, 'userService', 'get').mockReturnValue({
-        createUser: jest.fn().mockRejectedValue(new Error('Password must be at least 12 characters long')),
-      });
+      (authService as any).userService.createUser.mockRejectedValue(new Error('Password must be at least 12 characters long'));
 
       await expect(authService.register(request, context))
         .rejects.toThrow('Password must be at least 12 characters long');
@@ -130,19 +206,15 @@ describe('AuthenticationService', () => {
         userAgent: 'Test Agent',
       };
 
-      // Mock rate limiting to fail
-      jest.spyOn(authService as any, 'rateLimitService', 'get').mockReturnValue({
-        checkIPRateLimit: jest.fn().mockResolvedValue({
-          allowed: false,
-          remaining: 0,
-          resetTime: new Date(),
-          totalRequests: 6,
-        }),
+      // Configure mocked services
+      (authService as any).rateLimitService.checkIPRateLimit.mockResolvedValue({
+        allowed: false,
+        remaining: 0,
+        resetTime: new Date(),
+        totalRequests: 6,
       });
 
-      jest.spyOn(authService as any, 'auditService', 'get').mockReturnValue({
-        logEvent: jest.fn().mockResolvedValue(undefined),
-      });
+      (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       await expect(authService.register(request, context))
         .rejects.toThrow('Rate limit exceeded. Please try again later.');
@@ -173,40 +245,24 @@ describe('AuthenticationService', () => {
         userAgent: 'Test Agent',
       };
 
-      // Mock services
-      jest.spyOn(authService as any, 'rateLimitService', 'get').mockReturnValue({
-        checkIPRateLimit: jest.fn().mockResolvedValue({
-          allowed: true,
-          remaining: 4,
-          resetTime: new Date(),
-          totalRequests: 1,
-        }),
+      // Configure mocked services
+      (authService as any).rateLimitService.checkIPRateLimit.mockResolvedValue({
+        allowed: true,
+        remaining: 4,
+        resetTime: new Date(),
+        totalRequests: 1,
       });
 
-      jest.spyOn(authService as any, 'userService', 'get').mockReturnValue({
-        getUserByEmail: jest.fn().mockResolvedValue(mockUser),
-        verifyPassword: jest.fn().mockResolvedValue(true),
-        updateUser: jest.fn().mockResolvedValue(mockUser),
-      });
+      (authService as any).userService.getUserByEmail.mockResolvedValue(mockUser);
+      (authService as any).userService.verifyPassword.mockResolvedValue(true);
+      (authService as any).userService.updateUser.mockResolvedValue(mockUser);
 
-      jest.spyOn(authService as any, 'tokenService', 'get').mockReturnValue({
-        generateAccessToken: jest.fn().mockResolvedValue('access-token'),
-        generateRefreshToken: jest.fn().mockResolvedValue('refresh-token'),
-      });
+      (authService as any).tokenService.generateAccessToken.mockResolvedValue('access-token');
+      (authService as any).tokenService.generateRefreshToken.mockResolvedValue('refresh-token');
 
-      jest.spyOn(authService as any, 'auditService', 'get').mockReturnValue({
-        logEvent: jest.fn().mockResolvedValue(undefined),
-      });
+      (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
-      jest.spyOn(authService as any, 'createSession').mockResolvedValue('session-123');
-      jest.spyOn(authService as any, 'toPublicUser').mockResolvedValue({
-        id: mockUser.id,
-        email: mockUser.email,
-        emailVerified: mockUser.emailVerified,
-        createdAt: mockUser.createdAt,
-        roles: [],
-        permissions: [],
-      });
+      // createSession and toPublicUser are already mocked in beforeAll
 
       const result = await authService.login(request, context);
 
@@ -240,24 +296,18 @@ describe('AuthenticationService', () => {
         userAgent: 'Test Agent',
       };
 
-      // Mock services
-      jest.spyOn(authService as any, 'rateLimitService', 'get').mockReturnValue({
-        checkIPRateLimit: jest.fn().mockResolvedValue({
-          allowed: true,
-          remaining: 4,
-          resetTime: new Date(),
-          totalRequests: 1,
-        }),
+      // Configure mocked services
+      (authService as any).rateLimitService.checkIPRateLimit.mockResolvedValue({
+        allowed: true,
+        remaining: 4,
+        resetTime: new Date(),
+        totalRequests: 1,
       });
 
-      jest.spyOn(authService as any, 'userService', 'get').mockReturnValue({
-        getUserByEmail: jest.fn().mockResolvedValue(mockUser),
-        verifyPassword: jest.fn().mockResolvedValue(false),
-      });
+      (authService as any).userService.getUserByEmail.mockResolvedValue(mockUser);
+      (authService as any).userService.verifyPassword.mockResolvedValue(false);
 
-      jest.spyOn(authService as any, 'auditService', 'get').mockReturnValue({
-        logEvent: jest.fn().mockResolvedValue(undefined),
-      });
+      (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       await expect(authService.login(request, context))
         .rejects.toThrow('Invalid email or password');
@@ -287,23 +337,17 @@ describe('AuthenticationService', () => {
         userAgent: 'Test Agent',
       };
 
-      // Mock services
-      jest.spyOn(authService as any, 'rateLimitService', 'get').mockReturnValue({
-        checkIPRateLimit: jest.fn().mockResolvedValue({
-          allowed: true,
-          remaining: 4,
-          resetTime: new Date(),
-          totalRequests: 1,
-        }),
+      // Configure mocked services
+      (authService as any).rateLimitService.checkIPRateLimit.mockResolvedValue({
+        allowed: true,
+        remaining: 4,
+        resetTime: new Date(),
+        totalRequests: 1,
       });
 
-      jest.spyOn(authService as any, 'userService', 'get').mockReturnValue({
-        getUserByEmail: jest.fn().mockResolvedValue(mockUser),
-      });
+      (authService as any).userService.getUserByEmail.mockResolvedValue(mockUser);
 
-      jest.spyOn(authService as any, 'auditService', 'get').mockReturnValue({
-        logEvent: jest.fn().mockResolvedValue(undefined),
-      });
+      (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       await expect(authService.login(request, context))
         .rejects.toThrow('Account is locked. Please try again later or reset your password.');
@@ -332,23 +376,17 @@ describe('AuthenticationService', () => {
         aud: 'promptscape-api',
       };
 
-      // Mock token service
-      jest.spyOn(authService as any, 'tokenService', 'get').mockReturnValue({
-        verifyAccessToken: jest.fn().mockResolvedValue(mockPayload),
-      });
+      // Configure mocked services
+      (authService as any).tokenService.verifyAccessToken.mockResolvedValue(mockPayload);
 
-      // Mock user service
-      jest.spyOn(authService as any, 'userService', 'get').mockReturnValue({
-        getUserById: jest.fn().mockResolvedValue({
-          id: 'user-123',
-          email: 'test@example.com',
-          emailVerified: true,
-          createdAt: new Date(),
-          status: 'active',
-        }),
+      (authService as any).userService.getUserById.mockResolvedValue({
+        id: 'user-123',
+        email: 'test@example.com',
+        emailVerified: true,
+        createdAt: new Date(),
+        status: 'active',
       });
-
-      jest.spyOn(authService as any, 'toPublicUser').mockResolvedValue(mockUser);
+      // toPublicUser is already mocked in beforeAll
 
       const result = await authService.validateToken('valid-jwt-token');
 
@@ -356,10 +394,8 @@ describe('AuthenticationService', () => {
     });
 
     it('should reject an invalid JWT token', async () => {
-      // Mock token service to throw error
-      jest.spyOn(authService as any, 'tokenService', 'get').mockReturnValue({
-        verifyAccessToken: jest.fn().mockRejectedValue(new Error('Invalid token')),
-      });
+      // Configure mocked services to throw error
+      (authService as any).tokenService.verifyAccessToken.mockRejectedValue(new Error('Invalid token'));
 
       await expect(authService.validateToken('invalid-jwt-token'))
         .rejects.toThrow('Invalid token');
@@ -370,6 +406,10 @@ describe('AuthenticationService', () => {
     it('should initiate password reset for valid email', async () => {
       const request = {
         email: 'test@example.com',
+        clientInfo: {
+          ipAddress: '127.0.0.1',
+          userAgent: 'Test Agent',
+        },
       };
 
       const context = {
@@ -377,23 +417,17 @@ describe('AuthenticationService', () => {
         userAgent: 'Test Agent',
       };
 
-      // Mock services
-      jest.spyOn(authService as any, 'rateLimitService', 'get').mockReturnValue({
-        checkIPRateLimit: jest.fn().mockResolvedValue({
-          allowed: true,
-          remaining: 2,
-          resetTime: new Date(),
-          totalRequests: 1,
-        }),
+      // Configure mocked services
+      (authService as any).rateLimitService.checkIPRateLimit.mockResolvedValue({
+        allowed: true,
+        remaining: 2,
+        resetTime: new Date(),
+        totalRequests: 1,
       });
 
-      jest.spyOn(authService as any, 'userService', 'get').mockReturnValue({
-        requestPasswordReset: jest.fn().mockResolvedValue('reset-token-123'),
-      });
+      (authService as any).userService.requestPasswordReset.mockResolvedValue('reset-token-123');
 
-      jest.spyOn(authService as any, 'auditService', 'get').mockReturnValue({
-        logEvent: jest.fn().mockResolvedValue(undefined),
-      });
+      (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       // Should not throw any error
       await expect(authService.requestPasswordReset(request, context))
@@ -419,18 +453,12 @@ describe('AuthenticationService', () => {
         userAgent: 'Test Agent',
       };
 
-      // Mock services
-      jest.spyOn(authService as any, 'userService', 'get').mockReturnValue({
-        resetPassword: jest.fn().mockResolvedValue(mockUser),
-      });
+      // Configure mocked services
+      (authService as any).userService.resetPassword.mockResolvedValue(mockUser);
 
-      jest.spyOn(authService as any, 'tokenService', 'get').mockReturnValue({
-        revokeAllUserTokens: jest.fn().mockResolvedValue(undefined),
-      });
+      (authService as any).tokenService.revokeAllUserTokens.mockResolvedValue(undefined);
 
-      jest.spyOn(authService as any, 'auditService', 'get').mockReturnValue({
-        logEvent: jest.fn().mockResolvedValue(undefined),
-      });
+      (authService as any).auditService.logEvent.mockResolvedValue(undefined);
 
       // Should not throw any error
       await expect(authService.resetPassword(request, context))
@@ -440,15 +468,10 @@ describe('AuthenticationService', () => {
 
   describe('Health Check', () => {
     it('should return healthy status when all services are healthy', async () => {
-      // Mock database service
-      jest.spyOn(authService as any, 'dbService', 'get').mockReturnValue({
-        healthCheck: jest.fn().mockResolvedValue(true),
-      });
+      // Configure mocked services
+      (authService as any).dbService.healthCheck.mockResolvedValue(true);
 
-      // Mock Redis service
-      jest.spyOn(authService as any, 'redisService', 'get').mockReturnValue({
-        healthCheck: jest.fn().mockResolvedValue(true),
-      });
+      (authService as any).redisService.healthCheck.mockResolvedValue(true);
 
       const result = await authService.healthCheck();
 
@@ -458,15 +481,10 @@ describe('AuthenticationService', () => {
     });
 
     it('should return unhealthy status when database is down', async () => {
-      // Mock database service
-      jest.spyOn(authService as any, 'dbService', 'get').mockReturnValue({
-        healthCheck: jest.fn().mockResolvedValue(false),
-      });
+      // Configure mocked services
+      (authService as any).dbService.healthCheck.mockResolvedValue(false);
 
-      // Mock Redis service
-      jest.spyOn(authService as any, 'redisService', 'get').mockReturnValue({
-        healthCheck: jest.fn().mockResolvedValue(true),
-      });
+      (authService as any).redisService.healthCheck.mockResolvedValue(true);
 
       const result = await authService.healthCheck();
 

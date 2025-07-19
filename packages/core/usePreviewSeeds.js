@@ -1,14 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.usePreviewSeeds = void 0;
-const react_1 = require("react");
-const usePreviewSeeds = () => {
-    const [loading, setLoading] = (0, react_1.useState)(false);
-    const [error, setError] = (0, react_1.useState)(null);
-    const [results, setResults] = (0, react_1.useState)([]);
-    const [aggregateError, setAggregateError] = (0, react_1.useState)(null);
-    const abortRef = (0, react_1.useRef)(null);
-    const runPreview = (0, react_1.useCallback)(async (graph) => {
+import { useState, useCallback, useRef } from "react";
+export const usePreviewSeeds = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [results, setResults] = useState([]);
+    const [aggregateError, setAggregateError] = useState(null);
+    const abortRef = useRef(null);
+    const runPreview = useCallback(async (graph) => {
+        // Cancel any existing run
         abortRef.current?.abort();
         const controller = new AbortController();
         abortRef.current = controller;
@@ -16,8 +14,10 @@ const usePreviewSeeds = () => {
         setError(null);
         setAggregateError(null);
         try {
+            // TODO: replace with real executor call; honor controller.signal
             const seeds = Array.from({ length: 5 }, () => Math.floor(Math.random() * 100000));
             const settled = await Promise.allSettled(seeds.map((seed, i) => new Promise((resolve, reject) => {
+                // Simulate async executor — 20% chance to fail
                 const delay = 200 + Math.random() * 400;
                 const id = setTimeout(() => {
                     if (Math.random() < 0.2) {
@@ -33,7 +33,7 @@ const usePreviewSeeds = () => {
                 });
             })));
             if (controller.signal.aborted) {
-                return;
+                return; // Skip state updates if cancelled
             }
             const perSeedResults = settled.map((r, idx) => r.status === "fulfilled"
                 ? { seed: seeds[idx], output: r.value.output, usedNodeIds: [`node${idx}`], usedEdgeIds: [`edge${idx}`] }
@@ -53,14 +53,10 @@ const usePreviewSeeds = () => {
             setLoading(false);
         }
     }, []);
-    const cancelPreview = (0, react_1.useCallback)(() => {
+    const cancelPreview = useCallback(() => {
         abortRef.current?.abort();
         setLoading(false);
         setResults([]);
     }, []);
     return { loading, error, results, runPreview, cancelPreview };
 };
-exports.usePreviewSeeds = usePreviewSeeds;
-
-
-//# sourceMappingURL=usePreviewSeeds.js.map

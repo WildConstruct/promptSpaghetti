@@ -1,14 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.testCases = exports.CrossModelTester = void 0;
-exports.runCrossModelTests = runCrossModelTests;
-exports.generateTestReport = generateTestReport;
-const openai_agent_1 = require("../scripts/openai-agent");
-const anthropic_agent_1 = require("../scripts/anthropic-agent");
-const gemini_agent_1 = require("../scripts/gemini-agent");
-class CrossModelTester {
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.2 - Cross-Model Testing Examples
+// Comprehensive examples for testing all three LLM agents
+import { generateGraphWithOpenAI } from '../scripts/openai-agent';
+import { generateGraphWithClaude } from '../scripts/anthropic-agent';
+import { generateGraphWithGemini } from '../scripts/gemini-agent';
+export class CrossModelTester {
+    /**
+     * Test all three models with the same request
+     */
     async testAllModels(baseRequest) {
         const startTime = Date.now();
+        // Adapt request for each model's interface
         const openAIRequest = {
             purpose: baseRequest.purpose,
             complexity: baseRequest.complexity,
@@ -28,11 +30,13 @@ class CrossModelTester {
             constraints: baseRequest.constraints,
             examples: baseRequest.examples
         };
+        // Run all models concurrently
         const [openaiResult, claudeResult, geminiResult] = await Promise.allSettled([
-            (0, openai_agent_1.generateGraphWithOpenAI)(openAIRequest),
-            (0, anthropic_agent_1.generateGraphWithClaude)(claudeRequest),
-            (0, gemini_agent_1.generateGraphWithGemini)(geminiRequest)
+            generateGraphWithOpenAI(openAIRequest),
+            generateGraphWithClaude(claudeRequest),
+            generateGraphWithGemini(geminiRequest)
         ]);
+        // Extract results
         const results = {
             openai: openaiResult.status === 'fulfilled' ? openaiResult.value : { success: false, error: openaiResult.reason },
             claude: claudeResult.status === 'fulfilled' ? claudeResult.value : { success: false, error: claudeResult.reason },
@@ -45,6 +49,9 @@ class CrossModelTester {
         };
         return results;
     }
+    /**
+     * Calculate comparison metrics
+     */
     calculateComparison(results) {
         const validResults = results.filter(r => r && r.success);
         const successCount = validResults.length;
@@ -58,9 +65,13 @@ class CrossModelTester {
             consistencyScore: this.calculateConsistencyScore(validResults)
         };
     }
+    /**
+     * Calculate consistency score between successful results
+     */
     calculateConsistencyScore(results) {
         if (results.length < 2)
             return results.length > 0 ? 1.0 : 0.0;
+        // Simple consistency based on graph structure similarity
         const graphs = results.map(r => r.graph).filter(Boolean);
         if (graphs.length < 2)
             return 0.5;
@@ -74,7 +85,11 @@ class CrossModelTester {
         }
         return comparisons > 0 ? similarities / comparisons : 0.0;
     }
+    /**
+     * Calculate similarity between two graphs (basic implementation)
+     */
     calculateGraphSimilarity(graph1, graph2) {
+        // Count common patterns
         const patterns = [
             /type:\s*(\w+)/g,
             /---NODES---/,
@@ -93,8 +108,13 @@ class CrossModelTester {
         return total > 0 ? matches / total : 0.0;
     }
 }
-exports.CrossModelTester = CrossModelTester;
-exports.testCases = {
+/**
+ * Predefined test cases for cross-model comparison
+ */
+export const testCases = {
+    /**
+     * Simple test case
+     */
     simpleGreeting: {
         purpose: "Generate personalized greetings",
         complexity: "simple",
@@ -108,6 +128,9 @@ exports.testCases = {
         style: "creative",
         domain: "social interaction"
     },
+    /**
+     * Moderate complexity test case
+     */
     contentGenerator: {
         purpose: "Create adaptive content based on user preferences",
         complexity: "moderate",
@@ -122,6 +145,9 @@ exports.testCases = {
         style: "balanced",
         domain: "educational content"
     },
+    /**
+     * Complex test case with advanced features
+     */
     intelligentTutor: {
         purpose: "Build an adaptive tutoring system that adjusts to student responses",
         complexity: "complex",
@@ -142,6 +168,9 @@ exports.testCases = {
             "Clear learning objectives"
         ]
     },
+    /**
+     * Creative writing assistant
+     */
     storyGenerator: {
         purpose: "Generate interactive story scenarios with branching narratives",
         complexity: "moderate",
@@ -161,6 +190,9 @@ exports.testCases = {
             "Multiple endings possible"
         ]
     },
+    /**
+     * Data processing pipeline
+     */
     dataProcessor: {
         purpose: "Create a data transformation and analysis pipeline",
         complexity: "complex",
@@ -177,10 +209,14 @@ exports.testCases = {
         domain: "data science"
     }
 };
-async function runCrossModelTests() {
+/**
+ * Run comprehensive cross-model tests
+ */
+export async function runCrossModelTests() {
     const tester = new CrossModelTester();
     const testResults = {};
-    for (const [testName, testCase] of Object.entries(exports.testCases)) {
+    // Run all test cases
+    for (const [testName, testCase] of Object.entries(testCases)) {
         console.log(`Running test: ${testName}`);
         try {
             testResults[testName] = await tester.testAllModels(testCase);
@@ -198,15 +234,20 @@ async function runCrossModelTests() {
             };
         }
     }
+    // Calculate summary statistics
     const summary = calculateSummaryStats(testResults);
     return { testResults, summary };
 }
+/**
+ * Calculate summary statistics across all tests
+ */
 function calculateSummaryStats(testResults) {
     const tests = Object.values(testResults);
     const totalTests = tests.length;
     const successfulTests = tests.filter(t => t.comparison.allSucceeded).length;
     const consistencyScores = tests.map(t => t.comparison.consistencyScore);
     const averageConsistency = consistencyScores.reduce((sum, score) => sum + score, 0) / consistencyScores.length;
+    // Model-specific performance
     const openaiResults = tests.map(t => t.openai).filter(Boolean);
     const claudeResults = tests.map(t => t.claude).filter(Boolean);
     const geminiResults = tests.map(t => t.gemini).filter(Boolean);
@@ -231,7 +272,10 @@ function calculateSummaryStats(testResults) {
         modelPerformance
     };
 }
-function generateTestReport(results) {
+/**
+ * Generate a comparative report
+ */
+export function generateTestReport(results) {
     const { testResults, summary } = results;
     let report = `# Cross-Model LLM Agent Test Report\n\n`;
     report += `**Generated**: ${new Date().toISOString()}\n\n`;
@@ -252,4 +296,3 @@ function generateTestReport(results) {
     });
     return report;
 }
-//# sourceMappingURL=cross-model-examples.js.map

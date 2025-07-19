@@ -413,8 +413,18 @@ class HandbookBuilder {
   async generatePDFFromHTML(htmlFile, pdfFile) {
     try {
       // Try using Puppeteer first
-      const puppeteer = require('puppeteer');
-      const browser = await puppeteer.launch();
+      const puppeteer = require('puppeteer-core');
+      const possiblePaths = [
+        process.env.CHROME_PATH,
+        '/usr/bin/google-chrome',
+        '/usr/bin/chromium-browser',
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      ];
+      const executablePath = possiblePaths.find((p) => p && fs.existsSync(p));
+      const browser = await puppeteer.launch({
+        executablePath,
+        headless: 'new',
+      });
       const page = await browser.newPage();
       
       await page.goto(`file://${htmlFile}`, { waitUntil: 'networkidle0' });

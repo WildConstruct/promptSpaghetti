@@ -1,15 +1,21 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConditionalBuilder = exports.ConditionPresets = exports.ConditionalNode = void 0;
-exports.createConditionalNode = createConditionalNode;
-exports.conditional = conditional;
-const advanced_1 = require("../advanced");
-const io_system_1 = require("../io-system");
-class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
+// packages/core/runtime/nodes/Conditional.ts
+// Advanced conditional node with expression-based branching
+import { AdvancedRuntimeNode } from '../advanced';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+/**
+ * Advanced conditional node with expression-based branching logic
+ * Supports multiple conditions, variable access, and custom functions
+ */
+export class ConditionalNode extends AdvancedRuntimeNode {
+    ioHandler;
+    branches;
+    defaultOutput;
+    conditionalConfig;
     constructor(id, branches = [], defaultOutput = '', config = {}) {
+        // Configure as deterministic, non-cacheable (depends on variables), stateless
         const nodeConfig = {
             deterministic: true,
-            cacheable: false,
+            cacheable: false, // Don't cache since output depends on variable state
             stateful: false,
             performanceHints: {
                 expectedExecutionTime: 'fast',
@@ -25,7 +31,8 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
             customFunctions: {},
             ...config
         };
-        const ioSpec = new io_system_1.IOSpecBuilder()
+        // Set up I/O specification
+        const ioSpec = new IOSpecBuilder()
             .addInput({
             id: 'conditions',
             label: 'Condition Expressions',
@@ -52,12 +59,19 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
         })
             .addTextOutput('result', 'Conditional Result')
             .build();
-        this.ioHandler = new io_system_1.AdvancedIOHandler(ioSpec);
+        this.ioHandler = new AdvancedIOHandler(ioSpec);
     }
+    /**
+     * Execute conditional logic by evaluating expressions in order
+     */
     run(ctx) {
+        // Record this node's execution
         ctx.executionMeta.nodeExecutionOrder.push(this.id);
+        // Use performance tracking for conditional evaluation
         return this.measureExecution(ctx, 'conditional-evaluation', () => {
+            // Get effective branches (from constructor or dynamic inputs)
             const effectiveBranches = this.getEffectiveBranches(ctx);
+            // Evaluate each condition in order
             for (const branch of effectiveBranches) {
                 try {
                     const conditionResult = this.evaluateCondition(branch.condition, ctx);
@@ -66,24 +80,33 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
                     }
                 }
                 catch (error) {
+                    // Always re-throw security-related errors regardless of strict mode
                     const errorMessage = error instanceof Error ? error.message : String(error);
                     if (errorMessage.includes('Dangerous pattern detected')) {
                         throw error;
                     }
+                    // In non-strict mode, treat evaluation errors as false
                     if (this.conditionalConfig.strictMode) {
                         throw new Error(`Condition evaluation failed: ${branch.condition} - ${error}`);
                     }
+                    // Continue to next condition
                 }
             }
+            // No conditions matched, return default
             return this.defaultOutput;
         });
     }
+    /**
+     * Comprehensive validation of conditional configuration
+     */
     validate() {
         const errors = [];
         const warnings = [];
+        // Validate branches
         if (this.branches.length === 0) {
             warnings.push('No conditional branches configured - will always return default output');
         }
+        // Validate individual branches
         this.branches.forEach((branch, index) => {
             if (!branch.condition || branch.condition.trim() === '') {
                 errors.push(`Branch ${index} has empty condition`);
@@ -91,14 +114,17 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
             if (branch.output === undefined || branch.output === null) {
                 warnings.push(`Branch ${index} has undefined output`);
             }
+            // Basic syntax validation for common patterns
             const condition = branch.condition.trim();
             if (condition.includes('==')) {
                 warnings.push(`Branch ${index}: Consider using '===' instead of '==' for strict equality`);
             }
+            // Check for potentially dangerous expressions
             if (condition.includes('eval(') || condition.includes('Function(')) {
                 errors.push(`Branch ${index}: Dangerous expression detected - eval/Function not allowed`);
             }
         });
+        // Validate default output
         if (this.defaultOutput === undefined || this.defaultOutput === null) {
             warnings.push('Default output is undefined - consider providing a fallback value');
         }
@@ -108,6 +134,9 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
             warnings
         };
     }
+    /**
+     * Serialize node data for persistence
+     */
     serialize() {
         return {
             id: this.id,
@@ -124,16 +153,28 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
             }
         };
     }
+    /**
+     * Get effective branches from constructor data or dynamic inputs
+     */
     getEffectiveBranches(ctx) {
+        // For now, use constructor branches
+        // In full implementation, would merge with dynamic inputs from I/O system
         return this.branches;
     }
+    /**
+     * Evaluate a condition expression against the execution context
+     */
     evaluateCondition(expression, ctx) {
         try {
+            // Create a safe evaluation context
             const evalContext = this.createEvaluationContext(ctx);
+            // Parse and evaluate the expression
             const result = this.safeEvaluate(expression, evalContext);
+            // Convert result to boolean
             return Boolean(result);
         }
         catch (error) {
+            // Always re-throw security-related errors regardless of strict mode
             const errorMessage = error instanceof Error ? error.message : String(error);
             if (errorMessage.includes('Dangerous pattern detected') || errorMessage.includes('Expression evaluation failed')) {
                 throw error;
@@ -141,21 +182,30 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
             if (this.conditionalConfig.strictMode) {
                 throw error;
             }
+            // In non-strict mode, log the error for debugging but return false
             return false;
         }
     }
+    /**
+     * Create a safe evaluation context with variables and functions
+     */
     createEvaluationContext(ctx) {
         const evalContext = {};
+        // Add variables if allowed
         if (this.conditionalConfig.allowVariableAccess) {
+            // Add all variables from execution context
             Object.assign(evalContext, ctx.variables);
+            // Add convenience functions
             evalContext.hasVariable = (name) => name in ctx.variables;
             evalContext.getVariable = (name, defaultValue) => ctx.variables[name] !== undefined ? ctx.variables[name] : defaultValue;
         }
+        // Add custom functions
         Object.assign(evalContext, this.conditionalConfig.customFunctions);
-        evalContext.getType = (value) => typeof value;
+        // Add safe utility functions (avoid reserved keywords)
+        evalContext.getType = (value) => typeof value; // 'typeof' is reserved
         const lengthFn = (value) => value?.length ?? 0;
-        evalContext.len = lengthFn;
-        evalContext.length = lengthFn;
+        evalContext.len = lengthFn; // short name to avoid 'length' property conflict  
+        evalContext.length = lengthFn; // backward compatibility
         evalContext.isEmpty = (value) => !value || value.length === 0;
         evalContext.includes = (value, item) => {
             if (typeof value === 'string') {
@@ -171,11 +221,17 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
         evalContext.matches = (str, pattern) => new RegExp(pattern).test(String(str));
         return evalContext;
     }
+    /**
+     * Safely evaluate an expression with limited scope
+     */
     safeEvaluate(expression, context) {
+        // Sanitize the expression
         const sanitizedExpression = this.sanitizeExpression(expression);
+        // Create a function with the context variables as parameters
         const paramNames = Object.keys(context);
         const paramValues = paramNames.map(name => context[name]);
         try {
+            // Use Function constructor with controlled scope
             const func = new Function(...paramNames, `return (${sanitizedExpression});`);
             return func(...paramValues);
         }
@@ -183,7 +239,11 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
             throw new Error(`Expression evaluation failed: ${expression} - ${error}`);
         }
     }
+    /**
+     * Sanitize expression to prevent dangerous operations
+     */
     sanitizeExpression(expression) {
+        // Remove dangerous patterns
         const dangerous = [
             /eval\s*\(/gi,
             /Function\s*\(/gi,
@@ -206,30 +266,41 @@ class ConditionalNode extends advanced_1.AdvancedRuntimeNode {
         return sanitized;
     }
 }
-exports.ConditionalNode = ConditionalNode;
-function createConditionalNode(id, branches, defaultOutput, config) {
+/**
+ * Factory function for creating Conditional nodes
+ */
+export function createConditionalNode(id, branches, defaultOutput, config) {
     return new ConditionalNode(id, branches, defaultOutput, config);
 }
-exports.ConditionPresets = {
+/**
+ * Common condition patterns for easy setup
+ */
+export const ConditionPresets = {
+    /** Simple variable comparison */
     greaterThan: (variable, value) => `${variable} > ${value}`,
     lessThan: (variable, value) => `${variable} < ${value}`,
     equals: (variable, value) => `${variable} === ${JSON.stringify(value)}`,
+    /** Variable existence checks */
     hasVariable: (variable) => `hasVariable('${variable}')`,
     isEmpty: (variable) => `isEmpty(${variable})`,
+    /** String operations */
     startsWith: (variable, prefix) => `startsWith(${variable}, '${prefix}')`,
     contains: (variable, substring) => `${variable}.includes('${substring}')`,
     matches: (variable, pattern) => `matches(${variable}, '${pattern}')`,
+    /** Array operations */
     arrayIncludes: (array, item) => `includes(${array}, ${JSON.stringify(item)})`,
     arrayLength: (array, length) => `length(${array}) === ${length}`,
+    /** Logical combinations */
     and: (...conditions) => `(${conditions.join(') && (')})`,
     or: (...conditions) => `(${conditions.join(') || (')})`,
     not: (condition) => `!(${condition})`
 };
-class ConditionalBuilder {
-    constructor() {
-        this.branches = [];
-        this.defaultOutput = '';
-    }
+/**
+ * Utility for building complex conditional branches
+ */
+export class ConditionalBuilder {
+    branches = [];
+    defaultOutput = '';
     if(condition, output, label) {
         this.branches.push({ condition, output, label });
         return this;
@@ -251,8 +322,9 @@ class ConditionalBuilder {
         return this.defaultOutput;
     }
 }
-exports.ConditionalBuilder = ConditionalBuilder;
-function conditional(id) {
+/**
+ * Fluent API for building conditional nodes
+ */
+export function conditional(id) {
     return new ConditionalBuilder();
 }
-//# sourceMappingURL=Conditional.js.map

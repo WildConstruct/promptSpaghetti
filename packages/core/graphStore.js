@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.useGraphStore = void 0;
-const zustand_1 = require("zustand");
-const nodeDataUtils_1 = require("./utils/nodeDataUtils");
-exports.useGraphStore = (0, zustand_1.create)((set) => ({
+import { create } from 'zustand';
+import { addVariationToNode, removeVariationFromNode, updateVariationInNode, reorderVariationsInNode } from './utils/nodeDataUtils';
+export const useGraphStore = create((set) => ({
     nodes: [],
     edges: [],
     setNodes: (nodes) => set({ nodes }),
@@ -15,22 +12,22 @@ exports.useGraphStore = (0, zustand_1.create)((set) => ({
     })),
     addVariation: (nodeId, variation) => set((state) => ({
         nodes: state.nodes.map((n) => n.id === nodeId
-            ? { ...n, data: (0, nodeDataUtils_1.addVariationToNode)(n.data, variation) }
+            ? { ...n, data: addVariationToNode(n.data, variation) }
             : n),
     })),
     removeVariation: (nodeId, variationIndex) => set((state) => ({
         nodes: state.nodes.map((n) => n.id === nodeId
-            ? { ...n, data: (0, nodeDataUtils_1.removeVariationFromNode)(n.data, variationIndex) }
+            ? { ...n, data: removeVariationFromNode(n.data, variationIndex) }
             : n),
     })),
     updateVariation: (nodeId, variationIndex, newValue) => set((state) => ({
         nodes: state.nodes.map((n) => n.id === nodeId
-            ? { ...n, data: (0, nodeDataUtils_1.updateVariationInNode)(n.data, variationIndex, newValue) }
+            ? { ...n, data: updateVariationInNode(n.data, variationIndex, newValue) }
             : n),
     })),
     reorderVariations: (nodeId, fromIndex, toIndex) => set((state) => ({
         nodes: state.nodes.map((n) => n.id === nodeId
-            ? { ...n, data: (0, nodeDataUtils_1.reorderVariationsInNode)(n.data, fromIndex, toIndex) }
+            ? { ...n, data: reorderVariationsInNode(n.data, fromIndex, toIndex) }
             : n),
     })),
     duplicateNode: (nodeId) => set((state) => {
@@ -56,4 +53,3 @@ exports.useGraphStore = (0, zustand_1.create)((set) => ({
         edges: state.edges.filter((e) => e.source !== nodeId && e.target !== nodeId),
     })),
 }));
-//# sourceMappingURL=graphStore.js.map

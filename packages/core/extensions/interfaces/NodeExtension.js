@@ -1,9 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.NodeExtensionHelpers = exports.NodeCategory = void 0;
-const zod_1 = require("zod");
-const runtime_1 = require("../../runtime");
-var NodeCategory;
+/**
+ * Node Extension Interface - Epic 8.4 Story 8.4.2
+ * Defines interfaces for extending the runtime node system
+ */
+import { z } from 'zod';
+import { RuntimeNode } from '../../runtime';
+// Node Categories
+export var NodeCategory;
 (function (NodeCategory) {
     NodeCategory["INPUT"] = "input";
     NodeCategory["OUTPUT"] = "output";
@@ -11,8 +13,9 @@ var NodeCategory;
     NodeCategory["CONTROL"] = "control";
     NodeCategory["UTILITY"] = "utility";
     NodeCategory["CUSTOM"] = "custom";
-})(NodeCategory || (exports.NodeCategory = NodeCategory = {}));
-var NodeExtensionHelpers;
+})(NodeCategory || (NodeCategory = {}));
+// Node Extension Helper Functions
+export var NodeExtensionHelpers;
 (function (NodeExtensionHelpers) {
     function createNodeDefinition(config) {
         return {
@@ -21,10 +24,10 @@ var NodeExtensionHelpers;
             category: config.category || NodeCategory.CUSTOM,
             description: config.description || 'A custom node',
             version: config.version || '1.0.0',
-            nodeClass: config.nodeClass || class extends runtime_1.RuntimeNode {
+            nodeClass: config.nodeClass || class extends RuntimeNode {
                 run() { return null; }
             },
-            configSchema: config.configSchema || zod_1.z.object({}),
+            configSchema: config.configSchema || z.object({}),
             ui: config.ui || {},
             runtime: config.runtime || {},
             metadata: config.metadata || {
@@ -38,12 +41,14 @@ var NodeExtensionHelpers;
     function validateNodeDefinition(definition) {
         const errors = [];
         const warnings = [];
+        // Basic validation
         if (!definition.id)
             errors.push('Node ID is required');
         if (!definition.name)
             errors.push('Node name is required');
         if (!definition.nodeClass)
             errors.push('Node class is required');
+        // Schema validation
         try {
             definition.configSchema.parse({});
         }
@@ -101,5 +106,4 @@ var NodeExtensionHelpers;
         };
     }
     NodeExtensionHelpers.createNodeRegistry = createNodeRegistry;
-})(NodeExtensionHelpers || (exports.NodeExtensionHelpers = NodeExtensionHelpers = {}));
-//# sourceMappingURL=NodeExtension.js.map
+})(NodeExtensionHelpers || (NodeExtensionHelpers = {}));

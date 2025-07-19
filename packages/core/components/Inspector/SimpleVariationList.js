@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState } from "react";
+import { useState } from "react";
 export const SimpleVariationList = ({ variations, onChange, placeholder = "Add item...", addButtonText = "Add", emptyMessage = "No items defined.", }) => {
     const [newItem, setNewItem] = useState("");
     const handleAdd = () => {

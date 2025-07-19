@@ -95,7 +95,7 @@ ${exports}
         warnings.push('Extension configuration should be an object');
       }
     } catch (error) {
-      errors.push(`Configuration validation failed: ${error.message}`);
+      errors.push(`Configuration validation failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     // Health check validation
@@ -110,7 +110,7 @@ ${exports}
         errors.push('getHealthStatus() must return a health status object');
       }
     } catch (error) {
-      errors.push(`Health check validation failed: ${error.message}`);
+      errors.push(`Health check validation failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     return {
@@ -170,7 +170,7 @@ ${exports}
 
     } catch (error) {
       result.success = false;
-      result.errors.push(error);
+      result.errors.push(error instanceof Error ? error : new Error(String(error)));
     }
 
     result.duration = Date.now() - startTime;

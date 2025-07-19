@@ -245,12 +245,12 @@ server.register(authRoutes, { prefix: '/auth' });
 server.register(jwtAuthMiddleware);
 
 // Initialize additional analytics components
-let metricsCollector: MetricsCollector;
-let performanceDashboard: PerformanceDashboard;
-let analyticsDAO: AnalyticsDAO;
-let costTracker: CostTracker;
-let analyticsDashboard: AnalyticsDashboard;
-let analyticsWebSocketServer: AnalyticsWebSocketServer;
+let metricsCollector: MetricsCollector | undefined;
+let performanceDashboard: PerformanceDashboard | undefined;
+let analyticsDAO: AnalyticsDAO | undefined;
+let costTracker: CostTracker | undefined;
+let analyticsDashboard: AnalyticsDashboard | undefined;
+let analyticsWebSocketServer: AnalyticsWebSocketServer | undefined;
 
 try {
   const db = getDatabase();
@@ -330,7 +330,7 @@ if (analyticsDashboard && costTracker) {
 try {
   const db = getDatabase();
   server.register(async (fastify) => {
-    await marketplaceRoutes(fastify, db);
+    await marketplaceRoutes(fastify, db as any);
   }, { prefix: '/api/marketplace' });
   console.log('Marketplace routes registered successfully');
 } catch (error) {

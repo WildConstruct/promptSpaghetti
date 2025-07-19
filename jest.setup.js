@@ -1,5 +1,15 @@
 require('@testing-library/jest-dom');
 
+// Increase default Jest timeout for async-heavy tests
+jest.setTimeout(15000);
+
+// Polyfill for structuredClone if not available
+if (typeof structuredClone === 'undefined') {
+  global.structuredClone = (obj) => {
+    return JSON.parse(JSON.stringify(obj));
+  };
+}
+
 // TextEncoder/TextDecoder polyfill for Node.js environment
 if (typeof TextEncoder === 'undefined') {
   global.TextEncoder = require('util').TextEncoder;

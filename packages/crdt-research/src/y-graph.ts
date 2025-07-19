@@ -30,7 +30,7 @@ export class YGraph extends Y.AbstractType<any> {
   /**
    * Clone the graph (required by Yjs)
    */
-  _copy(): YGraph {
+  _copy(): any {
     const copy = new YGraph();
     // The maps will be replaced with document-integrated ones
     // so we don't need to copy data here
@@ -259,18 +259,30 @@ export class YGraph extends Y.AbstractType<any> {
   }
 
   /**
-   * Observe changes to the graph
+   * Observe changes to nodes
    */
-  observe(callback: (event: Y.YEvent<any>) => void): void {
+  observeNodes(callback: (event: Y.YEvent<any>) => void): void {
     this.nodes.observe(callback);
+  }
+
+  /**
+   * Observe changes to edges
+   */
+  observeEdges(callback: (event: Y.YEvent<any>) => void): void {
     this.edges.observe(callback);
   }
 
   /**
-   * Unobserve changes
+   * Unobserve changes to nodes
    */
-  unobserve(callback: (event: Y.YEvent<any>) => void): void {
+  unobserveNodes(callback: (event: Y.YEvent<any>) => void): void {
     this.nodes.unobserve(callback);
+  }
+
+  /**
+   * Unobserve changes to edges
+   */
+  unobserveEdges(callback: (event: Y.YEvent<any>) => void): void {
     this.edges.unobserve(callback);
   }
 }

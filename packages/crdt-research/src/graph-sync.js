@@ -1,46 +1,29 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GraphSyncHandler = void 0;
-const Y = __importStar(require("yjs"));
-const y_graph_1 = require("./y-graph");
-class GraphSyncHandler {
+/**
+ * Graph Synchronization Handler
+ * Epic 9.1.1 - Manages CRDT synchronization for collaborative graph editing
+ */
+import * as Y from 'yjs';
+import { YGraph } from './y-graph';
+export class GraphSyncHandler {
+    doc;
+    graph;
+    nodes;
+    edges;
+    awareness;
+    syncState;
+    onUpdate;
+    onAwarenessUpdate;
     constructor(documentId, userId) {
         this.doc = new Y.Doc();
-        this.graph = new y_graph_1.YGraph();
-        this.doc.getMap('graph').set('root', this.graph);
+        // Get the maps from the document
+        this.nodes = this.doc.getMap('nodes');
+        this.edges = this.doc.getMap('edges');
+        // Create YGraph and assign the document-integrated maps
+        this.graph = new YGraph();
+        this.graph.nodes = this.nodes;
+        this.graph.edges = this.edges;
+        // Set the document reference on the graph
+        this.graph.doc = this.doc;
         this.awareness = new Map();
         this.syncState = {
             documentId,
@@ -48,6 +31,7 @@ class GraphSyncHandler {
             lastSync: Date.now(),
             pendingOps: 0
         };
+        // Set up update observer
         this.doc.on('update', (update, origin) => {
             this.syncState.lastSync = Date.now();
             if (this.onUpdate) {
@@ -55,24 +39,45 @@ class GraphSyncHandler {
             }
         });
     }
+    /**
+     * Get the graph instance
+     */
     getGraph() {
         return this.graph;
     }
+    /**
+     * Get the Yjs document
+     */
     getDoc() {
         return this.doc;
     }
+    /**
+     * Apply an update from a remote peer
+     */
     applyUpdate(update, origin) {
         Y.applyUpdate(this.doc, update, origin);
     }
+    /**
+     * Get the current document state as an update
+     */
     getStateAsUpdate() {
         return Y.encodeStateAsUpdate(this.doc);
     }
+    /**
+     * Get state vector for synchronization
+     */
     getStateVector() {
         return Y.encodeStateVector(this.doc);
     }
+    /**
+     * Get diff update from a state vector
+     */
     getDiffUpdate(stateVector) {
         return Y.encodeStateAsUpdate(this.doc, stateVector);
     }
+    /**
+     * Create a sync message
+     */
     createSyncMessage(type, data) {
         const message = {
             type,
@@ -93,20 +98,26 @@ class GraphSyncHandler {
         }
         return message;
     }
+    /**
+     * Handle incoming sync message
+     */
     handleSyncMessage(message) {
         switch (message.type) {
             case 'sync':
+                // Respond with diff update
                 if (message.stateVector) {
                     const diffUpdate = this.getDiffUpdate(message.stateVector);
                     return this.createSyncMessage('update', diffUpdate);
                 }
                 break;
             case 'update':
+                // Apply the update
                 if (message.update) {
                     this.applyUpdate(message.update, message.userId);
                 }
                 break;
             case 'awareness':
+                // Update awareness information
                 if (message.awareness && message.userId) {
                     this.updateAwareness(message.userId, message.awareness);
                 }
@@ -114,8 +125,12 @@ class GraphSyncHandler {
         }
         return null;
     }
+    /**
+     * Update user presence/awareness
+     */
     updateAwareness(userId, presence) {
         this.awareness.set(userId, presence);
+        // Clean up stale presence (older than 30 seconds)
         const now = Date.now();
         this.awareness.forEach((presence, id) => {
             if (now - presence.timestamp > 30000) {
@@ -126,9 +141,15 @@ class GraphSyncHandler {
             this.onAwarenessUpdate(this.awareness);
         }
     }
+    /**
+     * Get current awareness state
+     */
     getAwareness() {
         return new Map(this.awareness);
     }
+    /**
+     * Set local user presence
+     */
     setLocalPresence(presence) {
         const fullPresence = {
             userId: this.syncState.userId,
@@ -140,37 +161,66 @@ class GraphSyncHandler {
         };
         this.updateAwareness(this.syncState.userId, fullPresence);
     }
+    /**
+     * Subscribe to document updates
+     */
     onDocumentUpdate(callback) {
         this.onUpdate = callback;
     }
+    /**
+     * Subscribe to awareness updates
+     */
     onAwarenessChange(callback) {
         this.onAwarenessUpdate = callback;
     }
+    /**
+     * Get sync state
+     */
     getSyncState() {
         return { ...this.syncState };
     }
+    /**
+     * Create a snapshot of the current state
+     */
     createSnapshot() {
         return Y.encodeSnapshot(this.doc);
     }
+    /**
+     * Restore from a snapshot
+     */
     restoreFromSnapshot(snapshot) {
         const newDoc = Y.decodeSnapshot(snapshot);
         const update = Y.encodeStateAsUpdate(newDoc);
         Y.applyUpdate(this.doc, update);
     }
+    /**
+     * Get operation history
+     */
     getHistory(limit = 100) {
+        // This would integrate with Yjs history plugin
+        // For now, return empty array
         return [];
     }
+    /**
+     * Calculate document size
+     */
     getDocumentSize() {
         const update = this.getStateAsUpdate();
         return update.byteLength;
     }
+    /**
+     * Garbage collect deleted items
+     */
     garbageCollect() {
+        // Yjs automatically handles garbage collection
+        // This method can be used to force GC if needed
         this.doc.gc = true;
     }
+    /**
+     * Destroy the sync handler
+     */
     destroy() {
         this.doc.destroy();
         this.awareness.clear();
     }
 }
-exports.GraphSyncHandler = GraphSyncHandler;
-//# sourceMappingURL=graph-sync.js.map

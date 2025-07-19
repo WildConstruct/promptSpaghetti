@@ -1,7 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const serializer_1 = require("../serialization/serializer");
-const validator_1 = require("../serialization/validator");
+// Epic 12 - Simple Serialization Example
+// Demonstrates the LLM-friendly serialization format
+import { GraphSerializer } from '../serialization/serializer';
+import { validateFormat } from '../serialization/validator';
+// Example: Simple greeting generator
 const simpleGraph = {
     nodes: [
         {
@@ -30,7 +31,8 @@ const simpleGraph = {
         }
     ]
 };
-const serialized = serializer_1.GraphSerializer.serialize(simpleGraph, {
+// Serialize the graph
+const serialized = GraphSerializer.serialize(simpleGraph, {
     name: 'Simple Greeting Generator',
     description: 'Generates personalized greetings',
     author: 'claude-agent',
@@ -38,7 +40,8 @@ const serialized = serializer_1.GraphSerializer.serialize(simpleGraph, {
 });
 console.log('=== LLM-Friendly Serialized Format ===');
 console.log(serialized);
-const validation = (0, validator_1.validateFormat)(serialized);
+// Validate the format
+const validation = validateFormat(serialized);
 console.log('\n=== Validation Results ===');
 console.log('Valid:', validation.isValid);
 console.log('Errors:', validation.errors.length);
@@ -55,4 +58,3 @@ if (validation.warnings.length > 0) {
         console.log(`  - ${warning.message}`);
     });
 }
-//# sourceMappingURL=simple-serialization.js.map

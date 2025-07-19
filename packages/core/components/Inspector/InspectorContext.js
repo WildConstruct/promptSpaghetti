@@ -1,5 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 const InspectorContext = createContext(null);
 export const InspectorProvider = ({ children, onNodeUpdate, initialWidth = 320, initialCollapsed = false, initialVisible = true, }) => {
     const [selectedNode, setSelectedNode] = useState(null);

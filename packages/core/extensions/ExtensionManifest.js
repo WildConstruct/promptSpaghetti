@@ -1,26 +1,33 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.extensionManifestValidator = exports.extensionManifestParser = exports.ExtensionManifestValidator = exports.ExtensionManifestParser = exports.ExtensionManifestSchema = void 0;
-const zod_1 = require("zod");
-exports.ExtensionManifestSchema = zod_1.z.object({
-    manifest_version: zod_1.z.literal('1.0'),
-    id: zod_1.z.string().min(1).max(100).regex(/^[a-z0-9-]+$/),
-    name: zod_1.z.string().min(1).max(100),
-    version: zod_1.z.string().regex(/^\d+\.\d+\.\d+$/),
-    description: zod_1.z.string().min(1).max(500),
-    author: zod_1.z.object({
-        name: zod_1.z.string().min(1).max(100),
-        email: zod_1.z.string().email().optional(),
-        url: zod_1.z.string().url().optional()
+/**
+ * Extension Manifest - Epic 8.4 Story 8.4.3
+ * Standardized manifest format for extensions with validation and parsing
+ */
+import { z } from 'zod';
+// Extension Manifest Schema
+export const ExtensionManifestSchema = z.object({
+    // Basic Information
+    manifest_version: z.literal('1.0'),
+    id: z.string().min(1).max(100).regex(/^[a-z0-9-]+$/),
+    name: z.string().min(1).max(100),
+    version: z.string().regex(/^\d+\.\d+\.\d+$/),
+    description: z.string().min(1).max(500),
+    // Author Information
+    author: z.object({
+        name: z.string().min(1).max(100),
+        email: z.string().email().optional(),
+        url: z.string().url().optional()
     }),
-    extension_type: zod_1.z.enum(['node', 'ui', 'transform', 'storage']),
-    main: zod_1.z.string().min(1),
-    dependencies: zod_1.z.object({
-        system: zod_1.z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
-        extensions: zod_1.z.record(zod_1.z.string().regex(/^[>=<~^]?\d+\.\d+\.\d+$/)).optional(),
-        npm: zod_1.z.record(zod_1.z.string()).optional()
+    // Extension Type and Main Entry
+    extension_type: z.enum(['node', 'ui', 'transform', 'storage']),
+    main: z.string().min(1),
+    // Dependencies
+    dependencies: z.object({
+        system: z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
+        extensions: z.record(z.string().regex(/^[>=<~^]?\d+\.\d+\.\d+$/)).optional(),
+        npm: z.record(z.string()).optional()
     }).optional(),
-    permissions: zod_1.z.array(zod_1.z.enum([
+    // Permissions
+    permissions: z.array(z.enum([
         'file-system-read',
         'file-system-write',
         'network',
@@ -30,81 +37,97 @@ exports.ExtensionManifestSchema = zod_1.z.object({
         'system-info',
         'extensions-api'
     ])).optional(),
-    capabilities: zod_1.z.object({
-        provides: zod_1.z.array(zod_1.z.string()).optional(),
-        requires: zod_1.z.array(zod_1.z.string()).optional(),
-        optional: zod_1.z.array(zod_1.z.string()).optional()
+    // Capabilities
+    capabilities: z.object({
+        provides: z.array(z.string()).optional(),
+        requires: z.array(z.string()).optional(),
+        optional: z.array(z.string()).optional()
     }).optional(),
-    ui: zod_1.z.object({
-        icon: zod_1.z.string().optional(),
-        category: zod_1.z.string().optional(),
-        themes: zod_1.z.array(zod_1.z.string()).optional(),
-        css: zod_1.z.array(zod_1.z.string()).optional(),
-        components: zod_1.z.record(zod_1.z.string()).optional()
+    // UI Configuration
+    ui: z.object({
+        icon: z.string().optional(),
+        category: z.string().optional(),
+        themes: z.array(z.string()).optional(),
+        css: z.array(z.string()).optional(),
+        components: z.record(z.string()).optional()
     }).optional(),
-    runtime: zod_1.z.object({
-        node_types: zod_1.z.array(zod_1.z.string()).optional(),
-        transforms: zod_1.z.array(zod_1.z.string()).optional(),
-        storage_providers: zod_1.z.array(zod_1.z.string()).optional(),
-        background_tasks: zod_1.z.array(zod_1.z.string()).optional()
+    // Runtime Configuration
+    runtime: z.object({
+        node_types: z.array(z.string()).optional(),
+        transforms: z.array(z.string()).optional(),
+        storage_providers: z.array(z.string()).optional(),
+        background_tasks: z.array(z.string()).optional()
     }).optional(),
-    build: zod_1.z.object({
-        output_dir: zod_1.z.string().default('dist'),
-        entry_point: zod_1.z.string().optional(),
-        externals: zod_1.z.array(zod_1.z.string()).optional(),
-        assets: zod_1.z.array(zod_1.z.string()).optional()
+    // Build and Development
+    build: z.object({
+        output_dir: z.string().default('dist'),
+        entry_point: z.string().optional(),
+        externals: z.array(z.string()).optional(),
+        assets: z.array(z.string()).optional()
     }).optional(),
-    activation_events: zod_1.z.array(zod_1.z.string()).optional(),
-    configuration: zod_1.z.object({
-        schema: zod_1.z.record(zod_1.z.any()).optional(),
-        defaults: zod_1.z.record(zod_1.z.any()).optional(),
-        ui_schema: zod_1.z.record(zod_1.z.any()).optional()
+    // Activation Events
+    activation_events: z.array(z.string()).optional(),
+    // Configuration Schema
+    configuration: z.object({
+        schema: z.record(z.any()).optional(),
+        defaults: z.record(z.any()).optional(),
+        ui_schema: z.record(z.any()).optional()
     }).optional(),
-    metadata: zod_1.z.object({
-        license: zod_1.z.string().optional(),
-        repository: zod_1.z.string().url().optional(),
-        homepage: zod_1.z.string().url().optional(),
-        bugs: zod_1.z.string().url().optional(),
-        keywords: zod_1.z.array(zod_1.z.string()).optional(),
-        categories: zod_1.z.array(zod_1.z.string()).optional(),
-        changelog: zod_1.z.string().optional(),
-        readme: zod_1.z.string().optional()
+    // Metadata
+    metadata: z.object({
+        license: z.string().optional(),
+        repository: z.string().url().optional(),
+        homepage: z.string().url().optional(),
+        bugs: z.string().url().optional(),
+        keywords: z.array(z.string()).optional(),
+        categories: z.array(z.string()).optional(),
+        changelog: z.string().optional(),
+        readme: z.string().optional()
     }).optional(),
-    compatibility: zod_1.z.object({
-        min_system_version: zod_1.z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
-        max_system_version: zod_1.z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
-        platforms: zod_1.z.array(zod_1.z.enum(['web', 'desktop', 'server'])).optional(),
-        browsers: zod_1.z.record(zod_1.z.string()).optional()
+    // Compatibility
+    compatibility: z.object({
+        min_system_version: z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
+        max_system_version: z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
+        platforms: z.array(z.enum(['web', 'desktop', 'server'])).optional(),
+        browsers: z.record(z.string()).optional()
     }).optional(),
-    security: zod_1.z.object({
-        content_security_policy: zod_1.z.string().optional(),
-        sandbox: zod_1.z.object({
-            enabled: zod_1.z.boolean().default(true),
-            permissions: zod_1.z.array(zod_1.z.string()).optional()
+    // Security
+    security: z.object({
+        content_security_policy: z.string().optional(),
+        sandbox: z.object({
+            enabled: z.boolean().default(true),
+            permissions: z.array(z.string()).optional()
         }).optional(),
-        trusted_domains: zod_1.z.array(zod_1.z.string()).optional()
+        trusted_domains: z.array(z.string()).optional()
     }).optional(),
-    publishing: zod_1.z.object({
-        private: zod_1.z.boolean().default(false),
-        registry: zod_1.z.string().url().optional(),
-        access: zod_1.z.enum(['public', 'private', 'restricted']).default('public'),
-        tags: zod_1.z.array(zod_1.z.string()).optional()
+    // Publishing
+    publishing: z.object({
+        private: z.boolean().default(false),
+        registry: z.string().url().optional(),
+        access: z.enum(['public', 'private', 'restricted']).default('public'),
+        tags: z.array(z.string()).optional()
     }).optional()
 });
-class ExtensionManifestParser {
-    constructor() {
-        this.cache = new Map();
-    }
+// Extension Manifest Parser
+export class ExtensionManifestParser {
+    static instance;
+    cache = new Map();
+    constructor() { }
     static getInstance() {
         if (!ExtensionManifestParser.instance) {
             ExtensionManifestParser.instance = new ExtensionManifestParser();
         }
         return ExtensionManifestParser.instance;
     }
+    /**
+     * Parse manifest from JSON string
+     */
     parseManifest(jsonString) {
         try {
+            // Parse JSON
             const rawManifest = JSON.parse(jsonString);
-            const result = exports.ExtensionManifestSchema.safeParse(rawManifest);
+            // Validate against schema
+            const result = ExtensionManifestSchema.safeParse(rawManifest);
             if (!result.success) {
                 return {
                     success: false,
@@ -116,6 +139,7 @@ class ExtensionManifestParser {
                     }))
                 };
             }
+            // Additional validation
             const additionalValidation = this.validateManifestLogic(result.data);
             if (!additionalValidation.valid) {
                 return {
@@ -145,16 +169,23 @@ class ExtensionManifestParser {
             };
         }
     }
+    /**
+     * Parse manifest from file path
+     */
     async parseManifestFromFile(filePath) {
         try {
+            // Check cache first
             if (this.cache.has(filePath)) {
                 return {
                     success: true,
                     data: this.cache.get(filePath)
                 };
             }
+            // Read file (this would use fs in a real implementation)
             const fileContent = await this.readFile(filePath);
+            // Parse manifest
             const result = this.parseManifest(fileContent);
+            // Cache if successful
             if (result.success) {
                 this.cache.set(filePath, result.data);
             }
@@ -172,12 +203,16 @@ class ExtensionManifestParser {
             };
         }
     }
+    /**
+     * Validate manifest dependencies
+     */
     validateDependencies(manifest, availableExtensions) {
         const errors = [];
         const warnings = [];
         if (!manifest.dependencies) {
             return { valid: true, errors: [], warnings: [] };
         }
+        // Check extension dependencies
         if (manifest.dependencies.extensions) {
             for (const [depId, versionRange] of Object.entries(manifest.dependencies.extensions)) {
                 const depExtension = availableExtensions.get(depId);
@@ -196,12 +231,16 @@ class ExtensionManifestParser {
             warnings
         };
     }
+    /**
+     * Check compatibility with system
+     */
     checkCompatibility(manifest, systemVersion, platform) {
         const errors = [];
         const warnings = [];
         if (!manifest.compatibility) {
             return { valid: true, errors: [], warnings: [] };
         }
+        // Check system version compatibility
         if (manifest.compatibility.min_system_version) {
             if (this.compareVersions(systemVersion, manifest.compatibility.min_system_version) < 0) {
                 errors.push(`System version ${systemVersion} is below minimum required ${manifest.compatibility.min_system_version}`);
@@ -212,6 +251,7 @@ class ExtensionManifestParser {
                 errors.push(`System version ${systemVersion} is above maximum supported ${manifest.compatibility.max_system_version}`);
             }
         }
+        // Check platform compatibility
         if (manifest.compatibility.platforms) {
             if (!manifest.compatibility.platforms.includes(platform)) {
                 errors.push(`Platform ${platform} is not supported`);
@@ -223,6 +263,9 @@ class ExtensionManifestParser {
             warnings
         };
     }
+    /**
+     * Generate manifest template
+     */
     generateManifestTemplate(options) {
         const template = {
             manifest_version: '1.0',
@@ -260,6 +303,7 @@ class ExtensionManifestParser {
                 }
             }
         };
+        // Add type-specific configurations
         switch (options.extensionType) {
             case 'node':
                 template.runtime = {
@@ -285,21 +329,30 @@ class ExtensionManifestParser {
         }
         return template;
     }
+    /**
+     * Clear cache
+     */
     clearCache() {
         this.cache.clear();
     }
+    /**
+     * Private helper methods
+     */
     validateManifestLogic(manifest) {
         const errors = [];
         const warnings = [];
+        // Check main file extension
         if (!manifest.main.endsWith('.js') && !manifest.main.endsWith('.ts')) {
             warnings.push('Main file should have .js or .ts extension');
         }
+        // Check extension type consistency
         if (manifest.extension_type === 'node' && !manifest.runtime?.node_types) {
             warnings.push('Node extensions should specify node_types in runtime configuration');
         }
         if (manifest.extension_type === 'ui' && !manifest.ui?.components) {
             warnings.push('UI extensions should specify components in ui configuration');
         }
+        // Check permissions consistency
         if (manifest.permissions) {
             if (manifest.permissions.includes('file-system-write') && !manifest.permissions.includes('file-system-read')) {
                 warnings.push('file-system-write permission typically requires file-system-read permission');
@@ -312,6 +365,7 @@ class ExtensionManifestParser {
         };
     }
     satisfiesVersionRange(version, range) {
+        // Simple version range checking (in a real implementation, use semver library)
         if (range.startsWith('>=')) {
             return this.compareVersions(version, range.substring(2)) >= 0;
         }
@@ -325,6 +379,7 @@ class ExtensionManifestParser {
             return this.compareVersions(version, range.substring(1)) < 0;
         }
         if (range.startsWith('~')) {
+            // Tilde range (~1.2.3 := >=1.2.3 <1.3.0)
             const targetVersion = range.substring(1);
             const [major, minor] = targetVersion.split('.');
             const upperBound = `${major}.${parseInt(minor) + 1}.0`;
@@ -332,12 +387,14 @@ class ExtensionManifestParser {
                 this.compareVersions(version, upperBound) < 0;
         }
         if (range.startsWith('^')) {
+            // Caret range (^1.2.3 := >=1.2.3 <2.0.0)
             const targetVersion = range.substring(1);
             const [major] = targetVersion.split('.');
             const upperBound = `${parseInt(major) + 1}.0.0`;
             return this.compareVersions(version, targetVersion) >= 0 &&
                 this.compareVersions(version, upperBound) < 0;
         }
+        // Exact match
         return version === range;
     }
     compareVersions(version1, version2) {
@@ -354,11 +411,15 @@ class ExtensionManifestParser {
         return 0;
     }
     async readFile(filePath) {
+        // In a real implementation, this would use fs.readFile
+        // For now, we'll simulate reading a file
         return Promise.resolve('{}');
     }
 }
-exports.ExtensionManifestParser = ExtensionManifestParser;
-class ExtensionManifestValidator {
+// Extension Manifest Validator
+export class ExtensionManifestValidator {
+    static instance;
+    parser;
     constructor() {
         this.parser = ExtensionManifestParser.getInstance();
     }
@@ -368,18 +429,26 @@ class ExtensionManifestValidator {
         }
         return ExtensionManifestValidator.instance;
     }
+    /**
+     * Comprehensive manifest validation
+     */
     validateManifest(manifest, context) {
         const errors = [];
         const warnings = [];
+        // Schema validation (already done during parsing)
+        // Dependency validation
         const depValidation = this.parser.validateDependencies(manifest, context.availableExtensions);
         errors.push(...depValidation.errors);
         warnings.push(...depValidation.warnings);
+        // Compatibility validation
         const compatValidation = this.parser.checkCompatibility(manifest, context.systemVersion, context.platform);
         errors.push(...compatValidation.errors);
         warnings.push(...compatValidation.warnings);
+        // Permission validation
         const permValidation = this.validatePermissions(manifest, context.grantedPermissions);
         errors.push(...permValidation.errors);
         warnings.push(...permValidation.warnings);
+        // Security validation
         const securityValidation = this.validateSecurity(manifest);
         errors.push(...securityValidation.errors);
         warnings.push(...securityValidation.warnings);
@@ -389,6 +458,9 @@ class ExtensionManifestValidator {
             warnings
         };
     }
+    /**
+     * Validate manifest permissions
+     */
     validatePermissions(manifest, grantedPermissions) {
         const errors = [];
         const warnings = [];
@@ -399,6 +471,7 @@ class ExtensionManifestValidator {
             if (!grantedPermissions.includes(permission)) {
                 errors.push(`Permission not granted: ${permission}`);
             }
+            // Check for dangerous permissions
             const dangerousPermissions = ['file-system-write', 'network'];
             if (dangerousPermissions.includes(permission)) {
                 warnings.push(`Dangerous permission requested: ${permission}`);
@@ -410,6 +483,9 @@ class ExtensionManifestValidator {
             warnings
         };
     }
+    /**
+     * Validate manifest security settings
+     */
     validateSecurity(manifest) {
         const errors = [];
         const warnings = [];
@@ -417,11 +493,13 @@ class ExtensionManifestValidator {
             warnings.push('No security configuration specified');
             return { valid: true, errors: [], warnings: [] };
         }
+        // Validate CSP
         if (manifest.security.content_security_policy) {
             if (!this.isValidCSP(manifest.security.content_security_policy)) {
                 errors.push('Invalid Content Security Policy');
             }
         }
+        // Validate sandbox settings
         if (manifest.security.sandbox) {
             if (!manifest.security.sandbox.enabled) {
                 warnings.push('Sandbox is disabled - this may be a security risk');
@@ -434,12 +512,10 @@ class ExtensionManifestValidator {
         };
     }
     isValidCSP(csp) {
+        // Basic CSP validation (in a real implementation, use proper CSP parser)
         return csp.includes('default-src') || csp.includes('script-src');
     }
 }
-exports.ExtensionManifestValidator = ExtensionManifestValidator;
-exports.extensionManifestParser = ExtensionManifestParser.getInstance();
-exports.extensionManifestValidator = ExtensionManifestValidator.getInstance();
-
-
-//# sourceMappingURL=ExtensionManifest.js.map
+// Export singletons
+export const extensionManifestParser = ExtensionManifestParser.getInstance();
+export const extensionManifestValidator = ExtensionManifestValidator.getInstance();

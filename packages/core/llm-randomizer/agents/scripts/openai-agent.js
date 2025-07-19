@@ -1,13 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultOpenAIConfig = exports.OpenAIGraphAgent = void 0;
-exports.generateGraphWithOpenAI = generateGraphWithOpenAI;
-const validator_1 = require("../../serialization/validator");
-class OpenAIGraphAgent {
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.2 - LLM Agent Script Development
+// OpenAI agent script with JSON mode integration and error correction
+import { validateFormat } from '../../serialization/validator';
+export class OpenAIGraphAgent {
+    config;
+    baseSystemPrompt;
     constructor(config) {
         this.config = config;
         this.baseSystemPrompt = this.buildSystemPrompt();
     }
+    /**
+     * Generate a graph based on the request parameters
+     */
     async generateGraph(request) {
         const startTime = Date.now();
         let attempts = 0;
@@ -18,8 +22,10 @@ class OpenAIGraphAgent {
                 const userPrompt = this.buildUserPrompt(request);
                 const response = await this.callOpenAI(userPrompt, currentTemperature);
                 if (response.success && response.content) {
+                    // Extract graph content from response
                     const graphContent = this.extractGraphContent(response.content);
-                    const validation = (0, validator_1.validateFormat)(graphContent);
+                    // Validate the generated graph
+                    const validation = validateFormat(graphContent);
                     if (validation.isValid) {
                         return {
                             success: true,
@@ -35,6 +41,7 @@ class OpenAIGraphAgent {
                         };
                     }
                     else {
+                        // Validation failed - try again with corrections
                         console.log(`Attempt ${attempts} failed validation:`, validation.errors);
                         if (attempts === this.config.maxRetries) {
                             return {
@@ -49,6 +56,7 @@ class OpenAIGraphAgent {
                                 }
                             };
                         }
+                        // Reduce temperature for next attempt
                         currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
                     }
                 }
@@ -59,6 +67,7 @@ class OpenAIGraphAgent {
             catch (error) {
                 console.error(`Attempt ${attempts} error:`, error);
             }
+            // Reduce temperature for retry
             currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
         }
         return {
@@ -73,6 +82,9 @@ class OpenAIGraphAgent {
             }
         };
     }
+    /**
+     * Build the system prompt for OpenAI
+     */
     buildSystemPrompt() {
         return `You are an expert Prompt Spaghetti graph generator. You create valid, creative graphs in a specific YAML-like format.
 
@@ -175,6 +187,9 @@ Before outputting, mentally check:
 
 Generate creative, functional graphs that solve real problems.`;
     }
+    /**
+     * Build user prompt based on request
+     */
     buildUserPrompt(request) {
         const complexityGuide = {
             simple: '3-8 nodes, straightforward logic, single output path',
@@ -203,13 +218,29 @@ Create a complete, valid graph that follows the format specification exactly. Be
 
 OUTPUT THE COMPLETE GRAPH:`;
     }
+    /**
+     * Call OpenAI API with error handling
+     */
     async callOpenAI(userPrompt, temperature) {
         try {
+            // Mock OpenAI API call for now - replace with actual API call
+            // const response = await openai.chat.completions.create({
+            //   model: this.config.model,
+            //   messages: [
+            //     { role: 'system', content: this.baseSystemPrompt },
+            //     { role: 'user', content: userPrompt }
+            //   ],
+            //   temperature,
+            //   max_tokens: this.config.maxTokens,
+            //   response_format: this.config.useJsonMode ? { type: 'json_object' } : undefined,
+            //   seed: this.config.seed
+            // });
+            // Mock response for development
             const mockResponse = this.generateMockResponse(userPrompt);
             return {
                 success: true,
                 content: mockResponse,
-                tokenCount: mockResponse.length / 4
+                tokenCount: mockResponse.length / 4 // Rough token estimate
             };
         }
         catch (error) {
@@ -219,17 +250,26 @@ OUTPUT THE COMPLETE GRAPH:`;
             };
         }
     }
+    /**
+     * Extract graph content from response
+     */
     extractGraphContent(response) {
+        // Look for content between code blocks
         const codeBlockMatch = response.match(/```(?:yaml|yml)?\n?([\s\S]*?)\n?```/);
         if (codeBlockMatch) {
             return codeBlockMatch[1].trim();
         }
+        // Look for version: line to start of ---END---
         const graphMatch = response.match(/version:\s*[\d.]+[\s\S]*?---END---/);
         if (graphMatch) {
             return graphMatch[0].trim();
         }
+        // Return as-is if no code blocks found
         return response.trim();
     }
+    /**
+     * Generate mock response for development/testing
+     */
     generateMockResponse(userPrompt) {
         return `version: 1.0.0
 metadata:
@@ -271,18 +311,22 @@ greeting_text -> final_output
 ---END---`;
     }
 }
-exports.OpenAIGraphAgent = OpenAIGraphAgent;
-exports.defaultOpenAIConfig = {
+/**
+ * Default configuration for OpenAI agent
+ */
+export const defaultOpenAIConfig = {
     apiKey: process.env.OPENAI_API_KEY || '',
     model: 'gpt-4',
     temperature: 0.7,
     maxTokens: 2000,
-    useJsonMode: false,
+    useJsonMode: false, // Set to true when using supported models
     maxRetries: 3,
     retryTemperatureReduction: 0.2
 };
-async function generateGraphWithOpenAI(request, config = {}) {
-    const agent = new OpenAIGraphAgent({ ...exports.defaultOpenAIConfig, ...config });
+/**
+ * Utility function to create and use OpenAI agent
+ */
+export async function generateGraphWithOpenAI(request, config = {}) {
+    const agent = new OpenAIGraphAgent({ ...defaultOpenAIConfig, ...config });
     return agent.generateGraph(request);
 }
-//# sourceMappingURL=openai-agent.js.map

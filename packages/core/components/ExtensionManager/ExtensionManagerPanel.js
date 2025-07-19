@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Extension Manager Panel - Epic 8.4 Story 8.4.5
  * Main UI component for managing extensions
  */
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useExtensionManagerStore } from './ExtensionManagerStore';
 import { ExtensionListView } from './ExtensionListView';
 import { ExtensionDetailView } from './ExtensionDetailView';

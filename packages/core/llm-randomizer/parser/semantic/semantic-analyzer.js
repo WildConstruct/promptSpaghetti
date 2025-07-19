@@ -1,11 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SemanticAnalyzer = void 0;
-const graphSchema_1 = require("../../../graphSchema");
-class SemanticAnalyzer {
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.3 - Parser Implementation
+// Semantic analysis and graph construction
+import { NodeTypeEnum } from '../../../graphSchema';
+export class SemanticAnalyzer {
+    context;
+    errors = [];
+    warnings = [];
     constructor() {
-        this.errors = [];
-        this.warnings = [];
         this.context = {
             nodeIds: new Set(),
             nodeMap: new Map(),
@@ -15,11 +16,17 @@ class SemanticAnalyzer {
             currentPath: []
         };
     }
+    /**
+     * Analyze AST and build validated Graph object
+     */
     analyze(ast) {
         this.reset();
         try {
+            // Phase 1: Build context and validate basic structure
             this.buildContext(ast);
+            // Phase 2: Validate semantics
             this.validateSemantics(ast);
+            // Phase 3: Build Graph object if no critical errors
             const graph = this.hasBlockingErrors() ? null : this.buildGraph(ast);
             return {
                 graph,
@@ -36,6 +43,9 @@ class SemanticAnalyzer {
             };
         }
     }
+    /**
+     * Reset analyzer state
+     */
     reset() {
         this.context = {
             nodeIds: new Set(),
@@ -48,7 +58,11 @@ class SemanticAnalyzer {
         this.errors = [];
         this.warnings = [];
     }
+    /**
+     * Build analysis context from AST
+     */
     buildContext(ast) {
+        // Collect all node IDs and build node map
         for (const node of ast.nodes) {
             if (this.context.nodeIds.has(node.id)) {
                 this.addError('DUPLICATE_NODE_ID', `Duplicate node ID: ${node.id}`, node.id);
@@ -58,9 +72,11 @@ class SemanticAnalyzer {
                 this.context.nodeMap.set(node.id, node);
             }
         }
+        // Build edge maps
         for (const edge of ast.edges) {
             this.addEdgeToContext(edge.source, edge.target);
         }
+        // Add edges from node inputs
         for (const node of ast.nodes) {
             if (node.inputs) {
                 for (const inputId of node.inputs) {
@@ -69,26 +85,41 @@ class SemanticAnalyzer {
             }
         }
     }
+    /**
+     * Add edge to context maps
+     */
     addEdgeToContext(source, target) {
+        // Forward edge map (source -> targets)
         if (!this.context.edgeMap.has(source)) {
             this.context.edgeMap.set(source, new Set());
         }
         this.context.edgeMap.get(source).add(target);
+        // Reverse edge map (target -> sources)
         if (!this.context.reverseEdgeMap.has(target)) {
             this.context.reverseEdgeMap.set(target, new Set());
         }
         this.context.reverseEdgeMap.get(target).add(source);
     }
+    /**
+     * Validate semantic correctness
+     */
     validateSemantics(ast) {
+        // Validate version
         this.validateVersion(ast.version);
+        // Validate nodes
         for (const node of ast.nodes) {
             this.validateNode(node);
         }
+        // Validate edges
         for (const edge of ast.edges) {
             this.validateEdge(edge);
         }
+        // Validate graph structure
         this.validateGraphStructure();
     }
+    /**
+     * Validate format version
+     */
     validateVersion(version) {
         if (!version) {
             this.addError('MISSING_VERSION', 'Version is required in graph header');
@@ -99,19 +130,26 @@ class SemanticAnalyzer {
             this.addError('UNSUPPORTED_VERSION', `Unsupported version: ${version}. Supported: ${supportedVersions.join(', ')}`);
         }
     }
+    /**
+     * Validate individual node
+     */
     validateNode(node) {
+        // Validate node ID format
         if (!this.isValidNodeId(node.id)) {
             this.addError('INVALID_NODE_ID', `Invalid node ID format: ${node.id}. Use alphanumeric, underscore, and hyphen only`, node.id);
         }
+        // Validate node type
         if (!node.nodeType) {
             this.addError('MISSING_NODE_TYPE', `Node ${node.id} is missing type property`, node.id);
             return;
         }
-        if (!graphSchema_1.NodeTypeEnum.options.includes(node.nodeType)) {
+        if (!NodeTypeEnum.options.includes(node.nodeType)) {
             this.addError('INVALID_NODE_TYPE', `Node ${node.id} has invalid type: ${node.nodeType}`, node.id);
             return;
         }
+        // Validate node-specific properties
         this.validateNodeProperties(node);
+        // Validate inputs
         if (node.inputs) {
             for (const inputId of node.inputs) {
                 if (!this.context.nodeIds.has(inputId)) {
@@ -120,6 +158,9 @@ class SemanticAnalyzer {
             }
         }
     }
+    /**
+     * Validate node-specific properties
+     */
     validateNodeProperties(node) {
         const { nodeType, properties } = node;
         switch (nodeType) {
@@ -148,11 +189,15 @@ class SemanticAnalyzer {
                 break;
             case 'Concat':
             case 'Output':
+                // These nodes don't require special properties
                 break;
             default:
                 this.addWarning('UNKNOWN_NODE_TYPE', `Unknown node type: ${nodeType}`, node.id);
         }
     }
+    /**
+     * Validate WeightedChoice properties
+     */
     validateWeightedChoiceProperties(node) {
         const choices = node.properties?.choices;
         if (!choices || !Array.isArray(choices)) {
@@ -183,6 +228,9 @@ class SemanticAnalyzer {
             this.addError('ZERO_TOTAL_WEIGHT', `${node.nodeType} node ${node.id} has zero total weight`, node.id);
         }
     }
+    /**
+     * Validate Conditional properties
+     */
     validateConditionalProperties(node) {
         const branches = node.properties?.branches;
         if (!branches || !Array.isArray(branches)) {
@@ -198,6 +246,9 @@ class SemanticAnalyzer {
             }
         });
     }
+    /**
+     * Validate Sequential properties
+     */
     validateSequentialProperties(node) {
         const sequence = node.properties?.sequence;
         if (!sequence || !Array.isArray(sequence)) {
@@ -208,6 +259,9 @@ class SemanticAnalyzer {
             this.addError('EMPTY_SEQUENCE', `Sequential node ${node.id} has empty sequence array`, node.id);
         }
     }
+    /**
+     * Validate Markov properties
+     */
     validateMarkovProperties(node) {
         const states = node.properties?.states;
         if (!states || typeof states !== 'object') {
@@ -218,6 +272,7 @@ class SemanticAnalyzer {
         if (stateNames.length === 0) {
             this.addError('EMPTY_STATES', `Markov node ${node.id} has no states defined`, node.id);
         }
+        // Validate each state's transitions
         for (const [stateName, state] of Object.entries(states)) {
             if (state && typeof state === 'object' && 'transitions' in state) {
                 const transitions = state.transitions;
@@ -231,6 +286,9 @@ class SemanticAnalyzer {
             }
         }
     }
+    /**
+     * Validate Variable properties
+     */
     validateVariableProperties(node) {
         const key = node.properties?.key;
         if (!key || typeof key !== 'string') {
@@ -240,22 +298,32 @@ class SemanticAnalyzer {
             this.addError('MISSING_VARIABLE_VALUE', `SetVariable node ${node.id} missing required value property`, node.id);
         }
     }
+    /**
+     * Validate Include properties
+     */
     validateIncludeProperties(node) {
         const name = node.properties?.name;
         if (!name || typeof name !== 'string') {
             this.addError('MISSING_INCLUDE_NAME', `Include node ${node.id} missing required name property`, node.id);
         }
     }
+    /**
+     * Validate PythonTransform properties
+     */
     validatePythonTransformProperties(node) {
         const code = node.properties?.code;
         if (!code || typeof code !== 'string') {
             this.addError('MISSING_PYTHON_CODE', `PythonTransform node ${node.id} missing required code property`, node.id);
         }
+        // Validate timeout if present
         const timeout = node.properties?.timeout;
         if (timeout !== undefined && (typeof timeout !== 'number' || timeout <= 0)) {
             this.addError('INVALID_TIMEOUT', `PythonTransform node ${node.id} has invalid timeout value`, node.id);
         }
     }
+    /**
+     * Validate edge reference
+     */
     validateEdge(edge) {
         if (!this.context.nodeIds.has(edge.source)) {
             this.addError('INVALID_EDGE_SOURCE', `Edge references non-existent source node: ${edge.source}`);
@@ -264,11 +332,20 @@ class SemanticAnalyzer {
             this.addError('INVALID_EDGE_TARGET', `Edge references non-existent target node: ${edge.target}`);
         }
     }
+    /**
+     * Validate overall graph structure
+     */
     validateGraphStructure() {
+        // Check for cycles
         this.detectCycles();
+        // Check for output nodes
         this.validateOutputNodes();
+        // Check for unreachable nodes
         this.detectUnreachableNodes();
     }
+    /**
+     * Detect cycles in the graph using DFS
+     */
     detectCycles() {
         const visited = new Set();
         const recursionStack = new Set();
@@ -300,6 +377,9 @@ class SemanticAnalyzer {
             }
         }
     }
+    /**
+     * Validate presence of output nodes
+     */
     validateOutputNodes() {
         const outputNodes = Array.from(this.context.nodeMap.values())
             .filter(node => node.nodeType === 'Output');
@@ -307,10 +387,15 @@ class SemanticAnalyzer {
             this.addWarning('NO_OUTPUT_NODES', 'Graph has no Output nodes - results may not be accessible');
         }
     }
+    /**
+     * Detect unreachable nodes
+     */
     detectUnreachableNodes() {
         const reachable = new Set();
+        // Find root nodes (no inputs)
         const rootNodes = Array.from(this.context.nodeIds)
             .filter(nodeId => !this.context.reverseEdgeMap.has(nodeId));
+        // DFS from root nodes
         const dfs = (nodeId) => {
             if (reachable.has(nodeId))
                 return;
@@ -325,12 +410,16 @@ class SemanticAnalyzer {
         for (const rootId of rootNodes) {
             dfs(rootId);
         }
+        // Check for unreachable nodes
         for (const nodeId of this.context.nodeIds) {
             if (!reachable.has(nodeId)) {
                 this.addWarning('UNREACHABLE_NODE', `Node ${nodeId} is unreachable from root nodes`, nodeId);
             }
         }
     }
+    /**
+     * Build Graph object from validated AST
+     */
     buildGraph(ast) {
         const nodes = [];
         for (const astNode of ast.nodes) {
@@ -341,21 +430,28 @@ class SemanticAnalyzer {
         }
         return {
             nodes,
-            seed: Date.now()
+            seed: Date.now() // Default seed
         };
     }
+    /**
+     * Build Node object from AST node
+     */
     buildNodeFromAST(astNode) {
         const baseNode = {
             id: astNode.id,
             type: astNode.nodeType,
             inputs: astNode.inputs
         };
+        // Add type-specific properties
         const properties = astNode.properties || {};
         return {
             ...baseNode,
             ...properties
         };
     }
+    /**
+     * Helper methods
+     */
     isValidNodeId(id) {
         return /^[a-zA-Z0-9_-]+$/.test(id);
     }
@@ -382,5 +478,3 @@ class SemanticAnalyzer {
         });
     }
 }
-exports.SemanticAnalyzer = SemanticAnalyzer;
-//# sourceMappingURL=semantic-analyzer.js.map

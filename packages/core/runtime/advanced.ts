@@ -52,6 +52,10 @@ export interface AdvancedExecutionContext extends ExecutionContext {
     nodeExecutionOrder: string[];
     performanceMetrics: Map<string, number>;
   };
+  /** Optional inputs for nodes */
+  inputs?: Record<string, any>;
+  /** Optional outputs storage */
+  outputs?: Record<string, any>;
 }
 
 /**

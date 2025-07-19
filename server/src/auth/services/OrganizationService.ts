@@ -90,7 +90,7 @@ export class OrganizationService {
     createdBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<Organization> {
-    const transaction = await this.dbService.beginTransaction();
+    const transaction = await this.dbService.transaction();
     
     try {
       const organizationId = require('crypto').randomUUID();
@@ -198,7 +198,7 @@ export class OrganizationService {
         slug,
         description: data.description,
         website: data.website,
-        logoUrl: null,
+        logoUrl: undefined,
         branding: data.branding || {},
         settings: data.settings || {},
         plan: data.plan || 'free',
@@ -284,7 +284,7 @@ export class OrganizationService {
     deletedBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
-    const transaction = await this.dbService.beginTransaction();
+    const transaction = await this.dbService.transaction();
     
     try {
       const organization = await this.getOrganizationById(organizationId);
@@ -521,7 +521,7 @@ export class OrganizationService {
     deletedBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
-    const transaction = await this.dbService.beginTransaction();
+    const transaction = await this.dbService.transaction();
     
     try {
       const team = await this.getTeamById(teamId);

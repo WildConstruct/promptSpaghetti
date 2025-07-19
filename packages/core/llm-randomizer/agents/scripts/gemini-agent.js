@@ -1,13 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultGeminiConfig = exports.GeminiGraphAgent = void 0;
-exports.generateGraphWithGemini = generateGraphWithGemini;
-const validator_1 = require("../../serialization/validator");
-class GeminiGraphAgent {
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.2 - LLM Agent Script Development
+// Google Gemini agent script with structured output and safety considerations
+import { validateFormat } from '../../serialization/validator';
+export class GeminiGraphAgent {
+    config;
+    basePrompt;
     constructor(config) {
         this.config = config;
         this.basePrompt = this.buildGeminiPrompt();
     }
+    /**
+     * Generate a graph using Gemini with structured output
+     */
     async generateGraph(request) {
         const startTime = Date.now();
         let attempts = 0;
@@ -18,9 +22,11 @@ class GeminiGraphAgent {
                 const prompt = this.buildRequestPrompt(request);
                 const response = await this.callGemini(prompt, currentTemperature);
                 if (response.success && response.content) {
+                    // Extract graph content from response
                     const graphContent = this.extractGraphFromResponse(response.content);
                     if (graphContent) {
-                        const validation = (0, validator_1.validateFormat)(graphContent);
+                        // Validate the generated graph
+                        const validation = validateFormat(graphContent);
                         if (validation.isValid) {
                             return {
                                 success: true,
@@ -37,6 +43,7 @@ class GeminiGraphAgent {
                             };
                         }
                         else {
+                            // Validation failed - try again with corrections
                             console.log(`Attempt ${attempts} failed validation:`, validation.errors);
                             if (attempts === this.config.maxRetries) {
                                 return {
@@ -60,6 +67,7 @@ class GeminiGraphAgent {
                 }
                 else {
                     console.log(`Attempt ${attempts} failed:`, response.error);
+                    // Check if failure was due to safety filters
                     if (response.safetyRatings?.some(rating => ['MEDIUM', 'HIGH'].includes(rating.probability))) {
                         return {
                             success: false,
@@ -79,6 +87,7 @@ class GeminiGraphAgent {
             catch (error) {
                 console.error(`Attempt ${attempts} error:`, error);
             }
+            // Reduce temperature for retry
             currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
         }
         return {
@@ -93,6 +102,9 @@ class GeminiGraphAgent {
             }
         };
     }
+    /**
+     * Build Gemini-optimized base prompt
+     */
     buildGeminiPrompt() {
         return `You are a specialized graph generator for the Prompt Spaghetti system. Your role is to create valid, functional graphs that follow a specific YAML-like serialization format.
 
@@ -205,6 +217,9 @@ Before outputting, verify:
 
 Generate structured, creative, and functional graphs.`;
     }
+    /**
+     * Build request-specific prompt
+     */
     buildRequestPrompt(request) {
         const complexityDescriptions = {
             simple: '3-8 nodes with straightforward logic flow',
@@ -256,11 +271,16 @@ Create a complete, valid graph that:
 **Generate the complete graph now:**`;
         return prompt;
     }
+    /**
+     * Extract graph content from Gemini response
+     */
     extractGraphFromResponse(response) {
+        // Look for YAML code blocks first
         const yamlBlockMatch = response.match(/```(?:yaml|yml)\n([\s\S]*?)\n```/);
         if (yamlBlockMatch) {
             return yamlBlockMatch[1].trim();
         }
+        // Look for any code blocks
         const codeBlockMatch = response.match(/```\n?([\s\S]*?)\n?```/);
         if (codeBlockMatch) {
             const content = codeBlockMatch[1].trim();
@@ -268,31 +288,51 @@ Create a complete, valid graph that:
                 return content;
             }
         }
+        // Look for version: to ---END--- pattern
         const versionMatch = response.match(/version:\s*[\d.]+[\s\S]*?---END---/);
         if (versionMatch) {
             return versionMatch[0].trim();
         }
+        // Check if response contains expected structure elements
         if (response.includes('version:') && response.includes('---NODES---')) {
+            // Try to extract everything from version to end
             const startMatch = response.match(/version:\s*[\d.]+/);
             if (startMatch) {
                 const startIndex = response.indexOf(startMatch[0]);
                 let content = response.substring(startIndex);
+                // Try to find a natural end point
                 const endIndex = content.indexOf('---END---');
                 if (endIndex !== -1) {
-                    content = content.substring(0, endIndex + 9);
+                    content = content.substring(0, endIndex + 9); // Include ---END---
                 }
                 return content.trim();
             }
         }
         return null;
     }
+    /**
+     * Call Gemini API with error handling
+     */
     async callGemini(prompt, temperature) {
         try {
+            // Mock Gemini API call for now - replace with actual API call
+            // const genAI = new GoogleGenerativeAI(this.config.apiKey);
+            // const model = genAI.getGenerativeModel({ 
+            //   model: this.config.model,
+            //   generationConfig: {
+            //     temperature,
+            //     maxOutputTokens: this.config.maxOutputTokens,
+            //     stopSequences: this.config.stopSequences
+            //   },
+            //   safetySettings: this.config.safetySettings
+            // });
+            // const result = await model.generateContent(this.basePrompt + '\n\n' + prompt);
+            // Mock response for development
             const mockResponse = this.generateGeminiMockResponse(prompt);
             return {
                 success: true,
                 content: mockResponse,
-                tokenCount: mockResponse.length / 4,
+                tokenCount: mockResponse.length / 4, // Rough estimate
                 safetyRatings: [
                     { category: 'HARM_CATEGORY_HARASSMENT', probability: 'NEGLIGIBLE' },
                     { category: 'HARM_CATEGORY_HATE_SPEECH', probability: 'NEGLIGIBLE' },
@@ -308,6 +348,9 @@ Create a complete, valid graph that:
             };
         }
     }
+    /**
+     * Generate mock Gemini response
+     */
     generateGeminiMockResponse(prompt) {
         return `I'll create a structured graph that addresses your requirements effectively.
 
@@ -389,8 +432,10 @@ final_assembly -> output_result
 This graph creates a flexible content generation system that adapts based on content type, topic focus, and complexity level, with conditional personalization and sequential structure.`;
     }
 }
-exports.GeminiGraphAgent = GeminiGraphAgent;
-exports.defaultGeminiConfig = {
+/**
+ * Default configuration for Gemini agent
+ */
+export const defaultGeminiConfig = {
     apiKey: process.env.GOOGLE_API_KEY || '',
     model: 'gemini-1.5-pro',
     temperature: 0.7,
@@ -406,8 +451,10 @@ exports.defaultGeminiConfig = {
     ],
     stopSequences: ['---END---', 'Human:', 'Assistant:']
 };
-async function generateGraphWithGemini(request, config = {}) {
-    const agent = new GeminiGraphAgent({ ...exports.defaultGeminiConfig, ...config });
+/**
+ * Utility function to create and use Gemini agent
+ */
+export async function generateGraphWithGemini(request, config = {}) {
+    const agent = new GeminiGraphAgent({ ...defaultGeminiConfig, ...config });
     return agent.generateGraph(request);
 }
-//# sourceMappingURL=gemini-agent.js.map

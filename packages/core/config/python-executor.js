@@ -1,20 +1,21 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pythonExecutorConfig = exports.PythonExecutorConfigManager = void 0;
-exports.getPythonExecutorConfig = getPythonExecutorConfig;
-exports.updatePythonExecutorConfig = updatePythonExecutorConfig;
-exports.isPythonExecutorConfigured = isPythonExecutorConfigured;
-exports.getClientSafeConfig = getClientSafeConfig;
+/**
+ * Configuration for Python Executor Integration
+ * Epic 8 Story 8.1.4: Configuration management for Python executor
+ */
 const DEFAULT_CONFIG = {
+    // Service connection
     serviceUrl: process.env.PYTHON_EXECUTOR_URL || 'http://localhost:8001',
     apiKey: process.env.PYTHON_EXECUTOR_API_KEY,
-    timeout: 30000,
+    // Request settings
+    timeout: 30000, // 30 seconds
     retryAttempts: 3,
-    retryDelay: 1000,
+    retryDelay: 1000, // 1 second
+    // Resource limits
     defaultMemoryLimit: '128MB',
     defaultTimeout: 30,
     maxMemoryLimit: '1GB',
     maxTimeout: 300,
+    // Security settings
     strictMode: true,
     enableCaching: true,
     allowedModules: [
@@ -22,54 +23,78 @@ const DEFAULT_CONFIG = {
         'collections', 'functools', 'operator', 'copy', 'uuid', 'hashlib',
         're', 'base64'
     ],
+    // Fallback behavior
     fallbackBehavior: 'error',
     defaultOutput: '',
+    // Monitoring
     enableMetrics: process.env.NODE_ENV !== 'production',
     enableTracing: process.env.NODE_ENV !== 'production',
     enableAuditLogs: true,
+    // Development
     enableDebugLogs: process.env.NODE_ENV === 'development',
     enableValidation: true,
 };
-class PythonExecutorConfigManager {
+/**
+ * Configuration manager for Python executor
+ */
+export class PythonExecutorConfigManager {
+    config;
+    listeners = [];
     constructor(initialConfig) {
-        this.listeners = [];
         this.config = {
             ...DEFAULT_CONFIG,
             ...this.loadFromEnvironment(),
             ...initialConfig,
         };
     }
+    /**
+     * Get current configuration
+     */
     get() {
         return { ...this.config };
     }
+    /**
+     * Update configuration
+     */
     update(updates) {
         const oldConfig = { ...this.config };
         this.config = { ...this.config, ...updates };
+        // Validate configuration
         this.validateConfig();
+        // Notify listeners
         this.notifyListeners();
         console.log('Python executor configuration updated:', {
             changed: this.getChangedFields(oldConfig, this.config),
             config: this.config,
         });
     }
+    /**
+     * Reset configuration to defaults
+     */
     reset() {
         this.config = { ...DEFAULT_CONFIG };
         this.notifyListeners();
     }
+    /**
+     * Load configuration from environment variables
+     */
     loadFromEnvironment() {
         const envConfig = {};
+        // Service connection
         if (process.env.PYTHON_EXECUTOR_URL) {
             envConfig.serviceUrl = process.env.PYTHON_EXECUTOR_URL;
         }
         if (process.env.PYTHON_EXECUTOR_API_KEY) {
             envConfig.apiKey = process.env.PYTHON_EXECUTOR_API_KEY;
         }
+        // Request settings
         if (process.env.PYTHON_EXECUTOR_TIMEOUT) {
             envConfig.timeout = parseInt(process.env.PYTHON_EXECUTOR_TIMEOUT, 10);
         }
         if (process.env.PYTHON_EXECUTOR_RETRY_ATTEMPTS) {
             envConfig.retryAttempts = parseInt(process.env.PYTHON_EXECUTOR_RETRY_ATTEMPTS, 10);
         }
+        // Resource limits
         if (process.env.PYTHON_EXECUTOR_DEFAULT_MEMORY_LIMIT) {
             envConfig.defaultMemoryLimit = process.env.PYTHON_EXECUTOR_DEFAULT_MEMORY_LIMIT;
         }
@@ -82,6 +107,7 @@ class PythonExecutorConfigManager {
         if (process.env.PYTHON_EXECUTOR_MAX_TIMEOUT) {
             envConfig.maxTimeout = parseInt(process.env.PYTHON_EXECUTOR_MAX_TIMEOUT, 10);
         }
+        // Security settings
         if (process.env.PYTHON_EXECUTOR_STRICT_MODE) {
             envConfig.strictMode = process.env.PYTHON_EXECUTOR_STRICT_MODE === 'true';
         }
@@ -91,12 +117,14 @@ class PythonExecutorConfigManager {
         if (process.env.PYTHON_EXECUTOR_ALLOWED_MODULES) {
             envConfig.allowedModules = process.env.PYTHON_EXECUTOR_ALLOWED_MODULES.split(',');
         }
+        // Fallback behavior
         if (process.env.PYTHON_EXECUTOR_FALLBACK_BEHAVIOR) {
             envConfig.fallbackBehavior = process.env.PYTHON_EXECUTOR_FALLBACK_BEHAVIOR;
         }
         if (process.env.PYTHON_EXECUTOR_DEFAULT_OUTPUT) {
             envConfig.defaultOutput = process.env.PYTHON_EXECUTOR_DEFAULT_OUTPUT;
         }
+        // Monitoring
         if (process.env.PYTHON_EXECUTOR_ENABLE_METRICS) {
             envConfig.enableMetrics = process.env.PYTHON_EXECUTOR_ENABLE_METRICS === 'true';
         }
@@ -108,8 +136,12 @@ class PythonExecutorConfigManager {
         }
         return envConfig;
     }
+    /**
+     * Validate configuration
+     */
     validateConfig() {
         const { config } = this;
+        // Validate service URL
         if (!config.serviceUrl) {
             throw new Error('Python executor service URL is required');
         }
@@ -119,6 +151,7 @@ class PythonExecutorConfigManager {
         catch {
             throw new Error('Python executor service URL must be a valid URL');
         }
+        // Validate timeouts
         if (config.timeout <= 0) {
             throw new Error('Timeout must be positive');
         }
@@ -131,28 +164,38 @@ class PythonExecutorConfigManager {
         if (config.defaultTimeout > config.maxTimeout) {
             throw new Error('Default timeout cannot exceed max timeout');
         }
+        // Validate retry attempts
         if (config.retryAttempts < 0) {
             throw new Error('Retry attempts cannot be negative');
         }
         if (config.retryAttempts > 10) {
             throw new Error('Retry attempts should not exceed 10');
         }
+        // Validate memory limits
         if (!this.isValidMemoryLimit(config.defaultMemoryLimit)) {
             throw new Error('Default memory limit must be a valid size (e.g., 128MB, 1GB)');
         }
         if (!this.isValidMemoryLimit(config.maxMemoryLimit)) {
             throw new Error('Max memory limit must be a valid size (e.g., 128MB, 1GB)');
         }
+        // Validate allowed modules
         if (!Array.isArray(config.allowedModules)) {
             throw new Error('Allowed modules must be an array');
         }
+        // Validate fallback behavior
         if (!['error', 'skip', 'default'].includes(config.fallbackBehavior)) {
             throw new Error('Fallback behavior must be one of: error, skip, default');
         }
     }
+    /**
+     * Check if memory limit is valid
+     */
     isValidMemoryLimit(limit) {
         return /^\d+(?:B|KB|MB|GB)$/.test(limit);
     }
+    /**
+     * Get changed fields between two configurations
+     */
     getChangedFields(oldConfig, newConfig) {
         const changed = [];
         for (const key in newConfig) {
@@ -162,15 +205,24 @@ class PythonExecutorConfigManager {
         }
         return changed;
     }
+    /**
+     * Add configuration change listener
+     */
     addListener(listener) {
         this.listeners.push(listener);
     }
+    /**
+     * Remove configuration change listener
+     */
     removeListener(listener) {
         const index = this.listeners.indexOf(listener);
         if (index !== -1) {
             this.listeners.splice(index, 1);
         }
     }
+    /**
+     * Notify all listeners of configuration changes
+     */
     notifyListeners() {
         for (const listener of this.listeners) {
             try {
@@ -181,6 +233,9 @@ class PythonExecutorConfigManager {
             }
         }
     }
+    /**
+     * Get configuration for a specific environment
+     */
     getEnvironmentConfig(environment) {
         switch (environment) {
             case 'development':
@@ -189,7 +244,7 @@ class PythonExecutorConfigManager {
                     enableMetrics: true,
                     enableTracing: true,
                     strictMode: false,
-                    timeout: 60000,
+                    timeout: 60000, // Longer timeout for development
                 };
             case 'staging':
                 return {
@@ -211,13 +266,22 @@ class PythonExecutorConfigManager {
                 return {};
         }
     }
+    /**
+     * Apply environment-specific configuration
+     */
     applyEnvironmentConfig(environment) {
         const envConfig = this.getEnvironmentConfig(environment);
         this.update(envConfig);
     }
+    /**
+     * Export configuration as JSON
+     */
     toJSON() {
         return JSON.stringify(this.config, null, 2);
     }
+    /**
+     * Import configuration from JSON
+     */
     fromJSON(json) {
         try {
             const config = JSON.parse(json);
@@ -228,21 +292,34 @@ class PythonExecutorConfigManager {
         }
     }
 }
-exports.PythonExecutorConfigManager = PythonExecutorConfigManager;
-exports.pythonExecutorConfig = new PythonExecutorConfigManager();
-function getPythonExecutorConfig() {
-    return exports.pythonExecutorConfig.get();
+/**
+ * Global configuration manager instance
+ */
+export const pythonExecutorConfig = new PythonExecutorConfigManager();
+/**
+ * Utility function to get current configuration
+ */
+export function getPythonExecutorConfig() {
+    return pythonExecutorConfig.get();
 }
-function updatePythonExecutorConfig(updates) {
-    exports.pythonExecutorConfig.update(updates);
+/**
+ * Utility function to update configuration
+ */
+export function updatePythonExecutorConfig(updates) {
+    pythonExecutorConfig.update(updates);
 }
-function isPythonExecutorConfigured() {
-    const config = exports.pythonExecutorConfig.get();
+/**
+ * Utility function to check if Python executor is configured
+ */
+export function isPythonExecutorConfigured() {
+    const config = pythonExecutorConfig.get();
     return !!(config.serviceUrl && config.serviceUrl !== 'http://localhost:8001');
 }
-function getClientSafeConfig() {
-    const config = exports.pythonExecutorConfig.get();
+/**
+ * Utility function to get safe configuration for client-side
+ */
+export function getClientSafeConfig() {
+    const config = pythonExecutorConfig.get();
     const { apiKey, ...clientSafeConfig } = config;
     return clientSafeConfig;
 }
-//# sourceMappingURL=python-executor.js.map

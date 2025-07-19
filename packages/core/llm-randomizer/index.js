@@ -1,68 +1,42 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LLMRandomizerSystem = void 0;
-__exportStar(require("./serialization"), exports);
-__exportStar(require("./agents"), exports);
-__exportStar(require("./parser"), exports);
-__exportStar(require("./generator"), exports);
-class LLMRandomizerSystem {
+// Epic 12 - LLM Agent Randomizer System
+// Main exports for the complete LLM randomizer system
+// Story 12.1 - Serialization Format Design
+export * from './serialization';
+// Story 12.2 - LLM Agent Script Development  
+export * from './agents';
+// Story 12.3 - Parser Implementation
+export * from './parser';
+// Story 12.4 - Randomizer Generator Implementation
+export * from './generator';
+/**
+ * Complete LLM Randomizer System implementation
+ */
+export class LLMRandomizerSystem {
+    workflow;
     async generateWithLLM(request, provider = 'openai') {
-        const { generateGraph } = await Promise.resolve().then(() => __importStar(require('./agents')));
+        const { generateGraph } = await import('./agents');
         return generateGraph(request, provider);
     }
     async parseFromLLM(llmOutput) {
-        const { parseGraph } = await Promise.resolve().then(() => __importStar(require('./parser')));
+        const { parseGraph } = await import('./parser');
         return parseGraph(llmOutput);
     }
     async validateAndSerialize(graph) {
-        const { serializeGraph } = await Promise.resolve().then(() => __importStar(require('./serialization')));
+        const { serializeGraph } = await import('./serialization');
         return serializeGraph(graph);
     }
     async fullWorkflow(request, provider = 'openai') {
+        // Initialize workflow if needed
         if (!this.workflow) {
-            const { RandomizerWorkflow } = await Promise.resolve().then(() => __importStar(require('./generator')));
+            const { RandomizerWorkflow } = await import('./generator');
             this.workflow = new RandomizerWorkflow();
         }
+        // Convert request to RandomizerParameters if needed
         const parameters = this.normalizeParameters(request, provider);
         return this.workflow.generateGraph(parameters);
     }
     normalizeParameters(request, provider) {
+        // Convert various request formats to RandomizerParameters
         if (typeof request === 'string') {
             return {
                 purpose: request,
@@ -112,5 +86,3 @@ class LLMRandomizerSystem {
         };
     }
 }
-exports.LLMRandomizerSystem = LLMRandomizerSystem;
-//# sourceMappingURL=index.js.map

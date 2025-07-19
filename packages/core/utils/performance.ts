@@ -43,7 +43,7 @@ export async function measureExecution<T>(
       startTime,
       endTime,
       memory: endMemory - startMemory,
-      metadata: { ...metadata, error: error.message }
+      metadata: { ...metadata, error: error instanceof Error ? error.message : String(error) }
     };
     
     throw error;

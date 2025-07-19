@@ -1,5 +1,4 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React from "react";
 export const Palette = ({ nodes, collapsed, onToggle, onDragStart }) => {
     return (_jsxs("aside", { "aria-label": "Node Palette", style: {
             width: collapsed ? 56 : 200,

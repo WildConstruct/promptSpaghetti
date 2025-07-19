@@ -1,7 +1,7 @@
 // Epic 11 Authentication Configuration
 // Security configuration and OWASP compliance settings
 
-import { AuthConfig, SecurityConfig, OAuthProvider, RateLimitRule } from './types';
+import { AuthConfig, SecurityConfig, OAuthProvider, OAuthProviderConfig, RateLimitRule } from './types';
 
 // Default security configuration following OWASP guidelines
 export const DEFAULT_SECURITY_CONFIG: SecurityConfig = {
@@ -67,29 +67,26 @@ export const RATE_LIMIT_RULES: Record<string, RateLimitRule> = {
 };
 
 // OAuth provider configurations
-export const OAUTH_PROVIDERS: Record<string, Partial<OAuthProvider>> = {
+export const OAUTH_PROVIDERS: Record<string, Partial<OAuthProviderConfig>> = {
   google: {
-    name: 'Google',
-    authorizeUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+    authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
     tokenUrl: 'https://oauth2.googleapis.com/token',
     userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
-    scope: ['openid', 'email', 'profile'],
+    scopes: ['openid', 'email', 'profile'],
   },
   
   github: {
-    name: 'GitHub',
-    authorizeUrl: 'https://github.com/login/oauth/authorize',
+    authorizationUrl: 'https://github.com/login/oauth/authorize',
     tokenUrl: 'https://github.com/login/oauth/access_token',
     userInfoUrl: 'https://api.github.com/user',
-    scope: ['user:email'],
+    scopes: ['user:email'],
   },
   
   microsoft: {
-    name: 'Microsoft',
-    authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+    authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
     tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
     userInfoUrl: 'https://graph.microsoft.com/v1.0/me',
-    scope: ['openid', 'email', 'profile'],
+    scopes: ['openid', 'email', 'profile'],
   },
 };
 
@@ -133,7 +130,7 @@ export function buildAuthConfig(): AuthConfig {
       refreshTokenExpiry: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '7'),
     },
     
-    oauthProviders: buildOAuthProviders(),
+    oauth: buildOAuthProviders(),
     
     emailService: process.env.EMAIL_API_KEY ? {
       apiKey: process.env.EMAIL_API_KEY,
@@ -143,40 +140,27 @@ export function buildAuthConfig(): AuthConfig {
   };
 }
 
-function buildOAuthProviders(): Record<string, OAuthProvider> {
-  const providers: Record<string, OAuthProvider> = {};
-  
-  // Google OAuth
-  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-    providers.google = {
+function buildOAuthProviders(): AuthConfig['oauth'] {
+  return {
+    google: {
       ...OAUTH_PROVIDERS.google,
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       redirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:8000/auth/oauth/google/callback',
-    } as OAuthProvider;
-  }
-  
-  // GitHub OAuth
-  if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
-    providers.github = {
+    } as OAuthProviderConfig,
+    github: {
       ...OAUTH_PROVIDERS.github,
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: process.env.GITHUB_CLIENT_ID || '',
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
       redirectUri: process.env.GITHUB_REDIRECT_URI || 'http://localhost:8000/auth/oauth/github/callback',
-    } as OAuthProvider;
-  }
-  
-  // Microsoft OAuth
-  if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
-    providers.microsoft = {
+    } as OAuthProviderConfig,
+    microsoft: {
       ...OAUTH_PROVIDERS.microsoft,
-      clientId: process.env.MICROSOFT_CLIENT_ID,
-      clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
+      clientId: process.env.MICROSOFT_CLIENT_ID || '',
+      clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
       redirectUri: process.env.MICROSOFT_REDIRECT_URI || 'http://localhost:8000/auth/oauth/microsoft/callback',
-    } as OAuthProvider;
-  }
-  
-  return providers;
+    } as OAuthProviderConfig,
+  };
 }
 
 // Security headers configuration

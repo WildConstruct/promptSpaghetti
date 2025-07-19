@@ -1,8 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.useExtensionManagerStore = void 0;
-const zustand_1 = require("zustand");
-const ExtensionCompatibilityChecker_1 = require("../../extensions/ExtensionCompatibilityChecker");
+/**
+ * Extension Manager Store - Epic 8.4 Story 8.4.5
+ * State management for extension manager UI
+ */
+import { create } from 'zustand';
+import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
+// Default extension status
 const createDefaultStatus = (extension) => ({
     enabled: false,
     loaded: false,
@@ -10,6 +12,7 @@ const createDefaultStatus = (extension) => ({
     version: extension.version,
     updateAvailable: false
 });
+// Mock data for development
 const mockInstalledExtensions = [
     {
         manifest_version: '1.0',
@@ -99,7 +102,8 @@ const mockAvailableExtensions = [
         }
     }
 ];
-exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
+export const useExtensionManagerStore = create((set, get) => ({
+    // Initial state
     installedExtensions: [],
     availableExtensions: [],
     extensionStatuses: new Map(),
@@ -107,16 +111,19 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
     isLoading: false,
     error: null,
     selectedExtensionId: null,
+    // Load installed extensions
     loadInstalledExtensions: async () => {
         set({ isLoading: true, error: null });
         try {
-            await new Promise(resolve => setTimeout(resolve, 500));
+            // In a real implementation, this would fetch from the extension registry
+            await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
             const extensions = mockInstalledExtensions;
             const statuses = new Map();
+            // Initialize statuses for installed extensions
             for (const ext of extensions) {
                 statuses.set(ext.id, {
                     ...createDefaultStatus(ext),
-                    enabled: ext.id === 'core-text-utils',
+                    enabled: ext.id === 'core-text-utils', // Enable core utils by default
                     loaded: true
                 });
             }
@@ -133,10 +140,12 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             });
         }
     },
+    // Load available extensions from marketplace
     loadAvailableExtensions: async () => {
         set({ isLoading: true, error: null });
         try {
-            await new Promise(resolve => setTimeout(resolve, 800));
+            // In a real implementation, this would fetch from marketplace API
+            await new Promise(resolve => setTimeout(resolve, 800)); // Simulate API call
             set({
                 availableExtensions: mockAvailableExtensions,
                 isLoading: false
@@ -149,10 +158,12 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             });
         }
     },
+    // Install extension
     installExtension: async (extension) => {
         set({ isLoading: true, error: null });
         try {
-            const compatibilityResult = ExtensionCompatibilityChecker_1.extensionCompatibilityChecker.checkExtensionCompatibility(extension, {
+            // Check compatibility before installation
+            const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(extension, {
                 systemVersion: '1.0.0',
                 platform: 'web',
                 availableExtensions: new Map(),
@@ -161,12 +172,15 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             if (!compatibilityResult.compatible) {
                 throw new Error(`Extension is not compatible: ${compatibilityResult.issues.map(i => i.message).join(', ')}`);
             }
+            // Simulate installation process
             await new Promise(resolve => setTimeout(resolve, 1000));
             const state = get();
             const newInstalledExtensions = [...state.installedExtensions];
+            // Add to installed extensions if not already installed
             if (!newInstalledExtensions.find(ext => ext.id === extension.id)) {
                 newInstalledExtensions.push(extension);
             }
+            // Set initial status
             const newStatuses = new Map(state.extensionStatuses);
             newStatuses.set(extension.id, {
                 ...createDefaultStatus(extension),
@@ -187,9 +201,11 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             throw error;
         }
     },
+    // Uninstall extension
     uninstallExtension: async (extensionId) => {
         set({ isLoading: true, error: null });
         try {
+            // Simulate uninstallation process
             await new Promise(resolve => setTimeout(resolve, 500));
             const state = get();
             const newInstalledExtensions = state.installedExtensions.filter(ext => ext.id !== extensionId);
@@ -213,6 +229,7 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             throw error;
         }
     },
+    // Enable extension
     enableExtension: async (extensionId) => {
         const state = get();
         const status = state.extensionStatuses.get(extensionId);
@@ -220,6 +237,7 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             throw new Error('Extension not found');
         }
         try {
+            // Simulate enabling process
             await new Promise(resolve => setTimeout(resolve, 300));
             const newStatuses = new Map(state.extensionStatuses);
             newStatuses.set(extensionId, {
@@ -242,6 +260,7 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             throw error;
         }
     },
+    // Disable extension
     disableExtension: async (extensionId) => {
         const state = get();
         const status = state.extensionStatuses.get(extensionId);
@@ -249,6 +268,7 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             throw new Error('Extension not found');
         }
         try {
+            // Simulate disabling process
             await new Promise(resolve => setTimeout(resolve, 200));
             const newStatuses = new Map(state.extensionStatuses);
             newStatuses.set(extensionId, {
@@ -264,9 +284,11 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             throw error;
         }
     },
+    // Update extension
     updateExtension: async (extensionId) => {
         set({ isLoading: true, error: null });
         try {
+            // Simulate update process
             await new Promise(resolve => setTimeout(resolve, 1500));
             const state = get();
             const extension = state.installedExtensions.find(ext => ext.id === extensionId);
@@ -274,6 +296,7 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             if (!extension || !status) {
                 throw new Error('Extension not found');
             }
+            // Update version (simulate)
             const newVersion = status.availableVersion || `${parseInt(extension.version.split('.')[0]) + 1}.0.0`;
             const updatedExtension = { ...extension, version: newVersion };
             const newInstalledExtensions = state.installedExtensions.map(ext => ext.id === extensionId ? updatedExtension : ext);
@@ -298,8 +321,10 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             throw error;
         }
     },
+    // Configure extension
     configureExtension: async (extensionId, config) => {
         try {
+            // Simulate configuration save
             await new Promise(resolve => setTimeout(resolve, 300));
             const state = get();
             const newConfigurations = new Map(state.extensionConfigurations);
@@ -311,6 +336,7 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             throw error;
         }
     },
+    // Get extension status
     getExtensionStatus: (extensionId) => {
         const state = get();
         return state.extensionStatuses.get(extensionId) || {
@@ -321,10 +347,13 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
             updateAvailable: false
         };
     },
+    // Check for updates
     checkForUpdates: async () => {
         const state = get();
         const newStatuses = new Map(state.extensionStatuses);
+        // Simulate checking for updates
         for (const [extensionId, status] of state.extensionStatuses) {
+            // Mock: randomly assign updates to some extensions
             if (Math.random() > 0.7) {
                 const currentVersion = status.version.split('.').map(Number);
                 const newPatch = currentVersion[2] + 1;
@@ -338,13 +367,12 @@ exports.useExtensionManagerStore = (0, zustand_1.create)((set, get) => ({
         }
         set({ extensionStatuses: newStatuses });
     },
+    // Clear error
     clearError: () => {
         set({ error: null });
     },
+    // Set selected extension
     setSelectedExtension: (extensionId) => {
         set({ selectedExtensionId: extensionId });
     }
 }));
-
-
-//# sourceMappingURL=ExtensionManagerStore.js.map

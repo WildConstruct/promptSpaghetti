@@ -1,13 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.extensionUpgradeAdvisor = exports.ExtensionUpgradeAdvisor = void 0;
-const ExtensionVersionManager_1 = require("./ExtensionVersionManager");
-const ExtensionCompatibilityChecker_1 = require("./ExtensionCompatibilityChecker");
-class ExtensionUpgradeAdvisor {
+/**
+ * Extension Upgrade Advisor - Epic 8.4 Story 8.4.4
+ * Provides intelligent upgrade recommendations and migration assistance
+ */
+import { SemanticVersion, extensionVersionManager } from './ExtensionVersionManager';
+import { extensionCompatibilityChecker } from './ExtensionCompatibilityChecker';
+// Upgrade Advisor
+export class ExtensionUpgradeAdvisor {
+    static instance;
+    upgradeStrategies = new Map();
+    migrationRules = new Map();
+    breakingChanges = new Map();
     constructor() {
-        this.upgradeStrategies = new Map();
-        this.migrationRules = new Map();
-        this.breakingChanges = new Map();
         this.initializeDefaultStrategies();
     }
     static getInstance() {
@@ -16,10 +19,13 @@ class ExtensionUpgradeAdvisor {
         }
         return ExtensionUpgradeAdvisor.instance;
     }
+    /**
+     * Get upgrade recommendations for an extension
+     */
     getUpgradeRecommendations(currentExtension, availableVersions, context) {
-        const currentVersion = new ExtensionVersionManager_1.SemanticVersion(currentExtension.version);
+        const currentVersion = new SemanticVersion(currentExtension.version);
         const availableSemanticVersions = availableVersions
-            .map(v => new ExtensionVersionManager_1.SemanticVersion(v))
+            .map(v => new SemanticVersion(v))
             .filter(v => v.compareTo(currentVersion) > 0)
             .sort((a, b) => a.compareTo(b));
         if (availableSemanticVersions.length === 0) {
@@ -32,6 +38,7 @@ class ExtensionUpgradeAdvisor {
         }
         const recommendations = [];
         const strategy = this.determineUpgradeStrategy(currentExtension, availableSemanticVersions, context);
+        // Generate recommendations based on strategy
         switch (strategy) {
             case 'conservative':
                 recommendations.push(...this.getConservativeRecommendations(currentVersion, availableSemanticVersions, context));
@@ -53,8 +60,11 @@ class ExtensionUpgradeAdvisor {
             strategy
         };
     }
+    /**
+     * Analyze upgrade path for specific target version
+     */
     analyzeUpgradePath(currentExtension, targetVersion, availableVersions, context) {
-        const upgradePath = ExtensionVersionManager_1.extensionVersionManager.getUpgradePath(currentExtension.version, targetVersion, availableVersions);
+        const upgradePath = extensionVersionManager.getUpgradePath(currentExtension.version, targetVersion, availableVersions);
         if (!upgradePath.possible) {
             return {
                 feasible: false,
@@ -78,6 +88,9 @@ class ExtensionUpgradeAdvisor {
             timeline: this.generateUpgradeTimeline(upgradePath, migrationTasks)
         };
     }
+    /**
+     * Generate migration plan for upgrade
+     */
     generateMigrationPlan(currentExtension, targetVersion, context) {
         const analysis = this.analyzeUpgradePath(currentExtension, targetVersion, [targetVersion], context);
         if (!analysis.feasible) {
@@ -100,12 +113,15 @@ class ExtensionUpgradeAdvisor {
             prerequisites: this.identifyPrerequisites(currentExtension, targetVersion, context)
         };
     }
+    /**
+     * Check for breaking changes between versions
+     */
     checkBreakingChanges(extensionId, fromVersion, toVersion) {
-        const fromVer = new ExtensionVersionManager_1.SemanticVersion(fromVersion);
-        const toVer = new ExtensionVersionManager_1.SemanticVersion(toVersion);
+        const fromVer = new SemanticVersion(fromVersion);
+        const toVer = new SemanticVersion(toVersion);
         const changes = this.breakingChanges.get(extensionId) || [];
         const applicableChanges = changes.filter(change => {
-            const changeVer = new ExtensionVersionManager_1.SemanticVersion(change.introducedIn);
+            const changeVer = new SemanticVersion(change.introducedIn);
             return changeVer.compareTo(fromVer) > 0 && changeVer.compareTo(toVer) <= 0;
         });
         return {
@@ -116,8 +132,11 @@ class ExtensionUpgradeAdvisor {
             automatedMigration: applicableChanges.every(c => c.automatedMigration)
         };
     }
+    /**
+     * Validate upgrade compatibility
+     */
     validateUpgradeCompatibility(currentExtension, targetExtension, context) {
-        const compatibilityResult = ExtensionCompatibilityChecker_1.extensionCompatibilityChecker.checkExtensionCompatibility(targetExtension, {
+        const compatibilityResult = extensionCompatibilityChecker.checkExtensionCompatibility(targetExtension, {
             systemVersion: context.systemVersion,
             platform: context.platform,
             availableExtensions: context.availableExtensions,
@@ -135,11 +154,15 @@ class ExtensionUpgradeAdvisor {
             dataBackupRequired: this.requiresDataBackup(currentExtension, targetExtension)
         };
     }
+    /**
+     * Determine upgrade strategy based on context
+     */
     determineUpgradeStrategy(extension, availableVersions, context) {
         const strategy = this.upgradeStrategies.get(extension.id);
         if (strategy) {
             return strategy.type;
         }
+        // Default strategy based on context
         if (context.securityPriority) {
             return 'security';
         }
@@ -151,8 +174,12 @@ class ExtensionUpgradeAdvisor {
         }
         return 'moderate';
     }
+    /**
+     * Get conservative upgrade recommendations
+     */
     getConservativeRecommendations(currentVersion, availableVersions, context) {
         const recommendations = [];
+        // Latest patch version
         const latestPatch = availableVersions
             .filter(v => v.major === currentVersion.major && v.minor === currentVersion.minor)
             .pop();
@@ -166,6 +193,7 @@ class ExtensionUpgradeAdvisor {
                 effort: 'minimal'
             });
         }
+        // Latest minor version (if stable)
         const latestMinor = availableVersions
             .filter(v => v.major === currentVersion.major && v.isStable())
             .pop();
@@ -181,9 +209,14 @@ class ExtensionUpgradeAdvisor {
         }
         return recommendations;
     }
+    /**
+     * Get moderate upgrade recommendations
+     */
     getModerateRecommendations(currentVersion, availableVersions, context) {
         const recommendations = [];
+        // Include conservative recommendations
         recommendations.push(...this.getConservativeRecommendations(currentVersion, availableVersions, context));
+        // Latest stable version
         const latestStable = availableVersions
             .filter(v => v.isStable())
             .pop();
@@ -199,9 +232,14 @@ class ExtensionUpgradeAdvisor {
         }
         return recommendations;
     }
+    /**
+     * Get aggressive upgrade recommendations
+     */
     getAggressiveRecommendations(currentVersion, availableVersions, context) {
         const recommendations = [];
+        // Include moderate recommendations
         recommendations.push(...this.getModerateRecommendations(currentVersion, availableVersions, context));
+        // Latest version (including prereleases)
         const latestVersion = availableVersions[availableVersions.length - 1];
         if (latestVersion && latestVersion.isPrerelease()) {
             recommendations.push({
@@ -215,9 +253,14 @@ class ExtensionUpgradeAdvisor {
         }
         return recommendations;
     }
+    /**
+     * Get security-focused upgrade recommendations
+     */
     getSecurityRecommendations(currentVersion, availableVersions, context) {
         const recommendations = [];
+        // Filter versions with security fixes
         const securityVersions = availableVersions.filter(v => {
+            // In a real implementation, this would check release notes or security advisories
             return v.compareTo(currentVersion) > 0;
         });
         for (const version of securityVersions) {
@@ -234,8 +277,12 @@ class ExtensionUpgradeAdvisor {
         }
         return recommendations;
     }
+    /**
+     * Generate migration tasks
+     */
     generateMigrationTasks(currentExtension, targetVersion, upgradePath) {
         const tasks = [];
+        // Standard migration tasks
         tasks.push({
             id: 'backup',
             title: 'Backup current extension',
@@ -254,6 +301,7 @@ class ExtensionUpgradeAdvisor {
             automated: true,
             estimatedDuration: '2 minutes'
         });
+        // Add version-specific migration tasks
         const rules = this.migrationRules.get(currentExtension.id) || [];
         for (const rule of rules) {
             if (rule.appliesTo(currentExtension.version, targetVersion)) {
@@ -262,8 +310,12 @@ class ExtensionUpgradeAdvisor {
         }
         return tasks;
     }
+    /**
+     * Assess upgrade risks
+     */
     assessUpgradeRisks(currentExtension, targetVersion, upgradePath, context) {
         const risks = [];
+        // Breaking changes risk
         const breakingChanges = this.checkBreakingChanges(currentExtension.id, currentExtension.version, targetVersion);
         if (breakingChanges.hasBreakingChanges) {
             risks.push({
@@ -274,6 +326,7 @@ class ExtensionUpgradeAdvisor {
                 probability: 'high'
             });
         }
+        // Dependency conflicts risk
         risks.push({
             type: 'dependency-conflicts',
             severity: 'medium',
@@ -281,6 +334,7 @@ class ExtensionUpgradeAdvisor {
             mitigation: 'Validate all dependencies before upgrade',
             probability: 'medium'
         });
+        // Data loss risk
         if (this.requiresDataBackup(currentExtension, { version: targetVersion })) {
             risks.push({
                 type: 'data-loss',
@@ -292,10 +346,14 @@ class ExtensionUpgradeAdvisor {
         }
         return risks;
     }
+    /**
+     * Identify upgrade benefits
+     */
     identifyUpgradeBenefits(currentExtension, targetVersion, context) {
         const benefits = [];
-        const currentVer = new ExtensionVersionManager_1.SemanticVersion(currentExtension.version);
-        const targetVer = new ExtensionVersionManager_1.SemanticVersion(targetVersion);
+        const currentVer = new SemanticVersion(currentExtension.version);
+        const targetVer = new SemanticVersion(targetVersion);
+        // Version-based benefits
         if (targetVer.major > currentVer.major) {
             benefits.push({
                 type: 'features',
@@ -317,6 +375,7 @@ class ExtensionUpgradeAdvisor {
                 impact: 'low'
             });
         }
+        // Always include security benefits
         benefits.push({
             type: 'security',
             description: 'Latest security updates and fixes',
@@ -324,6 +383,9 @@ class ExtensionUpgradeAdvisor {
         });
         return benefits;
     }
+    /**
+     * Initialize default upgrade strategies
+     */
     initializeDefaultStrategies() {
         this.upgradeStrategies.set('conservative', {
             type: 'conservative',
@@ -350,6 +412,9 @@ class ExtensionUpgradeAdvisor {
             requiresManualApproval: true
         });
     }
+    /**
+     * Helper methods
+     */
     calculateImpactLevel(changes) {
         if (changes.length === 0)
             return 'low';
@@ -362,18 +427,22 @@ class ExtensionUpgradeAdvisor {
     }
     checkDependencyConflicts(currentExtension, targetExtension, context) {
         const conflicts = [];
+        // Implementation would check for actual conflicts
         return conflicts;
     }
     analyzePermissionChanges(currentExtension, targetExtension) {
         const changes = [];
+        // Implementation would analyze permission differences
         return changes;
     }
     requiresRestart(currentExtension, targetExtension) {
+        // Check if upgrade requires system restart
         return currentExtension.extension_type !== targetExtension.extension_type;
     }
     requiresDataBackup(currentExtension, targetExtension) {
-        const currentVer = new ExtensionVersionManager_1.SemanticVersion(currentExtension.version);
-        const targetVer = new ExtensionVersionManager_1.SemanticVersion(targetExtension.version);
+        // Check if upgrade might affect data
+        const currentVer = new SemanticVersion(currentExtension.version);
+        const targetVer = new SemanticVersion(targetExtension.version);
         return targetVer.major > currentVer.major;
     }
     estimateUpgradeEffort(tasks, risks) {
@@ -462,6 +531,5 @@ class ExtensionUpgradeAdvisor {
         return prerequisites;
     }
 }
-exports.ExtensionUpgradeAdvisor = ExtensionUpgradeAdvisor;
-exports.extensionUpgradeAdvisor = ExtensionUpgradeAdvisor.getInstance();
-//# sourceMappingURL=ExtensionUpgradeAdvisor.js.map
+// Export singleton
+export const extensionUpgradeAdvisor = ExtensionUpgradeAdvisor.getInstance();

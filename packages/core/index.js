@@ -33,5 +33,14 @@ export { GraphCRDTAdapter, createCollaborativeGraph } from './collaboration/Grap
 export { useCollaborativeGraphStore, useCollaborationEnabled, useConnectedUsers, useConnectionStatus, useLocalPresence, useCollaborativeGraph, useCollaborativeActions } from './collaboration/collaborativeGraphStore';
 export { useCollaborativeReactFlow, useNodeCollaborators, useCollaborationStatus } from './collaboration/useCollaborativeReactFlow';
 export { CollaborativePresence, CollaborationStatus, UserAvatars } from './collaboration/CollaborativePresence';
-// Epic 13 - Analytics System exports
+// Epic 9.4 - Workflow Orchestration exports
+export { WorkflowStateManager } from './components/WorkflowStateManager';
+export { WorkflowStateIndicator, WorkflowStateBadge } from './components/WorkflowStateIndicator';
+export { WorkflowTransitionControls } from './components/WorkflowTransitionControls';
+export { WorkflowHistoryVisualization } from './components/WorkflowHistoryVisualization';
+export { AuditTrailViewer } from './components/AuditTrailViewer';
+export { ApiIntegrationManager } from './components/ApiIntegrationManager';
+export { ScheduledExecutionManager } from './components/ScheduledExecutionManager';
+export { useWorkflowStore } from './stores/workflowStore';
+// Epic 12 - LLM Agent Randomizer System exports
 export { RandomizerPanel, GraphPreview, RandomizerWorkflow, RandomizerSystem, LLMRandomizerSystem } from './llm-randomizer';

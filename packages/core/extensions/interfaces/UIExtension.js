@@ -1,7 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UIExtensionHelpers = exports.MenuTarget = exports.UIComponentCategory = void 0;
-var UIComponentCategory;
+/**
+ * UI Extension Interface - Epic 8.4 Story 8.4.2
+ * Defines interfaces for extending the user interface system
+ */
+// UI Component Categories
+export var UIComponentCategory;
 (function (UIComponentCategory) {
     UIComponentCategory["EDITOR"] = "editor";
     UIComponentCategory["PANEL"] = "panel";
@@ -11,8 +13,9 @@ var UIComponentCategory;
     UIComponentCategory["WIDGET"] = "widget";
     UIComponentCategory["OVERLAY"] = "overlay";
     UIComponentCategory["CUSTOM"] = "custom";
-})(UIComponentCategory || (exports.UIComponentCategory = UIComponentCategory = {}));
-var MenuTarget;
+})(UIComponentCategory || (UIComponentCategory = {}));
+// Menu Target
+export var MenuTarget;
 (function (MenuTarget) {
     MenuTarget["MAIN_MENU"] = "main";
     MenuTarget["CONTEXT_MENU"] = "context";
@@ -21,8 +24,9 @@ var MenuTarget;
     MenuTarget["INSPECTOR"] = "inspector";
     MenuTarget["GRAPH"] = "graph";
     MenuTarget["CUSTOM"] = "custom";
-})(MenuTarget || (exports.MenuTarget = MenuTarget = {}));
-var UIExtensionHelpers;
+})(MenuTarget || (MenuTarget = {}));
+// UI Extension Helper Functions
+export var UIExtensionHelpers;
 (function (UIExtensionHelpers) {
     function createTheme(partial) {
         return {
@@ -163,12 +167,14 @@ var UIExtensionHelpers;
     function validateUIComponent(definition) {
         const errors = [];
         const warnings = [];
+        // Basic validation
         if (!definition.id)
             errors.push('Component ID is required');
         if (!definition.name)
             errors.push('Component name is required');
         if (!definition.component)
             errors.push('Component class is required');
+        // React component validation
         if (definition.component && typeof definition.component !== 'function') {
             errors.push('Component must be a valid React component');
         }
@@ -179,5 +185,4 @@ var UIExtensionHelpers;
         };
     }
     UIExtensionHelpers.validateUIComponent = validateUIComponent;
-})(UIExtensionHelpers || (exports.UIExtensionHelpers = UIExtensionHelpers = {}));
-//# sourceMappingURL=UIExtension.js.map
+})(UIExtensionHelpers || (UIExtensionHelpers = {}));

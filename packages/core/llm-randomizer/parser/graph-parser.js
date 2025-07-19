@@ -1,12 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GraphParser = void 0;
-exports.parseGraph = parseGraph;
-exports.validateGraph = validateGraph;
-const graph_lexer_1 = require("./lexer/graph-lexer");
-const ast_builder_1 = require("./ast/ast-builder");
-const semantic_analyzer_1 = require("./semantic/semantic-analyzer");
-class GraphParser {
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.3 - Parser Implementation
+// Main parser interface that coordinates lexer, AST builder, and semantic analyzer
+import { GraphLexer } from './lexer/graph-lexer';
+import { ASTBuilder } from './ast/ast-builder';
+import { SemanticAnalyzer } from './semantic/semantic-analyzer';
+export class GraphParser {
+    options;
     constructor(options = {}) {
         this.options = {
             tolerateErrors: false,
@@ -17,6 +16,9 @@ class GraphParser {
             ...options
         };
     }
+    /**
+     * Parse serialized graph content into Graph object
+     */
     async parse(content) {
         const startTime = Date.now();
         const result = {
@@ -31,14 +33,16 @@ class GraphParser {
             }
         };
         try {
-            const lexer = new graph_lexer_1.GraphLexer(content);
+            // Phase 1: Lexical Analysis
+            const lexer = new GraphLexer(content);
             const { tokens, errors: lexerErrors } = lexer.tokenize();
             result.metadata.tokenCount = tokens.length;
             this.addLexerErrors(result, lexerErrors);
             if (this.shouldStopOnErrors(result)) {
                 return this.finalizeResult(result, startTime);
             }
-            const astBuilder = new ast_builder_1.ASTBuilder(tokens);
+            // Phase 2: AST Construction
+            const astBuilder = new ASTBuilder(tokens);
             const { ast, errors: parseErrors } = astBuilder.build();
             this.addParseErrors(result, parseErrors);
             if (!ast || this.shouldStopOnErrors(result)) {
@@ -46,7 +50,8 @@ class GraphParser {
             }
             result.metadata.nodeCount = ast.nodes.length;
             result.metadata.edgeCount = ast.edges.length;
-            const semanticAnalyzer = new semantic_analyzer_1.SemanticAnalyzer();
+            // Phase 3: Semantic Analysis
+            const semanticAnalyzer = new SemanticAnalyzer();
             const { graph, errors: semanticErrors, warnings } = semanticAnalyzer.analyze(ast);
             this.addSemanticErrors(result, semanticErrors);
             this.addSemanticWarnings(result, warnings);
@@ -66,10 +71,16 @@ class GraphParser {
             return this.finalizeResult(result, startTime);
         }
     }
+    /**
+     * Parse multiple graphs in batch
+     */
     async parseBatch(contents) {
         const results = await Promise.all(contents.map(content => this.parse(content)));
         return results;
     }
+    /**
+     * Validate content without full parsing (faster for validation-only use cases)
+     */
     async validate(content) {
         const result = await this.parse(content);
         return {
@@ -78,25 +89,31 @@ class GraphParser {
             warnings: result.warnings
         };
     }
+    /**
+     * Parse with performance profiling
+     */
     async parseWithProfiling(content) {
         const startTime = Date.now();
         let lexerTime = 0;
         let astTime = 0;
         let semanticTime = 0;
+        // Lexical Analysis
         const lexerStart = Date.now();
-        const lexer = new graph_lexer_1.GraphLexer(content);
+        const lexer = new GraphLexer(content);
         const { tokens, errors: lexerErrors } = lexer.tokenize();
         lexerTime = Date.now() - lexerStart;
+        // AST Construction
         const astStart = Date.now();
-        const astBuilder = new ast_builder_1.ASTBuilder(tokens);
+        const astBuilder = new ASTBuilder(tokens);
         const { ast, errors: parseErrors } = astBuilder.build();
         astTime = Date.now() - astStart;
+        // Semantic Analysis
         const semanticStart = Date.now();
         let graph;
         let semanticErrors = [];
         let warnings = [];
         if (ast) {
-            const semanticAnalyzer = new semantic_analyzer_1.SemanticAnalyzer();
+            const semanticAnalyzer = new SemanticAnalyzer();
             const result = semanticAnalyzer.analyze(ast);
             graph = result.graph || undefined;
             semanticErrors = result.errors;
@@ -104,6 +121,7 @@ class GraphParser {
         }
         const semanticTime = Date.now() - semanticStart;
         const totalTime = Date.now() - startTime;
+        // Build result
         const result = {
             success: !!graph,
             graph,
@@ -130,6 +148,9 @@ class GraphParser {
             }
         };
     }
+    /**
+     * Convert lexer errors to parser errors
+     */
     addLexerErrors(result, errors) {
         for (const error of errors) {
             result.errors.push({
@@ -143,6 +164,9 @@ class GraphParser {
             });
         }
     }
+    /**
+     * Convert parse errors to parser errors
+     */
     addParseErrors(result, errors) {
         for (const error of errors) {
             result.errors.push({
@@ -156,6 +180,9 @@ class GraphParser {
             });
         }
     }
+    /**
+     * Convert semantic errors to parser errors
+     */
     addSemanticErrors(result, errors) {
         for (const error of errors) {
             result.errors.push({
@@ -168,6 +195,9 @@ class GraphParser {
             });
         }
     }
+    /**
+     * Convert semantic warnings to parser warnings
+     */
     addSemanticWarnings(result, warnings) {
         for (const warning of warnings) {
             result.warnings.push({
@@ -180,20 +210,32 @@ class GraphParser {
             });
         }
     }
+    /**
+     * Check if parsing should stop due to errors
+     */
     shouldStopOnErrors(result) {
         if (this.options.tolerateErrors) {
             return result.errors.length >= (this.options.maxErrors || 10);
         }
         return result.errors.filter(e => e.severity === 'error').length > 0;
     }
+    /**
+     * Check if result has blocking errors
+     */
     hasBlockingErrors(result) {
         return result.errors.some(error => error.severity === 'error' &&
             error.code !== 'UNKNOWN_NODE_TYPE');
     }
+    /**
+     * Finalize result with metadata
+     */
     finalizeResult(result, startTime) {
         result.metadata.parseTime = Date.now() - startTime;
         return result;
     }
+    /**
+     * Generate detailed error report
+     */
     generateErrorReport(result) {
         let report = `# Parser Error Report\n\n`;
         if (result.success) {
@@ -234,14 +276,18 @@ class GraphParser {
         return report;
     }
 }
-exports.GraphParser = GraphParser;
-async function parseGraph(content, options) {
+/**
+ * Convenience function for simple parsing
+ */
+export async function parseGraph(content, options) {
     const parser = new GraphParser(options);
     return parser.parse(content);
 }
-async function validateGraph(content) {
+/**
+ * Convenience function for validation only
+ */
+export async function validateGraph(content) {
     const parser = new GraphParser({ tolerateErrors: true });
     const result = await parser.validate(content);
     return result.isValid;
 }
-//# sourceMappingURL=graph-parser.js.map

@@ -28,7 +28,7 @@ describe('CRDT Types', () => {
       
       expect(operation.id).toBe('op-123');
       expect(operation.type).toBe('test');
-      expect(operation.timestamp.counter).toBe(1);
+      expect((operation.timestamp as LogicalTimestamp).counter).toBe(1);
     });
   });
 });

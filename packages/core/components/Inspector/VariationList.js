@@ -1,5 +1,5 @@
 import { jsxs as _jsxs, jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useGraphStore } from "../../graphStore";
 export const VariationList = ({ nodeId, variations, onAdd, onRemove, onUpdate, onReorder, maxVariations = 50, placeholder = "Add a variation...", allowQuickEntry = true, }) => {
     const [newVariation, setNewVariation] = useState("");
