@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useCorrectionsStore, DEFAULT_CORRECTION_RULES } from '../correctionsStore';
 export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
     const { rules, addRule, updateRule, deleteRule, toggleRule, clearAllRules, applyCorrections, } = useCorrectionsStore();

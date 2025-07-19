@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(true);

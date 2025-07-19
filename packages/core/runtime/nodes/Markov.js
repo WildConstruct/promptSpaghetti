@@ -1,19 +1,20 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MarkovPresets = exports.MarkovNode = exports.StandardTransitionMatrix = void 0;
-exports.createMarkovNode = createMarkovNode;
-exports.createTransitionMatrix = createTransitionMatrix;
-const advanced_1 = require("../advanced");
-const io_system_1 = require("../io-system");
-const seedrandom_1 = __importDefault(require("seedrandom"));
-class StandardTransitionMatrix {
+// packages/core/runtime/nodes/Markov.ts
+// Advanced Markov node with state transition matrices
+import { AdvancedRuntimeNode } from '../advanced';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+import seedrandom from 'seedrandom';
+/**
+ * Standard transition matrix implementation
+ */
+export class StandardTransitionMatrix {
+    states;
+    transitions;
+    initialState;
     constructor(states, transitions, initialState) {
-        this.states = [...states];
-        this.transitions = JSON.parse(JSON.stringify(transitions));
+        this.states = [...states]; // Clone to avoid mutations
+        this.transitions = JSON.parse(JSON.stringify(transitions)); // Deep clone
         this.initialState = initialState;
+        // Validate on construction
         const validation = this.validate();
         if (!validation.valid) {
             throw new Error(`Invalid transition matrix: ${validation.errors.join(', ')}`);
@@ -31,12 +32,16 @@ class StandardTransitionMatrix {
         }
         const stateTransitions = this.transitions[currentState];
         if (!stateTransitions || Object.keys(stateTransitions).length === 0) {
+            // No transitions defined, stay in current state
             return currentState;
         }
+        // Calculate total probability
         const totalProbability = Object.values(stateTransitions).reduce((sum, prob) => sum + prob, 0);
         if (totalProbability <= 0) {
+            // All probabilities are zero or negative, stay in current state
             return currentState;
         }
+        // Weighted random selection
         let randomValue = rng() * totalProbability;
         for (const [nextState, probability] of Object.entries(stateTransitions)) {
             randomValue -= probability;
@@ -44,25 +49,30 @@ class StandardTransitionMatrix {
                 return nextState;
             }
         }
+        // Fallback to current state
         return currentState;
     }
     validate() {
         const errors = [];
         const warnings = [];
+        // Validate states
         if (this.states.length === 0) {
             errors.push('No states defined in transition matrix');
             return { valid: false, errors, warnings };
         }
+        // Check for duplicate states
         const uniqueStates = new Set(this.states);
         if (uniqueStates.size !== this.states.length) {
             errors.push('Duplicate states found in state list');
         }
+        // Validate transitions
         for (const state of this.states) {
             const stateTransitions = this.transitions[state];
             if (!stateTransitions) {
                 warnings.push(`No transitions defined for state: ${state}`);
                 continue;
             }
+            // Check transition targets exist
             for (const [targetState, probability] of Object.entries(stateTransitions)) {
                 if (!this.states.includes(targetState)) {
                     errors.push(`Transition from '${state}' to invalid state '${targetState}'`);
@@ -71,6 +81,7 @@ class StandardTransitionMatrix {
                     errors.push(`Invalid probability ${probability} for transition '${state}' -> '${targetState}'`);
                 }
             }
+            // Check probability sum
             const totalProbability = Object.values(stateTransitions).reduce((sum, prob) => sum + prob, 0);
             if (totalProbability === 0) {
                 warnings.push(`State '${state}' has no valid transitions (total probability = 0)`);
@@ -79,6 +90,7 @@ class StandardTransitionMatrix {
                 warnings.push(`State '${state}' transition probabilities sum to ${totalProbability.toFixed(3)}, not 1.0`);
             }
         }
+        // Validate initial state
         if (this.initialState && !this.states.includes(this.initialState)) {
             errors.push(`Initial state '${this.initialState}' is not in states list`);
         }
@@ -89,13 +101,20 @@ class StandardTransitionMatrix {
         };
     }
 }
-exports.StandardTransitionMatrix = StandardTransitionMatrix;
-class MarkovNode extends advanced_1.AdvancedRuntimeNode {
+/**
+ * Advanced Markov node with state transition matrices
+ * Supports probabilistic state transitions with full determinism
+ */
+export class MarkovNode extends AdvancedRuntimeNode {
+    ioHandler;
+    transitionMatrix;
+    markovConfig;
     constructor(id, transitionMatrix, config = {}) {
+        // Configure as deterministic, non-cacheable (stateful), stateful
         const nodeConfig = {
             deterministic: true,
-            cacheable: false,
-            stateful: true,
+            cacheable: false, // Don't cache since output depends on state
+            stateful: true, // Maintains state between executions
             performanceHints: {
                 expectedExecutionTime: 'fast',
                 memoryUsage: 'low'
@@ -110,7 +129,8 @@ class MarkovNode extends advanced_1.AdvancedRuntimeNode {
             detectLoops: false,
             ...config
         };
-        const ioSpec = new io_system_1.IOSpecBuilder()
+        // Set up I/O specification
+        const ioSpec = new IOSpecBuilder()
             .addInput({
             id: 'states',
             label: 'States',
@@ -137,13 +157,20 @@ class MarkovNode extends advanced_1.AdvancedRuntimeNode {
         })
             .addTextOutput('result', 'Current State')
             .build();
-        this.ioHandler = new io_system_1.AdvancedIOHandler(ioSpec);
+        this.ioHandler = new AdvancedIOHandler(ioSpec);
     }
+    /**
+     * Execute Markov chain transition
+     */
     run(ctx) {
+        // Record this node's execution
         ctx.executionMeta.nodeExecutionOrder.push(this.id);
+        // Use performance tracking for Markov processing
         return this.measureExecution(ctx, 'markov-transition', () => {
+            // Get current state or initialize
             let currentState = this.getState(ctx);
             if (!currentState) {
+                // Initialize new Markov chain
                 const initialState = this.transitionMatrix.getInitialState();
                 currentState = {
                     currentState: initialState,
@@ -154,11 +181,16 @@ class MarkovNode extends advanced_1.AdvancedRuntimeNode {
                 this.setState(ctx, currentState);
                 return initialState;
             }
+            // Check termination conditions
             if (this.shouldTerminate(currentState)) {
+                // Don't transition, return current state
                 return currentState.currentState;
             }
-            const rng = (0, seedrandom_1.default)(`${ctx.seed}-${this.id}-${currentState.transitionCount}`);
+            // Create seeded RNG for deterministic transitions
+            const rng = seedrandom(`${ctx.seed}-${this.id}-${currentState.transitionCount}`);
+            // Perform transition
             const nextState = this.transitionMatrix.transition(currentState.currentState, rng);
+            // Update state
             const newState = {
                 currentState: nextState,
                 history: [...currentState.history, currentState.currentState],
@@ -169,12 +201,17 @@ class MarkovNode extends advanced_1.AdvancedRuntimeNode {
             return nextState;
         });
     }
+    /**
+     * Comprehensive validation of Markov configuration
+     */
     validate() {
         const errors = [];
         const warnings = [];
+        // Validate transition matrix
         const matrixValidation = this.transitionMatrix.validate();
         errors.push(...matrixValidation.errors);
         warnings.push(...matrixValidation.warnings);
+        // Validate configuration
         if (this.markovConfig.maxTransitions !== undefined && this.markovConfig.maxTransitions <= 0) {
             errors.push('maxTransitions must be positive');
         }
@@ -191,6 +228,9 @@ class MarkovNode extends advanced_1.AdvancedRuntimeNode {
             warnings
         };
     }
+    /**
+     * Serialize node data for persistence
+     */
     serialize() {
         return {
             id: this.id,
@@ -208,9 +248,15 @@ class MarkovNode extends advanced_1.AdvancedRuntimeNode {
             }
         };
     }
+    /**
+     * Get current Markov state for debugging/inspection
+     */
     getCurrentMarkovState(ctx) {
         return this.getState(ctx) || null;
     }
+    /**
+     * Reset Markov chain state (for testing or manual control)
+     */
     resetMarkovState(ctx) {
         const initialState = this.transitionMatrix.getInitialState();
         this.setState(ctx, {
@@ -220,38 +266,60 @@ class MarkovNode extends advanced_1.AdvancedRuntimeNode {
             metadata: {}
         });
     }
+    /**
+     * Get transition history
+     */
     getTransitionHistory(ctx) {
         const state = this.getState(ctx);
         return state ? [...state.history, state.currentState] : [];
     }
+    /**
+     * Check if chain should terminate
+     */
     shouldTerminate(state) {
+        // Check max transitions
         if (this.markovConfig.maxTransitions && state.transitionCount >= this.markovConfig.maxTransitions) {
             return true;
         }
+        // Check termination states
         if (this.markovConfig.terminationStates && this.markovConfig.terminationStates.includes(state.currentState)) {
             return true;
         }
+        // Check for loops if enabled
         if (this.markovConfig.detectLoops && this.detectLoop(state)) {
             return true;
         }
         return false;
     }
+    /**
+     * Simple loop detection
+     */
     detectLoop(state) {
-        const recentHistory = state.history.slice(-10);
+        const recentHistory = state.history.slice(-10); // Check last 10 states
         const currentState = state.currentState;
+        // Look for repeated patterns
         const occurrences = recentHistory.filter(s => s === currentState).length;
-        return occurrences >= 3;
+        return occurrences >= 3; // If current state appeared 3+ times recently
     }
 }
-exports.MarkovNode = MarkovNode;
-function createMarkovNode(id, states, transitions, initialState, config = {}) {
+/**
+ * Factory function for creating Markov nodes
+ */
+export function createMarkovNode(id, states, transitions, initialState, config = {}) {
     const matrix = new StandardTransitionMatrix(states, transitions, initialState);
     return new MarkovNode(id, matrix, config);
 }
-function createTransitionMatrix(config) {
+/**
+ * Helper function to create transition matrix from simple configuration
+ */
+export function createTransitionMatrix(config) {
     return new StandardTransitionMatrix(config.states, config.transitions, config.initialState);
 }
-exports.MarkovPresets = {
+/**
+ * Common Markov chain presets
+ */
+export const MarkovPresets = {
+    /** Simple two-state toggle */
     toggle: (state1, state2) => createTransitionMatrix({
         states: [state1, state2],
         transitions: {
@@ -259,6 +327,7 @@ exports.MarkovPresets = {
             [state2]: { [state1]: 1.0 }
         }
     }),
+    /** Random walk with equal probabilities */
     randomWalk: (states) => {
         const prob = 1.0 / states.length;
         const transitions = {};
@@ -270,29 +339,36 @@ exports.MarkovPresets = {
         }
         return createTransitionMatrix({ states, transitions });
     },
+    /** Linear progression through states */
     linear: (states, cyclic = false) => {
         const transitions = {};
         for (let i = 0; i < states.length; i++) {
             const currentState = states[i];
             const nextIndex = i + 1;
             if (nextIndex < states.length) {
+                // Move to next state
                 transitions[currentState] = { [states[nextIndex]]: 1.0 };
             }
             else if (cyclic) {
+                // Cycle back to first state
                 transitions[currentState] = { [states[0]]: 1.0 };
             }
             else {
+                // Stay in final state
                 transitions[currentState] = { [currentState]: 1.0 };
             }
         }
         return createTransitionMatrix({ states, transitions });
     },
+    /** Absorbing states (traps that never transition out) */
     absorbing: (states, absorbingStates) => {
         const transitions = {};
         const normalStates = states.filter(s => !absorbingStates.includes(s));
+        // Absorbing states stay put
         for (const state of absorbingStates) {
             transitions[state] = { [state]: 1.0 };
         }
+        // Normal states transition to other states (including absorbing)
         for (const state of normalStates) {
             const prob = 1.0 / states.length;
             transitions[state] = {};
@@ -303,4 +379,3 @@ exports.MarkovPresets = {
         return createTransitionMatrix({ states, transitions });
     }
 };
-//# sourceMappingURL=Markov.js.map

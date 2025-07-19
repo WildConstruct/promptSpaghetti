@@ -1,16 +1,16 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState } from "react";
+import { useState } from "react";
 import { TextFieldEditor } from "../TextFieldEditor";
 import { VariationList } from "../VariationList";
 import { CollapsibleSection } from "../CollapsibleSection";
 export const WeightedChoiceEditor = (props) => {
-    const { nodeData, onChange } = props;
+    const { nodeData, onChange, nodeId } = props;
     // WeightedChoice specific fields
     const choices = nodeData.choices || [];
     const weights = nodeData.weights || [];
-    const label = nodeData.label || "";
+    const name = nodeData.name || nodeData.label || "WeightedChoice";
     // State for collapsible sections
-    const [basicPropsCollapsed, setBasicPropsCollapsed] = useState(false);
+    const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
     const [choicesCollapsed, setChoicesCollapsed] = useState(false);
     const [previewCollapsed, setPreviewCollapsed] = useState(true);
     const handleChoicesChange = (newChoices) => {
@@ -25,10 +25,10 @@ export const WeightedChoiceEditor = (props) => {
         newWeights[index] = Math.max(0, weight); // Ensure non-negative weights
         onChange({ weights: newWeights });
     };
-    const handleLabelChange = (value) => {
-        onChange({ label: value });
+    const handleNameChange = (value) => {
+        onChange({ name: value, label: value });
     };
-    return (_jsxs("div", { className: "weighted-choice-editor", children: [_jsx(CollapsibleSection, { title: "Basic Properties", collapsed: basicPropsCollapsed, onToggle: () => setBasicPropsCollapsed(!basicPropsCollapsed), children: _jsx(TextFieldEditor, { label: "Label", value: label, fieldKey: "label", zodType: null, onChange: handleLabelChange, placeholder: "Enter node label..." }) }), _jsxs(CollapsibleSection, { title: "Weighted Choices", collapsed: choicesCollapsed, onToggle: () => setChoicesCollapsed(!choicesCollapsed), children: [_jsxs("div", { style: { marginBottom: 12 }, children: [_jsx("label", { style: {
+    return (_jsxs("div", { className: "weighted-choice-editor", children: [_jsx(CollapsibleSection, { title: "Basic Properties", collapsed: commonPropsCollapsed, onToggle: () => setCommonPropsCollapsed(!commonPropsCollapsed), children: _jsx(TextFieldEditor, { label: "Name", value: name, fieldKey: "name", zodType: null, onChange: handleNameChange, placeholder: "Enter node name..." }) }), _jsxs(CollapsibleSection, { title: "Weighted Choices", collapsed: choicesCollapsed, onToggle: () => setChoicesCollapsed(!choicesCollapsed), children: [_jsxs("div", { style: { marginBottom: 12 }, children: [_jsx("label", { style: {
                                     display: "block",
                                     fontWeight: 500,
                                     marginBottom: 8,

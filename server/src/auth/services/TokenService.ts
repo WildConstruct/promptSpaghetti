@@ -13,8 +13,8 @@ export class TokenService implements ITokenService {
   private config: AuthConfig;
   private redis: RedisService;
   private db: DatabaseService;
-  private privateKey: string;
-  private publicKey: string;
+  private privateKey!: string;
+  private publicKey!: string;
 
   constructor(config: AuthConfig, redis: RedisService, db: DatabaseService) {
     this.config = config;
@@ -43,7 +43,7 @@ export class TokenService implements ITokenService {
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
       expiresIn: JWT_CONFIG.accessTokenExpiry,
-    });
+    } as jwt.SignOptions);
 
     return token;
   }
@@ -70,7 +70,7 @@ export class TokenService implements ITokenService {
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
       expiresIn,
-    });
+    } as jwt.SignOptions);
 
     // Store API token in database for tracking
     await this.storeApiToken(user.id, tokenId, token, scopes, name, expiresIn);
@@ -89,7 +89,7 @@ export class TokenService implements ITokenService {
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
       expiresIn: JWT_CONFIG.refreshTokenExpiry,
-    });
+    } as jwt.SignOptions);
 
     // Store refresh token in database for tracking
     await this.storeRefreshToken(user.id, token);

@@ -1,10 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RandomizerWorkflow = void 0;
-const agents_1 = require("../../agents");
-const parser_1 = require("../../parser");
-const serialization_1 = require("../../serialization");
-class RandomizerWorkflow {
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.4 - Randomizer Generator Implementation
+// Complete workflow integration for end-to-end graph generation
+import { generateGraph } from '../../agents';
+import { parseGraph } from '../../parser';
+import { serializeGraph } from '../../serialization';
+/**
+ * Complete randomizer workflow that orchestrates all Epic 12 components
+ */
+export class RandomizerWorkflow {
+    /**
+     * Generate a graph using the complete workflow
+     */
     async generateGraph(parameters, options = {}) {
         const startTime = Date.now();
         const result = {
@@ -22,6 +28,7 @@ class RandomizerWorkflow {
         };
         const { onProgress, validateIntermediateSteps = true, includeDebugInfo = false, timeoutMs = 60000 } = options;
         try {
+            // Stage 1: Preparation
             onProgress?.('Preparing LLM request...', 10);
             const preparationStart = Date.now();
             const llmRequest = this.prepareLoLLMRequest(parameters);
@@ -34,6 +41,7 @@ class RandomizerWorkflow {
                     validationResult: null
                 };
             }
+            // Stage 2: LLM Generation
             onProgress?.('Generating graph with LLM...', 30);
             const llmStart = Date.now();
             const llmResult = await this.callLLM(llmRequest, parameters, timeoutMs);
@@ -52,9 +60,10 @@ class RandomizerWorkflow {
             if (includeDebugInfo && result.debugInfo) {
                 result.debugInfo.llmResponse = llmResult;
             }
+            // Stage 3: Parsing
             onProgress?.('Parsing LLM output...', 60);
             const parseStart = Date.now();
-            const parseResult = await (0, parser_1.parseGraph)(llmResult.output);
+            const parseResult = await parseGraph(llmResult.output);
             result.metadata.parsingTime = Date.now() - parseStart;
             if (includeDebugInfo && result.debugInfo) {
                 result.debugInfo.parserResult = parseResult;
@@ -66,6 +75,7 @@ class RandomizerWorkflow {
                     message: 'Failed to parse LLM output into valid graph',
                     details: parseResult.errors
                 });
+                // Add parser errors as workflow errors
                 parseResult.errors.forEach(error => {
                     result.errors.push({
                         stage: 'parsing',
@@ -77,6 +87,7 @@ class RandomizerWorkflow {
                 return this.finalizeResult(result, startTime);
             }
             result.graph = parseResult.graph;
+            // Add parser warnings as workflow warnings
             parseResult.warnings.forEach(warning => {
                 result.warnings.push({
                     stage: 'parsing',
@@ -84,6 +95,7 @@ class RandomizerWorkflow {
                     suggestion: warning.suggestion
                 });
             });
+            // Stage 4: Validation (if requested)
             if (validateIntermediateSteps) {
                 onProgress?.('Validating generated graph...', 80);
                 const validationResult = this.validateGeneratedGraph(result.graph, parameters);
@@ -106,11 +118,12 @@ class RandomizerWorkflow {
                     });
                 });
             }
+            // Stage 5: Serialization (if requested)
             if (parameters.outputFormat === 'serialized' || parameters.outputFormat === 'both') {
                 onProgress?.('Serializing graph...', 90);
                 const serializeStart = Date.now();
                 try {
-                    result.serializedGraph = (0, serialization_1.serializeGraph)(result.graph, {
+                    result.serializedGraph = serializeGraph(result.graph, {
                         name: `Generated: ${parameters.purpose.substring(0, 50)}`,
                         description: parameters.purpose,
                         author: 'llm-randomizer',
@@ -127,6 +140,7 @@ class RandomizerWorkflow {
                     });
                 }
             }
+            // Final validation
             const criticalErrors = result.errors.filter(e => ['GENERATION_FAILED', 'PARSE_FAILED', 'CRITICAL_VALIDATION'].includes(e.type));
             result.success = criticalErrors.length === 0 && !!result.graph;
             onProgress?.('Generation complete!', 100);
@@ -142,6 +156,9 @@ class RandomizerWorkflow {
             return this.finalizeResult(result, startTime);
         }
     }
+    /**
+     * Prepare LLM request from parameters
+     */
     prepareLoLLMRequest(parameters) {
         return {
             purpose: parameters.purpose,
@@ -154,21 +171,25 @@ class RandomizerWorkflow {
             domain: parameters.domain,
             userContext: parameters.userContext,
             constraints: parameters.constraints,
-            examples: []
+            examples: [] // Could be populated from history
         };
     }
+    /**
+     * Call LLM with retry logic and error handling
+     */
     async callLLM(request, parameters, timeoutMs) {
         let attempts = 0;
         const maxAttempts = parameters.maxRetries;
         while (attempts < maxAttempts) {
             attempts++;
             try {
+                // Add timeout wrapper
                 const timeoutPromise = new Promise((_, reject) => {
                     setTimeout(() => reject(new Error('LLM request timeout')), timeoutMs);
                 });
-                const generationPromise = (0, agents_1.generateGraph)(request, parameters.provider, {
+                const generationPromise = generateGraph(request, parameters.provider, {
                     temperature: parameters.temperature,
-                    maxRetries: 1
+                    maxRetries: 1 // Handle retries at this level
                 });
                 const result = await Promise.race([generationPromise, timeoutPromise]);
                 if (result.success && result.graph) {
@@ -180,6 +201,7 @@ class RandomizerWorkflow {
                     };
                 }
                 else {
+                    // If this was the last attempt, return the error
                     if (attempts === maxAttempts) {
                         return {
                             success: false,
@@ -187,10 +209,12 @@ class RandomizerWorkflow {
                             attempts
                         };
                     }
+                    // Otherwise, continue to next attempt
                     console.warn(`LLM attempt ${attempts} failed:`, result.errors);
                 }
             }
             catch (error) {
+                // If this was the last attempt, return the error
                 if (attempts === maxAttempts) {
                     return {
                         success: false,
@@ -198,6 +222,7 @@ class RandomizerWorkflow {
                         attempts
                     };
                 }
+                // Otherwise, continue to next attempt
                 console.warn(`LLM attempt ${attempts} error:`, error);
             }
         }
@@ -207,18 +232,23 @@ class RandomizerWorkflow {
             attempts
         };
     }
+    /**
+     * Validate generated graph against parameters
+     */
     validateGeneratedGraph(graph, parameters) {
         const errors = [];
         const warnings = [];
+        // Check node count
         const nodeCount = graph.nodes.length;
         const targetCount = parameters.nodeCount;
-        const tolerance = Math.max(2, Math.floor(targetCount * 0.2));
+        const tolerance = Math.max(2, Math.floor(targetCount * 0.2)); // 20% tolerance
         if (Math.abs(nodeCount - targetCount) > tolerance) {
             warnings.push({
                 message: `Node count ${nodeCount} differs from target ${targetCount}`,
                 suggestion: 'Consider adjusting complexity or node count parameters'
             });
         }
+        // Check for required node types
         const nodeTypes = new Set(graph.nodes.map(n => n.type));
         const requiredTypes = parameters.nodeTypes.filter(nt => nt.required);
         for (const required of requiredTypes) {
@@ -229,6 +259,7 @@ class RandomizerWorkflow {
                 });
             }
         }
+        // Check for output nodes
         const hasOutput = graph.nodes.some(n => n.type === 'Output');
         if (!hasOutput) {
             warnings.push({
@@ -236,6 +267,7 @@ class RandomizerWorkflow {
                 suggestion: 'Results may not be accessible without Output nodes'
             });
         }
+        // Check complexity vs actual structure
         const complexityLevels = {
             simple: { max: 8, maxDepth: 3 },
             moderate: { max: 20, maxDepth: 5 },
@@ -250,10 +282,16 @@ class RandomizerWorkflow {
         }
         return { errors, warnings };
     }
+    /**
+     * Finalize result with timing metadata
+     */
     finalizeResult(result, startTime) {
         result.metadata.totalTime = Date.now() - startTime;
         return result;
     }
+    /**
+     * Generate multiple variations with different parameters
+     */
     async generateVariations(baseParameters, variationCount = 3, options = {}) {
         const variations = this.createParameterVariations(baseParameters, variationCount);
         const results = await Promise.all(variations.map((params, index) => this.generateGraph(params, {
@@ -264,14 +302,21 @@ class RandomizerWorkflow {
         })));
         return results;
     }
+    /**
+     * Create parameter variations for multiple generations
+     */
     createParameterVariations(base, count) {
         const variations = [];
         for (let i = 0; i < count; i++) {
             const variation = { ...base };
+            // Vary temperature
             variation.temperature = Math.max(0.1, Math.min(1.5, base.temperature + (Math.random() - 0.5) * 0.4));
+            // Vary node count slightly
             const nodeVariation = Math.floor((Math.random() - 0.5) * 4);
             variation.nodeCount = Math.max(3, Math.min(100, base.nodeCount + nodeVariation));
+            // Vary diversity score
             variation.diversityScore = Math.max(0, Math.min(1, base.diversityScore + (Math.random() - 0.5) * 0.3));
+            // Optionally vary provider for different approaches
             if (Math.random() < 0.3) {
                 const providers = ['openai', 'claude', 'gemini'];
                 variation.provider = providers[Math.floor(Math.random() * providers.length)];
@@ -280,9 +325,13 @@ class RandomizerWorkflow {
         }
         return variations;
     }
+    /**
+     * Validate workflow parameters before generation
+     */
     validateWorkflowParameters(parameters) {
         const errors = [];
         const warnings = [];
+        // Basic validation
         if (!parameters.purpose || parameters.purpose.length < 10) {
             errors.push('Purpose must be at least 10 characters long');
         }
@@ -292,6 +341,7 @@ class RandomizerWorkflow {
         if (parameters.temperature < 0 || parameters.temperature > 2) {
             errors.push('Temperature must be between 0 and 2');
         }
+        // Complexity vs node count validation
         const complexityRanges = {
             simple: { min: 3, max: 8 },
             moderate: { min: 8, max: 20 },
@@ -308,5 +358,3 @@ class RandomizerWorkflow {
         };
     }
 }
-exports.RandomizerWorkflow = RandomizerWorkflow;
-//# sourceMappingURL=randomizer-workflow.js.map

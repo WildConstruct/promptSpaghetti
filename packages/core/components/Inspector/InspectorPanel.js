@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { PropertiesSection } from "./PropertiesSection";
 import { PreviewSection } from "./PreviewSection";
 export const InspectorPanel = ({ node, schema, onChange, onClose, initialWidth = 320, minWidth = 280, maxWidth = 600, }) => {

@@ -4,6 +4,8 @@
 
 import '@testing-library/jest-dom';
 
+declare const global: any;
+
 // Mock window.matchMedia for responsive hooks
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -20,7 +22,7 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock ResizeObserver
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
+(global as any).ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
@@ -33,7 +35,7 @@ const localStorageMock = {
   removeItem: jest.fn(),
   clear: jest.fn(),
 };
-global.localStorage = localStorageMock;
+(global as any).localStorage = localStorageMock;
 
 // Mock navigator APIs
 Object.defineProperty(navigator, 'clipboard', {
@@ -48,9 +50,9 @@ Object.defineProperty(navigator, 'vibrate', {
 });
 
 // Mock CSS.supports
-global.CSS = {
+(global as any).CSS = {
   supports: jest.fn().mockReturnValue(false),
-} as any;
+};
 
 // Setup console error/warning capture
 const originalError = console.error;

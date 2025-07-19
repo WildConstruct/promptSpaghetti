@@ -1,13 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultAnthropicConfig = exports.AnthropicGraphAgent = void 0;
-exports.generateGraphWithClaude = generateGraphWithClaude;
-const validator_1 = require("../../serialization/validator");
-class AnthropicGraphAgent {
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.2 - LLM Agent Script Development
+// Anthropic Claude agent script with XML formatting and error correction
+import { validateFormat } from '../../serialization/validator';
+export class AnthropicGraphAgent {
+    config;
+    baseSystemPrompt;
     constructor(config) {
         this.config = config;
         this.baseSystemPrompt = this.buildClaudeSystemPrompt();
     }
+    /**
+     * Generate a graph using Claude with XML formatting
+     */
     async generateGraph(request) {
         const startTime = Date.now();
         let attempts = 0;
@@ -18,9 +22,11 @@ class AnthropicGraphAgent {
                 const userPrompt = this.buildClaudeUserPrompt(request);
                 const response = await this.callAnthropic(userPrompt, currentTemperature);
                 if (response.success && response.content) {
+                    // Extract graph and reasoning from Claude's response
                     const { graph, reasoning } = this.parseClaudeResponse(response.content);
                     if (graph) {
-                        const validation = (0, validator_1.validateFormat)(graph);
+                        // Validate the generated graph
+                        const validation = validateFormat(graph);
                         if (validation.isValid) {
                             return {
                                 success: true,
@@ -37,6 +43,7 @@ class AnthropicGraphAgent {
                             };
                         }
                         else {
+                            // Validation failed - try again with corrections
                             console.log(`Attempt ${attempts} failed validation:`, validation.errors);
                             if (attempts === this.config.maxRetries) {
                                 return {
@@ -65,6 +72,7 @@ class AnthropicGraphAgent {
             catch (error) {
                 console.error(`Attempt ${attempts} error:`, error);
             }
+            // Reduce temperature for retry
             currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
         }
         return {
@@ -79,6 +87,9 @@ class AnthropicGraphAgent {
             }
         };
     }
+    /**
+     * Build Claude-optimized system prompt with XML formatting
+     */
     buildClaudeSystemPrompt() {
         return `You are an expert Prompt Spaghetti graph generator. You create valid, creative graphs that follow a specific YAML-like serialization format.
 
@@ -211,6 +222,9 @@ When generating graphs:
 5. Validate the structure mentally before output
 6. Be creative while maintaining functionality`;
     }
+    /**
+     * Build Claude-specific user prompt with XML structure
+     */
     buildClaudeUserPrompt(request) {
         const complexitySpecs = {
             simple: 'Simple graph (3-8 nodes) with straightforward logic and single output',
@@ -253,23 +267,30 @@ First, let me think through this step by step:
 
 Please provide your reasoning in a <reasoning> section, then output the complete graph in a <graph> section.`;
     }
+    /**
+     * Parse Claude's XML-formatted response
+     */
     parseClaudeResponse(response) {
         let graph;
         let reasoning;
+        // Extract reasoning section
         const reasoningMatch = response.match(/<reasoning>([\s\S]*?)<\/reasoning>/);
         if (reasoningMatch) {
             reasoning = reasoningMatch[1].trim();
         }
+        // Extract graph section
         const graphMatch = response.match(/<graph>([\s\S]*?)<\/graph>/);
         if (graphMatch) {
             graph = graphMatch[1].trim();
         }
         else {
+            // Fallback: look for code blocks
             const codeBlockMatch = response.match(/```(?:yaml|yml)?\n?([\s\S]*?)\n?```/);
             if (codeBlockMatch) {
                 graph = codeBlockMatch[1].trim();
             }
             else {
+                // Fallback: look for version to ---END---
                 const versionMatch = response.match(/version:\s*[\d.]+[\s\S]*?---END---/);
                 if (versionMatch) {
                     graph = versionMatch[0].trim();
@@ -278,13 +299,31 @@ Please provide your reasoning in a <reasoning> section, then output the complete
         }
         return { graph, reasoning };
     }
+    /**
+     * Call Anthropic API with error handling
+     */
     async callAnthropic(userPrompt, temperature) {
         try {
+            // Mock Anthropic API call for now - replace with actual API call
+            // const response = await anthropic.messages.create({
+            //   model: this.config.model,
+            //   max_tokens: this.config.maxTokens,
+            //   temperature,
+            //   messages: [
+            //     {
+            //       role: 'user', 
+            //       content: userPrompt
+            //     }
+            //   ],
+            //   system: this.baseSystemPrompt,
+            //   stop_sequences: this.config.stopSequences
+            // });
+            // Mock response for development
             const mockResponse = this.generateClaudeMockResponse(userPrompt);
             return {
                 success: true,
                 content: mockResponse,
-                tokenCount: mockResponse.length / 4
+                tokenCount: mockResponse.length / 4 // Rough token estimate
             };
         }
         catch (error) {
@@ -294,6 +333,9 @@ Please provide your reasoning in a <reasoning> section, then output the complete
             };
         }
     }
+    /**
+     * Generate mock Claude response with reasoning
+     */
     generateClaudeMockResponse(userPrompt) {
         return `<reasoning>
 For this graph generation task, I need to create a functional prompt graph that serves the specified purpose. Let me break this down:
@@ -369,8 +411,10 @@ enhanced_content -> final_result
 </graph>`;
     }
 }
-exports.AnthropicGraphAgent = AnthropicGraphAgent;
-exports.defaultAnthropicConfig = {
+/**
+ * Default configuration for Anthropic agent
+ */
+export const defaultAnthropicConfig = {
     apiKey: process.env.ANTHROPIC_API_KEY || '',
     model: 'claude-3-sonnet-20240229',
     temperature: 0.7,
@@ -380,8 +424,10 @@ exports.defaultAnthropicConfig = {
     useXmlFormatting: true,
     stopSequences: ['</graph>']
 };
-async function generateGraphWithClaude(request, config = {}) {
-    const agent = new AnthropicGraphAgent({ ...exports.defaultAnthropicConfig, ...config });
+/**
+ * Utility function to create and use Anthropic agent
+ */
+export async function generateGraphWithClaude(request, config = {}) {
+    const agent = new AnthropicGraphAgent({ ...defaultAnthropicConfig, ...config });
     return agent.generateGraph(request);
 }
-//# sourceMappingURL=anthropic-agent.js.map

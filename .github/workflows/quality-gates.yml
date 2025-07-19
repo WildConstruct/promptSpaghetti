@@ -1,0 +1,270 @@
+name: Quality Gates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, develop]
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Full history for better analysis
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      
+    - name: Check code formatting
+      run: |
+        pnpm prettier --check "**/*.{js,jsx,ts,tsx,json,md}"
+        
+    - name: ESLint with annotations
+      uses: sibiraj-s/action-eslint@v3
+      with:
+        eslint-args: '--ext .js,.jsx,.ts,.tsx .'
+        annotations: true
+        
+    - name: TypeScript strict checks
+      run: |
+        echo "Checking for TypeScript errors..."
+        pnpm typecheck
+        
+    - name: Check for unused dependencies
+      run: |
+        pnpm dlx depcheck --json > depcheck.json || true
+        if [ -s depcheck.json ]; then
+          echo "::warning::Unused dependencies found"
+          cat depcheck.json
+        fi
+        
+  test-coverage:
+    name: Test Coverage Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      
+    - name: Run tests with coverage
+      run: |
+        pnpm test:coverage || true
+        
+    - name: Generate coverage report
+      run: |
+        echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ -f coverage/coverage-summary.json ]; then
+          node -e "
+            const coverage = require('./coverage/coverage-summary.json');
+            const total = coverage.total;
+            console.log('| Metric | Coverage |');
+            console.log('|--------|----------|');
+            console.log(\`| Lines | \${total.lines.pct}% |\`);
+            console.log(\`| Statements | \${total.statements.pct}% |\`);
+            console.log(\`| Functions | \${total.functions.pct}% |\`);
+            console.log(\`| Branches | \${total.branches.pct}% |\`);
+          " >> $GITHUB_STEP_SUMMARY
+        else
+          echo "No coverage data available" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+    - name: Coverage threshold check
+      run: |
+        if [ -f coverage/coverage-summary.json ]; then
+          node -e "
+            const coverage = require('./coverage/coverage-summary.json');
+            const total = coverage.total;
+            const threshold = 80;
+            
+            if (total.lines.pct < threshold) {
+              console.error(\`Coverage \${total.lines.pct}% is below threshold \${threshold}%\`);
+              process.exit(1);
+            }
+          "
+        fi
+      continue-on-error: true
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        fail_ci_if_error: false
+        
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      
+    - name: Run security audit
+      id: audit
+      run: |
+        echo "## Security Audit Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Run audit and capture output
+        pnpm audit --json > audit.json || true
+        
+        # Parse and display results
+        node -e "
+          const fs = require('fs');
+          const audit = JSON.parse(fs.readFileSync('audit.json', 'utf8'));
+          
+          const severities = {
+            critical: 0,
+            high: 0,
+            moderate: 0,
+            low: 0,
+            info: 0
+          };
+          
+          // Count vulnerabilities by severity
+          if (audit.vulnerabilities) {
+            Object.values(audit.vulnerabilities).forEach(vuln => {
+              if (vuln.severity && severities.hasOwnProperty(vuln.severity)) {
+                severities[vuln.severity]++;
+              }
+            });
+          }
+          
+          console.log('| Severity | Count |');
+          console.log('|----------|-------|');
+          Object.entries(severities).forEach(([sev, count]) => {
+            const emoji = sev === 'critical' || sev === 'high' ? '🔴' : 
+                         sev === 'moderate' ? '🟡' : '🟢';
+            console.log(\`| \${emoji} \${sev} | \${count} |\`);
+          });
+          
+          // Fail if critical or high vulnerabilities
+          if (severities.critical > 0 || severities.high > 0) {
+            console.error('\\nCritical or high severity vulnerabilities found!');
+            process.exit(1);
+          }
+        " >> $GITHUB_STEP_SUMMARY
+        
+    - name: License compliance check
+      run: |
+        pnpm dlx license-checker --production --summary --out licenses.json
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## License Summary" >> $GITHUB_STEP_SUMMARY
+        cat licenses.json >> $GITHUB_STEP_SUMMARY
+      continue-on-error: true
+      
+  bundle-analysis:
+    name: Bundle Size Analysis
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      
+    - name: Build and analyze bundle
+      run: |
+        pnpm --filter client build
+        
+        # Simple bundle size check
+        echo "## Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+        echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+        
+        find client/dist -name "*.js" -o -name "*.css" | while read file; do
+          size=$(du -h "$file" | cut -f1)
+          name=$(basename "$file")
+          echo "| $name | $size |" >> $GITHUB_STEP_SUMMARY
+        done
+        
+  performance-metrics:
+    name: Performance Metrics
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      
+    - name: Run performance tests
+      run: |
+        echo "## Performance Metrics" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+        
+        # Run basic performance tests
+        pnpm test -- --testPathPattern="performance" --json --outputFile=perf.json || true
+        
+        if [ -f perf.json ]; then
+          node -e "
+            const results = require('./perf.json');
+            // Parse and display performance metrics
+            console.log('| Test Execution Time | ' + results.testResults[0]?.perfStats?.runtime + 'ms |');
+          "
+        fi >> $GITHUB_STEP_SUMMARY
+      continue-on-error: true

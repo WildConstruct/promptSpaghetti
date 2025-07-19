@@ -16,7 +16,6 @@ export class RedisService {
       password: config.password,
       db: config.db || 0,
       keyPrefix: config.keyPrefix || 'auth:',
-      retryDelayOnFailover: 100,
       enableReadyCheck: true,
       lazyConnect: true,
       maxRetriesPerRequest: 3,

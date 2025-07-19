@@ -130,7 +130,7 @@ export class AuthenticationService {
         action: 'registration_failed',
         details: { 
           email: request.email,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
@@ -277,7 +277,7 @@ export class AuthenticationService {
         action: AUDIT_EVENTS.LOGIN_FAILED,
         details: { 
           email: request.email,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
@@ -335,7 +335,7 @@ export class AuthenticationService {
       // Log failed token refresh
       await this.auditService.logEvent({
         action: 'token_refresh_failed',
-        details: { error: error.message },
+        details: { error: error instanceof Error ? error.message : String(error) },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning',
@@ -380,7 +380,7 @@ export class AuthenticationService {
         action: 'password_reset_request_failed',
         details: { 
           hashedEmail: this.hashEmail(request.email),
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
@@ -417,7 +417,7 @@ export class AuthenticationService {
         action: 'password_reset_failed',
         details: { 
           token: request.token,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
@@ -449,7 +449,7 @@ export class AuthenticationService {
         action: 'email_verification_failed',
         details: { 
           token: request.token,
-          error: error.message,
+          error: error instanceof Error ? error.message : String(error),
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
@@ -501,7 +501,7 @@ export class AuthenticationService {
       await this.auditService.logEvent({
         userId,
         action: 'password_change_failed',
-        details: { error: error.message },
+        details: { error: error instanceof Error ? error.message : String(error) },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning',
@@ -671,7 +671,7 @@ export class AuthenticationService {
       const dbHealth = dbStatus.rows.length > 0 ? 'healthy' : 'unhealthy';
 
       // Check Redis connectivity
-      const redisHealth = this.redisService.isConnected() ? 'healthy' : 'unhealthy';
+      const redisHealth = await this.redisService.healthCheck() ? 'healthy' : 'unhealthy';
 
       return {
         database: dbHealth,

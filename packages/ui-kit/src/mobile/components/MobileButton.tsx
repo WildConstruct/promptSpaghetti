@@ -68,7 +68,7 @@ export const MobileButton: React.FC<MobileButtonProps> = ({
     <Button
       {...props}
       size={size}
-      onClick={handleClick}
+      onClick={onClick ? handleClick : undefined}
       className={cn(
         'mobile-button',
         isTouch && 'touch-device',

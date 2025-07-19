@@ -90,7 +90,7 @@ export function detectOrientation(): DeviceInfo['orientation'] {
     return Math.abs(window.orientation as number) === 90 ? 'landscape' : 'portrait';
   }
   
-  return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+  return (window as any).innerWidth > (window as any).innerHeight ? 'landscape' : 'portrait';
 }
 
 /**

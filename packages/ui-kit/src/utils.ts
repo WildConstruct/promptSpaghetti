@@ -21,22 +21,25 @@ export function resolveResponsiveValue<T>(
 
   const currentBreakpoint = breakpoint || getBreakpoint(getViewportSize().width);
 
+  // Cast to the expected type to handle the type system limitations
+  const responsiveValue = value as { mobile?: T; tablet?: T; desktop?: T };
+  
   // Return the most specific value available
-  if (value[currentBreakpoint] !== undefined) {
-    return value[currentBreakpoint]!;
+  if (responsiveValue[currentBreakpoint] !== undefined) {
+    return responsiveValue[currentBreakpoint]!;
   }
 
   // Fallback logic
-  if (currentBreakpoint === 'desktop' && value.tablet !== undefined) {
-    return value.tablet;
+  if (currentBreakpoint === 'desktop' && responsiveValue.tablet !== undefined) {
+    return responsiveValue.tablet;
   }
   
-  if (currentBreakpoint !== 'mobile' && value.mobile !== undefined) {
-    return value.mobile;
+  if (currentBreakpoint !== 'mobile' && responsiveValue.mobile !== undefined) {
+    return responsiveValue.mobile;
   }
 
   // Return first available value as fallback
-  return value.desktop || value.tablet || value.mobile || (value as any);
+  return responsiveValue.desktop || responsiveValue.tablet || responsiveValue.mobile || (value as T);
 }
 
 // Convert component size to pixel value
@@ -65,23 +68,26 @@ export function createResponsiveStyles<T>(
   }
 
   const styles: Record<string, any> = {};
+  
+  // Cast to the expected type to handle the type system limitations
+  const responsiveValue = value as { mobile?: T; tablet?: T; desktop?: T };
 
   // Base value (mobile-first)
-  if (value.mobile !== undefined) {
-    styles[property] = transform ? transform(value.mobile) : value.mobile;
+  if (responsiveValue.mobile !== undefined) {
+    styles[property] = transform ? transform(responsiveValue.mobile) : responsiveValue.mobile;
   }
 
   // Tablet breakpoint
-  if (value.tablet !== undefined) {
+  if (responsiveValue.tablet !== undefined) {
     styles[`@media (min-width: 768px)`] = {
-      [property]: transform ? transform(value.tablet) : value.tablet
+      [property]: transform ? transform(responsiveValue.tablet) : responsiveValue.tablet
     };
   }
 
   // Desktop breakpoint
-  if (value.desktop !== undefined) {
+  if (responsiveValue.desktop !== undefined) {
     styles[`@media (min-width: 1024px)`] = {
-      [property]: transform ? transform(value.desktop) : value.desktop
+      [property]: transform ? transform(responsiveValue.desktop) : responsiveValue.desktop
     };
   }
 

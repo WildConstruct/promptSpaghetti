@@ -1,29 +1,34 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.useCollaborativeReactFlow = useCollaborativeReactFlow;
-exports.useNodeCollaborators = useNodeCollaborators;
-exports.useCollaborationStatus = useCollaborationStatus;
-const react_1 = require("react");
-const reactflow_1 = require("reactflow");
-const collaborativeGraphStore_1 = require("./collaborativeGraphStore");
-function useCollaborativeReactFlow() {
-    const reactFlowInstance = (0, reactflow_1.useReactFlow)();
-    const { enableCollaboration, disableCollaboration, addNode, updateNode, deleteNode, addEdge, deleteEdge, updateNodePosition, updateUserCursor, updateUserSelection } = (0, collaborativeGraphStore_1.useCollaborativeActions)();
-    const { graph, isCollaborative, collaborationEnabled, connectionStatus, localPresence } = (0, collaborativeGraphStore_1.useCollaborativeGraphStore)();
-    const connectedUsers = (0, collaborativeGraphStore_1.useConnectedUsers)();
-    const flowNodes = (0, react_1.useMemo)(() => {
+/**
+ * React Flow Collaborative Integration Hook - Epic 9.1.2
+ * Integrates CRDT collaborative editing with React Flow editor
+ */
+import { useCallback, useEffect, useMemo } from 'react';
+import { useReactFlow } from 'reactflow';
+import { useCollaborativeGraphStore, useCollaborativeActions, useConnectedUsers } from './collaborativeGraphStore';
+/**
+ * Hook that bridges collaborative graph store with React Flow
+ */
+export function useCollaborativeReactFlow() {
+    const reactFlowInstance = useReactFlow();
+    const { enableCollaboration, disableCollaboration, addNode, updateNode, deleteNode, addEdge, deleteEdge, updateNodePosition, updateUserCursor, updateUserSelection } = useCollaborativeActions();
+    const { graph, isCollaborative, collaborationEnabled, connectionStatus, localPresence } = useCollaborativeGraphStore();
+    const connectedUsers = useConnectedUsers();
+    // Convert graph nodes to React Flow nodes
+    const flowNodes = useMemo(() => {
         return graph.nodes.map(node => ({
             id: node.id,
             type: node.type.toLowerCase(),
-            position: { x: 0, y: 0 },
+            position: { x: 0, y: 0 }, // Position will be managed by React Flow
             data: {
                 ...node,
                 isCollaborative,
+                // Add collaborative metadata
                 collaborators: isCollaborative ? getNodeCollaborators(node.id, connectedUsers) : []
             }
         }));
     }, [graph.nodes, isCollaborative, connectedUsers]);
-    const flowEdges = (0, react_1.useMemo)(() => {
+    // Convert graph edges to React Flow edges
+    const flowEdges = useMemo(() => {
         return graph.edges.map(edge => ({
             id: edge.id,
             source: edge.source,
@@ -34,6 +39,7 @@ function useCollaborativeReactFlow() {
             style: {
                 stroke: '#666',
                 strokeWidth: 2,
+                // Highlight if being edited by collaborators
                 ...(isCollaborative && isEdgeBeingEdited(edge.id, connectedUsers) && {
                     stroke: '#ff6b6b',
                     strokeWidth: 3
@@ -41,11 +47,13 @@ function useCollaborativeReactFlow() {
             }
         }));
     }, [graph.edges, isCollaborative, connectedUsers]);
-    const onNodesChange = (0, react_1.useCallback)((changes) => {
+    // Handle node changes (position, deletion, etc.)
+    const onNodesChange = useCallback((changes) => {
         changes.forEach(change => {
             switch (change.type) {
                 case 'position':
                     if (change.position && change.dragging === false) {
+                        // Only update position when drag is complete
                         updateNodePosition(change.id, change.position);
                     }
                     break;
@@ -55,7 +63,8 @@ function useCollaborativeReactFlow() {
             }
         });
     }, [updateNodePosition, deleteNode]);
-    const onEdgesChange = (0, react_1.useCallback)((changes) => {
+    // Handle edge changes
+    const onEdgesChange = useCallback((changes) => {
         changes.forEach(change => {
             switch (change.type) {
                 case 'remove':
@@ -64,7 +73,8 @@ function useCollaborativeReactFlow() {
             }
         });
     }, [deleteEdge]);
-    const onConnect = (0, react_1.useCallback)((connection) => {
+    // Handle new connections
+    const onConnect = useCallback((connection) => {
         if (connection.source && connection.target) {
             const newEdge = {
                 id: `edge-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -76,27 +86,32 @@ function useCollaborativeReactFlow() {
             addEdge(newEdge);
         }
     }, [addEdge]);
-    const onNodeDrag = (0, react_1.useCallback)((event, node) => {
+    // Handle node drag for presence updates
+    const onNodeDrag = useCallback((event, node) => {
         if (isCollaborative) {
             updateUserCursor(node.id, node.position);
         }
     }, [isCollaborative, updateUserCursor]);
-    const onSelectionChange = (0, react_1.useCallback)((params) => {
+    // Handle node selection for presence updates
+    const onSelectionChange = useCallback((params) => {
         if (isCollaborative) {
             const selectedNodeIds = params.nodes.map(node => node.id);
             updateUserSelection(selectedNodeIds);
         }
     }, [isCollaborative, updateUserSelection]);
-    const onPaneClick = (0, react_1.useCallback)(() => {
+    // Handle pane click to clear selection
+    const onPaneClick = useCallback(() => {
         if (isCollaborative) {
-            updateUserCursor();
-            updateUserSelection([]);
+            updateUserCursor(); // Clear cursor
+            updateUserSelection([]); // Clear selection
         }
     }, [isCollaborative, updateUserCursor, updateUserSelection]);
-    const addNodeAtPosition = (0, react_1.useCallback)((node, position) => {
+    // Add new node at specific position
+    const addNodeAtPosition = useCallback((node, position) => {
         addNode(node, position);
     }, [addNode]);
-    const getUserCursors = (0, react_1.useCallback)(() => {
+    // Get user cursors for rendering
+    const getUserCursors = useCallback(() => {
         if (!isCollaborative)
             return [];
         const cursors = [];
@@ -112,7 +127,8 @@ function useCollaborativeReactFlow() {
         });
         return cursors;
     }, [isCollaborative, connectedUsers, localPresence]);
-    const getRemoteSelections = (0, react_1.useCallback)(() => {
+    // Get selected nodes by other users
+    const getRemoteSelections = useCallback(() => {
         if (!isCollaborative)
             return new Map();
         const selections = new Map();
@@ -128,14 +144,17 @@ function useCollaborativeReactFlow() {
         });
         return selections;
     }, [isCollaborative, connectedUsers, localPresence]);
-    (0, react_1.useEffect)(() => {
+    // Update React Flow viewport when needed
+    useEffect(() => {
         if (reactFlowInstance && flowNodes.length > 0) {
+            // Fit view when nodes are first loaded
             setTimeout(() => {
                 reactFlowInstance.fitView({ padding: 0.1 });
             }, 100);
         }
     }, [reactFlowInstance, flowNodes.length]);
     return {
+        // React Flow props
         nodes: flowNodes,
         edges: flowEdges,
         onNodesChange,
@@ -144,18 +163,25 @@ function useCollaborativeReactFlow() {
         onNodeDrag,
         onSelectionChange,
         onPaneClick,
+        // Collaboration-specific actions
         enableCollaboration,
         disableCollaboration,
         addNodeAtPosition,
+        // Collaboration state
         isCollaborative,
         collaborationEnabled,
         connectionStatus,
         connectedUsers,
+        // Presence and cursors
         getUserCursors,
         getRemoteSelections,
+        // Utility
         isConnected: connectionStatus === 'connected'
     };
 }
+/**
+ * Get users who are currently interacting with a specific node
+ */
 function getNodeCollaborators(nodeId, connectedUsers) {
     const collaborators = [];
     connectedUsers.forEach(user => {
@@ -165,13 +191,21 @@ function getNodeCollaborators(nodeId, connectedUsers) {
     });
     return collaborators;
 }
+/**
+ * Check if an edge is being edited by any collaborator
+ */
 function isEdgeBeingEdited(edgeId, connectedUsers) {
+    // For now, we don't track edge-specific interactions
+    // This could be extended to track edge selection/editing
     return false;
 }
-function useNodeCollaborators(nodeId) {
-    const connectedUsers = (0, collaborativeGraphStore_1.useConnectedUsers)();
-    const localPresence = (0, collaborativeGraphStore_1.useCollaborativeGraphStore)(state => state.localPresence);
-    return (0, react_1.useMemo)(() => {
+/**
+ * Hook for collaborative node components to show presence
+ */
+export function useNodeCollaborators(nodeId) {
+    const connectedUsers = useConnectedUsers();
+    const localPresence = useCollaborativeGraphStore(state => state.localPresence);
+    return useMemo(() => {
         const collaborators = [];
         connectedUsers.forEach((user, userId) => {
             if (userId !== localPresence?.userId) {
@@ -183,8 +217,11 @@ function useNodeCollaborators(nodeId) {
         return collaborators;
     }, [nodeId, connectedUsers, localPresence]);
 }
-function useCollaborationStatus() {
-    return (0, collaborativeGraphStore_1.useCollaborativeGraphStore)(state => ({
+/**
+ * Hook for showing connection status indicator
+ */
+export function useCollaborationStatus() {
+    return useCollaborativeGraphStore(state => ({
         isCollaborative: state.isCollaborative,
         connectionStatus: state.connectionStatus,
         isConnected: state.isConnected,
@@ -192,4 +229,3 @@ function useCollaborationStatus() {
         lastSyncTime: state.lastSyncTime
     }));
 }
-//# sourceMappingURL=useCollaborativeReactFlow.js.map

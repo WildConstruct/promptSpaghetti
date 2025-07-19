@@ -9,8 +9,8 @@ import {
   ConditionPresets,
   ConditionalBuilder,
   conditional
-} from '../Conditional';
-import { AdvancedExecutionUtils } from '../../advanced';
+} from '../Conditional.js';
+import { AdvancedExecutionUtils } from '../../advanced.js';
 
 describe('Conditional Node', () => {
   let node: ConditionalNode;

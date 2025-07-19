@@ -1,28 +1,38 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GraphSerializer = void 0;
-exports.serializeGraph = serializeGraph;
-exports.createDefaultMetadata = createDefaultMetadata;
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.1 - Serialization Format Design
+// Core serialization logic for converting graphs to LLM-friendly format
+// Use Node.js crypto in Node environment, or web crypto API in browser
 let createHash;
 try {
     createHash = require('crypto').createHash;
 }
 catch {
+    // Browser environment - use a simple hash alternative
     createHash = (algorithm) => ({
         update: (data) => ({
             digest: (format) => {
+                // Simple hash fallback for browser testing
                 let hash = 0;
                 for (let i = 0; i < data.length; i++) {
                     const char = data.charCodeAt(i);
                     hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash;
+                    hash = hash & hash; // Convert to 32-bit integer
                 }
                 return Math.abs(hash).toString(16).padStart(16, '0');
             }
         })
     });
 }
-class GraphSerializer {
+export class GraphSerializer {
+    static FORMAT_VERSION = '1.0.0';
+    static SECTION_DELIMITERS = {
+        NODES: '---NODES---',
+        EDGES: '---EDGES---',
+        END: '---END---'
+    };
+    /**
+     * Serialize a graph to LLM-friendly format
+     */
     static serialize(graph, metadata, options = {}) {
         const { includeChecksum = true, includeMetadata = true, compactFormat = false, validateOnSerialize = true } = options;
         if (validateOnSerialize) {
@@ -30,6 +40,7 @@ class GraphSerializer {
         }
         const lines = [];
         const indent = compactFormat ? '' : '  ';
+        // Header section
         lines.push(`version: ${this.FORMAT_VERSION}`);
         if (includeMetadata && metadata) {
             lines.push('metadata:');
@@ -45,31 +56,38 @@ class GraphSerializer {
                 lines.push(`${indent}tags: [${metadata.tags.map(t => `"${t}"`).join(', ')}]`);
             }
         }
-        lines.push('');
+        lines.push(''); // Empty line before nodes section
+        // Nodes section
         lines.push(this.SECTION_DELIMITERS.NODES);
         graph.nodes.forEach(node => {
             lines.push(...this.serializeNode(node, compactFormat));
-            lines.push('');
+            lines.push(''); // Empty line between nodes
         });
+        // Edges section
         lines.push(this.SECTION_DELIMITERS.EDGES);
         const edges = this.extractEdges(graph);
         edges.forEach(edge => {
             lines.push(`${edge.source} -> ${edge.target}`);
         });
-        lines.push('');
+        lines.push(''); // Empty line before end
         lines.push(this.SECTION_DELIMITERS.END);
         let serialized = lines.join('\n');
+        // Add checksum if requested
         if (includeChecksum) {
             const checksum = this.calculateChecksum(serialized);
             serialized = serialized.replace(`version: ${this.FORMAT_VERSION}`, `version: ${this.FORMAT_VERSION}\nchecksum: ${checksum}`);
         }
         return serialized;
     }
+    /**
+     * Serialize an individual node to YAML format
+     */
     static serializeNode(node, compact = false) {
         const lines = [];
         const indent = compact ? '' : '  ';
         lines.push(`${node.id}:`);
         lines.push(`${indent}type: ${node.type}`);
+        // Serialize properties based on node type
         const props = this.extractNodeProperties(node);
         if (Object.keys(props).length > 0) {
             lines.push(`${indent}props:`);
@@ -77,12 +95,16 @@ class GraphSerializer {
                 lines.push(`${indent}${indent}${key}: ${this.serializeValue(value)}`);
             });
         }
+        // Add inputs if present
         if (node.inputs && node.inputs.length > 0) {
             const inputsStr = node.inputs.map(id => `"${id}"`).join(', ');
             lines.push(`${indent}inputs: [${inputsStr}]`);
         }
         return lines;
     }
+    /**
+     * Extract properties from a node based on its type
+     */
     static extractNodeProperties(node) {
         const props = {};
         switch (node.type) {
@@ -146,8 +168,12 @@ class GraphSerializer {
         }
         return props;
     }
+    /**
+     * Serialize a value to YAML format
+     */
     static serializeValue(value) {
         if (typeof value === 'string') {
+            // Quote strings that might be ambiguous
             if (value.includes('\n') || value.includes(':') || value.includes('"')) {
                 return `|\n      ${value.split('\n').join('\n      ')}`;
             }
@@ -162,6 +188,7 @@ class GraphSerializer {
             if (value.every(v => typeof v === 'string' || typeof v === 'number')) {
                 return `[${value.map(v => typeof v === 'string' ? `"${v}"` : v).join(', ')}]`;
             }
+            // Complex array - use multi-line format
             const items = value.map(v => `      - ${this.serializeValue(v)}`).join('\n');
             return `\n${items}`;
         }
@@ -174,6 +201,9 @@ class GraphSerializer {
         }
         return String(value);
     }
+    /**
+     * Extract edges from graph nodes
+     */
     static extractEdges(graph) {
         const edges = [];
         graph.nodes.forEach(node => {
@@ -188,17 +218,25 @@ class GraphSerializer {
         });
         return edges;
     }
+    /**
+     * Calculate SHA-256 checksum for integrity verification
+     */
     static calculateChecksum(content) {
         return createHash('sha256').update(content).digest('hex').substring(0, 16);
     }
+    /**
+     * Validate graph structure before serialization
+     */
     static validateGraph(graph) {
         if (!graph.nodes || graph.nodes.length === 0) {
             throw new Error('Graph must contain at least one node');
         }
         const nodeIds = new Set(graph.nodes.map(n => n.id));
+        // Check for duplicate node IDs
         if (nodeIds.size !== graph.nodes.length) {
             throw new Error('Graph contains duplicate node IDs');
         }
+        // Validate node references
         graph.nodes.forEach(node => {
             if (node.inputs) {
                 node.inputs.forEach(inputId => {
@@ -208,8 +246,12 @@ class GraphSerializer {
                 });
             }
         });
+        // Check for cycles (basic check)
         this.detectCycles(graph);
     }
+    /**
+     * Detect cycles in the graph using DFS
+     */
     static detectCycles(graph) {
         const nodeMap = new Map(graph.nodes.map(n => [n.id, n]));
         const visited = new Set();
@@ -241,21 +283,19 @@ class GraphSerializer {
         }
     }
 }
-exports.GraphSerializer = GraphSerializer;
-GraphSerializer.FORMAT_VERSION = '1.0.0';
-GraphSerializer.SECTION_DELIMITERS = {
-    NODES: '---NODES---',
-    EDGES: '---EDGES---',
-    END: '---END---'
-};
-function serializeGraph(graph, metadata, options) {
+/**
+ * Utility function for easy serialization
+ */
+export function serializeGraph(graph, metadata, options) {
     return GraphSerializer.serialize(graph, metadata, options);
 }
-function createDefaultMetadata() {
+/**
+ * Create default metadata for a graph
+ */
+export function createDefaultMetadata() {
     return {
         author: 'llm-agent',
         created: new Date().toISOString(),
         description: 'LLM-generated graph'
     };
 }
-//# sourceMappingURL=serializer.js.map

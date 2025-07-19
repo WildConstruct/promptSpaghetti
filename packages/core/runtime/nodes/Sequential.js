@@ -1,30 +1,26 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SequentialPresets = exports.SequentialNode = exports.WeightedPattern = exports.RandomPattern = exports.CyclicalPattern = exports.LinearPattern = void 0;
-exports.createSequencePattern = createSequencePattern;
-exports.createSequentialNode = createSequentialNode;
-const advanced_1 = require("../advanced");
-const io_system_1 = require("../io-system");
-const seedrandom_1 = __importDefault(require("seedrandom"));
-class LinearPattern {
-    constructor() {
-        this.type = 'linear';
-    }
+// packages/core/runtime/nodes/Sequential.ts
+// Advanced sequential node with stateful sequence processing
+import { AdvancedRuntimeNode } from '../advanced';
+import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+import seedrandom from 'seedrandom';
+/**
+ * Linear sequence pattern - goes through items in order, then stops
+ */
+export class LinearPattern {
+    type = 'linear';
     getNext(sequence, state, ctx) {
         if (state.index >= sequence.length) {
+            // Return last item when sequence is exhausted
             return sequence[sequence.length - 1] || '';
         }
         return sequence[state.index];
     }
 }
-exports.LinearPattern = LinearPattern;
-class CyclicalPattern {
-    constructor() {
-        this.type = 'cyclical';
-    }
+/**
+ * Cyclical sequence pattern - cycles through items infinitely
+ */
+export class CyclicalPattern {
+    type = 'cyclical';
     getNext(sequence, state, ctx) {
         if (sequence.length === 0)
             return '';
@@ -32,34 +28,44 @@ class CyclicalPattern {
         return sequence[index];
     }
 }
-exports.CyclicalPattern = CyclicalPattern;
-class RandomPattern {
+/**
+ * Random sequence pattern - selects items randomly
+ */
+export class RandomPattern {
+    config;
+    type = 'random';
     constructor(config = {}) {
         this.config = config;
-        this.type = 'random';
     }
     getNext(sequence, state, ctx) {
         if (sequence.length === 0)
             return '';
-        const rng = (0, seedrandom_1.default)(`${ctx.seed}-${state.index}`);
+        // Create seeded RNG for deterministic randomness
+        const rng = seedrandom(`${ctx.seed}-${state.index}`);
         if (this.config.allowRepeats === false) {
+            // Without repeats: select from unused items
             const used = new Set(state.history);
             const available = sequence.filter(item => !used.has(item));
             if (available.length === 0) {
+                // All items used, reset or return last
                 return sequence[Math.floor(rng() * sequence.length)];
             }
             return available[Math.floor(rng() * available.length)];
         }
         else {
+            // With repeats: select any item randomly
             return sequence[Math.floor(rng() * sequence.length)];
         }
     }
 }
-exports.RandomPattern = RandomPattern;
-class WeightedPattern {
+/**
+ * Weighted sequence pattern - selects items based on weights
+ */
+export class WeightedPattern {
+    config;
+    type = 'weighted';
     constructor(config) {
         this.config = config;
-        this.type = 'weighted';
         if (!config.weights) {
             throw new Error('WeightedPattern requires weights configuration');
         }
@@ -71,11 +77,15 @@ class WeightedPattern {
         if (weights.length !== sequence.length) {
             throw new Error(`Weights length (${weights.length}) must match sequence length (${sequence.length})`);
         }
-        const rng = (0, seedrandom_1.default)(`${ctx.seed}-${state.index}`);
+        // Create seeded RNG for deterministic selection
+        const rng = seedrandom(`${ctx.seed}-${state.index}`);
+        // Calculate total weight
         const totalWeight = weights.reduce((sum, weight) => sum + Math.max(0, weight), 0);
         if (totalWeight === 0) {
+            // All weights are zero, fallback to uniform random
             return sequence[Math.floor(rng() * sequence.length)];
         }
+        // Weighted selection
         let randomValue = rng() * totalWeight;
         for (let i = 0; i < sequence.length; i++) {
             randomValue -= Math.max(0, weights[i]);
@@ -83,11 +93,14 @@ class WeightedPattern {
                 return sequence[i];
             }
         }
+        // Fallback to last item
         return sequence[sequence.length - 1];
     }
 }
-exports.WeightedPattern = WeightedPattern;
-function createSequencePattern(type, config = {}) {
+/**
+ * Factory function to create sequence patterns
+ */
+export function createSequencePattern(type, config = {}) {
     switch (type) {
         case 'linear':
             return new LinearPattern();
@@ -102,12 +115,20 @@ function createSequencePattern(type, config = {}) {
             throw new Error(`Unknown sequence pattern type: ${type}`);
     }
 }
-class SequentialNode extends advanced_1.AdvancedRuntimeNode {
+/**
+ * Advanced sequential node with stateful sequence processing
+ * Supports multiple traversal patterns: linear, cyclical, random, weighted
+ */
+export class SequentialNode extends AdvancedRuntimeNode {
+    ioHandler;
+    sequence;
+    pattern;
     constructor(id, sequence = [], pattern = new LinearPattern()) {
+        // Configure as deterministic, non-cacheable (stateful), stateful
         const nodeConfig = {
             deterministic: true,
-            cacheable: false,
-            stateful: true,
+            cacheable: false, // Don't cache since output depends on state
+            stateful: true, // Maintains state between executions
             performanceHints: {
                 expectedExecutionTime: 'fast',
                 memoryUsage: 'low'
@@ -116,7 +137,8 @@ class SequentialNode extends advanced_1.AdvancedRuntimeNode {
         super(id, nodeConfig);
         this.sequence = sequence;
         this.pattern = pattern;
-        const ioSpec = new io_system_1.IOSpecBuilder()
+        // Set up I/O specification
+        const ioSpec = new IOSpecBuilder()
             .addInput({
             id: 'items',
             label: 'Sequence Items',
@@ -143,21 +165,31 @@ class SequentialNode extends advanced_1.AdvancedRuntimeNode {
         })
             .addTextOutput('result', 'Sequential Result')
             .build();
-        this.ioHandler = new io_system_1.AdvancedIOHandler(ioSpec);
+        this.ioHandler = new AdvancedIOHandler(ioSpec);
     }
+    /**
+     * Execute sequential logic using the configured pattern
+     */
     run(ctx) {
+        // Record this node's execution
         ctx.executionMeta.nodeExecutionOrder.push(this.id);
+        // Use performance tracking for sequential processing
         return this.measureExecution(ctx, 'sequential-processing', () => {
+            // Get current state or initialize
             const currentState = this.getState(ctx) || {
                 index: 0,
                 history: [],
                 patternData: {}
             };
+            // Get effective sequence (from constructor or dynamic inputs)
             const effectiveSequence = this.getEffectiveSequence(ctx);
             if (effectiveSequence.length === 0) {
+                // No items to sequence through
                 return '';
             }
+            // Get next item using pattern
             const result = this.pattern.getNext(effectiveSequence, currentState, ctx);
+            // Update state
             const newState = {
                 index: currentState.index + 1,
                 history: [...currentState.history, result],
@@ -167,15 +199,21 @@ class SequentialNode extends advanced_1.AdvancedRuntimeNode {
             return result;
         });
     }
+    /**
+     * Comprehensive validation of sequential configuration
+     */
     validate() {
         const errors = [];
         const warnings = [];
+        // Validate sequence
         if (this.sequence.length === 0) {
             warnings.push('No sequence items configured - will return empty string');
         }
+        // Validate pattern-specific configuration
         if (this.pattern.type === 'weighted' && this.sequence.length > 0) {
             const weightedPattern = this.pattern;
             try {
+                // This will throw if weights are invalid - use actual sequence for validation
                 const validationContext = {
                     variables: {},
                     seed: 123,
@@ -194,6 +232,7 @@ class SequentialNode extends advanced_1.AdvancedRuntimeNode {
                 errors.push(`Invalid weighted pattern configuration: ${error instanceof Error ? error.message : String(error)}`);
             }
         }
+        // Validate sequence items
         this.sequence.forEach((item, index) => {
             if (item === undefined || item === null) {
                 warnings.push(`Sequence item ${index} is undefined or null`);
@@ -208,6 +247,9 @@ class SequentialNode extends advanced_1.AdvancedRuntimeNode {
             warnings
         };
     }
+    /**
+     * Serialize node data for persistence
+     */
     serialize() {
         return {
             id: this.id,
@@ -230,9 +272,15 @@ class SequentialNode extends advanced_1.AdvancedRuntimeNode {
             }
         };
     }
+    /**
+     * Get current state for debugging/inspection
+     */
     getCurrentState(ctx) {
         return this.getState(ctx) || null;
     }
+    /**
+     * Reset state (for testing or manual control)
+     */
     resetState(ctx) {
         this.setState(ctx, {
             index: 0,
@@ -240,21 +288,36 @@ class SequentialNode extends advanced_1.AdvancedRuntimeNode {
             patternData: {}
         });
     }
+    /**
+     * Get effective sequence from constructor data or dynamic inputs
+     */
     getEffectiveSequence(ctx) {
+        // For now, use constructor sequence
+        // In full implementation, would merge with dynamic inputs from I/O system
         return this.sequence;
     }
 }
-exports.SequentialNode = SequentialNode;
-function createSequentialNode(id, sequence, patternType = 'linear', patternConfig = {}) {
+/**
+ * Factory function for creating Sequential nodes
+ */
+export function createSequentialNode(id, sequence, patternType = 'linear', patternConfig = {}) {
     const pattern = createSequencePattern(patternType, patternConfig);
     return new SequentialNode(id, sequence, pattern);
 }
-exports.SequentialPresets = {
+/**
+ * Utility functions for common sequential patterns
+ */
+export const SequentialPresets = {
+    /** Simple linear sequence */
     linear: (sequence) => createSequencePattern('linear'),
+    /** Infinite cycling sequence */
     cycle: (sequence) => createSequencePattern('cyclical'),
+    /** Random selection with repeats */
     random: (allowRepeats = true) => createSequencePattern('random', { allowRepeats }),
+    /** Random selection without repeats until exhausted */
     shuffle: () => createSequencePattern('random', { allowRepeats: false }),
+    /** Weighted selection */
     weighted: (weights) => createSequencePattern('weighted', { weights }),
+    /** Equal probability weighted selection */
     uniform: (length) => createSequencePattern('weighted', { weights: new Array(length).fill(1) })
 };
-//# sourceMappingURL=Sequential.js.map

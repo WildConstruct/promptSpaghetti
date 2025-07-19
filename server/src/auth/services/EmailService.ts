@@ -225,7 +225,7 @@ export class EmailService {
   }
 
   private renderEmailTemplate(templateName: string, data: any): EmailTemplate {
-    const templates = {
+    const templates: Record<string, EmailTemplate> = {
       emailVerification: {
         subject: 'Verify your email address - PromptScape',
         html: `

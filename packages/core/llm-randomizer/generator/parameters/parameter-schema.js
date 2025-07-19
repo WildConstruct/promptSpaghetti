@@ -1,67 +1,83 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.defaultPresets = exports.ParameterValidator = exports.ValidationResultSchema = exports.ParameterPresetSchema = exports.RandomizerParametersSchema = exports.NodeTypePreference = exports.LLMProvider = exports.StylePreference = exports.ComplexityLevel = void 0;
-const zod_1 = require("zod");
-exports.ComplexityLevel = zod_1.z.enum(['simple', 'moderate', 'complex']);
-exports.StylePreference = zod_1.z.enum(['creative', 'logical', 'balanced']);
-exports.LLMProvider = zod_1.z.enum(['openai', 'claude', 'gemini']);
-exports.NodeTypePreference = zod_1.z.object({
-    nodeType: zod_1.z.string(),
-    weight: zod_1.z.number().min(0).max(1),
-    required: zod_1.z.boolean().default(false)
+// Epic 12 - LLM Agent Randomizer System
+// Story 12.4 - Randomizer Generator Implementation
+// Parameter schema and validation system
+import { z } from 'zod';
+export const ComplexityLevel = z.enum(['simple', 'moderate', 'complex']);
+export const StylePreference = z.enum(['creative', 'logical', 'balanced']);
+export const LLMProvider = z.enum(['openai', 'claude', 'gemini']);
+export const NodeTypePreference = z.object({
+    nodeType: z.string(),
+    weight: z.number().min(0).max(1),
+    required: z.boolean().default(false)
 });
-exports.RandomizerParametersSchema = zod_1.z.object({
-    purpose: zod_1.z.string().min(10).max(500),
-    complexity: exports.ComplexityLevel,
-    nodeCount: zod_1.z.number().int().min(3).max(100),
-    style: exports.StylePreference,
-    domain: zod_1.z.string().optional(),
-    userContext: zod_1.z.string().optional(),
-    nodeTypes: zod_1.z.array(exports.NodeTypePreference).default([]),
-    specificRequirements: zod_1.z.array(zod_1.z.string()).default([]),
-    constraints: zod_1.z.array(zod_1.z.string()).default([]),
-    focusAreas: zod_1.z.array(zod_1.z.string()).default([]),
-    provider: exports.LLMProvider.default('openai'),
-    temperature: zod_1.z.number().min(0).max(2).default(0.7),
-    maxRetries: zod_1.z.number().int().min(1).max(10).default(3),
-    includeMetadata: zod_1.z.boolean().default(true),
-    validateOutput: zod_1.z.boolean().default(true),
-    enablePreview: zod_1.z.boolean().default(true),
-    preferredPatterns: zod_1.z.array(zod_1.z.string()).default([]),
-    avoidPatterns: zod_1.z.array(zod_1.z.string()).default([]),
-    qualityLevel: zod_1.z.enum(['draft', 'standard', 'high']).default('standard'),
-    diversityScore: zod_1.z.number().min(0).max(1).default(0.5),
-    outputFormat: zod_1.z.enum(['graph', 'serialized', 'both']).default('both'),
-    includeExplanation: zod_1.z.boolean().default(false)
+export const RandomizerParametersSchema = z.object({
+    // Core Generation Parameters
+    purpose: z.string().min(10).max(500),
+    complexity: ComplexityLevel,
+    nodeCount: z.number().int().min(3).max(100),
+    style: StylePreference,
+    // Domain and Context
+    domain: z.string().optional(),
+    userContext: z.string().optional(),
+    // Node Type Preferences
+    nodeTypes: z.array(NodeTypePreference).default([]),
+    // Requirements and Constraints
+    specificRequirements: z.array(z.string()).default([]),
+    constraints: z.array(z.string()).default([]),
+    focusAreas: z.array(z.string()).default([]),
+    // LLM Configuration
+    provider: LLMProvider.default('openai'),
+    temperature: z.number().min(0).max(2).default(0.7),
+    maxRetries: z.number().int().min(1).max(10).default(3),
+    // Advanced Options
+    includeMetadata: z.boolean().default(true),
+    validateOutput: z.boolean().default(true),
+    enablePreview: z.boolean().default(true),
+    // Generation Preferences
+    preferredPatterns: z.array(z.string()).default([]),
+    avoidPatterns: z.array(z.string()).default([]),
+    // Quality Settings
+    qualityLevel: z.enum(['draft', 'standard', 'high']).default('standard'),
+    diversityScore: z.number().min(0).max(1).default(0.5),
+    // Output Configuration
+    outputFormat: z.enum(['graph', 'serialized', 'both']).default('both'),
+    includeExplanation: z.boolean().default(false)
 });
-exports.ParameterPresetSchema = zod_1.z.object({
-    id: zod_1.z.string(),
-    name: zod_1.z.string(),
-    description: zod_1.z.string(),
-    category: zod_1.z.string(),
-    parameters: exports.RandomizerParametersSchema,
-    tags: zod_1.z.array(zod_1.z.string()).default([]),
-    isDefault: zod_1.z.boolean().default(false),
-    createdAt: zod_1.z.string().datetime(),
-    updatedAt: zod_1.z.string().datetime()
+export const ParameterPresetSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string(),
+    category: z.string(),
+    parameters: RandomizerParametersSchema,
+    tags: z.array(z.string()).default([]),
+    isDefault: z.boolean().default(false),
+    createdAt: z.string().datetime(),
+    updatedAt: z.string().datetime()
 });
-exports.ValidationResultSchema = zod_1.z.object({
-    isValid: zod_1.z.boolean(),
-    errors: zod_1.z.array(zod_1.z.object({
-        field: zod_1.z.string(),
-        message: zod_1.z.string(),
-        code: zod_1.z.string()
+export const ValidationResultSchema = z.object({
+    isValid: z.boolean(),
+    errors: z.array(z.object({
+        field: z.string(),
+        message: z.string(),
+        code: z.string()
     })),
-    warnings: zod_1.z.array(zod_1.z.object({
-        field: zod_1.z.string(),
-        message: zod_1.z.string(),
-        suggestion: zod_1.z.string().optional()
+    warnings: z.array(z.object({
+        field: z.string(),
+        message: z.string(),
+        suggestion: z.string().optional()
     }))
 });
-class ParameterValidator {
+/**
+ * Parameter validation class
+ */
+export class ParameterValidator {
+    /**
+     * Validate parameters against schema
+     */
     static validate(parameters) {
-        const result = exports.RandomizerParametersSchema.safeParse(parameters);
+        const result = RandomizerParametersSchema.safeParse(parameters);
         if (result.success) {
+            // Additional business logic validation
             return this.validateBusinessRules(result.data);
         }
         else {
@@ -76,9 +92,13 @@ class ParameterValidator {
             };
         }
     }
+    /**
+     * Validate business rules beyond schema
+     */
     static validateBusinessRules(parameters) {
         const errors = [];
         const warnings = [];
+        // Node count vs complexity validation
         const complexityNodeRanges = {
             simple: { min: 3, max: 8 },
             moderate: { min: 8, max: 20 },
@@ -92,6 +112,7 @@ class ParameterValidator {
                 suggestion: `Consider ${range.min}-${range.max} nodes for ${parameters.complexity} complexity`
             });
         }
+        // Purpose length validation
         if (parameters.purpose.length < 20) {
             warnings.push({
                 field: 'purpose',
@@ -99,6 +120,7 @@ class ParameterValidator {
                 suggestion: 'Provide more detailed purpose for better graph generation'
             });
         }
+        // Node type requirements validation
         const requiredNodeTypes = parameters.nodeTypes.filter(nt => nt.required);
         if (requiredNodeTypes.length > Math.floor(parameters.nodeCount / 2)) {
             errors.push({
@@ -107,6 +129,7 @@ class ParameterValidator {
                 code: 'TOO_MANY_REQUIRED_TYPES'
             });
         }
+        // Temperature validation for provider
         if (parameters.provider === 'openai' && parameters.temperature > 1.5) {
             warnings.push({
                 field: 'temperature',
@@ -120,8 +143,12 @@ class ParameterValidator {
             warnings
         };
     }
+    /**
+     * Get parameter suggestions based on input
+     */
     static getSuggestions(parameters) {
         const suggestions = {};
+        // Suggest node count based on complexity
         if (parameters.complexity && !parameters.nodeCount) {
             const counts = {
                 simple: 5,
@@ -130,9 +157,11 @@ class ParameterValidator {
             };
             suggestions.nodeCount = counts[parameters.complexity];
         }
+        // Suggest node types based on purpose
         if (parameters.purpose && (!parameters.nodeTypes || parameters.nodeTypes.length === 0)) {
             suggestions.nodeTypes = this.suggestNodeTypes(parameters.purpose);
         }
+        // Suggest temperature based on style
         if (parameters.style && !parameters.temperature) {
             const temperatures = {
                 creative: 0.8,
@@ -141,32 +170,45 @@ class ParameterValidator {
             };
             suggestions.temperature = temperatures[parameters.style];
         }
+        // Suggest focus areas based on domain
         if (parameters.domain && (!parameters.focusAreas || parameters.focusAreas.length === 0)) {
             suggestions.focusAreas = this.suggestFocusAreas(parameters.domain);
         }
         return suggestions;
     }
+    /**
+     * Suggest appropriate node types based on purpose
+     */
     static suggestNodeTypes(purpose) {
         const purposeLower = purpose.toLowerCase();
         const suggestions = [];
+        // Content generation patterns
         if (purposeLower.includes('content') || purposeLower.includes('text') || purposeLower.includes('writing')) {
             suggestions.push('WeightedChoice', 'Concat', 'Sequential');
         }
+        // Decision making patterns
         if (purposeLower.includes('decision') || purposeLower.includes('choice') || purposeLower.includes('branch')) {
             suggestions.push('Conditional', 'WeightedChoice');
         }
+        // Data processing patterns
         if (purposeLower.includes('data') || purposeLower.includes('process') || purposeLower.includes('transform')) {
             suggestions.push('PythonTransform', 'Conditional', 'Sequential');
         }
+        // Interactive patterns
         if (purposeLower.includes('interactive') || purposeLower.includes('user') || purposeLower.includes('response')) {
             suggestions.push('GetVariable', 'SetVariable', 'Conditional');
         }
+        // Story/narrative patterns
         if (purposeLower.includes('story') || purposeLower.includes('narrative') || purposeLower.includes('plot')) {
             suggestions.push('Markov', 'Sequential', 'WeightedChoice');
         }
+        // Always include Output for completeness
         suggestions.push('Output');
-        return [...new Set(suggestions)];
+        return [...new Set(suggestions)]; // Remove duplicates
     }
+    /**
+     * Suggest focus areas based on domain
+     */
     static suggestFocusAreas(domain) {
         const domainLower = domain.toLowerCase();
         const suggestions = [];
@@ -191,8 +233,10 @@ class ParameterValidator {
         return suggestions;
     }
 }
-exports.ParameterValidator = ParameterValidator;
-exports.defaultPresets = [
+/**
+ * Default parameter presets
+ */
+export const defaultPresets = [
     {
         id: 'simple-greeting',
         name: 'Simple Greeting Generator',
@@ -321,4 +365,3 @@ exports.defaultPresets = [
         updatedAt: new Date().toISOString()
     }
 ];
-//# sourceMappingURL=parameter-schema.js.map

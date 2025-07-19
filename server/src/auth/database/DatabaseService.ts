@@ -43,7 +43,7 @@ export class DatabaseService {
       console.error('Database query error:', {
         query: text,
         params: params ? params.map(p => typeof p === 'string' && p.length > 100 ? `${p.substring(0, 100)}...` : p) : undefined,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw error;
     }

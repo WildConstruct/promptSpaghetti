@@ -1,5 +1,5 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useCorrectionsEnabled } from './correctionsStore';
 import { CorrectionsManagerPanel } from './CorrectionsManagerPanel';
 import { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel';

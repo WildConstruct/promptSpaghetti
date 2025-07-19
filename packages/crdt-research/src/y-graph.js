@@ -1,103 +1,126 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.YGraph = void 0;
-exports.registerYGraphType = registerYGraphType;
-const Y = __importStar(require("yjs"));
-class YGraph extends Y.AbstractType {
+/**
+ * Y.Graph - Custom Yjs type for collaborative graph editing
+ * Epic 9.1.1 - CRDT Implementation Research
+ */
+import * as Y from 'yjs';
+/**
+ * Custom Yjs type for graph structures
+ * Provides conflict-free collaborative editing of nodes and edges
+ */
+export class YGraph extends Y.AbstractType {
+    nodes;
+    edges;
     constructor() {
         super();
         this.nodes = new Y.Map();
         this.edges = new Y.Map();
     }
+    /**
+     * Get the type name for Yjs
+     */
     get _name() {
         return 'Graph';
     }
+    /**
+     * Clone the graph (required by Yjs)
+     */
     _copy() {
         const copy = new YGraph();
-        this.nodes.forEach((node, id) => {
-            copy.nodes.set(id, { ...node });
-        });
-        this.edges.forEach((edge, id) => {
-            copy.edges.set(id, { ...edge });
-        });
+        // The maps will be replaced with document-integrated ones
+        // so we don't need to copy data here
         return copy;
     }
+    /**
+     * Write the graph to an update encoder (required by Yjs)
+     */
     _write(encoder) {
+        // Since we're using standard Y.Maps, we don't need custom serialization
+        // The maps will handle their own serialization
         encoder.writeTypeRef(YGraph);
-        encoder.writeVarUint(this.nodes.size);
-        this.nodes.forEach((node, id) => {
-            encoder.writeString(id);
-            encoder.writeJSON(node);
-        });
-        encoder.writeVarUint(this.edges.size);
-        this.edges.forEach((edge, id) => {
-            encoder.writeString(id);
-            encoder.writeJSON(edge);
-        });
+        encoder.writeVarUint(0); // No custom data
     }
+    /**
+     * Add a node to the graph
+     */
     addNode(node) {
-        this.doc?.transact(() => {
+        // If doc is available, use transaction
+        if (this.doc) {
+            this.doc.transact(() => {
+                this.nodes.set(node.id, node);
+            });
+        }
+        else {
+            // Direct set for testing
             this.nodes.set(node.id, node);
-        });
+        }
     }
+    /**
+     * Update a node in the graph
+     */
     updateNode(nodeId, updates) {
-        this.doc?.transact(() => {
+        if (this.doc) {
+            this.doc.transact(() => {
+                const node = this.nodes.get(nodeId);
+                if (node) {
+                    this.nodes.set(nodeId, { ...node, ...updates });
+                }
+            });
+        }
+        else {
             const node = this.nodes.get(nodeId);
             if (node) {
                 this.nodes.set(nodeId, { ...node, ...updates });
             }
-        });
+        }
     }
+    /**
+     * Delete a node from the graph
+     */
     deleteNode(nodeId) {
-        this.doc?.transact(() => {
+        if (this.doc) {
+            this.doc.transact(() => {
+                // Delete the node
+                this.nodes.delete(nodeId);
+                // Delete all connected edges
+                this.edges.forEach((edge, edgeId) => {
+                    if (edge.source === nodeId || edge.target === nodeId) {
+                        this.edges.delete(edgeId);
+                    }
+                });
+            });
+        }
+        else {
+            // Direct operations for testing
             this.nodes.delete(nodeId);
             this.edges.forEach((edge, edgeId) => {
                 if (edge.source === nodeId || edge.target === nodeId) {
                     this.edges.delete(edgeId);
                 }
             });
-        });
+        }
     }
+    /**
+     * Add an edge to the graph
+     */
     addEdge(edge) {
-        this.doc?.transact(() => {
+        if (this.doc) {
+            this.doc.transact(() => {
+                // Verify source and target nodes exist
+                if (this.nodes.has(edge.source) && this.nodes.has(edge.target)) {
+                    this.edges.set(edge.id, edge);
+                }
+            });
+        }
+        else {
+            // Direct operations for testing
             if (this.nodes.has(edge.source) && this.nodes.has(edge.target)) {
                 this.edges.set(edge.id, edge);
             }
-        });
+        }
     }
+    /**
+     * Update an edge in the graph
+     */
     updateEdge(edgeId, updates) {
         this.doc?.transact(() => {
             const edge = this.edges.get(edgeId);
@@ -106,23 +129,46 @@ class YGraph extends Y.AbstractType {
             }
         });
     }
+    /**
+     * Delete an edge from the graph
+     */
     deleteEdge(edgeId) {
-        this.doc?.transact(() => {
+        if (this.doc) {
+            this.doc.transact(() => {
+                this.edges.delete(edgeId);
+            });
+        }
+        else {
             this.edges.delete(edgeId);
-        });
+        }
     }
+    /**
+     * Get all nodes as an array
+     */
     getNodes() {
         return Array.from(this.nodes.values());
     }
+    /**
+     * Get all edges as an array
+     */
     getEdges() {
         return Array.from(this.edges.values());
     }
+    /**
+     * Get a specific node
+     */
     getNode(nodeId) {
         return this.nodes.get(nodeId);
     }
+    /**
+     * Get a specific edge
+     */
     getEdge(edgeId) {
         return this.edges.get(edgeId);
     }
+    /**
+     * Apply a graph operation
+     */
     applyOperation(operation) {
         if (operation.type === 'node') {
             this._applyNodeOperation(operation);
@@ -165,35 +211,60 @@ class YGraph extends Y.AbstractType {
                 break;
         }
     }
+    /**
+     * Serialize the graph to JSON
+     */
     toJSON() {
         return {
             nodes: this.getNodes(),
             edges: this.getEdges()
         };
     }
+    /**
+     * Load graph from JSON
+     */
     fromJSON(data) {
         this.doc?.transact(() => {
+            // Clear existing data
             this.nodes.clear();
             this.edges.clear();
+            // Load nodes
             data.nodes.forEach(node => {
                 this.nodes.set(node.id, node);
             });
+            // Load edges
             data.edges.forEach(edge => {
                 this.edges.set(edge.id, edge);
             });
         });
     }
-    observe(callback) {
+    /**
+     * Observe changes to nodes
+     */
+    observeNodes(callback) {
         this.nodes.observe(callback);
+    }
+    /**
+     * Observe changes to edges
+     */
+    observeEdges(callback) {
         this.edges.observe(callback);
     }
-    unobserve(callback) {
+    /**
+     * Unobserve changes to nodes
+     */
+    unobserveNodes(callback) {
         this.nodes.unobserve(callback);
+    }
+    /**
+     * Unobserve changes to edges
+     */
+    unobserveEdges(callback) {
         this.edges.unobserve(callback);
     }
 }
-exports.YGraph = YGraph;
-function registerYGraphType() {
+// Register the custom type with Yjs
+export function registerYGraphType() {
+    // @ts-ignore - Yjs type registration
     Y.registerType('Graph', YGraph);
 }
-//# sourceMappingURL=y-graph.js.map

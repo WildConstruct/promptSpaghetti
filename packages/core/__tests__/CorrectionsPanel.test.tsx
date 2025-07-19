@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+// import userEvent from '@testing-library/user-event'; // Using mock from jest.setup.js
 import { CorrectionsPanel } from '../CorrectionsPanel';
 import { useCorrectionsStore } from '../correctionsStore';
 
@@ -162,8 +162,8 @@ describe('CorrectionsPanel', () => {
     expect(ruleCheckbox).toBeInTheDocument();
     expect(ruleCheckbox).toBeChecked(); // Should be checked initially since isActive is true
     
-    // Use userEvent for more realistic interaction
-    await userEvent.click(ruleCheckbox);
+    // Use fireEvent since userEvent is mocked
+    fireEvent.click(ruleCheckbox);
     
     // Verify the store method was called
     expect(mockStore.toggleRule).toHaveBeenCalledWith('1');

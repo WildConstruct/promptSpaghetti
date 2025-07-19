@@ -2,9 +2,9 @@
 // Story 12.1 - Serialization Format Design
 // Comprehensive test cases for format validation and serialization
 
-import { GraphSerializer, SerializationMetadata } from '../serialization/serializer';
-import { FormatValidator, validateFormat, isValidFormat } from '../serialization/validator';
-import { Graph, Node } from '../../graphSchema';
+import { GraphSerializer, SerializationMetadata } from '../serialization/serializer.js';
+import { FormatValidator, validateFormat, isValidFormat } from '../serialization/validator.js';
+import { Graph, Node } from '../../graphSchema.js';
 
 describe('Epic 12 - LLM Serialization Format', () => {
   describe('GraphSerializer', () => {
@@ -192,7 +192,7 @@ describe('Epic 12 - LLM Serialization Format', () => {
         
         expect(result).toContain('type: Markov');
         expect(result).toContain('states:');
-        expect(result).toContain('initialState: start');
+        expect(result).toContain('initial: "start"');
       });
 
       test('should serialize PythonTransform node', () => {

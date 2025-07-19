@@ -170,7 +170,7 @@ export class ExtensionInterfaceValidator {
       }
 
     } catch (error) {
-      errors.push(`Configuration validation failed: ${error.message}`);
+      errors.push(`Configuration validation failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     return {

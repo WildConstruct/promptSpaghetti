@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { useCallback, useState, useMemo, useRef } from "react";
+import { useCallback, useState, useMemo, useRef } from "react";
 import { ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, ConnectionLineType, useReactFlow } from "reactflow";
 import { InspectorPanel } from "./components/Inspector";
 import { NodeRenderer } from "./components/NodeRenderer";
