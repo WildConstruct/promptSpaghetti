@@ -14,6 +14,7 @@ import {
   IOSpecBuilder,
   TypedInputs 
 } from '../io-system';
+import { SafeExpressionEvaluator } from '../expression-evaluator';
 
 /**
  * A conditional branch with condition expression and output value
@@ -295,17 +296,12 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
    * Safely evaluate an expression with limited scope
    */
   private safeEvaluate(expression: string, context: Record<string, any>): any {
-    // Sanitize the expression
-    const sanitizedExpression = this.sanitizeExpression(expression);
-    
-    // Create a function with the context variables as parameters
-    const paramNames = Object.keys(context);
-    const paramValues = paramNames.map(name => context[name]);
+    // First sanitize the expression to check for dangerous patterns
+    this.sanitizeExpression(expression);
     
     try {
-      // Use Function constructor with controlled scope
-      const func = new Function(...paramNames, `return (${sanitizedExpression});`);
-      return func(...paramValues);
+      // Use the safe AST-based evaluator instead of Function constructor
+      return SafeExpressionEvaluator.evaluate(expression, context);
     } catch (error) {
       throw new Error(`Expression evaluation failed: ${expression} - ${error}`);
     }

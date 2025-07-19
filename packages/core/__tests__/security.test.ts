@@ -185,7 +185,7 @@ describe('Security Validation Framework', () => {
       const largeArray = new Array(2000).fill('item');
       expect(SecurityValidation.validateSafeValue(largeArray)).toBe(false);
       
-      const largeObject = {};
+      const largeObject: Record<string, string> = {};
       for (let i = 0; i < 200; i++) {
         largeObject[`key${i}`] = `value${i}`;
       }
