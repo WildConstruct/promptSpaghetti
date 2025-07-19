@@ -11,6 +11,7 @@ import { approvalRoutes } from './routes/approval';
 import lockingRoutes from './routes/locking';
 import { randomizerRoutes } from './routes/randomizer';
 import { analyticsRoutes } from './routes/analytics';
+import { ticketRoutes } from './routes/tickets';
 import { AnalyticsDashboard } from './analytics/AnalyticsDashboard';
 import { AnalyticsCollector } from './analytics/AnalyticsCollector';
 import { CostTracker } from './analytics/CostTracker';
@@ -318,6 +319,9 @@ server.register(lockingRoutes, { prefix: '/api/locking' });
 
 // Register randomizer routes
 server.register(randomizerRoutes, { prefix: '/api/randomizer' });
+
+// Register ticket routes
+server.register(ticketRoutes, { prefix: '/api' });
 
 // Register analytics routes
 if (analyticsDashboard && costTracker) {

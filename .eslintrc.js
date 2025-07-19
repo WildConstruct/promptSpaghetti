@@ -16,7 +16,7 @@ module.exports = {
       plugins: ['@typescript-eslint', 'react', 'react-hooks'],
       extends: [
         'eslint:recommended',
-        '@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended',
         'plugin:react/recommended',
         'plugin:react-hooks/recommended'
       ]
@@ -28,7 +28,7 @@ module.exports = {
     'quotes': ['error', 'single'],
     'semi': ['error', 'always'],
     'comma-dangle': ['error', 'never'],
-    'max-len': ['error', { code: 80, ignoreUrls: true }],
+    'max-len': ['error', { code: 120, ignoreUrls: true, ignoreComments: true }],
     
     // React rules
     'react/react-in-jsx-scope': 'off', // Not needed with React 17+
