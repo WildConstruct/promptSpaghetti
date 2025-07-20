@@ -248,7 +248,7 @@ export class MigrationService {
     totalRules: number;
     activeRules: number;
     canMigrate: boolean;
-  } {
+    } {
     try {
       const { getDatabaseStats } = require('./connection');
       const stats = getDatabaseStats();
@@ -257,14 +257,14 @@ export class MigrationService {
         databaseInitialized: stats !== null,
         totalRules: stats?.totalRules?.count || 0,
         activeRules: stats?.activeRules?.count || 0,
-        canMigrate: stats !== null,
+        canMigrate: stats !== null
       };
     } catch (error) {
       return {
         databaseInitialized: false,
         totalRules: 0,
         activeRules: 0,
-        canMigrate: false,
+        canMigrate: false
       };
     }
   }

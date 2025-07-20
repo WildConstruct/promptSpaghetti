@@ -244,7 +244,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
             autoFixable: true,
             suggestions: [{
               type: 'fix',
-              description: `Remove parameter or upgrade to compatible version`
+              description: 'Remove parameter or upgrade to compatible version'
             }]
           }
         ));
@@ -397,106 +397,106 @@ export class MidjourneyAdaptor extends BaseAdaptor {
 
     // Process current node content
     switch (node.type) {
-      case 'text':
-        const textContent = node.data.content || '';
-        content = content ? `${content} ${textContent}` : textContent;
-        break;
+    case 'text':
+      const textContent = node.data.content || '';
+      content = content ? `${content} ${textContent}` : textContent;
+      break;
         
-      case 'style':
-        const styleContent = node.data.style || node.data.content || '';
-        if (styleContent) {
-          // Add style modifiers
-          content = content ? `${content}, ${styleContent}` : styleContent;
-          transformations.push({
-            step: 'process_style',
-            sourceNodeId: node.id,
-            action: 'Added style modifiers',
-            details: { style: styleContent }
-          });
-        }
-        break;
-        
-      case 'image':
-        const imageRef = node.data.url || node.data.content;
-        const imageDesc = node.data.description || node.data.alt || '';
-        
-        if (imageRef && imageRef.startsWith('http')) {
-          // Image URL reference
-          content = content ? `${content} ${imageRef}` : imageRef;
-          transformations.push({
-            step: 'process_image_reference',
-            sourceNodeId: node.id,
-            action: 'Added image URL reference',
-            details: { url: imageRef }
-          });
-        } else if (imageDesc) {
-          // Image description
-          content = content ? `${content}, ${imageDesc}` : imageDesc;
-          transformations.push({
-            step: 'process_image_description',
-            sourceNodeId: node.id,
-            action: 'Added image description',
-            details: { description: imageDesc }
-          });
-        }
-        break;
-        
-      case 'concat':
-        // Content already processed from inputs
+    case 'style':
+      const styleContent = node.data.style || node.data.content || '';
+      if (styleContent) {
+        // Add style modifiers
+        content = content ? `${content}, ${styleContent}` : styleContent;
         transformations.push({
-          step: 'process_concat',
+          step: 'process_style',
           sourceNodeId: node.id,
-          action: 'Concatenated input nodes'
+          action: 'Added style modifiers',
+          details: { style: styleContent }
         });
-        break;
+      }
+      break;
         
-      case 'weighted':
-        // Select based on weights (simplified - could be enhanced)
-        if (node.data.options && node.data.options.length > 0) {
-          const selectedOption = this.selectWeightedOption(node.data.options);
-          content = content ? `${content} ${selectedOption.text}` : selectedOption.text;
-          transformations.push({
-            step: 'process_weighted',
-            sourceNodeId: node.id,
-            action: 'Selected weighted option',
-            details: { selectedIndex: selectedOption.index, weight: selectedOption.weight }
-          });
-        }
-        break;
+    case 'image':
+      const imageRef = node.data.url || node.data.content;
+      const imageDesc = node.data.description || node.data.alt || '';
         
-      case 'conditional':
-        // For simplicity, take the 'true' branch (could be enhanced with condition evaluation)
-        if (node.data.trueBranch) {
-          content = content ? `${content} ${node.data.trueBranch}` : node.data.trueBranch;
-          transformations.push({
-            step: 'process_conditional',
-            sourceNodeId: node.id,
-            action: 'Selected true branch',
-            details: { condition: node.data.condition }
-          });
-        }
-        break;
-        
-      case 'output':
-        // Content already processed from inputs
+      if (imageRef && imageRef.startsWith('http')) {
+        // Image URL reference
+        content = content ? `${content} ${imageRef}` : imageRef;
         transformations.push({
-          step: 'process_output',
+          step: 'process_image_reference',
           sourceNodeId: node.id,
-          action: 'Processed output node'
+          action: 'Added image URL reference',
+          details: { url: imageRef }
         });
-        break;
+      } else if (imageDesc) {
+        // Image description
+        content = content ? `${content}, ${imageDesc}` : imageDesc;
+        transformations.push({
+          step: 'process_image_description',
+          sourceNodeId: node.id,
+          action: 'Added image description',
+          details: { description: imageDesc }
+        });
+      }
+      break;
         
-      default:
-        // For unsupported node types, try to extract any text content
-        if (node.data.content) {
-          content = content ? `${content} ${node.data.content}` : node.data.content;
-          transformations.push({
-            step: 'process_fallback',
-            sourceNodeId: node.id,
-            action: `Processed unsupported node type: ${node.type}`,
-            details: { nodeType: node.type }
-          });
-        }
+    case 'concat':
+      // Content already processed from inputs
+      transformations.push({
+        step: 'process_concat',
+        sourceNodeId: node.id,
+        action: 'Concatenated input nodes'
+      });
+      break;
+        
+    case 'weighted':
+      // Select based on weights (simplified - could be enhanced)
+      if (node.data.options && node.data.options.length > 0) {
+        const selectedOption = this.selectWeightedOption(node.data.options);
+        content = content ? `${content} ${selectedOption.text}` : selectedOption.text;
+        transformations.push({
+          step: 'process_weighted',
+          sourceNodeId: node.id,
+          action: 'Selected weighted option',
+          details: { selectedIndex: selectedOption.index, weight: selectedOption.weight }
+        });
+      }
+      break;
+        
+    case 'conditional':
+      // For simplicity, take the 'true' branch (could be enhanced with condition evaluation)
+      if (node.data.trueBranch) {
+        content = content ? `${content} ${node.data.trueBranch}` : node.data.trueBranch;
+        transformations.push({
+          step: 'process_conditional',
+          sourceNodeId: node.id,
+          action: 'Selected true branch',
+          details: { condition: node.data.condition }
+        });
+      }
+      break;
+        
+    case 'output':
+      // Content already processed from inputs
+      transformations.push({
+        step: 'process_output',
+        sourceNodeId: node.id,
+        action: 'Processed output node'
+      });
+      break;
+        
+    default:
+      // For unsupported node types, try to extract any text content
+      if (node.data.content) {
+        content = content ? `${content} ${node.data.content}` : node.data.content;
+        transformations.push({
+          step: 'process_fallback',
+          sourceNodeId: node.id,
+          action: `Processed unsupported node type: ${node.type}`,
+          details: { nodeType: node.type }
+        });
+      }
     }
 
     return content.trim();

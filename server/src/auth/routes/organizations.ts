@@ -35,16 +35,16 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           plan: { type: 'string', enum: ['free', 'pro', 'enterprise'] },
           maxUsers: { type: 'number', minimum: 1 },
           settings: { type: 'object' },
-          branding: { type: 'object' },
-        },
-      },
-    },
+          branding: { type: 'object' }
+        }
+      }
+    }
   }, async (request: OrganizationRequest, reply) => {
     try {
       const createData: CreateOrganizationData = request.body as CreateOrganizationData;
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const organization = await orgService.createOrganization(
@@ -55,40 +55,40 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.code(201).send({
         success: true,
-        data: organization,
+        data: organization
       });
     } catch (error) {
       fastify.log.error('Organization creation failed:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Organization creation failed',
+        error: error instanceof Error ? error.message : 'Organization creation failed'
       });
     }
   });
 
   // Get user's organizations
   fastify.get('/organizations/my', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const organizations = await orgService.getUserOrganizations(request.user.id);
 
       reply.send({
         success: true,
-        data: organizations,
+        data: organizations
       });
     } catch (error) {
       fastify.log.error('Failed to fetch user organizations:', error);
       reply.code(500).send({
         success: false,
-        error: 'Failed to fetch organizations',
+        error: 'Failed to fetch organizations'
       });
     }
   });
 
   // Get organization by ID
   fastify.get('/organizations/:organizationId', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -103,7 +103,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to view organization',
+          error: 'Insufficient permissions to view organization'
         });
       }
 
@@ -111,19 +111,19 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!organization) {
         return reply.code(404).send({
           success: false,
-          error: 'Organization not found',
+          error: 'Organization not found'
         });
       }
 
       reply.send({
         success: true,
-        data: organization,
+        data: organization
       });
     } catch (error) {
       fastify.log.error('Failed to fetch organization:', error);
       reply.code(500).send({
         success: false,
-        error: 'Failed to fetch organization',
+        error: 'Failed to fetch organization'
       });
     }
   });
@@ -141,10 +141,10 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           plan: { type: 'string', enum: ['free', 'pro', 'enterprise'] },
           maxUsers: { type: 'number', minimum: 1 },
           settings: { type: 'object' },
-          branding: { type: 'object' },
-        },
-      },
-    },
+          branding: { type: 'object' }
+        }
+      }
+    }
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -160,13 +160,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to update organization',
+          error: 'Insufficient permissions to update organization'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const organization = await orgService.updateOrganization(
@@ -178,20 +178,20 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: organization,
+        data: organization
       });
     } catch (error) {
       fastify.log.error('Organization update failed:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Organization update failed',
+        error: error instanceof Error ? error.message : 'Organization update failed'
       });
     }
   });
 
   // Delete organization
   fastify.delete('/organizations/:organizationId', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -206,33 +206,33 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to delete organization',
+          error: 'Insufficient permissions to delete organization'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       await orgService.deleteOrganization(organizationId, request.user.id, context);
 
       reply.send({
         success: true,
-        message: 'Organization deleted successfully',
+        message: 'Organization deleted successfully'
       });
     } catch (error) {
       fastify.log.error('Organization deletion failed:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Organization deletion failed',
+        error: error instanceof Error ? error.message : 'Organization deletion failed'
       });
     }
   });
 
   // Get organization statistics
   fastify.get('/organizations/:organizationId/stats', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -247,7 +247,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to view organization statistics',
+          error: 'Insufficient permissions to view organization statistics'
         });
       }
 
@@ -255,13 +255,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: stats,
+        data: stats
       });
     } catch (error) {
       fastify.log.error('Failed to fetch organization stats:', error);
       reply.code(500).send({
         success: false,
-        error: 'Failed to fetch organization statistics',
+        error: 'Failed to fetch organization statistics'
       });
     }
   });
@@ -279,10 +279,10 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           name: { type: 'string', minLength: 1, maxLength: 100 },
           description: { type: 'string', maxLength: 500 },
           parentTeamId: { type: 'string', format: 'uuid' },
-          settings: { type: 'object' },
-        },
-      },
-    },
+          settings: { type: 'object' }
+        }
+      }
+    }
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -303,13 +303,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to create teams',
+          error: 'Insufficient permissions to create teams'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const team = await orgService.createTeam(
@@ -320,20 +320,20 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.code(201).send({
         success: true,
-        data: team,
+        data: team
       });
     } catch (error) {
       fastify.log.error('Team creation failed:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Team creation failed',
+        error: error instanceof Error ? error.message : 'Team creation failed'
       });
     }
   });
 
   // Get organization teams
   fastify.get('/organizations/:organizationId/teams', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -348,7 +348,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to view teams',
+          error: 'Insufficient permissions to view teams'
         });
       }
 
@@ -356,20 +356,20 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: teams,
+        data: teams
       });
     } catch (error) {
       fastify.log.error('Failed to fetch teams:', error);
       reply.code(500).send({
         success: false,
-        error: 'Failed to fetch teams',
+        error: 'Failed to fetch teams'
       });
     }
   });
 
   // Get team hierarchy
   fastify.get('/organizations/:organizationId/teams/hierarchy', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { organizationId } = request.params as { organizationId: string };
@@ -384,7 +384,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to view team hierarchy',
+          error: 'Insufficient permissions to view team hierarchy'
         });
       }
 
@@ -392,20 +392,20 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: hierarchy,
+        data: hierarchy
       });
     } catch (error) {
       fastify.log.error('Failed to fetch team hierarchy:', error);
       reply.code(500).send({
         success: false,
-        error: 'Failed to fetch team hierarchy',
+        error: 'Failed to fetch team hierarchy'
       });
     }
   });
 
   // Get team by ID
   fastify.get('/teams/:teamId', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId } = request.params as { teamId: string };
@@ -414,7 +414,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!team) {
         return reply.code(404).send({
           success: false,
-          error: 'Team not found',
+          error: 'Team not found'
         });
       }
 
@@ -428,19 +428,19 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to view team',
+          error: 'Insufficient permissions to view team'
         });
       }
 
       reply.send({
         success: true,
-        data: team,
+        data: team
       });
     } catch (error) {
       fastify.log.error('Failed to fetch team:', error);
       reply.code(500).send({
         success: false,
-        error: 'Failed to fetch team',
+        error: 'Failed to fetch team'
       });
     }
   });
@@ -455,10 +455,10 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           name: { type: 'string', minLength: 1, maxLength: 100 },
           description: { type: 'string', maxLength: 500 },
           parentTeamId: { type: 'string', format: 'uuid' },
-          settings: { type: 'object' },
-        },
-      },
-    },
+          settings: { type: 'object' }
+        }
+      }
+    }
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId } = request.params as { teamId: string };
@@ -473,7 +473,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!team) {
         return reply.code(404).send({
           success: false,
-          error: 'Team not found',
+          error: 'Team not found'
         });
       }
 
@@ -487,13 +487,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to update team',
+          error: 'Insufficient permissions to update team'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const updatedTeam = await orgService.updateTeam(
@@ -505,20 +505,20 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: updatedTeam,
+        data: updatedTeam
       });
     } catch (error) {
       fastify.log.error('Team update failed:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Team update failed',
+        error: error instanceof Error ? error.message : 'Team update failed'
       });
     }
   });
 
   // Delete team
   fastify.delete('/teams/:teamId', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId } = request.params as { teamId: string };
@@ -527,7 +527,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!team) {
         return reply.code(404).send({
           success: false,
-          error: 'Team not found',
+          error: 'Team not found'
         });
       }
 
@@ -541,26 +541,26 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to delete team',
+          error: 'Insufficient permissions to delete team'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       await orgService.deleteTeam(teamId, request.user.id, context);
 
       reply.send({
         success: true,
-        message: 'Team deleted successfully',
+        message: 'Team deleted successfully'
       });
     } catch (error) {
       fastify.log.error('Team deletion failed:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Team deletion failed',
+        error: error instanceof Error ? error.message : 'Team deletion failed'
       });
     }
   });
@@ -576,10 +576,10 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         required: ['userId', 'role'],
         properties: {
           userId: { type: 'string', format: 'uuid' },
-          role: { type: 'string', enum: ['owner', 'admin', 'member', 'viewer'] },
-        },
-      },
-    },
+          role: { type: 'string', enum: ['owner', 'admin', 'member', 'viewer'] }
+        }
+      }
+    }
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId } = request.params as { teamId: string };
@@ -589,7 +589,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!team) {
         return reply.code(404).send({
           success: false,
-          error: 'Team not found',
+          error: 'Team not found'
         });
       }
 
@@ -603,13 +603,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to manage team members',
+          error: 'Insufficient permissions to manage team members'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const member = await orgService.addTeamMember(
@@ -617,27 +617,27 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           teamId,
           userId,
           role: role as 'owner' | 'admin' | 'member' | 'viewer',
-          invitedBy: request.user.id,
+          invitedBy: request.user.id
         },
         context
       );
 
       reply.code(201).send({
         success: true,
-        data: member,
+        data: member
       });
     } catch (error) {
       fastify.log.error('Failed to add team member:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to add team member',
+        error: error instanceof Error ? error.message : 'Failed to add team member'
       });
     }
   });
 
   // Get team members
   fastify.get('/teams/:teamId/members', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId } = request.params as { teamId: string };
@@ -646,7 +646,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!team) {
         return reply.code(404).send({
           success: false,
-          error: 'Team not found',
+          error: 'Team not found'
         });
       }
 
@@ -660,7 +660,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to view team members',
+          error: 'Insufficient permissions to view team members'
         });
       }
 
@@ -668,13 +668,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: members,
+        data: members
       });
     } catch (error) {
       fastify.log.error('Failed to fetch team members:', error);
       reply.code(500).send({
         success: false,
-        error: 'Failed to fetch team members',
+        error: 'Failed to fetch team members'
       });
     }
   });
@@ -687,10 +687,10 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['role'],
         properties: {
-          role: { type: 'string', enum: ['owner', 'admin', 'member', 'viewer'] },
-        },
-      },
-    },
+          role: { type: 'string', enum: ['owner', 'admin', 'member', 'viewer'] }
+        }
+      }
+    }
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId, userId } = request.params as { teamId: string; userId: string };
@@ -700,7 +700,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!team) {
         return reply.code(404).send({
           success: false,
-          error: 'Team not found',
+          error: 'Team not found'
         });
       }
 
@@ -714,13 +714,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to manage team members',
+          error: 'Insufficient permissions to manage team members'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       await orgService.updateTeamMemberRole(
@@ -733,20 +733,20 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        message: 'Team member role updated successfully',
+        message: 'Team member role updated successfully'
       });
     } catch (error) {
       fastify.log.error('Failed to update team member role:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to update team member role',
+        error: error instanceof Error ? error.message : 'Failed to update team member role'
       });
     }
   });
 
   // Remove team member
   fastify.delete('/teams/:teamId/members/:userId', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { teamId, userId } = request.params as { teamId: string; userId: string };
@@ -755,7 +755,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!team) {
         return reply.code(404).send({
           success: false,
-          error: 'Team not found',
+          error: 'Team not found'
         });
       }
 
@@ -769,33 +769,33 @@ export async function organizationRoutes(fastify: FastifyInstance) {
       if (!hasPermission.allowed) {
         return reply.code(403).send({
           success: false,
-          error: 'Insufficient permissions to manage team members',
+          error: 'Insufficient permissions to manage team members'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       await orgService.removeTeamMember(teamId, userId, request.user.id, context);
 
       reply.send({
         success: true,
-        message: 'Team member removed successfully',
+        message: 'Team member removed successfully'
       });
     } catch (error) {
       fastify.log.error('Failed to remove team member:', error);
       reply.code(400).send({
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to remove team member',
+        error: error instanceof Error ? error.message : 'Failed to remove team member'
       });
     }
   });
 
   // Get user teams
   fastify.get('/users/:userId/teams', {
-    preHandler: [requireAuth],
+    preHandler: [requireAuth]
   }, async (request: OrganizationRequest, reply) => {
     try {
       const { userId } = request.params as { userId: string };
@@ -812,7 +812,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
         if (!hasPermission.allowed) {
           return reply.code(403).send({
             success: false,
-            error: 'Insufficient permissions to view user teams',
+            error: 'Insufficient permissions to view user teams'
           });
         }
       }
@@ -821,13 +821,13 @@ export async function organizationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: teams,
+        data: teams
       });
     } catch (error) {
       fastify.log.error('Failed to fetch user teams:', error);
       reply.code(500).send({
         success: false,
-        error: 'Failed to fetch user teams',
+        error: 'Failed to fetch user teams'
       });
     }
   });

@@ -142,40 +142,40 @@ export class GraphLexer {
 
     // Handle YAML structure
     switch (char) {
-      case ':':
-        this.addToken(TokenType.COLON, ':');
-        break;
+    case ':':
+      this.addToken(TokenType.COLON, ':');
+      break;
 
-      case '-':
-        if (this.isWhitespace(this.peek())) {
-          this.addToken(TokenType.DASH, '-');
-        } else {
-          this.scanString();
-        }
-        break;
+    case '-':
+      if (this.isWhitespace(this.peek())) {
+        this.addToken(TokenType.DASH, '-');
+      } else {
+        this.scanString();
+      }
+      break;
 
-      case '[':
-        this.addToken(TokenType.ARRAY_START, '[');
-        break;
+    case '[':
+      this.addToken(TokenType.ARRAY_START, '[');
+      break;
 
-      case ']':
-        this.addToken(TokenType.ARRAY_END, ']');
-        break;
+    case ']':
+      this.addToken(TokenType.ARRAY_END, ']');
+      break;
 
-      case '"':
-      case "'":
-        this.scanQuotedString(char);
-        break;
+    case '"':
+    case '\'':
+      this.scanQuotedString(char);
+      break;
 
-      default:
-        if (this.isDigit(char)) {
-          this.scanNumber();
-        } else if (this.isAlpha(char)) {
-          this.scanIdentifier();
-        } else {
-          this.addError(`Unexpected character: ${char}`, 'Check for typos or invalid characters');
-        }
-        break;
+    default:
+      if (this.isDigit(char)) {
+        this.scanNumber();
+      } else if (this.isAlpha(char)) {
+        this.scanIdentifier();
+      } else {
+        this.addError(`Unexpected character: ${char}`, 'Check for typos or invalid characters');
+      }
+      break;
     }
   }
 
@@ -262,13 +262,13 @@ export class GraphLexer {
         // Handle escape sequences
         const char = this.advance();
         switch (char) {
-          case 'n': value += '\n'; break;
-          case 't': value += '\t'; break;
-          case 'r': value += '\r'; break;
-          case '\\': value += '\\'; break;
-          case '"': value += '"'; break;
-          case "'": value += "'"; break;
-          default: value += char; break;
+        case 'n': value += '\n'; break;
+        case 't': value += '\t'; break;
+        case 'r': value += '\r'; break;
+        case '\\': value += '\\'; break;
+        case '"': value += '"'; break;
+        case '\'': value += '\''; break;
+        default: value += char; break;
         }
         escaped = false;
       } else if (this.peek() === '\\') {
@@ -356,14 +356,14 @@ export class GraphLexer {
    */
   private getKeywordType(value: string): TokenType {
     switch (value.toLowerCase()) {
-      case 'version': return TokenType.VERSION;
-      case 'checksum': return TokenType.CHECKSUM;
-      case 'metadata': return TokenType.METADATA;
-      case 'true': case 'false': return TokenType.BOOLEAN;
-      case 'null': case 'nil': return TokenType.NULL;
-      default: 
-        // Determine if key or value based on position
-        return this.isAtLineStart() || this.isAfterIndent() ? TokenType.KEY : TokenType.VALUE;
+    case 'version': return TokenType.VERSION;
+    case 'checksum': return TokenType.CHECKSUM;
+    case 'metadata': return TokenType.METADATA;
+    case 'true': case 'false': return TokenType.BOOLEAN;
+    case 'null': case 'nil': return TokenType.NULL;
+    default: 
+      // Determine if key or value based on position
+      return this.isAtLineStart() || this.isAfterIndent() ? TokenType.KEY : TokenType.VALUE;
     }
   }
 

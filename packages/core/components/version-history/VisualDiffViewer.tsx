@@ -69,43 +69,43 @@ export const VisualDiffViewer: React.FC<VisualDiffViewerProps> = ({
     if (!diff) return [];
 
     switch (filterMode) {
-      case 'structural':
-        return GraphDiffEngine.filterChanges(diff, {
-          change_types: ['added', 'removed'],
-          element_types: ['node', 'edge']
-        });
-      case 'properties':
-        return GraphDiffEngine.filterChanges(diff, {
-          element_types: ['property']
-        });
-      case 'positions':
-        return GraphDiffEngine.filterChanges(diff, {
-          change_types: ['moved']
-        });
-      case 'significant':
-        return GraphDiffEngine.getSignificantChanges(diff, 0.6);
-      default:
-        return diff.changes;
+    case 'structural':
+      return GraphDiffEngine.filterChanges(diff, {
+        change_types: ['added', 'removed'],
+        element_types: ['node', 'edge']
+      });
+    case 'properties':
+      return GraphDiffEngine.filterChanges(diff, {
+        element_types: ['property']
+      });
+    case 'positions':
+      return GraphDiffEngine.filterChanges(diff, {
+        change_types: ['moved']
+      });
+    case 'significant':
+      return GraphDiffEngine.getSignificantChanges(diff, 0.6);
+    default:
+      return diff.changes;
     }
   }, [diff, filterMode]);
 
   const getChangeColor = (change: DiffChange): string => {
     switch (change.type) {
-      case 'added': return '#10B981'; // green
-      case 'removed': return '#EF4444'; // red
-      case 'modified': return '#F59E0B'; // yellow
-      case 'moved': return '#8B5CF6'; // purple
-      default: return '#6B7280'; // gray
+    case 'added': return '#10B981'; // green
+    case 'removed': return '#EF4444'; // red
+    case 'modified': return '#F59E0B'; // yellow
+    case 'moved': return '#8B5CF6'; // purple
+    default: return '#6B7280'; // gray
     }
   };
 
   const getChangeIcon = (change: DiffChange): string => {
     switch (change.type) {
-      case 'added': return '+';
-      case 'removed': return '−';
-      case 'modified': return '~';
-      case 'moved': return '↔';
-      default: return '?';
+    case 'added': return '+';
+    case 'removed': return '−';
+    case 'modified': return '~';
+    case 'moved': return '↔';
+    default: return '?';
     }
   };
 

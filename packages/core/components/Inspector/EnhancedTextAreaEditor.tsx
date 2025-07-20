@@ -39,7 +39,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
   showWordCount = false,
   enableInlineCorrections = true,
   autoApplyCorrections = false,
-  showCorrectionHighlights = true,
+  showCorrectionHighlights = true
 }) => {
   const [localValue, setLocalValue] = useState(String(value ?? ''));
   const [isFocused, setIsFocused] = useState(false);
@@ -92,7 +92,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
                 suggested: correctedText,
                 start: match.index,
                 end: match.index + match[0].length,
-                confidence: rule.effectivenessScore || 0.8,
+                confidence: rule.effectivenessScore || 0.8
               });
             }
           }
@@ -110,7 +110,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
                 suggested: rule.replaceWith,
                 start: match.index,
                 end: match.index + match[0].length,
-                confidence: rule.effectivenessScore || 0.8,
+                confidence: rule.effectivenessScore || 0.8
               });
             }
           }
@@ -150,7 +150,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
         addNotification({
           type: 'success',
           title: 'Corrections Applied',
-          message: 'Text has been automatically corrected.',
+          message: 'Text has been automatically corrected.'
         });
       }
     }
@@ -181,7 +181,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
     addNotification({
       type: 'success',
       title: 'Correction Applied',
-      message: `Applied "${suggestion.ruleName}" correction.`,
+      message: `Applied "${suggestion.ruleName}" correction.`
     });
   };
 
@@ -202,7 +202,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
         addNotification({
           type: 'success',
           title: 'All Corrections Applied',
-          message: 'All available corrections have been applied.',
+          message: 'All available corrections have been applied.'
         });
       }
     }
@@ -243,7 +243,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
     transition: 'border-color 0.2s ease',
     resize: autoResize ? 'none' as const : 'vertical' as const,
     minHeight: autoResize ? `${rows * 1.5}em` : undefined,
-    position: 'relative' as const,
+    position: 'relative' as const
   };
 
   const labelStyle = {
@@ -252,7 +252,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
     marginBottom: 4,
     color: '#e2e8f0',
     fontSize: 12,
-    letterSpacing: '0.025em',
+    letterSpacing: '0.025em'
   };
 
   const suggestionStyle = {
@@ -267,7 +267,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
     zIndex: 1000,
     maxHeight: '200px',
     overflowY: 'auto' as const,
-    marginTop: 2,
+    marginTop: 2
   };
 
   const wordCount = getWordCount(localValue);
@@ -320,7 +320,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  fontSize: 12,
+                  fontSize: 12
                 }}
               >
                 <div style={{ flex: 1 }}>
@@ -347,7 +347,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
                       borderRadius: 2,
                       padding: '2px 6px',
                       fontSize: 10,
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     Apply
@@ -361,7 +361,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
                       borderRadius: 2,
                       padding: '2px 6px',
                       fontSize: 10,
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     Dismiss
@@ -375,7 +375,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
                 padding: '8px 12px', 
                 color: '#a0aec0', 
                 fontSize: 10,
-                textAlign: 'center',
+                textAlign: 'center'
               }}>
                 +{suggestions.length - 5} more corrections available
               </div>
@@ -389,7 +389,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
           color: '#f56565', 
           fontSize: 11, 
           marginTop: 4,
-          fontWeight: 400,
+          fontWeight: 400
         }}>
           {error}
         </div>
@@ -401,7 +401,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
         alignItems: 'center',
         marginTop: 2,
         fontSize: 10,
-        color: '#a0aec0',
+        color: '#a0aec0'
       }}>
         <div style={{ display: 'flex', gap: 16 }}>
           {showWordCount && (
@@ -420,7 +420,7 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
                   color: suggestions.length > 0 ? '#fbb040' : '#a0aec0',
                   cursor: 'pointer',
                   fontSize: 10,
-                  padding: 0,
+                  padding: 0
                 }}
               >
                 {showSuggestions ? 'Hide' : 'Show'} corrections

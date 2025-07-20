@@ -290,8 +290,8 @@ export const OptimizedAnimation: React.FC<OptimizedAnimationProps> = ({
     // Use will-change for optimization
     if (config.useWillChange) {
       element.style.willChange = type === 'slide' ? 'transform' : 
-                                type === 'fade' ? 'opacity' : 
-                                type === 'scale' ? 'transform' : 'transform';
+        type === 'fade' ? 'opacity' : 
+          type === 'scale' ? 'transform' : 'transform';
     }
     
     // Start animation
@@ -322,31 +322,31 @@ export const OptimizedAnimation: React.FC<OptimizedAnimationProps> = ({
     }
     
     switch (type) {
-      case 'slide':
-        return {
-          ...baseStyles,
-          transform: config.use3DTransforms ? 'translate3d(0, 0, 0)' : 'translateY(0)',
-          opacity: 1
-        };
-      case 'fade':
-        return {
-          ...baseStyles,
-          opacity: 1
-        };
-      case 'scale':
-        return {
-          ...baseStyles,
-          transform: config.use3DTransforms ? 'scale3d(1, 1, 1)' : 'scale(1)',
-          opacity: 1
-        };
-      case 'rotate':
-        return {
-          ...baseStyles,
-          transform: config.use3DTransforms ? 'rotate3d(0, 0, 1, 0deg)' : 'rotate(0deg)',
-          opacity: 1
-        };
-      default:
-        return baseStyles;
+    case 'slide':
+      return {
+        ...baseStyles,
+        transform: config.use3DTransforms ? 'translate3d(0, 0, 0)' : 'translateY(0)',
+        opacity: 1
+      };
+    case 'fade':
+      return {
+        ...baseStyles,
+        opacity: 1
+      };
+    case 'scale':
+      return {
+        ...baseStyles,
+        transform: config.use3DTransforms ? 'scale3d(1, 1, 1)' : 'scale(1)',
+        opacity: 1
+      };
+    case 'rotate':
+      return {
+        ...baseStyles,
+        transform: config.use3DTransforms ? 'rotate3d(0, 0, 1, 0deg)' : 'rotate(0deg)',
+        opacity: 1
+      };
+    default:
+      return baseStyles;
     }
   };
   

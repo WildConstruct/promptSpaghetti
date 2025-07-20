@@ -10,12 +10,12 @@ import { TokenService } from '../services/TokenService';
 const createApiTokenSchema = z.object({
   name: z.string().min(1, 'Token name is required').max(255),
   scopes: z.array(z.string()).min(1, 'At least one scope is required'),
-  expiresIn: z.string().optional().default('90d'),
+  expiresIn: z.string().optional().default('90d')
 });
 
 // API token revocation schema
 const revokeApiTokenSchema = z.object({
-  tokenId: z.string().uuid(),
+  tokenId: z.string().uuid()
 });
 
 // Available scopes for API tokens
@@ -32,7 +32,7 @@ const AVAILABLE_SCOPES = [
   'teams:write',
   'admin:users',
   'admin:system',
-  '*', // Full access (admin only)
+  '*' // Full access (admin only)
 ];
 
 interface ApiTokenRouteContext {
@@ -57,14 +57,14 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
                 properties: {
                   name: { type: 'string' },
                   description: { type: 'string' },
-                  category: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  category: { type: 'string' }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const scopeDescriptions = {
       'graphs:read': { description: 'Read access to graphs', category: 'graphs' },
@@ -79,13 +79,13 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       'teams:write': { description: 'Modify team information', category: 'teams' },
       'admin:users': { description: 'Administrative access to user management', category: 'admin' },
       'admin:system': { description: 'Administrative access to system management', category: 'admin' },
-      '*': { description: 'Full access to all resources', category: 'admin' },
+      '*': { description: 'Full access to all resources', category: 'admin' }
     };
 
     const scopes = AVAILABLE_SCOPES.map(scope => ({
       name: scope,
       description: scopeDescriptions[scope]?.description || 'Unknown scope',
-      category: scopeDescriptions[scope]?.category || 'other',
+      category: scopeDescriptions[scope]?.category || 'other'
     }));
 
     return reply.send({ scopes });
@@ -107,11 +107,11 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
             name: { type: 'string' },
             scopes: { type: 'array', items: { type: 'string' } },
             expiresAt: { type: 'string' },
-            warning: { type: 'string' },
-          },
-        },
-      },
-    },
+            warning: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { name, scopes, expiresIn } = request.body as z.infer<typeof createApiTokenSchema>;
@@ -121,7 +121,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -130,7 +130,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if (invalidScopes.length > 0) {
         return reply.status(400).send({
           error: 'Invalid Scopes',
-          message: `Invalid scopes: ${invalidScopes.join(', ')}`,
+          message: `Invalid scopes: ${invalidScopes.join(', ')}`
         });
       }
 
@@ -142,7 +142,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if ((hasWildcardScope || hasAdminScopes) && !hasAdminRole) {
         return reply.status(403).send({
           error: 'Forbidden',
-          message: 'Administrator privileges required for admin scopes',
+          message: 'Administrator privileges required for admin scopes'
         });
       }
 
@@ -153,7 +153,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if (!user) {
         return reply.status(404).send({
           error: 'User Not Found',
-          message: 'User not found',
+          message: 'User not found'
         });
       }
 
@@ -178,11 +178,11 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           tokenId,
           name,
           scopes,
-          expiresAt,
+          expiresAt
         },
         ipAddress: request.ip,
         userAgent: request.headers['user-agent'],
-        severity: 'info',
+        severity: 'info'
       });
 
       return reply.status(201).send({
@@ -191,13 +191,13 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
         name,
         scopes,
         expiresAt: expiresAt.toISOString(),
-        warning: 'Store this token securely. It will not be shown again.',
+        warning: 'Store this token securely. It will not be shown again.'
       });
     } catch (error) {
       fastify.log.error('Create API token error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to create API token',
+        message: 'Failed to create API token'
       });
     }
   });
@@ -221,14 +221,14 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
                   expiresAt: { type: 'string' },
                   createdAt: { type: 'string' },
                   lastUsedAt: { type: 'string' },
-                  revoked: { type: 'boolean' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  revoked: { type: 'boolean' }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -236,7 +236,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -250,14 +250,14 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           expiresAt: token.expiresAt?.toISOString(),
           createdAt: token.createdAt.toISOString(),
           lastUsedAt: token.lastUsedAt?.toISOString(),
-          revoked: token.revoked,
-        })),
+          revoked: token.revoked
+        }))
       });
     } catch (error) {
       fastify.log.error('Get API tokens error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve API tokens',
+        message: 'Failed to retrieve API tokens'
       });
     }
   });
@@ -274,11 +274,11 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           type: 'object',
           properties: {
             success: { type: 'boolean' },
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { tokenId } = request.body as z.infer<typeof revokeApiTokenSchema>;
@@ -287,7 +287,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -298,14 +298,14 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if (!targetToken) {
         return reply.status(404).send({
           error: 'Token Not Found',
-          message: 'API token not found or does not belong to user',
+          message: 'API token not found or does not belong to user'
         });
       }
 
       if (targetToken.revoked) {
         return reply.status(400).send({
           error: 'Token Already Revoked',
-          message: 'API token has already been revoked',
+          message: 'API token has already been revoked'
         });
       }
 
@@ -320,22 +320,22 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
         details: {
           tokenId,
           name: targetToken.name,
-          scopes: targetToken.scopes,
+          scopes: targetToken.scopes
         },
         ipAddress: request.ip,
         userAgent: request.headers['user-agent'],
-        severity: 'info',
+        severity: 'info'
       });
 
       return reply.send({
         success: true,
-        message: 'API token revoked successfully',
+        message: 'API token revoked successfully'
       });
     } catch (error) {
       fastify.log.error('Revoke API token error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to revoke API token',
+        message: 'Failed to revoke API token'
       });
     }
   });
@@ -352,11 +352,11 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
             tokenType: { type: 'string' },
             scopes: { type: 'array', items: { type: 'string' } },
             user: { type: 'object' },
-            expiresAt: { type: 'string' },
-          },
-        },
-      },
-    },
+            expiresAt: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const user = request.user as any;
@@ -366,7 +366,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if (!token) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'No token provided',
+          message: 'No token provided'
         });
       }
 
@@ -380,15 +380,15 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
         user: {
           id: user.id,
           email: user.email,
-          roles: user.roles,
+          roles: user.roles
         },
-        expiresAt: new Date(payload.exp * 1000).toISOString(),
+        expiresAt: new Date(payload.exp * 1000).toISOString()
       });
     } catch (error) {
       fastify.log.error('Test API token error:', error);
       return reply.status(401).send({
         error: 'Unauthorized',
-        message: 'Invalid token',
+        message: 'Invalid token'
       });
     }
   });
@@ -405,11 +405,11 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
             activeTokens: { type: 'number' },
             revokedTokens: { type: 'number' },
             expiredTokens: { type: 'number' },
-            recentlyUsed: { type: 'array' },
-          },
-        },
-      },
-    },
+            recentlyUsed: { type: 'array' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -417,7 +417,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -446,7 +446,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
       const recentlyUsed = recentResult.rows.map(row => ({
         name: row.name,
         lastUsedAt: row.last_used_at,
-        scopes: typeof row.scopes === 'string' ? JSON.parse(row.scopes) : row.scopes,
+        scopes: typeof row.scopes === 'string' ? JSON.parse(row.scopes) : row.scopes
       }));
 
       return reply.send({
@@ -454,13 +454,13 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
         activeTokens: parseInt(stats.active_tokens),
         revokedTokens: parseInt(stats.revoked_tokens),
         expiredTokens: parseInt(stats.expired_tokens),
-        recentlyUsed,
+        recentlyUsed
       });
     } catch (error) {
       fastify.log.error('Get API token stats error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve token statistics',
+        message: 'Failed to retrieve token statistics'
       });
     }
   });

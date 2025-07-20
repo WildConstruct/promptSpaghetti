@@ -5,7 +5,7 @@ import {
   MetricType,
   TimeRange,
   AggregationType,
-  DashboardLayout,
+  DashboardLayout
 } from '../../../types/analytics';
 import { QueryBuilder } from './QueryBuilder';
 import { VisualizationConfig } from './VisualizationConfig';
@@ -27,7 +27,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
   existingReport,
   onSave,
   onCancel,
-  className = '',
+  className = ''
 }) => {
   const [step, setStep] = useState<'query' | 'visualization' | 'schedule' | 'preview'>('query');
   const [reportName, setReportName] = useState(existingReport?.name || '');
@@ -38,7 +38,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
       time_range: TimeRange.LAST_30D,
       aggregation: AggregationType.COUNT,
       limit: 100,
-      offset: 0,
+      offset: 0
     }
   );
   const [visualization, setVisualization] = useState(
@@ -47,7 +47,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
       layout: DashboardLayout.GRID,
       show_legend: true,
       show_grid: true,
-      color_scheme: 'default',
+      color_scheme: 'default'
     }
   );
   const [scheduling, setScheduling] = useState({
@@ -55,8 +55,8 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
     schedule: existingReport?.schedule || {
       frequency: 'weekly' as const,
       time: '09:00',
-      recipients: [],
-    },
+      recipients: []
+    }
   });
   const [previewData, setPreviewData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -75,7 +75,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
       const data = await analyticsService.queryAnalytics({
         ...query,
         creator_id: creatorId,
-        limit: 10, // Limit preview data
+        limit: 10 // Limit preview data
       });
       
       setPreviewData(data);
@@ -99,38 +99,38 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
     const errors: Record<string, string> = {};
 
     switch (step) {
-      case 'query':
-        if (!reportName.trim()) {
-          errors.reportName = 'Report name is required';
-        }
-        if (reportName.length > 255) {
-          errors.reportName = 'Report name must be less than 255 characters';
-        }
-        if (reportDescription && reportDescription.length > 1000) {
-          errors.reportDescription = 'Description must be less than 1000 characters';
-        }
-        if (query.metric_types.length === 0) {
-          errors.metrics = 'At least one metric must be selected';
-        }
-        break;
+    case 'query':
+      if (!reportName.trim()) {
+        errors.reportName = 'Report name is required';
+      }
+      if (reportName.length > 255) {
+        errors.reportName = 'Report name must be less than 255 characters';
+      }
+      if (reportDescription && reportDescription.length > 1000) {
+        errors.reportDescription = 'Description must be less than 1000 characters';
+      }
+      if (query.metric_types.length === 0) {
+        errors.metrics = 'At least one metric must be selected';
+      }
+      break;
         
-      case 'visualization':
-        // Visualization validation if needed
-        break;
+    case 'visualization':
+      // Visualization validation if needed
+      break;
         
-      case 'schedule':
-        if (scheduling.is_scheduled) {
-          if (!scheduling.schedule.frequency) {
-            errors.frequency = 'Frequency is required for scheduled reports';
-          }
-          if (!scheduling.schedule.time) {
-            errors.time = 'Time is required for scheduled reports';
-          }
-          if (scheduling.schedule.recipients.length === 0) {
-            errors.recipients = 'At least one recipient is required for scheduled reports';
-          }
+    case 'schedule':
+      if (scheduling.is_scheduled) {
+        if (!scheduling.schedule.frequency) {
+          errors.frequency = 'Frequency is required for scheduled reports';
         }
-        break;
+        if (!scheduling.schedule.time) {
+          errors.time = 'Time is required for scheduled reports';
+        }
+        if (scheduling.schedule.recipients.length === 0) {
+          errors.recipients = 'At least one recipient is required for scheduled reports';
+        }
+      }
+      break;
     }
 
     setValidationErrors(errors);
@@ -170,13 +170,13 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
         configuration: {
           query: {
             ...query,
-            creator_id: creatorId,
+            creator_id: creatorId
           },
           visualization,
-          refresh_interval: visualization.chart_type === 'table' ? undefined : 300, // 5 minutes
+          refresh_interval: visualization.chart_type === 'table' ? undefined : 300 // 5 minutes
         },
         is_scheduled: scheduling.is_scheduled,
-        schedule: scheduling.is_scheduled ? scheduling.schedule : undefined,
+        schedule: scheduling.is_scheduled ? scheduling.schedule : undefined
       };
 
       let savedReport: CustomReport;
@@ -199,11 +199,11 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({
   // Get step title
   const getStepTitle = () => {
     switch (step) {
-      case 'query': return 'Configure Data Query';
-      case 'visualization': return 'Choose Visualization';
-      case 'schedule': return 'Set Schedule';
-      case 'preview': return 'Preview Report';
-      default: return 'Build Report';
+    case 'query': return 'Configure Data Query';
+    case 'visualization': return 'Choose Visualization';
+    case 'schedule': return 'Set Schedule';
+    case 'preview': return 'Preview Report';
+    default: return 'Build Report';
     }
   };
 

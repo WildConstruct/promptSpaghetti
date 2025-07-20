@@ -16,7 +16,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
     toggleRule,
     reorderRules,
     clearAllRules,
-    applyCorrections,
+    applyCorrections
   } = useCorrectionsStore();
 
   const [editingRule, setEditingRule] = useState<CorrectionRule | null>(null);
@@ -27,7 +27,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
     replaceWith: '',
     isRegex: false,
     isActive: true,
-    priority: rules.length,
+    priority: rules.length
   });
   const [testText, setTestText] = useState('');
 
@@ -44,7 +44,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
         replaceWith: '',
         isRegex: false,
         isActive: true,
-        priority: rules.length,
+        priority: rules.length
       });
     }
   }, [newRule, addRule, rules.length]);
@@ -86,7 +86,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
         zIndex: 1000,
         overflow: 'hidden',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column'
       }}
       data-testid="corrections-panel"
     >
@@ -107,7 +107,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
             color: '#fff',
             fontSize: '20px',
             cursor: 'pointer',
-            padding: '4px 8px',
+            padding: '4px 8px'
           }}
           aria-label="Close corrections panel"
         >
@@ -132,7 +132,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
               color: '#fff',
               border: '1px solid #444',
               borderRadius: '4px',
-              resize: 'vertical',
+              resize: 'vertical'
             }}
           />
           {testText && (
@@ -145,7 +145,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                   border: '1px solid #444',
                   borderRadius: '4px',
                   marginTop: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               >
                 {handleTestCorrections()}
@@ -169,7 +169,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                   borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '12px',
-                  marginRight: '8px',
+                  marginRight: '8px'
                 }}
               >
                 Load Defaults
@@ -183,7 +183,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                   padding: '6px 12px',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  fontSize: '12px',
+                  fontSize: '12px'
                 }}
               >
                 Clear All
@@ -199,7 +199,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                 border: '1px solid #444',
                 borderRadius: '4px',
                 padding: '12px',
-                marginBottom: '8px',
+                marginBottom: '8px'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -233,7 +233,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                       color: '#63b3ed',
                       cursor: 'pointer',
                       fontSize: '12px',
-                      marginRight: '8px',
+                      marginRight: '8px'
                     }}
                   >
                     Edit
@@ -245,7 +245,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                       border: 'none',
                       color: '#e53e3e',
                       cursor: 'pointer',
-                      fontSize: '12px',
+                      fontSize: '12px'
                     }}
                   >
                     Delete
@@ -281,7 +281,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                 background: '#2a2e37',
                 color: '#fff',
                 border: '1px solid #444',
-                borderRadius: '4px',
+                borderRadius: '4px'
               }}
             />
             <input
@@ -294,7 +294,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                 background: '#2a2e37',
                 color: '#fff',
                 border: '1px solid #444',
-                borderRadius: '4px',
+                borderRadius: '4px'
               }}
             />
             <input
@@ -307,7 +307,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                 background: '#2a2e37',
                 color: '#fff',
                 border: '1px solid #444',
-                borderRadius: '4px',
+                borderRadius: '4px'
               }}
             />
             <input
@@ -320,7 +320,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                 background: '#2a2e37',
                 color: '#fff',
                 border: '1px solid #444',
-                borderRadius: '4px',
+                borderRadius: '4px'
               }}
             />
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -352,7 +352,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                 border: 'none',
                 padding: '8px 16px',
                 borderRadius: '4px',
-                cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
+                cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed'
               }}
             >
               Add Rule
@@ -374,7 +374,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 1001,
+            zIndex: 1001
           }}
         >
           <div
@@ -383,7 +383,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
               padding: '24px',
               borderRadius: '8px',
               width: '400px',
-              maxWidth: '90vw',
+              maxWidth: '90vw'
             }}
           >
             <h3 style={{ marginBottom: '16px' }}>Edit Rule</h3>
@@ -398,7 +398,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                   background: '#2a2e37',
                   color: '#fff',
                   border: '1px solid #444',
-                  borderRadius: '4px',
+                  borderRadius: '4px'
                 }}
               />
               <input
@@ -411,7 +411,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                   background: '#2a2e37',
                   color: '#fff',
                   border: '1px solid #444',
-                  borderRadius: '4px',
+                  borderRadius: '4px'
                 }}
               />
               <input
@@ -424,7 +424,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                   background: '#2a2e37',
                   color: '#fff',
                   border: '1px solid #444',
-                  borderRadius: '4px',
+                  borderRadius: '4px'
                 }}
               />
               <input
@@ -437,7 +437,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                   background: '#2a2e37',
                   color: '#fff',
                   border: '1px solid #444',
-                  borderRadius: '4px',
+                  borderRadius: '4px'
                 }}
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -470,7 +470,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                     padding: '8px 16px',
                     borderRadius: '4px',
                     cursor: 'pointer',
-                    flex: 1,
+                    flex: 1
                   }}
                 >
                   Save
@@ -484,7 +484,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                     padding: '8px 16px',
                     borderRadius: '4px',
                     cursor: 'pointer',
-                    flex: 1,
+                    flex: 1
                   }}
                 >
                   Cancel

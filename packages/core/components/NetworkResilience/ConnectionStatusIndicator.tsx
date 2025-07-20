@@ -34,20 +34,20 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
     }
 
     switch (status.connectionState) {
-      case ConnectionState.CONNECTED:
-        return status.connectionQuality === ConnectionQuality.EXCELLENT ? '🟢' :
-               status.connectionQuality === ConnectionQuality.GOOD ? '🟡' :
-               status.connectionQuality === ConnectionQuality.FAIR ? '🟠' : '🔴';
-      case ConnectionState.CONNECTING:
-        return '🔵';
-      case ConnectionState.DISCONNECTED:
-        return '⚫';
-      case ConnectionState.OFFLINE:
-        return '📴';
-      case ConnectionState.FAILED:
-        return '❌';
-      default:
-        return '❓';
+    case ConnectionState.CONNECTED:
+      return status.connectionQuality === ConnectionQuality.EXCELLENT ? '🟢' :
+        status.connectionQuality === ConnectionQuality.GOOD ? '🟡' :
+          status.connectionQuality === ConnectionQuality.FAIR ? '🟠' : '🔴';
+    case ConnectionState.CONNECTING:
+      return '🔵';
+    case ConnectionState.DISCONNECTED:
+      return '⚫';
+    case ConnectionState.OFFLINE:
+      return '📴';
+    case ConnectionState.FAILED:
+      return '❌';
+    default:
+      return '❓';
     }
   };
 
@@ -57,34 +57,34 @@ export const ConnectionStatusIndicator: React.FC<ConnectionStatusIndicatorProps>
     }
 
     switch (status.connectionState) {
-      case ConnectionState.CONNECTED:
-        return `Connected (${status.connectionQuality})`;
-      case ConnectionState.CONNECTING:
-        return 'Connecting...';
-      case ConnectionState.DISCONNECTED:
-        return 'Disconnected';
-      case ConnectionState.OFFLINE:
-        return 'Offline';
-      case ConnectionState.FAILED:
-        return 'Connection Failed';
-      default:
-        return 'Unknown';
+    case ConnectionState.CONNECTED:
+      return `Connected (${status.connectionQuality})`;
+    case ConnectionState.CONNECTING:
+      return 'Connecting...';
+    case ConnectionState.DISCONNECTED:
+      return 'Disconnected';
+    case ConnectionState.OFFLINE:
+      return 'Offline';
+    case ConnectionState.FAILED:
+      return 'Connection Failed';
+    default:
+      return 'Unknown';
     }
   };
 
   const getStatusColor = () => {
     if (status.isOnline) {
       switch (status.connectionQuality) {
-        case ConnectionQuality.EXCELLENT:
-          return '#22c55e'; // green-500
-        case ConnectionQuality.GOOD:
-          return '#eab308'; // yellow-500
-        case ConnectionQuality.FAIR:
-          return '#f97316'; // orange-500
-        case ConnectionQuality.POOR:
-          return '#ef4444'; // red-500
-        default:
-          return '#6b7280'; // gray-500
+      case ConnectionQuality.EXCELLENT:
+        return '#22c55e'; // green-500
+      case ConnectionQuality.GOOD:
+        return '#eab308'; // yellow-500
+      case ConnectionQuality.FAIR:
+        return '#f97316'; // orange-500
+      case ConnectionQuality.POOR:
+        return '#ef4444'; // red-500
+      default:
+        return '#6b7280'; // gray-500
       }
     } else {
       return status.reconnectionState === ReconnectionState.ATTEMPTING ? '#3b82f6' : '#ef4444';

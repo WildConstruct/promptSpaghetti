@@ -80,6 +80,6 @@ export const useCorrectionsPanel = () => {
     togglePanel,
     openStats,
     closeStats,
-    toggleStats,
+    toggleStats
   };
 };

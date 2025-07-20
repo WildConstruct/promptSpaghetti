@@ -487,7 +487,7 @@ test:
   type: Output
 ---END---`;
 
-        const invalidContent = `invalid format`;
+        const invalidContent = 'invalid format';
 
         expect(isValidFormat(validContent)).toBe(true);
         expect(isValidFormat(invalidContent)).toBe(false);

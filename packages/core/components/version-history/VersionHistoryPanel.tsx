@@ -50,19 +50,19 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({
       setLoading(true);
       
       switch (viewMode) {
-        case 'timeline':
-          await loadSnapshots();
-          break;
-        case 'branches':
-          await loadBranches();
-          await loadSnapshots();
-          break;
-        case 'changes':
-          await loadChangeEvents();
-          break;
-        case 'annotations':
-          await loadAnnotations();
-          break;
+      case 'timeline':
+        await loadSnapshots();
+        break;
+      case 'branches':
+        await loadBranches();
+        await loadSnapshots();
+        break;
+      case 'changes':
+        await loadChangeEvents();
+        break;
+      case 'annotations':
+        await loadAnnotations();
+        break;
       }
     } catch (error) {
       console.error('Failed to load version history data:', error);
@@ -202,21 +202,21 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({
 
   const getSnapshotTypeIcon = (type: string): string => {
     switch (type) {
-      case 'manual': return '📝';
-      case 'auto': return '🤖';
-      case 'milestone': return '🏆';
-      case 'backup': return '💾';
-      default: return '📄';
+    case 'manual': return '📝';
+    case 'auto': return '🤖';
+    case 'milestone': return '🏆';
+    case 'backup': return '💾';
+    default: return '📄';
     }
   };
 
   const getSnapshotTypeColor = (type: string): string => {
     switch (type) {
-      case 'manual': return 'bg-blue-100 text-blue-800';
-      case 'auto': return 'bg-gray-100 text-gray-800';
-      case 'milestone': return 'bg-yellow-100 text-yellow-800';
-      case 'backup': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'manual': return 'bg-blue-100 text-blue-800';
+    case 'auto': return 'bg-gray-100 text-gray-800';
+    case 'milestone': return 'bg-yellow-100 text-yellow-800';
+    case 'backup': return 'bg-green-100 text-green-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -480,12 +480,12 @@ const BranchView: React.FC<BranchViewProps> = ({
 }) => {
   const getBranchIcon = (type: string): string => {
     switch (type) {
-      case 'main': return '🌳';
-      case 'feature': return '🌿';
-      case 'hotfix': return '🔥';
-      case 'experiment': return '🧪';
-      case 'archive': return '📦';
-      default: return '🌿';
+    case 'main': return '🌳';
+    case 'feature': return '🌿';
+    case 'hotfix': return '🔥';
+    case 'experiment': return '🧪';
+    case 'archive': return '📦';
+    default: return '🌿';
     }
   };
 
@@ -559,24 +559,24 @@ const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeA
     const { event_type, event_data } = event;
     
     switch (event_type) {
-      case 'node_added':
-        return `Added ${event_data.node_count || 1} node(s)`;
-      case 'node_removed':
-        return `Removed ${event_data.node_count || 1} node(s)`;
-      case 'node_modified':
-        return `Modified ${event_data.node_count || 1} node(s)`;
-      case 'property_changed':
-        return `Changed ${event_data.property_name || 'properties'}`;
-      case 'snapshot_created':
-        return `Created snapshot: ${event_data.snapshot_type || 'manual'}`;
-      case 'branch_created':
-        return `Created branch: ${event_data.branch_name}`;
-      case 'branch_switched':
-        return `Switched to branch: ${event_data.branch_name}`;
-      case 'branch_merged':
-        return `Merged branches`;
-      default:
-        return event_type.replace(/_/g, ' ');
+    case 'node_added':
+      return `Added ${event_data.node_count || 1} node(s)`;
+    case 'node_removed':
+      return `Removed ${event_data.node_count || 1} node(s)`;
+    case 'node_modified':
+      return `Modified ${event_data.node_count || 1} node(s)`;
+    case 'property_changed':
+      return `Changed ${event_data.property_name || 'properties'}`;
+    case 'snapshot_created':
+      return `Created snapshot: ${event_data.snapshot_type || 'manual'}`;
+    case 'branch_created':
+      return `Created branch: ${event_data.branch_name}`;
+    case 'branch_switched':
+      return `Switched to branch: ${event_data.branch_name}`;
+    case 'branch_merged':
+      return 'Merged branches';
+    default:
+      return event_type.replace(/_/g, ' ');
     }
   };
 
@@ -630,21 +630,21 @@ interface AnnotationsListProps {
 const AnnotationsList: React.FC<AnnotationsListProps> = ({ annotations, formatTimeAgo }) => {
   const getAnnotationIcon = (type: string): string => {
     switch (type) {
-      case 'comment': return '💬';
-      case 'review': return '👀';
-      case 'approval': return '✅';
-      case 'flag': return '🚩';
-      default: return '💭';
+    case 'comment': return '💬';
+    case 'review': return '👀';
+    case 'approval': return '✅';
+    case 'flag': return '🚩';
+    default: return '💭';
     }
   };
 
   const getPriorityColor = (priority: string): string => {
     switch (priority) {
-      case 'critical': return 'text-red-600';
-      case 'high': return 'text-orange-600';
-      case 'normal': return 'text-gray-600';
-      case 'low': return 'text-gray-400';
-      default: return 'text-gray-600';
+    case 'critical': return 'text-red-600';
+    case 'high': return 'text-orange-600';
+    case 'normal': return 'text-gray-600';
+    case 'low': return 'text-gray-400';
+    default: return 'text-gray-600';
     }
   };
 

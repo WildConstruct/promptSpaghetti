@@ -544,29 +544,29 @@ export class PerformanceOptimizer extends EventEmitter {
    */
   private async executeOptimizationAction(action: OptimizationAction): Promise<void> {
     switch (action.type) {
-      case 'throttle':
-        await this.executeThrottleAction(action);
-        break;
-      case 'batch':
-        await this.executeBatchAction(action);
-        break;
-      case 'cache':
-        await this.executeCacheAction(action);
-        break;
-      case 'compress':
-        await this.executeCompressAction(action);
-        break;
-      case 'prioritize':
-        await this.executePrioritizeAction(action);
-        break;
-      case 'scale':
-        await this.executeScaleAction(action);
-        break;
-      case 'cleanup':
-        await this.executeCleanupAction(action);
-        break;
-      default:
-        throw new Error(`Unknown optimization action type: ${action.type}`);
+    case 'throttle':
+      await this.executeThrottleAction(action);
+      break;
+    case 'batch':
+      await this.executeBatchAction(action);
+      break;
+    case 'cache':
+      await this.executeCacheAction(action);
+      break;
+    case 'compress':
+      await this.executeCompressAction(action);
+      break;
+    case 'prioritize':
+      await this.executePrioritizeAction(action);
+      break;
+    case 'scale':
+      await this.executeScaleAction(action);
+      break;
+    case 'cleanup':
+      await this.executeCleanupAction(action);
+      break;
+    default:
+      throw new Error(`Unknown optimization action type: ${action.type}`);
     }
   }
 

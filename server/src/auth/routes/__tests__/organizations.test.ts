@@ -18,7 +18,7 @@ describe('Organization Routes', () => {
   const mockUser = {
     id: 'user-123',
     email: 'test@example.com',
-    roles: ['user'],
+    roles: ['user']
   };
 
   const mockOrganization = {
@@ -33,7 +33,7 @@ describe('Organization Routes', () => {
     plan: 'free' as const,
     maxUsers: 10,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   const mockTeam = {
@@ -44,7 +44,7 @@ describe('Organization Routes', () => {
     description: 'Main development team',
     settings: {},
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   beforeEach(async () => {
@@ -69,12 +69,12 @@ describe('Organization Routes', () => {
       removeTeamMember: jest.fn(),
       updateTeamMemberRole: jest.fn(),
       getTeamMembers: jest.fn(),
-      getUserTeams: jest.fn(),
+      getUserTeams: jest.fn()
     } as any;
 
     // Mock RBAC service
     mockRbacService = {
-      checkPermission: jest.fn(),
+      checkPermission: jest.fn()
     } as any;
 
     // Add services to fastify instance
@@ -108,8 +108,8 @@ describe('Organization Routes', () => {
           payload: {
             name: 'Test Organization',
             description: 'Test description',
-            plan: 'free',
-          },
+            plan: 'free'
+          }
         });
 
         expect(response.statusCode).toBe(201);
@@ -120,12 +120,12 @@ describe('Organization Routes', () => {
           {
             name: 'Test Organization',
             description: 'Test description',
-            plan: 'free',
+            plan: 'free'
           },
           'user-123',
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -137,8 +137,8 @@ describe('Organization Routes', () => {
           method: 'POST',
           url: '/organizations',
           payload: {
-            name: 'Test Organization',
-          },
+            name: 'Test Organization'
+          }
         });
 
         expect(response.statusCode).toBe(400);
@@ -152,8 +152,8 @@ describe('Organization Routes', () => {
           method: 'POST',
           url: '/organizations',
           payload: {
-            description: 'Missing name',
-          },
+            description: 'Missing name'
+          }
         });
 
         expect(response.statusCode).toBe(400);
@@ -167,7 +167,7 @@ describe('Organization Routes', () => {
 
         const response = await app.inject({
           method: 'GET',
-          url: '/organizations/my',
+          url: '/organizations/my'
         });
 
         expect(response.statusCode).toBe(200);
@@ -182,7 +182,7 @@ describe('Organization Routes', () => {
 
         const response = await app.inject({
           method: 'GET',
-          url: '/organizations/my',
+          url: '/organizations/my'
         });
 
         expect(response.statusCode).toBe(500);
@@ -196,13 +196,13 @@ describe('Organization Routes', () => {
       it('should return organization when user has permission', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has read permission',
+          reason: 'User has read permission'
         });
         mockOrgService.getOrganizationById.mockResolvedValue(mockOrganization);
 
         const response = await app.inject({
           method: 'GET',
-          url: '/organizations/org-123',
+          url: '/organizations/org-123'
         });
 
         expect(response.statusCode).toBe(200);
@@ -219,12 +219,12 @@ describe('Organization Routes', () => {
       it('should return 403 when user lacks permission', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: false,
-          reason: 'Insufficient permissions',
+          reason: 'Insufficient permissions'
         });
 
         const response = await app.inject({
           method: 'GET',
-          url: '/organizations/org-123',
+          url: '/organizations/org-123'
         });
 
         expect(response.statusCode).toBe(403);
@@ -236,13 +236,13 @@ describe('Organization Routes', () => {
       it('should return 404 when organization not found', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has read permission',
+          reason: 'User has read permission'
         });
         mockOrgService.getOrganizationById.mockResolvedValue(null);
 
         const response = await app.inject({
           method: 'GET',
-          url: '/organizations/nonexistent',
+          url: '/organizations/nonexistent'
         });
 
         expect(response.statusCode).toBe(404);
@@ -256,7 +256,7 @@ describe('Organization Routes', () => {
       it('should update organization when user has permission', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has write permission',
+          reason: 'User has write permission'
         });
         const updatedOrg = { ...mockOrganization, name: 'Updated Organization' };
         mockOrgService.updateOrganization.mockResolvedValue(updatedOrg);
@@ -265,8 +265,8 @@ describe('Organization Routes', () => {
           method: 'PUT',
           url: '/organizations/org-123',
           payload: {
-            name: 'Updated Organization',
-          },
+            name: 'Updated Organization'
+          }
         });
 
         expect(response.statusCode).toBe(200);
@@ -279,7 +279,7 @@ describe('Organization Routes', () => {
           'user-123',
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -287,15 +287,15 @@ describe('Organization Routes', () => {
       it('should return 403 when user lacks permission', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: false,
-          reason: 'Insufficient permissions',
+          reason: 'Insufficient permissions'
         });
 
         const response = await app.inject({
           method: 'PUT',
           url: '/organizations/org-123',
           payload: {
-            name: 'Updated Organization',
-          },
+            name: 'Updated Organization'
+          }
         });
 
         expect(response.statusCode).toBe(403);
@@ -309,13 +309,13 @@ describe('Organization Routes', () => {
       it('should delete organization when user has permission', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has delete permission',
+          reason: 'User has delete permission'
         });
         mockOrgService.deleteOrganization.mockResolvedValue();
 
         const response = await app.inject({
           method: 'DELETE',
-          url: '/organizations/org-123',
+          url: '/organizations/org-123'
         });
 
         expect(response.statusCode).toBe(200);
@@ -327,7 +327,7 @@ describe('Organization Routes', () => {
           'user-123',
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -335,12 +335,12 @@ describe('Organization Routes', () => {
       it('should return 403 when user lacks permission', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: false,
-          reason: 'Insufficient permissions',
+          reason: 'Insufficient permissions'
         });
 
         const response = await app.inject({
           method: 'DELETE',
-          url: '/organizations/org-123',
+          url: '/organizations/org-123'
         });
 
         expect(response.statusCode).toBe(403);
@@ -358,18 +358,18 @@ describe('Organization Routes', () => {
           activeTeams: 8,
           recentActivity: 3,
           planLimits: { maxUsers: 10, maxTeams: 5, maxStorage: 1024 },
-          usage: { users: 15, teams: 8, storage: 0 },
+          usage: { users: 15, teams: 8, storage: 0 }
         };
 
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has read permission',
+          reason: 'User has read permission'
         });
         mockOrgService.getOrganizationStats.mockResolvedValue(mockStats);
 
         const response = await app.inject({
           method: 'GET',
-          url: '/organizations/org-123/stats',
+          url: '/organizations/org-123/stats'
         });
 
         expect(response.statusCode).toBe(200);
@@ -386,7 +386,7 @@ describe('Organization Routes', () => {
       it('should create team when user has permission', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has write permission',
+          reason: 'User has write permission'
         });
         mockOrgService.createTeam.mockResolvedValue(mockTeam);
 
@@ -395,8 +395,8 @@ describe('Organization Routes', () => {
           url: '/organizations/org-123/teams',
           payload: {
             name: 'Development Team',
-            description: 'Main development team',
-          },
+            description: 'Main development team'
+          }
         });
 
         expect(response.statusCode).toBe(201);
@@ -407,12 +407,12 @@ describe('Organization Routes', () => {
           {
             organizationId: 'org-123',
             name: 'Development Team',
-            description: 'Main development team',
+            description: 'Main development team'
           },
           'user-123',
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -420,15 +420,15 @@ describe('Organization Routes', () => {
       it('should return 403 when user lacks permission', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: false,
-          reason: 'Insufficient permissions',
+          reason: 'Insufficient permissions'
         });
 
         const response = await app.inject({
           method: 'POST',
           url: '/organizations/org-123/teams',
           payload: {
-            name: 'Development Team',
-          },
+            name: 'Development Team'
+          }
         });
 
         expect(response.statusCode).toBe(403);
@@ -443,13 +443,13 @@ describe('Organization Routes', () => {
         const teams = [mockTeam];
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has read permission',
+          reason: 'User has read permission'
         });
         mockOrgService.getOrganizationTeams.mockResolvedValue(teams);
 
         const response = await app.inject({
           method: 'GET',
-          url: '/organizations/org-123/teams',
+          url: '/organizations/org-123/teams'
         });
 
         expect(response.statusCode).toBe(200);
@@ -465,13 +465,13 @@ describe('Organization Routes', () => {
         const hierarchy = [{ ...mockTeam, level: 0, path: ['Development Team'] }];
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has read permission',
+          reason: 'User has read permission'
         });
         mockOrgService.getTeamHierarchy.mockResolvedValue(hierarchy);
 
         const response = await app.inject({
           method: 'GET',
-          url: '/organizations/org-123/teams/hierarchy',
+          url: '/organizations/org-123/teams/hierarchy'
         });
 
         expect(response.statusCode).toBe(200);
@@ -487,12 +487,12 @@ describe('Organization Routes', () => {
         mockOrgService.getTeamById.mockResolvedValue(mockTeam);
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has read permission',
+          reason: 'User has read permission'
         });
 
         const response = await app.inject({
           method: 'GET',
-          url: '/teams/team-123',
+          url: '/teams/team-123'
         });
 
         expect(response.statusCode).toBe(200);
@@ -511,7 +511,7 @@ describe('Organization Routes', () => {
 
         const response = await app.inject({
           method: 'GET',
-          url: '/teams/nonexistent',
+          url: '/teams/nonexistent'
         });
 
         expect(response.statusCode).toBe(404);
@@ -526,7 +526,7 @@ describe('Organization Routes', () => {
         mockOrgService.getTeamById.mockResolvedValue(mockTeam);
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has write permission',
+          reason: 'User has write permission'
         });
         const updatedTeam = { ...mockTeam, name: 'Updated Team' };
         mockOrgService.updateTeam.mockResolvedValue(updatedTeam);
@@ -535,8 +535,8 @@ describe('Organization Routes', () => {
           method: 'PUT',
           url: '/teams/team-123',
           payload: {
-            name: 'Updated Team',
-          },
+            name: 'Updated Team'
+          }
         });
 
         expect(response.statusCode).toBe(200);
@@ -549,7 +549,7 @@ describe('Organization Routes', () => {
           'user-123',
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -560,13 +560,13 @@ describe('Organization Routes', () => {
         mockOrgService.getTeamById.mockResolvedValue(mockTeam);
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has delete permission',
+          reason: 'User has delete permission'
         });
         mockOrgService.deleteTeam.mockResolvedValue();
 
         const response = await app.inject({
           method: 'DELETE',
-          url: '/teams/team-123',
+          url: '/teams/team-123'
         });
 
         expect(response.statusCode).toBe(200);
@@ -578,7 +578,7 @@ describe('Organization Routes', () => {
           'user-123',
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -594,13 +594,13 @@ describe('Organization Routes', () => {
           userId: 'user-456',
           role: 'member' as const,
           joinedAt: new Date(),
-          invitedBy: 'user-123',
+          invitedBy: 'user-123'
         };
 
         mockOrgService.getTeamById.mockResolvedValue(mockTeam);
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has write permission',
+          reason: 'User has write permission'
         });
         mockOrgService.addTeamMember.mockResolvedValue(mockMember);
 
@@ -609,8 +609,8 @@ describe('Organization Routes', () => {
           url: '/teams/team-123/members',
           payload: {
             userId: 'user-456',
-            role: 'member',
-          },
+            role: 'member'
+          }
         });
 
         expect(response.statusCode).toBe(201);
@@ -622,11 +622,11 @@ describe('Organization Routes', () => {
             teamId: 'team-123',
             userId: 'user-456',
             role: 'member',
-            invitedBy: 'user-123',
+            invitedBy: 'user-123'
           },
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -647,21 +647,21 @@ describe('Organization Routes', () => {
               displayName: 'Member User',
               firstName: 'Member',
               lastName: 'User',
-              avatarUrl: null,
-            },
-          },
+              avatarUrl: null
+            }
+          }
         ];
 
         mockOrgService.getTeamById.mockResolvedValue(mockTeam);
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has read permission',
+          reason: 'User has read permission'
         });
         mockOrgService.getTeamMembers.mockResolvedValue(mockMembers);
 
         const response = await app.inject({
           method: 'GET',
-          url: '/teams/team-123/members',
+          url: '/teams/team-123/members'
         });
 
         expect(response.statusCode).toBe(200);
@@ -677,7 +677,7 @@ describe('Organization Routes', () => {
         mockOrgService.getTeamById.mockResolvedValue(mockTeam);
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has write permission',
+          reason: 'User has write permission'
         });
         mockOrgService.updateTeamMemberRole.mockResolvedValue();
 
@@ -685,8 +685,8 @@ describe('Organization Routes', () => {
           method: 'PUT',
           url: '/teams/team-123/members/user-456',
           payload: {
-            role: 'admin',
-          },
+            role: 'admin'
+          }
         });
 
         expect(response.statusCode).toBe(200);
@@ -700,7 +700,7 @@ describe('Organization Routes', () => {
           'user-123',
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -711,13 +711,13 @@ describe('Organization Routes', () => {
         mockOrgService.getTeamById.mockResolvedValue(mockTeam);
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has write permission',
+          reason: 'User has write permission'
         });
         mockOrgService.removeTeamMember.mockResolvedValue();
 
         const response = await app.inject({
           method: 'DELETE',
-          url: '/teams/team-123/members/user-456',
+          url: '/teams/team-123/members/user-456'
         });
 
         expect(response.statusCode).toBe(200);
@@ -730,7 +730,7 @@ describe('Organization Routes', () => {
           'user-123',
           {
             ipAddress: '127.0.0.1',
-            userAgent: undefined,
+            userAgent: undefined
           }
         );
       });
@@ -743,7 +743,7 @@ describe('Organization Routes', () => {
 
         const response = await app.inject({
           method: 'GET',
-          url: '/users/user-123/teams',
+          url: '/users/user-123/teams'
         });
 
         expect(response.statusCode).toBe(200);
@@ -756,14 +756,14 @@ describe('Organization Routes', () => {
       it('should check permissions when viewing other users teams', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: true,
-          reason: 'User has admin permission',
+          reason: 'User has admin permission'
         });
         const userTeams = [mockTeam];
         mockOrgService.getUserTeams.mockResolvedValue(userTeams);
 
         const response = await app.inject({
           method: 'GET',
-          url: '/users/other-user/teams?organizationId=org-123',
+          url: '/users/other-user/teams?organizationId=org-123'
         });
 
         expect(response.statusCode).toBe(200);
@@ -780,12 +780,12 @@ describe('Organization Routes', () => {
       it('should return 403 when user lacks permission to view other users teams', async () => {
         mockRbacService.checkPermission.mockResolvedValue({
           allowed: false,
-          reason: 'Insufficient permissions',
+          reason: 'Insufficient permissions'
         });
 
         const response = await app.inject({
           method: 'GET',
-          url: '/users/other-user/teams',
+          url: '/users/other-user/teams'
         });
 
         expect(response.statusCode).toBe(403);

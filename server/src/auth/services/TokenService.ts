@@ -32,7 +32,7 @@ export class TokenService implements ITokenService {
       organizationId: await this.getUserPrimaryOrganization(user.id),
       teamIds: await this.getUserTeams(user.id),
       iss: this.config.jwtIssuer,
-      aud: this.config.jwtAudience,
+      aud: this.config.jwtAudience
     };
 
     // Add scopes if provided (for API tokens)
@@ -42,7 +42,7 @@ export class TokenService implements ITokenService {
 
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
-      expiresIn: JWT_CONFIG.accessTokenExpiry,
+      expiresIn: JWT_CONFIG.accessTokenExpiry
     } as jwt.SignOptions);
 
     return token;
@@ -64,12 +64,12 @@ export class TokenService implements ITokenService {
       tokenId,
       name,
       iss: this.config.jwtIssuer,
-      aud: this.config.jwtAudience,
+      aud: this.config.jwtAudience
     };
 
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
-      expiresIn,
+      expiresIn
     } as jwt.SignOptions);
 
     // Store API token in database for tracking
@@ -83,12 +83,12 @@ export class TokenService implements ITokenService {
       sub: user.id,
       type: 'refresh',
       iss: this.config.jwtIssuer,
-      aud: this.config.jwtAudience,
+      aud: this.config.jwtAudience
     };
 
     const token = jwt.sign(payload, this.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
-      expiresIn: JWT_CONFIG.refreshTokenExpiry,
+      expiresIn: JWT_CONFIG.refreshTokenExpiry
     } as jwt.SignOptions);
 
     // Store refresh token in database for tracking
@@ -108,7 +108,7 @@ export class TokenService implements ITokenService {
       const payload = jwt.verify(token, this.publicKey, {
         algorithms: [JWT_CONFIG.algorithm],
         issuer: this.config.jwtIssuer,
-        audience: this.config.jwtAudience,
+        audience: this.config.jwtAudience
       }) as JWTPayload;
 
       return payload;
@@ -126,7 +126,7 @@ export class TokenService implements ITokenService {
       const payload = jwt.verify(token, this.publicKey, {
         algorithms: [JWT_CONFIG.algorithm],
         issuer: this.config.jwtIssuer,
-        audience: this.config.jwtAudience,
+        audience: this.config.jwtAudience
       }) as any;
 
       if (payload.type !== 'refresh') {
@@ -177,7 +177,7 @@ export class TokenService implements ITokenService {
       emailVerificationToken: userData.email_verification_token,
       emailVerificationExpires: userData.email_verification_expires,
       status: userData.status,
-      deletedAt: userData.deleted_at,
+      deletedAt: userData.deleted_at
     });
 
     // Generate new refresh token (rotation for security)
@@ -186,7 +186,7 @@ export class TokenService implements ITokenService {
 
     return {
       accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
+      refreshToken: newRefreshToken
     };
   }
 
@@ -262,7 +262,7 @@ export class TokenService implements ITokenService {
       expiresAt: row.expires_at,
       createdAt: row.created_at,
       lastUsedAt: row.last_used_at,
-      revoked: row.revoked,
+      revoked: row.revoked
     }));
   }
 

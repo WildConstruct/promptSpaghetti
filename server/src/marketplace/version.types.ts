@@ -201,7 +201,7 @@ export const CreateVersionSchema = z.object({
   max_claude_version: z.string().optional(),
   required_features: z.array(z.string()).default([]),
   optional_features: z.array(z.string()).default([]),
-  token_per_run_estimate: z.number().int().min(0).default(0),
+  token_per_run_estimate: z.number().int().min(0).default(0)
 });
 
 export const UpdateVersionSchema = z.object({
@@ -217,7 +217,7 @@ export const UpdateVersionSchema = z.object({
   min_claude_version: z.string().optional(),
   max_claude_version: z.string().optional(),
   required_features: z.array(z.string()).optional(),
-  optional_features: z.array(z.string()).optional(),
+  optional_features: z.array(z.string()).optional()
 });
 
 export const VersionDeploymentSchema = z.object({
@@ -225,7 +225,7 @@ export const VersionDeploymentSchema = z.object({
   deployment_type: z.enum(['rollout', 'canary', 'blue_green', 'immediate']).default('immediate'),
   rollout_percentage: z.number().min(0).max(100).default(100),
   target_audience: z.array(z.string()).default([]),
-  deployment_config: z.record(z.any()).default({}),
+  deployment_config: z.record(z.any()).default({})
 });
 
 export const VersionRollbackSchema = z.object({
@@ -234,14 +234,14 @@ export const VersionRollbackSchema = z.object({
   rollback_type: z.enum(['emergency', 'planned', 'issue_resolution']),
   impact_assessment: z.string().min(1).max(2000),
   rollback_plan: z.string().min(1).max(2000),
-  verification_steps: z.array(z.string()).min(1),
+  verification_steps: z.array(z.string()).min(1)
 });
 
 export const VersionComparisonSchema = z.object({
   from_version_id: z.string().uuid(),
   to_version_id: z.string().uuid(),
   include_content_diff: z.boolean().default(true),
-  include_metadata_diff: z.boolean().default(true),
+  include_metadata_diff: z.boolean().default(true)
 });
 
 // Export all types
@@ -252,7 +252,7 @@ export type {
   CompatibilityImpact,
   VersionDeployment,
   VersionAnalytics,
-  VersionRollback,
+  VersionRollback
 };
 
 export {
@@ -264,5 +264,5 @@ export {
   UpdateVersionSchema,
   VersionDeploymentSchema,
   VersionRollbackSchema,
-  VersionComparisonSchema,
+  VersionComparisonSchema
 };

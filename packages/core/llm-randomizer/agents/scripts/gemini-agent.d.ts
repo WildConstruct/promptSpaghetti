@@ -45,13 +45,37 @@ export declare class GeminiGraphAgent {
     private config;
     private basePrompt;
     constructor(config: GeminiAgentConfig);
+    /**
+     * Generate a graph using Gemini with structured output
+     */
     generateGraph(request: GeminiGenerationRequest): Promise<GeminiGenerationResult>;
+    /**
+     * Build Gemini-optimized base prompt
+     */
     private buildGeminiPrompt;
+    /**
+     * Build request-specific prompt
+     */
     private buildRequestPrompt;
+    /**
+     * Extract graph content from Gemini response
+     */
     private extractGraphFromResponse;
+    /**
+     * Call Gemini API with error handling
+     */
     private callGemini;
+    /**
+     * Generate mock Gemini response
+     */
     private generateGeminiMockResponse;
 }
+/**
+ * Default configuration for Gemini agent
+ */
 export declare const defaultGeminiConfig: GeminiAgentConfig;
+/**
+ * Utility function to create and use Gemini agent
+ */
 export declare function generateGraphWithGemini(request: GeminiGenerationRequest, config?: Partial<GeminiAgentConfig>): Promise<GeminiGenerationResult>;
 //# sourceMappingURL=gemini-agent.d.ts.map

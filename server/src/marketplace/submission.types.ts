@@ -153,17 +153,17 @@ export const SubmissionDataSchema = z.object({
   // Submission specifics
   moderation_notes: z.string().optional(),
   is_first_submission: z.boolean(),
-  previous_version_id: z.string().uuid().optional(),
+  previous_version_id: z.string().uuid().optional()
 });
 
 export const CreateSubmissionSchema = z.object({
   template_id: z.string().uuid().optional(), // Optional for new templates
-  submission_data: SubmissionDataSchema,
+  submission_data: SubmissionDataSchema
 });
 
 export const UpdateSubmissionSchema = z.object({
   submission_data: SubmissionDataSchema.partial(),
-  status: z.nativeEnum(SubmissionStatus).optional(),
+  status: z.nativeEnum(SubmissionStatus).optional()
 });
 
 export const SubmissionReviewSchema = z.object({
@@ -174,15 +174,15 @@ export const SubmissionReviewSchema = z.object({
     category: z.enum(['content', 'quality', 'compliance', 'usability', 'technical']),
     rating: z.number().int().min(1).max(5),
     comments: z.string().min(1).max(1000),
-    suggestions: z.array(z.string()).max(10),
-  })).min(1).max(5),
+    suggestions: z.array(z.string()).max(10)
+  })).min(1).max(5)
 });
 
 export const FileUploadSchema = z.object({
   file_type: z.nativeEnum(FileType),
   filename: z.string().min(1).max(255),
   file_size: z.number().int().min(1).max(10 * 1024 * 1024), // 10MB max
-  mime_type: z.string().min(1),
+  mime_type: z.string().min(1)
 });
 
 // Export all types
@@ -192,7 +192,7 @@ export type {
   ValidationResult,
   UploadedFile,
   SubmissionReview,
-  ReviewFeedback,
+  ReviewFeedback
 };
 
 export {
@@ -203,5 +203,5 @@ export {
   CreateSubmissionSchema,
   UpdateSubmissionSchema,
   SubmissionReviewSchema,
-  FileUploadSchema,
+  FileUploadSchema
 };

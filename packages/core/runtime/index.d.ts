@@ -5,6 +5,9 @@ export interface ExecutionContext {
 export declare abstract class RuntimeNode<TOutput = unknown> {
     id: string;
     constructor(id: string);
+    /**
+     * Execute this node and return its output. May mutate context.
+     */
     abstract run(ctx: ExecutionContext): Promise<TOutput> | TOutput;
 }
 export declare class WeightedChoiceNode extends RuntimeNode<string> {
@@ -29,7 +32,7 @@ export declare class IncludeNode extends RuntimeNode<string> {
     private name;
     private lookup;
     constructor(id: string, name: string, lookup: Record<string, string>);
-    run(): string;
+    run(ctx: ExecutionContext): string;
 }
 export declare class SetVariableNode extends RuntimeNode<void> {
     private key;

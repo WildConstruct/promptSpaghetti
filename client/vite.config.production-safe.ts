@@ -43,8 +43,8 @@ export default defineConfig({
     esbuildOptions: {
       // Allow overwriting CommonJS variables
       define: {
-        global: 'globalThis',
-      },
+        global: 'globalThis'
+      }
     }
   }
 });

@@ -53,12 +53,12 @@ const MetricCard: React.FC<MetricCardProps> = ({
     if (!trend) return null;
     
     switch (trend.direction) {
-      case 'up':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'down':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <Activity className="w-4 h-4 text-gray-500" />;
+    case 'up':
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case 'down':
+      return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default:
+      return <Activity className="w-4 h-4 text-gray-500" />;
     }
   };
 
@@ -66,12 +66,12 @@ const MetricCard: React.FC<MetricCardProps> = ({
     if (!trend) return 'text-gray-500';
     
     switch (trend.direction) {
-      case 'up':
-        return 'text-green-500';
-      case 'down':
-        return 'text-red-500';
-      default:
-        return 'text-gray-500';
+    case 'up':
+      return 'text-green-500';
+    case 'down':
+      return 'text-red-500';
+    default:
+      return 'text-gray-500';
     }
   };
 
@@ -79,14 +79,14 @@ const MetricCard: React.FC<MetricCardProps> = ({
     if (!progress) return 'bg-blue-500';
     
     switch (progress.color) {
-      case 'green':
-        return 'bg-green-500';
-      case 'yellow':
-        return 'bg-yellow-500';
-      case 'red':
-        return 'bg-red-500';
-      default:
-        return 'bg-blue-500';
+    case 'green':
+      return 'bg-green-500';
+    case 'yellow':
+      return 'bg-yellow-500';
+    case 'red':
+      return 'bg-red-500';
+    default:
+      return 'bg-blue-500';
     }
   };
 

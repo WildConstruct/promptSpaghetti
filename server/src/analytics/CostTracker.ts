@@ -445,17 +445,17 @@ export class CostTracker extends EventEmitter {
     const now = new Date();
     
     switch (periodType) {
-      case 'daily':
-        return now.toISOString().split('T')[0]; // YYYY-MM-DD
-      case 'weekly':
-        const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
-        return `${weekStart.getFullYear()}-W${this.getWeekNumber(weekStart)}`;
-      case 'monthly':
-        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-      case 'yearly':
-        return String(now.getFullYear());
-      default:
-        return now.toISOString().split('T')[0];
+    case 'daily':
+      return now.toISOString().split('T')[0]; // YYYY-MM-DD
+    case 'weekly':
+      const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
+      return `${weekStart.getFullYear()}-W${this.getWeekNumber(weekStart)}`;
+    case 'monthly':
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    case 'yearly':
+      return String(now.getFullYear());
+    default:
+      return now.toISOString().split('T')[0];
     }
   }
 

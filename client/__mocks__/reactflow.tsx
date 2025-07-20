@@ -4,7 +4,7 @@ import { jest } from '@jest/globals';
 // Very small subset of the public API that App and our tests actually use.
 export interface XYPosition { x: number; y: number }
 export interface Viewport extends XYPosition { zoom: number }
-export interface Node<T = any> {
+export interface Node<T = unknown> {
   id: string;
   position: XYPosition;
   data: T;
@@ -38,24 +38,24 @@ interface ReactFlowProps {
   nodes: Node[];
   edges: Edge[];
   onNodeClick?: (evt: React.MouseEvent, node: Node) => void;
-  onNodesChange?: any;
-  onEdgesChange?: any;
-  onConnect?: any;
+  onNodesChange?: (changes: unknown[]) => void;
+  onEdgesChange?: (changes: unknown[]) => void;
+  onConnect?: (connection: unknown) => void;
   onDrop?: (e: React.DragEvent) => void;
   onDragOver?: (e: React.DragEvent) => void;
   onPaneClick?: () => void;
-  nodeTypes?: any;
-  connectionMode?: any;
+  nodeTypes?: Record<string, React.ComponentType>;
+  connectionMode?: string;
   snapToGrid?: boolean;
   fitView?: boolean;
   style?: React.CSSProperties;
-  defaultEdgeOptions?: any;
+  defaultEdgeOptions?: Record<string, unknown>;
   selectNodesOnDrag?: boolean;
   selectionOnDrag?: boolean;
   nodeOrigin?: [number, number];
   className?: string;
   children?: React.ReactNode;
-  [key: string]: any; // Allow any additional props
+  [key: string]: unknown; // Allow any additional props
 }
 
 export const ReactFlow: React.FC<ReactFlowProps> = ({
@@ -68,7 +68,7 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
   children,
   style,
   className,
-  ...props
+  ..._props
 }) => {
   const handleDrop = (e: React.DragEvent) => {
     // Ensure clientX and clientY are available for tests
@@ -99,7 +99,7 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
                 className={`react-flow__node ${node.selected ? 'selected' : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  onNodeClick && onNodeClick(e, node);
+                  onNodeClick?.(e, node);
                 }}
                 style={{ 
                   cursor: 'pointer',
@@ -147,7 +147,7 @@ export const useReactFlow = () => ({
   fitView: () => {},
   zoomTo: () => {},
   zoomIn: () => {},
-  zoomOut: () => {},
+  zoomOut: () => {}
 });
 
 export const Position = { 
@@ -167,7 +167,17 @@ export const Handle: React.FC<{
 }> = ({ children, type, position, style }) => (
   <div 
     data-testid={`handle-${type}-${position}`} 
-    className={`react-flow__handle-${position} react-flow__handle nodrag nopan ${type} connectable connectablestart connectableend connectionindicator`}
+    className={[
+      `react-flow__handle-${position}`,
+      'react-flow__handle',
+      'nodrag',
+      'nopan',
+      type,
+      'connectable',
+      'connectablestart', 
+      'connectableend',
+      'connectionindicator'
+    ].join(' ')}
     data-handlepos={position}
     data-id={`null-null-${type}`}
     style={style}
@@ -179,7 +189,7 @@ export const Handle: React.FC<{
 // Add missing types for compatibility
 export interface NodeProps {
   id: string;
-  data: any;
+  data: unknown;
   selected?: boolean;
   isConnectable?: boolean;
   xPos?: number;
@@ -195,7 +205,10 @@ export const ConnectionMode = {
 } as const;
 
 // Add utility functions
-export const addEdge = jest.fn((connection: any, edges: Edge[]) => [...edges, { ...connection, id: `e-${Date.now()}` }]);
+export const addEdge = jest.fn((connection: unknown, edges: Edge[]) => [
+  ...edges, 
+  { ...connection, id: `e-${Date.now()}` }
+]);
 export const useNodesState = jest.fn((initialNodes: Node[]) => [initialNodes, jest.fn()]);
 export const useEdgesState = jest.fn((initialEdges: Edge[]) => [initialEdges, jest.fn()]);
 
@@ -213,5 +226,5 @@ export default {
   ConnectionMode,
   addEdge,
   useNodesState,
-  useEdgesState,
+  useEdgesState
 };

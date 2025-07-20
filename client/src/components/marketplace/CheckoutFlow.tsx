@@ -32,7 +32,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
     city: '',
     state: '',
     postal_code: '',
-    country: 'US',
+    country: 'US'
   });
   const [paymentIntent, setPaymentIntent] = useState<PaymentIntent | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,15 +44,15 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
     appearance: {
       theme: 'stripe',
       variables: {
-        colorPrimary: '#3b82f6',
-      },
-    },
+        colorPrimary: '#3b82f6'
+      }
+    }
   };
 
   const steps = [
     { id: 'billing', title: 'Billing Address', completed: currentStep !== 'billing' },
     { id: 'payment', title: 'Payment', completed: currentStep === 'confirmation' },
-    { id: 'confirmation', title: 'Confirmation', completed: false },
+    { id: 'confirmation', title: 'Confirmation', completed: false }
   ];
 
   return (
@@ -401,10 +401,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                 city: billingAddress.city,
                 state: billingAddress.state || undefined,
                 postal_code: billingAddress.postal_code,
-                country: billingAddress.country,
-              },
-            },
-          },
+                country: billingAddress.country
+              }
+            }
+          }
         }
       );
 
@@ -452,11 +452,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                     fontSize: '16px',
                     color: '#424770',
                     '::placeholder': {
-                      color: '#aab7c4',
-                    },
-                  },
+                      color: '#aab7c4'
+                    }
+                  }
                 },
-                hidePostalCode: true, // We collect this separately
+                hidePostalCode: true // We collect this separately
               }}
             />
           </div>

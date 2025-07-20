@@ -39,7 +39,7 @@ export const PERMISSIONS = {
   // Advanced permissions
   ACTIVITY_READ: 1 << 18,
   NOTIFICATION_MANAGE: 1 << 19,
-  EXPORT_DATA: 1 << 20,
+  EXPORT_DATA: 1 << 20
 } as const;
 
 // Pre-defined role permissions
@@ -52,7 +52,7 @@ export const ROLE_PERMISSIONS = {
   VIEWER: PERMISSIONS.WORKSPACE_READ | PERMISSIONS.PROJECT_READ | PERMISSIONS.RESOURCE_READ | 
           PERMISSIONS.COMMENT_READ | PERMISSIONS.ACTIVITY_READ,
   COMMENTER: PERMISSIONS.WORKSPACE_READ | PERMISSIONS.PROJECT_READ | PERMISSIONS.RESOURCE_READ | 
-             PERMISSIONS.COMMENT_READ | PERMISSIONS.COMMENT_WRITE | PERMISSIONS.ACTIVITY_READ,
+             PERMISSIONS.COMMENT_READ | PERMISSIONS.COMMENT_WRITE | PERMISSIONS.ACTIVITY_READ
 } as const;
 
 // User authentication and profile schemas
@@ -71,7 +71,7 @@ export const UserSchema = z.object({
   last_login_at: z.date().optional(),
   created_at: z.date(),
   updated_at: z.date(),
-  deactivated_at: z.date().nullable(),
+  deactivated_at: z.date().nullable()
 });
 
 export const CreateUserSchema = z.object({
@@ -80,13 +80,13 @@ export const CreateUserSchema = z.object({
   avatar: z.string().url().optional(),
   password: z.string().min(8).optional(), // For local auth
   auth_provider: z.enum(['local', 'google', 'github', 'microsoft', 'okta', 'auth0']).default('local'),
-  auth_provider_id: z.string().optional(),
+  auth_provider_id: z.string().optional()
 });
 
 export const UpdateUserSchema = z.object({
   name: z.string().min(1).max(255).optional(),
   avatar: z.string().url().optional(),
-  email_verified: z.boolean().optional(),
+  email_verified: z.boolean().optional()
 });
 
 export const UserSessionSchema = z.object({
@@ -97,7 +97,7 @@ export const UserSessionSchema = z.object({
   user_agent: z.string().optional(),
   ip_address: z.string().optional(),
   created_at: z.date(),
-  last_active_at: z.date(),
+  last_active_at: z.date()
 });
 
 export const CreateUserSessionSchema = z.object({
@@ -105,7 +105,7 @@ export const CreateUserSessionSchema = z.object({
   session_token: z.string(),
   expires_at: z.date(),
   user_agent: z.string().optional(),
-  ip_address: z.string().optional(),
+  ip_address: z.string().optional()
 });
 
 export const OAuthStateSchema = z.object({
@@ -115,7 +115,7 @@ export const OAuthStateSchema = z.object({
   redirect_uri: z.string().url(),
   workspace_id: z.string().uuid().optional(),
   expires_at: z.date(),
-  created_at: z.date(),
+  created_at: z.date()
 });
 
 // Zod schemas for validation
@@ -127,19 +127,19 @@ export const WorkspaceSchema = z.object({
   settings: z.record(z.unknown()).default({}),
   created_at: z.date(),
   updated_at: z.date(),
-  archived_at: z.date().nullable(),
+  archived_at: z.date().nullable()
 });
 
 export const CreateWorkspaceSchema = z.object({
   name: z.string().min(1).max(255),
   description: z.string().optional(),
-  settings: z.record(z.unknown()).optional().default({}),
+  settings: z.record(z.unknown()).optional().default({})
 });
 
 export const UpdateWorkspaceSchema = z.object({
   name: z.string().min(1).max(255).optional(),
   description: z.string().optional(),
-  settings: z.record(z.unknown()).optional(),
+  settings: z.record(z.unknown()).optional()
 });
 
 export const ProjectSchema = z.object({
@@ -151,21 +151,21 @@ export const ProjectSchema = z.object({
   metadata: z.record(z.unknown()).default({}),
   created_by: z.string(),
   created_at: z.date(),
-  updated_at: z.date(),
+  updated_at: z.date()
 });
 
 export const CreateProjectSchema = z.object({
   workspace_id: z.string().uuid(),
   name: z.string().min(1).max(255),
   description: z.string().optional(),
-  metadata: z.record(z.unknown()).optional().default({}),
+  metadata: z.record(z.unknown()).optional().default({})
 });
 
 export const UpdateProjectSchema = z.object({
   name: z.string().min(1).max(255).optional(),
   description: z.string().optional(),
   status: z.enum(['draft', 'active', 'archived', 'deleted']).optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.unknown()).optional()
 });
 
 export const ResourceSchema = z.object({
@@ -182,7 +182,7 @@ export const ResourceSchema = z.object({
   version: z.number().int().min(1),
   created_by: z.string(),
   created_at: z.date(),
-  updated_at: z.date(),
+  updated_at: z.date()
 });
 
 export const CreateResourceSchema = z.object({
@@ -194,7 +194,7 @@ export const CreateResourceSchema = z.object({
   storage_path: z.string().optional(),
   content_data: z.record(z.unknown()).optional(),
   size_bytes: z.number().int().min(0).optional().default(0),
-  checksum: z.string().optional(),
+  checksum: z.string().optional()
 });
 
 export const ACLRoleSchema = z.object({
@@ -205,14 +205,14 @@ export const ACLRoleSchema = z.object({
   permissions: z.number().int(),
   is_system_role: z.boolean(),
   created_at: z.date(),
-  updated_at: z.date(),
+  updated_at: z.date()
 });
 
 export const CreateACLRoleSchema = z.object({
   workspace_id: z.string().uuid(),
   name: z.string().min(1).max(100),
   description: z.string().optional(),
-  permissions: z.number().int(),
+  permissions: z.number().int()
 });
 
 export const ACLAssignmentSchema = z.object({
@@ -223,7 +223,7 @@ export const ACLAssignmentSchema = z.object({
   scope_id: z.string().uuid(),
   granted_by: z.string(),
   granted_at: z.date(),
-  expires_at: z.date().optional(),
+  expires_at: z.date().optional()
 });
 
 export const CreateACLAssignmentSchema = z.object({
@@ -231,7 +231,7 @@ export const CreateACLAssignmentSchema = z.object({
   role_id: z.string().uuid(),
   scope_type: z.enum(['workspace', 'project']),
   scope_id: z.string().uuid(),
-  expires_at: z.date().optional(),
+  expires_at: z.date().optional()
 });
 
 export const UserMembershipSchema = z.object({
@@ -241,13 +241,13 @@ export const UserMembershipSchema = z.object({
   status: z.enum(['pending', 'active', 'suspended', 'left']),
   invited_by: z.string().optional(),
   joined_at: z.date(),
-  last_active_at: z.date(),
+  last_active_at: z.date()
 });
 
 export const CreateUserMembershipSchema = z.object({
   user_id: z.string(),
   workspace_id: z.string().uuid(),
-  invited_by: z.string().optional(),
+  invited_by: z.string().optional()
 });
 
 export const ActivityEventSchema = z.object({
@@ -259,7 +259,7 @@ export const ActivityEventSchema = z.object({
   event_type: z.string(),
   event_data: z.record(z.unknown()).default({}),
   aggregation_key: z.string().optional(),
-  created_at: z.date(),
+  created_at: z.date()
 });
 
 export const CreateActivityEventSchema = z.object({
@@ -269,7 +269,7 @@ export const CreateActivityEventSchema = z.object({
   actor_id: z.string(),
   event_type: z.string(),
   event_data: z.record(z.unknown()).optional().default({}),
-  aggregation_key: z.string().optional(),
+  aggregation_key: z.string().optional()
 });
 
 export const CommentSchema = z.object({
@@ -286,7 +286,7 @@ export const CommentSchema = z.object({
   resolved_by: z.string().optional(),
   resolved_at: z.date().optional(),
   created_at: z.date(),
-  updated_at: z.date(),
+  updated_at: z.date()
 });
 
 export const CreateCommentSchema = z.object({
@@ -295,12 +295,12 @@ export const CreateCommentSchema = z.object({
   author_id: z.string(),
   content_markdown: z.string().min(1),
   target_type: z.enum(['resource', 'node', 'region']).optional(),
-  target_data: z.record(z.unknown()).optional().default({}),
+  target_data: z.record(z.unknown()).optional().default({})
 });
 
 export const UpdateCommentSchema = z.object({
   content_markdown: z.string().min(1).optional(),
-  status: z.enum(['active', 'edited', 'deleted', 'resolved']).optional(),
+  status: z.enum(['active', 'edited', 'deleted', 'resolved']).optional()
 });
 
 export const NotificationSchema = z.object({
@@ -315,7 +315,7 @@ export const NotificationSchema = z.object({
   priority: z.enum(['low', 'normal', 'high', 'urgent']),
   delivery_channel: z.enum(['in_app', 'email', 'push']),
   read_at: z.date().optional(),
-  delivered_at: z.date(),
+  delivered_at: z.date()
 });
 
 export const CreateNotificationSchema = z.object({
@@ -327,7 +327,7 @@ export const CreateNotificationSchema = z.object({
   message: z.string().optional(),
   action_url: z.string().optional(),
   priority: z.enum(['low', 'normal', 'high', 'urgent']).optional().default('normal'),
-  delivery_channel: z.enum(['in_app', 'email', 'push']).optional().default('in_app'),
+  delivery_channel: z.enum(['in_app', 'email', 'push']).optional().default('in_app')
 });
 
 // TypeScript types inferred from schemas

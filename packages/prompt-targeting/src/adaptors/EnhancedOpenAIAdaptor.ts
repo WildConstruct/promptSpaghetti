@@ -8,7 +8,7 @@ import {
   PlatformCapabilities,
   ValidationResult,
   PlatformPrompt,
-  TranslationContext,
+  TranslationContext
 } from '../types';
 import { AdvancedBaseAdaptor, AdvancedAdaptorConfig } from './AdvancedBaseAdaptor';
 
@@ -33,7 +33,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       apiKey: process.env.OPENAI_API_KEY,
       organization: process.env.OPENAI_ORGANIZATION,
       baseURL: process.env.OPENAI_BASE_URL,
-      ...this.config.openai,
+      ...this.config.openai
     };
 
     if (!this.openaiConfig.apiKey) {
@@ -60,7 +60,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
         top_p: [0.0, 1.0],
         frequency_penalty: [-2.0, 2.0],
         presence_penalty: [-2.0, 2.0],
-        max_tokens: [1, modelCapabilities.maxTokens],
+        max_tokens: [1, modelCapabilities.maxTokens]
       },
       features: [
         'text-generation',
@@ -77,7 +77,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
         'advanced-pipeline',
         'content-optimization',
         'conversation-flow',
-        'context-management',
+        'context-management'
       ],
       styleSupport: false,
       negativePromptSupport: false,
@@ -87,8 +87,8 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
         supportsSystemMessages: true,
         supportsFunctionCalling: this.supportsFunctionCalling(model),
         supportsJsonMode: this.supportsJsonMode(model),
-        supportsAdvancedFeatures: true,
-      },
+        supportsAdvancedFeatures: true
+      }
     };
   }
 
@@ -105,7 +105,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       supportsSystemMessages: true,
       supportsFunctionCalling: this.supportsFunctionCalling(model),
       temperatureRange: [0.0, 2.0] as [number, number],
-      topPRange: [0.0, 1.0] as [number, number],
+      topPRange: [0.0, 1.0] as [number, number]
     };
   }
 
@@ -132,13 +132,13 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
         code: 'CONTENT_EXCEEDS_LIMIT',
         message: `Content exceeds model limit (${tokenEstimate.total}/${modelCapabilities.maxTokens} tokens)`,
         severity: 'error',
-        suggestion: 'Reduce content length or use a model with larger context window',
+        suggestion: 'Reduce content length or use a model with larger context window'
       });
     } else if (tokenEstimate.total > modelCapabilities.maxTokens * 0.7) {
       warnings.push({
         code: 'CONTENT_NEAR_LIMIT',
         message: `Content approaching model limit (${tokenEstimate.total}/${modelCapabilities.maxTokens} tokens)`,
-        optimization: 'Consider optimizing content for better performance',
+        optimization: 'Consider optimizing content for better performance'
       });
     }
 
@@ -147,7 +147,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       warnings.push({
         code: 'IMAGE_ONLY_CONTENT',
         message: 'Content is image-focused but targeting text model',
-        optimization: 'Add descriptive text or consider image-to-text preprocessing',
+        optimization: 'Add descriptive text or consider image-to-text preprocessing'
       });
     }
 
@@ -156,7 +156,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       warnings.push({
         code: 'MISSING_SYSTEM_MESSAGE',
         message: 'Multi-turn conversation without system context',
-        optimization: 'Add system message for better conversation flow',
+        optimization: 'Add system message for better conversation flow'
       });
     }
 
@@ -166,7 +166,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
         code: 'UNSUPPORTED_FUNCTION_CALLING',
         message: `Model ${model} does not support function calling`,
         severity: 'error',
-        suggestion: 'Use gpt-3.5-turbo or gpt-4 for function calling',
+        suggestion: 'Use gpt-3.5-turbo or gpt-4 for function calling'
       });
     }
 
@@ -175,7 +175,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       warnings.push({
         code: 'JSON_MODE_UNAVAILABLE',
         message: `Model ${model} may not support JSON mode reliably`,
-        optimization: 'Use explicit JSON formatting instructions',
+        optimization: 'Use explicit JSON formatting instructions'
       });
     }
 
@@ -191,7 +191,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore,
+      compatibilityScore
     };
   }
 
@@ -221,8 +221,8 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       prompt: finalPrompt.content,
       parameters: {
         ...parameters,
-        ...finalPrompt.parameters,
-      },
+        ...finalPrompt.parameters
+      }
     };
   }
 
@@ -252,7 +252,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
         contentComplexity: 0,
         primaryIntent: 'unknown',
         topics: [],
-        sentiment: 'neutral',
+        sentiment: 'neutral'
       };
     }
 
@@ -316,7 +316,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       contentComplexity,
       primaryIntent,
       topics,
-      sentiment,
+      sentiment
     };
   }
 
@@ -341,7 +341,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       system: systemTokens,
       conversation: conversationTokens,
       functions: functionTokens,
-      total: contentTokens + systemTokens + conversationTokens + functionTokens,
+      total: contentTokens + systemTokens + conversationTokens + functionTokens
     };
   }
 
@@ -353,7 +353,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       system: null as string | null,
       messages: [] as any[],
       functions: [] as any[],
-      context: {} as any,
+      context: {} as any
     };
 
     if (!graph.nodes) return structure;
@@ -363,32 +363,32 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
     
     for (const node of processedNodes) {
       switch (node.type) {
-        case 'system':
-          structure.system = this.enhanceSystemMessage(node.data?.text || node.data?.content, analysis);
-          break;
+      case 'system':
+        structure.system = this.enhanceSystemMessage(node.data?.text || node.data?.content, analysis);
+        break;
           
-        case 'user':
-        case 'assistant':
-          structure.messages.push({
-            role: node.type,
-            content: node.data?.text || node.data?.content,
-            metadata: { nodeId: node.id, ...node.data?.metadata },
-          });
-          break;
+      case 'user':
+      case 'assistant':
+        structure.messages.push({
+          role: node.type,
+          content: node.data?.text || node.data?.content,
+          metadata: { nodeId: node.id, ...node.data?.metadata }
+        });
+        break;
           
-        case 'function':
-          structure.functions.push({
-            name: node.data?.name,
-            description: node.data?.description,
-            parameters: node.data?.parameters,
-          });
-          break;
+      case 'function':
+        structure.functions.push({
+          name: node.data?.name,
+          description: node.data?.description,
+          parameters: node.data?.parameters
+        });
+        break;
           
-        default:
-          // Handle other node types as context
-          if (node.data?.text || node.data?.content) {
-            structure.context[node.type] = node.data.text || node.data.content;
-          }
+      default:
+        // Handle other node types as context
+        if (node.data?.text || node.data?.content) {
+          structure.context[node.type] = node.data.text || node.data.content;
+        }
       }
     }
 
@@ -416,7 +416,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       const contextContent = Object.values(structure.context).join('\n\n');
       structure.messages.push({
         role: 'user',
-        content: contextContent,
+        content: contextContent
       });
     }
 
@@ -428,25 +428,25 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
    */
   private buildAdvancedParameters(graph: any, analysis: any, config?: AdvancedAdaptorConfig): Record<string, unknown> {
     const parameters: Record<string, unknown> = {
-      model: this.openaiConfig.model || 'gpt-4',
+      model: this.openaiConfig.model || 'gpt-4'
     };
 
     // Intent-based parameter optimization
     switch (analysis.primaryIntent) {
-      case 'creative':
-        parameters.temperature = 0.8;
-        parameters.top_p = 0.9;
-        break;
-      case 'analytical':
-        parameters.temperature = 0.2;
-        parameters.top_p = 0.8;
-        break;
-      case 'conversational':
-        parameters.temperature = 0.6;
-        parameters.presence_penalty = 0.3;
-        break;
-      default:
-        parameters.temperature = 0.7;
+    case 'creative':
+      parameters.temperature = 0.8;
+      parameters.top_p = 0.9;
+      break;
+    case 'analytical':
+      parameters.temperature = 0.2;
+      parameters.top_p = 0.8;
+      break;
+    case 'conversational':
+      parameters.temperature = 0.6;
+      parameters.presence_penalty = 0.3;
+      break;
+    default:
+      parameters.temperature = 0.7;
     }
 
     // Quality preference override
@@ -574,14 +574,14 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       type: node.type || 'unknown',
       data: {
         text: node.data?.text || node.data?.content || '',
-        ...node.data,
-      },
+        ...node.data
+      }
     })) || [];
 
     return {
       ...graph,
       nodes: normalizedNodes,
-      edges: graph.edges || [],
+      edges: graph.edges || []
     };
   }
 
@@ -636,7 +636,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       'gpt-4-turbo': { maxTokens: 128000 },
       'gpt-4-turbo-preview': { maxTokens: 128000 },
       'gpt-3.5-turbo': { maxTokens: 4096 },
-      'gpt-3.5-turbo-16k': { maxTokens: 16384 },
+      'gpt-3.5-turbo-16k': { maxTokens: 16384 }
     };
     
     return capabilities[model] || { maxTokens: 4096 };
@@ -739,7 +739,7 @@ export class EnhancedOpenAIAdaptor extends AdvancedBaseAdaptor implements TextTo
       creative: 'You are a creative assistant. Use imagination and provide engaging, original responses.',
       analytical: 'You are an analytical assistant. Provide thorough, logical, and well-reasoned responses.',
       conversational: 'You are a conversational assistant. Be natural, engaging, and maintain context.',
-      general: 'You are a helpful assistant.',
+      general: 'You are a helpful assistant.'
     };
     
     return intents[analysis.primaryIntent] || intents.general;

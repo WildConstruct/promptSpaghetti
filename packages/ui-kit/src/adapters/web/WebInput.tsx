@@ -34,15 +34,15 @@ export const WebInput: React.FC<WebInputProps> = ({
     // Web-specific keyboard shortcuts
     if (e.ctrlKey || e.metaKey) {
       switch (e.key) {
-        case 'a':
-          // Select all - let browser handle this
-          break;
-        case 'z':
-          // Undo - let browser handle this
-          break;
-        case 'y':
-          // Redo - let browser handle this
-          break;
+      case 'a':
+        // Select all - let browser handle this
+        break;
+      case 'z':
+        // Undo - let browser handle this
+        break;
+      case 'y':
+        // Redo - let browser handle this
+        break;
       }
     }
 
@@ -100,11 +100,11 @@ export const WebTextArea: React.FC<WebTextAreaProps> = ({
     // Web-specific keyboard shortcuts for text areas
     if (e.ctrlKey || e.metaKey) {
       switch (e.key) {
-        case 'Enter':
-          // Ctrl+Enter for submit in some contexts
-          e.preventDefault();
-          // Could trigger onSubmit callback if provided
-          break;
+      case 'Enter':
+        // Ctrl+Enter for submit in some contexts
+        e.preventDefault();
+        // Could trigger onSubmit callback if provided
+        break;
       }
     }
 

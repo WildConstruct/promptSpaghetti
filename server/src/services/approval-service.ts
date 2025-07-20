@@ -278,55 +278,55 @@ export class ApprovalService {
     const assignments: ReviewerAssignment[] = [];
 
     switch (rule.reviewer_assignment_type) {
-      case 'automatic':
-        // Assign based on resource ownership or project roles
-        const resourceOwners = await this.getResourceOwners(resourceId);
-        for (const owner of resourceOwners.slice(0, rule.required_reviewers)) {
-          if (owner !== requesterId || rule.allow_self_approval) {
-            assignments.push(await this.createReviewerAssignment(
-              approvalRequestId,
-              owner,
-              'primary',
-              'Automatic assignment based on resource ownership'
-            ));
-          }
+    case 'automatic':
+      // Assign based on resource ownership or project roles
+      const resourceOwners = await this.getResourceOwners(resourceId);
+      for (const owner of resourceOwners.slice(0, rule.required_reviewers)) {
+        if (owner !== requesterId || rule.allow_self_approval) {
+          assignments.push(await this.createReviewerAssignment(
+            approvalRequestId,
+            owner,
+            'primary',
+            'Automatic assignment based on resource ownership'
+          ));
         }
-        break;
+      }
+      break;
 
-      case 'role_based':
-        // Assign based on workspace roles
-        const roleBasedReviewers = await this.getRoleBasedReviewers(rule.workspace_id, resourceId);
-        for (const reviewer of roleBasedReviewers.slice(0, rule.required_reviewers)) {
-          if (reviewer !== requesterId || rule.allow_self_approval) {
-            assignments.push(await this.createReviewerAssignment(
-              approvalRequestId,
-              reviewer,
-              'primary',
-              'Role-based assignment'
-            ));
-          }
+    case 'role_based':
+      // Assign based on workspace roles
+      const roleBasedReviewers = await this.getRoleBasedReviewers(rule.workspace_id, resourceId);
+      for (const reviewer of roleBasedReviewers.slice(0, rule.required_reviewers)) {
+        if (reviewer !== requesterId || rule.allow_self_approval) {
+          assignments.push(await this.createReviewerAssignment(
+            approvalRequestId,
+            reviewer,
+            'primary',
+            'Role-based assignment'
+          ));
         }
-        break;
+      }
+      break;
 
-      case 'round_robin':
-        // Assign using round-robin algorithm
-        const roundRobinReviewers = await this.getRoundRobinReviewers(rule.workspace_id, rule.required_reviewers);
-        for (const reviewer of roundRobinReviewers) {
-          if (reviewer !== requesterId || rule.allow_self_approval) {
-            assignments.push(await this.createReviewerAssignment(
-              approvalRequestId,
-              reviewer,
-              'primary',
-              'Round-robin assignment'
-            ));
-          }
+    case 'round_robin':
+      // Assign using round-robin algorithm
+      const roundRobinReviewers = await this.getRoundRobinReviewers(rule.workspace_id, rule.required_reviewers);
+      for (const reviewer of roundRobinReviewers) {
+        if (reviewer !== requesterId || rule.allow_self_approval) {
+          assignments.push(await this.createReviewerAssignment(
+            approvalRequestId,
+            reviewer,
+            'primary',
+            'Round-robin assignment'
+          ));
         }
-        break;
+      }
+      break;
 
-      case 'manual':
-      default:
-        // Manual assignment will be handled separately
-        break;
+    case 'manual':
+    default:
+      // Manual assignment will be handled separately
+      break;
     }
 
     return assignments;
@@ -518,7 +518,7 @@ export class ApprovalService {
     }
 
     if (filters.overdue) {
-      query += ` AND ar.due_date < NOW() AND ar.status IN ('pending', 'in_review')`;
+      query += ' AND ar.due_date < NOW() AND ar.status IN (\'pending\', \'in_review\')';
     }
 
     query += `
@@ -574,7 +574,7 @@ export class ApprovalService {
         WHERE approval_request_id = $4 AND reviewer_id = $5
       `, [
         data.decision === 'approve' ? 'approved' : 
-        data.decision === 'reject' ? 'rejected' : 'abstained',
+          data.decision === 'reject' ? 'rejected' : 'abstained',
         data.comment,
         JSON.stringify(data.criteria_evaluations || {}),
         approvalRequestId,
@@ -728,7 +728,7 @@ export class ApprovalService {
         request.id,
         reviewerId,
         `Escalated Approval: ${request.title}`,
-        `An approval request has been escalated to you due to timeout. Please review urgently.`
+        'An approval request has been escalated to you due to timeout. Please review urgently.'
       ]);
     }
   }

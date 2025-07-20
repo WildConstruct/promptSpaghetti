@@ -368,22 +368,22 @@ export class SchedulingDAO {
       if (key === 'id' || value === undefined) return;
 
       switch (key) {
-        case 'startTime':
-          updates.push('start_time = ?');
-          params.push(new Date(value).toISOString());
-          break;
-        case 'endTime':
-          updates.push('end_time = ?');
-          params.push(value ? new Date(value).toISOString() : null);
-          break;
-        case 'recurrence':
-        case 'actionConfig':
-          updates.push(`${key.replace(/([A-Z])/g, '_$1').toLowerCase()} = ?`);
-          params.push(JSON.stringify(value));
-          break;
-        default:
-          updates.push(`${key.replace(/([A-Z])/g, '_$1').toLowerCase()} = ?`);
-          params.push(value);
+      case 'startTime':
+        updates.push('start_time = ?');
+        params.push(new Date(value).toISOString());
+        break;
+      case 'endTime':
+        updates.push('end_time = ?');
+        params.push(value ? new Date(value).toISOString() : null);
+        break;
+      case 'recurrence':
+      case 'actionConfig':
+        updates.push(`${key.replace(/([A-Z])/g, '_$1').toLowerCase()} = ?`);
+        params.push(JSON.stringify(value));
+        break;
+      default:
+        updates.push(`${key.replace(/([A-Z])/g, '_$1').toLowerCase()} = ?`);
+        params.push(value);
       }
     });
 

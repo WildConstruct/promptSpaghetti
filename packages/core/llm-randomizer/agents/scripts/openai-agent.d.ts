@@ -35,13 +35,37 @@ export declare class OpenAIGraphAgent {
     private config;
     private baseSystemPrompt;
     constructor(config: OpenAIAgentConfig);
+    /**
+     * Generate a graph based on the request parameters
+     */
     generateGraph(request: GraphGenerationRequest): Promise<GenerationResult>;
+    /**
+     * Build the system prompt for OpenAI
+     */
     private buildSystemPrompt;
+    /**
+     * Build user prompt based on request
+     */
     private buildUserPrompt;
+    /**
+     * Call OpenAI API with error handling
+     */
     private callOpenAI;
+    /**
+     * Extract graph content from response
+     */
     private extractGraphContent;
+    /**
+     * Generate mock response for development/testing
+     */
     private generateMockResponse;
 }
+/**
+ * Default configuration for OpenAI agent
+ */
 export declare const defaultOpenAIConfig: OpenAIAgentConfig;
+/**
+ * Utility function to create and use OpenAI agent
+ */
 export declare function generateGraphWithOpenAI(request: GraphGenerationRequest, config?: Partial<OpenAIAgentConfig>): Promise<GenerationResult>;
 //# sourceMappingURL=openai-agent.d.ts.map

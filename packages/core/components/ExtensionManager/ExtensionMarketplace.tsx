@@ -78,16 +78,16 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({
   const filteredExtensions = selectedCategory === 'all' 
     ? extensions 
     : selectedCategory === 'featured'
-    ? extensions.slice(0, Math.floor(extensions.length * 0.3))
-    : extensions.filter(ext => ext.extension_type === selectedCategory);
+      ? extensions.slice(0, Math.floor(extensions.length * 0.3))
+      : extensions.filter(ext => ext.extension_type === selectedCategory);
 
   const getExtensionIcon = (type: string): string => {
     switch (type) {
-      case 'node': return '🔧';
-      case 'ui': return '🎨';
-      case 'transform': return '⚡';
-      case 'storage': return '💾';
-      default: return '📦';
+    case 'node': return '🔧';
+    case 'ui': return '🎨';
+    case 'transform': return '⚡';
+    case 'storage': return '💾';
+    default: return '📦';
     }
   };
 

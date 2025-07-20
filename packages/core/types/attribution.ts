@@ -45,7 +45,7 @@ export const ChangeAttributionSchema = z.object({
   
   // Timestamps
   createdAt: z.date(),
-  effectiveAt: z.date(),
+  effectiveAt: z.date()
 });
 
 export const AttributionAggregationSchema = z.object({
@@ -79,7 +79,7 @@ export const AttributionAggregationSchema = z.object({
   averageChangeSize: z.number().default(0),
   
   createdAt: z.date(),
-  updatedAt: z.date(),
+  updatedAt: z.date()
 });
 
 export const AttributionSessionSchema = z.object({
@@ -108,7 +108,7 @@ export const AttributionSessionSchema = z.object({
   isAnonymous: z.boolean().default(false),
   trackingConsent: z.boolean().default(true),
   
-  createdAt: z.date(),
+  createdAt: z.date()
 });
 
 export const AttributionPrivacySettingsSchema = z.object({
@@ -133,7 +133,7 @@ export const AttributionPrivacySettingsSchema = z.object({
   autoAnonymizeAfterDays: z.number().int().default(90),
   
   createdAt: z.date(),
-  updatedAt: z.date(),
+  updatedAt: z.date()
 });
 
 export const AttributionStatsCacheSchema = z.object({
@@ -144,7 +144,7 @@ export const AttributionStatsCacheSchema = z.object({
   cacheData: z.record(z.unknown()),
   cacheMetadata: z.record(z.unknown()).default({}),
   expiresAt: z.date(),
-  createdAt: z.date(),
+  createdAt: z.date()
 });
 
 export type ResourceType = z.infer<typeof ResourceTypeSchema>;
@@ -176,7 +176,7 @@ export const CreateAttributionRequestSchema = z.object({
   collaboratorCount: z.number().int().default(1),
   sessionId: z.string().optional(),
   batchId: z.string().uuid().optional(),
-  parentChangeId: z.string().uuid().optional(),
+  parentChangeId: z.string().uuid().optional()
 });
 
 export const AttributionFilterSchema = z.object({
@@ -196,7 +196,7 @@ export const AttributionFilterSchema = z.object({
   limit: z.number().int().min(1).max(1000).default(100),
   offset: z.number().int().min(0).default(0),
   sortBy: z.enum(['created_at', 'effective_at', 'change_size', 'confidence_score']).default('created_at'),
-  sortOrder: z.enum(['asc', 'desc']).default('desc'),
+  sortOrder: z.enum(['asc', 'desc']).default('desc')
 });
 
 export const AttributionStatsRequestSchema = z.object({
@@ -210,12 +210,12 @@ export const AttributionStatsRequestSchema = z.object({
   includeAggregations: z.boolean().default(true),
   includeTimeline: z.boolean().default(false),
   includeHeatmap: z.boolean().default(false),
-  includeCollaborationMetrics: z.boolean().default(false),
+  includeCollaborationMetrics: z.boolean().default(false)
 });
 
 export const UpdatePrivacySettingsRequestSchema = z.object({
   projectId: z.string().uuid(),
-  settings: AttributionPrivacySettingsSchema.omit({ id: true, projectId: true, userId: true, createdAt: true, updatedAt: true }),
+  settings: AttributionPrivacySettingsSchema.omit({ id: true, projectId: true, userId: true, createdAt: true, updatedAt: true })
 });
 
 export type CreateAttributionRequest = z.infer<typeof CreateAttributionRequestSchema>;
@@ -231,7 +231,7 @@ export const AttributionStatsResponseSchema = z.object({
     activeSessions: z.number().int(),
     averageChangeSize: z.number(),
     collaborativeChanges: z.number().int(),
-    anonymousChanges: z.number().int(),
+    anonymousChanges: z.number().int()
   }),
   byAuthor: z.array(z.object({
     authorId: z.string().uuid().optional(),
@@ -242,7 +242,7 @@ export const AttributionStatsResponseSchema = z.object({
     changeTypes: z.record(z.number().int()),
     resourceTypes: z.record(z.number().int()),
     averageChangeSize: z.number(),
-    collaborativeChanges: z.number().int(),
+    collaborativeChanges: z.number().int()
   })),
   byResourceType: z.record(z.number().int()),
   byChangeType: z.record(z.number().int()),
@@ -250,7 +250,7 @@ export const AttributionStatsResponseSchema = z.object({
     timestamp: z.date(),
     changes: z.number().int(),
     authors: z.number().int(),
-    averageChangeSize: z.number(),
+    averageChangeSize: z.number()
   })).optional(),
   heatmap: z.record(z.record(z.number().int())).optional(),
   collaboration: z.object({
@@ -260,9 +260,9 @@ export const AttributionStatsResponseSchema = z.object({
       sessionId: z.string(),
       authors: z.array(z.string()),
       changes: z.number().int(),
-      duration: z.number().int(),
-    })),
-  }).optional(),
+      duration: z.number().int()
+    }))
+  }).optional()
 });
 
 export const AttributionTimelineResponseSchema = z.object({
@@ -277,26 +277,26 @@ export const AttributionTimelineResponseSchema = z.object({
       authorType: AuthorTypeSchema,
       changeDescription: z.string().optional(),
       isCollaborative: z.boolean(),
-      collaboratorCount: z.number().int(),
-    })),
+      collaboratorCount: z.number().int()
+    }))
   })),
   summary: z.object({
     totalChanges: z.number().int(),
     dateRange: z.object({
       start: z.date(),
-      end: z.date(),
+      end: z.date()
     }),
     mostActiveAuthor: z.object({
       authorId: z.string().uuid().optional(),
       authorName: z.string().optional(),
-      changes: z.number().int(),
+      changes: z.number().int()
     }).optional(),
     mostActiveResource: z.object({
       resourceType: ResourceTypeSchema,
       resourceId: z.string(),
-      changes: z.number().int(),
-    }).optional(),
-  }),
+      changes: z.number().int()
+    }).optional()
+  })
 });
 
 export const ContributorStatsResponseSchema = z.object({
@@ -309,19 +309,19 @@ export const ContributorStatsResponseSchema = z.object({
     lastContribution: z.date(),
     activePeriods: z.array(z.object({
       period: z.date(),
-      changes: z.number().int(),
+      changes: z.number().int()
     })),
     expertise: z.array(z.object({
       resourceType: ResourceTypeSchema,
       changes: z.number().int(),
-      percentage: z.number(),
+      percentage: z.number()
     })),
     collaborations: z.array(z.object({
       sessionId: z.string(),
       collaborators: z.array(z.string()),
       changes: z.number().int(),
-      duration: z.number().int(),
-    })),
+      duration: z.number().int()
+    }))
   })),
   summary: z.object({
     totalContributors: z.number().int(),
@@ -332,9 +332,9 @@ export const ContributorStatsResponseSchema = z.object({
     mostActiveContributor: z.object({
       authorId: z.string().uuid().optional(),
       authorName: z.string().optional(),
-      changes: z.number().int(),
-    }).optional(),
-  }),
+      changes: z.number().int()
+    }).optional()
+  })
 });
 
 export type AttributionStatsResponse = z.infer<typeof AttributionStatsResponseSchema>;
@@ -430,8 +430,8 @@ export const ATTRIBUTION_DEFAULTS = {
     HOUR: 60 * 60 * 1000,
     DAY: 24 * 60 * 60 * 1000,
     WEEK: 7 * 24 * 60 * 60 * 1000,
-    MONTH: 30 * 24 * 60 * 60 * 1000,
-  },
+    MONTH: 30 * 24 * 60 * 60 * 1000
+  }
 } as const;
 
 export const CHANGE_TYPE_DESCRIPTIONS = {
@@ -440,7 +440,7 @@ export const CHANGE_TYPE_DESCRIPTIONS = {
   delete: 'Resource deleted',
   move: 'Resource position changed',
   property_change: 'Resource property modified',
-  connection_change: 'Resource connections modified',
+  connection_change: 'Resource connections modified'
 } as const;
 
 export const AUTHOR_TYPE_DESCRIPTIONS = {
@@ -448,7 +448,7 @@ export const AUTHOR_TYPE_DESCRIPTIONS = {
   anonymous: 'Anonymous user',
   guest: 'Guest user',
   system: 'System operation',
-  api: 'API operation',
+  api: 'API operation'
 } as const;
 
 export const RESOURCE_TYPE_DESCRIPTIONS = {
@@ -456,7 +456,7 @@ export const RESOURCE_TYPE_DESCRIPTIONS = {
   edge: 'Graph edge',
   property: 'Resource property',
   position: 'Node position',
-  graph: 'Graph metadata',
+  graph: 'Graph metadata'
 } as const;
 
 // Event types for real-time updates

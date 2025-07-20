@@ -482,8 +482,8 @@ export class ExtensionCompatibilityChecker {
     // Basic CSP validation
     const hasDefaultSrc = csp.includes('default-src');
     const hasScriptSrc = csp.includes('script-src');
-    const hasUnsafeEval = csp.includes("'unsafe-eval'");
-    const hasUnsafeInline = csp.includes("'unsafe-inline'");
+    const hasUnsafeEval = csp.includes('\'unsafe-eval\'');
+    const hasUnsafeInline = csp.includes('\'unsafe-inline\'');
     
     return (hasDefaultSrc || hasScriptSrc) && !hasUnsafeEval && !hasUnsafeInline;
   }

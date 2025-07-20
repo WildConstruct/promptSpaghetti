@@ -121,18 +121,18 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
 
     // Type-specific validation
     switch (field.type) {
-      case 'number':
-        if (isNaN(Number(value))) {
-          return 'Must be a valid number';
-        }
-        break;
-      case 'json':
-        try {
-          JSON.parse(value);
-        } catch {
-          return 'Must be valid JSON';
-        }
-        break;
+    case 'number':
+      if (isNaN(Number(value))) {
+        return 'Must be a valid number';
+      }
+      break;
+    case 'json':
+      try {
+        JSON.parse(value);
+      } catch {
+        return 'Must be valid JSON';
+      }
+      break;
     }
 
     return null;

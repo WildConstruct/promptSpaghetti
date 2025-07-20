@@ -2,6 +2,8 @@
 // Advanced conditional node with expression-based branching
 import { AdvancedRuntimeNode } from '../advanced';
 import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+import { SafeExpressionEvaluator } from '../expression-evaluator';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../security-audit-logger';
 /**
  * Advanced conditional node with expression-based branching logic
  * Supports multiple conditions, variable access, and custom functions
@@ -166,6 +168,12 @@ export class ConditionalNode extends AdvancedRuntimeNode {
      */
     evaluateCondition(expression, ctx) {
         try {
+            // Log expression evaluation start
+            securityAudit.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, `Evaluating conditional expression`, {
+                nodeId: this.id,
+                expression,
+                strictMode: this.conditionalConfig.strictMode
+            }, false);
             // Create a safe evaluation context
             const evalContext = this.createEvaluationContext(ctx);
             // Parse and evaluate the expression
@@ -183,6 +191,11 @@ export class ConditionalNode extends AdvancedRuntimeNode {
                 throw error;
             }
             // In non-strict mode, log the error for debugging but return false
+            securityAudit.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.EXPRESSION_VALIDATION, `Expression evaluation failed in non-strict mode`, {
+                nodeId: this.id,
+                expression,
+                error: errorMessage
+            }, false);
             return false;
         }
     }
@@ -190,50 +203,35 @@ export class ConditionalNode extends AdvancedRuntimeNode {
      * Create a safe evaluation context with variables and functions
      */
     createEvaluationContext(ctx) {
-        const evalContext = {};
-        // Add variables if allowed
+        // Use SafeExpressionEvaluator's createSafeContext which includes safe Math
+        const evalContext = SafeExpressionEvaluator.createSafeContext(this.conditionalConfig.allowVariableAccess ? ctx.variables : {});
+        // Add additional convenience functions if variable access is allowed
         if (this.conditionalConfig.allowVariableAccess) {
-            // Add all variables from execution context
-            Object.assign(evalContext, ctx.variables);
-            // Add convenience functions
             evalContext.hasVariable = (name) => name in ctx.variables;
             evalContext.getVariable = (name, defaultValue) => ctx.variables[name] !== undefined ? ctx.variables[name] : defaultValue;
         }
-        // Add custom functions
+        // Add custom functions from config
         Object.assign(evalContext, this.conditionalConfig.customFunctions);
-        // Add safe utility functions (avoid reserved keywords)
-        evalContext.getType = (value) => typeof value; // 'typeof' is reserved
-        const lengthFn = (value) => value?.length ?? 0;
-        evalContext.len = lengthFn; // short name to avoid 'length' property conflict  
-        evalContext.length = lengthFn; // backward compatibility
-        evalContext.isEmpty = (value) => !value || value.length === 0;
-        evalContext.includes = (value, item) => {
-            if (typeof value === 'string') {
-                return String(value).includes(String(item));
+        // Add conditional-specific utility functions
+        evalContext.matches = (str, pattern) => {
+            try {
+                return new RegExp(pattern).test(String(str));
             }
-            else if (Array.isArray(value)) {
-                return value.includes(item);
+            catch (e) {
+                throw new Error(`Invalid regex pattern: ${pattern}`);
             }
-            return false;
         };
-        evalContext.startsWith = (str, prefix) => String(str).startsWith(String(prefix));
-        evalContext.endsWith = (str, suffix) => String(str).endsWith(String(suffix));
-        evalContext.matches = (str, pattern) => new RegExp(pattern).test(String(str));
         return evalContext;
     }
     /**
      * Safely evaluate an expression with limited scope
      */
     safeEvaluate(expression, context) {
-        // Sanitize the expression
-        const sanitizedExpression = this.sanitizeExpression(expression);
-        // Create a function with the context variables as parameters
-        const paramNames = Object.keys(context);
-        const paramValues = paramNames.map(name => context[name]);
+        // First sanitize the expression to check for dangerous patterns
+        this.sanitizeExpression(expression);
         try {
-            // Use Function constructor with controlled scope
-            const func = new Function(...paramNames, `return (${sanitizedExpression});`);
-            return func(...paramValues);
+            // Use the safe AST-based evaluator instead of Function constructor
+            return SafeExpressionEvaluator.evaluate(expression, context);
         }
         catch (error) {
             throw new Error(`Expression evaluation failed: ${expression} - ${error}`);
@@ -260,6 +258,15 @@ export class ConditionalNode extends AdvancedRuntimeNode {
         let sanitized = expression;
         for (const pattern of dangerous) {
             if (pattern.test(sanitized)) {
+                // Log the dangerous pattern detection
+                securityAudit.logExpressionBlocked(expression, `Dangerous pattern detected: ${pattern.source}`, {
+                    nodeId: this.id,
+                    nodeType: 'Conditional',
+                    additionalData: {
+                        pattern: pattern.source,
+                        patternIndex: dangerous.indexOf(pattern)
+                    }
+                });
                 throw new Error(`Dangerous pattern detected in expression: ${expression}`);
             }
         }

@@ -55,12 +55,12 @@ describe('Graph Store', () => {
         {
           id: 'e1',
           source: 'n1',
-          target: 'n2',
+          target: 'n2'
         },
         {
           id: 'e2',
           source: 'n2',
-          target: 'n3',
+          target: 'n3'
         }
       ];
 
@@ -115,7 +115,7 @@ describe('Graph Store', () => {
       const mockEdge: Edge = {
         id: 'e1',
         source: 'n1',
-        target: 'n2',
+        target: 'n2'
       };
 
       const store = useGraphStore.getState();
@@ -131,7 +131,7 @@ describe('Graph Store', () => {
       const secondEdge: Edge = {
         id: 'e2',
         source: 'n2',
-        target: 'n3',
+        target: 'n3'
       };
 
       act(() => {

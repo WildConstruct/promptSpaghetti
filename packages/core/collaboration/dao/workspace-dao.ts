@@ -332,7 +332,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
 
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
-      throw new Error(`Workspace member not found`);
+      throw new Error('Workspace member not found');
     }
   }
 
@@ -353,7 +353,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
 
     const result = await this.db.query<WorkspaceMember>(query, params);
     if (result.rows.length === 0) {
-      throw new Error(`Workspace member not found`);
+      throw new Error('Workspace member not found');
     }
     return result.rows[0];
   }
@@ -403,7 +403,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
 
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
-      throw new Error(`Project member not found`);
+      throw new Error('Project member not found');
     }
   }
 
@@ -424,7 +424,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
 
     const result = await this.db.query<ProjectMember>(query, params);
     if (result.rows.length === 0) {
-      throw new Error(`Project member not found`);
+      throw new Error('Project member not found');
     }
     return result.rows[0];
   }

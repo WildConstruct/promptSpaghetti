@@ -464,15 +464,15 @@ export class SynchronizationManager extends EventEmitter {
    */
   private applyOperation(state: DocumentState, operation: StateOperation): void {
     switch (operation.target) {
-      case 'node':
-        this.applyNodeOperation(state, operation);
-        break;
-      case 'edge':
-        this.applyEdgeOperation(state, operation);
-        break;
-      case 'metadata':
-        this.applyMetadataOperation(state, operation);
-        break;
+    case 'node':
+      this.applyNodeOperation(state, operation);
+      break;
+    case 'edge':
+      this.applyEdgeOperation(state, operation);
+      break;
+    case 'metadata':
+      this.applyMetadataOperation(state, operation);
+      break;
     }
   }
 
@@ -481,33 +481,33 @@ export class SynchronizationManager extends EventEmitter {
    */
   private applyNodeOperation(state: DocumentState, operation: StateOperation): void {
     switch (operation.type) {
-      case 'create':
-        if (state.nodes.has(operation.targetId)) {
-          throw new Error(`Node ${operation.targetId} already exists`);
-        }
-        state.nodes.set(operation.targetId, operation.data);
-        break;
+    case 'create':
+      if (state.nodes.has(operation.targetId)) {
+        throw new Error(`Node ${operation.targetId} already exists`);
+      }
+      state.nodes.set(operation.targetId, operation.data);
+      break;
       
-      case 'update':
-        if (!state.nodes.has(operation.targetId)) {
-          throw new Error(`Node ${operation.targetId} does not exist`);
-        }
-        state.nodes.set(operation.targetId, operation.data);
-        break;
+    case 'update':
+      if (!state.nodes.has(operation.targetId)) {
+        throw new Error(`Node ${operation.targetId} does not exist`);
+      }
+      state.nodes.set(operation.targetId, operation.data);
+      break;
       
-      case 'delete':
-        if (!state.nodes.has(operation.targetId)) {
-          throw new Error(`Node ${operation.targetId} does not exist`);
-        }
-        state.nodes.delete(operation.targetId);
+    case 'delete':
+      if (!state.nodes.has(operation.targetId)) {
+        throw new Error(`Node ${operation.targetId} does not exist`);
+      }
+      state.nodes.delete(operation.targetId);
         
-        // Remove connected edges
-        for (const [edgeId, edge] of state.edges) {
-          if (edge.source === operation.targetId || edge.target === operation.targetId) {
-            state.edges.delete(edgeId);
-          }
+      // Remove connected edges
+      for (const [edgeId, edge] of state.edges) {
+        if (edge.source === operation.targetId || edge.target === operation.targetId) {
+          state.edges.delete(edgeId);
         }
-        break;
+      }
+      break;
     }
   }
 
@@ -516,26 +516,26 @@ export class SynchronizationManager extends EventEmitter {
    */
   private applyEdgeOperation(state: DocumentState, operation: StateOperation): void {
     switch (operation.type) {
-      case 'create':
-        if (state.edges.has(operation.targetId)) {
-          throw new Error(`Edge ${operation.targetId} already exists`);
-        }
-        state.edges.set(operation.targetId, operation.data);
-        break;
+    case 'create':
+      if (state.edges.has(operation.targetId)) {
+        throw new Error(`Edge ${operation.targetId} already exists`);
+      }
+      state.edges.set(operation.targetId, operation.data);
+      break;
       
-      case 'update':
-        if (!state.edges.has(operation.targetId)) {
-          throw new Error(`Edge ${operation.targetId} does not exist`);
-        }
-        state.edges.set(operation.targetId, operation.data);
-        break;
+    case 'update':
+      if (!state.edges.has(operation.targetId)) {
+        throw new Error(`Edge ${operation.targetId} does not exist`);
+      }
+      state.edges.set(operation.targetId, operation.data);
+      break;
       
-      case 'delete':
-        if (!state.edges.has(operation.targetId)) {
-          throw new Error(`Edge ${operation.targetId} does not exist`);
-        }
-        state.edges.delete(operation.targetId);
-        break;
+    case 'delete':
+      if (!state.edges.has(operation.targetId)) {
+        throw new Error(`Edge ${operation.targetId} does not exist`);
+      }
+      state.edges.delete(operation.targetId);
+      break;
     }
   }
 

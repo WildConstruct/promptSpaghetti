@@ -3,12 +3,12 @@ module.exports = {
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   transform: {
     '^.+\\.ts$': ['ts-jest', {
-      useESM: true,
-    }],
+      useESM: true
+    }]
   },
   testMatch: [
     '**/__tests__/**/*.test.ts',
@@ -17,7 +17,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*.d.ts',
-    '!src/**/__tests__/**',
+    '!src/**/__tests__/**'
   ],
   coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {

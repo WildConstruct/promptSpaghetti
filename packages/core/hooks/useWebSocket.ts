@@ -39,7 +39,7 @@ const DEFAULT_CONFIG: Partial<WebSocketClientConfig> = {
 
 export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
   const {
-    url = `ws://localhost:8001`,
+    url = 'ws://localhost:8001',
     documentId,
     userId = 'anonymous',
     authToken,

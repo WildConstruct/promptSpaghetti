@@ -1,75 +1,75 @@
 import {
   GraphSchema,
   NodeTypeEnum,
-  WeightedChoiceNodeSchema,
-} from "../graphSchema";
+  WeightedChoiceNodeSchema
+} from '../graphSchema';
 
-describe("graphSchema validation", () => {
-  it("accepts a minimal valid graph", () => {
+describe('graphSchema validation', () => {
+  it('accepts a minimal valid graph', () => {
     const valid = {
       nodes: [
-        { id: "n1", type: "Output" as const },
-      ],
+        { id: 'n1', type: 'Output' as const }
+      ]
     };
     const result = GraphSchema.safeParse(valid);
     expect(result.success).toBe(true);
   });
 
-  it("rejects graph when a node is missing id", () => {
+  it('rejects graph when a node is missing id', () => {
     const invalid = {
       nodes: [
-        { type: "Output" as const },
-      ],
+        { type: 'Output' as const }
+      ]
     };
     const result = GraphSchema.safeParse(invalid);
     expect(result.success).toBe(false);
   });
 
-  it("validates WeightedChoice node weights as positive numbers", () => {
+  it('validates WeightedChoice node weights as positive numbers', () => {
     const badNode = {
-      id: "w1",
-      type: "WeightedChoice" as const,
-      choices: [{ value: "A", weight: -1 }],
+      id: 'w1',
+      type: 'WeightedChoice' as const,
+      choices: [{ value: 'A', weight: -1 }]
     };
     const res = WeightedChoiceNodeSchema.safeParse(badNode);
     expect(res.success).toBe(false);
   });
 
-  it("discriminates node types correctly", () => {
+  it('discriminates node types correctly', () => {
     const kinds = NodeTypeEnum.options;
     kinds.forEach((k) => {
-      let node: any = { id: `id-${k}`, type: k };
+      const node: any = { id: `id-${k}`, type: k };
       switch (k) {
-        case "WeightedChoice":
-          node.choices = [{ value: "A", weight: 1 }];
-          break;
-        case "Include":
-          node.name = "snippet";
-          break;
-        case "SetVariable":
-          node.key = "x";
-          node.value = 1;
-          break;
-        case "GetVariable":
-          node.key = "x";
-          break;
-        case "WeightedAdvanced":
-          node.choices = [{ value: "A", weight: 1 }];
-          break;
-        case "Conditional":
-          node.branches = [{ condition: "true", output: "test" }];
-          break;
-        case "Sequential":
-          node.sequence = ["A", "B", "C"];
-          break;
-        case "Markov":
-          node.states = ["start", "end"];
-          node.transitions = { "start": { "end": 1.0 } };
-          node.initialState = "start";
-          break;
-        case "PythonTransform":
-          node.code = "output = input_data";
-          break;
+      case 'WeightedChoice':
+        node.choices = [{ value: 'A', weight: 1 }];
+        break;
+      case 'Include':
+        node.name = 'snippet';
+        break;
+      case 'SetVariable':
+        node.key = 'x';
+        node.value = 1;
+        break;
+      case 'GetVariable':
+        node.key = 'x';
+        break;
+      case 'WeightedAdvanced':
+        node.choices = [{ value: 'A', weight: 1 }];
+        break;
+      case 'Conditional':
+        node.branches = [{ condition: 'true', output: 'test' }];
+        break;
+      case 'Sequential':
+        node.sequence = ['A', 'B', 'C'];
+        break;
+      case 'Markov':
+        node.states = ['start', 'end'];
+        node.transitions = { 'start': { 'end': 1.0 } };
+        node.initialState = 'start';
+        break;
+      case 'PythonTransform':
+        node.code = 'output = input_data';
+        break;
         // Concat, Output need no extra fields
       }
       const out = GraphSchema.safeParse({ nodes: [node] });

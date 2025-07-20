@@ -38,7 +38,7 @@ import {
   validateCreateMergeRequestRequest,
   validateMergeBranchRequest,
   validateBranchFilter,
-  validateMergeRequestFilter,
+  validateMergeRequestFilter
 } from '../../packages/core/types/branching';
 
 export class BranchingService {
@@ -61,7 +61,7 @@ export class BranchingService {
       name: request.name,
       branchType: request.branchType,
       parentBranchId: request.parentBranchId,
-      userId,
+      userId
     });
 
     // Check if branch name already exists
@@ -117,7 +117,7 @@ export class BranchingService {
       validatedRequest.autoMergeEnabled,
       validatedRequest.requiresReview,
       validatedRequest.allowForcePush,
-      validatedRequest.deleteOnMerge,
+      validatedRequest.deleteOnMerge
     ]);
 
     const branch = this.mapDatabaseRowToBranch(result.rows[0]);
@@ -126,7 +126,7 @@ export class BranchingService {
     await this.createCommit({
       branchId: branch.id,
       snapshotId: baseSnapshotId,
-      commitMessage: `Initial commit for branch ${branch.name}`,
+      commitMessage: `Initial commit for branch ${branch.name}`
     }, userId);
 
     return branch;
@@ -141,7 +141,7 @@ export class BranchingService {
     this.logger.info('Updating branch', {
       branchId,
       updates: validatedRequest,
-      userId,
+      userId
     });
 
     // Check permissions
@@ -206,7 +206,7 @@ export class BranchingService {
       throw new Error('No fields to update');
     }
 
-    updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
+    updateFields.push('updated_at = CURRENT_TIMESTAMP');
     updateValues.push(branchId);
 
     const result = await this.db.query(`
@@ -356,7 +356,7 @@ export class BranchingService {
     this.logger.info('Creating commit', {
       branchId: request.branchId,
       snapshotId: request.snapshotId,
-      userId,
+      userId
     });
 
     // Check branch write permissions
@@ -388,7 +388,7 @@ export class BranchingService {
       request.commitMessage,
       userId,
       request.parentCommitIds,
-      JSON.stringify(request.commitMetadata),
+      JSON.stringify(request.commitMetadata)
     ]);
 
     // Update branch head snapshot
@@ -411,7 +411,7 @@ export class BranchingService {
       sourceBranchId: request.sourceBranchId,
       targetBranchId: request.targetBranchId,
       title: request.title,
-      userId,
+      userId
     });
 
     // Check if source and target branches exist
@@ -452,7 +452,7 @@ export class BranchingService {
       validatedRequest.allowSquashMerge,
       validatedRequest.allowMergeCommit,
       validatedRequest.allowRebaseMerge,
-      validatedRequest.deleteSourceBranch,
+      validatedRequest.deleteSourceBranch
     ]);
 
     return this.mapDatabaseRowToMergeRequest(result.rows[0]);
@@ -467,7 +467,7 @@ export class BranchingService {
     this.logger.info('Merging branch', {
       mergeRequestId: request.mergeRequestId,
       strategy: request.mergeStrategy,
-      userId,
+      userId
     });
 
     // Get merge request
@@ -591,8 +591,8 @@ export class BranchingService {
         activityType: row.activity_type,
         activityDate: row.activity_date,
         userId: row.user_id,
-        userName: row.user_name,
-      })),
+        userName: row.user_name
+      }))
     };
   }
 
@@ -613,7 +613,7 @@ export class BranchingService {
           branch,
           children: buildHierarchy(branch.id, depth + 1, [...path, branch.name]),
           depth,
-          path: [...path, branch.name],
+          path: [...path, branch.name]
         }));
     };
 
@@ -655,7 +655,7 @@ export class BranchingService {
       conflicts,
       canMerge: conflicts.length === 0,
       mergeStrategy: conflicts.length === 0 ? 'merge' : undefined,
-      estimatedMergeTime: this.estimateMergeTime(ahead, behind, conflicts.length),
+      estimatedMergeTime: this.estimateMergeTime(ahead, behind, conflicts.length)
     };
   }
 
@@ -700,7 +700,7 @@ export class BranchingService {
       branchId: mergeRequest.targetBranchId,
       snapshotId: mergeRequest.sourceCommitId || mergeRequest.sourceBranchId,
       commitMessage: `Merge ${strategy}: ${mergeRequest.title}`,
-      parentCommitIds: [mergeRequest.sourceCommitId || mergeRequest.sourceBranchId],
+      parentCommitIds: [mergeRequest.sourceCommitId || mergeRequest.sourceBranchId]
     }, userId);
 
     return mergeCommitId.id;
@@ -755,7 +755,7 @@ export class BranchingService {
       commitCount: row.commit_count,
       contributorCount: row.contributor_count,
       lastActivityAt: row.last_activity_at,
-      metadata: row.metadata || {},
+      metadata: row.metadata || {}
     };
   }
 
@@ -772,7 +772,7 @@ export class BranchingService {
       changesCount: row.changes_count,
       additionsCount: row.additions_count,
       deletionsCount: row.deletions_count,
-      commitMetadata: row.commit_metadata || {},
+      commitMetadata: row.commit_metadata || {}
     };
   }
 
@@ -803,7 +803,7 @@ export class BranchingService {
       updatedAt: row.updated_at,
       mergedAt: row.merged_at,
       closedAt: row.closed_at,
-      metadata: row.metadata || {},
+      metadata: row.metadata || {}
     };
   }
 
@@ -818,7 +818,7 @@ export class BranchingService {
       conflictResolution: row.conflict_resolution,
       detectedAt: row.detected_at,
       resolvedAt: row.resolved_at,
-      resolvedBy: row.resolved_by,
+      resolvedBy: row.resolved_by
     };
   }
 }

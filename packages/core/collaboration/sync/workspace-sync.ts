@@ -252,16 +252,16 @@ export class WorkspaceStateSync extends EventEmitter {
     }
 
     switch (resolver.strategy) {
-      case 'automatic':
-        await this.resolveConflictsAutomatically(conflicts);
-        break;
-      case 'last_writer_wins':
-        await this.resolveConflictsLastWriterWins(conflicts);
-        break;
-      case 'manual':
-        // Emit event for manual resolution
-        this.emit('manual_conflict_resolution_required', { workspaceId, conflicts });
-        break;
+    case 'automatic':
+      await this.resolveConflictsAutomatically(conflicts);
+      break;
+    case 'last_writer_wins':
+      await this.resolveConflictsLastWriterWins(conflicts);
+      break;
+    case 'manual':
+      // Emit event for manual resolution
+      this.emit('manual_conflict_resolution_required', { workspaceId, conflicts });
+      break;
     }
   }
 

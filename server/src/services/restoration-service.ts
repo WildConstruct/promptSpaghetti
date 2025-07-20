@@ -26,7 +26,7 @@ import {
   RESTORATION_DEFAULTS,
   validateRestorationConfig,
   validateRestorationAttempt,
-  validateConflictResolution,
+  validateConflictResolution
 } from '../../packages/core/types/restoration';
 
 export class RestorationService {
@@ -49,7 +49,7 @@ export class RestorationService {
       sourceSnapshotId: request.sourceSnapshotId,
       targetSnapshotId: request.targetSnapshotId,
       userId,
-      config,
+      config
     });
 
     const attempt = await this.db.query(`
@@ -65,7 +65,7 @@ export class RestorationService {
       userId,
       config.restorationType,
       config.restorationStrategy,
-      JSON.stringify(config),
+      JSON.stringify(config)
     ]);
 
     const restorationAttempt = this.mapDatabaseRowToRestoration(attempt.rows[0]);
@@ -88,7 +88,7 @@ export class RestorationService {
       projectId: request.projectId,
       sourceSnapshotId: request.sourceSnapshotId,
       targetSnapshotId: request.targetSnapshotId,
-      userId,
+      userId
     });
 
     // Get the source snapshot
@@ -128,7 +128,7 @@ export class RestorationService {
       userId,
       JSON.stringify(preview),
       JSON.stringify(this.generateConflictSummary(conflicts)),
-      expiresAt,
+      expiresAt
     ]);
 
     return {
@@ -141,9 +141,9 @@ export class RestorationService {
                     preview.edgesToUpdate.length + preview.edgesToDelete.length,
         totalConflicts: conflicts.length,
         estimatedDuration: this.estimateRestorationDuration(preview, conflicts),
-        riskLevel: this.assessRiskLevel(conflicts),
+        riskLevel: this.assessRiskLevel(conflicts)
       },
-      expiresAt,
+      expiresAt
     };
   }
 
@@ -200,7 +200,7 @@ export class RestorationService {
       estimatedTimeRemaining: this.estimateTimeRemaining(
         attempt.rows[0].progress_percentage, 
         attempt.rows[0].created_at
-      ),
+      )
     };
   }
 
@@ -214,7 +214,7 @@ export class RestorationService {
       restorationAttemptId: request.restorationAttemptId,
       conflictId: request.conflictId,
       strategy: request.resolutionStrategy,
-      userId,
+      userId
     });
 
     const result = await this.db.query(`
@@ -227,7 +227,7 @@ export class RestorationService {
       resolution.resolvedValue ? JSON.stringify(resolution.resolvedValue) : null,
       userId,
       resolution.conflictId,
-      resolution.restorationAttemptId,
+      resolution.restorationAttemptId
     ]);
 
     if (result.rows.length === 0) {
@@ -238,7 +238,7 @@ export class RestorationService {
       conflictId: request.conflictId,
       resolved: true,
       resolvedValue: resolution.resolvedValue,
-      strategy: resolution.resolutionStrategy,
+      strategy: resolution.resolutionStrategy
     };
   }
 
@@ -293,9 +293,9 @@ export class RestorationService {
       averageDuration: parseFloat(stats.rows[0].avg_duration) || 0,
       mostCommonConflicts: conflicts.rows.map(row => ({
         conflictType: row.conflict_type as ConflictType,
-        count: parseInt(row.count),
+        count: parseInt(row.count)
       })),
-      recentAttempts: recent.rows.map(row => this.mapDatabaseRowToRestoration(row)),
+      recentAttempts: recent.rows.map(row => this.mapDatabaseRowToRestoration(row))
     };
   }
 
@@ -316,7 +316,7 @@ export class RestorationService {
       request.sourceSnapshotId,
       request.targetSnapshotId,
       JSON.stringify(request.restorationConfig),
-      userId,
+      userId
     ]);
 
     return this.mapDatabaseRowToBookmark(result.rows[0]);
@@ -428,7 +428,7 @@ export class RestorationService {
       sourceSnapshot,
       targetSnapshot,
       currentState,
-      config,
+      config
     };
   }
 
@@ -441,7 +441,7 @@ export class RestorationService {
 
   private async executeRestorationOperations(restorationAttemptId: string, operations: RestorationOperation[]): Promise<RestorationResult> {
     let executedOperations = 0;
-    let resolvedConflicts = 0;
+    const resolvedConflicts = 0;
     const startTime = Date.now();
 
     try {
@@ -460,7 +460,7 @@ export class RestorationService {
         restorationAttemptId,
         operationsExecuted: executedOperations,
         conflictsResolved: resolvedConflicts,
-        duration: Date.now() - startTime,
+        duration: Date.now() - startTime
       };
     } catch (error) {
       return {
@@ -469,7 +469,7 @@ export class RestorationService {
         operationsExecuted: executedOperations,
         conflictsResolved: resolvedConflicts,
         errorMessage: error.message,
-        duration: Date.now() - startTime,
+        duration: Date.now() - startTime
       };
     }
   }
@@ -504,7 +504,7 @@ export class RestorationService {
       nodesToDelete: [],
       edgesToAdd: [],
       edgesToUpdate: [],
-      edgesToDelete: [],
+      edgesToDelete: []
     };
   }
 
@@ -516,7 +516,7 @@ export class RestorationService {
 
     return {
       totalConflicts: conflicts.length,
-      conflictsByType: summary,
+      conflictsByType: summary
     };
   }
 
@@ -584,7 +584,7 @@ export class RestorationService {
       metadata: row.metadata || {},
       createdAt: row.created_at,
       updatedAt: row.updated_at,
-      completedAt: row.completed_at,
+      completedAt: row.completed_at
     };
   }
 
@@ -599,7 +599,7 @@ export class RestorationService {
       restorationConfig: row.restoration_config,
       createdBy: row.created_by,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     };
   }
 }

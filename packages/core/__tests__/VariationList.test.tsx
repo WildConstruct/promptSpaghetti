@@ -8,14 +8,14 @@ jest.mock('../graphStore', () => ({
     addVariation: jest.fn(),
     removeVariation: jest.fn(),
     updateVariation: jest.fn(),
-    reorderVariations: jest.fn(),
-  }),
+    reorderVariations: jest.fn()
+  })
 }));
 
 describe('VariationList', () => {
   const defaultProps = {
     nodeId: 'test-node',
-    variations: ['variation 1', 'variation 2', 'variation 3'],
+    variations: ['variation 1', 'variation 2', 'variation 3']
   };
 
   beforeEach(() => {

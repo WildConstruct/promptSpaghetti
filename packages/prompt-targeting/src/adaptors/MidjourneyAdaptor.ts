@@ -8,7 +8,7 @@ import {
   PlatformCapabilities,
   ValidationResult,
   PlatformPrompt,
-  AdaptorConfig,
+  AdaptorConfig
 } from '../types';
 import { BaseAdaptor } from './BaseAdaptor';
 
@@ -43,7 +43,7 @@ const STYLE_MAPPINGS: Record<string, string> = {
   'oil-painting': 'oil painting, traditional art, brush strokes',
   'watercolor': 'watercolor, flowing, transparent',
   'pencil': 'pencil drawing, sketch, graphite',
-  'digital-art': 'digital art, cgi, rendered',
+  'digital-art': 'digital art, cgi, rendered'
 };
 
 /**
@@ -57,7 +57,7 @@ const ASPECT_RATIOS: Record<string, string> = {
   'ultrawide': '32:9',
   'tall': '9:21',
   'classic': '4:3',
-  'cinema': '2.39:1',
+  'cinema': '2.39:1'
 };
 
 /**
@@ -81,7 +81,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
       defaultAspectRatio: '1:1',
       defaultQuality: 1,
       defaultStylize: 100,
-      ...this.config.midjourney,
+      ...this.config.midjourney
     };
   }
 
@@ -102,7 +102,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
         stylize: [0, 1000],
         chaos: [0, 100],
         weird: [0, 3000],
-        stop: [10, 100],
+        stop: [10, 100]
       },
       features: [
         'text-to-image',
@@ -117,7 +117,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
         'permutations',
         'blend-mode',
         'describe-mode',
-        'remix-mode',
+        'remix-mode'
       ],
       styleSupport: true,
       negativePromptSupport: true,
@@ -126,8 +126,8 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
         supportsVideo: true,
         supportsUpscaling: true,
         supportsVariations: true,
-        supportsRemix: true,
-      },
+        supportsRemix: true
+      }
     };
   }
 
@@ -145,7 +145,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
       supportsNegativePrompts: true,
       supportsStyleTransfer: true,
       qualityRange: [0.25, 2] as [number, number],
-      guidanceRange: [0, 1000] as [number, number], // Stylize parameter
+      guidanceRange: [0, 1000] as [number, number] // Stylize parameter
     };
   }
 
@@ -168,7 +168,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
         code: 'PROMPT_TOO_LONG',
         message: `Prompt exceeds Midjourney limit (${textContent.length}/4000 characters)`,
         severity: 'error',
-        suggestion: 'Reduce prompt length or split into multiple prompts',
+        suggestion: 'Reduce prompt length or split into multiple prompts'
       });
     }
 
@@ -177,7 +177,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
       warnings.push({
         code: 'TEXT_ONLY_CONTENT',
         message: 'Content appears to be text-focused rather than visual',
-        optimization: 'Add visual descriptions, styles, or composition details',
+        optimization: 'Add visual descriptions, styles, or composition details'
       });
     }
 
@@ -191,7 +191,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
       warnings.push({
         code: 'INVALID_ASPECT_RATIO',
         message: `Unsupported aspect ratio: ${aspectRatio}`,
-        optimization: 'Use supported aspect ratios like 1:1, 16:9, 9:16, etc.',
+        optimization: 'Use supported aspect ratios like 1:1, 16:9, 9:16, etc.'
       });
     }
 
@@ -203,7 +203,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore,
+      compatibilityScore
     };
   }
 
@@ -227,7 +227,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
       platform: 'midjourney',
       prompt,
       negativePrompt: negativePrompt || undefined,
-      parameters,
+      parameters
     };
   }
 
@@ -250,40 +250,40 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
       if (!node.data) continue;
 
       switch (node.type) {
-        case 'subject':
-        case 'description':
-        case 'output':
-          if (node.data.text || node.data.content) {
-            descriptions.push(node.data.text || node.data.content);
-          }
-          break;
+      case 'subject':
+      case 'description':
+      case 'output':
+        if (node.data.text || node.data.content) {
+          descriptions.push(node.data.text || node.data.content);
+        }
+        break;
 
-        case 'style':
-          if (node.data.style) {
-            const mappedStyle = this.mapStyleToMidjourney(node.data.style);
-            styles.push(mappedStyle);
-          }
-          break;
+      case 'style':
+        if (node.data.style) {
+          const mappedStyle = this.mapStyleToMidjourney(node.data.style);
+          styles.push(mappedStyle);
+        }
+        break;
 
-        case 'technical':
-        case 'parameters':
-          if (node.data.text) {
-            technical.push(node.data.text);
-          }
-          break;
+      case 'technical':
+      case 'parameters':
+        if (node.data.text) {
+          technical.push(node.data.text);
+        }
+        break;
 
-        case 'concat':
-          if (node.data.template) {
-            descriptions.push(node.data.template);
-          }
-          break;
+      case 'concat':
+        if (node.data.template) {
+          descriptions.push(node.data.template);
+        }
+        break;
 
-        case 'weightedChoice':
-          // Use first choice for now
-          if (node.data.choices && node.data.choices.length > 0) {
-            descriptions.push(node.data.choices[0].text);
-          }
-          break;
+      case 'weightedChoice':
+        // Use first choice for now
+        if (node.data.choices && node.data.choices.length > 0) {
+          descriptions.push(node.data.choices[0].text);
+        }
+        break;
       }
     }
 
@@ -364,17 +364,17 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
     // Apply style preference
     if (config?.stylePreference) {
       switch (config.stylePreference) {
-        case 'artistic':
-          parameters.stylize = 250;
-          break;
-        case 'photorealistic':
-          parameters.stylize = 50;
-          break;
-        case 'minimal':
-          parameters.stylize = 0;
-          break;
-        default:
-          parameters.stylize = this.midjourneyConfig.defaultStylize || 100;
+      case 'artistic':
+        parameters.stylize = 250;
+        break;
+      case 'photorealistic':
+        parameters.stylize = 50;
+        break;
+      case 'minimal':
+        parameters.stylize = 0;
+        break;
+      default:
+        parameters.stylize = this.midjourneyConfig.defaultStylize || 100;
       }
     }
 
@@ -525,7 +525,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
         code: 'INVALID_ASPECT_RATIO_SYNTAX',
         message: 'Invalid aspect ratio syntax. Use format: --ar 16:9',
         severity: 'error',
-        suggestion: 'Correct aspect ratio format: --ar width:height',
+        suggestion: 'Correct aspect ratio format: --ar width:height'
       });
     }
 
@@ -534,7 +534,7 @@ export class MidjourneyAdaptor extends BaseAdaptor implements TextToImageAdaptor
         code: 'INVALID_QUALITY_SYNTAX',
         message: 'Invalid quality syntax. Use format: --q 1',
         severity: 'error',
-        suggestion: 'Quality should be a number between 0.25 and 2',
+        suggestion: 'Quality should be a number between 0.25 and 2'
       });
     }
 

@@ -32,7 +32,7 @@ interface UserProfileManagerProps {
 export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
   onProfileUpdate,
   showCompleteness = true,
-  allowImageUpload = true,
+  allowImageUpload = true
 }) => {
   const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -58,7 +58,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
     { code: 'fr-FR', name: 'Français' },
     { code: 'de-DE', name: 'Deutsch' },
     { code: 'ja-JP', name: '日本語' },
-    { code: 'zh-CN', name: '中文' },
+    { code: 'zh-CN', name: '中文' }
   ];
 
   useEffect(() => {
@@ -72,8 +72,8 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
       setLoading(true);
       const response = await fetch('/api/auth/profile', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (!response.ok) {
@@ -102,9 +102,9 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify(updates),
+        body: JSON.stringify(updates)
       });
 
       if (!response.ok) {
@@ -142,9 +142,9 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
       const response = await fetch('/api/auth/profile/avatar', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: formData,
+        body: formData
       });
 
       if (!response.ok) {
@@ -170,8 +170,8 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
       const response = await fetch('/api/auth/profile/avatar', {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (!response.ok) {

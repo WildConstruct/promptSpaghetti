@@ -49,7 +49,7 @@ interface SessionManagerProps {
 export const SessionManager: React.FC<SessionManagerProps> = ({
   onSessionRevoked,
   onAllSessionsRevoked,
-  showSecurityInsights = true,
+  showSecurityInsights = true
 }) => {
   const { user } = useAuth();
   const [sessions, setSessions] = useState<SessionInfo[]>([]);
@@ -74,8 +74,8 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
       setLoading(true);
       const response = await fetch('/api/auth/sessions', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (!response.ok) {
@@ -97,8 +97,8 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
     try {
       const response = await fetch('/api/auth/sessions/security', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (!response.ok) {
@@ -119,9 +119,9 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify({ sessionId, reason }),
+        body: JSON.stringify({ sessionId, reason })
       });
 
       if (!response.ok) {
@@ -136,7 +136,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
         setStats({
           ...stats,
           activeSessions: stats.activeSessions - 1,
-          revokedSessions: stats.revokedSessions + 1,
+          revokedSessions: stats.revokedSessions + 1
         });
       }
 
@@ -156,9 +156,9 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify({ exceptCurrent }),
+        body: JSON.stringify({ exceptCurrent })
       });
 
       if (!response.ok) {
@@ -179,7 +179,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
         setStats({
           ...stats,
           activeSessions: exceptCurrent ? 1 : 0,
-          revokedSessions: stats.revokedSessions + data.revokedCount,
+          revokedSessions: stats.revokedSessions + data.revokedCount
         });
       }
 

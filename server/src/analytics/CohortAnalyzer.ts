@@ -846,7 +846,7 @@ export class CohortAnalyzer extends EventEmitter {
         const difference = comp.cohort2Value - comp.cohort1Value;
         const percentageChange = comp.cohort1Value > 0 ? (difference / comp.cohort1Value) * 100 : 0;
         const significance = Math.abs(percentageChange) > 20 ? 'high' : 
-                           Math.abs(percentageChange) > 10 ? 'medium' : 'low';
+          Math.abs(percentageChange) > 10 ? 'medium' : 'low';
 
         return {
           metric: comp.metric,

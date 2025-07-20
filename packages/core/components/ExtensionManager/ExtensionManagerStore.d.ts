@@ -1,3 +1,7 @@
+/**
+ * Extension Manager Store - Epic 8.4 Story 8.4.5
+ * State management for extension manager UI
+ */
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 export interface ExtensionStatus {
     enabled: boolean;

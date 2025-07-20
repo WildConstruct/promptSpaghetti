@@ -40,14 +40,14 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
   const getIndicatorMessage = () => {
     if (!status.isOnline) {
       switch (status.connectionState) {
-        case ConnectionState.OFFLINE:
-          return 'You are offline. Changes will be saved locally and synced when connection is restored.';
-        case ConnectionState.DISCONNECTED:
-          return 'Connection lost. Attempting to reconnect...';
-        case ConnectionState.FAILED:
-          return 'Connection failed. Check your network and try again.';
-        default:
-          return 'Not connected. Working in offline mode.';
+      case ConnectionState.OFFLINE:
+        return 'You are offline. Changes will be saved locally and synced when connection is restored.';
+      case ConnectionState.DISCONNECTED:
+        return 'Connection lost. Attempting to reconnect...';
+      case ConnectionState.FAILED:
+        return 'Connection failed. Check your network and try again.';
+      default:
+        return 'Not connected. Working in offline mode.';
       }
     } else if (status.queueSize > 0) {
       return `Syncing ${status.queueSize} pending change${status.queueSize === 1 ? '' : 's'}...`;
@@ -68,34 +68,34 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
   const getIndicatorColor = () => {
     const type = getIndicatorType();
     switch (type) {
-      case 'error':
-        return {
-          background: '#fef2f2',
-          border: '#fecaca',
-          text: '#dc2626',
-          button: '#dc2626'
-        };
-      case 'warning':
-        return {
-          background: '#fffbeb',
-          border: '#fed7aa',
-          text: '#d97706',
-          button: '#d97706'
-        };
-      case 'info':
-        return {
-          background: '#eff6ff',
-          border: '#bfdbfe',
-          text: '#2563eb',
-          button: '#2563eb'
-        };
-      default:
-        return {
-          background: '#f8fafc',
-          border: '#e2e8f0',
-          text: '#475569',
-          button: '#475569'
-        };
+    case 'error':
+      return {
+        background: '#fef2f2',
+        border: '#fecaca',
+        text: '#dc2626',
+        button: '#dc2626'
+      };
+    case 'warning':
+      return {
+        background: '#fffbeb',
+        border: '#fed7aa',
+        text: '#d97706',
+        button: '#d97706'
+      };
+    case 'info':
+      return {
+        background: '#eff6ff',
+        border: '#bfdbfe',
+        text: '#2563eb',
+        button: '#2563eb'
+      };
+    default:
+      return {
+        background: '#f8fafc',
+        border: '#e2e8f0',
+        text: '#475569',
+        button: '#475569'
+      };
     }
   };
 

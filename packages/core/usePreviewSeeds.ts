@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from 'react';
 
 interface PreviewResult {
   seed: number;
@@ -39,9 +39,9 @@ export const usePreviewSeeds = () => {
                 resolve({ seed, output: `Mock output #${i + 1}` });
               }
             }, delay);
-            controller.signal.addEventListener("abort", () => {
+            controller.signal.addEventListener('abort', () => {
               clearTimeout(id);
-              reject(new DOMException("aborted", "AbortError"));
+              reject(new DOMException('aborted', 'AbortError'));
             });
           })
         )
@@ -51,7 +51,7 @@ export const usePreviewSeeds = () => {
       }
 
       const perSeedResults: PreviewResult[] = settled.map((r, idx) =>
-        r.status === "fulfilled"
+        r.status === 'fulfilled'
           ? { seed: seeds[idx], output: r.value.output, usedNodeIds: [`node${idx}`], usedEdgeIds: [`edge${idx}`] }
           : { seed: seeds[idx], error: (r.reason as Error).message }
       );
@@ -61,8 +61,8 @@ export const usePreviewSeeds = () => {
         setAggregateError(`${failed} of ${perSeedResults.length} previews failed`);
       }
     } catch (err: any) {
-      if (err?.name !== "AbortError") {
-        setError(err?.message ?? "Unknown error");
+      if (err?.name !== 'AbortError') {
+        setError(err?.message ?? 'Unknown error');
       }
     } finally {
       setLoading(false);

@@ -12,7 +12,7 @@ import {
   TranslationContext,
   AdaptorError,
   ValidationError,
-  TranslationError,
+  TranslationError
 } from '../types';
 import { BaseAdaptor } from './BaseAdaptor';
 import { EventEmitter } from 'events';
@@ -105,7 +105,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       validations: 0,
       errors: 0,
       totalDuration: 0,
-      avgDuration: 0,
+      avgDuration: 0
     };
     this.initializePipeline();
   }
@@ -175,7 +175,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         () => this.validateGraphStructure(graph),
         () => this.validatePlatformConstraints(graph, config),
         () => this.validateContentQuality(graph, config),
-        () => this.validatePerformanceImpact(graph, config),
+        () => this.validatePerformanceImpact(graph, config)
       ];
 
       const results: ValidationResult[] = [];
@@ -190,10 +190,10 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
             errors: [{
               code: 'VALIDATION_STAGE_ERROR',
               message: `Validation stage failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-              severity: 'error',
+              severity: 'error'
             }],
             warnings: [],
-            compatibilityScore: 0,
+            compatibilityScore: 0
           });
         }
       }
@@ -226,7 +226,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       this.createValidationStage(),
       this.createOptimizationStage(),
       this.createTransformationStage(),
-      this.createPostprocessingStage(),
+      this.createPostprocessingStage()
     ];
   }
 
@@ -243,16 +243,16 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           return {
             success: true,
             data: preprocessed,
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         }
-      },
+      }
     };
   }
 
@@ -272,26 +272,26 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
               success: false,
               error: new ValidationError('Graph validation failed', validation.errors),
               data: validation,
-              duration: Date.now() - startTime,
+              duration: Date.now() - startTime
             };
           }
 
           return {
             success: true,
             data: { graph, validation },
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         }
       },
       shouldSkip: async (graph: any, context: TranslationContext) => {
         return context.config?.pipeline?.skipValidation === true;
-      },
+      }
     };
   }
 
@@ -315,19 +315,19 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           return {
             success: true,
             data: { ...data, optimizations },
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         }
       },
       shouldSkip: async (data: any, context: TranslationContext) => {
         return context.config?.pipeline?.skipOptimization === true;
-      },
+      }
     };
   }
 
@@ -346,16 +346,16 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           return {
             success: true,
             data: result,
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         }
-      },
+      }
     };
   }
 
@@ -372,16 +372,16 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           return {
             success: true,
             data: postprocessed,
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         } catch (error) {
           return {
             success: false,
             error: error as Error,
-            duration: Date.now() - startTime,
+            duration: Date.now() - startTime
           };
         }
-      },
+      }
     };
   }
 
@@ -397,8 +397,8 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
         startTime: new Date(),
         sessionId: uuidv4(),
         adaptorId: this.id,
-        adaptorVersion: this.version,
-      },
+        adaptorVersion: this.version
+      }
     };
   }
 
@@ -473,7 +473,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
     const retryableErrors = context.config?.pipeline?.retries?.retryableErrors || [
       'NETWORK_ERROR',
       'TIMEOUT_ERROR',
-      'RATE_LIMIT_ERROR',
+      'RATE_LIMIT_ERROR'
     ];
     
     return retryableErrors.some(code => error.message.includes(code));
@@ -508,9 +508,9 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
           adaptorId: this.id,
           adaptorVersion: this.version,
           sessionId: context.metadata.sessionId,
-          stages: this.pipeline.length,
-        },
-      },
+          stages: this.pipeline.length
+        }
+      }
     };
   }
 
@@ -526,7 +526,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       errors.push({
         code: 'INVALID_GRAPH_STRUCTURE',
         message: 'Graph structure is invalid or corrupted',
-        severity: 'error',
+        severity: 'error'
       });
     }
 
@@ -535,7 +535,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       errors.push({
         code: 'GRAPH_HAS_CYCLES',
         message: 'Graph contains cycles which may cause infinite loops',
-        severity: 'error',
+        severity: 'error'
       });
     }
 
@@ -544,7 +544,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       warnings.push({
         code: 'LARGE_GRAPH',
         message: 'Graph is very large and may impact performance',
-        optimization: 'Consider breaking into smaller subgraphs',
+        optimization: 'Consider breaking into smaller subgraphs'
       });
     }
 
@@ -552,7 +552,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore: errors.length === 0 ? 0.9 : 0.3,
+      compatibilityScore: errors.length === 0 ? 0.9 : 0.3
     };
   }
 
@@ -584,7 +584,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       warnings.push({
         code: 'EMPTY_CONTENT',
         message: 'Graph produces no text content',
-        optimization: 'Add content nodes to generate meaningful output',
+        optimization: 'Add content nodes to generate meaningful output'
       });
     }
 
@@ -593,7 +593,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       warnings.push({
         code: 'INCOHERENT_CONTENT',
         message: 'Content may be incoherent or contradictory',
-        optimization: 'Review node connections and content flow',
+        optimization: 'Review node connections and content flow'
       });
     }
 
@@ -601,7 +601,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore: 0.8,
+      compatibilityScore: 0.8
     };
   }
 
@@ -621,7 +621,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       warnings.push({
         code: 'HIGH_COMPLEXITY',
         message: 'Graph has high processing complexity',
-        optimization: 'Simplify graph structure or use caching',
+        optimization: 'Simplify graph structure or use caching'
       });
     }
 
@@ -629,7 +629,7 @@ export abstract class AdvancedBaseAdaptor extends BaseAdaptor {
       valid: true,
       errors: [],
       warnings,
-      compatibilityScore: complexity > 100 ? 0.7 : 0.9,
+      compatibilityScore: complexity > 100 ? 0.7 : 0.9
     };
   }
 

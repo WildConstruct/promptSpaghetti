@@ -264,19 +264,19 @@ export class LockingService {
     );
 
     switch (strategy) {
-      case 'queue':
-        await this.addToLockQueue(request);
-        break;
-      case 'notify':
-        await this.notifyLockOwner(conflictingLock, request);
-        break;
-      case 'escalate':
-        await this.escalateLockConflict(conflict, policy);
-        break;
-      case 'reject':
-      default:
-        // Already handled by returning conflict
-        break;
+    case 'queue':
+      await this.addToLockQueue(request);
+      break;
+    case 'notify':
+      await this.notifyLockOwner(conflictingLock, request);
+      break;
+    case 'escalate':
+      await this.escalateLockConflict(conflict, policy);
+      break;
+    case 'reject':
+    default:
+      // Already handled by returning conflict
+      break;
     }
 
     return conflict;

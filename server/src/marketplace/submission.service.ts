@@ -165,7 +165,7 @@ export class SubmissionService {
       updateValues.push(validated.status);
     }
 
-    updateFields.push(`updated_at = NOW()`);
+    updateFields.push('updated_at = NOW()');
     updateValues.push(id);
 
     const result = await this.pool.query(`
@@ -290,16 +290,16 @@ export class SubmissionService {
     // Update submission status
     let newStatus: SubmissionStatus;
     switch (validated.decision) {
-      case 'approved':
-        newStatus = SubmissionStatus.APPROVED;
-        await this.publishApprovedSubmission(submissionId);
-        break;
-      case 'rejected':
-        newStatus = SubmissionStatus.REJECTED;
-        break;
-      case 'changes_requested':
-        newStatus = SubmissionStatus.CHANGES_REQUESTED;
-        break;
+    case 'approved':
+      newStatus = SubmissionStatus.APPROVED;
+      await this.publishApprovedSubmission(submissionId);
+      break;
+    case 'rejected':
+      newStatus = SubmissionStatus.REJECTED;
+      break;
+    case 'changes_requested':
+      newStatus = SubmissionStatus.CHANGES_REQUESTED;
+      break;
     }
 
     await this.pool.query(`

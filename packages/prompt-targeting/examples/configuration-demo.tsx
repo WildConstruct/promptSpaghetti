@@ -8,7 +8,7 @@ import {
   ConfigurationManager,
   ConfigurationPanel,
   useConfiguration,
-  ConfigurationProvider,
+  ConfigurationProvider
 } from '../index';
 
 // Mock React DOM for demo purposes
@@ -33,7 +33,7 @@ const ConfigurationDemo: React.FC = () => {
   const [configManager] = useState(() => new ConfigurationManager({
     qualityPreference: 0.7,
     stylePreference: 'default',
-    enableOptimizations: true,
+    enableOptimizations: true
   }));
 
   return (
@@ -138,40 +138,40 @@ const ReactHooksDemo: React.FC = () => {
     let result = '';
     
     switch (example) {
-      case 'getConfig':
-        result = JSON.stringify(configHook.config, null, 2);
-        break;
+    case 'getConfig':
+      result = JSON.stringify(configHook.config, null, 2);
+      break;
         
-      case 'updateConfig':
-        const updateResult = configHook.updateConfig({
-          qualityPreference: 0.9,
-          stylePreference: 'photorealistic',
-        });
-        result = `Update result: ${updateResult.valid ? 'Success' : 'Failed'}\n` +
+    case 'updateConfig':
+      const updateResult = configHook.updateConfig({
+        qualityPreference: 0.9,
+        stylePreference: 'photorealistic'
+      });
+      result = `Update result: ${updateResult.valid ? 'Success' : 'Failed'}\n` +
                  `Errors: ${updateResult.errors.length}\n` +
                  `Warnings: ${updateResult.warnings.length}`;
-        break;
+      break;
         
-      case 'setConfigValue':
-        const setResult = configHook.setConfigValue('platformOverrides.openai.temperature', 0.2);
-        result = `Set temperature to 0.2\n` +
+    case 'setConfigValue':
+      const setResult = configHook.setConfigValue('platformOverrides.openai.temperature', 0.2);
+      result = 'Set temperature to 0.2\n' +
                  `Result: ${setResult.valid ? 'Success' : 'Failed'}\n` +
                  `Current value: ${configHook.getConfigValue('platformOverrides.openai.temperature')}`;
-        break;
+      break;
         
-      case 'presets':
-        result = `Available presets:\n` +
+    case 'presets':
+      result = 'Available presets:\n' +
                  configHook.presets.map(p => `- ${p.name}: ${p.description}`).join('\n');
-        break;
+      break;
         
-      case 'summary':
-        const summary = configHook.getConfigSummary();
-        result = JSON.stringify(summary, null, 2);
-        break;
+    case 'summary':
+      const summary = configHook.getConfigSummary();
+      result = JSON.stringify(summary, null, 2);
+      break;
         
-      case 'export':
-        result = configHook.exportConfig('json');
-        break;
+    case 'export':
+      result = configHook.exportConfig('json');
+      break;
     }
     
     setOutput(result);
@@ -245,7 +245,7 @@ const CodeExamplesDemo: React.FC = () => {
       <div style={{ marginBottom: '30px' }}>
         <h3>1. Basic Configuration Manager Usage</h3>
         <pre style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px' }}>
-{`import { ConfigurationManager } from '@prompt-graph/targeting';
+          {`import { ConfigurationManager } from '@prompt-graph/targeting';
 
 // Create configuration manager
 const configManager = new ConfigurationManager({
@@ -275,7 +275,7 @@ if (result.valid) {
       <div style={{ marginBottom: '30px' }}>
         <h3>2. React Component with Configuration</h3>
         <pre style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px' }}>
-{`import React from 'react';
+          {`import React from 'react';
 import { 
   ConfigurationProvider, 
   useConfiguration,
@@ -320,7 +320,7 @@ function MyComponent() {
       <div style={{ marginBottom: '30px' }}>
         <h3>3. Configuration Presets</h3>
         <pre style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px' }}>
-{`// Create custom preset
+          {`// Create custom preset
 configManager.createPreset(
   'my-preset',
   'My custom configuration for creative work',
@@ -349,7 +349,7 @@ presets.forEach(preset => {
       <div style={{ marginBottom: '30px' }}>
         <h3>4. Configuration Import/Export</h3>
         <pre style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px' }}>
-{`// Export configuration
+          {`// Export configuration
 const jsonConfig = configManager.exportConfig('json');
 const yamlConfig = configManager.exportConfig('yaml');
 
@@ -372,7 +372,7 @@ a.click();`}
       <div style={{ marginBottom: '30px' }}>
         <h3>5. Real-time Validation</h3>
         <pre style={{ background: '#f8f9fa', padding: '15px', borderRadius: '4px' }}>
-{`// Subscribe to validation events
+          {`// Subscribe to validation events
 configManager.on('config:validated', (result) => {
   if (!result.valid) {
     console.error('Validation failed:', result.errors);
@@ -417,23 +417,23 @@ const useConfigurationContext = () => {
           retries: {
             maxAttempts: 3,
             backoffMs: 100,
-            retryableErrors: [],
-          },
+            retryableErrors: []
+          }
         },
         monitoring: {
           enableTiming: true,
           enableMemoryTracking: false,
           enableEvents: true,
-          enableLogging: true,
+          enableLogging: true
         },
-        customMappings: {},
+        customMappings: {}
       },
       isLoading: false,
       isDirty: false,
       validationResult: { valid: true, errors: [], warnings: [] },
       presets: [
         { name: 'high-quality', description: 'High quality preset', tags: ['quality'], isBuiltIn: true, created: new Date(), updated: new Date(), config: {} as any },
-        { name: 'creative', description: 'Creative preset', tags: ['creative'], isBuiltIn: true, created: new Date(), updated: new Date(), config: {} as any },
+        { name: 'creative', description: 'Creative preset', tags: ['creative'], isBuiltIn: true, created: new Date(), updated: new Date(), config: {} as any }
       ],
       updateConfig: () => ({ valid: true, errors: [], warnings: [] }),
       setConfigValue: () => ({ valid: true, errors: [], warnings: [] }),
@@ -450,10 +450,10 @@ const useConfigurationContext = () => {
         qualityLevel: 'Medium',
         optimizationsEnabled: true,
         presetCount: 3,
-        lastUpdated: new Date(),
+        lastUpdated: new Date()
       }),
-      getConfigHistory: () => [],
-    },
+      getConfigHistory: () => []
+    }
   };
 };
 

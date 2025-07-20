@@ -150,10 +150,10 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <PlayArrowIcon fontSize="small" />;
-      case 'paused': return <PauseIcon fontSize="small" />;
-      case 'cancelled': return <StopIcon fontSize="small" />;
-      default: return <ScheduleIcon fontSize="small" />;
+    case 'active': return <PlayArrowIcon fontSize="small" />;
+    case 'paused': return <PauseIcon fontSize="small" />;
+    case 'cancelled': return <StopIcon fontSize="small" />;
+    default: return <ScheduleIcon fontSize="small" />;
     }
   };
 

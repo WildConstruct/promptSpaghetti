@@ -17,7 +17,7 @@ export const WorkspaceList: React.FC<WorkspaceListProps> = ({
   workspaces,
   selectedWorkspace,
   onWorkspaceSelect,
-  loading = false,
+  loading = false
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterBy, setFilterBy] = useState<'all' | 'owner' | 'member'>('all');
@@ -131,7 +131,7 @@ interface WorkspaceItemProps {
 const WorkspaceItem: React.FC<WorkspaceItemProps> = ({
   workspace,
   isSelected,
-  onSelect,
+  onSelect
 }) => {
   const isOwner = workspace.owner_id === workspace.membership?.user_id;
   const memberCount = 1; // TODO: Get actual member count from API

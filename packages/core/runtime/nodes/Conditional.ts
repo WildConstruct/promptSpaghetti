@@ -15,6 +15,7 @@ import {
   TypedInputs 
 } from '../io-system';
 import { SafeExpressionEvaluator } from '../expression-evaluator';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../security-audit-logger';
 
 /**
  * A conditional branch with condition expression and output value
@@ -228,6 +229,19 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
    */
   private evaluateCondition(expression: string, ctx: AdvancedExecutionContext): boolean {
     try {
+      // Log expression evaluation start
+      securityAudit.logEvent(
+        SecuritySeverity.INFO,
+        SecurityEventCategory.EXPRESSION_VALIDATION,
+        'Evaluating conditional expression',
+        { 
+          nodeId: this.id,
+          expression,
+          strictMode: this.conditionalConfig.strictMode
+        },
+        false
+      );
+      
       // Create a safe evaluation context
       const evalContext = this.createEvaluationContext(ctx);
       
@@ -247,6 +261,17 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
         throw error;
       }
       // In non-strict mode, log the error for debugging but return false
+      securityAudit.logEvent(
+        SecuritySeverity.WARNING,
+        SecurityEventCategory.EXPRESSION_VALIDATION,
+        'Expression evaluation failed in non-strict mode',
+        { 
+          nodeId: this.id,
+          expression,
+          error: errorMessage
+        },
+        false
+      );
       return false;
     }
   }
@@ -255,39 +280,29 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
    * Create a safe evaluation context with variables and functions
    */
   private createEvaluationContext(ctx: AdvancedExecutionContext): Record<string, any> {
-    const evalContext: Record<string, any> = {};
+    // Use SafeExpressionEvaluator's createSafeContext which includes safe Math
+    const evalContext = SafeExpressionEvaluator.createSafeContext(
+      this.conditionalConfig.allowVariableAccess ? ctx.variables : {}
+    );
 
-    // Add variables if allowed
+    // Add additional convenience functions if variable access is allowed
     if (this.conditionalConfig.allowVariableAccess) {
-      // Add all variables from execution context
-      Object.assign(evalContext, ctx.variables);
-      
-      // Add convenience functions
       evalContext.hasVariable = (name: string) => name in ctx.variables;
       evalContext.getVariable = (name: string, defaultValue?: any) => 
         ctx.variables[name] !== undefined ? ctx.variables[name] : defaultValue;
     }
 
-    // Add custom functions
+    // Add custom functions from config
     Object.assign(evalContext, this.conditionalConfig.customFunctions);
 
-    // Add safe utility functions (avoid reserved keywords)
-    evalContext.getType = (value: any) => typeof value; // 'typeof' is reserved
-    const lengthFn = (value: any) => value?.length ?? 0;
-    evalContext.len = lengthFn; // short name to avoid 'length' property conflict  
-    evalContext.length = lengthFn; // backward compatibility
-    evalContext.isEmpty = (value: any) => !value || value.length === 0;
-    evalContext.includes = (value: any, item: any) => {
-      if (typeof value === 'string') {
-        return String(value).includes(String(item));
-      } else if (Array.isArray(value)) {
-        return value.includes(item);
+    // Add conditional-specific utility functions
+    evalContext.matches = (str: string, pattern: string) => {
+      try {
+        return new RegExp(pattern).test(String(str));
+      } catch (e) {
+        throw new Error(`Invalid regex pattern: ${pattern}`);
       }
-      return false;
     };
-    evalContext.startsWith = (str: string, prefix: string) => String(str).startsWith(String(prefix));
-    evalContext.endsWith = (str: string, suffix: string) => String(str).endsWith(String(suffix));
-    evalContext.matches = (str: string, pattern: string) => new RegExp(pattern).test(String(str));
 
     return evalContext;
   }
@@ -326,9 +341,22 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
       /document\./gi
     ];
 
-    let sanitized = expression;
+    const sanitized = expression;
     for (const pattern of dangerous) {
       if (pattern.test(sanitized)) {
+        // Log the dangerous pattern detection
+        securityAudit.logExpressionBlocked(
+          expression,
+          `Dangerous pattern detected: ${pattern.source}`,
+          { 
+            nodeId: this.id,
+            nodeType: 'Conditional',
+            additionalData: { 
+              pattern: pattern.source,
+              patternIndex: dangerous.indexOf(pattern)
+            }
+          }
+        );
         throw new Error(`Dangerous pattern detected in expression: ${expression}`);
       }
     }

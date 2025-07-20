@@ -13,36 +13,36 @@ const RegisterSchema = z.object({
   displayName: z.string().optional(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
-  invitationToken: z.string().optional(),
+  invitationToken: z.string().optional()
 });
 
 const LoginSchema = z.object({
   email: z.string().email(),
   password: z.string(),
   rememberMe: z.boolean().optional(),
-  deviceInfo: z.record(z.any()).optional(),
+  deviceInfo: z.record(z.any()).optional()
 });
 
 const PasswordResetRequestSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email()
 });
 
 const PasswordResetConfirmSchema = z.object({
   token: z.string(),
-  newPassword: z.string().min(12),
+  newPassword: z.string().min(12)
 });
 
 const EmailVerificationSchema = z.object({
-  token: z.string(),
+  token: z.string()
 });
 
 const RefreshTokenSchema = z.object({
-  refreshToken: z.string(),
+  refreshToken: z.string()
 });
 
 const ChangePasswordSchema = z.object({
   currentPassword: z.string(),
-  newPassword: z.string().min(12),
+  newPassword: z.string().min(12)
 });
 
 export async function authRoutes(fastify: FastifyInstance) {
@@ -62,7 +62,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   function getRequestContext(request: FastifyRequest) {
     return {
       ipAddress: request.ip,
-      userAgent: request.headers['user-agent'],
+      userAgent: request.headers['user-agent']
     };
   }
 
@@ -87,17 +87,17 @@ export async function authRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             user: { type: 'object' },
-            emailVerificationRequired: { type: 'boolean' },
-          },
+            emailVerificationRequired: { type: 'boolean' }
+          }
         },
         400: {
           type: 'object',
           properties: {
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof RegisterSchema> }>, reply: FastifyReply) => {
     try {
       const result = await authService.register(request.body, getRequestContext(request));
@@ -118,17 +118,17 @@ export async function authRoutes(fastify: FastifyInstance) {
             accessToken: { type: 'string' },
             refreshToken: { type: 'string' },
             user: { type: 'object' },
-            expiresAt: { type: 'string', format: 'date-time' },
-          },
+            expiresAt: { type: 'string', format: 'date-time' }
+          }
         },
         401: {
           type: 'object',
           properties: {
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof LoginSchema> }>, reply: FastifyReply) => {
     try {
       const result = await authService.login(request.body, getRequestContext(request));
@@ -143,7 +143,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     preHandler: async (request) => {
       // Validate JWT token
       await getUserFromToken(request);
-    },
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = await getUserFromToken(request);
@@ -163,17 +163,17 @@ export async function authRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             accessToken: { type: 'string' },
-            refreshToken: { type: 'string' },
-          },
+            refreshToken: { type: 'string' }
+          }
         },
         401: {
           type: 'object',
           properties: {
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof RefreshTokenSchema> }>, reply: FastifyReply) => {
     try {
       const result = await authService.refreshToken(request.body, getRequestContext(request));
@@ -191,17 +191,17 @@ export async function authRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            message: { type: 'string' },
-          },
+            message: { type: 'string' }
+          }
         },
         429: {
           type: 'object',
           properties: {
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof PasswordResetRequestSchema> }>, reply: FastifyReply) => {
     try {
       await authService.requestPasswordReset(request.body, getRequestContext(request));
@@ -220,17 +220,17 @@ export async function authRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            message: { type: 'string' },
-          },
+            message: { type: 'string' }
+          }
         },
         400: {
           type: 'object',
           properties: {
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof PasswordResetConfirmSchema> }>, reply: FastifyReply) => {
     try {
       await authService.resetPassword(request.body, getRequestContext(request));
@@ -248,17 +248,17 @@ export async function authRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            message: { type: 'string' },
-          },
+            message: { type: 'string' }
+          }
         },
         400: {
           type: 'object',
           properties: {
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof EmailVerificationSchema> }>, reply: FastifyReply) => {
     try {
       await authService.verifyEmail(request.body, getRequestContext(request));
@@ -280,17 +280,17 @@ export async function authRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            message: { type: 'string' },
-          },
+            message: { type: 'string' }
+          }
         },
         400: {
           type: 'object',
           properties: {
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof ChangePasswordSchema> }>, reply: FastifyReply) => {
     try {
       const userId = await getUserFromToken(request);
@@ -313,17 +313,17 @@ export async function authRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            user: { type: 'object' },
-          },
+            user: { type: 'object' }
+          }
         },
         401: {
           type: 'object',
           properties: {
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const authHeader = request.headers.authorization;
@@ -344,7 +344,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     } catch (error) {
       reply.code(503).send({
         status: 'unhealthy',
-        error: error.message,
+        error: error.message
       });
     }
   });
@@ -355,27 +355,27 @@ export async function authRoutes(fastify: FastifyInstance) {
       body: {
         type: 'object',
         properties: {
-          token: { type: 'string' },
+          token: { type: 'string' }
         },
-        required: ['token'],
+        required: ['token']
       },
       response: {
         200: {
           type: 'object',
           properties: {
             valid: { type: 'boolean' },
-            user: { type: 'object' },
-          },
+            user: { type: 'object' }
+          }
         },
         401: {
           type: 'object',
           properties: {
             valid: { type: 'boolean' },
-            error: { type: 'string' },
-          },
-        },
-      },
-    },
+            error: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: { token: string } }>, reply: FastifyReply) => {
     try {
       const user = await authService.validateToken(request.body.token);
@@ -419,7 +419,7 @@ export async function jwtAuthMiddleware(fastify: FastifyInstance) {
       '/auth/health',
       '/health',
       '/preview',
-      '/',
+      '/'
     ];
 
     const isPublicRoute = publicRoutes.some(route => 

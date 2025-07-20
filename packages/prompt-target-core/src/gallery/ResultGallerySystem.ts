@@ -297,29 +297,29 @@ export class ResultGallerySystem {
       let bVal: any;
 
       switch (sortBy) {
-        case 'created':
-          aVal = a.metadata.created.getTime();
-          bVal = b.metadata.created.getTime();
-          break;
-        case 'modified':
-          aVal = a.metadata.modified.getTime();
-          bVal = b.metadata.modified.getTime();
-          break;
-        case 'rating':
-          aVal = a.rating || 0;
-          bVal = b.rating || 0;
-          break;
-        case 'views':
-          aVal = a.metadata.views;
-          bVal = b.metadata.views;
-          break;
-        case 'quality':
-          aVal = a.metadata.quality || 0;
-          bVal = b.metadata.quality || 0;
-          break;
-        default:
-          aVal = a.metadata.created.getTime();
-          bVal = b.metadata.created.getTime();
+      case 'created':
+        aVal = a.metadata.created.getTime();
+        bVal = b.metadata.created.getTime();
+        break;
+      case 'modified':
+        aVal = a.metadata.modified.getTime();
+        bVal = b.metadata.modified.getTime();
+        break;
+      case 'rating':
+        aVal = a.rating || 0;
+        bVal = b.rating || 0;
+        break;
+      case 'views':
+        aVal = a.metadata.views;
+        bVal = b.metadata.views;
+        break;
+      case 'quality':
+        aVal = a.metadata.quality || 0;
+        bVal = b.metadata.quality || 0;
+        break;
+      default:
+        aVal = a.metadata.created.getTime();
+        bVal = b.metadata.created.getTime();
       }
 
       const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;

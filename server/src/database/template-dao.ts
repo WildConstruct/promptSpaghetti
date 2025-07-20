@@ -27,7 +27,7 @@ import {
   TemplateUsageFilter,
   TemplateAnalytics,
   PaginatedResult,
-  PaginationOptions,
+  PaginationOptions
 } from './template-models';
 
 export class TemplateDAO {
@@ -130,7 +130,7 @@ export class TemplateDAO {
       is_favorited: Boolean(row.is_favorited),
       user_rating: row.user_rating || undefined,
       can_edit: template.created_by === userId || template.workspace_id === userId, // Simplified permission check
-      can_delete: template.created_by === userId,
+      can_delete: template.created_by === userId
     };
   }
 
@@ -198,35 +198,35 @@ export class TemplateDAO {
     // Build ORDER BY clause
     let orderClause = '';
     switch (sort_by) {
-      case 'name':
-        orderClause = `ORDER BY t.name ${sort_order.toUpperCase()}`;
-        break;
-      case 'rating_average':
-        orderClause = `ORDER BY t.rating_average ${sort_order.toUpperCase()} NULLS LAST, t.rating_count ${sort_order.toUpperCase()}`;
-        break;
-      case 'usage_count':
-        orderClause = `ORDER BY t.usage_count ${sort_order.toUpperCase()}, t.created_at ${sort_order.toUpperCase()}`;
-        break;
-      case 'updated_at':
-        orderClause = `ORDER BY t.updated_at ${sort_order.toUpperCase()}`;
-        break;
-      case 'relevance':
-        // For search relevance - simplified scoring
-        if (filter.search) {
-          orderClause = `ORDER BY (
+    case 'name':
+      orderClause = `ORDER BY t.name ${sort_order.toUpperCase()}`;
+      break;
+    case 'rating_average':
+      orderClause = `ORDER BY t.rating_average ${sort_order.toUpperCase()} NULLS LAST, t.rating_count ${sort_order.toUpperCase()}`;
+      break;
+    case 'usage_count':
+      orderClause = `ORDER BY t.usage_count ${sort_order.toUpperCase()}, t.created_at ${sort_order.toUpperCase()}`;
+      break;
+    case 'updated_at':
+      orderClause = `ORDER BY t.updated_at ${sort_order.toUpperCase()}`;
+      break;
+    case 'relevance':
+      // For search relevance - simplified scoring
+      if (filter.search) {
+        orderClause = `ORDER BY (
             CASE WHEN t.name ILIKE ? THEN 3 ELSE 0 END +
             CASE WHEN t.description ILIKE ? THEN 2 ELSE 0 END +
             CASE WHEN ? = ANY(t.tags) THEN 4 ELSE 0 END +
             t.rating_average * 0.5 + 
             LOG(t.usage_count + 1) * 0.3
           ) DESC, t.created_at DESC`;
-          params.push(`%${filter.search}%`, `%${filter.search}%`, filter.search);
-        } else {
-          orderClause = `ORDER BY t.created_at ${sort_order.toUpperCase()}`;
-        }
-        break;
-      default:
+        params.push(`%${filter.search}%`, `%${filter.search}%`, filter.search);
+      } else {
         orderClause = `ORDER BY t.created_at ${sort_order.toUpperCase()}`;
+      }
+      break;
+    default:
+      orderClause = `ORDER BY t.created_at ${sort_order.toUpperCase()}`;
     }
 
     const countStmt = this.db.prepare(`
@@ -273,7 +273,7 @@ export class TemplateDAO {
         is_favorited: Boolean(row.is_favorited),
         user_rating: row.user_rating || undefined,
         can_edit: template.created_by === userId || template.workspace_id === userId,
-        can_delete: template.created_by === userId,
+        can_delete: template.created_by === userId
       };
     });
 
@@ -285,8 +285,8 @@ export class TemplateDAO {
         total,
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
-        has_prev: page > 1,
-      },
+        has_prev: page > 1
+      }
     };
   }
 
@@ -601,7 +601,7 @@ export class TemplateDAO {
       ...this.mapReviewRow(row),
       author_name: `User ${row.user_id}`, // TODO: Get actual user name
       author_avatar: undefined,
-      is_author: false, // TODO: Check if current user is author
+      is_author: false // TODO: Check if current user is author
     }));
 
     return {
@@ -612,8 +612,8 @@ export class TemplateDAO {
         total,
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
-        has_prev: page > 1,
-      },
+        has_prev: page > 1
+      }
     };
   }
 
@@ -635,7 +635,7 @@ export class TemplateDAO {
       template_id: templateId,
       user_id: userId,
       workspace_id: workspaceId,
-      created_at: new Date(now),
+      created_at: new Date(now)
     };
   }
 
@@ -686,7 +686,7 @@ export class TemplateDAO {
       ...this.mapTemplateRow(row),
       is_favorited: true,
       can_edit: row.created_by === userId,
-      can_delete: row.created_by === userId,
+      can_delete: row.created_by === userId
     }));
 
     return {
@@ -697,8 +697,8 @@ export class TemplateDAO {
         total,
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
-        has_prev: page > 1,
-      },
+        has_prev: page > 1
+      }
     };
   }
 
@@ -721,7 +721,7 @@ export class TemplateDAO {
       sort_order: row.sort_order,
       is_active: Boolean(row.is_active),
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     }));
   }
 
@@ -792,19 +792,19 @@ export class TemplateDAO {
         completion_rate: totalUsages > 0 ? completedUsages / totalUsages : 0,
         average_completion_time: usageRows.length > 0 ? usageRows[0].avg_completion_time || 0 : 0,
         usage_by_source: usageBySource,
-        usage_trend: usageTrend.sort((a, b) => a.date.localeCompare(b.date)),
+        usage_trend: usageTrend.sort((a, b) => a.date.localeCompare(b.date))
       },
       rating_stats: {
         average_rating: averageRating,
         rating_distribution: ratingDistribution,
         review_count: reviewCount,
-        recent_reviews: [], // TODO: Implement recent reviews
+        recent_reviews: [] // TODO: Implement recent reviews
       },
       performance_metrics: {
         conversion_rate: 0.85, // TODO: Calculate actual conversion rate
         retention_rate: 0.65, // TODO: Calculate actual retention rate
-        recommendation_score: averageRating * 0.4 + (totalUsages / 100) * 0.6, // Simplified scoring
-      },
+        recommendation_score: averageRating * 0.4 + (totalUsages / 100) * 0.6 // Simplified scoring
+      }
     };
   }
 
@@ -838,7 +838,7 @@ export class TemplateDAO {
       published_at: row.published_at ? new Date(row.published_at) : undefined,
       archived_at: row.archived_at ? new Date(row.archived_at) : undefined,
       deprecated_at: row.deprecated_at ? new Date(row.deprecated_at) : undefined,
-      replacement_template_id: row.replacement_template_id,
+      replacement_template_id: row.replacement_template_id
     };
   }
 
@@ -857,7 +857,7 @@ export class TemplateDAO {
       started_at: new Date(row.started_at),
       completed_at: row.completed_at ? new Date(row.completed_at) : undefined,
       last_accessed_at: new Date(row.last_accessed_at),
-      source: row.source,
+      source: row.source
     };
   }
 
@@ -872,7 +872,7 @@ export class TemplateDAO {
       is_verified_purchase: Boolean(row.is_verified_purchase),
       is_helpful_count: row.is_helpful_count || 0,
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     };
   }
 }

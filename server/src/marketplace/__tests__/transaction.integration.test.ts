@@ -54,13 +54,13 @@ describe('Transaction System Integration Tests', () => {
     // Mock fastify instance
     fastify = {
       db: {
-        query: jest.fn(),
+        query: jest.fn()
       },
       log: {
         info: jest.fn(),
-        error: jest.fn(),
+        error: jest.fn()
       },
-      authenticate: jest.fn(),
+      authenticate: jest.fn()
     } as any;
 
     transactionService = new TransactionService(fastify);

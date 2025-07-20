@@ -308,7 +308,7 @@ describe('WeightedAdvanced Node', () => {
       
       node.run(freshContext);
       
-      const metricKey = `test-weighted-weighted-selection_duration_ms`;
+      const metricKey = 'test-weighted-weighted-selection_duration_ms';
       expect(freshContext.executionMeta.performanceMetrics.has(metricKey)).toBe(true);
       expect(freshContext.executionMeta.nodeExecutionOrder).toContain('test-weighted');
     });

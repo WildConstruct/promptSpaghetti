@@ -29,7 +29,7 @@ export class AuditService implements IAuditService {
         event.ipAddress || null,
         event.userAgent || null,
         event.sessionId || null,
-        event.severity || 'info',
+        event.severity || 'info'
       ]);
 
       // Log to console for development
@@ -38,7 +38,7 @@ export class AuditService implements IAuditService {
           userId: event.userId,
           resourceType: event.resourceType,
           resourceId: event.resourceId,
-          details: event.details,
+          details: event.details
         });
       }
 
@@ -62,11 +62,11 @@ export class AuditService implements IAuditService {
         securityEventType: event.type,
         success: event.success,
         email: event.email,
-        ...event.metadata,
+        ...event.metadata
       },
       ipAddress: event.ipAddress,
       userAgent: event.userAgent,
-      severity: event.success ? 'info' : 'warning',
+      severity: event.success ? 'info' : 'warning'
     });
   }
 
@@ -152,7 +152,7 @@ export class AuditService implements IAuditService {
       hour: '1 hour',
       day: '1 day',
       week: '1 week',
-      month: '1 month',
+      month: '1 month'
     };
 
     try {
@@ -204,8 +204,8 @@ export class AuditService implements IAuditService {
         }, {}),
         topUsers: usersResult.rows.map(row => ({
           userId: row.user_id,
-          count: parseInt(row.count),
-        })),
+          count: parseInt(row.count)
+        }))
       };
     } catch (error) {
       console.error('Failed to get audit stats:', error);
@@ -221,7 +221,7 @@ export class AuditService implements IAuditService {
     const logs = await this.getAuditLogs({
       startDate: filters.startDate,
       endDate: filters.endDate,
-      limit: 10000, // Large limit for export
+      limit: 10000 // Large limit for export
     });
 
     if (filters.format === 'csv') {
@@ -246,9 +246,9 @@ export class AuditService implements IAuditService {
           details: { 
             deletedCount, 
             retentionDays,
-            cleanupDate: new Date().toISOString(),
+            cleanupDate: new Date().toISOString()
           },
-          severity: 'info',
+          severity: 'info'
         });
       }
 
@@ -273,7 +273,7 @@ export class AuditService implements IAuditService {
       details: event.details,
       ipAddress: event.ipAddress,
       userAgent: event.userAgent,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
 
     // TODO: Implement actual alerting integrations
@@ -292,7 +292,7 @@ export class AuditService implements IAuditService {
       userAgent: row.user_agent,
       sessionId: row.session_id,
       severity: row.severity,
-      createdAt: row.created_at,
+      createdAt: row.created_at
     };
   }
 
@@ -312,7 +312,7 @@ export class AuditService implements IAuditService {
       log.userAgent || '',
       log.severity,
       log.createdAt.toISOString(),
-      log.details ? JSON.stringify(log.details) : '',
+      log.details ? JSON.stringify(log.details) : ''
     ]);
 
     const csvContent = [

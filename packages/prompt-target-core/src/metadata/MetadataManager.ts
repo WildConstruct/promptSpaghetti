@@ -502,17 +502,17 @@ export class MetadataManager {
     };
 
     switch (format) {
-      case 'json':
-        return JSON.stringify(searchResult.items, null, 2);
+    case 'json':
+      return JSON.stringify(searchResult.items, null, 2);
         
-      case 'csv':
-        return this.convertToCSV(searchResult.items);
+    case 'csv':
+      return this.convertToCSV(searchResult.items);
         
-      case 'xml':
-        return this.convertToXML(searchResult.items);
+    case 'xml':
+      return this.convertToXML(searchResult.items);
         
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
   }
 

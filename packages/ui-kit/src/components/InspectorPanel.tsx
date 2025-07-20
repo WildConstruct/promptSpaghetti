@@ -31,28 +31,28 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
     if (!selectedNode) return null;
 
     switch (selectedNode.type) {
-      case 'WeightedChoice':
-        return <WeightedChoiceEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'Concat':
-        return <ConcatEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'Output':
-        return <OutputEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'Include':
-        return <IncludeEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'SetVariable':
-        return <SetVariableEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'GetVariable':
-        return <GetVariableEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'WeightedAdvanced':
-        return <WeightedAdvancedEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'Conditional':
-        return <ConditionalEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'Sequential':
-        return <SequentialEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      case 'Markov':
-        return <MarkovEditor node={selectedNode} onUpdate={onNodeUpdate} />;
-      default:
-        return <GenericEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'WeightedChoice':
+      return <WeightedChoiceEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'Concat':
+      return <ConcatEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'Output':
+      return <OutputEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'Include':
+      return <IncludeEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'SetVariable':
+      return <SetVariableEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'GetVariable':
+      return <GetVariableEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'WeightedAdvanced':
+      return <WeightedAdvancedEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'Conditional':
+      return <ConditionalEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'Sequential':
+      return <SequentialEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    case 'Markov':
+      return <MarkovEditor node={selectedNode} onUpdate={onNodeUpdate} />;
+    default:
+      return <GenericEditor node={selectedNode} onUpdate={onNodeUpdate} />;
     }
   }, [selectedNode, onNodeUpdate]);
 

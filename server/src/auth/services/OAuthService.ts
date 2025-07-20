@@ -72,8 +72,8 @@ export class OAuthService {
         email: 'email',
         name: 'name',
         picture: 'picture',
-        verified: 'verified_email',
-      },
+        verified: 'verified_email'
+      }
     });
 
     // GitHub OAuth Configuration
@@ -89,8 +89,8 @@ export class OAuthService {
         id: 'id',
         email: 'email',
         name: 'name',
-        picture: 'avatar_url',
-      },
+        picture: 'avatar_url'
+      }
     });
 
     // Microsoft OAuth Configuration
@@ -106,8 +106,8 @@ export class OAuthService {
         id: 'id',
         email: 'mail',
         name: 'displayName',
-        picture: 'photo',
-      },
+        picture: 'photo'
+      }
     });
   }
 
@@ -129,7 +129,7 @@ export class OAuthService {
       redirect_uri: providerConfig.redirectUri,
       response_type: 'code',
       scope: providerConfig.scopes.join(' '),
-      state,
+      state
     });
 
     // Provider-specific parameters
@@ -148,11 +148,11 @@ export class OAuthService {
       details: {
         provider,
         returnUrl,
-        state,
+        state
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
 
     return { url: authUrl, state };
@@ -194,11 +194,11 @@ export class OAuthService {
         details: {
           provider,
           isNewUser,
-          oauthId: userInfo.id,
+          oauthId: userInfo.id
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       return {
@@ -206,9 +206,9 @@ export class OAuthService {
         tokens: {
           accessToken,
           refreshToken,
-          expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes
+          expiresAt: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
         },
-        isNewUser,
+        isNewUser
       };
     } catch (error) {
       // Log failed OAuth callback
@@ -216,11 +216,11 @@ export class OAuthService {
         action: 'oauth_callback_failed',
         details: {
           provider,
-          error: error.message,
+          error: error.message
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'error',
+        severity: 'error'
       });
 
       throw error;
@@ -255,11 +255,11 @@ export class OAuthService {
         action: 'oauth_account_linked',
         details: {
           provider,
-          oauthId: userInfo.id,
+          oauthId: userInfo.id
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
     } catch (error) {
       await this.auditService.logEvent({
@@ -267,11 +267,11 @@ export class OAuthService {
         action: 'oauth_account_linking_failed',
         details: {
           provider,
-          error: error.message,
+          error: error.message
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'error',
+        severity: 'error'
       });
 
       throw error;
@@ -311,7 +311,7 @@ export class OAuthService {
         details: { provider },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
     } catch (error) {
       await this.auditService.logEvent({
@@ -319,11 +319,11 @@ export class OAuthService {
         action: 'oauth_account_unlinking_failed',
         details: {
           provider,
-          error: error.message,
+          error: error.message
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'error',
+        severity: 'error'
       });
 
       throw error;
@@ -351,7 +351,7 @@ export class OAuthService {
       client_id: providerConfig.clientId,
       client_secret: providerConfig.clientSecret,
       code,
-      redirect_uri: providerConfig.redirectUri,
+      redirect_uri: providerConfig.redirectUri
     });
 
     // Provider-specific parameters
@@ -363,9 +363,9 @@ export class OAuthService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
+        'Accept': 'application/json'
       },
-      body: params.toString(),
+      body: params.toString()
     });
 
     if (!response.ok) {
@@ -385,8 +385,8 @@ export class OAuthService {
     const response = await fetch(providerConfig.userInfoUrl, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/json',
-      },
+        'Accept': 'application/json'
+      }
     });
 
     if (!response.ok) {
@@ -403,7 +403,7 @@ export class OAuthService {
       email: rawUserInfo[mapping.email],
       name: rawUserInfo[mapping.name],
       picture: mapping.picture ? rawUserInfo[mapping.picture] : undefined,
-      verified: mapping.verified ? rawUserInfo[mapping.verified] : true,
+      verified: mapping.verified ? rawUserInfo[mapping.verified] : true
     };
   }
 
@@ -434,7 +434,7 @@ export class OAuthService {
       firstName: userInfo.name?.split(' ')[0] || '',
       lastName: userInfo.name?.split(' ').slice(1).join(' ') || '',
       emailVerified: userInfo.verified,
-      registrationSource: provider,
+      registrationSource: provider
     });
 
     return { user, isNewUser: true };
@@ -464,7 +464,7 @@ export class OAuthService {
         tokens.refresh_token,
         tokens.expires_in ? new Date(Date.now() + tokens.expires_in * 1000) : null,
         userId,
-        provider,
+        provider
       ]);
     } else {
       // Create new account link
@@ -482,7 +482,7 @@ export class OAuthService {
         userInfo.picture,
         tokens.access_token,
         tokens.refresh_token,
-        tokens.expires_in ? new Date(Date.now() + tokens.expires_in * 1000) : null,
+        tokens.expires_in ? new Date(Date.now() + tokens.expires_in * 1000) : null
       ]);
     }
   }
@@ -510,7 +510,7 @@ export class OAuthService {
       sessionId: crypto.randomUUID(),
       createdAt: new Date(),
       ipAddress: context.ipAddress,
-      userAgent: context.userAgent,
+      userAgent: context.userAgent
     };
 
     // Store state in Redis with 10-minute expiration
@@ -520,7 +520,7 @@ export class OAuthService {
     `, [
       state,
       JSON.stringify(stateData),
-      new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+      new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
     ]);
 
     return state;

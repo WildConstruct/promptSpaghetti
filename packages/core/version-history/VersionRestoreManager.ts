@@ -414,7 +414,7 @@ export class VersionRestoreManager {
         type: 'workflow_conflict',
         element_id: 'approval_status',
         element_type: 'metadata',
-        description: `Approval status has changed since snapshot`,
+        description: 'Approval status has changed since snapshot',
         current_value: currentData.approval_status,
         restore_value: snapshotData.approval_status,
         suggested_resolution: 'keep_current',
@@ -481,35 +481,35 @@ export class VersionRestoreManager {
   private async applyConflictResolution(conflict: RestoreConflict, resolution: string): Promise<void> {
     // Implementation would depend on the specific conflict type and resolution strategy
     switch (resolution) {
-      case 'keep_current':
-        // Keep the current value, don't apply the restore value
-        break;
-      case 'use_restore':
-        // Use the restore value, overwrite current
-        break;
-      case 'merge':
-        // Attempt to merge the values
-        await this.mergeConflictValues(conflict);
-        break;
-      default:
-        throw new Error(`Unknown resolution strategy: ${resolution}`);
+    case 'keep_current':
+      // Keep the current value, don't apply the restore value
+      break;
+    case 'use_restore':
+      // Use the restore value, overwrite current
+      break;
+    case 'merge':
+      // Attempt to merge the values
+      await this.mergeConflictValues(conflict);
+      break;
+    default:
+      throw new Error(`Unknown resolution strategy: ${resolution}`);
     }
   }
 
   private async mergeConflictValues(conflict: RestoreConflict): Promise<void> {
     // Implement intelligent merging based on conflict type
     switch (conflict.element_type) {
-      case 'node':
-        await this.mergeNodeValues(conflict);
-        break;
-      case 'edge':
-        await this.mergeEdgeValues(conflict);
-        break;
-      case 'property':
-        await this.mergePropertyValues(conflict);
-        break;
-      default:
-        throw new Error(`Cannot merge conflict type: ${conflict.element_type}`);
+    case 'node':
+      await this.mergeNodeValues(conflict);
+      break;
+    case 'edge':
+      await this.mergeEdgeValues(conflict);
+      break;
+    case 'property':
+      await this.mergePropertyValues(conflict);
+      break;
+    default:
+      throw new Error(`Cannot merge conflict type: ${conflict.element_type}`);
     }
   }
 
@@ -587,18 +587,18 @@ export class VersionRestoreManager {
     };
 
     switch (options.restore_mode) {
-      case 'full':
-        // Complete replacement
-        return this.calculateFullRestore(currentData, snapshotData);
+    case 'full':
+      // Complete replacement
+      return this.calculateFullRestore(currentData, snapshotData);
       
-      case 'selective':
-        // Only restore specific elements (would need additional selection data)
-        return this.calculateSelectiveRestore(currentData, snapshotData, options);
+    case 'selective':
+      // Only restore specific elements (would need additional selection data)
+      return this.calculateSelectiveRestore(currentData, snapshotData, options);
       
-      case 'merge':
-      default:
-        // Intelligent merge
-        return this.calculateMergeRestore(currentData, snapshotData, resolvedConflicts);
+    case 'merge':
+    default:
+      // Intelligent merge
+      return this.calculateMergeRestore(currentData, snapshotData, resolvedConflicts);
     }
   }
 

@@ -78,7 +78,7 @@ export const OrganizationManager: React.FC = () => {
     website: '',
     plan: 'free',
     settings: {},
-    branding: {},
+    branding: {}
   });
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export const OrganizationManager: React.FC = () => {
     try {
       setLoading(true);
       const response = await fetch('/api/auth/organizations/my', {
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -119,7 +119,7 @@ export const OrganizationManager: React.FC = () => {
   const loadOrganizationStats = async (organizationId: string) => {
     try {
       const response = await fetch(`/api/auth/organizations/${organizationId}/stats`, {
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -138,10 +138,10 @@ export const OrganizationManager: React.FC = () => {
       const response = await fetch('/api/auth/organizations', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
 
       if (!response.ok) {
@@ -166,10 +166,10 @@ export const OrganizationManager: React.FC = () => {
       const response = await fetch(`/api/auth/organizations/${editingOrg.id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
 
       if (!response.ok) {
@@ -201,7 +201,7 @@ export const OrganizationManager: React.FC = () => {
     try {
       const response = await fetch(`/api/auth/organizations/${organizationId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -227,7 +227,7 @@ export const OrganizationManager: React.FC = () => {
       website: '',
       plan: 'free',
       settings: {},
-      branding: {},
+      branding: {}
     });
   };
 
@@ -240,25 +240,25 @@ export const OrganizationManager: React.FC = () => {
       website: org.website || '',
       plan: org.plan,
       settings: org.settings,
-      branding: org.branding,
+      branding: org.branding
     });
   };
 
   const getPlanColor = (plan: string) => {
     switch (plan) {
-      case 'free': return 'text-gray-600';
-      case 'pro': return 'text-blue-600';
-      case 'enterprise': return 'text-purple-600';
-      default: return 'text-gray-600';
+    case 'free': return 'text-gray-600';
+    case 'pro': return 'text-blue-600';
+    case 'enterprise': return 'text-purple-600';
+    default: return 'text-gray-600';
     }
   };
 
   const getPlanBadge = (plan: string) => {
     switch (plan) {
-      case 'free': return 'bg-gray-100 text-gray-800';
-      case 'pro': return 'bg-blue-100 text-blue-800';
-      case 'enterprise': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'free': return 'bg-gray-100 text-gray-800';
+    case 'pro': return 'bg-blue-100 text-blue-800';
+    case 'enterprise': return 'bg-purple-100 text-purple-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -384,7 +384,7 @@ export const OrganizationManager: React.FC = () => {
                     { id: 'settings', label: 'Settings', icon: Settings },
                     { id: 'branding', label: 'Branding', icon: Palette },
                     { id: 'members', label: 'Members', icon: Users },
-                    { id: 'teams', label: 'Teams', icon: Shield },
+                    { id: 'teams', label: 'Teams', icon: Shield }
                   ].map((tab) => (
                     <button
                       key={tab.id}

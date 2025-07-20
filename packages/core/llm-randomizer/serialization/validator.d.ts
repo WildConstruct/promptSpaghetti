@@ -38,17 +38,53 @@ export declare class FormatValidator {
     private static readonly SUPPORTED_VERSIONS;
     private static readonly REQUIRED_SECTIONS;
     private static readonly VALID_NODE_TYPES;
+    /**
+     * Validate serialized graph format
+     */
     static validate(content: string): ValidationResult;
+    /**
+     * Parse the serialized content into structured data
+     */
     private static parseContent;
+    /**
+     * Parse a value from YAML-like format
+     */
     private static parseValue;
+    /**
+     * Parse array value from string representation
+     */
     private static parseArrayValue;
+    /**
+     * Validate overall structure and format
+     */
     private static validateStructure;
+    /**
+     * Validate semantic correctness
+     */
     private static validateSemantics;
+    /**
+     * Detect cycles in the graph
+     */
     private static detectCycles;
+    /**
+     * Validate node-specific properties
+     */
     private static validateNodeProperties;
+    /**
+     * Check for optimization opportunities
+     */
     private static checkOptimizations;
+    /**
+     * Check for unreachable nodes
+     */
     private static checkReachability;
 }
+/**
+ * Utility function for easy validation
+ */
 export declare function validateFormat(content: string): ValidationResult;
+/**
+ * Check if content is valid (no errors)
+ */
 export declare function isValidFormat(content: string): boolean;
 //# sourceMappingURL=validator.d.ts.map

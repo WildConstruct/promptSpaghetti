@@ -12,7 +12,7 @@ const UserSchema = z.object({
   createdAt: z.string(),
   lastLoginAt: z.string().nullable(),
   roles: z.array(z.string()),
-  permissions: z.array(z.string()),
+  permissions: z.array(z.string())
 });
 
 const LoginRequestSchema = z.object({
@@ -23,8 +23,8 @@ const LoginRequestSchema = z.object({
     fingerprint: z.string().optional(),
     userAgent: z.string().optional(),
     language: z.string().optional(),
-    timezone: z.string().optional(),
-  }).optional(),
+    timezone: z.string().optional()
+  }).optional()
 });
 
 type User = z.infer<typeof UserSchema>;
@@ -48,7 +48,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 const STORAGE_KEYS = {
   USER: 'auth_user',
   SESSION: 'auth_session',
-  REMEMBER_ME: 'auth_remember_me',
+  REMEMBER_ME: 'auth_remember_me'
 } as const;
 
 export const useAuth = () => {
@@ -120,8 +120,8 @@ const useStandaloneAuth = () => {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       return response.ok;
@@ -142,7 +142,7 @@ const useStandaloneAuth = () => {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify({
@@ -151,9 +151,9 @@ const useStandaloneAuth = () => {
             ...credentials.deviceInfo,
             userAgent: navigator.userAgent,
             language: navigator.language,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          },
-        }),
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+          }
+        })
       });
 
       const data = await response.json();
@@ -197,10 +197,10 @@ const useStandaloneAuth = () => {
       await fetch('/api/auth/logout', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify({ sessionId }),
+        body: JSON.stringify({ sessionId })
       });
     } catch (error) {
       console.error('Logout request failed:', error);
@@ -224,11 +224,11 @@ const useStandaloneAuth = () => {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          refreshToken: '', // Token is in HTTP-only cookie
-        }),
+          refreshToken: '' // Token is in HTTP-only cookie
+        })
       });
 
       if (!response.ok) {
@@ -254,7 +254,7 @@ const useStandaloneAuth = () => {
     login,
     logout,
     refreshToken,
-    clearError,
+    clearError
   };
 };
 
@@ -286,7 +286,7 @@ export const usePermissions = () => {
     hasPermission,
     hasRole,
     hasAnyRole,
-    hasAllPermissions,
+    hasAllPermissions
   };
 };
 
@@ -320,7 +320,7 @@ export const useAuthRedirect = () => {
     redirectToDashboard,
     redirectAfterLogin,
     shouldRedirectToLogin: !isAuthenticated && !isLoading,
-    shouldRedirectAfterLogin: isAuthenticated && !isLoading,
+    shouldRedirectAfterLogin: isAuthenticated && !isLoading
   };
 };
 
@@ -352,14 +352,14 @@ export const useAuthValidation = () => {
     return {
       email: emailError,
       password: passwordError,
-      isValid: !emailError && !passwordError,
+      isValid: !emailError && !passwordError
     };
   }, [validateEmail, validatePassword]);
 
   return {
     validateEmail,
     validatePassword,
-    validateForm,
+    validateForm
   };
 };
 

@@ -6,8 +6,8 @@ describe('Graph type', () => {
       nodes: [],
       edges: [],
       meta: {
-        version: '0.0.1',
-      },
+        version: '0.0.1'
+      }
     };
 
     expect(graph.nodes).toBeDefined();

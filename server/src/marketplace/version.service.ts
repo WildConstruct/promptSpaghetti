@@ -196,7 +196,7 @@ export class VersionService {
       }
     });
 
-    updateFields.push(`updated_at = NOW()`);
+    updateFields.push('updated_at = NOW()');
     updateValues.push(id);
 
     const result = await this.pool.query(`
@@ -527,10 +527,10 @@ export class VersionService {
 
   private describeDifference(diff: any): string {
     switch (diff.kind) {
-      case 'N': return `Added ${diff.path?.join('.') || 'property'}`;
-      case 'D': return `Removed ${diff.path?.join('.') || 'property'}`;
-      case 'E': return `Modified ${diff.path?.join('.') || 'property'}`;
-      default: return 'Unknown change';
+    case 'N': return `Added ${diff.path?.join('.') || 'property'}`;
+    case 'D': return `Removed ${diff.path?.join('.') || 'property'}`;
+    case 'E': return `Modified ${diff.path?.join('.') || 'property'}`;
+    default: return 'Unknown change';
     }
   }
 

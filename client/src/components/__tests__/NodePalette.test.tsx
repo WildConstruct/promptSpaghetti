@@ -10,7 +10,7 @@ const NODE_TYPES = [
   'Output',
   'Include',
   'SetVariable',
-  'GetVariable',
+  'GetVariable'
 ];
 
 describe('NodePalette', () => {

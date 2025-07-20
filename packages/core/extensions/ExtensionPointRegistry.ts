@@ -194,7 +194,7 @@ export class ExtensionPointRegistry {
     byCategory: Record<ExtensionPointCategory, number>;
     byPriority: Record<ExtensionPointPriority, number>;
     byLifecycle: Record<ExtensionPointLifecycle, number>;
-  } {
+    } {
     const stats = {
       total: this.extensionPoints.size,
       byCategory: {} as Record<ExtensionPointCategory, number>,

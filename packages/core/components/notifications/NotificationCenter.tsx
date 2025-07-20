@@ -152,39 +152,39 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     if (notification.icon) return notification.icon;
     
     switch (notification.notification_type) {
-      case 'comment':
-        return '💬';
-      case 'mention':
-        return '@';
-      case 'collaboration':
-        return '👥';
-      case 'workspace':
-        return '🏢';
-      case 'template':
-        return '📋';
-      case 'approval':
-        return '✅';
-      case 'rejection':
-        return '❌';
-      case 'system':
-        return 'ℹ️';
-      default:
-        return '🔔';
+    case 'comment':
+      return '💬';
+    case 'mention':
+      return '@';
+    case 'collaboration':
+      return '👥';
+    case 'workspace':
+      return '🏢';
+    case 'template':
+      return '📋';
+    case 'approval':
+      return '✅';
+    case 'rejection':
+      return '❌';
+    case 'system':
+      return 'ℹ️';
+    default:
+      return '🔔';
     }
   };
 
   const getPriorityColor = (priority: string): string => {
     switch (priority) {
-      case 'urgent':
-        return 'text-red-600 bg-red-100';
-      case 'high':
-        return 'text-orange-600 bg-orange-100';
-      case 'normal':
-        return 'text-blue-600 bg-blue-100';
-      case 'low':
-        return 'text-gray-600 bg-gray-100';
-      default:
-        return 'text-gray-600 bg-gray-100';
+    case 'urgent':
+      return 'text-red-600 bg-red-100';
+    case 'high':
+      return 'text-orange-600 bg-orange-100';
+    case 'normal':
+      return 'text-blue-600 bg-blue-100';
+    case 'low':
+      return 'text-gray-600 bg-gray-100';
+    default:
+      return 'text-gray-600 bg-gray-100';
     }
   };
 

@@ -254,24 +254,24 @@ export class VisualFeedback {
     if (!config.enabled) return;
     
     switch (config.type) {
-      case 'ripple':
-        this.createRipple(element, config, position);
-        break;
-      case 'highlight':
-        this.createHighlight(element, config);
-        break;
-      case 'scale':
-        this.createScale(element, config);
-        break;
-      case 'glow':
-        this.createGlow(element, config);
-        break;
-      case 'pulse':
-        this.createPulse(element, config);
-        break;
-      case 'shake':
-        this.createShake(element, config);
-        break;
+    case 'ripple':
+      this.createRipple(element, config, position);
+      break;
+    case 'highlight':
+      this.createHighlight(element, config);
+      break;
+    case 'scale':
+      this.createScale(element, config);
+      break;
+    case 'glow':
+      this.createGlow(element, config);
+      break;
+    case 'pulse':
+      this.createPulse(element, config);
+      break;
+    case 'shake':
+      this.createShake(element, config);
+      break;
     }
   }
   

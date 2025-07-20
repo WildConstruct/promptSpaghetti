@@ -10,7 +10,7 @@ import {
   ContributorStatsResponse,
   AttributionPrivacySettings,
   AttributionSession,
-  AttributionContext,
+  AttributionContext
 } from '../types/attribution';
 
 interface UseAttributionReturn {
@@ -53,8 +53,8 @@ export const useAttribution = (): UseAttributionReturn => {
         ...options,
         headers: {
           'Content-Type': 'application/json',
-          ...options.headers,
-        },
+          ...options.headers
+        }
       });
 
       if (!response.ok) {
@@ -81,7 +81,7 @@ export const useAttribution = (): UseAttributionReturn => {
   const recordAttribution = useCallback(async (request: CreateAttributionRequest): Promise<ChangeAttribution> => {
     return apiCall<ChangeAttribution>('/api/attribution/record', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
@@ -155,21 +155,21 @@ export const useAttribution = (): UseAttributionReturn => {
   const startSession = useCallback(async (projectId: string, sessionId?: string): Promise<AttributionSession> => {
     return apiCall<AttributionSession>('/api/attribution/session/start', {
       method: 'POST',
-      body: JSON.stringify({ projectId, sessionId }),
+      body: JSON.stringify({ projectId, sessionId })
     });
   }, [apiCall]);
 
   const endSession = useCallback(async (sessionId: string): Promise<void> => {
     return apiCall<void>('/api/attribution/session/end', {
       method: 'POST',
-      body: JSON.stringify({ sessionId }),
+      body: JSON.stringify({ sessionId })
     });
   }, [apiCall]);
 
   const updatePrivacySettings = useCallback(async (request: UpdatePrivacySettingsRequest): Promise<AttributionPrivacySettings> => {
     return apiCall<AttributionPrivacySettings>(`/api/attribution/privacy/${request.projectId}`, {
       method: 'PUT',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
@@ -179,7 +179,7 @@ export const useAttribution = (): UseAttributionReturn => {
 
   const cleanupOldData = useCallback(async (projectId: string): Promise<void> => {
     return apiCall<void>(`/api/attribution/cleanup/${projectId}`, {
-      method: 'POST',
+      method: 'POST'
     });
   }, [apiCall]);
 
@@ -199,7 +199,7 @@ export const useAttribution = (): UseAttributionReturn => {
   const recordBatchAttributions = useCallback(async (projectId: string, attributions: any[], batchId?: string): Promise<ChangeAttribution[]> => {
     return apiCall<ChangeAttribution[]>('/api/attribution/batch', {
       method: 'POST',
-      body: JSON.stringify({ projectId, attributions, batchId }),
+      body: JSON.stringify({ projectId, attributions, batchId })
     });
   }, [apiCall]);
 
@@ -223,6 +223,6 @@ export const useAttribution = (): UseAttributionReturn => {
     getResourceAttribution,
     getAuthorAttribution,
     recordBatchAttributions,
-    clearError,
+    clearError
   };
 };

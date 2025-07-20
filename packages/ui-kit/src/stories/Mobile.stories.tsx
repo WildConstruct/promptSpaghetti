@@ -27,8 +27,8 @@ const meta: Meta = {
   parameters: {
     layout: 'fullscreen',
     viewport: {
-      defaultViewport: 'iphone12',
-    },
+      defaultViewport: 'iphone12'
+    }
   },
   decorators: [
     (Story) => {

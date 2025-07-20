@@ -12,7 +12,7 @@ const createDragEvent = (type: string, clientX: number, clientY: number, dataTra
     bubbles: true,
     cancelable: true,
     clientX,
-    clientY,
+    clientY
   }) as any;
   
   // Add dataTransfer for drag events
@@ -25,7 +25,7 @@ const createDragEvent = (type: string, clientX: number, clientY: number, dataTra
     },
     setData: jest.fn(),
     dropEffect: 'move',
-    effectAllowed: 'all',
+    effectAllowed: 'all'
   };
   
   return event;

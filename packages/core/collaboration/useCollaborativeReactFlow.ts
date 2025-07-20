@@ -88,16 +88,16 @@ export function useCollaborativeReactFlow() {
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     changes.forEach(change => {
       switch (change.type) {
-        case 'position':
-          if (change.position && change.dragging === false) {
-            // Only update position when drag is complete
-            updateNodePosition(change.id, change.position);
-          }
-          break;
+      case 'position':
+        if (change.position && change.dragging === false) {
+          // Only update position when drag is complete
+          updateNodePosition(change.id, change.position);
+        }
+        break;
         
-        case 'remove':
-          deleteNode(change.id);
-          break;
+      case 'remove':
+        deleteNode(change.id);
+        break;
       }
     });
   }, [updateNodePosition, deleteNode]);
@@ -106,9 +106,9 @@ export function useCollaborativeReactFlow() {
   const onEdgesChange = useCallback((changes: EdgeChange[]) => {
     changes.forEach(change => {
       switch (change.type) {
-        case 'remove':
-          deleteEdge(change.id);
-          break;
+      case 'remove':
+        deleteEdge(change.id);
+        break;
       }
     });
   }, [deleteEdge]);

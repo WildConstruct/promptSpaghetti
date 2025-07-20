@@ -414,7 +414,7 @@ export async function submissionRoutes(fastify: FastifyInstance) {
       let paramIndex = 1;
 
       if (request.query.active_only !== false) {
-        conditions.push(`is_active = true`);
+        conditions.push('is_active = true');
       }
 
       if (request.query.category) {

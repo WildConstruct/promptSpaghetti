@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
-import { Edge, Node } from "reactflow";
-import { ValidationError, validateConnection } from "../validation";
+import { useState, useCallback, useEffect } from 'react';
+import { Edge, Node } from 'reactflow';
+import { ValidationError, validateConnection } from '../validation';
 
 interface UseValidationReturn {
   errors: ValidationError[];
@@ -22,7 +22,7 @@ export const useValidation = ({
   nodes,
   highlightNodeIds = new Set(),
   highlightEdgeIds = new Set(),
-  validateConnection: customValidateConnection = validateConnection,
+  validateConnection: customValidateConnection = validateConnection
 }: UseValidationProps): UseValidationReturn => {
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
@@ -62,6 +62,6 @@ export const useValidation = ({
     errors,
     styledEdges,
     styledNodes,
-    runValidation,
+    runValidation
   };
 };

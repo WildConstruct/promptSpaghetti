@@ -40,54 +40,54 @@ export const WebGraphCanvas: React.FC<WebGraphCanvasProps> = ({
     const isCtrlOrCmd = e.ctrlKey || e.metaKey;
 
     switch (e.key) {
-      case 'Delete':
-      case 'Backspace':
-        // Delete selected node
-        if (props.selectedNodeId && !props.readOnly) {
-          e.preventDefault();
-          // onNodeDelete could be called here
-        }
-        break;
+    case 'Delete':
+    case 'Backspace':
+      // Delete selected node
+      if (props.selectedNodeId && !props.readOnly) {
+        e.preventDefault();
+        // onNodeDelete could be called here
+      }
+      break;
 
-      case 'z':
-        if (isCtrlOrCmd && enableUndo) {
-          e.preventDefault();
-          if (e.shiftKey) {
-            // Redo
-            handleRedo();
-          } else {
-            // Undo
-            handleUndo();
-          }
+    case 'z':
+      if (isCtrlOrCmd && enableUndo) {
+        e.preventDefault();
+        if (e.shiftKey) {
+          // Redo
+          handleRedo();
+        } else {
+          // Undo
+          handleUndo();
         }
-        break;
+      }
+      break;
 
-      case 'c':
-        if (isCtrlOrCmd && enableClipboard && props.selectedNodeId) {
-          e.preventDefault();
-          handleCopyNode();
-        }
-        break;
+    case 'c':
+      if (isCtrlOrCmd && enableClipboard && props.selectedNodeId) {
+        e.preventDefault();
+        handleCopyNode();
+      }
+      break;
 
-      case 'v':
-        if (isCtrlOrCmd && enableClipboard) {
-          e.preventDefault();
-          handlePasteNode();
-        }
-        break;
+    case 'v':
+      if (isCtrlOrCmd && enableClipboard) {
+        e.preventDefault();
+        handlePasteNode();
+      }
+      break;
 
-      case 'a':
-        if (isCtrlOrCmd) {
-          e.preventDefault();
-          // Select all nodes
-          handleSelectAll();
-        }
-        break;
+    case 'a':
+      if (isCtrlOrCmd) {
+        e.preventDefault();
+        // Select all nodes
+        handleSelectAll();
+      }
+      break;
 
-      case 'Escape':
-        // Deselect all
-        onNodeSelect?.(null);
-        break;
+    case 'Escape':
+      // Deselect all
+      onNodeSelect?.(null);
+      break;
     }
   }, [enableKeyboardShortcuts, enableUndo, enableClipboard, props.selectedNodeId, props.readOnly, onNodeSelect]);
 

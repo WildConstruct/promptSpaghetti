@@ -26,18 +26,18 @@ describe('OrganizationService', () => {
     mockDbService = {
       query: jest.fn(),
       transaction: jest.fn(),
-      healthCheck: jest.fn(),
+      healthCheck: jest.fn()
     } as any;
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn(),
+      logEvent: jest.fn()
     } as any;
 
     // Mock RBAC service
     mockRbacService = {
       createRole: jest.fn(),
-      assignRole: jest.fn(),
+      assignRole: jest.fn()
     } as any;
 
     // Mock config
@@ -47,19 +47,19 @@ describe('OrganizationService', () => {
         issuer: 'test-issuer',
         audience: 'test-audience',
         accessTokenExpiry: '15m',
-        refreshTokenExpiry: '7d',
+        refreshTokenExpiry: '7d'
       },
       database: {
         host: 'localhost',
         port: 5432,
         name: 'test_db',
         user: 'test_user',
-        password: 'test_password',
+        password: 'test_password'
       },
       redis: {
         host: 'localhost',
-        port: 6379,
-      },
+        port: 6379
+      }
     } as any;
 
     organizationService = new OrganizationService(
@@ -83,7 +83,7 @@ describe('OrganizationService', () => {
         const mockTransaction = {
           query: jest.fn(),
           commit: jest.fn(),
-          rollback: jest.fn(),
+          rollback: jest.fn()
         };
 
         mockDbService.transaction.mockImplementation((callback) => 
@@ -103,7 +103,7 @@ describe('OrganizationService', () => {
           scope: 'organization',
           organizationId: 'test-uuid-123',
           createdAt: new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date()
         });
 
         mockRbacService.createRole.mockResolvedValueOnce({
@@ -113,7 +113,7 @@ describe('OrganizationService', () => {
           scope: 'organization',
           organizationId: 'test-uuid-123',
           createdAt: new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date()
         });
 
         mockRbacService.createRole.mockResolvedValueOnce({
@@ -123,7 +123,7 @@ describe('OrganizationService', () => {
           scope: 'organization',
           organizationId: 'test-uuid-123',
           createdAt: new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date()
         });
 
         mockRbacService.assignRole.mockResolvedValue({} as any);
@@ -133,12 +133,12 @@ describe('OrganizationService', () => {
           name: 'Test Organization',
           description: 'A test organization',
           plan: 'pro',
-          maxUsers: 50,
+          maxUsers: 50
         };
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         const result = await organizationService.createOrganization(data, 'user-123', context);
@@ -149,7 +149,7 @@ describe('OrganizationService', () => {
           slug: 'test-organization',
           description: 'A test organization',
           plan: 'pro',
-          maxUsers: 50,
+          maxUsers: 50
         });
 
         expect(mockTransaction.query).toHaveBeenCalledTimes(2);
@@ -163,11 +163,11 @@ describe('OrganizationService', () => {
           details: {
             organizationName: 'Test Organization',
             slug: 'test-organization',
-            plan: 'pro',
+            plan: 'pro'
           },
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
-          severity: 'info',
+          severity: 'info'
         });
         expect(mockTransaction.commit).toHaveBeenCalled();
       });
@@ -176,7 +176,7 @@ describe('OrganizationService', () => {
         const mockTransaction = {
           query: jest.fn(),
           commit: jest.fn(),
-          rollback: jest.fn(),
+          rollback: jest.fn()
         };
 
         mockDbService.transaction.mockImplementation((callback) => 
@@ -185,12 +185,12 @@ describe('OrganizationService', () => {
 
         // Mock existing organization with same slug
         mockTransaction.query.mockResolvedValueOnce({
-          rows: [{ id: 'existing-org-123' }],
+          rows: [{ id: 'existing-org-123' }]
         });
 
         const data: CreateOrganizationData = {
           name: 'Test Organization',
-          slug: 'existing-slug',
+          slug: 'existing-slug'
         };
 
         await expect(
@@ -204,7 +204,7 @@ describe('OrganizationService', () => {
         const mockTransaction = {
           query: jest.fn(),
           commit: jest.fn(),
-          rollback: jest.fn(),
+          rollback: jest.fn()
         };
 
         mockDbService.transaction.mockImplementation((callback) => 
@@ -218,13 +218,13 @@ describe('OrganizationService', () => {
           id: 'role-123',
           name: 'test-role',
           createdAt: new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date()
         } as any);
         mockRbacService.assignRole.mockResolvedValue({} as any);
         mockAuditService.logEvent.mockResolvedValue();
 
         const data: CreateOrganizationData = {
-          name: 'Test Organization 123!',
+          name: 'Test Organization 123!'
         };
 
         const result = await organizationService.createOrganization(data, 'user-123');
@@ -245,7 +245,7 @@ describe('OrganizationService', () => {
           settings: {},
           branding: {},
           createdAt: new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date()
         };
 
         // Mock getOrganizationById
@@ -257,12 +257,12 @@ describe('OrganizationService', () => {
         const updates: UpdateOrganizationData = {
           name: 'Updated Name',
           description: 'Updated description',
-          plan: 'pro',
+          plan: 'pro'
         };
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         const result = await organizationService.updateOrganization('org-123', updates, 'user-123', context);
@@ -271,7 +271,7 @@ describe('OrganizationService', () => {
           id: 'org-123',
           name: 'Updated Name',
           description: 'Updated description',
-          plan: 'pro',
+          plan: 'pro'
         });
 
         expect(mockDbService.query).toHaveBeenCalledWith(
@@ -289,12 +289,12 @@ describe('OrganizationService', () => {
             previousValues: {
               name: 'Original Name',
               description: 'Original description',
-              plan: 'free',
-            },
+              plan: 'free'
+            }
           },
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
-          severity: 'info',
+          severity: 'info'
         });
       });
 
@@ -302,7 +302,7 @@ describe('OrganizationService', () => {
         jest.spyOn(organizationService, 'getOrganizationById').mockResolvedValue(null);
 
         const updates: UpdateOrganizationData = {
-          name: 'Updated Name',
+          name: 'Updated Name'
         };
 
         await expect(
@@ -316,13 +316,13 @@ describe('OrganizationService', () => {
         const mockTransaction = {
           query: jest.fn(),
           commit: jest.fn(),
-          rollback: jest.fn(),
+          rollback: jest.fn()
         };
 
         const mockOrganization = {
           id: 'org-123',
           name: 'Test Organization',
-          slug: 'test-org',
+          slug: 'test-org'
         };
 
         mockDbService.transaction.mockResolvedValue(mockTransaction as any);
@@ -333,7 +333,7 @@ describe('OrganizationService', () => {
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         await organizationService.deleteOrganization('org-123', 'user-123', context);
@@ -347,11 +347,11 @@ describe('OrganizationService', () => {
           resourceId: 'org-123',
           details: {
             organizationName: 'Test Organization',
-            slug: 'test-org',
+            slug: 'test-org'
           },
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
-          severity: 'warning',
+          severity: 'warning'
         });
       });
 
@@ -359,7 +359,7 @@ describe('OrganizationService', () => {
         const mockTransaction = {
           query: jest.fn(),
           commit: jest.fn(),
-          rollback: jest.fn(),
+          rollback: jest.fn()
         };
 
         mockDbService.transaction.mockImplementation((callback) => 
@@ -390,7 +390,7 @@ describe('OrganizationService', () => {
           max_users: 10,
           created_at: new Date(),
           updated_at: new Date(),
-          deleted_at: null,
+          deleted_at: null
         };
 
         mockDbService.query.mockResolvedValue({ rows: [mockRow] } as any);
@@ -402,7 +402,7 @@ describe('OrganizationService', () => {
           name: 'Test Organization',
           slug: 'test-org',
           plan: 'free',
-          maxUsers: 10,
+          maxUsers: 10
         });
 
         expect(mockDbService.query).toHaveBeenCalledWith(
@@ -433,7 +433,7 @@ describe('OrganizationService', () => {
           userId: 'user-123',
           role: 'owner',
           joinedAt: new Date(),
-          invitedBy: 'user-123',
+          invitedBy: 'user-123'
         });
 
         mockAuditService.logEvent.mockResolvedValue();
@@ -442,12 +442,12 @@ describe('OrganizationService', () => {
           organizationId: 'org-123',
           name: 'Development Team',
           description: 'Main development team',
-          parentTeamId: 'parent-team-123',
+          parentTeamId: 'parent-team-123'
         };
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         const result = await organizationService.createTeam(data, 'user-123', context);
@@ -457,7 +457,7 @@ describe('OrganizationService', () => {
           organizationId: 'org-123',
           name: 'Development Team',
           description: 'Main development team',
-          parentTeamId: 'parent-team-123',
+          parentTeamId: 'parent-team-123'
         });
 
         expect(mockDbService.query).toHaveBeenCalledWith(
@@ -473,11 +473,11 @@ describe('OrganizationService', () => {
           details: {
             teamName: 'Development Team',
             organizationId: 'org-123',
-            parentTeamId: 'parent-team-123',
+            parentTeamId: 'parent-team-123'
           },
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
-          severity: 'info',
+          severity: 'info'
         });
       });
     });
@@ -492,7 +492,7 @@ describe('OrganizationService', () => {
           parentTeamId: null,
           settings: {},
           createdAt: new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date()
         };
 
         jest.spyOn(organizationService, 'getTeamById').mockResolvedValue(mockTeam as any);
@@ -501,12 +501,12 @@ describe('OrganizationService', () => {
 
         const updates: UpdateTeamData = {
           name: 'Updated Team',
-          description: 'Updated description',
+          description: 'Updated description'
         };
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         const result = await organizationService.updateTeam('team-123', updates, 'user-123', context);
@@ -514,7 +514,7 @@ describe('OrganizationService', () => {
         expect(result).toMatchObject({
           id: 'team-123',
           name: 'Updated Team',
-          description: 'Updated description',
+          description: 'Updated description'
         });
 
         expect(mockDbService.query).toHaveBeenCalledWith(
@@ -527,7 +527,7 @@ describe('OrganizationService', () => {
         jest.spyOn(organizationService, 'getTeamById').mockResolvedValue(null);
 
         const updates: UpdateTeamData = {
-          name: 'Updated Team',
+          name: 'Updated Team'
         };
 
         await expect(
@@ -541,13 +541,13 @@ describe('OrganizationService', () => {
         const mockTransaction = {
           query: jest.fn(),
           commit: jest.fn(),
-          rollback: jest.fn(),
+          rollback: jest.fn()
         };
 
         const mockTeam = {
           id: 'team-123',
           organizationId: 'org-123',
-          name: 'Test Team',
+          name: 'Test Team'
         };
 
         mockDbService.transaction.mockResolvedValue(mockTransaction as any);
@@ -563,7 +563,7 @@ describe('OrganizationService', () => {
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         await organizationService.deleteTeam('team-123', 'user-123', context);
@@ -576,11 +576,11 @@ describe('OrganizationService', () => {
           resourceId: 'team-123',
           details: {
             teamName: 'Test Team',
-            organizationId: 'org-123',
+            organizationId: 'org-123'
           },
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
-          severity: 'warning',
+          severity: 'warning'
         });
       });
 
@@ -588,12 +588,12 @@ describe('OrganizationService', () => {
         const mockTransaction = {
           query: jest.fn(),
           commit: jest.fn(),
-          rollback: jest.fn(),
+          rollback: jest.fn()
         };
 
         const mockTeam = {
           id: 'team-123',
-          name: 'Test Team',
+          name: 'Test Team'
         };
 
         mockDbService.transaction.mockResolvedValue(mockTransaction as any);
@@ -625,12 +625,12 @@ describe('OrganizationService', () => {
           teamId: 'team-123',
           userId: 'user-456',
           role: 'member',
-          invitedBy: 'user-123',
+          invitedBy: 'user-123'
         };
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         const result = await organizationService.addTeamMember(data, context);
@@ -640,7 +640,7 @@ describe('OrganizationService', () => {
           teamId: 'team-123',
           userId: 'user-456',
           role: 'member',
-          invitedBy: 'user-123',
+          invitedBy: 'user-123'
         });
 
         expect(mockDbService.query).toHaveBeenCalledWith(
@@ -657,7 +657,7 @@ describe('OrganizationService', () => {
           teamId: 'team-123',
           userId: 'user-456',
           role: 'member',
-          invitedBy: 'user-123',
+          invitedBy: 'user-123'
         };
 
         await expect(organizationService.addTeamMember(data)).rejects.toThrow(
@@ -669,13 +669,13 @@ describe('OrganizationService', () => {
     describe('removeTeamMember', () => {
       it('should remove team member successfully', async () => {
         mockDbService.query.mockResolvedValue({
-          rows: [{ id: 'member-123', role: 'member' }],
+          rows: [{ id: 'member-123', role: 'member' }]
         } as any);
         mockAuditService.logEvent.mockResolvedValue();
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         await organizationService.removeTeamMember('team-123', 'user-456', 'user-123', context);
@@ -693,11 +693,11 @@ describe('OrganizationService', () => {
           details: {
             teamId: 'team-123',
             removedUserId: 'user-456',
-            previousRole: 'member',
+            previousRole: 'member'
           },
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
-          severity: 'info',
+          severity: 'info'
         });
       });
 
@@ -713,13 +713,13 @@ describe('OrganizationService', () => {
     describe('updateTeamMemberRole', () => {
       it('should update team member role successfully', async () => {
         mockDbService.query.mockResolvedValue({
-          rows: [{ id: 'member-123', role: 'member' }],
+          rows: [{ id: 'member-123', role: 'member' }]
         } as any);
         mockAuditService.logEvent.mockResolvedValue();
 
         const context = {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Agent',
+          userAgent: 'Test Agent'
         };
 
         await organizationService.updateTeamMemberRole('team-123', 'user-456', 'admin', 'user-123', context);
@@ -738,11 +738,11 @@ describe('OrganizationService', () => {
             teamId: 'team-123',
             targetUserId: 'user-456',
             newRole: 'admin',
-            previousRole: 'member',
+            previousRole: 'member'
           },
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
-          severity: 'info',
+          severity: 'info'
         });
       });
     });
@@ -766,13 +766,13 @@ describe('OrganizationService', () => {
           planLimits: {
             maxUsers: 100,
             maxTeams: 50,
-            maxStorage: 10240,
+            maxStorage: 10240
           },
           usage: {
             users: 15,
             teams: 8,
-            storage: 0,
-          },
+            storage: 0
+          }
         });
       });
     });
@@ -825,19 +825,19 @@ describe('OrganizationService', () => {
       expect(getPlanLimits('free')).toEqual({
         maxUsers: 10,
         maxTeams: 5,
-        maxStorage: 1024,
+        maxStorage: 1024
       });
 
       expect(getPlanLimits('pro')).toEqual({
         maxUsers: 100,
         maxTeams: 50,
-        maxStorage: 10240,
+        maxStorage: 10240
       });
 
       expect(getPlanLimits('enterprise')).toEqual({
         maxUsers: 1000,
         maxTeams: 500,
-        maxStorage: 102400,
+        maxStorage: 102400
       });
     });
   });
@@ -846,5 +846,5 @@ describe('OrganizationService', () => {
 // Mock crypto.randomUUID for consistent testing
 jest.mock('crypto', () => ({
   ...jest.requireActual('crypto'),
-  randomUUID: jest.fn(() => 'test-uuid-123'),
+  randomUUID: jest.fn(() => 'test-uuid-123')
 }));

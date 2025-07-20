@@ -28,23 +28,23 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
   protected getIOSpec() {
     return new IOSpecBuilder()
       .input('text', 'string')
-        .required()
-        .description('Text to process')
-        .constraint(ValidationHelpers.lengthConstraint(1, 10000))
+      .required()
+      .description('Text to process')
+      .constraint(ValidationHelpers.lengthConstraint(1, 10000))
       .input('operation', 'string')
-        .required()
-        .description('Processing operation to perform')
-        .constraint(ValidationHelpers.customConstraint(
-          (value) => ['uppercase', 'lowercase', 'title', 'reverse', 'clean'].includes(value)
-        ))
+      .required()
+      .description('Processing operation to perform')
+      .constraint(ValidationHelpers.customConstraint(
+        (value) => ['uppercase', 'lowercase', 'title', 'reverse', 'clean'].includes(value)
+      ))
       .input('options', 'object')
-        .optional()
-        .defaultValue({})
-        .description('Additional processing options')
+      .optional()
+      .defaultValue({})
+      .description('Additional processing options')
       .output('result', 'string')
-        .description('Processed text')
+      .description('Processed text')
       .output('metadata', 'object')
-        .description('Processing metadata and statistics')
+      .description('Processing metadata and statistics')
       .build();
   }
 
@@ -131,23 +131,23 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
   ): Promise<string> {
     
     switch (operation) {
-      case 'uppercase':
-        return this.processUppercase(text, options);
+    case 'uppercase':
+      return this.processUppercase(text, options);
       
-      case 'lowercase':
-        return this.processLowercase(text, options);
+    case 'lowercase':
+      return this.processLowercase(text, options);
       
-      case 'title':
-        return this.processTitleCase(text, options);
+    case 'title':
+      return this.processTitleCase(text, options);
       
-      case 'reverse':
-        return this.processReverse(text, options);
+    case 'reverse':
+      return this.processReverse(text, options);
       
-      case 'clean':
-        return this.processClean(text, options);
+    case 'clean':
+      return this.processClean(text, options);
       
-      default:
-        throw new Error(`Unsupported operation: ${operation}`);
+    default:
+      throw new Error(`Unsupported operation: ${operation}`);
     }
   }
 

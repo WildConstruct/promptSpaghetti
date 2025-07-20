@@ -255,28 +255,28 @@ export class AdvancedIOHandler {
    */
   private isValidType(value: any, dataType: IODataType): boolean {
     switch (dataType) {
-      case 'string':
-        return typeof value === 'string';
-      case 'number':
-        return typeof value === 'number' && !isNaN(value);
-      case 'boolean':
-        return typeof value === 'boolean';
-      case 'array':
-        return Array.isArray(value);
-      case 'object':
-        return typeof value === 'object' && value !== null && !Array.isArray(value);
-      case 'stringArray':
-        return Array.isArray(value) && value.every(v => typeof v === 'string');
-      case 'numberArray':
-        return Array.isArray(value) && value.every(v => typeof v === 'number');
-      case 'any':
-        return true;
-      case 'choice':
-        return typeof value === 'string' || typeof value === 'number';
-      case 'conditional':
-        return typeof value === 'boolean' || typeof value === 'string';
-      default:
-        return false;
+    case 'string':
+      return typeof value === 'string';
+    case 'number':
+      return typeof value === 'number' && !isNaN(value);
+    case 'boolean':
+      return typeof value === 'boolean';
+    case 'array':
+      return Array.isArray(value);
+    case 'object':
+      return typeof value === 'object' && value !== null && !Array.isArray(value);
+    case 'stringArray':
+      return Array.isArray(value) && value.every(v => typeof v === 'string');
+    case 'numberArray':
+      return Array.isArray(value) && value.every(v => typeof v === 'number');
+    case 'any':
+      return true;
+    case 'choice':
+      return typeof value === 'string' || typeof value === 'number';
+    case 'conditional':
+      return typeof value === 'boolean' || typeof value === 'string';
+    default:
+      return false;
     }
   }
 
@@ -390,31 +390,31 @@ export class AdvancedIOHandler {
    */
   private performCoercion(value: any, from: IODataType, to: IODataType): any {
     switch (to) {
-      case 'string':
-        return String(value);
-      case 'number':
-        const num = Number(value);
-        if (isNaN(num)) throw new Error(`Cannot convert ${value} to number`);
-        return num;
-      case 'boolean':
-        if (typeof value === 'string') {
-          return value.toLowerCase() === 'true' || value === '1';
-        }
-        return Boolean(value);
-      case 'array':
-        return Array.isArray(value) ? value : [value];
-      case 'stringArray':
-        const arr = Array.isArray(value) ? value : [value];
-        return arr.map(v => String(v));
-      case 'numberArray':
-        const numArr = Array.isArray(value) ? value : [value];
-        return numArr.map(v => {
-          const n = Number(v);
-          if (isNaN(n)) throw new Error(`Cannot convert ${v} to number`);
-          return n;
-        });
-      default:
-        throw new Error(`Cannot coerce to type ${to}`);
+    case 'string':
+      return String(value);
+    case 'number':
+      const num = Number(value);
+      if (isNaN(num)) throw new Error(`Cannot convert ${value} to number`);
+      return num;
+    case 'boolean':
+      if (typeof value === 'string') {
+        return value.toLowerCase() === 'true' || value === '1';
+      }
+      return Boolean(value);
+    case 'array':
+      return Array.isArray(value) ? value : [value];
+    case 'stringArray':
+      const arr = Array.isArray(value) ? value : [value];
+      return arr.map(v => String(v));
+    case 'numberArray':
+      const numArr = Array.isArray(value) ? value : [value];
+      return numArr.map(v => {
+        const n = Number(v);
+        if (isNaN(n)) throw new Error(`Cannot convert ${v} to number`);
+        return n;
+      });
+    default:
+      throw new Error(`Cannot coerce to type ${to}`);
     }
   }
 }

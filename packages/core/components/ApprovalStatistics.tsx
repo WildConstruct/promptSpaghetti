@@ -102,22 +102,22 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'in_review': return 'bg-blue-100 text-blue-800';
-      case 'approved': return 'bg-green-100 text-green-800';
-      case 'rejected': return 'bg-red-100 text-red-800';
-      case 'expired': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'pending': return 'bg-yellow-100 text-yellow-800';
+    case 'in_review': return 'bg-blue-100 text-blue-800';
+    case 'approved': return 'bg-green-100 text-green-800';
+    case 'rejected': return 'bg-red-100 text-red-800';
+    case 'expired': return 'bg-gray-100 text-gray-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+    case 'critical': return 'bg-red-500';
+    case 'high': return 'bg-orange-500';
+    case 'medium': return 'bg-yellow-500';
+    case 'low': return 'bg-green-500';
+    default: return 'bg-gray-500';
     }
   };
 
@@ -328,12 +328,12 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
             type="bar"
             colorMap={(status) => {
               switch (status) {
-                case 'pending': return 'bg-yellow-500';
-                case 'in_review': return 'bg-blue-500';
-                case 'approved': return 'bg-green-500';
-                case 'rejected': return 'bg-red-500';
-                case 'expired': return 'bg-gray-500';
-                default: return 'bg-gray-500';
+              case 'pending': return 'bg-yellow-500';
+              case 'in_review': return 'bg-blue-500';
+              case 'approved': return 'bg-green-500';
+              case 'rejected': return 'bg-red-500';
+              case 'expired': return 'bg-gray-500';
+              default: return 'bg-gray-500';
               }
             }}
           />

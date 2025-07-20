@@ -21,7 +21,7 @@ jest.mock('lucide-react', () => ({
   ChevronDown: () => <div data-testid="chevron-down-icon" />,
   UserPlus: () => <div data-testid="user-plus-icon" />,
   Settings: () => <div data-testid="settings-icon" />,
-  Activity: () => <div data-testid="activity-icon" />,
+  Activity: () => <div data-testid="activity-icon" />
 }));
 
 describe('TeamManager', () => {
@@ -36,7 +36,7 @@ describe('TeamManager', () => {
       createdAt: new Date('2023-01-01'),
       updatedAt: new Date('2023-01-01'),
       level: 0,
-      path: ['Engineering'],
+      path: ['Engineering']
     },
     {
       id: 'team-2',
@@ -48,7 +48,7 @@ describe('TeamManager', () => {
       createdAt: new Date('2023-01-02'),
       updatedAt: new Date('2023-01-02'),
       level: 1,
-      path: ['Engineering', 'Frontend'],
+      path: ['Engineering', 'Frontend']
     },
     {
       id: 'team-3',
@@ -60,8 +60,8 @@ describe('TeamManager', () => {
       createdAt: new Date('2023-01-03'),
       updatedAt: new Date('2023-01-03'),
       level: 1,
-      path: ['Engineering', 'Backend'],
-    },
+      path: ['Engineering', 'Backend']
+    }
   ];
 
   const mockMembers = [
@@ -77,8 +77,8 @@ describe('TeamManager', () => {
         displayName: 'Team Owner',
         firstName: 'Team',
         lastName: 'Owner',
-        avatarUrl: null,
-      },
+        avatarUrl: null
+      }
     },
     {
       id: 'member-2',
@@ -92,9 +92,9 @@ describe('TeamManager', () => {
         displayName: 'Team Member',
         firstName: 'Team',
         lastName: 'Member',
-        avatarUrl: null,
-      },
-    },
+        avatarUrl: null
+      }
+    }
   ];
 
   const defaultProps = {
@@ -105,7 +105,7 @@ describe('TeamManager', () => {
     onAddMember: jest.fn(),
     onRemoveMember: jest.fn(),
     onUpdateMemberRole: jest.fn(),
-    onLoadMembers: jest.fn(),
+    onLoadMembers: jest.fn()
   };
 
   beforeEach(() => {
@@ -188,7 +188,7 @@ describe('TeamManager', () => {
         name: 'DevOps Team',
         description: 'DevOps and infrastructure team',
         parentTeamId: 'team-1',
-        settings: {},
+        settings: {}
       });
     });
   });
@@ -260,7 +260,7 @@ describe('TeamManager', () => {
         name: 'Updated Engineering',
         description: 'Engineering team',
         parentTeamId: null,
-        settings: {},
+        settings: {}
       });
     });
   });
@@ -400,7 +400,7 @@ describe('TeamManager', () => {
     await waitFor(() => {
       expect(mockAddMember).toHaveBeenCalledWith('team-1', {
         userEmail: 'newmember@example.com',
-        role: 'member',
+        role: 'member'
       });
     });
   });

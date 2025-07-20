@@ -30,8 +30,8 @@ test.describe('Large Graph Performance', () => {
 
     // Start performance monitoring
     const startTime = performance.now();
-    let frameCount = 0;
-    let lastFrameTime = startTime;
+    const frameCount = 0;
+    const lastFrameTime = startTime;
 
     // Monitor FPS for 5 seconds
     const fpsPromise = page.evaluate(() => {
@@ -91,7 +91,7 @@ test.describe('Large Graph Performance', () => {
     expect(memoryUsage).toBeLessThan(500); // Should use less than 500MB
     
     // Log performance metrics
-    console.log(`Performance metrics for 250-node graph:`);
+    console.log('Performance metrics for 250-node graph:');
     console.log(`Average FPS: ${fps.toFixed(2)}`);
     console.log(`Memory usage: ${memoryUsage.toFixed(2)} MB`);
   });
@@ -162,19 +162,19 @@ function generateLargeGraph(nodeCount: number) {
  */
 function getDefaultNodeData(nodeType: string) {
   switch (nodeType) {
-    case 'WeightedChoice':
-      return { choices: ['option1', 'option2'], weights: [0.5, 0.5] };
-    case 'Concat':
-      return { separator: ' ' };
-    case 'Output':
-      return { template: 'Output: {{value}}' };
-    case 'Include':
-      return { bundleName: 'example' };
-    case 'SetVariable':
-      return { variableName: 'var1', value: 'default' };
-    case 'GetVariable':
-      return { variableName: 'var1' };
-    default:
-      return {};
+  case 'WeightedChoice':
+    return { choices: ['option1', 'option2'], weights: [0.5, 0.5] };
+  case 'Concat':
+    return { separator: ' ' };
+  case 'Output':
+    return { template: 'Output: {{value}}' };
+  case 'Include':
+    return { bundleName: 'example' };
+  case 'SetVariable':
+    return { variableName: 'var1', value: 'default' };
+  case 'GetVariable':
+    return { variableName: 'var1' };
+  default:
+    return {};
   }
 }

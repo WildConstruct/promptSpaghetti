@@ -111,36 +111,36 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'templates':
-        return (
-          <ExportTemplateList
-            templates={templates}
-            onTemplateSelect={handleTemplateSelect}
-            onQuickExport={handleQuickExport}
-            loading={loading}
-            error={error}
-          />
-        );
-      case 'jobs':
-        return (
-          <ExportJobList
-            jobs={jobs}
-            onCancel={cancelExportJob}
-            onRefresh={fetchJobs}
-            loading={loading}
-            error={error}
-          />
-        );
-      case 'statistics':
-        return (
-          <ExportStatsDashboard
-            statistics={statistics}
-            loading={loading}
-            error={error}
-          />
-        );
-      default:
-        return null;
+    case 'templates':
+      return (
+        <ExportTemplateList
+          templates={templates}
+          onTemplateSelect={handleTemplateSelect}
+          onQuickExport={handleQuickExport}
+          loading={loading}
+          error={error}
+        />
+      );
+    case 'jobs':
+      return (
+        <ExportJobList
+          jobs={jobs}
+          onCancel={cancelExportJob}
+          onRefresh={fetchJobs}
+          loading={loading}
+          error={error}
+        />
+      );
+    case 'statistics':
+      return (
+        <ExportStatsDashboard
+          statistics={statistics}
+          loading={loading}
+          error={error}
+        />
+      );
+    default:
+      return null;
     }
   };
 

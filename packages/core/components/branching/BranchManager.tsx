@@ -22,7 +22,7 @@ import {
   Row,
   Col,
   Drawer,
-  Divider,
+  Divider
 } from 'antd';
 import {
   BranchesOutlined,
@@ -41,7 +41,7 @@ import {
   ForkOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
-  ExclamationCircleOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { 
   ProjectBranch,
@@ -54,7 +54,7 @@ import {
   ProtectionLevel,
   BRANCH_TYPE_DESCRIPTIONS,
   BRANCH_STATUS_DESCRIPTIONS,
-  PROTECTION_LEVEL_DESCRIPTIONS,
+  PROTECTION_LEVEL_DESCRIPTIONS
 } from '../../types/branching';
 import { useBranching } from '../../hooks/useBranching';
 import { MergeRequestPanel } from './MergeRequestPanel';
@@ -91,44 +91,44 @@ const BranchNode: React.FC<BranchNodeProps> = ({
 }) => {
   const getBranchTypeColor = (type: BranchType) => {
     switch (type) {
-      case 'main':
-        return 'purple';
-      case 'feature':
-        return 'blue';
-      case 'hotfix':
-        return 'red';
-      case 'release':
-        return 'green';
-      case 'experiment':
-        return 'orange';
-      default:
-        return 'default';
+    case 'main':
+      return 'purple';
+    case 'feature':
+      return 'blue';
+    case 'hotfix':
+      return 'red';
+    case 'release':
+      return 'green';
+    case 'experiment':
+      return 'orange';
+    default:
+      return 'default';
     }
   };
 
   const getBranchStatusColor = (status: BranchStatus) => {
     switch (status) {
-      case 'active':
-        return 'success';
-      case 'merged':
-        return 'processing';
-      case 'abandoned':
-        return 'error';
-      case 'archived':
-        return 'default';
-      default:
-        return 'default';
+    case 'active':
+      return 'success';
+    case 'merged':
+      return 'processing';
+    case 'abandoned':
+      return 'error';
+    case 'archived':
+      return 'default';
+    default:
+      return 'default';
     }
   };
 
   const getProtectionIcon = (level: ProtectionLevel) => {
     switch (level) {
-      case 'locked':
-        return <LockOutlined style={{ color: '#ff4d4f' }} />;
-      case 'protected':
-        return <LockOutlined style={{ color: '#fa8c16' }} />;
-      default:
-        return <UnlockOutlined style={{ color: '#52c41a' }} />;
+    case 'locked':
+      return <LockOutlined style={{ color: '#ff4d4f' }} />;
+    case 'protected':
+      return <LockOutlined style={{ color: '#fa8c16' }} />;
+    default:
+      return <UnlockOutlined style={{ color: '#52c41a' }} />;
     }
   };
 
@@ -176,7 +176,7 @@ const BranchNode: React.FC<BranchNodeProps> = ({
         backgroundColor: isSelected ? '#e6f7ff' : 'transparent',
         border: isSelected ? '1px solid #1890ff' : '1px solid transparent',
         marginBottom: '4px',
-        cursor: 'pointer',
+        cursor: 'pointer'
       }}
       onClick={() => onSelect(branch.id)}
     >
@@ -237,7 +237,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
   onBranchSelect,
   onBranchCreate,
   onBranchUpdate,
-  onBranchDelete,
+  onBranchDelete
 }) => {
   const [hierarchy, setHierarchy] = useState<BranchHierarchy[]>([]);
   const [stats, setStats] = useState<BranchStatsResponse | null>(null);
@@ -256,7 +256,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
     getBranchHierarchy,
     getBranchStats,
     loading,
-    error,
+    error
   } = useBranching();
 
   useEffect(() => {
@@ -267,7 +267,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
     try {
       const [hierarchyData, statsData] = await Promise.all([
         getBranchHierarchy(projectId),
-        getBranchStats(projectId),
+        getBranchStats(projectId)
       ]);
       setHierarchy(hierarchyData);
       setStats(statsData);
@@ -288,7 +288,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
         autoMergeEnabled: values.autoMergeEnabled || false,
         requiresReview: values.requiresReview || false,
         allowForcePush: values.allowForcePush || false,
-        deleteOnMerge: values.deleteOnMerge || false,
+        deleteOnMerge: values.deleteOnMerge || false
       };
 
       const branch = await createBranch(request);
@@ -313,7 +313,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
         autoMergeEnabled: values.autoMergeEnabled,
         requiresReview: values.requiresReview,
         allowForcePush: values.allowForcePush,
-        deleteOnMerge: values.deleteOnMerge,
+        deleteOnMerge: values.deleteOnMerge
       };
 
       const branch = await updateBranch(editingBranch.id, request);
@@ -352,7 +352,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
       autoMergeEnabled: branch.autoMergeEnabled,
       requiresReview: branch.requiresReview,
       allowForcePush: branch.allowForcePush,
-      deleteOnMerge: branch.deleteOnMerge,
+      deleteOnMerge: branch.deleteOnMerge
     });
     setShowEditModal(true);
   };
@@ -498,7 +498,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
             autoMergeEnabled: false,
             requiresReview: false,
             allowForcePush: false,
-            deleteOnMerge: false,
+            deleteOnMerge: false
           }}
         >
           <Form.Item

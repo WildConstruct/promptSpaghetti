@@ -172,7 +172,7 @@ describe('Cross-Platform Integration', () => {
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
       configurable: true,
-      value: 375,
+      value: 375
     });
     
     Object.defineProperty(window, 'matchMedia', {
@@ -185,8 +185,8 @@ describe('Cross-Platform Integration', () => {
         removeListener: jest.fn(),
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
+        dispatchEvent: jest.fn()
+      }))
     });
     
     renderApp('mobile');

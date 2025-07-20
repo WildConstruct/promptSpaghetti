@@ -333,37 +333,37 @@ export async function auditRoutes(fastify: FastifyInstance) {
       const filename = `audit-logs-${timestamp}.${format}`;
       
       switch (format) {
-        case 'csv':
-          reply.header('Content-Type', 'text/csv');
-          reply.header('Content-Disposition', `attachment; filename="${filename}"`);
-          reply.send(await this.exportAsCSV(result.events, request.query));
-          break;
+      case 'csv':
+        reply.header('Content-Type', 'text/csv');
+        reply.header('Content-Disposition', `attachment; filename="${filename}"`);
+        reply.send(await this.exportAsCSV(result.events, request.query));
+        break;
           
-        case 'xml':
-          reply.header('Content-Type', 'application/xml');
-          reply.header('Content-Disposition', `attachment; filename="${filename}"`);
-          reply.send(await this.exportAsXML(result.events, request.query));
-          break;
+      case 'xml':
+        reply.header('Content-Type', 'application/xml');
+        reply.header('Content-Disposition', `attachment; filename="${filename}"`);
+        reply.send(await this.exportAsXML(result.events, request.query));
+        break;
           
-        case 'pdf':
-          reply.header('Content-Type', 'application/pdf');
-          reply.header('Content-Disposition', `attachment; filename="${filename}"`);
-          reply.send(await this.exportAsPDF(result.events, request.query));
-          break;
+      case 'pdf':
+        reply.header('Content-Type', 'application/pdf');
+        reply.header('Content-Disposition', `attachment; filename="${filename}"`);
+        reply.send(await this.exportAsPDF(result.events, request.query));
+        break;
           
-        default: // json
-          reply.header('Content-Type', 'application/json');
-          reply.header('Content-Disposition', `attachment; filename="${filename}"`);
-          reply.send({
-            exportInfo: {
-              generatedAt: new Date().toISOString(),
-              format: 'json',
-              eventCount: result.events.length,
-              query: request.query
-            },
-            events: result.events,
-            summary: result.summary
-          });
+      default: // json
+        reply.header('Content-Type', 'application/json');
+        reply.header('Content-Disposition', `attachment; filename="${filename}"`);
+        reply.send({
+          exportInfo: {
+            generatedAt: new Date().toISOString(),
+            format: 'json',
+            eventCount: result.events.length,
+            query: request.query
+          },
+          events: result.events,
+          summary: result.summary
+        });
       }
     } catch (error: any) {
       reply.code(500).send({

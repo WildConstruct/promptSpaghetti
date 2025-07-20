@@ -222,3 +222,25 @@ The system creates these tables:
 - `commit_tracking` - Tracks commits per ticket
 - `ticket_history` - Audit trail of changes
 - `github_automation_config` - Configuration settings
+
+## Agent Integration
+
+The ticket system is fully integrated with the agent architecture:
+
+### QA Agent Integration
+- When QA agent sets task status to `APPROVED`, it automatically triggers:
+  - GitHub PR creation (if enabled)
+  - Commit tracking and auto-push
+  - Webhook notifications
+
+### Developer Agent Updates
+- Agents no longer use phase-based task assignment
+- Developers self-assign tasks using `grab-tasks.js`
+- See `/src/agents/README.md` for updated agent documentation
+
+### Related Documentation
+- **Agent System**: `/src/agents/README.md` - Complete agent documentation
+- **Migration Guide**: `/src/AGENT-MIGRATION-GUIDE.md` - Updating existing agents
+- **Developer Workflow**: `/src/dev-workflow.md` - Task management commands
+- **API Routes**: `/server/src/routes/tickets.ts` - REST endpoint details
+- **GitHub Service**: `/server/src/services/github-automation-service.ts` - PR automation

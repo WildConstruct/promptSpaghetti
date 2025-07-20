@@ -112,11 +112,11 @@ export const MaterialAppBar: React.FC<MaterialAppBarProps> = ({
   
   const getHeight = () => {
     switch (type) {
-      case 'center': return 64;
-      case 'small': return 64;
-      case 'medium': return scrolled ? 64 : 112;
-      case 'large': return scrolled ? 64 : 152;
-      default: return 64;
+    case 'center': return 64;
+    case 'small': return 64;
+    case 'medium': return scrolled ? 64 : 112;
+    case 'large': return scrolled ? 64 : 152;
+    default: return 64;
     }
   };
   

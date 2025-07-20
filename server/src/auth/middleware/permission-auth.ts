@@ -23,7 +23,7 @@ export function createPermissionAuthMiddleware(rbacService: RBACService) {
         if (!user || !user.id) {
           return reply.status(401).send({
             error: 'Unauthorized',
-            message: 'Authentication required',
+            message: 'Authentication required'
           });
         }
 
@@ -53,7 +53,7 @@ export function createPermissionAuthMiddleware(rbacService: RBACService) {
         const permissionChecks: PermissionCheck[] = permissions.map(p => ({
           resource: p.resource,
           action: p.action,
-          context,
+          context
         }));
 
         const requireAll = permissions[0].requireAll ?? false;
@@ -77,8 +77,8 @@ export function createPermissionAuthMiddleware(rbacService: RBACService) {
             message: 'Insufficient permissions',
             details: {
               required: deniedPermissions.map(p => `${p.resource}:${p.action}`),
-              reasons,
-            },
+              reasons
+            }
           });
         }
 
@@ -86,7 +86,7 @@ export function createPermissionAuthMiddleware(rbacService: RBACService) {
         (request as any).permissions = {
           checked: permissionChecks,
           results,
-          context,
+          context
         };
 
         // Continue to next handler
@@ -94,7 +94,7 @@ export function createPermissionAuthMiddleware(rbacService: RBACService) {
         console.error('Permission check error:', error);
         return reply.status(500).send({
           error: 'Internal Server Error',
-          message: 'Permission check failed',
+          message: 'Permission check failed'
         });
       }
     };
@@ -146,98 +146,98 @@ export const PermissionConfigs = {
   GRAPHS_READ: {
     resource: 'graphs',
     action: 'read',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   GRAPHS_WRITE: {
     resource: 'graphs',
     action: 'write',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   GRAPHS_DELETE: {
     resource: 'graphs',
     action: 'delete',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   GRAPHS_EXECUTE: {
     resource: 'graphs',
     action: 'execute',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
 
   // User permissions
   USERS_READ: {
     resource: 'users',
     action: 'read',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   USERS_WRITE: {
     resource: 'users',
     action: 'write',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   USERS_DELETE: {
     resource: 'users',
     action: 'delete',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
 
   // Organization permissions
   ORGANIZATIONS_READ: {
     resource: 'organizations',
     action: 'read',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   ORGANIZATIONS_WRITE: {
     resource: 'organizations',
     action: 'write',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   ORGANIZATIONS_DELETE: {
     resource: 'organizations',
     action: 'delete',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
 
   // Team permissions
   TEAMS_READ: {
     resource: 'teams',
     action: 'read',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   TEAMS_WRITE: {
     resource: 'teams',
     action: 'write',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   TEAMS_DELETE: {
     resource: 'teams',
     action: 'delete',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
 
   // Role permissions
   ROLES_READ: {
     resource: 'roles',
     action: 'read',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   ROLES_WRITE: {
     resource: 'roles',
     action: 'write',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
   ROLES_DELETE: {
     resource: 'roles',
     action: 'delete',
-    allowSuperAdmin: true,
+    allowSuperAdmin: true
   },
 
   // System administration
   SYSTEM_ADMIN: {
     resource: 'system',
     action: 'admin',
-    allowSuperAdmin: true,
-  },
+    allowSuperAdmin: true
+  }
 } as const;
 
 // Helper function to create permission auth plugin for Fastify
@@ -295,7 +295,7 @@ export const ContextExtractors = {
     return {
       userId: user.id,
       teamId: params.teamId,
-      organizationId: params.organizationId,
+      organizationId: params.organizationId
     };
   },
 
@@ -306,9 +306,9 @@ export const ContextExtractors = {
     
     return {
       userId: user.id,
-      resourceId: params.id || params.resourceId,
+      resourceId: params.id || params.resourceId
     };
-  },
+  }
 };
 
 // Type augmentation for Fastify to include permission methods

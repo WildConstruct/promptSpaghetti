@@ -202,22 +202,22 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({
     const errors = validationResults.filter(r => r.severity === 'error');
     
     switch (currentStep) {
-      case 1: // Basic Info
-        return !errors.some(e => 
-          e.location?.field && ['title', 'description', 'tags', 'categories'].includes(e.location.field)
-        );
-      case 2: // Technical Details
-        return !errors.some(e => 
-          e.location?.field && ['graph_json', 'claude_model', 'token_per_run_estimate'].includes(e.location.field)
-        );
-      case 3: // Content Details
-        return !errors.some(e => 
-          e.location?.field && ['intended_use_cases', 'example_outputs'].includes(e.location.field)
-        );
-      case 4: // Review
-        return errors.length === 0;
-      default:
-        return true;
+    case 1: // Basic Info
+      return !errors.some(e => 
+        e.location?.field && ['title', 'description', 'tags', 'categories'].includes(e.location.field)
+      );
+    case 2: // Technical Details
+      return !errors.some(e => 
+        e.location?.field && ['graph_json', 'claude_model', 'token_per_run_estimate'].includes(e.location.field)
+      );
+    case 3: // Content Details
+      return !errors.some(e => 
+        e.location?.field && ['intended_use_cases', 'example_outputs'].includes(e.location.field)
+      );
+    case 4: // Review
+      return errors.length === 0;
+    default:
+      return true;
     }
   };
 

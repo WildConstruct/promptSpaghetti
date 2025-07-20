@@ -16,7 +16,7 @@ interface AnalyticsDashboardProps {
 
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
   creatorId,
-  className = '',
+  className = ''
 }) => {
   const [dashboard, setDashboard] = useState<CreatorDashboard | null>(null);
   const [insights, setInsights] = useState<AnalyticsInsight[]>([]);
@@ -41,7 +41,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           customStartDate,
           customEndDate
         ),
-        analyticsService.generateInsights(creatorId),
+        analyticsService.generateInsights(creatorId)
       ]);
 
       setDashboard(dashboardData);

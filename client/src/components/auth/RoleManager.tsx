@@ -68,7 +68,7 @@ export const RoleManager: React.FC = () => {
     name: '',
     description: '',
     scope: 'global',
-    permissions: [],
+    permissions: []
   });
 
   // Permission templates for common role types
@@ -78,17 +78,17 @@ export const RoleManager: React.FC = () => {
       { resource: 'users', action: 'write', scope: 'global' as const },
       { resource: 'roles', action: 'read', scope: 'global' as const },
       { resource: 'roles', action: 'write', scope: 'global' as const },
-      { resource: 'system', action: 'admin', scope: 'global' as const },
+      { resource: 'system', action: 'admin', scope: 'global' as const }
     ],
     editor: [
       { resource: 'graphs', action: 'read', scope: 'global' as const },
       { resource: 'graphs', action: 'write', scope: 'own' as const },
-      { resource: 'graphs', action: 'execute', scope: 'global' as const },
+      { resource: 'graphs', action: 'execute', scope: 'global' as const }
     ],
     viewer: [
       { resource: 'graphs', action: 'read', scope: 'global' as const },
-      { resource: 'graphs', action: 'execute', scope: 'global' as const },
-    ],
+      { resource: 'graphs', action: 'execute', scope: 'global' as const }
+    ]
   };
 
   useEffect(() => {
@@ -101,13 +101,13 @@ export const RoleManager: React.FC = () => {
         fetch('/api/auth/rbac/roles?' + new URLSearchParams({
           ...(scopeFilter && { scope: scopeFilter }),
           ...(searchQuery && { search: searchQuery }),
-          ...(organizationFilter && { organizationId: organizationFilter }),
+          ...(organizationFilter && { organizationId: organizationFilter })
         }), {
-          credentials: 'include',
+          credentials: 'include'
         }),
         fetch('/api/auth/rbac/stats', {
-          credentials: 'include',
-        }),
+          credentials: 'include'
+        })
       ]);
 
       if (rolesResponse.ok) {
@@ -129,7 +129,7 @@ export const RoleManager: React.FC = () => {
   const loadRoleDetails = async (roleId: string) => {
     try {
       const response = await fetch(`/api/auth/rbac/roles/${roleId}`, {
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (response.ok) {
@@ -137,7 +137,7 @@ export const RoleManager: React.FC = () => {
         setSelectedRole({
           ...data.role,
           permissions: data.permissions,
-          assignedUsers: data.assignedUsers,
+          assignedUsers: data.assignedUsers
         });
       }
     } catch (error) {
@@ -153,10 +153,10 @@ export const RoleManager: React.FC = () => {
       const response = await fetch('/api/auth/rbac/roles', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       });
 
       if (response.ok) {
@@ -165,7 +165,7 @@ export const RoleManager: React.FC = () => {
           name: '',
           description: '',
           scope: 'global',
-          permissions: [],
+          permissions: []
         });
         await loadData();
       } else {
@@ -188,7 +188,7 @@ export const RoleManager: React.FC = () => {
     try {
       const response = await fetch(`/api/auth/rbac/roles/${roleId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (response.ok) {
@@ -220,7 +220,7 @@ export const RoleManager: React.FC = () => {
   const applyPermissionTemplate = (template: keyof typeof permissionTemplates) => {
     setFormData({
       ...formData,
-      permissions: [...permissionTemplates[template]],
+      permissions: [...permissionTemplates[template]]
     });
   };
 
@@ -229,8 +229,8 @@ export const RoleManager: React.FC = () => {
       ...formData,
       permissions: [
         ...formData.permissions,
-        { resource: '', action: '', scope: 'global' },
-      ],
+        { resource: '', action: '', scope: 'global' }
+      ]
     });
   };
 
@@ -243,7 +243,7 @@ export const RoleManager: React.FC = () => {
   const removePermission = (index: number) => {
     setFormData({
       ...formData,
-      permissions: formData.permissions.filter((_, i) => i !== index),
+      permissions: formData.permissions.filter((_, i) => i !== index)
     });
   };
 
@@ -386,8 +386,8 @@ export const RoleManager: React.FC = () => {
                           <div className="flex items-center space-x-2 mt-1">
                             <span className={`px-2 py-1 text-xs rounded-full ${
                               role.scope === 'global' ? 'bg-blue-100 text-blue-800' :
-                              role.scope === 'organization' ? 'bg-green-100 text-green-800' :
-                              'bg-yellow-100 text-yellow-800'
+                                role.scope === 'organization' ? 'bg-green-100 text-green-800' :
+                                  'bg-yellow-100 text-yellow-800'
                             }`}>
                               {role.scope}
                             </span>
@@ -433,9 +433,9 @@ export const RoleManager: React.FC = () => {
                                 <span>{permission.resource}:{permission.action}</span>
                                 <span className={`px-2 py-1 text-xs rounded ${
                                   permission.scope === 'global' ? 'bg-blue-100 text-blue-800' :
-                                  permission.scope === 'organization' ? 'bg-green-100 text-green-800' :
-                                  permission.scope === 'team' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-purple-100 text-purple-800'
+                                    permission.scope === 'organization' ? 'bg-green-100 text-green-800' :
+                                      permission.scope === 'team' ? 'bg-yellow-100 text-yellow-800' :
+                                        'bg-purple-100 text-purple-800'
                                 }`}>
                                   {permission.scope}
                                 </span>
@@ -480,7 +480,7 @@ export const RoleManager: React.FC = () => {
                     name: '',
                     description: '',
                     scope: 'global',
-                    permissions: [],
+                    permissions: []
                   });
                 }}
                 className="text-gray-400 hover:text-gray-600"
@@ -631,7 +631,7 @@ export const RoleManager: React.FC = () => {
                       name: '',
                       description: '',
                       scope: 'global',
-                      permissions: [],
+                      permissions: []
                     });
                   }}
                   className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"

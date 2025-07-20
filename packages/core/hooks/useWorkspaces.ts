@@ -29,8 +29,8 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
       const response = await fetch(`${API_BASE}/workspaces`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId, // Mock auth header
-        },
+          'X-User-Id': userId // Mock auth header
+        }
       });
 
       if (!response.ok) {
@@ -54,9 +54,9 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Id': userId,
+        'X-User-Id': userId
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
 
     if (!response.ok) {
@@ -81,9 +81,9 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Id': userId,
+        'X-User-Id': userId
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
 
     if (!response.ok) {
@@ -106,8 +106,8 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {
       method: 'DELETE',
       headers: {
-        'X-User-Id': userId,
-      },
+        'X-User-Id': userId
+      }
     });
 
     if (!response.ok) {
@@ -129,12 +129,12 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Id': userId,
+        'X-User-Id': userId
       },
       body: JSON.stringify({
         user_id: userIdToInvite,
-        role,
-      }),
+        role
+      })
     });
 
     if (!response.ok) {
@@ -169,6 +169,6 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     updateWorkspace,
     archiveWorkspace,
     inviteUser,
-    refreshWorkspaces,
+    refreshWorkspaces
   };
 }

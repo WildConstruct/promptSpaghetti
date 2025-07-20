@@ -287,12 +287,12 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
         setExecutionLogs(prev => prev.map(log => 
           log.id === newLog.id 
             ? { 
-                ...log, 
-                status: 'completed', 
-                completed_at: new Date(),
-                execution_time_ms: 3000,
-                result_data: { manual_execution: true }
-              }
+              ...log, 
+              status: 'completed', 
+              completed_at: new Date(),
+              execution_time_ms: 3000,
+              result_data: { manual_execution: true }
+            }
             : log
         ));
       }, 3000);
@@ -321,34 +321,34 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
 
   const formatScheduleExpression = (schedule: ScheduledExecution) => {
     switch (schedule.schedule_type) {
-      case 'cron':
-        return formatCronExpression(schedule.schedule_expression);
-      case 'interval':
-        return `Every ${schedule.schedule_expression}`;
-      case 'once':
-        return `Once at ${new Date(schedule.schedule_expression).toLocaleString()}`;
-      default:
-        return schedule.schedule_expression;
+    case 'cron':
+      return formatCronExpression(schedule.schedule_expression);
+    case 'interval':
+      return `Every ${schedule.schedule_expression}`;
+    case 'once':
+      return `Once at ${new Date(schedule.schedule_expression).toLocaleString()}`;
+    default:
+      return schedule.schedule_expression;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'running': return 'bg-blue-100 text-blue-800';
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'failed': return 'bg-red-100 text-red-800';
-      case 'cancelled': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'running': return 'bg-blue-100 text-blue-800';
+    case 'completed': return 'bg-green-100 text-green-800';
+    case 'failed': return 'bg-red-100 text-red-800';
+    case 'cancelled': return 'bg-gray-100 text-gray-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'running': return <PlayIcon className="h-4 w-4 text-blue-600" />;
-      case 'completed': return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
-      case 'failed': return <XCircleIcon className="h-4 w-4 text-red-600" />;
-      case 'cancelled': return <StopIcon className="h-4 w-4 text-gray-600" />;
-      default: return <ClockIcon className="h-4 w-4 text-gray-600" />;
+    case 'running': return <PlayIcon className="h-4 w-4 text-blue-600" />;
+    case 'completed': return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
+    case 'failed': return <XCircleIcon className="h-4 w-4 text-red-600" />;
+    case 'cancelled': return <StopIcon className="h-4 w-4 text-gray-600" />;
+    default: return <ClockIcon className="h-4 w-4 text-gray-600" />;
     }
   };
 
@@ -785,8 +785,8 @@ const CreateScheduleModal: React.FC<{
               onChange={(e) => setFormData(prev => ({ ...prev, schedule_expression: e.target.value }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               placeholder={formData.schedule_type === 'cron' ? '0 9 * * *' : 
-                          formData.schedule_type === 'interval' ? '1 hour' : 
-                          '2024-01-25T15:00:00Z'}
+                formData.schedule_type === 'interval' ? '1 hour' : 
+                  '2024-01-25T15:00:00Z'}
               required
             />
             <p className="text-xs text-gray-500 mt-1">

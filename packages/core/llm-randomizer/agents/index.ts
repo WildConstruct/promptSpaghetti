@@ -82,16 +82,16 @@ export async function generateGraph(
   config: Partial<AnyAgentConfig> = {}
 ): Promise<AnyGenerationResult> {
   switch (provider) {
-    case 'openai':
-      return generateGraphWithOpenAI(request as GraphGenerationRequest, config as Partial<OpenAIAgentConfig>);
+  case 'openai':
+    return generateGraphWithOpenAI(request as GraphGenerationRequest, config as Partial<OpenAIAgentConfig>);
     
-    case 'claude':
-      return generateGraphWithClaude(request as ClaudeGenerationRequest, config as Partial<AnthropicAgentConfig>);
+  case 'claude':
+    return generateGraphWithClaude(request as ClaudeGenerationRequest, config as Partial<AnthropicAgentConfig>);
     
-    case 'gemini':
-      return generateGraphWithGemini(request as GeminiGenerationRequest, config as Partial<GeminiAgentConfig>);
+  case 'gemini':
+    return generateGraphWithGemini(request as GeminiGenerationRequest, config as Partial<GeminiAgentConfig>);
     
-    default:
-      throw new Error(`Unsupported provider: ${provider}`);
+  default:
+    throw new Error(`Unsupported provider: ${provider}`);
   }
 }

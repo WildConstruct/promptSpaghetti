@@ -7,7 +7,7 @@ import {
   SetVariableNodeData,
   GetVariableNodeData,
   IncludeNodeData
-} from "../types/NodeTypes";
+} from '../types/NodeTypes';
 
 // Legacy function - delegates to new factory system
 export const createDefaultNodeData = (type: NodeType): NodeData => {
@@ -20,7 +20,7 @@ export const addVariationToNode = (nodeData: NodeData, variation: string): NodeD
   const currentVariations = nodeData.variations || [];
   return {
     ...nodeData,
-    variations: [...currentVariations, variation],
+    variations: [...currentVariations, variation]
   };
 };
 
@@ -28,7 +28,7 @@ export const removeVariationFromNode = (nodeData: NodeData, index: number): Node
   const currentVariations = nodeData.variations || [];
   return {
     ...nodeData,
-    variations: currentVariations.filter((_, i) => i !== index),
+    variations: currentVariations.filter((_, i) => i !== index)
   };
 };
 
@@ -42,7 +42,7 @@ export const updateVariationInNode = (
   updatedVariations[index] = newValue;
   return {
     ...nodeData,
-    variations: updatedVariations,
+    variations: updatedVariations
   };
 };
 
@@ -57,7 +57,7 @@ export const reorderVariationsInNode = (
   updatedVariations.splice(toIndex, 0, movedItem);
   return {
     ...nodeData,
-    variations: updatedVariations,
+    variations: updatedVariations
   };
 };
 
@@ -84,12 +84,12 @@ export const getVariationCount = (nodeData: NodeData): number => {
 // Legacy validation function - uses new validation system
 export const validateNodeDataLegacyWrapper = (nodeData: NodeData): { valid: boolean; errors: string[] } => {
   // Import the new validation function to avoid conflicts
-  const { validateNodeData: newValidate } = require("../types/NodeTypes");
+  const { validateNodeData: newValidate } = require('../types/NodeTypes');
   const errors = newValidate(nodeData);
   
   return {
     valid: errors.length === 0,
-    errors,
+    errors
   };
 };
 
@@ -97,51 +97,51 @@ export const validateNodeDataLegacyWrapper = (nodeData: NodeData): { valid: bool
 export const validateNodeDataLegacy = (nodeData: NodeData): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
   
-  if (!nodeData.label || nodeData.label.trim() === "") {
-    errors.push("Node label is required");
+  if (!nodeData.label || nodeData.label.trim() === '') {
+    errors.push('Node label is required');
   }
   
-  if (!nodeData.id || nodeData.id.trim() === "") {
-    errors.push("Node ID is required");
+  if (!nodeData.id || nodeData.id.trim() === '') {
+    errors.push('Node ID is required');
   }
   
   // Type-specific validation with new field names
   switch (nodeData.type) {
-    case "WeightedChoice":
-      const wcData = nodeData as WeightedChoiceNodeData;
-      if (wcData.choices && wcData.weights && wcData.choices.length !== wcData.weights.length) {
-        errors.push("Number of choices must match number of weights");
-      }
-      if (wcData.weights && wcData.weights.some(w => w <= 0)) {
-        errors.push("All weights must be positive numbers");
-      }
-      break;
+  case 'WeightedChoice':
+    const wcData = nodeData as WeightedChoiceNodeData;
+    if (wcData.choices && wcData.weights && wcData.choices.length !== wcData.weights.length) {
+      errors.push('Number of choices must match number of weights');
+    }
+    if (wcData.weights && wcData.weights.some(w => w <= 0)) {
+      errors.push('All weights must be positive numbers');
+    }
+    break;
       
-    case "SetVariable":
-      const setVarData = nodeData as SetVariableNodeData;
-      if (!setVarData.variableName || setVarData.variableName.trim() === "") {
-        errors.push("Variable name is required");
-      }
-      break;
+  case 'SetVariable':
+    const setVarData = nodeData as SetVariableNodeData;
+    if (!setVarData.variableName || setVarData.variableName.trim() === '') {
+      errors.push('Variable name is required');
+    }
+    break;
       
-    case "GetVariable":
-      const getVarData = nodeData as GetVariableNodeData;
-      if (!getVarData.variableName || getVarData.variableName.trim() === "") {
-        errors.push("Variable name is required");
-      }
-      break;
+  case 'GetVariable':
+    const getVarData = nodeData as GetVariableNodeData;
+    if (!getVarData.variableName || getVarData.variableName.trim() === '') {
+      errors.push('Variable name is required');
+    }
+    break;
       
-    case "Include":
-      const includeData = nodeData as IncludeNodeData;
-      if (!includeData.name || includeData.name.trim() === "") {
-        errors.push("Include name is required");
-      }
-      break;
+  case 'Include':
+    const includeData = nodeData as IncludeNodeData;
+    if (!includeData.name || includeData.name.trim() === '') {
+      errors.push('Include name is required');
+    }
+    break;
   }
   
   return {
     valid: errors.length === 0,
-    errors,
+    errors
   };
 };
 
@@ -155,7 +155,7 @@ export const mergeNodeData = <T extends NodeData>(
 ): T => {
   return {
     ...original,
-    ...updates,
+    ...updates
   } as T;
 };
 
@@ -181,7 +181,7 @@ export const migrateNodeData = (oldNodeData: any): NodeData | null => {
     
     return newData;
   } catch (error) {
-    console.warn("Failed to migrate node data:", error);
+    console.warn('Failed to migrate node data:', error);
     return null;
   }
 };

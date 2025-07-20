@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Edge, Node } from "reactflow";
-import { ValidationError } from "../validation";
-import { WebSocketStatusIcon, WebSocketDetails } from "./WebSocketStatus";
-import { ConnectionState } from "../websocket/WebSocketClient";
+import React, { useState, useRef, useEffect } from 'react';
+import { Edge, Node } from 'reactflow';
+import { ValidationError } from '../validation';
+import { WebSocketStatusIcon, WebSocketDetails } from './WebSocketStatus';
+import { ConnectionState } from '../websocket/WebSocketClient';
 
 interface StatusBarProps {
   statusMessage: string;
@@ -40,7 +40,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   queuedMessages = 0,
   onClearQueue,
   onReconnect,
-  onDisconnect,
+  onDisconnect
 }) => {
   const errorCount = errors.length;
   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
@@ -62,12 +62,12 @@ export const StatusBar: React.FC<StatusBarProps> = ({
 
   return (
     <div style={{ 
-      position: "absolute", 
+      position: 'absolute', 
       bottom: 0, 
       left: 0, 
       right: 0, 
-      background: "#fff", 
-      borderTop: "1px solid #eee", 
+      background: '#fff', 
+      borderTop: '1px solid #eee', 
       padding: 8, 
       fontSize: 14, 
       display: 'flex', 
@@ -163,14 +163,14 @@ export const StatusBar: React.FC<StatusBarProps> = ({
           </button>
         )}
         
-        {errorCount === 0 ? "No errors" : `${errorCount} error${errorCount > 1 ? "s" : ""}`}
+        {errorCount === 0 ? 'No errors' : `${errorCount} error${errorCount > 1 ? 's' : ''}`}
         
         {errorCount > 0 && (
           <span style={{ marginLeft: 16 }}>
             {errors.map((err) => (
               <span 
                 key={err.edgeId} 
-                style={{ color: "#f00", marginRight: 8 }} 
+                style={{ color: '#f00', marginRight: 8 }} 
                 title={err.message}
               >
                 {err.message}

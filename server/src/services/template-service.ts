@@ -31,7 +31,7 @@ import {
   PaginationOptions,
   canUserAccessTemplate,
   validateCustomizations,
-  applyTemplateCustomizations,
+  applyTemplateCustomizations
 } from '../database/template-models';
 
 export interface TemplateServiceOptions {
@@ -91,8 +91,8 @@ export class TemplateService {
         event_data: {
           template_id: template.id,
           template_name: template.name,
-          category: template.category,
-        },
+          category: template.category
+        }
       });
     }
 
@@ -177,8 +177,8 @@ export class TemplateService {
         event_data: {
           template_id: id,
           template_name: updatedTemplate.name,
-          changes: Object.keys(data),
-        },
+          changes: Object.keys(data)
+        }
       });
     }
 
@@ -211,8 +211,8 @@ export class TemplateService {
         event_type: 'template.archived',
         event_data: {
           template_id: id,
-          template_name: template.name,
-        },
+          template_name: template.name
+        }
       });
     }
 
@@ -244,8 +244,8 @@ export class TemplateService {
         event_type: 'template.published',
         event_data: {
           template_id: id,
-          template_name: template.name,
-        },
+          template_name: template.name
+        }
       });
     }
 
@@ -293,8 +293,8 @@ export class TemplateService {
         ...customizedData,
         template_id: templateId,
         template_version: template.version,
-        customizations_applied: customizations,
-      },
+        customizations_applied: customizations
+      }
     }, userId);
 
     // Create usage record
@@ -303,7 +303,7 @@ export class TemplateService {
       project_id: project.id,
       workspace_id: projectData.workspace_id,
       customizations_applied: customizations,
-      source: 'manual',
+      source: 'manual'
     }, userId);
 
     // Log activity
@@ -315,8 +315,8 @@ export class TemplateService {
       event_data: {
         template_id: templateId,
         template_name: template.name,
-        project_name: project.name,
-      },
+        project_name: project.name
+      }
     });
 
     return { project, usage };
@@ -334,7 +334,7 @@ export class TemplateService {
   ): Promise<TemplateUsage | null> {
     const data: UpdateTemplateUsage = {
       ...completionData,
-      completed_at: completionData.completion_status === 'completed' ? new Date() : undefined,
+      completed_at: completionData.completion_status === 'completed' ? new Date() : undefined
     };
 
     return this.templateDAO.updateTemplateUsage(usageId, data, userId);
@@ -366,7 +366,7 @@ export class TemplateService {
         title: 'New review on your template',
         message: `${userId} left a ${data.rating}-star review on "${template.name}"`,
         template_id: template.id,
-        review_id: review.id,
+        review_id: review.id
       });
     }
 
@@ -465,9 +465,9 @@ export class TemplateService {
         version: template.version,
         exported_at: new Date().toISOString(),
         exported_by: userId,
-        export_format: format,
+        export_format: format
       },
-      template,
+      template
     };
 
     // Include analytics if requested and user has permission
@@ -494,7 +494,7 @@ export class TemplateService {
       ...templateData.template,
       workspace_id: workspaceId,
       name: `${templateData.template.name} (Imported)`,
-      version: '1.0.0', // Reset version for imported template
+      version: '1.0.0' // Reset version for imported template
     };
 
     // Remove id and other auto-generated fields

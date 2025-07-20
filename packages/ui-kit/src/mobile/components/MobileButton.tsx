@@ -111,19 +111,19 @@ export const MobileFAB: React.FC<MobileFABProps> = ({
   
   // Position-specific styles
   switch (position) {
-    case 'bottom-right':
-      positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
-      positionStyles.right = `calc(${offset}px + env(safe-area-inset-right))`;
-      break;
-    case 'bottom-left':
-      positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
-      positionStyles.left = `calc(${offset}px + env(safe-area-inset-left))`;
-      break;
-    case 'bottom-center':
-      positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
-      positionStyles.left = '50%';
-      positionStyles.transform = 'translateX(-50%)';
-      break;
+  case 'bottom-right':
+    positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
+    positionStyles.right = `calc(${offset}px + env(safe-area-inset-right))`;
+    break;
+  case 'bottom-left':
+    positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
+    positionStyles.left = `calc(${offset}px + env(safe-area-inset-left))`;
+    break;
+  case 'bottom-center':
+    positionStyles.bottom = `calc(${offset}px + env(safe-area-inset-bottom))`;
+    positionStyles.left = '50%';
+    positionStyles.transform = 'translateX(-50%)';
+    break;
   }
   
   return (

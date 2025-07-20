@@ -91,7 +91,7 @@ const DANGEROUS_PATTERNS = [
   /window\./gi,
   /alert\s*\(/gi,
   /setTimeout\s*\(/gi,
-  /setInterval\s*\(/gi,
+  /setInterval\s*\(/gi
 ];
 
 class SecurityValidation {
@@ -128,7 +128,7 @@ class SecurityValidation {
       /\bconfirm\b/gi,
       /\bprompt\b/gi,
       /\bsetTimeout\b/gi,
-      /\bsetInterval\b/gi,
+      /\bsetInterval\b/gi
     ];
     
     for (const pattern of dangerousExpressionPatterns) {
@@ -163,7 +163,7 @@ class SecurityValidation {
       'propertyIsEnumerable',
       'toLocaleString',
       'toString',
-      'valueOf',
+      'valueOf'
     ];
     
     if (dangerousProperties.includes(key)) {
@@ -222,35 +222,35 @@ const SecureValidation = {
   safeString: (maxLength = 10000) => 
     z.string().max(maxLength).refine(
       (val) => SecurityValidation.validateSafeString(val),
-      { message: "String contains dangerous patterns" }
+      { message: 'String contains dangerous patterns' }
     ),
 
   safeExpression: (maxLength = 500) =>
     z.string().max(maxLength).refine(
       (val) => SecurityValidation.validateSafeExpression(val),
-      { message: "Expression contains unsafe patterns" }
+      { message: 'Expression contains unsafe patterns' }
     ),
 
   safePropertyKey: (maxLength = 100) =>
     z.string().max(maxLength).refine(
       (val) => SecurityValidation.validateSafePropertyKey(val),
-      { message: "Property key contains dangerous patterns" }
+      { message: 'Property key contains dangerous patterns' }
     ),
 
   safeValue: () =>
     z.union([
       z.string().max(10000).refine(
         (val) => SecurityValidation.validateSafeString(val),
-        { message: "String value contains dangerous patterns" }
+        { message: 'String value contains dangerous patterns' }
       ),
       z.number().finite().refine(
         (val) => !isNaN(val),
-        { message: "Number value must be finite" }
+        { message: 'Number value must be finite' }
       ),
       z.boolean(),
       z.array(z.string().max(1000)).max(1000).refine(
         (val) => val.every(item => SecurityValidation.validateSafeString(item)),
-        { message: "Array contains dangerous values" }
+        { message: 'Array contains dangerous values' }
       ),
       z.record(z.string().max(1000)).refine(
         (val) => {
@@ -259,7 +259,7 @@ const SecureValidation = {
           return keys.every(key => SecurityValidation.validateSafePropertyKey(key)) &&
                  Object.values(val).every(value => SecurityValidation.validateSafeString(value));
         },
-        { message: "Object contains dangerous keys or values" }
+        { message: 'Object contains dangerous keys or values' }
       ),
       z.null(),
       z.undefined()
@@ -282,7 +282,7 @@ const INJECTION_PATTERNS = [
   'import("fs")',
   'process.exit()',
   'global.process',
-  'Buffer.from("test")',
+  'Buffer.from("test")'
 ];
 
 function runSecurityTests() {
@@ -320,7 +320,7 @@ function runSecurityTests() {
     function() { return 'evil'; },
     () => 'evil',
     { __proto__: { polluted: true } },
-    { constructor: { polluted: true } },
+    { constructor: { polluted: true } }
   ];
   testResults = testValidation(SecurityValidation.validateSafeValue, dangerousValues, 'Safe Value');
   totalTests += testResults.total;
@@ -337,7 +337,7 @@ function runSecurityTests() {
   
   // Summary
   console.log('\n' + '='.repeat(60));
-  console.log(`🔐 Security Validation Results`);
+  console.log('🔐 Security Validation Results');
   console.log(`   Total Tests: ${totalTests}`);
   console.log(`   ✅ Passed: ${passedTests}`);
   console.log(`   ❌ Failed: ${failedTests}`);

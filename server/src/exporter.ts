@@ -15,46 +15,46 @@ export const GeneratorBundleSchema = z.object({
     created: z.string(), // ISO-8601 date
     debug: z.object({
       seed: z.number().optional(),
-      originGraphGuid: z.string().optional(),
-    }).optional(),
+      originGraphGuid: z.string().optional()
+    }).optional()
   }),
   variables: z.record(z.string(), z.unknown()),
   grammar: z.record(z.string(), z.union([
     z.array(z.string()), // ArrayRule
     z.array(z.object({   // WeightedArrayRule
       text: z.string(),
-      weight: z.number().optional(),
+      weight: z.number().optional()
     })),
     z.object({           // ConditionalRule
       type: z.literal('conditional'),
       cases: z.array(z.object({
         condition: z.string(),
-        value: z.string(),
-      })),
+        value: z.string()
+      }))
     }),
     z.object({           // SequentialRule
       type: z.literal('sequential'),
-      items: z.array(z.string()),
+      items: z.array(z.string())
     }),
     z.union([            // IncludeRule (two formats)
       z.object({ $include: z.string() }),
       z.array(z.union([
         z.object({ _meta: z.record(z.string(), z.unknown()).optional() }),
-        z.object({ $include: z.string() }),
-      ])),
+        z.object({ $include: z.string() })
+      ]))
     ]),
     z.object({           // ModifierChainRule
       type: z.literal('modifier_chain'),
       base: z.string(),
-      mods: z.array(z.string()),
-    }),
+      mods: z.array(z.string())
+    })
   ])),
   entry_points: z.object({
     default: z.string(),
-    alternatives: z.array(z.string()).optional(),
+    alternatives: z.array(z.string()).optional()
   }),
   lockedValues: z.record(z.string(), z.string()).optional(),
-  seed: z.number().optional(),
+  seed: z.number().optional()
 });
 
 export type GeneratorBundle = z.infer<typeof GeneratorBundleSchema>;
@@ -81,8 +81,8 @@ export function graphToBundle(
     created: new Date().toISOString(),
     debug: {
       seed: typeof graph.seed === 'number' ? graph.seed : undefined,
-      originGraphGuid: undefined, // Could be added as an optional parameter if needed
-    },
+      originGraphGuid: undefined // Could be added as an optional parameter if needed
+    }
   };
 
   // Initialize bundle structure
@@ -92,9 +92,9 @@ export function graphToBundle(
     grammar: {},
     entry_points: {
       default: 'main',
-      alternatives: [],
+      alternatives: []
     },
-    seed: typeof graph.seed === 'number' ? graph.seed : undefined,
+    seed: typeof graph.seed === 'number' ? graph.seed : undefined
   };
 
   // Find all variable declarations in the graph
@@ -142,45 +142,45 @@ export function graphToBundle(
  */
 function convertNodeToRule(node: Node, nodeMap: Map<string, Node>): any {
   switch (node.type) {
-    case 'WeightedChoice':
-      // Convert to weighted array rule
-      return node.choices.map(choice => ({
-        text: choice.value,
-        weight: choice.weight,
-      }));
+  case 'WeightedChoice':
+    // Convert to weighted array rule
+    return node.choices.map(choice => ({
+      text: choice.value,
+      weight: choice.weight
+    }));
       
-    case 'Concat':
-      // If inputs exist, create a sequential rule
-      if (node.inputs && node.inputs.length > 0) {
-        return {
-          type: 'sequential',
-          items: node.inputs,
-        };
-      }
-      return ['']; // Empty concat gives empty string
+  case 'Concat':
+    // If inputs exist, create a sequential rule
+    if (node.inputs && node.inputs.length > 0) {
+      return {
+        type: 'sequential',
+        items: node.inputs
+      };
+    }
+    return ['']; // Empty concat gives empty string
       
-    case 'Output':
-      // Output nodes reference their input
-      if (node.inputs && node.inputs.length > 0) {
-        return [node.inputs[0]];
-      }
-      return [''];
+  case 'Output':
+    // Output nodes reference their input
+    if (node.inputs && node.inputs.length > 0) {
+      return [node.inputs[0]];
+    }
+    return [''];
       
-    case 'Include':
-      // Create an include rule
-      return { $include: node.name };
+  case 'Include':
+    // Create an include rule
+    return { $include: node.name };
       
-    case 'SetVariable':
-      // Variable setting doesn't produce content directly
-      return [''];
+  case 'SetVariable':
+    // Variable setting doesn't produce content directly
+    return [''];
       
-    case 'GetVariable':
-      // Create a reference to the variable
-      return [`$${node.key}`];
+  case 'GetVariable':
+    // Create a reference to the variable
+    return [`$${node.key}`];
       
-    default:
-      // For unknown node types, return empty
-      return [''];
+  default:
+    // For unknown node types, return empty
+    return [''];
   }
 }
 
@@ -280,7 +280,7 @@ function convertRuleToNode(id: string, rule: any): Node | null {
   if (Array.isArray(rule) && rule.length > 0 && typeof rule[0] === 'string') {
     return {
       id,
-      type: 'Output',
+      type: 'Output'
     };
   }
   
@@ -297,7 +297,7 @@ function convertRuleToNode(id: string, rule: any): Node | null {
   if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'sequential') {
     return {
       id,
-      type: 'Concat',
+      type: 'Concat'
     };
   }
   
@@ -318,7 +318,7 @@ function convertRuleToNode(id: string, rule: any): Node | null {
   if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'modifier_chain') {
     return {
       id,
-      type: 'Concat',
+      type: 'Concat'
     };
   }
   

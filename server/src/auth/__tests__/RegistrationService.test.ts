@@ -53,13 +53,13 @@ describe('RegistrationService', () => {
       password: 'SecurePassword123!',
       firstName: 'John',
       lastName: 'Doe',
-      displayName: 'John Doe',
+      displayName: 'John Doe'
     };
 
     const validContext = {
       ipAddress: '127.0.0.1',
       userAgent: 'Test Browser',
-      source: 'organic',
+      source: 'organic'
     };
 
     it('should register a user successfully', async () => {
@@ -68,7 +68,7 @@ describe('RegistrationService', () => {
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1,
+        totalRequests: 1
       });
 
       const mockUser = {
@@ -87,7 +87,7 @@ describe('RegistrationService', () => {
         lockedUntil: null,
         passwordResetToken: null,
         passwordResetExpires: null,
-        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000)
       };
 
       mockUserService.createUser.mockResolvedValue(mockUser);
@@ -103,7 +103,7 @@ describe('RegistrationService', () => {
         emailVerified: mockUser.emailVerified,
         createdAt: mockUser.createdAt,
         roles: ['user'],
-        permissions: ['graphs:create:own'],
+        permissions: ['graphs:create:own']
       });
 
       // Execute
@@ -117,10 +117,10 @@ describe('RegistrationService', () => {
           emailVerified: false,
           createdAt: mockUser.createdAt,
           roles: ['user'],
-          permissions: ['graphs:create:own'],
+          permissions: ['graphs:create:own']
         },
         emailVerificationRequired: true,
-        nextSteps: expect.any(Array),
+        nextSteps: expect.any(Array)
       });
 
       expect(mockRateLimitService.checkIPRateLimit).toHaveBeenCalledWith(
@@ -137,7 +137,7 @@ describe('RegistrationService', () => {
         allowed: false,
         remaining: 0,
         resetTime: new Date(),
-        totalRequests: 6,
+        totalRequests: 6
       });
 
       mockAuditService.logEvent.mockResolvedValue();
@@ -153,7 +153,7 @@ describe('RegistrationService', () => {
     it('should handle invitation flow correctly', async () => {
       const requestWithInvitation = {
         ...validRegistrationRequest,
-        invitationToken: 'invitation-token-123',
+        invitationToken: 'invitation-token-123'
       };
 
       const mockInvitation = {
@@ -168,7 +168,7 @@ describe('RegistrationService', () => {
         acceptedAt: null,
         acceptedBy: null,
         createdAt: new Date(),
-        metadata: {},
+        metadata: {}
       };
 
       const mockUser = {
@@ -187,7 +187,7 @@ describe('RegistrationService', () => {
         lockedUntil: null,
         passwordResetToken: null,
         passwordResetExpires: null,
-        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000)
       };
 
       // Setup mocks
@@ -195,7 +195,7 @@ describe('RegistrationService', () => {
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1,
+        totalRequests: 1
       });
 
       // Mock validateInvitation
@@ -207,7 +207,7 @@ describe('RegistrationService', () => {
 
       mockDbService.transaction.mockImplementation(async (callback) => {
         const mockClient = {
-          query: jest.fn().mockResolvedValue({ rows: [] }),
+          query: jest.fn().mockResolvedValue({ rows: [] })
         };
         return callback(mockClient as any);
       });
@@ -223,7 +223,7 @@ describe('RegistrationService', () => {
         emailVerified: mockUser.emailVerified,
         createdAt: mockUser.createdAt,
         roles: ['user'],
-        permissions: ['graphs:create:own'],
+        permissions: ['graphs:create:own']
       });
 
       // Execute
@@ -237,14 +237,14 @@ describe('RegistrationService', () => {
     it('should handle email validation errors', async () => {
       const invalidEmailRequest = {
         ...validRegistrationRequest,
-        email: 'invalid-email',
+        email: 'invalid-email'
       };
 
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1,
+        totalRequests: 1
       });
 
       jest.spyOn(registrationService as any, 'trackRegistrationEvent').mockResolvedValue();
@@ -255,10 +255,10 @@ describe('RegistrationService', () => {
         errors: [{
           field: 'email',
           message: 'Please enter a valid email address',
-          code: 'INVALID_FORMAT',
+          code: 'INVALID_FORMAT'
         }],
         warnings: [],
-        suggestions: [],
+        suggestions: []
       });
 
       await expect(
@@ -271,7 +271,7 @@ describe('RegistrationService', () => {
     it('should validate email format correctly', async () => {
       const invalidRequest = {
         email: 'invalid-email',
-        password: 'SecurePassword123!',
+        password: 'SecurePassword123!'
       };
 
       mockUserService.getUserByEmail.mockResolvedValue(null);
@@ -282,14 +282,14 @@ describe('RegistrationService', () => {
       expect(result.errors).toContainEqual({
         field: 'email',
         message: 'Please enter a valid email address',
-        code: 'INVALID_FORMAT',
+        code: 'INVALID_FORMAT'
       });
     });
 
     it('should detect existing email addresses', async () => {
       const existingUserRequest = {
         email: 'existing@example.com',
-        password: 'SecurePassword123!',
+        password: 'SecurePassword123!'
       };
 
       const existingUser = {
@@ -308,7 +308,7 @@ describe('RegistrationService', () => {
         passwordResetToken: null,
         passwordResetExpires: null,
         emailVerificationToken: null,
-        emailVerificationExpires: null,
+        emailVerificationExpires: null
       };
 
       mockUserService.getUserByEmail.mockResolvedValue(existingUser);
@@ -319,18 +319,18 @@ describe('RegistrationService', () => {
       expect(result.errors).toContainEqual({
         field: 'email',
         message: 'An account with this email address already exists',
-        code: 'EMAIL_EXISTS',
+        code: 'EMAIL_EXISTS'
       });
       expect(result.suggestions).toContainEqual({
         field: 'email',
-        suggestion: 'Try logging in instead, or use the forgot password feature',
+        suggestion: 'Try logging in instead, or use the forgot password feature'
       });
     });
 
     it('should validate password strength', async () => {
       const weakPasswordRequest = {
         email: 'test@example.com',
-        password: 'weak',
+        password: 'weak'
       };
 
       mockUserService.getUserByEmail.mockResolvedValue(null);
@@ -344,7 +344,7 @@ describe('RegistrationService', () => {
     it('should provide email suggestions for typos', async () => {
       const typoRequest = {
         email: 'test@gmial.com', // typo in gmail
-        password: 'SecurePassword123!',
+        password: 'SecurePassword123!'
       };
 
       mockUserService.getUserByEmail.mockResolvedValue(null);
@@ -373,14 +373,14 @@ describe('RegistrationService', () => {
         lockedUntil: null,
         passwordResetToken: null,
         passwordResetExpires: null,
-        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000)
       };
 
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1,
+        totalRequests: 1
       });
 
       mockUserService.getUserByEmail.mockResolvedValue(mockUser);
@@ -391,7 +391,7 @@ describe('RegistrationService', () => {
 
       await registrationService.resendEmailVerification('test@example.com', {
         ipAddress: '127.0.0.1',
-        userAgent: 'Test Browser',
+        userAgent: 'Test Browser'
       });
 
       expect(mockRateLimitService.checkIPRateLimit).toHaveBeenCalled();
@@ -415,14 +415,14 @@ describe('RegistrationService', () => {
         lockedUntil: null,
         passwordResetToken: null,
         passwordResetExpires: null,
-        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000)
       };
 
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({
         allowed: true,
         remaining: 4,
         resetTime: new Date(),
-        totalRequests: 1,
+        totalRequests: 1
       });
 
       mockUserService.getUserByEmail.mockResolvedValue(mockUser);
@@ -430,7 +430,7 @@ describe('RegistrationService', () => {
       await expect(
         registrationService.resendEmailVerification('test@example.com', {
           ipAddress: '127.0.0.1',
-          userAgent: 'Test Browser',
+          userAgent: 'Test Browser'
         })
       ).rejects.toThrow('Email is already verified');
     });
@@ -476,6 +476,6 @@ function createMockUser(overrides: any = {}) {
     emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     status: 'active' as const,
     deletedAt: null,
-    ...overrides,
+    ...overrides
   };
 }

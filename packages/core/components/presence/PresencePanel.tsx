@@ -74,7 +74,7 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({
       return `Using ${user.currentTool}`;
     }
     if (user.focusedNodeId) {
-      return `Editing node`;
+      return 'Editing node';
     }
     if (user.selection && user.selection.length > 0) {
       return `Selected ${user.selection.length} item${user.selection.length > 1 ? 's' : ''}`;

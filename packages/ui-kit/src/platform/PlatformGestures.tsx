@@ -83,7 +83,7 @@ export const PlatformGestureHandler: React.FC<PlatformGestureHandlerProps> = ({
     if (!containerRef.current || !enablePlatformSpecific) return;
     
     const config = getPlatformGestureConfig();
-    let cleanup: (() => void)[] = [];
+    const cleanup: (() => void)[] = [];
     
     // iOS-specific gestures
     if (os === 'iOS') {
@@ -392,7 +392,7 @@ export const PlatformButton: React.FC<PlatformButtonProps> = ({
         padding: size === 'small' ? '8px 16px' : size === 'large' ? '16px 32px' : '12px 24px',
         borderRadius: variant === 'text' ? 0 : 10,
         backgroundColor: variant === 'primary' ? 'var(--color-primary)' : 
-                        variant === 'secondary' ? 'var(--color-secondary)' : 'transparent',
+          variant === 'secondary' ? 'var(--color-secondary)' : 'transparent',
         color: variant === 'text' ? 'var(--color-primary)' : 'white'
       };
     }
@@ -404,10 +404,10 @@ export const PlatformButton: React.FC<PlatformButtonProps> = ({
         padding: size === 'small' ? '6px 16px' : size === 'large' ? '14px 24px' : '10px 20px',
         borderRadius: 20,
         backgroundColor: variant === 'primary' ? 'var(--md-sys-color-primary)' : 
-                        variant === 'secondary' ? 'var(--md-sys-color-secondary-container)' : 'transparent',
+          variant === 'secondary' ? 'var(--md-sys-color-secondary-container)' : 'transparent',
         color: variant === 'primary' ? 'var(--md-sys-color-on-primary)' :
-               variant === 'secondary' ? 'var(--md-sys-color-on-secondary-container)' :
-               'var(--md-sys-color-primary)',
+          variant === 'secondary' ? 'var(--md-sys-color-on-secondary-container)' :
+            'var(--md-sys-color-primary)',
         textTransform: 'uppercase',
         letterSpacing: '0.5px'
       };
@@ -419,7 +419,7 @@ export const PlatformButton: React.FC<PlatformButtonProps> = ({
       padding: size === 'small' ? '6px 12px' : size === 'large' ? '12px 24px' : '8px 16px',
       borderRadius: 4,
       backgroundColor: variant === 'primary' ? 'var(--color-primary)' : 
-                      variant === 'secondary' ? 'var(--color-secondary)' : 'transparent',
+        variant === 'secondary' ? 'var(--color-secondary)' : 'transparent',
       color: variant === 'text' ? 'var(--color-primary)' : 'white'
     };
   };

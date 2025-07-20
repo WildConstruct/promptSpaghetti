@@ -117,7 +117,7 @@ describe('Graph to GeneratorBundle conversion', () => {
         name: 'Test Import Bundle',
         version: '1.0.0',
         author: 'Test Author',
-        created: new Date().toISOString(),
+        created: new Date().toISOString()
       },
       variables: {
         greeting: 'Hello',
@@ -276,7 +276,7 @@ describe('Graph to GeneratorBundle conversion', () => {
         name: 'Complex Bundle',
         version: '1.0.0',
         author: 'Test Author',
-        created: new Date().toISOString(),
+        created: new Date().toISOString()
       },
       variables: {},
       grammar: {

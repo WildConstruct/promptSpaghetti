@@ -12,14 +12,14 @@ jest.mock('../python-executor-client', () => {
   const mockClient = {
     execute: jest.fn(),
     validate: jest.fn(),
-    health: jest.fn(),
+    health: jest.fn()
   };
   
   return {
     PythonExecutorClient: jest.fn(() => mockClient),
     pythonExecutorClient: mockClient,
     executePythonCode: jest.fn(),
-    validatePythonCode: jest.fn(),
+    validatePythonCode: jest.fn()
   };
 });
 
@@ -39,7 +39,7 @@ describe('PythonTransformNode', () => {
     // Create test context
     context = AdvancedExecutionUtils.enhanceContext({
       variables: { testVar: 'test value' },
-      seed: 'test-seed',
+      seed: 'test-seed'
     });
 
     // Create node with basic configuration
@@ -50,7 +50,7 @@ def transform(input_data):
 `,
       timeout: 30,
       memoryLimit: '128MB',
-      allowedModules: ['json', 'math'],
+      allowedModules: ['json', 'math']
     });
   });
 
@@ -88,9 +88,9 @@ def transform(input_data):
         context: expect.objectContaining({
           variables: { testVar: 'test value' },
           nodeId: 'test-node',
-          seed: 'test-seed',
+          seed: 'test-seed'
         }),
-        strict_mode: true,
+        strict_mode: true
       });
     });
 
@@ -123,7 +123,7 @@ def transform(input_data):
       // Create node with skip fallback
       node = new PythonTransformNode('test-node', {
         code: 'invalid code',
-        pythonConfig: { fallbackBehavior: 'skip' },
+        pythonConfig: { fallbackBehavior: 'skip' }
       });
 
       // Mock execution failure
@@ -160,7 +160,7 @@ def transform(input_data):
         pythonConfig: { 
           fallbackBehavior: 'default',
           defaultOutput: 'Default output'
-        },
+        }
       });
 
       // Mock execution failure
@@ -205,7 +205,7 @@ def transform(input_data):
       // Create node with skip fallback
       node = new PythonTransformNode('test-node', {
         code: 'def transform(input_data): return input_data',
-        pythonConfig: { fallbackBehavior: 'skip' },
+        pythonConfig: { fallbackBehavior: 'skip' }
       });
 
       // Mock client error
@@ -244,8 +244,8 @@ def transform(input_data):
         pythonConfig: {
           strictMode: false,
           enableCaching: false,
-          retryAttempts: 5,
-        },
+          retryAttempts: 5
+        }
       });
 
       // Mock successful execution
@@ -277,7 +277,7 @@ def transform(input_data):
         memory_limit: '256MB',
         allowed_modules: ['json', 'math', 'datetime'],
         context: expect.any(Object),
-        strict_mode: false,
+        strict_mode: false
       });
     });
 
@@ -287,15 +287,15 @@ def transform(input_data):
         code: 'def transform(input_data): return input_data',
         pythonConfig: {
           executorUrl: 'http://custom-executor:8001',
-          retryAttempts: 2,
-        },
+          retryAttempts: 2
+        }
       });
 
       // Verify custom client was created
       expect(PythonExecutorClient).toHaveBeenCalledWith({
         baseUrl: 'http://custom-executor:8001',
         retryAttempts: 2,
-        defaultStrictMode: true,
+        defaultStrictMode: true
       });
     });
   });
@@ -315,15 +315,15 @@ def transform(input_data):
             level: 'warning',
             type: 'memory_warning',
             message: 'High memory usage detected',
-            details: { usage: '90%' },
+            details: { usage: '90%' }
           },
           {
             timestamp: Date.now(),
             level: 'error',
             type: 'dangerous_pattern',
             message: 'Dangerous pattern detected',
-            details: { pattern: 'eval(' },
-          },
+            details: { pattern: 'eval(' }
+          }
         ],
         warnings: [],
         peak_memory: '30MB',
@@ -347,14 +347,14 @@ def transform(input_data):
         expect.stringContaining('Python security event in node test-node:'),
         expect.objectContaining({
           level: 'warning',
-          type: 'memory_warning',
+          type: 'memory_warning'
         })
       );
       expect(consoleWarnSpy).toHaveBeenCalledWith(
         expect.stringContaining('Python security event in node test-node:'),
         expect.objectContaining({
           level: 'error',
-          type: 'dangerous_pattern',
+          type: 'dangerous_pattern'
         })
       );
 
@@ -392,13 +392,13 @@ def transform(input_data):
       expect(consoleWarnSpy).toHaveBeenCalledWith(
         expect.stringContaining('Python warning in node test-node:'),
         expect.objectContaining({
-          warning: 'Warning 1',
+          warning: 'Warning 1'
         })
       );
       expect(consoleWarnSpy).toHaveBeenCalledWith(
         expect.stringContaining('Python warning in node test-node:'),
         expect.objectContaining({
-          warning: 'Warning 2',
+          warning: 'Warning 2'
         })
       );
 
@@ -507,7 +507,7 @@ def transform(input_data):
       });
       expect(mockClient.validate).toHaveBeenCalledWith({
         code: expect.stringContaining('def transform(input_data):'),
-        strict_mode: true,
+        strict_mode: true
       });
     });
 
@@ -516,7 +516,7 @@ def transform(input_data):
       mockClient.validate.mockResolvedValue({
         valid: false,
         errors: ['Syntax error', 'Missing function'],
-        warnings: ['Performance warning'],
+        warnings: ['Performance warning']
       });
 
       // Validate code
@@ -526,7 +526,7 @@ def transform(input_data):
       expect(result).toEqual({
         valid: false,
         errors: ['Syntax error', 'Missing function'],
-        warnings: ['Performance warning'],
+        warnings: ['Performance warning']
       });
     });
 
@@ -567,7 +567,7 @@ def transform(input_data):
       mockClient.health.mockResolvedValue({
         status: 'healthy',
         version: '1.0.0',
-        uptime: 3600,
+        uptime: 3600
       });
 
       // Check availability
@@ -593,7 +593,7 @@ def transform(input_data):
       const healthData = {
         status: 'healthy',
         version: '1.0.0',
-        uptime: 3600,
+        uptime: 3600
       };
       mockClient.health.mockResolvedValue(healthData);
 

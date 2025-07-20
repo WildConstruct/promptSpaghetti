@@ -12,24 +12,24 @@ import {
 // Request schemas
 const GetRulesQuerySchema = z.object({
   includeInactive: z.string().optional().transform(val => val === 'true'),
-  search: z.string().optional(),
+  search: z.string().optional()
 });
 
 const RuleIdParamsSchema = z.object({
-  id: z.string().transform(val => parseInt(val, 10)),
+  id: z.string().transform(val => parseInt(val, 10))
 });
 
 const ReorderRulesSchema = z.object({
-  ruleIds: z.array(z.number().int().positive()),
+  ruleIds: z.array(z.number().int().positive())
 });
 
 const ImportRulesSchema = z.object({
   rules: z.array(z.any()),
-  userId: z.number().int().positive().optional().default(1),
+  userId: z.number().int().positive().optional().default(1)
 });
 
 const StatsQuerySchema = z.object({
-  days: z.string().optional().transform(val => parseInt(val || '30', 10)),
+  days: z.string().optional().transform(val => parseInt(val || '30', 10))
 });
 
 const ExportQuerySchema = z.object({
@@ -38,7 +38,7 @@ const ExportQuerySchema = z.object({
   description: z.string().optional(),
   includeInactive: z.string().optional().transform(val => val === 'true'),
   includeStatistics: z.string().optional().transform(val => val === 'true'),
-  ruleIds: z.string().optional().transform(val => val ? val.split(',').map(id => parseInt(id, 10)) : undefined),
+  ruleIds: z.string().optional().transform(val => val ? val.split(',').map(id => parseInt(id, 10)) : undefined)
 });
 
 const ImportSchema = z.object({
@@ -46,7 +46,7 @@ const ImportSchema = z.object({
   content: z.string(),
   overwrite: z.boolean().optional().default(false),
   merge: z.boolean().optional().default(false),
-  skipDuplicates: z.boolean().optional().default(true),
+  skipDuplicates: z.boolean().optional().default(true)
 });
 
 const CreateCorrectionSetSchema = z.object({
@@ -54,7 +54,7 @@ const CreateCorrectionSetSchema = z.object({
   description: z.string().optional(),
   version: z.string().optional().default('1.0.0'),
   isPublic: z.boolean().optional().default(false),
-  ruleIds: z.array(z.number().int().positive()),
+  ruleIds: z.array(z.number().int().positive())
 });
 
 // Type definitions
@@ -738,7 +738,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
         description: options.description,
         includeInactive: options.includeInactive,
         includeStatistics: options.includeStatistics,
-        ruleIds: options.ruleIds,
+        ruleIds: options.ruleIds
       });
       
       if (!result.success) {
@@ -778,7 +778,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
         {
           overwrite: importData.overwrite,
           merge: importData.merge,
-          skipDuplicates: importData.skipDuplicates,
+          skipDuplicates: importData.skipDuplicates
         }
       );
       
@@ -842,7 +842,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           name: setData.name,
           description: setData.description,
           version: setData.version,
-          isPublic: setData.isPublic,
+          isPublic: setData.isPublic
         }
       );
       
@@ -1028,12 +1028,12 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
               id: rule.id,
               name: rule.name,
               executionTime,
-              charactersChanged: Math.abs(correctedText.length - originalText.length),
+              charactersChanged: Math.abs(correctedText.length - originalText.length)
             });
             
             // Record enhanced statistics
             dao.recordRuleUsage(rule.id, executionTime, originalText.length, true, {
-              charactersAfter: correctedText.length,
+              charactersAfter: correctedText.length
             });
           }
         } catch (error) {
@@ -1051,7 +1051,7 @@ export async function correctionsRoutes(fastify: FastifyInstance) {
           correctedText,
           appliedRules,
           changed: text !== correctedText,
-          totalExecutionTime: appliedRules.reduce((sum, r) => sum + r.executionTime, 0),
+          totalExecutionTime: appliedRules.reduce((sum, r) => sum + r.executionTime, 0)
         }
       };
     } catch (error) {

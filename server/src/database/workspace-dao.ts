@@ -44,7 +44,7 @@ import {
   ProjectFilter,
   ActivityEventFilter,
   CommentFilter,
-  ROLE_PERMISSIONS,
+  ROLE_PERMISSIONS
 } from './workspace-models';
 
 export class WorkspaceDAO {
@@ -77,7 +77,7 @@ export class WorkspaceDAO {
     // Add owner as admin member
     await this.createUserMembership({
       user_id: userId,
-      workspace_id: id,
+      workspace_id: id
     }, userId);
 
     const adminRole = await this.getRole(id, 'admin');
@@ -86,7 +86,7 @@ export class WorkspaceDAO {
         user_id: userId,
         role_id: adminRole.id,
         scope_type: 'workspace',
-        scope_id: id,
+        scope_id: id
       }, userId);
     }
 
@@ -108,7 +108,7 @@ export class WorkspaceDAO {
       settings: JSON.parse(row.settings || '{}'),
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at),
-      archived_at: row.archived_at ? new Date(row.archived_at) : null,
+      archived_at: row.archived_at ? new Date(row.archived_at) : null
     };
   }
 
@@ -128,7 +128,7 @@ export class WorkspaceDAO {
     const params: any[] = [userId];
 
     if (filter.search) {
-      whereClause += ` AND (w.name ILIKE ? OR w.description ILIKE ?)`;
+      whereClause += ' AND (w.name ILIKE ? OR w.description ILIKE ?)';
       params.push(`%${filter.search}%`, `%${filter.search}%`);
     }
 
@@ -176,9 +176,9 @@ export class WorkspaceDAO {
         status: row.membership_status,
         invited_by: null,
         joined_at: new Date(row.joined_at),
-        last_active_at: new Date(row.last_active_at),
+        last_active_at: new Date(row.last_active_at)
       },
-      role_permissions: row.role_permissions || 0,
+      role_permissions: row.role_permissions || 0
     }));
 
     return {
@@ -189,8 +189,8 @@ export class WorkspaceDAO {
         total,
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
-        has_prev: page > 1,
-      },
+        has_prev: page > 1
+      }
     };
   }
 
@@ -269,7 +269,7 @@ export class WorkspaceDAO {
       project_id: id,
       actor_id: userId,
       event_type: 'project.created',
-      event_data: { project_name: data.name },
+      event_data: { project_name: data.name }
     });
 
     return this.getProject(id)!;
@@ -289,7 +289,7 @@ export class WorkspaceDAO {
       ...row,
       metadata: JSON.parse(row.metadata || '{}'),
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     };
   }
 
@@ -301,7 +301,7 @@ export class WorkspaceDAO {
     const { page = 1, limit = 20, sort_by = 'updated_at', sort_order = 'desc' } = pagination;
     const offset = (page - 1) * limit;
 
-    let whereClause = `WHERE p.workspace_id = ? AND p.status != 'deleted'`;
+    let whereClause = 'WHERE p.workspace_id = ? AND p.status != \'deleted\'';
     const params: any[] = [workspaceId];
 
     if (filter.status && filter.status.length > 0) {
@@ -311,12 +311,12 @@ export class WorkspaceDAO {
     }
 
     if (filter.created_by) {
-      whereClause += ` AND p.created_by = ?`;
+      whereClause += ' AND p.created_by = ?';
       params.push(filter.created_by);
     }
 
     if (filter.search) {
-      whereClause += ` AND (p.name ILIKE ? OR p.description ILIKE ?)`;
+      whereClause += ' AND (p.name ILIKE ? OR p.description ILIKE ?)';
       params.push(`%${filter.search}%`, `%${filter.search}%`);
     }
 
@@ -358,7 +358,7 @@ export class WorkspaceDAO {
       updated_at: new Date(row.updated_at),
       resource_count: row.resource_count || 0,
       comment_count: row.comment_count || 0,
-      last_activity: row.last_activity ? new Date(row.last_activity) : null,
+      last_activity: row.last_activity ? new Date(row.last_activity) : null
     }));
 
     return {
@@ -369,8 +369,8 @@ export class WorkspaceDAO {
         total,
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
-        has_prev: page > 1,
-      },
+        has_prev: page > 1
+      }
     };
   }
 
@@ -419,7 +419,7 @@ export class WorkspaceDAO {
         project_id: id,
         actor_id: userId,
         event_type: 'project.updated',
-        event_data: { changes: Object.keys(data) },
+        event_data: { changes: Object.keys(data) }
       });
     }
 
@@ -466,7 +466,7 @@ export class WorkspaceDAO {
         resource_id: id,
         actor_id: userId,
         event_type: 'resource.created',
-        event_data: { resource_name: data.name, resource_type: data.type },
+        event_data: { resource_name: data.name, resource_type: data.type }
       });
     }
 
@@ -491,7 +491,7 @@ export class WorkspaceDAO {
       json_meta: JSON.parse(row.json_meta || '{}'),
       content_data: row.content_data ? JSON.parse(row.content_data) : null,
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     };
   }
 
@@ -502,7 +502,7 @@ export class WorkspaceDAO {
       { name: 'admin', description: 'Full workspace access', permissions: ROLE_PERMISSIONS.ADMIN },
       { name: 'editor', description: 'Can create and edit content', permissions: ROLE_PERMISSIONS.EDITOR },
       { name: 'viewer', description: 'Read-only access', permissions: ROLE_PERMISSIONS.VIEWER },
-      { name: 'commenter', description: 'Can view and comment', permissions: ROLE_PERMISSIONS.COMMENTER },
+      { name: 'commenter', description: 'Can view and comment', permissions: ROLE_PERMISSIONS.COMMENTER }
     ];
 
     const stmt = this.db.prepare(`
@@ -530,7 +530,7 @@ export class WorkspaceDAO {
       ...row,
       is_system_role: Boolean(row.is_system_role),
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     };
   }
 
@@ -562,7 +562,7 @@ export class WorkspaceDAO {
       scope_id: data.scope_id,
       granted_by: grantedBy,
       granted_at: new Date(now),
-      expires_at: data.expires_at || undefined,
+      expires_at: data.expires_at || undefined
     };
   }
 
@@ -584,7 +584,7 @@ export class WorkspaceDAO {
       status: 'active',
       invited_by: invitedBy,
       joined_at: new Date(now),
-      last_active_at: new Date(now),
+      last_active_at: new Date(now)
     };
   }
 
@@ -623,7 +623,7 @@ export class WorkspaceDAO {
       event_type: data.event_type,
       event_data: data.event_data || {},
       aggregation_key: data.aggregation_key,
-      created_at: new Date(now),
+      created_at: new Date(now)
     };
   }
 
@@ -635,16 +635,16 @@ export class WorkspaceDAO {
     const { page = 1, limit = 20, sort_by = 'created_at', sort_order = 'desc' } = pagination;
     const offset = (page - 1) * limit;
 
-    let whereClause = `WHERE ae.workspace_id = ?`;
+    let whereClause = 'WHERE ae.workspace_id = ?';
     const params: any[] = [workspaceId];
 
     if (filter.project_id) {
-      whereClause += ` AND ae.project_id = ?`;
+      whereClause += ' AND ae.project_id = ?';
       params.push(filter.project_id);
     }
 
     if (filter.actor_id) {
-      whereClause += ` AND ae.actor_id = ?`;
+      whereClause += ' AND ae.actor_id = ?';
       params.push(filter.actor_id);
     }
 
@@ -655,12 +655,12 @@ export class WorkspaceDAO {
     }
 
     if (filter.from_date) {
-      whereClause += ` AND ae.created_at >= ?`;
+      whereClause += ' AND ae.created_at >= ?';
       params.push(filter.from_date.toISOString());
     }
 
     if (filter.to_date) {
-      whereClause += ` AND ae.created_at <= ?`;
+      whereClause += ' AND ae.created_at <= ?';
       params.push(filter.to_date.toISOString());
     }
 
@@ -700,7 +700,7 @@ export class WorkspaceDAO {
       actor_name: `User ${row.actor_id}`, // TODO: Get actual user name
       project_name: row.project_name,
       resource_name: row.resource_name,
-      resource_type: row.resource_type,
+      resource_type: row.resource_type
     }));
 
     return {
@@ -711,8 +711,8 @@ export class WorkspaceDAO {
         total,
         total_pages: Math.ceil(total / limit),
         has_next: page * limit < total,
-        has_prev: page > 1,
-      },
+        has_prev: page > 1
+      }
     };
   }
 
@@ -745,7 +745,7 @@ export class WorkspaceDAO {
       actor_name: `User ${row.actor_id}`, // TODO: Get actual user name
       project_name: row.project_name,
       resource_name: row.resource_name,
-      resource_type: row.resource_type,
+      resource_type: row.resource_type
     };
   }
 
@@ -805,7 +805,7 @@ export class WorkspaceDAO {
     const dayRows = dayStmt.all(workspaceId, since.toISOString()) as any[];
     const eventsByDay = dayRows.map(row => ({
       date: row.date,
-      count: row.count,
+      count: row.count
     }));
 
     // Most active users
@@ -820,14 +820,14 @@ export class WorkspaceDAO {
     const userRows = userStmt.all(workspaceId, since.toISOString()) as any[];
     const mostActiveUsers = userRows.map(row => ({
       user_id: row.user_id,
-      count: row.count,
+      count: row.count
     }));
 
     return {
       total_events: total,
       events_by_type: eventsByType,
       events_by_day: eventsByDay,
-      most_active_users: mostActiveUsers,
+      most_active_users: mostActiveUsers
     };
   }
 
@@ -872,7 +872,7 @@ export class WorkspaceDAO {
         target_type: data.target_type,
         target_id: data.target_id,
         content_preview: data.content.substring(0, 100)
-      },
+      }
     });
 
     return this.getComment(id)!;
@@ -911,7 +911,7 @@ export class WorkspaceDAO {
       metadata: JSON.parse(row.metadata || '{}'),
       reply_count: parseInt(row.reply_count) || 0,
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     };
   }
 
@@ -952,7 +952,7 @@ export class WorkspaceDAO {
         comment_id: commentId,
         target_type: existingComment.target_type,
         target_id: existingComment.target_id
-      },
+      }
     });
 
     return this.getComment(commentId);
@@ -984,7 +984,7 @@ export class WorkspaceDAO {
           comment_id: commentId,
           target_type: existingComment.target_type,
           target_id: existingComment.target_id
-        },
+        }
       });
     }
 
@@ -1049,7 +1049,7 @@ export class WorkspaceDAO {
       metadata: JSON.parse(row.metadata || '{}'),
       reply_count: parseInt(row.reply_count) || 0,
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     }));
 
     const total = totalResult.total;
@@ -1114,7 +1114,7 @@ export class WorkspaceDAO {
       metadata: JSON.parse(row.metadata || '{}'),
       reply_count: 0,
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     }));
 
     const total = totalResult.total;
@@ -1184,7 +1184,7 @@ export class WorkspaceDAO {
       metadata: JSON.parse(row.metadata || '{}'),
       reply_count: parseInt(row.reply_count) || 0,
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     }));
 
     const total = totalResult.total;
@@ -1243,7 +1243,7 @@ export class WorkspaceDAO {
       priority: data.priority || 'normal',
       delivery_channel: data.delivery_channel || 'in_app',
       read_at: undefined,
-      delivered_at: new Date(now),
+      delivered_at: new Date(now)
     };
   }
 
@@ -1296,7 +1296,7 @@ export class WorkspaceDAO {
       last_login_at: row.last_login_at ? new Date(row.last_login_at) : undefined,
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at),
-      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null,
+      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null
     };
   }
 
@@ -1321,7 +1321,7 @@ export class WorkspaceDAO {
       last_login_at: row.last_login_at ? new Date(row.last_login_at) : undefined,
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at),
-      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null,
+      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null
     };
   }
 
@@ -1349,7 +1349,7 @@ export class WorkspaceDAO {
       last_login_at: row.last_login_at ? new Date(row.last_login_at) : undefined,
       created_at: new Date(row.created_at),
       updated_at: new Date(row.updated_at),
-      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null,
+      deactivated_at: row.deactivated_at ? new Date(row.deactivated_at) : null
     };
   }
 
@@ -1458,7 +1458,7 @@ export class WorkspaceDAO {
       user_agent: data.user_agent,
       ip_address: data.ip_address,
       created_at: new Date(now),
-      last_active_at: new Date(now),
+      last_active_at: new Date(now)
     };
   }
 
@@ -1479,7 +1479,7 @@ export class WorkspaceDAO {
       user_agent: row.user_agent,
       ip_address: row.ip_address,
       created_at: new Date(row.created_at),
-      last_active_at: new Date(row.last_active_at),
+      last_active_at: new Date(row.last_active_at)
     };
   }
 
@@ -1521,7 +1521,7 @@ export class WorkspaceDAO {
       user_agent: row.user_agent,
       ip_address: row.ip_address,
       created_at: new Date(row.created_at),
-      last_active_at: new Date(row.last_active_at),
+      last_active_at: new Date(row.last_active_at)
     }));
   }
 
@@ -1560,7 +1560,7 @@ export class WorkspaceDAO {
       redirect_uri: redirectUri,
       workspace_id: workspaceId,
       expires_at: expiresAt,
-      created_at: new Date(now),
+      created_at: new Date(now)
     };
   }
 
@@ -1580,7 +1580,7 @@ export class WorkspaceDAO {
       redirect_uri: row.redirect_uri,
       workspace_id: row.workspace_id,
       expires_at: new Date(row.expires_at),
-      created_at: new Date(row.created_at),
+      created_at: new Date(row.created_at)
     };
   }
 
@@ -1669,7 +1669,7 @@ export class WorkspaceDAO {
       ip_address: row.ip_address,
       user_agent: row.user_agent,
       workspace_id: row.workspace_id,
-      created_at: new Date(row.created_at),
+      created_at: new Date(row.created_at)
     }));
   }
 
@@ -1694,7 +1694,7 @@ export class WorkspaceDAO {
       id: row.id,
       name: row.name,
       role: row.role,
-      permissions: row.permissions,
+      permissions: row.permissions
     }));
   }
 }

@@ -99,8 +99,8 @@ export const BulkOperationsModal: React.FC<BulkOperationsModalProps> = ({
         const body = operation === 'enable' 
           ? { reason }
           : operation === 'disable'
-          ? { enabled: false, reason }
-          : undefined;
+            ? { enabled: false, reason }
+            : undefined;
 
         const response = await fetch(endpoint, {
           method,

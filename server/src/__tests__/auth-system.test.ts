@@ -29,7 +29,7 @@ const mockWorkspaceDAO = {
   findOAuthState: jest.fn(),
   deleteOAuthState: jest.fn(),
   logSecurityEvent: jest.fn(),
-  getUserWorkspaces: jest.fn(),
+  getUserWorkspaces: jest.fn()
 } as unknown as WorkspaceDAO;
 
 // Mock fetch for OAuth tests
@@ -55,7 +55,7 @@ describe('AuthService', () => {
         clientId: 'test-client-id',
         clientSecret: 'test-client-secret',
         redirectUri: 'http://localhost:3000/auth/callback',
-        scope: 'openid email profile',
+        scope: 'openid email profile'
       };
 
       await expect(authService.registerOAuthProvider(config)).resolves.not.toThrow();
@@ -74,7 +74,7 @@ describe('AuthService', () => {
         provider: 'invalid' as any,
         clientId: 'test-client-id',
         clientSecret: 'test-client-secret',
-        redirectUri: 'http://localhost:3000/auth/callback',
+        redirectUri: 'http://localhost:3000/auth/callback'
       };
 
       await expect(authService.registerOAuthProvider(invalidConfig)).rejects.toThrow();
@@ -88,7 +88,7 @@ describe('AuthService', () => {
         clientId: 'test-client-id',
         clientSecret: 'test-client-secret',
         redirectUri: 'http://localhost:3000/auth/callback',
-        scope: 'openid email profile',
+        scope: 'openid email profile'
       });
     });
 
@@ -114,12 +114,12 @@ describe('AuthService', () => {
         token_type: 'Bearer',
         expires_in: 3600,
         refresh_token: 'mock-refresh-token',
-        scope: 'openid email profile',
+        scope: 'openid email profile'
       };
 
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockTokenResponse),
+        json: jest.fn().mockResolvedValue(mockTokenResponse)
       });
 
       const tokenResponse = await authService.exchangeCodeForToken('google', 'auth-code');
@@ -130,8 +130,8 @@ describe('AuthService', () => {
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
-            'Content-Type': 'application/x-www-form-urlencoded',
-          }),
+            'Content-Type': 'application/x-www-form-urlencoded'
+          })
         })
       );
     });
@@ -139,7 +139,7 @@ describe('AuthService', () => {
     test('should handle token exchange failure', async () => {
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: false,
-        statusText: 'Bad Request',
+        statusText: 'Bad Request'
       });
 
       await expect(authService.exchangeCodeForToken('google', 'invalid-code'))
@@ -152,12 +152,12 @@ describe('AuthService', () => {
         email: 'user@example.com',
         name: 'Test User',
         picture: 'https://example.com/avatar.jpg',
-        verified_email: true,
+        verified_email: true
       };
 
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockUserInfo),
+        json: jest.fn().mockResolvedValue(mockUserInfo)
       });
 
       const userInfo = await authService.getUserInfo('google', 'access-token');
@@ -167,14 +167,14 @@ describe('AuthService', () => {
         email: 'user@example.com',
         name: 'Test User',
         picture: 'https://example.com/avatar.jpg',
-        verified_email: true,
+        verified_email: true
       });
     });
 
     test('should handle user info fetch failure', async () => {
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: false,
-        statusText: 'Unauthorized',
+        statusText: 'Unauthorized'
       });
 
       await expect(authService.getUserInfo('google', 'invalid-token'))
@@ -364,7 +364,7 @@ describe('AuthService', () => {
         role: 'editor',
         permissions: [1, 2, 4, 8],
         created_at: new Date(),
-        updated_at: new Date(),
+        updated_at: new Date()
       };
 
       (mockWorkspaceDAO.getUserMembership as jest.Mock).mockResolvedValue(mockMembership);
@@ -390,7 +390,7 @@ describe('AuthService', () => {
       const userId = 'user-123';
       const workspaceId = 'workspace-123';
       const mockMembership = {
-        permissions: [1, 2, 4, 8],
+        permissions: [1, 2, 4, 8]
       };
 
       (mockWorkspaceDAO.getUserMembership as jest.Mock).mockResolvedValue(mockMembership);
@@ -423,7 +423,7 @@ describe('AuthService', () => {
         provider: 'google' as const,
         clientId: '',
         clientSecret: 'test-secret',
-        redirectUri: 'invalid-url',
+        redirectUri: 'invalid-url'
       };
 
       await expect(authService.registerOAuthProvider(invalidConfig)).rejects.toThrow();

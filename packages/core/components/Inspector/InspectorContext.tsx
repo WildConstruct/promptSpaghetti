@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Node } from "reactflow";
-import { ZodSchema } from "zod";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { Node } from 'reactflow';
+import { ZodSchema } from 'zod';
 
 interface InspectorState {
   selectedNode: Node | null;
@@ -36,7 +36,7 @@ export const InspectorProvider: React.FC<InspectorProviderProps> = ({
   onNodeUpdate,
   initialWidth = 320,
   initialCollapsed = false,
-  initialVisible = true,
+  initialVisible = true
 }) => {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [selectedSchema, setSelectedSchema] = useState<ZodSchema<any> | null>(null);
@@ -63,7 +63,7 @@ export const InspectorProvider: React.FC<InspectorProviderProps> = ({
     setPanelWidth,
     setPanelCollapsed,
     setPanelVisible,
-    updateNodeData,
+    updateNodeData
   };
 
   return (

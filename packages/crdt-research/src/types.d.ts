@@ -1,14 +1,39 @@
+/**
+ * Core types for CRDT research
+ */
+export interface NodeData {
+    [key: string]: any;
+}
+export interface Edge {
+    id: string;
+    source: string;
+    target: string;
+    type?: string;
+    data?: any;
+}
+/**
+ * Unique identifier for a peer in the collaborative session
+ */
 export type PeerId = string;
+/**
+ * Logical timestamp for operation ordering
+ */
 export interface LogicalTimestamp {
     counter: number;
     peerId: PeerId;
 }
+/**
+ * Base interface for all CRDT operations
+ */
 export interface CRDTOperation {
     id: string;
     timestamp: LogicalTimestamp | number;
     peerId: PeerId;
     type: string;
 }
+/**
+ * Graph-specific CRDT operations
+ */
 export interface GraphOperation extends CRDTOperation {
     type: 'node' | 'edge' | 'addNode' | 'removeNode' | 'updateNode' | 'addEdge' | 'removeEdge';
     payload: unknown;
@@ -17,12 +42,18 @@ export interface GraphOperation extends CRDTOperation {
     data?: any;
     userId?: string;
 }
+/**
+ * CRDT-enhanced graph structure
+ */
 export interface CRDTGraph {
     nodes: Map<string, CRDTNode>;
     edges: Map<string, CRDTEdge>;
     tombstones: Set<string>;
     version: LogicalTimestamp;
 }
+/**
+ * CRDT-enhanced node with metadata
+ */
 export interface CRDTNode {
     id: string;
     type: 'WeightedChoice' | 'Concat' | 'Output' | 'SetVariable' | 'GetVariable' | 'Include' | string;
@@ -37,6 +68,9 @@ export interface CRDTNode {
     lastModified?: LogicalTimestamp;
     deleted?: boolean;
 }
+/**
+ * CRDT-enhanced edge with metadata
+ */
 export interface CRDTEdge {
     id: string;
     source: string;
@@ -48,19 +82,22 @@ export interface CRDTEdge {
     createdAt?: LogicalTimestamp;
     deleted?: boolean;
 }
-export interface SyncMessage {
-    type: 'operation' | 'state' | 'request';
-    peerId: PeerId;
-    timestamp: LogicalTimestamp;
-    payload: unknown;
-}
+/**
+ * Conflict resolution strategy
+ */
 export type ConflictResolutionStrategy = 'lastWriteWins' | 'multiValue' | 'custom';
+/**
+ * CRDT implementation configuration
+ */
 export interface CRDTConfig {
     peerId: PeerId;
     conflictResolution: ConflictResolutionStrategy;
     gcInterval?: number;
     maxHistorySize?: number;
 }
+/**
+ * User presence information for awareness
+ */
 export interface UserPresence {
     userId: string;
     cursor?: {
@@ -75,12 +112,18 @@ export interface UserPresence {
     name: string;
     timestamp: number;
 }
+/**
+ * Sync state tracking
+ */
 export interface SyncState {
     documentId: string;
     userId: string;
     lastSync: number;
     pendingOps: number;
 }
+/**
+ * Synchronization message between peers
+ */
 export interface SyncMessage {
     type: 'sync' | 'update' | 'awareness' | 'operation' | 'state' | 'request';
     documentId: string;
@@ -92,12 +135,18 @@ export interface SyncMessage {
     peerId?: PeerId;
     payload?: unknown;
 }
+/**
+ * Node operation types
+ */
 export interface NodeOperation extends GraphOperation {
     type: 'node';
     action: 'create' | 'update' | 'delete';
     targetId: string;
     data?: Partial<CRDTNode>;
 }
+/**
+ * Edge operation types
+ */
 export interface EdgeOperation extends GraphOperation {
     type: 'edge';
     action: 'create' | 'update' | 'delete';

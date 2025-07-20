@@ -28,7 +28,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
   resourceId,
   projectId,
   className = '',
-  compact = false,
+  compact = false
 }) => {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -42,13 +42,13 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
     deleteComment,
     loadMore,
     hasMore,
-    refresh,
+    refresh
   } = useComments({
     workspaceId,
     targetType,
     targetId,
     userId,
-    sortOrder,
+    sortOrder
   });
 
   const handleCreateComment = async (content: string, parentCommentId?: string) => {
@@ -61,7 +61,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
       parent_comment_id: parentCommentId,
       target_type: targetType,
       target_id: targetId,
-      metadata: {},
+      metadata: {}
     };
 
     try {
@@ -104,8 +104,8 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
         ...comment.metadata,
         resolved,
         resolved_by: resolved ? userId : undefined,
-        resolved_at: resolved ? new Date().toISOString() : undefined,
-      },
+        resolved_at: resolved ? new Date().toISOString() : undefined
+      }
     };
 
     try {

@@ -26,7 +26,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
   creatorId,
   timeRange,
   startDate,
-  endDate,
+  endDate
 }) => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');

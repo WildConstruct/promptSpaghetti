@@ -5,20 +5,20 @@ import {
   AnalyticsEventSchema,
   AnalyticsQuerySchema,
   CustomReportSchema,
-  TimeRange,
+  TimeRange
 } from './analytics.types';
 
 // Request/Response schemas
 const TrackEventRequest = AnalyticsEventSchema;
 
 const BatchTrackEventsRequest = z.object({
-  events: z.array(AnalyticsEventSchema).min(1).max(100),
+  events: z.array(AnalyticsEventSchema).min(1).max(100)
 });
 
 const DashboardQueryParams = z.object({
   time_range: z.nativeEnum(TimeRange),
   start_date: z.coerce.date().optional(),
-  end_date: z.coerce.date().optional(),
+  end_date: z.coerce.date().optional()
 });
 
 const MetricsQueryParams = DashboardQueryParams;
@@ -26,12 +26,12 @@ const MetricsQueryParams = DashboardQueryParams;
 const InsightsQueryParams = z.object({
   template_ids: z.string().optional().transform(val => 
     val ? val.split(',').filter(Boolean) : undefined
-  ),
+  )
 });
 
 const ExportRequest = z.object({
   query: AnalyticsQuerySchema,
-  format: z.enum(['csv', 'xlsx', 'json']).default('csv'),
+  format: z.enum(['csv', 'xlsx', 'json']).default('csv')
 });
 
 const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
@@ -44,10 +44,10 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       response: {
         200: z.object({
           success: z.boolean(),
-          event_id: z.string(),
-        }),
-      },
-    },
+          event_id: z.string()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const eventData = request.body;
@@ -55,13 +55,13 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       
       reply.send({
         success: true,
-        event_id: event.id,
+        event_id: event.id
       });
     } catch (error) {
       fastify.log.error('Failed to track analytics event:', error);
       reply.status(500).send({
         error: 'Failed to track analytics event',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -73,10 +73,10 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       response: {
         200: z.object({
           success: z.boolean(),
-          events_tracked: z.number(),
-        }),
-      },
-    },
+          events_tracked: z.number()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const { events } = request.body;
@@ -84,13 +84,13 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       
       reply.send({
         success: true,
-        events_tracked: trackedEvents.length,
+        events_tracked: trackedEvents.length
       });
     } catch (error) {
       fastify.log.error('Failed to batch track analytics events:', error);
       reply.status(500).send({
         error: 'Failed to batch track analytics events',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -99,10 +99,10 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/creators/:creatorId/dashboard', {
     schema: {
       params: z.object({
-        creatorId: z.string().uuid(),
+        creatorId: z.string().uuid()
       }),
-      querystring: DashboardQueryParams,
-    },
+      querystring: DashboardQueryParams
+    }
   }, async (request, reply) => {
     try {
       const { creatorId } = request.params;
@@ -120,7 +120,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to fetch creator dashboard:', error);
       reply.status(500).send({
         error: 'Failed to fetch creator dashboard',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -129,10 +129,10 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/templates/:templateId/metrics', {
     schema: {
       params: z.object({
-        templateId: z.string().uuid(),
+        templateId: z.string().uuid()
       }),
-      querystring: MetricsQueryParams,
-    },
+      querystring: MetricsQueryParams
+    }
   }, async (request, reply) => {
     try {
       const { templateId } = request.params;
@@ -150,7 +150,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to fetch template metrics:', error);
       reply.status(500).send({
         error: 'Failed to fetch template metrics',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -158,8 +158,8 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   // Query analytics data
   fastify.post('/query', {
     schema: {
-      body: AnalyticsQuerySchema,
-    },
+      body: AnalyticsQuerySchema
+    }
   }, async (request, reply) => {
     try {
       const query = request.body;
@@ -170,7 +170,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to query analytics data:', error);
       reply.status(500).send({
         error: 'Failed to query analytics data',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -178,8 +178,8 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   // Create custom report
   fastify.post('/reports', {
     schema: {
-      body: CustomReportSchema,
-    },
+      body: CustomReportSchema
+    }
   }, async (request, reply) => {
     try {
       // Extract creator ID from auth context (placeholder)
@@ -196,7 +196,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to create custom report:', error);
       reply.status(500).send({
         error: 'Failed to create custom report',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -205,9 +205,9 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/creators/:creatorId/reports', {
     schema: {
       params: z.object({
-        creatorId: z.string().uuid(),
-      }),
-    },
+        creatorId: z.string().uuid()
+      })
+    }
   }, async (request, reply) => {
     try {
       const { creatorId } = request.params;
@@ -218,7 +218,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to fetch custom reports:', error);
       reply.status(500).send({
         error: 'Failed to fetch custom reports',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -227,9 +227,9 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post('/reports/:reportId/generate', {
     schema: {
       params: z.object({
-        reportId: z.string().uuid(),
-      }),
-    },
+        reportId: z.string().uuid()
+      })
+    }
   }, async (request, reply) => {
     try {
       const { reportId } = request.params;
@@ -240,7 +240,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to generate report:', error);
       reply.status(500).send({
         error: 'Failed to generate report',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -249,10 +249,10 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.patch('/reports/:reportId', {
     schema: {
       params: z.object({
-        reportId: z.string().uuid(),
+        reportId: z.string().uuid()
       }),
-      body: CustomReportSchema.partial(),
-    },
+      body: CustomReportSchema.partial()
+    }
   }, async (request, reply) => {
     try {
       const { reportId } = request.params;
@@ -274,7 +274,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
           updates.description,
           updates.configuration ? JSON.stringify(updates.configuration) : null,
           updates.is_scheduled,
-          updates.schedule ? JSON.stringify(updates.schedule) : null,
+          updates.schedule ? JSON.stringify(updates.schedule) : null
         ]
       );
 
@@ -287,13 +287,13 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
         configuration: JSON.parse(updatedReport.configuration),
         schedule: updatedReport.schedule ? JSON.parse(updatedReport.schedule) : undefined,
         created_at: new Date(updatedReport.created_at),
-        updated_at: new Date(updatedReport.updated_at),
+        updated_at: new Date(updatedReport.updated_at)
       });
     } catch (error) {
       fastify.log.error('Failed to update custom report:', error);
       reply.status(500).send({
         error: 'Failed to update custom report',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -302,9 +302,9 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.delete('/reports/:reportId', {
     schema: {
       params: z.object({
-        reportId: z.string().uuid(),
-      }),
-    },
+        reportId: z.string().uuid()
+      })
+    }
   }, async (request, reply) => {
     try {
       const { reportId } = request.params;
@@ -323,7 +323,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to delete custom report:', error);
       reply.status(500).send({
         error: 'Failed to delete custom report',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -332,10 +332,10 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.get('/creators/:creatorId/insights', {
     schema: {
       params: z.object({
-        creatorId: z.string().uuid(),
+        creatorId: z.string().uuid()
       }),
-      querystring: InsightsQueryParams,
-    },
+      querystring: InsightsQueryParams
+    }
   }, async (request, reply) => {
     try {
       const { creatorId } = request.params;
@@ -348,7 +348,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to generate insights:', error);
       reply.status(500).send({
         error: 'Failed to generate insights',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -357,9 +357,9 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post('/insights/:insightId/dismiss', {
     schema: {
       params: z.object({
-        insightId: z.string().uuid(),
-      }),
-    },
+        insightId: z.string().uuid()
+      })
+    }
   }, async (request, reply) => {
     try {
       const { insightId } = request.params;
@@ -374,7 +374,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       fastify.log.error('Failed to dismiss insight:', error);
       reply.status(500).send({
         error: 'Failed to dismiss insight',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -382,8 +382,8 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
   // Export analytics data
   fastify.post('/export', {
     schema: {
-      body: ExportRequest,
-    },
+      body: ExportRequest
+    }
   }, async (request, reply) => {
     try {
       const { query, format } = request.body;
@@ -393,31 +393,31 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       const filename = `analytics_export_${new Date().toISOString().split('T')[0]}`;
       
       switch (format) {
-        case 'csv':
-          reply.header('Content-Type', 'text/csv');
-          reply.header('Content-Disposition', `attachment; filename="${filename}.csv"`);
-          reply.send(convertToCSV(results));
-          break;
+      case 'csv':
+        reply.header('Content-Type', 'text/csv');
+        reply.header('Content-Disposition', `attachment; filename="${filename}.csv"`);
+        reply.send(convertToCSV(results));
+        break;
           
-        case 'xlsx':
-          reply.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-          reply.header('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
-          // Note: Would need xlsx library for actual Excel export
-          reply.send(JSON.stringify(results));
-          break;
+      case 'xlsx':
+        reply.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        reply.header('Content-Disposition', `attachment; filename="${filename}.xlsx"`);
+        // Note: Would need xlsx library for actual Excel export
+        reply.send(JSON.stringify(results));
+        break;
           
-        case 'json':
-        default:
-          reply.header('Content-Type', 'application/json');
-          reply.header('Content-Disposition', `attachment; filename="${filename}.json"`);
-          reply.send(results);
-          break;
+      case 'json':
+      default:
+        reply.header('Content-Type', 'application/json');
+        reply.header('Content-Disposition', `attachment; filename="${filename}.json"`);
+        reply.send(results);
+        break;
       }
     } catch (error) {
       fastify.log.error('Failed to export analytics data:', error);
       reply.status(500).send({
         error: 'Failed to export analytics data',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -428,23 +428,23 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       response: {
         200: z.object({
           success: z.boolean(),
-          message: z.string(),
-        }),
-      },
-    },
+          message: z.string()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       await fastify.db.query('SELECT aggregate_analytics_data()');
       
       reply.send({
         success: true,
-        message: 'Analytics data aggregated successfully',
+        message: 'Analytics data aggregated successfully'
       });
     } catch (error) {
       fastify.log.error('Failed to aggregate analytics data:', error);
       reply.status(500).send({
         error: 'Failed to aggregate analytics data',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });
@@ -455,23 +455,23 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
       response: {
         200: z.object({
           success: z.boolean(),
-          message: z.string(),
-        }),
-      },
-    },
+          message: z.string()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       await fastify.db.query('SELECT generate_analytics_insights()');
       
       reply.send({
         success: true,
-        message: 'Analytics insights generated successfully',
+        message: 'Analytics insights generated successfully'
       });
     } catch (error) {
       fastify.log.error('Failed to generate analytics insights:', error);
       reply.status(500).send({
         error: 'Failed to generate analytics insights',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   });

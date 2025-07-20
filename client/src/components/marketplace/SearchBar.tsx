@@ -64,31 +64,31 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     }
 
     switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setSelectedSuggestion(prev => 
-          prev < suggestions.length - 1 ? prev + 1 : 0
-        );
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setSelectedSuggestion(prev => 
-          prev > 0 ? prev - 1 : suggestions.length - 1
-        );
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
-          handleSuggestionSelect(suggestions[selectedSuggestion]);
-        } else {
-          handleSubmit();
-        }
-        break;
-      case 'Escape':
-        setShowSuggestions(false);
-        setSelectedSuggestion(-1);
-        inputRef.current?.blur();
-        break;
+    case 'ArrowDown':
+      e.preventDefault();
+      setSelectedSuggestion(prev => 
+        prev < suggestions.length - 1 ? prev + 1 : 0
+      );
+      break;
+    case 'ArrowUp':
+      e.preventDefault();
+      setSelectedSuggestion(prev => 
+        prev > 0 ? prev - 1 : suggestions.length - 1
+      );
+      break;
+    case 'Enter':
+      e.preventDefault();
+      if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
+        handleSuggestionSelect(suggestions[selectedSuggestion]);
+      } else {
+        handleSubmit();
+      }
+      break;
+    case 'Escape':
+      setShowSuggestions(false);
+      setSelectedSuggestion(-1);
+      inputRef.current?.blur();
+      break;
     }
   };
 

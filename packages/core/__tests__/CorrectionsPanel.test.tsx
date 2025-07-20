@@ -16,9 +16,9 @@ jest.mock('../correctionsStore', () => ({
       replaceWith: ' ',
       isRegex: true,
       isActive: true,
-      priority: 1,
-    },
-  ],
+      priority: 1
+    }
+  ]
 }));
 
 const mockStore = {
@@ -29,7 +29,7 @@ const mockStore = {
   toggleRule: jest.fn(),
   reorderRules: jest.fn(),
   clearAllRules: jest.fn(),
-  applyCorrections: jest.fn((text) => text),
+  applyCorrections: jest.fn((text) => text)
 };
 
 beforeEach(() => {
@@ -88,8 +88,8 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -108,8 +108,8 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -131,8 +131,8 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -150,8 +150,8 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -173,16 +173,16 @@ describe('CorrectionsPanel', () => {
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     
     fireEvent.change(screen.getByPlaceholderText('Rule name'), {
-      target: { value: 'New Rule' },
+      target: { value: 'New Rule' }
     });
     fireEvent.change(screen.getByPlaceholderText('Description (optional)'), {
-      target: { value: 'New description' },
+      target: { value: 'New description' }
     });
     fireEvent.change(screen.getByPlaceholderText('Find pattern'), {
-      target: { value: 'find' },
+      target: { value: 'find' }
     });
     fireEvent.change(screen.getByPlaceholderText('Replace with'), {
-      target: { value: 'replace' },
+      target: { value: 'replace' }
     });
     
     fireEvent.click(screen.getByText('Add Rule'));
@@ -194,7 +194,7 @@ describe('CorrectionsPanel', () => {
       replaceWith: 'replace',
       isRegex: false,
       isActive: true,
-      priority: 1,
+      priority: 1
     });
   });
 
@@ -205,12 +205,12 @@ describe('CorrectionsPanel', () => {
     expect(addButton).toBeDisabled();
     
     fireEvent.change(screen.getByPlaceholderText('Rule name'), {
-      target: { value: 'New Rule' },
+      target: { value: 'New Rule' }
     });
     expect(addButton).toBeDisabled();
     
     fireEvent.change(screen.getByPlaceholderText('Find pattern'), {
-      target: { value: 'find' },
+      target: { value: 'find' }
     });
     expect(addButton).not.toBeDisabled();
   });
@@ -226,8 +226,8 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -252,8 +252,8 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -300,8 +300,8 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
@@ -314,7 +314,7 @@ describe('CorrectionsPanel', () => {
     fireEvent.click(screen.getByText('Save'));
     
     expect(mockStore.updateRule).toHaveBeenCalledWith('1', expect.objectContaining({
-      name: 'Updated Rule',
+      name: 'Updated Rule'
     }));
   });
 
@@ -329,8 +329,8 @@ describe('CorrectionsPanel', () => {
         isActive: true,
         priority: 1,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
     
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);

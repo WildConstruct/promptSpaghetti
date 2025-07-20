@@ -16,18 +16,18 @@ const ROLES = [
   { value: 'admin', label: 'Admin', description: 'Full workspace access and management' },
   { value: 'editor', label: 'Editor', description: 'Can create and edit projects and resources' },
   { value: 'commenter', label: 'Commenter', description: 'Can view content and add comments' },
-  { value: 'viewer', label: 'Viewer', description: 'Read-only access to content' },
+  { value: 'viewer', label: 'Viewer', description: 'Read-only access to content' }
 ];
 
 export const InviteUserModal: React.FC<InviteUserModalProps> = ({
   workspaceId,
   workspaceName,
   onSubmit,
-  onCancel,
+  onCancel
 }) => {
   const [formData, setFormData] = useState({
     userId: '',
-    role: 'editor',
+    role: 'editor'
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,7 +60,7 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({
     try {
       await onSubmit({
         userId: formData.userId.trim(),
-        role: formData.role,
+        role: formData.role
       });
     } catch (error) {
       console.error('Failed to invite user:', error);

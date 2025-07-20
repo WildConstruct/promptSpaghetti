@@ -419,28 +419,28 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         try {
           let result;
           switch (action) {
-            case 'cancel':
-              result = await schedulingService.updateSchedule(
-                { id: scheduleId, status: ScheduleStatus.CANCELLED, reason },
-                userId
-              );
-              break;
-            case 'pause':
-              result = await schedulingService.updateSchedule(
-                { id: scheduleId, enabled: false, reason },
-                userId
-              );
-              break;
-            case 'resume':
-              result = await schedulingService.updateSchedule(
-                { id: scheduleId, enabled: true, reason },
-                userId
-              );
-              break;
-            case 'delete':
-              const deleted = await schedulingService.deleteSchedule(scheduleId);
-              result = deleted ? { id: scheduleId, deleted: true } : null;
-              break;
+          case 'cancel':
+            result = await schedulingService.updateSchedule(
+              { id: scheduleId, status: ScheduleStatus.CANCELLED, reason },
+              userId
+            );
+            break;
+          case 'pause':
+            result = await schedulingService.updateSchedule(
+              { id: scheduleId, enabled: false, reason },
+              userId
+            );
+            break;
+          case 'resume':
+            result = await schedulingService.updateSchedule(
+              { id: scheduleId, enabled: true, reason },
+              userId
+            );
+            break;
+          case 'delete':
+            const deleted = await schedulingService.deleteSchedule(scheduleId);
+            result = deleted ? { id: scheduleId, deleted: true } : null;
+            break;
           }
 
           results.push({

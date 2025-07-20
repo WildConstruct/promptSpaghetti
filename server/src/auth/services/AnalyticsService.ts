@@ -66,7 +66,7 @@ export class AnalyticsService {
         data.userAgent,
         data.source || 'organic',
         data.referrer,
-        JSON.stringify(data.additionalData || {}),
+        JSON.stringify(data.additionalData || {})
       ]);
     } catch (error) {
       console.error('Failed to track registration event:', error);
@@ -95,7 +95,7 @@ export class AnalyticsService {
         eventType,
         data.fieldValueLength || null,
         data.errorMessage || null,
-        data.timeSpentMs || null,
+        data.timeSpentMs || null
       ]);
     } catch (error) {
       console.error('Failed to track form field interaction:', error);
@@ -121,7 +121,7 @@ export class AnalyticsService {
         data.emailHash,
         step,
         JSON.stringify(data.stepData || {}),
-        data.durationMs,
+        data.durationMs
       ]);
     } catch (error) {
       console.error('Failed to track registration funnel:', error);
@@ -132,7 +132,7 @@ export class AnalyticsService {
     const timeframes = {
       day: '1 day',
       week: '1 week',
-      month: '1 month',
+      month: '1 month'
     };
 
     try {
@@ -225,7 +225,7 @@ export class AnalyticsService {
         dropOffPoints: dropOffData.rows.map(row => ({
           step: row.step,
           count: parseInt(row.count),
-          percentage: parseInt(row.percentage),
+          percentage: parseInt(row.percentage)
         })),
         sourceBreakdown: sourceData.rows.reduce((acc, row) => {
           const visits = parseInt(row.visits);
@@ -233,10 +233,10 @@ export class AnalyticsService {
           acc[row.source] = {
             visits,
             registrations,
-            conversionRate: visits > 0 ? registrations / visits : 0,
+            conversionRate: visits > 0 ? registrations / visits : 0
           };
           return acc;
-        }, {}),
+        }, {})
       };
     } catch (error) {
       console.error('Failed to get registration metrics:', error);
@@ -248,7 +248,7 @@ export class AnalyticsService {
     const timeframes = {
       day: '1 day',
       week: '1 week',
-      month: '1 month',
+      month: '1 month'
     };
 
     try {
@@ -337,7 +337,7 @@ export class AnalyticsService {
         .map(field => ({
           field,
           errorRate: fieldErrorMap[field] || 0,
-          averageTime: fieldTimeMap[field] || 0,
+          averageTime: fieldTimeMap[field] || 0
         }))
         .filter(item => item.errorRate > 0.1 || item.averageTime > 10000) // High error rate or >10s
         .sort((a, b) => b.errorRate - a.errorRate)
@@ -350,7 +350,7 @@ export class AnalyticsService {
         stepCompletionRates: stepCompletion.rows.reduce((acc, row) => {
           acc[row.step_number] = parseFloat(row.completion_rate);
           return acc;
-        }, {}),
+        }, {})
       };
     } catch (error) {
       console.error('Failed to get form analytics:', error);
@@ -385,7 +385,7 @@ export class AnalyticsService {
         variant: row.variant,
         participants: parseInt(row.participants),
         conversions: parseInt(row.conversions),
-        conversionRate: parseFloat(row.conversion_rate),
+        conversionRate: parseFloat(row.conversion_rate)
       }));
 
       // Simple statistical significance calculation (would need more sophisticated analysis in production)
@@ -417,7 +417,7 @@ export class AnalyticsService {
       return {
         variants,
         winner,
-        confidence,
+        confidence
       };
     } catch (error) {
       console.error('Failed to get A/B test results:', error);
@@ -447,7 +447,7 @@ export class AnalyticsService {
         emailType,
         emailAddress,
         status,
-        JSON.stringify(metadata || {}),
+        JSON.stringify(metadata || {})
       ]);
     } catch (error) {
       console.error('Failed to track email delivery:', error);
@@ -463,7 +463,7 @@ export class AnalyticsService {
     const timeframes = {
       day: '1 day',
       week: '1 week',
-      month: '1 month',
+      month: '1 month'
     };
 
     try {
@@ -502,7 +502,7 @@ export class AnalyticsService {
         deliveryRates,
         openRates,
         clickRates,
-        bounceRates,
+        bounceRates
       };
     } catch (error) {
       console.error('Failed to get email delivery stats:', error);

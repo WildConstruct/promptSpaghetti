@@ -16,54 +16,54 @@ export const WebSocketStatus: React.FC<WebSocketStatusProps> = ({
 }) => {
   const getStatusColor = (status: ConnectionState['status']): string => {
     switch (status) {
-      case 'connected':
-      case 'authenticated':
-        return 'text-green-500';
-      case 'connecting':
-      case 'authenticating':
-        return 'text-yellow-500';
-      case 'disconnected':
-        return 'text-gray-500';
-      case 'error':
-        return 'text-red-500';
-      default:
-        return 'text-gray-500';
+    case 'connected':
+    case 'authenticated':
+      return 'text-green-500';
+    case 'connecting':
+    case 'authenticating':
+      return 'text-yellow-500';
+    case 'disconnected':
+      return 'text-gray-500';
+    case 'error':
+      return 'text-red-500';
+    default:
+      return 'text-gray-500';
     }
   };
 
   const getStatusIcon = (status: ConnectionState['status']): string => {
     switch (status) {
-      case 'connected':
-      case 'authenticated':
-        return '●';
-      case 'connecting':
-      case 'authenticating':
-        return '◐';
-      case 'disconnected':
-        return '○';
-      case 'error':
-        return '✕';
-      default:
-        return '○';
+    case 'connected':
+    case 'authenticated':
+      return '●';
+    case 'connecting':
+    case 'authenticating':
+      return '◐';
+    case 'disconnected':
+      return '○';
+    case 'error':
+      return '✕';
+    default:
+      return '○';
     }
   };
 
   const getStatusText = (status: ConnectionState['status']): string => {
     switch (status) {
-      case 'connected':
-        return 'Connected';
-      case 'authenticated':
-        return 'Connected & Authenticated';
-      case 'connecting':
-        return 'Connecting...';
-      case 'authenticating':
-        return 'Authenticating...';
-      case 'disconnected':
-        return 'Disconnected';
-      case 'error':
-        return 'Connection Error';
-      default:
-        return 'Unknown';
+    case 'connected':
+      return 'Connected';
+    case 'authenticated':
+      return 'Connected & Authenticated';
+    case 'connecting':
+      return 'Connecting...';
+    case 'authenticating':
+      return 'Authenticating...';
+    case 'disconnected':
+      return 'Disconnected';
+    case 'error':
+      return 'Connection Error';
+    default:
+      return 'Unknown';
     }
   };
 
@@ -183,8 +183,8 @@ export const WebSocketDetails: React.FC<{
             <span className="text-gray-600">Status:</span>
             <span className={`font-medium ${
               isConnected ? 'text-green-600' : 
-              connectionState.status === 'error' ? 'text-red-600' : 
-              'text-gray-600'
+                connectionState.status === 'error' ? 'text-red-600' : 
+                  'text-gray-600'
             }`}>
               {connectionState.status}
             </span>

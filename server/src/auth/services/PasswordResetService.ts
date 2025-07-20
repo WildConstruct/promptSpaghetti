@@ -11,7 +11,7 @@ import {
   PasswordResetConfirmation,
   SecurityEvent,
   PasswordResetToken,
-  PasswordResetAttempt,
+  PasswordResetAttempt
 } from '../types';
 
 const PASSWORD_RESET_REQUEST_SCHEMA = z.object({
@@ -20,8 +20,8 @@ const PASSWORD_RESET_REQUEST_SCHEMA = z.object({
   clientInfo: z.object({
     userAgent: z.string(),
     ipAddress: z.string(),
-    fingerprint: z.string().optional(),
-  }),
+    fingerprint: z.string().optional()
+  })
 });
 
 const PASSWORD_RESET_CONFIRM_SCHEMA = z.object({
@@ -31,11 +31,11 @@ const PASSWORD_RESET_CONFIRM_SCHEMA = z.object({
   clientInfo: z.object({
     userAgent: z.string(),
     ipAddress: z.string(),
-    fingerprint: z.string().optional(),
-  }),
+    fingerprint: z.string().optional()
+  })
 }).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
+  message: 'Passwords don\'t match',
+  path: ['confirmPassword']
 });
 
 export class PasswordResetService {
@@ -69,7 +69,7 @@ export class PasswordResetService {
       const response: PasswordResetResponse = {
         success: true,
         message: 'If an account with that email exists, we\'ve sent a password reset link.',
-        estimatedDelivery: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
+        estimatedDelivery: new Date(Date.now() + 5 * 60 * 1000) // 5 minutes
       };
 
       if (!user) {
@@ -81,7 +81,7 @@ export class PasswordResetService {
           ipAddress: clientInfo.ipAddress,
           userAgent: clientInfo.userAgent,
           success: false,
-          metadata: { reason: 'User not found' },
+          metadata: { reason: 'User not found' }
         });
         return response;
       }
@@ -95,7 +95,7 @@ export class PasswordResetService {
           ipAddress: clientInfo.ipAddress,
           userAgent: clientInfo.userAgent,
           success: false,
-          metadata: { accountStatus: user.status },
+          metadata: { accountStatus: user.status }
         });
         return response;
       }
@@ -121,7 +121,7 @@ export class PasswordResetService {
         expiresAt,
         ipAddress: clientInfo.ipAddress,
         userAgent: clientInfo.userAgent,
-        fingerprint: clientInfo.fingerprint,
+        fingerprint: clientInfo.fingerprint
       });
 
       // Send password reset email
@@ -135,7 +135,7 @@ export class PasswordResetService {
         ipAddress: clientInfo.ipAddress,
         userAgent: clientInfo.userAgent,
         success: true,
-        metadata: { tokenExpiresAt: expiresAt },
+        metadata: { tokenExpiresAt: expiresAt }
       });
 
       return response;
@@ -147,7 +147,7 @@ export class PasswordResetService {
         ipAddress: request.clientInfo.ipAddress,
         userAgent: request.clientInfo.userAgent,
         success: false,
-        metadata: { error: error instanceof Error ? error.message : 'Unknown error' },
+        metadata: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       throw error;
     }
@@ -162,7 +162,7 @@ export class PasswordResetService {
         return {
           valid: false,
           error: 'Invalid or expired reset token',
-          canRetry: false,
+          canRetry: false
         };
       }
 
@@ -171,7 +171,7 @@ export class PasswordResetService {
         return {
           valid: false,
           error: 'Reset token has expired',
-          canRetry: true,
+          canRetry: true
         };
       }
 
@@ -180,7 +180,7 @@ export class PasswordResetService {
         return {
           valid: false,
           error: 'Account is not available for password reset',
-          canRetry: false,
+          canRetry: false
         };
       }
 
@@ -188,13 +188,13 @@ export class PasswordResetService {
         valid: true,
         userId: user.id,
         email: user.email,
-        tokenExpiresAt: tokenRecord.expiresAt,
+        tokenExpiresAt: tokenRecord.expiresAt
       };
     } catch (error) {
       return {
         valid: false,
         error: 'Failed to validate reset token',
-        canRetry: true,
+        canRetry: true
       };
     }
   }
@@ -217,7 +217,7 @@ export class PasswordResetService {
           ipAddress: clientInfo.ipAddress,
           userAgent: clientInfo.userAgent,
           success: false,
-          metadata: { error: validation.error },
+          metadata: { error: validation.error }
         });
         
         throw new Error(validation.error || 'Invalid reset token');
@@ -270,12 +270,12 @@ export class PasswordResetService {
         metadata: { 
           sessionsInvalidated: true,
           passwordStrengthScore: passwordValidation.score 
-        },
+        }
       });
 
       return {
         success: true,
-        message: 'Password has been reset successfully. Please log in with your new password.',
+        message: 'Password has been reset successfully. Please log in with your new password.'
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
@@ -287,7 +287,7 @@ export class PasswordResetService {
         ipAddress: confirmation.clientInfo.ipAddress,
         userAgent: confirmation.clientInfo.userAgent,
         success: false,
-        metadata: { error: errorMessage },
+        metadata: { error: errorMessage }
       });
 
       throw new Error(errorMessage);
@@ -321,7 +321,7 @@ export class PasswordResetService {
       ipAddress: row.ip_address,
       userAgent: row.user_agent,
       completed: row.completed,
-      revoked: row.revoked,
+      revoked: row.revoked
     }));
   }
 
@@ -367,7 +367,7 @@ export class PasswordResetService {
       tokenData.expiresAt,
       tokenData.ipAddress,
       tokenData.userAgent,
-      tokenData.fingerprint,
+      tokenData.fingerprint
     ]);
   }
 
@@ -389,7 +389,7 @@ export class PasswordResetService {
       expiresAt: row.expires_at,
       usedAt: row.used_at,
       revokedAt: row.revoked_at,
-      createdAt: row.created_at,
+      createdAt: row.created_at
     };
   }
 
@@ -410,7 +410,7 @@ export class PasswordResetService {
       expiresAt: row.expires_at,
       usedAt: row.used_at,
       revokedAt: row.revoked_at,
-      createdAt: row.created_at,
+      createdAt: row.created_at
     }));
   }
 
@@ -488,7 +488,7 @@ export class PasswordResetService {
       type: argon2.argon2id,
       memoryCost: 2 ** 16, // 64 MB
       timeCost: 3,
-      parallelism: 1,
+      parallelism: 1
     });
   }
 
@@ -549,7 +549,7 @@ export class PasswordResetService {
       resetUrl,
       expiresAt: new Date(Date.now() + this.TOKEN_EXPIRY_HOURS * 60 * 60 * 1000),
       ipAddress: clientInfo.ipAddress,
-      userAgent: clientInfo.userAgent,
+      userAgent: clientInfo.userAgent
     });
   }
 
@@ -562,7 +562,7 @@ export class PasswordResetService {
       firstName: user.first_name,
       timestamp: new Date(),
       ipAddress: clientInfo.ipAddress,
-      userAgent: clientInfo.userAgent,
+      userAgent: clientInfo.userAgent
     });
   }
 }

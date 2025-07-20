@@ -152,53 +152,53 @@ export class GraphSerializer {
     const props: Record<string, any> = {};
 
     switch (node.type) {
-      case 'WeightedChoice':
-        if ('choices' in node) {
-          props.choices = node.choices;
-        }
-        break;
+    case 'WeightedChoice':
+      if ('choices' in node) {
+        props.choices = node.choices;
+      }
+      break;
 
-      case 'WeightedAdvanced':
-        if ('choices' in node) props.choices = node.choices;
-        if ('distributionConfig' in node) props.distribution = node.distributionConfig;
-        break;
+    case 'WeightedAdvanced':
+      if ('choices' in node) props.choices = node.choices;
+      if ('distributionConfig' in node) props.distribution = node.distributionConfig;
+      break;
 
-      case 'Conditional':
-        if ('branches' in node) props.branches = node.branches;
-        if ('defaultOutput' in node) props.default = node.defaultOutput;
-        if ('conditionalConfig' in node) props.config = node.conditionalConfig;
-        break;
+    case 'Conditional':
+      if ('branches' in node) props.branches = node.branches;
+      if ('defaultOutput' in node) props.default = node.defaultOutput;
+      if ('conditionalConfig' in node) props.config = node.conditionalConfig;
+      break;
 
-      case 'Sequential':
-        if ('sequence' in node) props.sequence = node.sequence;
-        if ('pattern' in node) props.pattern = node.pattern;
-        break;
+    case 'Sequential':
+      if ('sequence' in node) props.sequence = node.sequence;
+      if ('pattern' in node) props.pattern = node.pattern;
+      break;
 
-      case 'Markov':
-        if ('states' in node) props.states = node.states;
-        if ('initialState' in node) props.initial = node.initialState;
-        if ('terminationConditions' in node) props.termination = node.terminationConditions;
-        break;
+    case 'Markov':
+      if ('states' in node) props.states = node.states;
+      if ('initialState' in node) props.initial = node.initialState;
+      if ('terminationConditions' in node) props.termination = node.terminationConditions;
+      break;
 
-      case 'SetVariable':
-        if ('key' in node) props.key = node.key;
-        if ('value' in node) props.value = node.value;
-        break;
+    case 'SetVariable':
+      if ('key' in node) props.key = node.key;
+      if ('value' in node) props.value = node.value;
+      break;
 
-      case 'GetVariable':
-        if ('key' in node) props.key = node.key;
-        break;
+    case 'GetVariable':
+      if ('key' in node) props.key = node.key;
+      break;
 
-      case 'Include':
-        if ('name' in node) props.name = node.name;
-        break;
+    case 'Include':
+      if ('name' in node) props.name = node.name;
+      break;
 
-      case 'PythonTransform':
-        if ('code' in node) props.code = node.code;
-        if ('timeout' in node) props.timeout = node.timeout;
-        if ('memoryLimit' in node) props.memory_limit = node.memoryLimit;
-        if ('allowedModules' in node) props.allowed_modules = node.allowedModules;
-        break;
+    case 'PythonTransform':
+      if ('code' in node) props.code = node.code;
+      if ('timeout' in node) props.timeout = node.timeout;
+      if ('memoryLimit' in node) props.memory_limit = node.memoryLimit;
+      if ('allowedModules' in node) props.allowed_modules = node.allowedModules;
+      break;
     }
 
     return props;

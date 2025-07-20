@@ -1,6 +1,6 @@
-import React, { memo } from "react";
-import { Node, Handle, Position } from "reactflow";
-import { NodeMeta } from "../Palette";
+import React, { memo } from 'react';
+import { Node, Handle, Position } from 'reactflow';
+import { NodeMeta } from '../Palette';
 
 interface NodeRendererProps {
   id: string;
@@ -17,7 +17,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
   selected = false,
   onSelect,
   getNodeMeta,
-  getCategoryColor,
+  getCategoryColor
 }) => {
   try {
     const hasVariations = data?.variations && data.variations.length > 0;
@@ -65,7 +65,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           WebkitTransform: 'translateZ(0)',
           transform: 'translateZ(0)',
           WebkitBackfaceVisibility: 'hidden',
-          backfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden'
         }}
         onMouseEnter={(e) => {
           if (!selected) {
@@ -97,7 +97,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             fontWeight: 600,
             display: 'flex',
             alignItems: 'center',
-            gap: 6,
+            gap: 6
           }}
         >
           <span style={{ fontSize: 14 }}>
@@ -116,7 +116,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 10,
-                fontWeight: 'bold',
+                fontWeight: 'bold'
               }}
               title={`${data.variations.length} variations`}
             >
@@ -163,7 +163,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             background: '#4a5568',
             border: '2px solid #2d3748',
             cursor: 'crosshair',
-            zIndex: 10,
+            zIndex: 10
           }}
           isConnectable={true}
         />
@@ -180,7 +180,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             background: categoryColor,
             border: '2px solid #2d3748',
             cursor: 'crosshair',
-            zIndex: 10,
+            zIndex: 10
           }}
           isConnectable={true}
         />
@@ -202,7 +202,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           color: '#e2e8f0',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'center'
         }}
       >
         Error: {data?.nodeType || data?.type || 'Unknown'}

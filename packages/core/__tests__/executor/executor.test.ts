@@ -9,15 +9,15 @@ const sampleGraph: Graph = {
       type: 'WeightedChoice',
       choices: [
         { value: 'A', weight: 1 },
-        { value: 'B', weight: 1 },
-      ],
+        { value: 'B', weight: 1 }
+      ]
     },
     {
       id: 'out1',
       type: 'Output',
-      inputs: ['wc1'],
-    },
-  ],
+      inputs: ['wc1']
+    }
+  ]
 };
 
 describe('executeGraph determinism', () => {

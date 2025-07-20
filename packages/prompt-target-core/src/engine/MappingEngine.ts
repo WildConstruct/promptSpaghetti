@@ -435,7 +435,7 @@ export class MappingEngine {
       version: string;
       name: string;
     }>;
-  } {
+    } {
     const adaptorInfo = Array.from(this.adaptors.entries()).map(([platform, adaptor]) => ({
       platform,
       id: adaptor.id,

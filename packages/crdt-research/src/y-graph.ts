@@ -193,37 +193,37 @@ export class YGraph extends Y.AbstractType<any> {
 
   private _applyNodeOperation(operation: NodeOperation): void {
     switch (operation.action) {
-      case 'create':
-        if (operation.data) {
-          this.addNode(operation.data);
-        }
-        break;
-      case 'update':
-        if (operation.data) {
-          this.updateNode(operation.targetId, operation.data);
-        }
-        break;
-      case 'delete':
-        this.deleteNode(operation.targetId);
-        break;
+    case 'create':
+      if (operation.data) {
+        this.addNode(operation.data);
+      }
+      break;
+    case 'update':
+      if (operation.data) {
+        this.updateNode(operation.targetId, operation.data);
+      }
+      break;
+    case 'delete':
+      this.deleteNode(operation.targetId);
+      break;
     }
   }
 
   private _applyEdgeOperation(operation: EdgeOperation): void {
     switch (operation.action) {
-      case 'create':
-        if (operation.data) {
-          this.addEdge(operation.data);
-        }
-        break;
-      case 'update':
-        if (operation.data) {
-          this.updateEdge(operation.targetId, operation.data);
-        }
-        break;
-      case 'delete':
-        this.deleteEdge(operation.targetId);
-        break;
+    case 'create':
+      if (operation.data) {
+        this.addEdge(operation.data);
+      }
+      break;
+    case 'update':
+      if (operation.data) {
+        this.updateEdge(operation.targetId, operation.data);
+      }
+      break;
+    case 'delete':
+      this.deleteEdge(operation.targetId);
+      break;
     }
   }
 

@@ -150,13 +150,13 @@ export class ValidationRulesEngine extends EventEmitter {
       maxExecutionTime: 10000, // 10 seconds
       parallelExecution: true,
       enableMetrics: true,
-      ...config,
+      ...config
     };
     
     this.metrics = {
       totalValidations: 0,
       averageExecutionTime: 0,
-      rulePerformance: new Map(),
+      rulePerformance: new Map()
     };
     
     this.initializeBuiltInRules();
@@ -268,13 +268,13 @@ export class ValidationRulesEngine extends EventEmitter {
             fixes.push({
               ruleId: result.rule.id,
               changes: fixResult.changes,
-              success: fixResult.fixed,
+              success: fixResult.fixed
             });
           } catch (error) {
             fixes.push({
               ruleId: result.rule.id,
               changes: [],
-              success: false,
+              success: false
             });
           }
         }
@@ -304,19 +304,19 @@ export class ValidationRulesEngine extends EventEmitter {
           message: result.result.message,
           source: result.result.affectedNodes?.length ? {
             nodeId: result.result.affectedNodes[0]
-          } : undefined,
+          } : undefined
         };
 
         if (result.severity === ValidationSeverity.ERROR || result.severity === ValidationSeverity.CRITICAL) {
           errors.push({
             ...item,
             severity: 'error' as const,
-            suggestion: result.rule.getSuggestion?.(report.results[0] as any, result.result),
+            suggestion: result.rule.getSuggestion?.(report.results[0] as any, result.result)
           });
         } else {
           warnings.push({
             ...item,
-            optimization: result.rule.getSuggestion?.(report.results[0] as any, result.result),
+            optimization: result.rule.getSuggestion?.(report.results[0] as any, result.result)
           });
         }
       }
@@ -326,7 +326,7 @@ export class ValidationRulesEngine extends EventEmitter {
       valid: report.valid,
       errors,
       warnings,
-      compatibilityScore: report.score / 100,
+      compatibilityScore: report.score / 100
     };
   }
 
@@ -344,13 +344,13 @@ export class ValidationRulesEngine extends EventEmitter {
       averageTime: number;
       failureRate: number;
     }>;
-  } {
+    } {
     const enabledRules = this.getRules().filter(r => r.enabled).length;
     const rulePerformance = Array.from(this.metrics.rulePerformance.entries()).map(([ruleId, stats]) => ({
       ruleId,
       executions: stats.executions,
       averageTime: stats.totalTime / stats.executions,
-      failureRate: stats.failureRate,
+      failureRate: stats.failureRate
     }));
 
     return {
@@ -358,7 +358,7 @@ export class ValidationRulesEngine extends EventEmitter {
       averageExecutionTime: this.metrics.averageExecutionTime,
       registeredRules: this.rules.size,
       enabledRules,
-      rulePerformance,
+      rulePerformance
     };
   }
 
@@ -456,9 +456,9 @@ export class ValidationRulesEngine extends EventEmitter {
             rule,
             result: {
               passed: false,
-              message: `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              message: `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`
             },
-            executionTime,
+            executionTime
           };
         }
       });
@@ -482,9 +482,9 @@ export class ValidationRulesEngine extends EventEmitter {
             rule,
             result: {
               passed: false,
-              message: `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              message: `Rule execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`
             },
-            executionTime,
+            executionTime
           });
         }
       }
@@ -525,14 +525,14 @@ export class ValidationRulesEngine extends EventEmitter {
       rule,
       result,
       severity: rule.severity,
-      category: rule.category,
+      category: rule.category
     }));
 
     const summary = {
       critical: results.filter(r => r.severity === ValidationSeverity.CRITICAL && !r.result.passed).length,
       errors: results.filter(r => r.severity === ValidationSeverity.ERROR && !r.result.passed).length,
       warnings: results.filter(r => r.severity === ValidationSeverity.WARNING && !r.result.passed).length,
-      info: results.filter(r => r.severity === ValidationSeverity.INFO && !r.result.passed).length,
+      info: results.filter(r => r.severity === ValidationSeverity.INFO && !r.result.passed).length
     };
 
     const rulesPassed = results.filter(r => r.result.passed).length;
@@ -557,7 +557,7 @@ export class ValidationRulesEngine extends EventEmitter {
       results,
       summary,
       recommendations,
-      autoFixable,
+      autoFixable
     };
   }
 
@@ -572,7 +572,7 @@ export class ValidationRulesEngine extends EventEmitter {
       [ValidationSeverity.CRITICAL]: 40,
       [ValidationSeverity.ERROR]: 25,
       [ValidationSeverity.WARNING]: 10,
-      [ValidationSeverity.INFO]: 5,
+      [ValidationSeverity.INFO]: 5
     };
 
     const totalPossiblePoints = results.reduce((sum, r) => sum + weights[r.severity], 0);
@@ -604,24 +604,24 @@ export class ValidationRulesEngine extends EventEmitter {
       const count = categoryResults.length;
       
       switch (category) {
-        case ValidationCategory.STRUCTURE:
-          recommendations.push(`Fix ${count} structural issue${count > 1 ? 's' : ''} to improve graph validity`);
-          break;
-        case ValidationCategory.CONTENT:
-          recommendations.push(`Address ${count} content issue${count > 1 ? 's' : ''} to enhance output quality`);
-          break;
-        case ValidationCategory.PLATFORM:
-          recommendations.push(`Resolve ${count} platform compatibility issue${count > 1 ? 's' : ''}`);
-          break;
-        case ValidationCategory.PERFORMANCE:
-          recommendations.push(`Optimize ${count} performance aspect${count > 1 ? 's' : ''} for better efficiency`);
-          break;
-        case ValidationCategory.SECURITY:
-          recommendations.push(`Address ${count} security concern${count > 1 ? 's' : ''} before deployment`);
-          break;
-        case ValidationCategory.QUALITY:
-          recommendations.push(`Improve ${count} quality metric${count > 1 ? 's' : ''} for better results`);
-          break;
+      case ValidationCategory.STRUCTURE:
+        recommendations.push(`Fix ${count} structural issue${count > 1 ? 's' : ''} to improve graph validity`);
+        break;
+      case ValidationCategory.CONTENT:
+        recommendations.push(`Address ${count} content issue${count > 1 ? 's' : ''} to enhance output quality`);
+        break;
+      case ValidationCategory.PLATFORM:
+        recommendations.push(`Resolve ${count} platform compatibility issue${count > 1 ? 's' : ''}`);
+        break;
+      case ValidationCategory.PERFORMANCE:
+        recommendations.push(`Optimize ${count} performance aspect${count > 1 ? 's' : ''} for better efficiency`);
+        break;
+      case ValidationCategory.SECURITY:
+        recommendations.push(`Address ${count} security concern${count > 1 ? 's' : ''} before deployment`);
+        break;
+      case ValidationCategory.QUALITY:
+        recommendations.push(`Improve ${count} quality metric${count > 1 ? 's' : ''} for better results`);
+        break;
       }
     }
 
@@ -642,7 +642,7 @@ export class ValidationRulesEngine extends EventEmitter {
       results: [],
       summary: { critical: 0, errors: 0, warnings: 0, info: 0 },
       recommendations: [],
-      autoFixable: 0,
+      autoFixable: 0
     };
   }
 
@@ -669,7 +669,7 @@ export class ValidationRulesEngine extends EventEmitter {
       this.metrics.rulePerformance.set(ruleId, {
         executions: 0,
         totalTime: 0,
-        failureRate: 0,
+        failureRate: 0
       });
     }
 
@@ -689,7 +689,7 @@ export class ValidationRulesEngine extends EventEmitter {
       [ValidationSeverity.INFO]: 0,
       [ValidationSeverity.WARNING]: 1,
       [ValidationSeverity.ERROR]: 2,
-      [ValidationSeverity.CRITICAL]: 3,
+      [ValidationSeverity.CRITICAL]: 3
     };
     return order[severity];
   }
@@ -720,7 +720,7 @@ class EmptyGraphRule implements ValidationRule {
       return {
         passed: false,
         message: 'Graph contains no nodes',
-        details: { nodeCount: 0 },
+        details: { nodeCount: 0 }
       };
     }
 
@@ -736,7 +736,7 @@ class EmptyGraphRule implements ValidationRule {
         details: { 
           totalNodes: graph.nodes.length,
           contentNodes: 0 
-        },
+        }
       };
     }
 
@@ -746,7 +746,7 @@ class EmptyGraphRule implements ValidationRule {
       details: { 
         totalNodes: graph.nodes.length,
         contentNodes: contentNodes.length 
-      },
+      }
     };
   }
 
@@ -776,7 +776,7 @@ class TokenLimitRule implements ValidationRule {
     if (!capabilities?.maxTokens) {
       return {
         passed: true,
-        message: 'No token limit specified for platform',
+        message: 'No token limit specified for platform'
       };
     }
 
@@ -797,7 +797,7 @@ class TokenLimitRule implements ValidationRule {
           limit, 
           overLimit: estimatedTokens - limit 
         },
-        metrics: { tokenUsage: estimatedTokens / limit },
+        metrics: { tokenUsage: estimatedTokens / limit }
       };
     }
 
@@ -810,7 +810,7 @@ class TokenLimitRule implements ValidationRule {
           limit, 
           warningThreshold 
         },
-        metrics: { tokenUsage: estimatedTokens / limit },
+        metrics: { tokenUsage: estimatedTokens / limit }
       };
     }
 
@@ -818,7 +818,7 @@ class TokenLimitRule implements ValidationRule {
       passed: true,
       message: `Content within acceptable token limits (${estimatedTokens}/${limit} tokens)`,
       details: { estimatedTokens, limit },
-      metrics: { tokenUsage: estimatedTokens / limit },
+      metrics: { tokenUsage: estimatedTokens / limit }
     };
   }
 
@@ -860,7 +860,7 @@ class InjectionDetectionRule implements ValidationRule {
     /execute\s+code/i,
     /run\s+command/i,
     /\$\{.*\}/g, // Template injection
-    /\{\{.*\}\}/g, // Handlebars/Mustache injection
+    /\{\{.*\}\}/g // Handlebars/Mustache injection
   ];
 
   applies(context: ValidationContext): boolean {
@@ -896,14 +896,14 @@ class InjectionDetectionRule implements ValidationRule {
           patterns: detectedPatterns,
           affectedNodeCount: affectedNodes.length 
         },
-        affectedNodes: [...new Set(affectedNodes)], // Remove duplicates
+        affectedNodes: [...new Set(affectedNodes)] // Remove duplicates
       };
     }
 
     return {
       passed: true,
       message: 'No injection attack patterns detected',
-      details: { patternsChecked: this.dangerousPatterns.length },
+      details: { patternsChecked: this.dangerousPatterns.length }
     };
   }
 
@@ -929,7 +929,7 @@ class InjectionDetectionRule implements ValidationRule {
               nodeId: node.id,
               type: 'text_sanitized',
               original: originalText,
-              cleaned: cleanedText,
+              cleaned: cleanedText
             });
           }
         }
@@ -977,7 +977,7 @@ class CyclicGraphRule implements ValidationRule {
     if (!graph.edges || graph.edges.length === 0) {
       return {
         passed: true,
-        message: 'No edges present, no cycles possible',
+        message: 'No edges present, no cycles possible'
       };
     }
 
@@ -1030,7 +1030,7 @@ class CyclicGraphRule implements ValidationRule {
             passed: false,
             message: `Cycle detected in graph involving ${cycleNodes.length} node(s)`,
             details: { cycleLength: cycleNodes.length },
-            affectedNodes: [...new Set(cycleNodes)],
+            affectedNodes: [...new Set(cycleNodes)]
           };
         }
       }
@@ -1039,7 +1039,7 @@ class CyclicGraphRule implements ValidationRule {
     return {
       passed: true,
       message: 'No cycles detected in graph',
-      details: { nodesChecked: adjacencyList.size },
+      details: { nodesChecked: adjacencyList.size }
     };
   }
 
@@ -1064,7 +1064,7 @@ class DisconnectedNodesRule implements ValidationRule {
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No nodes to validate',
+        message: 'No nodes to validate'
       };
     }
 
@@ -1072,14 +1072,14 @@ class DisconnectedNodesRule implements ValidationRule {
       if (graph.nodes.length === 1) {
         return {
           passed: true,
-          message: 'Single node graph is valid',
+          message: 'Single node graph is valid'
         };
       }
       return {
         passed: false,
         message: 'Multiple nodes with no connections detected',
         details: { disconnectedNodes: graph.nodes.length },
-        affectedNodes: graph.nodes.map((n: any) => n.id),
+        affectedNodes: graph.nodes.map((n: any) => n.id)
       };
     }
 
@@ -1146,7 +1146,7 @@ class DisconnectedNodesRule implements ValidationRule {
           largestComponentSize: largestComponent.length,
           disconnectedNodeCount: disconnectedNodes.length
         },
-        affectedNodes: disconnectedNodes,
+        affectedNodes: disconnectedNodes
       };
     }
 
@@ -1156,7 +1156,7 @@ class DisconnectedNodesRule implements ValidationRule {
       details: { 
         nodeCount: graph.nodes.length,
         edgeCount: graph.edges.length 
-      },
+      }
     };
   }
 
@@ -1179,7 +1179,7 @@ class InvalidNodeTypeRule implements ValidationRule {
     // Implementation for node type validation
     return {
       passed: true,
-      message: 'All nodes have valid types',
+      message: 'All nodes have valid types'
     };
   }
 }
@@ -1198,7 +1198,7 @@ class MissingRequiredPropertiesRule implements ValidationRule {
     // Implementation for required properties validation
     return {
       passed: true,
-      message: 'All nodes have required properties',
+      message: 'All nodes have required properties'
     };
   }
 }
@@ -1219,7 +1219,7 @@ class EmptyContentRule implements ValidationRule {
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No nodes to validate',
+        message: 'No nodes to validate'
       };
     }
 
@@ -1261,14 +1261,14 @@ class EmptyContentRule implements ValidationRule {
           emptyNodeCount: emptyContentNodes.length,
           totalNodes: graph.nodes.length 
         },
-        affectedNodes: emptyContentNodes,
+        affectedNodes: emptyContentNodes
       };
     }
 
     return {
       passed: true,
       message: 'All content nodes have valid content',
-      details: { contentNodesChecked: graph.nodes.length },
+      details: { contentNodesChecked: graph.nodes.length }
     };
   }
 
@@ -1317,7 +1317,7 @@ class EmptyContentRule implements ValidationRule {
             changes.push({
               nodeId: node.id,
               type: 'content_added',
-              content: placeholderContent,
+              content: placeholderContent
             });
           }
         }
@@ -1342,7 +1342,7 @@ class ContentLengthRule implements ValidationRule {
     // Implementation for content length validation
     return {
       passed: true,
-      message: 'Content length is appropriate',
+      message: 'Content length is appropriate'
     };
   }
 }
@@ -1363,7 +1363,7 @@ class ContentQualityRule implements ValidationRule {
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No content to assess',
+        message: 'No content to assess'
       };
     }
 
@@ -1402,7 +1402,7 @@ class ContentQualityRule implements ValidationRule {
           issues: qualityIssues.slice(0, 10) // Limit to first 10 issues
         },
         affectedNodes: [...new Set(affectedNodes)],
-        metrics: { qualityScore: qualityScore / 100 },
+        metrics: { qualityScore: qualityScore / 100 }
       };
     }
 
@@ -1413,7 +1413,7 @@ class ContentQualityRule implements ValidationRule {
         qualityScore,
         contentNodesChecked: totalContentNodes
       },
-      metrics: { qualityScore: qualityScore / 100 },
+      metrics: { qualityScore: qualityScore / 100 }
     };
   }
 
@@ -1519,7 +1519,7 @@ class DuplicateContentRule implements ValidationRule {
     // Implementation for duplicate content detection
     return {
       passed: true,
-      message: 'No duplicate content detected',
+      message: 'No duplicate content detected'
     };
   }
 }
@@ -1538,7 +1538,7 @@ class LanguageConsistencyRule implements ValidationRule {
     // Implementation for language consistency check
     return {
       passed: true,
-      message: 'Language usage is consistent',
+      message: 'Language usage is consistent'
     };
   }
 }
@@ -1561,7 +1561,7 @@ class PlatformCompatibilityRule implements ValidationRule {
     if (!capabilities) {
       return {
         passed: true,
-        message: 'No platform capabilities defined for validation',
+        message: 'No platform capabilities defined for validation'
       };
     }
 
@@ -1571,7 +1571,7 @@ class PlatformCompatibilityRule implements ValidationRule {
     if (!graph.nodes) {
       return {
         passed: true,
-        message: 'No nodes to validate for platform compatibility',
+        message: 'No nodes to validate for platform compatibility'
       };
     }
 
@@ -1599,7 +1599,7 @@ class PlatformCompatibilityRule implements ValidationRule {
           issueCount: incompatibilityIssues.length,
           issues: incompatibilityIssues.slice(0, 10) // Limit to first 10 issues
         },
-        affectedNodes: [...new Set(affectedNodes)],
+        affectedNodes: [...new Set(affectedNodes)]
       };
     }
 
@@ -1609,7 +1609,7 @@ class PlatformCompatibilityRule implements ValidationRule {
       details: {
         platform: targetPlatform,
         nodesChecked: graph.nodes.length
-      },
+      }
     };
   }
 
@@ -1653,16 +1653,16 @@ class PlatformCompatibilityRule implements ValidationRule {
 
     // Platform-specific checks
     switch (platform.toLowerCase()) {
-      case 'openai':
-        issues.push(...this.checkOpenAICompatibility(nodeData));
-        break;
-      case 'midjourney':
-        issues.push(...this.checkMidjourneyCompatibility(nodeData));
-        break;
-      case 'dalle':
-      case 'dall-e':
-        issues.push(...this.checkDALLECompatibility(nodeData));
-        break;
+    case 'openai':
+      issues.push(...this.checkOpenAICompatibility(nodeData));
+      break;
+    case 'midjourney':
+      issues.push(...this.checkMidjourneyCompatibility(nodeData));
+      break;
+    case 'dalle':
+    case 'dall-e':
+      issues.push(...this.checkDALLECompatibility(nodeData));
+      break;
     }
 
     return issues;
@@ -1777,7 +1777,7 @@ class ParameterValidationRule implements ValidationRule {
     // Implementation for parameter validation
     return {
       passed: true,
-      message: 'All parameters are valid for target platform',
+      message: 'All parameters are valid for target platform'
     };
   }
 }
@@ -1796,7 +1796,7 @@ class FeatureSupportRule implements ValidationRule {
     // Implementation for feature support validation
     return {
       passed: true,
-      message: 'All features are supported by target platform',
+      message: 'All features are supported by target platform'
     };
   }
 }
@@ -1818,7 +1818,7 @@ class ComplexityRule implements ValidationRule {
       return {
         passed: true,
         message: 'Empty graph has minimal complexity',
-        metrics: { complexity: 0 },
+        metrics: { complexity: 0 }
       };
     }
 
@@ -1874,7 +1874,7 @@ class ComplexityRule implements ValidationRule {
         complexity: complexityScore,
         depth: depthComplexity,
         branching: branchingFactor
-      },
+      }
     };
   }
 
@@ -1954,7 +1954,7 @@ class ProcessingTimeRule implements ValidationRule {
     // Implementation for processing time estimation
     return {
       passed: true,
-      message: 'Expected processing time is acceptable',
+      message: 'Expected processing time is acceptable'
     };
   }
 }
@@ -1973,7 +1973,7 @@ class MemoryUsageRule implements ValidationRule {
     // Implementation for memory usage estimation
     return {
       passed: true,
-      message: 'Expected memory usage is within limits',
+      message: 'Expected memory usage is within limits'
     };
   }
 }
@@ -1992,7 +1992,7 @@ class SensitiveContentRule implements ValidationRule {
     // Implementation for sensitive content detection
     return {
       passed: true,
-      message: 'No sensitive content detected',
+      message: 'No sensitive content detected'
     };
   }
 }
@@ -2011,7 +2011,7 @@ class MaliciousPatternRule implements ValidationRule {
     // Implementation for malicious pattern detection
     return {
       passed: true,
-      message: 'No malicious patterns detected',
+      message: 'No malicious patterns detected'
     };
   }
 }
@@ -2030,7 +2030,7 @@ class OutputCoherenceRule implements ValidationRule {
     // Implementation for output coherence assessment
     return {
       passed: true,
-      message: 'Expected output coherence is good',
+      message: 'Expected output coherence is good'
     };
   }
 }
@@ -2049,7 +2049,7 @@ class StyleConsistencyRule implements ValidationRule {
     // Implementation for style consistency check
     return {
       passed: true,
-      message: 'Style is consistent across the graph',
+      message: 'Style is consistent across the graph'
     };
   }
 }
@@ -2068,7 +2068,7 @@ class OptimizationOpportunityRule implements ValidationRule {
     // Implementation for optimization opportunity detection
     return {
       passed: true,
-      message: 'No obvious optimization opportunities detected',
+      message: 'No obvious optimization opportunities detected'
     };
   }
 }

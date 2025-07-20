@@ -1,3 +1,7 @@
+/**
+ * Node Extension Interface - Epic 8.4 Story 8.4.2
+ * Defines interfaces for extending the runtime node system
+ */
 import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 import { RuntimeNode, AdvancedRuntimeNode, ExecutionContext, AdvancedExecutionContext } from '../../runtime';

@@ -39,12 +39,12 @@ export const IncludeNodeSchema = BaseNode.extend({
 });
 export const SetVariableNodeSchema = BaseNode.extend({
     type: z.literal('SetVariable'),
-    key: SecureValidation.safePropertyKey(),
+    key: SecureValidation.variableName(),
     value: SecureValidation.safeValue(),
 });
 export const GetVariableNodeSchema = BaseNode.extend({
     type: z.literal('GetVariable'),
-    key: z.string(),
+    key: SecureValidation.variableName(),
 });
 // Epic 7 Advanced Node Schemas
 export const WeightedAdvancedNodeSchema = BaseNode.extend({

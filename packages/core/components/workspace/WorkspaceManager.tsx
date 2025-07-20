@@ -18,7 +18,7 @@ interface WorkspaceManagerProps {
 
 export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
   userId,
-  onWorkspaceSelect,
+  onWorkspaceSelect
 }) => {
   const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceWithMembership | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -33,7 +33,7 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({
     updateWorkspace,
     archiveWorkspace,
     inviteUser,
-    refreshWorkspaces,
+    refreshWorkspaces
   } = useWorkspaces(userId);
 
   const handleWorkspaceSelect = (workspace: WorkspaceWithMembership) => {

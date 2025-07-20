@@ -169,60 +169,60 @@ export class GraphValidator {
    */
   private validateNodeData(node: GraphNode, errors: ValidationError[]): void {
     switch (node.type) {
-      case 'WeightedChoice':
-        if (!node.data.choices || !Array.isArray(node.data.choices)) {
-          errors.push({
-            type: 'INVALID_DATA',
-            message: 'WeightedChoice node must have choices array',
-            nodeId: node.id,
-            severity: 'error'
-          });
-        } else {
-          for (const choice of node.data.choices) {
-            if (typeof choice.value !== 'string' || typeof choice.weight !== 'number' || choice.weight < 0) {
-              errors.push({
-                type: 'INVALID_DATA',
-                message: 'WeightedChoice choices must have string value and non-negative number weight',
-                nodeId: node.id,
-                severity: 'error'
-              });
-            }
+    case 'WeightedChoice':
+      if (!node.data.choices || !Array.isArray(node.data.choices)) {
+        errors.push({
+          type: 'INVALID_DATA',
+          message: 'WeightedChoice node must have choices array',
+          nodeId: node.id,
+          severity: 'error'
+        });
+      } else {
+        for (const choice of node.data.choices) {
+          if (typeof choice.value !== 'string' || typeof choice.weight !== 'number' || choice.weight < 0) {
+            errors.push({
+              type: 'INVALID_DATA',
+              message: 'WeightedChoice choices must have string value and non-negative number weight',
+              nodeId: node.id,
+              severity: 'error'
+            });
           }
         }
-        break;
+      }
+      break;
 
-      case 'SetVariable':
-        if (!node.data.key || typeof node.data.key !== 'string') {
-          errors.push({
-            type: 'INVALID_DATA',
-            message: 'SetVariable node must have a string key',
-            nodeId: node.id,
-            severity: 'error'
-          });
-        }
-        break;
+    case 'SetVariable':
+      if (!node.data.key || typeof node.data.key !== 'string') {
+        errors.push({
+          type: 'INVALID_DATA',
+          message: 'SetVariable node must have a string key',
+          nodeId: node.id,
+          severity: 'error'
+        });
+      }
+      break;
 
-      case 'GetVariable':
-        if (!node.data.key || typeof node.data.key !== 'string') {
-          errors.push({
-            type: 'INVALID_DATA',
-            message: 'GetVariable node must have a string key',
-            nodeId: node.id,
-            severity: 'error'
-          });
-        }
-        break;
+    case 'GetVariable':
+      if (!node.data.key || typeof node.data.key !== 'string') {
+        errors.push({
+          type: 'INVALID_DATA',
+          message: 'GetVariable node must have a string key',
+          nodeId: node.id,
+          severity: 'error'
+        });
+      }
+      break;
 
-      case 'Include':
-        if (!node.data.name || typeof node.data.name !== 'string') {
-          errors.push({
-            type: 'INVALID_DATA',
-            message: 'Include node must have a string name',
-            nodeId: node.id,
-            severity: 'error'
-          });
-        }
-        break;
+    case 'Include':
+      if (!node.data.name || typeof node.data.name !== 'string') {
+        errors.push({
+          type: 'INVALID_DATA',
+          message: 'Include node must have a string name',
+          nodeId: node.id,
+          severity: 'error'
+        });
+      }
+      break;
     }
   }
 

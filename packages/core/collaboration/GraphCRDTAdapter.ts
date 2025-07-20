@@ -91,53 +91,53 @@ export class GraphCRDTAdapter {
 
     // Add type-specific properties based on node type
     switch (crdtNode.type) {
-      case 'WeightedChoice':
-        return {
-          ...baseNode,
-          type: 'WeightedChoice',
-          choices: crdtNode.data.choices || []
-        };
+    case 'WeightedChoice':
+      return {
+        ...baseNode,
+        type: 'WeightedChoice',
+        choices: crdtNode.data.choices || []
+      };
       
-      case 'Concat':
-        return {
-          ...baseNode,
-          type: 'Concat'
-        };
+    case 'Concat':
+      return {
+        ...baseNode,
+        type: 'Concat'
+      };
       
-      case 'Output':
-        return {
-          ...baseNode,
-          type: 'Output'
-        };
+    case 'Output':
+      return {
+        ...baseNode,
+        type: 'Output'
+      };
       
-      case 'SetVariable':
-        return {
-          ...baseNode,
-          type: 'SetVariable',
-          variableName: crdtNode.data.variableName || '',
-          value: crdtNode.data.value || ''
-        };
+    case 'SetVariable':
+      return {
+        ...baseNode,
+        type: 'SetVariable',
+        variableName: crdtNode.data.variableName || '',
+        value: crdtNode.data.value || ''
+      };
       
-      case 'GetVariable':
-        return {
-          ...baseNode,
-          type: 'GetVariable',
-          variableName: crdtNode.data.variableName || ''
-        };
+    case 'GetVariable':
+      return {
+        ...baseNode,
+        type: 'GetVariable',
+        variableName: crdtNode.data.variableName || ''
+      };
       
-      case 'Include':
-        return {
-          ...baseNode,
-          type: 'Include',
-          name: crdtNode.data.name || ''
-        };
+    case 'Include':
+      return {
+        ...baseNode,
+        type: 'Include',
+        name: crdtNode.data.name || ''
+      };
       
-      default:
-        // For unknown types, preserve original data
-        return {
-          ...baseNode,
-          ...crdtNode.data
-        };
+    default:
+      // For unknown types, preserve original data
+      return {
+        ...baseNode,
+        ...crdtNode.data
+      };
     }
   }
 

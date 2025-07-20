@@ -1,5 +1,5 @@
-import React from "react";
-import { EditorFieldProps } from "./BaseNodeEditor";
+import React from 'react';
+import { EditorFieldProps } from './BaseNodeEditor';
 
 export interface SelectOption {
   value: string | number;
@@ -28,12 +28,12 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
   multiple = false,
   searchable = false,
   allowCustom = false,
-  emptyLabel = "None",
+  emptyLabel = 'None'
 }) => {
   const [localValue, setLocalValue] = React.useState(value);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [customValue, setCustomValue] = React.useState("");
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [customValue, setCustomValue] = React.useState('');
   const [showCustomInput, setShowCustomInput] = React.useState(false);
   const [isFocused, setIsFocused] = React.useState(false);
 
@@ -50,7 +50,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
         setShowCustomInput(false);
-        setSearchTerm("");
+        setSearchTerm('');
       }
     };
 
@@ -81,16 +81,16 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
   const handleCustomSubmit = () => {
     if (customValue.trim()) {
       handleSelect(customValue.trim());
-      setCustomValue("");
+      setCustomValue('');
       setShowCustomInput(false);
     }
   };
 
   const filteredOptions = searchable && searchTerm
     ? options.filter(option => 
-        option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      option.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
         String(option.value).toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    )
     : options;
 
   // Group options if they have groups
@@ -119,37 +119,37 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
 
   const containerStyle = {
     position: 'relative' as const,
-    marginBottom: 16,
+    marginBottom: 16
   };
 
   const labelStyle = {
-    display: "block",
+    display: 'block',
     fontWeight: 500,
     marginBottom: 4,
-    color: "#e2e8f0",
+    color: '#e2e8f0',
     fontSize: 12,
-    letterSpacing: "0.025em",
+    letterSpacing: '0.025em'
   };
 
   const selectStyle = {
-    width: "100%",
+    width: '100%',
     padding: 8,
     border: error 
-      ? "1px solid #f56565" 
+      ? '1px solid #f56565' 
       : isFocused 
-        ? "1px solid #4299e1" 
-        : "1px solid #4a5568",
+        ? '1px solid #4299e1' 
+        : '1px solid #4a5568',
     borderRadius: 4,
-    background: "#2d3748",
-    color: "#e2e8f0",
+    background: '#2d3748',
+    color: '#e2e8f0',
     fontSize: 13,
-    fontFamily: "system-ui, -apple-system, sans-serif",
-    outline: "none",
+    fontFamily: 'system-ui, -apple-system, sans-serif',
+    outline: 'none',
     cursor: disabled ? 'not-allowed' : 'pointer',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: 36,
+    minHeight: 36
   };
 
   const dropdownStyle = {
@@ -157,14 +157,14 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
     top: '100%',
     left: 0,
     right: 0,
-    background: "#2d3748",
-    border: "1px solid #4a5568",
+    background: '#2d3748',
+    border: '1px solid #4a5568',
     borderRadius: 4,
     borderTop: 'none',
     maxHeight: 200,
     overflowY: 'auto' as const,
     zIndex: 1000,
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
   };
 
   const optionStyle = (selected: boolean, disabled: boolean) => ({
@@ -173,7 +173,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
     background: selected ? '#4299e1' : 'transparent',
     color: disabled ? '#718096' : '#e2e8f0',
     fontSize: 13,
-    borderBottom: '1px solid #4a5568',
+    borderBottom: '1px solid #4a5568'
   });
 
   return (
@@ -181,7 +181,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
       <label htmlFor={inputId} style={labelStyle}>
         {label}
         {error && (
-          <span style={{ color: "#f56565", marginLeft: 4, fontSize: 10 }}>
+          <span style={{ color: '#f56565', marginLeft: 4, fontSize: 10 }}>
             *
           </span>
         )}
@@ -219,7 +219,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                   background: '#1a202c',
                   color: '#e2e8f0',
                   fontSize: 12,
-                  outline: 'none',
+                  outline: 'none'
                 }}
               />
             </div>
@@ -235,7 +235,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                   fontSize: 11,
                   fontWeight: 600,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  letterSpacing: '0.05em'
                 }}>
                   {groupName}
                 </div>
@@ -277,7 +277,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                     borderRadius: 2,
                     color: '#a0aec0',
                     fontSize: 12,
-                    cursor: 'pointer',
+                    cursor: 'pointer'
                   }}
                 >
                   + Add custom value
@@ -297,7 +297,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                       background: '#1a202c',
                       color: '#e2e8f0',
                       fontSize: 12,
-                      outline: 'none',
+                      outline: 'none'
                     }}
                     onKeyPress={(e) => e.key === 'Enter' && handleCustomSubmit()}
                   />
@@ -310,7 +310,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
                       borderRadius: 2,
                       color: 'white',
                       fontSize: 12,
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     Add
@@ -326,7 +326,7 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
               textAlign: 'center',
               color: '#a0aec0',
               fontSize: 12,
-              fontStyle: 'italic',
+              fontStyle: 'italic'
             }}>
               No options found
             </div>
@@ -336,10 +336,10 @@ export const SelectEditor: React.FC<SelectEditorProps> = ({
 
       {error && (
         <div style={{ 
-          color: "#f56565", 
+          color: '#f56565', 
           fontSize: 11, 
           marginTop: 4,
-          fontWeight: 400,
+          fontWeight: 400
         }}>
           {error}
         </div>

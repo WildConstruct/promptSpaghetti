@@ -226,18 +226,18 @@ export class AnalyticsDashboard extends EventEmitter {
     let granularity: 'hour' | 'day';
 
     switch (type) {
-      case 'hourly':
-        startTime = endTime - (24 * 60 * 60 * 1000); // Last 24 hours
-        granularity = 'hour';
-        break;
-      case 'daily':
-        startTime = endTime - (30 * 24 * 60 * 60 * 1000); // Last 30 days
-        granularity = 'day';
-        break;
-      case 'weekly':
-        startTime = endTime - (12 * 7 * 24 * 60 * 60 * 1000); // Last 12 weeks
-        granularity = 'day';
-        break;
+    case 'hourly':
+      startTime = endTime - (24 * 60 * 60 * 1000); // Last 24 hours
+      granularity = 'hour';
+      break;
+    case 'daily':
+      startTime = endTime - (30 * 24 * 60 * 60 * 1000); // Last 30 days
+      granularity = 'day';
+      break;
+    case 'weekly':
+      startTime = endTime - (12 * 7 * 24 * 60 * 60 * 1000); // Last 12 weeks
+      granularity = 'day';
+      break;
     }
 
     const timeSeriesData = this.analyticsDAO.getTimeSeriesData(
@@ -335,18 +335,18 @@ export class AnalyticsDashboard extends EventEmitter {
     };
 
     switch (format) {
-      case 'json':
-        return JSON.stringify(reportData, null, 2);
+    case 'json':
+      return JSON.stringify(reportData, null, 2);
       
-      case 'html':
-        return this.generateHTMLReport(reportData);
+    case 'html':
+      return this.generateHTMLReport(reportData);
       
-      case 'pdf':
-        // Would integrate with PDF generation library
-        return JSON.stringify(reportData, null, 2);
+    case 'pdf':
+      // Would integrate with PDF generation library
+      return JSON.stringify(reportData, null, 2);
       
-      default:
-        return JSON.stringify(reportData, null, 2);
+    default:
+      return JSON.stringify(reportData, null, 2);
     }
   }
 

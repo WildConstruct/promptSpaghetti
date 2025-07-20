@@ -1,3 +1,7 @@
+/**
+ * Extension Compatibility Checker - Epic 8.4 Story 8.4.4
+ * Advanced compatibility checking and resolution for extensions
+ */
 import { ExtensionManifest } from './ExtensionManifest';
 import { CompatibilityIssue } from './ExtensionVersionManager';
 export declare class ExtensionCompatibilityChecker {
@@ -7,20 +11,65 @@ export declare class ExtensionCompatibilityChecker {
     private systemCapabilities;
     private constructor();
     static getInstance(): ExtensionCompatibilityChecker;
+    /**
+     * Comprehensive compatibility check
+     */
     checkExtensionCompatibility(extension: ExtensionManifest, context: CompatibilityContext): ExtensionCompatibilityResult;
+    /**
+     * Check system compatibility
+     */
     private checkSystemCompatibility;
+    /**
+     * Check dependency compatibility
+     */
     private checkDependencyCompatibility;
+    /**
+     * Check platform compatibility
+     */
     private checkPlatformCompatibility;
+    /**
+     * Check permission compatibility
+     */
     private checkPermissionCompatibility;
+    /**
+     * Check security compatibility
+     */
     private checkSecurityCompatibility;
+    /**
+     * Check transitive dependencies
+     */
     private checkTransitiveDependencies;
+    /**
+     * Find circular dependencies
+     */
     private findCircularDependencies;
+    /**
+     * Generate recommendations based on compatibility issues
+     */
     private generateRecommendations;
+    /**
+     * Add custom compatibility rule
+     */
     addCompatibilityRule(rule: CompatibilityRule): void;
+    /**
+     * Check if permission is dangerous
+     */
     private isDangerousPermission;
+    /**
+     * Validate CSP
+     */
     private validateCSP;
+    /**
+     * Check if domain is trusted
+     */
     private isTrustedDomain;
+    /**
+     * Initialize system capabilities
+     */
     private initializeSystemCapabilities;
+    /**
+     * Initialize default compatibility rules
+     */
     private initializeDefaultRules;
 }
 export interface CompatibilityContext {

@@ -1,6 +1,6 @@
-import React from "react";
-import { renderHook, act } from "@testing-library/react";
-import { usePreviewSeeds } from "../usePreviewSeeds";
+import React from 'react';
+import { renderHook, act } from '@testing-library/react';
+import { usePreviewSeeds } from '../usePreviewSeeds';
 
 jest.useFakeTimers();
 
@@ -11,8 +11,8 @@ jest.useFakeTimers();
  * 3. cancelPreview aborts early and results stay empty.
  */
 
-describe("usePreviewSeeds", () => {
-  it("returns 5 results for a stable graph", async () => {
+describe('usePreviewSeeds', () => {
+  it('returns 5 results for a stable graph', async () => {
     const { result } = renderHook(() => usePreviewSeeds());
 
     act(() => {
@@ -40,7 +40,7 @@ describe("usePreviewSeeds", () => {
     });
   });
 
-  it("cancelPreview aborts in-flight fetch", async () => {
+  it('cancelPreview aborts in-flight fetch', async () => {
     const { result } = renderHook(() => usePreviewSeeds());
 
     act(() => {

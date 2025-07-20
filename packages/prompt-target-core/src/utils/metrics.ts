@@ -53,7 +53,7 @@ export class MemoryMetrics implements MetricsInterface {
       p95: number;
       p99: number;
     }>;
-  } {
+    } {
     const histogramStats: Record<string, any> = {};
     
     for (const [key, values] of this.histograms.entries()) {

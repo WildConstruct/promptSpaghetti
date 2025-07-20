@@ -279,17 +279,17 @@ export const CartItemSchema = z.object({
   template_id: z.string().uuid(),
   version_id: z.string().uuid().optional(),
   license_type: z.nativeEnum(LicenseType),
-  quantity: z.number().int().min(1).default(1),
+  quantity: z.number().int().min(1).default(1)
 });
 
 export const AddToCartSchema = z.object({
-  items: z.array(CartItemSchema).min(1),
+  items: z.array(CartItemSchema).min(1)
 });
 
 export const UpdateCartSchema = z.object({
   item_id: z.string().uuid(),
   quantity: z.number().int().min(0), // 0 to remove
-  license_type: z.nativeEnum(LicenseType).optional(),
+  license_type: z.nativeEnum(LicenseType).optional()
 });
 
 export const CreatePaymentIntentSchema = z.object({
@@ -305,25 +305,25 @@ export const CreatePaymentIntentSchema = z.object({
     state: z.string().optional(),
     postal_code: z.string().min(1),
     country: z.string().min(2).max(2),
-    tax_id: z.string().optional(),
-  }),
+    tax_id: z.string().optional()
+  })
 });
 
 export const ProcessPaymentSchema = z.object({
   payment_intent_id: z.string().uuid(),
-  confirmation_token: z.string().optional(),
+  confirmation_token: z.string().optional()
 });
 
 export const CreateRefundRequestSchema = z.object({
   purchase_id: z.string().uuid(),
   reason: z.string().min(10).max(1000),
-  amount_cents: z.number().int().min(1).optional(), // For partial refunds
+  amount_cents: z.number().int().min(1).optional() // For partial refunds
 });
 
 export const LicenseTransferSchema = z.object({
   license_id: z.string().uuid(),
   to_user_email: z.string().email(),
-  reason: z.string().min(10).max(500),
+  reason: z.string().min(10).max(500)
 });
 
 // Analytics interfaces for transactions
@@ -371,7 +371,7 @@ export type {
   Refund,
   RiskAssessment,
   TaxCalculation,
-  TransactionAnalytics,
+  TransactionAnalytics
 };
 
 export {
@@ -387,5 +387,5 @@ export {
   CreatePaymentIntentSchema,
   ProcessPaymentSchema,
   CreateRefundRequestSchema,
-  LicenseTransferSchema,
+  LicenseTransferSchema
 };

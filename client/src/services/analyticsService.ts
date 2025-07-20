@@ -6,7 +6,7 @@ import {
   CustomReport,
   AnalyticsInsight,
   TimeRange,
-  AnalyticsService as IAnalyticsService,
+  AnalyticsService as IAnalyticsService
 } from '../types/analytics';
 
 class AnalyticsService implements IAnalyticsService {
@@ -23,9 +23,9 @@ class AnalyticsService implements IAnalyticsService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getAuthToken()}`,
+          'Authorization': `Bearer ${this.getAuthToken()}`
         },
-        body: JSON.stringify(event),
+        body: JSON.stringify(event)
       });
 
       if (!response.ok) {
@@ -44,9 +44,9 @@ class AnalyticsService implements IAnalyticsService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getAuthToken()}`,
+          'Authorization': `Bearer ${this.getAuthToken()}`
         },
-        body: JSON.stringify({ events }),
+        body: JSON.stringify({ events })
       });
 
       if (!response.ok) {
@@ -68,15 +68,15 @@ class AnalyticsService implements IAnalyticsService {
       const params = new URLSearchParams({
         time_range: timeRange,
         ...(startDate && { start_date: startDate.toISOString() }),
-        ...(endDate && { end_date: endDate.toISOString() }),
+        ...(endDate && { end_date: endDate.toISOString() })
       });
 
       const response = await fetch(
         `${this.baseUrl}/api/analytics/creators/${creatorId}/dashboard?${params}`,
         {
           headers: {
-            'Authorization': `Bearer ${this.getAuthToken()}`,
-          },
+            'Authorization': `Bearer ${this.getAuthToken()}`
+          }
         }
       );
 
@@ -103,15 +103,15 @@ class AnalyticsService implements IAnalyticsService {
       const params = new URLSearchParams({
         time_range: timeRange,
         ...(startDate && { start_date: startDate.toISOString() }),
-        ...(endDate && { end_date: endDate.toISOString() }),
+        ...(endDate && { end_date: endDate.toISOString() })
       });
 
       const response = await fetch(
         `${this.baseUrl}/api/analytics/templates/${templateId}/metrics?${params}`,
         {
           headers: {
-            'Authorization': `Bearer ${this.getAuthToken()}`,
-          },
+            'Authorization': `Bearer ${this.getAuthToken()}`
+          }
         }
       );
 
@@ -134,9 +134,9 @@ class AnalyticsService implements IAnalyticsService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getAuthToken()}`,
+          'Authorization': `Bearer ${this.getAuthToken()}`
         },
-        body: JSON.stringify(query),
+        body: JSON.stringify(query)
       });
 
       if (!response.ok) {
@@ -157,9 +157,9 @@ class AnalyticsService implements IAnalyticsService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getAuthToken()}`,
+          'Authorization': `Bearer ${this.getAuthToken()}`
         },
-        body: JSON.stringify(report),
+        body: JSON.stringify(report)
       });
 
       if (!response.ok) {
@@ -181,8 +181,8 @@ class AnalyticsService implements IAnalyticsService {
         `${this.baseUrl}/api/analytics/creators/${creatorId}/reports`,
         {
           headers: {
-            'Authorization': `Bearer ${this.getAuthToken()}`,
-          },
+            'Authorization': `Bearer ${this.getAuthToken()}`
+          }
         }
       );
 
@@ -206,8 +206,8 @@ class AnalyticsService implements IAnalyticsService {
         {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${this.getAuthToken()}`,
-          },
+            'Authorization': `Bearer ${this.getAuthToken()}`
+          }
         }
       );
 
@@ -237,8 +237,8 @@ class AnalyticsService implements IAnalyticsService {
         `${this.baseUrl}/api/analytics/creators/${creatorId}/insights?${params}`,
         {
           headers: {
-            'Authorization': `Bearer ${this.getAuthToken()}`,
-          },
+            'Authorization': `Bearer ${this.getAuthToken()}`
+          }
         }
       );
 
@@ -264,9 +264,9 @@ class AnalyticsService implements IAnalyticsService {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getAuthToken()}`,
+          'Authorization': `Bearer ${this.getAuthToken()}`
         },
-        body: JSON.stringify(updates),
+        body: JSON.stringify(updates)
       });
 
       if (!response.ok) {
@@ -287,8 +287,8 @@ class AnalyticsService implements IAnalyticsService {
       const response = await fetch(`${this.baseUrl}/api/analytics/reports/${reportId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${this.getAuthToken()}`,
-        },
+          'Authorization': `Bearer ${this.getAuthToken()}`
+        }
       });
 
       if (!response.ok) {
@@ -308,8 +308,8 @@ class AnalyticsService implements IAnalyticsService {
         {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${this.getAuthToken()}`,
-          },
+            'Authorization': `Bearer ${this.getAuthToken()}`
+          }
         }
       );
 
@@ -332,9 +332,9 @@ class AnalyticsService implements IAnalyticsService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.getAuthToken()}`,
+          'Authorization': `Bearer ${this.getAuthToken()}`
         },
-        body: JSON.stringify({ ...query, format }),
+        body: JSON.stringify({ ...query, format })
       });
 
       if (!response.ok) {
@@ -358,7 +358,7 @@ class AnalyticsService implements IAnalyticsService {
     return {
       ...data,
       period_start: new Date(data.period_start),
-      period_end: new Date(data.period_end),
+      period_end: new Date(data.period_end)
     };
   }
 
@@ -371,9 +371,9 @@ class AnalyticsService implements IAnalyticsService {
         ...data.trends,
         daily_metrics: data.trends.daily_metrics.map((metric: any) => ({
           ...metric,
-          date: new Date(metric.date),
-        })),
-      },
+          date: new Date(metric.date)
+        }))
+      }
     };
   }
 
@@ -381,14 +381,14 @@ class AnalyticsService implements IAnalyticsService {
     return {
       ...data,
       created_at: new Date(data.created_at),
-      updated_at: new Date(data.updated_at),
+      updated_at: new Date(data.updated_at)
     };
   }
 
   private transformInsight(data: any): AnalyticsInsight {
     return {
       ...data,
-      created_at: new Date(data.created_at),
+      created_at: new Date(data.created_at)
     };
   }
 }

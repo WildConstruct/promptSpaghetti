@@ -14,7 +14,7 @@ import {
   Space,
   Statistic,
   Row,
-  Col,
+  Col
 } from 'antd';
 import {
   PlusOutlined,
@@ -22,7 +22,7 @@ import {
   EditOutlined,
   WarningOutlined,
   InfoCircleOutlined,
-  QuestionCircleOutlined,
+  QuestionCircleOutlined
 } from '@ant-design/icons';
 import { 
   RestorationPreviewResponse, 
@@ -30,7 +30,7 @@ import {
   RestorationConflict,
   ResolutionStrategy,
   CONFLICT_DESCRIPTIONS,
-  RESOLUTION_STRATEGY_DESCRIPTIONS,
+  RESOLUTION_STRATEGY_DESCRIPTIONS
 } from '../../types/restoration';
 
 const { TabPane } = Tabs;
@@ -47,7 +47,7 @@ interface RestorationPreviewProps {
 export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
   preview,
   config,
-  onConflictResolve,
+  onConflictResolve
 }) => {
   const [activeTab, setActiveTab] = useState('changes');
   const [conflictResolutions, setConflictResolutions] = useState<Record<string, ResolutionStrategy>>({});
@@ -55,47 +55,47 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
   const handleConflictResolution = (conflictId: string, strategy: ResolutionStrategy) => {
     setConflictResolutions(prev => ({
       ...prev,
-      [conflictId]: strategy,
+      [conflictId]: strategy
     }));
     onConflictResolve(conflictId, strategy);
   };
 
   const getChangeIcon = (type: string) => {
     switch (type) {
-      case 'add':
-        return <PlusOutlined style={{ color: '#52c41a' }} />;
-      case 'update':
-        return <EditOutlined style={{ color: '#1890ff' }} />;
-      case 'delete':
-        return <MinusOutlined style={{ color: '#ff4d4f' }} />;
-      default:
-        return <InfoCircleOutlined />;
+    case 'add':
+      return <PlusOutlined style={{ color: '#52c41a' }} />;
+    case 'update':
+      return <EditOutlined style={{ color: '#1890ff' }} />;
+    case 'delete':
+      return <MinusOutlined style={{ color: '#ff4d4f' }} />;
+    default:
+      return <InfoCircleOutlined />;
     }
   };
 
   const getChangeColor = (type: string) => {
     switch (type) {
-      case 'add':
-        return 'success';
-      case 'update':
-        return 'processing';
-      case 'delete':
-        return 'error';
-      default:
-        return 'default';
+    case 'add':
+      return 'success';
+    case 'update':
+      return 'processing';
+    case 'delete':
+      return 'error';
+    default:
+      return 'default';
     }
   };
 
   const getRiskLevelColor = (level: string) => {
     switch (level) {
-      case 'low':
-        return 'success';
-      case 'medium':
-        return 'warning';
-      case 'high':
-        return 'error';
-      default:
-        return 'default';
+    case 'low':
+      return 'success';
+    case 'medium':
+      return 'warning';
+    case 'high':
+      return 'error';
+    default:
+      return 'default';
     }
   };
 
@@ -109,7 +109,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
         <Tag color={getChangeColor(action) as any} icon={getChangeIcon(action)}>
           {action.toUpperCase()}
         </Tag>
-      ),
+      )
     },
     {
       title: 'Node ID',
@@ -120,19 +120,19 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
         <Text code style={{ fontSize: '12px' }}>
           {id}
         </Text>
-      ),
+      )
     },
     {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      width: 120,
+      width: 120
     },
     {
       title: 'Label',
       dataIndex: 'label',
       key: 'label',
-      render: (label: string) => label || <Text type="secondary">No label</Text>,
+      render: (label: string) => label || <Text type="secondary">No label</Text>
     },
     {
       title: 'Properties',
@@ -142,8 +142,8 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
         <Text type="secondary">
           {properties ? Object.keys(properties).length : 0} properties
         </Text>
-      ),
-    },
+      )
+    }
   ];
 
   const edgeColumns = [
@@ -156,7 +156,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
         <Tag color={getChangeColor(action) as any} icon={getChangeIcon(action)}>
           {action.toUpperCase()}
         </Tag>
-      ),
+      )
     },
     {
       title: 'Edge ID',
@@ -167,7 +167,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
         <Text code style={{ fontSize: '12px' }}>
           {id}
         </Text>
-      ),
+      )
     },
     {
       title: 'From',
@@ -178,7 +178,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
         <Text code style={{ fontSize: '12px' }}>
           {source}
         </Text>
-      ),
+      )
     },
     {
       title: 'To',
@@ -189,14 +189,14 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
         <Text code style={{ fontSize: '12px' }}>
           {target}
         </Text>
-      ),
+      )
     },
     {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      width: 120,
-    },
+      width: 120
+    }
   ];
 
   const conflictColumns = [
@@ -211,7 +211,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
             {type.replace('_', ' ').toUpperCase()}
           </Tag>
         </Tooltip>
-      ),
+      )
     },
     {
       title: 'Resource',
@@ -228,13 +228,13 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
             {record.resourceType}
           </Text>
         </div>
-      ),
+      )
     },
     {
       title: 'Description',
       dataIndex: 'conflictDescription',
       key: 'conflictDescription',
-      render: (description: string) => description || <Text type="secondary">No description</Text>,
+      render: (description: string) => description || <Text type="secondary">No description</Text>
     },
     {
       title: 'Resolution',
@@ -256,20 +256,20 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
             </Option>
           ))}
         </Select>
-      ),
-    },
+      )
+    }
   ];
 
   const allNodeChanges = [
     ...preview.preview.nodesToAdd.map((node: any) => ({ ...node, action: 'add' })),
     ...preview.preview.nodesToUpdate.map((node: any) => ({ ...node, action: 'update' })),
-    ...preview.preview.nodesToDelete.map((id: string) => ({ id, action: 'delete' })),
+    ...preview.preview.nodesToDelete.map((id: string) => ({ id, action: 'delete' }))
   ];
 
   const allEdgeChanges = [
     ...preview.preview.edgesToAdd.map((edge: any) => ({ ...edge, action: 'add' })),
     ...preview.preview.edgesToUpdate.map((edge: any) => ({ ...edge, action: 'update' })),
-    ...preview.preview.edgesToDelete.map((id: string) => ({ id, action: 'delete' })),
+    ...preview.preview.edgesToDelete.map((id: string) => ({ id, action: 'delete' }))
   ];
 
   const unresolvedConflicts = preview.conflicts.filter(

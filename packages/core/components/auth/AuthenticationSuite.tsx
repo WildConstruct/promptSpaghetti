@@ -138,10 +138,10 @@ export const AuthenticationSuite: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'in-progress': return 'text-blue-600 bg-blue-100';
-      case 'planned': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'completed': return 'text-green-600 bg-green-100';
+    case 'in-progress': return 'text-blue-600 bg-blue-100';
+    case 'planned': return 'text-gray-600 bg-gray-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 

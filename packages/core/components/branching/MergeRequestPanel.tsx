@@ -17,7 +17,7 @@ import {
   Timeline,
   Badge,
   Dropdown,
-  Menu,
+  Menu
 } from 'antd';
 import {
   MergeOutlined,
@@ -31,14 +31,14 @@ import {
   EditOutlined,
   DeleteOutlined,
   EyeOutlined,
-  BranchesOutlined,
+  BranchesOutlined
 } from '@ant-design/icons';
 import { 
   BranchMergeRequest,
   ProjectBranch,
   CreateMergeRequestRequest,
   MergeRequestStatus,
-  ReviewStatus,
+  ReviewStatus
 } from '../../types/branching';
 import { useBranching } from '../../hooks/useBranching';
 
@@ -67,16 +67,16 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
 }) => {
   const getStatusColor = (status: MergeRequestStatus) => {
     switch (status) {
-      case 'open':
-        return 'success';
-      case 'merged':
-        return 'processing';
-      case 'closed':
-        return 'default';
-      case 'draft':
-        return 'warning';
-      default:
-        return 'default';
+    case 'open':
+      return 'success';
+    case 'merged':
+      return 'processing';
+    case 'closed':
+      return 'default';
+    case 'draft':
+      return 'warning';
+    default:
+      return 'default';
     }
   };
 
@@ -169,7 +169,7 @@ const MergeRequestItem: React.FC<MergeRequestItemProps> = ({
 export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
   projectId,
   visible,
-  onClose,
+  onClose
 }) => {
   const [mergeRequests, setMergeRequests] = useState<BranchMergeRequest[]>([]);
   const [branches, setBranches] = useState<ProjectBranch[]>([]);
@@ -182,7 +182,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
     createMergeRequest,
     mergeBranch,
     loading,
-    error,
+    error
   } = useBranching();
 
   useEffect(() => {
@@ -194,7 +194,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
   const loadData = async () => {
     try {
       const [branchesData] = await Promise.all([
-        listBranches({ projectId, limit: 100 }),
+        listBranches({ projectId, limit: 100 })
         // Would also load merge requests here
       ]);
       setBranches(branchesData);
@@ -217,7 +217,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
         allowSquashMerge: values.allowSquashMerge !== false,
         allowMergeCommit: values.allowMergeCommit !== false,
         allowRebaseMerge: values.allowRebaseMerge || false,
-        deleteSourceBranch: values.deleteSourceBranch || false,
+        deleteSourceBranch: values.deleteSourceBranch || false
       };
 
       await createMergeRequest(request);
@@ -234,7 +234,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
       await mergeBranch({
         mergeRequestId: mergeRequest.id,
         mergeStrategy: 'merge',
-        deleteSourceBranch: mergeRequest.deleteSourceBranch,
+        deleteSourceBranch: mergeRequest.deleteSourceBranch
       });
       loadData();
     } catch (error) {

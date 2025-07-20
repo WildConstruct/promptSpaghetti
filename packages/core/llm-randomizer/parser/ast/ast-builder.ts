@@ -203,17 +203,17 @@ export class ASTBuilder {
     const sectionName = this.extractSectionName(delimiter.value);
 
     switch (sectionName) {
-      case 'NODES':
-        this.parseNodesSection(graph);
-        break;
-      case 'EDGES':
-        this.parseEdgesSection(graph);
-        break;
-      case 'END':
-        // End of graph
-        return;
-      default:
-        this.addError(`Unknown section: ${sectionName}`, 'error', 'Use NODES, EDGES, or END');
+    case 'NODES':
+      this.parseNodesSection(graph);
+      break;
+    case 'EDGES':
+      this.parseEdgesSection(graph);
+      break;
+    case 'END':
+      // End of graph
+      return;
+    default:
+      this.addError(`Unknown section: ${sectionName}`, 'error', 'Use NODES, EDGES, or END');
     }
   }
 
@@ -268,18 +268,18 @@ export class ASTBuilder {
           this.expect(TokenType.COLON, 'Expected colon after property key');
 
           switch (key) {
-            case 'type':
-              node.nodeType = this.parseValue();
-              break;
-            case 'props':
-              node.properties = this.parseProperties();
-              break;
-            case 'inputs':
-              node.inputs = this.parseArray();
-              break;
-            default:
-              this.addError(`Unknown node property: ${key}`, 'warning', 'Use type, props, or inputs');
-              this.parseValue(); // Skip unknown property
+          case 'type':
+            node.nodeType = this.parseValue();
+            break;
+          case 'props':
+            node.properties = this.parseProperties();
+            break;
+          case 'inputs':
+            node.inputs = this.parseArray();
+            break;
+          default:
+            this.addError(`Unknown node property: ${key}`, 'warning', 'Use type, props, or inputs');
+            this.parseValue(); // Skip unknown property
           }
         } else if (this.currentToken().type === TokenType.NEWLINE) {
           this.advance();
@@ -386,33 +386,33 @@ export class ASTBuilder {
     const token = this.currentToken();
 
     switch (token.type) {
-      case TokenType.STRING:
-      case TokenType.VALUE:
-        this.advance();
-        return token.value;
+    case TokenType.STRING:
+    case TokenType.VALUE:
+      this.advance();
+      return token.value;
 
-      case TokenType.NUMBER:
-        this.advance();
-        return parseFloat(token.value);
+    case TokenType.NUMBER:
+      this.advance();
+      return parseFloat(token.value);
 
-      case TokenType.BOOLEAN:
-        this.advance();
-        return token.value.toLowerCase() === 'true';
+    case TokenType.BOOLEAN:
+      this.advance();
+      return token.value.toLowerCase() === 'true';
 
-      case TokenType.NULL:
-        this.advance();
-        return null;
+    case TokenType.NULL:
+      this.advance();
+      return null;
 
-      case TokenType.ARRAY_START:
-        return this.parseArray();
+    case TokenType.ARRAY_START:
+      return this.parseArray();
 
-      case TokenType.INDENT:
-        return this.parseObject();
+    case TokenType.INDENT:
+      return this.parseObject();
 
-      default:
-        this.addError(`Unexpected token in value: ${token.value}`, 'error');
-        this.advance();
-        return null;
+    default:
+      this.addError(`Unexpected token in value: ${token.value}`, 'error');
+      this.advance();
+      return null;
     }
   }
 

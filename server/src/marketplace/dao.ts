@@ -226,32 +226,32 @@ export class MarketplaceDAO {
     // Sorting
     let orderBy = '';
     switch (filters.sort_by) {
-      case 'price_asc':
-        orderBy = 'ORDER BY t.price_cents ASC, t.created_at DESC';
-        break;
-      case 'price_desc':
-        orderBy = 'ORDER BY t.price_cents DESC, t.created_at DESC';
-        break;
-      case 'rating':
-        orderBy = 'ORDER BY t.avg_rating DESC, t.total_reviews DESC, t.created_at DESC';
-        break;
-      case 'popularity':
-        orderBy = 'ORDER BY t.total_purchases DESC, t.avg_rating DESC, t.created_at DESC';
-        break;
-      case 'newest':
-        orderBy = 'ORDER BY t.created_at DESC';
-        break;
-      case 'oldest':
-        orderBy = 'ORDER BY t.created_at ASC';
-        break;
-      case 'relevance':
-      default:
-        if (filters.query) {
-          orderBy = `ORDER BY ts_rank(t.search_vector, plainto_tsquery('english', $1)) DESC, t.featured_at DESC NULLS LAST, t.avg_rating DESC`;
-        } else {
-          orderBy = 'ORDER BY t.featured_at DESC NULLS LAST, t.avg_rating DESC, t.total_purchases DESC';
-        }
-        break;
+    case 'price_asc':
+      orderBy = 'ORDER BY t.price_cents ASC, t.created_at DESC';
+      break;
+    case 'price_desc':
+      orderBy = 'ORDER BY t.price_cents DESC, t.created_at DESC';
+      break;
+    case 'rating':
+      orderBy = 'ORDER BY t.avg_rating DESC, t.total_reviews DESC, t.created_at DESC';
+      break;
+    case 'popularity':
+      orderBy = 'ORDER BY t.total_purchases DESC, t.avg_rating DESC, t.created_at DESC';
+      break;
+    case 'newest':
+      orderBy = 'ORDER BY t.created_at DESC';
+      break;
+    case 'oldest':
+      orderBy = 'ORDER BY t.created_at ASC';
+      break;
+    case 'relevance':
+    default:
+      if (filters.query) {
+        orderBy = 'ORDER BY ts_rank(t.search_vector, plainto_tsquery(\'english\', $1)) DESC, t.featured_at DESC NULLS LAST, t.avg_rating DESC';
+      } else {
+        orderBy = 'ORDER BY t.featured_at DESC NULLS LAST, t.avg_rating DESC, t.total_purchases DESC';
+      }
+      break;
     }
 
     // Get total count

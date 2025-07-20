@@ -24,7 +24,7 @@ import {
   validateCreateAttributionRequest,
   validateAttributionFilter,
   validateAttributionStatsRequest,
-  validateUpdatePrivacySettingsRequest,
+  validateUpdatePrivacySettingsRequest
 } from '../../packages/core/types/attribution';
 
 export class AttributionService {
@@ -47,7 +47,7 @@ export class AttributionService {
       resourceType: request.resourceType,
       changeType: request.changeType,
       authorId: context.userId,
-      sessionId: context.sessionId,
+      sessionId: context.sessionId
     });
 
     // Check privacy settings
@@ -90,7 +90,7 @@ export class AttributionService {
       validatedRequest.isCollaborative,
       validatedRequest.collaboratorCount,
       validatedRequest.batchId,
-      validatedRequest.parentChangeId,
+      validatedRequest.parentChangeId
     ]);
 
     return this.mapDatabaseRowToAttribution(attribution.rows[0]);
@@ -105,7 +105,7 @@ export class AttributionService {
     this.logger.info('Getting attribution statistics', {
       projectId: request.projectId,
       period: request.period,
-      authorId: request.authorId,
+      authorId: request.authorId
     });
 
     // Check cache first
@@ -150,7 +150,7 @@ export class AttributionService {
       byChangeType,
       timeline,
       heatmap,
-      collaboration,
+      collaboration
     };
 
     // Cache the results
@@ -170,7 +170,7 @@ export class AttributionService {
     
     this.logger.info('Getting attribution timeline', {
       projectId,
-      filter: validatedFilter,
+      filter: validatedFilter
     });
 
     const timeline = await this.db.query(`
@@ -206,7 +206,7 @@ export class AttributionService {
       validatedFilter.authorId,
       validatedFilter.dateFrom,
       validatedFilter.dateTo,
-      validatedFilter.limit,
+      validatedFilter.limit
     ]);
 
     // Get summary statistics
@@ -215,9 +215,9 @@ export class AttributionService {
     return {
       timeline: timeline.rows.map(row => ({
         timestamp: row.timestamp,
-        changes: row.changes,
+        changes: row.changes
       })),
-      summary,
+      summary
     };
   }
 
@@ -250,7 +250,7 @@ export class AttributionService {
     `, [
       projectId,
       dateRange?.start,
-      dateRange?.end,
+      dateRange?.end
     ]);
 
     const contributorStats = await Promise.all(
@@ -270,7 +270,7 @@ export class AttributionService {
           lastContribution: row.last_contribution,
           activePeriods: this.aggregateActivityPeriods(row.activity_periods),
           expertise,
-          collaborations,
+          collaborations
         };
       })
     );
@@ -280,7 +280,7 @@ export class AttributionService {
 
     return {
       contributors: contributorStats,
-      summary,
+      summary
     };
   }
 
@@ -296,7 +296,7 @@ export class AttributionService {
     this.logger.info('Updating privacy settings', {
       projectId: request.projectId,
       userId,
-      settings: validatedRequest.settings,
+      settings: validatedRequest.settings
     });
 
     const result = await this.db.query(`
@@ -331,7 +331,7 @@ export class AttributionService {
       validatedRequest.settings.trackMouseMovements,
       validatedRequest.settings.trackKeystrokes,
       validatedRequest.settings.retentionDays,
-      validatedRequest.settings.autoAnonymizeAfterDays,
+      validatedRequest.settings.autoAnonymizeAfterDays
     ]);
 
     return this.mapDatabaseRowToPrivacySettings(result.rows[0]);
@@ -358,7 +358,7 @@ export class AttributionService {
     this.logger.info('Starting attribution session', {
       projectId: context.projectId,
       userId: context.userId,
-      sessionKey,
+      sessionKey
     });
 
     const result = await this.db.query(`
@@ -374,7 +374,7 @@ export class AttributionService {
       JSON.stringify(this.parseBrowserInfo(context.userAgent)),
       JSON.stringify(this.parseDeviceInfo(context.userAgent)),
       context.isAnonymous || false,
-      context.trackingConsent !== false,
+      context.trackingConsent !== false
     ]);
 
     return this.mapDatabaseRowToSession(result.rows[0]);
@@ -578,7 +578,7 @@ export class AttributionService {
       request.isCollaborative,
       request.collaboratorCount,
       request.batchId,
-      request.parentChangeId,
+      request.parentChangeId
     ]);
 
     return this.mapDatabaseRowToAttribution(result.rows[0]);
@@ -615,7 +615,7 @@ export class AttributionService {
   private parseBrowserInfo(userAgent?: string): any {
     // Simple user agent parsing - would use a proper library in production
     return {
-      userAgent: userAgent || 'Unknown',
+      userAgent: userAgent || 'Unknown'
       // Add more browser detection logic here
     };
   }
@@ -623,7 +623,7 @@ export class AttributionService {
   private parseDeviceInfo(userAgent?: string): any {
     // Simple device detection - would use a proper library in production
     return {
-      userAgent: userAgent || 'Unknown',
+      userAgent: userAgent || 'Unknown'
       // Add more device detection logic here
     };
   }
@@ -638,7 +638,7 @@ export class AttributionService {
 
     return Object.entries(aggregated).map(([date, changes]) => ({
       period: new Date(date),
-      changes,
+      changes
     }));
   }
 
@@ -672,7 +672,7 @@ export class AttributionService {
       isCollaborative: row.is_collaborative,
       collaboratorCount: row.collaborator_count,
       createdAt: row.created_at,
-      effectiveAt: row.effective_at,
+      effectiveAt: row.effective_at
     };
   }
 
@@ -694,7 +694,7 @@ export class AttributionService {
       locationInfo: row.location_info,
       isAnonymous: row.is_anonymous,
       trackingConsent: row.tracking_consent,
-      createdAt: row.created_at,
+      createdAt: row.created_at
     };
   }
 
@@ -714,7 +714,7 @@ export class AttributionService {
       retentionDays: row.retention_days,
       autoAnonymizeAfterDays: row.auto_anonymize_after_days,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     };
   }
 
@@ -727,7 +727,7 @@ export class AttributionService {
       activeSessions: 0,
       averageChangeSize: 0,
       collaborativeChanges: 0,
-      anonymousChanges: 0,
+      anonymousChanges: 0
     };
   }
 
@@ -761,7 +761,7 @@ export class AttributionService {
     return {
       totalCollaborativeSessions: 0,
       averageCollaboratorsPerSession: 0,
-      mostActiveCollaborations: [],
+      mostActiveCollaborations: []
     };
   }
 
@@ -771,7 +771,7 @@ export class AttributionService {
       totalChanges: 0,
       dateRange: { start: new Date(), end: new Date() },
       mostActiveAuthor: null,
-      mostActiveResource: null,
+      mostActiveResource: null
     };
   }
 
@@ -793,7 +793,7 @@ export class AttributionService {
       newContributors: 0,
       returningContributors: 0,
       averageContributionsPerUser: 0,
-      mostActiveContributor: null,
+      mostActiveContributor: null
     };
   }
 

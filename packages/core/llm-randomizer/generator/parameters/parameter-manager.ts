@@ -294,7 +294,7 @@ export class ParameterManager {
     mostUsedComplexity: string;
     mostUsedProvider: string;
     popularNodeTypes: Array<{ nodeType: string; count: number }>;
-  } {
+    } {
     if (this.history.length === 0) {
       return {
         totalGenerations: 0,
@@ -387,7 +387,7 @@ export class ParameterManager {
     presets: ParameterPreset[];
     history: ParameterHistory[];
     exported: string;
-  } {
+    } {
     return {
       presets: Array.from(this.presets.values()),
       history: this.history,

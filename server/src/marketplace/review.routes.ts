@@ -419,21 +419,21 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       const { review_id, action, reason } = request.body;
       
       switch (action) {
-        case 'approve':
-          await reviewService.approveReview(review_id, request.user.id);
-          break;
-        case 'reject':
-          await reviewService.rejectReview(review_id, request.user.id, reason || 'Rejected by moderator');
-          break;
-        case 'flag':
-          await reviewService.flagReview(review_id, request.user.id, 'inappropriate', reason);
-          break;
-        case 'hide':
-          await reviewService.hideReview(review_id, reason || 'Hidden by moderator');
-          break;
-        default:
-          reply.code(400).send({ error: 'Invalid moderation action' });
-          return;
+      case 'approve':
+        await reviewService.approveReview(review_id, request.user.id);
+        break;
+      case 'reject':
+        await reviewService.rejectReview(review_id, request.user.id, reason || 'Rejected by moderator');
+        break;
+      case 'flag':
+        await reviewService.flagReview(review_id, request.user.id, 'inappropriate', reason);
+        break;
+      case 'hide':
+        await reviewService.hideReview(review_id, reason || 'Hidden by moderator');
+        break;
+      default:
+        reply.code(400).send({ error: 'Invalid moderation action' });
+        return;
       }
       
       // Update moderation queue

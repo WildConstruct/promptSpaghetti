@@ -407,7 +407,7 @@ export abstract class EnhancedBaseAdaptor implements ModelAdaptor, AdaptorLifecy
         config: this.config
       };
 
-      let partialResult: PartialTargetPrompt = {};
+      const partialResult: PartialTargetPrompt = {};
 
       // Execute transformation pipeline stages
       for (const stage of this.transformationPipeline) {

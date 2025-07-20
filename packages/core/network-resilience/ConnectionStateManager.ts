@@ -182,31 +182,31 @@ export class ConnectionStateManager extends EventEmitter {
 
     // Update state-specific data
     switch (newState) {
-      case ConnectionState.CONNECTED:
-        this.stateData.lastConnected = timestamp;
-        this.stateData.disconnectedAt = null;
-        this.stateData.reconnectAttempts = 0;
-        this.stateData.isOnline = true;
-        this.startPingMonitoring();
-        break;
+    case ConnectionState.CONNECTED:
+      this.stateData.lastConnected = timestamp;
+      this.stateData.disconnectedAt = null;
+      this.stateData.reconnectAttempts = 0;
+      this.stateData.isOnline = true;
+      this.startPingMonitoring();
+      break;
 
-      case ConnectionState.DISCONNECTED:
-      case ConnectionState.OFFLINE:
-        if (this.stateData.lastConnected && !this.stateData.disconnectedAt) {
-          this.stateData.disconnectedAt = timestamp;
-        }
-        this.stateData.isOnline = false;
-        this.stopPingMonitoring();
-        break;
+    case ConnectionState.DISCONNECTED:
+    case ConnectionState.OFFLINE:
+      if (this.stateData.lastConnected && !this.stateData.disconnectedAt) {
+        this.stateData.disconnectedAt = timestamp;
+      }
+      this.stateData.isOnline = false;
+      this.stopPingMonitoring();
+      break;
 
-      case ConnectionState.RECONNECTING:
-        this.stateData.reconnectAttempts++;
-        break;
+    case ConnectionState.RECONNECTING:
+      this.stateData.reconnectAttempts++;
+      break;
 
-      case ConnectionState.FAILED:
-        this.stateData.isOnline = false;
-        this.stopPingMonitoring();
-        break;
+    case ConnectionState.FAILED:
+      this.stateData.isOnline = false;
+      this.stopPingMonitoring();
+      break;
     }
 
     // Update state history

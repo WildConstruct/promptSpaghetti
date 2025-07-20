@@ -18,7 +18,7 @@ export class RedisService {
       keyPrefix: config.keyPrefix || 'auth:',
       enableReadyCheck: true,
       lazyConnect: true,
-      maxRetriesPerRequest: 3,
+      maxRetriesPerRequest: 3
     });
 
     // Handle Redis events
@@ -152,7 +152,7 @@ export class RedisService {
         allowed,
         count: count + 1,
         remaining,
-        resetTime,
+        resetTime
       };
     } catch (error) {
       console.error(`Redis rate limit error for key ${key}:`, error);
@@ -161,7 +161,7 @@ export class RedisService {
         allowed: true,
         count: 1,
         remaining: limit - 1,
-        resetTime: new Date(Date.now() + window * 1000),
+        resetTime: new Date(Date.now() + window * 1000)
       };
     }
   }

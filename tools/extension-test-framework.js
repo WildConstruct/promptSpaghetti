@@ -643,22 +643,22 @@ async function main() {
   const framework = new ExtensionTestFramework();
   
   switch (command) {
-    case 'test':
-      await handleTest(framework, args.slice(1));
-      break;
-    case 'benchmark':
-      await handleBenchmark(framework, args.slice(1));
-      break;
-    case 'coverage':
-      await handleCoverage(framework, args.slice(1));
-      break;
-    case 'help':
-      showUsage();
-      break;
-    default:
-      console.error(`Unknown command: ${command}`);
-      showUsage();
-      process.exit(1);
+  case 'test':
+    await handleTest(framework, args.slice(1));
+    break;
+  case 'benchmark':
+    await handleBenchmark(framework, args.slice(1));
+    break;
+  case 'coverage':
+    await handleCoverage(framework, args.slice(1));
+    break;
+  case 'help':
+    showUsage();
+    break;
+  default:
+    console.error(`Unknown command: ${command}`);
+    showUsage();
+    process.exit(1);
   }
 }
 
@@ -708,21 +708,21 @@ function parseTestOptions(args) {
     const arg = args[i];
     
     switch (arg) {
-      case '--verbose':
-        options.verbose = true;
-        break;
-      case '--coverage':
-        options.coverage = true;
-        break;
-      case '--parallel':
-        options.parallel = true;
-        break;
-      case '--timeout':
-        options.timeout = parseInt(args[++i]) || 30000;
-        break;
-      case '--retries':
-        options.retries = parseInt(args[++i]) || 0;
-        break;
+    case '--verbose':
+      options.verbose = true;
+      break;
+    case '--coverage':
+      options.coverage = true;
+      break;
+    case '--parallel':
+      options.parallel = true;
+      break;
+    case '--timeout':
+      options.timeout = parseInt(args[++i]) || 30000;
+      break;
+    case '--retries':
+      options.retries = parseInt(args[++i]) || 0;
+      break;
     }
   }
   

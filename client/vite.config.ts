@@ -27,7 +27,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@promptscape/core': path.resolve(__dirname, '../packages/core'),
+      '@promptscape/core': path.resolve(__dirname, '../packages/core')
     },
     dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow']
   },

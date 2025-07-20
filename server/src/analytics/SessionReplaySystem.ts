@@ -453,17 +453,17 @@ export class SessionReplaySystem extends EventEmitter {
     }
 
     switch (format) {
-      case 'json':
-        return JSON.stringify(replay, null, 2);
+    case 'json':
+      return JSON.stringify(replay, null, 2);
       
-      case 'har':
-        return this.convertToHAR(replay);
+    case 'har':
+      return this.convertToHAR(replay);
       
-      case 'csv':
-        return this.convertToCSV(replay);
+    case 'csv':
+      return this.convertToCSV(replay);
       
-      default:
-        throw new Error(`Unsupported format: ${format}`);
+    default:
+      throw new Error(`Unsupported format: ${format}`);
     }
   }
 
@@ -496,37 +496,37 @@ export class SessionReplaySystem extends EventEmitter {
     }
 
     switch (eventType) {
-      case ReplayEventType.KEY_PRESS:
-        const keyData = eventData as KeyPressData;
-        if (keyData.isInputField && this.config.maskSensitiveData) {
-          return {
-            ...keyData,
-            key: '*',
-            code: 'masked'
-          };
-        }
-        return keyData;
+    case ReplayEventType.KEY_PRESS:
+      const keyData = eventData as KeyPressData;
+      if (keyData.isInputField && this.config.maskSensitiveData) {
+        return {
+          ...keyData,
+          key: '*',
+          code: 'masked'
+        };
+      }
+      return keyData;
 
-      case ReplayEventType.NETWORK_REQUEST:
-        if (!this.config.captureNetworkRequests) {
-          return null;
-        }
-        return eventData;
+    case ReplayEventType.NETWORK_REQUEST:
+      if (!this.config.captureNetworkRequests) {
+        return null;
+      }
+      return eventData;
 
-      case ReplayEventType.CONSOLE_LOG:
-        if (!this.config.captureConsoleMessages) {
-          return null;
-        }
-        return eventData;
+    case ReplayEventType.CONSOLE_LOG:
+      if (!this.config.captureConsoleMessages) {
+        return null;
+      }
+      return eventData;
 
-      case ReplayEventType.ERROR:
-        if (!this.config.captureErrors) {
-          return null;
-        }
-        return eventData;
+    case ReplayEventType.ERROR:
+      if (!this.config.captureErrors) {
+        return null;
+      }
+      return eventData;
 
-      default:
-        return eventData;
+    default:
+      return eventData;
     }
   }
 
@@ -535,21 +535,21 @@ export class SessionReplaySystem extends EventEmitter {
    */
   private updateSummaryCounters(summary: SessionReplay['summary'], eventType: ReplayEventType): void {
     switch (eventType) {
-      case ReplayEventType.MOUSE_CLICK:
-        summary.clicks++;
-        break;
-      case ReplayEventType.KEY_PRESS:
-        summary.keystrokes++;
-        break;
-      case ReplayEventType.SCROLL:
-        summary.scrolls++;
-        break;
-      case ReplayEventType.ERROR:
-        summary.errors++;
-        break;
-      case ReplayEventType.NETWORK_REQUEST:
-        summary.networkRequests++;
-        break;
+    case ReplayEventType.MOUSE_CLICK:
+      summary.clicks++;
+      break;
+    case ReplayEventType.KEY_PRESS:
+      summary.keystrokes++;
+      break;
+    case ReplayEventType.SCROLL:
+      summary.scrolls++;
+      break;
+    case ReplayEventType.ERROR:
+      summary.errors++;
+      break;
+    case ReplayEventType.NETWORK_REQUEST:
+      summary.networkRequests++;
+      break;
     }
   }
 
@@ -587,28 +587,28 @@ export class SessionReplaySystem extends EventEmitter {
    */
   private generateEventDescription(event: ReplayEvent): string {
     switch (event.type) {
-      case ReplayEventType.MOUSE_CLICK:
-        const clickData = event.data as MouseClickData;
-        return `Clicked ${clickData.elementType || 'element'} at (${clickData.x}, ${clickData.y})`;
+    case ReplayEventType.MOUSE_CLICK:
+      const clickData = event.data as MouseClickData;
+      return `Clicked ${clickData.elementType || 'element'} at (${clickData.x}, ${clickData.y})`;
       
-      case ReplayEventType.KEY_PRESS:
-        const keyData = event.data as KeyPressData;
-        return `Pressed key "${keyData.key}" in ${keyData.elementType || 'element'}`;
+    case ReplayEventType.KEY_PRESS:
+      const keyData = event.data as KeyPressData;
+      return `Pressed key "${keyData.key}" in ${keyData.elementType || 'element'}`;
       
-      case ReplayEventType.SCROLL:
-        const scrollData = event.data as ScrollData;
-        return `Scrolled to (${scrollData.scrollX}, ${scrollData.scrollY})`;
+    case ReplayEventType.SCROLL:
+      const scrollData = event.data as ScrollData;
+      return `Scrolled to (${scrollData.scrollX}, ${scrollData.scrollY})`;
       
-      case ReplayEventType.ERROR:
-        const errorData = event.data as ErrorData;
-        return `Error: ${errorData.message}`;
+    case ReplayEventType.ERROR:
+      const errorData = event.data as ErrorData;
+      return `Error: ${errorData.message}`;
       
-      case ReplayEventType.NAVIGATION:
-        const navData = event.data as NavigationData;
-        return `Navigated from ${navData.from} to ${navData.to}`;
+    case ReplayEventType.NAVIGATION:
+      const navData = event.data as NavigationData;
+      return `Navigated from ${navData.from} to ${navData.to}`;
       
-      default:
-        return `${event.type} event`;
+    default:
+      return `${event.type} event`;
     }
   }
 

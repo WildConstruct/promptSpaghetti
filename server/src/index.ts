@@ -35,7 +35,7 @@ const PreviewRequestSchema = z.object({
   graph: z.object({
     nodes: z.array(z.any()),
     edges: z.array(z.any()).optional(),
-    seed: z.number().optional(),
+    seed: z.number().optional()
   }),
   runs: z.number().int().min(1).max(50).default(5),
   seedStart: z.number().int().min(1).default(1)

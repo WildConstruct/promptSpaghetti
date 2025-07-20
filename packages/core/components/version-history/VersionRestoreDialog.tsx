@@ -190,21 +190,21 @@ export const VersionRestoreDialog: React.FC<VersionRestoreDialogProps> = ({
 
   const getRiskLevelColor = (level: string): string => {
     switch (level) {
-      case 'low': return 'text-green-600 bg-green-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'critical': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'low': return 'text-green-600 bg-green-100';
+    case 'medium': return 'text-yellow-600 bg-yellow-100';
+    case 'high': return 'text-orange-600 bg-orange-100';
+    case 'critical': return 'text-red-600 bg-red-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getSeverityColor = (severity: string): string => {
     switch (severity) {
-      case 'low': return 'text-green-600';
-      case 'medium': return 'text-yellow-600';
-      case 'high': return 'text-orange-600';
-      case 'critical': return 'text-red-600';
-      default: return 'text-gray-600';
+    case 'low': return 'text-green-600';
+    case 'medium': return 'text-yellow-600';
+    case 'high': return 'text-orange-600';
+    case 'critical': return 'text-red-600';
+    default: return 'text-gray-600';
     }
   };
 
@@ -246,8 +246,8 @@ export const VersionRestoreDialog: React.FC<VersionRestoreDialogProps> = ({
                   currentStep === step.key
                     ? 'bg-blue-500 text-white'
                     : ['options', 'conflicts', 'preview'].indexOf(currentStep) > ['options', 'conflicts', 'preview'].indexOf(step.key)
-                    ? 'bg-green-500 text-white'
-                    : 'bg-gray-200 text-gray-600'
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-200 text-gray-600'
                 }`}>
                   {index + 1}
                 </div>

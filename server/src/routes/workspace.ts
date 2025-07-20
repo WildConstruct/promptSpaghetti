@@ -16,7 +16,7 @@ import {
   CreateCommentSchema,
   UpdateCommentSchema,
   CreateNotificationSchema,
-  PaginationOptions,
+  PaginationOptions
 } from '../database/workspace-models';
 
 // Request schemas
@@ -26,7 +26,7 @@ const GetWorkspacesQuerySchema = z.object({
   sort_by: z.enum(['name', 'created_at', 'updated_at']).optional().default('updated_at'),
   sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
   search: z.string().optional(),
-  archived: z.coerce.boolean().optional(),
+  archived: z.coerce.boolean().optional()
 });
 
 const GetProjectsQuerySchema = z.object({
@@ -36,25 +36,25 @@ const GetProjectsQuerySchema = z.object({
   sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
   search: z.string().optional(),
   status: z.array(z.enum(['draft', 'active', 'archived'])).optional(),
-  created_by: z.string().optional(),
+  created_by: z.string().optional()
 });
 
 const InviteUserSchema = z.object({
   user_id: z.string(),
-  role: z.enum(['admin', 'editor', 'viewer', 'commenter']),
+  role: z.enum(['admin', 'editor', 'viewer', 'commenter'])
 });
 
 const UUIDParamSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().uuid()
 });
 
 const WorkspaceParamSchema = z.object({
-  workspaceId: z.string().uuid(),
+  workspaceId: z.string().uuid()
 });
 
 const ProjectParamSchema = z.object({
   workspaceId: z.string().uuid(),
-  projectId: z.string().uuid(),
+  projectId: z.string().uuid()
 });
 
 // Mock user authentication - in real implementation, this would extract from JWT
@@ -74,7 +74,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     sendNotification: async (notification) => {
       // Mock implementation - in real app, this would send via email/push service
       fastify.log.info('Notification sent:', notification.title);
-    },
+    }
   });
 
   // ====== WORKSPACE ENDPOINTS ======
@@ -88,10 +88,10 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           data: z.array(z.any()),
-          pagination: z.any(),
-        }),
-      },
-    },
+          pagination: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -113,9 +113,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     schema: {
       body: CreateWorkspaceSchema,
       response: {
-        201: z.any(),
-      },
-    },
+        201: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -135,9 +135,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -167,9 +167,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       body: UpdateWorkspaceSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -201,9 +201,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       response: {
         204: z.null(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -232,9 +232,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       body: InviteUserSchema,
       response: {
-        200: z.object({ message: z.string() }),
-      },
-    },
+        200: z.object({ message: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -270,10 +270,10 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           data: z.array(z.any()),
-          pagination: z.any(),
-        }),
-      },
-    },
+          pagination: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -306,15 +306,15 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: WorkspaceParamSchema,
       body: CreateProjectSchema.omit({ workspace_id: true }),
       response: {
-        201: z.any(),
-      },
-    },
+        201: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
       const projectData = {
         ...request.body,
-        workspace_id: request.params.workspaceId,
+        workspace_id: request.params.workspaceId
       };
       
       const project = await workspaceService.createProject(projectData, userId);
@@ -337,9 +337,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: ProjectParamSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -369,9 +369,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       body: UpdateProjectSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -403,9 +403,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: ProjectParamSchema,
       response: {
         204: z.null(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -436,15 +436,15 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: z.object({ projectId: z.string().uuid() }),
       body: CreateResourceSchema.omit({ project_id: true }),
       response: {
-        201: z.any(),
-      },
-    },
+        201: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
       const resourceData = {
         ...request.body,
-        project_id: request.params.projectId,
+        project_id: request.params.projectId
       };
       
       const resource = await workspaceService.createResource(resourceData, userId);
@@ -467,9 +467,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -517,15 +517,15 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         actor_id: z.string().optional(),
         event_types: z.string().optional(),
         from_date: z.string().optional(),
-        to_date: z.string().optional(),
+        to_date: z.string().optional()
       }),
       response: {
         200: z.object({
           data: z.array(z.any()),
-          pagination: z.any(),
-        }),
-      },
-    },
+          pagination: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -565,7 +565,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     schema: {
       params: WorkspaceParamSchema,
       querystring: z.object({
-        days: z.coerce.number().min(1).max(365).optional().default(30),
+        days: z.coerce.number().min(1).max(365).optional().default(30)
       }),
       response: {
         200: z.object({
@@ -573,15 +573,15 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
           events_by_type: z.record(z.number()),
           events_by_day: z.array(z.object({
             date: z.string(),
-            count: z.number(),
+            count: z.number()
           })),
           most_active_users: z.array(z.object({
             user_id: z.string(),
-            count: z.number(),
-          })),
-        }),
-      },
-    },
+            count: z.number()
+          }))
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -608,9 +608,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     schema: {
       params: WorkspaceParamSchema,
       response: {
-        200: z.array(z.string()),
-      },
-    },
+        200: z.array(z.string())
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -645,15 +645,15 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         page: z.coerce.number().min(1).optional().default(1),
         limit: z.coerce.number().min(1).max(100).optional().default(20),
         sort_by: z.enum(['created_at', 'event_type']).optional().default('created_at'),
-        sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('desc')
       }),
       response: {
         200: z.object({
           data: z.array(z.any()),
-          pagination: z.any(),
-        }),
-      },
-    },
+          pagination: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -681,9 +681,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -714,16 +714,16 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: z.object({ resourceId: z.string().uuid() }),
       body: CreateCommentSchema.omit({ resource_id: true, author_id: true }),
       response: {
-        201: z.any(),
-      },
-    },
+        201: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
       const commentData = {
         ...request.body,
         resource_id: request.params.resourceId,
-        author_id: userId,
+        author_id: userId
       };
       
       const comment = await workspaceService.createComment(commentData);
@@ -748,9 +748,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       body: UpdateCommentSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -790,15 +790,15 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         workspace_id: z.string().uuid().optional(),
         unread_only: z.coerce.boolean().optional().default(false),
         page: z.coerce.number().min(1).optional().default(1),
-        limit: z.coerce.number().min(1).max(100).optional().default(20),
+        limit: z.coerce.number().min(1).max(100).optional().default(20)
       }),
       response: {
         200: z.object({
           data: z.array(z.any()),
-          pagination: z.any(),
-        }),
-      },
-    },
+          pagination: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -824,9 +824,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     schema: {
       params: UUIDParamSchema,
       response: {
-        200: z.object({ message: z.string() }),
-      },
-    },
+        200: z.object({ message: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -851,9 +851,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     schema: {
       body: CreateCommentSchema,
       response: {
-        201: CommentSchema,
-      },
-    },
+        201: CommentSchema
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -882,9 +882,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     schema: {
       params: UUIDParamSchema,
       response: {
-        200: CommentSchema,
-      },
-    },
+        200: CommentSchema
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -919,9 +919,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       body: UpdateCommentSchema,
       response: {
-        200: CommentSchema,
-      },
-    },
+        200: CommentSchema
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -956,9 +956,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     schema: {
       params: UUIDParamSchema,
       response: {
-        200: z.object({ message: z.string() }),
-      },
-    },
+        200: z.object({ message: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -994,12 +994,12 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         page: z.coerce.number().min(1).optional().default(1),
         limit: z.coerce.number().min(1).max(50).optional().default(10),
         sort_by: z.enum(['created_at']).optional().default('created_at'),
-        sort_order: z.enum(['asc', 'desc']).optional().default('asc'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('asc')
       }),
       response: {
-        200: PaginatedResponseSchema(CommentSchema),
-      },
-    },
+        200: PaginatedResponseSchema(CommentSchema)
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -1041,12 +1041,12 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         page: z.coerce.number().min(1).optional().default(1),
         limit: z.coerce.number().min(1).max(100).optional().default(20),
         sort_by: z.enum(['created_at']).optional().default('created_at'),
-        sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('desc')
       }),
       response: {
-        200: PaginatedResponseSchema(CommentSchema),
-      },
-    },
+        200: PaginatedResponseSchema(CommentSchema)
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -1086,12 +1086,12 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         page: z.coerce.number().min(1).optional().default(1),
         limit: z.coerce.number().min(1).max(100).optional().default(20),
         sort_by: z.enum(['created_at']).optional().default('created_at'),
-        sort_order: z.enum(['asc', 'desc']).optional().default('desc'),
+        sort_order: z.enum(['asc', 'desc']).optional().default('desc')
       }),
       response: {
-        200: PaginatedResponseSchema(CommentSchema),
-      },
-    },
+        200: PaginatedResponseSchema(CommentSchema)
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -1122,9 +1122,9 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       body: z.object({ resolved: z.boolean() }),
       response: {
-        200: CommentSchema,
-      },
-    },
+        200: CommentSchema
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);

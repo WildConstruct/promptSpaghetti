@@ -5,24 +5,24 @@ import {
   IncludeNode,
   SetVariableNode,
   GetVariableNode,
-  ExecutionContext,
-} from "../runtime";
+  ExecutionContext
+} from '../runtime';
 
-import seedrandom from "seedrandom";
+import seedrandom from 'seedrandom';
 
-describe("Runtime node classes", () => {
-  const baseCtx = (): ExecutionContext => ({ variables: {}, seed: "abc" });
+describe('Runtime node classes', () => {
+  const baseCtx = (): ExecutionContext => ({ variables: {}, seed: 'abc' });
 
-  it("WeightedChoiceNode returns deterministic value for same seed", () => {
+  it('WeightedChoiceNode returns deterministic value for same seed', () => {
     // Mock Math.random via seedrandom for full determinism
     const choices = [
-      { value: "A", weight: 1 },
-      { value: "B", weight: 1 },
-      { value: "C", weight: 1 },
+      { value: 'A', weight: 1 },
+      { value: 'B', weight: 1 },
+      { value: 'C', weight: 1 }
     ];
 
-    const node1 = new WeightedChoiceNode("w1", choices);
-    const node2 = new WeightedChoiceNode("w2", choices);
+    const node1 = new WeightedChoiceNode('w1', choices);
+    const node2 = new WeightedChoiceNode('w2', choices);
 
     const ctx1 = baseCtx();
     const ctx2 = baseCtx();
@@ -33,25 +33,25 @@ describe("Runtime node classes", () => {
     expect(out1).toBe(out2);
   });
 
-  it("ConcatNode joins strings", () => {
-    const node = new ConcatNode("c1", ["Hello", ", ", "world!"]);
-    expect(node.run()).toBe("Hello, world!");
+  it('ConcatNode joins strings', () => {
+    const node = new ConcatNode('c1', ['Hello', ', ', 'world!']);
+    expect(node.run()).toBe('Hello, world!');
   });
 
-  it("OutputNode echoes input", () => {
-    const node = new OutputNode("o1", "Final");
-    expect(node.run()).toBe("Final");
+  it('OutputNode echoes input', () => {
+    const node = new OutputNode('o1', 'Final');
+    expect(node.run()).toBe('Final');
   });
 
-  it("IncludeNode looks up value", () => {
-    const node = new IncludeNode("inc", "greet", { greet: "hi" });
-    expect(node.run()).toBe("hi");
+  it('IncludeNode looks up value', () => {
+    const node = new IncludeNode('inc', 'greet', { greet: 'hi' });
+    expect(node.run(baseCtx())).toBe('hi');
   });
 
-  it("SetVariableNode and GetVariableNode mutate/shared context", () => {
+  it('SetVariableNode and GetVariableNode mutate/shared context', () => {
     const ctx = baseCtx();
-    const setNode = new SetVariableNode("set1", "x", 42);
-    const getNode = new GetVariableNode("get1", "x");
+    const setNode = new SetVariableNode('set1', 'x', 42);
+    const getNode = new GetVariableNode('get1', 'x');
 
     setNode.run(ctx);
     const value = getNode.run(ctx);

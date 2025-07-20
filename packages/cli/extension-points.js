@@ -414,7 +414,7 @@ function generateVisualization(options) {
         const nodeId = ep.id.replace(/[^a-zA-Z0-9]/g, '_');
         mermaid += `        ${nodeId}["${ep.name}"]\n`;
       });
-      mermaid += `    end\n`;
+      mermaid += '    end\n';
     });
   } else {
     // Add all nodes

@@ -24,7 +24,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   submitText = 'Post Comment',
   userId,
   compact = false,
-  autoFocus = true,
+  autoFocus = true
 }) => {
   const [content, setContent] = useState(initialValue);
   const [submitting, setSubmitting] = useState(false);

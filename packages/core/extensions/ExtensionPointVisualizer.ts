@@ -57,13 +57,13 @@ export class ExtensionPointVisualizer {
     const graph = this.buildGraph(options);
     
     switch (options.format) {
-      case 'graphviz':
-        return this.generateGraphviz(graph, options);
-      case 'json':
-        return this.generateJSON(graph, options);
-      case 'mermaid':
-      default:
-        return this.generateMermaid(graph, options);
+    case 'graphviz':
+      return this.generateGraphviz(graph, options);
+    case 'json':
+      return this.generateJSON(graph, options);
+    case 'mermaid':
+    default:
+      return this.generateMermaid(graph, options);
     }
   }
 
@@ -88,7 +88,7 @@ export class ExtensionPointVisualizer {
             const nodeId = this.sanitizeId(ep.id);
             mermaid += `        ${nodeId}["${ep.name}"]\n`;
           });
-          mermaid += `    end\n`;
+          mermaid += '    end\n';
         }
       });
     } else {
@@ -284,7 +284,7 @@ export class ExtensionPointVisualizer {
             const nodeId = this.sanitizeId(node.id);
             mermaid += `        ${nodeId}["${node.name}"]\n`;
           });
-          mermaid += `    end\n`;
+          mermaid += '    end\n';
         }
       });
     } else {
@@ -301,15 +301,15 @@ export class ExtensionPointVisualizer {
       const targetId = this.sanitizeId(edge.target);
       
       switch (edge.type) {
-        case 'dependency':
-          mermaid += `    ${sourceId} --> ${targetId}\n`;
-          break;
-        case 'interface':
-          mermaid += `    ${sourceId} -.-> ${targetId}\n`;
-          break;
-        case 'inheritance':
-          mermaid += `    ${sourceId} ==> ${targetId}\n`;
-          break;
+      case 'dependency':
+        mermaid += `    ${sourceId} --> ${targetId}\n`;
+        break;
+      case 'interface':
+        mermaid += `    ${sourceId} -.-> ${targetId}\n`;
+        break;
+      case 'inheritance':
+        mermaid += `    ${sourceId} ==> ${targetId}\n`;
+        break;
       }
     });
     
@@ -332,8 +332,8 @@ export class ExtensionPointVisualizer {
         if (nodes.length > 0) {
           dot += `    subgraph cluster_${category} {\n`;
           dot += `        label="${category.toUpperCase()}";\n`;
-          dot += `        style=filled;\n`;
-          dot += `        color=lightgrey;\n`;
+          dot += '        style=filled;\n';
+          dot += '        color=lightgrey;\n';
           
           nodes.forEach(node => {
             const nodeId = this.sanitizeId(node.id).replace(/[.-]/g, '_');
@@ -356,15 +356,15 @@ export class ExtensionPointVisualizer {
       const targetId = this.sanitizeId(edge.target).replace(/[.-]/g, '_');
       
       switch (edge.type) {
-        case 'dependency':
-          dot += `    ${sourceId} -> ${targetId} [label="depends on"];\n`;
-          break;
-        case 'interface':
-          dot += `    ${sourceId} -> ${targetId} [style=dashed, label="provides"];\n`;
-          break;
-        case 'inheritance':
-          dot += `    ${sourceId} -> ${targetId} [arrowhead=empty, label="extends"];\n`;
-          break;
+      case 'dependency':
+        dot += `    ${sourceId} -> ${targetId} [label="depends on"];\n`;
+        break;
+      case 'interface':
+        dot += `    ${sourceId} -> ${targetId} [style=dashed, label="provides"];\n`;
+        break;
+      case 'inheritance':
+        dot += `    ${sourceId} -> ${targetId} [arrowhead=empty, label="extends"];\n`;
+        break;
       }
     });
     

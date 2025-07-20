@@ -4,19 +4,11 @@
 // and returns output plus possibly mutated context.
 // These are thin stubs for now; they will be fully implemented in later tasks.
 
-export interface ExecutionContext {
-  variables: Record<string, any>;
-  seed: string | number;
-}
+import { SecurityValidation } from '../validation/security';
+import { ExecutionContext, RuntimeNode } from './types';
 
-export abstract class RuntimeNode<TOutput = unknown> {
-  constructor(public id: string) {}
-
-  /**
-   * Execute this node and return its output. May mutate context.
-   */
-  abstract run(ctx: ExecutionContext): Promise<TOutput> | TOutput;
-}
+// Re-export types
+export { ExecutionContext, RuntimeNode } from './types';
 
 /* ------------------------- Core node runtimes ------------------------- */
 
@@ -92,13 +84,9 @@ export class SetVariableNode extends RuntimeNode<void> {
   }
 
   run(ctx: ExecutionContext): void {
-    // Security: Validate key for dangerous patterns
-    if (this.key.includes('__proto__') || 
-        this.key.includes('constructor') || 
-        this.key.includes('prototype') ||
-        typeof this.key !== 'string' ||
-        this.key.length === 0) {
-      return; // Silently ignore dangerous keys
+    // Security: Validate variable name using the new alphanumeric pattern with 64 char limit
+    if (!SecurityValidation.validateVariableName(this.key)) {
+      return; // Silently ignore invalid variable names
     }
     
     // Security: Validate value is safe
@@ -130,13 +118,9 @@ export class GetVariableNode extends RuntimeNode<any> {
   }
 
   run(ctx: ExecutionContext): any {
-    // Security: Validate key for dangerous patterns
-    if (this.key.includes('__proto__') || 
-        this.key.includes('constructor') || 
-        this.key.includes('prototype') ||
-        typeof this.key !== 'string' ||
-        this.key.length === 0) {
-      return undefined; // Return undefined for dangerous keys
+    // Security: Validate variable name using the same validation as SetVariable
+    if (!SecurityValidation.validateVariableName(this.key)) {
+      return undefined; // Return undefined for invalid variable names
     }
     
     // Security: Only return value if it exists as own property

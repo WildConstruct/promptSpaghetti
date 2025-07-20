@@ -252,7 +252,7 @@ export class ProjectTemplateManager {
     }
 
     // Generate preview without recording usage
-    let graphData = JSON.parse(JSON.stringify(template.graph_data));
+    const graphData = JSON.parse(JSON.stringify(template.graph_data));
     return this.applyCustomizations(graphData, template, customizations);
   }
 
@@ -264,19 +264,19 @@ export class ProjectTemplateManager {
     }
 
     switch (format) {
-      case 'json':
-        return JSON.stringify(template, null, 2);
+    case 'json':
+      return JSON.stringify(template, null, 2);
       
-      case 'yaml':
-        // Convert to YAML format
-        return this.convertToYaml(template);
+    case 'yaml':
+      // Convert to YAML format
+      return this.convertToYaml(template);
       
-      case 'bundle':
-        // Create a complete bundle with dependencies
-        return this.createTemplateBundle(template);
+    case 'bundle':
+      // Create a complete bundle with dependencies
+      return this.createTemplateBundle(template);
       
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
   }
 
@@ -284,20 +284,20 @@ export class ProjectTemplateManager {
     let template: ProjectTemplate;
 
     switch (format) {
-      case 'json':
-        template = JSON.parse(templateData);
-        break;
+    case 'json':
+      template = JSON.parse(templateData);
+      break;
       
-      case 'yaml':
-        template = this.parseYamlTemplate(templateData);
-        break;
+    case 'yaml':
+      template = this.parseYamlTemplate(templateData);
+      break;
       
-      case 'bundle':
-        template = this.extractFromBundle(templateData);
-        break;
+    case 'bundle':
+      template = this.extractFromBundle(templateData);
+      break;
       
-      default:
-        throw new Error(`Unsupported import format: ${format}`);
+    default:
+      throw new Error(`Unsupported import format: ${format}`);
     }
 
     // Validate and store
@@ -421,21 +421,21 @@ export class ProjectTemplateManager {
   private applyCustomizationPoint(graphData: any, point: CustomizationPoint, value: any): void {
     // Apply customization based on type
     switch (point.type) {
-      case 'node_properties':
-        this.updateNodeProperties(graphData, point.target_nodes, point.properties, value);
-        break;
+    case 'node_properties':
+      this.updateNodeProperties(graphData, point.target_nodes, point.properties, value);
+      break;
       
-      case 'graph_structure':
-        this.updateGraphStructure(graphData, point, value);
-        break;
+    case 'graph_structure':
+      this.updateGraphStructure(graphData, point, value);
+      break;
       
-      case 'styling':
-        this.updateStyling(graphData, point.target_nodes, value);
-        break;
+    case 'styling':
+      this.updateStyling(graphData, point.target_nodes, value);
+      break;
       
-      case 'behavior':
-        this.updateBehavior(graphData, point.target_nodes, value);
-        break;
+    case 'behavior':
+      this.updateBehavior(graphData, point.target_nodes, value);
+      break;
     }
   }
 
@@ -478,18 +478,18 @@ export class ProjectTemplateManager {
 
   private sortTemplates(templates: ProjectTemplate[], sortBy: string): void {
     switch (sortBy) {
-      case 'popularity':
-        templates.sort((a, b) => b.usage_count - a.usage_count);
-        break;
-      case 'rating':
-        templates.sort((a, b) => b.rating - a.rating);
-        break;
-      case 'newest':
-        templates.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        break;
-      case 'name':
-        templates.sort((a, b) => a.name.localeCompare(b.name));
-        break;
+    case 'popularity':
+      templates.sort((a, b) => b.usage_count - a.usage_count);
+      break;
+    case 'rating':
+      templates.sort((a, b) => b.rating - a.rating);
+      break;
+    case 'newest':
+      templates.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      break;
+    case 'name':
+      templates.sort((a, b) => a.name.localeCompare(b.name));
+      break;
     }
   }
 

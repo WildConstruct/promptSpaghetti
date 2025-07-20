@@ -263,7 +263,7 @@ export const PERMISSIONS = {
   // Advanced permissions
   ACTIVITY_READ: 1 << 18,
   NOTIFICATION_MANAGE: 1 << 19,
-  EXPORT_DATA: 1 << 20,
+  EXPORT_DATA: 1 << 20
 } as const;
 
 // Utility functions

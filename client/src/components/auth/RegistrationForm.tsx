@@ -19,10 +19,10 @@ const RegistrationSchema = z.object({
   lastName: z.string().min(2, 'Last name must be at least 2 characters').optional(),
   displayName: z.string().min(2, 'Display name must be at least 2 characters').optional(),
   acceptTerms: z.boolean().refine(val => val === true, 'You must accept the terms and conditions'),
-  marketingConsent: z.boolean().optional(),
+  marketingConsent: z.boolean().optional()
 }).refine(data => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
+  message: 'Passwords don\'t match',
+  path: ['confirmPassword']
 });
 
 type RegistrationFormData = z.infer<typeof RegistrationSchema>;
@@ -38,11 +38,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   invitationToken,
   onSuccess,
   onCancel,
-  className = '',
+  className = ''
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<Partial<RegistrationFormData>>({
-    marketingConsent: false,
+    marketingConsent: false
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
@@ -52,7 +52,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     isLoading,
     error: registrationError,
     validationResult,
-    validateField,
+    validateField
   } = useRegistration();
 
   const { trackFieldEvent, trackFormStep } = useFormAnalytics();
@@ -65,7 +65,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   const steps = [
     { number: 1, title: 'Account Information', description: 'Create your account' },
     { number: 2, title: 'Personal Details', description: 'Tell us about yourself' },
-    { number: 3, title: 'Confirmation', description: 'Review and confirm' },
+    { number: 3, title: 'Confirmation', description: 'Review and confirm' }
   ];
 
   const handleFieldChange = (field: string, value: string | boolean) => {
@@ -121,7 +121,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
       if (!formData.confirmPassword) {
         stepErrors.confirmPassword = 'Please confirm your password';
       } else if (formData.password !== formData.confirmPassword) {
-        stepErrors.confirmPassword = "Passwords don't match";
+        stepErrors.confirmPassword = 'Passwords don\'t match';
       }
     }
 
@@ -173,7 +173,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
         firstName: formData.firstName,
         lastName: formData.lastName,
         displayName: formData.displayName || `${formData.firstName || ''} ${formData.lastName || ''}`.trim(),
-        invitationToken,
+        invitationToken
       };
 
       const result = await register(registrationData);

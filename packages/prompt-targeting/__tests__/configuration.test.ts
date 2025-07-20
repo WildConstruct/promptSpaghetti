@@ -29,9 +29,9 @@ describe('Configuration System', () => {
         platformOverrides: {
           openai: {
             model: 'gpt-4' as const,
-            temperature: 0.2,
-          },
-        },
+            temperature: 0.2
+          }
+        }
       };
 
       const manager = new ConfigurationManager(customConfig);
@@ -46,7 +46,7 @@ describe('Configuration System', () => {
     test('should validate configuration updates', () => {
       const result = configManager.updateConfig({
         qualityPreference: 0.8,
-        stylePreference: 'artistic',
+        stylePreference: 'artistic'
       });
 
       expect(result.valid).toBe(true);
@@ -59,7 +59,7 @@ describe('Configuration System', () => {
 
     test('should reject invalid configuration updates', () => {
       const result = configManager.updateConfig({
-        qualityPreference: 2.5, // Invalid: must be 0-1
+        qualityPreference: 2.5 // Invalid: must be 0-1
       } as any);
 
       expect(result.valid).toBe(false);
@@ -80,7 +80,7 @@ describe('Configuration System', () => {
     test('should provide business logic warnings', () => {
       const result = configManager.updateConfig({
         qualityPreference: 0.9,
-        stylePreference: 'minimal', // Conflicting: high quality + minimal style
+        stylePreference: 'minimal' // Conflicting: high quality + minimal style
       });
 
       expect(result.valid).toBe(true);
@@ -103,7 +103,7 @@ describe('Configuration System', () => {
       // Modify config
       configManager.updateConfig({
         qualityPreference: 0.9,
-        stylePreference: 'artistic',
+        stylePreference: 'artistic'
       });
 
       // Reset to defaults
@@ -201,7 +201,7 @@ describe('Configuration System', () => {
     test('should export configuration as JSON', () => {
       configManager.updateConfig({
         qualityPreference: 0.8,
-        stylePreference: 'artistic',
+        stylePreference: 'artistic'
       });
 
       const exported = configManager.exportConfig('json');
@@ -214,7 +214,7 @@ describe('Configuration System', () => {
     test('should export configuration as YAML', () => {
       configManager.updateConfig({
         qualityPreference: 0.8,
-        stylePreference: 'artistic',
+        stylePreference: 'artistic'
       });
 
       const exported = configManager.exportConfig('yaml');
@@ -228,7 +228,7 @@ describe('Configuration System', () => {
       const configData = JSON.stringify({
         qualityPreference: 0.6,
         stylePreference: 'minimal',
-        enableOptimizations: false,
+        enableOptimizations: false
       });
 
       const result = configManager.importConfig(configData, 'json');
@@ -272,8 +272,8 @@ enableOptimizations: false
         qualityPreference: 0.9,
         platformOverrides: {
           openai: { model: 'gpt-4' },
-          midjourney: { version: '6' },
-        },
+          midjourney: { version: '6' }
+        }
       });
 
       const summary = configManager.getConfigSummary();
@@ -309,9 +309,9 @@ enableOptimizations: false
         platformOverrides: {
           openai: {
             model: 'gpt-4',
-            temperature: 0.7,
-          },
-        },
+            temperature: 0.7
+          }
+        }
       };
 
       expect(() => GlobalConfigSchema.parse(validConfig)).not.toThrow();
@@ -320,7 +320,7 @@ enableOptimizations: false
     test('should reject invalid schema values', () => {
       const invalidConfig = {
         qualityPreference: 2.0, // Invalid: > 1
-        stylePreference: 'invalid-style', // Invalid enum value
+        stylePreference: 'invalid-style' // Invalid enum value
       };
 
       expect(() => GlobalConfigSchema.parse(invalidConfig)).toThrow();
@@ -328,7 +328,7 @@ enableOptimizations: false
 
     test('should apply default values for missing fields', () => {
       const partialConfig = {
-        qualityPreference: 0.8,
+        qualityPreference: 0.8
       };
 
       const parsed = GlobalConfigSchema.parse(partialConfig);
@@ -395,7 +395,7 @@ enableOptimizations: false
   describe('Error Handling', () => {
     test('should handle malformed configuration gracefully', () => {
       const result = configManager.updateConfig({
-        qualityPreference: 'invalid' as any,
+        qualityPreference: 'invalid' as any
       });
 
       expect(result.valid).toBe(false);

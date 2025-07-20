@@ -84,7 +84,7 @@ export class SessionService {
       expiresAt,
       createdAt: new Date(),
       lastAccessedAt: new Date(),
-      revoked: false,
+      revoked: false
     };
 
     // Store session in database
@@ -103,7 +103,7 @@ export class SessionService {
       sessionData.deviceInfo?.userAgent,
       expiresAt,
       session.createdAt,
-      session.lastAccessedAt,
+      session.lastAccessedAt
     ]);
 
     // Store session in Redis for fast lookups
@@ -117,12 +117,12 @@ export class SessionService {
         sessionId,
         deviceInfo: sessionData.deviceInfo,
         location: sessionData.location,
-        rememberMe: sessionData.rememberMe,
+        rememberMe: sessionData.rememberMe
       },
       ipAddress: sessionData.location?.ipAddress,
       userAgent: sessionData.deviceInfo?.userAgent,
       sessionId,
-      severity: 'info',
+      severity: 'info'
     });
 
     return session;
@@ -159,27 +159,27 @@ export class SessionService {
     if (!session) {
       return {
         valid: false,
-        reason: 'Session not found or expired',
+        reason: 'Session not found or expired'
       };
     }
 
     if (session.revoked) {
       return {
         valid: false,
-        reason: 'Session has been revoked',
+        reason: 'Session has been revoked'
       };
     }
 
     if (session.expiresAt < new Date()) {
       return {
         valid: false,
-        reason: 'Session has expired',
+        reason: 'Session has expired'
       };
     }
 
     return {
       valid: true,
-      session,
+      session
     };
   }
 
@@ -228,12 +228,12 @@ export class SessionService {
       action: 'session_renewed',
       details: {
         sessionId: session.id,
-        newExpiresAt,
+        newExpiresAt
       },
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
       sessionId: session.id,
-      severity: 'info',
+      severity: 'info'
     });
 
     return session;
@@ -266,12 +266,12 @@ export class SessionService {
       action: 'session_revoked',
       details: {
         sessionId: session.id,
-        reason: reason || 'manual_revocation',
+        reason: reason || 'manual_revocation'
       },
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
       sessionId: session.id,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -312,9 +312,9 @@ export class SessionService {
       details: {
         revokedCount,
         exceptSessionId,
-        revokedSessionIds: result.rows.map(row => row.id),
+        revokedSessionIds: result.rows.map(row => row.id)
       },
-      severity: 'info',
+      severity: 'info'
     });
 
     return revokedCount;
@@ -332,10 +332,10 @@ export class SessionService {
       id: row.id,
       deviceInfo: row.device_info || {},
       location: {
-        ipAddress: row.ip_address,
+        ipAddress: row.ip_address
       },
       lastAccessedAt: row.last_accessed_at,
-      createdAt: row.created_at,
+      createdAt: row.created_at
     }));
   }
 
@@ -357,9 +357,9 @@ export class SessionService {
         action: 'sessions_cleanup',
         details: {
           cleanedCount,
-          cleanedSessionIds: result.rows.map(row => row.id),
+          cleanedSessionIds: result.rows.map(row => row.id)
         },
-        severity: 'info',
+        severity: 'info'
       });
     }
 
@@ -387,7 +387,7 @@ export class SessionService {
       totalSessions: parseInt(stats.total_sessions),
       activeSessions: parseInt(stats.active_sessions),
       expiredSessions: parseInt(stats.expired_sessions),
-      revokedSessions: parseInt(stats.revoked_sessions),
+      revokedSessions: parseInt(stats.revoked_sessions)
     };
   }
 
@@ -435,7 +435,7 @@ export class SessionService {
       multipleLocations,
       unusualDevices,
       suspiciousLocations,
-      newDevices,
+      newDevices
     };
   }
 
@@ -463,7 +463,7 @@ export class SessionService {
         createdAt: new Date(sessionData.createdAt),
         lastAccessedAt: new Date(sessionData.lastAccessedAt),
         expiresAt: new Date(sessionData.expiresAt),
-        revokedAt: sessionData.revokedAt ? new Date(sessionData.revokedAt) : undefined,
+        revokedAt: sessionData.revokedAt ? new Date(sessionData.revokedAt) : undefined
       };
     } catch (error) {
       console.error('Error parsing cached session:', error);
@@ -489,7 +489,7 @@ export class SessionService {
       createdAt: new Date(row.created_at),
       lastAccessedAt: new Date(row.last_accessed_at),
       revoked: row.revoked,
-      revokedAt: row.revoked_at ? new Date(row.revoked_at) : undefined,
+      revokedAt: row.revoked_at ? new Date(row.revoked_at) : undefined
     };
   }
 
@@ -501,10 +501,10 @@ export class SessionService {
       action: 'session_notification_sent',
       details: {
         sessionId: session.id,
-        type: 'new_session',
+        type: 'new_session'
       },
       sessionId: session.id,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -515,9 +515,9 @@ export class SessionService {
       action: 'security_alert_sent',
       details: {
         type: 'suspicious_activity',
-        activity,
+        activity
       },
-      severity: 'warning',
+      severity: 'warning'
     });
   }
 }

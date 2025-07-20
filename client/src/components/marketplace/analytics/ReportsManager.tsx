@@ -13,7 +13,7 @@ interface ReportsManagerProps {
 
 export const ReportsManager: React.FC<ReportsManagerProps> = ({
   creatorId,
-  className = '',
+  className = ''
 }) => {
   const [reports, setReports] = useState<CustomReport[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,7 +85,7 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       
       // Create download link
       const blob = new Blob([JSON.stringify(reportData, null, 2)], {
-        type: 'application/json',
+        type: 'application/json'
       });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -109,20 +109,20 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       let aValue: any, bValue: any;
 
       switch (sortBy) {
-        case 'name':
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-          break;
-        case 'created_at':
-          aValue = new Date(a.created_at).getTime();
-          bValue = new Date(b.created_at).getTime();
-          break;
-        case 'updated_at':
-          aValue = new Date(a.updated_at).getTime();
-          bValue = new Date(b.updated_at).getTime();
-          break;
-        default:
-          return 0;
+      case 'name':
+        aValue = a.name.toLowerCase();
+        bValue = b.name.toLowerCase();
+        break;
+      case 'created_at':
+        aValue = new Date(a.created_at).getTime();
+        bValue = new Date(b.created_at).getTime();
+        break;
+      case 'updated_at':
+        aValue = new Date(a.updated_at).getTime();
+        bValue = new Date(b.updated_at).getTime();
+        break;
+      default:
+        return 0;
       }
 
       if (sortOrder === 'asc') {

@@ -33,7 +33,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -55,7 +55,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -64,7 +64,7 @@ describe('useCorrectionsStore', () => {
     act(() => {
       result.current.updateRule(ruleId, {
         name: 'Updated Rule',
-        replaceWith: 'UPDATED',
+        replaceWith: 'UPDATED'
       });
     });
 
@@ -84,7 +84,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -108,7 +108,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -138,7 +138,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST1',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
       result.current.addRule({
         name: 'Rule 2',
@@ -147,7 +147,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST2',
         isRegex: false,
         isActive: true,
-        priority: 2,
+        priority: 2
       });
     });
 
@@ -172,7 +172,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST1',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
       result.current.addRule({
         name: 'Test Rule 2',
@@ -181,7 +181,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST2',
         isRegex: false,
         isActive: true,
-        priority: 2,
+        priority: 2
       });
     });
 
@@ -205,7 +205,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'the',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -224,7 +224,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: ' ',
         isRegex: true,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -243,7 +243,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'the',
         isRegex: false,
         isActive: true,
-        priority: 2,
+        priority: 2
       });
       result.current.addRule({
         name: 'Fix spaces',
@@ -252,7 +252,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: ' ',
         isRegex: true,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -271,7 +271,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST',
         isRegex: false,
         isActive: false,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -291,7 +291,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'fixed',
         isRegex: true,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 
@@ -316,7 +316,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST1',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
       result.current.addRule({
         name: 'Inactive rule',
@@ -325,7 +325,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST2',
         isRegex: false,
         isActive: false,
-        priority: 2,
+        priority: 2
       });
     });
 
@@ -349,7 +349,7 @@ describe('useCorrectionsStore', () => {
         replaceWith: 'TEST',
         isRegex: false,
         isActive: true,
-        priority: 1,
+        priority: 1
       });
     });
 

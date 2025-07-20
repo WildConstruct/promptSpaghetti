@@ -14,13 +14,13 @@ const profileUpdateSchema = z.object({
   lastName: z.string().min(1).max(50).optional(),
   bio: z.string().max(500).optional(),
   timezone: z.string().max(50).optional(),
-  locale: z.string().max(10).optional(),
+  locale: z.string().max(10).optional()
 });
 
 // Preferences update schema
 const preferencesUpdateSchema = z.object({
   category: z.string().min(1).max(50),
-  settings: z.record(z.any()),
+  settings: z.record(z.any())
 });
 
 // Notification preferences schema
@@ -32,8 +32,8 @@ const notificationPreferencesSchema = z.object({
       security: z.boolean(),
       system: z.boolean(),
       updates: z.boolean(),
-      marketing: z.boolean(),
-    }),
+      marketing: z.boolean()
+    })
   }),
   inApp: z.object({
     enabled: z.boolean(),
@@ -41,8 +41,8 @@ const notificationPreferencesSchema = z.object({
       security: z.boolean(),
       system: z.boolean(),
       updates: z.boolean(),
-      mentions: z.boolean(),
-    }),
+      mentions: z.boolean()
+    })
   }),
   push: z.object({
     enabled: z.boolean(),
@@ -50,15 +50,15 @@ const notificationPreferencesSchema = z.object({
       security: z.boolean(),
       system: z.boolean(),
       updates: z.boolean(),
-      mentions: z.boolean(),
-    }),
+      mentions: z.boolean()
+    })
   }),
   quietHours: z.object({
     enabled: z.boolean(),
     start: z.string().regex(/^\d{2}:\d{2}$/),
     end: z.string().regex(/^\d{2}:\d{2}$/),
-    timezone: z.string(),
-  }),
+    timezone: z.string()
+  })
 });
 
 interface ProfileRouteContext {
@@ -72,8 +72,8 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
   // Register multipart support for file uploads
   await fastify.register(multipart, {
     limits: {
-      fileSize: 5 * 1024 * 1024, // 5MB limit
-    },
+      fileSize: 5 * 1024 * 1024 // 5MB limit
+    }
   });
 
   // Get user profile
@@ -96,21 +96,21 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
                 timezone: { type: 'string' },
                 locale: { type: 'string' },
                 createdAt: { type: 'string' },
-                updatedAt: { type: 'string' },
-              },
+                updatedAt: { type: 'string' }
+              }
             },
             completeness: {
               type: 'object',
               properties: {
                 percentage: { type: 'number' },
                 completedFields: { type: 'array', items: { type: 'string' } },
-                missingFields: { type: 'array', items: { type: 'string' } },
-              },
-            },
-          },
-        },
-      },
-    },
+                missingFields: { type: 'array', items: { type: 'string' } }
+              }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -118,7 +118,7 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -127,13 +127,13 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
 
       return reply.send({
         profile,
-        completeness,
+        completeness
       });
     } catch (error) {
       fastify.log.error('Get profile error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve profile',
+        message: 'Failed to retrieve profile'
       });
     }
   });
@@ -150,11 +150,11 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
           type: 'object',
           properties: {
             profile: { type: 'object' },
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -163,26 +163,26 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const profile = await profileService.updateProfile(userId, profileData, context);
 
       return reply.send({
         profile,
-        message: 'Profile updated successfully',
+        message: 'Profile updated successfully'
       });
     } catch (error) {
       fastify.log.error('Update profile error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to update profile',
+        message: 'Failed to update profile'
       });
     }
   });
@@ -196,11 +196,11 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
           type: 'object',
           properties: {
             avatarUrl: { type: 'string' },
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -208,7 +208,7 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -217,7 +217,7 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!data) {
         return reply.status(400).send({
           error: 'Bad Request',
-          message: 'No file uploaded',
+          message: 'No file uploaded'
         });
       }
 
@@ -227,25 +227,25 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         originalName: data.filename,
         mimeType: data.mimetype,
         size: buffer.length,
-        buffer,
+        buffer
       };
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const result = await profileService.uploadProfileImage(userId, imageData, context);
 
       return reply.send({
         avatarUrl: result.avatarUrl,
-        message: 'Profile image uploaded successfully',
+        message: 'Profile image uploaded successfully'
       });
     } catch (error) {
       fastify.log.error('Upload profile image error:', error);
       return reply.status(400).send({
         error: 'Upload Failed',
-        message: error.message || 'Failed to upload profile image',
+        message: error.message || 'Failed to upload profile image'
       });
     }
   });
@@ -258,11 +258,11 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         200: {
           type: 'object',
           properties: {
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -270,25 +270,25 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       await profileService.deleteProfileImage(userId, context);
 
       return reply.send({
-        message: 'Profile image deleted successfully',
+        message: 'Profile image deleted successfully'
       });
     } catch (error) {
       fastify.log.error('Delete profile image error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to delete profile image',
+        message: 'Failed to delete profile image'
       });
     }
   });
@@ -300,8 +300,8 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       querystring: {
         type: 'object',
         properties: {
-          category: { type: 'string' },
-        },
+          category: { type: 'string' }
+        }
       },
       response: {
         200: {
@@ -316,14 +316,14 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
                   category: { type: 'string' },
                   settings: { type: 'object' },
                   createdAt: { type: 'string' },
-                  updatedAt: { type: 'string' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  updatedAt: { type: 'string' }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -332,20 +332,20 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
       const preferences = await profileService.getPreferences(userId, category);
 
       return reply.send({
-        preferences,
+        preferences
       });
     } catch (error) {
       fastify.log.error('Get preferences error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve preferences',
+        message: 'Failed to retrieve preferences'
       });
     }
   });
@@ -362,11 +362,11 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
           type: 'object',
           properties: {
             preferences: { type: 'object' },
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -375,26 +375,26 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const preferences = await profileService.updatePreferences(userId, category, settings, context);
 
       return reply.send({
         preferences,
-        message: 'Preferences updated successfully',
+        message: 'Preferences updated successfully'
       });
     } catch (error) {
       fastify.log.error('Update preferences error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to update preferences',
+        message: 'Failed to update preferences'
       });
     }
   });
@@ -407,11 +407,11 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         200: {
           type: 'object',
           properties: {
-            preferences: { type: 'object' },
-          },
-        },
-      },
-    },
+            preferences: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -419,20 +419,20 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
       const preferences = await profileService.getNotificationPreferences(userId);
 
       return reply.send({
-        preferences,
+        preferences
       });
     } catch (error) {
       fastify.log.error('Get notification preferences error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve notification preferences',
+        message: 'Failed to retrieve notification preferences'
       });
     }
   });
@@ -449,11 +449,11 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
           type: 'object',
           properties: {
             preferences: { type: 'object' },
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -462,26 +462,26 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       const preferences = await profileService.updateNotificationPreferences(userId, preferencesData, context);
 
       return reply.send({
         preferences,
-        message: 'Notification preferences updated successfully',
+        message: 'Notification preferences updated successfully'
       });
     } catch (error) {
       fastify.log.error('Update notification preferences error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to update notification preferences',
+        message: 'Failed to update notification preferences'
       });
     }
   });
@@ -495,9 +495,9 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         properties: {
           q: { type: 'string', minLength: 1 },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 20 },
-          offset: { type: 'number', minimum: 0, default: 0 },
+          offset: { type: 'number', minimum: 0, default: 0 }
         },
-        required: ['q'],
+        required: ['q']
       },
       response: {
         200: {
@@ -505,7 +505,7 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
           properties: {
             profiles: {
               type: 'array',
-              items: { type: 'object' },
+              items: { type: 'object' }
             },
             total: { type: 'number' },
             pagination: {
@@ -513,13 +513,13 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
               properties: {
                 limit: { type: 'number' },
                 offset: { type: 'number' },
-                hasMore: { type: 'boolean' },
-              },
-            },
-          },
-        },
-      },
-    },
+                hasMore: { type: 'boolean' }
+              }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { q, limit = 20, offset = 0 } = request.query as {
@@ -537,14 +537,14 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         pagination: {
           limit,
           offset,
-          hasMore,
-        },
+          hasMore
+        }
       });
     } catch (error) {
       fastify.log.error('Search profiles error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to search profiles',
+        message: 'Failed to search profiles'
       });
     }
   });
@@ -556,19 +556,19 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       params: {
         type: 'object',
         properties: {
-          userId: { type: 'string', format: 'uuid' },
+          userId: { type: 'string', format: 'uuid' }
         },
-        required: ['userId'],
+        required: ['userId']
       },
       response: {
         200: {
           type: 'object',
           properties: {
-            profile: { type: 'object' },
-          },
-        },
-      },
-    },
+            profile: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { userId } = request.params as { userId: string };
@@ -584,7 +584,7 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!profile) {
         return reply.status(404).send({
           error: 'Profile Not Found',
-          message: 'User profile not found',
+          message: 'User profile not found'
         });
       }
 
@@ -596,17 +596,17 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         lastName: profile.lastName,
         bio: profile.bio,
         avatarUrl: profile.avatarUrl,
-        createdAt: profile.createdAt,
+        createdAt: profile.createdAt
       };
 
       return reply.send({
-        profile: publicProfile,
+        profile: publicProfile
       });
     } catch (error) {
       fastify.log.error('Get public profile error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve profile',
+        message: 'Failed to retrieve profile'
       });
     }
   });
@@ -619,11 +619,11 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         200: {
           type: 'object',
           properties: {
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -631,25 +631,25 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
       const context = {
         ipAddress: request.ip,
-        userAgent: request.headers['user-agent'],
+        userAgent: request.headers['user-agent']
       };
 
       await profileService.deleteProfile(userId, context);
 
       return reply.send({
-        message: 'Profile deleted successfully',
+        message: 'Profile deleted successfully'
       });
     } catch (error) {
       fastify.log.error('Delete profile error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to delete profile',
+        message: 'Failed to delete profile'
       });
     }
   });

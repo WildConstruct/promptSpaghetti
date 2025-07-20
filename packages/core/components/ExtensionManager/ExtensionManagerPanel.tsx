@@ -62,7 +62,7 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
   const filteredExtensions = useMemo(() => {
     const extensions = currentView === 'marketplace' ? availableExtensions : installedExtensions;
     
-    let filtered = extensions.filter(ext => {
+    const filtered = extensions.filter(ext => {
       // Search query filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -91,18 +91,18 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({
     // Sort extensions
     filtered.sort((a, b) => {
       switch (filterOptions.sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'version':
-          return a.version.localeCompare(b.version);
-        case 'lastUpdated':
-          // In a real implementation, this would use actual update timestamps
-          return a.version.localeCompare(b.version);
-        case 'size':
-          // In a real implementation, this would use actual size data
-          return a.name.length - b.name.length;
-        default:
-          return 0;
+      case 'name':
+        return a.name.localeCompare(b.name);
+      case 'version':
+        return a.version.localeCompare(b.version);
+      case 'lastUpdated':
+        // In a real implementation, this would use actual update timestamps
+        return a.version.localeCompare(b.version);
+      case 'size':
+        // In a real implementation, this would use actual size data
+        return a.name.length - b.name.length;
+      default:
+        return 0;
       }
     });
 

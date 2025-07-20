@@ -344,7 +344,7 @@ export const PlatformCapabilitiesSchema = z.object({
   features: z.array(z.string()),
   styleSupport: z.boolean(),
   negativePromptSupport: z.boolean(),
-  customParameters: z.record(z.unknown()).optional(),
+  customParameters: z.record(z.unknown()).optional()
 });
 
 export const ValidationResultSchema = z.object({
@@ -355,20 +355,20 @@ export const ValidationResultSchema = z.object({
     severity: z.enum(['error', 'warning', 'info']),
     source: z.object({
       nodeId: z.string().optional(),
-      property: z.string().optional(),
+      property: z.string().optional()
     }).optional(),
-    suggestion: z.string().optional(),
+    suggestion: z.string().optional()
   })),
   warnings: z.array(z.object({
     code: z.string(),
     message: z.string(),
     source: z.object({
       nodeId: z.string().optional(),
-      property: z.string().optional(),
+      property: z.string().optional()
     }).optional(),
-    optimization: z.string().optional(),
+    optimization: z.string().optional()
   })),
-  compatibilityScore: z.number().min(0).max(1),
+  compatibilityScore: z.number().min(0).max(1)
 });
 
 export const PlatformPromptSchema = z.object({
@@ -380,8 +380,8 @@ export const PlatformPromptSchema = z.object({
     sourceHash: z.string(),
     timestamp: z.date(),
     qualityScore: z.number().min(0).max(1),
-    optimizations: z.array(z.string()),
-  }),
+    optimizations: z.array(z.string())
+  })
 });
 
 export const AdaptorConfigSchema = z.object({
@@ -389,7 +389,7 @@ export const AdaptorConfigSchema = z.object({
   stylePreference: z.enum(['default', 'artistic', 'photorealistic', 'minimal']).optional(),
   platformOverrides: z.record(z.unknown()).optional(),
   enableOptimizations: z.boolean().optional(),
-  customMappings: z.record(z.unknown()).optional(),
+  customMappings: z.record(z.unknown()).optional()
 });
 
 /**

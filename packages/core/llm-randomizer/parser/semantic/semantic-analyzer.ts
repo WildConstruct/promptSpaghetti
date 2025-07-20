@@ -210,43 +210,43 @@ export class SemanticAnalyzer {
     const { nodeType, properties } = node;
 
     switch (nodeType) {
-      case 'WeightedChoice':
-      case 'WeightedAdvanced':
-        this.validateWeightedChoiceProperties(node);
-        break;
+    case 'WeightedChoice':
+    case 'WeightedAdvanced':
+      this.validateWeightedChoiceProperties(node);
+      break;
 
-      case 'Conditional':
-        this.validateConditionalProperties(node);
-        break;
+    case 'Conditional':
+      this.validateConditionalProperties(node);
+      break;
 
-      case 'Sequential':
-        this.validateSequentialProperties(node);
-        break;
+    case 'Sequential':
+      this.validateSequentialProperties(node);
+      break;
 
-      case 'Markov':
-        this.validateMarkovProperties(node);
-        break;
+    case 'Markov':
+      this.validateMarkovProperties(node);
+      break;
 
-      case 'SetVariable':
-      case 'GetVariable':
-        this.validateVariableProperties(node);
-        break;
+    case 'SetVariable':
+    case 'GetVariable':
+      this.validateVariableProperties(node);
+      break;
 
-      case 'Include':
-        this.validateIncludeProperties(node);
-        break;
+    case 'Include':
+      this.validateIncludeProperties(node);
+      break;
 
-      case 'PythonTransform':
-        this.validatePythonTransformProperties(node);
-        break;
+    case 'PythonTransform':
+      this.validatePythonTransformProperties(node);
+      break;
 
-      case 'Concat':
-      case 'Output':
-        // These nodes don't require special properties
-        break;
+    case 'Concat':
+    case 'Output':
+      // These nodes don't require special properties
+      break;
 
-      default:
-        this.addWarning('UNKNOWN_NODE_TYPE', `Unknown node type: ${nodeType}`, node.id);
+    default:
+      this.addWarning('UNKNOWN_NODE_TYPE', `Unknown node type: ${nodeType}`, node.id);
     }
   }
 

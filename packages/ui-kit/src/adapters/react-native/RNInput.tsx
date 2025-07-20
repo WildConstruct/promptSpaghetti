@@ -50,16 +50,16 @@ export const RNInput: React.FC<RNInputProps> = ({
     if (keyboardType !== 'default') return keyboardType;
     
     switch (type) {
-      case 'email':
-        return 'email-address';
-      case 'number':
-        return 'numeric';
-      case 'tel':
-        return 'phone-pad';
-      case 'url':
-        return 'url';
-      default:
-        return 'default';
+    case 'email':
+      return 'email-address';
+    case 'number':
+      return 'numeric';
+    case 'tel':
+      return 'phone-pad';
+    case 'url':
+      return 'url';
+    default:
+      return 'default';
     }
   };
 
@@ -68,16 +68,16 @@ export const RNInput: React.FC<RNInputProps> = ({
     if (textContentType) return textContentType;
     
     switch (type) {
-      case 'email':
-        return 'emailAddress';
-      case 'password':
-        return 'password';
-      case 'tel':
-        return 'telephoneNumber';
-      case 'url':
-        return 'URL';
-      default:
-        return 'none';
+    case 'email':
+      return 'emailAddress';
+    case 'password':
+      return 'password';
+    case 'tel':
+      return 'telephoneNumber';
+    case 'url':
+      return 'URL';
+    default:
+      return 'none';
     }
   };
 

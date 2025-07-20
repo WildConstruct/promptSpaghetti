@@ -51,7 +51,7 @@ export const ConfigurationPanel: React.FC<ConfigurationPanelProps> = ({
   configManager,
   className = '',
   onConfigChanged,
-  onValidationResult,
+  onValidationResult
 }) => {
   const [config, setConfig] = useState<GlobalConfig>(configManager.getConfig());
   const [validationResult, setValidationResult] = useState<ConfigValidationResult | null>(null);
@@ -294,7 +294,7 @@ const GeneralConfigSection: React.FC<{
           { value: 'default', label: 'Default' },
           { value: 'artistic', label: 'Artistic' },
           { value: 'photorealistic', label: 'Photorealistic' },
-          { value: 'minimal', label: 'Minimal' },
+          { value: 'minimal', label: 'Minimal' }
         ]}
       />
       
@@ -329,7 +329,7 @@ const PlatformConfigSection: React.FC<{
             { value: 'gpt-3.5-turbo-16k', label: 'GPT-3.5 Turbo 16K' },
             { value: 'gpt-4', label: 'GPT-4' },
             { value: 'gpt-4-32k', label: 'GPT-4 32K' },
-            { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
+            { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' }
           ]}
         />
         
@@ -363,7 +363,7 @@ const PlatformConfigSection: React.FC<{
             { value: '5', label: 'Version 5' },
             { value: '5.1', label: 'Version 5.1' },
             { value: '5.2', label: 'Version 5.2' },
-            { value: '6', label: 'Version 6' },
+            { value: '6', label: 'Version 6' }
           ]}
         />
         
@@ -612,70 +612,70 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
   error,
   warning,
-  help,
+  help
 }) => {
   const renderInput = () => {
     switch (type) {
-      case 'boolean':
-        return (
-          <input
-            type="checkbox"
-            checked={value}
-            onChange={(e) => onChange(e.target.checked)}
-          />
-        );
+    case 'boolean':
+      return (
+        <input
+          type="checkbox"
+          checked={value}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+      );
       
-      case 'number':
-        return (
+    case 'number':
+      return (
+        <input
+          type="number"
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          min={min}
+          max={max}
+          step={step}
+          placeholder={placeholder}
+        />
+      );
+      
+    case 'range':
+      return (
+        <div className="range-input">
           <input
-            type="number"
+            type="range"
             value={value}
             onChange={(e) => onChange(Number(e.target.value))}
             min={min}
             max={max}
             step={step}
-            placeholder={placeholder}
           />
-        );
+          <span className="range-value">{value}</span>
+        </div>
+      );
       
-      case 'range':
-        return (
-          <div className="range-input">
-            <input
-              type="range"
-              value={value}
-              onChange={(e) => onChange(Number(e.target.value))}
-              min={min}
-              max={max}
-              step={step}
-            />
-            <span className="range-value">{value}</span>
-          </div>
-        );
+    case 'select':
+      return (
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        >
+          {options?.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      );
       
-      case 'select':
-        return (
-          <select
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          >
-            {options?.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        );
-      
-      default:
-        return (
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-          />
-        );
+    default:
+      return (
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+        />
+      );
     }
   };
 

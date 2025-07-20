@@ -19,7 +19,7 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
           return reply.status(401).send({
             error: 'Unauthorized',
-            message: 'Bearer token required',
+            message: 'Bearer token required'
           });
         }
 
@@ -40,7 +40,7 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
           if (!isValid) {
             return reply.status(401).send({
               error: 'Unauthorized',
-              message: 'API token is invalid or revoked',
+              message: 'API token is invalid or revoked'
             });
           }
         }
@@ -49,7 +49,7 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
         if (isUserToken && !options.allowUser) {
           return reply.status(403).send({
             error: 'Forbidden',
-            message: 'API token required for this endpoint',
+            message: 'API token required for this endpoint'
           });
         }
 
@@ -59,7 +59,7 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
         if (!hasRequiredScopes) {
           return reply.status(403).send({
             error: 'Forbidden',
-            message: `Insufficient scopes. Required: ${options.requiredScopes.join(', ')}`,
+            message: `Insufficient scopes. Required: ${options.requiredScopes.join(', ')}`
           });
         }
 
@@ -67,14 +67,14 @@ export function createScopeAuthMiddleware(tokenService: TokenService) {
         (request as any).tokenInfo = {
           type: tokenType,
           scopes: tokenScopes,
-          payload,
+          payload
         };
 
         // Continue to next handler
       } catch (error) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'Invalid token',
+          message: 'Invalid token'
         });
       }
     };
@@ -100,52 +100,52 @@ function checkScopes(tokenScopes: string[], requiredScopes: string[], requireAll
 export const ScopeConfigs = {
   GRAPHS_READ: {
     requiredScopes: ['graphs:read'],
-    allowUser: true,
+    allowUser: true
   },
   GRAPHS_WRITE: {
     requiredScopes: ['graphs:write'],
-    allowUser: true,
+    allowUser: true
   },
   GRAPHS_EXECUTE: {
     requiredScopes: ['graphs:execute'],
-    allowUser: true,
+    allowUser: true
   },
   GRAPHS_DELETE: {
     requiredScopes: ['graphs:delete'],
-    allowUser: true,
+    allowUser: true
   },
   USER_READ: {
     requiredScopes: ['user:read'],
-    allowUser: true,
+    allowUser: true
   },
   USER_WRITE: {
     requiredScopes: ['user:write'],
-    allowUser: true,
+    allowUser: true
   },
   ADMIN_USERS: {
     requiredScopes: ['admin:users'],
-    allowUser: false,
+    allowUser: false
   },
   ADMIN_SYSTEM: {
     requiredScopes: ['admin:system'],
-    allowUser: false,
+    allowUser: false
   },
   ORGANIZATIONS_READ: {
     requiredScopes: ['organizations:read'],
-    allowUser: true,
+    allowUser: true
   },
   ORGANIZATIONS_WRITE: {
     requiredScopes: ['organizations:write'],
-    allowUser: true,
+    allowUser: true
   },
   TEAMS_READ: {
     requiredScopes: ['teams:read'],
-    allowUser: true,
+    allowUser: true
   },
   TEAMS_WRITE: {
     requiredScopes: ['teams:write'],
-    allowUser: true,
-  },
+    allowUser: true
+  }
 } as const;
 
 // Helper function to create scope auth plugin for Fastify

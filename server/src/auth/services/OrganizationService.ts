@@ -124,7 +124,7 @@ export class OrganizationService {
         JSON.stringify(data.settings || {}),
         JSON.stringify(data.branding || {}),
         now,
-        now,
+        now
       ]);
 
       // Create default organization owner role
@@ -137,8 +137,8 @@ export class OrganizationService {
           { resource: 'organizations', action: '*', scope: 'organization' },
           { resource: 'teams', action: '*', scope: 'organization' },
           { resource: 'users', action: '*', scope: 'organization' },
-          { resource: 'roles', action: '*', scope: 'organization' },
-        ],
+          { resource: 'roles', action: '*', scope: 'organization' }
+        ]
       }, context);
 
       // Assign creator as organization owner
@@ -146,7 +146,7 @@ export class OrganizationService {
         userId: createdBy,
         roleId: ownerRole.id,
         grantedBy: createdBy,
-        scopeContext: { organizationId },
+        scopeContext: { organizationId }
       }, context);
 
       // Create default admin role
@@ -158,8 +158,8 @@ export class OrganizationService {
         permissions: [
           { resource: 'teams', action: '*', scope: 'organization' },
           { resource: 'users', action: 'read', scope: 'organization' },
-          { resource: 'users', action: 'write', scope: 'organization' },
-        ],
+          { resource: 'users', action: 'write', scope: 'organization' }
+        ]
       }, context);
 
       // Create default member role
@@ -170,8 +170,8 @@ export class OrganizationService {
         organizationId,
         permissions: [
           { resource: 'teams', action: 'read', scope: 'organization' },
-          { resource: 'graphs', action: '*', scope: 'organization' },
-        ],
+          { resource: 'graphs', action: '*', scope: 'organization' }
+        ]
       }, context);
 
       await transaction.commit();
@@ -185,11 +185,11 @@ export class OrganizationService {
         details: {
           organizationName: data.name,
           slug,
-          plan: data.plan || 'free',
+          plan: data.plan || 'free'
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       const organization: Organization = {
@@ -204,7 +204,7 @@ export class OrganizationService {
         plan: data.plan || 'free',
         maxUsers: data.maxUsers || this.getDefaultMaxUsers(data.plan || 'free'),
         createdAt: now,
-        updatedAt: now,
+        updatedAt: now
       };
 
       return organization;
@@ -242,7 +242,7 @@ export class OrganizationService {
       JSON.stringify(updates.settings ?? existing.settings),
       JSON.stringify(updates.branding ?? existing.branding),
       now,
-      organizationId,
+      organizationId
     ]);
 
     // Log organization update
@@ -256,12 +256,12 @@ export class OrganizationService {
         previousValues: {
           name: existing.name,
           description: existing.description,
-          plan: existing.plan,
-        },
+          plan: existing.plan
+        }
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
 
     const updated: Organization = {
@@ -273,7 +273,7 @@ export class OrganizationService {
       maxUsers: updates.maxUsers ?? existing.maxUsers,
       settings: updates.settings ?? existing.settings,
       branding: updates.branding ?? existing.branding,
-      updatedAt: now,
+      updatedAt: now
     };
 
     return updated;
@@ -346,11 +346,11 @@ export class OrganizationService {
         resourceId: organizationId,
         details: {
           organizationName: organization.name,
-          slug: organization.slug,
+          slug: organization.slug
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
     } catch (error) {
       await transaction.rollback();
@@ -418,7 +418,7 @@ export class OrganizationService {
       data.description,
       JSON.stringify(data.settings || {}),
       now,
-      now,
+      now
     ]);
 
     // Add creator as team owner
@@ -426,7 +426,7 @@ export class OrganizationService {
       teamId,
       userId: createdBy,
       role: 'owner',
-      invitedBy: createdBy,
+      invitedBy: createdBy
     }, context);
 
     // Log team creation
@@ -438,11 +438,11 @@ export class OrganizationService {
       details: {
         teamName: data.name,
         organizationId: data.organizationId,
-        parentTeamId: data.parentTeamId,
+        parentTeamId: data.parentTeamId
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
 
     const team: Team = {
@@ -453,7 +453,7 @@ export class OrganizationService {
       description: data.description,
       settings: data.settings || {},
       createdAt: now,
-      updatedAt: now,
+      updatedAt: now
     };
 
     return team;
@@ -482,7 +482,7 @@ export class OrganizationService {
       updates.parentTeamId ?? existing.parentTeamId,
       JSON.stringify(updates.settings ?? existing.settings),
       now,
-      teamId,
+      teamId
     ]);
 
     // Log team update
@@ -496,12 +496,12 @@ export class OrganizationService {
         previousValues: {
           name: existing.name,
           description: existing.description,
-          parentTeamId: existing.parentTeamId,
-        },
+          parentTeamId: existing.parentTeamId
+        }
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
 
     const updated: Team = {
@@ -510,7 +510,7 @@ export class OrganizationService {
       description: updates.description ?? existing.description,
       parentTeamId: updates.parentTeamId ?? existing.parentTeamId,
       settings: updates.settings ?? existing.settings,
-      updatedAt: now,
+      updatedAt: now
     };
 
     return updated;
@@ -563,11 +563,11 @@ export class OrganizationService {
         resourceId: teamId,
         details: {
           teamName: team.name,
-          organizationId: team.organizationId,
+          organizationId: team.organizationId
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
     } catch (error) {
       await transaction.rollback();
@@ -618,7 +618,7 @@ export class OrganizationService {
     return result.rows.map(row => ({
       ...this.mapDatabaseToTeam(row),
       level: row.level,
-      path: row.path,
+      path: row.path
     }));
   }
 
@@ -654,11 +654,11 @@ export class OrganizationService {
       details: {
         teamId: data.teamId,
         addedUserId: data.userId,
-        role: data.role,
+        role: data.role
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
 
     const teamMember: TeamMember = {
@@ -667,7 +667,7 @@ export class OrganizationService {
       userId: data.userId,
       role: data.role,
       joinedAt: now,
-      invitedBy: data.invitedBy,
+      invitedBy: data.invitedBy
     };
 
     return teamMember;
@@ -698,11 +698,11 @@ export class OrganizationService {
       details: {
         teamId,
         removedUserId: userId,
-        previousRole: result.rows[0].role,
+        previousRole: result.rows[0].role
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -734,11 +734,11 @@ export class OrganizationService {
         teamId,
         targetUserId: userId,
         newRole,
-        previousRole: result.rows[0].role,
+        previousRole: result.rows[0].role
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -764,8 +764,8 @@ export class OrganizationService {
         displayName: row.display_name,
         firstName: row.first_name,
         lastName: row.last_name,
-        avatarUrl: row.avatar_url,
-      },
+        avatarUrl: row.avatar_url
+      }
     }));
   }
 
@@ -808,7 +808,7 @@ export class OrganizationService {
       
       this.dbService.query(`
         SELECT plan, max_users FROM organizations WHERE id = $1
-      `, [organizationId]),
+      `, [organizationId])
     ]);
 
     const organization = planResult.rows[0];
@@ -823,8 +823,8 @@ export class OrganizationService {
       usage: {
         users: parseInt(membersResult.rows[0].total_members) || 0,
         teams: parseInt(teamsResult.rows[0].total_teams) || 0,
-        storage: 0, // TODO: Implement storage calculation
-      },
+        storage: 0 // TODO: Implement storage calculation
+      }
     };
   }
 
@@ -841,23 +841,23 @@ export class OrganizationService {
 
   private getDefaultMaxUsers(plan: string): number {
     switch (plan) {
-      case 'free': return 10;
-      case 'pro': return 100;
-      case 'enterprise': return 1000;
-      default: return 10;
+    case 'free': return 10;
+    case 'pro': return 100;
+    case 'enterprise': return 1000;
+    default: return 10;
     }
   }
 
   private getPlanLimits(plan: string) {
     switch (plan) {
-      case 'free':
-        return { maxUsers: 10, maxTeams: 5, maxStorage: 1024 }; // 1GB
-      case 'pro':
-        return { maxUsers: 100, maxTeams: 50, maxStorage: 10240 }; // 10GB
-      case 'enterprise':
-        return { maxUsers: 1000, maxTeams: 500, maxStorage: 102400 }; // 100GB
-      default:
-        return { maxUsers: 10, maxTeams: 5, maxStorage: 1024 };
+    case 'free':
+      return { maxUsers: 10, maxTeams: 5, maxStorage: 1024 }; // 1GB
+    case 'pro':
+      return { maxUsers: 100, maxTeams: 50, maxStorage: 10240 }; // 10GB
+    case 'enterprise':
+      return { maxUsers: 1000, maxTeams: 500, maxStorage: 102400 }; // 100GB
+    default:
+      return { maxUsers: 10, maxTeams: 5, maxStorage: 1024 };
     }
   }
 
@@ -875,7 +875,7 @@ export class OrganizationService {
       maxUsers: row.max_users,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
-      deletedAt: row.deleted_at,
+      deletedAt: row.deleted_at
     };
   }
 
@@ -889,7 +889,7 @@ export class OrganizationService {
       settings: row.settings || {},
       createdAt: row.created_at,
       updatedAt: row.updated_at,
-      deletedAt: row.deleted_at,
+      deletedAt: row.deleted_at
     };
   }
 }

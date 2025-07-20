@@ -51,7 +51,7 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
       );
       
       gradient.addColorStop(0, `rgba(59, 130, 246, ${alpha})`);
-      gradient.addColorStop(1, `rgba(59, 130, 246, 0)`);
+      gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
       
       ctx.fillStyle = gradient;
       ctx.beginPath();
@@ -226,14 +226,14 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
    */
   const getCurrentPatternData = useCallback(() => {
     switch (state.selectedPattern) {
-      case 'hourly':
-        return state.hourlyPattern;
-      case 'daily':
-        return state.dailyPattern;
-      case 'weekly':
-        return state.weeklyPattern;
-      default:
-        return null;
+    case 'hourly':
+      return state.hourlyPattern;
+    case 'daily':
+      return state.dailyPattern;
+    case 'weekly':
+      return state.weeklyPattern;
+    default:
+      return null;
     }
   }, [state.selectedPattern, state.hourlyPattern, state.dailyPattern, state.weeklyPattern]);
 

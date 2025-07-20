@@ -677,24 +677,24 @@ export class ExportService {
 
   private formatExportData(data: any, format: ExportFormat): string {
     switch (format) {
-      case 'json':
-        return JSON.stringify(data, null, 2);
-      case 'yaml':
-        // Mock YAML formatting
-        return Object.entries(data)
-          .map(([key, value]) => `${key}: ${JSON.stringify(value)}`)
-          .join('\n');
-      case 'xml':
-        return `<?xml version="1.0"?>\n<export>\n${JSON.stringify(data)}\n</export>`;
-      case 'csv':
-        return 'id,type,format,generated_at\n' + 
+    case 'json':
+      return JSON.stringify(data, null, 2);
+    case 'yaml':
+      // Mock YAML formatting
+      return Object.entries(data)
+        .map(([key, value]) => `${key}: ${JSON.stringify(value)}`)
+        .join('\n');
+    case 'xml':
+      return `<?xml version="1.0"?>\n<export>\n${JSON.stringify(data)}\n</export>`;
+    case 'csv':
+      return 'id,type,format,generated_at\n' + 
                `${data.project_id},${data.export_type},${data.export_format},${data.generated_at}`;
-      case 'markdown':
-        return `# Export Report\n\n**Project:** ${data.project_id}\n**Type:** ${data.export_type}\n**Format:** ${data.export_format}\n**Generated:** ${data.generated_at}`;
-      case 'html':
-        return `<!DOCTYPE html><html><head><title>Export</title></head><body><pre>${JSON.stringify(data, null, 2)}</pre></body></html>`;
-      default:
-        return JSON.stringify(data, null, 2);
+    case 'markdown':
+      return `# Export Report\n\n**Project:** ${data.project_id}\n**Type:** ${data.export_type}\n**Format:** ${data.export_format}\n**Generated:** ${data.generated_at}`;
+    case 'html':
+      return `<!DOCTYPE html><html><head><title>Export</title></head><body><pre>${JSON.stringify(data, null, 2)}</pre></body></html>`;
+    default:
+      return JSON.stringify(data, null, 2);
     }
   }
 

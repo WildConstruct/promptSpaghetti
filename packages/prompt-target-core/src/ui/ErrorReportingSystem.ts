@@ -266,14 +266,14 @@ export class ErrorReportingSystem {
     format: 'json' | 'html' | 'csv'
   ): string {
     switch (format) {
-      case 'json':
-        return this.exportAsJSON(report);
-      case 'html':
-        return this.exportAsHTML(report);
-      case 'csv':
-        return this.exportAsCSV(report);
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    case 'json':
+      return this.exportAsJSON(report);
+    case 'html':
+      return this.exportAsHTML(report);
+    case 'csv':
+      return this.exportAsCSV(report);
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
   }
 
@@ -316,20 +316,20 @@ export class ErrorReportingSystem {
 
   private mapValidationSeverity(severity: string): 'low' | 'medium' | 'high' | 'critical' {
     switch (severity) {
-      case 'critical': return 'critical';
-      case 'high': return 'high';
-      case 'medium': return 'medium';
-      case 'low': return 'low';
-      default: return 'medium';
+    case 'critical': return 'critical';
+    case 'high': return 'high';
+    case 'medium': return 'medium';
+    case 'low': return 'low';
+    default: return 'medium';
     }
   }
 
   private mapIssueSeverity(severity: string): 'low' | 'medium' | 'high' | 'critical' {
     switch (severity) {
-      case 'high': return 'high';
-      case 'medium': return 'medium';
-      case 'low': return 'low';
-      default: return 'medium';
+    case 'high': return 'high';
+    case 'medium': return 'medium';
+    case 'low': return 'low';
+    default: return 'medium';
     }
   }
 

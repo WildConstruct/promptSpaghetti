@@ -8,8 +8,8 @@ jest.mock('../graphStore', () => ({
     addVariation: jest.fn(),
     removeVariation: jest.fn(),
     updateVariation: jest.fn(),
-    reorderVariations: jest.fn(),
-  }),
+    reorderVariations: jest.fn()
+  })
 }));
 
 describe('VariationList Integration with Editors', () => {
@@ -19,7 +19,7 @@ describe('VariationList Integration with Editors', () => {
     label: 'Test Choice',
     choices: ['Option A', 'Option B'],
     weights: [1, 2],
-    variations: [],
+    variations: []
   };
 
   const mockOnChange = jest.fn();
@@ -68,7 +68,7 @@ describe('VariationList Integration with Editors', () => {
     // Verify onChange was called with the updated choices
     expect(mockOnChange).toHaveBeenCalledWith({
       choices: ['Option A', 'Option B', 'Option C'],
-      weights: [1, 2, 1],
+      weights: [1, 2, 1]
     });
   });
 
@@ -95,7 +95,7 @@ describe('VariationList Integration with Editors', () => {
     const nodeDataWithChoices = {
       ...mockNodeData,
       choices: ['A', 'B', 'C'],
-      weights: [1, 1, 1],
+      weights: [1, 1, 1]
     };
 
     render(

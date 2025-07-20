@@ -18,7 +18,7 @@ const mockUserService = {
   getUserByEmail: jest.fn(),
   verifyPassword: jest.fn(),
   updateUser: jest.fn(),
-  getUserById: jest.fn(),
+  getUserById: jest.fn()
 } as jest.Mocked<UserService>;
 
 const mockTokenService = {
@@ -26,38 +26,38 @@ const mockTokenService = {
   generateRefreshToken: jest.fn(),
   refreshAccessToken: jest.fn(),
   verifyRefreshToken: jest.fn(),
-  revokeAllUserTokens: jest.fn(),
+  revokeAllUserTokens: jest.fn()
 } as jest.Mocked<TokenService>;
 
 const mockAuditService = {
-  logEvent: jest.fn(),
+  logEvent: jest.fn()
 } as jest.Mocked<AuditService>;
 
 const mockRateLimitService = {
-  checkIPRateLimit: jest.fn(),
+  checkIPRateLimit: jest.fn()
 } as jest.Mocked<RateLimitService>;
 
 const mockEmailService = {
   sendLoginAlert: jest.fn(),
   sendAccountUnlocked: jest.fn(),
-  sendAccountUnlockRequest: jest.fn(),
+  sendAccountUnlockRequest: jest.fn()
 } as jest.Mocked<EmailService>;
 
 const mockDatabaseService = {
-  query: jest.fn(),
+  query: jest.fn()
 } as jest.Mocked<DatabaseService>;
 
 const mockRedisService = {
   get: jest.fn(),
   set: jest.fn(),
   setex: jest.fn(),
-  del: jest.fn(),
+  del: jest.fn()
 } as jest.Mocked<RedisService>;
 
 const mockConfig: AuthConfig = buildAuthConfig({
   JWT_SECRET: 'test-secret',
   REDIS_URL: 'redis://localhost:6379',
-  DATABASE_URL: 'postgresql://localhost:5432/test',
+  DATABASE_URL: 'postgresql://localhost:5432/test'
 });
 
 describe('LoginService', () => {
@@ -74,13 +74,13 @@ describe('LoginService', () => {
     failedLoginAttempts: 0,
     emailVerified: true,
     createdAt: new Date(),
-    lastLoginAt: new Date(),
+    lastLoginAt: new Date()
   };
 
   const mockLoginRequest = {
     email: 'test@example.com',
     password: 'password123',
-    rememberMe: false,
+    rememberMe: false
   };
 
   const mockContext = {
@@ -90,8 +90,8 @@ describe('LoginService', () => {
     geoLocation: {
       country: 'US',
       city: 'New York',
-      timezone: 'America/New_York',
-    },
+      timezone: 'America/New_York'
+    }
   };
 
   beforeEach(() => {
@@ -134,17 +134,17 @@ describe('LoginService', () => {
         refreshToken: 'refresh-token',
         user: expect.objectContaining({
           id: mockUser.id,
-          email: mockUser.email,
+          email: mockUser.email
         }),
         expiresAt: expect.any(Date),
-        sessionId: 'session-123',
+        sessionId: 'session-123'
       });
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           userId: mockUser.id,
           action: 'login_success',
-          severity: 'info',
+          severity: 'info'
         })
       );
     });
@@ -160,7 +160,7 @@ describe('LoginService', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           action: 'brute_force_attempt',
-          severity: 'warning',
+          severity: 'warning'
         })
       );
     });
@@ -177,7 +177,7 @@ describe('LoginService', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           action: 'login_failed',
-          severity: 'warning',
+          severity: 'warning'
         })
       );
     });
@@ -210,7 +210,7 @@ describe('LoginService', () => {
       const lockedUser = {
         ...mockUser,
         accountLocked: true,
-        lockedUntil: new Date(Date.now() + 3600000), // 1 hour from now
+        lockedUntil: new Date(Date.now() + 3600000) // 1 hour from now
       };
       mockRateLimitService.checkIPRateLimit.mockResolvedValue({ allowed: true, remainingAttempts: 5 });
       mockUserService.getUserByEmail.mockResolvedValue(lockedUser);
@@ -267,7 +267,7 @@ describe('LoginService', () => {
         expect.objectContaining({
           displayName: mockUser.displayName,
           ipAddress: mockContext.ipAddress,
-          userAgent: mockContext.userAgent,
+          userAgent: mockContext.userAgent
         })
       );
 
@@ -276,8 +276,8 @@ describe('LoginService', () => {
           userId: mockUser.id,
           action: 'suspicious_login',
           details: expect.objectContaining({
-            reason: 'new_device',
-          }),
+            reason: 'new_device'
+          })
         })
       );
     });
@@ -295,8 +295,8 @@ describe('LoginService', () => {
         expect.objectContaining({
           action: 'suspicious_activity_detected',
           details: expect.objectContaining({
-            type: 'rapid_attempts',
-          }),
+            type: 'rapid_attempts'
+          })
         })
       );
     });
@@ -321,7 +321,7 @@ describe('LoginService', () => {
         expect.objectContaining({
           userId,
           action: 'logout',
-          severity: 'info',
+          severity: 'info'
         })
       );
     });
@@ -342,7 +342,7 @@ describe('LoginService', () => {
       const refreshToken = 'refresh-token';
       const newTokens = {
         accessToken: 'new-access-token',
-        refreshToken: 'new-refresh-token',
+        refreshToken: 'new-refresh-token'
       };
       const tokenPayload = { sub: 'user-123' };
 
@@ -358,7 +358,7 @@ describe('LoginService', () => {
         expect.objectContaining({
           userId: tokenPayload.sub,
           action: 'token_refreshed',
-          severity: 'info',
+          severity: 'info'
         })
       );
     });
@@ -375,7 +375,7 @@ describe('LoginService', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           action: 'token_refresh_failed',
-          severity: 'warning',
+          severity: 'warning'
         })
       );
     });
@@ -396,21 +396,21 @@ describe('LoginService', () => {
       expect(mockUserService.updateUser).toHaveBeenCalledWith(mockUser.id, {
         accountLocked: false,
         lockedUntil: undefined,
-        failedLoginAttempts: 0,
+        failedLoginAttempts: 0
       });
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           userId: mockUser.id,
           action: 'account_unlocked',
-          severity: 'info',
+          severity: 'info'
         })
       );
 
       expect(mockEmailService.sendAccountUnlocked).toHaveBeenCalledWith(
         mockUser.email,
         expect.objectContaining({
-          displayName: mockUser.displayName,
+          displayName: mockUser.displayName
         })
       );
     });
@@ -446,20 +446,20 @@ describe('LoginService', () => {
       const mockAnalyticsData = {
         total_attempts: '100',
         successful_logins: '85',
-        failed_attempts: '15',
+        failed_attempts: '15'
       };
 
       const mockFailureReasons = [
         { reason: 'Invalid password', count: '10' },
-        { reason: 'Account locked', count: '5' },
+        { reason: 'Account locked', count: '5' }
       ];
 
       const mockSuspiciousActivity = [
-        { type: 'brute_force_attempt', count: '3', severity: 'high' },
+        { type: 'brute_force_attempt', count: '3', severity: 'high' }
       ];
 
       const mockDeviceAnalysis = [
-        { new_devices: '20', returning_devices: '80', suspicious_devices: '2' },
+        { new_devices: '20', returning_devices: '80', suspicious_devices: '2' }
       ];
 
       mockDatabaseService.query
@@ -479,21 +479,21 @@ describe('LoginService', () => {
         successRate: 0.85,
         topFailureReasons: [
           { reason: 'Invalid password', count: 10, percentage: 10 },
-          { reason: 'Account locked', count: 5, percentage: 5 },
+          { reason: 'Account locked', count: 5, percentage: 5 }
         ],
         suspiciousActivity: [
           {
             type: 'brute_force_attempt',
             description: 'Multiple failed login attempts detected',
             count: 3,
-            severity: 'high',
-          },
+            severity: 'high'
+          }
         ],
         deviceAnalysis: {
           newDevices: 20,
           returningDevices: 80,
-          suspiciousDevices: 2,
-        },
+          suspiciousDevices: 2
+        }
       });
     });
 
@@ -523,8 +523,8 @@ describe('LoginService', () => {
         expect.objectContaining({
           action: 'suspicious_activity_detected',
           details: expect.objectContaining({
-            type: 'multiple_emails',
-          }),
+            type: 'multiple_emails'
+          })
         })
       );
     });
@@ -594,7 +594,7 @@ describe('LoginService', () => {
           expect.anything(),
           chromeUserAgent,
           expect.stringContaining('"browser":"Chrome"'),
-          expect.anything(),
+          expect.anything()
         ])
       );
     });

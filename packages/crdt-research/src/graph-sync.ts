@@ -105,15 +105,15 @@ export class GraphSyncHandler {
     };
 
     switch (type) {
-      case 'sync':
-        message.stateVector = this.getStateVector();
-        break;
-      case 'update':
-        message.update = data;
-        break;
-      case 'awareness':
-        message.awareness = data;
-        break;
+    case 'sync':
+      message.stateVector = this.getStateVector();
+      break;
+    case 'update':
+      message.update = data;
+      break;
+    case 'awareness':
+      message.awareness = data;
+      break;
     }
 
     return message;
@@ -124,27 +124,27 @@ export class GraphSyncHandler {
    */
   handleSyncMessage(message: SyncMessage): SyncMessage | null {
     switch (message.type) {
-      case 'sync':
-        // Respond with diff update
-        if (message.stateVector) {
-          const diffUpdate = this.getDiffUpdate(message.stateVector);
-          return this.createSyncMessage('update', diffUpdate);
-        }
-        break;
+    case 'sync':
+      // Respond with diff update
+      if (message.stateVector) {
+        const diffUpdate = this.getDiffUpdate(message.stateVector);
+        return this.createSyncMessage('update', diffUpdate);
+      }
+      break;
       
-      case 'update':
-        // Apply the update
-        if (message.update) {
-          this.applyUpdate(message.update, message.userId);
-        }
-        break;
+    case 'update':
+      // Apply the update
+      if (message.update) {
+        this.applyUpdate(message.update, message.userId);
+      }
+      break;
       
-      case 'awareness':
-        // Update awareness information
-        if (message.awareness && message.userId) {
-          this.updateAwareness(message.userId, message.awareness);
-        }
-        break;
+    case 'awareness':
+      // Update awareness information
+      if (message.awareness && message.userId) {
+        this.updateAwareness(message.userId, message.awareness);
+      }
+      break;
     }
 
     return null;

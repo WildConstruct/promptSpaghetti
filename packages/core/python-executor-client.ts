@@ -90,7 +90,7 @@ export class PythonExecutorClient {
       defaultMemoryLimit: config.defaultMemoryLimit || '128MB',
       defaultTimeout: config.defaultTimeout || 30,
       defaultStrictMode: config.defaultStrictMode ?? true,
-      ...config,
+      ...config
     };
   }
 
@@ -104,7 +104,7 @@ export class PythonExecutorClient {
       ...request,
       timeout: request.timeout || this.config.defaultTimeout,
       memory_limit: request.memory_limit || this.config.defaultMemoryLimit,
-      strict_mode: request.strict_mode ?? this.config.defaultStrictMode,
+      strict_mode: request.strict_mode ?? this.config.defaultStrictMode
     };
 
     try {
@@ -114,8 +114,8 @@ export class PythonExecutorClient {
         headers: {
           'Content-Type': 'application/json',
           'X-Request-ID': requestId,
-          ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),
-        },
+          ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+        }
       });
 
       const result: PythonExecutionResult = await response.json();
@@ -140,7 +140,7 @@ export class PythonExecutorClient {
 
     const validateRequest: PythonValidationRequest = {
       ...request,
-      strict_mode: request.strict_mode ?? this.config.defaultStrictMode,
+      strict_mode: request.strict_mode ?? this.config.defaultStrictMode
     };
 
     try {
@@ -150,8 +150,8 @@ export class PythonExecutorClient {
         headers: {
           'Content-Type': 'application/json',
           'X-Request-ID': requestId,
-          ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),
-        },
+          ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+        }
       });
 
       const result: PythonValidationResult = await response.json();
@@ -179,8 +179,8 @@ export class PythonExecutorClient {
         method: 'GET',
         headers: {
           'X-Request-ID': requestId,
-          ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),
-        },
+          ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+        }
       });
 
       return await response.json();
@@ -201,8 +201,8 @@ export class PythonExecutorClient {
         method: 'GET',
         headers: {
           'X-Request-ID': requestId,
-          ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` }),
-        },
+          ...(this.config.apiKey && { 'Authorization': `Bearer ${this.config.apiKey}` })
+        }
       });
 
       return await response.text();
@@ -240,7 +240,7 @@ export class PythonExecutorClient {
 
         const response = await fetch(url, {
           ...options,
-          signal: controller.signal,
+          signal: controller.signal
         });
 
         clearTimeout(timeoutId);
@@ -314,7 +314,7 @@ export class PythonExecutorClient {
       executionTime: result.execution_time,
       memoryUsed: result.memory_used,
       cacheHit: result.cache_hit,
-      securityViolations: result.sandbox_violations,
+      securityViolations: result.sandbox_violations
     };
 
     // In a real application, you would send these metrics to a monitoring service
@@ -330,7 +330,7 @@ export class PythonExecutorClient {
       operation,
       timestamp: Date.now(),
       error: error.message,
-      stack: error.stack,
+      stack: error.stack
     };
 
     // In a real application, you would send these errors to a monitoring service
@@ -344,7 +344,7 @@ export class PythonExecutorClient {
 export const pythonExecutorClient = new PythonExecutorClient({
   baseUrl: process.env.PYTHON_EXECUTOR_URL || 'http://localhost:8001',
   apiKey: process.env.PYTHON_EXECUTOR_API_KEY,
-  enableMetrics: process.env.NODE_ENV !== 'production',
+  enableMetrics: process.env.NODE_ENV !== 'production'
 });
 
 /**
@@ -378,7 +378,7 @@ export async function executePythonCode(
   return pythonExecutorClient.execute({
     code,
     input_data: inputData,
-    ...options,
+    ...options
   });
 }
 
@@ -391,6 +391,6 @@ export async function validatePythonCode(
 ): Promise<PythonValidationResult> {
   return pythonExecutorClient.validate({
     code,
-    ...options,
+    ...options
   });
 }

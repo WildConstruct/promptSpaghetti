@@ -16,7 +16,7 @@ import {
   RestorationAttempt,
   RestorationType,
   RestorationStrategy,
-  RestorationProgressResponse,
+  RestorationProgressResponse
 } from '../../types/restoration';
 import { useRestoration } from '../../hooks/useRestoration';
 
@@ -44,23 +44,23 @@ const wizardSteps: WizardStep[] = [
   {
     title: 'Configure',
     description: 'Set restoration options',
-    icon: <RestoreOutlined />,
+    icon: <RestoreOutlined />
   },
   {
     title: 'Preview',
     description: 'Review changes',
-    icon: <ExclamationCircleOutlined />,
+    icon: <ExclamationCircleOutlined />
   },
   {
     title: 'Confirm',
     description: 'Confirm restoration',
-    icon: <CheckCircleOutlined />,
+    icon: <CheckCircleOutlined />
   },
   {
     title: 'Progress',
     description: 'Monitor progress',
-    icon: <LoadingOutlined />,
-  },
+    icon: <LoadingOutlined />
+  }
 ];
 
 export const RestorationWizard: React.FC<RestorationWizardProps> = ({
@@ -70,7 +70,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
   sourceSnapshotId,
   targetSnapshotId,
   onSuccess,
-  onError,
+  onError
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
@@ -79,7 +79,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
     restorationStrategy: 'replace',
     preserveCurrentChanges: false,
     createBackup: true,
-    notifyOnCompletion: true,
+    notifyOnCompletion: true
   });
   const [preview, setPreview] = useState<RestorationPreviewResponse | null>(null);
   const [restorationAttempt, setRestorationAttempt] = useState<RestorationAttempt | null>(null);
@@ -103,7 +103,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
         restorationStrategy: 'replace',
         preserveCurrentChanges: false,
         createBackup: true,
-        notifyOnCompletion: true,
+        notifyOnCompletion: true
       });
       setPreview(null);
       setRestorationAttempt(null);
@@ -155,7 +155,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           projectId,
           sourceSnapshotId,
           targetSnapshotId,
-          config: updatedConfig,
+          config: updatedConfig
         });
         setPreview(previewData);
         setCurrentStep(1);
@@ -176,7 +176,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
           projectId,
           sourceSnapshotId,
           targetSnapshotId,
-          config,
+          config
         });
         setRestorationAttempt(attempt);
         setCurrentStep(3);
@@ -218,109 +218,109 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
 
   const renderStepContent = () => {
     switch (currentStep) {
-      case 0:
-        return (
-          <Form
-            form={form}
-            layout="vertical"
-            initialValues={config}
-            onValuesChange={(changedValues) => {
-              setConfig(prev => ({ ...prev, ...changedValues }));
-            }}
+    case 0:
+      return (
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={config}
+          onValuesChange={(changedValues) => {
+            setConfig(prev => ({ ...prev, ...changedValues }));
+          }}
+        >
+          <Form.Item
+            name="restorationType"
+            label="Restoration Type"
+            tooltip="Choose how much of the snapshot to restore"
           >
-            <Form.Item
-              name="restorationType"
-              label="Restoration Type"
-              tooltip="Choose how much of the snapshot to restore"
-            >
-              <Select>
-                <Option value="full">Full Restoration</Option>
-                <Option value="partial">Partial Restoration</Option>
-                <Option value="selective">Selective Restoration</Option>
-              </Select>
-            </Form.Item>
+            <Select>
+              <Option value="full">Full Restoration</Option>
+              <Option value="partial">Partial Restoration</Option>
+              <Option value="selective">Selective Restoration</Option>
+            </Select>
+          </Form.Item>
 
-            <Form.Item
-              name="restorationStrategy"
-              label="Restoration Strategy"
-              tooltip="Choose how to handle conflicts with current state"
-            >
-              <Select>
-                <Option value="replace">Replace Current State</Option>
-                <Option value="merge">Merge with Current State</Option>
-                <Option value="selective">Selective Merge</Option>
-              </Select>
-            </Form.Item>
+          <Form.Item
+            name="restorationStrategy"
+            label="Restoration Strategy"
+            tooltip="Choose how to handle conflicts with current state"
+          >
+            <Select>
+              <Option value="replace">Replace Current State</Option>
+              <Option value="merge">Merge with Current State</Option>
+              <Option value="selective">Selective Merge</Option>
+            </Select>
+          </Form.Item>
 
-            <Form.Item name="preserveCurrentChanges" valuePropName="checked">
-              <Checkbox>
+          <Form.Item name="preserveCurrentChanges" valuePropName="checked">
+            <Checkbox>
                 Preserve current changes where possible
-              </Checkbox>
-            </Form.Item>
+            </Checkbox>
+          </Form.Item>
 
-            <Form.Item name="createBackup" valuePropName="checked">
-              <Checkbox>
+          <Form.Item name="createBackup" valuePropName="checked">
+            <Checkbox>
                 Create backup before restoration
-              </Checkbox>
-            </Form.Item>
+            </Checkbox>
+          </Form.Item>
 
-            <Form.Item name="notifyOnCompletion" valuePropName="checked">
-              <Checkbox>
+          <Form.Item name="notifyOnCompletion" valuePropName="checked">
+            <Checkbox>
                 Notify when restoration completes
-              </Checkbox>
-            </Form.Item>
-          </Form>
-        );
+            </Checkbox>
+          </Form.Item>
+        </Form>
+      );
 
-      case 1:
-        return preview ? (
-          <RestorationPreview
-            preview={preview}
-            config={config}
-            onConflictResolve={(conflictId, strategy) => {
-              // Handle conflict resolution
-              console.log('Resolving conflict:', conflictId, strategy);
-            }}
-          />
-        ) : (
-          <div style={{ textAlign: 'center', padding: '40px' }}>
-            <LoadingOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
-            <Title level={4}>Generating Preview...</Title>
-            <Text type="secondary">
+    case 1:
+      return preview ? (
+        <RestorationPreview
+          preview={preview}
+          config={config}
+          onConflictResolve={(conflictId, strategy) => {
+            // Handle conflict resolution
+            console.log('Resolving conflict:', conflictId, strategy);
+          }}
+        />
+      ) : (
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <LoadingOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
+          <Title level={4}>Generating Preview...</Title>
+          <Text type="secondary">
               Please wait while we analyze the changes that will be made.
-            </Text>
-          </div>
-        );
+          </Text>
+        </div>
+      );
 
-      case 2:
-        return preview ? (
-          <RestorationConfirmation
-            preview={preview}
-            config={config}
-            onConfirm={() => handleNext()}
-            onCancel={() => handlePrevious()}
-          />
-        ) : null;
+    case 2:
+      return preview ? (
+        <RestorationConfirmation
+          preview={preview}
+          config={config}
+          onConfirm={() => handleNext()}
+          onCancel={() => handlePrevious()}
+        />
+      ) : null;
 
-      case 3:
-        return progress ? (
-          <RestoreProgressPanel
-            progress={progress}
-            onCancel={() => handleCancel()}
-            showDetails={true}
-          />
-        ) : (
-          <div style={{ textAlign: 'center', padding: '40px' }}>
-            <LoadingOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
-            <Title level={4}>Starting Restoration...</Title>
-            <Text type="secondary">
+    case 3:
+      return progress ? (
+        <RestoreProgressPanel
+          progress={progress}
+          onCancel={() => handleCancel()}
+          showDetails={true}
+        />
+      ) : (
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <LoadingOutlined style={{ fontSize: '48px', marginBottom: '16px' }} />
+          <Title level={4}>Starting Restoration...</Title>
+          <Text type="secondary">
               Please wait while we prepare the restoration process.
-            </Text>
-          </div>
-        );
+          </Text>
+        </div>
+      );
 
-      default:
-        return null;
+    default:
+      return null;
     }
   };
 
@@ -329,20 +329,20 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({
       'Configure Restoration',
       'Preview Changes',
       'Confirm Restoration',
-      'Restoration in Progress',
+      'Restoration in Progress'
     ];
     return stepTitles[currentStep] || 'Version Restoration';
   };
 
   const getModalWidth = () => {
     switch (currentStep) {
-      case 1:
-      case 2:
-        return 900;
-      case 3:
-        return 700;
-      default:
-        return 600;
+    case 1:
+    case 2:
+      return 900;
+    case 3:
+      return 700;
+    default:
+      return 600;
     }
   };
 

@@ -34,38 +34,38 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       };
 
       switch (variant) {
-        case 'outlined':
-          return {
-            ...baseStyles,
-            border: `1px solid ${theme.colors.border}`,
-            backgroundColor: theme.colors.background
-          };
+      case 'outlined':
+        return {
+          ...baseStyles,
+          border: `1px solid ${theme.colors.border}`,
+          backgroundColor: theme.colors.background
+        };
 
-        case 'elevated':
-          return {
-            ...baseStyles,
-            boxShadow: theme.shadows.md,
-            border: 'none',
-            '&:hover': clickable ? {
-              boxShadow: theme.shadows.lg,
-              transform: 'translateY(-2px)'
-            } : {}
-          };
+      case 'elevated':
+        return {
+          ...baseStyles,
+          boxShadow: theme.shadows.md,
+          border: 'none',
+          '&:hover': clickable ? {
+            boxShadow: theme.shadows.lg,
+            transform: 'translateY(-2px)'
+          } : {}
+        };
 
-        case 'filled':
-          return {
-            ...baseStyles,
-            backgroundColor: theme.colors.surface,
-            border: 'none'
-          };
+      case 'filled':
+        return {
+          ...baseStyles,
+          backgroundColor: theme.colors.surface,
+          border: 'none'
+        };
 
-        case 'default':
-        default:
-          return {
-            ...baseStyles,
-            boxShadow: theme.shadows.sm,
-            border: `1px solid ${theme.colors.border}`
-          };
+      case 'default':
+      default:
+        return {
+          ...baseStyles,
+          boxShadow: theme.shadows.sm,
+          border: `1px solid ${theme.colors.border}`
+        };
       }
     };
 

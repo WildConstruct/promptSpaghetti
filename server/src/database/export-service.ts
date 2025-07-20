@@ -73,7 +73,7 @@ export class ExportService {
           active_rules: metrics.active_rules,
           total_executions: metrics.total_executions,
           success_rate: 100 - metrics.error_rate,
-          avg_execution_time: metrics.average_execution_time,
+          avg_execution_time: metrics.average_execution_time
         };
       }
 
@@ -85,10 +85,10 @@ export class ExportService {
           version: '1.0.0',
           format_version: '1.0',
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         },
         rules: exportedRules,
-        statistics,
+        statistics
       };
 
       // Format output
@@ -97,26 +97,26 @@ export class ExportService {
       let mimeType: string;
 
       switch (format) {
-        case 'json':
-          data = exportToJSON(exportSet);
-          filename = `corrections-${Date.now()}.json`;
-          mimeType = 'application/json';
-          break;
-        case 'yaml':
-          data = exportToYAML(exportSet);
-          filename = `corrections-${Date.now()}.yaml`;
-          mimeType = 'application/x-yaml';
-          break;
-        case 'csv':
-          data = exportToCSV(exportSet);
-          filename = `corrections-${Date.now()}.csv`;
-          mimeType = 'text/csv';
-          break;
-        default:
-          return {
-            success: false,
-            error: 'Unsupported export format'
-          };
+      case 'json':
+        data = exportToJSON(exportSet);
+        filename = `corrections-${Date.now()}.json`;
+        mimeType = 'application/json';
+        break;
+      case 'yaml':
+        data = exportToYAML(exportSet);
+        filename = `corrections-${Date.now()}.yaml`;
+        mimeType = 'application/x-yaml';
+        break;
+      case 'csv':
+        data = exportToCSV(exportSet);
+        filename = `corrections-${Date.now()}.csv`;
+        mimeType = 'text/csv';
+        break;
+      default:
+        return {
+          success: false,
+          error: 'Unsupported export format'
+        };
       }
 
       return {
@@ -169,9 +169,9 @@ export class ExportService {
           version: metadata.version || '1.0.0',
           format_version: '1.0',
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         },
-        rules: rules.map(ruleToExportFormat),
+        rules: rules.map(ruleToExportFormat)
       };
 
       const exportData = exportToJSON(exportSet);
@@ -258,17 +258,17 @@ export class ExportService {
       
       try {
         switch (format) {
-          case 'json':
-            importedSet = parseFromJSON(content);
-            break;
-          case 'yaml':
-            importedSet = parseFromYAML(content);
-            break;
-          case 'csv':
-            importedSet = parseFromCSV(content);
-            break;
-          default:
-            throw new Error('Unsupported format');
+        case 'json':
+          importedSet = parseFromJSON(content);
+          break;
+        case 'yaml':
+          importedSet = parseFromYAML(content);
+          break;
+        case 'csv':
+          importedSet = parseFromCSV(content);
+          break;
+        default:
+          throw new Error('Unsupported format');
         }
       } catch (error) {
         return {
@@ -352,7 +352,7 @@ export class ExportService {
               replace_with: rule.replaceWith,
               is_regex: rule.isRegex,
               is_active: rule.isActive,
-              priority: rule.priority,
+              priority: rule.priority
             };
 
             const updated = this.dao.updateRule(existingByUuidConflict.id, updateData, userId);
@@ -391,7 +391,7 @@ export class ExportService {
           is_active: rule.isActive,
           priority: rule.priority,
           user_id: userId,
-          scope: 'private' as const,
+          scope: 'private' as const
         };
 
         const created = this.dao.createRule(ruleData);

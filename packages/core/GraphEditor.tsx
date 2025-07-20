@@ -1,30 +1,30 @@
-import React, { useCallback, useState, useMemo, useRef } from "react";
-import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange, ConnectionLineType, useReactFlow } from "reactflow";
-import { InspectorPanel } from "./components/Inspector";
-import { NodeRenderer } from "./components/NodeRenderer";
-import { StatusBar } from "./components/StatusBar";
-import { RestorePrompt } from "./components/RestorePrompt";
-import { nodeSchemas } from "./nodeSchemas";
-import { Palette, NodeMeta } from "./Palette";
-import { useGraphStore } from "./graphStore";
-import { PreviewModal } from "./PreviewModal";
-import { usePreviewSeeds } from "./usePreviewSeeds";
-import { ResponsiveCorrectionsPanel } from "./ResponsiveCorrectionsPanel";
-import { CorrectionsStatsDashboard } from "./components/CorrectionsStatsDashboard";
-import { ExtensionManagerPanel } from "./components/ExtensionManager/ExtensionManagerPanel";
-import { useCorrectionsEnabled } from "./correctionsStore";
-import { useValidation } from "./hooks/useValidation";
-import { useAutosave } from "./hooks/useAutosave";
-import { useNodeUtils } from "./hooks/useNodeUtils";
-import { ValidationError } from "./validation";
+import React, { useCallback, useState, useMemo, useRef } from 'react';
+import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange, ConnectionLineType, useReactFlow } from 'reactflow';
+import { InspectorPanel } from './components/Inspector';
+import { NodeRenderer } from './components/NodeRenderer';
+import { StatusBar } from './components/StatusBar';
+import { RestorePrompt } from './components/RestorePrompt';
+import { nodeSchemas } from './nodeSchemas';
+import { Palette, NodeMeta } from './Palette';
+import { useGraphStore } from './graphStore';
+import { PreviewModal } from './PreviewModal';
+import { usePreviewSeeds } from './usePreviewSeeds';
+import { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel';
+import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
+import { ExtensionManagerPanel } from './components/ExtensionManager/ExtensionManagerPanel';
+import { useCorrectionsEnabled } from './correctionsStore';
+import { useValidation } from './hooks/useValidation';
+import { useAutosave } from './hooks/useAutosave';
+import { useNodeUtils } from './hooks/useNodeUtils';
+import { ValidationError } from './validation';
 import {
   WeightedChoiceIcon,
   ConcatIcon,
   OutputIcon,
   IncludeIcon,
   SetVariableIcon,
-  GetVariableIcon,
-} from "./icons";
+  GetVariableIcon
+} from './icons';
 
 interface GraphEditorProps {
   initialNodes: Node[];
@@ -36,87 +36,87 @@ interface GraphEditorProps {
 const NODE_TYPES: NodeMeta[] = [
   // Text Node Types
   {
-    id: "Subject",
-    label: "Subject",
-    icon: "👤",
-    tooltip: "Text subject with grammatical forms",
-    category: "text",
+    id: 'Subject',
+    label: 'Subject',
+    icon: '👤',
+    tooltip: 'Text subject with grammatical forms',
+    category: 'text'
   },
   {
-    id: "Connector",
-    label: "Connector",
-    icon: "🔗",
-    tooltip: "Grammar connector between elements",
-    category: "text",
+    id: 'Connector',
+    label: 'Connector',
+    icon: '🔗',
+    tooltip: 'Grammar connector between elements',
+    category: 'text'
   },
   {
-    id: "Attribute",
-    label: "Attribute",
-    icon: "🏷️",
-    tooltip: "Descriptive attribute for nouns",
-    category: "text",
+    id: 'Attribute',
+    label: 'Attribute',
+    icon: '🏷️',
+    tooltip: 'Descriptive attribute for nouns',
+    category: 'text'
   },
   {
-    id: "Action",
-    label: "Action",
-    icon: "⚡",
-    tooltip: "Action verb with tense options",
-    category: "text",
+    id: 'Action',
+    label: 'Action',
+    icon: '⚡',
+    tooltip: 'Action verb with tense options',
+    category: 'text'
   },
   // Original Node Types
   {
-    id: "WeightedChoice",
-    label: "WeightedChoice",
+    id: 'WeightedChoice',
+    label: 'WeightedChoice',
     icon: WeightedChoiceIcon,
-    tooltip: "Branch with weighted options",
-    category: "logic",
+    tooltip: 'Branch with weighted options',
+    category: 'logic'
   },
   {
-    id: "Concat",
-    label: "Concat",
+    id: 'Concat',
+    label: 'Concat',
     icon: ConcatIcon,
-    tooltip: "Concatenate child prompts",
-    category: "logic",
+    tooltip: 'Concatenate child prompts',
+    category: 'logic'
   },
   {
-    id: "Output",
-    label: "Output",
+    id: 'Output',
+    label: 'Output',
     icon: OutputIcon,
-    tooltip: "Final output node",
-    category: "output",
+    tooltip: 'Final output node',
+    category: 'output'
   },
   {
-    id: "Include",
-    label: "Include",
+    id: 'Include',
+    label: 'Include',
     icon: IncludeIcon,
-    tooltip: "Include another bundle",
-    category: "logic",
+    tooltip: 'Include another bundle',
+    category: 'logic'
   },
   {
-    id: "SetVariable",
-    label: "SetVariable",
+    id: 'SetVariable',
+    label: 'SetVariable',
     icon: SetVariableIcon,
-    tooltip: "Set a variable",
-    category: "variable",
+    tooltip: 'Set a variable',
+    category: 'variable'
   },
   {
-    id: "GetVariable",
-    label: "GetVariable",
+    id: 'GetVariable',
+    label: 'GetVariable',
     icon: GetVariableIcon,
-    tooltip: "Read a variable",
-    category: "variable",
-  },
+    tooltip: 'Read a variable',
+    category: 'variable'
+  }
 ];
 
 // Inner component that has access to React Flow instance
 const GraphEditorInner: React.FC<GraphEditorProps> = ({
   initialNodes,
   initialEdges,
-  validateConnection,
+  validateConnection
 }) => {
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
-  const [statusMessage, setStatusMessage] = useState<string>("");
+  const [statusMessage, setStatusMessage] = useState<string>('');
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [correctionsOpen, setCorrectionsOpen] = useState(false);
@@ -141,7 +141,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     nodes,
     highlightNodeIds,
     highlightEdgeIds,
-    validateConnection,
+    validateConnection
   });
 
   // Memoized node render component using modular NodeRenderer
@@ -209,7 +209,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
       // Use React Flow's screenToFlowPosition for accurate positioning
       const position = reactFlowInstance.screenToFlowPosition({
         x: event.clientX,
-        y: event.clientY,
+        y: event.clientY
       });
       
       // Use Zod schema to get default params
@@ -217,10 +217,10 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
       const params = schema.parse({});
       const newNode: Node = {
         id: `${nodeType}-${Date.now()}`,
-        type: "default",
+        type: 'default',
         position,
         data: { ...params, nodeType: nodeType },
-        selected: false,
+        selected: false
       };
       addNode(newNode);
       setNodes((prev) => [...prev, newNode]);
@@ -277,215 +277,215 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
 
 
   return (
-      <div style={{ position: "relative", width: "100%", height: "100%" }}>
-        <RestorePrompt
-          show={showRestorePrompt}
-          draft={restoreDraft}
-          onRestore={(nodes, edges) => {
-            setNodes(nodes);
-            setEdges(edges);
-            setShowRestorePrompt(false);
-            setStatusMessage('Draft Restored');
-            setTimeout(() => setStatusMessage(''), 3000);
-          }}
-          onDismiss={() => {
-            setShowRestorePrompt(false);
-            localStorage.removeItem('graphDraft');
-          }}
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <RestorePrompt
+        show={showRestorePrompt}
+        draft={restoreDraft}
+        onRestore={(nodes, edges) => {
+          setNodes(nodes);
+          setEdges(edges);
+          setShowRestorePrompt(false);
+          setStatusMessage('Draft Restored');
+          setTimeout(() => setStatusMessage(''), 3000);
+        }}
+        onDismiss={() => {
+          setShowRestorePrompt(false);
+          localStorage.removeItem('graphDraft');
+        }}
+      />
+      <div style={{ display: 'flex', height: '100%' }}>
+        <Palette
+          nodes={NODE_TYPES}
+          collapsed={paletteCollapsed}
+          onToggle={() => setPaletteCollapsed((c) => !c)}
+          onDragStart={handlePaletteDragStart}
         />
-        <div style={{ display: 'flex', height: '100%' }}>
-          <Palette
-            nodes={NODE_TYPES}
-            collapsed={paletteCollapsed}
-            onToggle={() => setPaletteCollapsed((c) => !c)}
-            onDragStart={handlePaletteDragStart}
-          />
-          <div style={{ flex: 1, position: 'relative', overflow: 'visible' }} data-testid="react-flow-canvas-wrapper">
-            <ReactFlow
-              nodes={styledNodes}
-              edges={styledEdges}
-              data-testid="react-flow-canvas"
-              onNodesChange={(changes) => {
-                lastChangeRef.current = Date.now();
-                onNodesChange(changes);
-              }}
-              onEdgesChange={(changes) => {
-                lastChangeRef.current = Date.now();
-                onEdgesChange(changes);
-              }}
-              onConnect={onConnect}
-              onNodeClick={onNodeClick}
-              fitView
-              style={{ background: '#1a202c', height: '100%' }}
-              nodeTypes={nodeTypes}
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              // Node interaction
-              nodesDraggable={true}
-              nodesConnectable={true}
-              elementsSelectable={true}
-              // Standard 3D-style mouse controls
-              panOnScroll={false} // Disable scroll to pan
-              zoomOnScroll={true} // Enable scroll to zoom (standard 3D behavior)
-              panOnDrag={[1, 2]} // Pan with left or middle mouse button
-              selectionOnDrag={false} // Disable box selection on drag
-              zoomOnDoubleClick={false} // Disable double-click zoom
-              // Keyboard shortcuts - completely disable all keyboard handling
-              deleteKeyCode={null} // Disable delete key completely
-              multiSelectionKeyCode={null} // Disable multi-selection
-              zoomActivationKeyCode={null} // Disable zoom activation
-              // Disable all keyboard event capturing
-              onKeyDown={(e) => {
-                // Check if the event target is inside an input or textarea
-                const target = e.target as HTMLElement;
-                const isFormElement = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT';
-                const isInInspector = target.closest('aside') !== null;
-                
-                if (isFormElement || isInInspector) {
-                  // Don't capture keyboard events for form elements or inspector
-                  return;
-                }
-                
-                // Only handle keyboard events for canvas interaction
-                e.stopPropagation();
-              }}
-              // Connection line style - Clean 90-degree lines
-              connectionLineStyle={{ stroke: '#4a5568', strokeWidth: 2 }}
-              connectionLineType={ConnectionLineType.Step}
-              // Default edge options for clean 90-degree connections
-              defaultEdgeOptions={{
-                type: 'step',
-                style: { stroke: '#666', strokeWidth: 2 },
-                markerEnd: { type: 'arrow', color: '#666' }
-              }}
-              // Default zoom/pan settings
-              minZoom={0.1}
-              maxZoom={4}
-              defaultViewport={{ x: 0, y: 0, zoom: 1 }}
-            >
-              <Background color="#2d3748" gap={16} />
-              <MiniMap nodeColor={() => '#363a45'} maskColor="#181b21BB" />
-              <Controls />
-            </ReactFlow>
-            
-            {/* Mouse Controls Help Overlay */}
-            <div style={{
-              position: 'absolute',
-              bottom: 10,
-              right: 10,
-              background: 'rgba(42, 42, 42, 0.9)',
-              border: '1px solid #444',
-              borderRadius: 4,
-              padding: 8,
-              fontSize: 11,
-              color: '#a0aec0',
-              cursor: 'pointer',
-              userSelect: 'none',
+        <div style={{ flex: 1, position: 'relative', overflow: 'visible' }} data-testid="react-flow-canvas-wrapper">
+          <ReactFlow
+            nodes={styledNodes}
+            edges={styledEdges}
+            data-testid="react-flow-canvas"
+            onNodesChange={(changes) => {
+              lastChangeRef.current = Date.now();
+              onNodesChange(changes);
             }}
-            onClick={() => setShowControls(!showControls)}
-            >
-              <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>
+            onEdgesChange={(changes) => {
+              lastChangeRef.current = Date.now();
+              onEdgesChange(changes);
+            }}
+            onConnect={onConnect}
+            onNodeClick={onNodeClick}
+            fitView
+            style={{ background: '#1a202c', height: '100%' }}
+            nodeTypes={nodeTypes}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            // Node interaction
+            nodesDraggable={true}
+            nodesConnectable={true}
+            elementsSelectable={true}
+            // Standard 3D-style mouse controls
+            panOnScroll={false} // Disable scroll to pan
+            zoomOnScroll={true} // Enable scroll to zoom (standard 3D behavior)
+            panOnDrag={[1, 2]} // Pan with left or middle mouse button
+            selectionOnDrag={false} // Disable box selection on drag
+            zoomOnDoubleClick={false} // Disable double-click zoom
+            // Keyboard shortcuts - completely disable all keyboard handling
+            deleteKeyCode={null} // Disable delete key completely
+            multiSelectionKeyCode={null} // Disable multi-selection
+            zoomActivationKeyCode={null} // Disable zoom activation
+            // Disable all keyboard event capturing
+            onKeyDown={(e) => {
+              // Check if the event target is inside an input or textarea
+              const target = e.target as HTMLElement;
+              const isFormElement = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT';
+              const isInInspector = target.closest('aside') !== null;
+                
+              if (isFormElement || isInInspector) {
+                // Don't capture keyboard events for form elements or inspector
+                return;
+              }
+                
+              // Only handle keyboard events for canvas interaction
+              e.stopPropagation();
+            }}
+            // Connection line style - Clean 90-degree lines
+            connectionLineStyle={{ stroke: '#4a5568', strokeWidth: 2 }}
+            connectionLineType={ConnectionLineType.Step}
+            // Default edge options for clean 90-degree connections
+            defaultEdgeOptions={{
+              type: 'step',
+              style: { stroke: '#666', strokeWidth: 2 },
+              markerEnd: { type: 'arrow', color: '#666' }
+            }}
+            // Default zoom/pan settings
+            minZoom={0.1}
+            maxZoom={4}
+            defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+          >
+            <Background color="#2d3748" gap={16} />
+            <MiniMap nodeColor={() => '#363a45'} maskColor="#181b21BB" />
+            <Controls />
+          </ReactFlow>
+            
+          {/* Mouse Controls Help Overlay */}
+          <div style={{
+            position: 'absolute',
+            bottom: 10,
+            right: 10,
+            background: 'rgba(42, 42, 42, 0.9)',
+            border: '1px solid #444',
+            borderRadius: 4,
+            padding: 8,
+            fontSize: 11,
+            color: '#a0aec0',
+            cursor: 'pointer',
+            userSelect: 'none'
+          }}
+          onClick={() => setShowControls(!showControls)}
+          >
+            <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>
                 🖱️ Controls {showControls ? '▼' : '▶'}
-              </div>
-              {showControls && (
-                <div style={{ marginTop: 8, lineHeight: 1.6 }}>
-                  <div><b>Pan:</b> Left-click + drag on canvas</div>
-                  <div><b>Zoom:</b> Mouse wheel / trackpad scroll</div>
-                  <div><b>Select:</b> Click node</div>
-                  <div><b>Multi-select:</b> Shift/Ctrl + Click</div>
-                  <div><b>Connect:</b> Drag from output port</div>
-                  <div><b>Delete:</b> Select + Delete/Backspace</div>
-                  <div><b>Alternative Pan:</b> Middle-click + drag</div>
-                </div>
-              )}
             </div>
+            {showControls && (
+              <div style={{ marginTop: 8, lineHeight: 1.6 }}>
+                <div><b>Pan:</b> Left-click + drag on canvas</div>
+                <div><b>Zoom:</b> Mouse wheel / trackpad scroll</div>
+                <div><b>Select:</b> Click node</div>
+                <div><b>Multi-select:</b> Shift/Ctrl + Click</div>
+                <div><b>Connect:</b> Drag from output port</div>
+                <div><b>Delete:</b> Select + Delete/Backspace</div>
+                <div><b>Alternative Pan:</b> Middle-click + drag</div>
+              </div>
+            )}
           </div>
-          <InspectorPanel
-            node={selectedNode}
-            schema={selectedSchema}
-            onChange={handleInspectorChange}
-          />
         </div>
-        <StatusBar
-          statusMessage={statusMessage}
-          errors={errors}
-          onPreview={() => {
-            const now = Date.now();
-            const sinceChange = now - lastChangeRef.current;
-            const run = () => {
-              runPreview({ nodes, edges });
-              setPreviewOpen(true);
-            };
-            if (sinceChange < 500) {
-              if (previewTimeoutRef.current) clearTimeout(previewTimeoutRef.current);
-              previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
-            } else {
-              run();
-            }
-          }}
-          onSaveJson={() => {
-            const blob = new Blob([
-              JSON.stringify({ nodes, edges }, null, 2)
-            ], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'graph.json';
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => {
-              document.body.removeChild(a);
-              URL.revokeObjectURL(url);
-            }, 0);
-          }}
-          onCorrections={() => setCorrectionsOpen(true)}
-          correctionsEnabled={correctionsEnabled}
-          correctionsOpen={correctionsOpen}
-          onStats={() => setStatsOpen(true)}
-          statsOpen={statsOpen}
-          onExtensions={() => setExtensionsOpen(true)}
-          extensionsOpen={extensionsOpen}
+        <InspectorPanel
+          node={selectedNode}
+          schema={selectedSchema}
+          onChange={handleInspectorChange}
         />
-        <PreviewModal
-          open={previewOpen}
-          loading={previewLoading}
-          error={previewError}
-          results={previewResults}
-          onClose={() => {
-            cancelPreview();
-            setPreviewOpen(false);
-            setHighlightEdgeIds(new Set());
-            setHighlightNodeIds(new Set());
-          }}
-          onCancel={cancelPreview}
-          onResultHover={(idx) => {
-            const res = previewResults[idx];
-            if (res?.usedEdgeIds) {
-              setHighlightEdgeIds(new Set(res.usedEdgeIds));
-            } else {
-              setHighlightEdgeIds(new Set());
-            }
-            if (res?.usedNodeIds) {
-              setHighlightNodeIds(new Set(res.usedNodeIds));
-            } else {
-              setHighlightNodeIds(new Set());
-            }
-          }}
-        />
-        <ResponsiveCorrectionsPanel
-          isOpen={correctionsOpen}
-          onClose={() => setCorrectionsOpen(false)}
-        />
-        <CorrectionsStatsDashboard
-          isOpen={statsOpen}
-          onClose={() => setStatsOpen(false)}
-        />
-        {extensionsOpen && (
-          <ExtensionManagerPanel
-            onClose={() => setExtensionsOpen(false)}
-          />
-        )}
       </div>
+      <StatusBar
+        statusMessage={statusMessage}
+        errors={errors}
+        onPreview={() => {
+          const now = Date.now();
+          const sinceChange = now - lastChangeRef.current;
+          const run = () => {
+            runPreview({ nodes, edges });
+            setPreviewOpen(true);
+          };
+          if (sinceChange < 500) {
+            if (previewTimeoutRef.current) clearTimeout(previewTimeoutRef.current);
+            previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
+          } else {
+            run();
+          }
+        }}
+        onSaveJson={() => {
+          const blob = new Blob([
+            JSON.stringify({ nodes, edges }, null, 2)
+          ], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'graph.json';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 0);
+        }}
+        onCorrections={() => setCorrectionsOpen(true)}
+        correctionsEnabled={correctionsEnabled}
+        correctionsOpen={correctionsOpen}
+        onStats={() => setStatsOpen(true)}
+        statsOpen={statsOpen}
+        onExtensions={() => setExtensionsOpen(true)}
+        extensionsOpen={extensionsOpen}
+      />
+      <PreviewModal
+        open={previewOpen}
+        loading={previewLoading}
+        error={previewError}
+        results={previewResults}
+        onClose={() => {
+          cancelPreview();
+          setPreviewOpen(false);
+          setHighlightEdgeIds(new Set());
+          setHighlightNodeIds(new Set());
+        }}
+        onCancel={cancelPreview}
+        onResultHover={(idx) => {
+          const res = previewResults[idx];
+          if (res?.usedEdgeIds) {
+            setHighlightEdgeIds(new Set(res.usedEdgeIds));
+          } else {
+            setHighlightEdgeIds(new Set());
+          }
+          if (res?.usedNodeIds) {
+            setHighlightNodeIds(new Set(res.usedNodeIds));
+          } else {
+            setHighlightNodeIds(new Set());
+          }
+        }}
+      />
+      <ResponsiveCorrectionsPanel
+        isOpen={correctionsOpen}
+        onClose={() => setCorrectionsOpen(false)}
+      />
+      <CorrectionsStatsDashboard
+        isOpen={statsOpen}
+        onClose={() => setStatsOpen(false)}
+      />
+      {extensionsOpen && (
+        <ExtensionManagerPanel
+          onClose={() => setExtensionsOpen(false)}
+        />
+      )}
+    </div>
   );
 };
 

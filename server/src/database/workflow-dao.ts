@@ -348,7 +348,7 @@ export class WorkflowDAO {
     }
 
     if (filter.overdue) {
-      query += ` AND wa.due_date < CURRENT_TIMESTAMP AND wa.status = 'pending'`;
+      query += ' AND wa.due_date < CURRENT_TIMESTAMP AND wa.status = \'pending\'';
     }
 
     query += ' ORDER BY wa.requested_at DESC';
@@ -501,7 +501,7 @@ export class WorkflowDAO {
     }
 
     if (filter.expired) {
-      query += ` AND wl.expires_at < CURRENT_TIMESTAMP`;
+      query += ' AND wl.expires_at < CURRENT_TIMESTAMP';
     }
 
     query += ' ORDER BY wl.locked_at DESC';

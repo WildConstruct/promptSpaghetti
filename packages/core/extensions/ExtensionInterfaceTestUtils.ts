@@ -295,25 +295,25 @@ export class ExtensionInterfaceTestSuite {
 
     // Test based on extension type
     switch (extensionType) {
-      case 'node':
-        tests.push(...await this.runNodeExtensionTests(extension as NodeExtension));
-        break;
-      case 'ui':
-        tests.push(...await this.runUIExtensionTests(extension as UIExtension));
-        break;
-      case 'transform':
-        tests.push(...await this.runTransformExtensionTests(extension as TransformExtension));
-        break;
-      case 'storage':
-        tests.push(...await this.runStorageExtensionTests(extension as StorageExtension));
-        break;
-      default:
-        tests.push({
-          name: 'Unknown Extension Type',
-          passed: false,
-          error: `Unknown extension type: ${extensionType}`,
-          duration: 0
-        });
+    case 'node':
+      tests.push(...await this.runNodeExtensionTests(extension as NodeExtension));
+      break;
+    case 'ui':
+      tests.push(...await this.runUIExtensionTests(extension as UIExtension));
+      break;
+    case 'transform':
+      tests.push(...await this.runTransformExtensionTests(extension as TransformExtension));
+      break;
+    case 'storage':
+      tests.push(...await this.runStorageExtensionTests(extension as StorageExtension));
+      break;
+    default:
+      tests.push({
+        name: 'Unknown Extension Type',
+        passed: false,
+        error: `Unknown extension type: ${extensionType}`,
+        duration: 0
+      });
     }
 
     return tests;
@@ -598,7 +598,7 @@ export class ExtensionInterfaceTestSuite {
       return `No test results found for extension: ${extensionId}`;
     }
 
-    let report = `\n# Extension Interface Test Report\n\n`;
+    let report = '\n# Extension Interface Test Report\n\n';
     report += `**Extension**: ${results.extensionName} (${results.extensionId})\n`;
     report += `**Version**: ${results.version}\n`;
     report += `**Timestamp**: ${results.timestamp.toISOString()}\n`;
@@ -615,7 +615,7 @@ export class ExtensionInterfaceTestSuite {
           report += `   Error: ${test.error}\n`;
         }
         
-        report += `\n`;
+        report += '\n';
       }
     }
 
@@ -665,42 +665,42 @@ export class ExtensionInterfaceMockFactory {
 
     // Add type-specific methods
     switch (type) {
-      case 'node':
-        (baseExtension as any).extensionType = 'node';
-        (baseExtension as any).getNodeDefinitions = () => [];
-        (baseExtension as any).createNodeInstance = () => ({});
-        (baseExtension as any).validateNodeConfig = () => ({ valid: true, errors: [], warnings: [] });
-        (baseExtension as any).getNodeSchema = () => ({ type: 'object' });
-        (baseExtension as any).supportsAdvancedNodes = () => false;
-        break;
+    case 'node':
+      (baseExtension as any).extensionType = 'node';
+      (baseExtension as any).getNodeDefinitions = () => [];
+      (baseExtension as any).createNodeInstance = () => ({});
+      (baseExtension as any).validateNodeConfig = () => ({ valid: true, errors: [], warnings: [] });
+      (baseExtension as any).getNodeSchema = () => ({ type: 'object' });
+      (baseExtension as any).supportsAdvancedNodes = () => false;
+      break;
         
-      case 'ui':
-        (baseExtension as any).extensionType = 'ui';
-        (baseExtension as any).getComponentDefinitions = () => [];
-        (baseExtension as any).createComponentInstance = () => null;
-        (baseExtension as any).getThemeContributions = () => [];
-        (baseExtension as any).getCommandContributions = () => [];
-        (baseExtension as any).getMenuContributions = () => [];
-        (baseExtension as any).getKeybindingContributions = () => [];
-        break;
+    case 'ui':
+      (baseExtension as any).extensionType = 'ui';
+      (baseExtension as any).getComponentDefinitions = () => [];
+      (baseExtension as any).createComponentInstance = () => null;
+      (baseExtension as any).getThemeContributions = () => [];
+      (baseExtension as any).getCommandContributions = () => [];
+      (baseExtension as any).getMenuContributions = () => [];
+      (baseExtension as any).getKeybindingContributions = () => [];
+      break;
         
-      case 'transform':
-        (baseExtension as any).extensionType = 'transform';
-        (baseExtension as any).getTransformDefinitions = () => [];
-        (baseExtension as any).createTransformInstance = () => ({});
-        (baseExtension as any).validateTransformConfig = () => ({ valid: true, errors: [], warnings: [] });
-        (baseExtension as any).getTransformSchema = () => ({ type: 'object' });
-        (baseExtension as any).supportsPipeline = () => false;
-        break;
+    case 'transform':
+      (baseExtension as any).extensionType = 'transform';
+      (baseExtension as any).getTransformDefinitions = () => [];
+      (baseExtension as any).createTransformInstance = () => ({});
+      (baseExtension as any).validateTransformConfig = () => ({ valid: true, errors: [], warnings: [] });
+      (baseExtension as any).getTransformSchema = () => ({ type: 'object' });
+      (baseExtension as any).supportsPipeline = () => false;
+      break;
         
-      case 'storage':
-        (baseExtension as any).extensionType = 'storage';
-        (baseExtension as any).getStorageProviders = () => [];
-        (baseExtension as any).createStorageProvider = () => ({});
-        (baseExtension as any).validateStorageConfig = () => ({ valid: true, errors: [], warnings: [] });
-        (baseExtension as any).getStorageSchema = () => ({ type: 'object' });
-        (baseExtension as any).supportsMigration = () => false;
-        break;
+    case 'storage':
+      (baseExtension as any).extensionType = 'storage';
+      (baseExtension as any).getStorageProviders = () => [];
+      (baseExtension as any).createStorageProvider = () => ({});
+      (baseExtension as any).validateStorageConfig = () => ({ valid: true, errors: [], warnings: [] });
+      (baseExtension as any).getStorageSchema = () => ({ type: 'object' });
+      (baseExtension as any).supportsMigration = () => false;
+      break;
     }
 
     return baseExtension;

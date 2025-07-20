@@ -7,7 +7,7 @@ const NODE_TYPES = [
   'Output',
   'Include',
   'SetVariable',
-  'GetVariable',
+  'GetVariable'
 ];
 
 function onDragStart(event: React.DragEvent, nodeType: string) {

@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "name": "Advanced Story Prompt Generator",
+    "version": "3.0.0",
+    "author": "Handbook Examples",
+    "description": "Advanced generator demonstrating conditionals, complex variables, and Epic 7 node types"
+  },
+  "variables": {
+    "genre": "fantasy",
+    "mood": "mysterious",
+    "complexity": "simple",
+    "protagonist": {},
+    "setting": {}
+  },
+  "grammar": {
+    "start": "[selectGenre][buildStory]",
+    
+    "selectGenre": {
+      "type": "setVariable",
+      "key": "genre",
+      "value": "[genres]"
+    },
+    
+    "genres": [
+      {"w": 30, "v": "fantasy"},
+      {"w": 25, "v": "sci-fi"},
+      {"w": 20, "v": "mystery"},
+      {"w": 15, "v": "horror"},
+      {"w": 10, "v": "romance"}
+    ],
+    
+    "buildStory": {
+      "type": "conditional",
+      "branches": [
+        {
+          "condition": "{genre} == 'fantasy'",
+          "output": "[fantasyPrompt]"
+        },
+        {
+          "condition": "{genre} == 'sci-fi'",
+          "output": "[scifiPrompt]"
+        },
+        {
+          "condition": "{genre} == 'mystery'",
+          "output": "[mysteryPrompt]"
+        }
+      ],
+      "defaultOutput": "[genericPrompt]"
+    },
+    
+    "fantasyPrompt": "In a realm where [magicSystem], [hero] must [quest] before [deadline]. But [complication] threatens everything.",
+    
+    "scifiPrompt": "The year is [futureYear]. [scifiHero] discovers [discovery] that could [consequence]. Time is running out as [threat].",
+    
+    "mysteryPrompt": "[detective] investigates [crime] in [location]. The only clue: [clue]. But [twist] changes everything.",
+    
+    "genericPrompt": "[protagonist] faces [challenge] in [setting]. With only [resource], they must [action] or [consequence].",
+    
+    "magicSystem": [
+      "magic flows through ancient ley lines",
+      "spells are woven from forgotten words",
+      "power comes from bonding with mystical creatures",
+      "the elements obey those with the gift",
+      "reality bends to the will of the awakened"
+    ],
+    
+    "hero": {
+      "type": "Sequential",
+      "sequence": [
+        "a young apprentice",
+        "an exiled prince",
+        "a battle-worn veteran",
+        "a mysterious wanderer",
+        "an unlikely chosen one"
+      ],
+      "pattern": {
+        "type": "weighted",
+        "config": {
+          "weights": [40, 25, 20, 10, 5]
+        }
+      }
+    },
+    
+    "quest": [
+      "retrieve the lost artifact",
+      "unite the warring kingdoms",
+      "master the forbidden magic",
+      "defeat the ancient evil",
+      "restore the broken covenant"
+    ],
+    
+    "deadline": [
+      "the blood moon rises",
+      "the prophecy expires",
+      "the barrier falls",
+      "the enemy arrives",
+      "the magic fades forever"
+    ],
+    
+    "complication": {
+      "type": "WeightedAdvanced",
+      "choices": [
+        {"value": "betrayal from within", "weight": 30},
+        {"value": "an impossible love", "weight": 25},
+        {"value": "a dark family secret", "weight": 20},
+        {"value": "a cursed bloodline", "weight": 15},
+        {"value": "the price of power", "weight": 10}
+      ],
+      "distributionConfig": {
+        "type": "exponential",
+        "parameters": {"rate": 0.5}
+      }
+    },
+    
+    "futureYear": {
+      "type": "Markov",
+      "states": {
+        "near": {
+          "mid": 0.7,
+          "far": 0.3
+        },
+        "mid": {
+          "far": 0.8,
+          "near": 0.2
+        },
+        "far": {
+          "far": 0.9,
+          "mid": 0.1
+        }
+      },
+      "initial": "near",
+      "outputs": {
+        "near": "[2050-2100]",
+        "mid": "[2100-2200]", 
+        "far": "[2200-3000]"
+      }
+    }
+  },
+  
+  "config": {
+    "maxRecursionDepth": 20,
+    "enableCaching": true,
+    "performanceTracking": true
+  }
+}

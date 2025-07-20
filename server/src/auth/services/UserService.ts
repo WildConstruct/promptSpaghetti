@@ -79,7 +79,7 @@ export class UserService implements IUserService {
       resourceType: 'user',
       resourceId: user.id,
       details: { email: user.email },
-      severity: 'info',
+      severity: 'info'
     });
 
     return user;
@@ -160,7 +160,7 @@ export class UserService implements IUserService {
       resourceType: 'user',
       resourceId: id,
       details: { updatedFields: Object.keys(data) },
-      severity: 'info',
+      severity: 'info'
     });
 
     return updatedUser;
@@ -186,7 +186,7 @@ export class UserService implements IUserService {
       action: AUDIT_EVENTS.USER_DELETED,
       resourceType: 'user',
       resourceId: id,
-      severity: 'warning',
+      severity: 'warning'
     });
   }
 
@@ -205,7 +205,7 @@ export class UserService implements IUserService {
           await this.updateUser(user.id, {
             failedLoginAttempts: 0,
             accountLocked: false,
-            lockedUntil: undefined,
+            lockedUntil: undefined
           });
         }
       } else {
@@ -227,7 +227,7 @@ export class UserService implements IUserService {
         type: argon2.argon2id,
         memoryCost: 2 ** 16, // 64 MB
         timeCost: 3,
-        parallelism: 1,
+        parallelism: 1
       });
     } catch (error) {
       throw new Error('Failed to hash password');
@@ -248,7 +248,7 @@ export class UserService implements IUserService {
 
     await this.updateUser(user.id, {
       passwordResetToken: resetToken,
-      passwordResetExpires: resetExpires,
+      passwordResetExpires: resetExpires
     });
 
     // Log password reset request
@@ -257,7 +257,7 @@ export class UserService implements IUserService {
       action: AUDIT_EVENTS.PASSWORD_RESET_REQUESTED,
       resourceType: 'user',
       resourceId: user.id,
-      severity: 'info',
+      severity: 'info'
     });
 
     return resetToken;
@@ -287,7 +287,7 @@ export class UserService implements IUserService {
       passwordResetExpires: undefined,
       failedLoginAttempts: 0,
       accountLocked: false,
-      lockedUntil: undefined,
+      lockedUntil: undefined
     });
 
     // Log password reset completion
@@ -296,7 +296,7 @@ export class UserService implements IUserService {
       action: AUDIT_EVENTS.PASSWORD_RESET_COMPLETED,
       resourceType: 'user',
       resourceId: userData.id,
-      severity: 'info',
+      severity: 'info'
     });
 
     return updatedUser;
@@ -318,7 +318,7 @@ export class UserService implements IUserService {
     const updatedUser = await this.updateUser(userData.id, {
       emailVerified: true,
       emailVerificationToken: undefined,
-      emailVerificationExpires: undefined,
+      emailVerificationExpires: undefined
     });
 
     // Log email verification
@@ -327,7 +327,7 @@ export class UserService implements IUserService {
       action: AUDIT_EVENTS.EMAIL_VERIFIED,
       resourceType: 'user',
       resourceId: userData.id,
-      severity: 'info',
+      severity: 'info'
     });
 
     return updatedUser;
@@ -360,7 +360,7 @@ export class UserService implements IUserService {
       action: AUDIT_EVENTS.PASSWORD_CHANGED,
       resourceType: 'user',
       resourceId: userId,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -377,7 +377,7 @@ export class UserService implements IUserService {
       await this.updateUser(user.id, {
         failedLoginAttempts: failedAttempts,
         accountLocked: true,
-        lockedUntil,
+        lockedUntil
       });
 
       // Log account lockout
@@ -387,12 +387,12 @@ export class UserService implements IUserService {
         resourceType: 'user',
         resourceId: user.id,
         details: { reason: 'Too many failed login attempts' },
-        severity: 'warning',
+        severity: 'warning'
       });
     } else {
       // Just increment failed attempts
       await this.updateUser(user.id, {
-        failedLoginAttempts: failedAttempts,
+        failedLoginAttempts: failedAttempts
       });
     }
   }
@@ -451,7 +451,7 @@ export class UserService implements IUserService {
       emailVerificationToken: row.email_verification_token,
       emailVerificationExpires: row.email_verification_expires,
       status: row.status,
-      deletedAt: row.deleted_at,
+      deletedAt: row.deleted_at
     };
   }
 

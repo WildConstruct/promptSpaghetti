@@ -46,7 +46,7 @@ interface NotificationPreferencesProps {
 }
 
 export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({
-  onPreferencesUpdate,
+  onPreferencesUpdate
 }) => {
   const { user } = useAuth();
   const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);
@@ -65,7 +65,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     'Asia/Tokyo',
     'Asia/Shanghai',
     'Asia/Mumbai',
-    'Australia/Sydney',
+    'Australia/Sydney'
   ];
 
   useEffect(() => {
@@ -79,8 +79,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       setLoading(true);
       const response = await fetch('/api/auth/preferences/notifications', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (!response.ok) {
@@ -110,9 +110,9 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify(newPreferences),
+        body: JSON.stringify(newPreferences)
       });
 
       if (!response.ok) {
@@ -136,8 +136,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     updatePreferences({
       [channel]: {
         ...preferences[channel],
-        enabled,
-      },
+        enabled
+      }
     });
   };
 
@@ -153,9 +153,9 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
         ...preferences[channel],
         types: {
           ...preferences[channel].types,
-          [type]: enabled,
-        },
-      },
+          [type]: enabled
+        }
+      }
     });
   };
 
@@ -165,8 +165,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     updatePreferences({
       email: {
         ...preferences.email,
-        frequency,
-      },
+        frequency
+      }
     });
   };
 
@@ -176,8 +176,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     updatePreferences({
       quietHours: {
         ...preferences.quietHours,
-        enabled,
-      },
+        enabled
+      }
     });
   };
 
@@ -187,8 +187,8 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     updatePreferences({
       quietHours: {
         ...preferences.quietHours,
-        [field]: value,
-      },
+        [field]: value
+      }
     });
   };
 

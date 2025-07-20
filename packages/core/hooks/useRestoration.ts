@@ -10,7 +10,7 @@ import {
   RestorationStatsResponse,
   RestorationBookmark,
   ConflictResolutionResult,
-  RestorationFilter,
+  RestorationFilter
 } from '../types/restoration';
 
 interface UseRestorationReturn {
@@ -51,8 +51,8 @@ export const useRestoration = (): UseRestorationReturn => {
         ...options,
         headers: {
           'Content-Type': 'application/json',
-          ...options.headers,
-        },
+          ...options.headers
+        }
       });
 
       if (!response.ok) {
@@ -79,14 +79,14 @@ export const useRestoration = (): UseRestorationReturn => {
   const generatePreview = useCallback(async (request: RestorationPreviewRequest): Promise<RestorationPreviewResponse> => {
     return apiCall<RestorationPreviewResponse>('/api/restoration/preview', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
   const createRestoration = useCallback(async (request: CreateRestorationAttemptRequest): Promise<RestorationAttempt> => {
     return apiCall<RestorationAttempt>('/api/restoration/attempts', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
@@ -97,13 +97,13 @@ export const useRestoration = (): UseRestorationReturn => {
   const resolveConflict = useCallback(async (request: ConflictResolutionRequest): Promise<ConflictResolutionResult> => {
     return apiCall<ConflictResolutionResult>('/api/restoration/conflicts/resolve', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
   const cancelRestoration = useCallback(async (restorationAttemptId: string): Promise<void> => {
     return apiCall<void>(`/api/restoration/attempts/${restorationAttemptId}/cancel`, {
-      method: 'POST',
+      method: 'POST'
     });
   }, [apiCall]);
 
@@ -114,7 +114,7 @@ export const useRestoration = (): UseRestorationReturn => {
   const createBookmark = useCallback(async (request: RestorationBookmarkRequest): Promise<RestorationBookmark> => {
     return apiCall<RestorationBookmark>('/api/restoration/bookmarks', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
@@ -124,7 +124,7 @@ export const useRestoration = (): UseRestorationReturn => {
 
   const deleteBookmark = useCallback(async (bookmarkId: string): Promise<void> => {
     return apiCall<void>(`/api/restoration/bookmarks/${bookmarkId}`, {
-      method: 'DELETE',
+      method: 'DELETE'
     });
   }, [apiCall]);
 
@@ -165,6 +165,6 @@ export const useRestoration = (): UseRestorationReturn => {
     deleteBookmark,
     listRestorations,
     getRestorationDetails,
-    clearError,
+    clearError
   };
 };

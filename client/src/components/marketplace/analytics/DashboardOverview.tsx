@@ -16,7 +16,7 @@ interface DashboardOverviewProps {
 export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   dashboard,
   insights,
-  onRefresh,
+  onRefresh
 }) => {
   const { overview, performance_summary } = dashboard;
 
@@ -135,7 +135,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               { date: '2024-01-04', views: 158, downloads: 61, revenue: 285 },
               { date: '2024-01-05', views: 171, downloads: 67, revenue: 320 },
               { date: '2024-01-06', views: 165, downloads: 59, revenue: 275 },
-              { date: '2024-01-07', views: 189, downloads: 73, revenue: 380 },
+              { date: '2024-01-07', views: 189, downloads: 73, revenue: 380 }
             ]}
             metric="views"
             timeRange={dashboard.period}

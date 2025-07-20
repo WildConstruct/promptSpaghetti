@@ -6,7 +6,7 @@ import {
   RegisterResponse,
   User,
   UserInvitation,
-  AuthConfig,
+  AuthConfig
 } from '../types';
 import { UserService } from './UserService';
 import { EmailService } from './EmailService';
@@ -104,7 +104,7 @@ export class RegistrationService {
       const validation = await this.validateRegistration(request);
       if (!validation.isValid) {
         await this.trackRegistrationEvent('validation_failed', request.email, context, {
-          errors: validation.errors,
+          errors: validation.errors
         });
         
         const error = new Error('Registration validation failed') as any;
@@ -133,7 +133,7 @@ export class RegistrationService {
       if (invitation) {
         await this.acceptInvitation(invitation, user);
         await this.trackRegistrationEvent('invitation_accepted', request.email, context, {
-          invitationId: invitation.id,
+          invitationId: invitation.id
         });
       }
 
@@ -145,7 +145,7 @@ export class RegistrationService {
       // Track successful registration
       await this.trackRegistrationEvent('completed', request.email, context, {
         userId: user.id,
-        source: context.source,
+        source: context.source
       });
 
       // Log registration analytics
@@ -158,22 +158,22 @@ export class RegistrationService {
           email: user.email,
           source: context.source,
           referrer: context.referrer,
-          hasInvitation: !!invitation,
+          hasInvitation: !!invitation
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       return {
         user: await this.toPublicUser(user),
         emailVerificationRequired: !user.emailVerified,
-        nextSteps: this.getNextSteps(user, invitation),
+        nextSteps: this.getNextSteps(user, invitation)
       };
     } catch (error) {
       // Track failed registration
       await this.trackRegistrationEvent('failed', request.email, context, {
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -224,7 +224,7 @@ export class RegistrationService {
       isValid: errors.length === 0,
       errors,
       warnings,
-      suggestions,
+      suggestions
     };
   }
 
@@ -260,7 +260,7 @@ export class RegistrationService {
       action: 'email_verification_resent',
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -268,7 +268,7 @@ export class RegistrationService {
     const timeframes = {
       day: '1 day',
       week: '1 week',
-      month: '1 month',
+      month: '1 month'
     };
 
     try {
@@ -351,13 +351,13 @@ export class RegistrationService {
           started,
           emailVerified: parseInt(funnelResult.rows[0]?.email_verified || '0'),
           profileCompleted: parseInt(funnelResult.rows[0]?.profile_completed || '0'),
-          firstLogin: parseInt(funnelResult.rows[0]?.first_login || '0'),
+          firstLogin: parseInt(funnelResult.rows[0]?.first_login || '0')
         },
         dropOffPoints: dropOffResult.rows.map(row => ({
           step: row.step,
           count: parseInt(row.count),
-          percentage: started > 0 ? Math.round((parseInt(row.count) / started) * 100) : 0,
-        })),
+          percentage: started > 0 ? Math.round((parseInt(row.count) / started) * 100) : 0
+        }))
       };
     } catch (error) {
       console.error('Failed to get registration analytics:', error);
@@ -381,7 +381,7 @@ export class RegistrationService {
       errors.push({
         field: 'email',
         message: 'Please enter a valid email address',
-        code: 'INVALID_FORMAT',
+        code: 'INVALID_FORMAT'
       });
       return { isValid: false, errors, warnings, suggestions };
     }
@@ -392,12 +392,12 @@ export class RegistrationService {
       errors.push({
         field: 'email',
         message: 'An account with this email address already exists',
-        code: 'EMAIL_EXISTS',
+        code: 'EMAIL_EXISTS'
       });
       
       suggestions.push({
         field: 'email',
-        suggestion: 'Try logging in instead, or use the forgot password feature',
+        suggestion: 'Try logging in instead, or use the forgot password feature'
       });
     }
 
@@ -410,12 +410,12 @@ export class RegistrationService {
       warnings.push({
         field: 'email',
         message: 'Please double-check your email domain',
-        code: 'POSSIBLE_TYPO',
+        code: 'POSSIBLE_TYPO'
       });
       
       suggestions.push({
         field: 'email',
-        suggestion: `Did you mean ${email.split('@')[0]}@${typoSuggestions[0]}?`,
+        suggestion: `Did you mean ${email.split('@')[0]}@${typoSuggestions[0]}?`
       });
     }
 
@@ -425,7 +425,7 @@ export class RegistrationService {
       warnings.push({
         field: 'email',
         message: 'Temporary email addresses may cause issues with account recovery',
-        code: 'DISPOSABLE_EMAIL',
+        code: 'DISPOSABLE_EMAIL'
       });
     }
 
@@ -433,7 +433,7 @@ export class RegistrationService {
       isValid: errors.length === 0,
       errors,
       warnings,
-      suggestions,
+      suggestions
     };
   }
 
@@ -450,7 +450,7 @@ export class RegistrationService {
       errors.push({
         field: 'password',
         message: `Password must be at least ${this.config.security.passwordMinLength} characters long`,
-        code: 'PASSWORD_TOO_SHORT',
+        code: 'PASSWORD_TOO_SHORT'
       });
     }
 
@@ -459,7 +459,7 @@ export class RegistrationService {
       errors.push({
         field: 'password',
         message: 'Password must contain at least one uppercase letter',
-        code: 'PASSWORD_NO_UPPERCASE',
+        code: 'PASSWORD_NO_UPPERCASE'
       });
     }
 
@@ -467,7 +467,7 @@ export class RegistrationService {
       errors.push({
         field: 'password',
         message: 'Password must contain at least one lowercase letter',
-        code: 'PASSWORD_NO_LOWERCASE',
+        code: 'PASSWORD_NO_LOWERCASE'
       });
     }
 
@@ -475,7 +475,7 @@ export class RegistrationService {
       errors.push({
         field: 'password',
         message: 'Password must contain at least one number',
-        code: 'PASSWORD_NO_NUMBERS',
+        code: 'PASSWORD_NO_NUMBERS'
       });
     }
 
@@ -483,21 +483,21 @@ export class RegistrationService {
       errors.push({
         field: 'password',
         message: 'Password must contain at least one special character',
-        code: 'PASSWORD_NO_SYMBOLS',
+        code: 'PASSWORD_NO_SYMBOLS'
       });
     }
 
     // Common password check
     const commonPasswords = [
       'password', 'password123', '123456', 'qwerty', 'abc123',
-      'letmein', 'monkey', '1234567890', 'dragon', 'princess',
+      'letmein', 'monkey', '1234567890', 'dragon', 'princess'
     ];
     
     if (commonPasswords.includes(password.toLowerCase())) {
       errors.push({
         field: 'password',
         message: 'This password is too common and not secure',
-        code: 'PASSWORD_TOO_COMMON',
+        code: 'PASSWORD_TOO_COMMON'
       });
     }
 
@@ -506,14 +506,14 @@ export class RegistrationService {
       warnings.push({
         field: 'password',
         message: 'Consider using a longer password for better security',
-        code: 'PASSWORD_COULD_BE_LONGER',
+        code: 'PASSWORD_COULD_BE_LONGER'
       });
     }
 
     return {
       isValid: errors.length === 0,
       errors,
-      warnings,
+      warnings
     };
   }
 
@@ -527,7 +527,7 @@ export class RegistrationService {
       errors.push({
         field: 'displayName',
         message: 'Display name must be at least 2 characters long',
-        code: 'DISPLAY_NAME_TOO_SHORT',
+        code: 'DISPLAY_NAME_TOO_SHORT'
       });
     }
 
@@ -535,7 +535,7 @@ export class RegistrationService {
       errors.push({
         field: 'displayName',
         message: 'Display name must be less than 100 characters',
-        code: 'DISPLAY_NAME_TOO_LONG',
+        code: 'DISPLAY_NAME_TOO_LONG'
       });
     }
 
@@ -545,13 +545,13 @@ export class RegistrationService {
       errors.push({
         field: 'displayName',
         message: 'This display name is not allowed',
-        code: 'DISPLAY_NAME_INAPPROPRIATE',
+        code: 'DISPLAY_NAME_INAPPROPRIATE'
       });
     }
 
     return {
       isValid: errors.length === 0,
-      errors,
+      errors
     };
   }
 
@@ -567,7 +567,7 @@ export class RegistrationService {
       warnings.push({
         field: 'general',
         message: 'Registration pattern appears automated',
-        code: 'SUSPICIOUS_PATTERN',
+        code: 'SUSPICIOUS_PATTERN'
       });
     }
 
@@ -630,7 +630,7 @@ export class RegistrationService {
         {
           displayName: user.displayName,
           ipAddress: context.ipAddress,
-          userAgent: context.userAgent,
+          userAgent: context.userAgent
         }
       );
 
@@ -660,7 +660,7 @@ export class RegistrationService {
         context.userAgent,
         context.source,
         context.referrer,
-        JSON.stringify(additionalData || {}),
+        JSON.stringify(additionalData || {})
       ]);
     } catch (error) {
       console.error('Failed to track registration event:', error);
@@ -729,7 +729,7 @@ export class RegistrationService {
       emailVerified: user.emailVerified,
       createdAt: user.createdAt,
       roles: ['user'], // Default role
-      permissions: ['graphs:create:own', 'graphs:read:own'],
+      permissions: ['graphs:create:own', 'graphs:read:own']
     };
   }
 

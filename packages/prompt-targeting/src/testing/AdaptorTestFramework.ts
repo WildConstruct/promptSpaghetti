@@ -8,7 +8,7 @@ import {
   PlatformCapabilities,
   ValidationResult,
   PlatformPrompt,
-  AdaptorConfig,
+  AdaptorConfig
 } from '../types';
 
 /**
@@ -155,7 +155,7 @@ export class AdaptorTestFramework {
       validationTests: results.filter(r => r.details.validation).length,
       translationTests: results.filter(r => r.details.translation).length,
       capabilityTests: results.filter(r => r.details.capabilities).length,
-      performanceTests: results.filter(r => r.duration > 1000).length,
+      performanceTests: results.filter(r => r.duration > 1000).length
     };
 
     const suiteResult: TestSuiteResult = {
@@ -165,7 +165,7 @@ export class AdaptorTestFramework {
       failedTests,
       duration,
       results,
-      summary,
+      summary
     };
 
     this.printSummary(suiteResult);
@@ -323,7 +323,7 @@ export class AdaptorTestFramework {
       duration,
       error,
       details,
-      assertions,
+      assertions
     };
   }
 
@@ -337,7 +337,7 @@ export class AdaptorTestFramework {
         description: 'Test validation of empty graph',
         graph: { nodes: [], edges: [] },
         expectedValid: true,
-        expectedWarnings: ['EMPTY_GRAPH'],
+        expectedWarnings: ['EMPTY_GRAPH']
       },
       {
         name: 'Simple Text Content',
@@ -346,12 +346,12 @@ export class AdaptorTestFramework {
           nodes: [
             { id: '1', type: 'output', data: { text: 'Hello, world!' } }
           ],
-          edges: [],
+          edges: []
         },
         expectedValid: true,
         shouldTranslate: true,
         expectedPromptContains: ['Hello, world!'],
-        minCompatibilityScore: 0.8,
+        minCompatibilityScore: 0.8
       },
       {
         name: 'Complex Graph Structure',
@@ -360,17 +360,17 @@ export class AdaptorTestFramework {
           nodes: [
             { id: '1', type: 'subject', data: { text: 'A robot' } },
             { id: '2', type: 'action', data: { text: 'walking in a garden' } },
-            { id: '3', type: 'style', data: { text: 'futuristic' } },
+            { id: '3', type: 'style', data: { text: 'futuristic' } }
           ],
           edges: [
             { id: 'e1', source: '1', target: '2' },
-            { id: 'e2', source: '2', target: '3' },
-          ],
+            { id: 'e2', source: '2', target: '3' }
+          ]
         },
         expectedValid: true,
         shouldTranslate: true,
         expectedPromptContains: ['robot', 'walking', 'garden'],
-        minCompatibilityScore: 0.7,
+        minCompatibilityScore: 0.7
       },
       {
         name: 'High Quality Configuration',
@@ -379,15 +379,15 @@ export class AdaptorTestFramework {
           nodes: [
             { id: '1', type: 'output', data: { text: 'Write a detailed analysis' } }
           ],
-          edges: [],
+          edges: []
         },
         config: {
           qualityPreference: 0.9,
-          enableOptimizations: true,
+          enableOptimizations: true
         },
         expectedValid: true,
         shouldTranslate: true,
-        minCompatibilityScore: 0.8,
+        minCompatibilityScore: 0.8
       },
       {
         name: 'Long Content Warning',
@@ -402,17 +402,17 @@ export class AdaptorTestFramework {
               } 
             }
           ],
-          edges: [],
+          edges: []
         },
         expectedValid: true,
-        expectedWarnings: ['CONTENT_TOO_LONG', 'CONTENT_NEAR_LIMIT'],
+        expectedWarnings: ['CONTENT_TOO_LONG', 'CONTENT_NEAR_LIMIT']
       },
       {
         name: 'Invalid Graph Structure',
         description: 'Test invalid graph structure',
         graph: null,
         expectedValid: false,
-        expectedErrors: ['MISSING_GRAPH'],
+        expectedErrors: ['MISSING_GRAPH']
       },
       {
         name: 'Performance Test',
@@ -427,12 +427,12 @@ export class AdaptorTestFramework {
             id: `edge-${i}`,
             source: `node-${i}`,
             target: `node-${i + 1}`
-          })),
+          }))
         },
         expectedValid: true,
         shouldTranslate: true,
-        timeout: 5000,
-      },
+        timeout: 5000
+      }
     ];
   }
 
@@ -448,15 +448,15 @@ export class AdaptorTestFramework {
         graph: {
           nodes: [
             { id: '1', type: 'system', data: { text: 'You are a helpful assistant' } },
-            { id: '2', type: 'user', data: { text: 'Hello!' } },
+            { id: '2', type: 'user', data: { text: 'Hello!' } }
           ],
-          edges: [{ id: 'e1', source: '1', target: '2' }],
+          edges: [{ id: 'e1', source: '1', target: '2' }]
         },
         expectedValid: true,
         shouldTranslate: true,
         expectedParameters: {
-          system: 'You are a helpful assistant',
-        },
+          system: 'You are a helpful assistant'
+        }
       },
       {
         name: 'Function Calling',
@@ -471,12 +471,12 @@ export class AdaptorTestFramework {
                 description: 'Get current weather',
                 parameters: { location: { type: 'string' } }
               } 
-            },
+            }
           ],
-          edges: [],
+          edges: []
         },
         expectedValid: true,
-        shouldTranslate: true,
+        shouldTranslate: true
       },
       {
         name: 'JSON Output Request',
@@ -490,13 +490,13 @@ export class AdaptorTestFramework {
                 text: 'Return the result in JSON format',
                 outputFormat: 'json'
               } 
-            },
+            }
           ],
-          edges: [],
+          edges: []
         },
         expectedValid: true,
-        shouldTranslate: true,
-      },
+        shouldTranslate: true
+      }
     ];
   }
 
@@ -512,13 +512,13 @@ export class AdaptorTestFramework {
         graph: {
           nodes: [
             { id: '1', type: 'subject', data: { text: 'A dragon' } },
-            { id: '2', type: 'style', data: { style: 'fantasy' } },
+            { id: '2', type: 'style', data: { style: 'fantasy' } }
           ],
-          edges: [{ id: 'e1', source: '1', target: '2' }],
+          edges: [{ id: 'e1', source: '1', target: '2' }]
         },
         expectedValid: true,
         shouldTranslate: true,
-        expectedPromptContains: ['/imagine prompt:', 'dragon', 'fantasy', 'magical'],
+        expectedPromptContains: ['/imagine prompt:', 'dragon', 'fantasy', 'magical']
       },
       {
         name: 'Aspect Ratio Handling',
@@ -526,32 +526,32 @@ export class AdaptorTestFramework {
         graph: {
           nodes: [
             { id: '1', type: 'subject', data: { text: 'A landscape' } },
-            { id: '2', type: 'aspectRatio', data: { aspectRatio: 'landscape' } },
+            { id: '2', type: 'aspectRatio', data: { aspectRatio: 'landscape' } }
           ],
-          edges: [{ id: 'e1', source: '1', target: '2' }],
+          edges: [{ id: 'e1', source: '1', target: '2' }]
         },
         expectedValid: true,
         shouldTranslate: true,
         expectedPromptContains: ['--ar 16:9'],
         expectedParameters: {
-          aspect: '16:9',
-        },
+          aspect: '16:9'
+        }
       },
       {
         name: 'Quality Configuration',
         description: 'Test quality parameter mapping',
         graph: {
           nodes: [
-            { id: '1', type: 'subject', data: { text: 'A portrait' } },
+            { id: '1', type: 'subject', data: { text: 'A portrait' } }
           ],
-          edges: [],
+          edges: []
         },
         config: {
           qualityPreference: 0.9,
-          stylePreference: 'photorealistic',
+          stylePreference: 'photorealistic'
         },
         expectedValid: true,
-        shouldTranslate: true,
+        shouldTranslate: true
       },
       {
         name: 'Text-Only Content Warning',
@@ -564,13 +564,13 @@ export class AdaptorTestFramework {
               data: { 
                 text: 'Write a detailed article about economic policy and financial markets'
               } 
-            },
+            }
           ],
-          edges: [],
+          edges: []
         },
         expectedValid: true,
-        expectedWarnings: ['TEXT_ONLY_CONTENT'],
-      },
+        expectedWarnings: ['TEXT_ONLY_CONTENT']
+      }
     ];
   }
 
@@ -590,7 +590,7 @@ export class AdaptorTestFramework {
       passed,
       actual,
       expected,
-      message,
+      message
     });
   }
 
@@ -630,14 +630,14 @@ export class AdaptorTestFramework {
     this.logger.log(`   ⏱️  Duration: ${result.duration}ms`);
     this.logger.log(`   📈 Success Rate: ${((result.passedTests / result.totalTests) * 100).toFixed(1)}%`);
     
-    this.logger.log(`\n📋 Test Breakdown:`);
+    this.logger.log('\n📋 Test Breakdown:');
     this.logger.log(`   Validation Tests: ${result.summary.validationTests}`);
     this.logger.log(`   Translation Tests: ${result.summary.translationTests}`);
     this.logger.log(`   Capability Tests: ${result.summary.capabilityTests}`);
     this.logger.log(`   Performance Tests: ${result.summary.performanceTests}`);
 
     if (result.failedTests > 0) {
-      this.logger.log(`\n❌ Failed Tests:`);
+      this.logger.log('\n❌ Failed Tests:');
       result.results
         .filter(r => !r.passed)
         .forEach(r => {
@@ -682,7 +682,7 @@ export class AdaptorTestFramework {
       averageDuration,
       slowestTest: slowestResult.testCase,
       fastestTest: fastestResult.testCase,
-      performanceScore,
+      performanceScore
     };
   }
 }

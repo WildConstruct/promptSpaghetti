@@ -134,22 +134,22 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({
     const errors: string[] = [];
     
     switch (currentStep) {
-      case 'format':
-        if (!exportData.export_format) {
-          errors.push('Please select an export format');
+    case 'format':
+      if (!exportData.export_format) {
+        errors.push('Please select an export format');
+      }
+      if (!exportData.export_type) {
+        errors.push('Please select an export type');
+      }
+      break;
+    case 'options':
+      if (exportData.export_format && exportData.export_options) {
+        const validation = validateExportOptions(exportData.export_format, exportData.export_options);
+        if (!validation.success) {
+          errors.push(...validation.error.errors.map(e => e.message));
         }
-        if (!exportData.export_type) {
-          errors.push('Please select an export type');
-        }
-        break;
-      case 'options':
-        if (exportData.export_format && exportData.export_options) {
-          const validation = validateExportOptions(exportData.export_format, exportData.export_options);
-          if (!validation.success) {
-            errors.push(...validation.error.errors.map(e => e.message));
-          }
-        }
-        break;
+      }
+      break;
     }
 
     setValidationErrors(errors);
@@ -568,31 +568,31 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({
 
   const renderStepContent = () => {
     switch (currentStep) {
-      case 'format':
-        return renderFormatStep();
-      case 'options':
-        return renderOptionsStep();
-      case 'filters':
-        return renderFiltersStep();
-      case 'review':
-        return renderReviewStep();
-      default:
-        return null;
+    case 'format':
+      return renderFormatStep();
+    case 'options':
+      return renderOptionsStep();
+    case 'filters':
+      return renderFiltersStep();
+    case 'review':
+      return renderReviewStep();
+    default:
+      return null;
     }
   };
 
   const getStepIcon = (step: WizardStep) => {
     switch (step) {
-      case 'format':
-        return FiFile;
-      case 'options':
-        return FiSettings;
-      case 'filters':
-        return FiFilter;
-      case 'review':
-        return FiCheck;
-      default:
-        return FiFile;
+    case 'format':
+      return FiFile;
+    case 'options':
+      return FiSettings;
+    case 'filters':
+      return FiFilter;
+    case 'review':
+      return FiCheck;
+    default:
+      return FiFile;
     }
   };
 

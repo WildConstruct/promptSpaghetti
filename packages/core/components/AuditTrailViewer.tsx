@@ -134,32 +134,32 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
 
   const getActionTypeIcon = (actionType: string) => {
     switch (actionType) {
-      case 'state_change':
-        return <CogIcon className="h-4 w-4 text-blue-600" />;
-      case 'approval_requested':
-        return <ClockIcon className="h-4 w-4 text-yellow-600" />;
-      case 'approved':
-        return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
-      case 'rejected':
-        return <XCircleIcon className="h-4 w-4 text-red-600" />;
-      case 'locked':
-        return <LockClosedIcon className="h-4 w-4 text-orange-600" />;
-      case 'unlocked':
-        return <LockOpenIcon className="h-4 w-4 text-gray-600" />;
-      default:
-        return <ClipboardDocumentListIcon className="h-4 w-4 text-gray-600" />;
+    case 'state_change':
+      return <CogIcon className="h-4 w-4 text-blue-600" />;
+    case 'approval_requested':
+      return <ClockIcon className="h-4 w-4 text-yellow-600" />;
+    case 'approved':
+      return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
+    case 'rejected':
+      return <XCircleIcon className="h-4 w-4 text-red-600" />;
+    case 'locked':
+      return <LockClosedIcon className="h-4 w-4 text-orange-600" />;
+    case 'unlocked':
+      return <LockOpenIcon className="h-4 w-4 text-gray-600" />;
+    default:
+      return <ClipboardDocumentListIcon className="h-4 w-4 text-gray-600" />;
     }
   };
 
   const getActionTypeColor = (actionType: string) => {
     switch (actionType) {
-      case 'state_change': return 'bg-blue-50 text-blue-800';
-      case 'approval_requested': return 'bg-yellow-50 text-yellow-800';
-      case 'approved': return 'bg-green-50 text-green-800';
-      case 'rejected': return 'bg-red-50 text-red-800';
-      case 'locked': return 'bg-orange-50 text-orange-800';
-      case 'unlocked': return 'bg-gray-50 text-gray-800';
-      default: return 'bg-gray-50 text-gray-800';
+    case 'state_change': return 'bg-blue-50 text-blue-800';
+    case 'approval_requested': return 'bg-yellow-50 text-yellow-800';
+    case 'approved': return 'bg-green-50 text-green-800';
+    case 'rejected': return 'bg-red-50 text-red-800';
+    case 'locked': return 'bg-orange-50 text-orange-800';
+    case 'unlocked': return 'bg-gray-50 text-gray-800';
+    default: return 'bg-gray-50 text-gray-800';
     }
   };
 

@@ -17,12 +17,12 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
   filters,
   eventTypes,
   onFilterChange,
-  className = '',
+  className = ''
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [dateRange, setDateRange] = useState({
     from: filters.from_date ? filters.from_date.toISOString().split('T')[0] : '',
-    to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : '',
+    to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : ''
   });
 
   const handleEventTypeChange = (eventType: string, checked: boolean) => {
@@ -40,7 +40,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
 
     onFilterChange({
       from_date: newDateRange.from ? new Date(newDateRange.from) : undefined,
-      to_date: newDateRange.to ? new Date(newDateRange.to) : undefined,
+      to_date: newDateRange.to ? new Date(newDateRange.to) : undefined
     });
   };
 
@@ -50,7 +50,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
       actor_id: undefined,
       event_types: undefined,
       from_date: undefined,
-      to_date: undefined,
+      to_date: undefined
     });
   };
 
@@ -67,7 +67,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({
     resource: eventTypes.filter(t => t.startsWith('resource.')),
     comment: eventTypes.filter(t => t.startsWith('comment.')),
     user: eventTypes.filter(t => t.startsWith('user.')),
-    other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix))),
+    other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix)))
   };
 
   return (

@@ -25,8 +25,8 @@ export const ExportedCorrectionRuleSchema = z.object({
     version: z.string().optional(),
     author: z.string().optional(),
     usage_count: z.number().int().optional(),
-    effectiveness_score: z.number().min(0).max(100).optional(),
-  }).optional(),
+    effectiveness_score: z.number().min(0).max(100).optional()
+  }).optional()
 });
 
 /**
@@ -44,8 +44,8 @@ export const ExportedCorrectionSetSchema = z.object({
     license: z.string().optional(),
     compatibility: z.object({
       min_version: z.string().optional(),
-      max_version: z.string().optional(),
-    }).optional(),
+      max_version: z.string().optional()
+    }).optional()
   }),
   
   rules: z.array(ExportedCorrectionRuleSchema),
@@ -55,19 +55,19 @@ export const ExportedCorrectionSetSchema = z.object({
     id: z.string(),
     name: z.string(),
     description: z.string().optional(),
-    color: z.string().optional(),
+    color: z.string().optional()
   })).optional(),
   
   tags: z.array(z.object({
     id: z.string(),
     name: z.string(),
-    description: z.string().optional(),
+    description: z.string().optional()
   })).optional(),
   
   settings: z.object({
     auto_apply: z.boolean().optional(),
     priority_mode: z.enum(['sequence', 'weighted']).optional(),
-    performance_mode: z.enum(['fast', 'thorough']).optional(),
+    performance_mode: z.enum(['fast', 'thorough']).optional()
   }).optional(),
   
   // Statistics and metrics
@@ -76,8 +76,8 @@ export const ExportedCorrectionSetSchema = z.object({
     active_rules: z.number().int(),
     total_executions: z.number().int().optional(),
     success_rate: z.number().min(0).max(100).optional(),
-    avg_execution_time: z.number().min(0).optional(),
-  }).optional(),
+    avg_execution_time: z.number().min(0).optional()
+  }).optional()
 });
 
 // Type definitions
@@ -103,9 +103,9 @@ export function ruleToExportFormat(rule: CorrectionRule): ExportedCorrectionRule
     updatedAt: rule.updated_at,
     
     metadata: {
-      version: rule.version.toString(),
+      version: rule.version.toString()
       // Additional metadata would be populated from statistics
-    },
+    }
   };
 }
 
@@ -130,7 +130,7 @@ export function exportFormatToRule(exportedRule: ExportedCorrectionRule): {
     replace_with: exportedRule.replaceWith,
     is_regex: exportedRule.isRegex,
     is_active: exportedRule.isActive,
-    priority: exportedRule.priority,
+    priority: exportedRule.priority
   };
 }
 
@@ -331,15 +331,15 @@ export function parseFromCSV(csvString: string): ExportedCorrectionSet {
       headers.forEach((header, index) => {
         const value = values[index];
         switch (header) {
-          case 'isRegex':
-          case 'isActive':
-            rule[header] = value === 'true';
-            break;
-          case 'priority':
-            rule[header] = parseInt(value, 10);
-            break;
-          default:
-            rule[header] = value;
+        case 'isRegex':
+        case 'isActive':
+          rule[header] = value === 'true';
+          break;
+        case 'priority':
+          rule[header] = parseInt(value, 10);
+          break;
+        default:
+          rule[header] = value;
         }
       });
       
@@ -353,7 +353,7 @@ export function parseFromCSV(csvString: string): ExportedCorrectionSet {
     version: '1.0.0',
     format_version: '1.0',
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
   };
   
   return ExportedCorrectionSetSchema.parse({ meta, rules });

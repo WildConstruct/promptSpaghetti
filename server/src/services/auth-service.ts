@@ -13,7 +13,7 @@ const OAuthProviderSchema = z.object({
   clientSecret: z.string(),
   redirectUri: z.string(),
   scope: z.string().optional(),
-  domain: z.string().optional(), // For enterprise SSO
+  domain: z.string().optional() // For enterprise SSO
 });
 
 // Session Management Schema
@@ -23,7 +23,7 @@ const SessionSchema = z.object({
   workspaceId: z.string().optional(),
   permissions: z.array(z.string()),
   expiresAt: z.date(),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.any()).optional()
 });
 
 // MFA Configuration Schema
@@ -32,7 +32,7 @@ const MFAConfigSchema = z.object({
   secret: z.string(),
   backupCodes: z.array(z.string()),
   enabled: z.boolean(),
-  lastUsed: z.date().optional(),
+  lastUsed: z.date().optional()
 });
 
 export type OAuthProvider = z.infer<typeof OAuthProviderSchema>;
@@ -89,7 +89,7 @@ export class AuthService {
       redirect_uri: config.redirectUri,
       response_type: 'code',
       scope: config.scope || this.getDefaultScope(provider),
-      state: state || this.generateState(),
+      state: state || this.generateState()
     });
 
     return `${this.getAuthEndpoint(provider)}?${params.toString()}`;
@@ -107,15 +107,15 @@ export class AuthService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
+        'Accept': 'application/json'
       },
       body: new URLSearchParams({
         client_id: config.clientId,
         client_secret: config.clientSecret,
         code,
         grant_type: 'authorization_code',
-        redirect_uri: config.redirectUri,
-      }),
+        redirect_uri: config.redirectUri
+      })
     });
 
     if (!response.ok) {
@@ -131,8 +131,8 @@ export class AuthService {
     const response = await fetch(userInfoEndpoint, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/json',
-      },
+        'Accept': 'application/json'
+      }
     });
 
     if (!response.ok) {
@@ -157,8 +157,8 @@ export class AuthService {
       metadata: {
         createdAt: new Date(),
         userAgent: '', // Will be set by request handler
-        ipAddress: '', // Will be set by request handler
-      },
+        ipAddress: '' // Will be set by request handler
+      }
     };
 
     this.sessionStore.set(sessionId, session);
@@ -231,7 +231,7 @@ export class AuthService {
       userId,
       secret,
       backupCodes,
-      enabled: true,
+      enabled: true
     };
 
     this.mfaStore.set(userId, mfaConfig);
@@ -294,7 +294,7 @@ export class AuthService {
       github: 'user:email',
       microsoft: 'openid email profile',
       okta: 'openid email profile',
-      auth0: 'openid email profile',
+      auth0: 'openid email profile'
     };
     return scopes[provider as keyof typeof scopes] || 'openid email profile';
   }
@@ -305,7 +305,7 @@ export class AuthService {
       github: 'https://github.com/login/oauth/authorize',
       microsoft: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
       okta: '', // Will be configured per domain
-      auth0: '', // Will be configured per domain
+      auth0: '' // Will be configured per domain
     };
     return endpoints[provider as keyof typeof endpoints];
   }
@@ -316,7 +316,7 @@ export class AuthService {
       github: 'https://github.com/login/oauth/access_token',
       microsoft: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
       okta: '', // Will be configured per domain
-      auth0: '', // Will be configured per domain
+      auth0: '' // Will be configured per domain
     };
     return endpoints[provider as keyof typeof endpoints];
   }
@@ -327,36 +327,36 @@ export class AuthService {
       github: 'https://api.github.com/user',
       microsoft: 'https://graph.microsoft.com/v1.0/me',
       okta: '', // Will be configured per domain
-      auth0: '', // Will be configured per domain
+      auth0: '' // Will be configured per domain
     };
     return endpoints[provider as keyof typeof endpoints];
   }
 
   private normalizeUserInfo(provider: string, userInfo: any): UserInfo {
     switch (provider) {
-      case 'google':
-        return {
-          id: userInfo.id,
-          email: userInfo.email,
-          name: userInfo.name,
-          picture: userInfo.picture,
-          verified_email: userInfo.verified_email,
-        };
-      case 'github':
-        return {
-          id: userInfo.id.toString(),
-          email: userInfo.email,
-          name: userInfo.name || userInfo.login,
-          picture: userInfo.avatar_url,
-        };
-      case 'microsoft':
-        return {
-          id: userInfo.id,
-          email: userInfo.mail || userInfo.userPrincipalName,
-          name: userInfo.displayName,
-        };
-      default:
-        return userInfo;
+    case 'google':
+      return {
+        id: userInfo.id,
+        email: userInfo.email,
+        name: userInfo.name,
+        picture: userInfo.picture,
+        verified_email: userInfo.verified_email
+      };
+    case 'github':
+      return {
+        id: userInfo.id.toString(),
+        email: userInfo.email,
+        name: userInfo.name || userInfo.login,
+        picture: userInfo.avatar_url
+      };
+    case 'microsoft':
+      return {
+        id: userInfo.id,
+        email: userInfo.mail || userInfo.userPrincipalName,
+        name: userInfo.displayName
+      };
+    default:
+      return userInfo;
     }
   }
 

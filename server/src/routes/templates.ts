@@ -14,7 +14,7 @@ import {
   CreateTemplateReviewSchema,
   UpdateTemplateReviewSchema,
   CreateTemplateUsageSchema,
-  UpdateTemplateUsageSchema,
+  UpdateTemplateUsageSchema
 } from '../database/template-models';
 
 // Request schemas
@@ -31,30 +31,30 @@ const GetTemplatesQuerySchema = z.object({
   min_rating: z.coerce.number().min(1).max(5).optional(),
   is_featured: z.coerce.boolean().optional(),
   created_by: z.string().optional(),
-  workspace_id: z.string().uuid().optional(),
+  workspace_id: z.string().uuid().optional()
 });
 
 const UseTemplateSchema = z.object({
   customizations: z.record(z.unknown()).default({}),
   project_name: z.string().min(1),
   project_description: z.string().optional(),
-  workspace_id: z.string().uuid(),
+  workspace_id: z.string().uuid()
 });
 
 const CompleteUsageSchema = z.object({
   completion_status: z.enum(['completed', 'abandoned']),
   time_to_complete_minutes: z.number().int().positive().optional(),
   user_rating: z.number().int().min(1).max(5).optional(),
-  user_feedback: z.string().optional(),
+  user_feedback: z.string().optional()
 });
 
 const ExportTemplateQuerySchema = z.object({
   format: z.enum(['json', 'yaml', 'zip']).optional().default('json'),
-  include_analytics: z.coerce.boolean().optional().default(false),
+  include_analytics: z.coerce.boolean().optional().default(false)
 });
 
 const UUIDParamSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().uuid()
 });
 
 // Mock user authentication - in real implementation, this would extract from JWT
@@ -80,7 +80,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
     },
     sendNotification: async (userId: string, notification: any) => {
       fastify.log.info('Notification sent:', notification);
-    },
+    }
   });
 
   // ====== TEMPLATE ENDPOINTS ======
@@ -94,10 +94,10 @@ export async function templateRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           data: z.array(z.any()),
-          pagination: z.any(),
-        }),
-      },
-    },
+          pagination: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -113,7 +113,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
         min_rating,
         is_featured,
         created_by,
-        workspace_id,
+        workspace_id
       };
 
       if (tags) {
@@ -128,7 +128,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
 
       const sort = {
         sort_by: request.query.sort_by,
-        sort_order: request.query.sort_order,
+        sort_order: request.query.sort_order
       };
 
       const result = await templateService.getTemplates(filter, sort, pagination, userId);
@@ -145,9 +145,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
     schema: {
       body: CreateProjectTemplateSchema,
       response: {
-        201: z.any(),
-      },
-    },
+        201: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -168,9 +168,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -200,9 +200,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
       body: UpdateProjectTemplateSchema,
       response: {
         200: z.any(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -234,9 +234,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       response: {
         204: z.null(),
-        404: z.object({ error: z.string() }),
-      },
-    },
+        404: z.object({ error: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -263,9 +263,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
     schema: {
       params: UUIDParamSchema,
       response: {
-        200: z.object({ message: z.string() }),
-      },
-    },
+        200: z.object({ message: z.string() })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -298,10 +298,10 @@ export async function templateRoutes(fastify: FastifyInstance) {
       response: {
         201: z.object({
           project: z.any(),
-          usage: z.any(),
-        }),
-      },
-    },
+          usage: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -313,7 +313,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
         {
           name: project_name,
           description: project_description,
-          workspace_id,
+          workspace_id
         },
         userId
       );
@@ -339,9 +339,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       querystring: ExportTemplateQuerySchema,
       response: {
-        200: z.any(),
-      },
-    },
+        200: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -402,15 +402,15 @@ export async function templateRoutes(fastify: FastifyInstance) {
         limit: z.coerce.number().min(1).max(100).optional().default(20),
         min_rating: z.coerce.number().min(1).max(5).optional(),
         max_rating: z.coerce.number().min(1).max(5).optional(),
-        has_text: z.coerce.boolean().optional(),
+        has_text: z.coerce.boolean().optional()
       }),
       response: {
         200: z.object({
           data: z.array(z.any()),
-          pagination: z.any(),
-        }),
-      },
-    },
+          pagination: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const { min_rating, max_rating, has_text, ...pagination } = request.query;
@@ -437,15 +437,15 @@ export async function templateRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       body: CreateTemplateReviewSchema.omit({ template_id: true }),
       response: {
-        201: z.any(),
-      },
-    },
+        201: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
       const reviewData = {
         ...request.body,
-        template_id: request.params.id,
+        template_id: request.params.id
       };
       
       const review = await templateService.createTemplateReview(reviewData, userId);
@@ -469,9 +469,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
     schema: {
       params: UUIDParamSchema,
       response: {
-        201: z.any(),
-      },
-    },
+        201: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -494,9 +494,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
     schema: {
       params: UUIDParamSchema,
       response: {
-        204: z.null(),
-      },
-    },
+        204: z.null()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -522,15 +522,15 @@ export async function templateRoutes(fastify: FastifyInstance) {
     schema: {
       querystring: z.object({
         page: z.coerce.number().min(1).optional().default(1),
-        limit: z.coerce.number().min(1).max(100).optional().default(20),
+        limit: z.coerce.number().min(1).max(100).optional().default(20)
       }),
       response: {
         200: z.object({
           data: z.array(z.any()),
-          pagination: z.any(),
-        }),
-      },
-    },
+          pagination: z.any()
+        })
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -554,12 +554,12 @@ export async function templateRoutes(fastify: FastifyInstance) {
     schema: {
       params: UUIDParamSchema,
       querystring: z.object({
-        days: z.coerce.number().min(1).max(365).optional().default(30),
+        days: z.coerce.number().min(1).max(365).optional().default(30)
       }),
       response: {
-        200: z.any(),
-      },
-    },
+        200: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);
@@ -585,9 +585,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
   fastify.get('/template-categories', {
     schema: {
       response: {
-        200: z.array(z.any()),
-      },
-    },
+        200: z.array(z.any())
+      }
+    }
   }, async (request, reply) => {
     try {
       const categories = await templateService.getTemplateCategories();
@@ -608,9 +608,9 @@ export async function templateRoutes(fastify: FastifyInstance) {
       params: UUIDParamSchema,
       body: CompleteUsageSchema,
       response: {
-        200: z.any(),
-      },
-    },
+        200: z.any()
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = getCurrentUser(request);

@@ -31,7 +31,7 @@ export const env: EnvironmentConfig = {
   // Feature flags
   ANALYTICS_ENABLED: getBoolEnvVar('VITE_ANALYTICS_ENABLED', true),
   DEBUG_MODE: getBoolEnvVar('VITE_DEBUG_MODE', false),
-  FEATURE_FLAGS_ENABLED: getBoolEnvVar('VITE_FEATURE_FLAGS_ENABLED', true),
+  FEATURE_FLAGS_ENABLED: getBoolEnvVar('VITE_FEATURE_FLAGS_ENABLED', true)
 };
 
 // Validate required environment variables in production

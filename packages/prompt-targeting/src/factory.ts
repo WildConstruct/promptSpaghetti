@@ -6,7 +6,7 @@
 import {
   AdaptorRegistry,
   MappingEngine,
-  TranslationCache,
+  TranslationCache
 } from './types';
 import { DefaultAdaptorRegistry } from './adaptors/AdaptorRegistry';
 import { DefaultMappingEngine, MappingEngineConfig } from './engines/MappingEngine';
@@ -73,7 +73,7 @@ export async function createPromptTargetingSystem(
   // Create mapping engine
   const engine = new DefaultMappingEngine(registry, cache, {
     enableLogging: config.enableLogging,
-    ...config.mapping,
+    ...config.mapping
   });
   
   if (config.enableLogging) {
@@ -86,7 +86,7 @@ export async function createPromptTargetingSystem(
   return {
     registry,
     engine,
-    cache,
+    cache
   };
 }
 
@@ -97,12 +97,12 @@ export function createBasicPromptTargetingSystem(): PromptTargetingSystem {
   const registry = new DefaultAdaptorRegistry();
   const engine = new DefaultMappingEngine(registry, undefined, {
     enableCaching: false,
-    enableLogging: true,
+    enableLogging: true
   });
   
   return {
     registry,
-    engine,
+    engine
   };
 }
 
@@ -117,15 +117,15 @@ export async function createProductionPromptTargetingSystem(
     cache: {
       enabled: true,
       type: 'redis',
-      config: redisConfig,
+      config: redisConfig
     },
     mapping: {
       enableCaching: true,
       maxConcurrency: 20,
       translationTimeout: 30000,
       enableLogging: true,
-      ...mappingConfig,
+      ...mappingConfig
     },
-    enableLogging: true,
+    enableLogging: true
   });
 }

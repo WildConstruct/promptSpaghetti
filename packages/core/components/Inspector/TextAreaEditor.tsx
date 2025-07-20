@@ -1,5 +1,5 @@
-import React from "react";
-import { EditorFieldProps } from "./BaseNodeEditor";
+import React from 'react';
+import { EditorFieldProps } from './BaseNodeEditor';
 
 export interface TextAreaEditorProps extends EditorFieldProps {
   rows?: number;
@@ -21,15 +21,15 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({
   maxLength,
   minLength,
   autoResize = false,
-  showWordCount = false,
+  showWordCount = false
 }) => {
-  const [localValue, setLocalValue] = React.useState(String(value ?? ""));
+  const [localValue, setLocalValue] = React.useState(String(value ?? ''));
   const [isFocused, setIsFocused] = React.useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   // Update local value when external value changes
   React.useEffect(() => {
-    setLocalValue(String(value ?? ""));
+    setLocalValue(String(value ?? ''));
   }, [value]);
 
   // Auto-resize functionality
@@ -53,31 +53,31 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({
   const inputId = `field-${fieldKey}`;
   
   const textareaStyle = {
-    width: "100%",
+    width: '100%',
     padding: 8,
     border: error 
-      ? "1px solid #f56565" 
+      ? '1px solid #f56565' 
       : isFocused 
-        ? "1px solid #4299e1" 
-        : "1px solid #4a5568",
+        ? '1px solid #4299e1' 
+        : '1px solid #4a5568',
     borderRadius: 4,
-    background: "#2d3748",
-    color: "#e2e8f0",
+    background: '#2d3748',
+    color: '#e2e8f0',
     fontSize: 13,
-    fontFamily: "system-ui, -apple-system, sans-serif",
-    outline: "none",
-    transition: "border-color 0.2s ease",
+    fontFamily: 'system-ui, -apple-system, sans-serif',
+    outline: 'none',
+    transition: 'border-color 0.2s ease',
     resize: autoResize ? 'none' as const : 'vertical' as const,
-    minHeight: autoResize ? `${rows * 1.5}em` : undefined,
+    minHeight: autoResize ? `${rows * 1.5}em` : undefined
   };
 
   const labelStyle = {
-    display: "block",
+    display: 'block',
     fontWeight: 500,
     marginBottom: 4,
-    color: "#e2e8f0",
+    color: '#e2e8f0',
     fontSize: 12,
-    letterSpacing: "0.025em",
+    letterSpacing: '0.025em'
   };
 
   const wordCount = getWordCount(localValue);
@@ -88,7 +88,7 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({
       <label htmlFor={inputId} style={labelStyle}>
         {label}
         {error && (
-          <span style={{ color: "#f56565", marginLeft: 4, fontSize: 10 }}>
+          <span style={{ color: '#f56565', marginLeft: 4, fontSize: 10 }}>
             *
           </span>
         )}
@@ -111,21 +111,21 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({
       
       {error && (
         <div style={{ 
-          color: "#f56565", 
+          color: '#f56565', 
           fontSize: 11, 
           marginTop: 4,
-          fontWeight: 400,
+          fontWeight: 400
         }}>
           {error}
         </div>
       )}
       
       <div style={{
-        display: "flex",
-        justifyContent: "space-between",
+        display: 'flex',
+        justifyContent: 'space-between',
         marginTop: 2,
         fontSize: 10,
-        color: "#a0aec0",
+        color: '#a0aec0'
       }}>
         {showWordCount && (
           <span>

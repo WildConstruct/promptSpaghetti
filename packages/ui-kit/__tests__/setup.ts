@@ -17,15 +17,15 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: jest.fn(), // deprecated
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
+    dispatchEvent: jest.fn()
+  }))
 });
 
 // Mock ResizeObserver
 (global as any).ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
-  disconnect: jest.fn(),
+  disconnect: jest.fn()
 }));
 
 // Mock localStorage
@@ -33,7 +33,7 @@ const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
-  clear: jest.fn(),
+  clear: jest.fn()
 };
 (global as any).localStorage = localStorageMock;
 
@@ -41,17 +41,17 @@ const localStorageMock = {
 Object.defineProperty(navigator, 'clipboard', {
   value: {
     writeText: jest.fn().mockResolvedValue(undefined),
-    readText: jest.fn().mockResolvedValue(''),
-  },
+    readText: jest.fn().mockResolvedValue('')
+  }
 });
 
 Object.defineProperty(navigator, 'vibrate', {
-  value: jest.fn(),
+  value: jest.fn()
 });
 
 // Mock CSS.supports
 (global as any).CSS = {
-  supports: jest.fn().mockReturnValue(false),
+  supports: jest.fn().mockReturnValue(false)
 };
 
 // Setup console error/warning capture

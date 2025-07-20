@@ -9,13 +9,13 @@ import { SessionService } from '../services/SessionService';
 // Session revocation schema
 const revokeSessionSchema = z.object({
   sessionId: z.string().uuid(),
-  reason: z.string().optional(),
+  reason: z.string().optional()
 });
 
 // Bulk session revocation schema
 const revokeBulkSessionsSchema = z.object({
   exceptCurrent: z.boolean().default(true),
-  reason: z.string().optional(),
+  reason: z.string().optional()
 });
 
 interface SessionRouteContext {
@@ -44,9 +44,9 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                   location: { type: 'object' },
                   lastAccessedAt: { type: 'string' },
                   createdAt: { type: 'string' },
-                  current: { type: 'boolean' },
-                },
-              },
+                  current: { type: 'boolean' }
+                }
+              }
             },
             stats: {
               type: 'object',
@@ -54,13 +54,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                 totalSessions: { type: 'number' },
                 activeSessions: { type: 'number' },
                 expiredSessions: { type: 'number' },
-                revokedSessions: { type: 'number' },
-              },
-            },
-          },
-        },
-      },
-    },
+                revokedSessions: { type: 'number' }
+              }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -69,7 +69,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -79,7 +79,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       // Mark current session
       const sessionsWithCurrent = sessions.map(session => ({
         ...session,
-        current: session.id === currentSessionId,
+        current: session.id === currentSessionId
       }));
 
       // Get session statistics
@@ -87,13 +87,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
 
       return reply.send({
         sessions: sessionsWithCurrent,
-        stats,
+        stats
       });
     } catch (error) {
       fastify.log.error('Get sessions error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve sessions',
+        message: 'Failed to retrieve sessions'
       });
     }
   });
@@ -110,11 +110,11 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           type: 'object',
           properties: {
             success: { type: 'boolean' },
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { sessionId, reason } = request.body as z.infer<typeof revokeSessionSchema>;
@@ -123,7 +123,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -134,7 +134,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       if (!targetSession) {
         return reply.status(404).send({
           error: 'Session Not Found',
-          message: 'Session not found or does not belong to user',
+          message: 'Session not found or does not belong to user'
         });
       }
 
@@ -146,13 +146,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
 
       return reply.send({
         success: true,
-        message: 'Session revoked successfully',
+        message: 'Session revoked successfully'
       });
     } catch (error) {
       fastify.log.error('Revoke session error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to revoke session',
+        message: 'Failed to revoke session'
       });
     }
   });
@@ -170,11 +170,11 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' },
-            revokedCount: { type: 'number' },
-          },
-        },
-      },
-    },
+            revokedCount: { type: 'number' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { exceptCurrent, reason } = request.body as z.infer<typeof revokeBulkSessionsSchema>;
@@ -184,7 +184,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -194,13 +194,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       return reply.send({
         success: true,
         message: `Successfully revoked ${revokedCount} session(s)`,
-        revokedCount,
+        revokedCount
       });
     } catch (error) {
       fastify.log.error('Revoke all sessions error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to revoke sessions',
+        message: 'Failed to revoke sessions'
       });
     }
   });
@@ -215,11 +215,11 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' },
-            newExpiresAt: { type: 'string' },
-          },
-        },
-      },
-    },
+            newExpiresAt: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const sessionToken = (request.user as any)?.sessionToken;
@@ -227,7 +227,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       if (!sessionToken) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'Session token required',
+          message: 'Session token required'
         });
       }
 
@@ -236,20 +236,20 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       if (!renewedSession) {
         return reply.status(404).send({
           error: 'Session Not Found',
-          message: 'Session not found or already expired',
+          message: 'Session not found or already expired'
         });
       }
 
       return reply.send({
         success: true,
         message: 'Session renewed successfully',
-        newExpiresAt: renewedSession.expiresAt.toISOString(),
+        newExpiresAt: renewedSession.expiresAt.toISOString()
       });
     } catch (error) {
       fastify.log.error('Renew session error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to renew session',
+        message: 'Failed to renew session'
       });
     }
   });
@@ -268,17 +268,17 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                 multipleLocations: { type: 'boolean' },
                 unusualDevices: { type: 'boolean' },
                 suspiciousLocations: { type: 'array', items: { type: 'string' } },
-                newDevices: { type: 'array' },
-              },
+                newDevices: { type: 'array' }
+              }
             },
             recommendations: {
               type: 'array',
-              items: { type: 'string' },
-            },
-          },
-        },
-      },
-    },
+              items: { type: 'string' }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -286,7 +286,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -320,13 +320,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
 
       return reply.send({
         suspiciousActivity,
-        recommendations,
+        recommendations
       });
     } catch (error) {
       fastify.log.error('Get security insights error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve security insights',
+        message: 'Failed to retrieve security insights'
       });
     }
   });
@@ -339,8 +339,8 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
         type: 'object',
         properties: {
           limit: { type: 'number', default: 50 },
-          offset: { type: 'number', default: 0 },
-        },
+          offset: { type: 'number', default: 0 }
+        }
       },
       response: {
         200: {
@@ -355,14 +355,14 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                   action: { type: 'string' },
                   sessionId: { type: 'string' },
                   deviceInfo: { type: 'object' },
-                  location: { type: 'object' },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+                  location: { type: 'object' }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const userId = (request.user as any)?.id;
@@ -371,7 +371,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
       if (!userId) {
         return reply.status(401).send({
           error: 'Unauthorized',
-          message: 'User authentication required',
+          message: 'User authentication required'
         });
       }
 
@@ -381,7 +381,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
         userId,
         startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
         limit,
-        offset,
+        offset
       });
 
       // Filter for session-related activities
@@ -395,14 +395,14 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           action: activity.action,
           sessionId: activity.sessionId,
           deviceInfo: activity.details?.deviceInfo || {},
-          location: activity.details?.location || { ipAddress: activity.ipAddress },
-        })),
+          location: activity.details?.location || { ipAddress: activity.ipAddress }
+        }))
       });
     } catch (error) {
       fastify.log.error('Get session activity error:', error);
       return reply.status(500).send({
         error: 'Internal Server Error',
-        message: 'Failed to retrieve session activity',
+        message: 'Failed to retrieve session activity'
       });
     }
   });
@@ -420,13 +420,13 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
               properties: {
                 totalActiveSessions: { type: 'number' },
                 expiredSessionsLastHour: { type: 'number' },
-                averageSessionDuration: { type: 'number' },
-              },
-            },
-          },
-        },
-      },
-    },
+                averageSessionDuration: { type: 'number' }
+              }
+            }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Get system-wide session metrics
@@ -448,14 +448,14 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
         metrics: {
           totalActiveSessions: parseInt(metrics.active_sessions) || 0,
           expiredSessionsLastHour: parseInt(metrics.expired_last_hour) || 0,
-          averageSessionDuration: parseFloat(metrics.avg_duration) || 0,
-        },
+          averageSessionDuration: parseFloat(metrics.avg_duration) || 0
+        }
       });
     } catch (error) {
       fastify.log.error('Session health check error:', error);
       return reply.status(500).send({
         status: 'unhealthy',
-        error: error.message,
+        error: error.message
       });
     }
   });

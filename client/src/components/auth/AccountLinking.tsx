@@ -27,7 +27,7 @@ interface AccountLinkingProps {
 
 export const AccountLinking: React.FC<AccountLinkingProps> = ({
   onAccountLinked,
-  onAccountUnlinked,
+  onAccountUnlinked
 }) => {
   const { user } = useAuth();
   const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount[]>([]);
@@ -48,8 +48,8 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({
     try {
       const response = await fetch('/api/auth/oauth/accounts', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (!response.ok) {
@@ -89,8 +89,8 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({
       // Generate OAuth authorization URL
       const authResponse = await fetch(`/api/auth/oauth/authorize?provider=${provider}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (!authResponse.ok) {
@@ -117,9 +117,9 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify({ provider }),
+        body: JSON.stringify({ provider })
       });
 
       if (!response.ok) {
@@ -142,7 +142,7 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({
     const icons = {
       google: '🔍',
       github: '🐙',
-      microsoft: '🏢',
+      microsoft: '🏢'
     };
     return icons[provider as keyof typeof icons] || '🔗';
   };
@@ -151,7 +151,7 @@ export const AccountLinking: React.FC<AccountLinkingProps> = ({
     const colors = {
       google: 'bg-red-50 border-red-200 text-red-700',
       github: 'bg-gray-50 border-gray-200 text-gray-700',
-      microsoft: 'bg-blue-50 border-blue-200 text-blue-700',
+      microsoft: 'bg-blue-50 border-blue-200 text-blue-700'
     };
     return colors[provider as keyof typeof colors] || 'bg-gray-50 border-gray-200 text-gray-700';
   };

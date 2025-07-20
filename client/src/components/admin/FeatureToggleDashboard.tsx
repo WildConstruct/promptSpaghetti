@@ -159,48 +159,48 @@ export const FeatureToggleDashboard: React.FC = () => {
   // Get toggle type badge color
   const getTypeColor = (type: string): string => {
     switch (type) {
-      case 'boolean': return 'blue';
-      case 'percentage_rollout': return 'green';
-      case 'multivariate': return 'purple';
-      case 'scheduled': return 'orange';
-      case 'segmentation': return 'pink';
-      default: return 'gray';
+    case 'boolean': return 'blue';
+    case 'percentage_rollout': return 'green';
+    case 'multivariate': return 'purple';
+    case 'scheduled': return 'orange';
+    case 'segmentation': return 'pink';
+    default: return 'gray';
     }
   };
 
   // Get Claude impact badge color and icon
   const getClaudeImpactDisplay = (impact: string) => {
     switch (impact) {
-      case 'NONE':
-        return { color: 'gray', icon: null, text: 'None' };
-      case 'PROMPT_COST':
-        return { color: 'yellow', icon: <Shield size={12} />, text: 'Cost' };
-      case 'MODEL_VERSION':
-        return { color: 'blue', icon: <Zap size={12} />, text: 'Model' };
-      case 'OUTPUT_QUALITY':
-        return { color: 'green', icon: <Eye size={12} />, text: 'Quality' };
-      case 'HALLUCINATION_RISK':
-        return { color: 'red', icon: <AlertTriangle size={12} />, text: 'Risk' };
-      default:
-        return { color: 'gray', icon: null, text: impact };
+    case 'NONE':
+      return { color: 'gray', icon: null, text: 'None' };
+    case 'PROMPT_COST':
+      return { color: 'yellow', icon: <Shield size={12} />, text: 'Cost' };
+    case 'MODEL_VERSION':
+      return { color: 'blue', icon: <Zap size={12} />, text: 'Model' };
+    case 'OUTPUT_QUALITY':
+      return { color: 'green', icon: <Eye size={12} />, text: 'Quality' };
+    case 'HALLUCINATION_RISK':
+      return { color: 'red', icon: <AlertTriangle size={12} />, text: 'Risk' };
+    default:
+      return { color: 'gray', icon: null, text: impact };
     }
   };
 
   // Format toggle value for display
   const formatToggleValue = (toggle: FeatureToggle): string => {
     switch (toggle.type) {
-      case 'boolean':
-        return toggle.value.enabled ? 'Enabled' : 'Disabled';
-      case 'percentage_rollout':
-        return `${toggle.value.percentage}%`;
-      case 'multivariate':
-        return `${toggle.value.variants?.length || 0} variants`;
-      case 'scheduled':
-        return toggle.value.enabled ? 'Active schedule' : 'Inactive';
-      case 'segmentation':
-        return `${toggle.value.rules?.length || 0} rules`;
-      default:
-        return 'Unknown';
+    case 'boolean':
+      return toggle.value.enabled ? 'Enabled' : 'Disabled';
+    case 'percentage_rollout':
+      return `${toggle.value.percentage}%`;
+    case 'multivariate':
+      return `${toggle.value.variants?.length || 0} variants`;
+    case 'scheduled':
+      return toggle.value.enabled ? 'Active schedule' : 'Inactive';
+    case 'segmentation':
+      return `${toggle.value.rules?.length || 0} rules`;
+    default:
+      return 'Unknown';
     }
   };
 

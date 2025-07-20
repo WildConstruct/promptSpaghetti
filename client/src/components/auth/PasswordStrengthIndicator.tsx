@@ -11,37 +11,37 @@ interface PasswordStrengthIndicatorProps {
 
 export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
   password,
-  className = '',
+  className = ''
 }) => {
   const { score, feedback, strength } = usePasswordStrength(password);
 
   const getStrengthColor = (strength: string) => {
     switch (strength) {
-      case 'weak':
-        return 'bg-red-500';
-      case 'fair':
-        return 'bg-yellow-500';
-      case 'good':
-        return 'bg-blue-500';
-      case 'strong':
-        return 'bg-green-500';
-      default:
-        return 'bg-gray-300';
+    case 'weak':
+      return 'bg-red-500';
+    case 'fair':
+      return 'bg-yellow-500';
+    case 'good':
+      return 'bg-blue-500';
+    case 'strong':
+      return 'bg-green-500';
+    default:
+      return 'bg-gray-300';
     }
   };
 
   const getStrengthTextColor = (strength: string) => {
     switch (strength) {
-      case 'weak':
-        return 'text-red-700';
-      case 'fair':
-        return 'text-yellow-700';
-      case 'good':
-        return 'text-blue-700';
-      case 'strong':
-        return 'text-green-700';
-      default:
-        return 'text-gray-700';
+    case 'weak':
+      return 'text-red-700';
+    case 'fair':
+      return 'text-yellow-700';
+    case 'good':
+      return 'text-blue-700';
+    case 'strong':
+      return 'text-green-700';
+    default:
+      return 'text-gray-700';
     }
   };
 
@@ -86,7 +86,7 @@ export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>
           { test: /[a-z]/.test(password), label: 'Lowercase letter' },
           { test: /[A-Z]/.test(password), label: 'Uppercase letter' },
           { test: /\d/.test(password), label: 'Number' },
-          { test: /[^A-Za-z0-9]/.test(password), label: 'Special character' },
+          { test: /[^A-Za-z0-9]/.test(password), label: 'Special character' }
         ].map((requirement, index) => (
           <div key={index} className="flex items-center text-xs">
             {requirement.test ? (

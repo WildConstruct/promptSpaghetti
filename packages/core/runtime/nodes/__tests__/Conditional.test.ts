@@ -407,7 +407,7 @@ describe('Conditional Node', () => {
       
       node.run(freshContext);
       
-      const metricKey = `test-conditional-conditional-evaluation_duration_ms`;
+      const metricKey = 'test-conditional-conditional-evaluation_duration_ms';
       expect(freshContext.executionMeta.performanceMetrics.has(metricKey)).toBe(true);
       expect(freshContext.executionMeta.nodeExecutionOrder).toContain('test-conditional');
     });

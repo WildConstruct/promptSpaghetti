@@ -48,24 +48,72 @@ export declare class ASTBuilder {
     private current;
     private errors;
     constructor(tokens: Token[]);
+    /**
+     * Build AST from token stream
+     */
     build(): {
         ast: GraphAST | null;
         errors: ParseError[];
     };
+    /**
+     * Parse complete graph structure
+     */
     private parseGraph;
+    /**
+     * Parse header section (version, checksum, metadata)
+     */
     private parseHeader;
+    /**
+     * Parse header key-value pair
+     */
     private parseHeaderValue;
+    /**
+     * Parse metadata section
+     */
     private parseMetadata;
+    /**
+     * Parse section (NODES or EDGES)
+     */
     private parseSection;
+    /**
+     * Parse nodes section
+     */
     private parseNodesSection;
+    /**
+     * Parse individual node definition
+     */
     private parseNodeDefinition;
+    /**
+     * Parse properties object
+     */
     private parseProperties;
+    /**
+     * Parse edges section
+     */
     private parseEdgesSection;
+    /**
+     * Parse individual edge definition
+     */
     private parseEdgeDefinition;
+    /**
+     * Parse generic value (string, number, boolean, array, object)
+     */
     private parseValue;
+    /**
+     * Parse array [item1, item2, ...]
+     */
     private parseArray;
+    /**
+     * Parse object (nested properties)
+     */
     private parseObject;
+    /**
+     * Extract section name from delimiter (e.g., "---NODES---" -> "NODES")
+     */
     private extractSectionName;
+    /**
+     * Helper methods
+     */
     private currentToken;
     private advance;
     private isAtEnd;

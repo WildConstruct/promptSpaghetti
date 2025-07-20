@@ -46,7 +46,7 @@ export function useActivityFeed(
   const buildQueryString = useCallback((filters: ActivityEventFilter, page: number) => {
     const params = new URLSearchParams({
       page: page.toString(),
-      limit: limit.toString(),
+      limit: limit.toString()
     });
 
     if (filters.project_id) params.append('project_id', filters.project_id);
@@ -76,8 +76,8 @@ export function useActivityFeed(
       const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity?${queryString}`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId,
-        },
+          'X-User-Id': userId
+        }
       });
 
       if (!response.ok) {
@@ -110,8 +110,8 @@ export function useActivityFeed(
       const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity/stats`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId,
-        },
+          'X-User-Id': userId
+        }
       });
 
       if (!response.ok) {
@@ -131,8 +131,8 @@ export function useActivityFeed(
       const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity/types`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId,
-        },
+          'X-User-Id': userId
+        }
       });
 
       if (!response.ok) {
@@ -164,8 +164,8 @@ export function useActivityFeed(
       const response = await fetch(`${API_BASE}/activity/${eventId}`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId,
-        },
+          'X-User-Id': userId
+        }
       });
 
       if (!response.ok) {
@@ -224,7 +224,7 @@ export function useActivityFeed(
     eventTypes,
     loadMore,
     refresh,
-    fetchActivityEvent,
+    fetchActivityEvent
   };
 }
 
@@ -254,14 +254,14 @@ export function useProjectActivityFeed(
 
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: limit.toString(),
+        limit: limit.toString()
       });
 
       const response = await fetch(`${API_BASE}/projects/${projectId}/activity?${params}`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId,
-        },
+          'X-User-Id': userId
+        }
       });
 
       if (!response.ok) {
@@ -320,6 +320,6 @@ export function useProjectActivityFeed(
     hasMore,
     page,
     loadMore,
-    refresh,
+    refresh
   };
 }

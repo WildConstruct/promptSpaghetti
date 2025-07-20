@@ -132,69 +132,69 @@ Grid.displayName = 'Grid';
 export const Stack = forwardRef<HTMLDivElement, LayoutProps & {
   spacing?: keyof typeof import('../types').ThemeSpacing;
   divider?: React.ReactNode;
-}>(
-  (
-    {
-      children,
-      spacing = 'md',
-      divider,
-      align = 'stretch',
-      padding,
-      margin,
-      className,
-      style,
-      testId,
-      ...props
-    },
-    ref
-  ) => {
-    const theme = useTheme();
-    const childrenArray = React.Children.toArray(children);
+    }>(
+    (
+      {
+        children,
+        spacing = 'md',
+        divider,
+        align = 'stretch',
+        padding,
+        margin,
+        className,
+        style,
+        testId,
+        ...props
+      },
+      ref
+    ) => {
+      const theme = useTheme();
+      const childrenArray = React.Children.toArray(children);
 
-    const stackStyles = {
-      display: 'flex',
-      flexDirection: 'column' as const,
-      alignItems: resolveResponsiveValue(align),
-      ...(padding && createSpacingStyles('padding', padding, theme)),
-      ...(margin && createSpacingStyles('margin', margin, theme)),
-      ...style
-    };
+      const stackStyles = {
+        display: 'flex',
+        flexDirection: 'column' as const,
+        alignItems: resolveResponsiveValue(align),
+        ...(padding && createSpacingStyles('padding', padding, theme)),
+        ...(margin && createSpacingStyles('margin', margin, theme)),
+        ...style
+      };
 
-    return (
-      <div
-        ref={ref}
-        className={cn('ui-stack', className)}
-        style={stackStyles}
-        data-testid={testId}
-        {...props}
-      >
-        {childrenArray.map((child, index) => (
-          <React.Fragment key={index}>
-            {child}
-            {divider && index < childrenArray.length - 1 && (
-              <div
-                className="ui-stack-divider"
-                style={{
-                  margin: `${theme.spacing[spacing] / 2}px 0`
-                }}
-              >
-                {divider}
-              </div>
-            )}
-            {!divider && index < childrenArray.length - 1 && (
-              <div
-                className="ui-stack-spacer"
-                style={{
-                  height: `${theme.spacing[spacing]}px`
-                }}
-              />
-            )}
-          </React.Fragment>
-        ))}
-      </div>
+      return (
+        <div
+          ref={ref}
+          className={cn('ui-stack', className)}
+          style={stackStyles}
+          data-testid={testId}
+          {...props}
+        >
+          {childrenArray.map((child, index) => (
+            <React.Fragment key={index}>
+              {child}
+              {divider && index < childrenArray.length - 1 && (
+                <div
+                  className="ui-stack-divider"
+                  style={{
+                    margin: `${theme.spacing[spacing] / 2}px 0`
+                  }}
+                >
+                  {divider}
+                </div>
+              )}
+              {!divider && index < childrenArray.length - 1 && (
+                <div
+                  className="ui-stack-spacer"
+                  style={{
+                    height: `${theme.spacing[spacing]}px`
+                  }}
+                />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      );
+    }
     );
-  }
-);
 
 Stack.displayName = 'Stack';
 

@@ -76,7 +76,7 @@ describe('ReconnectionHandler', () => {
       
       handler.on('reconnection_scheduled', (event) => retryEvents.push(event));
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
 
     test('should fail after max attempts', (done) => {
@@ -90,7 +90,7 @@ describe('ReconnectionHandler', () => {
         done();
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
   });
 
@@ -140,7 +140,7 @@ describe('ReconnectionHandler', () => {
         }
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
   });
 
@@ -148,7 +148,7 @@ describe('ReconnectionHandler', () => {
     test.skip('should timeout slow connections', (done) => {
       const handler = new ReconnectionHandler({
         maxAttempts: 1,
-        connectionTimeout: 500,
+        connectionTimeout: 500
       });
       handler.setConnectionFactory(mockConnectionFactory);
 
@@ -163,7 +163,7 @@ describe('ReconnectionHandler', () => {
         done();
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
 
     test('should succeed within timeout', async () => {
@@ -191,7 +191,7 @@ describe('ReconnectionHandler', () => {
         done();
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
 
     test.skip('should block reconnection when circuit breaker is open', async () => {
@@ -200,7 +200,7 @@ describe('ReconnectionHandler', () => {
       // Trip the circuit breaker first
       await new Promise<void>((resolve) => {
         handler.on('circuit_breaker_tripped', () => resolve());
-              handler.startReconnection();
+        handler.startReconnection();
       });
 
       const blockedEvents: any[] = [];
@@ -234,7 +234,7 @@ describe('ReconnectionHandler', () => {
         done();
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
 
     test('should allow manual circuit breaker reset', (done) => {
@@ -249,7 +249,7 @@ describe('ReconnectionHandler', () => {
         done();
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
   });
 
@@ -260,7 +260,7 @@ describe('ReconnectionHandler', () => {
       // Trip circuit breaker
       await new Promise<void>((resolve) => {
         handler.on('circuit_breaker_tripped', () => resolve());
-              handler.startReconnection();
+        handler.startReconnection();
       });
 
       expect(handler.isCircuitBreakerActive()).toBe(true);
@@ -315,7 +315,7 @@ describe('ReconnectionHandler', () => {
         done();
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
 
     test('should calculate reconnection time statistics', async () => {
@@ -367,7 +367,7 @@ describe('ReconnectionHandler', () => {
       const stoppedEvents: any[] = [];
       handler.on('reconnection_stopped', () => stoppedEvents.push({}));
 
-            handler.startReconnection();
+      handler.startReconnection();
       
       // Stop after a short delay
       setTimeout(() => {
@@ -398,7 +398,7 @@ describe('ReconnectionHandler', () => {
         }
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
 
     test('should limit recent attempts list', async () => {
@@ -416,7 +416,7 @@ describe('ReconnectionHandler', () => {
         done();
       });
 
-            handler.startReconnection();
+      handler.startReconnection();
     });
 
     test('should handle missing connection factory', async () => {

@@ -11,12 +11,30 @@ export interface CrossModelTestResult {
     };
 }
 export declare class CrossModelTester {
+    /**
+     * Test all three models with the same request
+     */
     testAllModels(baseRequest: any): Promise<CrossModelTestResult>;
+    /**
+     * Calculate comparison metrics
+     */
     private calculateComparison;
+    /**
+     * Calculate consistency score between successful results
+     */
     private calculateConsistencyScore;
+    /**
+     * Calculate similarity between two graphs (basic implementation)
+     */
     private calculateGraphSimilarity;
 }
+/**
+ * Predefined test cases for cross-model comparison
+ */
 export declare const testCases: {
+    /**
+     * Simple test case
+     */
     simpleGreeting: {
         purpose: string;
         complexity: "simple";
@@ -26,6 +44,9 @@ export declare const testCases: {
         style: "creative";
         domain: string;
     };
+    /**
+     * Moderate complexity test case
+     */
     contentGenerator: {
         purpose: string;
         complexity: "moderate";
@@ -36,6 +57,9 @@ export declare const testCases: {
         style: "balanced";
         domain: string;
     };
+    /**
+     * Complex test case with advanced features
+     */
     intelligentTutor: {
         purpose: string;
         complexity: "complex";
@@ -47,6 +71,9 @@ export declare const testCases: {
         domain: string;
         constraints: string[];
     };
+    /**
+     * Creative writing assistant
+     */
     storyGenerator: {
         purpose: string;
         complexity: "moderate";
@@ -58,6 +85,9 @@ export declare const testCases: {
         domain: string;
         examples: string[];
     };
+    /**
+     * Data processing pipeline
+     */
     dataProcessor: {
         purpose: string;
         complexity: "complex";
@@ -69,6 +99,9 @@ export declare const testCases: {
         domain: string;
     };
 };
+/**
+ * Run comprehensive cross-model tests
+ */
 export declare function runCrossModelTests(): Promise<{
     testResults: Record<string, CrossModelTestResult>;
     summary: {
@@ -91,6 +124,9 @@ export declare function runCrossModelTests(): Promise<{
         };
     };
 }>;
+/**
+ * Generate a comparative report
+ */
 export declare function generateTestReport(results: {
     testResults: Record<string, CrossModelTestResult>;
     summary: any;

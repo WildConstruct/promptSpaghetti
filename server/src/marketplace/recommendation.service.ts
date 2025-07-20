@@ -262,21 +262,21 @@ export class RecommendationService {
 
     for (const row of result.rows) {
       switch (row.event_type) {
-        case EventType.VIEW:
-          if (!behavior.viewedTemplates.includes(row.template_id)) {
-            behavior.viewedTemplates.push(row.template_id);
-          }
-          break;
-        case EventType.PURCHASE:
-          if (!behavior.purchasedTemplates.includes(row.template_id)) {
-            behavior.purchasedTemplates.push(row.template_id);
-          }
-          break;
-        case EventType.PREVIEW:
-          if (!behavior.previewedTemplates.includes(row.template_id)) {
-            behavior.previewedTemplates.push(row.template_id);
-          }
-          break;
+      case EventType.VIEW:
+        if (!behavior.viewedTemplates.includes(row.template_id)) {
+          behavior.viewedTemplates.push(row.template_id);
+        }
+        break;
+      case EventType.PURCHASE:
+        if (!behavior.purchasedTemplates.includes(row.template_id)) {
+          behavior.purchasedTemplates.push(row.template_id);
+        }
+        break;
+      case EventType.PREVIEW:
+        if (!behavior.previewedTemplates.includes(row.template_id)) {
+          behavior.previewedTemplates.push(row.template_id);
+        }
+        break;
       }
 
       // Extract search queries from metadata

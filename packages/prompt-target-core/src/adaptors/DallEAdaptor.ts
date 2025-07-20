@@ -438,66 +438,66 @@ export class DallEAdaptor extends BaseAdaptor {
 
     // Process current node content
     switch (node.type) {
-      case 'text':
-        const textContent = node.data.content || '';
-        content = content ? `${content} ${textContent}` : textContent;
-        break;
+    case 'text':
+      const textContent = node.data.content || '';
+      content = content ? `${content} ${textContent}` : textContent;
+      break;
         
-      case 'style':
-        const styleContent = node.data.style || node.data.content || '';
-        if (styleContent) {
-          content = content ? `${content}, in ${styleContent} style` : `in ${styleContent} style`;
-          transformations.push({
-            step: 'process_style',
-            sourceNodeId: node.id,
-            action: 'Added style descriptor',
-            details: { style: styleContent }
-          });
-        }
-        break;
+    case 'style':
+      const styleContent = node.data.style || node.data.content || '';
+      if (styleContent) {
+        content = content ? `${content}, in ${styleContent} style` : `in ${styleContent} style`;
+        transformations.push({
+          step: 'process_style',
+          sourceNodeId: node.id,
+          action: 'Added style descriptor',
+          details: { style: styleContent }
+        });
+      }
+      break;
         
-      case 'image':
-        const imageDesc = node.data.description || node.data.content || '';
-        if (imageDesc) {
-          content = content ? `${content}, inspired by ${imageDesc}` : `inspired by ${imageDesc}`;
-          transformations.push({
-            step: 'process_image_reference',
-            sourceNodeId: node.id,
-            action: 'Added image inspiration',
-            details: { description: imageDesc }
-          });
-        }
-        break;
+    case 'image':
+      const imageDesc = node.data.description || node.data.content || '';
+      if (imageDesc) {
+        content = content ? `${content}, inspired by ${imageDesc}` : `inspired by ${imageDesc}`;
+        transformations.push({
+          step: 'process_image_reference',
+          sourceNodeId: node.id,
+          action: 'Added image inspiration',
+          details: { description: imageDesc }
+        });
+      }
+      break;
         
-      case 'weighted':
-        if (node.data.options && node.data.options.length > 0) {
-          const selectedOption = this.selectWeightedOption(node.data.options);
-          content = content ? `${content} ${selectedOption.text}` : selectedOption.text;
-          transformations.push({
-            step: 'process_weighted',
-            sourceNodeId: node.id,
-            action: 'Selected weighted option',
-            details: { selectedIndex: selectedOption.index, weight: selectedOption.weight }
-          });
-        }
-        break;
+    case 'weighted':
+      if (node.data.options && node.data.options.length > 0) {
+        const selectedOption = this.selectWeightedOption(node.data.options);
+        content = content ? `${content} ${selectedOption.text}` : selectedOption.text;
+        transformations.push({
+          step: 'process_weighted',
+          sourceNodeId: node.id,
+          action: 'Selected weighted option',
+          details: { selectedIndex: selectedOption.index, weight: selectedOption.weight }
+        });
+      }
+      break;
         
-      case 'conditional':
-        if (node.data.trueBranch) {
-          content = content ? `${content} ${node.data.trueBranch}` : node.data.trueBranch;
-          transformations.push({
-            step: 'process_conditional',
-            sourceNodeId: node.id,
-            action: 'Selected true branch',
-            details: { condition: node.data.condition }
-          });
-        }
-        break;
+    case 'conditional':
+      if (node.data.trueBranch) {
+        content = content ? `${content} ${node.data.trueBranch}` : node.data.trueBranch;
+        transformations.push({
+          step: 'process_conditional',
+          sourceNodeId: node.id,
+          action: 'Selected true branch',
+          details: { condition: node.data.condition }
+        });
+      }
+      break;
         
-      default:
-        if (node.data.content) {
-          content = content ? `${content} ${node.data.content}` : node.data.content;
-        }
+    default:
+      if (node.data.content) {
+        content = content ? `${content} ${node.data.content}` : node.data.content;
+      }
     }
 
     return content.trim();

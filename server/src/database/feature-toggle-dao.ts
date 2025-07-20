@@ -107,7 +107,7 @@ export class FeatureToggleDAO {
   } = {}): Promise<{ toggles: FeatureToggle[]; total: number }> {
     const client = await this.pool.connect();
     try {
-      let whereConditions = ['archived = false'];
+      const whereConditions = ['archived = false'];
       const values: any[] = [];
       let paramIndex = 1;
 

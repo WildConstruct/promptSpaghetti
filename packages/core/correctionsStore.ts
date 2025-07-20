@@ -43,11 +43,11 @@ export const useCorrectionsStore = create<CorrectionsState>()(
             ...ruleData,
             id: `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             createdAt: new Date(),
-            updatedAt: new Date(),
+            updatedAt: new Date()
           };
           
           set((state) => ({
-            rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority),
+            rules: [...state.rules, newRule].sort((a, b) => a.priority - b.priority)
           }));
         },
         
@@ -57,13 +57,13 @@ export const useCorrectionsStore = create<CorrectionsState>()(
               rule.id === id
                 ? { ...rule, ...updates, updatedAt: new Date() }
                 : rule
-            ),
+            )
           }));
         },
         
         deleteRule: (id) => {
           set((state) => ({
-            rules: state.rules.filter((rule) => rule.id !== id),
+            rules: state.rules.filter((rule) => rule.id !== id)
           }));
         },
         
@@ -73,7 +73,7 @@ export const useCorrectionsStore = create<CorrectionsState>()(
               rule.id === id
                 ? { ...rule, isActive: !rule.isActive, updatedAt: new Date() }
                 : rule
-            ),
+            )
           }));
         },
         
@@ -88,8 +88,8 @@ export const useCorrectionsStore = create<CorrectionsState>()(
               rules: newRules.map((rule, index) => ({
                 ...rule,
                 priority: index,
-                updatedAt: new Date(),
-              })),
+                updatedAt: new Date()
+              }))
             };
           });
         },
@@ -129,16 +129,16 @@ export const useCorrectionsStore = create<CorrectionsState>()(
         getActiveRules: () => {
           const { rules } = get();
           return rules.filter((rule) => rule.isActive).sort((a, b) => a.priority - b.priority);
-        },
+        }
       }),
       {
         name: 'corrections-store',
         // Only persist if corrections are enabled
-        skipHydration: !process.env.ENABLE_CORRECTIONS,
+        skipHydration: !process.env.ENABLE_CORRECTIONS
       }
     ),
     {
-      name: 'corrections-store',
+      name: 'corrections-store'
     }
   )
 );
@@ -164,7 +164,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     replaceWith: ' ',
     isRegex: true,
     isActive: true,
-    priority: 1,
+    priority: 1
   },
   {
     name: 'Fix Trailing Whitespace',
@@ -173,7 +173,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     replaceWith: '',
     isRegex: true,
     isActive: true,
-    priority: 2,
+    priority: 2
   },
   {
     name: 'Fix Leading Whitespace',
@@ -182,7 +182,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     replaceWith: '',
     isRegex: true,
     isActive: true,
-    priority: 3,
+    priority: 3
   },
   {
     name: 'Common Typo: "teh" → "the"',
@@ -191,7 +191,7 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     replaceWith: 'the',
     isRegex: false,
     isActive: true,
-    priority: 10,
+    priority: 10
   },
   {
     name: 'Common Typo: "recieve" → "receive"',
@@ -200,6 +200,6 @@ export const DEFAULT_CORRECTION_RULES: Omit<CorrectionRule, 'id' | 'createdAt' |
     replaceWith: 'receive',
     isRegex: false,
     isActive: true,
-    priority: 11,
-  },
+    priority: 11
+  }
 ];

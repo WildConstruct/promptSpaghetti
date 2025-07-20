@@ -251,94 +251,94 @@ function renderNodeProperties(node: GraphNode, onChange: (property: string, valu
   const commonFieldStyle = { marginBottom: MOBILE_SPACING.lg };
   
   switch (node.type) {
-    case 'subject':
-    case 'action':
-    case 'attribute':
-      return (
-        <>
-          <div style={commonFieldStyle}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: MOBILE_SPACING.xs,
-              fontSize: 14,
-              color: 'var(--color-text-secondary)'
-            }}>
+  case 'subject':
+  case 'action':
+  case 'attribute':
+    return (
+      <>
+        <div style={commonFieldStyle}>
+          <label style={{ 
+            display: 'block', 
+            marginBottom: MOBILE_SPACING.xs,
+            fontSize: 14,
+            color: 'var(--color-text-secondary)'
+          }}>
               Variations
-            </label>
-            <MobileTextArea
-              value={node.data.variations?.join('\n') || ''}
-              onChange={(e) => {
-                const variations = e.target.value.split('\n').filter(Boolean);
-                onChange('variations', variations);
-              }}
-              placeholder="Enter variations (one per line)"
-              minRows={3}
-              maxRows={8}
-            />
-          </div>
-        </>
-      );
-      
-    case 'weightedChoice':
-      return (
-        <>
-          <div style={commonFieldStyle}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: MOBILE_SPACING.xs,
-              fontSize: 14,
-              color: 'var(--color-text-secondary)'
-            }}>
-              Weighted Options
-            </label>
-            <MobileTextArea
-              value={formatWeightedOptions(node.data.options || [])}
-              onChange={(e) => {
-                const options = parseWeightedOptions(e.target.value);
-                onChange('options', options);
-              }}
-              placeholder="text:weight (e.g., option1:50)"
-              minRows={4}
-            />
-            <div style={{ 
-              fontSize: 12, 
-              color: 'var(--color-text-secondary)',
-              marginTop: MOBILE_SPACING.xs 
-            }}>
-              Format: text:weight (one per line)
-            </div>
-          </div>
-        </>
-      );
-      
-    case 'output':
-      return (
-        <>
-          <div style={commonFieldStyle}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: MOBILE_SPACING.xs,
-              fontSize: 14,
-              color: 'var(--color-text-secondary)'
-            }}>
-              Template
-            </label>
-            <MobileTextArea
-              value={node.data.template || ''}
-              onChange={(e) => onChange('template', e.target.value)}
-              placeholder="Enter output template with {{variables}}"
-              minRows={4}
-            />
-          </div>
-        </>
-      );
-      
-    default:
-      return (
-        <div style={{ color: 'var(--color-text-secondary)' }}>
-          No editable properties for this node type
+          </label>
+          <MobileTextArea
+            value={node.data.variations?.join('\n') || ''}
+            onChange={(e) => {
+              const variations = e.target.value.split('\n').filter(Boolean);
+              onChange('variations', variations);
+            }}
+            placeholder="Enter variations (one per line)"
+            minRows={3}
+            maxRows={8}
+          />
         </div>
-      );
+      </>
+    );
+      
+  case 'weightedChoice':
+    return (
+      <>
+        <div style={commonFieldStyle}>
+          <label style={{ 
+            display: 'block', 
+            marginBottom: MOBILE_SPACING.xs,
+            fontSize: 14,
+            color: 'var(--color-text-secondary)'
+          }}>
+              Weighted Options
+          </label>
+          <MobileTextArea
+            value={formatWeightedOptions(node.data.options || [])}
+            onChange={(e) => {
+              const options = parseWeightedOptions(e.target.value);
+              onChange('options', options);
+            }}
+            placeholder="text:weight (e.g., option1:50)"
+            minRows={4}
+          />
+          <div style={{ 
+            fontSize: 12, 
+            color: 'var(--color-text-secondary)',
+            marginTop: MOBILE_SPACING.xs 
+          }}>
+              Format: text:weight (one per line)
+          </div>
+        </div>
+      </>
+    );
+      
+  case 'output':
+    return (
+      <>
+        <div style={commonFieldStyle}>
+          <label style={{ 
+            display: 'block', 
+            marginBottom: MOBILE_SPACING.xs,
+            fontSize: 14,
+            color: 'var(--color-text-secondary)'
+          }}>
+              Template
+          </label>
+          <MobileTextArea
+            value={node.data.template || ''}
+            onChange={(e) => onChange('template', e.target.value)}
+            placeholder="Enter output template with {{variables}}"
+            minRows={4}
+          />
+        </div>
+      </>
+    );
+      
+  default:
+    return (
+      <div style={{ color: 'var(--color-text-secondary)' }}>
+          No editable properties for this node type
+      </div>
+    );
   }
 }
 

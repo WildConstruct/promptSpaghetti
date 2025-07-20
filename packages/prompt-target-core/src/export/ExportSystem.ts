@@ -328,7 +328,7 @@ export class ExportSystem {
     totalDownloads: number;
     popularFormats: Array<{ format: ExportFormat; count: number }>;
     averageFileSize: number;
-  } {
+    } {
     const results = Array.from(this.results.values());
     
     const totalExports = results.length;
@@ -432,50 +432,50 @@ export class ExportSystem {
     let mimeType: string;
 
     switch (options.format) {
-      case 'json':
-        exportData = await this.generateJSONExport(validItems, options);
-        filename = `${request.name}.json`;
-        mimeType = 'application/json';
-        break;
+    case 'json':
+      exportData = await this.generateJSONExport(validItems, options);
+      filename = `${request.name}.json`;
+      mimeType = 'application/json';
+      break;
         
-      case 'csv':
-        exportData = await this.generateCSVExport(validItems, options);
-        filename = `${request.name}.csv`;
-        mimeType = 'text/csv';
-        break;
+    case 'csv':
+      exportData = await this.generateCSVExport(validItems, options);
+      filename = `${request.name}.csv`;
+      mimeType = 'text/csv';
+      break;
         
-      case 'zip':
-        exportData = await this.generateZIPExport(validItems, options);
-        filename = `${request.name}.zip`;
-        mimeType = 'application/zip';
-        break;
+    case 'zip':
+      exportData = await this.generateZIPExport(validItems, options);
+      filename = `${request.name}.zip`;
+      mimeType = 'application/zip';
+      break;
         
-      case 'pdf':
-        exportData = await this.generatePDFExport(validItems, options);
-        filename = `${request.name}.pdf`;
-        mimeType = 'application/pdf';
-        break;
+    case 'pdf':
+      exportData = await this.generatePDFExport(validItems, options);
+      filename = `${request.name}.pdf`;
+      mimeType = 'application/pdf';
+      break;
         
-      case 'html':
-        exportData = await this.generateHTMLExport(validItems, options);
-        filename = `${request.name}.html`;
-        mimeType = 'text/html';
-        break;
+    case 'html':
+      exportData = await this.generateHTMLExport(validItems, options);
+      filename = `${request.name}.html`;
+      mimeType = 'text/html';
+      break;
         
-      case 'midjourney_prompt':
-        exportData = await this.generatePlatformExport(validItems, 'midjourney', options);
-        filename = `${request.name}_midjourney.txt`;
-        mimeType = 'text/plain';
-        break;
+    case 'midjourney_prompt':
+      exportData = await this.generatePlatformExport(validItems, 'midjourney', options);
+      filename = `${request.name}_midjourney.txt`;
+      mimeType = 'text/plain';
+      break;
         
-      case 'dalle_prompt':
-        exportData = await this.generatePlatformExport(validItems, 'openai-dalle', options);
-        filename = `${request.name}_dalle.txt`;
-        mimeType = 'text/plain';
-        break;
+    case 'dalle_prompt':
+      exportData = await this.generatePlatformExport(validItems, 'openai-dalle', options);
+      filename = `${request.name}_dalle.txt`;
+      mimeType = 'text/plain';
+      break;
 
-      default:
-        throw new Error(`Unsupported export format: ${options.format}`);
+    default:
+      throw new Error(`Unsupported export format: ${options.format}`);
     }
 
     this.notifyProgress(request.id, 'processing', 80, 'Finalizing export...');

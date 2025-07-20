@@ -489,12 +489,12 @@ export class LicenseService {
     
     // Different license types have different validity periods
     switch (licenseType) {
-      case LicenseType.EDUCATIONAL:
-        expiration.setFullYear(now.getFullYear() + 1); // 1 year for educational
-        break;
-      default:
-        expiration.setFullYear(now.getFullYear() + 5); // 5 years for others
-        break;
+    case LicenseType.EDUCATIONAL:
+      expiration.setFullYear(now.getFullYear() + 1); // 1 year for educational
+      break;
+    default:
+      expiration.setFullYear(now.getFullYear() + 5); // 5 years for others
+      break;
     }
     
     return expiration;

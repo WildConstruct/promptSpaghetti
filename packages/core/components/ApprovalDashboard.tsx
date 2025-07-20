@@ -168,35 +168,35 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'critical': return 'bg-red-100 text-red-800';
+    case 'high': return 'bg-orange-100 text-orange-800';
+    case 'medium': return 'bg-yellow-100 text-yellow-800';
+    case 'low': return 'bg-green-100 text-green-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'in_review': return 'bg-blue-100 text-blue-800';
-      case 'approved': return 'bg-green-100 text-green-800';
-      case 'rejected': return 'bg-red-100 text-red-800';
-      case 'cancelled': return 'bg-gray-100 text-gray-800';
-      case 'expired': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'pending': return 'bg-yellow-100 text-yellow-800';
+    case 'in_review': return 'bg-blue-100 text-blue-800';
+    case 'approved': return 'bg-green-100 text-green-800';
+    case 'rejected': return 'bg-red-100 text-red-800';
+    case 'cancelled': return 'bg-gray-100 text-gray-800';
+    case 'expired': return 'bg-red-100 text-red-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending': return <ClockIcon className="h-4 w-4" />;
-      case 'in_review': return <EyeIcon className="h-4 w-4" />;
-      case 'approved': return <CheckCircleIcon className="h-4 w-4" />;
-      case 'rejected': return <XCircleIcon className="h-4 w-4" />;
-      case 'cancelled': return <XCircleIcon className="h-4 w-4" />;
-      case 'expired': return <ExclamationTriangleIcon className="h-4 w-4" />;
-      default: return <ClockIcon className="h-4 w-4" />;
+    case 'pending': return <ClockIcon className="h-4 w-4" />;
+    case 'in_review': return <EyeIcon className="h-4 w-4" />;
+    case 'approved': return <CheckCircleIcon className="h-4 w-4" />;
+    case 'rejected': return <XCircleIcon className="h-4 w-4" />;
+    case 'cancelled': return <XCircleIcon className="h-4 w-4" />;
+    case 'expired': return <ExclamationTriangleIcon className="h-4 w-4" />;
+    default: return <ClockIcon className="h-4 w-4" />;
     }
   };
 
@@ -231,19 +231,19 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({
     .sort((a, b) => {
       const multiplier = sortDirection === 'asc' ? 1 : -1;
       switch (sortBy) {
-        case 'requested_at':
-          return (new Date(a.requested_at).getTime() - new Date(b.requested_at).getTime()) * multiplier;
-        case 'due_date':
-          const aDate = a.due_date ? new Date(a.due_date).getTime() : 0;
-          const bDate = b.due_date ? new Date(b.due_date).getTime() : 0;
-          return (aDate - bDate) * multiplier;
-        case 'urgency':
-          const urgencyOrder = { low: 1, medium: 2, high: 3, critical: 4 };
-          return (urgencyOrder[a.urgency] - urgencyOrder[b.urgency]) * multiplier;
-        case 'approval_percentage':
-          return (a.approval_percentage - b.approval_percentage) * multiplier;
-        default:
-          return 0;
+      case 'requested_at':
+        return (new Date(a.requested_at).getTime() - new Date(b.requested_at).getTime()) * multiplier;
+      case 'due_date':
+        const aDate = a.due_date ? new Date(a.due_date).getTime() : 0;
+        const bDate = b.due_date ? new Date(b.due_date).getTime() : 0;
+        return (aDate - bDate) * multiplier;
+      case 'urgency':
+        const urgencyOrder = { low: 1, medium: 2, high: 3, critical: 4 };
+        return (urgencyOrder[a.urgency] - urgencyOrder[b.urgency]) * multiplier;
+      case 'approval_percentage':
+        return (a.approval_percentage - b.approval_percentage) * multiplier;
+      default:
+        return 0;
       }
     });
 
@@ -278,12 +278,12 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({
             <div>
               <h2 className="text-lg font-medium text-gray-900">
                 {mode === 'reviewer' ? 'Review Dashboard' : 
-                 mode === 'requester' ? 'My Requests' : 'Approval Management'}
+                  mode === 'requester' ? 'My Requests' : 'Approval Management'}
               </h2>
               <p className="mt-1 text-sm text-gray-600">
                 {mode === 'reviewer' ? 'Approval requests requiring your review' :
-                 mode === 'requester' ? 'Your approval requests and their status' :
-                 'Manage all approval requests in this workspace'}
+                  mode === 'requester' ? 'Your approval requests and their status' :
+                    'Manage all approval requests in this workspace'}
               </p>
             </div>
             <div className="flex items-center space-x-3">
@@ -393,8 +393,8 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({
             <h3 className="mt-2 text-sm font-medium text-gray-900">No approval requests</h3>
             <p className="mt-1 text-sm text-gray-500">
               {activeTab === 'pending' ? 'No pending approvals at this time.' : 
-               activeTab === 'completed' ? 'No completed approvals found.' : 
-               'No approval requests match your current filters.'}
+                activeTab === 'completed' ? 'No completed approvals found.' : 
+                  'No approval requests match your current filters.'}
             </p>
           </div>
         ) : (

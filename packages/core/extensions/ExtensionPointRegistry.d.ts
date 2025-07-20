@@ -1,3 +1,7 @@
+/**
+ * Extension Point Registry - Epic 8.4 Story 8.4.1
+ * Central registry for all extension points in the Prompt Spaghetti system
+ */
 import { z } from 'zod';
 export declare enum ExtensionPointCategory {
     RUNTIME = "runtime",
@@ -52,42 +56,42 @@ export declare const ExtensionPointSchema: z.ZodObject<{
             description: z.ZodString;
             defaultValue: z.ZodOptional<z.ZodAny>;
         }, "strip", z.ZodTypeAny, {
-            type: string;
             name: string;
-            required: boolean;
             description: string;
+            type: string;
+            required: boolean;
             defaultValue?: any;
         }, {
-            type: string;
             name: string;
-            required: boolean;
             description: string;
+            type: string;
+            required: boolean;
             defaultValue?: any;
         }>, "many">;
         returnType: z.ZodString;
         examples: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         name: string;
+        description: string;
         parameters: {
-            type: string;
             name: string;
-            required: boolean;
             description: string;
+            type: string;
+            required: boolean;
             defaultValue?: any;
         }[];
-        description: string;
         returnType: string;
         examples?: string[] | undefined;
     }, {
         name: string;
+        description: string;
         parameters: {
-            type: string;
             name: string;
-            required: boolean;
             description: string;
+            type: string;
+            required: boolean;
             defaultValue?: any;
         }[];
-        description: string;
         returnType: string;
         examples?: string[] | undefined;
     }>, "many">;
@@ -98,14 +102,14 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         code: z.ZodString;
         language: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        code: string;
         name: string;
         description: string;
+        code: string;
         language: string;
     }, {
-        code: string;
         name: string;
         description: string;
+        code: string;
         language: string;
     }>, "many">>;
     constraints: z.ZodOptional<z.ZodObject<{
@@ -113,11 +117,11 @@ export declare const ExtensionPointSchema: z.ZodObject<{
             maxExecutionTime: z.ZodOptional<z.ZodNumber>;
             maxMemoryUsage: z.ZodOptional<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
-            maxMemoryUsage?: number | undefined;
             maxExecutionTime?: number | undefined;
+            maxMemoryUsage?: number | undefined;
         }, {
-            maxMemoryUsage?: number | undefined;
             maxExecutionTime?: number | undefined;
+            maxMemoryUsage?: number | undefined;
         }>>;
         security: z.ZodOptional<z.ZodObject<{
             permissions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -131,8 +135,8 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         }>>;
     }, "strip", z.ZodTypeAny, {
         performance?: {
-            maxMemoryUsage?: number | undefined;
             maxExecutionTime?: number | undefined;
+            maxMemoryUsage?: number | undefined;
         } | undefined;
         security?: {
             permissions?: string[] | undefined;
@@ -140,8 +144,8 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         } | undefined;
     }, {
         performance?: {
-            maxMemoryUsage?: number | undefined;
             maxExecutionTime?: number | undefined;
+            maxMemoryUsage?: number | undefined;
         } | undefined;
         security?: {
             permissions?: string[] | undefined;
@@ -168,6 +172,12 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     id: string;
     name: string;
     description: string;
+    priority: ExtensionPointPriority;
+    location: {
+        file: string;
+        function?: string | undefined;
+        line?: number | undefined;
+    };
     metadata: {
         addedIn: string;
         deprecatedIn?: string | undefined;
@@ -176,47 +186,47 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     };
     category: ExtensionPointCategory;
     version: string;
-    priority: ExtensionPointPriority;
-    location: {
-        file: string;
-        function?: string | undefined;
-        line?: number | undefined;
-    };
     lifecycle: ExtensionPointLifecycle;
     interfaces: {
         name: string;
+        description: string;
         parameters: {
-            type: string;
             name: string;
-            required: boolean;
             description: string;
+            type: string;
+            required: boolean;
             defaultValue?: any;
         }[];
-        description: string;
         returnType: string;
         examples?: string[] | undefined;
     }[];
+    dependencies?: string[] | undefined;
     constraints?: {
         performance?: {
-            maxMemoryUsage?: number | undefined;
             maxExecutionTime?: number | undefined;
+            maxMemoryUsage?: number | undefined;
         } | undefined;
         security?: {
             permissions?: string[] | undefined;
             sandboxed?: boolean | undefined;
         } | undefined;
     } | undefined;
-    dependencies?: string[] | undefined;
     examples?: {
-        code: string;
         name: string;
         description: string;
+        code: string;
         language: string;
     }[] | undefined;
 }, {
     id: string;
     name: string;
     description: string;
+    priority: ExtensionPointPriority;
+    location: {
+        file: string;
+        function?: string | undefined;
+        line?: number | undefined;
+    };
     metadata: {
         addedIn: string;
         deprecatedIn?: string | undefined;
@@ -225,45 +235,42 @@ export declare const ExtensionPointSchema: z.ZodObject<{
     };
     category: ExtensionPointCategory;
     version: string;
-    priority: ExtensionPointPriority;
-    location: {
-        file: string;
-        function?: string | undefined;
-        line?: number | undefined;
-    };
     lifecycle: ExtensionPointLifecycle;
     interfaces: {
         name: string;
+        description: string;
         parameters: {
-            type: string;
             name: string;
-            required: boolean;
             description: string;
+            type: string;
+            required: boolean;
             defaultValue?: any;
         }[];
-        description: string;
         returnType: string;
         examples?: string[] | undefined;
     }[];
+    dependencies?: string[] | undefined;
     constraints?: {
         performance?: {
-            maxMemoryUsage?: number | undefined;
             maxExecutionTime?: number | undefined;
+            maxMemoryUsage?: number | undefined;
         } | undefined;
         security?: {
             permissions?: string[] | undefined;
             sandboxed?: boolean | undefined;
         } | undefined;
     } | undefined;
-    dependencies?: string[] | undefined;
     examples?: {
-        code: string;
         name: string;
         description: string;
+        code: string;
         language: string;
     }[] | undefined;
 }>;
 export type ExtensionPoint = z.infer<typeof ExtensionPointSchema>;
+/**
+ * Extension Point Registry - manages all extension points
+ */
 export declare class ExtensionPointRegistry {
     private static instance;
     private extensionPoints;
@@ -271,26 +278,62 @@ export declare class ExtensionPointRegistry {
     private locationIndex;
     private constructor();
     static getInstance(): ExtensionPointRegistry;
+    /**
+     * Register an extension point
+     */
     register(extensionPoint: ExtensionPoint): void;
+    /**
+     * Get extension point by ID
+     */
     get(id: string): ExtensionPoint | undefined;
+    /**
+     * Get all extension points
+     */
     getAll(): ExtensionPoint[];
+    /**
+     * Get extension points by category
+     */
     getByCategory(category: ExtensionPointCategory): ExtensionPoint[];
+    /**
+     * Get extension points by priority
+     */
     getByPriority(priority: ExtensionPointPriority): ExtensionPoint[];
+    /**
+     * Get extension points by lifecycle status
+     */
     getByLifecycle(lifecycle: ExtensionPointLifecycle): ExtensionPoint[];
+    /**
+     * Get extension points by file location
+     */
     getByLocation(file: string): ExtensionPoint[];
+    /**
+     * Search extension points
+     */
     search(query: string): ExtensionPoint[];
+    /**
+     * Get extension point statistics
+     */
     getStatistics(): {
         total: number;
         byCategory: Record<ExtensionPointCategory, number>;
         byPriority: Record<ExtensionPointPriority, number>;
         byLifecycle: Record<ExtensionPointLifecycle, number>;
     };
+    /**
+     * Validate extension point compatibility
+     */
     validateCompatibility(extensionPointId: string, version: string): {
         compatible: boolean;
         warnings: string[];
         errors: string[];
     };
+    /**
+     * Initialize the registry with core extension points
+     */
     private initializeRegistry;
+    /**
+     * Compare version strings
+     */
     private compareVersions;
 }
 export declare const extensionPointRegistry: ExtensionPointRegistry;

@@ -17,7 +17,7 @@ import {
   DatePicker,
   Select,
   Button,
-  Empty,
+  Empty
 } from 'antd';
 import {
   UserOutlined,
@@ -28,7 +28,7 @@ import {
   CalendarOutlined,
   BarChartOutlined,
   EyeOutlined,
-  EyeInvisibleOutlined,
+  EyeInvisibleOutlined
 } from '@ant-design/icons';
 import { 
   ContributorStatsResponse,
@@ -36,7 +36,7 @@ import {
   ResourceType,
   ChangeType,
   CHANGE_TYPE_DESCRIPTIONS,
-  RESOURCE_TYPE_DESCRIPTIONS,
+  RESOURCE_TYPE_DESCRIPTIONS
 } from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
 
@@ -65,18 +65,18 @@ const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, projectI
 
   const getContributorColor = (authorType: string) => {
     switch (authorType) {
-      case 'user':
-        return '#1890ff';
-      case 'anonymous':
-        return '#d9d9d9';
-      case 'guest':
-        return '#faad14';
-      case 'system':
-        return '#52c41a';
-      case 'api':
-        return '#722ed1';
-      default:
-        return '#8c8c8c';
+    case 'user':
+      return '#1890ff';
+    case 'anonymous':
+      return '#d9d9d9';
+    case 'guest':
+      return '#faad14';
+    case 'system':
+      return '#52c41a';
+    case 'api':
+      return '#722ed1';
+    default:
+      return '#8c8c8c';
     }
   };
 
@@ -176,7 +176,7 @@ const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, projectI
 export const ContributorVisualization: React.FC<ContributorVisualizationProps> = ({
   projectId,
   visible = true,
-  onClose,
+  onClose
 }) => {
   const [contributors, setContributors] = useState<ContributorStatsResponse | null>(null);
   const [recentAttributions, setRecentAttributions] = useState<ChangeAttribution[]>([]);
@@ -203,7 +203,7 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
     try {
       const stats = await getContributorStats(projectId, dateRange ? {
         start: dateRange[0],
-        end: dateRange[1],
+        end: dateRange[1]
       } : undefined);
       setContributors(stats);
     } catch (error) {
@@ -220,7 +220,7 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
         limit: 50,
         offset: 0,
         sortBy: 'created_at',
-        sortOrder: 'desc',
+        sortOrder: 'desc'
       });
       setRecentAttributions(attributions);
     } catch (error) {
@@ -242,27 +242,27 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
 
   const getChangeTypeIcon = (changeType: ChangeType) => {
     switch (changeType) {
-      case 'create':
-        return <EditOutlined style={{ color: '#52c41a' }} />;
-      case 'update':
-        return <EditOutlined style={{ color: '#1890ff' }} />;
-      case 'delete':
-        return <EditOutlined style={{ color: '#ff4d4f' }} />;
-      default:
-        return <EditOutlined />;
+    case 'create':
+      return <EditOutlined style={{ color: '#52c41a' }} />;
+    case 'update':
+      return <EditOutlined style={{ color: '#1890ff' }} />;
+    case 'delete':
+      return <EditOutlined style={{ color: '#ff4d4f' }} />;
+    default:
+      return <EditOutlined />;
     }
   };
 
   const getChangeTypeColor = (changeType: ChangeType) => {
     switch (changeType) {
-      case 'create':
-        return 'success';
-      case 'update':
-        return 'processing';
-      case 'delete':
-        return 'error';
-      default:
-        return 'default';
+    case 'create':
+      return 'success';
+    case 'update':
+      return 'processing';
+    case 'delete':
+      return 'error';
+    default:
+      return 'default';
     }
   };
 
@@ -400,7 +400,7 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
                           </div>
                         )}
                       </div>
-                    ),
+                    )
                   }))}
                 />
               </Card>

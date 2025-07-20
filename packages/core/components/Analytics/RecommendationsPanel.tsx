@@ -101,14 +101,14 @@ const RecommendationItem: React.FC<RecommendationItemProps> = ({
 
   const getImpactIcon = (impact: string) => {
     switch (impact) {
-      case 'high':
-        return <TrendingUp className="w-4 h-4 text-red-600" />;
-      case 'medium':
-        return <TrendingUp className="w-4 h-4 text-yellow-600" />;
-      case 'low':
-        return <TrendingUp className="w-4 h-4 text-green-600" />;
-      default:
-        return <TrendingUp className="w-4 h-4 text-gray-600" />;
+    case 'high':
+      return <TrendingUp className="w-4 h-4 text-red-600" />;
+    case 'medium':
+      return <TrendingUp className="w-4 h-4 text-yellow-600" />;
+    case 'low':
+      return <TrendingUp className="w-4 h-4 text-green-600" />;
+    default:
+      return <TrendingUp className="w-4 h-4 text-gray-600" />;
     }
   };
 

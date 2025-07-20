@@ -196,14 +196,14 @@ ${extension.description}
 
 ## Dependencies
 ${extension.dependencies.length > 0 ? 
-  extension.dependencies.map(dep => `- ${dep}`).join('\n') : 
-  'No dependencies'
+    extension.dependencies.map(dep => `- ${dep}`).join('\n') : 
+    'No dependencies'
 }
 
 ## Permissions
 ${extension.permissions.length > 0 ? 
-  extension.permissions.map(perm => `- ${perm}`).join('\n') : 
-  'No special permissions required'
+    extension.permissions.map(perm => `- ${perm}`).join('\n') : 
+    'No special permissions required'
 }
 
 ## Configuration
@@ -410,8 +410,8 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
 
   private generateTypeSpecificMethods(type: string): string {
     switch (type) {
-      case 'node':
-        return `
+    case 'node':
+      return `
   public getNodeDefinitions(): any[] {
     return [
       // Add your node definitions here
@@ -436,8 +436,8 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
     return false;
   }`;
       
-      case 'ui':
-        return `
+    case 'ui':
+      return `
   public getComponentDefinitions(): any[] {
     return [
       // Add your component definitions here
@@ -465,8 +465,8 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
     return [];
   }`;
       
-      case 'transform':
-        return `
+    case 'transform':
+      return `
   public getTransformDefinitions(): any[] {
     return [
       // Add your transform definitions here
@@ -491,8 +491,8 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
     return false;
   }`;
       
-      case 'storage':
-        return `
+    case 'storage':
+      return `
   public getStorageProviders(): any[] {
     return [
       // Add your storage provider definitions here
@@ -517,8 +517,8 @@ export class ${this.toPascalCase(id)}Extension extends BaseExtensionImpl impleme
     return false;
   }`;
       
-      default:
-        return '';
+    default:
+      return '';
     }
   }
 
@@ -554,16 +554,16 @@ ${this.getTypeSpecificAPIDocs(type)}
 
   private getTypeSpecificAPIDocs(type: string): string {
     switch (type) {
-      case 'node':
-        return `
+    case 'node':
+      return `
 - \`getNodeDefinitions(): NodeDefinition[]\` - Get node definitions
 - \`createNodeInstance(nodeType: string, nodeId: string, config: any): RuntimeNode\` - Create node instance
 - \`validateNodeConfig(nodeType: string, config: any): ExtensionValidationResult\` - Validate node configuration
 - \`getNodeSchema(nodeType: string): ZodSchema\` - Get node schema
 - \`supportsAdvancedNodes(): boolean\` - Check advanced node support`;
       
-      case 'ui':
-        return `
+    case 'ui':
+      return `
 - \`getComponentDefinitions(): UIComponentDefinition[]\` - Get component definitions
 - \`createComponentInstance(componentId: string, props: any): React.ComponentType\` - Create component instance
 - \`getThemeContributions(): ThemeContribution[]\` - Get theme contributions
@@ -571,8 +571,8 @@ ${this.getTypeSpecificAPIDocs(type)}
 - \`getMenuContributions(): MenuContribution[]\` - Get menu contributions
 - \`getKeybindingContributions(): KeybindingContribution[]\` - Get keybinding contributions`;
       
-      default:
-        return 'See interface documentation for type-specific methods.';
+    default:
+      return 'See interface documentation for type-specific methods.';
     }
   }
 
@@ -598,24 +598,24 @@ await extension.dispose();
 
   private getTypeSpecificExample(type: string): string {
     switch (type) {
-      case 'node':
-        return `
+    case 'node':
+      return `
 // Get available node definitions
 const nodeDefinitions = extension.getNodeDefinitions();
 
 // Create a node instance
 const node = extension.createNodeInstance('my-node', 'node-1', {});`;
       
-      case 'ui':
-        return `
+    case 'ui':
+      return `
 // Get available components
 const components = extension.getComponentDefinitions();
 
 // Create a component instance
 const Component = extension.createComponentInstance('my-component', {});`;
       
-      default:
-        return '// Use extension-specific methods here';
+    default:
+      return '// Use extension-specific methods here';
     }
   }
 

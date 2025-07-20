@@ -22,7 +22,7 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
     'transform': ['template', 'content'],
     'conditional': ['condition'],
     'loop': ['iterations'],
-    'variable': ['name', 'value'],
+    'variable': ['name', 'value']
   };
 
   applies() { return true; }
@@ -33,7 +33,7 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No nodes to validate',
+        message: 'No nodes to validate'
       };
     }
 
@@ -75,16 +75,16 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
         details: {
           affectedNodeCount: missingPropsNodes.length,
           totalMissingProperties: totalMissing,
-          missingByNode: missingPropsNodes,
+          missingByNode: missingPropsNodes
         },
-        affectedNodes,
+        affectedNodes
       };
     }
 
     return {
       passed: true,
       message: 'All nodes have required properties',
-      details: { nodesChecked: graph.nodes.length },
+      details: { nodesChecked: graph.nodes.length }
     };
   }
 
@@ -113,7 +113,7 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
               nodeId: node.id,
               type: 'property_added',
               property: prop,
-              value: defaultValue,
+              value: defaultValue
             });
           }
         }
@@ -131,7 +131,7 @@ export class MissingRequiredPropertiesRule implements ValidationRule {
       name: `${nodeType}_${Date.now()}`,
       condition: 'true',
       iterations: '1',
-      value: '',
+      value: ''
     };
 
     return defaults[property] || `[${property}]`;
@@ -157,7 +157,7 @@ export class DuplicateContentRule implements ValidationRule {
     if (!graph.nodes || graph.nodes.length < 2) {
       return {
         passed: true,
-        message: 'Insufficient nodes for duplicate detection',
+        message: 'Insufficient nodes for duplicate detection'
       };
     }
 
@@ -199,17 +199,17 @@ export class DuplicateContentRule implements ValidationRule {
           duplicates: duplicates.map(([content, nodeIds]) => ({
             content: content.substring(0, 50) + (content.length > 50 ? '...' : ''),
             nodeIds,
-            duplicateCount: nodeIds.length,
-          })),
+            duplicateCount: nodeIds.length
+          }))
         },
-        affectedNodes,
+        affectedNodes
       };
     }
 
     return {
       passed: true,
       message: 'No duplicate content detected',
-      details: { contentPatternsChecked: contentMap.size },
+      details: { contentPatternsChecked: contentMap.size }
     };
   }
 
@@ -232,20 +232,20 @@ export class LanguageConsistencyRule implements ValidationRule {
   private readonly languagePatterns: Record<string, RegExp[]> = {
     english: [
       /\b(the|and|or|but|in|on|at|to|for|of|with|by)\b/gi,
-      /\b(this|that|these|those|here|there)\b/gi,
+      /\b(this|that|these|those|here|there)\b/gi
     ],
     spanish: [
       /\b(el|la|los|las|y|o|pero|en|de|con|por|para)\b/gi,
-      /\b(este|esta|estos|estas|aquí|allí)\b/gi,
+      /\b(este|esta|estos|estas|aquí|allí)\b/gi
     ],
     french: [
       /\b(le|la|les|et|ou|mais|dans|de|avec|par|pour)\b/gi,
-      /\b(ce|cette|ces|ici|là)\b/gi,
+      /\b(ce|cette|ces|ici|là)\b/gi
     ],
     german: [
       /\b(der|die|das|und|oder|aber|in|auf|mit|von|für)\b/gi,
-      /\b(dieser|diese|dieses|hier|dort)\b/gi,
-    ],
+      /\b(dieser|diese|dieses|hier|dort)\b/gi
+    ]
   };
 
   applies() { return true; }
@@ -256,7 +256,7 @@ export class LanguageConsistencyRule implements ValidationRule {
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No content to analyze for language consistency',
+        message: 'No content to analyze for language consistency'
       };
     }
 
@@ -280,7 +280,7 @@ export class LanguageConsistencyRule implements ValidationRule {
     if (contentTexts.length < 2) {
       return {
         passed: true,
-        message: 'Insufficient content for language consistency analysis',
+        message: 'Insufficient content for language consistency analysis'
       };
     }
 
@@ -288,7 +288,7 @@ export class LanguageConsistencyRule implements ValidationRule {
     const languageDetections = contentTexts.map(({ nodeId, content }) => ({
       nodeId,
       content,
-      languages: this.detectLanguages(content),
+      languages: this.detectLanguages(content)
     }));
 
     // Find language inconsistencies
@@ -305,7 +305,7 @@ export class LanguageConsistencyRule implements ValidationRule {
     if (!primaryLanguage) {
       return {
         passed: true,
-        message: 'Unable to determine primary language',
+        message: 'Unable to determine primary language'
       };
     }
 
@@ -324,10 +324,10 @@ export class LanguageConsistencyRule implements ValidationRule {
           consistencyScore: Math.round(consistencyScore),
           inconsistentNodeCount: inconsistentNodes.length,
           totalContentNodes: languageDetections.length,
-          languageDistribution: Object.fromEntries(languageCounts),
+          languageDistribution: Object.fromEntries(languageCounts)
         },
         affectedNodes: inconsistentNodes,
-        metrics: { consistencyScore: consistencyScore / 100 },
+        metrics: { consistencyScore: consistencyScore / 100 }
       };
     }
 
@@ -337,9 +337,9 @@ export class LanguageConsistencyRule implements ValidationRule {
       details: {
         primaryLanguage,
         consistencyScore: 100,
-        contentNodesAnalyzed: languageDetections.length,
+        contentNodesAnalyzed: languageDetections.length
       },
-      metrics: { consistencyScore: 1 },
+      metrics: { consistencyScore: 1 }
     };
   }
 
@@ -396,14 +396,14 @@ export class SensitiveContentRule implements ValidationRule {
     /\b(illegal|fraud|scam|phishing)\b/gi,
     
     // Inappropriate content indicators
-    /\b(explicit|nsfw|adult|mature)\b/gi,
+    /\b(explicit|nsfw|adult|mature)\b/gi
   ];
 
   private readonly sensitiveCategories = [
     'Personal Information',
     'Confidential Data',
     'Potentially Harmful',
-    'Inappropriate Content',
+    'Inappropriate Content'
   ];
 
   applies() { return true; }
@@ -414,7 +414,7 @@ export class SensitiveContentRule implements ValidationRule {
     if (!graph.nodes || graph.nodes.length === 0) {
       return {
         passed: true,
-        message: 'No content to scan for sensitive information',
+        message: 'No content to scan for sensitive information'
       };
     }
 
@@ -443,7 +443,7 @@ export class SensitiveContentRule implements ValidationRule {
                 nodeId: node.id,
                 category: this.sensitiveCategories[Math.floor(i / 2)] || 'Unknown',
                 pattern: pattern.source,
-                matches: matches.length,
+                matches: matches.length
               });
             }
           }
@@ -463,9 +463,9 @@ export class SensitiveContentRule implements ValidationRule {
           affectedNodeCount: affectedNodes.length,
           totalMatches,
           categories: [...new Set(sensitiveFindings.map(f => f.category))],
-          findings: sensitiveFindings.slice(0, 10), // Limit to first 10 findings
+          findings: sensitiveFindings.slice(0, 10) // Limit to first 10 findings
         },
-        affectedNodes,
+        affectedNodes
       };
     }
 
@@ -474,8 +474,8 @@ export class SensitiveContentRule implements ValidationRule {
       message: 'No sensitive content patterns detected',
       details: { 
         patternsChecked: this.sensitivePatterns.length,
-        nodesScanned: graph.nodes.length,
-      },
+        nodesScanned: graph.nodes.length
+      }
     };
   }
 
@@ -512,7 +512,7 @@ export class SensitiveContentRule implements ValidationRule {
                 type: 'content_sanitized',
                 field,
                 original: originalContent.substring(0, 100),
-                sanitized: sanitizedContent.substring(0, 100),
+                sanitized: sanitizedContent.substring(0, 100)
               });
             }
           }
@@ -543,7 +543,7 @@ export class ProcessingTimeRule implements ValidationRule {
     'loop': 1.0,
     'variable': 0.05,
     'api-call': 2.0,
-    'ai-generation': 5.0,
+    'ai-generation': 5.0
   };
 
   applies() { return true; }
@@ -555,7 +555,7 @@ export class ProcessingTimeRule implements ValidationRule {
       return {
         passed: true,
         message: 'No nodes to estimate processing time',
-        metrics: { estimatedTime: 0 },
+        metrics: { estimatedTime: 0 }
       };
     }
 
@@ -618,12 +618,12 @@ export class ProcessingTimeRule implements ValidationRule {
         nodeCount,
         edgeCount,
         warningThreshold,
-        errorThreshold,
+        errorThreshold
       },
       metrics: {
         estimatedTime: totalEstimatedTime,
-        complexity: complexityMultiplier,
-      },
+        complexity: complexityMultiplier
+      }
     };
   }
 
@@ -663,7 +663,7 @@ export class MemoryUsageRule implements ValidationRule {
     'loop': 5,
     'variable': 0.5,
     'api-call': 10,
-    'ai-generation': 50,
+    'ai-generation': 50
   };
 
   applies() { return true; }
@@ -675,7 +675,7 @@ export class MemoryUsageRule implements ValidationRule {
       return {
         passed: true,
         message: 'No nodes to estimate memory usage',
-        metrics: { estimatedMemoryKB: 0 },
+        metrics: { estimatedMemoryKB: 0 }
       };
     }
 
@@ -723,12 +723,12 @@ export class MemoryUsageRule implements ValidationRule {
         nodeCount: graph.nodes.length,
         edgeCount: graph.edges?.length || 0,
         warningThresholdMB,
-        errorThresholdMB,
+        errorThresholdMB
       },
       metrics: {
         memoryKB: totalMemoryKB,
-        memoryMB: totalMemoryMB,
-      },
+        memoryMB: totalMemoryMB
+      }
     };
   }
 

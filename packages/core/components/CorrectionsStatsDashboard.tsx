@@ -105,7 +105,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1001,
+        zIndex: 1001
       }}
     >
       <div
@@ -117,7 +117,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
           maxWidth: '800px',
           maxHeight: '90vh',
           overflow: 'auto',
-          color: '#fff',
+          color: '#fff'
         }}
       >
         <div style={{ 
@@ -139,7 +139,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 color: '#fff',
                 border: '1px solid #444',
                 borderRadius: '4px',
-                fontSize: '14px',
+                fontSize: '14px'
               }}
             >
               <option value="7">Last 7 days</option>
@@ -154,7 +154,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 color: '#a0aec0',
                 cursor: 'pointer',
                 fontSize: '20px',
-                padding: '4px 8px',
+                padding: '4px 8px'
               }}
             >
               ×
@@ -198,7 +198,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h3 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                   Total Rules
@@ -215,7 +215,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h3 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                   Total Executions
@@ -232,7 +232,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h3 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                   Avg Execution Time
@@ -249,7 +249,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h3 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                   Error Rate
@@ -270,7 +270,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h3 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                   Quality Score
@@ -279,7 +279,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   fontSize: '24px', 
                   fontWeight: 600, 
                   color: metrics.overall_quality_score >= 80 ? '#68d391' : 
-                         metrics.overall_quality_score >= 60 ? '#fbb040' : '#e53e3e'
+                    metrics.overall_quality_score >= 60 ? '#fbb040' : '#e53e3e'
                 }}>
                   {metrics.overall_quality_score.toFixed(0)}/100
                 </div>
@@ -292,7 +292,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h3 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                   Impact Rating
@@ -301,7 +301,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   fontSize: '24px', 
                   fontWeight: 600, 
                   color: metrics.average_impact_rating >= 4 ? '#68d391' : 
-                         metrics.average_impact_rating >= 3 ? '#fbb040' : '#e53e3e'
+                    metrics.average_impact_rating >= 3 ? '#fbb040' : '#e53e3e'
                 }}>
                   {metrics.average_impact_rating.toFixed(1)}/5
                 </div>
@@ -314,7 +314,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h3 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                   Characters Saved
@@ -335,7 +335,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h3 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                   False Positive Rate
@@ -344,7 +344,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   fontSize: '24px', 
                   fontWeight: 600, 
                   color: metrics.false_positive_rate > 10 ? '#e53e3e' : 
-                         metrics.false_positive_rate > 5 ? '#fbb040' : '#68d391'
+                    metrics.false_positive_rate > 5 ? '#fbb040' : '#68d391'
                 }}>
                   {metrics.false_positive_rate.toFixed(1)}%
                 </div>
@@ -393,38 +393,38 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                       gap: '12px',
                       padding: '12px 16px',
                       borderBottom: '1px solid #444',
-                      fontSize: '14px',
+                      fontSize: '14px'
                     }}
                   >
                     <div style={{ fontWeight: 500 }}>{rule.rule_name}</div>
                     <div>{rule.total_applications.toLocaleString()}</div>
                     <div style={{ 
                       color: rule.quality_score >= 80 ? '#68d391' : 
-                             rule.quality_score >= 60 ? '#fbb040' : '#e53e3e'
+                        rule.quality_score >= 60 ? '#fbb040' : '#e53e3e'
                     }}>
                       {rule.quality_score.toFixed(0)}
                     </div>
                     <div style={{ 
                       color: rule.impact_rating >= 4 ? '#68d391' : 
-                             rule.impact_rating >= 3 ? '#fbb040' : '#e53e3e'
+                        rule.impact_rating >= 3 ? '#fbb040' : '#e53e3e'
                     }}>
                       {rule.impact_rating.toFixed(1)}
                     </div>
                     <div>{rule.average_execution_time.toFixed(1)}ms</div>
                     <div style={{ 
                       color: rule.success_rate > 95 ? '#68d391' : 
-                             rule.success_rate > 85 ? '#fbb040' : '#e53e3e'
+                        rule.success_rate > 85 ? '#fbb040' : '#e53e3e'
                     }}>
                       {rule.success_rate.toFixed(1)}%
                     </div>
                     <div>
                       <span style={{ 
                         color: rule.usage_trend === 'increasing' ? '#68d391' : 
-                               rule.usage_trend === 'decreasing' ? '#e53e3e' : '#a0aec0',
+                          rule.usage_trend === 'decreasing' ? '#e53e3e' : '#a0aec0',
                         fontSize: '12px'
                       }}>
                         {rule.usage_trend === 'increasing' ? '↗' : 
-                         rule.usage_trend === 'decreasing' ? '↘' : '→'}
+                          rule.usage_trend === 'decreasing' ? '↘' : '→'}
                       </span>
                     </div>
                   </div>
@@ -457,7 +457,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                           background: '#1e2228',
                           padding: '12px',
                           borderRadius: '6px',
-                          textAlign: 'center',
+                          textAlign: 'center'
                         }}
                       >
                         <div style={{ fontSize: '12px', color: '#a0aec0', marginBottom: '4px' }}>
@@ -510,7 +510,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   background: '#2a2e37',
                   padding: '16px',
                   borderRadius: '8px',
-                  border: '1px solid #444',
+                  border: '1px solid #444'
                 }}>
                   <h4 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                     Impact Distribution
@@ -533,7 +533,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   background: '#2a2e37',
                   padding: '16px',
                   borderRadius: '8px',
-                  border: '1px solid #444',
+                  border: '1px solid #444'
                 }}>
                   <h4 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                     Quality Distribution
@@ -556,7 +556,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   background: '#2a2e37',
                   padding: '16px',
                   borderRadius: '8px',
-                  border: '1px solid #444',
+                  border: '1px solid #444'
                 }}>
                   <h4 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                     Performance Distribution
@@ -580,7 +580,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                     background: '#2a2e37',
                     padding: '16px',
                     borderRadius: '8px',
-                    border: '1px solid #444',
+                    border: '1px solid #444'
                   }}>
                     <h4 style={{ fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }}>
                       User Satisfaction
@@ -589,7 +589,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                       fontSize: '24px', 
                       fontWeight: 600, 
                       color: metrics.user_satisfaction_score >= 4 ? '#68d391' : 
-                             metrics.user_satisfaction_score >= 3 ? '#fbb040' : '#e53e3e'
+                        metrics.user_satisfaction_score >= 3 ? '#fbb040' : '#e53e3e'
                     }}>
                       {metrics.user_satisfaction_score.toFixed(1)}/5
                     </div>
@@ -613,7 +613,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  fontWeight: 500,
+                  fontWeight: 500
                 }}
               >
                 Refresh
@@ -628,7 +628,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
                   borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  fontWeight: 500,
+                  fontWeight: 500
                 }}
               >
                 Close

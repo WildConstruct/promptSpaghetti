@@ -14,7 +14,7 @@ const loginSchema = z.object({
   password: z.string()
     .min(8, 'Password must be at least 8 characters')
     .max(128, 'Password is too long'),
-  rememberMe: z.boolean(),
+  rememberMe: z.boolean()
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -32,7 +32,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onError,
   redirectTo = '/dashboard',
   showRegistrationLink = true,
-  showForgotPasswordLink = true,
+  showForgotPasswordLink = true
 }) => {
   const { login, isLoading, error: authError } = useAuth();
   const { trackFormInteraction, trackLoginAttempt } = useLoginAnalytics();
@@ -40,7 +40,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
-    rememberMe: false,
+    rememberMe: false
   });
   
   const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({});
@@ -155,10 +155,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           fingerprint: deviceFingerprint,
           userAgent: navigator.userAgent,
           language: navigator.language,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        },
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
       }, {
-        geoLocation,
+        geoLocation
       });
 
       // Track successful login
@@ -166,7 +166,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         email: formData.email,
         success: true,
         duration: Date.now() - startTime,
-        rememberMe: formData.rememberMe,
+        rememberMe: formData.rememberMe
       });
 
       // Reset form state
@@ -190,7 +190,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         success: false,
         duration: Date.now() - startTime,
         failureReason: error.message,
-        attemptNumber: newAttempts,
+        attemptNumber: newAttempts
       });
 
       // Handle lockout after 5 failed attempts
@@ -216,7 +216,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       screen.width + 'x' + screen.height,
       new Date().getTimezoneOffset().toString(),
       navigator.platform,
-      navigator.cookieEnabled.toString(),
+      navigator.cookieEnabled.toString()
     ];
     
     const fingerprint = components.join('|');

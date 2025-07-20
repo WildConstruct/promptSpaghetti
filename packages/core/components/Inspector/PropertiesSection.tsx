@@ -1,6 +1,6 @@
-import React from "react";
-import { ZodSchema } from "zod";
-import { NodeEditorRouter } from "./NodeEditorRouter";
+import React from 'react';
+import { ZodSchema } from 'zod';
+import { NodeEditorRouter } from './NodeEditorRouter';
 
 export interface PropertiesSectionProps {
   node: any;
@@ -11,10 +11,10 @@ export interface PropertiesSectionProps {
 export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
   node,
   schema,
-  onChange,
+  onChange
 }) => {
   return (
-    <div style={{ height: "100%" }}>
+    <div style={{ height: '100%' }}>
       <NodeEditorRouter 
         node={node}
         schema={schema}

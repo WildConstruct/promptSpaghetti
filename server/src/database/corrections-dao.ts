@@ -13,7 +13,7 @@ import {
   RuleUsageStats,
   PerformanceMetrics,
   WorkflowStateHistory,
-  WorkflowNotification,
+  WorkflowNotification
 } from './models';
 
 /**
@@ -814,7 +814,7 @@ export class CorrectionsDAO {
       slow_rules: distribution.slow_rules || 0,
       excellent_rules: distribution.excellent_rules || 0,
       good_rules: distribution.good_rules || 0,
-      poor_rules: distribution.poor_rules || 0,
+      poor_rules: distribution.poor_rules || 0
     };
   }
 
@@ -838,7 +838,7 @@ export class CorrectionsDAO {
             is_active: rule.isActive,
             priority: rule.priority,
             user_id: userId,
-            scope: 'private',
+            scope: 'private'
           };
           
           this.createRule(input);
@@ -869,7 +869,7 @@ export class CorrectionsDAO {
       isActive: rule.is_active,
       priority: rule.priority,
       createdAt: rule.created_at,
-      updatedAt: rule.updated_at,
+      updatedAt: rule.updated_at
     }));
   }
 

@@ -9,7 +9,7 @@ import { z } from 'zod';
 export const TemplateVisibility = {
   PRIVATE: 'private',
   WORKSPACE: 'workspace', 
-  PUBLIC: 'public',
+  PUBLIC: 'public'
 } as const;
 
 // Template categories
@@ -20,21 +20,21 @@ export const TemplateCategory = {
   BUSINESS: 'business',
   TECHNICAL: 'technical',
   EDUCATIONAL: 'educational',
-  CUSTOM: 'custom',
+  CUSTOM: 'custom'
 } as const;
 
 // Template difficulty levels
 export const TemplateDifficulty = {
   BEGINNER: 'beginner',
   INTERMEDIATE: 'intermediate',
-  ADVANCED: 'advanced',
+  ADVANCED: 'advanced'
 } as const;
 
 // Template completion status
 export const TemplateUsageStatus = {
   IN_PROGRESS: 'in_progress',
   COMPLETED: 'completed',
-  ABANDONED: 'abandoned',
+  ABANDONED: 'abandoned'
 } as const;
 
 // Template usage source
@@ -43,14 +43,14 @@ export const TemplateUsageSource = {
   RECOMMENDED: 'recommended',
   SEARCH: 'search',
   FEATURED: 'featured',
-  SHARED: 'shared',
+  SHARED: 'shared'
 } as const;
 
 // Template download formats
 export const TemplateDownloadFormat = {
   JSON: 'json',
   YAML: 'yaml',
-  ZIP: 'zip',
+  ZIP: 'zip'
 } as const;
 
 // Template customization field types
@@ -63,7 +63,7 @@ export const CustomizationFieldType = {
   COLOR: 'color',
   DATE: 'date',
   OBJECT: 'object',
-  ARRAY: 'array',
+  ARRAY: 'array'
 } as const;
 
 // Zod schemas for validation
@@ -94,7 +94,7 @@ export const ProjectTemplateSchema = z.object({
   published_at: z.date().optional(),
   archived_at: z.date().optional(),
   deprecated_at: z.date().optional(),
-  replacement_template_id: z.string().uuid().optional(),
+  replacement_template_id: z.string().uuid().optional()
 });
 
 export const CreateProjectTemplateSchema = z.object({
@@ -113,7 +113,7 @@ export const CreateProjectTemplateSchema = z.object({
   is_featured: z.boolean().optional().default(false),
   customizable_fields: z.record(z.unknown()).optional().default({}),
   default_values: z.record(z.unknown()).optional().default({}),
-  validation_rules: z.record(z.unknown()).optional().default({}),
+  validation_rules: z.record(z.unknown()).optional().default({})
 });
 
 export const UpdateProjectTemplateSchema = z.object({
@@ -131,7 +131,7 @@ export const UpdateProjectTemplateSchema = z.object({
   is_featured: z.boolean().optional(),
   customizable_fields: z.record(z.unknown()).optional(),
   default_values: z.record(z.unknown()).optional(),
-  validation_rules: z.record(z.unknown()).optional(),
+  validation_rules: z.record(z.unknown()).optional()
 });
 
 export const TemplateReviewSchema = z.object({
@@ -144,20 +144,20 @@ export const TemplateReviewSchema = z.object({
   is_verified_purchase: z.boolean(),
   is_helpful_count: z.number().int().min(0),
   created_at: z.date(),
-  updated_at: z.date(),
+  updated_at: z.date()
 });
 
 export const CreateTemplateReviewSchema = z.object({
   template_id: z.string().uuid(),
   rating: z.number().int().min(1).max(5),
   title: z.string().max(255).optional(),
-  review_text: z.string().optional(),
+  review_text: z.string().optional()
 });
 
 export const UpdateTemplateReviewSchema = z.object({
   rating: z.number().int().min(1).max(5).optional(),
   title: z.string().max(255).optional(),
-  review_text: z.string().optional(),
+  review_text: z.string().optional()
 });
 
 export const TemplateUsageSchema = z.object({
@@ -174,7 +174,7 @@ export const TemplateUsageSchema = z.object({
   started_at: z.date(),
   completed_at: z.date().optional(),
   last_accessed_at: z.date(),
-  source: z.enum(['manual', 'recommended', 'search', 'featured', 'shared']),
+  source: z.enum(['manual', 'recommended', 'search', 'featured', 'shared'])
 });
 
 export const CreateTemplateUsageSchema = z.object({
@@ -182,7 +182,7 @@ export const CreateTemplateUsageSchema = z.object({
   project_id: z.string().uuid().optional(),
   workspace_id: z.string().uuid(),
   customizations_applied: z.record(z.unknown()).optional().default({}),
-  source: z.enum(['manual', 'recommended', 'search', 'featured', 'shared']).default('manual'),
+  source: z.enum(['manual', 'recommended', 'search', 'featured', 'shared']).default('manual')
 });
 
 export const UpdateTemplateUsageSchema = z.object({
@@ -191,7 +191,7 @@ export const UpdateTemplateUsageSchema = z.object({
   time_to_complete_minutes: z.number().int().positive().optional(),
   user_rating: z.number().int().min(1).max(5).optional(),
   user_feedback: z.string().optional(),
-  completed_at: z.date().optional(),
+  completed_at: z.date().optional()
 });
 
 export const TemplateCategorySchema = z.object({
@@ -202,7 +202,7 @@ export const TemplateCategorySchema = z.object({
   sort_order: z.number().int(),
   is_active: z.boolean(),
   created_at: z.date(),
-  updated_at: z.date(),
+  updated_at: z.date()
 });
 
 export const TemplateFavoriteSchema = z.object({
@@ -210,7 +210,7 @@ export const TemplateFavoriteSchema = z.object({
   template_id: z.string().uuid(),
   user_id: z.string(),
   workspace_id: z.string().uuid().optional(),
-  created_at: z.date(),
+  created_at: z.date()
 });
 
 export const TemplateDownloadSchema = z.object({
@@ -221,7 +221,7 @@ export const TemplateDownloadSchema = z.object({
   download_size_bytes: z.number().int().optional(),
   user_agent: z.string().optional(),
   ip_address: z.string().optional(),
-  downloaded_at: z.date(),
+  downloaded_at: z.date()
 });
 
 // TypeScript types inferred from schemas

@@ -75,12 +75,12 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
     name: '',
     description: '',
     parentTeamId: '',
-    settings: {},
+    settings: {}
   });
 
   const [memberFormData, setMemberFormData] = useState({
     userId: '',
-    role: 'member' as 'owner' | 'admin' | 'member' | 'viewer',
+    role: 'member' as 'owner' | 'admin' | 'member' | 'viewer'
   });
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
     try {
       setLoading(true);
       const response = await fetch(`/api/auth/organizations/${organizationId}/teams/hierarchy`, {
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -121,7 +121,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
   const loadTeamMembers = async (teamId: string) => {
     try {
       const response = await fetch(`/api/auth/teams/${teamId}/members`, {
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -140,13 +140,13 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
       const response = await fetch(`/api/auth/organizations/${organizationId}/teams`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify({
           ...formData,
-          parentTeamId: formData.parentTeamId || undefined,
-        }),
+          parentTeamId: formData.parentTeamId || undefined
+        })
       });
 
       if (!response.ok) {
@@ -171,13 +171,13 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
       const response = await fetch(`/api/auth/teams/${editingTeam.id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify({
           ...formData,
-          parentTeamId: formData.parentTeamId || undefined,
-        }),
+          parentTeamId: formData.parentTeamId || undefined
+        })
       });
 
       if (!response.ok) {
@@ -201,7 +201,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
     try {
       const response = await fetch(`/api/auth/teams/${teamId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -226,10 +226,10 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(memberFormData),
+        body: JSON.stringify(memberFormData)
       });
 
       if (!response.ok) {
@@ -251,7 +251,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
     try {
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {
         method: 'DELETE',
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -272,10 +272,10 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify({ role: newRole }),
+        body: JSON.stringify({ role: newRole })
       });
 
       if (!response.ok) {
@@ -294,7 +294,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
       name: '',
       description: '',
       parentTeamId: '',
-      settings: {},
+      settings: {}
     });
   };
 
@@ -304,7 +304,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
       name: team.name,
       description: team.description || '',
       parentTeamId: team.parentTeamId || '',
-      settings: team.settings,
+      settings: team.settings
     });
   };
 
@@ -320,21 +320,21 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
 
   const getRoleIcon = (role: string) => {
     switch (role) {
-      case 'owner': return <Crown className="w-4 h-4 text-yellow-600" />;
-      case 'admin': return <Shield className="w-4 h-4 text-blue-600" />;
-      case 'member': return <User className="w-4 h-4 text-green-600" />;
-      case 'viewer': return <Eye className="w-4 h-4 text-gray-600" />;
-      default: return <User className="w-4 h-4 text-gray-600" />;
+    case 'owner': return <Crown className="w-4 h-4 text-yellow-600" />;
+    case 'admin': return <Shield className="w-4 h-4 text-blue-600" />;
+    case 'member': return <User className="w-4 h-4 text-green-600" />;
+    case 'viewer': return <Eye className="w-4 h-4 text-gray-600" />;
+    default: return <User className="w-4 h-4 text-gray-600" />;
     }
   };
 
   const getRoleBadge = (role: string) => {
     switch (role) {
-      case 'owner': return 'bg-yellow-100 text-yellow-800';
-      case 'admin': return 'bg-blue-100 text-blue-800';
-      case 'member': return 'bg-green-100 text-green-800';
-      case 'viewer': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'owner': return 'bg-yellow-100 text-yellow-800';
+    case 'admin': return 'bg-blue-100 text-blue-800';
+    case 'member': return 'bg-green-100 text-green-800';
+    case 'viewer': return 'bg-gray-100 text-gray-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -486,7 +486,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({ organizationId }) => {
                   {[
                     { id: 'overview', label: 'Overview', icon: Activity },
                     { id: 'members', label: 'Members', icon: Users },
-                    { id: 'settings', label: 'Settings', icon: Settings },
+                    { id: 'settings', label: 'Settings', icon: Settings }
                   ].map((tab) => (
                     <button
                       key={tab.id}

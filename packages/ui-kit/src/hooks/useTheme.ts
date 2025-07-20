@@ -12,12 +12,12 @@ export const ThemeContext = createContext<{
   setTheme: (theme: Partial<Theme>) => void;
   toggleColorMode: () => void;
   colorMode: 'light' | 'dark';
-}>({
-  theme: createTheme(),
-  setTheme: () => {},
-  toggleColorMode: () => {},
-  colorMode: 'light'
-});
+    }>({
+      theme: createTheme(),
+      setTheme: () => {},
+      toggleColorMode: () => {},
+      colorMode: 'light'
+    });
 
 // Hook to use theme
 export function useTheme(): Theme {

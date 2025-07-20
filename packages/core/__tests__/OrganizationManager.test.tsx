@@ -20,7 +20,7 @@ jest.mock('lucide-react', () => ({
   Shield: () => <div data-testid="shield-icon" />,
   BarChart3: () => <div data-testid="chart-icon" />,
   ChevronRight: () => <div data-testid="chevron-right-icon" />,
-  Palette: () => <div data-testid="palette-icon" />,
+  Palette: () => <div data-testid="palette-icon" />
 }));
 
 describe('OrganizationManager', () => {
@@ -37,7 +37,7 @@ describe('OrganizationManager', () => {
       plan: 'free' as const,
       maxUsers: 10,
       createdAt: new Date('2023-01-01'),
-      updatedAt: new Date('2023-01-01'),
+      updatedAt: new Date('2023-01-01')
     },
     {
       id: 'org-2',
@@ -51,8 +51,8 @@ describe('OrganizationManager', () => {
       plan: 'pro' as const,
       maxUsers: 100,
       createdAt: new Date('2023-01-02'),
-      updatedAt: new Date('2023-01-02'),
-    },
+      updatedAt: new Date('2023-01-02')
+    }
   ];
 
   const mockStats = {
@@ -63,20 +63,20 @@ describe('OrganizationManager', () => {
     planLimits: {
       maxUsers: 10,
       maxTeams: 5,
-      maxStorage: 1024,
+      maxStorage: 1024
     },
     usage: {
       users: 8,
       teams: 5,
-      storage: 512,
-    },
+      storage: 512
+    }
   };
 
   const defaultProps = {
     onCreateOrganization: jest.fn(),
     onUpdateOrganization: jest.fn(),
     onDeleteOrganization: jest.fn(),
-    onViewStats: jest.fn(),
+    onViewStats: jest.fn()
   };
 
   beforeEach(() => {
@@ -155,7 +155,7 @@ describe('OrganizationManager', () => {
         name: 'New Organization',
         description: 'A new test organization',
         website: 'https://neworg.com',
-        plan: 'free',
+        plan: 'free'
       });
     });
   });
@@ -227,7 +227,7 @@ describe('OrganizationManager', () => {
         name: 'Updated Organization',
         description: 'A test organization',
         website: 'https://test.com',
-        plan: 'free',
+        plan: 'free'
       });
     });
   });
@@ -347,7 +347,7 @@ describe('OrganizationManager', () => {
     const orgsWithDifferentPlans = [
       { ...mockOrganizations[0], plan: 'free' as const },
       { ...mockOrganizations[1], plan: 'pro' as const },
-      { ...mockOrganizations[0], id: 'org-3', plan: 'enterprise' as const, name: 'Enterprise Org' },
+      { ...mockOrganizations[0], id: 'org-3', plan: 'enterprise' as const, name: 'Enterprise Org' }
     ];
     
     render(<OrganizationManager organizations={orgsWithDifferentPlans} {...defaultProps} />);

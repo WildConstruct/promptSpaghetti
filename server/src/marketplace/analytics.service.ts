@@ -14,7 +14,7 @@ import {
   AggregationType,
   AnalyticsEventSchema,
   AnalyticsQuerySchema,
-  CustomReportSchema,
+  CustomReportSchema
 } from './analytics.types';
 
 export class AnalyticsService {
@@ -34,7 +34,7 @@ export class AnalyticsService {
         validatedData.user_id,
         validatedData.event_type,
         JSON.stringify(validatedData.event_data),
-        JSON.stringify(validatedData.metadata),
+        JSON.stringify(validatedData.metadata)
       ]
     );
 
@@ -54,7 +54,7 @@ export class AnalyticsService {
       event.user_id,
       event.event_type,
       JSON.stringify(event.event_data),
-      JSON.stringify(event.metadata),
+      JSON.stringify(event.metadata)
     ]);
 
     const results = await this.db.query(
@@ -130,10 +130,10 @@ export class AnalyticsService {
         usage_minutes: parseFloat(metricsRow.usage_minutes) || 0,
         error_count: parseInt(metricsRow.error_count) || 0,
         success_rate: parseFloat(metricsRow.success_rate) || 1.0,
-        conversion_rate: this.calculateConversionRate(metricsRow),
+        conversion_rate: this.calculateConversionRate(metricsRow)
       },
       demographics,
-      trends,
+      trends
     };
   }
 
@@ -177,7 +177,7 @@ export class AnalyticsService {
       overview,
       performance_summary: performanceSummary,
       traffic_metrics: trafficMetrics,
-      financial_metrics: financialMetrics,
+      financial_metrics: financialMetrics
     };
   }
 
@@ -199,7 +199,7 @@ export class AnalyticsService {
         validatedData.description,
         JSON.stringify(validatedData.configuration),
         validatedData.is_scheduled,
-        JSON.stringify(validatedData.schedule),
+        JSON.stringify(validatedData.schedule)
       ]
     );
 
@@ -232,7 +232,7 @@ export class AnalyticsService {
       report_id: reportId,
       generated_at: new Date(),
       data: results,
-      configuration: configuration.visualization,
+      configuration: configuration.visualization
     };
   }
 
@@ -267,16 +267,16 @@ export class AnalyticsService {
     // Select fields based on aggregation
     const metricSelects = query.metric_types.map(metric => {
       switch (query.aggregation) {
-        case AggregationType.COUNT:
-          return `COUNT(CASE WHEN event_type = '${metric}' THEN 1 END) as ${metric}_count`;
-        case AggregationType.SUM:
-          return `SUM(CASE WHEN event_type = '${metric}' THEN (event_data->>'value')::numeric ELSE 0 END) as ${metric}_sum`;
-        case AggregationType.AVERAGE:
-          return `AVG(CASE WHEN event_type = '${metric}' THEN (event_data->>'value')::numeric END) as ${metric}_avg`;
-        case AggregationType.UNIQUE:
-          return `COUNT(DISTINCT CASE WHEN event_type = '${metric}' THEN user_id END) as ${metric}_unique`;
-        default:
-          return `COUNT(CASE WHEN event_type = '${metric}' THEN 1 END) as ${metric}_count`;
+      case AggregationType.COUNT:
+        return `COUNT(CASE WHEN event_type = '${metric}' THEN 1 END) as ${metric}_count`;
+      case AggregationType.SUM:
+        return `SUM(CASE WHEN event_type = '${metric}' THEN (event_data->>'value')::numeric ELSE 0 END) as ${metric}_sum`;
+      case AggregationType.AVERAGE:
+        return `AVG(CASE WHEN event_type = '${metric}' THEN (event_data->>'value')::numeric END) as ${metric}_avg`;
+      case AggregationType.UNIQUE:
+        return `COUNT(DISTINCT CASE WHEN event_type = '${metric}' THEN user_id END) as ${metric}_unique`;
+      default:
+        return `COUNT(CASE WHEN event_type = '${metric}' THEN 1 END) as ${metric}_count`;
       }
     });
 
@@ -349,29 +349,29 @@ export class AnalyticsService {
     let start: Date;
 
     switch (timeRange) {
-      case TimeRange.LAST_24H:
-        start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_7D:
-        start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_30D:
-        start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_90D:
-        start = new Date(end.getTime() - 90 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_YEAR:
-        start = new Date(end.getTime() - 365 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.ALL_TIME:
-        start = new Date('2020-01-01');
-        break;
-      case TimeRange.CUSTOM:
-        start = startDate || new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+    case TimeRange.LAST_24H:
+      start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_7D:
+      start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_30D:
+      start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_90D:
+      start = new Date(end.getTime() - 90 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_YEAR:
+      start = new Date(end.getTime() - 365 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.ALL_TIME:
+      start = new Date('2020-01-01');
+      break;
+    case TimeRange.CUSTOM:
+      start = startDate || new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
+    default:
+      start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
     }
 
     return { start, end };
@@ -401,7 +401,7 @@ export class AnalyticsService {
          GROUP BY metadata->>'device_type'
          ORDER BY count DESC`,
         [templateId, start, end]
-      ),
+      )
     ]);
 
     const totalEvents = countriesData.reduce((sum, row) => sum + parseInt(row.count), 0);
@@ -410,14 +410,14 @@ export class AnalyticsService {
       top_countries: countriesData.map(row => ({
         country: row.country,
         count: parseInt(row.count),
-        percentage: totalEvents > 0 ? (parseInt(row.count) / totalEvents) * 100 : 0,
+        percentage: totalEvents > 0 ? (parseInt(row.count) / totalEvents) * 100 : 0
       })),
       device_breakdown: devicesData.map(row => ({
         device: row.device,
         count: parseInt(row.count),
-        percentage: totalEvents > 0 ? (parseInt(row.count) / totalEvents) * 100 : 0,
+        percentage: totalEvents > 0 ? (parseInt(row.count) / totalEvents) * 100 : 0
       })),
-      user_segments: [], // Placeholder for user segments
+      user_segments: [] // Placeholder for user segments
     };
   }
 
@@ -444,13 +444,13 @@ export class AnalyticsService {
         date: new Date(row.date),
         views: parseInt(row.views),
         downloads: parseInt(row.downloads),
-        revenue: parseFloat(row.revenue) || 0,
+        revenue: parseFloat(row.revenue) || 0
       })),
       growth_rates: {
         views_growth: 0, // Calculate based on previous period
         downloads_growth: 0,
-        revenue_growth: 0,
-      },
+        revenue_growth: 0
+      }
     };
   }
 
@@ -483,8 +483,8 @@ export class AnalyticsService {
           title: '',
           views: 0,
           downloads: 0,
-          revenue: 0,
-        },
+          revenue: 0
+        }
       },
       performance_summary: {
         views_trend: 0,
@@ -492,22 +492,22 @@ export class AnalyticsService {
         revenue_trend: 0,
         rating_trend: 0,
         market_share: 0,
-        ranking_position: 0,
+        ranking_position: 0
       },
       traffic_metrics: {
         unique_visitors: 0,
         returning_visitors: 0,
         bounce_rate: 0,
         average_session_duration: 0,
-        top_referrers: [],
+        top_referrers: []
       },
       financial_metrics: {
         gross_revenue: 0,
         net_revenue: 0,
         platform_fee: 0,
         payout_amount: 0,
-        revenue_by_template: [],
-      },
+        revenue_by_template: []
+      }
     };
   }
 
@@ -525,8 +525,8 @@ export class AnalyticsService {
         title: '',
         views: 0,
         downloads: 0,
-        revenue: 0,
-      },
+        revenue: 0
+      }
     };
   }
 
@@ -538,7 +538,7 @@ export class AnalyticsService {
       revenue_trend: 0,
       rating_trend: 0,
       market_share: 0,
-      ranking_position: 0,
+      ranking_position: 0
     };
   }
 
@@ -549,7 +549,7 @@ export class AnalyticsService {
       returning_visitors: 0,
       bounce_rate: 0,
       average_session_duration: 0,
-      top_referrers: [],
+      top_referrers: []
     };
   }
 
@@ -560,7 +560,7 @@ export class AnalyticsService {
       net_revenue: 0,
       platform_fee: 0,
       payout_amount: 0,
-      revenue_by_template: [],
+      revenue_by_template: []
     };
   }
 
@@ -588,7 +588,7 @@ export class AnalyticsService {
       event_data: JSON.parse(row.event_data),
       metadata: JSON.parse(row.metadata),
       timestamp: new Date(row.timestamp),
-      created_at: new Date(row.created_at),
+      created_at: new Date(row.created_at)
     };
   }
 
@@ -602,7 +602,7 @@ export class AnalyticsService {
       is_scheduled: row.is_scheduled,
       schedule: row.schedule ? JSON.parse(row.schedule) : undefined,
       created_at: new Date(row.created_at),
-      updated_at: new Date(row.updated_at),
+      updated_at: new Date(row.updated_at)
     };
   }
 }

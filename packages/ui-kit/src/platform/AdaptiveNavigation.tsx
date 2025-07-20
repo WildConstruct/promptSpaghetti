@@ -171,8 +171,8 @@ export const AdaptiveNavigation: React.FC<AdaptiveNavigationProps> = ({
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                 <path d={isCollapsed ? 
-                  "M7 4L13 10L7 16" : 
-                  "M13 16L7 10L13 4"
+                  'M7 4L13 10L7 16' : 
+                  'M13 16L7 10L13 4'
                 }/>
               </svg>
             </button>

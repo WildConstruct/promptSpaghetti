@@ -57,14 +57,14 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
     const filters = {
       query: searchQuery || undefined,
       categories: selectedCategory ? [selectedCategory] : 
-                 advancedFilters.categories.length > 0 ? advancedFilters.categories : undefined,
+        advancedFilters.categories.length > 0 ? advancedFilters.categories : undefined,
       tags: advancedFilters.tags.length > 0 ? advancedFilters.tags : undefined,
       price_min: advancedFilters.priceRange.min,
       price_max: advancedFilters.priceRange.max,
       rating_min: advancedFilters.rating > 0 ? advancedFilters.rating : undefined,
       sort_by: advancedFilters.sortBy !== 'relevance' ? advancedFilters.sortBy : sortBy,
       is_free: advancedFilters.isFree !== null ? advancedFilters.isFree : 
-               priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
+        priceFilter === 'free' ? true : priceFilter === 'paid' ? false : undefined,
       page: 1,
       limit: 20
     };
@@ -207,8 +207,8 @@ export const MarketplaceHome: React.FC<MarketplaceHomeProps> = ({ className = ''
           <div className="templates-header">
             <h2>
               {searchQuery ? `Results for "${searchQuery}"` : 
-               selectedCategory ? `${categories.find(c => c.id === selectedCategory)?.name || 'Category'}` : 
-               'All Templates'}
+                selectedCategory ? `${categories.find(c => c.id === selectedCategory)?.name || 'Category'}` : 
+                  'All Templates'}
             </h2>
             <span className="results-count">
               {templates.total || 0} templates found

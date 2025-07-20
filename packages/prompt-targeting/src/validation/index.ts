@@ -20,7 +20,7 @@ export {
   type ValidationRuleResult,
   type ValidationContext,
   type ValidationReport,
-  type ValidationEngineConfig,
+  type ValidationEngineConfig
 } from './ValidationRulesEngine';
 
 // Export additional validation rules
@@ -30,7 +30,7 @@ export {
   LanguageConsistencyRule,
   SensitiveContentRule,
   ProcessingTimeRule,
-  MemoryUsageRule,
+  MemoryUsageRule
 } from './AdditionalValidationRules';
 
 /**
@@ -43,7 +43,7 @@ export function createValidationEngine(config?: Partial<ValidationEngineConfig>)
     enableAutoFix: false,
     maxExecutionTime: 10000,
     parallelExecution: true,
-    enableMetrics: true,
+    enableMetrics: true
   };
 
   return new ValidationRulesEngine({ ...defaultConfig, ...config });
@@ -59,7 +59,7 @@ export function createStrictValidationEngine(): ValidationRulesEngine {
     enableAutoFix: false,
     maxExecutionTime: 15000,
     parallelExecution: true,
-    enableMetrics: true,
+    enableMetrics: true
   });
 }
 
@@ -73,7 +73,7 @@ export function createDevelopmentValidationEngine(): ValidationRulesEngine {
     enableAutoFix: true,
     maxExecutionTime: 30000,
     parallelExecution: false, // Sequential for better debugging
-    enableMetrics: true,
+    enableMetrics: true
   });
 }
 
@@ -87,7 +87,7 @@ export function createSecurityValidationEngine(): ValidationRulesEngine {
     enableAutoFix: true,
     maxExecutionTime: 20000,
     parallelExecution: true,
-    enableMetrics: true,
+    enableMetrics: true
   });
 }
 
@@ -101,7 +101,7 @@ export function createPerformanceValidationEngine(): ValidationRulesEngine {
     enableAutoFix: false,
     maxExecutionTime: 5000,
     parallelExecution: true,
-    enableMetrics: true,
+    enableMetrics: true
   });
 }
 
@@ -130,8 +130,8 @@ export async function validateGraph(
       nodeCount: graph.nodes?.length || 0,
       edgeCount: graph.edges?.length || 0,
       complexity: calculateBasicComplexity(graph),
-      estimatedTokens: estimateTokenCount(graph),
-    },
+      estimatedTokens: estimateTokenCount(graph)
+    }
   };
 
   return engine.validate(context);
@@ -162,8 +162,8 @@ export async function validateAndFixGraph(
       nodeCount: graph.nodes?.length || 0,
       edgeCount: graph.edges?.length || 0,
       complexity: calculateBasicComplexity(graph),
-      estimatedTokens: estimateTokenCount(graph),
-    },
+      estimatedTokens: estimateTokenCount(graph)
+    }
   };
 
   const { report, fixes } = await engine.validateAndFix(context);
@@ -171,7 +171,7 @@ export async function validateAndFixGraph(
   return {
     report,
     fixes,
-    modifiedGraph: context.graph,
+    modifiedGraph: context.graph
   };
 }
 
@@ -217,8 +217,8 @@ function generateBasicCapabilities(platform: string): any {
       parameterLimits: {
         temperature: { min: 0, max: 2 },
         max_tokens: { min: 1, max: 4000 },
-        top_p: { min: 0, max: 1 },
-      },
+        top_p: { min: 0, max: 1 }
+      }
     },
     anthropic: {
       maxTokens: 8000,
@@ -226,26 +226,26 @@ function generateBasicCapabilities(platform: string): any {
       supportedNodeTypes: ['output', 'input', 'transform', 'conditional', 'variable'],
       parameterLimits: {
         temperature: { min: 0, max: 1 },
-        max_tokens: { min: 1, max: 8000 },
-      },
+        max_tokens: { min: 1, max: 8000 }
+      }
     },
     midjourney: {
       maxTokens: 1000,
       maxContentLength: 4000,
       supportedNodeTypes: ['output', 'input', 'transform'],
-      unsupportedParameters: ['temperature', 'top_p'],
+      unsupportedParameters: ['temperature', 'top_p']
     },
     dalle: {
       maxTokens: 250,
       maxContentLength: 1000,
       supportedNodeTypes: ['output', 'input'],
-      unsupportedParameters: ['temperature', 'top_p', 'max_tokens'],
+      unsupportedParameters: ['temperature', 'top_p', 'max_tokens']
     },
     generic: {
       maxTokens: 2000,
       maxContentLength: 4000,
-      supportedNodeTypes: ['output', 'input', 'transform', 'conditional'],
-    },
+      supportedNodeTypes: ['output', 'input', 'transform', 'conditional']
+    }
   };
   
   return capabilities[platform] || capabilities.generic;
@@ -331,5 +331,5 @@ export const ValidationUtils = {
     if (summary.info > 0) parts.push(`${summary.info} info`);
     
     return `⚠️ Found ${parts.join(', ')} (Score: ${score}/100)`;
-  },
+  }
 };

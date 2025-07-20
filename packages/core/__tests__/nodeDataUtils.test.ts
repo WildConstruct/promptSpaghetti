@@ -7,7 +7,7 @@ import {
   getRandomVariation,
   hasVariations,
   getVariationCount,
-  validateNodeDataLegacy,
+  validateNodeDataLegacy
 } from '../utils/nodeDataUtils';
 import { SubjectNodeData, WeightedChoiceNodeData, ActionNodeData } from '../types/NodeTypes';
 
@@ -44,7 +44,7 @@ describe('nodeDataUtils', () => {
       variations: ['var1', 'var2'],
       subjects: ['test'],
       singularForm: 'test',
-      pluralForm: 'tests',
+      pluralForm: 'tests'
     };
 
     it('adds variation to node', () => {
@@ -76,7 +76,7 @@ describe('nodeDataUtils', () => {
       variations: ['apple', 'banana', 'cherry'],
       subjects: ['test'],
       singularForm: 'test',
-      pluralForm: 'tests',
+      pluralForm: 'tests'
     };
 
     const nodeWithoutVariations: SubjectNodeData = {
@@ -86,7 +86,7 @@ describe('nodeDataUtils', () => {
       variations: [],
       subjects: ['test'],
       singularForm: 'test',
-      pluralForm: 'tests',
+      pluralForm: 'tests'
     };
 
     it('detects if node has variations', () => {
@@ -122,7 +122,7 @@ describe('nodeDataUtils', () => {
         variations: ['var1'],
         subjects: ['test'],
         singularForm: 'test',
-        pluralForm: 'tests',
+        pluralForm: 'tests'
       };
 
       const result = validateNodeDataLegacy(validNode);
@@ -138,7 +138,7 @@ describe('nodeDataUtils', () => {
         variations: [],
         subjects: ['test'],
         singularForm: 'test',
-        pluralForm: 'tests',
+        pluralForm: 'tests'
       };
 
       const result = validateNodeDataLegacy(invalidNode);
@@ -153,7 +153,7 @@ describe('nodeDataUtils', () => {
         label: 'Test',
         type: 'WeightedChoice' as const,
         options: ['a', 'b'],
-        weights: [1], // Mismatch with options length
+        weights: [1] // Mismatch with options length
       };
 
       const result = validateNodeDataLegacy(invalidWeightedChoice);
@@ -167,7 +167,7 @@ describe('nodeDataUtils', () => {
         label: 'Test',
         type: 'SetVariable' as const,
         name: '',
-        value: 'test',
+        value: 'test'
       };
 
       const result = validateNodeDataLegacy(invalidSetVariable);

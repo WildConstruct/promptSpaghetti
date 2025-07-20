@@ -494,39 +494,39 @@ export class ElasticsearchService {
    */
   private buildElasticsearchSort(sortBy?: string, hasQuery: boolean = false): any[] {
     switch (sortBy) {
-      case 'price_asc':
-        return [{ price_cents: { order: 'asc' } }];
-      case 'price_desc':
-        return [{ price_cents: { order: 'desc' } }];
-      case 'rating':
+    case 'price_asc':
+      return [{ price_cents: { order: 'asc' } }];
+    case 'price_desc':
+      return [{ price_cents: { order: 'desc' } }];
+    case 'rating':
+      return [
+        { avg_rating: { order: 'desc' } },
+        { total_reviews: { order: 'desc' } }
+      ];
+    case 'popularity':
+      return [
+        { total_purchases: { order: 'desc' } },
+        { avg_rating: { order: 'desc' } }
+      ];
+    case 'newest':
+      return [{ created_at: { order: 'desc' } }];
+    case 'oldest':
+      return [{ created_at: { order: 'asc' } }];
+    case 'relevance':
+    default:
+      if (hasQuery) {
         return [
-          { avg_rating: { order: 'desc' } },
-          { total_reviews: { order: 'desc' } }
-        ];
-      case 'popularity':
-        return [
-          { total_purchases: { order: 'desc' } },
+          '_score',
+          { featured_at: { order: 'desc', missing: '_last' } },
           { avg_rating: { order: 'desc' } }
         ];
-      case 'newest':
-        return [{ created_at: { order: 'desc' } }];
-      case 'oldest':
-        return [{ created_at: { order: 'asc' } }];
-      case 'relevance':
-      default:
-        if (hasQuery) {
-          return [
-            '_score',
-            { featured_at: { order: 'desc', missing: '_last' } },
-            { avg_rating: { order: 'desc' } }
-          ];
-        } else {
-          return [
-            { featured_at: { order: 'desc', missing: '_last' } },
-            { avg_rating: { order: 'desc' } },
-            { total_purchases: { order: 'desc' } }
-          ];
-        }
+      } else {
+        return [
+          { featured_at: { order: 'desc', missing: '_last' } },
+          { avg_rating: { order: 'desc' } },
+          { total_purchases: { order: 'desc' } }
+        ];
+      }
     }
   }
 

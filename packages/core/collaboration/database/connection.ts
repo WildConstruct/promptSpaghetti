@@ -22,7 +22,7 @@ export class DatabaseConnection {
       ...config,
       max: config.max || 20,
       idleTimeoutMillis: config.idleTimeoutMillis || 30000,
-      connectionTimeoutMillis: config.connectionTimeoutMillis || 5000,
+      connectionTimeoutMillis: config.connectionTimeoutMillis || 5000
     });
 
     this.pool.on('error', (err) => {
@@ -223,8 +223,8 @@ export class QueryBuilder {
 
   build(): { query: string; params: any[] } {
     // Replace numbered placeholders with proper parameter indices
-    let finalQuery = this.query;
-    let finalParams = [...this.params];
+    const finalQuery = this.query;
+    const finalParams = [...this.params];
     
     // Reset for reuse
     this.query = '';

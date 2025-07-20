@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, AlertCircle, Info } from 'lucide-react';
-import { Badge } from '../common/Badge';
+// import { Badge } from '../common/Badge'; // Unused import
 import { ValidationMessage } from '../common/ValidationMessage';
 import { TargetingRuleBuilder } from './targeting/TargetingRuleBuilder';
 import './targeting/TargetingRuleBuilder.css';
@@ -18,7 +18,7 @@ interface CreateToggleData {
   name: string;
   description?: string;
   type: 'boolean' | 'percentage_rollout' | 'multivariate' | 'scheduled' | 'segmentation';
-  value: any;
+  value: unknown;
   claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK';
   enabled: boolean;
 }
@@ -60,28 +60,31 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({
 
     // Validate type-specific values
     switch (formData.type) {
-      case 'percentage_rollout':
-        if (typeof formData.value.percentage !== 'number' || 
+    case 'percentage_rollout':
+      if (typeof formData.value.percentage !== 'number' || 
             formData.value.percentage < 0 || 
             formData.value.percentage > 100) {
-          newErrors.value = 'Percentage must be between 0 and 100';
+        newErrors.value = 'Percentage must be between 0 and 100';
+      }
+      break;
+    case 'multivariate':
+      if (!Array.isArray(formData.value.variants) || formData.value.variants.length === 0) {
+        newErrors.value = 'At least one variant is required';
+      } else {
+        const totalPercentage = formData.value.variants.reduce(
+          (sum: number, v: { percentage?: number }) => sum + (v.percentage || 0), 
+          0
+        );
+        if (totalPercentage > 100) {
+          newErrors.value = 'Total variant percentages cannot exceed 100%';
         }
-        break;
-      case 'multivariate':
-        if (!Array.isArray(formData.value.variants) || formData.value.variants.length === 0) {
-          newErrors.value = 'At least one variant is required';
-        } else {
-          const totalPercentage = formData.value.variants.reduce((sum: number, v: any) => sum + (v.percentage || 0), 0);
-          if (totalPercentage > 100) {
-            newErrors.value = 'Total variant percentages cannot exceed 100%';
-          }
-        }
-        break;
-      case 'segmentation':
-        if (!Array.isArray(formData.value.rules) || formData.value.rules.length === 0) {
-          newErrors.value = 'At least one segmentation rule is required';
-        }
-        break;
+      }
+      break;
+    case 'segmentation':
+      if (!Array.isArray(formData.value.rules) || formData.value.rules.length === 0) {
+        newErrors.value = 'At least one segmentation rule is required';
+      }
+      break;
     }
 
     setErrors(newErrors);
@@ -118,26 +121,26 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({
   };
 
   const handleTypeChange = (type: CreateToggleData['type']) => {
-    let defaultValue: any;
+    let defaultValue: unknown;
     
     switch (type) {
-      case 'boolean':
-        defaultValue = { enabled: false };
-        break;
-      case 'percentage_rollout':
-        defaultValue = { percentage: 0 };
-        break;
-      case 'multivariate':
-        defaultValue = { variants: [{ key: 'variant_a', value: 'A', percentage: 50 }] };
-        break;
-      case 'scheduled':
-        defaultValue = { enabled: false, startTime: null, endTime: null };
-        break;
-      case 'segmentation':
-        defaultValue = { rules: [], defaultValue: false };
-        break;
-      default:
-        defaultValue = {};
+    case 'boolean':
+      defaultValue = { enabled: false };
+      break;
+    case 'percentage_rollout':
+      defaultValue = { percentage: 0 };
+      break;
+    case 'multivariate':
+      defaultValue = { variants: [{ key: 'variant_a', value: 'A', percentage: 50 }] };
+      break;
+    case 'scheduled':
+      defaultValue = { enabled: false, startTime: null, endTime: null };
+      break;
+    case 'segmentation':
+      defaultValue = { rules: [], defaultValue: false };
+      break;
+    default:
+      defaultValue = {};
     }
 
     setFormData(prev => ({ ...prev, type, value: defaultValue }));
@@ -145,202 +148,205 @@ export const CreateToggleModal: React.FC<CreateToggleModalProps> = ({
 
   const renderValueEditor = () => {
     switch (formData.type) {
-      case 'boolean':
-        return (
-          <div className="form-group">
+    case 'boolean':
+      return (
+        <div className="form-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={formData.value.enabled}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                value: { enabled: e.target.checked }
+              }))}
+            />
+              Toggle is enabled by default
+          </label>
+        </div>
+      );
+
+    case 'percentage_rollout':
+      return (
+        <div className="form-group">
+          <label>Rollout Percentage</label>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            value={formData.value.percentage || 0}
+            onChange={(e) => setFormData(prev => ({
+              ...prev,
+              value: { percentage: parseInt(e.target.value) || 0 }
+            }))}
+            className={errors.value ? 'error' : ''}
+          />
+          <div className="form-help">
+              Percentage of users who will see this feature (0-100)
+          </div>
+        </div>
+      );
+
+    case 'multivariate':
+      return (
+        <div className="form-group">
+          <label>Variants</label>
+          <div className="variants-editor">
+            {formData.value.variants?.map((
+              variant: { key?: string; value?: string; percentage?: number }, 
+              index: number
+            ) => (
+              <div key={index} className="variant-row">
+                <input
+                  type="text"
+                  placeholder="Variant key"
+                  value={variant.key || ''}
+                  onChange={(e) => {
+                    const newVariants = [...formData.value.variants];
+                    newVariants[index] = { ...variant, key: e.target.value };
+                    setFormData(prev => ({
+                      ...prev,
+                      value: { variants: newVariants }
+                    }));
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Variant value"
+                  value={variant.value || ''}
+                  onChange={(e) => {
+                    const newVariants = [...formData.value.variants];
+                    newVariants[index] = { ...variant, value: e.target.value };
+                    setFormData(prev => ({
+                      ...prev,
+                      value: { variants: newVariants }
+                    }));
+                  }}
+                />
+                <input
+                  type="number"
+                  placeholder="% "
+                  min="0"
+                  max="100"
+                  value={variant.percentage || 0}
+                  onChange={(e) => {
+                    const newVariants = [...formData.value.variants];
+                    newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
+                    setFormData(prev => ({
+                      ...prev,
+                      value: { variants: newVariants }
+                    }));
+                  }}
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => {
+                const newVariants = [...(formData.value.variants || []), {
+                  key: `variant_${String.fromCharCode(65 + formData.value.variants.length)}`,
+                  value: '',
+                  percentage: 0
+                }];
+                setFormData(prev => ({
+                  ...prev,
+                  value: { variants: newVariants }
+                }));
+              }}
+            >
+                Add Variant
+            </button>
+          </div>
+        </div>
+      );
+
+    case 'scheduled':
+      return (
+        <div className="form-group">
+          <label>Schedule Configuration</label>
+          <div className="schedule-editor">
             <label>
               <input
                 type="checkbox"
                 checked={formData.value.enabled}
                 onChange={(e) => setFormData(prev => ({
                   ...prev,
-                  value: { enabled: e.target.checked }
+                  value: { ...prev.value, enabled: e.target.checked }
                 }))}
               />
-              Toggle is enabled by default
-            </label>
-          </div>
-        );
-
-      case 'percentage_rollout':
-        return (
-          <div className="form-group">
-            <label>Rollout Percentage</label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              value={formData.value.percentage || 0}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                value: { percentage: parseInt(e.target.value) || 0 }
-              }))}
-              className={errors.value ? 'error' : ''}
-            />
-            <div className="form-help">
-              Percentage of users who will see this feature (0-100)
-            </div>
-          </div>
-        );
-
-      case 'multivariate':
-        return (
-          <div className="form-group">
-            <label>Variants</label>
-            <div className="variants-editor">
-              {formData.value.variants?.map((variant: any, index: number) => (
-                <div key={index} className="variant-row">
-                  <input
-                    type="text"
-                    placeholder="Variant key"
-                    value={variant.key || ''}
-                    onChange={(e) => {
-                      const newVariants = [...formData.value.variants];
-                      newVariants[index] = { ...variant, key: e.target.value };
-                      setFormData(prev => ({
-                        ...prev,
-                        value: { variants: newVariants }
-                      }));
-                    }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Variant value"
-                    value={variant.value || ''}
-                    onChange={(e) => {
-                      const newVariants = [...formData.value.variants];
-                      newVariants[index] = { ...variant, value: e.target.value };
-                      setFormData(prev => ({
-                        ...prev,
-                        value: { variants: newVariants }
-                      }));
-                    }}
-                  />
-                  <input
-                    type="number"
-                    placeholder="% "
-                    min="0"
-                    max="100"
-                    value={variant.percentage || 0}
-                    onChange={(e) => {
-                      const newVariants = [...formData.value.variants];
-                      newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
-                      setFormData(prev => ({
-                        ...prev,
-                        value: { variants: newVariants }
-                      }));
-                    }}
-                  />
-                </div>
-              ))}
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm"
-                onClick={() => {
-                  const newVariants = [...(formData.value.variants || []), {
-                    key: `variant_${String.fromCharCode(65 + formData.value.variants.length)}`,
-                    value: '',
-                    percentage: 0
-                  }];
-                  setFormData(prev => ({
-                    ...prev,
-                    value: { variants: newVariants }
-                  }));
-                }}
-              >
-                Add Variant
-              </button>
-            </div>
-          </div>
-        );
-
-      case 'scheduled':
-        return (
-          <div className="form-group">
-            <label>Schedule Configuration</label>
-            <div className="schedule-editor">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={formData.value.enabled}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    value: { ...prev.value, enabled: e.target.checked }
-                  }))}
-                />
                 Schedule is active
-              </label>
+            </label>
               
-              <div className="date-inputs">
-                <div>
-                  <label>Start Time</label>
-                  <input
-                    type="datetime-local"
-                    value={formData.value.startTime || ''}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      value: { ...prev.value, startTime: e.target.value }
-                    }))}
-                  />
-                </div>
-                
-                <div>
-                  <label>End Time</label>
-                  <input
-                    type="datetime-local"
-                    value={formData.value.endTime || ''}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      value: { ...prev.value, endTime: e.target.value }
-                    }))}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'segmentation':
-        return (
-          <div className="form-group">
-            <label>Targeting Rules</label>
-            <div className="segmentation-editor">
-              <TargetingRuleBuilder
-                initialRules={formData.value.rules || []}
-                onRulesChange={(rules) => setFormData(prev => ({
-                  ...prev,
-                  value: { ...prev.value, rules }
-                }))}
-                onTestRule={async (rules) => {
-                  // Mock test implementation
-                  return {
-                    matches: true,
-                    userCount: Math.floor(Math.random() * 5000) + 100
-                  };
-                }}
-              />
-              
-              <div className="default-value-section">
-                <label>Default Value</label>
+            <div className="date-inputs">
+              <div>
+                <label>Start Time</label>
                 <input
-                  type="text"
-                  placeholder="Value when no rules match (e.g., false, disabled)"
-                  value={formData.value.defaultValue || ''}
+                  type="datetime-local"
+                  value={formData.value.startTime || ''}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
-                    value: { ...prev.value, defaultValue: e.target.value }
+                    value: { ...prev.value, startTime: e.target.value }
                   }))}
                 />
-                <div className="form-help">
-                  This value will be used when none of the targeting rules match the user
-                </div>
+              </div>
+                
+              <div>
+                <label>End Time</label>
+                <input
+                  type="datetime-local"
+                  value={formData.value.endTime || ''}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    value: { ...prev.value, endTime: e.target.value }
+                  }))}
+                />
               </div>
             </div>
           </div>
-        );
+        </div>
+      );
 
-      default:
-        return null;
+    case 'segmentation':
+      return (
+        <div className="form-group">
+          <label>Targeting Rules</label>
+          <div className="segmentation-editor">
+            <TargetingRuleBuilder
+              initialRules={formData.value.rules || []}
+              onRulesChange={(rules) => setFormData(prev => ({
+                ...prev,
+                value: { ...prev.value, rules }
+              }))}
+              onTestRule={async (_rules) => {
+                // Mock test implementation
+                return {
+                  matches: true,
+                  userCount: Math.floor(Math.random() * 5000) + 100
+                };
+              }}
+            />
+              
+            <div className="default-value-section">
+              <label>Default Value</label>
+              <input
+                type="text"
+                placeholder="Value when no rules match (e.g., false, disabled)"
+                value={formData.value.defaultValue || ''}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  value: { ...prev.value, defaultValue: e.target.value }
+                }))}
+              />
+              <div className="form-help">
+                  This value will be used when none of the targeting rules match the user
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    default:
+      return null;
     }
   };
 

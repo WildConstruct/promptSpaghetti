@@ -120,7 +120,7 @@ export const ReviewSystem: React.FC<ReviewSystemProps> = ({
       const response = await fetch('/api/marketplace/reviews', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           ...reviewData,
@@ -142,7 +142,7 @@ export const ReviewSystem: React.FC<ReviewSystemProps> = ({
       const response = await fetch('/api/marketplace/reviews/helpfulness', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           review_id: reviewId,
@@ -163,7 +163,7 @@ export const ReviewSystem: React.FC<ReviewSystemProps> = ({
       const response = await fetch('/api/marketplace/reviews/flag', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           review_id: reviewId,
@@ -185,7 +185,7 @@ export const ReviewSystem: React.FC<ReviewSystemProps> = ({
       const responseData = await fetch('/api/marketplace/reviews/response', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           review_id: reviewId,

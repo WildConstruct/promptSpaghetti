@@ -48,7 +48,7 @@ const deps = ['zod', 'zustand', 'reactflow', 'seedrandom'];
 const locations = {
   Root: './node_modules',
   Client: './client/node_modules',
-  Core: './packages/core/node_modules',
+  Core: './packages/core/node_modules'
 };
 
 const depVersions = {};

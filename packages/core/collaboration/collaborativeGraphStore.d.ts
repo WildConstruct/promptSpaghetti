@@ -1,3 +1,7 @@
+/**
+ * Collaborative Graph Store - Epic 9.1.2
+ * Extends existing graph store with collaborative editing capabilities
+ */
 import { Graph, Node, Edge } from '../graphSchema';
 import { GraphCRDTAdapter, CollaborativeGraphOptions } from './GraphCRDTAdapter';
 export interface UserPresence {
@@ -57,14 +61,14 @@ export declare const useCollaborativeGraphStore: import("zustand").UseBoundStore
     subscribe: {
         (listener: (selectedState: CollaborativeGraphState, previousSelectedState: CollaborativeGraphState) => void): () => void;
         <U>(selector: (state: CollaborativeGraphState) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
-            equalityFn?: (a: U, b: U) => boolean;
+            equalityFn?: ((a: U, b: U) => boolean) | undefined;
             fireImmediately?: boolean;
         } | undefined): () => void;
     };
 }>;
 export declare const useCollaborationEnabled: () => boolean;
 export declare const useConnectedUsers: () => Map<string, UserPresence>;
-export declare const useConnectionStatus: () => "error" | "connected" | "disconnected" | "connecting";
+export declare const useConnectionStatus: () => "error" | "disconnected" | "connecting" | "connected";
 export declare const useLocalPresence: () => UserPresence | undefined;
 export declare const useCollaborativeGraph: () => {
     nodes: ({
@@ -85,14 +89,14 @@ export declare const useCollaborativeGraph: () => {
         inputs?: string[] | undefined;
     } | {
         id: string;
-        type: "Include";
         name: string;
+        type: "Include";
         inputs?: string[] | undefined;
     } | {
         id: string;
         type: "SetVariable";
         key: string;
-        value?: any;
+        value?: string | number | boolean | string[] | Record<string, string> | null | undefined;
         inputs?: string[] | undefined;
     } | {
         id: string;
@@ -108,9 +112,9 @@ export declare const useCollaborativeGraph: () => {
             weight: number;
         }[] | undefined;
         distributionConfig?: {
-            type: "custom" | "linear" | "exponential" | "gaussian";
-            parameters?: Record<string, number> | undefined;
+            type: "linear" | "custom" | "exponential" | "gaussian";
             normalize?: boolean | undefined;
+            parameters?: Record<string, number> | undefined;
             minWeight?: number | undefined;
         } | undefined;
     } | {
@@ -118,29 +122,29 @@ export declare const useCollaborativeGraph: () => {
         type: "Conditional";
         inputs?: string[] | undefined;
         branches?: {
-            condition: string;
             output: string;
+            condition: string;
             label?: string | undefined;
         }[] | undefined;
         defaultOutput?: string | undefined;
         conditionalConfig?: {
             allowVariableAccess?: boolean | undefined;
             strictMode?: boolean | undefined;
-            customFunctions?: Record<string, any> | undefined;
+            customFunctions?: Record<string, string | number | boolean | string[] | Record<string, string> | null | undefined> | undefined;
         } | undefined;
     } | {
         id: string;
         type: "Sequential";
-        inputs?: string[] | undefined;
-        sequence?: string[] | undefined;
         pattern?: {
             type: "linear" | "cyclical" | "random" | "weighted";
             config?: {
                 custom?: Record<string, any> | undefined;
-                weights?: number[] | undefined;
                 allowRepeats?: boolean | undefined;
+                weights?: number[] | undefined;
             } | undefined;
         } | undefined;
+        inputs?: string[] | undefined;
+        sequence?: string[] | undefined;
     } | {
         id: string;
         type: "Markov";
@@ -159,8 +163,8 @@ export declare const useCollaborativeGraph: () => {
         id: string;
         type: "PythonTransform";
         code: string;
-        inputs?: string[] | undefined;
         timeout?: number | undefined;
+        inputs?: string[] | undefined;
         memoryLimit?: string | undefined;
         allowedModules?: string[] | undefined;
         pythonConfig?: {
@@ -169,7 +173,7 @@ export declare const useCollaborativeGraph: () => {
             enableCaching?: boolean | undefined;
             executorUrl?: string | undefined;
             retryAttempts?: number | undefined;
-            fallbackBehavior?: "error" | "skip" | "default" | undefined;
+            fallbackBehavior?: "error" | "default" | "skip" | undefined;
         } | undefined;
     })[];
     seed?: string | number | undefined;

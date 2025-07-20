@@ -11,13 +11,13 @@ import {
   OutputNode,
   RuntimeNode,
   SetVariableNode,
-  WeightedChoiceNode,
+  WeightedChoiceNode
 } from '../../packages/core/runtime/index.js';
 
 // Import advanced capabilities separately
 import {
   AdvancedExecutionContext,
-  AdvancedExecutionUtils,
+  AdvancedExecutionUtils
 } from '../../packages/core/runtime/advanced.js';
 
 // Epic 13 Analytics Integration
@@ -98,9 +98,9 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
     // Create appropriate execution context
     const ctx = hasAdvancedNodes 
       ? AdvancedExecutionUtils.enhanceContext({ 
-          variables: {}, 
-          seed: graph.seed ?? Date.now() 
-        })
+        variables: {}, 
+        seed: graph.seed ?? Date.now() 
+      })
       : { variables: {}, seed: graph.seed ?? Date.now() } as ExecutionContext;
 
     const nodeMap = new Map<string, Node>();
@@ -297,65 +297,65 @@ function isAdvancedNodeType(nodeType: string): boolean {
 
 function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
   switch (node.type) {
-    // Basic Epic 3 nodes
-    case 'WeightedChoice':
-      return new WeightedChoiceNode(node.id, node.choices);
-    case 'Concat':
-      return new ConcatNode(node.id, resolvedInputs as string[]);
-    case 'Output':
-      return new OutputNode(node.id, resolvedInputs[0]);
-    case 'Include':
-      return new IncludeNode(node.id, node.name, {});
-    case 'SetVariable':
-      return new SetVariableNode(node.id, node.key, node.value);
-    case 'GetVariable':
-      return new GetVariableNode(node.id, node.key);
+  // Basic Epic 3 nodes
+  case 'WeightedChoice':
+    return new WeightedChoiceNode(node.id, node.choices);
+  case 'Concat':
+    return new ConcatNode(node.id, resolvedInputs as string[]);
+  case 'Output':
+    return new OutputNode(node.id, resolvedInputs[0]);
+  case 'Include':
+    return new IncludeNode(node.id, node.name, {});
+  case 'SetVariable':
+    return new SetVariableNode(node.id, node.key, node.value);
+  case 'GetVariable':
+    return new GetVariableNode(node.id, node.key);
     
     // Epic 7 Advanced nodes
-    case 'WeightedAdvanced':
-      return new WeightedAdvancedNode(
-        node.id,
-        node.choices || [],
-        node.distributionConfig || { type: 'linear', normalize: true }
-      );
+  case 'WeightedAdvanced':
+    return new WeightedAdvancedNode(
+      node.id,
+      node.choices || [],
+      node.distributionConfig || { type: 'linear', normalize: true }
+    );
     
-    case 'Conditional':
-      return new ConditionalNode(
-        node.id,
-        node.branches || [],
-        node.defaultOutput || '',
-        node.conditionalConfig || {}
-      );
+  case 'Conditional':
+    return new ConditionalNode(
+      node.id,
+      node.branches || [],
+      node.defaultOutput || '',
+      node.conditionalConfig || {}
+    );
     
-    case 'Sequential':
-      const patternConfig = node.pattern?.config || {};
-      const pattern = createSequencePattern(
-        node.pattern?.type || 'linear',
-        patternConfig
-      );
-      return new SequentialNode(
-        node.id,
-        node.sequence || [],
-        pattern
-      );
+  case 'Sequential':
+    const patternConfig = node.pattern?.config || {};
+    const pattern = createSequencePattern(
+      node.pattern?.type || 'linear',
+      patternConfig
+    );
+    return new SequentialNode(
+      node.id,
+      node.sequence || [],
+      pattern
+    );
     
-    case 'Markov':
-      // Handle empty states by providing a minimal default configuration
-      const states = node.states && node.states.length > 0 ? node.states : ['default'];
-      const transitions = node.transitions && Object.keys(node.transitions).length > 0 
-        ? node.transitions 
-        : { default: { default: 1.0 } };
+  case 'Markov':
+    // Handle empty states by providing a minimal default configuration
+    const states = node.states && node.states.length > 0 ? node.states : ['default'];
+    const transitions = node.transitions && Object.keys(node.transitions).length > 0 
+      ? node.transitions 
+      : { default: { default: 1.0 } };
       
-      const transitionMatrix = createTransitionMatrix({
-        states,
-        transitions,
-        initialState: node.initialState || states[0]
-      });
-      return new MarkovNode(
-        node.id,
-        transitionMatrix,
-        node.markovConfig || {}
-      );
+    const transitionMatrix = createTransitionMatrix({
+      states,
+      transitions,
+      initialState: node.initialState || states[0]
+    });
+    return new MarkovNode(
+      node.id,
+      transitionMatrix,
+      node.markovConfig || {}
+    );
     
     // Epic 8 Python Integration - Temporarily disabled
     // case 'PythonTransform':
@@ -367,15 +367,15 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
     //     pythonConfig: node.pythonConfig
     //   });
     
-    default:
-      // Epic 8.4 Extension System - Try to find extension nodes
-      const extensionNode = tryCreateExtensionNode(node, resolvedInputs);
-      if (extensionNode) {
-        return extensionNode;
-      }
-      // Exhaustive check
-      const _exhaustive: never = node;
-      throw new Error(`Unsupported node type ${(node as any).type}`);
+  default:
+    // Epic 8.4 Extension System - Try to find extension nodes
+    const extensionNode = tryCreateExtensionNode(node, resolvedInputs);
+    if (extensionNode) {
+      return extensionNode;
+    }
+    // Exhaustive check
+    const _exhaustive: never = node;
+    throw new Error(`Unsupported node type ${(node as any).type}`);
   }
 }
 

@@ -4,12 +4,12 @@ import { Palette } from '../packages/core/Palette';
 
 describe('Palette component', () => {
   const nodes = [
-    { id: 'WeightedChoice', label: 'WeightedChoice', icon: '🔀', tooltip: 'Branch' },
+    { id: 'WeightedChoice', label: 'WeightedChoice', icon: '🔀', tooltip: 'Branch' }
   ];
   it('renders node icons and tooltips', () => {
     render(
       <Palette
-        nodes={nodes as any}
+        nodes={nodes as unknown}
         collapsed={false}
         onToggle={() => {}}
       />
@@ -21,7 +21,7 @@ describe('Palette component', () => {
     const mockDragStart = jest.fn();
     render(
       <Palette
-        nodes={nodes as any}
+        nodes={nodes as unknown}
         collapsed={false}
         onToggle={() => {}}
         onDragStart={mockDragStart}
@@ -30,8 +30,8 @@ describe('Palette component', () => {
     const btn = screen.getByRole('button', { name: /WeightedChoice/ });
     fireEvent.dragStart(btn, {
       dataTransfer: {
-        setData: jest.fn(),
-      },
+        setData: jest.fn()
+      }
     } as unknown as DragEvent);
     expect(mockDragStart).toHaveBeenCalledWith('WeightedChoice');
   });

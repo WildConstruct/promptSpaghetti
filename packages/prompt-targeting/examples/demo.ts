@@ -6,7 +6,7 @@
 import {
   createBasicPromptTargetingSystem,
   OpenAIAdaptor,
-  MidjourneyAdaptor,
+  MidjourneyAdaptor
 } from '../index';
 
 /**
@@ -20,24 +20,24 @@ const sampleGraphs = {
         id: '1',
         type: 'system',
         data: {
-          text: 'You are a creative writing assistant.',
-        },
+          text: 'You are a creative writing assistant.'
+        }
       },
       {
         id: '2',
         type: 'output',
         data: {
-          text: 'Write a short story about a time traveler who discovers they can only travel to moments of great historical significance.',
-        },
-      },
+          text: 'Write a short story about a time traveler who discovers they can only travel to moments of great historical significance.'
+        }
+      }
     ],
     edges: [
       {
         id: 'e1',
         source: '1',
-        target: '2',
-      },
-    ],
+        target: '2'
+      }
+    ]
   },
 
   // Visual art prompt (good for Midjourney)
@@ -47,36 +47,36 @@ const sampleGraphs = {
         id: '1',
         type: 'subject',
         data: {
-          text: 'A cyberpunk cityscape at night',
-        },
+          text: 'A cyberpunk cityscape at night'
+        }
       },
       {
         id: '2',
         type: 'style',
         data: {
-          style: 'sci-fi',
-        },
+          style: 'sci-fi'
+        }
       },
       {
         id: '3',
         type: 'aspectRatio',
         data: {
-          aspectRatio: 'landscape',
-        },
-      },
+          aspectRatio: 'landscape'
+        }
+      }
     ],
     edges: [
       {
         id: 'e1',
         source: '1',
-        target: '2',
+        target: '2'
       },
       {
         id: 'e2',
         source: '2',
-        target: '3',
-      },
-    ],
+        target: '3'
+      }
+    ]
   },
 
   // Mixed content prompt (works for both)
@@ -86,12 +86,12 @@ const sampleGraphs = {
         id: '1',
         type: 'output',
         data: {
-          text: 'Create something inspiring about the future of technology',
-        },
-      },
+          text: 'Create something inspiring about the future of technology'
+        }
+      }
     ],
-    edges: [],
-  },
+    edges: []
+  }
 };
 
 /**
@@ -114,16 +114,16 @@ async function runDemo() {
   await openaiAdaptor.initialize({
     openai: {
       apiKey: 'demo-key', // Not actually used in demo
-      model: 'gpt-4',
-    },
+      model: 'gpt-4'
+    }
   });
 
   await midjourneyAdaptor.initialize({
     midjourney: {
       version: '6',
       defaultAspectRatio: '1:1',
-      defaultQuality: 1,
-    },
+      defaultQuality: 1
+    }
   });
 
   // Register adaptors
@@ -185,7 +185,7 @@ async function demoValidation(system: any) {
     { name: 'Creative Writing', graph: sampleGraphs.creativeWriting, platform: 'openai' },
     { name: 'Visual Art', graph: sampleGraphs.visualArt, platform: 'midjourney' },
     { name: 'Creative Writing → Midjourney', graph: sampleGraphs.creativeWriting, platform: 'midjourney' },
-    { name: 'Visual Art → OpenAI', graph: sampleGraphs.visualArt, platform: 'openai' },
+    { name: 'Visual Art → OpenAI', graph: sampleGraphs.visualArt, platform: 'openai' }
   ];
 
   for (const testCase of testCases) {
@@ -230,7 +230,7 @@ async function demoCrossPlatformTranslation(system: any) {
   try {
     const openaiResult = await system.engine.translate(graph, 'openai', {
       qualityPreference: 0.8,
-      stylePreference: 'default',
+      stylePreference: 'default'
     });
 
     console.log(`   Platform: ${openaiResult.platform}`);
@@ -247,7 +247,7 @@ async function demoCrossPlatformTranslation(system: any) {
   try {
     const mjResult = await system.engine.translate(graph, 'midjourney', {
       qualityPreference: 0.9,
-      stylePreference: 'artistic',
+      stylePreference: 'artistic'
     });
 
     console.log(`   Platform: ${mjResult.platform}`);
@@ -267,15 +267,15 @@ async function demoBatchTranslation(system: any) {
   const graph = sampleGraphs.visualArt;
 
   console.log('\n📦 Batch Translation:');
-  console.log(`   Source: Visual Art Graph`);
-  console.log(`   Targets: OpenAI, Midjourney`);
+  console.log('   Source: Visual Art Graph');
+  console.log('   Targets: OpenAI, Midjourney');
 
   const results = await system.engine.translateBatch(
     graph,
     ['openai', 'midjourney'],
     {
       qualityPreference: 0.7,
-      enableOptimizations: true,
+      enableOptimizations: true
     }
   );
 
@@ -298,7 +298,7 @@ async function demoConfigurationEffects(system: any) {
   const configs = [
     { name: 'High Quality', config: { qualityPreference: 0.9, stylePreference: 'photorealistic' } },
     { name: 'Creative', config: { qualityPreference: 0.5, stylePreference: 'artistic' } },
-    { name: 'Minimal', config: { qualityPreference: 0.7, stylePreference: 'minimal' } },
+    { name: 'Minimal', config: { qualityPreference: 0.7, stylePreference: 'minimal' } }
   ];
 
   console.log('\n⚙️ Configuration Effects (Midjourney):');

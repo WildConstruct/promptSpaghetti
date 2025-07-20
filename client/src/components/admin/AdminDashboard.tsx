@@ -46,20 +46,20 @@ export const AdminDashboard: React.FC = () => {
 
   const renderCurrentSection = () => {
     switch (currentSection) {
-      case 'feature-toggles':
-        return <FeatureToggleDashboard />;
-      case 'users':
-        return <UserManagementDashboard />;
-      case 'content':
-        return <ContentManagementDashboard />;
-      case 'marketplace':
-        return <MarketplaceAdminDashboard />;
-      case 'analytics':
-        return <AnalyticsMonitoringDashboard />;
-      case 'system':
-        return <SystemConfigurationDashboard />;
-      default:
-        return <FeatureToggleDashboard />;
+    case 'feature-toggles':
+      return <FeatureToggleDashboard />;
+    case 'users':
+      return <UserManagementDashboard />;
+    case 'content':
+      return <ContentManagementDashboard />;
+    case 'marketplace':
+      return <MarketplaceAdminDashboard />;
+    case 'analytics':
+      return <AnalyticsMonitoringDashboard />;
+    case 'system':
+      return <SystemConfigurationDashboard />;
+    default:
+      return <FeatureToggleDashboard />;
     }
   };
 

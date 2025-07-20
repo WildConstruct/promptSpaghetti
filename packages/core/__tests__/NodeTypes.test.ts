@@ -6,7 +6,7 @@ import {
   deserializeFromRuntime,
   validateNodeData,
   isRuntimeNodeType,
-  isUINodeType,
+  isUINodeType
 } from '../types/NodeTypes';
 
 describe('NodeTypes Data Model', () => {
@@ -114,7 +114,7 @@ describe('NodeTypes Data Model', () => {
         id: 'test',
         type: 'WeightedChoice' as const,
         label: 'Test',
-        choices: [],
+        choices: []
       };
       
       const errors = validateNodeData(invalidChoice);

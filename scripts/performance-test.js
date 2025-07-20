@@ -369,7 +369,7 @@ ${this.generateRecommendations(report)}
 ## Detailed Metrics
 
 ${report.metrics.map(metric => 
-  `### ${metric.name}
+    `### ${metric.name}
 - Average: ${metric.average.toFixed(2)}ms
 - Min: ${metric.min.toFixed(2)}ms
 - Max: ${metric.max.toFixed(2)}ms

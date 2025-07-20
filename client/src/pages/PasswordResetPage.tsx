@@ -24,7 +24,7 @@ const PasswordResetPage: React.FC = () => {
     getTokenExpirationInfo,
     isTokenValid,
     canRetry,
-    userEmail,
+    userEmail
   } = usePasswordReset();
 
   // Determine mode based on token presence and validation

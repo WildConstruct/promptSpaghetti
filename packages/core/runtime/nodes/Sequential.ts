@@ -160,17 +160,17 @@ export function createSequencePattern(
   config: SequencePatternConfig = {}
 ): SequencePattern {
   switch (type) {
-    case 'linear':
-      return new LinearPattern();
-    case 'cyclical':
-      return new CyclicalPattern();
-    case 'random':
-      return new RandomPattern(config);
-    case 'weighted':
-      return new WeightedPattern(config);
-    default:
-      const _exhaustive: never = type;
-      throw new Error(`Unknown sequence pattern type: ${type}`);
+  case 'linear':
+    return new LinearPattern();
+  case 'cyclical':
+    return new CyclicalPattern();
+  case 'random':
+    return new RandomPattern(config);
+  case 'weighted':
+    return new WeightedPattern(config);
+  default:
+    const _exhaustive: never = type;
+    throw new Error(`Unknown sequence pattern type: ${type}`);
   }
 }
 
@@ -343,8 +343,8 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
           config: this.pattern instanceof WeightedPattern ? 
             { weights: (this.pattern as any).config.weights } :
             this.pattern instanceof RandomPattern ?
-            { allowRepeats: (this.pattern as any).config.allowRepeats } :
-            {}
+              { allowRepeats: (this.pattern as any).config.allowRepeats } :
+              {}
         }
       },
       metadata: {

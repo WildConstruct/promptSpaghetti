@@ -21,7 +21,7 @@ describe('Security Validation Framework', () => {
         'window.location',
         'require("fs")',
         'process.exit()',
-        'global.process',
+        'global.process'
       ];
 
       dangerousInputs.forEach(input => {
@@ -36,7 +36,7 @@ describe('Security Validation Framework', () => {
         'simple variable name',
         'text with numbers 123',
         'mixed-case Text',
-        '',
+        ''
       ];
 
       safeInputs.forEach(input => {
@@ -63,7 +63,7 @@ describe('Security Validation Framework', () => {
         'setTimeout(function() { alert(1); }, 0)',
         'setInterval(() => {}, 1000)',
         'window.location = "http://evil.com"',
-        'document.cookie',
+        'document.cookie'
       ];
 
       dangerousExpressions.forEach(expr => {
@@ -81,7 +81,7 @@ describe('Security Validation Framework', () => {
         'value1 + value2',
         '(a && b) || c',
         '!isEmpty',
-        '',
+        ''
       ];
 
       safeExpressions.forEach(expr => {
@@ -107,7 +107,7 @@ describe('Security Validation Framework', () => {
         'toString',
         'valueOf',
         'key__proto__',
-        'constructor.prototype',
+        'constructor.prototype'
       ];
 
       dangerousKeys.forEach(key => {
@@ -125,7 +125,7 @@ describe('Security Validation Framework', () => {
         'normalProperty',
         'CamelCase',
         'kebab-case',
-        'snake_case',
+        'snake_case'
       ];
 
       safeKeys.forEach(key => {
@@ -143,7 +143,7 @@ describe('Security Validation Framework', () => {
         'key@with@at',
         'key#with#hash',
         'key!with!exclamation',
-        'a'.repeat(200), // Too long
+        'a'.repeat(200) // Too long
       ];
 
       invalidKeys.forEach(key => {
@@ -261,7 +261,7 @@ describe('Zod Schema Security Tests', () => {
             key: 'constructor',
             value: 'any value'
           }]
-        },
+        }
       ];
 
       dangerousGraphs.forEach(graph => {
@@ -302,7 +302,7 @@ describe('Zod Schema Security Tests', () => {
             key: 'data',
             value: { name: 'John', age: 30 }
           }]
-        },
+        }
       ];
 
       safeGraphs.forEach(graph => {
@@ -343,7 +343,7 @@ describe('Zod Schema Security Tests', () => {
               output: 'result'
             }]
           }]
-        },
+        }
       ];
 
       dangerousGraphs.forEach(graph => {
@@ -382,7 +382,7 @@ describe('Zod Schema Security Tests', () => {
               output: 'result'
             }]
           }]
-        },
+        }
       ];
 
       safeGraphs.forEach(graph => {
@@ -421,7 +421,7 @@ describe('Zod Schema Security Tests', () => {
             type: 'Include',
             name: 'hasOwnProperty'
           }]
-        },
+        }
       ];
 
       dangerousGraphs.forEach(graph => {
@@ -451,7 +451,7 @@ describe('Zod Schema Security Tests', () => {
             type: 'Include',
             name: 'valid-key'
           }]
-        },
+        }
       ];
 
       safeGraphs.forEach(graph => {
@@ -506,7 +506,7 @@ describe('Runtime Security Tests', () => {
         { key: 'null', value: null },
         { key: 'undefined', value: undefined },
         { key: 'array', value: ['a', 'b', 'c'] },
-        { key: 'object', value: { nested: 'value' } },
+        { key: 'object', value: { nested: 'value' } }
       ];
 
       testCases.forEach(({ key, value }) => {
@@ -523,7 +523,7 @@ describe('Runtime Security Tests', () => {
         () => 'evil',
         Symbol('evil'),
         new Date(),
-        /regex/,
+        /regex/
       ];
 
       dangerousValues.forEach(value => {
@@ -540,7 +540,7 @@ describe('Runtime Security Tests', () => {
     beforeEach(() => {
       ctx.variables = {
         safeKey: 'safe value',
-        normalProperty: 'normal value',
+        normalProperty: 'normal value'
       };
     });
 
@@ -574,7 +574,7 @@ describe('Runtime Security Tests', () => {
     it('should handle safe property access', () => {
       const lookup = {
         template1: 'Hello World',
-        template2: 'Another template',
+        template2: 'Another template'
       };
       
       const node = new IncludeNode('test', 'template1', lookup);
@@ -585,7 +585,7 @@ describe('Runtime Security Tests', () => {
 
     it('should reject dangerous property access', () => {
       const lookup = {
-        template1: 'Hello World',
+        template1: 'Hello World'
       };
       
       const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
@@ -600,7 +600,7 @@ describe('Runtime Security Tests', () => {
 
     it('should handle non-existent properties safely', () => {
       const lookup = {
-        template1: 'Hello World',
+        template1: 'Hello World'
       };
       
       const node = new IncludeNode('test', 'nonExistent', lookup);
@@ -624,7 +624,7 @@ describe('Runtime Security Tests', () => {
       const lookup = {
         template1: 123 as any, // Non-string value
         template2: null as any,
-        template3: undefined as any,
+        template3: undefined as any
       };
       
       ['template1', 'template2', 'template3'].forEach(key => {
@@ -718,7 +718,7 @@ describe('Integration Security Tests', () => {
     const edgeCases = [
       { key: '', value: 'test' },
       { key: 'a'.repeat(200), value: 'test' },
-      { key: 'normal', value: 'x'.repeat(20000) },
+      { key: 'normal', value: 'x'.repeat(20000) }
     ];
 
     edgeCases.forEach(({ key, value }) => {

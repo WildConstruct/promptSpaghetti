@@ -11,7 +11,7 @@ import {
   AdaptorConfig,
   AdaptorError,
   ValidationError,
-  TranslationError,
+  TranslationError
 } from '../types';
 import { createHash } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
@@ -124,8 +124,8 @@ export abstract class BaseAdaptor implements ModelAdaptor {
           qualityScore: validation.compatibilityScore,
           optimizations: await this.getAppliedOptimizations(graph, config),
           ...result.metadata,
-          transformTime,
-        },
+          transformTime
+        }
       };
 
       this.logger.log(`Transform completed for ${this.id} in ${transformTime}ms`);
@@ -150,7 +150,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
     return {
       enableOptimizations: true,
       qualityPreference: 0.7,
-      stylePreference: 'default',
+      stylePreference: 'default'
     };
   }
 
@@ -199,7 +199,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       errors.push({
         code: 'MISSING_GRAPH',
         message: 'No graph provided for validation',
-        severity: 'error' as const,
+        severity: 'error' as const
       });
       return { valid: false, errors, warnings, compatibilityScore: 0 };
     }
@@ -209,7 +209,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       errors.push({
         code: 'INVALID_GRAPH_STRUCTURE',
         message: 'Graph must contain a nodes array',
-        severity: 'error' as const,
+        severity: 'error' as const
       });
     }
 
@@ -217,7 +217,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       errors.push({
         code: 'INVALID_GRAPH_STRUCTURE',
         message: 'Graph must contain an edges array',
-        severity: 'error' as const,
+        severity: 'error' as const
       });
     }
 
@@ -226,7 +226,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       warnings.push({
         code: 'EMPTY_GRAPH',
         message: 'Graph contains no nodes',
-        optimization: 'Add content nodes to generate meaningful output',
+        optimization: 'Add content nodes to generate meaningful output'
       });
     }
 
@@ -243,7 +243,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       valid: errors.length === 0,
       errors,
       warnings,
-      compatibilityScore,
+      compatibilityScore
     };
   }
 
@@ -259,7 +259,7 @@ export abstract class BaseAdaptor implements ModelAdaptor {
       valid: allErrors.length === 0,
       errors: allErrors,
       warnings: allWarnings,
-      compatibilityScore: avgCompatibilityScore,
+      compatibilityScore: avgCompatibilityScore
     };
   }
 

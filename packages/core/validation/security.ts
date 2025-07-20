@@ -7,6 +7,10 @@
 
 import { z } from 'zod';
 
+// Alphanumeric validation pattern for variable names (includes underscore and dash)
+export const VARIABLE_NAME_PATTERN = /^[a-zA-Z0-9_-]+$/;
+export const VARIABLE_NAME_MAX_LENGTH = 64;
+
 // Dangerous patterns that should be blocked
 const DANGEROUS_PATTERNS = [
   // JavaScript injection patterns
@@ -56,7 +60,7 @@ const DANGEROUS_PATTERNS = [
   /url/gi,
   /util/gi,
   /vm/gi,
-  /worker_threads/gi,
+  /worker_threads/gi
 ];
 
 // Safe expression patterns for conditionals
@@ -64,7 +68,7 @@ const SAFE_EXPRESSION_PATTERNS = [
   // Basic operators
   /^[a-zA-Z_$][a-zA-Z0-9_$]*$/,  // Simple variable names
   /^[a-zA-Z0-9_$\s\.\[\]]+$/,    // Property access
-  /^[a-zA-Z0-9_$\s\.\[\]===!==<>=+\-*\/&&\|\|!()]+$/, // Basic expressions
+  /^[a-zA-Z0-9_$\s\.\[\]===!==<>=+\-*\/&&\|\|!()]+$/ // Basic expressions
 ];
 
 // Allowed operators and keywords in expressions
@@ -140,7 +144,7 @@ export class SecurityValidation {
       /\bwebkitRequestAnimationFrame\b/gi,
       /\bmozRequestAnimationFrame\b/gi,
       /\bmsRequestAnimationFrame\b/gi,
-      /\boRequestAnimationFrame\b/gi,
+      /\boRequestAnimationFrame\b/gi
     ];
     
     for (const pattern of dangerousExpressionPatterns) {
@@ -159,12 +163,32 @@ export class SecurityValidation {
   }
 
   /**
+   * Validates that a variable name is safe for SetVariable nodes
+   * - Must be alphanumeric with underscore and dash only
+   * - Must not exceed 64 characters
+   * - Must not use reserved keywords or dangerous patterns
+   */
+  static validateVariableName(name: string): boolean {
+    if (typeof name !== 'string') return false;
+    if (name.length === 0) return false;
+    if (name.length > VARIABLE_NAME_MAX_LENGTH) return false;
+    
+    // Check alphanumeric pattern first
+    if (!VARIABLE_NAME_PATTERN.test(name)) {
+      return false;
+    }
+    
+    // Then check for dangerous patterns using the general property key validation
+    return this.validateSafePropertyKey(name);
+  }
+
+  /**
    * Validates that a property key is safe for object access
    */
   static validateSafePropertyKey(key: string): boolean {
     if (typeof key !== 'string') return false;
     if (key.length === 0) return false;
-    if (key.length > 100) return false; // Prevent DoS via long keys
+    if (key.length > VARIABLE_NAME_MAX_LENGTH) return false; // Limit to 64 chars as per security requirements
     
     // Dangerous property names
     const dangerousProperties = [
@@ -180,7 +204,7 @@ export class SecurityValidation {
       'propertyIsEnumerable',
       'toLocaleString',
       'toString',
-      'valueOf',
+      'valueOf'
     ];
     
     if (dangerousProperties.includes(key)) {
@@ -193,8 +217,7 @@ export class SecurityValidation {
     }
     
     // Only allow alphanumeric, underscore, and dash
-    const safeKeyPattern = /^[a-zA-Z0-9_-]+$/;
-    if (!safeKeyPattern.test(key)) {
+    if (!VARIABLE_NAME_PATTERN.test(key)) {
       return false;
     }
     
@@ -297,7 +320,7 @@ export const SecureValidation = {
       .max(maxLength, `String must be no longer than ${maxLength} characters`)
       .refine(
         (val) => SecurityValidation.validateSafeString(val),
-        { message: "String contains dangerous patterns" }
+        { message: 'String contains dangerous patterns' }
       ),
 
   /**
@@ -308,18 +331,32 @@ export const SecureValidation = {
       .max(maxLength, `Expression must be no longer than ${maxLength} characters`)
       .refine(
         (val) => SecurityValidation.validateSafeExpression(val),
-        { message: "Expression contains unsafe patterns" }
+        { message: 'Expression contains unsafe patterns' }
       ),
 
   /**
    * Safe property key validation
    */
-  safePropertyKey: (maxLength: number = 100) =>
+  safePropertyKey: (maxLength: number = 64) =>
     z.string()
       .max(maxLength, `Property key must be no longer than ${maxLength} characters`)
       .refine(
         (val) => SecurityValidation.validateSafePropertyKey(val),
-        { message: "Property key contains dangerous patterns" }
+        { message: 'Property key contains dangerous patterns' }
+      ),
+
+  /**
+   * Variable name validation for SetVariable nodes
+   * Enforces strict alphanumeric pattern with 64 character limit
+   */
+  variableName: () =>
+    z.string()
+      .min(1, 'Variable name cannot be empty')
+      .max(VARIABLE_NAME_MAX_LENGTH, `Variable name must be no longer than ${VARIABLE_NAME_MAX_LENGTH} characters`)
+      .regex(VARIABLE_NAME_PATTERN, 'Variable name must contain only letters, numbers, underscore, or dash')
+      .refine(
+        (val) => SecurityValidation.validateVariableName(val),
+        { message: 'Variable name contains reserved keywords or dangerous patterns' }
       ),
 
   /**
@@ -329,16 +366,16 @@ export const SecureValidation = {
     z.union([
       z.string().max(10000).refine(
         (val) => SecurityValidation.validateSafeString(val),
-        { message: "String value contains dangerous patterns" }
+        { message: 'String value contains dangerous patterns' }
       ),
       z.number().finite().refine(
         (val) => !isNaN(val),
-        { message: "Number value must be finite" }
+        { message: 'Number value must be finite' }
       ),
       z.boolean(),
       z.array(z.string().max(1000)).max(1000).refine(
         (val) => val.every(item => SecurityValidation.validateSafeString(item)),
-        { message: "Array contains dangerous values" }
+        { message: 'Array contains dangerous values' }
       ),
       z.record(z.string().max(1000)).refine(
         (val) => {
@@ -347,7 +384,7 @@ export const SecureValidation = {
           return keys.every(key => SecurityValidation.validateSafePropertyKey(key)) &&
                  Object.values(val).every(value => SecurityValidation.validateSafeString(value));
         },
-        { message: "Object contains dangerous keys or values" }
+        { message: 'Object contains dangerous keys or values' }
       ),
       z.null(),
       z.undefined()
@@ -371,8 +408,8 @@ export const SecureValidation = {
       )
       .refine(
         (val) => Object.keys(val).every(key => SecurityValidation.validateSafePropertyKey(key)),
-        { message: "Object contains dangerous property keys" }
-      ),
+        { message: 'Object contains dangerous property keys' }
+      )
 };
 
 /**
@@ -397,7 +434,7 @@ export class SecurityTesting {
     'import("fs")',
     'process.exit()',
     'global.process',
-    'Buffer.from("test")',
+    'Buffer.from("test")'
   ];
 
   /**
@@ -423,7 +460,7 @@ export class SecurityTesting {
 
     console.log(`Security Test [${testName}]: ${passed} passed, ${failed} failed`);
     if (failed > 0) {
-      console.warn(`Failed patterns:`, failedPatterns);
+      console.warn('Failed patterns:', failedPatterns);
     }
 
     return { passed, failed, failedPatterns };

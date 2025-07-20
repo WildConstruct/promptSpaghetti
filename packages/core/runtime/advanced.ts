@@ -1,7 +1,7 @@
 // packages/core/runtime/advanced.ts
 // Advanced runtime node base classes and enhanced execution context for Epic 7
 
-import { RuntimeNode, ExecutionContext } from './index';
+import { RuntimeNode, ExecutionContext } from './types';
 import seedrandom from 'seedrandom';
 
 export interface ValidationResult {

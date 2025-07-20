@@ -106,7 +106,7 @@ describe('Advanced I/O System', () => {
 
         const result = ioHandler.validateInputs(inputs);
         expect(result.valid).toBe(false);
-        expect(result.errors).toContain("Required input 'Title' (title) is missing");
+        expect(result.errors).toContain('Required input \'Title\' (title) is missing');
       });
 
       it('should validate input constraints', () => {
@@ -119,7 +119,7 @@ describe('Advanced I/O System', () => {
         const result = ioHandler.validateInputs(inputs);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain('Value 15 is above maximum 10');
-        expect(result.errors).toContain("Value 'invalid' is not in allowed values: fast, slow");
+        expect(result.errors).toContain('Value \'invalid\' is not in allowed values: fast, slow');
       });
 
       it('should handle optional inputs with defaults', () => {

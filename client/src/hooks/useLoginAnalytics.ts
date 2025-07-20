@@ -65,7 +65,7 @@ export const useLoginAnalytics = () => {
       action,
       field,
       value: typeof value === 'string' ? value.substring(0, 50) : value, // Limit value length
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     formInteractions.current.push(event);
@@ -91,17 +91,17 @@ export const useLoginAnalytics = () => {
         screenResolution: `${screen.width}x${screen.height}`,
         timestamp: new Date().toISOString(),
         // Include recent form interactions
-        formInteractions: formInteractions.current.slice(-20), // Last 20 interactions
+        formInteractions: formInteractions.current.slice(-20) // Last 20 interactions
       };
 
       // Send to analytics endpoint
       await fetch('/api/auth/analytics/login-attempt', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
 
       // Clear form interactions after successful login
@@ -121,16 +121,16 @@ export const useLoginAnalytics = () => {
       const payload = {
         interactions: formInteractions.current,
         sessionId: generateSessionId(),
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       await fetch('/api/auth/analytics/form-interactions', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
 
       // Clear sent interactions
@@ -150,16 +150,16 @@ export const useLoginAnalytics = () => {
         details,
         userAgent: navigator.userAgent,
         timestamp: new Date().toISOString(),
-        sessionId: generateSessionId(),
+        sessionId: generateSessionId()
       };
 
       await fetch('/api/auth/analytics/security-event', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
     } catch (error) {
       console.error('Failed to track security event:', error);
@@ -174,8 +174,8 @@ export const useLoginAnalytics = () => {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {
@@ -210,16 +210,16 @@ export const useLoginAnalytics = () => {
           firstContentfulPaint: paint.find(p => p.name === 'first-contentful-paint')?.startTime || 0,
           connectionType: (navigator as any).connection?.effectiveType || 'unknown',
           userAgent: navigator.userAgent,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         };
 
         await fetch('/api/auth/analytics/page-metrics', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           credentials: 'include',
-          body: JSON.stringify(metrics),
+          body: JSON.stringify(metrics)
         });
       }
     } catch (error) {
@@ -237,16 +237,16 @@ export const useLoginAnalytics = () => {
         data,
         timestamp: new Date().toISOString(),
         sessionDuration: new Date().getTime() - sessionStartTime.current.getTime(),
-        pageUrl: window.location.href,
+        pageUrl: window.location.href
       };
 
       await fetch('/api/auth/analytics/engagement', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
     } catch (error) {
       console.error('Failed to track engagement:', error);
@@ -286,7 +286,7 @@ export const useLoginAnalytics = () => {
         if (avgInterval < 50) { // Less than 50ms between keystrokes
           await trackSecurityEvent('rapid_typing_detected', {
             averageInterval: avgInterval,
-            intervalCount: typingIntervals.length,
+            intervalCount: typingIntervals.length
           });
         }
       }
@@ -296,7 +296,7 @@ export const useLoginAnalytics = () => {
       if (pasteEvents.length > 0) {
         await trackSecurityEvent('paste_detected', {
           pasteCount: pasteEvents.length,
-          fields: pasteEvents.map(e => e.field),
+          fields: pasteEvents.map(e => e.field)
         });
       }
 
@@ -309,7 +309,7 @@ export const useLoginAnalytics = () => {
         if (sessionDuration > 30000) { // More than 30 seconds without submitting
           await trackSecurityEvent('form_abandonment', {
             focusEvents: formFocusEvents.length,
-            sessionDuration,
+            sessionDuration
           });
         }
       }
@@ -336,7 +336,7 @@ export const useLoginAnalytics = () => {
     trackEngagement,
     fetchAnalytics,
     detectSuspiciousBehavior,
-    cleanup,
+    cleanup
   };
 };
 
@@ -374,7 +374,7 @@ export const useAnalyticsDashboard = () => {
       successRate: analytics.successRate,
       securityScore: getSecurityScore(),
       deviceTrustRatio: analytics.deviceAnalysis.returningDevices / 
-        (analytics.deviceAnalysis.newDevices + analytics.deviceAnalysis.returningDevices || 1),
+        (analytics.deviceAnalysis.newDevices + analytics.deviceAnalysis.returningDevices || 1)
     };
   }, [analytics, getSecurityScore]);
 
@@ -385,7 +385,7 @@ export const useAnalyticsDashboard = () => {
     setTimeframe,
     refreshAnalytics,
     getSecurityScore,
-    getTrendData,
+    getTrendData
   };
 };
 

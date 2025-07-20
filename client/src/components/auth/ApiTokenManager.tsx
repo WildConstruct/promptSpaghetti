@@ -35,7 +35,7 @@ interface ApiTokenManagerProps {
 
 export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({
   onTokenCreated,
-  onTokenRevoked,
+  onTokenRevoked
 }) => {
   const { user } = useAuth();
   const [tokens, setTokens] = useState<ApiToken[]>([]);
@@ -65,8 +65,8 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({
     try {
       const response = await fetch('/api/auth/api-tokens', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (!response.ok) {
@@ -87,8 +87,8 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({
     try {
       const response = await fetch('/api/auth/api-tokens/stats', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        },
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
 
       if (response.ok) {
@@ -126,13 +126,13 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
         body: JSON.stringify({
           name: tokenName,
           scopes: selectedScopes,
-          expiresIn,
-        }),
+          expiresIn
+        })
       });
 
       if (!response.ok) {
@@ -169,9 +169,9 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify({ tokenId }),
+        body: JSON.stringify({ tokenId })
       });
 
       if (!response.ok) {
@@ -412,8 +412,8 @@ export const ApiTokenManager: React.FC<ApiTokenManagerProps> = ({
               token.revoked 
                 ? 'border-red-200 bg-red-50' 
                 : new Date(token.expiresAt) < new Date()
-                ? 'border-yellow-200 bg-yellow-50'
-                : 'border-gray-200 bg-white'
+                  ? 'border-yellow-200 bg-yellow-50'
+                  : 'border-gray-200 bg-white'
             }`}
           >
             <div className="flex items-center justify-between">

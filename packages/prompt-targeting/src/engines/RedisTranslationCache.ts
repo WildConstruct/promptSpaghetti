@@ -42,7 +42,7 @@ export class RedisTranslationCache implements TranslationCache {
     misses: 0,
     sets: 0,
     deletes: 0,
-    errors: 0,
+    errors: 0
   };
   private logger: Console = console;
 
@@ -56,13 +56,13 @@ export class RedisTranslationCache implements TranslationCache {
       keyPrefix: config.keyPrefix || 'prompt-targeting:',
       defaultTTL: config.defaultTTL || 3600,
       enableCompression: config.enableCompression || true,
-      compressionThreshold: config.compressionThreshold || 1024,
+      compressionThreshold: config.compressionThreshold || 1024
     };
 
     this.client = createClient({
       url: this.config.url,
       password: this.config.password,
-      database: this.config.database,
+      database: this.config.database
     });
 
     this.setupEventHandlers();
@@ -236,7 +236,7 @@ export class RedisTranslationCache implements TranslationCache {
       hits: this.stats.hits,
       misses: this.stats.misses,
       size,
-      hitRate,
+      hitRate
     };
   }
 
@@ -275,7 +275,7 @@ export class RedisTranslationCache implements TranslationCache {
         redisInfo = {
           memoryUsage,
           keyspaceHits: hitsMatch ? parseInt(hitsMatch[1]) : undefined,
-          keyspaceMisses: missesMatch ? parseInt(missesMatch[1]) : undefined,
+          keyspaceMisses: missesMatch ? parseInt(missesMatch[1]) : undefined
         };
       } catch (error) {
         this.logger.error('Error getting Redis info:', error);
@@ -288,7 +288,7 @@ export class RedisTranslationCache implements TranslationCache {
       deletes: this.stats.deletes,
       errors: this.stats.errors,
       connected: this.connected,
-      ...redisInfo,
+      ...redisInfo
     };
   }
 
@@ -396,7 +396,7 @@ export class RedisTranslationCache implements TranslationCache {
       return {
         healthy: false,
         connected: false,
-        error: 'Not connected to Redis',
+        error: 'Not connected to Redis'
       };
     }
 
@@ -408,13 +408,13 @@ export class RedisTranslationCache implements TranslationCache {
       return {
         healthy: true,
         connected: true,
-        latency,
+        latency
       };
     } catch (error) {
       return {
         healthy: false,
         connected: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : 'Unknown error'
       };
     }
   }

@@ -27,7 +27,7 @@ export interface ValidationError {
 
 // Basic node schema with required fields
 const nodeSchema = z.object({
-  id: z.string().min(1, "Node ID cannot be empty"),
+  id: z.string().min(1, 'Node ID cannot be empty'),
   type: z.enum([
     'WeightedChoice',
     'Concat',
@@ -35,14 +35,14 @@ const nodeSchema = z.object({
     'Include',
     'SetVariable',
     'GetVariable'
-  ], { errorMap: () => ({ message: "Invalid node type" }) }),
-  inputs: z.array(z.string()).optional(),
+  ], { errorMap: () => ({ message: 'Invalid node type' }) }),
+  inputs: z.array(z.string()).optional()
 });
 
 // Graph schema with required fields
 const graphSchema = z.object({
-  nodes: z.array(nodeSchema).min(1, "Graph must contain at least one node"),
-  seed: z.union([z.number(), z.string(), z.undefined()]).optional(),
+  nodes: z.array(nodeSchema).min(1, 'Graph must contain at least one node'),
+  seed: z.union([z.number(), z.string(), z.undefined()]).optional()
 });
 
 /**
@@ -176,67 +176,67 @@ function validateNodeConfigurations(graph: Graph): ValidationError[] {
   
   for (const node of graph.nodes) {
     switch (node.type) {
-      case 'WeightedChoice':
-        // Validate that choices array exists and is not empty
-        if (!('choices' in node) || !Array.isArray(node.choices) || node.choices.length === 0) {
-          errors.push({
-            code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
-            message: `WeightedChoice node "${node.id}" must have a non-empty array of choices`,
-            nodeId: node.id,
-            severity: 'error'
-          });
-        } else {
-          // Validate that each choice has a value and positive weight
-          for (let i = 0; i < node.choices.length; i++) {
-            const choice = node.choices[i];
-            if (!choice || typeof choice !== 'object') {
-              errors.push({
-                code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
-                message: `WeightedChoice node "${node.id}" has an invalid choice at index ${i}`,
-                nodeId: node.id,
-                severity: 'error'
-              });
-            } else if (!('value' in choice) || typeof choice.value !== 'string') {
-              errors.push({
-                code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
-                message: `WeightedChoice node "${node.id}" has a choice without a string value at index ${i}`,
-                nodeId: node.id,
-                severity: 'error'
-              });
-            } else if (!('weight' in choice) || typeof choice.weight !== 'number' || choice.weight <= 0) {
-              errors.push({
-                code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
-                message: `WeightedChoice node "${node.id}" has a choice without a positive weight at index ${i}`,
-                nodeId: node.id,
-                severity: 'error'
-              });
-            }
+    case 'WeightedChoice':
+      // Validate that choices array exists and is not empty
+      if (!('choices' in node) || !Array.isArray(node.choices) || node.choices.length === 0) {
+        errors.push({
+          code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
+          message: `WeightedChoice node "${node.id}" must have a non-empty array of choices`,
+          nodeId: node.id,
+          severity: 'error'
+        });
+      } else {
+        // Validate that each choice has a value and positive weight
+        for (let i = 0; i < node.choices.length; i++) {
+          const choice = node.choices[i];
+          if (!choice || typeof choice !== 'object') {
+            errors.push({
+              code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
+              message: `WeightedChoice node "${node.id}" has an invalid choice at index ${i}`,
+              nodeId: node.id,
+              severity: 'error'
+            });
+          } else if (!('value' in choice) || typeof choice.value !== 'string') {
+            errors.push({
+              code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
+              message: `WeightedChoice node "${node.id}" has a choice without a string value at index ${i}`,
+              nodeId: node.id,
+              severity: 'error'
+            });
+          } else if (!('weight' in choice) || typeof choice.weight !== 'number' || choice.weight <= 0) {
+            errors.push({
+              code: 'INVALID_WEIGHTEDCHOICE_CONFIG',
+              message: `WeightedChoice node "${node.id}" has a choice without a positive weight at index ${i}`,
+              nodeId: node.id,
+              severity: 'error'
+            });
           }
         }
-        break;
+      }
+      break;
         
-      case 'Include':
-        if (!('name' in node) || typeof node.name !== 'string' || node.name.trim() === '') {
-          errors.push({
-            code: 'INVALID_INCLUDE_CONFIG',
-            message: `Include node "${node.id}" must have a non-empty name property`,
-            nodeId: node.id,
-            severity: 'error'
-          });
-        }
-        break;
+    case 'Include':
+      if (!('name' in node) || typeof node.name !== 'string' || node.name.trim() === '') {
+        errors.push({
+          code: 'INVALID_INCLUDE_CONFIG',
+          message: `Include node "${node.id}" must have a non-empty name property`,
+          nodeId: node.id,
+          severity: 'error'
+        });
+      }
+      break;
 
-      case 'SetVariable':
-      case 'GetVariable':
-        if (!('key' in node) || typeof node.key !== 'string' || node.key.trim() === '') {
-          errors.push({
-            code: 'INVALID_VARIABLE_CONFIG',
-            message: `${node.type} node "${node.id}" must have a non-empty key property`,
-            nodeId: node.id,
-            severity: 'error'
-          });
-        }
-        break;
+    case 'SetVariable':
+    case 'GetVariable':
+      if (!('key' in node) || typeof node.key !== 'string' || node.key.trim() === '') {
+        errors.push({
+          code: 'INVALID_VARIABLE_CONFIG',
+          message: `${node.type} node "${node.id}" must have a non-empty key property`,
+          nodeId: node.id,
+          severity: 'error'
+        });
+      }
+      break;
     }
   }
   

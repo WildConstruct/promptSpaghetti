@@ -37,9 +37,9 @@ import {
   MenuList,
   MenuItem as MenuItemComponent,
   ListItemIcon,
-  ListItemText,
-  Badge,
-  Divider
+  ListItemText
+  // Badge,
+  // Divider
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -53,7 +53,7 @@ import {
   Error as ErrorIcon,
   Info as InfoIcon,
   ExpandMore as ExpandMoreIcon,
-  MoreVert as MoreVertIcon,
+  // MoreVert as MoreVertIcon,
   Refresh as RefreshIcon,
   GetApp as GetAppIcon,
   Assessment as AssessmentIcon
@@ -77,13 +77,13 @@ interface AuditEvent {
   action: string;
   description: string;
   outcome: 'success' | 'failure' | 'partial';
-  beforeValue?: any;
-  afterValue?: any;
+  beforeValue?: unknown;
+  afterValue?: unknown;
   changedFields?: string[];
   sessionId?: string;
   ipAddress?: string;
   userAgent?: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   tags: string[];
   timestamp: Date;
   duration?: number;
@@ -127,7 +127,7 @@ const EVENT_CATEGORIES = [
 ];
 
 const SEVERITIES = ['low', 'medium', 'high', 'critical'];
-const OUTCOMES = ['success', 'failure', 'partial'];
+// const OUTCOMES = ['success', 'failure', 'partial'];
 
 const SEVERITY_CONFIG = {
   low: { color: 'info', icon: InfoIcon },
@@ -164,7 +164,7 @@ export const AuditLogViewer: React.FC = () => {
   // UI State
   const [selectedEvent, setSelectedEvent] = useState<AuditEvent | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  // const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   const [exportMenuAnchor, setExportMenuAnchor] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
@@ -286,7 +286,7 @@ export const AuditLogViewer: React.FC = () => {
     }
   };
 
-  const handleFilterChange = (field: keyof AuditFilters, value: any) => {
+  const handleFilterChange = (field: keyof AuditFilters, value: unknown) => {
     setFilters(prev => ({ ...prev, [field]: value }));
     setPage(0); // Reset to first page when filters change
   };
@@ -318,12 +318,12 @@ export const AuditLogViewer: React.FC = () => {
     });
   };
 
-  const formatDuration = (ms?: number): string => {
-    if (!ms) return 'N/A';
-    if (ms < 1000) return `${ms}ms`;
-    if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
-    return `${(ms / 60000).toFixed(1)}m`;
-  };
+  // const formatDuration = (ms?: number): string => {
+  //   if (!ms) return 'N/A';
+  //   if (ms < 1000) return `${ms}ms`;
+  //   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`;
+  //   return `${(ms / 60000).toFixed(1)}m`;
+  // };
 
   const formatTimestamp = (timestamp: Date): string => {
     return timestamp.toLocaleString();
@@ -597,7 +597,12 @@ export const AuditLogViewer: React.FC = () => {
                   <TableCell>
                     <Box display="flex" alignItems="center" gap={1}>
                       <OutcomeIcon 
-                        color={outcomeConfig.color as any} 
+                        color={
+                          outcomeConfig.color as (
+                            'inherit' | 'primary' | 'secondary' | 
+                            'success' | 'error' | 'info' | 'warning'
+                          )
+                        } 
                         fontSize="small" 
                       />
                       <Typography variant="body2">
@@ -608,7 +613,12 @@ export const AuditLogViewer: React.FC = () => {
                   <TableCell>
                     <Box display="flex" alignItems="center" gap={1}>
                       <SeverityIcon 
-                        color={severityConfig.color as any} 
+                        color={
+                          severityConfig.color as (
+                            'inherit' | 'primary' | 'secondary' | 
+                            'success' | 'error' | 'info' | 'warning'
+                          )
+                        } 
                         fontSize="small" 
                       />
                       <Typography variant="body2">

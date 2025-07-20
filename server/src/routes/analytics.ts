@@ -655,9 +655,9 @@ export async function analyticsRoutes(
       );
       
       const contentType = config.format === 'html' ? 'text/html' :
-                         config.format === 'csv' ? 'text/csv' :
-                         config.format === 'pdf' ? 'application/pdf' :
-                         'application/json';
+        config.format === 'csv' ? 'text/csv' :
+          config.format === 'pdf' ? 'application/pdf' :
+            'application/json';
       
       reply.type(contentType).send(report);
     } catch (error) {

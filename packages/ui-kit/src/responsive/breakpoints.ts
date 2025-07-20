@@ -84,26 +84,26 @@ export function createMediaQuery(
   const index = sortedKeys.indexOf(breakpoint);
   
   switch (type) {
-    case 'up':
+  case 'up':
+    return `(min-width: ${value}px)`;
+    
+  case 'down':
+    const nextBreakpoint = sortedKeys[index + 1];
+    const maxWidth = nextBreakpoint ? breakpoints[nextBreakpoint] - 1 : Infinity;
+    return maxWidth === Infinity 
+      ? '(min-width: 0px)' 
+      : `(max-width: ${maxWidth}px)`;
+    
+  case 'only':
+    const nextBp = sortedKeys[index + 1];
+    if (!nextBp) {
       return `(min-width: ${value}px)`;
+    }
+    const max = breakpoints[nextBp] - 1;
+    return `(min-width: ${value}px) and (max-width: ${max}px)`;
     
-    case 'down':
-      const nextBreakpoint = sortedKeys[index + 1];
-      const maxWidth = nextBreakpoint ? breakpoints[nextBreakpoint] - 1 : Infinity;
-      return maxWidth === Infinity 
-        ? `(min-width: 0px)` 
-        : `(max-width: ${maxWidth}px)`;
-    
-    case 'only':
-      const nextBp = sortedKeys[index + 1];
-      if (!nextBp) {
-        return `(min-width: ${value}px)`;
-      }
-      const max = breakpoints[nextBp] - 1;
-      return `(min-width: ${value}px) and (max-width: ${max}px)`;
-    
-    default:
-      return `(min-width: ${value}px)`;
+  default:
+    return `(min-width: ${value}px)`;
   }
 }
 

@@ -186,7 +186,7 @@ class VersionCLI {
       }
     );
     
-    console.log(`\n🔍 Upgrade Path Analysis`);
+    console.log('\n🔍 Upgrade Path Analysis');
     console.log('='.repeat(50));
     console.log(`From: ${manifest.version}`);
     console.log(`To: ${targetVersion}`);
@@ -197,13 +197,13 @@ class VersionCLI {
       return;
     }
     
-    console.log(`\nUpgrade Path:`);
+    console.log('\nUpgrade Path:');
     analysis.path.steps.forEach((step, index) => {
       const riskIcon = step.risk === 'high' ? '🔴' : step.risk === 'medium' ? '🟡' : '🟢';
       console.log(`  ${index + 1}. ${step.fromVersion} → ${step.toVersion} (${step.type}) ${riskIcon}`);
       
       if (step.breakingChanges) {
-        console.log(`     ⚠️ Breaking changes detected`);
+        console.log('     ⚠️ Breaking changes detected');
       }
       
       if (step.recommendedActions.length > 0) {
@@ -256,7 +256,7 @@ class VersionCLI {
         result = `${version1} = ${version2}`;
       }
       
-      console.log(`\n🔄 Version Comparison`);
+      console.log('\n🔄 Version Comparison');
       console.log('='.repeat(30));
       console.log(`Result: ${result}`);
       console.log(`\nVersion 1: ${version1}`);
@@ -288,7 +288,7 @@ class VersionCLI {
     try {
       const v = new SemanticVersion(version);
       
-      console.log(`\n✅ Valid Semantic Version`);
+      console.log('\n✅ Valid Semantic Version');
       console.log('='.repeat(30));
       console.log(`Version: ${version}`);
       console.log(`Major: ${v.major}`);
@@ -299,7 +299,7 @@ class VersionCLI {
       console.log(`Stable: ${v.isStable() ? 'Yes' : 'No'}`);
       
     } catch (error) {
-      console.log(`\n❌ Invalid Semantic Version`);
+      console.log('\n❌ Invalid Semantic Version');
       console.log('='.repeat(30));
       console.log(`Version: ${version}`);
       console.log(`Error: ${error.message}`);
@@ -320,7 +320,7 @@ class VersionCLI {
     try {
       const versionRange = VersionRange.parse(range);
       
-      console.log(`\n🎯 Version Range Test`);
+      console.log('\n🎯 Version Range Test');
       console.log('='.repeat(30));
       console.log(`Range: ${range}`);
       console.log();
@@ -364,7 +364,7 @@ class VersionCLI {
       const v = new SemanticVersion(currentVersion);
       const nextVersion = v.getNextVersion(releaseType);
       
-      console.log(`\n⬆️ Next Version`);
+      console.log('\n⬆️ Next Version');
       console.log('='.repeat(20));
       console.log(`Current: ${currentVersion}`);
       console.log(`Type: ${releaseType}`);
@@ -388,7 +388,7 @@ class VersionCLI {
     
     const analysis = extensionUpgradeAdvisor.checkBreakingChanges(extensionId, fromVersion, toVersion);
     
-    console.log(`\n⚠️ Breaking Changes Analysis`);
+    console.log('\n⚠️ Breaking Changes Analysis');
     console.log('='.repeat(40));
     console.log(`Extension: ${extensionId}`);
     console.log(`From: ${fromVersion}`);
@@ -444,7 +444,7 @@ class VersionCLI {
       }
     );
     
-    console.log(`\n📅 Migration Plan`);
+    console.log('\n📅 Migration Plan');
     console.log('='.repeat(30));
     console.log(`Extension: ${manifest.name}`);
     console.log(`From: ${manifest.version}`);

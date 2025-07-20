@@ -13,10 +13,10 @@ describe('InspectorSidebar', () => {
     id: 'WeightedChoice-1',
     type: 'WeightedChoice',
     data: { label: 'Choice', weight: 0.5 }
-  } as any;
+  } as unknown;
 
   it('renders fields from schema', () => {
-    render(<InspectorSidebar node={node} schema={schema as any} onChange={() => {}} />);
+    render(<InspectorSidebar node={node} schema={schema as unknown} onChange={() => {}} />);
     expect(screen.getByLabelText('label')).toBeTruthy();
     expect(screen.getByLabelText('weight')).toBeTruthy();
   });
@@ -24,7 +24,7 @@ describe('InspectorSidebar', () => {
   it('calls onChange when field updates', () => {
     jest.useFakeTimers();
     const onChange = jest.fn();
-    render(<InspectorSidebar node={node} schema={schema as any} onChange={onChange} />);
+    render(<InspectorSidebar node={node} schema={schema as unknown} onChange={onChange} />);
     const input = screen.getByLabelText('label') as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Updated' } });
     // debounce 300ms
@@ -35,7 +35,7 @@ describe('InspectorSidebar', () => {
 
   it('shows validation error', () => {
     jest.useFakeTimers();
-    render(<InspectorSidebar node={node} schema={schema as any} onChange={() => {}} />);
+    render(<InspectorSidebar node={node} schema={schema as unknown} onChange={() => {}} />);
     const weightInput = screen.getByLabelText('weight') as HTMLInputElement;
     fireEvent.change(weightInput, { target: { value: '2' } });
     jest.advanceTimersByTime(350);

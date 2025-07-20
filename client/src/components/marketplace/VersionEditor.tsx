@@ -201,16 +201,16 @@ export const VersionEditor: React.FC = () => {
     const [major, minor, patch] = parts;
     
     switch (compatibilityLevel) {
-      case 'breaking':
-        return `${major + 1}.0.0`;
-      case 'major':
-        return `${major + 1}.0.0`;
-      case 'minor':
-        return `${major}.${minor + 1}.0`;
-      case 'patch':
-        return `${major}.${minor}.${patch + 1}`;
-      default:
-        return `${major}.${minor}.${patch + 1}`;
+    case 'breaking':
+      return `${major + 1}.0.0`;
+    case 'major':
+      return `${major + 1}.0.0`;
+    case 'minor':
+      return `${major}.${minor + 1}.0`;
+    case 'patch':
+      return `${major}.${minor}.${patch + 1}`;
+    default:
+      return `${major}.${minor}.${patch + 1}`;
     }
   };
 
@@ -226,16 +226,16 @@ export const VersionEditor: React.FC = () => {
 
   const validateStep = (step: number): boolean => {
     switch (step) {
-      case 1: // Basic Info
-        return !!(versionData.version_number && versionData.release_notes && versionData.compatibility_level);
-      case 2: // Technical Details
-        return !!(versionData.claude_model && Object.keys(versionData.graph_json).length > 0);
-      case 3: // Change Details
-        return true; // Optional fields
-      case 4: // Review
-        return true;
-      default:
-        return true;
+    case 1: // Basic Info
+      return !!(versionData.version_number && versionData.release_notes && versionData.compatibility_level);
+    case 2: // Technical Details
+      return !!(versionData.claude_model && Object.keys(versionData.graph_json).length > 0);
+    case 3: // Change Details
+      return true; // Optional fields
+    case 4: // Review
+      return true;
+    default:
+      return true;
     }
   };
 

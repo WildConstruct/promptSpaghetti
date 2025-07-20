@@ -19,7 +19,7 @@ export class DatabaseService {
       ssl: config.database.ssl,
       max: config.database.poolSize || 10,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      connectionTimeoutMillis: 2000
     });
 
     // Handle pool errors
@@ -43,7 +43,7 @@ export class DatabaseService {
       console.error('Database query error:', {
         query: text,
         params: params ? params.map(p => typeof p === 'string' && p.length > 100 ? `${p.substring(0, 100)}...` : p) : undefined,
-        error: error instanceof Error ? error.message : String(error),
+        error: error instanceof Error ? error.message : String(error)
       });
       throw error;
     }
@@ -105,7 +105,7 @@ export class DatabaseService {
     return {
       totalCount: this.pool.totalCount,
       idleCount: this.pool.idleCount,
-      waitingCount: this.pool.waitingCount,
+      waitingCount: this.pool.waitingCount
     };
   }
 

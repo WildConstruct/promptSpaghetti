@@ -61,7 +61,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
           strokeLinecap="round"
           strokeLinejoin="round"
           style={{
-            transition: 'd 0.3s ease, opacity 0.3s ease',
+            transition: 'd 0.3s ease, opacity 0.3s ease'
           }}
         />
       </svg>

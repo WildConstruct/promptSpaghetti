@@ -85,16 +85,16 @@ export const ReviewList: React.FC<ReviewListProps> = ({
 
   const sortedReviews = [...reviews].sort((a, b) => {
     switch (sortBy) {
-      case 'newest':
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-      case 'oldest':
-        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
-      case 'highest':
-        return b.stars - a.stars;
-      case 'lowest':
-        return a.stars - b.stars;
-      default:
-        return 0;
+    case 'newest':
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    case 'oldest':
+      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+    case 'highest':
+      return b.stars - a.stars;
+    case 'lowest':
+      return a.stars - b.stars;
+    default:
+      return 0;
     }
   });
 

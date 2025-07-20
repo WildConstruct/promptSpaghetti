@@ -6,7 +6,7 @@ import {
   RestorationPreviewRequestSchema,
   ConflictResolutionRequestSchema,
   RestorationBookmarkRequestSchema,
-  RestorationFilterSchema,
+  RestorationFilterSchema
 } from '../../packages/core/types/restoration';
 
 export async function restorationRoutes(fastify: FastifyInstance) {
@@ -21,11 +21,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
-            data: { type: 'object' },
-          },
-        },
-      },
-    },
+            data: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -37,13 +37,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.status(201).send({
         success: true,
-        data: attempt,
+        data: attempt
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to create restoration attempt',
+        error: 'Failed to create restoration attempt'
       });
     }
   });
@@ -57,11 +57,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
-            data: { type: 'object' },
-          },
-        },
-      },
-    },
+            data: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -73,13 +73,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: preview,
+        data: preview
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to generate restoration preview',
+        error: 'Failed to generate restoration preview'
       });
     }
   });
@@ -90,11 +90,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -102,13 +102,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: progress,
+        data: progress
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to get restoration progress',
+        error: 'Failed to get restoration progress'
       });
     }
   });
@@ -122,11 +122,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
-            data: { type: 'object' },
-          },
-        },
-      },
-    },
+            data: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -138,13 +138,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: result,
+        data: result
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to resolve conflict',
+        error: 'Failed to resolve conflict'
       });
     }
   });
@@ -155,11 +155,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -172,13 +172,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        message: 'Restoration cancelled successfully',
+        message: 'Restoration cancelled successfully'
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to cancel restoration',
+        error: 'Failed to cancel restoration'
       });
     }
   });
@@ -189,11 +189,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          projectId: { type: 'string', format: 'uuid' },
+          projectId: { type: 'string', format: 'uuid' }
         },
-        required: ['projectId'],
-      },
-    },
+        required: ['projectId']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { projectId } = request.params as { projectId: string };
@@ -201,13 +201,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: stats,
+        data: stats
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to get restoration statistics',
+        error: 'Failed to get restoration statistics'
       });
     }
   });
@@ -221,11 +221,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
-            data: { type: 'object' },
-          },
-        },
-      },
-    },
+            data: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -237,13 +237,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.status(201).send({
         success: true,
-        data: bookmark,
+        data: bookmark
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to create restoration bookmark',
+        error: 'Failed to create restoration bookmark'
       });
     }
   });
@@ -254,11 +254,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          projectId: { type: 'string', format: 'uuid' },
+          projectId: { type: 'string', format: 'uuid' }
         },
-        required: ['projectId'],
-      },
-    },
+        required: ['projectId']
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -271,13 +271,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: bookmarks,
+        data: bookmarks
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to get restoration bookmarks',
+        error: 'Failed to get restoration bookmarks'
       });
     }
   });
@@ -288,11 +288,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -309,13 +309,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        message: 'Bookmark deleted successfully',
+        message: 'Bookmark deleted successfully'
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to delete restoration bookmark',
+        error: 'Failed to delete restoration bookmark'
       });
     }
   });
@@ -333,10 +333,10 @@ export async function restorationRoutes(fastify: FastifyInstance) {
           dateFrom: { type: 'string', format: 'date-time' },
           dateTo: { type: 'string', format: 'date-time' },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
-          offset: { type: 'integer', minimum: 0, default: 0 },
-        },
-      },
-    },
+          offset: { type: 'integer', minimum: 0, default: 0 }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const filter = RestorationFilterSchema.parse(request.query);
@@ -344,13 +344,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: attempts,
+        data: attempts
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to list restoration attempts',
+        error: 'Failed to list restoration attempts'
       });
     }
   });
@@ -361,11 +361,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -377,7 +377,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       if (attempt.rows.length === 0) {
         return reply.status(404).send({
           success: false,
-          error: 'Restoration attempt not found',
+          error: 'Restoration attempt not found'
         });
       }
 
@@ -398,14 +398,14 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         data: {
           attempt: attempt.rows[0],
           conflicts: conflicts.rows,
-          operations: operations.rows,
-        },
+          operations: operations.rows
+        }
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to get restoration attempt details',
+        error: 'Failed to get restoration attempt details'
       });
     }
   });
@@ -416,11 +416,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -433,13 +433,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: conflicts.rows,
+        data: conflicts.rows
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to get restoration conflicts',
+        error: 'Failed to get restoration conflicts'
       });
     }
   });
@@ -450,11 +450,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -467,13 +467,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: operations.rows,
+        data: operations.rows
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to get restoration operations',
+        error: 'Failed to get restoration operations'
       });
     }
   });
@@ -486,11 +486,11 @@ export async function restorationRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
-            message: { type: 'string' },
-          },
-        },
-      },
-    },
+            message: { type: 'string' }
+          }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const result = await fastify.db.query(`
@@ -500,13 +500,13 @@ export async function restorationRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        message: `Cleaned up ${result.rowCount} expired preview sessions`,
+        message: `Cleaned up ${result.rowCount} expired preview sessions`
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: 'Failed to clean up expired preview sessions',
+        error: 'Failed to clean up expired preview sessions'
       });
     }
   });

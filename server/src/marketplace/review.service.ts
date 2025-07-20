@@ -291,21 +291,21 @@ export class ReviewService {
     // Build ORDER BY clause
     let orderClause = 'created_at DESC';
     switch (filters.sort_by) {
-      case ReviewSortBy.OLDEST:
-        orderClause = 'created_at ASC';
-        break;
-      case ReviewSortBy.HIGHEST_RATED:
-        orderClause = 'stars DESC, created_at DESC';
-        break;
-      case ReviewSortBy.LOWEST_RATED:
-        orderClause = 'stars ASC, created_at DESC';
-        break;
-      case ReviewSortBy.MOST_HELPFUL:
-        orderClause = '(helpful_votes - not_helpful_votes) DESC, created_at DESC';
-        break;
-      case ReviewSortBy.VERIFIED_FIRST:
-        orderClause = 'verified_purchase DESC, created_at DESC';
-        break;
+    case ReviewSortBy.OLDEST:
+      orderClause = 'created_at ASC';
+      break;
+    case ReviewSortBy.HIGHEST_RATED:
+      orderClause = 'stars DESC, created_at DESC';
+      break;
+    case ReviewSortBy.LOWEST_RATED:
+      orderClause = 'stars ASC, created_at DESC';
+      break;
+    case ReviewSortBy.MOST_HELPFUL:
+      orderClause = '(helpful_votes - not_helpful_votes) DESC, created_at DESC';
+      break;
+    case ReviewSortBy.VERIFIED_FIRST:
+      orderClause = 'verified_purchase DESC, created_at DESC';
+      break;
     }
 
     // Get reviews

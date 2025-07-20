@@ -7,17 +7,17 @@ import { usePasswordReset } from '../../hooks/usePasswordReset';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 
 const PasswordResetRequestSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: z.string().email('Please enter a valid email address')
 });
 
 const PasswordResetConfirmSchema = z.object({
   newPassword: z.string()
     .min(8, 'Password must be at least 8 characters')
     .max(128, 'Password must be less than 128 characters'),
-  confirmPassword: z.string(),
+  confirmPassword: z.string()
 }).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
+  message: 'Passwords don\'t match',
+  path: ['confirmPassword']
 });
 
 interface PasswordResetFormProps {
@@ -31,12 +31,12 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
   mode,
   token,
   onSuccess,
-  onCancel,
+  onCancel
 }) => {
   const [formData, setFormData] = useState({
     email: '',
     newPassword: '',
-    confirmPassword: '',
+    confirmPassword: ''
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -48,7 +48,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     confirmPasswordReset,
     validateToken,
     loading,
-    error: hookError,
+    error: hookError
   } = usePasswordReset();
 
   // Validate token on component mount for confirm mode
@@ -67,7 +67,7 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
       } else {
         PasswordResetConfirmSchema.parse({
           newPassword: formData.newPassword,
-          confirmPassword: formData.confirmPassword,
+          confirmPassword: formData.confirmPassword
         });
       }
       return true;

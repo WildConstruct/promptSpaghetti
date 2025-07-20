@@ -170,35 +170,35 @@ export const getViewportSize = () => {
 // Platform-specific optimizations
 export const getPlatformOptimizations = (platform: Platform) => {
   switch (platform) {
-    case 'mobile':
-      return {
-        enableTouchOptimizations: true,
-        reducedAnimations: isReducedMotion(),
-        useLargerTouchTargets: true,
-        enableVirtualization: true,
-        prefersSystemTheme: true
-      };
+  case 'mobile':
+    return {
+      enableTouchOptimizations: true,
+      reducedAnimations: isReducedMotion(),
+      useLargerTouchTargets: true,
+      enableVirtualization: true,
+      prefersSystemTheme: true
+    };
     
-    case 'desktop':
-      return {
-        enableTouchOptimizations: false,
-        reducedAnimations: false,
-        useLargerTouchTargets: false,
-        enableVirtualization: false,
-        prefersSystemTheme: false,
-        enableKeyboardShortcuts: true
-      };
+  case 'desktop':
+    return {
+      enableTouchOptimizations: false,
+      reducedAnimations: false,
+      useLargerTouchTargets: false,
+      enableVirtualization: false,
+      prefersSystemTheme: false,
+      enableKeyboardShortcuts: true
+    };
     
-    case 'web':
-    default:
-      return {
-        enableTouchOptimizations: isTouchDevice(),
-        reducedAnimations: isReducedMotion(),
-        useLargerTouchTargets: isTouchDevice(),
-        enableVirtualization: true,
-        prefersSystemTheme: true,
-        enableKeyboardShortcuts: !isTouchDevice()
-      };
+  case 'web':
+  default:
+    return {
+      enableTouchOptimizations: isTouchDevice(),
+      reducedAnimations: isReducedMotion(),
+      useLargerTouchTargets: isTouchDevice(),
+      enableVirtualization: true,
+      prefersSystemTheme: true,
+      enableKeyboardShortcuts: !isTouchDevice()
+    };
   }
 };
 

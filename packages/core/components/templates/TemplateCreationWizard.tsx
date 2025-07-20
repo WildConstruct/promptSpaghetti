@@ -73,20 +73,20 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({
     const newErrors: Record<string, string> = {};
 
     switch (currentStep) {
-      case 'basic':
-        if (!templateData.name?.trim()) {
-          newErrors.name = 'Template name is required';
-        }
-        if (!templateData.description?.trim()) {
-          newErrors.description = 'Description is required';
-        }
-        if (!templateData.category) {
-          newErrors.category = 'Category is required';
-        }
-        if (!templateData.estimated_time || templateData.estimated_time <= 0) {
-          newErrors.estimated_time = 'Estimated time must be greater than 0';
-        }
-        break;
+    case 'basic':
+      if (!templateData.name?.trim()) {
+        newErrors.name = 'Template name is required';
+      }
+      if (!templateData.description?.trim()) {
+        newErrors.description = 'Description is required';
+      }
+      if (!templateData.category) {
+        newErrors.category = 'Category is required';
+      }
+      if (!templateData.estimated_time || templateData.estimated_time <= 0) {
+        newErrors.estimated_time = 'Estimated time must be greater than 0';
+      }
+      break;
     }
 
     setErrors(newErrors);

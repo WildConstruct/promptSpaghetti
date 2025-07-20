@@ -145,54 +145,54 @@ export class SchedulingService {
 
       const beforeValue = toggle.value;
       let afterValue = beforeValue;
-      let affectedUsers = 0;
+      const affectedUsers = 0;
 
       // Execute the action
       switch (schedule.action) {
-        case ScheduleAction.ENABLE:
+      case ScheduleAction.ENABLE:
+        await this.featureToggleDAO.updateToggle({
+          id: schedule.toggleId,
+          enabled: true
+        }, 'scheduler');
+        break;
+
+      case ScheduleAction.DISABLE:
+        await this.featureToggleDAO.updateToggle({
+          id: schedule.toggleId,
+          enabled: false
+        }, 'scheduler');
+        break;
+
+      case ScheduleAction.UPDATE_VALUE:
+        if (schedule.actionConfig.targetValue !== undefined) {
           await this.featureToggleDAO.updateToggle({
             id: schedule.toggleId,
-            enabled: true
+            value: schedule.actionConfig.targetValue
           }, 'scheduler');
-          break;
+          afterValue = schedule.actionConfig.targetValue;
+        }
+        break;
 
-        case ScheduleAction.DISABLE:
+      case ScheduleAction.MODIFY_PERCENTAGE:
+        if (schedule.actionConfig.rolloutPercentage !== undefined) {
+          const newValue = { ...toggle.value };
+          if (toggle.type === 'percentage_rollout') {
+            newValue.percentage = schedule.actionConfig.rolloutPercentage;
+          }
           await this.featureToggleDAO.updateToggle({
             id: schedule.toggleId,
-            enabled: false
+            value: newValue
           }, 'scheduler');
-          break;
+          afterValue = newValue;
+        }
+        break;
 
-        case ScheduleAction.UPDATE_VALUE:
-          if (schedule.actionConfig.targetValue !== undefined) {
-            await this.featureToggleDAO.updateToggle({
-              id: schedule.toggleId,
-              value: schedule.actionConfig.targetValue
-            }, 'scheduler');
-            afterValue = schedule.actionConfig.targetValue;
-          }
-          break;
-
-        case ScheduleAction.MODIFY_PERCENTAGE:
-          if (schedule.actionConfig.rolloutPercentage !== undefined) {
-            const newValue = { ...toggle.value };
-            if (toggle.type === 'percentage_rollout') {
-              newValue.percentage = schedule.actionConfig.rolloutPercentage;
-            }
-            await this.featureToggleDAO.updateToggle({
-              id: schedule.toggleId,
-              value: newValue
-            }, 'scheduler');
-            afterValue = newValue;
-          }
-          break;
-
-        case ScheduleAction.ACTIVATE_ROLLOUT:
-          if (schedule.actionConfig.gradualRollout) {
-            await this.handleGradualRollout(schedule);
-            return; // Gradual rollout handles its own execution logging
-          }
-          break;
+      case ScheduleAction.ACTIVATE_ROLLOUT:
+        if (schedule.actionConfig.gradualRollout) {
+          await this.handleGradualRollout(schedule);
+          return; // Gradual rollout handles its own execution logging
+        }
+        break;
       }
 
       // Log successful execution
@@ -331,7 +331,7 @@ export class SchedulingService {
   private checkActionConflict(action1: ScheduleAction, action2: ScheduleAction): boolean {
     const conflictingActions = [
       [ScheduleAction.ENABLE, ScheduleAction.DISABLE],
-      [ScheduleAction.UPDATE_VALUE, ScheduleAction.UPDATE_VALUE], // Same action with different values
+      [ScheduleAction.UPDATE_VALUE, ScheduleAction.UPDATE_VALUE] // Same action with different values
     ];
 
     return conflictingActions.some(([a1, a2]) => 
@@ -388,13 +388,13 @@ export class SchedulingService {
     if (!suggestedResolution) return;
 
     switch (suggestedResolution.action) {
-      case 'modify_priority':
-        // Increase new schedule priority by 1
-        await this.schedulingDAO.updateSchedule(
-          { id: schedule.id, priority: schedule.priority + 1 },
-          'auto-resolver'
-        );
-        break;
+    case 'modify_priority':
+      // Increase new schedule priority by 1
+      await this.schedulingDAO.updateSchedule(
+        { id: schedule.id, priority: schedule.priority + 1 },
+        'auto-resolver'
+      );
+      break;
     }
   }
 
@@ -460,34 +460,34 @@ export class SchedulingService {
     // Recurring schedules
     if (schedule.type === ScheduleType.RECURRING && schedule.recurrence) {
       const { type, interval } = schedule.recurrence;
-      let nextDate = new Date(schedule.startTime);
+      const nextDate = new Date(schedule.startTime);
 
       // If start time has passed, calculate next occurrence
       if (nextDate <= now) {
         switch (type) {
-          case RecurrenceType.DAILY:
-            while (nextDate <= now) {
-              nextDate.setDate(nextDate.getDate() + interval);
-            }
-            break;
+        case RecurrenceType.DAILY:
+          while (nextDate <= now) {
+            nextDate.setDate(nextDate.getDate() + interval);
+          }
+          break;
 
-          case RecurrenceType.WEEKLY:
-            while (nextDate <= now) {
-              nextDate.setDate(nextDate.getDate() + (7 * interval));
-            }
-            break;
+        case RecurrenceType.WEEKLY:
+          while (nextDate <= now) {
+            nextDate.setDate(nextDate.getDate() + (7 * interval));
+          }
+          break;
 
-          case RecurrenceType.MONTHLY:
-            while (nextDate <= now) {
-              nextDate.setMonth(nextDate.getMonth() + interval);
-            }
-            break;
+        case RecurrenceType.MONTHLY:
+          while (nextDate <= now) {
+            nextDate.setMonth(nextDate.getMonth() + interval);
+          }
+          break;
 
-          case RecurrenceType.YEARLY:
-            while (nextDate <= now) {
-              nextDate.setFullYear(nextDate.getFullYear() + interval);
-            }
-            break;
+        case RecurrenceType.YEARLY:
+          while (nextDate <= now) {
+            nextDate.setFullYear(nextDate.getFullYear() + interval);
+          }
+          break;
         }
       }
 

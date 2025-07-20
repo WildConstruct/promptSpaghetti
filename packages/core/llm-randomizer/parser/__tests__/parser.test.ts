@@ -406,7 +406,7 @@ test:
     });
 
     test('should detect invalid format quickly', async () => {
-      const content = `invalid format without proper structure`;
+      const content = 'invalid format without proper structure';
 
       const isValid = await validateGraph(content);
       expect(isValid).toBe(false);
@@ -469,9 +469,9 @@ node2:
 
     test('should parse batch of graphs', async () => {
       const graphs = [
-        `version: 1.0.0\n---NODES---\ntest1:\n  type: Output\n---END---`,
-        `version: 1.0.0\n---NODES---\ntest2:\n  type: Output\n---END---`,
-        `invalid graph content`
+        'version: 1.0.0\n---NODES---\ntest1:\n  type: Output\n---END---',
+        'version: 1.0.0\n---NODES---\ntest2:\n  type: Output\n---END---',
+        'invalid graph content'
       ];
 
       const parser = new GraphParser();

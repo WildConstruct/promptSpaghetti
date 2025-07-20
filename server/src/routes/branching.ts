@@ -12,7 +12,7 @@ import {
   MergeBranchRequestSchema,
   SyncBranchRequestSchema,
   BranchFilterSchema,
-  MergeRequestFilterSchema,
+  MergeRequestFilterSchema
 } from '../../packages/core/types/branching';
 
 export async function branchingRoutes(fastify: FastifyInstance) {
@@ -27,11 +27,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
-            data: { type: 'object' },
-          },
-        },
-      },
-    },
+            data: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -43,13 +43,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.status(201).send({
         success: true,
-        data: branch,
+        data: branch
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to create branch',
+        error: error.message || 'Failed to create branch'
       });
     }
   });
@@ -60,12 +60,12 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
+        required: ['id']
       },
-      body: UpdateBranchRequestSchema,
-    },
+      body: UpdateBranchRequestSchema
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -78,13 +78,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: branch,
+        data: branch
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to update branch',
+        error: error.message || 'Failed to update branch'
       });
     }
   });
@@ -95,11 +95,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -112,13 +112,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        message: 'Branch deleted successfully',
+        message: 'Branch deleted successfully'
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to delete branch',
+        error: error.message || 'Failed to delete branch'
       });
     }
   });
@@ -129,11 +129,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -141,13 +141,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: branch,
+        data: branch
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to get branch',
+        error: error.message || 'Failed to get branch'
       });
     }
   });
@@ -170,10 +170,10 @@ export async function branchingRoutes(fastify: FastifyInstance) {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 },
           sortBy: { type: 'string', enum: ['name', 'created_at', 'updated_at', 'last_activity_at'], default: 'updated_at' },
-          sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' },
-        },
-      },
-    },
+          sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const query = request.query as any;
@@ -191,20 +191,20 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         limit: query.limit || 20,
         offset: query.offset || 0,
         sortBy: query.sortBy || 'updated_at',
-        sortOrder: query.sortOrder || 'desc',
+        sortOrder: query.sortOrder || 'desc'
       };
 
       const branches = await branchingService.listBranches(filter);
       
       reply.send({
         success: true,
-        data: branches,
+        data: branches
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to list branches',
+        error: error.message || 'Failed to list branches'
       });
     }
   });
@@ -215,9 +215,9 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
+        required: ['id']
       },
       body: {
         type: 'object',
@@ -225,11 +225,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
           snapshotId: { type: 'string', format: 'uuid' },
           commitMessage: { type: 'string' },
           parentCommitIds: { type: 'array', items: { type: 'string', format: 'uuid' } },
-          commitMetadata: { type: 'object' },
+          commitMetadata: { type: 'object' }
         },
-        required: ['snapshotId'],
-      },
-    },
+        required: ['snapshotId']
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -245,20 +245,20 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         snapshotId,
         commitMessage,
         parentCommitIds: parentCommitIds || [],
-        commitMetadata: commitMetadata || {},
+        commitMetadata: commitMetadata || {}
       };
 
       const commit = await branchingService.createCommit(commitRequest, userId);
       
       reply.status(201).send({
         success: true,
-        data: commit,
+        data: commit
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to create commit',
+        error: error.message || 'Failed to create commit'
       });
     }
   });
@@ -266,8 +266,8 @@ export async function branchingRoutes(fastify: FastifyInstance) {
   // Create merge request
   fastify.post('/merge-requests', {
     schema: {
-      body: CreateMergeRequestRequestSchema,
-    },
+      body: CreateMergeRequestRequestSchema
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -279,13 +279,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.status(201).send({
         success: true,
-        data: mergeRequest,
+        data: mergeRequest
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to create merge request',
+        error: error.message || 'Failed to create merge request'
       });
     }
   });
@@ -296,19 +296,19 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
+        required: ['id']
       },
       body: {
         type: 'object',
         properties: {
           mergeStrategy: { type: 'string', enum: ['merge', 'squash', 'rebase'], default: 'merge' },
           commitMessage: { type: 'string' },
-          deleteSourceBranch: { type: 'boolean', default: false },
-        },
-      },
-    },
+          deleteSourceBranch: { type: 'boolean', default: false }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -323,20 +323,20 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         mergeRequestId: id,
         mergeStrategy: mergeStrategy || 'merge',
         commitMessage,
-        deleteSourceBranch: deleteSourceBranch || false,
+        deleteSourceBranch: deleteSourceBranch || false
       };
 
       const result = await branchingService.mergeBranch(mergeRequest, userId);
       
       reply.send({
         success: true,
-        data: result,
+        data: result
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to merge branch',
+        error: error.message || 'Failed to merge branch'
       });
     }
   });
@@ -347,11 +347,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          projectId: { type: 'string', format: 'uuid' },
+          projectId: { type: 'string', format: 'uuid' }
         },
-        required: ['projectId'],
-      },
-    },
+        required: ['projectId']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { projectId } = request.params as { projectId: string };
@@ -359,13 +359,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: stats,
+        data: stats
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to get branch statistics',
+        error: error.message || 'Failed to get branch statistics'
       });
     }
   });
@@ -376,11 +376,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          projectId: { type: 'string', format: 'uuid' },
+          projectId: { type: 'string', format: 'uuid' }
         },
-        required: ['projectId'],
-      },
-    },
+        required: ['projectId']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { projectId } = request.params as { projectId: string };
@@ -388,13 +388,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: hierarchy,
+        data: hierarchy
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to get branch hierarchy',
+        error: error.message || 'Failed to get branch hierarchy'
       });
     }
   });
@@ -406,11 +406,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           sourceId: { type: 'string', format: 'uuid' },
-          targetId: { type: 'string', format: 'uuid' },
+          targetId: { type: 'string', format: 'uuid' }
         },
-        required: ['sourceId', 'targetId'],
-      },
-    },
+        required: ['sourceId', 'targetId']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { sourceId, targetId } = request.params as { sourceId: string; targetId: string };
@@ -418,13 +418,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: comparison,
+        data: comparison
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to compare branches',
+        error: error.message || 'Failed to compare branches'
       });
     }
   });
@@ -435,19 +435,19 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
+        required: ['id']
       },
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 },
-          sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' },
-        },
-      },
-    },
+          sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -462,13 +462,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: result.rows,
+        data: result.rows
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to get branch commits',
+        error: error.message || 'Failed to get branch commits'
       });
     }
   });
@@ -491,10 +491,10 @@ export async function branchingRoutes(fastify: FastifyInstance) {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 },
           sortBy: { type: 'string', enum: ['created_at', 'updated_at', 'title'], default: 'updated_at' },
-          sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' },
-        },
-      },
-    },
+          sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
+        }
+      }
+    }
   }, async (request, reply) => {
     try {
       const query = request.query as any;
@@ -562,13 +562,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       
       reply.send({
         success: true,
-        data: result.rows,
+        data: result.rows
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to list merge requests',
+        error: error.message || 'Failed to list merge requests'
       });
     }
   });
@@ -579,11 +579,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -595,19 +595,19 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       if (result.rows.length === 0) {
         return reply.status(404).send({
           success: false,
-          error: 'Merge request not found',
+          error: 'Merge request not found'
         });
       }
 
       reply.send({
         success: true,
-        data: result.rows[0],
+        data: result.rows[0]
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to get merge request',
+        error: error.message || 'Failed to get merge request'
       });
     }
   });
@@ -618,12 +618,12 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
+        required: ['id']
       },
-      body: UpdateMergeRequestRequestSchema,
-    },
+      body: UpdateMergeRequestRequestSchema
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -665,11 +665,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       if (updateFields.length === 0) {
         return reply.status(400).send({
           success: false,
-          error: 'No fields to update',
+          error: 'No fields to update'
         });
       }
 
-      updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
+      updateFields.push('updated_at = CURRENT_TIMESTAMP');
       updateValues.push(id);
 
       const result = await fastify.db.query(`
@@ -682,19 +682,19 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       if (result.rows.length === 0) {
         return reply.status(404).send({
           success: false,
-          error: 'Merge request not found',
+          error: 'Merge request not found'
         });
       }
 
       reply.send({
         success: true,
-        data: result.rows[0],
+        data: result.rows[0]
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to update merge request',
+        error: error.message || 'Failed to update merge request'
       });
     }
   });
@@ -705,11 +705,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -729,19 +729,19 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       if (result.rows.length === 0) {
         return reply.status(404).send({
           success: false,
-          error: 'Merge request not found',
+          error: 'Merge request not found'
         });
       }
 
       reply.send({
         success: true,
-        data: result.rows[0],
+        data: result.rows[0]
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to close merge request',
+        error: error.message || 'Failed to close merge request'
       });
     }
   });
@@ -752,19 +752,19 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
+        required: ['id']
       },
       body: {
         type: 'object',
         properties: {
           status: { type: 'string', enum: ['pending', 'approved', 'rejected', 'commented'] },
-          reviewMessage: { type: 'string' },
+          reviewMessage: { type: 'string' }
         },
-        required: ['status'],
-      },
-    },
+        required: ['status']
+      }
+    }
   }, async (request, reply) => {
     try {
       const userId = request.user?.id;
@@ -787,13 +787,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
 
       reply.status(201).send({
         success: true,
-        data: result.rows[0],
+        data: result.rows[0]
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to create review',
+        error: error.message || 'Failed to create review'
       });
     }
   });
@@ -804,11 +804,11 @@ export async function branchingRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          id: { type: 'string', format: 'uuid' },
+          id: { type: 'string', format: 'uuid' }
         },
-        required: ['id'],
-      },
-    },
+        required: ['id']
+      }
+    }
   }, async (request, reply) => {
     try {
       const { id } = request.params as { id: string };
@@ -823,13 +823,13 @@ export async function branchingRoutes(fastify: FastifyInstance) {
 
       reply.send({
         success: true,
-        data: result.rows,
+        data: result.rows
       });
     } catch (error) {
       fastify.log.error(error);
       reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to get reviews',
+        error: error.message || 'Failed to get reviews'
       });
     }
   });

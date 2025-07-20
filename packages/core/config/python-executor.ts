@@ -74,7 +74,7 @@ const DEFAULT_CONFIG: PythonExecutorConfig = {
   
   // Development
   enableDebugLogs: process.env.NODE_ENV === 'development',
-  enableValidation: true,
+  enableValidation: true
 };
 
 /**
@@ -88,7 +88,7 @@ export class PythonExecutorConfigManager {
     this.config = {
       ...DEFAULT_CONFIG,
       ...this.loadFromEnvironment(),
-      ...initialConfig,
+      ...initialConfig
     };
   }
 
@@ -114,7 +114,7 @@ export class PythonExecutorConfigManager {
     
     console.log('Python executor configuration updated:', {
       changed: this.getChangedFields(oldConfig, this.config),
-      config: this.config,
+      config: this.config
     });
   }
 
@@ -310,35 +310,35 @@ export class PythonExecutorConfigManager {
    */
   getEnvironmentConfig(environment: 'development' | 'staging' | 'production'): Partial<PythonExecutorConfig> {
     switch (environment) {
-      case 'development':
-        return {
-          enableDebugLogs: true,
-          enableMetrics: true,
-          enableTracing: true,
-          strictMode: false,
-          timeout: 60000, // Longer timeout for development
-        };
+    case 'development':
+      return {
+        enableDebugLogs: true,
+        enableMetrics: true,
+        enableTracing: true,
+        strictMode: false,
+        timeout: 60000 // Longer timeout for development
+      };
       
-      case 'staging':
-        return {
-          enableDebugLogs: false,
-          enableMetrics: true,
-          enableTracing: true,
-          strictMode: true,
-          timeout: 45000,
-        };
+    case 'staging':
+      return {
+        enableDebugLogs: false,
+        enableMetrics: true,
+        enableTracing: true,
+        strictMode: true,
+        timeout: 45000
+      };
       
-      case 'production':
-        return {
-          enableDebugLogs: false,
-          enableMetrics: false,
-          enableTracing: false,
-          strictMode: true,
-          timeout: 30000,
-        };
+    case 'production':
+      return {
+        enableDebugLogs: false,
+        enableMetrics: false,
+        enableTracing: false,
+        strictMode: true,
+        timeout: 30000
+      };
       
-      default:
-        return {};
+    default:
+      return {};
     }
   }
 

@@ -231,7 +231,7 @@ export class MetricsCollector extends EventEmitter {
     system: SystemMetrics | null;
     webSocket: WebSocketMetrics | null;
     collaboration: CollaborationMetrics | null;
-  } {
+    } {
     return {
       system: this.systemMetrics[this.systemMetrics.length - 1] || null,
       webSocket: this.webSocketMetrics[this.webSocketMetrics.length - 1] || null,
@@ -406,8 +406,8 @@ export class MetricsCollector extends EventEmitter {
   private async getNetworkStats(): Promise<any> {
     try {
       const networkInterfaces = os.networkInterfaces();
-      let totalReceived = 0;
-      let totalSent = 0;
+      const totalReceived = 0;
+      const totalSent = 0;
       
       // This is a simplified implementation
       // In a real scenario, you'd track deltas from baseline
@@ -485,7 +485,7 @@ export class MetricsCollector extends EventEmitter {
    * Create a performance alert
    */
   private createAlert(metric: string, currentValue: number, threshold: number, 
-                     description: string, severity: 'warning' | 'critical'): void {
+    description: string, severity: 'warning' | 'critical'): void {
     const alertId = `${metric}_${Date.now()}`;
     const alert: PerformanceAlert = {
       id: alertId,

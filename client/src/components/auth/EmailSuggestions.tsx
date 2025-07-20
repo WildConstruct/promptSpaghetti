@@ -12,7 +12,7 @@ interface EmailSuggestionsProps {
 export const EmailSuggestions: React.FC<EmailSuggestionsProps> = ({
   suggestion,
   onAccept,
-  className = '',
+  className = ''
 }) => {
   if (!suggestion) {
     return null;

@@ -41,25 +41,25 @@ export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({
 
   const getOperationPriorityColor = (priority: 'high' | 'medium' | 'low') => {
     switch (priority) {
-      case 'high': return '#dc2626';
-      case 'medium': return '#d97706';
-      case 'low': return '#059669';
-      default: return '#6b7280';
+    case 'high': return '#dc2626';
+    case 'medium': return '#d97706';
+    case 'low': return '#059669';
+    default: return '#6b7280';
     }
   };
 
   const getConnectionQualityDescription = (quality: ConnectionQuality) => {
     switch (quality) {
-      case ConnectionQuality.EXCELLENT:
-        return 'Excellent connection quality. Low latency, no packet loss.';
-      case ConnectionQuality.GOOD:
-        return 'Good connection quality. Acceptable latency and minimal packet loss.';
-      case ConnectionQuality.FAIR:
-        return 'Fair connection quality. Some latency or packet loss detected.';
-      case ConnectionQuality.POOR:
-        return 'Poor connection quality. High latency or significant packet loss.';
-      default:
-        return 'Connection quality unknown. Gathering metrics...';
+    case ConnectionQuality.EXCELLENT:
+      return 'Excellent connection quality. Low latency, no packet loss.';
+    case ConnectionQuality.GOOD:
+      return 'Good connection quality. Acceptable latency and minimal packet loss.';
+    case ConnectionQuality.FAIR:
+      return 'Fair connection quality. Some latency or packet loss detected.';
+    case ConnectionQuality.POOR:
+      return 'Poor connection quality. High latency or significant packet loss.';
+    default:
+      return 'Connection quality unknown. Gathering metrics...';
     }
   };
 
@@ -146,7 +146,7 @@ export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({
                     <span className="text-gray-600">Quality:</span>
                     <span className="font-medium" style={{ color: getOperationPriorityColor(
                       status.connectionQuality === ConnectionQuality.EXCELLENT ? 'low' :
-                      status.connectionQuality === ConnectionQuality.GOOD ? 'medium' : 'high'
+                        status.connectionQuality === ConnectionQuality.GOOD ? 'medium' : 'high'
                     )}}>
                       {status.connectionQuality}
                     </span>

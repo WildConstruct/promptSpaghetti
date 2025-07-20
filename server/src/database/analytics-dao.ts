@@ -508,44 +508,44 @@ export class AnalyticsDAO {
     const table = granularity === 'hour' ? 'analytics_hourly' : 'analytics_daily';
     
     switch (metric) {
-      case 'executions':
-        query = `
+    case 'executions':
+      query = `
           SELECT ${timeField} as timestamp, graphs_executed as value
           FROM ${table}
           WHERE ${timeField} >= ? AND ${timeField} <= ?
           ORDER BY ${timeField}
         `;
-        break;
+      break;
         
-      case 'tokens':
-        query = `
+    case 'tokens':
+      query = `
           SELECT ${timeField} as timestamp, total_token_usage as value
           FROM ${table}
           WHERE ${timeField} >= ? AND ${timeField} <= ?
           ORDER BY ${timeField}
         `;
-        break;
+      break;
         
-      case 'cost':
-        query = `
+    case 'cost':
+      query = `
           SELECT ${timeField} as timestamp, total_cost_usd as value
           FROM ${table}
           WHERE ${timeField} >= ? AND ${timeField} <= ?
           ORDER BY ${timeField}
         `;
-        break;
+      break;
         
-      case 'errors':
-        query = `
+    case 'errors':
+      query = `
           SELECT ${timeField} as timestamp, error_count as value
           FROM ${table}
           WHERE ${timeField} >= ? AND ${timeField} <= ?
           ORDER BY ${timeField}
         `;
-        break;
+      break;
         
-      default:
-        throw new Error(`Unknown metric: ${metric}`);
+    default:
+      throw new Error(`Unknown metric: ${metric}`);
     }
 
     return this.db.prepare(query).all(
@@ -691,11 +691,11 @@ export class AnalyticsDAO {
     
     tables.forEach(table => {
       const timeField = table === 'analytics_events' ? 'timestamp' : 
-                       table.includes('executions') ? 'start_time' :
-                       table === 'token_usage' ? 'request_start' :
-                       table === 'user_interactions' ? 'timestamp' :
-                       table === 'performance_metrics' ? 'timestamp' :
-                       'timestamp';
+        table.includes('executions') ? 'start_time' :
+          table === 'token_usage' ? 'request_start' :
+            table === 'user_interactions' ? 'timestamp' :
+              table === 'performance_metrics' ? 'timestamp' :
+                'timestamp';
 
       const result = this.db.prepare(`
         DELETE FROM ${table} WHERE ${timeField} < ?
@@ -716,17 +716,17 @@ export class AnalyticsDAO {
     
     if (filters.startTime !== undefined) {
       const timeField = tableName === 'user_interactions' ? 'timestamp' : 
-                       tableName.includes('executions') ? 'start_time' :
-                       tableName === 'token_usage' ? 'request_start' :
-                       'timestamp';
+        tableName.includes('executions') ? 'start_time' :
+          tableName === 'token_usage' ? 'request_start' :
+            'timestamp';
       conditions.push(`${timeField} >= ?`);
     }
     
     if (filters.endTime !== undefined) {
       const timeField = tableName === 'user_interactions' ? 'timestamp' : 
-                       tableName.includes('executions') ? 'start_time' :
-                       tableName === 'token_usage' ? 'request_start' :
-                       'timestamp';
+        tableName.includes('executions') ? 'start_time' :
+          tableName === 'token_usage' ? 'request_start' :
+            'timestamp';
       conditions.push(`${timeField} <= ?`);
     }
     

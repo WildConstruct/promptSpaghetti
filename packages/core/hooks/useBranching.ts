@@ -18,7 +18,7 @@ import {
   MergeBranchRequest,
   SyncBranchRequest,
   BranchFilter,
-  MergeRequestFilter,
+  MergeRequestFilter
 } from '../types/branching';
 
 interface UseBranchingReturn {
@@ -79,8 +79,8 @@ export const useBranching = (): UseBranchingReturn => {
         ...options,
         headers: {
           'Content-Type': 'application/json',
-          ...options.headers,
-        },
+          ...options.headers
+        }
       });
 
       if (!response.ok) {
@@ -108,20 +108,20 @@ export const useBranching = (): UseBranchingReturn => {
   const createBranch = useCallback(async (request: CreateBranchRequest): Promise<ProjectBranch> => {
     return apiCall<ProjectBranch>('/api/branches', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
   const updateBranch = useCallback(async (branchId: string, request: UpdateBranchRequest): Promise<ProjectBranch> => {
     return apiCall<ProjectBranch>(`/api/branches/${branchId}`, {
       method: 'PUT',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
   const deleteBranch = useCallback(async (branchId: string): Promise<void> => {
     return apiCall<void>(`/api/branches/${branchId}`, {
-      method: 'DELETE',
+      method: 'DELETE'
     });
   }, [apiCall]);
 
@@ -157,8 +157,8 @@ export const useBranching = (): UseBranchingReturn => {
         snapshotId: request.snapshotId,
         commitMessage: request.commitMessage,
         parentCommitIds: request.parentCommitIds,
-        commitMetadata: request.commitMetadata,
-      }),
+        commitMetadata: request.commitMetadata
+      })
     });
   }, [apiCall]);
 
@@ -174,14 +174,14 @@ export const useBranching = (): UseBranchingReturn => {
   const createMergeRequest = useCallback(async (request: CreateMergeRequestRequest): Promise<BranchMergeRequest> => {
     return apiCall<BranchMergeRequest>('/api/merge-requests', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
   const updateMergeRequest = useCallback(async (mergeRequestId: string, request: UpdateMergeRequestRequest): Promise<BranchMergeRequest> => {
     return apiCall<BranchMergeRequest>(`/api/merge-requests/${mergeRequestId}`, {
       method: 'PUT',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
@@ -211,7 +211,7 @@ export const useBranching = (): UseBranchingReturn => {
 
   const closeMergeRequest = useCallback(async (mergeRequestId: string): Promise<BranchMergeRequest> => {
     return apiCall<BranchMergeRequest>(`/api/merge-requests/${mergeRequestId}/close`, {
-      method: 'POST',
+      method: 'POST'
     });
   }, [apiCall]);
 
@@ -221,8 +221,8 @@ export const useBranching = (): UseBranchingReturn => {
       body: JSON.stringify({
         mergeStrategy: request.mergeStrategy,
         commitMessage: request.commitMessage,
-        deleteSourceBranch: request.deleteSourceBranch,
-      }),
+        deleteSourceBranch: request.deleteSourceBranch
+      })
     });
   }, [apiCall]);
 
@@ -232,8 +232,8 @@ export const useBranching = (): UseBranchingReturn => {
       method: 'POST',
       body: JSON.stringify({
         status: request.status,
-        reviewMessage: request.reviewMessage,
-      }),
+        reviewMessage: request.reviewMessage
+      })
     });
   }, [apiCall]);
 
@@ -272,7 +272,7 @@ export const useBranching = (): UseBranchingReturn => {
   const syncBranch = useCallback(async (request: SyncBranchRequest): Promise<void> => {
     return apiCall<void>(`/api/branches/${request.branchId}/sync`, {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   }, [apiCall]);
 
@@ -304,6 +304,6 @@ export const useBranching = (): UseBranchingReturn => {
     getBranchHierarchy,
     compareBranches,
     syncBranch,
-    clearError,
+    clearError
   };
 };

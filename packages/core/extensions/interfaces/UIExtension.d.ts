@@ -1,3 +1,7 @@
+/**
+ * UI Extension Interface - Epic 8.4 Story 8.4.2
+ * Defines interfaces for extending the user interface system
+ */
 import React from 'react';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 export interface UIExtension extends BaseExtension {

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Edge, Node } from "reactflow";
+import { useEffect, useState } from 'react';
+import { Edge, Node } from 'reactflow';
 
 interface UseAutosaveProps {
   nodes: Node[];
@@ -19,7 +19,7 @@ export const useAutosave = ({
   nodes,
   edges,
   intervalMs = 5000,
-  storageKey = 'graphDraft',
+  storageKey = 'graphDraft'
 }: UseAutosaveProps): UseAutosaveReturn => {
   const [showRestorePrompt, setShowRestorePrompt] = useState(false);
   const [restoreDraft, setRestoreDraft] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
@@ -67,6 +67,6 @@ export const useAutosave = ({
     showRestorePrompt,
     restoreDraft,
     setShowRestorePrompt,
-    setRestoreDraft,
+    setRestoreDraft
   };
 };

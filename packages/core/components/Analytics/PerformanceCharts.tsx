@@ -254,18 +254,18 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({
       if (result.status === 'fulfilled' && result.value.success) {
         const data = result.value.data.dataPoints || [];
         switch (metric) {
-          case 'executions':
-            newState.executionsData = data;
-            break;
-          case 'tokens':
-            newState.tokensData = data;
-            break;
-          case 'cost':
-            newState.costData = data;
-            break;
-          case 'errors':
-            newState.errorsData = data;
-            break;
+        case 'executions':
+          newState.executionsData = data;
+          break;
+        case 'tokens':
+          newState.tokensData = data;
+          break;
+        case 'cost':
+          newState.costData = data;
+          break;
+        case 'errors':
+          newState.errorsData = data;
+          break;
         }
       } else {
         const error = result.status === 'rejected' 
@@ -361,8 +361,8 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({
                   {executionsTrend && (
                     <div className={`trend-indicator ${executionsTrend.direction}`}>
                       {executionsTrend.direction === 'up' ? <TrendingUp className="w-4 h-4" /> : 
-                       executionsTrend.direction === 'down' ? <TrendingDown className="w-4 h-4" /> : 
-                       <Activity className="w-4 h-4" />}
+                        executionsTrend.direction === 'down' ? <TrendingDown className="w-4 h-4" /> : 
+                          <Activity className="w-4 h-4" />}
                       <span>{executionsTrend.value.toFixed(1)}%</span>
                     </div>
                   )}
@@ -379,8 +379,8 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({
                   {tokensTrend && (
                     <div className={`trend-indicator ${tokensTrend.direction}`}>
                       {tokensTrend.direction === 'up' ? <TrendingUp className="w-4 h-4" /> : 
-                       tokensTrend.direction === 'down' ? <TrendingDown className="w-4 h-4" /> : 
-                       <Activity className="w-4 h-4" />}
+                        tokensTrend.direction === 'down' ? <TrendingDown className="w-4 h-4" /> : 
+                          <Activity className="w-4 h-4" />}
                       <span>{tokensTrend.value.toFixed(1)}%</span>
                     </div>
                   )}
@@ -397,8 +397,8 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({
                   {costTrend && (
                     <div className={`trend-indicator ${costTrend.direction}`}>
                       {costTrend.direction === 'up' ? <TrendingUp className="w-4 h-4" /> : 
-                       costTrend.direction === 'down' ? <TrendingDown className="w-4 h-4" /> : 
-                       <Activity className="w-4 h-4" />}
+                        costTrend.direction === 'down' ? <TrendingDown className="w-4 h-4" /> : 
+                          <Activity className="w-4 h-4" />}
                       <span>{costTrend.value.toFixed(1)}%</span>
                     </div>
                   )}
@@ -415,8 +415,8 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({
                   {errorsTrend && (
                     <div className={`trend-indicator ${errorsTrend.direction === 'up' ? 'up-bad' : errorsTrend.direction === 'down' ? 'down-good' : 'stable'}`}>
                       {errorsTrend.direction === 'up' ? <TrendingUp className="w-4 h-4" /> : 
-                       errorsTrend.direction === 'down' ? <TrendingDown className="w-4 h-4" /> : 
-                       <Activity className="w-4 h-4" />}
+                        errorsTrend.direction === 'down' ? <TrendingDown className="w-4 h-4" /> : 
+                          <Activity className="w-4 h-4" />}
                       <span>{errorsTrend.value.toFixed(1)}%</span>
                     </div>
                   )}

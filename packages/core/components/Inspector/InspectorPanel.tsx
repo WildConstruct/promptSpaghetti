@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import { ZodSchema } from "zod";
-import { PropertiesSection } from "./PropertiesSection";
-import { PreviewSection } from "./PreviewSection";
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { ZodSchema } from 'zod';
+import { PropertiesSection } from './PropertiesSection';
+import { PreviewSection } from './PreviewSection';
 
 export interface InspectorPanelProps {
   node: any | null;
@@ -20,7 +20,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
   onClose,
   initialWidth = 320,
   minWidth = 280,
-  maxWidth = 600,
+  maxWidth = 600
 }) => {
   const [width, setWidth] = useState(initialWidth);
   const [isResizing, setIsResizing] = useState(false);
@@ -71,12 +71,12 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         style={{
           width: collapsed ? 40 : width,
           minWidth: collapsed ? 40 : minWidth,
-          borderLeft: "1px solid #4a5568",
-          background: "#1a202c",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          transition: collapsed ? "width 0.2s ease" : "none",
+          borderLeft: '1px solid #4a5568',
+          background: '#1a202c',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          transition: collapsed ? 'width 0.2s ease' : 'none'
         }}
         onKeyDown={(e) => {
           e.stopPropagation();
@@ -90,40 +90,40 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
       >
         <div
           style={{
-            padding: "12px 16px",
-            borderBottom: "1px solid #4a5568",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            background: "#2d3748",
+            padding: '12px 16px',
+            borderBottom: '1px solid #4a5568',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            background: '#2d3748'
           }}
         >
           {!collapsed && (
-            <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: "#e2e8f0" }}>
+            <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
               Inspector
             </h3>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
             style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
               fontSize: 16,
-              color: "#a0aec0",
-              padding: 4,
+              color: '#a0aec0',
+              padding: 4
             }}
-            title={collapsed ? "Expand Inspector" : "Collapse Inspector"}
+            title={collapsed ? 'Expand Inspector' : 'Collapse Inspector'}
           >
-            {collapsed ? "◀" : "▶"}
+            {collapsed ? '◀' : '▶'}
           </button>
         </div>
         {!collapsed && (
           <div style={{ 
             padding: 16, 
-            color: "#a0aec0", 
-            fontStyle: "italic",
-            textAlign: "center",
+            color: '#a0aec0', 
+            fontStyle: 'italic',
+            textAlign: 'center',
             marginTop: 40
           }}>
             Select a node to edit its properties
@@ -133,14 +133,14 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
           ref={resizeRef}
           onMouseDown={handleMouseDown}
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: 0,
             top: 0,
             bottom: 0,
             width: 4,
-            cursor: "col-resize",
-            background: "transparent",
-            zIndex: 10,
+            cursor: 'col-resize',
+            background: 'transparent',
+            zIndex: 10
           }}
         />
       </aside>
@@ -152,12 +152,12 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
       style={{
         width: collapsed ? 40 : width,
         minWidth: collapsed ? 40 : minWidth,
-        borderLeft: "1px solid #4a5568",
-        background: "#1a202c",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        transition: collapsed ? "width 0.2s ease" : "none",
+        borderLeft: '1px solid #4a5568',
+        background: '#1a202c',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: collapsed ? 'width 0.2s ease' : 'none'
       }}
       onKeyDown={(e) => {
         e.stopPropagation();
@@ -171,30 +171,30 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
     >
       <div
         style={{
-          padding: "12px 16px",
-          borderBottom: "1px solid #4a5568",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          background: "#2d3748",
+          padding: '12px 16px',
+          borderBottom: '1px solid #4a5568',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: '#2d3748'
         }}
       >
         {!collapsed && (
-          <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: "#e2e8f0" }}>
-            <span style={{ color: "#4CAF50" }}>🔍</span> {node.data?.label || node.data?.nodeType || node.type} Properties
+          <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
+            <span style={{ color: '#4CAF50' }}>🔍</span> {node.data?.label || node.data?.nodeType || node.type} Properties
           </h3>
         )}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {!collapsed && onClose && (
             <button
               onClick={onClose}
               style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
                 fontSize: 16,
-                color: "#a0aec0",
-                padding: 4,
+                color: '#a0aec0',
+                padding: 4
               }}
               title="Close Inspector"
             >
@@ -204,22 +204,22 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
           <button
             onClick={() => setCollapsed(!collapsed)}
             style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
               fontSize: 16,
-              color: "#a0aec0",
-              padding: 4,
+              color: '#a0aec0',
+              padding: 4
             }}
-            title={collapsed ? "Expand Inspector" : "Collapse Inspector"}
+            title={collapsed ? 'Expand Inspector' : 'Collapse Inspector'}
           >
-            {collapsed ? "◀" : "▶"}
+            {collapsed ? '◀' : '▶'}
           </button>
         </div>
       </div>
 
       {!collapsed && (
-        <div style={{ flex: 1, overflow: "auto", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
           <PropertiesSection
             node={node}
             schema={schema}
@@ -235,14 +235,14 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
         ref={resizeRef}
         onMouseDown={handleMouseDown}
         style={{
-          position: "absolute",
+          position: 'absolute',
           left: 0,
           top: 0,
           bottom: 0,
           width: 4,
-          cursor: "col-resize",
-          background: "transparent",
-          zIndex: 10,
+          cursor: 'col-resize',
+          background: 'transparent',
+          zIndex: 10
         }}
       />
     </aside>

@@ -19,7 +19,7 @@ interface ToggleData {
   name: string;
   description?: string;
   type: string;
-  value: any;
+  value: unknown;
   claudeImpact: string;
   enabled: boolean;
   version: number;
@@ -134,196 +134,199 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
     if (!toggle) return null;
 
     switch (toggle.type) {
-      case 'boolean':
-        return (
-          <div className="form-group">
+    case 'boolean':
+      return (
+        <div className="form-group">
+          <label>
+            <input
+              type="checkbox"
+              checked={formData.value?.enabled || false}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                value: { enabled: e.target.checked }
+              }))}
+            />
+              Toggle is enabled by default
+          </label>
+        </div>
+      );
+
+    case 'percentage_rollout':
+      return (
+        <div className="form-group">
+          <label>Rollout Percentage</label>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            value={formData.value?.percentage || 0}
+            onChange={(e) => setFormData(prev => ({
+              ...prev,
+              value: { ...prev.value, percentage: parseInt(e.target.value) || 0 }
+            }))}
+            className={errors.value ? 'error' : ''}
+          />
+          <div className="form-help">
+              Percentage of users who will see this feature (0-100)
+          </div>
+        </div>
+      );
+
+    case 'multivariate':
+      return (
+        <div className="form-group">
+          <label>Variants</label>
+          <div className="variants-editor">
+            {formData.value?.variants?.map((
+              variant: { key?: string; value?: string; percentage?: number }, 
+              index: number
+            ) => (
+              <div key={index} className="variant-row">
+                <input
+                  type="text"
+                  placeholder="Variant key"
+                  value={variant.key || ''}
+                  onChange={(e) => {
+                    const newVariants = [...(formData.value?.variants || [])];
+                    newVariants[index] = { ...variant, key: e.target.value };
+                    setFormData(prev => ({
+                      ...prev,
+                      value: { ...prev.value, variants: newVariants }
+                    }));
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Variant value"
+                  value={variant.value || ''}
+                  onChange={(e) => {
+                    const newVariants = [...(formData.value?.variants || [])];
+                    newVariants[index] = { ...variant, value: e.target.value };
+                    setFormData(prev => ({
+                      ...prev,
+                      value: { ...prev.value, variants: newVariants }
+                    }));
+                  }}
+                />
+                <input
+                  type="number"
+                  placeholder="% "
+                  min="0"
+                  max="100"
+                  value={variant.percentage || 0}
+                  onChange={(e) => {
+                    const newVariants = [...(formData.value?.variants || [])];
+                    newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
+                    setFormData(prev => ({
+                      ...prev,
+                      value: { ...prev.value, variants: newVariants }
+                    }));
+                  }}
+                />
+                <button
+                  type="button"
+                  className="btn-icon btn-danger"
+                  onClick={() => {
+                    const newVariants = (formData.value?.variants || []).filter((_: unknown, i: number) => i !== index);
+                    setFormData(prev => ({
+                      ...prev,
+                      value: { ...prev.value, variants: newVariants }
+                    }));
+                  }}
+                >
+                    ×
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => {
+                const newVariants = [...(formData.value?.variants || []), {
+                  key: `variant_${String.fromCharCode(65 + (formData.value?.variants?.length || 0))}`,
+                  value: '',
+                  percentage: 0
+                }];
+                setFormData(prev => ({
+                  ...prev,
+                  value: { ...prev.value, variants: newVariants }
+                }));
+              }}
+            >
+                Add Variant
+            </button>
+          </div>
+        </div>
+      );
+
+    case 'scheduled':
+      return (
+        <div className="form-group">
+          <label>Schedule Configuration</label>
+          <div className="schedule-editor">
             <label>
               <input
                 type="checkbox"
                 checked={formData.value?.enabled || false}
                 onChange={(e) => setFormData(prev => ({
                   ...prev,
-                  value: { enabled: e.target.checked }
+                  value: { ...prev.value, enabled: e.target.checked }
                 }))}
               />
-              Toggle is enabled by default
+                Schedule is active
             </label>
-          </div>
-        );
-
-      case 'percentage_rollout':
-        return (
-          <div className="form-group">
-            <label>Rollout Percentage</label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              value={formData.value?.percentage || 0}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                value: { ...prev.value, percentage: parseInt(e.target.value) || 0 }
-              }))}
-              className={errors.value ? 'error' : ''}
-            />
-            <div className="form-help">
-              Percentage of users who will see this feature (0-100)
-            </div>
-          </div>
-        );
-
-      case 'multivariate':
-        return (
-          <div className="form-group">
-            <label>Variants</label>
-            <div className="variants-editor">
-              {formData.value?.variants?.map((variant: any, index: number) => (
-                <div key={index} className="variant-row">
-                  <input
-                    type="text"
-                    placeholder="Variant key"
-                    value={variant.key || ''}
-                    onChange={(e) => {
-                      const newVariants = [...(formData.value?.variants || [])];
-                      newVariants[index] = { ...variant, key: e.target.value };
-                      setFormData(prev => ({
-                        ...prev,
-                        value: { ...prev.value, variants: newVariants }
-                      }));
-                    }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Variant value"
-                    value={variant.value || ''}
-                    onChange={(e) => {
-                      const newVariants = [...(formData.value?.variants || [])];
-                      newVariants[index] = { ...variant, value: e.target.value };
-                      setFormData(prev => ({
-                        ...prev,
-                        value: { ...prev.value, variants: newVariants }
-                      }));
-                    }}
-                  />
-                  <input
-                    type="number"
-                    placeholder="% "
-                    min="0"
-                    max="100"
-                    value={variant.percentage || 0}
-                    onChange={(e) => {
-                      const newVariants = [...(formData.value?.variants || [])];
-                      newVariants[index] = { ...variant, percentage: parseInt(e.target.value) || 0 };
-                      setFormData(prev => ({
-                        ...prev,
-                        value: { ...prev.value, variants: newVariants }
-                      }));
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="btn-icon btn-danger"
-                    onClick={() => {
-                      const newVariants = (formData.value?.variants || []).filter((_: any, i: number) => i !== index);
-                      setFormData(prev => ({
-                        ...prev,
-                        value: { ...prev.value, variants: newVariants }
-                      }));
-                    }}
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm"
-                onClick={() => {
-                  const newVariants = [...(formData.value?.variants || []), {
-                    key: `variant_${String.fromCharCode(65 + (formData.value?.variants?.length || 0))}`,
-                    value: '',
-                    percentage: 0
-                  }];
-                  setFormData(prev => ({
-                    ...prev,
-                    value: { ...prev.value, variants: newVariants }
-                  }));
-                }}
-              >
-                Add Variant
-              </button>
-            </div>
-          </div>
-        );
-
-      case 'scheduled':
-        return (
-          <div className="form-group">
-            <label>Schedule Configuration</label>
-            <div className="schedule-editor">
-              <label>
+              
+            <div className="date-inputs">
+              <div>
+                <label>Start Time</label>
                 <input
-                  type="checkbox"
-                  checked={formData.value?.enabled || false}
+                  type="datetime-local"
+                  value={formData.value?.startTime || ''}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
-                    value: { ...prev.value, enabled: e.target.checked }
+                    value: { ...prev.value, startTime: e.target.value }
                   }))}
                 />
-                Schedule is active
-              </label>
-              
-              <div className="date-inputs">
-                <div>
-                  <label>Start Time</label>
-                  <input
-                    type="datetime-local"
-                    value={formData.value?.startTime || ''}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      value: { ...prev.value, startTime: e.target.value }
-                    }))}
-                  />
-                </div>
+              </div>
                 
-                <div>
-                  <label>End Time</label>
-                  <input
-                    type="datetime-local"
-                    value={formData.value?.endTime || ''}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      value: { ...prev.value, endTime: e.target.value }
-                    }))}
-                  />
-                </div>
+              <div>
+                <label>End Time</label>
+                <input
+                  type="datetime-local"
+                  value={formData.value?.endTime || ''}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    value: { ...prev.value, endTime: e.target.value }
+                  }))}
+                />
               </div>
             </div>
           </div>
-        );
+        </div>
+      );
 
-      default:
-        return (
-          <div className="form-group">
-            <label>Configuration</label>
-            <textarea
-              value={JSON.stringify(formData.value, null, 2)}
-              onChange={(e) => {
-                try {
-                  const value = JSON.parse(e.target.value);
-                  setFormData(prev => ({ ...prev, value }));
-                } catch {
-                  // Invalid JSON, ignore
-                }
-              }}
-              rows={6}
-              className="json-editor"
-            />
-            <div className="form-help">
+    default:
+      return (
+        <div className="form-group">
+          <label>Configuration</label>
+          <textarea
+            value={JSON.stringify(formData.value, null, 2)}
+            onChange={(e) => {
+              try {
+                const value = JSON.parse(e.target.value);
+                setFormData(prev => ({ ...prev, value }));
+              } catch {
+                // Invalid JSON, ignore
+              }
+            }}
+            rows={6}
+            className="json-editor"
+          />
+          <div className="form-help">
               Edit the raw JSON configuration
-            </div>
           </div>
-        );
+        </div>
+      );
     }
   };
 

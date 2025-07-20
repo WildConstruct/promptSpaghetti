@@ -12,11 +12,11 @@ interface CreateWorkspaceModalProps {
 
 export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
   onSubmit,
-  onCancel,
+  onCancel
 }) => {
   const [formData, setFormData] = useState({
     name: '',
-    description: '',
+    description: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,7 +51,7 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({
     try {
       await onSubmit({
         name: formData.name.trim(),
-        description: formData.description.trim() || undefined,
+        description: formData.description.trim() || undefined
       });
     } catch (error) {
       // Handle error (could set form-level error state)

@@ -45,7 +45,7 @@ const fixes = {
         return;
       }
       content = content.replace('export default defineConfig({',
-        `export default defineConfig({\n  optimizeDeps: { include: ['zod','zustand','reactflow','seedrandom'] },`);
+        'export default defineConfig({\n  optimizeDeps: { include: [\'zod\',\'zustand\',\'reactflow\',\'seedrandom\'] },');
       fs.writeFileSync(vitePath, content);
       console.log(chalk.green('optimizeDeps injected into Vite config.'));
     }

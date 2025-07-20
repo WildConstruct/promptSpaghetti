@@ -39,7 +39,7 @@ export class EmailService {
       expiryHours: Math.floor(this.config.security.emailVerificationTokenExpiry / 60),
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      timestamp: context.timestamp || new Date(),
+      timestamp: context.timestamp || new Date()
     });
 
     await this.sendEmail(email, template);
@@ -59,7 +59,7 @@ export class EmailService {
       expiryHours: Math.floor(this.config.security.passwordResetTokenExpiry / 60),
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      timestamp: context.timestamp || new Date(),
+      timestamp: context.timestamp || new Date()
     });
 
     await this.sendEmail(email, template);
@@ -74,7 +74,7 @@ export class EmailService {
       displayName: context.displayName || email.split('@')[0],
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      timestamp: context.timestamp || new Date(),
+      timestamp: context.timestamp || new Date()
     });
 
     await this.sendEmail(email, template);
@@ -90,7 +90,7 @@ export class EmailService {
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       deviceInfo: context.deviceInfo,
-      timestamp: context.timestamp || new Date(),
+      timestamp: context.timestamp || new Date()
     });
 
     await this.sendEmail(email, template);
@@ -107,7 +107,7 @@ export class EmailService {
       unlockTime,
       unlockTimeFormatted: unlockTime.toLocaleString(),
       supportEmail: this.config.emailService?.fromEmail || 'support@promptscape.com',
-      timestamp: context.timestamp || new Date(),
+      timestamp: context.timestamp || new Date()
     });
 
     await this.sendEmail(email, template);
@@ -122,7 +122,7 @@ export class EmailService {
       displayName: context.displayName || email.split('@')[0],
       hasInvitation: context.hasInvitation || false,
       dashboardUrl: this.buildDashboardUrl(),
-      timestamp: context.timestamp || new Date(),
+      timestamp: context.timestamp || new Date()
     });
 
     await this.sendEmail(email, template);
@@ -143,7 +143,7 @@ export class EmailService {
       organizationName,
       invitationUrl,
       expiryDays: 7, // Default invitation expiry
-      timestamp: context.timestamp || new Date(),
+      timestamp: context.timestamp || new Date()
     });
 
     await this.sendEmail(email, template);
@@ -165,7 +165,7 @@ export class EmailService {
       expiryHours: Math.floor((data.expiresAt.getTime() - Date.now()) / (1000 * 60 * 60)),
       ipAddress: data.ipAddress,
       userAgent: data.userAgent,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
 
     await this.sendEmail(data.to, template);
@@ -183,7 +183,7 @@ export class EmailService {
       displayName: data.firstName,
       timestamp: data.timestamp,
       ipAddress: data.ipAddress,
-      userAgent: data.userAgent,
+      userAgent: data.userAgent
     });
 
     await this.sendEmail(data.to, template);
@@ -205,12 +205,12 @@ export class EmailService {
       const emailData = {
         from: {
           email: this.config.emailService.fromEmail,
-          name: this.config.emailService.fromName,
+          name: this.config.emailService.fromName
         },
         to: [{ email }],
         subject: template.subject,
         html: template.html,
-        text: template.text,
+        text: template.text
       };
 
       // TODO: Implement actual email service integration
@@ -295,7 +295,7 @@ export class EmailService {
           If you didn't create an account with us, please ignore this email.
           
           © 2025 PromptScape. All rights reserved.
-        `,
+        `
       },
 
       passwordReset: {
@@ -372,7 +372,7 @@ export class EmailService {
           For your security, this request was made from IP address: ${data.ipAddress || 'unknown'}
           
           © 2025 PromptScape. All rights reserved.
-        `,
+        `
       },
 
       passwordChanged: {
@@ -436,7 +436,7 @@ export class EmailService {
           If you didn't make this change, please contact support immediately.
           
           © 2025 PromptScape. All rights reserved.
-        `,
+        `
       },
 
       welcome: {
@@ -474,9 +474,9 @@ export class EmailService {
                 <p>Your account is now verified and ready to use! Welcome to the PromptScape community.</p>
                 
                 ${data.hasInvitation ? 
-                  '<p>You were invited to join an organization. You\'ll find your team and projects waiting for you in your dashboard.</p>' :
-                  '<p>You\'re all set to start creating amazing prompt graphs and exploring our powerful features.</p>'
-                }
+    '<p>You were invited to join an organization. You\'ll find your team and projects waiting for you in your dashboard.</p>' :
+    '<p>You\'re all set to start creating amazing prompt graphs and exploring our powerful features.</p>'
+}
                 
                 <p style="text-align: center;">
                   <a href="${data.dashboardUrl}" class="button">Go to Dashboard</a>
@@ -515,7 +515,7 @@ export class EmailService {
           - Join our community forum
           
           © 2025 PromptScape. All rights reserved.
-        `,
+        `
       },
 
       invitation: {
@@ -579,14 +579,14 @@ export class EmailService {
           This invitation will expire in ${data.expiryDays} days.
           
           © 2025 PromptScape. All rights reserved.
-        `,
-      },
+        `
+      }
     };
 
     return templates[templateName] || {
       subject: 'Notification from PromptScape',
       html: '<p>This is a test email.</p>',
-      text: 'This is a test email.',
+      text: 'This is a test email.'
     };
   }
 

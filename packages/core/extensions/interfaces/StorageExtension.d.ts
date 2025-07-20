@@ -1,3 +1,7 @@
+/**
+ * Storage Extension Interface - Epic 8.4 Story 8.4.2
+ * Defines interfaces for extending the storage and persistence system
+ */
 import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 export interface StorageExtension extends BaseExtension {

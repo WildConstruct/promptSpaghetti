@@ -95,7 +95,7 @@ export class ProfileService {
       timezone: row.timezone,
       locale: row.locale,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     };
   }
 
@@ -118,7 +118,7 @@ export class ProfileService {
       data.timezone || 'UTC',
       data.locale || 'en-US',
       now,
-      now,
+      now
     ]);
 
     // Log profile creation
@@ -128,7 +128,7 @@ export class ProfileService {
       resourceType: 'profile',
       resourceId: id,
       details: data,
-      severity: 'info',
+      severity: 'info'
     });
 
     return {
@@ -142,7 +142,7 @@ export class ProfileService {
       timezone: data.timezone || 'UTC',
       locale: data.locale || 'en-US',
       createdAt: now,
-      updatedAt: now,
+      updatedAt: now
     };
   }
 
@@ -172,7 +172,7 @@ export class ProfileService {
         data.timezone ?? profile.timezone,
         data.locale ?? profile.locale,
         now,
-        userId,
+        userId
       ]);
 
       // Log profile update
@@ -189,12 +189,12 @@ export class ProfileService {
             lastName: profile.lastName,
             bio: profile.bio,
             timezone: profile.timezone,
-            locale: profile.locale,
-          },
+            locale: profile.locale
+          }
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       // Update profile object
@@ -206,7 +206,7 @@ export class ProfileService {
         bio: data.bio ?? profile.bio,
         timezone: data.timezone ?? profile.timezone,
         locale: data.locale ?? profile.locale,
-        updatedAt: now,
+        updatedAt: now
       };
     }
 
@@ -256,7 +256,7 @@ export class ProfileService {
         imageData.mimeType,
         imageData.size,
         'avatar',
-        avatarUrl,
+        avatarUrl
       ]);
 
       // Log image upload
@@ -268,11 +268,11 @@ export class ProfileService {
           filename,
           originalName: imageData.originalName,
           mimeType: imageData.mimeType,
-          size: imageData.size,
+          size: imageData.size
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       return { avatarUrl };
@@ -285,11 +285,11 @@ export class ProfileService {
           error: error.message,
           originalName: imageData.originalName,
           mimeType: imageData.mimeType,
-          size: imageData.size,
+          size: imageData.size
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'error',
+        severity: 'error'
       });
 
       throw error;
@@ -325,11 +325,11 @@ export class ProfileService {
       action: 'profile_image_deleted',
       resourceType: 'profile',
       details: {
-        deletedAvatarUrl: profile.avatarUrl,
+        deletedAvatarUrl: profile.avatarUrl
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -347,7 +347,7 @@ export class ProfileService {
       category: row.category,
       settings: row.settings,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     }));
   }
 
@@ -382,17 +382,17 @@ export class ProfileService {
         details: {
           category,
           changes: settings,
-          previousSettings,
+          previousSettings
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       return {
         ...preference,
         settings,
-        updatedAt: now,
+        updatedAt: now
       };
     } else {
       // Create new preferences
@@ -411,11 +411,11 @@ export class ProfileService {
         resourceId: id,
         details: {
           category,
-          settings,
+          settings
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       return {
@@ -424,7 +424,7 @@ export class ProfileService {
         category,
         settings,
         createdAt: now,
-        updatedAt: now,
+        updatedAt: now
       };
     }
   }
@@ -442,8 +442,8 @@ export class ProfileService {
             security: true,
             system: true,
             updates: false,
-            marketing: false,
-          },
+            marketing: false
+          }
         },
         inApp: {
           enabled: true,
@@ -451,8 +451,8 @@ export class ProfileService {
             security: true,
             system: true,
             updates: true,
-            mentions: true,
-          },
+            mentions: true
+          }
         },
         push: {
           enabled: false,
@@ -460,15 +460,15 @@ export class ProfileService {
             security: true,
             system: false,
             updates: false,
-            mentions: true,
-          },
+            mentions: true
+          }
         },
         quietHours: {
           enabled: false,
           start: '22:00',
           end: '08:00',
-          timezone: 'UTC',
-        },
+          timezone: 'UTC'
+        }
       };
     }
 
@@ -514,11 +514,11 @@ export class ProfileService {
       action: 'profile_deleted',
       resourceType: 'profile',
       details: {
-        deletedAt: new Date(),
+        deletedAt: new Date()
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -536,7 +536,7 @@ export class ProfileService {
       'bio',
       'avatarUrl',
       'timezone',
-      'locale',
+      'locale'
     ];
 
     const completedFields: string[] = [];
@@ -555,7 +555,7 @@ export class ProfileService {
     return {
       percentage,
       completedFields,
-      missingFields,
+      missingFields
     };
   }
 
@@ -595,7 +595,7 @@ export class ProfileService {
       bio: row.bio,
       avatarUrl: row.avatar_url,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     }));
 
     const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;

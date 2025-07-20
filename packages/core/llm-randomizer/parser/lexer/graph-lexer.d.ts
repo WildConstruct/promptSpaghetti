@@ -46,21 +46,60 @@ export declare class GraphLexer {
     private indentStack;
     private currentSection;
     constructor(input: string);
+    /**
+     * Tokenize the entire input
+     */
     tokenize(): {
         tokens: Token[];
         errors: LexerError[];
     };
+    /**
+     * Scan and classify the next token
+     */
     private scanToken;
+    /**
+     * Handle indentation tracking
+     */
     private handleIndentation;
+    /**
+     * Scan section delimiter (---NODES---, ---EDGES---, etc.)
+     */
     private scanSectionDelimiter;
+    /**
+     * Scan quoted string
+     */
     private scanQuotedString;
+    /**
+     * Scan unquoted string/identifier
+     */
     private scanString;
+    /**
+     * Scan identifier (unquoted key/value)
+     */
     private scanIdentifier;
+    /**
+     * Scan numeric value
+     */
     private scanNumber;
+    /**
+     * Skip comment to end of line
+     */
     private skipComment;
+    /**
+     * Get token type for keywords
+     */
     private getKeywordType;
+    /**
+     * Add token to list
+     */
     private addToken;
+    /**
+     * Add error to list
+     */
     private addError;
+    /**
+     * Helper methods
+     */
     private advance;
     private peek;
     private peekNext;

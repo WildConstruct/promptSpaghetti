@@ -182,20 +182,20 @@ export class NotificationManager {
     if (!this.preferences) return null;
 
     switch (notificationType) {
-      case 'comment':
-      case 'mention':
-        return this.preferences.comments;
-      case 'collaboration':
-        return this.preferences.collaboration;
-      case 'workspace':
-        return this.preferences.workspace;
-      case 'approval':
-      case 'rejection':
-        return this.preferences.approvals;
-      case 'system':
-        return this.preferences.system;
-      default:
-        return null;
+    case 'comment':
+    case 'mention':
+      return this.preferences.comments;
+    case 'collaboration':
+      return this.preferences.collaboration;
+    case 'workspace':
+      return this.preferences.workspace;
+    case 'approval':
+    case 'rejection':
+      return this.preferences.approvals;
+    case 'system':
+      return this.preferences.system;
+    default:
+      return null;
     }
   }
 

@@ -427,7 +427,7 @@ export class UserJourneyAnalyzer extends EventEmitter {
    */
   private createUserJourney(sessionId: string, events: any[]): UserJourney {
     const segments: JourneySegment[] = [];
-    let conversionEvents: string[] = [];
+    const conversionEvents: string[] = [];
     let dropoffPoint: number | undefined;
 
     events.forEach((event, index) => {

@@ -203,20 +203,20 @@ export const VersionHistory: React.FC = () => {
 
   const getVersionTypeIcon = (compatibilityLevel: string) => {
     switch (compatibilityLevel) {
-      case 'breaking': return '💥';
-      case 'major': return '🚀';
-      case 'minor': return '✨';
-      case 'patch': return '🔧';
-      default: return '📦';
+    case 'breaking': return '💥';
+    case 'major': return '🚀';
+    case 'minor': return '✨';
+    case 'patch': return '🔧';
+    default: return '📦';
     }
   };
 
   const getRiskIcon = (riskLevel: string) => {
     switch (riskLevel) {
-      case 'high': return '🔴';
-      case 'medium': return '🟡';
-      case 'low': return '🟢';
-      default: return '⚪';
+    case 'high': return '🔴';
+    case 'medium': return '🟡';
+    case 'low': return '🟢';
+    default: return '⚪';
     }
   };
 

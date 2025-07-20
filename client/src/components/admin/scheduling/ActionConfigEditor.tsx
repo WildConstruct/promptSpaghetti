@@ -143,82 +143,82 @@ export const ActionConfigEditor: React.FC<ActionConfigEditorProps> = ({
     const type = attribute?.type || 'string';
 
     switch (type) {
-      case 'boolean':
-        return (
-          <FormControlLabel
-            control={
-              <Switch
-                checked={Boolean(condition.value)}
-                onChange={(e) => handleConditionChange(index, 'value', e.target.checked)}
-              />
-            }
-            label={condition.value ? 'True' : 'False'}
-          />
-        );
-      
-      case 'number':
-        return (
-          <TextField
-            type="number"
-            value={condition.value || ''}
-            onChange={(e) => handleConditionChange(index, 'value', parseFloat(e.target.value) || 0)}
-            size="small"
-            fullWidth
-          />
-        );
-      
-      case 'date':
-        return (
-          <TextField
-            type="datetime-local"
-            value={condition.value || ''}
-            onChange={(e) => handleConditionChange(index, 'value', e.target.value)}
-            size="small"
-            fullWidth
-          />
-        );
-      
-      default:
-        if (['in', 'not_in'].includes(condition.operator)) {
-          return (
-            <TextField
-              value={Array.isArray(condition.value) ? condition.value.join(', ') : condition.value || ''}
-              onChange={(e) => {
-                const values = e.target.value.split(',').map(v => v.trim()).filter(v => v);
-                handleConditionChange(index, 'value', values);
-              }}
-              placeholder="value1, value2, value3"
-              size="small"
-              fullWidth
-              helperText="Comma-separated values"
+    case 'boolean':
+      return (
+        <FormControlLabel
+          control={
+            <Switch
+              checked={Boolean(condition.value)}
+              onChange={(e) => handleConditionChange(index, 'value', e.target.checked)}
             />
-          );
-        }
-        
+          }
+          label={condition.value ? 'True' : 'False'}
+        />
+      );
+      
+    case 'number':
+      return (
+        <TextField
+          type="number"
+          value={condition.value || ''}
+          onChange={(e) => handleConditionChange(index, 'value', parseFloat(e.target.value) || 0)}
+          size="small"
+          fullWidth
+        />
+      );
+      
+    case 'date':
+      return (
+        <TextField
+          type="datetime-local"
+          value={condition.value || ''}
+          onChange={(e) => handleConditionChange(index, 'value', e.target.value)}
+          size="small"
+          fullWidth
+        />
+      );
+      
+    default:
+      if (['in', 'not_in'].includes(condition.operator)) {
         return (
           <TextField
-            value={condition.value || ''}
-            onChange={(e) => handleConditionChange(index, 'value', e.target.value)}
+            value={Array.isArray(condition.value) ? condition.value.join(', ') : condition.value || ''}
+            onChange={(e) => {
+              const values = e.target.value.split(',').map(v => v.trim()).filter(v => v);
+              handleConditionChange(index, 'value', values);
+            }}
+            placeholder="value1, value2, value3"
             size="small"
             fullWidth
+            helperText="Comma-separated values"
           />
         );
+      }
+        
+      return (
+        <TextField
+          value={condition.value || ''}
+          onChange={(e) => handleConditionChange(index, 'value', e.target.value)}
+          size="small"
+          fullWidth
+        />
+      );
     }
   };
 
   const getActionConfigHelp = () => {
     switch (action) {
-      case 'enable':
-      case 'disable':
-        return 'This action requires no additional configuration.';
-      case 'update_value':
-        return 'Specify the new value for the feature toggle.';
-      case 'modify_percentage':
-        return 'Set the rollout percentage (0-100%).';
-      case 'activate_rollout':
-        return 'Configure gradual rollout settings.';
-      default:
-        return 'Configure action-specific settings.';
+    case 'enable':
+    case 'disable':
+      return 'This action requires no additional configuration.';
+    case 'update_value':
+      return 'Specify the new value for the feature toggle.';
+    case 'modify_percentage':
+      return 'Set the rollout percentage (0-100%).';
+    case 'activate_rollout':
+      return 'Configure gradual rollout settings.';
+    default:
+      return 'Configure action-specific settings.';
     }
   };
 

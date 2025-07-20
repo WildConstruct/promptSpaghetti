@@ -192,36 +192,36 @@ export class SimulatedUser extends EventEmitter {
     
     try {
       switch (operationType) {
-        case OperationType.CREATE_NODE:
-          await this.createNode();
-          break;
-        case OperationType.DELETE_NODE:
-          await this.deleteNode();
-          break;
-        case OperationType.UPDATE_NODE_PROPERTIES:
-          await this.updateNodeProperties();
-          break;
-        case OperationType.MOVE_NODE:
-          await this.moveNode();
-          break;
-        case OperationType.CREATE_EDGE:
-          await this.createEdge();
-          break;
-        case OperationType.DELETE_EDGE:
-          await this.deleteEdge();
-          break;
-        case OperationType.UPDATE_CURSOR:
-          await this.updateCursor();
-          break;
-        case OperationType.UPDATE_SELECTION:
-          await this.updateSelection();
-          break;
-        case OperationType.TYPING_ACTIVITY:
-          await this.simulateTyping();
-          break;
-        case OperationType.TOOL_CHANGE:
-          await this.changeTool();
-          break;
+      case OperationType.CREATE_NODE:
+        await this.createNode();
+        break;
+      case OperationType.DELETE_NODE:
+        await this.deleteNode();
+        break;
+      case OperationType.UPDATE_NODE_PROPERTIES:
+        await this.updateNodeProperties();
+        break;
+      case OperationType.MOVE_NODE:
+        await this.moveNode();
+        break;
+      case OperationType.CREATE_EDGE:
+        await this.createEdge();
+        break;
+      case OperationType.DELETE_EDGE:
+        await this.deleteEdge();
+        break;
+      case OperationType.UPDATE_CURSOR:
+        await this.updateCursor();
+        break;
+      case OperationType.UPDATE_SELECTION:
+        await this.updateSelection();
+        break;
+      case OperationType.TYPING_ACTIVITY:
+        await this.simulateTyping();
+        break;
+      case OperationType.TOOL_CHANGE:
+        await this.changeTool();
+        break;
       }
       
       const operationTime = performance.now() - operationStartTime;
@@ -510,18 +510,18 @@ export class SimulatedUser extends EventEmitter {
       
       // Track different types of messages for performance analysis
       switch (message.type) {
-        case 'conflict_detected':
-          this.handleConflictDetected(message);
-          break;
-        case 'graph_update':
-          this.handleGraphUpdate(message);
-          break;
-        case 'presence_update':
-          this.handlePresenceUpdate(message);
-          break;
-        case 'sync_response':
-          this.handleSyncResponse(message);
-          break;
+      case 'conflict_detected':
+        this.handleConflictDetected(message);
+        break;
+      case 'graph_update':
+        this.handleGraphUpdate(message);
+        break;
+      case 'presence_update':
+        this.handlePresenceUpdate(message);
+        break;
+      case 'sync_response':
+        this.handleSyncResponse(message);
+        break;
       }
       
     } catch (error) {

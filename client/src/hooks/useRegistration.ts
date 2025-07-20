@@ -58,10 +58,10 @@ export const useRegistration = () => {
       const response = await fetch('/auth/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(data),
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -82,7 +82,7 @@ export const useRegistration = () => {
       if (window.gtag) {
         window.gtag('event', 'sign_up', {
           method: 'email',
-          user_id: result.user.id,
+          user_id: result.user.id
         });
       }
 
@@ -94,7 +94,7 @@ export const useRegistration = () => {
       // Track registration failure
       if (window.gtag) {
         window.gtag('event', 'registration_failed', {
-          error: errorMessage,
+          error: errorMessage
         });
       }
       
@@ -111,9 +111,9 @@ export const useRegistration = () => {
       const response = await fetch('/auth/validate-field', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ field, value }),
+        body: JSON.stringify({ field, value })
       });
 
       if (response.ok) {
@@ -135,10 +135,10 @@ export const useRegistration = () => {
       const response = await fetch('/auth/resend-verification', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email }),
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -162,10 +162,10 @@ export const useRegistration = () => {
       const response = await fetch('/auth/verify-email', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ token }),
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -203,7 +203,7 @@ export const useRegistration = () => {
     error,
     validationResult,
     clearError,
-    clearValidation,
+    clearValidation
   };
 };
 
@@ -267,7 +267,7 @@ export const usePasswordStrength = (password: string) => {
     return {
       score: Math.min(100, Math.max(0, score)),
       feedback,
-      strength,
+      strength
     };
   }, []);
 

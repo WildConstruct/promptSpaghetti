@@ -82,7 +82,7 @@ export class RBACService {
           permData.action,
           permData.scope,
           permData.conditions ? JSON.stringify(permData.conditions) : null,
-          now,
+          now
         ]);
       }
 
@@ -98,11 +98,11 @@ export class RBACService {
           roleName: data.name,
           scope: data.scope,
           organizationId: data.organizationId,
-          permissionsCount: data.permissions.length,
+          permissionsCount: data.permissions.length
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       const role: Role = {
@@ -112,7 +112,7 @@ export class RBACService {
         scope: data.scope,
         organizationId: data.organizationId,
         createdAt: now,
-        updatedAt: now,
+        updatedAt: now
       };
 
       return role;
@@ -149,7 +149,7 @@ export class RBACService {
         updates.name ?? existingRole.name,
         updates.description ?? existingRole.description,
         now,
-        roleId,
+        roleId
       ]);
 
       // Update permissions if provided
@@ -170,7 +170,7 @@ export class RBACService {
             permData.action,
             permData.scope,
             permData.conditions ? JSON.stringify(permData.conditions) : null,
-            now,
+            now
           ]);
         }
       }
@@ -188,11 +188,11 @@ export class RBACService {
         resourceId: roleId,
         details: {
           changes: updates,
-          previousName: existingRole.name,
+          previousName: existingRole.name
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       const updatedRole: Role = {
@@ -202,7 +202,7 @@ export class RBACService {
         scope: existingRole.scope,
         organizationId: existingRole.organization_id,
         createdAt: existingRole.created_at,
-        updatedAt: now,
+        updatedAt: now
       };
 
       return updatedRole;
@@ -254,11 +254,11 @@ export class RBACService {
         resourceId: roleId,
         details: {
           roleName: role.name,
-          scope: role.scope,
+          scope: role.scope
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
     } catch (error) {
       await transaction.rollback();
@@ -318,7 +318,7 @@ export class RBACService {
       scope: row.scope,
       organizationId: row.organization_id,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     }));
 
     return { roles, total };
@@ -339,7 +339,7 @@ export class RBACService {
       scope: row.scope,
       organizationId: row.organization_id,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     };
   }
 
@@ -356,7 +356,7 @@ export class RBACService {
       action: row.action,
       scope: row.scope,
       conditions: row.conditions ? JSON.parse(row.conditions) : undefined,
-      createdAt: row.created_at,
+      createdAt: row.created_at
     }));
   }
 
@@ -378,7 +378,7 @@ export class RBACService {
       data.grantedBy,
       now,
       data.expiresAt,
-      data.scopeContext ? JSON.stringify(data.scopeContext) : null,
+      data.scopeContext ? JSON.stringify(data.scopeContext) : null
     ]);
 
     // Clear user permission cache
@@ -398,11 +398,11 @@ export class RBACService {
         roleId: data.roleId,
         roleName: role?.name,
         expiresAt: data.expiresAt,
-        scopeContext: data.scopeContext,
+        scopeContext: data.scopeContext
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
 
     return {
@@ -412,7 +412,7 @@ export class RBACService {
       grantedBy: data.grantedBy,
       grantedAt: now,
       expiresAt: data.expiresAt,
-      scopeContext: data.scopeContext,
+      scopeContext: data.scopeContext
     };
   }
 
@@ -446,11 +446,11 @@ export class RBACService {
       details: {
         targetUserId: userId,
         roleId,
-        roleName: role?.name,
+        roleName: role?.name
       },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
   }
 
@@ -469,7 +469,7 @@ export class RBACService {
       scope: row.scope,
       organizationId: row.organization_id,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     }));
   }
 
@@ -489,7 +489,7 @@ export class RBACService {
       if (matchingPermissions.length === 0) {
         return {
           allowed: false,
-          reason: `No permission found for ${permission.resource}:${permission.action}`,
+          reason: `No permission found for ${permission.resource}:${permission.action}`
         };
       }
 
@@ -498,7 +498,7 @@ export class RBACService {
         if (await this.evaluateConditions(perm, context)) {
           return {
             allowed: true,
-            matchingPermissions: [perm],
+            matchingPermissions: [perm]
           };
         }
       }
@@ -506,13 +506,13 @@ export class RBACService {
       return {
         allowed: false,
         reason: 'Permission conditions not met',
-        matchingPermissions,
+        matchingPermissions
       };
     } catch (error) {
       console.error('Permission check error:', error);
       return {
         allowed: false,
-        reason: 'Permission check failed',
+        reason: 'Permission check failed'
       };
     }
   }
@@ -542,13 +542,13 @@ export class RBACService {
       action: row.action,
       scope: row.scope,
       conditions: row.conditions ? JSON.parse(row.conditions) : undefined,
-      createdAt: row.created_at,
+      createdAt: row.created_at
     }));
 
     // Cache the result
     this.permissionCache.set(cacheKey, {
       permissions,
-      expiresAt: new Date(Date.now() + this.cacheTimeoutMs),
+      expiresAt: new Date(Date.now() + this.cacheTimeoutMs)
     });
 
     return permissions;
@@ -580,20 +580,20 @@ export class RBACService {
 
   private checkScope(permission: Permission, context?: PermissionContext): boolean {
     switch (permission.scope) {
-      case 'global':
-        return true;
+    case 'global':
+      return true;
       
-      case 'organization':
-        return context?.organizationId !== undefined;
+    case 'organization':
+      return context?.organizationId !== undefined;
       
-      case 'team':
-        return context?.teamId !== undefined;
+    case 'team':
+      return context?.teamId !== undefined;
       
-      case 'own':
-        return context?.userId !== undefined && context?.resourceId !== undefined;
+    case 'own':
+      return context?.userId !== undefined && context?.resourceId !== undefined;
       
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
@@ -608,27 +608,27 @@ export class RBACService {
     // Implement condition evaluation logic
     for (const [key, value] of Object.entries(permission.conditions)) {
       switch (key) {
-        case 'ownResource':
-          if (value && (!context?.userId || !context?.resourceId)) {
-            return false;
-          }
-          break;
+      case 'ownResource':
+        if (value && (!context?.userId || !context?.resourceId)) {
+          return false;
+        }
+        break;
         
-        case 'organizationMember':
-          if (value && !context?.organizationId) {
-            return false;
-          }
-          break;
+      case 'organizationMember':
+        if (value && !context?.organizationId) {
+          return false;
+        }
+        break;
         
-        case 'teamMember':
-          if (value && !context?.teamId) {
-            return false;
-          }
-          break;
+      case 'teamMember':
+        if (value && !context?.teamId) {
+          return false;
+        }
+        break;
         
-        default:
-          // Custom condition evaluation can be added here
-          break;
+      default:
+        // Custom condition evaluation can be added here
+        break;
       }
     }
 
@@ -674,7 +674,7 @@ export class RBACService {
         this.dbService.query('SELECT COUNT(*) as count FROM roles'),
         this.dbService.query('SELECT scope, COUNT(*) as count FROM roles GROUP BY scope'),
         this.dbService.query('SELECT COUNT(*) as count FROM user_roles WHERE expires_at IS NULL OR expires_at > NOW()'),
-        this.dbService.query('SELECT COUNT(*) as count FROM user_roles WHERE granted_at > NOW() - INTERVAL \'7 days\''),
+        this.dbService.query('SELECT COUNT(*) as count FROM user_roles WHERE granted_at > NOW() - INTERVAL \'7 days\'')
       ]);
 
     const rolesByScope: Record<string, number> = {};
@@ -686,7 +686,7 @@ export class RBACService {
       totalRoles: parseInt(totalRolesResult.rows[0].count),
       rolesByScope,
       totalAssignments: parseInt(totalAssignmentsResult.rows[0].count),
-      recentAssignments: parseInt(recentAssignmentsResult.rows[0].count),
+      recentAssignments: parseInt(recentAssignmentsResult.rows[0].count)
     };
   }
 
@@ -709,7 +709,7 @@ export class RBACService {
       lastName: row.last_name,
       grantedAt: row.granted_at,
       expiresAt: row.expires_at,
-      grantedBy: row.granted_by,
+      grantedBy: row.granted_by
     }));
   }
 }

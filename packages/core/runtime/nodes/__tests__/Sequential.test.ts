@@ -404,7 +404,7 @@ describe('Sequential Node', () => {
       
       node.run(freshContext);
       
-      const metricKey = `perf-test-sequential-processing_duration_ms`;
+      const metricKey = 'perf-test-sequential-processing_duration_ms';
       expect(freshContext.executionMeta.performanceMetrics.has(metricKey)).toBe(true);
       expect(freshContext.executionMeta.nodeExecutionOrder).toContain('perf-test');
     });

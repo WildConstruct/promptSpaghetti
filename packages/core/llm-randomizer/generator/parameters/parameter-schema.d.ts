@@ -7,12 +7,12 @@ export declare const NodeTypePreference: z.ZodObject<{
     weight: z.ZodNumber;
     required: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
+    nodeType: string;
     weight: number;
     required: boolean;
-    nodeType: string;
 }, {
-    weight: number;
     nodeType: string;
+    weight: number;
     required?: boolean | undefined;
 }>;
 export declare const RandomizerParametersSchema: z.ZodObject<{
@@ -27,12 +27,12 @@ export declare const RandomizerParametersSchema: z.ZodObject<{
         weight: z.ZodNumber;
         required: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
+        nodeType: string;
         weight: number;
         required: boolean;
-        nodeType: string;
     }, {
-        weight: number;
         nodeType: string;
+        weight: number;
         required?: boolean | undefined;
     }>, "many">>;
     specificRequirements: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -51,58 +51,58 @@ export declare const RandomizerParametersSchema: z.ZodObject<{
     outputFormat: z.ZodDefault<z.ZodEnum<["graph", "serialized", "both"]>>;
     includeExplanation: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    constraints: string[];
-    includeMetadata: boolean;
-    temperature: number;
-    maxRetries: number;
-    purpose: string;
-    complexity: "moderate" | "simple" | "complex";
-    nodeCount: number;
-    style: "creative" | "logical" | "balanced";
+    style: "creative" | "balanced" | "logical";
     nodeTypes: {
+        nodeType: string;
         weight: number;
         required: boolean;
-        nodeType: string;
     }[];
+    includeMetadata: boolean;
+    nodeCount: number;
+    constraints: string[];
+    complexity: "simple" | "moderate" | "complex";
+    purpose: string;
     specificRequirements: string[];
     focusAreas: string[];
     provider: "openai" | "claude" | "gemini";
+    temperature: number;
+    maxRetries: number;
     validateOutput: boolean;
     enablePreview: boolean;
     preferredPatterns: string[];
     avoidPatterns: string[];
-    qualityLevel: "high" | "draft" | "standard";
+    qualityLevel: "draft" | "high" | "standard";
     diversityScore: number;
-    outputFormat: "graph" | "both" | "serialized";
+    outputFormat: "both" | "graph" | "serialized";
     includeExplanation: boolean;
     domain?: string | undefined;
     userContext?: string | undefined;
 }, {
-    purpose: string;
-    complexity: "moderate" | "simple" | "complex";
+    style: "creative" | "balanced" | "logical";
     nodeCount: number;
-    style: "creative" | "logical" | "balanced";
-    constraints?: string[] | undefined;
-    includeMetadata?: boolean | undefined;
-    temperature?: number | undefined;
-    maxRetries?: number | undefined;
-    domain?: string | undefined;
-    userContext?: string | undefined;
+    complexity: "simple" | "moderate" | "complex";
+    purpose: string;
     nodeTypes?: {
-        weight: number;
         nodeType: string;
+        weight: number;
         required?: boolean | undefined;
     }[] | undefined;
+    includeMetadata?: boolean | undefined;
+    constraints?: string[] | undefined;
+    domain?: string | undefined;
+    userContext?: string | undefined;
     specificRequirements?: string[] | undefined;
     focusAreas?: string[] | undefined;
     provider?: "openai" | "claude" | "gemini" | undefined;
+    temperature?: number | undefined;
+    maxRetries?: number | undefined;
     validateOutput?: boolean | undefined;
     enablePreview?: boolean | undefined;
     preferredPatterns?: string[] | undefined;
     avoidPatterns?: string[] | undefined;
-    qualityLevel?: "high" | "draft" | "standard" | undefined;
+    qualityLevel?: "draft" | "high" | "standard" | undefined;
     diversityScore?: number | undefined;
-    outputFormat?: "graph" | "both" | "serialized" | undefined;
+    outputFormat?: "both" | "graph" | "serialized" | undefined;
     includeExplanation?: boolean | undefined;
 }>;
 export type RandomizerParameters = z.infer<typeof RandomizerParametersSchema>;
@@ -123,12 +123,12 @@ export declare const ParameterPresetSchema: z.ZodObject<{
             weight: z.ZodNumber;
             required: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
+            nodeType: string;
             weight: number;
             required: boolean;
-            nodeType: string;
         }, {
-            weight: number;
             nodeType: string;
+            weight: number;
             required?: boolean | undefined;
         }>, "many">>;
         specificRequirements: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -147,58 +147,58 @@ export declare const ParameterPresetSchema: z.ZodObject<{
         outputFormat: z.ZodDefault<z.ZodEnum<["graph", "serialized", "both"]>>;
         includeExplanation: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        constraints: string[];
-        includeMetadata: boolean;
-        temperature: number;
-        maxRetries: number;
-        purpose: string;
-        complexity: "moderate" | "simple" | "complex";
-        nodeCount: number;
-        style: "creative" | "logical" | "balanced";
+        style: "creative" | "balanced" | "logical";
         nodeTypes: {
+            nodeType: string;
             weight: number;
             required: boolean;
-            nodeType: string;
         }[];
+        includeMetadata: boolean;
+        nodeCount: number;
+        constraints: string[];
+        complexity: "simple" | "moderate" | "complex";
+        purpose: string;
         specificRequirements: string[];
         focusAreas: string[];
         provider: "openai" | "claude" | "gemini";
+        temperature: number;
+        maxRetries: number;
         validateOutput: boolean;
         enablePreview: boolean;
         preferredPatterns: string[];
         avoidPatterns: string[];
-        qualityLevel: "high" | "draft" | "standard";
+        qualityLevel: "draft" | "high" | "standard";
         diversityScore: number;
-        outputFormat: "graph" | "both" | "serialized";
+        outputFormat: "both" | "graph" | "serialized";
         includeExplanation: boolean;
         domain?: string | undefined;
         userContext?: string | undefined;
     }, {
-        purpose: string;
-        complexity: "moderate" | "simple" | "complex";
+        style: "creative" | "balanced" | "logical";
         nodeCount: number;
-        style: "creative" | "logical" | "balanced";
-        constraints?: string[] | undefined;
-        includeMetadata?: boolean | undefined;
-        temperature?: number | undefined;
-        maxRetries?: number | undefined;
-        domain?: string | undefined;
-        userContext?: string | undefined;
+        complexity: "simple" | "moderate" | "complex";
+        purpose: string;
         nodeTypes?: {
-            weight: number;
             nodeType: string;
+            weight: number;
             required?: boolean | undefined;
         }[] | undefined;
+        includeMetadata?: boolean | undefined;
+        constraints?: string[] | undefined;
+        domain?: string | undefined;
+        userContext?: string | undefined;
         specificRequirements?: string[] | undefined;
         focusAreas?: string[] | undefined;
         provider?: "openai" | "claude" | "gemini" | undefined;
+        temperature?: number | undefined;
+        maxRetries?: number | undefined;
         validateOutput?: boolean | undefined;
         enablePreview?: boolean | undefined;
         preferredPatterns?: string[] | undefined;
         avoidPatterns?: string[] | undefined;
-        qualityLevel?: "high" | "draft" | "standard" | undefined;
+        qualityLevel?: "draft" | "high" | "standard" | undefined;
         diversityScore?: number | undefined;
-        outputFormat?: "graph" | "both" | "serialized" | undefined;
+        outputFormat?: "both" | "graph" | "serialized" | undefined;
         includeExplanation?: boolean | undefined;
     }>;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -207,76 +207,76 @@ export declare const ParameterPresetSchema: z.ZodObject<{
     updatedAt: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    createdAt: string;
+    updatedAt: string;
     name: string;
+    description: string;
+    category: string;
+    tags: string[];
     parameters: {
-        constraints: string[];
-        includeMetadata: boolean;
-        temperature: number;
-        maxRetries: number;
-        purpose: string;
-        complexity: "moderate" | "simple" | "complex";
-        nodeCount: number;
-        style: "creative" | "logical" | "balanced";
+        style: "creative" | "balanced" | "logical";
         nodeTypes: {
+            nodeType: string;
             weight: number;
             required: boolean;
-            nodeType: string;
         }[];
+        includeMetadata: boolean;
+        nodeCount: number;
+        constraints: string[];
+        complexity: "simple" | "moderate" | "complex";
+        purpose: string;
         specificRequirements: string[];
         focusAreas: string[];
         provider: "openai" | "claude" | "gemini";
+        temperature: number;
+        maxRetries: number;
         validateOutput: boolean;
         enablePreview: boolean;
         preferredPatterns: string[];
         avoidPatterns: string[];
-        qualityLevel: "high" | "draft" | "standard";
+        qualityLevel: "draft" | "high" | "standard";
         diversityScore: number;
-        outputFormat: "graph" | "both" | "serialized";
+        outputFormat: "both" | "graph" | "serialized";
         includeExplanation: boolean;
         domain?: string | undefined;
         userContext?: string | undefined;
     };
-    description: string;
-    category: string;
-    tags: string[];
-    createdAt: string;
-    updatedAt: string;
     isDefault: boolean;
 }, {
     id: string;
+    createdAt: string;
+    updatedAt: string;
     name: string;
+    description: string;
+    category: string;
     parameters: {
-        purpose: string;
-        complexity: "moderate" | "simple" | "complex";
+        style: "creative" | "balanced" | "logical";
         nodeCount: number;
-        style: "creative" | "logical" | "balanced";
-        constraints?: string[] | undefined;
-        includeMetadata?: boolean | undefined;
-        temperature?: number | undefined;
-        maxRetries?: number | undefined;
-        domain?: string | undefined;
-        userContext?: string | undefined;
+        complexity: "simple" | "moderate" | "complex";
+        purpose: string;
         nodeTypes?: {
-            weight: number;
             nodeType: string;
+            weight: number;
             required?: boolean | undefined;
         }[] | undefined;
+        includeMetadata?: boolean | undefined;
+        constraints?: string[] | undefined;
+        domain?: string | undefined;
+        userContext?: string | undefined;
         specificRequirements?: string[] | undefined;
         focusAreas?: string[] | undefined;
         provider?: "openai" | "claude" | "gemini" | undefined;
+        temperature?: number | undefined;
+        maxRetries?: number | undefined;
         validateOutput?: boolean | undefined;
         enablePreview?: boolean | undefined;
         preferredPatterns?: string[] | undefined;
         avoidPatterns?: string[] | undefined;
-        qualityLevel?: "high" | "draft" | "standard" | undefined;
+        qualityLevel?: "draft" | "high" | "standard" | undefined;
         diversityScore?: number | undefined;
-        outputFormat?: "graph" | "both" | "serialized" | undefined;
+        outputFormat?: "both" | "graph" | "serialized" | undefined;
         includeExplanation?: boolean | undefined;
     };
-    description: string;
-    category: string;
-    createdAt: string;
-    updatedAt: string;
     tags?: string[] | undefined;
     isDefault?: boolean | undefined;
 }>;
@@ -310,42 +310,63 @@ export declare const ValidationResultSchema: z.ZodObject<{
         suggestion?: string | undefined;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
-    warnings: {
-        message: string;
-        field: string;
-        suggestion?: string | undefined;
-    }[];
     errors: {
         code: string;
         message: string;
         field: string;
+    }[];
+    warnings: {
+        message: string;
+        field: string;
+        suggestion?: string | undefined;
     }[];
     isValid: boolean;
 }, {
-    warnings: {
-        message: string;
-        field: string;
-        suggestion?: string | undefined;
-    }[];
     errors: {
         code: string;
         message: string;
         field: string;
+    }[];
+    warnings: {
+        message: string;
+        field: string;
+        suggestion?: string | undefined;
     }[];
     isValid: boolean;
 }>;
 export type ValidationResult = z.infer<typeof ValidationResultSchema>;
+/**
+ * Parameter validation class
+ */
 export declare class ParameterValidator {
+    /**
+     * Validate parameters against schema
+     */
     static validate(parameters: Partial<RandomizerParameters>): ValidationResult;
+    /**
+     * Validate business rules beyond schema
+     */
     private static validateBusinessRules;
+    /**
+     * Get parameter suggestions based on input
+     */
     static getSuggestions(parameters: Partial<RandomizerParameters>): {
         nodeCount?: number;
         nodeTypes?: string[];
         temperature?: number;
         focusAreas?: string[];
     };
+    /**
+     * Suggest appropriate node types based on purpose
+     */
     private static suggestNodeTypes;
+    /**
+     * Suggest focus areas based on domain
+     */
     private static suggestFocusAreas;
 }
+/**
+ * Default parameter presets
+ */
 export declare const defaultPresets: ParameterPreset[];
 //# sourceMappingURL=parameter-schema.d.ts.map

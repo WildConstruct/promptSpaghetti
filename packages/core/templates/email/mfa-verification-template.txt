@@ -1,0 +1,50 @@
+===========================================
+PROMPTSCAPE - YOUR VERIFICATION CODE
+===========================================
+
+Hi {{displayName}},
+
+We received a request to verify your identity for your PromptScape account. Use the verification code below to complete your login.
+
+VERIFICATION CODE: {{code}}
+
+This code expires in {{expiryMinutes}} minutes.
+
+HOW TO USE THIS CODE:
+1. Return to the PromptScape login page
+2. Enter this 6-digit code exactly as shown
+3. Complete your login within {{expiryMinutes}} minutes
+
+{{#if securityWarning}}
+!!! SECURITY ALERT !!!
+{{securityWarning}} If this wasn't you, please contact our security team immediately and consider changing your password.
+{{/if}}
+
+SECURITY REMINDER:
+PromptScape will never ask for your verification code via phone, email, or text message. Only enter this code on the official PromptScape website.
+
+HAVING TROUBLE?
+
+Code not working?
+Make sure you're entering all 6 digits exactly as shown, including any leading zeros.
+
+Code expired?
+Request a new verification code from the login page.
+
+Didn't request this?
+Contact our security team immediately if you didn't attempt to log in.
+
+NEED HELP?
+Our support team is available 24/7 to assist with any login issues.
+Email: security@promptscape.com
+
+-------------------------------------------
+This is an automated security message from PromptScape.
+
+Privacy Policy: https://promptscape.com/privacy
+Security Center: https://promptscape.com/security
+Help Center: https://promptscape.com/help
+
+© 2025 PromptScape, Inc. All rights reserved.
+This email was sent to {{emailAddress}} for account security purposes.
+===========================================

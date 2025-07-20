@@ -147,7 +147,7 @@ export const touchUtils = {
     haptics: boolean;
     forceTouch: boolean;
     maxTouchPoints: number;
-  } {
+    } {
     return {
       touch: this.isTouchDevice(),
       multiTouch: navigator.maxTouchPoints > 1,

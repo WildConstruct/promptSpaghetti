@@ -27,7 +27,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
     getPublishedRules,
     approveRule,
     deprecateRule,
-    notifications,
+    notifications
   } = useCorrectionsStore();
 
   // UI State
@@ -53,7 +53,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
     isActive: true,
     priority: rules.length,
     category: '',
-    tags: [] as string[],
+    tags: [] as string[]
   });
 
   // Import/Export state
@@ -93,43 +93,43 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
 
     // Apply type filter
     switch (filterType) {
-      case 'active':
-        filtered = filtered.filter(rule => rule.isActive);
-        break;
-      case 'inactive':
-        filtered = filtered.filter(rule => !rule.isActive);
-        break;
-      case 'regex':
-        filtered = filtered.filter(rule => rule.isRegex);
-        break;
-      case 'text':
-        filtered = filtered.filter(rule => !rule.isRegex);
-        break;
-      case 'draft':
-        filtered = filtered.filter(rule => rule.status === 'draft');
-        break;
-      case 'published':
-        filtered = filtered.filter(rule => rule.status === 'published');
-        break;
-      case 'deprecated':
-        filtered = filtered.filter(rule => rule.status === 'deprecated');
-        break;
+    case 'active':
+      filtered = filtered.filter(rule => rule.isActive);
+      break;
+    case 'inactive':
+      filtered = filtered.filter(rule => !rule.isActive);
+      break;
+    case 'regex':
+      filtered = filtered.filter(rule => rule.isRegex);
+      break;
+    case 'text':
+      filtered = filtered.filter(rule => !rule.isRegex);
+      break;
+    case 'draft':
+      filtered = filtered.filter(rule => rule.status === 'draft');
+      break;
+    case 'published':
+      filtered = filtered.filter(rule => rule.status === 'published');
+      break;
+    case 'deprecated':
+      filtered = filtered.filter(rule => rule.status === 'deprecated');
+      break;
     }
 
     // Apply sorting
     switch (sortType) {
-      case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'priority':
-        filtered.sort((a, b) => a.priority - b.priority);
-        break;
-      case 'created':
-        filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        break;
-      case 'updated':
-        filtered.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-        break;
+    case 'name':
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 'priority':
+      filtered.sort((a, b) => a.priority - b.priority);
+      break;
+    case 'created':
+      filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      break;
+    case 'updated':
+      filtered.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+      break;
     }
 
     return filtered;
@@ -146,7 +146,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
         replaceWith: '',
         isRegex: false,
         isActive: true,
-        priority: rules.length,
+        priority: rules.length
       });
     }
   }, [newRule, addRule, rules.length]);
@@ -170,15 +170,15 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
 
     selectedRules.forEach(ruleId => {
       switch (action) {
-        case 'delete':
-          deleteRule(ruleId);
-          break;
-        case 'activate':
-          updateRule(ruleId, { isActive: true });
-          break;
-        case 'deactivate':
-          updateRule(ruleId, { isActive: false });
-          break;
+      case 'delete':
+        deleteRule(ruleId);
+        break;
+      case 'activate':
+        updateRule(ruleId, { isActive: true });
+        break;
+      case 'deactivate':
+        updateRule(ruleId, { isActive: false });
+        break;
       }
     });
 
@@ -198,8 +198,8 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
       const response = await fetch(`/api/corrections/export?format=${exportFormat}`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       if (response.ok) {
@@ -225,13 +225,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
       const response = await fetch('/api/corrections/import', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           filename: importFilename,
           content: importContent,
-          skipDuplicates: true,
-        }),
+          skipDuplicates: true
+        })
       });
 
       if (response.ok) {
@@ -268,7 +268,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        transition: 'width 0.3s ease',
+        transition: 'width 0.3s ease'
       }}
       data-testid="corrections-manager-panel"
     >
@@ -279,7 +279,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        minHeight: '48px',
+        minHeight: '48px'
       }}>
         {!isCollapsed && (
           <>
@@ -307,7 +307,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   cursor: 'pointer',
                   padding: '4px',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
                 title="Collapse panel"
               >
@@ -322,7 +322,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   cursor: 'pointer',
                   padding: '4px',
                   borderRadius: '4px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
                 title="Close panel"
               >
@@ -343,7 +343,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 cursor: 'pointer',
                 padding: '4px',
                 borderRadius: '4px',
-                fontSize: '14px',
+                fontSize: '14px'
               }}
               title="Expand panel"
             >
@@ -354,7 +354,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               textOrientation: 'mixed',
               fontSize: '12px',
               color: '#a0aec0',
-              transform: 'rotate(180deg)',
+              transform: 'rotate(180deg)'
             }}>
               Corrections
             </div>
@@ -380,7 +380,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '6px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
             </div>
@@ -402,7 +402,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '12px',
+                  fontSize: '12px'
                 }}
               >
                 <option value="all">All Rules</option>
@@ -425,7 +425,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '12px',
+                  fontSize: '12px'
                 }}
               >
                 <option value="priority">Priority</option>
@@ -444,7 +444,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '12px',
+                  fontSize: '12px'
                 }}
               >
                 <option value="list">List</option>
@@ -464,7 +464,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   border: 'none',
                   borderRadius: '4px',
                   fontSize: '12px',
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
               >
                 {selectedRules.size === filteredAndSortedRules.length ? 'Deselect All' : 'Select All'}
@@ -481,7 +481,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       border: 'none',
                       borderRadius: '4px',
                       fontSize: '12px',
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     Activate ({selectedRules.size})
@@ -495,7 +495,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       border: 'none',
                       borderRadius: '4px',
                       fontSize: '12px',
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     Deactivate ({selectedRules.size})
@@ -509,7 +509,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       border: 'none',
                       borderRadius: '4px',
                       fontSize: '12px',
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     Delete ({selectedRules.size})
@@ -526,7 +526,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   border: 'none',
                   borderRadius: '4px',
                   fontSize: '12px',
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
               >
                 Import/Export
@@ -541,7 +541,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   border: 'none',
                   borderRadius: '4px',
                   fontSize: '12px',
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
               >
                 Stats
@@ -557,7 +557,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   borderRadius: '4px',
                   fontSize: '12px',
                   cursor: 'pointer',
-                  position: 'relative',
+                  position: 'relative'
                 }}
               >
                 Workflow
@@ -574,7 +574,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     fontSize: '10px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'center'
                   }}>
                     {getDraftRules().length}
                   </span>
@@ -612,7 +612,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       color: '#fff',
                       border: '1px solid #444',
                       borderRadius: '4px',
-                      fontSize: '12px',
+                      fontSize: '12px'
                     }}
                   >
                     <option value="json">JSON</option>
@@ -628,7 +628,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       border: 'none',
                       borderRadius: '4px',
                       fontSize: '12px',
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     Export
@@ -663,7 +663,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     border: '1px solid #444',
                     borderRadius: '4px',
                     fontSize: '12px',
-                    marginBottom: '8px',
+                    marginBottom: '8px'
                   }}
                 />
                 {importContent && (
@@ -676,7 +676,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       border: 'none',
                       borderRadius: '4px',
                       fontSize: '12px',
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     Import
@@ -704,7 +704,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 border: '1px solid #444',
                 borderRadius: '6px',
                 resize: 'vertical',
-                fontSize: '14px',
+                fontSize: '14px'
               }}
             />
             {testText && (
@@ -718,7 +718,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     borderRadius: '6px',
                     marginTop: '4px',
                     fontSize: '14px',
-                    wordBreak: 'break-word',
+                    wordBreak: 'break-word'
                   }}
                 >
                   {handleTestCorrections()}
@@ -752,7 +752,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     border: 'none',
                     borderRadius: '4px',
                     fontSize: '12px',
-                    cursor: 'pointer',
+                    cursor: 'pointer'
                   }}
                 >
                   Load Defaults
@@ -770,7 +770,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     border: 'none',
                     borderRadius: '4px',
                     fontSize: '12px',
-                    cursor: 'pointer',
+                    cursor: 'pointer'
                   }}
                 >
                   Clear All
@@ -788,7 +788,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     border: '1px solid #444',
                     borderRadius: '6px',
                     padding: '12px',
-                    transition: 'background 0.2s ease',
+                    transition: 'background 0.2s ease'
                   }}
                 >
                   <div style={{ 
@@ -836,8 +836,8 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       {rule.status && (
                         <span style={{ 
                           background: rule.status === 'draft' ? '#fbb040' : 
-                                     rule.status === 'published' ? '#68d391' : 
-                                     rule.status === 'deprecated' ? '#e53e3e' : '#a0aec0',
+                            rule.status === 'published' ? '#68d391' : 
+                              rule.status === 'deprecated' ? '#e53e3e' : '#a0aec0',
                           color: '#1a202c', 
                           padding: '2px 6px', 
                           borderRadius: '2px', 
@@ -859,7 +859,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                           cursor: 'pointer',
                           fontSize: '12px',
                           padding: '4px 8px',
-                          borderRadius: '4px',
+                          borderRadius: '4px'
                         }}
                       >
                         Edit
@@ -873,7 +873,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                           cursor: 'pointer',
                           fontSize: '12px',
                           padding: '4px 8px',
-                          borderRadius: '4px',
+                          borderRadius: '4px'
                         }}
                       >
                         Delete
@@ -955,7 +955,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
               <input
@@ -969,7 +969,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
               <input
@@ -983,7 +983,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
               <input
@@ -997,7 +997,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -1031,7 +1031,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   borderRadius: '4px',
                   cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
                   fontSize: '14px',
-                  fontWeight: 500,
+                  fontWeight: 500
                 }}
               >
                 Add Rule
@@ -1054,7 +1054,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 1001,
+            zIndex: 1001
           }}
         >
           <div
@@ -1065,7 +1065,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               width: isMobile ? '90%' : '400px',
               maxWidth: '90vw',
               maxHeight: '90vh',
-              overflow: 'auto',
+              overflow: 'auto'
             }}
           >
             <h3 style={{ marginBottom: '16px', fontSize: '16px', fontWeight: 600 }}>
@@ -1083,7 +1083,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
               <input
@@ -1097,7 +1097,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
               <input
@@ -1111,7 +1111,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
               <input
@@ -1125,7 +1125,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '4px',
-                  fontSize: '14px',
+                  fontSize: '14px'
                 }}
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -1160,7 +1160,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     cursor: 'pointer',
                     flex: 1,
                     fontSize: '14px',
-                    fontWeight: 500,
+                    fontWeight: 500
                   }}
                 >
                   Save
@@ -1176,7 +1176,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     cursor: 'pointer',
                     flex: 1,
                     fontSize: '14px',
-                    fontWeight: 500,
+                    fontWeight: 500
                   }}
                 >
                   Cancel

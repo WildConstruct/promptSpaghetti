@@ -44,9 +44,9 @@ class ExtensionScaffolder {
     this.installDependencies(projectDir, type);
     
     console.log(`✅ Extension created successfully at: ${projectDir}`);
-    console.log(`\nNext steps:`);
+    console.log('\nNext steps:');
     console.log(`  cd ${name}`);
-    console.log(`  npm run dev`);
+    console.log('  npm run dev');
     
     return projectDir;
   }
@@ -850,19 +850,19 @@ function main() {
   const command = args[0];
   
   switch (command) {
-    case 'create':
-      handleCreate(args.slice(1));
-      break;
-    case 'list-types':
-      listExtensionTypes();
-      break;
-    case 'help':
-      showUsage();
-      break;
-    default:
-      console.error(`Unknown command: ${command}`);
-      showUsage();
-      process.exit(1);
+  case 'create':
+    handleCreate(args.slice(1));
+    break;
+  case 'list-types':
+    listExtensionTypes();
+    break;
+  case 'help':
+    showUsage();
+    break;
+  default:
+    console.error(`Unknown command: ${command}`);
+    showUsage();
+    process.exit(1);
   }
 }
 

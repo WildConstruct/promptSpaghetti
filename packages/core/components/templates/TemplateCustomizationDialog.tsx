@@ -254,78 +254,78 @@ interface VariableEditorProps {
 const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error, onChange }) => {
   const renderInput = () => {
     switch (variable.type) {
-      case 'text':
-        return (
+    case 'text':
+      return (
+        <input
+          type="text"
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={variable.description}
+          className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            error ? 'border-red-300' : 'border-gray-300'
+          }`}
+        />
+      );
+
+    case 'textarea':
+      return (
+        <textarea
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={variable.description}
+          rows={3}
+          className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            error ? 'border-red-300' : 'border-gray-300'
+          }`}
+        />
+      );
+
+    case 'number':
+      return (
+        <input
+          type="number"
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value ? Number(e.target.value) : undefined)}
+          placeholder={variable.description}
+          min={variable.validation?.min}
+          max={variable.validation?.max}
+          className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            error ? 'border-red-300' : 'border-gray-300'
+          }`}
+        />
+      );
+
+    case 'boolean':
+      return (
+        <label className="flex items-center">
           <input
-            type="text"
-            value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={variable.description}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              error ? 'border-red-300' : 'border-gray-300'
-            }`}
+            type="checkbox"
+            checked={value || false}
+            onChange={(e) => onChange(e.target.checked)}
+            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
           />
-        );
+          <span className="ml-2 text-sm text-gray-700">{variable.description}</span>
+        </label>
+      );
 
-      case 'textarea':
-        return (
-          <textarea
-            value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={variable.description}
-            rows={3}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              error ? 'border-red-300' : 'border-gray-300'
-            }`}
-          />
-        );
+    case 'select':
+      return (
+        <select
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            error ? 'border-red-300' : 'border-gray-300'
+          }`}
+        >
+          <option value="">Select an option</option>
+          {variable.validation?.options?.map(option => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+        </select>
+      );
 
-      case 'number':
-        return (
-          <input
-            type="number"
-            value={value || ''}
-            onChange={(e) => onChange(e.target.value ? Number(e.target.value) : undefined)}
-            placeholder={variable.description}
-            min={variable.validation?.min}
-            max={variable.validation?.max}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              error ? 'border-red-300' : 'border-gray-300'
-            }`}
-          />
-        );
-
-      case 'boolean':
-        return (
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              checked={value || false}
-              onChange={(e) => onChange(e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-sm text-gray-700">{variable.description}</span>
-          </label>
-        );
-
-      case 'select':
-        return (
-          <select
-            value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              error ? 'border-red-300' : 'border-gray-300'
-            }`}
-          >
-            <option value="">Select an option</option>
-            {variable.validation?.options?.map(option => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
-        );
-
-      default:
-        return null;
+    default:
+      return null;
     }
   };
 
@@ -358,78 +358,78 @@ interface CustomizationPointEditorProps {
 const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ point, value, onChange }) => {
   const renderInput = () => {
     switch (point.ui_component) {
-      case 'input':
-        return (
+    case 'input':
+      return (
+        <input
+          type="text"
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={point.description}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      );
+
+    case 'select':
+      return (
+        <select
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          <option value="">Default</option>
+          {/* Options would be dynamically loaded based on the customization point */}
+        </select>
+      );
+
+    case 'color_picker':
+      return (
+        <div className="flex items-center space-x-2">
+          <input
+            type="color"
+            value={value || '#000000'}
+            onChange={(e) => onChange(e.target.value)}
+            className="h-10 w-16 border border-gray-300 rounded cursor-pointer"
+          />
           <input
             type="text"
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
-            placeholder={point.description}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="#000000"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-        );
+        </div>
+      );
 
-      case 'select':
-        return (
-          <select
-            value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="">Default</option>
-            {/* Options would be dynamically loaded based on the customization point */}
-          </select>
-        );
+    case 'slider':
+      return (
+        <div className="space-y-2">
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={value || 50}
+            onChange={(e) => onChange(Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="text-center text-sm text-gray-600">{value || 50}</div>
+        </div>
+      );
 
-      case 'color_picker':
-        return (
-          <div className="flex items-center space-x-2">
-            <input
-              type="color"
-              value={value || '#000000'}
-              onChange={(e) => onChange(e.target.value)}
-              className="h-10 w-16 border border-gray-300 rounded cursor-pointer"
-            />
-            <input
-              type="text"
-              value={value || ''}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder="#000000"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-        );
+    case 'toggle':
+      return (
+        <label className="flex items-center">
+          <input
+            type="checkbox"
+            checked={value || false}
+            onChange={(e) => onChange(e.target.checked)}
+            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <span className="ml-2 text-sm text-gray-700">Enable {point.name}</span>
+        </label>
+      );
 
-      case 'slider':
-        return (
-          <div className="space-y-2">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={value || 50}
-              onChange={(e) => onChange(Number(e.target.value))}
-              className="w-full"
-            />
-            <div className="text-center text-sm text-gray-600">{value || 50}</div>
-          </div>
-        );
-
-      case 'toggle':
-        return (
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              checked={value || false}
-              onChange={(e) => onChange(e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="ml-2 text-sm text-gray-700">Enable {point.name}</span>
-          </label>
-        );
-
-      default:
-        return null;
+    default:
+      return null;
     }
   };
 

@@ -55,43 +55,43 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ({
 
   const getConflictIcon = (type: string): string => {
     switch (type) {
-      case 'node_position':
-        return '📍';
-      case 'node_properties':
-        return '⚙️';
-      case 'node_creation':
-        return '➕';
-      case 'node_deletion':
-        return '➖';
-      case 'edge_creation':
-        return '🔗';
-      case 'edge_deletion':
-        return '🔓';
-      case 'edge_properties':
-        return '🔧';
-      default:
-        return '⚠️';
+    case 'node_position':
+      return '📍';
+    case 'node_properties':
+      return '⚙️';
+    case 'node_creation':
+      return '➕';
+    case 'node_deletion':
+      return '➖';
+    case 'edge_creation':
+      return '🔗';
+    case 'edge_deletion':
+      return '🔓';
+    case 'edge_properties':
+      return '🔧';
+    default:
+      return '⚠️';
     }
   };
 
   const getConflictColor = (type: string): string => {
     switch (type) {
-      case 'node_position':
-        return 'border-blue-200 bg-blue-50';
-      case 'node_properties':
-        return 'border-green-200 bg-green-50';
-      case 'node_creation':
-        return 'border-purple-200 bg-purple-50';
-      case 'node_deletion':
-        return 'border-red-200 bg-red-50';
-      case 'edge_creation':
-        return 'border-indigo-200 bg-indigo-50';
-      case 'edge_deletion':
-        return 'border-orange-200 bg-orange-50';
-      case 'edge_properties':
-        return 'border-teal-200 bg-teal-50';
-      default:
-        return 'border-gray-200 bg-gray-50';
+    case 'node_position':
+      return 'border-blue-200 bg-blue-50';
+    case 'node_properties':
+      return 'border-green-200 bg-green-50';
+    case 'node_creation':
+      return 'border-purple-200 bg-purple-50';
+    case 'node_deletion':
+      return 'border-red-200 bg-red-50';
+    case 'edge_creation':
+      return 'border-indigo-200 bg-indigo-50';
+    case 'edge_deletion':
+      return 'border-orange-200 bg-orange-50';
+    case 'edge_properties':
+      return 'border-teal-200 bg-teal-50';
+    default:
+      return 'border-gray-200 bg-gray-50';
     }
   };
 

@@ -263,60 +263,60 @@ export class WebSocketClient extends EventEmitter {
       const message = WSMessageSchema.parse(JSON.parse(data));
       
       switch (message.type) {
-        case 'connect':
-          this.handleConnectMessage(message);
-          break;
+      case 'connect':
+        this.handleConnectMessage(message);
+        break;
           
-        case 'auth_response':
-          this.handleAuthResponse(message);
-          break;
+      case 'auth_response':
+        this.handleAuthResponse(message);
+        break;
           
-        case 'graph_update':
-          this.emit('graph_update', message.payload);
-          break;
+      case 'graph_update':
+        this.emit('graph_update', message.payload);
+        break;
           
-        case 'presence_update':
-          this.emit('presence_update', message.payload);
-          break;
+      case 'presence_update':
+        this.emit('presence_update', message.payload);
+        break;
           
-        case 'user_join':
-          this.emit('user_join', message.payload);
-          break;
+      case 'user_join':
+        this.emit('user_join', message.payload);
+        break;
           
-        case 'user_leave':
-          this.emit('user_leave', message.payload);
-          break;
+      case 'user_leave':
+        this.emit('user_leave', message.payload);
+        break;
 
-        case 'presence_sync':
-          this.emit('presence_sync', message.payload);
-          break;
+      case 'presence_sync':
+        this.emit('presence_sync', message.payload);
+        break;
 
-        case 'cursor_update':
-          this.emit('cursor_update', message.payload);
-          break;
+      case 'cursor_update':
+        this.emit('cursor_update', message.payload);
+        break;
 
-        case 'selection_update':
-          this.emit('selection_update', message.payload);
-          break;
+      case 'selection_update':
+        this.emit('selection_update', message.payload);
+        break;
 
-        case 'activity_update':
-          this.emit('activity_update', message.payload);
-          break;
+      case 'activity_update':
+        this.emit('activity_update', message.payload);
+        break;
 
-        case 'user_status_changed':
-          this.emit('user_status_changed', message.payload);
-          break;
+      case 'user_status_changed':
+        this.emit('user_status_changed', message.payload);
+        break;
           
-        case 'pong':
-          // Heartbeat response received
-          break;
+      case 'pong':
+        // Heartbeat response received
+        break;
           
-        case 'error':
-          this.emit('error', message.payload);
-          break;
+      case 'error':
+        this.emit('error', message.payload);
+        break;
           
-        default:
-          console.warn('Unknown message type:', message.type);
+      default:
+        console.warn('Unknown message type:', message.type);
       }
       
     } catch (error) {

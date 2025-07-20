@@ -179,7 +179,7 @@ describe('Runtime Node Implementation Tests', () => {
       // First run with string seed
       const stringSeedCtx: ExecutionContext = {
         variables: {},
-        seed: "hello"
+        seed: 'hello'
       };
       
       const node = new WeightedChoiceNode('weighted2', [
@@ -192,7 +192,7 @@ describe('Runtime Node Implementation Tests', () => {
       // Run again with same seed
       const stringSeedCtx2: ExecutionContext = {
         variables: {},
-        seed: "hello"
+        seed: 'hello'
       };
       const secondResult = node.run(stringSeedCtx2);
       

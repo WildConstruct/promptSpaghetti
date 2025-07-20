@@ -179,20 +179,20 @@ export class AnalyticsWebSocketServer extends EventEmitter {
       const message: WebSocketMessage = JSON.parse(data.toString());
       
       switch (message.type) {
-        case WebSocketMessageType.SUBSCRIPTION:
-          this.handleSubscription(clientId, message.data);
-          break;
+      case WebSocketMessageType.SUBSCRIPTION:
+        this.handleSubscription(clientId, message.data);
+        break;
         
-        case WebSocketMessageType.UNSUBSCRIPTION:
-          this.handleUnsubscription(clientId, message.data);
-          break;
+      case WebSocketMessageType.UNSUBSCRIPTION:
+        this.handleUnsubscription(clientId, message.data);
+        break;
         
-        case WebSocketMessageType.HEARTBEAT:
-          this.handleHeartbeat(clientId);
-          break;
+      case WebSocketMessageType.HEARTBEAT:
+        this.handleHeartbeat(clientId);
+        break;
         
-        default:
-          console.warn(`Unknown message type from client ${clientId}: ${message.type}`);
+      default:
+        console.warn(`Unknown message type from client ${clientId}: ${message.type}`);
       }
     } catch (error) {
       console.error(`Failed to parse message from client ${clientId}:`, error);
@@ -321,28 +321,28 @@ export class AnalyticsWebSocketServer extends EventEmitter {
       let data: any = null;
 
       switch (topic) {
-        case 'dashboard':
-          data = this.analyticsDashboard.getAnalyticsDashboardData();
-          break;
+      case 'dashboard':
+        data = this.analyticsDashboard.getAnalyticsDashboardData();
+        break;
         
-        case 'cost_alerts':
-          data = this.costTracker.getActiveAlerts();
-          break;
+      case 'cost_alerts':
+        data = this.costTracker.getActiveAlerts();
+        break;
         
-        case 'recommendations':
-          data = this.costTracker.getEfficiencyRecommendations(
-            client.userId, 
-            client.organizationId
-          );
-          break;
+      case 'recommendations':
+        data = this.costTracker.getEfficiencyRecommendations(
+          client.userId, 
+          client.organizationId
+        );
+        break;
         
-        case 'user_activity':
-          data = this.analyticsCollector.getCurrentSummary();
-          break;
+      case 'user_activity':
+        data = this.analyticsCollector.getCurrentSummary();
+        break;
         
-        default:
-          console.warn(`Unknown topic: ${topic}`);
-          return;
+      default:
+        console.warn(`Unknown topic: ${topic}`);
+        return;
       }
 
       if (data) {
@@ -520,7 +520,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
     authenticatedClients: number;
     totalSubscriptions: number;
     topicCounts: { [topic: string]: number };
-  } {
+    } {
     const authenticatedClients = Array.from(this.clients.values()).filter(c => c.isAuthenticated).length;
     const totalSubscriptions = Array.from(this.clients.values()).reduce((sum, client) => sum + client.subscriptions.size, 0);
     

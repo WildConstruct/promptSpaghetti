@@ -52,7 +52,7 @@ Object.defineProperties(global.HTMLElement.prototype, {
   },
   scrollHeight: { 
     get() { return parseFloat(this.style.height) || 600; } 
-  },
+  }
 });
 
 // SVG getBBox mock for ReactFlow
@@ -109,8 +109,8 @@ jest.mock('@testing-library/user-event', () => {
       clear: async (el) => {
         el.value = '';
         el.dispatchEvent(new mockEvent('input', { bubbles: true }));
-      },
-    },
+      }
+    }
   };
 }, { virtual: true });
 

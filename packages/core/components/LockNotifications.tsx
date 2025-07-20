@@ -19,39 +19,39 @@ export const LockNotifications: React.FC<LockNotificationsProps> = ({
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'acquired':
-        return <Lock className="h-4 w-4 text-green-500" />;
-      case 'released':
-        return <Check className="h-4 w-4 text-blue-500" />;
-      case 'broken':
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'conflict':
-        return <AlertTriangle className="h-4 w-4 text-orange-500" />;
-      case 'queue_position':
-        return <Clock className="h-4 w-4 text-blue-500" />;
-      case 'expiring':
-        return <Clock className="h-4 w-4 text-amber-500" />;
-      default:
-        return <Bell className="h-4 w-4 text-gray-500" />;
+    case 'acquired':
+      return <Lock className="h-4 w-4 text-green-500" />;
+    case 'released':
+      return <Check className="h-4 w-4 text-blue-500" />;
+    case 'broken':
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case 'conflict':
+      return <AlertTriangle className="h-4 w-4 text-orange-500" />;
+    case 'queue_position':
+      return <Clock className="h-4 w-4 text-blue-500" />;
+    case 'expiring':
+      return <Clock className="h-4 w-4 text-amber-500" />;
+    default:
+      return <Bell className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'acquired':
-        return 'border-l-green-500 bg-green-50';
-      case 'released':
-        return 'border-l-blue-500 bg-blue-50';
-      case 'broken':
-        return 'border-l-red-500 bg-red-50';
-      case 'conflict':
-        return 'border-l-orange-500 bg-orange-50';
-      case 'queue_position':
-        return 'border-l-blue-500 bg-blue-50';
-      case 'expiring':
-        return 'border-l-amber-500 bg-amber-50';
-      default:
-        return 'border-l-gray-500 bg-gray-50';
+    case 'acquired':
+      return 'border-l-green-500 bg-green-50';
+    case 'released':
+      return 'border-l-blue-500 bg-blue-50';
+    case 'broken':
+      return 'border-l-red-500 bg-red-50';
+    case 'conflict':
+      return 'border-l-orange-500 bg-orange-50';
+    case 'queue_position':
+      return 'border-l-blue-500 bg-blue-50';
+    case 'expiring':
+      return 'border-l-amber-500 bg-amber-50';
+    default:
+      return 'border-l-gray-500 bg-gray-50';
     }
   };
 

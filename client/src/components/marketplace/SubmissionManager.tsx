@@ -144,16 +144,16 @@ export const SubmissionManager: React.FC = () => {
 
   const getFilteredSubmissions = () => {
     switch (selectedTab) {
-      case 'drafts':
-        return submissions.filter(s => s.status === 'draft');
-      case 'submitted':
-        return submissions.filter(s => s.status === 'submitted' || s.status === 'under_review');
-      case 'approved':
-        return submissions.filter(s => s.status === 'approved');
-      case 'rejected':
-        return submissions.filter(s => s.status === 'rejected' || s.status === 'changes_requested');
-      default:
-        return submissions;
+    case 'drafts':
+      return submissions.filter(s => s.status === 'draft');
+    case 'submitted':
+      return submissions.filter(s => s.status === 'submitted' || s.status === 'under_review');
+    case 'approved':
+      return submissions.filter(s => s.status === 'approved');
+    case 'rejected':
+      return submissions.filter(s => s.status === 'rejected' || s.status === 'changes_requested');
+    default:
+      return submissions;
     }
   };
 
@@ -275,7 +275,7 @@ export const SubmissionManager: React.FC = () => {
           <h3>No submissions found</h3>
           <p>
             {selectedTab === 'all' 
-              ? "You haven't submitted any templates yet." 
+              ? 'You haven\'t submitted any templates yet.' 
               : `No ${selectedTab} submissions found.`
             }
           </p>

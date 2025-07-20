@@ -19,12 +19,12 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
   onUpdate,
   onArchive,
   onCancel,
-  canArchive,
+  canArchive
 }) => {
   const [activeTab, setActiveTab] = useState<'general' | 'members' | 'danger'>('general');
   const [formData, setFormData] = useState({
     name: workspace.name,
-    description: workspace.description || '',
+    description: workspace.description || ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,7 +70,7 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({
     try {
       await onUpdate({
         name: formData.name.trim(),
-        description: formData.description.trim() || undefined,
+        description: formData.description.trim() || undefined
       });
     } catch (error) {
       console.error('Failed to update workspace:', error);

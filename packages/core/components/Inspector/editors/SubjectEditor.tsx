@@ -1,47 +1,47 @@
-import React, { useState } from "react";
-import { BaseNodeEditor, BaseNodeEditorProps } from "../BaseNodeEditor";
-import { TextFieldEditor } from "../TextFieldEditor";
-import { SelectEditor, SelectOption } from "../SelectEditor";
-import { VariationList } from "../VariationList";
-import { CollapsibleSection } from "../CollapsibleSection";
+import React, { useState } from 'react';
+import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { SelectEditor, SelectOption } from '../SelectEditor';
+import { VariationList } from '../VariationList';
+import { CollapsibleSection } from '../CollapsibleSection';
 
 export interface SubjectEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Subject specific props can be added here
 }
 
 const GRAMMATICAL_NUMBERS: SelectOption[] = [
-  { value: "singular", label: "Singular" },
-  { value: "plural", label: "Plural" },
-  { value: "both", label: "Both (auto-detect)" },
+  { value: 'singular', label: 'Singular' },
+  { value: 'plural', label: 'Plural' },
+  { value: 'both', label: 'Both (auto-detect)' }
 ];
 
 const GRAMMATICAL_PERSONS: SelectOption[] = [
-  { value: "first", label: "First person (I, we)" },
-  { value: "second", label: "Second person (you)" },
-  { value: "third", label: "Third person (he, she, it, they)" },
-  { value: "any", label: "Any person" },
+  { value: 'first', label: 'First person (I, we)' },
+  { value: 'second', label: 'Second person (you)' },
+  { value: 'third', label: 'Third person (he, she, it, they)' },
+  { value: 'any', label: 'Any person' }
 ];
 
 const SUBJECT_CATEGORIES: SelectOption[] = [
-  { value: "person", label: "Person/People", group: "Animate" },
-  { value: "animal", label: "Animal", group: "Animate" },
-  { value: "character", label: "Character/Role", group: "Animate" },
-  { value: "object", label: "Object/Thing", group: "Inanimate" },
-  { value: "concept", label: "Concept/Idea", group: "Abstract" },
-  { value: "place", label: "Place/Location", group: "Abstract" },
-  { value: "organization", label: "Organization", group: "Abstract" },
-  { value: "other", label: "Other", group: "Misc" },
+  { value: 'person', label: 'Person/People', group: 'Animate' },
+  { value: 'animal', label: 'Animal', group: 'Animate' },
+  { value: 'character', label: 'Character/Role', group: 'Animate' },
+  { value: 'object', label: 'Object/Thing', group: 'Inanimate' },
+  { value: 'concept', label: 'Concept/Idea', group: 'Abstract' },
+  { value: 'place', label: 'Place/Location', group: 'Abstract' },
+  { value: 'organization', label: 'Organization', group: 'Abstract' },
+  { value: 'other', label: 'Other', group: 'Misc' }
 ];
 
 export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
   const { nodeData, onChange } = props;
   
   // Subject specific fields
-  const label = (nodeData.label as string) || "";
+  const label = (nodeData.label as string) || '';
   const variations = (nodeData.variations as string[]) || [];
-  const grammaticalNumber = (nodeData.grammaticalNumber as string) || "both";
-  const grammaticalPerson = (nodeData.grammaticalPerson as string) || "any";
-  const category = (nodeData.category as string) || "person";
+  const grammaticalNumber = (nodeData.grammaticalNumber as string) || 'both';
+  const grammaticalPerson = (nodeData.grammaticalPerson as string) || 'any';
+  const category = (nodeData.category as string) || 'person';
   const allowPronouns = (nodeData.allowPronouns as boolean) ?? true;
   const pronouns = (nodeData.pronouns as string[]) || [];
   const contextHints = (nodeData.contextHints as string[]) || [];
@@ -59,41 +59,41 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
   };
 
   const handleVariationsChange = (newVariations: string[]) => {
-    handleFieldChange("variations", newVariations);
+    handleFieldChange('variations', newVariations);
   };
 
   const handlePronounsChange = (newPronouns: string[]) => {
-    handleFieldChange("pronouns", newPronouns);
+    handleFieldChange('pronouns', newPronouns);
   };
 
   const handleContextHintsChange = (newHints: string[]) => {
-    handleFieldChange("contextHints", newHints);
+    handleFieldChange('contextHints', newHints);
   };
 
   // Auto-generate pronouns based on category and person
   const generatePronouns = () => {
     const generated = [];
     
-    if (grammaticalPerson === "first" || grammaticalPerson === "any") {
-      generated.push("I", "me", "my", "mine");
-      if (grammaticalNumber === "plural" || grammaticalNumber === "both") {
-        generated.push("we", "us", "our", "ours");
+    if (grammaticalPerson === 'first' || grammaticalPerson === 'any') {
+      generated.push('I', 'me', 'my', 'mine');
+      if (grammaticalNumber === 'plural' || grammaticalNumber === 'both') {
+        generated.push('we', 'us', 'our', 'ours');
       }
     }
     
-    if (grammaticalPerson === "second" || grammaticalPerson === "any") {
-      generated.push("you", "your", "yours");
+    if (grammaticalPerson === 'second' || grammaticalPerson === 'any') {
+      generated.push('you', 'your', 'yours');
     }
     
-    if (grammaticalPerson === "third" || grammaticalPerson === "any") {
-      if (category === "person") {
-        generated.push("he", "him", "his", "she", "her", "hers");
+    if (grammaticalPerson === 'third' || grammaticalPerson === 'any') {
+      if (category === 'person') {
+        generated.push('he', 'him', 'his', 'she', 'her', 'hers');
       }
-      if (category === "object" || category === "concept" || category === "place") {
-        generated.push("it", "its");
+      if (category === 'object' || category === 'concept' || category === 'place') {
+        generated.push('it', 'its');
       }
-      if (grammaticalNumber === "plural" || grammaticalNumber === "both") {
-        generated.push("they", "them", "their", "theirs");
+      if (grammaticalNumber === 'plural' || grammaticalNumber === 'both') {
+        generated.push('they', 'them', 'their', 'theirs');
       }
     }
     
@@ -113,7 +113,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
           value={label}
           fieldKey="label"
           zodType={null as any}
-          onChange={(value) => handleFieldChange("label", value)}
+          onChange={(value) => handleFieldChange('label', value)}
           placeholder="Enter subject label..."
         />
 
@@ -123,7 +123,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
           fieldKey="category"
           options={SUBJECT_CATEGORIES}
           zodType={null as any}
-          onChange={(value) => handleFieldChange("category", value)}
+          onChange={(value) => handleFieldChange('category', value)}
         />
       </CollapsibleSection>
 
@@ -135,11 +135,11 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
-            display: "block", 
+            display: 'block', 
             fontWeight: 500, 
             marginBottom: 8,
-            color: "#e2e8f0",
-            fontSize: 12,
+            color: '#e2e8f0',
+            fontSize: 12
           }}>
             Subject Forms
           </label>
@@ -168,9 +168,9 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
           />
           <div style={{
             fontSize: 10,
-            color: "#a0aec0",
+            color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4,
+            lineHeight: 1.4
           }}>
             Include different forms: definite ("the cat"), indefinite ("a cat"), proper nouns ("Fluffy"), etc.
           </div>
@@ -189,7 +189,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
           fieldKey="grammaticalNumber"
           options={GRAMMATICAL_NUMBERS}
           zodType={null as any}
-          onChange={(value) => handleFieldChange("grammaticalNumber", value)}
+          onChange={(value) => handleFieldChange('grammaticalNumber', value)}
         />
 
         <SelectEditor
@@ -198,7 +198,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
           fieldKey="grammaticalPerson"
           options={GRAMMATICAL_PERSONS}
           zodType={null as any}
-          onChange={(value) => handleFieldChange("grammaticalPerson", value)}
+          onChange={(value) => handleFieldChange('grammaticalPerson', value)}
         />
       </CollapsibleSection>
 
@@ -210,27 +210,27 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
       >
         <div style={{ marginBottom: 16 }}>
           <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 8,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 8
           }}>
             <label style={{
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               gap: 8,
               fontSize: 12,
-              color: "#e2e8f0",
-              cursor: "pointer",
+              color: '#e2e8f0',
+              cursor: 'pointer'
             }}>
               <input
                 type="checkbox"
                 checked={allowPronouns}
-                onChange={(e) => handleFieldChange("allowPronouns", e.target.checked)}
+                onChange={(e) => handleFieldChange('allowPronouns', e.target.checked)}
                 style={{
                   width: 14,
                   height: 14,
-                  cursor: "pointer",
+                  cursor: 'pointer'
                 }}
               />
               Allow pronoun substitution
@@ -240,13 +240,13 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
               onClick={generatePronouns}
               disabled={!allowPronouns}
               style={{
-                padding: "4px 8px",
+                padding: '4px 8px',
                 fontSize: 10,
-                background: allowPronouns ? "#4299e1" : "#4a5568",
-                border: "none",
+                background: allowPronouns ? '#4299e1' : '#4a5568',
+                border: 'none',
                 borderRadius: 2,
-                color: "white",
-                cursor: allowPronouns ? "pointer" : "not-allowed",
+                color: 'white',
+                cursor: allowPronouns ? 'pointer' : 'not-allowed'
               }}
             >
               Auto-Generate
@@ -289,11 +289,11 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
-            display: "block", 
+            display: 'block', 
             fontWeight: 500, 
             marginBottom: 8,
-            color: "#e2e8f0",
-            fontSize: 12,
+            color: '#e2e8f0',
+            fontSize: 12
           }}>
             Context Hints
           </label>
@@ -322,9 +322,9 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
           />
           <div style={{
             fontSize: 10,
-            color: "#a0aec0",
+            color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4,
+            lineHeight: 1.4
           }}>
             Hints help other nodes determine correct verb forms, adjective agreement, etc.
           </div>
@@ -338,38 +338,38 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
         onToggle={() => setPreviewCollapsed(!previewCollapsed)}
       >
         <div style={{
-          background: "#1a202c",
-          border: "1px solid #4a5568",
+          background: '#1a202c',
+          border: '1px solid #4a5568',
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: "#e2e8f0",
+          color: '#e2e8f0'
         }}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Subject Configuration:
           </div>
           
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Category:</span> {SUBJECT_CATEGORIES.find(c => c.value === category)?.label}
+            <span style={{ color: '#a0aec0' }}>Category:</span> {SUBJECT_CATEGORIES.find(c => c.value === category)?.label}
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Number:</span> {GRAMMATICAL_NUMBERS.find(n => n.value === grammaticalNumber)?.label}
+            <span style={{ color: '#a0aec0' }}>Number:</span> {GRAMMATICAL_NUMBERS.find(n => n.value === grammaticalNumber)?.label}
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Person:</span> {GRAMMATICAL_PERSONS.find(p => p.value === grammaticalPerson)?.label}
+            <span style={{ color: '#a0aec0' }}>Person:</span> {GRAMMATICAL_PERSONS.find(p => p.value === grammaticalPerson)?.label}
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Pronouns:</span> {allowPronouns ? "Enabled" : "Disabled"}
+            <span style={{ color: '#a0aec0' }}>Pronouns:</span> {allowPronouns ? 'Enabled' : 'Disabled'}
           </div>
 
           {variations.length > 0 && (
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
-              background: "rgba(66, 153, 225, 0.1)",
-              borderRadius: 2,
+              background: 'rgba(66, 153, 225, 0.1)',
+              borderRadius: 2
             }}>
-              <div style={{ color: "#a0aec0", fontSize: 10, marginBottom: 4 }}>
+              <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Subject forms ({variations.length}):
               </div>
               <div style={{ fontSize: 11 }}>
@@ -379,7 +379,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
                   </div>
                 ))}
                 {variations.length > 3 && (
-                  <div style={{ color: "#a0aec0", fontStyle: "italic" }}>
+                  <div style={{ color: '#a0aec0', fontStyle: 'italic' }}>
                     ... and {variations.length - 3} more
                   </div>
                 )}
@@ -391,14 +391,14 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
-              background: "rgba(34, 197, 94, 0.1)",
-              borderRadius: 2,
+              background: 'rgba(34, 197, 94, 0.1)',
+              borderRadius: 2
             }}>
-              <div style={{ color: "#a0aec0", fontSize: 10, marginBottom: 4 }}>
+              <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Available pronouns:
               </div>
               <div style={{ fontSize: 11 }}>
-                {pronouns.join(", ")}
+                {pronouns.join(', ')}
               </div>
             </div>
           )}

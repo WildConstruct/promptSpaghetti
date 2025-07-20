@@ -127,20 +127,20 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
 
       if (match) {
         switch (match.match_type) {
-          case 'added':
-            diffState = 'added';
-            break;
-          case 'removed':
-            diffState = 'removed';
-            break;
-          case 'modified':
-          case 'similar':
-            diffState = 'modified';
-            changeDetails = match.property_changes;
-            break;
-          case 'exact':
-            diffState = 'unchanged';
-            break;
+        case 'added':
+          diffState = 'added';
+          break;
+        case 'removed':
+          diffState = 'removed';
+          break;
+        case 'modified':
+        case 'similar':
+          diffState = 'modified';
+          changeDetails = match.property_changes;
+          break;
+        case 'exact':
+          diffState = 'unchanged';
+          break;
         }
       }
 
@@ -151,15 +151,15 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
 
       if (highlightMode !== 'all') {
         switch (highlightMode) {
-          case 'changes':
-            if (diffState === 'unchanged') return null;
-            break;
-          case 'additions':
-            if (diffState !== 'added') return null;
-            break;
-          case 'deletions':
-            if (diffState !== 'removed') return null;
-            break;
+        case 'changes':
+          if (diffState === 'unchanged') return null;
+          break;
+        case 'additions':
+          if (diffState !== 'added') return null;
+          break;
+        case 'deletions':
+          if (diffState !== 'removed') return null;
+          break;
         }
       }
 
@@ -197,20 +197,20 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
 
       if (match) {
         switch (match.match_type) {
-          case 'added':
-            diffState = 'added';
-            break;
-          case 'removed':
-            diffState = 'removed';
-            break;
-          case 'modified':
-          case 'similar':
-            diffState = 'modified';
-            changeDetails = match.property_changes;
-            break;
-          case 'exact':
-            diffState = 'unchanged';
-            break;
+        case 'added':
+          diffState = 'added';
+          break;
+        case 'removed':
+          diffState = 'removed';
+          break;
+        case 'modified':
+        case 'similar':
+          diffState = 'modified';
+          changeDetails = match.property_changes;
+          break;
+        case 'exact':
+          diffState = 'unchanged';
+          break;
         }
       }
 
@@ -221,15 +221,15 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
 
       if (highlightMode !== 'all') {
         switch (highlightMode) {
-          case 'changes':
-            if (diffState === 'unchanged') return null;
-            break;
-          case 'additions':
-            if (diffState !== 'added') return null;
-            break;
-          case 'deletions':
-            if (diffState !== 'removed') return null;
-            break;
+        case 'changes':
+          if (diffState === 'unchanged') return null;
+          break;
+        case 'additions':
+          if (diffState !== 'added') return null;
+          break;
+        case 'deletions':
+          if (diffState !== 'removed') return null;
+          break;
         }
       }
 
@@ -259,14 +259,14 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
     };
 
     switch (diffState) {
-      case 'added':
-        return { ...baseStyle, borderColor: '#10b981', backgroundColor: '#ecfdf5' };
-      case 'removed':
-        return { ...baseStyle, borderColor: '#ef4444', backgroundColor: '#fef2f2', opacity: 0.7 };
-      case 'modified':
-        return { ...baseStyle, borderColor: '#f59e0b', backgroundColor: '#fffbeb' };
-      default:
-        return { ...baseStyle, borderColor: '#6b7280', backgroundColor: '#f9fafb' };
+    case 'added':
+      return { ...baseStyle, borderColor: '#10b981', backgroundColor: '#ecfdf5' };
+    case 'removed':
+      return { ...baseStyle, borderColor: '#ef4444', backgroundColor: '#fef2f2', opacity: 0.7 };
+    case 'modified':
+      return { ...baseStyle, borderColor: '#f59e0b', backgroundColor: '#fffbeb' };
+    default:
+      return { ...baseStyle, borderColor: '#6b7280', backgroundColor: '#f9fafb' };
     }
   };
 
@@ -278,14 +278,14 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
     };
 
     switch (diffState) {
-      case 'added':
-        return { ...baseStyle, stroke: '#10b981' };
-      case 'removed':
-        return { ...baseStyle, stroke: '#ef4444', opacity: 0.7, strokeDasharray: '5,5' };
-      case 'modified':
-        return { ...baseStyle, stroke: '#f59e0b' };
-      default:
-        return { ...baseStyle, stroke: '#6b7280' };
+    case 'added':
+      return { ...baseStyle, stroke: '#10b981' };
+    case 'removed':
+      return { ...baseStyle, stroke: '#ef4444', opacity: 0.7, strokeDasharray: '5,5' };
+    case 'modified':
+      return { ...baseStyle, stroke: '#f59e0b' };
+    default:
+      return { ...baseStyle, stroke: '#6b7280' };
     }
   };
 

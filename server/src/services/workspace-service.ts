@@ -30,7 +30,7 @@ import {
   ProjectFilter,
   ActivityEventFilter,
   CommentFilter,
-  PERMISSIONS,
+  PERMISSIONS
 } from '../database/workspace-models';
 
 export interface WorkspaceServiceOptions {
@@ -62,7 +62,7 @@ export class WorkspaceService {
         notification_type: 'workspace.created',
         title: 'Welcome to your new workspace',
         message: `Your workspace "${workspace.name}" has been created successfully.`,
-        priority: 'normal',
+        priority: 'normal'
       });
       await this.options.sendNotification(notification);
     }
@@ -109,7 +109,7 @@ export class WorkspaceService {
         workspace_id: id,
         actor_id: userId,
         event_type: 'workspace.updated',
-        event_data: { changes: Object.keys(data) },
+        event_data: { changes: Object.keys(data) }
       });
     }
 
@@ -130,7 +130,7 @@ export class WorkspaceService {
         workspace_id: id,
         actor_id: userId,
         event_type: 'workspace.archived',
-        event_data: {},
+        event_data: {}
       });
     }
 
@@ -296,7 +296,7 @@ export class WorkspaceService {
     await this.dao.createUserMembership(
       {
         user_id: userIdToInvite,
-        workspace_id: workspaceId,
+        workspace_id: workspaceId
       },
       invitedBy
     );
@@ -307,7 +307,7 @@ export class WorkspaceService {
         user_id: userIdToInvite,
         role_id: role.id,
         scope_type: 'workspace',
-        scope_id: workspaceId,
+        scope_id: workspaceId
       },
       invitedBy
     );
@@ -317,7 +317,7 @@ export class WorkspaceService {
       workspace_id: workspaceId,
       actor_id: invitedBy,
       event_type: 'user.invited',
-      event_data: { invited_user: userIdToInvite, role: roleName },
+      event_data: { invited_user: userIdToInvite, role: roleName }
     });
 
     // Send notification to invited user
@@ -330,7 +330,7 @@ export class WorkspaceService {
           notification_type: 'user.invited',
           title: 'Workspace invitation',
           message: `You've been invited to join the workspace "${workspace.name}".`,
-          priority: 'normal',
+          priority: 'normal'
         });
         await this.options.sendNotification(notification);
       }
@@ -485,7 +485,7 @@ export class WorkspaceService {
           title: 'New reply to your comment',
           message: `${data.author_id} replied to your comment`,
           action_url: `/workspaces/${data.workspace_id}/comments/${comment.id}`,
-          priority: 'normal',
+          priority: 'normal'
         });
       }
     }
@@ -639,8 +639,8 @@ export class WorkspaceService {
         ...comment.metadata,
         resolved,
         resolved_by: resolved ? userId : undefined,
-        resolved_at: resolved ? new Date().toISOString() : undefined,
-      },
+        resolved_at: resolved ? new Date().toISOString() : undefined
+      }
     });
   }
 
@@ -700,8 +700,8 @@ export class WorkspaceService {
         total: 0,
         total_pages: 0,
         has_next: false,
-        has_prev: false,
-      },
+        has_prev: false
+      }
     };
   }
 }

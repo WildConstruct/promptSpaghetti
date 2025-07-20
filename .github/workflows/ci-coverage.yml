@@ -1,0 +1,213 @@
+name: CI with Coverage Gates
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    
+    - name: Get pnpm store directory
+      id: pnpm-cache
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+    
+    - uses: actions/cache@v3
+      name: Setup pnpm cache
+      with:
+        path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    
+    - name: Run linting
+      run: pnpm lint
+    
+    - name: Run type checking
+      run: pnpm typecheck
+    
+    - name: Run tests with coverage
+      run: pnpm test -- --coverage --coverageReporters=json,lcov,text,clover
+    
+    - name: Check coverage thresholds
+      run: |
+        # Extract coverage percentages from coverage summary
+        COVERAGE_FILE="coverage/coverage-summary.json"
+        
+        if [ -f "$COVERAGE_FILE" ]; then
+          # Global coverage check (80%)
+          GLOBAL_COVERAGE=$(jq '.total.lines.pct' $COVERAGE_FILE)
+          echo "Global coverage: $GLOBAL_COVERAGE%"
+          if [ $(node -e "console.log($GLOBAL_COVERAGE < 80 ? 1 : 0)") -eq 1 ]; then
+            echo "❌ Global coverage is below 80% threshold"
+            exit 1
+          fi
+          
+          # Core runtime coverage check (90%)
+          CORE_COVERAGE=$(jq '."packages/core/runtime/index.ts".lines.pct // 0' $COVERAGE_FILE)
+          echo "Core runtime coverage: $CORE_COVERAGE%"
+          if [ $(node -e "console.log($CORE_COVERAGE < 90 ? 1 : 0)") -eq 1 ]; then
+            echo "❌ Core runtime coverage is below 90% threshold"
+            exit 1
+          fi
+          
+          # Validation module coverage check (95%)
+          VALIDATION_COVERAGE=$(jq '."packages/core/validation.ts".lines.pct // 0' $COVERAGE_FILE)
+          echo "Validation coverage: $VALIDATION_COVERAGE%"
+          if [ $(node -e "console.log($VALIDATION_COVERAGE < 95 ? 1 : 0)") -eq 1 ]; then
+            echo "❌ Validation module coverage is below 95% threshold"
+            exit 1
+          fi
+          
+          # Server engine coverage check (85%)
+          SERVER_COVERAGE=$(jq '."server/src/engine.ts".lines.pct // 0' $COVERAGE_FILE)
+          echo "Server engine coverage: $SERVER_COVERAGE%"
+          if [ $(node -e "console.log($SERVER_COVERAGE < 85 ? 1 : 0)") -eq 1 ]; then
+            echo "❌ Server engine coverage is below 85% threshold"
+            exit 1
+          fi
+          
+          # Inspector components coverage check (80%)
+          INSPECTOR_FILES=$(find packages/core/components/Inspector -name "*.ts" -o -name "*.tsx" | grep -v test)
+          INSPECTOR_COVERAGE=0
+          INSPECTOR_COUNT=0
+          
+          for file in $INSPECTOR_FILES; do
+            FILE_COV=$(jq --arg file "$file" '.[$file].lines.pct // 0' $COVERAGE_FILE)
+            INSPECTOR_COVERAGE=$(node -e "console.log($INSPECTOR_COVERAGE + $FILE_COV)")
+            INSPECTOR_COUNT=$((INSPECTOR_COUNT + 1))
+          done
+          
+          if [ $INSPECTOR_COUNT -gt 0 ]; then
+            INSPECTOR_AVG=$(node -e "console.log(($INSPECTOR_COVERAGE / $INSPECTOR_COUNT).toFixed(2))")
+            echo "Inspector average coverage: $INSPECTOR_AVG%"
+            if [ $(node -e "console.log($INSPECTOR_AVG < 80 ? 1 : 0)") -eq 1 ]; then
+              echo "❌ Inspector components coverage is below 80% threshold"
+              exit 1
+            fi
+          fi
+          
+          echo "✅ All coverage thresholds met!"
+        else
+          echo "❌ Coverage summary file not found"
+          exit 1
+        fi
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
+    
+    - name: Upload coverage reports as artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-reports
+        path: coverage/
+        retention-days: 7
+    
+    - name: Comment PR with coverage
+      uses: 5monkeys/cobertura-action@master
+      if: github.event_name == 'pull_request'
+      with:
+        path: coverage/clover.xml
+        minimum_coverage: 80
+        fail_below_threshold: true
+        show_class_names: true
+        show_missing: true
+        show_line: true
+        show_branch: true
+        
+  security-tests:
+    runs-on: ubuntu-latest
+    needs: test-coverage
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+    
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    
+    - name: Run security-specific tests
+      run: |
+        pnpm test -- --testPathPattern="security" --coverage
+        pnpm test -- --testPathPattern="validation" --coverage
+        pnpm test -- --testPathPattern="ast-node-whitelist" --coverage
+    
+    - name: Check for security vulnerabilities
+      run: pnpm audit --audit-level=high
+      
+  build-verification:
+    runs-on: ubuntu-latest
+    needs: [test-coverage, security-tests]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20.x
+    
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+    
+    - name: Build all packages
+      run: pnpm build
+    
+    - name: Verify build outputs
+      run: |
+        # Check that build outputs exist
+        if [ ! -d "packages/core/dist" ]; then
+          echo "❌ Core package build output missing"
+          exit 1
+        fi
+        
+        if [ ! -d "server/dist" ]; then
+          echo "❌ Server build output missing"
+          exit 1
+        fi
+        
+        echo "✅ All build outputs verified"

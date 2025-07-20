@@ -23,7 +23,7 @@ export const useFormAnalytics = () => {
     formType: '',
     fieldInteractions: new Map(),
     stepTimes: new Map(),
-    startTime: Date.now(),
+    startTime: Date.now()
   });
 
   const trackFieldEvent = useCallback((
@@ -35,27 +35,27 @@ export const useFormAnalytics = () => {
     const field = data.fieldInteractions.get(fieldName) || {
       focusCount: 0,
       changeCount: 0,
-      errorCount: 0,
+      errorCount: 0
     };
 
     switch (eventType) {
-      case 'focus':
-        field.focusTime = Date.now();
-        field.focusCount++;
-        break;
-      case 'blur':
-        if (field.focusTime) {
-          const timeSpent = Date.now() - field.focusTime;
-          // Send analytics if enabled
-          sendFieldAnalytics(fieldName, 'blur', { timeSpent, valueLength });
-        }
-        break;
-      case 'change':
-        field.changeCount++;
-        break;
-      case 'error':
-        field.errorCount++;
-        break;
+    case 'focus':
+      field.focusTime = Date.now();
+      field.focusCount++;
+      break;
+    case 'blur':
+      if (field.focusTime) {
+        const timeSpent = Date.now() - field.focusTime;
+        // Send analytics if enabled
+        sendFieldAnalytics(fieldName, 'blur', { timeSpent, valueLength });
+      }
+      break;
+    case 'change':
+      field.changeCount++;
+      break;
+    case 'error':
+      field.errorCount++;
+      break;
     }
 
     data.fieldInteractions.set(fieldName, field);
@@ -91,7 +91,7 @@ export const useFormAnalytics = () => {
       totalTime,
       fieldInteractions: Object.fromEntries(data.fieldInteractions),
       stepTimes: Object.fromEntries(data.stepTimes),
-      ...completionData,
+      ...completionData
     });
   }, []);
 
@@ -107,7 +107,7 @@ export const useFormAnalytics = () => {
     sendAbandonmentAnalytics(currentStep, formType, {
       timeOnForm,
       reason,
-      fieldInteractions: Object.fromEntries(data.fieldInteractions),
+      fieldInteractions: Object.fromEntries(data.fieldInteractions)
     });
   }, []);
 
@@ -115,7 +115,7 @@ export const useFormAnalytics = () => {
     trackFieldEvent,
     trackFormStep,
     trackFormCompletion,
-    trackFormAbandonment,
+    trackFormAbandonment
   };
 };
 
@@ -140,14 +140,14 @@ async function sendFieldAnalytics(
     await fetch('/analytics/field-interaction', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         fieldName,
         eventType,
         ...data,
-        timestamp: new Date().toISOString(),
-      }),
+        timestamp: new Date().toISOString()
+      })
     });
   } catch (error) {
     console.error('Failed to send field analytics:', error);
@@ -163,7 +163,7 @@ async function sendStepAnalytics(
     if (window.gtag) {
       window.gtag('event', 'form_step', {
         step_number: stepNumber,
-        form_type: formType,
+        form_type: formType
       });
     }
 
@@ -176,13 +176,13 @@ async function sendStepAnalytics(
     await fetch('/analytics/form-step', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         stepNumber,
         formType,
-        timestamp: new Date().toISOString(),
-      }),
+        timestamp: new Date().toISOString()
+      })
     });
   } catch (error) {
     console.error('Failed to send step analytics:', error);
@@ -200,7 +200,7 @@ async function sendCompletionAnalytics(
       window.gtag('event', 'form_completion', {
         success,
         form_type: formType,
-        completion_time: data.totalTime,
+        completion_time: data.totalTime
       });
     }
 
@@ -213,14 +213,14 @@ async function sendCompletionAnalytics(
     await fetch('/analytics/form-completion', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         success,
         formType,
         ...data,
-        timestamp: new Date().toISOString(),
-      }),
+        timestamp: new Date().toISOString()
+      })
     });
   } catch (error) {
     console.error('Failed to send completion analytics:', error);
@@ -238,7 +238,7 @@ async function sendAbandonmentAnalytics(
       window.gtag('event', 'form_abandonment', {
         step_number: currentStep,
         form_type: formType,
-        time_on_form: data.timeOnForm,
+        time_on_form: data.timeOnForm
       });
     }
 
@@ -251,14 +251,14 @@ async function sendAbandonmentAnalytics(
     await fetch('/analytics/form-abandonment', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         currentStep,
         formType,
         ...data,
-        timestamp: new Date().toISOString(),
-      }),
+        timestamp: new Date().toISOString()
+      })
     });
   } catch (error) {
     console.error('Failed to send abandonment analytics:', error);
@@ -277,15 +277,15 @@ export const useAdvancedFormAnalytics = () => {
       await fetch('/analytics/field-validation', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           fieldName,
           isValid,
           validationTime,
           errorMessage,
-          timestamp: new Date().toISOString(),
-        }),
+          timestamp: new Date().toISOString()
+        })
       });
     } catch (error) {
       console.error('Failed to send validation analytics:', error);
@@ -300,13 +300,13 @@ export const useAdvancedFormAnalytics = () => {
       await fetch('/analytics/user-hesitation', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           fieldName,
           hesitationTime,
-          timestamp: new Date().toISOString(),
-        }),
+          timestamp: new Date().toISOString()
+        })
       });
     } catch (error) {
       console.error('Failed to send hesitation analytics:', error);
@@ -321,7 +321,7 @@ export const useAdvancedFormAnalytics = () => {
       await fetch('/analytics/form-errors', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           errors,
@@ -329,8 +329,8 @@ export const useAdvancedFormAnalytics = () => {
             acc[key] = !!formData[key];
             return acc;
           }, {} as Record<string, boolean>),
-          timestamp: new Date().toISOString(),
-        }),
+          timestamp: new Date().toISOString()
+        })
       });
     } catch (error) {
       console.error('Failed to send error analytics:', error);
@@ -340,7 +340,7 @@ export const useAdvancedFormAnalytics = () => {
   return {
     trackFieldValidation,
     trackUserHesitation,
-    trackFormErrors,
+    trackFormErrors
   };
 };
 

@@ -87,39 +87,39 @@ export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualization
 
   const getActionIcon = (actionType: string) => {
     switch (actionType) {
-      case 'state_changed':
-        return <ArrowRightIcon className="h-4 w-4 text-blue-500" />;
-      case 'approval_requested':
-        return <ClockIcon className="h-4 w-4 text-yellow-500" />;
-      case 'approved':
-        return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
-      case 'rejected':
-        return <XCircleIcon className="h-4 w-4 text-red-500" />;
-      case 'lock_acquired':
-        return <LockClosedIcon className="h-4 w-4 text-orange-500" />;
-      case 'lock_released':
-        return <LockOpenIcon className="h-4 w-4 text-orange-500" />;
-      default:
-        return <DocumentTextIcon className="h-4 w-4 text-gray-500" />;
+    case 'state_changed':
+      return <ArrowRightIcon className="h-4 w-4 text-blue-500" />;
+    case 'approval_requested':
+      return <ClockIcon className="h-4 w-4 text-yellow-500" />;
+    case 'approved':
+      return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
+    case 'rejected':
+      return <XCircleIcon className="h-4 w-4 text-red-500" />;
+    case 'lock_acquired':
+      return <LockClosedIcon className="h-4 w-4 text-orange-500" />;
+    case 'lock_released':
+      return <LockOpenIcon className="h-4 w-4 text-orange-500" />;
+    default:
+      return <DocumentTextIcon className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getActionDescription = (entry: WorkflowHistoryEntry) => {
     switch (entry.action_type) {
-      case 'state_changed':
-        return `Changed state from ${getStateName(entry.previous_state_id)} to ${getStateName(entry.new_state_id)}`;
-      case 'approval_requested':
-        return `Requested approval for transition to ${getStateName(entry.new_state_id)}`;
-      case 'approved':
-        return `Approved transition to ${getStateName(entry.new_state_id)}`;
-      case 'rejected':
-        return `Rejected transition to ${getStateName(entry.new_state_id)}`;
-      case 'lock_acquired':
-        return `Acquired ${entry.metadata.lock_type || 'edit'} lock`;
-      case 'lock_released':
-        return `Released ${entry.metadata.lock_type || 'edit'} lock`;
-      default:
-        return `Performed ${entry.action_type}`;
+    case 'state_changed':
+      return `Changed state from ${getStateName(entry.previous_state_id)} to ${getStateName(entry.new_state_id)}`;
+    case 'approval_requested':
+      return `Requested approval for transition to ${getStateName(entry.new_state_id)}`;
+    case 'approved':
+      return `Approved transition to ${getStateName(entry.new_state_id)}`;
+    case 'rejected':
+      return `Rejected transition to ${getStateName(entry.new_state_id)}`;
+    case 'lock_acquired':
+      return `Acquired ${entry.metadata.lock_type || 'edit'} lock`;
+    case 'lock_released':
+      return `Released ${entry.metadata.lock_type || 'edit'} lock`;
+    default:
+      return `Performed ${entry.action_type}`;
     }
   };
 

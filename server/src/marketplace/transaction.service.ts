@@ -42,7 +42,7 @@ export class TransactionService {
     }
     
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2023-10-16',
+      apiVersion: '2023-10-16'
     });
   }
 
@@ -78,7 +78,7 @@ export class TransactionService {
 
   async getCart(cartId: string, userId: string): Promise<ShoppingCart | null> {
     const result = await this.db.query(
-      `SELECT * FROM shopping_carts WHERE id = ? AND user_id = ? AND expires_at > datetime('now')`,
+      'SELECT * FROM shopping_carts WHERE id = ? AND user_id = ? AND expires_at > datetime(\'now\')',
       [cartId, userId]
     );
 
@@ -177,7 +177,7 @@ export class TransactionService {
 
   async clearCart(userId: string, cartId: string): Promise<void> {
     await this.db.query(
-      `DELETE FROM shopping_carts WHERE id = ? AND user_id = ?`,
+      'DELETE FROM shopping_carts WHERE id = ? AND user_id = ?',
       [cartId, userId]
     );
   }
@@ -381,14 +381,14 @@ export class TransactionService {
         
         // Update order item with license
         await this.db.query(
-          `UPDATE order_items SET license_id = ?, fulfillment_status = 'fulfilled' WHERE id = ?`,
+          'UPDATE order_items SET license_id = ?, fulfillment_status = \'fulfilled\' WHERE id = ?',
           [license.id, item.id]
         );
       }
 
       // Update order status
       await this.db.query(
-        `UPDATE orders SET status = 'completed', fulfillment_status = 'fulfilled', completed_at = datetime('now') WHERE id = ?`,
+        'UPDATE orders SET status = \'completed\', fulfillment_status = \'fulfilled\', completed_at = datetime(\'now\') WHERE id = ?',
         [order.id]
       );
 
@@ -403,7 +403,7 @@ export class TransactionService {
       
       // Update order status to failed
       await this.db.query(
-        `UPDATE orders SET fulfillment_status = 'failed' WHERE id = ?`,
+        'UPDATE orders SET fulfillment_status = \'failed\' WHERE id = ?',
         [order.id]
       );
       
@@ -459,7 +459,7 @@ export class TransactionService {
 
   async validateLicense(licenseKey: string, templateId: string, userId: string): Promise<boolean> {
     const result = await this.db.query(
-      `SELECT * FROM template_licenses WHERE license_key = ? AND template_id = ? AND buyer_id = ? AND status = 'active'`,
+      'SELECT * FROM template_licenses WHERE license_key = ? AND template_id = ? AND buyer_id = ? AND status = \'active\'',
       [licenseKey, templateId, userId]
     );
 
@@ -479,7 +479,7 @@ export class TransactionService {
 
     // Update usage count
     await this.db.query(
-      `UPDATE template_licenses SET usage_count = usage_count + 1, last_used_at = datetime('now') WHERE id = ?`,
+      'UPDATE template_licenses SET usage_count = usage_count + 1, last_used_at = datetime(\'now\') WHERE id = ?',
       [license.id]
     );
 
@@ -522,7 +522,7 @@ export class TransactionService {
       `INSERT INTO refund_requests (id, purchase_id, order_id, user_id, reason, amount_cents, status, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [refundRequestId, refundRequest.purchase_id, refundRequest.order_id, refundRequest.user_id,
-       refundRequest.reason, refundRequest.amount_cents, refundRequest.status, refundRequest.created_at]
+        refundRequest.reason, refundRequest.amount_cents, refundRequest.status, refundRequest.created_at]
     );
 
     return refundRequest;
@@ -534,7 +534,7 @@ export class TransactionService {
 
   private async getActiveCart(userId: string): Promise<ShoppingCart | null> {
     const result = await this.db.query(
-      `SELECT * FROM shopping_carts WHERE user_id = ? AND expires_at > datetime('now') ORDER BY created_at DESC LIMIT 1`,
+      'SELECT * FROM shopping_carts WHERE user_id = ? AND expires_at > datetime(\'now\') ORDER BY created_at DESC LIMIT 1',
       [userId]
     );
 
@@ -561,7 +561,7 @@ export class TransactionService {
     cart.updated_at = new Date();
 
     await this.db.query(
-      `UPDATE shopping_carts SET items = ?, total_cents = ?, updated_at = ? WHERE id = ?`,
+      'UPDATE shopping_carts SET items = ?, total_cents = ?, updated_at = ? WHERE id = ?',
       [JSON.stringify(cart.items), cart.total_cents, cart.updated_at, cart.id]
     );
 
@@ -830,7 +830,7 @@ export class TransactionService {
 
   private async getRecentTransactionCount(userId: string): Promise<number> {
     const result = await this.db.query(
-      `SELECT COUNT(*) as count FROM transactions WHERE user_id = ? AND created_at > datetime('now', '-24 hours')`,
+      'SELECT COUNT(*) as count FROM transactions WHERE user_id = ? AND created_at > datetime(\'now\', \'-24 hours\')',
       [userId]
     );
     return result[0]?.count || 0;

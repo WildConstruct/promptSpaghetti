@@ -209,8 +209,8 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
   const displayText = userNames.length === 1
     ? `${userNames[0]} is typing...`
     : userNames.length === 2
-    ? `${userNames[0]} and ${userNames[1]} are typing...`
-    : `${userNames[0]} and ${userNames.length - 1} others are typing...`;
+      ? `${userNames[0]} and ${userNames[1]} are typing...`
+      : `${userNames[0]} and ${userNames.length - 1} others are typing...`;
 
   return (
     <div className={`flex items-center space-x-2 text-sm text-gray-600 ${className}`}>
@@ -236,7 +236,7 @@ function getUserColor(userId: string): string {
     '#6366f1', // indigo-500
     '#14b8a6', // teal-500
     '#f97316', // orange-500
-    '#84cc16', // lime-500
+    '#84cc16' // lime-500
   ];
   
   let hash = 0;

@@ -250,7 +250,7 @@ describe('Graph Validator', () => {
           { id: 'node1', type: 'Concat', inputs: ['node2'] },
           { id: 'node2', type: 'Concat', inputs: ['node1'] },
           // Reference to non-existent node3
-          { id: 'node4', type: 'Concat', inputs: ['node3'] },
+          { id: 'node4', type: 'Concat', inputs: ['node3'] }
         ]
       });
 

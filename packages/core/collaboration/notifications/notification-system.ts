@@ -114,7 +114,7 @@ The Team`,
       channels: {
         in_app: {
           subject: 'Invited to {{project_name}}',
-          body: '{{actor_name}} invited you to collaborate on {{project_name}}.',
+          body: '{{actor_name}} invited you to collaborate on {{project_name}}.'
         },
         email: {
           subject: 'Invitation to collaborate on {{project_name}}',
@@ -141,7 +141,7 @@ The Team`
       channels: {
         in_app: {
           subject: '{{actor_name}} mentioned you',
-          body: '{{actor_name}} mentioned you in a comment on {{resource_name}}.',
+          body: '{{actor_name}} mentioned you in a comment on {{resource_name}}.'
         },
         email: {
           subject: 'You were mentioned in {{resource_name}}',
@@ -165,7 +165,7 @@ The Team`
       channels: {
         in_app: {
           subject: 'Reply to your comment',
-          body: '{{actor_name}} replied to your comment on {{resource_name}}.',
+          body: '{{actor_name}} replied to your comment on {{resource_name}}.'
         },
         email: {
           subject: 'New reply to your comment on {{resource_name}}',
@@ -189,7 +189,7 @@ The Team`
       channels: {
         in_app: {
           subject: '{{resource_name}} shared with you',
-          body: '{{actor_name}} shared {{resource_name}} with you.',
+          body: '{{actor_name}} shared {{resource_name}} with you.'
         },
         email: {
           subject: '{{actor_name}} shared {{resource_name}} with you',
@@ -216,7 +216,7 @@ The Team`
       channels: {
         in_app: {
           subject: 'Your role has been updated',
-          body: 'Your role in {{workspace_name}} has been changed to {{new_role}}.',
+          body: 'Your role in {{workspace_name}} has been changed to {{new_role}}.'
         },
         email: {
           subject: 'Role update in {{workspace_name}}',
@@ -243,7 +243,7 @@ The Team`
       channels: {
         in_app: {
           subject: 'Activity digest for {{workspace_name}}',
-          body: 'Here\'s what happened in {{workspace_name}} since your last visit.',
+          body: 'Here\'s what happened in {{workspace_name}} since your last visit.'
         },
         email: {
           subject: 'Activity digest for {{workspace_name}}',
@@ -424,16 +424,16 @@ The Team`
     context: NotificationContext
   ): boolean {
     switch (filter.type) {
-      case 'workspace':
-        return context.workspaceId === filter.value;
-      case 'project':
-        return context.projectId === filter.value;
-      case 'activity_type':
-        return type === filter.value;
-      case 'user':
-        return context.actorUserId === filter.value;
-      default:
-        return false;
+    case 'workspace':
+      return context.workspaceId === filter.value;
+    case 'project':
+      return context.projectId === filter.value;
+    case 'activity_type':
+      return type === filter.value;
+    case 'user':
+      return context.actorUserId === filter.value;
+    default:
+      return false;
     }
   }
 
@@ -508,20 +508,20 @@ The Team`
 
   private async deliverNotification(delivery: NotificationDelivery): Promise<void> {
     switch (delivery.channel) {
-      case 'in_app':
-        // In-app notifications are already stored in the database
-        break;
-      case 'email':
-        await this.deliverEmail(delivery);
-        break;
-      case 'slack':
-        await this.deliverSlack(delivery);
-        break;
-      case 'webhook':
-        await this.deliverWebhook(delivery);
-        break;
-      default:
-        throw new Error(`Unsupported delivery channel: ${delivery.channel}`);
+    case 'in_app':
+      // In-app notifications are already stored in the database
+      break;
+    case 'email':
+      await this.deliverEmail(delivery);
+      break;
+    case 'slack':
+      await this.deliverSlack(delivery);
+      break;
+    case 'webhook':
+      await this.deliverWebhook(delivery);
+      break;
+    default:
+      throw new Error(`Unsupported delivery channel: ${delivery.channel}`);
     }
   }
 
@@ -604,21 +604,21 @@ The Team`
     
     // Simple frequency check - in production, implement proper scheduling
     switch (frequency) {
-      case 'immediate':
-        return true;
-      case 'hourly':
-        return now.getMinutes() === 0;
-      case 'daily':
-        return now.getHours().toString().padStart(2, '0') + ':' + 
+    case 'immediate':
+      return true;
+    case 'hourly':
+      return now.getMinutes() === 0;
+    case 'daily':
+      return now.getHours().toString().padStart(2, '0') + ':' + 
                now.getMinutes().toString().padStart(2, '0') === 
                (preferences.digest.time || '09:00');
-      case 'weekly':
-        return now.getDay() === 1 && // Monday
+    case 'weekly':
+      return now.getDay() === 1 && // Monday
                now.getHours().toString().padStart(2, '0') + ':' + 
                now.getMinutes().toString().padStart(2, '0') === 
                (preferences.digest.time || '09:00');
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 

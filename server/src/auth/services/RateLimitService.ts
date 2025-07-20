@@ -25,7 +25,7 @@ export class RateLimitService implements IRateLimitService {
         allowed: result.allowed,
         remaining: result.remaining,
         resetTime: result.resetTime,
-        totalRequests: result.count,
+        totalRequests: result.count
       };
     } catch (error) {
       console.error(`Rate limit check error for key ${key}:`, error);
@@ -35,7 +35,7 @@ export class RateLimitService implements IRateLimitService {
         allowed: true,
         remaining: rule.max - 1,
         resetTime: new Date(Date.now() + rule.window * 1000),
-        totalRequests: 1,
+        totalRequests: 1
       };
     }
   }
@@ -85,7 +85,7 @@ export class RateLimitService implements IRateLimitService {
         allowed: count < rule.max,
         remaining,
         resetTime,
-        totalRequests: count,
+        totalRequests: count
       };
     } catch (error) {
       console.error(`Rate limit status error for key ${key}:`, error);
@@ -94,7 +94,7 @@ export class RateLimitService implements IRateLimitService {
         allowed: true,
         remaining: rule.max,
         resetTime: new Date(Date.now() + rule.window * 1000),
-        totalRequests: 0,
+        totalRequests: 0
       };
     }
   }
@@ -136,7 +136,7 @@ export class RateLimitService implements IRateLimitService {
   ): Promise<void> {
     const rule: RateLimitRule = {
       window: windowSeconds,
-      max: maxAttempts,
+      max: maxAttempts
     };
 
     const result = await this.checkRateLimit(key, rule);
@@ -170,7 +170,7 @@ export class RateLimitService implements IRateLimitService {
     
     const adaptedRule: RateLimitRule = {
       ...baseRule,
-      max: adjustedMax,
+      max: adjustedMax
     };
     
     return this.checkRateLimit(key, adaptedRule);
@@ -218,7 +218,7 @@ export class RateLimitService implements IRateLimitService {
         Math.ceil(capacity / refillRate) + 60, // TTL slightly longer than full refill time
         JSON.stringify({
           tokens,
-          lastRefill: now,
+          lastRefill: now
         })
       );
       
@@ -226,7 +226,7 @@ export class RateLimitService implements IRateLimitService {
         allowed,
         remaining: Math.floor(tokens),
         resetTime: new Date((now + (capacity - tokens) / refillRate) * 1000),
-        totalRequests: capacity - Math.floor(tokens),
+        totalRequests: capacity - Math.floor(tokens)
       };
     } catch (error) {
       console.error(`Token bucket rate limit error for key ${key}:`, error);
@@ -235,7 +235,7 @@ export class RateLimitService implements IRateLimitService {
         allowed: true,
         remaining: capacity - tokensRequested,
         resetTime: new Date(Date.now() + 60000),
-        totalRequests: tokensRequested,
+        totalRequests: tokensRequested
       };
     }
   }
@@ -293,14 +293,14 @@ export class RateLimitService implements IRateLimitService {
       return {
         totalKeys: keys.length,
         activeKeys,
-        topKeys: keyCounts.slice(0, 10),
+        topKeys: keyCounts.slice(0, 10)
       };
     } catch (error) {
       console.error('Rate limit stats error:', error);
       return {
         totalKeys: 0,
         activeKeys: 0,
-        topKeys: [],
+        topKeys: []
       };
     }
   }

@@ -15,7 +15,7 @@ import {
   Alert,
   Popover,
   Timeline,
-  Empty,
+  Empty
 } from 'antd';
 import {
   UserOutlined,
@@ -29,7 +29,7 @@ import {
   DeleteOutlined,
   PlusOutlined,
   NodeIndexOutlined,
-  ShareAltOutlined,
+  ShareAltOutlined
 } from '@ant-design/icons';
 import { 
   ChangeAttribution,
@@ -38,7 +38,7 @@ import {
   ChangeType,
   CHANGE_TYPE_DESCRIPTIONS,
   RESOURCE_TYPE_DESCRIPTIONS,
-  AUTHOR_TYPE_DESCRIPTIONS,
+  AUTHOR_TYPE_DESCRIPTIONS
 } from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
 import { ContributorVisualization } from './ContributorVisualization';
@@ -68,35 +68,35 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
 
   const getAuthorColor = (authorType: string) => {
     switch (authorType) {
-      case 'user':
-        return '#1890ff';
-      case 'anonymous':
-        return '#d9d9d9';
-      case 'guest':
-        return '#faad14';
-      case 'system':
-        return '#52c41a';
-      case 'api':
-        return '#722ed1';
-      default:
-        return '#8c8c8c';
+    case 'user':
+      return '#1890ff';
+    case 'anonymous':
+      return '#d9d9d9';
+    case 'guest':
+      return '#faad14';
+    case 'system':
+      return '#52c41a';
+    case 'api':
+      return '#722ed1';
+    default:
+      return '#8c8c8c';
     }
   };
 
   const getChangeTypeIcon = (changeType: ChangeType) => {
     switch (changeType) {
-      case 'create':
-        return <PlusOutlined style={{ color: '#52c41a' }} />;
-      case 'update':
-        return <EditOutlined style={{ color: '#1890ff' }} />;
-      case 'delete':
-        return <DeleteOutlined style={{ color: '#ff4d4f' }} />;
-      case 'move':
-        return <NodeIndexOutlined style={{ color: '#722ed1' }} />;
-      case 'connection_change':
-        return <ShareAltOutlined style={{ color: '#fa8c16' }} />;
-      default:
-        return <EditOutlined />;
+    case 'create':
+      return <PlusOutlined style={{ color: '#52c41a' }} />;
+    case 'update':
+      return <EditOutlined style={{ color: '#1890ff' }} />;
+    case 'delete':
+      return <DeleteOutlined style={{ color: '#ff4d4f' }} />;
+    case 'move':
+      return <NodeIndexOutlined style={{ color: '#722ed1' }} />;
+    case 'connection_change':
+      return <ShareAltOutlined style={{ color: '#fa8c16' }} />;
+    default:
+      return <EditOutlined />;
     }
   };
 
@@ -175,7 +175,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
   selectedResourceId,
   visible,
   onClose,
-  onAttributionRecord,
+  onAttributionRecord
 }) => {
   const [attributions, setAttributions] = useState<ChangeAttribution[]>([]);
   const [showContributors, setShowContributors] = useState(false);
@@ -234,7 +234,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
         limit: 50,
         offset: 0,
         sortBy: 'created_at',
-        sortOrder: 'desc',
+        sortOrder: 'desc'
       });
       setAttributions(recentAttributions);
     } catch (error) {
@@ -246,7 +246,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
     try {
       const updatedSettings = await updatePrivacySettings({
         projectId,
-        settings: { ...privacySettings, ...settings } as any,
+        settings: { ...privacySettings, ...settings } as any
       });
       setPrivacySettings(updatedSettings);
     } catch (error) {
@@ -336,7 +336,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
                         style={{ 
                           backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
                           fontSize: '10px',
-                          cursor: 'pointer',
+                          cursor: 'pointer'
                         }}
                         onClick={() => handleAttributionClick(attribution)}
                       >

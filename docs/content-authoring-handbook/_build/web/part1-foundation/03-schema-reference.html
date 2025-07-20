@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3: Generator JSON Schema Reference - Content Authoring Handbook</title>
+    <meta name="description" content="Chapter 3: Generator JSON Schema Reference - Content Authoring Handbook">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./assets/css/handbook-base.css">
+    <link rel="stylesheet" href="./assets/css/search-navigation.css">
+    <link rel="stylesheet" href="./assets/css/interactive-examples.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/favicon.ico">
+    
+    <!-- Search Engine -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Chapter 3: Generator JSON Schema Reference - Content Authoring Handbook">
+    <meta property="og:description" content="Chapter 3: Generator JSON Schema Reference - Content Authoring Handbook">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{PAGE_URL}}">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Chapter 3: Generator JSON Schema Reference - Content Authoring Handbook">
+    <meta name="twitter:description" content="Chapter 3: Generator JSON Schema Reference - Content Authoring Handbook">
+    
+    <!-- Monaco Editor (for interactive examples) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="handbook-header">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="" class="logo">
+                    <img src="./assets/images/logo.svg" alt="Prompt Spaghetti" class="logo-img">
+                    <span class="logo-text">Content Authoring Handbook</span>
+                </a>
+            </div>
+            
+            <div class="header-center">
+                <div class="handbook-search-container">
+                    <div class="search-header">
+                        <input type="text" id="handbook-search" 
+                               placeholder="Search handbook... (Ctrl+K)" 
+                               class="search-input">
+                        <button class="search-clear" title="Clear search">×</button>
+                    </div>
+                    <div class="search-filters">
+                        <select class="filter-select" data-filter="type">
+                            <option value="all">All Types</option>
+                            <option value="chapter">Chapters</option>
+                            <option value="example">Examples</option>
+                            <option value="reference">Reference</option>
+                        </select>
+                        <select class="filter-select" data-filter="difficulty">
+                            <option value="all">All Levels</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                        <select class="filter-select" data-filter="part">
+                            <option value="all">All Parts</option>
+                            <option value="part1">Part 1: Foundation</option>
+                            <option value="part2">Part 2: Content Development</option>
+                            <option value="part3">Part 3: Engine Reference</option>
+                            <option value="part4">Part 4: Practical Guides</option>
+                            <option value="part5">Part 5: Advanced Topics</option>
+                            <option value="part6">Part 6: Reference Materials</option>
+                        </select>
+                    </div>
+                    <div id="search-results" class="search-results"></div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <nav class="header-nav">
+                    <a href="" class="nav-link">Home</a>
+                    <a href="/part4-practical-guides/14-interactive-tutorial.html" class="nav-link">Tutorial</a>
+                    <a href="/part6-reference-materials/22-quick-reference.html" class="nav-link">Reference</a>
+                    <a href="https://github.com/your-org/prompt-spaghetti" class="nav-link" target="_blank">GitHub</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="handbook-main">
+        <div class="main-container">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <div class="sidebar-content">
+                    <!-- Breadcrumb Navigation -->
+                    <nav class="breadcrumb-nav">
+                        
+      <div class="breadcrumb-item">
+        <a href="../index.html" class="breadcrumb-link">Home</a>
+      </div>
+      <div class="breadcrumb-item">
+        <a href="#" class="breadcrumb-link">Part 1: Foundation</a>
+      </div>
+      <div class="breadcrumb-item">
+        <span class="breadcrumb-current">Chapter 3: Generator JSON Schema Reference</span>
+      </div>
+    
+                    </nav>
+                    
+                    <!-- Table of Contents -->
+                    <div class="table-of-contents">
+                        <h3 class="toc-title">On This Page</h3>
+                        <ul class="toc-list" id="toc-list">
+                            <!-- Generated by JavaScript -->
+                        </ul>
+                    </div>
+                    
+                    <!-- Main Navigation -->
+                    <nav class="handbook-navigation" id="handbook-nav">
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 1: Foundation</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part1-foundation/01-introduction.html" class="nav-link">Introduction & Overview</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part1-foundation/02-architecture.html" class="nav-link">Architecture & Core Concepts</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part1-foundation/03-schema-reference.html" class="nav-link">Generator JSON Schema Reference</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 2: Content Development</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part2-content-development/04-basic-generator.html" class="nav-link">Basic Generator Creation</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part2-content-development/05-advanced-rules.html" class="nav-link">Advanced Rule Syntax</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part2-content-development/06-modularization.html" class="nav-link">Modularization & Organization</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 3: Engine Reference</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part3-engine-reference/09-api-documentation.html" class="nav-link">Engine API Documentation</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part3-engine-reference/10-modifier-system.html" class="nav-link">Modifier System</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part3-engine-reference/11-variable-system.html" class="nav-link">Variable System</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 4: Practical Guides</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part4-practical-guides/14-interactive-tutorial.html" class="nav-link">Interactive Tutorial</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part4-practical-guides/15-expansion-recipes.html" class="nav-link">Expansion Recipes for LLMs</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part4-practical-guides/16-testing-qa.html" class="nav-link">Testing & Quality Assurance</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 5: Advanced Topics</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part5-advanced-topics/18-custom-extensions.html" class="nav-link">Custom Extensions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part5-advanced-topics/19-security.html" class="nav-link">Security Best Practices</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part5-advanced-topics/20-integration.html" class="nav-link">Integration Patterns</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nav-section">
+                            <h3 class="nav-section-title">Part 6: Reference Materials</h3>
+                            <ul class="nav-section-items">
+                                <li class="nav-item">
+                                    <a href="/part6-reference-materials/22-quick-reference.html" class="nav-link">Quick Reference Tables</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part6-reference-materials/23-templates.html" class="nav-link">Templates & Boilerplates</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/part6-reference-materials/24-pitfalls.html" class="nav-link">Common Pitfalls & Solutions</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <article class="content">
+                <div class="content-header">
+                    <h1 class="page-title">Chapter 3: Generator JSON Schema Reference</h1>
+                    <div class="page-meta">
+                        <span class="page-type">reference</span>
+                        <span class="page-difficulty">beginner</span>
+                        <span class="page-part">part1</span>
+                    </div>
+                </div>
+                
+                <div class="content-body">
+                    <h1>Chapter 3: Generator JSON Schema Reference</h1><p>This chapter provides a complete reference for the Generator JSON format, which serves as both the storage format and the interchange format for Prompt Spaghetti generators.</p><h2>Schema Overview</h2><p>A generator file consists of several key sections:</p><p>``<code>json</p>
+<p>{</p>
+<p>  "meta": {</p>
+<p>    "name": "Generator Name",</p>
+<p>    "author": "Author Name",</p>
+<p>    "version": "1.0.0",</p>
+<p>    "description": "What this generator creates"</p>
+<p>  },</p>
+<p>  "variables": {</p>
+<p>    "variableName": "defaultValue"</p>
+<p>  },</p>
+<p>  "grammar": {</p>
+<p>    "start": ["Entry point rule"],</p>
+<p>    "ruleName": ["array", "of", "options"]</p>
+<p>  },</p>
+<p>  "includes": {</p>
+<p>    "external": "./path/to/file.json"</p>
+<p>  },</p>
+<p>  "config": {</p>
+<p>    "maxDepth": 10,</p>
+<p>    "enableDebug": false</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h2>Metadata Structure</h2><p>The </code>meta<code> section contains information about the generator:</p><h3>Required Fields</h3></code>`<code>json</p>
+<p>{</p>
+<p>  "meta": {</p>
+<p>    "name": "Character Generator",</p>
+<p>    "version": "1.0.0"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p>
+<ul><li><strong>name</strong> (string, required): Display name for the generator</li>
+<li><strong>version</strong> (string, required): Semantic version number</li><h3>Optional Fields</h3></code>`<code>json</p>
+<p>{</p>
+<p>  "meta": {</p>
+<p>    "author": "Jane Doe",</p>
+<p>    "description": "Generates fantasy RPG characters",</p>
+<p>    "tags": ["fantasy", "rpg", "character"],</p>
+<p>    "license": "MIT",</p>
+<p>    "homepage": "https://example.com/generators",</p>
+<p>    "category": "gaming",</p>
+<p>    "minEngineVersion": "2.0.0"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p>
+<li><strong>author</strong> (string): Creator's name or handle</li>
+<li><strong>description</strong> (string): Detailed explanation of generator purpose</li>
+<li><strong>tags</strong> (array): Searchable keywords</li>
+<li><strong>license</strong> (string): Distribution license</li>
+<li><strong>homepage</strong> (string): Project or documentation URL</li>
+<li><strong>category</strong> (string): Classification for organization</li>
+<li><strong>minEngineVersion</strong> (string): Minimum compatible engine version</li><h2>Grammar Rules Definition</h2><p>The </code>grammar<code> section contains the generation rules:</p><h3>Basic Rule Types</h3><h4>String Rules</h4>
+<p>Simple text output:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "greeting": "Hello, world!"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h4>Array Rules</h4>
+<p>Random selection from options:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "color": ["red", "blue", "green", "yellow"]</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h4>Weighted Rules</h4>
+<p>Probability-based selection:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "rarity": [</p>
+<p>      {"w": 60, "v": "common"},</p>
+<p>      {"w": 30, "v": "uncommon"},</p>
+<p>      {"w": 9, "v": "rare"},</p>
+<p>      {"w": 1, "v": "legendary"}</p>
+<p>    ]</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Advanced Rule Patterns</h3><h4>Reference Expansion</h4>
+<p>Reference other rules using square brackets:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "character": "[name] the [class]",</p>
+<p>    "name": ["Alice", "Bob", "Charlie"],</p>
+<p>    "class": ["Warrior", "Mage", "Rogue"]</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h4>Nested References</h4>
+<p>Build complex structures:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "npc": "[greeting], I am [character]",</p>
+<p>    "greeting": ["Hello", "Greetings", "Welcome"],</p>
+<p>    "character": "[name] the [adjective] [class]",</p>
+<p>    "name": ["Aldric", "Elara", "Thorin"],</p>
+<p>    "adjective": ["brave", "wise", "stealthy"],</p>
+<p>    "class": ["knight", "wizard", "thief"]</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h4>Modifier Application</h4>
+<p>Apply text transformations:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "title": "[name.capitalize] the [epithet.allcaps]",</p>
+<p>    "name": ["alice", "bob"],</p>
+<p>    "epithet": ["great", "terrible"]</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h2>Variables and Their Types</h2><p>Variables provide dynamic state during generation:</p><h3>Variable Declaration</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "variables": {</p>
+<p>    "playerName": "Hero",</p>
+<p>    "playerLevel": 1,</p>
+<p>    "hasCompanion": false,</p>
+<p>    "inventory": []</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Variable Types</h3>
+<li><strong>String</strong>: Text values</li>
+<li><strong>Number</strong>: Integers or decimals</li>
+<li><strong>Boolean</strong>: true/false</li>
+<li><strong>Array</strong>: Lists of values</li>
+<li><strong>Object</strong>: Nested structures</li><h3>Variable Usage</h3>
+<p>Reference variables with curly braces:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "greeting": "Welcome, {playerName}!",</p>
+<p>    "levelUp": "You are now level {playerLevel}!"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Dynamic Variables</h3>
+<p>Set variables during generation:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "start": "[setName][greet]",</p>
+<p>    "setName": {</p>
+<p>      "type": "setVariable",</p>
+<p>      "key": "userName",</p>
+<p>      "value": "[names]"</p>
+<p>    },</p>
+<p>    "names": ["Alice", "Bob", "Charlie"],</p>
+<p>    "greet": "Hello, {userName}!"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h2>Entry Points and Execution</h2><p>Entry points determine where generation begins:</p><h3>Default Entry Point</h3>
+<p>The </code>start<code> rule is the default:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "start": "This is where generation begins"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Multiple Entry Points</h3>
+<p>Define multiple starting options:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "entryPoints": ["character", "location", "item"],</p>
+<p>  "grammar": {</p>
+<p>    "character": "[name] the [class]",</p>
+<p>    "location": "The [adjective] [place]",</p>
+<p>    "item": "[quality] [itemType]"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Execution Configuration</h3>
+<p>Control execution behavior:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "config": {</p>
+<p>    "defaultEntryPoint": "start",</p>
+<p>    "maxRecursionDepth": 10,</p>
+<p>    "timeoutMs": 5000,</p>
+<p>    "enableCaching": true,</p>
+<p>    "strictMode": false</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h2>Include Patterns and Modularization</h2><p>Break large generators into manageable pieces:</p><h3>Basic Include</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "includes": {</p>
+<p>    "names": "./data/names.json",</p>
+<p>    "locations": "./data/locations.json"</p>
+<p>  },</p>
+<p>  "grammar": {</p>
+<p>    "character": "[names:first] from [locations:city]"</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Include File Format</h3>
+</code>names.json<code>:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "first": ["Alice", "Bob", "Charlie"],</p>
+<p>  "last": ["Smith", "Jones", "Brown"]</p>
+<p>}</p>
+</code>`<code></p><h3>Meta Merge Arrays</h3>
+<p>Special </code>_meta<code> array for extending includes:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "includes": {</p>
+<p>    "base": "./base-generator.json"</p>
+<p>  },</p>
+<p>  "grammar": {</p>
+<p>    "_meta": {</p>
+<p>      "merge": ["base"],</p>
+<p>      "exclude": ["oldRule"],</p>
+<p>      "override": {</p>
+<p>        "specificRule": ["new", "values"]</p>
+<p>      }</p>
+<p>    }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h2>Node Type Definitions</h2><p>When using the visual editor, nodes map to JSON structures:</p><h3>WeightedChoice Node</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "type": "WeightedChoice",</p>
+<p>  "choices": [</p>
+<p>    {"value": "common", "weight": 70},</p>
+<p>    {"value": "rare", "weight": 30}</p>
+<p>  ]</p>
+<p>}</p>
+</code>`<code></p><h3>Concat Node</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "type": "Concat",</p>
+<p>  "inputs": ["Hello, ", "[name]", "!"]</p>
+<p>}</p>
+</code>`<code></p><h3>Output Node</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "type": "Output",</p>
+<p>  "template": "Generated: {result}"</p>
+<p>}</p>
+</code>`<code></p><h3>SetVariable Node</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "type": "SetVariable",</p>
+<p>  "key": "characterName",</p>
+<p>  "value": "[generateName]"</p>
+<p>}</p>
+</code>`<code></p><h3>GetVariable Node</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "type": "GetVariable",</p>
+<p>  "key": "characterName",</p>
+<p>  "default": "Unknown"</p>
+<p>}</p>
+</code>`<code></p><h2>Advanced Schema Features</h2><h3>Conditional Rules</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "type": "conditional",</p>
+<p>  "condition": "{playerLevel} > 5",</p>
+<p>  "true": "You are experienced!",</p>
+<p>  "false": "You are a novice."</p>
+<p>}</p>
+</code>`<code></p><h3>Sequential Patterns</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "type": "Sequential",</p>
+<p>  "sequence": ["First", "Second", "Third"],</p>
+<p>  "pattern": {</p>
+<p>    "type": "linear",</p>
+<p>    "config": {</p>
+<p>      "allowRepeats": false</p>
+<p>    }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Markov Chains</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "type": "Markov",</p>
+<p>  "states": {</p>
+<p>    "happy": {</p>
+<p>      "sad": 0.3,</p>
+<p>      "excited": 0.7</p>
+<p>    },</p>
+<p>    "sad": {</p>
+<p>      "happy": 0.5,</p>
+<p>      "angry": 0.5</p>
+<p>    }</p>
+<p>  },</p>
+<p>  "initial": "happy"</p>
+<p>}</p>
+</code>`<code></p><h2>Validation Rules</h2><p>The schema enforces several validation rules:</p><h3>Structure Validation</h3>
+<li>Valid JSON syntax required</li>
+<li>All references must resolve</li>
+<li>No circular dependencies</li>
+<li>Proper type matching</li><h3>Weight Validation</h3>
+<li>Weights must be positive numbers</li>
+<li>At least one non-zero weight required</li>
+<li>Weights automatically normalized</li><h3>Variable Validation</h3>
+<li>Variable names must be valid identifiers</li>
+<li>No reserved keywords</li>
+<li>Type consistency maintained</li><h3>Performance Limits</h3>
+<li>Maximum recursion depth</li>
+<li>String length limits</li>
+<li>Array size limits</li>
+<li>Execution timeout</li><h2>Migration and Compatibility</h2><h3>Version Detection</h3>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "meta": {</p>
+<p>    "version": "2.0.0",</p>
+<p>    "compatibleWith": ["1.x", "2.x"]</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Legacy Format Support</h3>
+<p>Older formats automatically upgraded:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "grammar": {</p>
+<p>    "start": {</p>
+<p>      "_legacy": true,</p>
+<p>      "options": ["old", "format"]</p>
+<p>    }</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h3>Future-Proofing</h3>
+<p>Use extension fields:</p>
+</code>`<code>json</p>
+<p>{</p>
+<p>  "meta": {</p>
+<p>    "x-custom-field": "value",</p>
+<p>    "x-plugin-config": {}</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h2>Best Practices</h2><p>When creating generator JSON:</p><p>1. <strong>Use Semantic Versioning</strong>
+<li>Major.Minor.Patch format</li>
+<li>Increment appropriately</li>
+<li>Document changes</li><p>2. <strong>Organize Rules Logically</strong>
+<li>Group related rules</li>
+<li>Use clear naming</li>
+<li>Add comments via </code>_comment<code></li><p>3. <strong>Optimize for Performance</strong>
+<li>Minimize deep nesting</li>
+<li>Reuse common patterns</li>
+<li>Use variables for repeated values</li><p>4. <strong>Plan for Modularity</strong>
+<li>Split large generators</li>
+<li>Use includes effectively</li>
+<li>Create reusable components</li></ul><h2>Complete Example</h2><p>Here's a full generator demonstrating all major features:</p></code>`<code>json</p>
+<p>{</p>
+<p>  "meta": {</p>
+<p>    "name": "Fantasy Character Generator",</p>
+<p>    "version": "1.2.0",</p>
+<p>    "author": "Jane Doe",</p>
+<p>    "description": "Creates detailed fantasy RPG characters"</p>
+<p>  },</p>
+<p>  "variables": {</p>
+<p>    "characterClass": "",</p>
+<p>    "level": 1</p>
+<p>  },</p>
+<p>  "includes": {</p>
+<p>    "names": "./data/fantasy-names.json",</p>
+<p>    "items": "./data/equipment.json"</p>
+<p>  },</p>
+<p>  "grammar": {</p>
+<p>    "start": "[setClass][character]",</p>
+<p>    "setClass": {</p>
+<p>      "type": "setVariable",</p>
+<p>      "key": "characterClass",</p>
+<p>      "value": "[class]"</p>
+<p>    },</p>
+<p>    "character": "[name] the [adjective] {characterClass}",</p>
+<p>    "name": "[names:first] [names:last]",</p>
+<p>    "adjective": [</p>
+<p>      {"w": 60, "v": "[common_adjective]"},</p>
+<p>      {"w": 30, "v": "[uncommon_adjective]"},</p>
+<p>      {"w": 10, "v": "[rare_adjective]"}</p>
+<p>    ],</p>
+<p>    "common_adjective": ["brave", "strong", "swift"],</p>
+<p>    "uncommon_adjective": ["cunning", "wise", "fierce"],</p>
+<p>    "rare_adjective": ["legendary", "immortal", "divine"],</p>
+<p>    "class": ["Warrior", "Mage", "Rogue", "Cleric"]</p>
+<p>  },</p>
+<p>  "config": {</p>
+<p>    "maxRecursionDepth": 15,</p>
+<p>    "enableDebug": true</p>
+<p>  }</p>
+<p>}</p>
+</code>``</p><p>This schema reference provides the foundation for understanding how Prompt Spaghetti generators work at the data level. Whether you're hand-crafting JSON or using the visual editor, these principles remain consistent.</p><p>---</p><strong>Next Chapter</strong>: <a href="../part2-content-development/04-basic-generator.md">Basic Generator Creation</a> →</p>
+                </div>
+                
+                <div class="content-footer">
+                    <div class="page-navigation">
+                        {{#PREV_PAGE}}
+                        <a href="{{PREV_PAGE.url}}" class="page-nav-link prev">
+                            <span class="nav-direction">← Previous</span>
+                            <span class="nav-title">{{PREV_PAGE.title}}</span>
+                        </a>
+                        {{/PREV_PAGE}}
+                        
+                        {{#NEXT_PAGE}}
+                        <a href="{{NEXT_PAGE.url}}" class="page-nav-link next">
+                            <span class="nav-direction">Next →</span>
+                            <span class="nav-title">{{NEXT_PAGE.title}}</span>
+                        </a>
+                        {{/NEXT_PAGE}}
+                    </div>
+                    
+                    <div class="content-actions">
+                        <button class="action-button" onclick="window.print()">Print</button>
+                        <button class="action-button" onclick="copyPageUrl()">Share</button>
+                        <a href="https://github.com/your-org/prompt-spaghetti/edit/main/docs/content-authoring-handbook" class="action-button" target="_blank">Edit on GitHub</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="handbook-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Content Authoring Handbook</h4>
+                    <p>Comprehensive guide to creating content with Prompt Spaghetti</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/part1-foundation/01-introduction.html">Getting Started</a></li>
+                        <li><a href="/part4-practical-guides/14-interactive-tutorial.html">Interactive Tutorial</a></li>
+                        <li><a href="/part6-reference-materials/22-quick-reference.html">Quick Reference</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="https://github.com/your-org/prompt-spaghetti" target="_blank">GitHub</a></li>
+                        <li><a href="https://discord.gg/your-server" target="_blank">Discord</a></li>
+                        <li><a href="https://twitter.com/your-account" target="_blank">Twitter</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="/assets/examples/" target="_blank">Example Generators</a></li>
+                        <li><a href="/assets/templates/" target="_blank">Templates</a></li>
+                        <li><a href="/assets/tools/" target="_blank">Tools</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Prompt Spaghetti. All rights reserved.</p>
+                <p>Built with ❤️ for the content creation community</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./assets/js/search-system.js"></script>
+    <script src="./assets/js/interactive-examples.js"></script>
+    <script src="./assets/js/handbook-utils.js"></script>
+    
+    <script>
+        // Initialize Monaco Editor for interactive examples
+        require.config({ 
+            paths: { 
+                'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs' 
+            } 
+        });
+        
+        // Initialize handbook features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate table of contents
+            generateTableOfContents();
+            
+            // Initialize search with custom configuration
+            window.handbookSearch = new HandbookSearchSystem({
+                searchInputId: 'handbook-search',
+                resultsContainerId: 'search-results',
+                navigationId: 'handbook-nav',
+                indexPath: './assets/data/search-index.json'
+            });
+            
+            // Initialize interactive examples
+            initializeInteractiveExamples();
+            
+            // Track page views
+            trackPageView();
+        });
+        
+        // Generate table of contents from headings
+        function generateTableOfContents() {
+            const toc = document.getElementById('toc-list');
+            const headings = document.querySelectorAll('.content h2, .content h3, .content h4');
+            
+            if (headings.length === 0) {
+                toc.parentElement.style.display = 'none';
+                return;
+            }
+            
+            headings.forEach((heading, index) => {
+                const id = heading.id || `heading-${index}`;
+                if (!heading.id) {
+                    heading.id = id;
+                }
+                
+                const li = document.createElement('li');
+                li.className = 'toc-item';
+                
+                const a = document.createElement('a');
+                a.href = `#${id}`;
+                a.className = 'toc-link';
+                a.textContent = heading.textContent;
+                
+                li.appendChild(a);
+                toc.appendChild(li);
+            });
+            
+            // Highlight current section on scroll
+            window.addEventListener('scroll', updateTocHighlight);
+        }
+        
+        // Update TOC highlighting based on scroll position
+        function updateTocHighlight() {
+            const headings = document.querySelectorAll('.content h2, .content h3, .content h4');
+            const tocLinks = document.querySelectorAll('.toc-link');
+            
+            let current = 0;
+            headings.forEach((heading, index) => {
+                if (heading.offsetTop <= window.scrollY + 100) {
+                    current = index;
+                }
+            });
+            
+            tocLinks.forEach((link, index) => {
+                link.classList.toggle('active', index === current);
+            });
+        }
+        
+        // Initialize interactive examples
+        function initializeInteractiveExamples() {
+            // This is handled by the interactive-examples.js file
+            // but we can add any page-specific initialization here
+        }
+        
+        // Copy page URL to clipboard
+        function copyPageUrl() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Page URL copied to clipboard!');
+            });
+        }
+        
+        // Track page views for analytics
+        function trackPageView() {
+            if (typeof gtag !== 'undefined') {
+                gtag('config', 'GA_MEASUREMENT_ID', {
+                    page_title: 'Chapter 3: Generator JSON Schema Reference',
+                    page_location: window.location.href
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run linting on staged files
+pnpm lint-staged
+
+# Check if any test files were modified
+TEST_FILES_CHANGED=$(git diff --cached --name-only | grep -E '\.(test|spec)\.(ts|tsx|js|jsx)$' | wc -l)
+SOURCE_FILES_CHANGED=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '\.(test|spec)\.' | grep -v '__tests__' | wc -l)
+
+# If source files changed but no test files, warn the user
+if [ $SOURCE_FILES_CHANGED -gt 0 ] && [ $TEST_FILES_CHANGED -eq 0 ]; then
+  echo "⚠️  Warning: You modified source files but didn't update any tests."
+  echo "📝 Modified source files:"
+  git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | grep -v -E '\.(test|spec)\.' | grep -v '__tests__'
+  echo ""
+  echo "Please ensure your changes are covered by tests."
+  echo "Do you want to continue anyway? (y/n)"
+  read -r response
+  if [ "$response" != "y" ]; then
+    echo "❌ Commit aborted. Please add tests for your changes."
+    exit 1
+  fi
+fi
+
+# Run tests for changed files only (faster feedback)
+CHANGED_FILES=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
+if [ ! -z "$CHANGED_FILES" ]; then
+  echo "🧪 Running tests for changed files..."
+  pnpm test -- --findRelatedTests $CHANGED_FILES --passWithNoTests
+  if [ $? -ne 0 ]; then
+    echo "❌ Tests failed. Please fix the failing tests before committing."
+    exit 1
+  fi
+fi
+
+# Check coverage for critical files if they were modified
+CRITICAL_FILES=(
+  "packages/core/runtime/index.ts"
+  "packages/core/validation.ts"
+  "server/src/engine.ts"
+  "packages/core/runtime/expression-evaluator.ts"
+  "packages/core/runtime/ast-node-whitelist.ts"
+)
+
+for file in "${CRITICAL_FILES[@]}"; do
+  if git diff --cached --name-only | grep -q "$file"; then
+    echo "🔍 Checking coverage for critical file: $file"
+    pnpm test -- --coverage --collectCoverageFrom="$file" --coverageReporters=json-summary
+    
+    # Extract coverage percentage
+    if [ -f "coverage/coverage-summary.json" ]; then
+      COVERAGE=$(node -e "
+        const coverage = require('./coverage/coverage-summary.json');
+        const fileCov = coverage['$file'];
+        if (fileCov) {
+          console.log(fileCov.lines.pct);
+        } else {
+          console.log('0');
+        }
+      ")
+      
+      # Check against thresholds
+      case "$file" in
+        "packages/core/runtime/index.ts")
+          THRESHOLD=90
+          ;;
+        "packages/core/validation.ts")
+          THRESHOLD=95
+          ;;
+        "server/src/engine.ts")
+          THRESHOLD=85
+          ;;
+        *)
+          THRESHOLD=80
+          ;;
+      esac
+      
+      if [ $(node -e "console.log($COVERAGE < $THRESHOLD ? 1 : 0)") -eq 1 ]; then
+        echo "❌ Coverage for $file is $COVERAGE%, below required $THRESHOLD%"
+        echo "Please add more tests to meet the coverage threshold."
+        exit 1
+      else
+        echo "✅ Coverage for $file is $COVERAGE% (threshold: $THRESHOLD%)"
+      fi
+    fi
+  fi
+done
+
+echo "✅ All pre-commit checks passed!"

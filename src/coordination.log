@@ -1,0 +1,76 @@
+
+> @promptscape/coordination@1.0.0 start:all
+> concurrently -n "Gateway,PO,SM,Dev-A,Dev-B,Dev-C,Stuck,Metrics" -c "cyan,green,yellow,blue,magenta,white,red,gray" "npm:gateway" "npm:agent:*" "npm:watcher:*"
+
+[Gateway] 
+[Gateway] > @promptscape/coordination@1.0.0 gateway
+[Gateway] > ts-node gateway/index.ts
+[Gateway] 
+[POdev-b] 
+[POdev-b] > @promptscape/coordination@1.0.0 agent:dev-b
+[POdev-b] > ts-node -e "require('./agents/devAgentTemplate').createDevAgent('dev_B').runForever()"
+[POdev-b] 
+[POdev-c] 
+[POdev-c] > @promptscape/coordination@1.0.0 agent:dev-c
+[POdev-c] > ts-node -e "require('./agents/devAgentTemplate').createDevAgent('dev_C').runForever()"
+[POdev-c] 
+[SMmetrics] 
+[SMmetrics] > @promptscape/coordination@1.0.0 watcher:metrics
+[SMmetrics] > ts-node watchers/metricsCollector.ts
+[SMmetrics] 
+[SMstuck] 
+[SMstuck] > @promptscape/coordination@1.0.0 watcher:stuck
+[SMstuck] > ts-node watchers/stuckWatcher.ts
+[SMstuck] 
+[POsm] 
+[POsm] > @promptscape/coordination@1.0.0 agent:sm
+[POsm] > ts-node -e "new (require('./agents/scrumMasterAgent').ScrumMasterAgent)().runForever()"
+[POsm] 
+[POdev-a] 
+[POdev-a] > @promptscape/coordination@1.0.0 agent:dev-a
+[POdev-a] > ts-node -e "require('./agents/devAgentTemplate').createDevAgent('dev_A').runForever()"
+[POdev-a] 
+[POpo] 
+[POpo] > @promptscape/coordination@1.0.0 agent:po
+[POpo] > ts-node -e "new (require('./agents/productOwnerAgent').ProductOwnerAgent)().runForever()"
+[POpo] 
+[SMstuck] 👀 Starting stuck task watcher...
+[SMmetrics] 📊 Starting metrics collector...
+[POdev-a] 🤖 dev_A_agent initialized at event 9
+[POdev-a] 🚀 dev_A_agent starting main loop...
+[POpo] 🤖 product_owner_agent initialized at event 9
+[POdev-b] 🤖 dev_B_agent initialized at event 9
+[POpo] 🚀 product_owner_agent starting main loop...
+[POdev-b] 🚀 dev_B_agent starting main loop...
+[POdev-c] 🤖 dev_C_agent initialized at event 9
+[POdev-c] 🚀 dev_C_agent starting main loop...
+[POsm] 🤖 scrum_master_agent initialized at event 9
+[POsm] 🚀 scrum_master_agent starting main loop...
+[Gateway] /Users/brianbehm/CascadeProjects/prompt-spaghetti/src/node_modules/ts-node/src/index.ts:859
+[Gateway]     return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+[Gateway]            ^
+[Gateway] TSError: ⨯ Unable to compile TypeScript:
+[Gateway] gateway/index.ts(8,51): error TS2459: Module '"../core/projector"' declares 'DiscordMessage' locally, but it is not exported.
+[Gateway] 
+[Gateway]     at createTSError (/Users/brianbehm/CascadeProjects/prompt-spaghetti/src/node_modules/ts-node/src/index.ts:859:12)
+[Gateway]     at reportTSError (/Users/brianbehm/CascadeProjects/prompt-spaghetti/src/node_modules/ts-node/src/index.ts:863:19)
+[Gateway]     at getOutput (/Users/brianbehm/CascadeProjects/prompt-spaghetti/src/node_modules/ts-node/src/index.ts:1077:36)
+[Gateway]     at Object.compile (/Users/brianbehm/CascadeProjects/prompt-spaghetti/src/node_modules/ts-node/src/index.ts:1433:41)
+[Gateway]     at Module.m._compile (/Users/brianbehm/CascadeProjects/prompt-spaghetti/src/node_modules/ts-node/src/index.ts:1617:30)
+[Gateway]     at node:internal/modules/cjs/loader:1824:10
+[Gateway]     at Object.require.extensions.<computed> [as .ts] (/Users/brianbehm/CascadeProjects/prompt-spaghetti/src/node_modules/ts-node/src/index.ts:1621:12)
+[Gateway]     at Module.load (node:internal/modules/cjs/loader:1427:32)
+[Gateway]     at Module._load (node:internal/modules/cjs/loader:1250:12)
+[Gateway]     at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+[Gateway]   diagnosticCodes: [ 2459 ]
+[Gateway] }
+[Gateway] npm run gateway exited with code 1
+[POsm] scrum_master_agent emitted: TASK_CREATED (ID: 0)
+[POsm] scrum_master_agent - Event validation failed: [ 'Task T-1752950332240 does not exist' ]
+[POdev-a] npm run agent:dev-a exited with code SIGTERM
+[POsm] npm run agent:sm exited with code SIGTERM
+[POdev-b] npm run agent:dev-b exited with code SIGTERM
+[POdev-c] npm run agent:dev-c exited with code SIGTERM
+[POpo] npm run agent:po exited with code SIGTERM
+[SMstuck] npm run watcher:stuck exited with code SIGTERM
+[SMmetrics] npm run watcher:metrics exited with code SIGTERM

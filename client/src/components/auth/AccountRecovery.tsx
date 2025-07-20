@@ -7,11 +7,11 @@ import { z } from 'zod';
 // Recovery form validation schemas
 const unlockAccountSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
-  unlockToken: z.string().min(1, 'Unlock token is required'),
+  unlockToken: z.string().min(1, 'Unlock token is required')
 });
 
 const requestUnlockSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: z.string().email('Please enter a valid email address')
 });
 
 type UnlockAccountData = z.infer<typeof unlockAccountSchema>;
@@ -30,19 +30,19 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
   onSuccess,
   onError,
   initialEmail = '',
-  unlockToken = '',
+  unlockToken = ''
 }) => {
   const [mode, setMode] = useState<RecoveryMode>(unlockToken ? 'unlock' : 'request');
   const [isLoading, setIsLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
   
   const [requestData, setRequestData] = useState<RequestUnlockData>({
-    email: initialEmail,
+    email: initialEmail
   });
   
   const [unlockData, setUnlockData] = useState<UnlockAccountData>({
     email: initialEmail,
-    unlockToken: unlockToken,
+    unlockToken: unlockToken
   });
   
   const [errors, setErrors] = useState<{
@@ -110,7 +110,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
       const response = await fetch('/api/auth/request-unlock', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestData),
+        body: JSON.stringify(requestData)
       });
 
       const result = await response.json();
@@ -143,7 +143,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
       const response = await fetch('/api/auth/unlock-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(unlockData),
+        body: JSON.stringify(unlockData)
       });
 
       const result = await response.json();

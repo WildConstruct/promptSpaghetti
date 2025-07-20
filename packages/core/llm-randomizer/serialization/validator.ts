@@ -222,7 +222,7 @@ export class FormatValidator {
 
     // Handle quoted strings
     if ((value.startsWith('"') && value.endsWith('"')) || 
-        (value.startsWith("'") && value.endsWith("'"))) {
+        (value.startsWith('\'') && value.endsWith('\''))) {
       return value.slice(1, -1);
     }
 
@@ -431,59 +431,59 @@ export class FormatValidator {
   private static validateNodeProperties(parsed: ParsedGraph, result: ValidationResult): void {
     parsed.nodes.forEach(node => {
       switch (node.type) {
-        case 'WeightedChoice':
-        case 'WeightedAdvanced':
-          if (!node.props?.choices || !Array.isArray(node.props.choices)) {
-            result.errors.push({
-              type: 'schema',
-              message: `${node.type} node ${node.id} missing required choices array`,
-              nodeId: node.id,
-              severity: 'error'
-            });
-          } else {
-            node.props.choices.forEach((choice: any, index: number) => {
-              if (typeof choice.value !== 'string') {
-                result.errors.push({
-                  type: 'schema',
-                  message: `${node.type} node ${node.id} choice ${index} missing value`,
-                  nodeId: node.id,
-                  severity: 'error'
-                });
-              }
-              if (typeof choice.weight !== 'number' || choice.weight < 0) {
-                result.errors.push({
-                  type: 'schema',
-                  message: `${node.type} node ${node.id} choice ${index} has invalid weight`,
-                  nodeId: node.id,
-                  severity: 'error'
-                });
-              }
-            });
-          }
-          break;
+      case 'WeightedChoice':
+      case 'WeightedAdvanced':
+        if (!node.props?.choices || !Array.isArray(node.props.choices)) {
+          result.errors.push({
+            type: 'schema',
+            message: `${node.type} node ${node.id} missing required choices array`,
+            nodeId: node.id,
+            severity: 'error'
+          });
+        } else {
+          node.props.choices.forEach((choice: any, index: number) => {
+            if (typeof choice.value !== 'string') {
+              result.errors.push({
+                type: 'schema',
+                message: `${node.type} node ${node.id} choice ${index} missing value`,
+                nodeId: node.id,
+                severity: 'error'
+              });
+            }
+            if (typeof choice.weight !== 'number' || choice.weight < 0) {
+              result.errors.push({
+                type: 'schema',
+                message: `${node.type} node ${node.id} choice ${index} has invalid weight`,
+                nodeId: node.id,
+                severity: 'error'
+              });
+            }
+          });
+        }
+        break;
 
-        case 'SetVariable':
-        case 'GetVariable':
-          if (!node.props?.key) {
-            result.errors.push({
-              type: 'schema',
-              message: `${node.type} node ${node.id} missing required key property`,
-              nodeId: node.id,
-              severity: 'error'
-            });
-          }
-          break;
+      case 'SetVariable':
+      case 'GetVariable':
+        if (!node.props?.key) {
+          result.errors.push({
+            type: 'schema',
+            message: `${node.type} node ${node.id} missing required key property`,
+            nodeId: node.id,
+            severity: 'error'
+          });
+        }
+        break;
 
-        case 'Include':
-          if (!node.props?.name) {
-            result.errors.push({
-              type: 'schema',
-              message: `Include node ${node.id} missing required name property`,
-              nodeId: node.id,
-              severity: 'error'
-            });
-          }
-          break;
+      case 'Include':
+        if (!node.props?.name) {
+          result.errors.push({
+            type: 'schema',
+            message: `Include node ${node.id} missing required name property`,
+            nodeId: node.id,
+            severity: 'error'
+          });
+        }
+        break;
       }
     });
   }

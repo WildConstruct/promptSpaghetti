@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useGraphStore } from "../../graphStore";
+import React, { useState, useRef, useEffect } from 'react';
+import { useGraphStore } from '../../graphStore';
 
 export interface VariationListProps {
   nodeId: string;
@@ -21,14 +21,14 @@ export const VariationList: React.FC<VariationListProps> = ({
   onUpdate,
   onReorder,
   maxVariations = 50,
-  placeholder = "Add a variation...",
-  allowQuickEntry = true,
+  placeholder = 'Add a variation...',
+  allowQuickEntry = true
 }) => {
-  const [newVariation, setNewVariation] = useState("");
+  const [newVariation, setNewVariation] = useState('');
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [editingValue, setEditingValue] = useState("");
+  const [editingValue, setEditingValue] = useState('');
   const [quickEntryMode, setQuickEntryMode] = useState(false);
-  const [quickEntryText, setQuickEntryText] = useState("");
+  const [quickEntryText, setQuickEntryText] = useState('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   
@@ -52,7 +52,7 @@ export const VariationList: React.FC<VariationListProps> = ({
       addVariation(nodeId, newVariation.trim());
     }
     
-    setNewVariation("");
+    setNewVariation('');
   };
 
   const handleRemove = (index: number) => {
@@ -89,12 +89,12 @@ export const VariationList: React.FC<VariationListProps> = ({
       handleUpdate(editingIndex, editingValue.trim());
     }
     setEditingIndex(null);
-    setEditingValue("");
+    setEditingValue('');
   };
 
   const cancelEdit = () => {
     setEditingIndex(null);
-    setEditingValue("");
+    setEditingValue('');
   };
 
   const handleQuickEntry = () => {
@@ -107,7 +107,7 @@ export const VariationList: React.FC<VariationListProps> = ({
       addVariation(nodeId, entry);
     });
     
-    setQuickEntryText("");
+    setQuickEntryText('');
     setQuickEntryMode(false);
   };
 
@@ -135,15 +135,15 @@ export const VariationList: React.FC<VariationListProps> = ({
   return (
     <div style={{ marginBottom: 16 }}>
       <div style={{ 
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "space-between",
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
         marginBottom: 12 
       }}>
         <label style={{ 
           fontSize: 12, 
           fontWeight: 600, 
-          color: "#e2e8f0" 
+          color: '#e2e8f0' 
         }}>
           Variations ({variations.length})
         </label>
@@ -151,17 +151,17 @@ export const VariationList: React.FC<VariationListProps> = ({
           <button
             onClick={() => setQuickEntryMode(!quickEntryMode)}
             style={{
-              background: "none",
-              border: "1px solid #4a5568",
+              background: 'none',
+              border: '1px solid #4a5568',
               borderRadius: 4,
-              padding: "2px 8px",
+              padding: '2px 8px',
               fontSize: 11,
-              cursor: "pointer",
-              color: "#6b7280",
+              cursor: 'pointer',
+              color: '#6b7280'
             }}
             title="Quick entry (comma-separated)"
           >
-            {quickEntryMode ? "List" : "Quick"}
+            {quickEntryMode ? 'List' : 'Quick'}
           </button>
         )}
       </div>
@@ -173,20 +173,20 @@ export const VariationList: React.FC<VariationListProps> = ({
             onChange={(e) => setQuickEntryText(e.target.value)}
             placeholder="Enter variations separated by commas..."
             style={{
-              width: "100%",
+              width: '100%',
               height: 80,
-              padding: "8px 12px",
-              border: "1px solid #4a5568",
+              padding: '8px 12px',
+              border: '1px solid #4a5568',
               borderRadius: 6,
               fontSize: 14,
-              resize: "vertical",
-              background: "#2d3748",
-              color: "#e2e8f0",
-              fontFamily: "inherit",
+              resize: 'vertical',
+              background: '#2d3748',
+              color: '#e2e8f0',
+              fontFamily: 'inherit'
             }}
           />
           <div style={{ 
-            display: "flex", 
+            display: 'flex', 
             gap: 8, 
             marginTop: 8 
           }}>
@@ -194,13 +194,13 @@ export const VariationList: React.FC<VariationListProps> = ({
               onClick={handleQuickEntry}
               disabled={!quickEntryText.trim()}
               style={{
-                background: quickEntryText.trim() ? "#3b82f6" : "#9ca3af",
-                color: "#fff",
-                border: "none",
+                background: quickEntryText.trim() ? '#3b82f6' : '#9ca3af',
+                color: '#fff',
+                border: 'none',
                 borderRadius: 4,
-                padding: "6px 12px",
+                padding: '6px 12px',
                 fontSize: 12,
-                cursor: quickEntryText.trim() ? "pointer" : "not-allowed",
+                cursor: quickEntryText.trim() ? 'pointer' : 'not-allowed'
               }}
             >
               Add All
@@ -208,16 +208,16 @@ export const VariationList: React.FC<VariationListProps> = ({
             <button
               onClick={() => {
                 setQuickEntryMode(false);
-                setQuickEntryText("");
+                setQuickEntryText('');
               }}
               style={{
-                background: "#4a5568",
-                border: "1px solid #4a5568",
+                background: '#4a5568',
+                border: '1px solid #4a5568',
                 borderRadius: 4,
-                padding: "6px 12px",
+                padding: '6px 12px',
                 fontSize: 12,
-                color: "#e2e8f0",
-                cursor: "pointer",
+                color: '#e2e8f0',
+                cursor: 'pointer'
               }}
             >
               Cancel
@@ -227,7 +227,7 @@ export const VariationList: React.FC<VariationListProps> = ({
       ) : (
         <>
           <div style={{ 
-            display: "flex", 
+            display: 'flex', 
             gap: 8, 
             marginBottom: 12 
           }}>
@@ -246,26 +246,26 @@ export const VariationList: React.FC<VariationListProps> = ({
               disabled={variations.length >= maxVariations}
               style={{
                 flex: 1,
-                padding: "8px 12px",
-                border: "1px solid #4a5568",
+                padding: '8px 12px',
+                border: '1px solid #4a5568',
                 borderRadius: 6,
                 fontSize: 14,
-                outline: "none",
-                background: "#2d3748",
-                color: "#e2e8f0",
+                outline: 'none',
+                background: '#2d3748',
+                color: '#e2e8f0'
               }}
             />
             <button
               onClick={handleAdd}
               disabled={!newVariation.trim() || variations.length >= maxVariations}
               style={{
-                background: newVariation.trim() && variations.length < maxVariations ? "#3b82f6" : "#9ca3af",
-                color: "#fff",
-                border: "none",
+                background: newVariation.trim() && variations.length < maxVariations ? '#3b82f6' : '#9ca3af',
+                color: '#fff',
+                border: 'none',
                 borderRadius: 6,
-                padding: "8px 16px",
+                padding: '8px 16px',
                 fontSize: 14,
-                cursor: newVariation.trim() && variations.length < maxVariations ? "pointer" : "not-allowed",
+                cursor: newVariation.trim() && variations.length < maxVariations ? 'pointer' : 'not-allowed'
               }}
             >
               Add
@@ -276,18 +276,18 @@ export const VariationList: React.FC<VariationListProps> = ({
 
       <div style={{ 
         maxHeight: 200, 
-        overflowY: "auto",
-        border: "1px solid #4a5568",
+        overflowY: 'auto',
+        border: '1px solid #4a5568',
         borderRadius: 6,
-        background: "#2d3748",
+        background: '#2d3748'
       }}>
         {variations.length === 0 ? (
           <div style={{
             padding: 20,
-            textAlign: "center",
-            color: "#9ca3af",
-            fontStyle: "italic",
-            fontSize: 13,
+            textAlign: 'center',
+            color: '#9ca3af',
+            fontStyle: 'italic',
+            fontSize: 13
           }}>
             No variations yet. Add some above.
           </div>
@@ -300,13 +300,13 @@ export const VariationList: React.FC<VariationListProps> = ({
               onDragOver={(e) => handleDragOver(e, index)}
               onDrop={(e) => handleDrop(e, index)}
               style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "8px 12px",
-                borderBottom: index < variations.length - 1 ? "1px solid #4a5568" : "none",
-                background: dragOverIndex === index ? "#4a5568" : "transparent",
+                display: 'flex',
+                alignItems: 'center',
+                padding: '8px 12px',
+                borderBottom: index < variations.length - 1 ? '1px solid #4a5568' : 'none',
+                background: dragOverIndex === index ? '#4a5568' : 'transparent',
                 opacity: draggedIndex === index ? 0.5 : 1,
-                cursor: "move",
+                cursor: 'move'
               }}
             >
               <div
@@ -314,12 +314,12 @@ export const VariationList: React.FC<VariationListProps> = ({
                   width: 16,
                   height: 16,
                   marginRight: 8,
-                  color: "#9ca3af",
-                  cursor: "move",
+                  color: '#9ca3af',
+                  cursor: 'move',
                   fontSize: 12,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 ⋮⋮
@@ -341,11 +341,11 @@ export const VariationList: React.FC<VariationListProps> = ({
                   onBlur={commitEdit}
                   style={{
                     flex: 1,
-                    padding: "4px 8px",
-                    border: "1px solid #3b82f6",
+                    padding: '4px 8px',
+                    border: '1px solid #3b82f6',
                     borderRadius: 4,
                     fontSize: 14,
-                    outline: "none",
+                    outline: 'none'
                   }}
                 />
               ) : (
@@ -353,9 +353,9 @@ export const VariationList: React.FC<VariationListProps> = ({
                   onClick={() => startEdit(index)}
                   style={{
                     flex: 1,
-                    cursor: "pointer",
+                    cursor: 'pointer',
                     fontSize: 14,
-                    color: "#374151",
+                    color: '#374151'
                   }}
                   title="Click to edit"
                 >
@@ -365,13 +365,13 @@ export const VariationList: React.FC<VariationListProps> = ({
               <button
                 onClick={() => handleRemove(index)}
                 style={{
-                  background: "none",
-                  border: "none",
-                  color: "#ef4444",
-                  cursor: "pointer",
+                  background: 'none',
+                  border: 'none',
+                  color: '#ef4444',
+                  cursor: 'pointer',
                   fontSize: 14,
                   marginLeft: 8,
-                  padding: 4,
+                  padding: 4
                 }}
                 title="Remove variation"
               >
@@ -386,8 +386,8 @@ export const VariationList: React.FC<VariationListProps> = ({
         <div style={{
           marginTop: 8,
           fontSize: 12,
-          color: "#ef4444",
-          textAlign: "center",
+          color: '#ef4444',
+          textAlign: 'center'
         }}>
           Maximum {maxVariations} variations reached
         </div>

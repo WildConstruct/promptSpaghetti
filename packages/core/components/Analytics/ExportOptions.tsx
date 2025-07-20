@@ -110,8 +110,8 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
       // Create blob and download
       const blob = new Blob([reportData], {
         type: exportConfig.format === 'json' ? 'application/json' :
-              exportConfig.format === 'csv' ? 'text/csv' :
-              exportConfig.format === 'html' ? 'text/html' :
+          exportConfig.format === 'csv' ? 'text/csv' :
+            exportConfig.format === 'html' ? 'text/html' :
               'application/pdf'
       });
 
@@ -172,16 +172,16 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
    */
   const getFormatIcon = (format: string) => {
     switch (format) {
-      case 'json':
-        return <FileText className="w-4 h-4" />;
-      case 'csv':
-        return <Table className="w-4 h-4" />;
-      case 'html':
-        return <Image className="w-4 h-4" />;
-      case 'pdf':
-        return <FileText className="w-4 h-4" />;
-      default:
-        return <FileText className="w-4 h-4" />;
+    case 'json':
+      return <FileText className="w-4 h-4" />;
+    case 'csv':
+      return <Table className="w-4 h-4" />;
+    case 'html':
+      return <Image className="w-4 h-4" />;
+    case 'pdf':
+      return <FileText className="w-4 h-4" />;
+    default:
+      return <FileText className="w-4 h-4" />;
     }
   };
 
@@ -190,16 +190,16 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
    */
   const getFormatDescription = (format: string) => {
     switch (format) {
-      case 'json':
-        return 'Raw data in JSON format for programmatic access';
-      case 'csv':
-        return 'Tabular data for spreadsheet applications';
-      case 'html':
-        return 'Interactive dashboard for viewing and sharing';
-      case 'pdf':
-        return 'Professional report format for presentations';
-      default:
-        return '';
+    case 'json':
+      return 'Raw data in JSON format for programmatic access';
+    case 'csv':
+      return 'Tabular data for spreadsheet applications';
+    case 'html':
+      return 'Interactive dashboard for viewing and sharing';
+    case 'pdf':
+      return 'Professional report format for presentations';
+    default:
+      return '';
     }
   };
 

@@ -100,29 +100,29 @@ export const MultiTouchController: React.FC<MultiTouchControllerProps> = ({
     
     // Handle based on finger count
     switch (touchCount) {
-      case 2:
-        handlers.onTwoFingerTap?.();
-        if (enableShortcuts) {
-          // Two-finger tap shortcut (e.g., zoom to fit)
-          if (enableHaptics) haptic.current.trigger('selection');
-        }
-        break;
+    case 2:
+      handlers.onTwoFingerTap?.();
+      if (enableShortcuts) {
+        // Two-finger tap shortcut (e.g., zoom to fit)
+        if (enableHaptics) haptic.current.trigger('selection');
+      }
+      break;
         
-      case 3:
-        handlers.onThreeFingerTap?.();
-        if (enableShortcuts) {
-          handlers.onSelectAll?.();
-          if (enableHaptics) haptic.current.trigger('success');
-        }
-        break;
+    case 3:
+      handlers.onThreeFingerTap?.();
+      if (enableShortcuts) {
+        handlers.onSelectAll?.();
+        if (enableHaptics) haptic.current.trigger('success');
+      }
+      break;
         
-      case 4:
-        handlers.onFourFingerTap?.();
-        if (enableShortcuts) {
-          handlers.onToggleFullscreen?.();
-          if (enableHaptics) haptic.current.trigger('heavy');
-        }
-        break;
+    case 4:
+      handlers.onFourFingerTap?.();
+      if (enableShortcuts) {
+        handlers.onToggleFullscreen?.();
+        if (enableHaptics) haptic.current.trigger('heavy');
+      }
+      break;
     }
   }, [handlers, enableShortcuts, enableHaptics]);
   
@@ -130,19 +130,19 @@ export const MultiTouchController: React.FC<MultiTouchControllerProps> = ({
     const touchCount = event.touches.length;
     
     switch (touchCount) {
-      case 2:
-        if (enableShortcuts) {
-          handlers.onZoomReset?.();
-          if (enableHaptics) haptic.current.trigger('medium');
-        }
-        break;
+    case 2:
+      if (enableShortcuts) {
+        handlers.onZoomReset?.();
+        if (enableHaptics) haptic.current.trigger('medium');
+      }
+      break;
         
-      case 3:
-        if (enableShortcuts) {
-          handlers.onDeselectAll?.();
-          if (enableHaptics) haptic.current.trigger('light');
-        }
-        break;
+    case 3:
+      if (enableShortcuts) {
+        handlers.onDeselectAll?.();
+        if (enableHaptics) haptic.current.trigger('light');
+      }
+      break;
     }
   }, [handlers, enableShortcuts, enableHaptics]);
   
@@ -162,31 +162,31 @@ export const MultiTouchController: React.FC<MultiTouchControllerProps> = ({
     if (!direction) return;
     
     switch (touchCount) {
-      case 2:
-        handlers.onTwoFingerSwipe?.(direction);
+    case 2:
+      handlers.onTwoFingerSwipe?.(direction);
         
-        if (enableShortcuts) {
-          if (direction === 'right') {
-            handlers.onUndo?.();
-            if (enableHaptics) haptic.current.trigger('soft');
-          } else if (direction === 'left') {
-            handlers.onRedo?.();
-            if (enableHaptics) haptic.current.trigger('soft');
-          }
+      if (enableShortcuts) {
+        if (direction === 'right') {
+          handlers.onUndo?.();
+          if (enableHaptics) haptic.current.trigger('soft');
+        } else if (direction === 'left') {
+          handlers.onRedo?.();
+          if (enableHaptics) haptic.current.trigger('soft');
         }
-        break;
+      }
+      break;
         
-      case 3:
-        handlers.onThreeFingerSwipe?.(direction);
-        break;
+    case 3:
+      handlers.onThreeFingerSwipe?.(direction);
+      break;
         
-      case 4:
-        handlers.onFourFingerSwipe?.(direction);
-        if (enableShortcuts) {
-          handlers.onSwitchMode?.();
-          if (enableHaptics) haptic.current.trigger('rigid');
-        }
-        break;
+    case 4:
+      handlers.onFourFingerSwipe?.(direction);
+      if (enableShortcuts) {
+        handlers.onSwitchMode?.();
+        if (enableHaptics) haptic.current.trigger('rigid');
+      }
+      break;
     }
   }, [handlers, enableShortcuts, enableHaptics]);
   

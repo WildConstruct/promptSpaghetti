@@ -53,18 +53,18 @@ export class ExtensionUpgradeAdvisor {
 
     // Generate recommendations based on strategy
     switch (strategy) {
-      case 'conservative':
-        recommendations.push(...this.getConservativeRecommendations(currentVersion, availableSemanticVersions, context));
-        break;
-      case 'moderate':
-        recommendations.push(...this.getModerateRecommendations(currentVersion, availableSemanticVersions, context));
-        break;
-      case 'aggressive':
-        recommendations.push(...this.getAggressiveRecommendations(currentVersion, availableSemanticVersions, context));
-        break;
-      case 'security':
-        recommendations.push(...this.getSecurityRecommendations(currentVersion, availableSemanticVersions, context));
-        break;
+    case 'conservative':
+      recommendations.push(...this.getConservativeRecommendations(currentVersion, availableSemanticVersions, context));
+      break;
+    case 'moderate':
+      recommendations.push(...this.getModerateRecommendations(currentVersion, availableSemanticVersions, context));
+      break;
+    case 'aggressive':
+      recommendations.push(...this.getAggressiveRecommendations(currentVersion, availableSemanticVersions, context));
+      break;
+    case 'security':
+      recommendations.push(...this.getSecurityRecommendations(currentVersion, availableSemanticVersions, context));
+      break;
     }
 
     return {

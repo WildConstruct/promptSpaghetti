@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { BaseNodeEditor, BaseNodeEditorProps } from "../BaseNodeEditor";
-import { TextFieldEditor } from "../TextFieldEditor";
-import { VariationList } from "../VariationList";
-import { CollapsibleSection } from "../CollapsibleSection";
+import React, { useState } from 'react';
+import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { VariationList } from '../VariationList';
+import { CollapsibleSection } from '../CollapsibleSection';
 
 export interface WeightedChoiceEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // WeightedChoice specific props can be added here
@@ -14,7 +14,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
   // WeightedChoice specific fields
   const choices = (nodeData.choices as string[]) || [];
   const weights = (nodeData.weights as number[]) || [];
-  const name = (nodeData.name as string) || (nodeData.label as string) || "WeightedChoice";
+  const name = (nodeData.name as string) || (nodeData.label as string) || 'WeightedChoice';
 
   // State for collapsible sections
   const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
@@ -25,7 +25,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
     onChange({
       choices: newChoices,
       // Ensure weights array matches choices length
-      weights: newChoices.map((_, index) => weights[index] || 1),
+      weights: newChoices.map((_, index) => weights[index] || 1)
     });
   };
 
@@ -65,11 +65,11 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
-            display: "block", 
+            display: 'block', 
             fontWeight: 500, 
             marginBottom: 8,
-            color: "#e2e8f0",
-            fontSize: 12,
+            color: '#e2e8f0',
+            fontSize: 12
           }}>
             Choice Options
           </label>
@@ -102,20 +102,20 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
         {choices.length > 0 && (
           <div style={{ marginTop: 16 }}>
             <label style={{ 
-              display: "block", 
+              display: 'block', 
               fontWeight: 500, 
               marginBottom: 8,
-              color: "#e2e8f0",
-              fontSize: 12,
+              color: '#e2e8f0',
+              fontSize: 12
             }}>
               Weights
             </label>
             
             <div style={{ 
-              background: "#2d3748", 
-              border: "1px solid #4a5568", 
+              background: '#2d3748', 
+              border: '1px solid #4a5568', 
               borderRadius: 4,
-              padding: 8,
+              padding: 8
             }}>
               {choices.map((choice, index) => {
                 const weight = weights[index] || 1;
@@ -127,19 +127,19 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
                   <div 
                     key={index} 
                     style={{ 
-                      display: "flex", 
-                      alignItems: "center", 
+                      display: 'flex', 
+                      alignItems: 'center', 
                       marginBottom: index < choices.length - 1 ? 8 : 0,
-                      gap: 8,
+                      gap: 8
                     }}
                   >
                     <div style={{ 
                       flex: 1, 
                       fontSize: 12, 
-                      color: "#e2e8f0",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
+                      color: '#e2e8f0',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
                     }}>
                       {choice || `Choice ${index + 1}`}
                     </div>
@@ -153,20 +153,20 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
                       style={{
                         width: 60,
                         padding: 4,
-                        border: "1px solid #4a5568",
+                        border: '1px solid #4a5568',
                         borderRadius: 2,
-                        background: "#1a202c",
-                        color: "#e2e8f0",
+                        background: '#1a202c',
+                        color: '#e2e8f0',
                         fontSize: 11,
-                        textAlign: "center",
+                        textAlign: 'center'
                       }}
                     />
                     
                     <div style={{ 
                       width: 40, 
                       fontSize: 10, 
-                      color: "#a0aec0",
-                      textAlign: "right",
+                      color: '#a0aec0',
+                      textAlign: 'right'
                     }}>
                       {percentage}%
                     </div>
@@ -178,11 +178,11 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
               <div style={{ 
                 marginTop: 8, 
                 paddingTop: 8, 
-                borderTop: "1px solid #4a5568",
-                display: "flex",
-                justifyContent: "space-between",
+                borderTop: '1px solid #4a5568',
+                display: 'flex',
+                justifyContent: 'space-between',
                 fontSize: 11,
-                color: "#a0aec0",
+                color: '#a0aec0'
               }}>
                 <span>Total Weight:</span>
                 <span>{weights.reduce((sum, w) => sum + w, 0).toFixed(1)}</span>
@@ -195,9 +195,9 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
         {choices.length > 1 && (
           <div style={{ 
             marginTop: 12, 
-            display: "flex", 
+            display: 'flex', 
             gap: 8,
-            flexWrap: "wrap",
+            flexWrap: 'wrap'
           }}>
             <button
               onClick={() => {
@@ -206,13 +206,13 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
                 onChange({ weights: newWeights });
               }}
               style={{
-                padding: "4px 8px",
+                padding: '4px 8px',
                 fontSize: 10,
-                background: "#4a5568",
-                border: "none",
+                background: '#4a5568',
+                border: 'none',
                 borderRadius: 2,
-                color: "#e2e8f0",
-                cursor: "pointer",
+                color: '#e2e8f0',
+                cursor: 'pointer'
               }}
             >
               Equal Weights
@@ -224,13 +224,13 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
                 onChange({ weights: randomWeights });
               }}
               style={{
-                padding: "4px 8px",
+                padding: '4px 8px',
                 fontSize: 10,
-                background: "#4a5568",
-                border: "none",
+                background: '#4a5568',
+                border: 'none',
                 borderRadius: 2,
-                color: "#e2e8f0",
-                cursor: "pointer",
+                color: '#e2e8f0',
+                cursor: 'pointer'
               }}
             >
               Random Weights
@@ -246,15 +246,15 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
         onToggle={() => setPreviewCollapsed(!previewCollapsed)}
       >
         <div style={{
-          background: "#1a202c",
-          border: "1px solid #4a5568",
+          background: '#1a202c',
+          border: '1px solid #4a5568',
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: "#e2e8f0",
+          color: '#e2e8f0'
         }}>
           {choices.length === 0 ? (
-            <div style={{ color: "#a0aec0", fontStyle: "italic" }}>
+            <div style={{ color: '#a0aec0', fontStyle: 'italic' }}>
               Add choices to see preview
             </div>
           ) : (
@@ -270,15 +270,15 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
                 
                 return (
                   <div key={index} style={{ 
-                    display: "flex", 
-                    justifyContent: "space-between",
+                    display: 'flex', 
+                    justifyContent: 'space-between',
                     marginBottom: 4,
-                    padding: "2px 4px",
-                    background: "rgba(66, 153, 225, 0.1)",
-                    borderRadius: 2,
+                    padding: '2px 4px',
+                    background: 'rgba(66, 153, 225, 0.1)',
+                    borderRadius: 2
                   }}>
                     <span>"{choice}"</span>
-                    <span style={{ color: "#a0aec0" }}>{percentage}% chance</span>
+                    <span style={{ color: '#a0aec0' }}>{percentage}% chance</span>
                   </div>
                 );
               })}

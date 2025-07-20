@@ -612,34 +612,34 @@ export class GraphComparisonService {
     // Count node changes
     nodeMatches.forEach(match => {
       switch (match.match_type) {
-        case 'added':
-          summary.nodes_added++;
-          break;
-        case 'removed':
-          summary.nodes_removed++;
-          break;
-        case 'modified':
-        case 'similar':
-          summary.nodes_modified++;
-          summary.properties_changed += Object.keys(match.property_changes).length;
-          break;
+      case 'added':
+        summary.nodes_added++;
+        break;
+      case 'removed':
+        summary.nodes_removed++;
+        break;
+      case 'modified':
+      case 'similar':
+        summary.nodes_modified++;
+        summary.properties_changed += Object.keys(match.property_changes).length;
+        break;
       }
     });
 
     // Count edge changes
     edgeMatches.forEach(match => {
       switch (match.match_type) {
-        case 'added':
-          summary.edges_added++;
-          break;
-        case 'removed':
-          summary.edges_removed++;
-          break;
-        case 'modified':
-        case 'similar':
-          summary.edges_modified++;
-          summary.properties_changed += Object.keys(match.property_changes).length;
-          break;
+      case 'added':
+        summary.edges_added++;
+        break;
+      case 'removed':
+        summary.edges_removed++;
+        break;
+      case 'modified':
+      case 'similar':
+        summary.edges_modified++;
+        summary.properties_changed += Object.keys(match.property_changes).length;
+        break;
       }
     });
 

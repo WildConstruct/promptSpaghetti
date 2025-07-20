@@ -11,7 +11,7 @@ import {
   Statistic,
   Tag,
   List,
-  Tooltip,
+  Tooltip
 } from 'antd';
 import {
   WarningOutlined,
@@ -20,12 +20,12 @@ import {
   CloseCircleOutlined,
   SafetyOutlined,
   ClockCircleOutlined,
-  EditOutlined,
+  EditOutlined
 } from '@ant-design/icons';
 import { 
   RestorationPreviewResponse, 
   RestorationConfig,
-  CONFLICT_DESCRIPTIONS,
+  CONFLICT_DESCRIPTIONS
 } from '../../types/restoration';
 
 const { Title, Text } = Typography;
@@ -41,7 +41,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
   preview,
   config,
   onConfirm,
-  onCancel,
+  onCancel
 }) => {
   const hasConflicts = preview.summary.totalConflicts > 0;
   const isHighRisk = preview.summary.riskLevel === 'high';
@@ -81,33 +81,33 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
     return Object.entries(conflictTypes).map(([type, count]) => ({
       type,
       count,
-      description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS],
+      description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS]
     }));
   };
 
   const getActionIcon = (type: string) => {
     switch (type) {
-      case 'add':
-        return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
-      case 'update':
-        return <EditOutlined style={{ color: '#1890ff' }} />;
-      case 'delete':
-        return <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
-      default:
-        return <InfoCircleOutlined />;
+    case 'add':
+      return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
+    case 'update':
+      return <EditOutlined style={{ color: '#1890ff' }} />;
+    case 'delete':
+      return <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
+    default:
+      return <InfoCircleOutlined />;
     }
   };
 
   const getActionColor = (type: string) => {
     switch (type) {
-      case 'add':
-        return 'success';
-      case 'update':
-        return 'processing';
-      case 'delete':
-        return 'error';
-      default:
-        return 'default';
+    case 'add':
+      return 'success';
+    case 'update':
+      return 'processing';
+    case 'delete':
+      return 'error';
+    default:
+      return 'default';
     }
   };
 
@@ -184,7 +184,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
               prefix={<SafetyOutlined />}
               valueStyle={{ 
                 color: preview.summary.riskLevel === 'high' ? '#ff4d4f' : 
-                       preview.summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600'
+                  preview.summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600'
               }}
             />
           </Card>
@@ -293,7 +293,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
                   text: 'Notification will be sent on completion', 
                   enabled: config.notifyOnCompletion,
                   icon: <InfoCircleOutlined />
-                },
+                }
               ]}
               renderItem={(item) => (
                 <List.Item>

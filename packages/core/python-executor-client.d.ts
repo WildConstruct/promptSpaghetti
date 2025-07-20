@@ -1,3 +1,7 @@
+/**
+ * TypeScript client for Python Executor Service
+ * Epic 8 Story 8.1.4: Main application integration
+ */
 export interface PythonExecutionRequest {
     code: string;
     input_data: any;
@@ -63,25 +67,73 @@ export declare class PythonExecutorClient {
     private config;
     private requestId;
     constructor(config?: Partial<PythonExecutorConfig>);
+    /**
+     * Execute Python code using the executor service
+     */
     execute(request: PythonExecutionRequest): Promise<PythonExecutionResult>;
+    /**
+     * Validate Python code without executing it
+     */
     validate(request: PythonValidationRequest): Promise<PythonValidationResult>;
+    /**
+     * Check if the Python executor service is healthy
+     */
     health(): Promise<{
         status: string;
         version: string;
         uptime: number;
     }>;
+    /**
+     * Get service metrics
+     */
     metrics(): Promise<any>;
+    /**
+     * Update client configuration
+     */
     updateConfig(config: Partial<PythonExecutorConfig>): void;
+    /**
+     * Get current configuration
+     */
     getConfig(): PythonExecutorConfig;
+    /**
+     * Make HTTP request with retry logic
+     */
     private makeRequest;
+    /**
+     * Generate unique request ID
+     */
     private generateRequestId;
+    /**
+     * Sleep for specified milliseconds
+     */
     private sleep;
+    /**
+     * Log metrics for monitoring
+     */
     private logMetrics;
+    /**
+     * Handle and log errors
+     */
     private handleError;
 }
+/**
+ * Default instance with common configuration
+ */
 export declare const pythonExecutorClient: PythonExecutorClient;
+/**
+ * Factory function for creating configured clients
+ */
 export declare function createPythonExecutorClient(config: Partial<PythonExecutorConfig>): PythonExecutorClient;
+/**
+ * Utility function to check if the service is available
+ */
 export declare function isPythonExecutorAvailable(baseUrl?: string): Promise<boolean>;
+/**
+ * Utility function to execute Python code with default settings
+ */
 export declare function executePythonCode(code: string, inputData: any, options?: Partial<PythonExecutionRequest>): Promise<PythonExecutionResult>;
+/**
+ * Utility function to validate Python code
+ */
 export declare function validatePythonCode(code: string, options?: Partial<PythonValidationRequest>): Promise<PythonValidationResult>;
 //# sourceMappingURL=python-executor-client.d.ts.map

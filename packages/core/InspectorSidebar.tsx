@@ -1,5 +1,5 @@
-import React from "react";
-import { ZodSchema, ZodTypeAny, z } from "zod";
+import React from 'react';
+import { ZodSchema, ZodTypeAny, z } from 'zod';
 
 /**
  * InspectorSidebar
@@ -36,7 +36,7 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
       const fieldSchema: any = (schema as any).shape?.[key] ?? (schema as any)._def?.shape?.()[key];
       if (fieldSchema) {
         const parsed = fieldSchema.safeParse(val);
-        setFieldErrors((prev) => ({ ...prev, [key]: parsed.success ? "" : parsed.error.issues[0]?.message || "Invalid" }));
+        setFieldErrors((prev) => ({ ...prev, [key]: parsed.success ? '' : parsed.error.issues[0]?.message || 'Invalid' }));
       }
     }
 
@@ -50,7 +50,7 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
 
   if (!node || !schema) {
     return (
-      <aside style={{ padding: 16, width: 320, borderLeft: "1px solid #eee", background: "#fafbfc", height: "100%" }}>
+      <aside style={{ padding: 16, width: 320, borderLeft: '1px solid #eee', background: '#fafbfc', height: '100%' }}>
         <em>Select a node to edit its properties.</em>
       </aside>
     );
@@ -75,34 +75,34 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
   }
 
   return (
-    <aside style={{ padding: 16, width: 320, borderLeft: "1px solid #eee", background: "#fafbfc", height: "100%" }}>
+    <aside style={{ padding: 16, width: 320, borderLeft: '1px solid #eee', background: '#fafbfc', height: '100%' }}>
       <h3 style={{ marginTop: 0 }}>{node.data?.label || node.type} Properties</h3>
       <form>
         {Object.entries(shape).map(([key, zodType]) => {
-          const value = node.data?.[key] ?? "";
+          const value = node.data?.[key] ?? '';
           // Render basic input for string/number; customize per type as needed
           return (
             <div key={key} style={{ marginBottom: 12 }}>
-              <label htmlFor={`field-${key}`} style={{ display: "block", fontWeight: 500, marginBottom: 4 }}>{key}</label>
+              <label htmlFor={`field-${key}`} style={{ display: 'block', fontWeight: 500, marginBottom: 4 }}>{key}</label>
               <input
                 id={`field-${key}`}
-                type={(zodType as any)._def?.typeName === "ZodNumber" ? "number" : "text"}
+                type={(zodType as any)._def?.typeName === 'ZodNumber' ? 'number' : 'text'}
                 value={
                   ((): any => {
                     const v = values[key];
                     if (v === undefined || v === null) {
-                      return (zodType as any)._def?.typeName === "ZodNumber" ? 0 : "";
+                      return (zodType as any)._def?.typeName === 'ZodNumber' ? 0 : '';
                     }
                     return v as any;
                   })()
                 }
                 onChange={e => {
-                  const isNumber = zodType instanceof z.ZodNumber || (zodType as any)._def?.typeName === "ZodNumber";
+                  const isNumber = zodType instanceof z.ZodNumber || (zodType as any)._def?.typeName === 'ZodNumber';
                   updateField(key, isNumber ? Number(e.target.value) : e.target.value);
                 }}
-                style={{ width: "100%", padding: 6, border: fieldErrors[key] ? "1px solid #f00" : "1px solid #ccc", borderRadius: 4 }}
+                style={{ width: '100%', padding: 6, border: fieldErrors[key] ? '1px solid #f00' : '1px solid #ccc', borderRadius: 4 }}
               />
-              {fieldErrors[key] && <div style={{ color: "#f00", fontSize: 12 }}>{fieldErrors[key]}</div>}
+              {fieldErrors[key] && <div style={{ color: '#f00', fontSize: 12 }}>{fieldErrors[key]}</div>}
             </div>
           );
         })}

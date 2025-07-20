@@ -154,21 +154,21 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'low': return 'bg-green-100 text-green-800 border-green-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved': return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
-      case 'rejected': return <XCircleIcon className="h-4 w-4 text-red-500" />;
-      case 'reviewing': return <EyeIcon className="h-4 w-4 text-blue-500" />;
-      case 'pending': return <ClockIcon className="h-4 w-4 text-yellow-500" />;
-      default: return <ClockIcon className="h-4 w-4 text-gray-500" />;
+    case 'approved': return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
+    case 'rejected': return <XCircleIcon className="h-4 w-4 text-red-500" />;
+    case 'reviewing': return <EyeIcon className="h-4 w-4 text-blue-500" />;
+    case 'pending': return <ClockIcon className="h-4 w-4 text-yellow-500" />;
+    default: return <ClockIcon className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -328,8 +328,8 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                       </div>
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
                         assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' :
-                        assignment.assignment_type === 'secondary' ? 'bg-blue-100 text-blue-800' :
-                        'bg-gray-100 text-gray-800'
+                          assignment.assignment_type === 'secondary' ? 'bg-blue-100 text-blue-800' :
+                            'bg-gray-100 text-gray-800'
                       }`}>
                         {assignment.assignment_type}
                       </span>

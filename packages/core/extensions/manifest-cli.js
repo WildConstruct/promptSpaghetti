@@ -211,8 +211,8 @@ class ManifestCLI {
     const metadata = ExtensionManifestUtils.extractMetadata(manifest);
     const sizeInfo = ExtensionManifestUtils.getManifestSize(manifest);
     
-    console.log(`\n📋 Manifest Information`);
-    console.log(`========================`);
+    console.log('\n📋 Manifest Information');
+    console.log('========================');
     console.log(`ID: ${metadata.id}`);
     console.log(`Name: ${metadata.name}`);
     console.log(`Version: ${metadata.version}`);
@@ -222,15 +222,15 @@ class ManifestCLI {
     console.log(`License: ${metadata.license}`);
     console.log(`Keywords: ${metadata.keywords.join(', ')}`);
     console.log(`Categories: ${metadata.categories.join(', ')}`);
-    console.log(`\n📊 Statistics`);
-    console.log(`=============`);
+    console.log('\n📊 Statistics');
+    console.log('=============');
     console.log(`Dependencies: ${metadata.dependencyCount}`);
     console.log(`Permissions: ${metadata.permissionCount}`);
     console.log(`Has UI: ${metadata.hasUI ? 'Yes' : 'No'}`);
     console.log(`Has Runtime: ${metadata.hasRuntime ? 'Yes' : 'No'}`);
     console.log(`Has Security: ${metadata.hasSecurity ? 'Yes' : 'No'}`);
-    console.log(`\n📏 Size`);
-    console.log(`=======`);
+    console.log('\n📏 Size');
+    console.log('=======');
     console.log(`Raw: ${sizeInfo.raw} bytes`);
     console.log(`Compressed: ${sizeInfo.compressed} bytes`);
     console.log(`Compression Ratio: ${(sizeInfo.compressionRatio * 100).toFixed(1)}%`);

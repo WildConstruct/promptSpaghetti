@@ -81,7 +81,7 @@ describe('Engine Coverage Tests', () => {
           {
             id: 'invalid1',
             // @ts-ignore - Intentionally using an invalid type
-            type: 'UnsupportedNodeType',
+            type: 'UnsupportedNodeType'
           },
           {
             id: 'text1',

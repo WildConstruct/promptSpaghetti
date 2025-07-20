@@ -252,26 +252,26 @@ export class GraphEngine {
 
   private createRuntimeNode(node: GraphNode, inputs: any[], context: ExecutionContext): RuntimeNode {
     switch (node.type) {
-      case 'WeightedChoice':
-        return new WeightedChoiceRuntimeNode(node.id, node.data.choices || []);
+    case 'WeightedChoice':
+      return new WeightedChoiceRuntimeNode(node.id, node.data.choices || []);
       
-      case 'Concat':
-        return new ConcatRuntimeNode(node.id, node.data.template, inputs, context);
+    case 'Concat':
+      return new ConcatRuntimeNode(node.id, node.data.template, inputs, context);
       
-      case 'Output':
-        return new OutputRuntimeNode(node.id, node.data.text, inputs, context);
+    case 'Output':
+      return new OutputRuntimeNode(node.id, node.data.text, inputs, context);
       
-      case 'Include':
-        return new IncludeRuntimeNode(node.id, node.data.name || '', node.data.lookup || {});
+    case 'Include':
+      return new IncludeRuntimeNode(node.id, node.data.name || '', node.data.lookup || {});
       
-      case 'SetVariable':
-        return new SetVariableRuntimeNode(node.id, node.data.key || '', node.data.value);
+    case 'SetVariable':
+      return new SetVariableRuntimeNode(node.id, node.data.key || '', node.data.value);
       
-      case 'GetVariable':
-        return new GetVariableRuntimeNode(node.id, node.data.key || '');
+    case 'GetVariable':
+      return new GetVariableRuntimeNode(node.id, node.data.key || '');
       
-      default:
-        throw new Error(`Unsupported node type: ${node.type}`);
+    default:
+      throw new Error(`Unsupported node type: ${node.type}`);
     }
   }
 

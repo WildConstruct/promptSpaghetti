@@ -66,11 +66,11 @@ export const ExtensionManagerUtils = {
    */
   getExtensionIcon(type: string): string {
     switch (type) {
-      case 'node': return '🔧';
-      case 'ui': return '🎨';
-      case 'transform': return '⚡';
-      case 'storage': return '💾';
-      default: return '📦';
+    case 'node': return '🔧';
+    case 'ui': return '🎨';
+    case 'transform': return '⚡';
+    case 'storage': return '💾';
+    default: return '📦';
     }
   },
 

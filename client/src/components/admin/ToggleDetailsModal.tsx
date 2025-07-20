@@ -38,7 +38,7 @@ interface ToggleDetails {
   name: string;
   description?: string;
   type: string;
-  value: any;
+  value: unknown;
   enabled: boolean;
   claudeImpact: string;
   createdAt: string;
@@ -48,7 +48,7 @@ interface ToggleDetails {
   updatedBy?: string;
   scopes: Array<{
     id: string;
-    rule: any;
+    rule: unknown;
     priority: number;
     createdAt: string;
   }>;
@@ -84,7 +84,9 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
   const [toggle, setToggle] = useState<ToggleDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'config' | 'audit' | 'dependencies' | 'targeting'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    'overview' | 'config' | 'audit' | 'dependencies' | 'targeting'
+  >('overview');
   const [showUserPreview, setShowUserPreview] = useState(false);
 
   useEffect(() => {
@@ -119,69 +121,72 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
 
   const getClaudeImpactDisplay = (impact: string) => {
     switch (impact) {
-      case 'NONE':
-        return { color: 'gray', icon: <Info size={14} />, text: 'No Impact' };
-      case 'PROMPT_COST':
-        return { color: 'yellow', icon: <Shield size={14} />, text: 'Prompt Cost Impact' };
-      case 'MODEL_VERSION':
-        return { color: 'blue', icon: <Zap size={14} />, text: 'Model Version Change' };
-      case 'OUTPUT_QUALITY':
-        return { color: 'green', icon: <Eye size={14} />, text: 'Output Quality Impact' };
-      case 'HALLUCINATION_RISK':
-        return { color: 'red', icon: <AlertTriangle size={14} />, text: 'Hallucination Risk' };
-      default:
-        return { color: 'gray', icon: <Info size={14} />, text: impact };
+    case 'NONE':
+      return { color: 'gray', icon: <Info size={14} />, text: 'No Impact' };
+    case 'PROMPT_COST':
+      return { color: 'yellow', icon: <Shield size={14} />, text: 'Prompt Cost Impact' };
+    case 'MODEL_VERSION':
+      return { color: 'blue', icon: <Zap size={14} />, text: 'Model Version Change' };
+    case 'OUTPUT_QUALITY':
+      return { color: 'green', icon: <Eye size={14} />, text: 'Output Quality Impact' };
+    case 'HALLUCINATION_RISK':
+      return { color: 'red', icon: <AlertTriangle size={14} />, text: 'Hallucination Risk' };
+    default:
+      return { color: 'gray', icon: <Info size={14} />, text: impact };
     }
   };
 
   const formatToggleValue = (toggle: ToggleDetails): JSX.Element => {
     switch (toggle.type) {
-      case 'boolean':
-        return (
-          <div className="toggle-value-display">
-            <span className={`boolean-indicator ${toggle.value.enabled ? 'enabled' : 'disabled'}`}>
-              {toggle.value.enabled ? <CheckCircle size={16} /> : <XCircle size={16} />}
-              {toggle.value.enabled ? 'Enabled' : 'Disabled'}
-            </span>
-          </div>
-        );
+    case 'boolean':
+      return (
+        <div className="toggle-value-display">
+          <span className={`boolean-indicator ${toggle.value.enabled ? 'enabled' : 'disabled'}`}>
+            {toggle.value.enabled ? <CheckCircle size={16} /> : <XCircle size={16} />}
+            {toggle.value.enabled ? 'Enabled' : 'Disabled'}
+          </span>
+        </div>
+      );
         
-      case 'percentage_rollout':
-        return (
-          <div className="toggle-value-display">
-            <div className="percentage-display">
-              <div className="percentage-bar">
-                <div 
-                  className="percentage-fill" 
-                  style={{ width: `${toggle.value.percentage}%` }}
-                />
+    case 'percentage_rollout':
+      return (
+        <div className="toggle-value-display">
+          <div className="percentage-display">
+            <div className="percentage-bar">
+              <div 
+                className="percentage-fill" 
+                style={{ width: `${toggle.value.percentage}%` }}
+              />
+            </div>
+            <span className="percentage-text">{toggle.value.percentage}%</span>
+          </div>
+        </div>
+      );
+        
+    case 'multivariate':
+      return (
+        <div className="toggle-value-display">
+          <div className="variants-display">
+            {toggle.value.variants?.map((
+              variant: { key?: string; value?: unknown; percentage?: number }, 
+              index: number
+            ) => (
+              <div key={index} className="variant-item">
+                <span className="variant-key">{variant.key}</span>
+                <span className="variant-percentage">{variant.percentage}%</span>
+                <span className="variant-value">{JSON.stringify(variant.value)}</span>
               </div>
-              <span className="percentage-text">{toggle.value.percentage}%</span>
-            </div>
+            ))}
           </div>
-        );
+        </div>
+      );
         
-      case 'multivariate':
-        return (
-          <div className="toggle-value-display">
-            <div className="variants-display">
-              {toggle.value.variants?.map((variant: any, index: number) => (
-                <div key={index} className="variant-item">
-                  <span className="variant-key">{variant.key}</span>
-                  <span className="variant-percentage">{variant.percentage}%</span>
-                  <span className="variant-value">{JSON.stringify(variant.value)}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-        
-      default:
-        return (
-          <div className="toggle-value-display">
-            <code className="raw-value">{JSON.stringify(toggle.value, null, 2)}</code>
-          </div>
-        );
+    default:
+      return (
+        <div className="toggle-value-display">
+          <code className="raw-value">{JSON.stringify(toggle.value, null, 2)}</code>
+        </div>
+      );
     }
   };
 
@@ -369,7 +374,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
                       <h3>Scoping Rules</h3>
                       {toggle.scopes.length > 0 ? (
                         <div className="scopes-list">
-                          {toggle.scopes.map((scope, index) => (
+                          {toggle.scopes.map((scope, _index) => (
                             <div key={scope.id} className="scope-item">
                               <div className="scope-header">
                                 <span className="scope-priority">Priority {scope.priority}</span>

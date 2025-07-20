@@ -191,11 +191,11 @@ class ExtensionValidator {
       if (manifest.security.content_security_policy) {
         const csp = manifest.security.content_security_policy;
         
-        if (csp.includes("'unsafe-eval'")) {
+        if (csp.includes('\'unsafe-eval\'')) {
           this.warnings.push('Content Security Policy allows unsafe-eval');
         }
         
-        if (csp.includes("'unsafe-inline'")) {
+        if (csp.includes('\'unsafe-inline\'')) {
           this.warnings.push('Content Security Policy allows unsafe-inline');
         }
         
@@ -347,7 +347,7 @@ class ExtensionValidator {
     }
 
     const securityLevel = securityScore >= 80 ? 'Good' : 
-                         securityScore >= 60 ? 'Moderate' : 'Poor';
+      securityScore >= 60 ? 'Moderate' : 'Poor';
     
     console.log(`   Security Score: ${securityScore}/100 (${securityLevel})`);
     
@@ -364,16 +364,16 @@ class ExtensionValidator {
 
     // Type-specific recommendations
     switch (manifest.extension_type) {
-      case 'node':
-        if (!manifest.runtime?.node_types) {
-          recommendations.push('Specify node_types in runtime configuration');
-        }
-        break;
-      case 'ui':
-        if (!manifest.ui) {
-          recommendations.push('Add ui configuration with themes or components');
-        }
-        break;
+    case 'node':
+      if (!manifest.runtime?.node_types) {
+        recommendations.push('Specify node_types in runtime configuration');
+      }
+      break;
+    case 'ui':
+      if (!manifest.ui) {
+        recommendations.push('Add ui configuration with themes or components');
+      }
+      break;
     }
 
     // Security recommendations
@@ -509,19 +509,19 @@ function main() {
   const command = args[0];
   
   switch (command) {
-    case 'validate':
-      handleValidate(args.slice(1));
-      break;
-    case 'profile':
-      handleProfile(args.slice(1));
-      break;
-    case 'help':
-      showUsage();
-      break;
-    default:
-      console.error(`Unknown command: ${command}`);
-      showUsage();
-      process.exit(1);
+  case 'validate':
+    handleValidate(args.slice(1));
+    break;
+  case 'profile':
+    handleProfile(args.slice(1));
+    break;
+  case 'help':
+    showUsage();
+    break;
+  default:
+    console.error(`Unknown command: ${command}`);
+    showUsage();
+    process.exit(1);
   }
 }
 

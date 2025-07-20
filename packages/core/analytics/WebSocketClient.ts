@@ -343,44 +343,44 @@ export class WebSocketClient extends EventEmitter {
 
       // Handle different message types
       switch (message.type) {
-        case WebSocketMessageType.ANALYTICS_UPDATE:
-          this.emit('analytics_update', message.data);
-          break;
+      case WebSocketMessageType.ANALYTICS_UPDATE:
+        this.emit('analytics_update', message.data);
+        break;
         
-        case WebSocketMessageType.COST_ALERT:
-          this.emit('cost_alert', message.data);
-          break;
+      case WebSocketMessageType.COST_ALERT:
+        this.emit('cost_alert', message.data);
+        break;
         
-        case WebSocketMessageType.BUDGET_ALERT:
-          this.emit('budget_alert', message.data);
-          break;
+      case WebSocketMessageType.BUDGET_ALERT:
+        this.emit('budget_alert', message.data);
+        break;
         
-        case WebSocketMessageType.PERFORMANCE_METRIC:
-          this.emit('performance_metric', message.data);
-          break;
+      case WebSocketMessageType.PERFORMANCE_METRIC:
+        this.emit('performance_metric', message.data);
+        break;
         
-        case WebSocketMessageType.USER_ACTIVITY:
-          this.emit('user_activity', message.data);
-          break;
+      case WebSocketMessageType.USER_ACTIVITY:
+        this.emit('user_activity', message.data);
+        break;
         
-        case WebSocketMessageType.SYSTEM_STATUS:
-          this.emit('system_status', message.data);
-          break;
+      case WebSocketMessageType.SYSTEM_STATUS:
+        this.emit('system_status', message.data);
+        break;
         
-        case WebSocketMessageType.RECOMMENDATION:
-          this.emit('recommendation', message.data);
-          break;
+      case WebSocketMessageType.RECOMMENDATION:
+        this.emit('recommendation', message.data);
+        break;
         
-        case WebSocketMessageType.ERROR:
-          this.emit('server_error', message.data);
-          break;
+      case WebSocketMessageType.ERROR:
+        this.emit('server_error', message.data);
+        break;
         
-        case WebSocketMessageType.HEARTBEAT:
-          // Heartbeat received, connection is alive
-          break;
+      case WebSocketMessageType.HEARTBEAT:
+        // Heartbeat received, connection is alive
+        break;
         
-        default:
-          this.log(`Unknown message type: ${message.type}`);
+      default:
+        this.log(`Unknown message type: ${message.type}`);
       }
 
       // Emit generic message event

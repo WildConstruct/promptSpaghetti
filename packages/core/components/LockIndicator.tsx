@@ -43,35 +43,35 @@ export const LockIndicator: React.FC<LockIndicatorProps> = ({
     }
 
     switch (lock.lock_type) {
-      case 'admin':
-        return {
-          icon: Shield,
-          color: 'text-purple-500',
-          bg: 'bg-purple-100',
-          border: 'border-purple-300'
-        };
-      case 'delete':
-        return {
-          icon: AlertTriangle,
-          color: 'text-red-500',
-          bg: 'bg-red-100',
-          border: 'border-red-300'
-        };
-      case 'state_change':
-        return {
-          icon: Users,
-          color: 'text-orange-500',
-          bg: 'bg-orange-100',
-          border: 'border-orange-300'
-        };
-      case 'edit':
-      default:
-        return {
-          icon: Lock,
-          color: 'text-blue-500',
-          bg: 'bg-blue-100',
-          border: 'border-blue-300'
-        };
+    case 'admin':
+      return {
+        icon: Shield,
+        color: 'text-purple-500',
+        bg: 'bg-purple-100',
+        border: 'border-purple-300'
+      };
+    case 'delete':
+      return {
+        icon: AlertTriangle,
+        color: 'text-red-500',
+        bg: 'bg-red-100',
+        border: 'border-red-300'
+      };
+    case 'state_change':
+      return {
+        icon: Users,
+        color: 'text-orange-500',
+        bg: 'bg-orange-100',
+        border: 'border-orange-300'
+      };
+    case 'edit':
+    default:
+      return {
+        icon: Lock,
+        color: 'text-blue-500',
+        bg: 'bg-blue-100',
+        border: 'border-blue-300'
+      };
     }
   };
 
@@ -204,18 +204,18 @@ export const LockTypeBadge: React.FC<LockTypeBadgeProps> = ({
 
   const getTypeConfig = () => {
     switch (lockType) {
-      case 'admin':
-        return { color: 'bg-purple-100 text-purple-800', label: 'Admin' };
-      case 'delete':
-        return { color: 'bg-red-100 text-red-800', label: 'Delete' };
-      case 'state_change':
-        return { color: 'bg-orange-100 text-orange-800', label: 'State Change' };
-      case 'edit':
-        return { color: 'bg-blue-100 text-blue-800', label: 'Edit' };
-      case 'custom':
-        return { color: 'bg-gray-100 text-gray-800', label: 'Custom' };
-      default:
-        return { color: 'bg-gray-100 text-gray-800', label: lockType };
+    case 'admin':
+      return { color: 'bg-purple-100 text-purple-800', label: 'Admin' };
+    case 'delete':
+      return { color: 'bg-red-100 text-red-800', label: 'Delete' };
+    case 'state_change':
+      return { color: 'bg-orange-100 text-orange-800', label: 'State Change' };
+    case 'edit':
+      return { color: 'bg-blue-100 text-blue-800', label: 'Edit' };
+    case 'custom':
+      return { color: 'bg-gray-100 text-gray-800', label: 'Custom' };
+    default:
+      return { color: 'bg-gray-100 text-gray-800', label: lockType };
     }
   };
 

@@ -6,7 +6,7 @@
 import {
   createBasicPromptTargetingSystem,
   OpenAIAdaptor,
-  MidjourneyAdaptor,
+  MidjourneyAdaptor
 } from '../index';
 
 describe('Prompt Targeting System Integration', () => {
@@ -26,15 +26,15 @@ describe('Prompt Targeting System Integration', () => {
     await openaiAdaptor.initialize({
       openai: {
         apiKey: 'test-key',
-        model: 'gpt-3.5-turbo',
-      },
+        model: 'gpt-3.5-turbo'
+      }
     });
     
     await midjourneyAdaptor.initialize({
       midjourney: {
         version: '6',
-        defaultAspectRatio: '1:1',
-      },
+        defaultAspectRatio: '1:1'
+      }
     });
     
     // Register adaptors
@@ -78,11 +78,11 @@ describe('Prompt Targeting System Integration', () => {
           id: '1',
           type: 'output',
           data: {
-            text: 'Write a creative story about a robot discovering emotions.',
-          },
-        },
+            text: 'Write a creative story about a robot discovering emotions.'
+          }
+        }
       ],
-      edges: [],
+      edges: []
     };
 
     test('should validate OpenAI graph successfully', async () => {
@@ -96,7 +96,7 @@ describe('Prompt Targeting System Integration', () => {
     test('should transform graph to OpenAI format', async () => {
       const result = await system.engine.translate(sampleGraph, 'openai', {
         qualityPreference: 0.8,
-        enableOptimizations: true,
+        enableOptimizations: true
       });
       
       expect(result.platform).toBe('openai');
@@ -115,24 +115,24 @@ describe('Prompt Targeting System Integration', () => {
           id: '1',
           type: 'subject',
           data: {
-            text: 'A majestic dragon flying over a mountain range',
-          },
+            text: 'A majestic dragon flying over a mountain range'
+          }
         },
         {
           id: '2',
           type: 'style',
           data: {
-            style: 'fantasy',
-          },
-        },
+            style: 'fantasy'
+          }
+        }
       ],
       edges: [
         {
           id: 'e1',
           source: '1',
-          target: '2',
-        },
-      ],
+          target: '2'
+        }
+      ]
     };
 
     test('should validate Midjourney graph successfully', async () => {
@@ -146,7 +146,7 @@ describe('Prompt Targeting System Integration', () => {
     test('should transform graph to Midjourney format', async () => {
       const result = await system.engine.translate(sampleGraph, 'midjourney', {
         qualityPreference: 0.9,
-        stylePreference: 'artistic',
+        stylePreference: 'artistic'
       });
       
       expect(result.platform).toBe('midjourney');
@@ -167,10 +167,10 @@ describe('Prompt Targeting System Integration', () => {
             id: '3',
             type: 'aspectRatio',
             data: {
-              aspectRatio: 'landscape',
-            },
-          },
-        ],
+              aspectRatio: 'landscape'
+            }
+          }
+        ]
       };
 
       const result = await system.engine.translate(graphWithAspectRatio, 'midjourney');
@@ -187,11 +187,11 @@ describe('Prompt Targeting System Integration', () => {
           id: '1',
           type: 'output',
           data: {
-            text: 'A creative prompt that works for both text and image generation',
-          },
-        },
+            text: 'A creative prompt that works for both text and image generation'
+          }
+        }
       ],
-      edges: [],
+      edges: []
     };
 
     test('should translate to multiple platforms', async () => {
@@ -227,7 +227,7 @@ describe('Prompt Targeting System Integration', () => {
     test('should handle unsupported platform', async () => {
       const sampleGraph = {
         nodes: [{ id: '1', type: 'output', data: { text: 'test' } }],
-        edges: [],
+        edges: []
       };
       
       const result = await system.engine.validateTranslation(sampleGraph, 'unknown-platform');
@@ -243,11 +243,11 @@ describe('Prompt Targeting System Integration', () => {
             id: '1',
             type: 'output',
             data: {
-              text: 'Write a detailed article about economic policy',
-            },
-          },
+              text: 'Write a detailed article about economic policy'
+            }
+          }
         ],
-        edges: [],
+        edges: []
       };
       
       const midjourneyResult = await system.engine.validateTranslation(textOnlyGraph, 'midjourney');
@@ -260,7 +260,7 @@ describe('Prompt Targeting System Integration', () => {
     test('should track translation performance', async () => {
       const sampleGraph = {
         nodes: [{ id: '1', type: 'output', data: { text: 'test prompt' } }],
-        edges: [],
+        edges: []
       };
       
       const startTime = Date.now();

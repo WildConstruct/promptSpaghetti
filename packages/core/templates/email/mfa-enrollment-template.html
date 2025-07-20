@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptScape - Complete Your MFA Setup</title>
+    <style>
+        /* Reuse styles from verification template with modifications */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        .ExternalClass {
+            width: 100%;
+        }
+        
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+            line-height: 100%;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --background-light: #f8fafc;
+            --border-color: #e5e7eb;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            text-decoration: none;
+        }
+
+        .header-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            margin: 8px 0 0 0;
+            font-weight: 400;
+        }
+
+        .email-content {
+            padding: 40px 24px;
+        }
+
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 24px 0;
+            color: var(--text-primary);
+        }
+
+        .main-message {
+            font-size: 16px;
+            margin: 0 0 32px 0;
+            color: var(--text-secondary);
+        }
+
+        /* Setup progress indicator */
+        .setup-progress {
+            background: #ecfdf5;
+            border: 2px solid #a7f3d0;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+            text-align: center;
+        }
+
+        .progress-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .progress-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--success-color);
+            margin: 0 0 12px 0;
+        }
+
+        .progress-subtitle {
+            font-size: 14px;
+            color: #166534;
+            margin: 0;
+        }
+
+        /* Verification code display */
+        .verification-code-container {
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px 24px;
+            text-align: center;
+            margin: 32px 0;
+        }
+
+        .code-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: 0 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .verification-code {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--success-color);
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            letter-spacing: 8px;
+            margin: 0;
+            padding: 16px;
+            background: #ffffff;
+            border: 2px solid var(--success-color);
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 280px;
+        }
+
+        .code-validity {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 16px 0 0 0;
+            font-style: italic;
+        }
+
+        /* Setup instructions */
+        .setup-instructions {
+            background: #f0f9ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 24px;
+            margin: 32px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .instructions-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0 0 16px 0;
+        }
+
+        .instructions-list {
+            margin: 0;
+            padding-left: 20px;
+            color: #0c4a6e;
+        }
+
+        .instructions-list li {
+            margin-bottom: 12px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Benefits section */
+        .benefits-section {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+
+        .benefits-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #92400e;
+            margin: 0 0 16px 0;
+            text-align: center;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 16px;
+        }
+
+        .benefit-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .benefit-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            margin: 0 0 4px 0;
+        }
+
+        .benefit-description {
+            font-size: 12px;
+            color: #a16207;
+            margin: 0;
+        }
+
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--success-color);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background-color 0.2s ease;
+        }
+
+        .cta-button:hover {
+            background: #047857;
+        }
+
+        /* Support section */
+        .support-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 24px;
+            background: var(--background-light);
+            border-radius: 8px;
+        }
+
+        .support-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 12px 0;
+            color: var(--text-primary);
+        }
+
+        .support-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0 0 20px 0;
+        }
+
+        .support-button {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .support-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* Footer */
+        .email-footer {
+            background: #f8fafc;
+            padding: 32px 24px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .footer-links {
+            margin: 16px 0;
+        }
+
+        .footer-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 16px;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-legal {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 24px;
+        }
+
+        /* Responsive design */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+            }
+            
+            .email-content {
+                padding: 24px 16px !important;
+            }
+            
+            .email-header {
+                padding: 24px 16px !important;
+            }
+            
+            .verification-code {
+                font-size: 28px !important;
+                letter-spacing: 4px !important;
+                min-width: auto !important;
+                padding: 12px !important;
+            }
+            
+            .verification-code-container {
+                padding: 24px 16px !important;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .setup-instructions,
+            .benefits-section,
+            .support-section {
+                margin-left: -16px !important;
+                margin-right: -16px !important;
+                border-radius: 0 !important;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .email-container {
+                background-color: #1f2937 !important;
+                color: #f9fafb !important;
+            }
+            
+            .verification-code-container {
+                background: #374151 !important;
+                border-color: #4b5563 !important;
+            }
+            
+            .verification-code {
+                background: #1f2937 !important;
+                color: #34d399 !important;
+                border-color: #34d399 !important;
+            }
+            
+            .email-footer {
+                background: #111827 !important;
+                border-color: #374151 !important;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .email-container {
+                box-shadow: none !important;
+                background: white !important;
+            }
+            
+            .cta-button,
+            .support-button,
+            .footer-links {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 20px; background-color: #f1f5f9;">
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1 class="logo">PromptScape</h1>
+            <p class="header-subtitle">Complete Your Security Setup</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="email-content">
+            <!-- Setup Progress -->
+            <div class="setup-progress">
+                <span class="progress-icon">🔒</span>
+                <h2 class="progress-title">Almost There!</h2>
+                <p class="progress-subtitle">Complete your multi-factor authentication setup</p>
+            </div>
+
+            <h2 class="greeting">Hi {{displayName}},</h2>
+            
+            <p class="main-message">
+                You're just one step away from securing your PromptScape account with multi-factor authentication. 
+                Use the verification code below to complete your MFA setup.
+            </p>
+
+            <!-- Verification Code Display -->
+            <div class="verification-code-container">
+                <p class="code-label">Your Setup Verification Code</p>
+                <div class="verification-code">{{code}}</div>
+                <p class="code-validity">This code expires in {{expiryMinutes}} minutes</p>
+            </div>
+
+            <!-- Setup Instructions -->
+            <div class="setup-instructions">
+                <h3 class="instructions-title">Complete Your MFA Setup:</h3>
+                <ol class="instructions-list">
+                    <li>Return to the PromptScape MFA setup page</li>
+                    <li>Enter this 6-digit verification code exactly as shown</li>
+                    <li>Complete the setup process within {{expiryMinutes}} minutes</li>
+                    <li>Save your backup codes in a secure location</li>
+                </ol>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="benefits-section">
+                <h3 class="benefits-title">Why Enable Multi-Factor Authentication?</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🛡️</span>
+                        <h4 class="benefit-title">Enhanced Security</h4>
+                        <p class="benefit-description">Protect against password breaches</p>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">⚡</span>
+                        <h4 class="benefit-title">Quick Access</h4>
+                        <p class="benefit-description">Fast verification process</p>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">📱</span>
+                        <h4 class="benefit-title">Multiple Options</h4>
+                        <p class="benefit-description">Email, SMS, or authenticator apps</p>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🔄</span>
+                        <h4 class="benefit-title">Backup Methods</h4>
+                        <p class="benefit-description">Recovery codes for emergencies</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <a href="{{setupUrl}}" class="cta-button">
+                    Complete MFA Setup
+                </a>
+            </div>
+
+            <!-- Additional Info -->
+            <p style="font-size: 14px; color: #6b7280; margin: 24px 0;">
+                <strong>Important:</strong> Once MFA is enabled, you'll need to use one of your configured 
+                authentication methods every time you log in. Make sure to save your backup codes 
+                in a secure location for account recovery.
+            </p>
+
+            <!-- Troubleshooting -->
+            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 20px; margin: 32px 0;">
+                <h3 style="font-size: 16px; font-weight: 600; color: #0369a1; margin: 0 0 16px 0;">
+                    Setup Tips:
+                </h3>
+                <div style="margin-bottom: 12px; font-size: 14px; color: #0c4a6e;">
+                    <strong>Code not working?</strong> Make sure you're entering all 6 digits exactly as shown.
+                </div>
+                <div style="margin-bottom: 12px; font-size: 14px; color: #0c4a6e;">
+                    <strong>Code expired?</strong> Start the MFA setup process again to get a new code.
+                </div>
+                <div style="margin-bottom: 12px; font-size: 14px; color: #0c4a6e;">
+                    <strong>Need help?</strong> Our support team can guide you through the setup process.
+                </div>
+            </div>
+
+            <!-- Support Section -->
+            <div class="support-section">
+                <h3 class="support-title">Need Assistance?</h3>
+                <p class="support-message">
+                    Our security team is here to help with your MFA setup.
+                </p>
+                <a href="mailto:security@promptscape.com" class="support-button">
+                    Get Setup Help
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <div class="footer-content">
+                <p>This is an automated message from PromptScape Security.</p>
+                
+                <div class="footer-links">
+                    <a href="#" class="footer-link">MFA Guide</a>
+                    <a href="#" class="footer-link">Security Center</a>
+                    <a href="#" class="footer-link">Help Center</a>
+                </div>
+                
+                <p class="footer-legal">
+                    © 2025 PromptScape, Inc. All rights reserved.<br>
+                    This email was sent to {{emailAddress}} for account security setup.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tracking pixel for email analytics (optional) -->
+    <img src="{{trackingPixelUrl}}" width="1" height="1" style="display:none;" alt="">
+</body>
+</html>

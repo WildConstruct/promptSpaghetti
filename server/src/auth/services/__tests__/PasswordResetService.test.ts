@@ -15,7 +15,7 @@ jest.mock('../AuditService');
 jest.mock('../RateLimitService');
 jest.mock('crypto', () => ({
   randomBytes: jest.fn(() => ({ toString: () => 'mock-token-hex' })),
-  createHash: jest.fn(() => ({ update: jest.fn().mockReturnThis(), digest: () => 'mock-hash' })),
+  createHash: jest.fn(() => ({ update: jest.fn().mockReturnThis(), digest: () => 'mock-hash' }))
 }));
 
 describe('PasswordResetService', () => {
@@ -30,13 +30,13 @@ describe('PasswordResetService', () => {
     email: 'user@example.com',
     first_name: 'John',
     status: 'active',
-    hashed_password: 'hashed-password',
+    hashed_password: 'hashed-password'
   };
 
   const mockClientInfo = {
     userAgent: 'Mozilla/5.0 Test',
     ipAddress: '192.168.1.1',
-    fingerprint: 'test-fingerprint',
+    fingerprint: 'test-fingerprint'
   };
 
   beforeEach(() => {
@@ -64,7 +64,7 @@ describe('PasswordResetService', () => {
   describe('requestPasswordReset', () => {
     const validRequest: PasswordResetRequest = {
       email: 'user@example.com',
-      clientInfo: mockClientInfo,
+      clientInfo: mockClientInfo
     };
 
     it('should successfully process password reset request for valid user', async () => {
@@ -85,7 +85,7 @@ describe('PasswordResetService', () => {
         resetUrl: expect.stringContaining('token='),
         expiresAt: expect.any(Date),
         ipAddress: mockClientInfo.ipAddress,
-        userAgent: mockClientInfo.userAgent,
+        userAgent: mockClientInfo.userAgent
       });
       expect(mockAudit.logSecurityEvent).toHaveBeenCalledWith({
         type: 'PASSWORD_RESET_REQUESTED',
@@ -94,7 +94,7 @@ describe('PasswordResetService', () => {
         ipAddress: mockClientInfo.ipAddress,
         userAgent: mockClientInfo.userAgent,
         success: true,
-        metadata: expect.any(Object),
+        metadata: expect.any(Object)
       });
     });
 
@@ -113,7 +113,7 @@ describe('PasswordResetService', () => {
         ipAddress: mockClientInfo.ipAddress,
         userAgent: mockClientInfo.userAgent,
         success: false,
-        metadata: { reason: 'User not found' },
+        metadata: { reason: 'User not found' }
       });
     });
 
@@ -132,7 +132,7 @@ describe('PasswordResetService', () => {
         ipAddress: mockClientInfo.ipAddress,
         userAgent: mockClientInfo.userAgent,
         success: false,
-        metadata: { accountStatus: 'suspended' },
+        metadata: { accountStatus: 'suspended' }
       });
     });
 
@@ -148,7 +148,7 @@ describe('PasswordResetService', () => {
     it('should revoke oldest token when max tokens reached', async () => {
       const activeTokens = Array(5).fill(null).map((_, i) => ({
         token: `token-${i}`,
-        created_at: new Date(Date.now() - i * 1000),
+        created_at: new Date(Date.now() - i * 1000)
       }));
 
       mockDb.findUserByEmail = jest.fn().mockResolvedValue(mockUser);
@@ -170,7 +170,7 @@ describe('PasswordResetService', () => {
     it('should validate input data', async () => {
       const invalidRequest = {
         email: 'invalid-email',
-        clientInfo: mockClientInfo,
+        clientInfo: mockClientInfo
       };
 
       await expect(passwordResetService.requestPasswordReset(invalidRequest as any))
@@ -188,7 +188,7 @@ describe('PasswordResetService', () => {
         expires_at: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now
         used_at: null,
         revoked_at: null,
-        created_at: new Date(),
+        created_at: new Date()
       };
 
       mockDb.query = jest.fn().mockResolvedValue({ rows: [tokenRecord] });
@@ -218,7 +218,7 @@ describe('PasswordResetService', () => {
         expires_at: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
         used_at: null,
         revoked_at: null,
-        created_at: new Date(),
+        created_at: new Date()
       };
 
       mockDb.query = jest.fn()
@@ -239,7 +239,7 @@ describe('PasswordResetService', () => {
         expires_at: new Date(Date.now() + 60 * 60 * 1000),
         used_at: new Date(),
         revoked_at: null,
-        created_at: new Date(),
+        created_at: new Date()
       };
 
       mockDb.query = jest.fn().mockResolvedValue({ rows: [usedTokenRecord] });
@@ -258,7 +258,7 @@ describe('PasswordResetService', () => {
         expires_at: new Date(Date.now() + 60 * 60 * 1000),
         used_at: null,
         revoked_at: null,
-        created_at: new Date(),
+        created_at: new Date()
       };
 
       const inactiveUser = { ...mockUser, status: 'suspended' };
@@ -279,14 +279,14 @@ describe('PasswordResetService', () => {
       token: 'valid-token',
       newPassword: 'NewSecurePassword123!',
       confirmPassword: 'NewSecurePassword123!',
-      clientInfo: mockClientInfo,
+      clientInfo: mockClientInfo
     };
 
     beforeEach(() => {
       // Mock argon2 module
       jest.doMock('argon2', () => ({
         hash: jest.fn().mockResolvedValue('hashed-new-password'),
-        argon2id: 'argon2id',
+        argon2id: 'argon2id'
       }), { virtual: true });
     });
 
@@ -298,7 +298,7 @@ describe('PasswordResetService', () => {
         expires_at: new Date(Date.now() + 60 * 60 * 1000),
         used_at: null,
         revoked_at: null,
-        created_at: new Date(),
+        created_at: new Date()
       };
 
       mockDb.query = jest.fn()
@@ -308,7 +308,7 @@ describe('PasswordResetService', () => {
       mockDb.findUserById = jest.fn().mockResolvedValue(mockUser);
       mockDb.getClient = jest.fn().mockResolvedValue({
         query: jest.fn().mockResolvedValue({ rowCount: 1 }),
-        release: jest.fn(),
+        release: jest.fn()
       });
 
       const result = await passwordResetService.confirmPasswordReset(validConfirmation);
@@ -325,8 +325,8 @@ describe('PasswordResetService', () => {
         success: true,
         metadata: expect.objectContaining({
           sessionsInvalidated: true,
-          passwordStrengthScore: expect.any(Number),
-        }),
+          passwordStrengthScore: expect.any(Number)
+        })
       });
     });
 
@@ -334,7 +334,7 @@ describe('PasswordResetService', () => {
       const weakConfirmation = {
         ...validConfirmation,
         newPassword: 'weak',
-        confirmPassword: 'weak',
+        confirmPassword: 'weak'
       };
 
       await expect(passwordResetService.confirmPasswordReset(weakConfirmation))
@@ -344,18 +344,18 @@ describe('PasswordResetService', () => {
     it('should reject mismatched passwords', async () => {
       const mismatchedConfirmation = {
         ...validConfirmation,
-        confirmPassword: 'DifferentPassword123!',
+        confirmPassword: 'DifferentPassword123!'
       };
 
       await expect(passwordResetService.confirmPasswordReset(mismatchedConfirmation))
-        .rejects.toThrow("Passwords don't match");
+        .rejects.toThrow('Passwords don\'t match');
     });
 
     it('should reject common passwords', async () => {
       const commonPasswordConfirmation = {
         ...validConfirmation,
         newPassword: 'password123',
-        confirmPassword: 'password123',
+        confirmPassword: 'password123'
       };
 
       // Mock token validation
@@ -365,7 +365,7 @@ describe('PasswordResetService', () => {
         expires_at: new Date(Date.now() + 60 * 60 * 1000),
         used_at: null,
         revoked_at: null,
-        created_at: new Date(),
+        created_at: new Date()
       };
 
       mockDb.query = jest.fn().mockResolvedValueOnce({ rows: [tokenRecord] });
@@ -379,7 +379,7 @@ describe('PasswordResetService', () => {
       const emailPasswordConfirmation = {
         ...validConfirmation,
         newPassword: 'user@example.com123!',
-        confirmPassword: 'user@example.com123!',
+        confirmPassword: 'user@example.com123!'
       };
 
       // Mock token validation
@@ -389,7 +389,7 @@ describe('PasswordResetService', () => {
         expires_at: new Date(Date.now() + 60 * 60 * 1000),
         used_at: null,
         revoked_at: null,
-        created_at: new Date(),
+        created_at: new Date()
       };
 
       mockDb.query = jest.fn().mockResolvedValueOnce({ rows: [tokenRecord] });
@@ -407,7 +407,7 @@ describe('PasswordResetService', () => {
         expires_at: new Date(Date.now() + 60 * 60 * 1000),
         used_at: null,
         revoked_at: null,
-        created_at: new Date(),
+        created_at: new Date()
       };
 
       mockDb.query = jest.fn().mockResolvedValueOnce({ rows: [tokenRecord] });
@@ -433,7 +433,7 @@ describe('PasswordResetService', () => {
         ipAddress: mockClientInfo.ipAddress,
         userAgent: mockClientInfo.userAgent,
         success: false,
-        metadata: { error: 'Invalid reset token' },
+        metadata: { error: 'Invalid reset token' }
       });
     });
   });
@@ -446,15 +446,15 @@ describe('PasswordResetService', () => {
           ip_address: '192.168.1.1',
           user_agent: 'Mozilla/5.0',
           completed: true,
-          revoked: false,
+          revoked: false
         },
         {
           created_at: new Date(Date.now() - 60 * 60 * 1000),
           ip_address: '192.168.1.2',
           user_agent: 'Chrome/90.0',
           completed: false,
-          revoked: true,
-        },
+          revoked: true
+        }
       ];
 
       mockDb.query = jest.fn().mockResolvedValue({ rows: mockAttempts });
@@ -467,7 +467,7 @@ describe('PasswordResetService', () => {
         ipAddress: '192.168.1.1',
         userAgent: 'Mozilla/5.0',
         completed: true,
-        revoked: false,
+        revoked: false
       });
     });
   });
@@ -484,7 +484,7 @@ describe('PasswordResetService', () => {
 
       await passwordResetService.requestPasswordReset({
         email: 'user@example.com',
-        clientInfo: mockClientInfo,
+        clientInfo: mockClientInfo
       });
 
       expect(mockCrypto.createHash).toHaveBeenCalledWith('sha256');
@@ -505,7 +505,7 @@ describe('PasswordResetService', () => {
 
       await passwordResetService.requestPasswordReset({
         email: 'user@example.com',
-        clientInfo: mockClientInfo,
+        clientInfo: mockClientInfo
       });
 
       expect(mockCrypto.randomBytes).toHaveBeenCalledWith(32);
@@ -520,7 +520,7 @@ describe('PasswordResetService', () => {
 
       await passwordResetService.requestPasswordReset({
         email: 'user@example.com',
-        clientInfo: mockClientInfo,
+        clientInfo: mockClientInfo
       });
 
       expect(mockDb.query).toHaveBeenCalledWith(
@@ -536,7 +536,7 @@ describe('PasswordResetService', () => {
 
       await expect(passwordResetService.requestPasswordReset({
         email: 'user@example.com',
-        clientInfo: mockClientInfo,
+        clientInfo: mockClientInfo
       })).rejects.toThrow('Database error');
 
       expect(mockAudit.logSecurityEvent).toHaveBeenCalledWith({
@@ -546,7 +546,7 @@ describe('PasswordResetService', () => {
         ipAddress: mockClientInfo.ipAddress,
         userAgent: mockClientInfo.userAgent,
         success: false,
-        metadata: { error: 'Database error' },
+        metadata: { error: 'Database error' }
       });
     });
 
@@ -560,7 +560,7 @@ describe('PasswordResetService', () => {
 
       await expect(passwordResetService.requestPasswordReset({
         email: 'user@example.com',
-        clientInfo: mockClientInfo,
+        clientInfo: mockClientInfo
       })).rejects.toThrow('Email service error');
     });
   });

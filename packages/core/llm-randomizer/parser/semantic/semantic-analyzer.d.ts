@@ -22,28 +22,97 @@ export declare class SemanticAnalyzer {
     private errors;
     private warnings;
     constructor();
+    /**
+     * Analyze AST and build validated Graph object
+     */
     analyze(ast: GraphAST): SemanticAnalysisResult;
+    /**
+     * Reset analyzer state
+     */
     private reset;
+    /**
+     * Build analysis context from AST
+     */
     private buildContext;
+    /**
+     * Add edge to context maps
+     */
     private addEdgeToContext;
+    /**
+     * Validate semantic correctness
+     */
     private validateSemantics;
+    /**
+     * Validate format version
+     */
     private validateVersion;
+    /**
+     * Validate individual node
+     */
     private validateNode;
+    /**
+     * Validate node-specific properties
+     */
     private validateNodeProperties;
+    /**
+     * Validate WeightedChoice properties
+     */
     private validateWeightedChoiceProperties;
+    /**
+     * Validate Conditional properties
+     */
     private validateConditionalProperties;
+    /**
+     * Validate Sequential properties
+     */
     private validateSequentialProperties;
+    /**
+     * Validate Markov properties
+     */
     private validateMarkovProperties;
+    /**
+     * Validate Variable properties
+     */
     private validateVariableProperties;
+    /**
+     * Validate Include properties
+     */
     private validateIncludeProperties;
+    /**
+     * Validate PythonTransform properties
+     */
     private validatePythonTransformProperties;
+    /**
+     * Validate edge reference
+     */
     private validateEdge;
+    /**
+     * Validate overall graph structure
+     */
     private validateGraphStructure;
+    /**
+     * Detect cycles in the graph using DFS
+     */
     private detectCycles;
+    /**
+     * Validate presence of output nodes
+     */
     private validateOutputNodes;
+    /**
+     * Detect unreachable nodes
+     */
     private detectUnreachableNodes;
+    /**
+     * Build Graph object from validated AST
+     */
     private buildGraph;
+    /**
+     * Build Node object from AST node
+     */
     private buildNodeFromAST;
+    /**
+     * Helper methods
+     */
     private isValidNodeId;
     private hasBlockingErrors;
     private addError;

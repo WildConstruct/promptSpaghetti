@@ -101,25 +101,25 @@ export class SemanticVersion {
    */
   public getNextVersion(releaseType: ReleaseType): SemanticVersion {
     switch (releaseType) {
-      case 'major':
-        return new SemanticVersion(`${this.major + 1}.0.0`);
-      case 'minor':
-        return new SemanticVersion(`${this.major}.${this.minor + 1}.0`);
-      case 'patch':
-        return new SemanticVersion(`${this.major}.${this.minor}.${this.patch + 1}`);
-      case 'prerelease':
-        if (this.prerelease.length === 0) {
-          return new SemanticVersion(`${this.major}.${this.minor}.${this.patch + 1}-alpha.0`);
-        }
-        const lastPre = this.prerelease[this.prerelease.length - 1];
-        const preNum = parseInt(lastPre, 10);
-        if (!isNaN(preNum)) {
-          const newPre = [...this.prerelease.slice(0, -1), (preNum + 1).toString()];
-          return new SemanticVersion(`${this.major}.${this.minor}.${this.patch}-${newPre.join('.')}`);
-        }
-        return new SemanticVersion(`${this.major}.${this.minor}.${this.patch}-${this.prerelease.join('.')}.1`);
-      default:
-        throw new Error(`Unknown release type: ${releaseType}`);
+    case 'major':
+      return new SemanticVersion(`${this.major + 1}.0.0`);
+    case 'minor':
+      return new SemanticVersion(`${this.major}.${this.minor + 1}.0`);
+    case 'patch':
+      return new SemanticVersion(`${this.major}.${this.minor}.${this.patch + 1}`);
+    case 'prerelease':
+      if (this.prerelease.length === 0) {
+        return new SemanticVersion(`${this.major}.${this.minor}.${this.patch + 1}-alpha.0`);
+      }
+      const lastPre = this.prerelease[this.prerelease.length - 1];
+      const preNum = parseInt(lastPre, 10);
+      if (!isNaN(preNum)) {
+        const newPre = [...this.prerelease.slice(0, -1), (preNum + 1).toString()];
+        return new SemanticVersion(`${this.major}.${this.minor}.${this.patch}-${newPre.join('.')}`);
+      }
+      return new SemanticVersion(`${this.major}.${this.minor}.${this.patch}-${this.prerelease.join('.')}.1`);
+    default:
+      throw new Error(`Unknown release type: ${releaseType}`);
     }
   }
 
@@ -218,12 +218,12 @@ export class VersionRange {
           satisfies: (v: SemanticVersion) => {
             const cmp = v.compareTo(version);
             switch (op) {
-              case '>=': return cmp >= 0;
-              case '<=': return cmp <= 0;
-              case '>': return cmp > 0;
-              case '<': return cmp < 0;
-              case '=': return cmp === 0;
-              default: return false;
+            case '>=': return cmp >= 0;
+            case '<=': return cmp <= 0;
+            case '>': return cmp > 0;
+            case '<': return cmp < 0;
+            case '=': return cmp === 0;
+            default: return false;
             }
           }
         };

@@ -84,7 +84,7 @@ export function getDatabaseStats() {
       totalHistory: db.prepare('SELECT COUNT(*) as count FROM correction_rule_history').get(),
       totalStatistics: db.prepare('SELECT COUNT(*) as count FROM correction_statistics').get(),
       totalSets: db.prepare('SELECT COUNT(*) as count FROM correction_sets').get(),
-      databaseSize: db.prepare('SELECT page_count * page_size as size FROM pragma_page_count(), pragma_page_size()').get(),
+      databaseSize: db.prepare('SELECT page_count * page_size as size FROM pragma_page_count(), pragma_page_size()').get()
     };
     
     return stats;

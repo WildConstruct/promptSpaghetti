@@ -308,7 +308,7 @@ export const GraphPreview: React.FC<GraphPreviewProps> = ({
                 y1={visualNodes.find(n => n.id === edge.source)?.y || 0}
                 x2={visualNodes.find(n => n.id === edge.target)?.x || 0}
                 y2={visualNodes.find(n => n.id === edge.target)?.y || 0}
-                stroke={edge.isSelected ? "#007bff" : "#666"}
+                stroke={edge.isSelected ? '#007bff' : '#666'}
                 strokeWidth={edge.isSelected ? 3 : 2}
                 markerEnd="url(#arrowhead)"
                 className={`edge ${edge.isSelected ? 'selected' : ''}`}
@@ -325,7 +325,7 @@ export const GraphPreview: React.FC<GraphPreviewProps> = ({
                 <circle
                   r={Math.max(20, Math.min(40, 15 + node.connections * 3))}
                   fill={getNodeColor(node.type)}
-                  stroke={node.isSelected ? "#007bff" : "#333"}
+                  stroke={node.isSelected ? '#007bff' : '#333'}
                   strokeWidth={node.isSelected ? 3 : 2}
                   className={`node node-type-${node.type.toLowerCase()} ${node.isSelected ? 'selected' : ''}`}
                   onClick={() => handleNodeClick(node.id)}

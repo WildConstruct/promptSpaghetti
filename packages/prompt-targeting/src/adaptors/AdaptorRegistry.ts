@@ -7,7 +7,7 @@ import {
   ModelAdaptor,
   AdaptorRegistry,
   PlatformCapabilities,
-  AdaptorError,
+  AdaptorError
 } from '../types';
 import { EventEmitter } from 'events';
 import semver from 'semver';
@@ -452,7 +452,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
     capabilityCount: number;
     adaptorsByPlatform: Record<string, number>;
     mostCommonCapabilities: Array<{ capability: string; count: number }>;
-  } {
+    } {
     const adaptorsByPlatform: Record<string, number> = {};
     this.platformIndex.forEach((adaptors, platform) => {
       adaptorsByPlatform[platform] = adaptors.size;
@@ -467,7 +467,7 @@ export class DefaultAdaptorRegistry extends EventEmitter implements AdaptorRegis
       platformCount: this.platformIndex.size,
       capabilityCount: this.capabilityIndex.size,
       adaptorsByPlatform,
-      mostCommonCapabilities: capabilityCounts.slice(0, 10),
+      mostCommonCapabilities: capabilityCounts.slice(0, 10)
     };
   }
 }

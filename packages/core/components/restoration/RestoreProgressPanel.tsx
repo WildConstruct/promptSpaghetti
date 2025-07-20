@@ -13,7 +13,7 @@ import {
   List,
   Collapse,
   Tooltip,
-  Modal,
+  Modal
 } from 'antd';
 import {
   LoadingOutlined,
@@ -24,11 +24,11 @@ import {
   InfoCircleOutlined,
   ClockCircleOutlined,
   EditOutlined,
-  ExclamationCircleOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { 
   RestorationProgressResponse,
-  RestorationStatus,
+  RestorationStatus
 } from '../../types/restoration';
 
 const { Title, Text } = Typography;
@@ -43,55 +43,55 @@ interface RestoreProgressPanelProps {
 export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({
   progress,
   onCancel,
-  showDetails = false,
+  showDetails = false
 }) => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState(showDetails);
 
   const getStatusIcon = (status: RestorationStatus) => {
     switch (status) {
-      case 'pending':
-        return <ClockCircleOutlined style={{ color: '#fa8c16' }} />;
-      case 'in_progress':
-        return <LoadingOutlined style={{ color: '#1890ff' }} />;
-      case 'completed':
-        return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
-      case 'failed':
-        return <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
-      case 'cancelled':
-        return <StopOutlined style={{ color: '#d9d9d9' }} />;
-      default:
-        return <InfoCircleOutlined />;
+    case 'pending':
+      return <ClockCircleOutlined style={{ color: '#fa8c16' }} />;
+    case 'in_progress':
+      return <LoadingOutlined style={{ color: '#1890ff' }} />;
+    case 'completed':
+      return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
+    case 'failed':
+      return <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
+    case 'cancelled':
+      return <StopOutlined style={{ color: '#d9d9d9' }} />;
+    default:
+      return <InfoCircleOutlined />;
     }
   };
 
   const getStatusColor = (status: RestorationStatus) => {
     switch (status) {
-      case 'pending':
-        return 'warning';
-      case 'in_progress':
-        return 'processing';
-      case 'completed':
-        return 'success';
-      case 'failed':
-        return 'error';
-      case 'cancelled':
-        return 'default';
-      default:
-        return 'default';
+    case 'pending':
+      return 'warning';
+    case 'in_progress':
+      return 'processing';
+    case 'completed':
+      return 'success';
+    case 'failed':
+      return 'error';
+    case 'cancelled':
+      return 'default';
+    default:
+      return 'default';
     }
   };
 
   const getProgressStatus = () => {
     switch (progress.status) {
-      case 'completed':
-        return 'success';
-      case 'failed':
-        return 'exception';
-      case 'cancelled':
-        return 'exception';
-      default:
-        return 'active';
+    case 'completed':
+      return 'success';
+    case 'failed':
+      return 'exception';
+    case 'cancelled':
+      return 'exception';
+    default:
+      return 'active';
     }
   };
 
@@ -274,7 +274,7 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({
                   { label: 'Total Operations', value: progress.totalOperations },
                   { label: 'Completed Operations', value: progress.operationsCompleted },
                   { label: 'Remaining Operations', value: progress.totalOperations - progress.operationsCompleted },
-                  { label: 'Success Rate', value: `${Math.round((progress.operationsCompleted / progress.totalOperations) * 100)}%` },
+                  { label: 'Success Rate', value: `${Math.round((progress.operationsCompleted / progress.totalOperations) * 100)}%` }
                 ]}
                 renderItem={(item) => (
                   <List.Item>
@@ -294,7 +294,7 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({
                   { label: 'Total Conflicts', value: progress.totalConflicts },
                   { label: 'Resolved Conflicts', value: progress.conflictsResolved },
                   { label: 'Remaining Conflicts', value: progress.totalConflicts - progress.conflictsResolved },
-                  { label: 'Resolution Rate', value: progress.totalConflicts > 0 ? `${Math.round((progress.conflictsResolved / progress.totalConflicts) * 100)}%` : 'N/A' },
+                  { label: 'Resolution Rate', value: progress.totalConflicts > 0 ? `${Math.round((progress.conflictsResolved / progress.totalConflicts) * 100)}%` : 'N/A' }
                 ]}
                 renderItem={(item) => (
                   <List.Item>
@@ -314,7 +314,7 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({
                   { label: 'Restoration ID', value: progress.restorationAttemptId },
                   { label: 'Status', value: progress.status },
                   { label: 'Current Operation', value: progress.currentOperation || 'N/A' },
-                  { label: 'Estimated Time Remaining', value: progress.estimatedTimeRemaining ? formatTime(progress.estimatedTimeRemaining) : 'N/A' },
+                  { label: 'Estimated Time Remaining', value: progress.estimatedTimeRemaining ? formatTime(progress.estimatedTimeRemaining) : 'N/A' }
                 ]}
                 renderItem={(item) => (
                   <List.Item>

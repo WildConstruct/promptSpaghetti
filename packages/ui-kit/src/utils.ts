@@ -79,14 +79,14 @@ export function createResponsiveStyles<T>(
 
   // Tablet breakpoint
   if (responsiveValue.tablet !== undefined) {
-    styles[`@media (min-width: 768px)`] = {
+    styles['@media (min-width: 768px)'] = {
       [property]: transform ? transform(responsiveValue.tablet) : responsiveValue.tablet
     };
   }
 
   // Desktop breakpoint
   if (responsiveValue.desktop !== undefined) {
-    styles[`@media (min-width: 1024px)`] = {
+    styles['@media (min-width: 1024px)'] = {
       [property]: transform ? transform(responsiveValue.desktop) : responsiveValue.desktop
     };
   }
@@ -152,86 +152,86 @@ export function createButtonVariantStyles(
   };
 
   switch (variant) {
-    case 'primary':
-      return {
-        ...baseStyles,
-        backgroundColor: theme.colors.primary,
-        color: theme.colors.background,
-        '&:hover:not(:disabled)': {
-          backgroundColor: theme.colors.secondary
-        },
-        '&:disabled': {
-          backgroundColor: theme.colors.border,
-          color: theme.colors.textSecondary,
-          cursor: 'not-allowed'
-        }
-      };
+  case 'primary':
+    return {
+      ...baseStyles,
+      backgroundColor: theme.colors.primary,
+      color: theme.colors.background,
+      '&:hover:not(:disabled)': {
+        backgroundColor: theme.colors.secondary
+      },
+      '&:disabled': {
+        backgroundColor: theme.colors.border,
+        color: theme.colors.textSecondary,
+        cursor: 'not-allowed'
+      }
+    };
 
-    case 'secondary':
-      return {
-        ...baseStyles,
+  case 'secondary':
+    return {
+      ...baseStyles,
+      backgroundColor: theme.colors.surface,
+      color: theme.colors.text,
+      border: `1px solid ${theme.colors.border}`,
+      '&:hover:not(:disabled)': {
+        backgroundColor: theme.colors.border
+      },
+      '&:disabled': {
         backgroundColor: theme.colors.surface,
-        color: theme.colors.text,
-        border: `1px solid ${theme.colors.border}`,
-        '&:hover:not(:disabled)': {
-          backgroundColor: theme.colors.border
-        },
-        '&:disabled': {
-          backgroundColor: theme.colors.surface,
-          color: theme.colors.textSecondary,
-          cursor: 'not-allowed'
-        }
-      };
+        color: theme.colors.textSecondary,
+        cursor: 'not-allowed'
+      }
+    };
 
-    case 'outline':
-      return {
-        ...baseStyles,
-        backgroundColor: 'transparent',
-        color: theme.colors.primary,
-        border: `1px solid ${theme.colors.primary}`,
-        '&:hover:not(:disabled)': {
-          backgroundColor: theme.colors.primary,
-          color: theme.colors.background
-        },
-        '&:disabled': {
-          borderColor: theme.colors.border,
-          color: theme.colors.textSecondary,
-          cursor: 'not-allowed'
-        }
-      };
+  case 'outline':
+    return {
+      ...baseStyles,
+      backgroundColor: 'transparent',
+      color: theme.colors.primary,
+      border: `1px solid ${theme.colors.primary}`,
+      '&:hover:not(:disabled)': {
+        backgroundColor: theme.colors.primary,
+        color: theme.colors.background
+      },
+      '&:disabled': {
+        borderColor: theme.colors.border,
+        color: theme.colors.textSecondary,
+        cursor: 'not-allowed'
+      }
+    };
 
-    case 'ghost':
-      return {
-        ...baseStyles,
-        backgroundColor: 'transparent',
-        color: theme.colors.text,
-        '&:hover:not(:disabled)': {
-          backgroundColor: theme.colors.surface
-        },
-        '&:disabled': {
-          color: theme.colors.textSecondary,
-          cursor: 'not-allowed'
-        }
-      };
+  case 'ghost':
+    return {
+      ...baseStyles,
+      backgroundColor: 'transparent',
+      color: theme.colors.text,
+      '&:hover:not(:disabled)': {
+        backgroundColor: theme.colors.surface
+      },
+      '&:disabled': {
+        color: theme.colors.textSecondary,
+        cursor: 'not-allowed'
+      }
+    };
 
-    case 'link':
-      return {
-        ...baseStyles,
-        backgroundColor: 'transparent',
-        color: theme.colors.primary,
-        padding: 0,
-        borderRadius: 0,
-        '&:hover:not(:disabled)': {
-          textDecoration: 'underline'
-        },
-        '&:disabled': {
-          color: theme.colors.textSecondary,
-          cursor: 'not-allowed'
-        }
-      };
+  case 'link':
+    return {
+      ...baseStyles,
+      backgroundColor: 'transparent',
+      color: theme.colors.primary,
+      padding: 0,
+      borderRadius: 0,
+      '&:hover:not(:disabled)': {
+        textDecoration: 'underline'
+      },
+      '&:disabled': {
+        color: theme.colors.textSecondary,
+        cursor: 'not-allowed'
+      }
+    };
 
-    default:
-      return baseStyles;
+  default:
+    return baseStyles;
   }
 }
 

@@ -363,27 +363,27 @@ export class ExtensionManifestParser {
 
     // Add type-specific configurations
     switch (options.extensionType) {
-      case 'node':
-        template.runtime = {
-          node_types: options.nodeTypes || []
-        };
-        break;
-      case 'ui':
-        template.ui = {
-          category: options.uiCategory || 'general',
-          components: options.uiComponents || {}
-        };
-        break;
-      case 'transform':
-        template.runtime = {
-          transforms: options.transforms || []
-        };
-        break;
-      case 'storage':
-        template.runtime = {
-          storage_providers: options.storageProviders || []
-        };
-        break;
+    case 'node':
+      template.runtime = {
+        node_types: options.nodeTypes || []
+      };
+      break;
+    case 'ui':
+      template.ui = {
+        category: options.uiCategory || 'general',
+        components: options.uiComponents || {}
+      };
+      break;
+    case 'transform':
+      template.runtime = {
+        transforms: options.transforms || []
+      };
+      break;
+    case 'storage':
+      template.runtime = {
+        storage_providers: options.storageProviders || []
+      };
+      break;
     }
 
     return template;

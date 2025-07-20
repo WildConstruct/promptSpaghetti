@@ -21,7 +21,7 @@ interface ActivityStatsProps {
 export const ActivityStats: React.FC<ActivityStatsProps> = ({
   stats,
   workspaceId,
-  className = '',
+  className = ''
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'types' | 'timeline' | 'users'>('overview');
 

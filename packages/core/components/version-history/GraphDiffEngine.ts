@@ -388,16 +388,16 @@ export class GraphDiffEngine {
     let significance = 0.5;
     
     switch (changeType) {
-      case 'added':
-      case 'removed':
-        significance = 0.8;
-        break;
-      case 'modified':
-        significance = 0.6;
-        break;
-      case 'moved':
-        significance = 0.3;
-        break;
+    case 'added':
+    case 'removed':
+      significance = 0.8;
+      break;
+    case 'modified':
+      significance = 0.6;
+      break;
+    case 'moved':
+      significance = 0.3;
+      break;
     }
 
     // Adjust by element type
@@ -455,16 +455,16 @@ export class GraphDiffEngine {
     for (const change of changes) {
       if (change.element_type === 'node') {
         switch (change.type) {
-          case 'added': summary.added_nodes++; break;
-          case 'removed': summary.removed_nodes++; break;
-          case 'modified': summary.modified_nodes++; break;
-          case 'moved': summary.moved_nodes++; break;
+        case 'added': summary.added_nodes++; break;
+        case 'removed': summary.removed_nodes++; break;
+        case 'modified': summary.modified_nodes++; break;
+        case 'moved': summary.moved_nodes++; break;
         }
       } else if (change.element_type === 'edge') {
         switch (change.type) {
-          case 'added': summary.added_edges++; break;
-          case 'removed': summary.removed_edges++; break;
-          case 'modified': summary.modified_edges++; break;
+        case 'added': summary.added_edges++; break;
+        case 'removed': summary.removed_edges++; break;
+        case 'modified': summary.modified_edges++; break;
         }
       } else if (change.element_type === 'property') {
         summary.property_changes++;

@@ -1,5 +1,5 @@
-import React from "react";
-import { Edge, Node } from "reactflow";
+import React from 'react';
+import { Edge, Node } from 'reactflow';
 
 interface RestorePromptProps {
   show: boolean;
@@ -12,7 +12,7 @@ export const RestorePrompt: React.FC<RestorePromptProps> = ({
   show,
   draft,
   onRestore,
-  onDismiss,
+  onDismiss
 }) => {
   if (!show || !draft) {
     return null;
@@ -31,7 +31,7 @@ export const RestorePrompt: React.FC<RestorePromptProps> = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
       }} 
       data-testid="restore-draft-modal"
     >

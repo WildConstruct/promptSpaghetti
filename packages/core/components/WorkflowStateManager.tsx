@@ -112,7 +112,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
       if (result.success) {
         if (result.approval_required) {
           // Show approval request confirmation
-          alert(`Approval request submitted for state transition.`);
+          alert('Approval request submitted for state transition.');
         } else {
           onStateChange?.(result.new_state_id!);
         }
@@ -179,12 +179,12 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
 
   const getStateIcon = (state: WorkflowState) => {
     switch (state.icon) {
-      case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
-      case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
-      case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
-      case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
-      case 'DocumentTextIcon': 
-      default: return <DocumentTextIcon className="h-4 w-4" />;
+    case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
+    case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
+    case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
+    case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
+    case 'DocumentTextIcon': 
+    default: return <DocumentTextIcon className="h-4 w-4" />;
     }
   };
 
@@ -440,8 +440,8 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
                         </div>
                         <span className={`px-2 py-1 rounded text-xs ${
                           approval.priority === 'high' ? 'bg-red-100 text-red-800' :
-                          approval.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-green-100 text-green-800'
+                            approval.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-green-100 text-green-800'
                         }`}>
                           {approval.priority}
                         </span>

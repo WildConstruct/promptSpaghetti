@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface NodeMeta {
   id: string;
@@ -29,7 +29,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
         transition: 'width 0.2s',
         overflow: 'hidden',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column'
       }}
     >
       <button
@@ -44,7 +44,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
           width: '100%',
           padding: '12px 0',
           cursor: 'pointer',
-          outline: 'none',
+          outline: 'none'
         }}
       >
         {collapsed ? '»' : '«'}
@@ -75,7 +75,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                 borderRadius: 6,
                 background: 'none',
                 cursor: 'grab',
-                outline: 'none',
+                outline: 'none'
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -119,7 +119,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                     textTransform: 'uppercase',
                     letterSpacing: '0.5px',
                     marginBottom: 8,
-                    paddingLeft: 8,
+                    paddingLeft: 8
                   }}>
                     {categoryLabels[categoryKey as keyof typeof categoryLabels]}
                   </div>
@@ -147,7 +147,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                         background: 'none',
                         cursor: 'grab',
                         outline: 'none',
-                        transition: 'background-color 0.2s',
+                        transition: 'background-color 0.2s'
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#2a2f3a';

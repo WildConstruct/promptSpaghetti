@@ -42,9 +42,9 @@ export const usePasswordReset = () => {
       const response = await fetch('/api/auth/password-reset/request', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email })
       });
 
       const data: PasswordResetRequestResponse = await response.json();
@@ -71,8 +71,8 @@ export const usePasswordReset = () => {
       const response = await fetch(`/api/auth/password-reset/validate/${encodeURIComponent(token)}`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       const data: PasswordResetValidationResponse = await response.json();
@@ -110,13 +110,13 @@ export const usePasswordReset = () => {
       const response = await fetch('/api/auth/password-reset/confirm', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           token,
           newPassword,
-          confirmPassword,
-        }),
+          confirmPassword
+        })
       });
 
       const data: PasswordResetConfirmResponse = await response.json();
@@ -162,7 +162,7 @@ export const usePasswordReset = () => {
       expired: false,
       timeLeft,
       formatted,
-      expiresAt,
+      expiresAt
     };
   }, [tokenValidation]);
 
@@ -195,7 +195,7 @@ export const usePasswordReset = () => {
     // Computed values
     isTokenValid: tokenValidation?.valid === true,
     canRetry: tokenValidation?.canRetry === true,
-    userEmail: tokenValidation?.email,
+    userEmail: tokenValidation?.email
   };
 };
 

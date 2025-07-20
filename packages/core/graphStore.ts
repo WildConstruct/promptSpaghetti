@@ -36,7 +36,7 @@ export const useGraphStore = create<GraphState>((set) => ({
     set((state) => ({
       nodes: state.nodes.map((n) =>
         n.id === nodeId ? { ...n, data: { ...n.data, ...partial } } : n
-      ),
+      )
     })),
   
   addVariation: (nodeId, variation) =>
@@ -45,7 +45,7 @@ export const useGraphStore = create<GraphState>((set) => ({
         n.id === nodeId
           ? { ...n, data: addVariationToNode(n.data as NodeData, variation) }
           : n
-      ),
+      )
     })),
   
   removeVariation: (nodeId, variationIndex) =>
@@ -54,7 +54,7 @@ export const useGraphStore = create<GraphState>((set) => ({
         n.id === nodeId
           ? { ...n, data: removeVariationFromNode(n.data as NodeData, variationIndex) }
           : n
-      ),
+      )
     })),
   
   updateVariation: (nodeId, variationIndex, newValue) =>
@@ -63,7 +63,7 @@ export const useGraphStore = create<GraphState>((set) => ({
         n.id === nodeId
           ? { ...n, data: updateVariationInNode(n.data as NodeData, variationIndex, newValue) }
           : n
-      ),
+      )
     })),
   
   reorderVariations: (nodeId, fromIndex, toIndex) =>
@@ -72,7 +72,7 @@ export const useGraphStore = create<GraphState>((set) => ({
         n.id === nodeId
           ? { ...n, data: reorderVariationsInNode(n.data as NodeData, fromIndex, toIndex) }
           : n
-      ),
+      )
     })),
   
   duplicateNode: (nodeId) =>
@@ -85,12 +85,12 @@ export const useGraphStore = create<GraphState>((set) => ({
         id: `${nodeToClone.id}-copy-${Date.now()}`,
         position: {
           x: nodeToClone.position.x + 100,
-          y: nodeToClone.position.y + 100,
+          y: nodeToClone.position.y + 100
         },
         data: {
           ...nodeToClone.data,
-          label: `${nodeToClone.data.label} (Copy)`,
-        },
+          label: `${nodeToClone.data.label} (Copy)`
+        }
       };
       
       return { nodes: [...state.nodes, newNode] };
@@ -99,6 +99,6 @@ export const useGraphStore = create<GraphState>((set) => ({
   deleteNode: (nodeId) =>
     set((state) => ({
       nodes: state.nodes.filter((n) => n.id !== nodeId),
-      edges: state.edges.filter((e) => e.source !== nodeId && e.target !== nodeId),
-    })),
+      edges: state.edges.filter((e) => e.source !== nodeId && e.target !== nodeId)
+    }))
 }));

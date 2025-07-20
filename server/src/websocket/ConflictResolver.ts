@@ -265,23 +265,23 @@ export class ConflictResolver extends EventEmitter {
     }
 
     switch (op1.type) {
-      case ConflictType.NODE_POSITION:
-        return this.isPositionConflict(op1, op2);
+    case ConflictType.NODE_POSITION:
+      return this.isPositionConflict(op1, op2);
       
-      case ConflictType.NODE_PROPERTIES:
-      case ConflictType.EDGE_PROPERTIES:
-        return op1.property === op2.property;
+    case ConflictType.NODE_PROPERTIES:
+    case ConflictType.EDGE_PROPERTIES:
+      return op1.property === op2.property;
       
-      case ConflictType.NODE_CREATION:
-      case ConflictType.NODE_DELETION:
-        return op1.nodeId === op2.nodeId;
+    case ConflictType.NODE_CREATION:
+    case ConflictType.NODE_DELETION:
+      return op1.nodeId === op2.nodeId;
       
-      case ConflictType.EDGE_CREATION:
-      case ConflictType.EDGE_DELETION:
-        return op1.edgeId === op2.edgeId;
+    case ConflictType.EDGE_CREATION:
+    case ConflictType.EDGE_DELETION:
+      return op1.edgeId === op2.edgeId;
       
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
@@ -376,26 +376,26 @@ export class ConflictResolver extends EventEmitter {
     userSelection?: any
   ): ResolutionResult {
     switch (strategy) {
-      case ResolutionStrategy.LAST_WRITER_WINS:
-        return this.resolveLastWriterWins(conflict);
+    case ResolutionStrategy.LAST_WRITER_WINS:
+      return this.resolveLastWriterWins(conflict);
       
-      case ResolutionStrategy.FIRST_WRITER_WINS:
-        return this.resolveFirstWriterWins(conflict);
+    case ResolutionStrategy.FIRST_WRITER_WINS:
+      return this.resolveFirstWriterWins(conflict);
       
-      case ResolutionStrategy.MERGE_PROPERTIES:
-        return this.resolveMergeProperties(conflict);
+    case ResolutionStrategy.MERGE_PROPERTIES:
+      return this.resolveMergeProperties(conflict);
       
-      case ResolutionStrategy.POSITIONAL_OFFSET:
-        return this.resolvePositionalOffset(conflict);
+    case ResolutionStrategy.POSITIONAL_OFFSET:
+      return this.resolvePositionalOffset(conflict);
       
-      case ResolutionStrategy.SEMANTIC_MERGE:
-        return this.resolveSemanticMerge(conflict);
+    case ResolutionStrategy.SEMANTIC_MERGE:
+      return this.resolveSemanticMerge(conflict);
       
-      case ResolutionStrategy.USER_RESOLUTION:
-        return this.resolveUserSelection(conflict, userSelection);
+    case ResolutionStrategy.USER_RESOLUTION:
+      return this.resolveUserSelection(conflict, userSelection);
       
-      default:
-        return this.resolveLastWriterWins(conflict);
+    default:
+      return this.resolveLastWriterWins(conflict);
     }
   }
 
@@ -588,29 +588,29 @@ export class ConflictResolver extends EventEmitter {
     const userCount = new Set([operation.userId, ...conflictingOps.map(op => op.userId)]).size;
     
     switch (operation.type) {
-      case ConflictType.NODE_POSITION:
-        return `${userCount} users moved the same node to different positions`;
+    case ConflictType.NODE_POSITION:
+      return `${userCount} users moved the same node to different positions`;
       
-      case ConflictType.NODE_PROPERTIES:
-        return `${userCount} users changed properties of the same node`;
+    case ConflictType.NODE_PROPERTIES:
+      return `${userCount} users changed properties of the same node`;
       
-      case ConflictType.NODE_CREATION:
-        return `${userCount} users created nodes at the same location`;
+    case ConflictType.NODE_CREATION:
+      return `${userCount} users created nodes at the same location`;
       
-      case ConflictType.NODE_DELETION:
-        return `${userCount} users tried to modify a deleted node`;
+    case ConflictType.NODE_DELETION:
+      return `${userCount} users tried to modify a deleted node`;
       
-      case ConflictType.EDGE_CREATION:
-        return `${userCount} users created conflicting edges`;
+    case ConflictType.EDGE_CREATION:
+      return `${userCount} users created conflicting edges`;
       
-      case ConflictType.EDGE_DELETION:
-        return `${userCount} users tried to modify a deleted edge`;
+    case ConflictType.EDGE_DELETION:
+      return `${userCount} users tried to modify a deleted edge`;
       
-      case ConflictType.EDGE_PROPERTIES:
-        return `${userCount} users changed properties of the same edge`;
+    case ConflictType.EDGE_PROPERTIES:
+      return `${userCount} users changed properties of the same edge`;
       
-      default:
-        return `${userCount} users made conflicting changes`;
+    default:
+      return `${userCount} users made conflicting changes`;
     }
   }
 

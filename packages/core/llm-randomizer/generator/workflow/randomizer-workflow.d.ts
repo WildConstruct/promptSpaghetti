@@ -42,14 +42,41 @@ export interface WorkflowWarning {
     message: string;
     suggestion?: string;
 }
+/**
+ * Complete randomizer workflow that orchestrates all Epic 12 components
+ */
 export declare class RandomizerWorkflow {
+    /**
+     * Generate a graph using the complete workflow
+     */
     generateGraph(parameters: RandomizerParameters, options?: WorkflowOptions): Promise<WorkflowResult>;
+    /**
+     * Prepare LLM request from parameters
+     */
     private prepareLoLLMRequest;
+    /**
+     * Call LLM with retry logic and error handling
+     */
     private callLLM;
+    /**
+     * Validate generated graph against parameters
+     */
     private validateGeneratedGraph;
+    /**
+     * Finalize result with timing metadata
+     */
     private finalizeResult;
+    /**
+     * Generate multiple variations with different parameters
+     */
     generateVariations(baseParameters: RandomizerParameters, variationCount?: number, options?: WorkflowOptions): Promise<WorkflowResult[]>;
+    /**
+     * Create parameter variations for multiple generations
+     */
     private createParameterVariations;
+    /**
+     * Validate workflow parameters before generation
+     */
     validateWorkflowParameters(parameters: RandomizerParameters): {
         isValid: boolean;
         errors: string[];

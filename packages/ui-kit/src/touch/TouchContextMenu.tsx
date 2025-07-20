@@ -84,22 +84,22 @@ export const TouchContextMenu: React.FC<TouchContextMenuProps> = ({
     } else {
       // Manual anchor positions
       switch (anchor) {
-        case 'top':
-          y = Math.max(20, position.y - rect.height);
-          break;
-        case 'bottom':
-          y = Math.min(viewport.height - rect.height - 20, position.y);
-          break;
-        case 'left':
-          x = Math.max(20, position.x - rect.width);
-          break;
-        case 'right':
-          x = Math.min(viewport.width - rect.width - 20, position.x);
-          break;
-        case 'center':
-          x = position.x - rect.width / 2;
-          y = position.y - rect.height / 2;
-          break;
+      case 'top':
+        y = Math.max(20, position.y - rect.height);
+        break;
+      case 'bottom':
+        y = Math.min(viewport.height - rect.height - 20, position.y);
+        break;
+      case 'left':
+        x = Math.max(20, position.x - rect.width);
+        break;
+      case 'right':
+        x = Math.min(viewport.width - rect.width - 20, position.x);
+        break;
+      case 'center':
+        x = position.x - rect.width / 2;
+        y = position.y - rect.height / 2;
+        break;
       }
     }
     
@@ -136,30 +136,30 @@ export const TouchContextMenu: React.FC<TouchContextMenuProps> = ({
     const currentIndex = selectedIndex;
     
     switch (e.key) {
-      case 'ArrowUp':
-        e.preventDefault();
-        const prevIndex = currentIndex <= 0 ? visibleItems.length - 1 : currentIndex - 1;
-        setSelectedIndex(prevIndex);
-        break;
+    case 'ArrowUp':
+      e.preventDefault();
+      const prevIndex = currentIndex <= 0 ? visibleItems.length - 1 : currentIndex - 1;
+      setSelectedIndex(prevIndex);
+      break;
         
-      case 'ArrowDown':
-        e.preventDefault();
-        const nextIndex = currentIndex >= visibleItems.length - 1 ? 0 : currentIndex + 1;
-        setSelectedIndex(nextIndex);
-        break;
+    case 'ArrowDown':
+      e.preventDefault();
+      const nextIndex = currentIndex >= visibleItems.length - 1 ? 0 : currentIndex + 1;
+      setSelectedIndex(nextIndex);
+      break;
         
-      case 'Enter':
-      case ' ':
-        e.preventDefault();
-        if (currentIndex >= 0 && visibleItems[currentIndex]) {
-          handleItemSelect(visibleItems[currentIndex], currentIndex);
-        }
-        break;
+    case 'Enter':
+    case ' ':
+      e.preventDefault();
+      if (currentIndex >= 0 && visibleItems[currentIndex]) {
+        handleItemSelect(visibleItems[currentIndex], currentIndex);
+      }
+      break;
         
-      case 'Escape':
-        e.preventDefault();
-        onDismiss?.();
-        break;
+    case 'Escape':
+      e.preventDefault();
+      onDismiss?.();
+      break;
     }
   }, [items, selectedIndex, handleItemSelect, onDismiss]);
   

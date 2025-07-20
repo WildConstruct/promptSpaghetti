@@ -13,7 +13,7 @@ import {
   RefreshTokenRequest,
   ChangePasswordRequest,
   PublicUser,
-  User,
+  User
 } from './types';
 
 import { UserService } from './services/UserService';
@@ -91,11 +91,11 @@ export class AuthenticationService {
         details: { 
           endpoint: 'register',
           ipAddress: context.ipAddress,
-          rateLimitExceeded: true,
+          rateLimitExceeded: true
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw new Error('Rate limit exceeded. Please try again later.');
@@ -113,16 +113,16 @@ export class AuthenticationService {
         resourceId: user.id,
         details: { 
           email: user.email,
-          registrationMethod: 'email',
+          registrationMethod: 'email'
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       return {
         user: await this.toPublicUser(user),
-        emailVerificationRequired: !user.emailVerified,
+        emailVerificationRequired: !user.emailVerified
       };
     } catch (error) {
       // Log failed registration
@@ -130,11 +130,11 @@ export class AuthenticationService {
         action: 'registration_failed',
         details: { 
           email: request.email,
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : String(error)
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw error;
@@ -158,11 +158,11 @@ export class AuthenticationService {
         details: { 
           endpoint: 'login',
           ipAddress: context.ipAddress,
-          rateLimitExceeded: true,
+          rateLimitExceeded: true
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw new Error('Rate limit exceeded. Please try again later.');
@@ -185,11 +185,11 @@ export class AuthenticationService {
           action: AUDIT_EVENTS.LOGIN_FAILED,
           details: { 
             reason: 'account_locked',
-            lockedUntil: user.lockedUntil,
+            lockedUntil: user.lockedUntil
           },
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
-          severity: 'warning',
+          severity: 'warning'
         });
         
         throw new Error('Account is locked. Please try again later or reset your password.');
@@ -204,11 +204,11 @@ export class AuthenticationService {
           action: AUDIT_EVENTS.LOGIN_FAILED,
           details: { 
             reason: 'invalid_password',
-            failedAttempts: user.failedLoginAttempts + 1,
+            failedAttempts: user.failedLoginAttempts + 1
           },
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
-          severity: 'warning',
+          severity: 'warning'
         });
         
         throw new Error('Invalid email or password');
@@ -221,11 +221,11 @@ export class AuthenticationService {
           action: AUDIT_EVENTS.LOGIN_FAILED,
           details: { 
             reason: 'inactive_account',
-            status: user.status,
+            status: user.status
           },
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
-          severity: 'warning',
+          severity: 'warning'
         });
         
         throw new Error('Account is not active. Please contact support.');
@@ -237,14 +237,14 @@ export class AuthenticationService {
 
       // Update last login
       await this.userService.updateUser(user.id, {
-        lastLoginAt: new Date(),
+        lastLoginAt: new Date()
       });
 
       // Create session record
       const sessionId = await this.createSession(user.id, {
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        deviceInfo: request.deviceInfo,
+        deviceInfo: request.deviceInfo
       });
 
       // Log successful login
@@ -253,12 +253,12 @@ export class AuthenticationService {
         action: AUDIT_EVENTS.LOGIN_SUCCESS,
         details: { 
           loginMethod: 'password',
-          sessionId,
+          sessionId
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId,
-        severity: 'info',
+        severity: 'info'
       });
 
       // Calculate token expiry
@@ -268,7 +268,7 @@ export class AuthenticationService {
         accessToken,
         refreshToken,
         user: await this.toPublicUser(user),
-        expiresAt,
+        expiresAt
       };
     } catch (error) {
       // Log failed login attempt
@@ -277,11 +277,11 @@ export class AuthenticationService {
         action: AUDIT_EVENTS.LOGIN_FAILED,
         details: { 
           email: request.email,
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : String(error)
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw error;
@@ -305,7 +305,7 @@ export class AuthenticationService {
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId,
-        severity: 'info',
+        severity: 'info'
       });
     } catch (error) {
       console.error('Logout error:', error);
@@ -327,7 +327,7 @@ export class AuthenticationService {
         action: 'token_refreshed',
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       return tokens;
@@ -338,7 +338,7 @@ export class AuthenticationService {
         details: { error: error instanceof Error ? error.message : String(error) },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw error;
@@ -372,7 +372,7 @@ export class AuthenticationService {
         details: { hashedEmail: this.hashEmail(request.email) },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
     } catch (error) {
       // Log failed password reset request
@@ -380,11 +380,11 @@ export class AuthenticationService {
         action: 'password_reset_request_failed',
         details: { 
           hashedEmail: this.hashEmail(request.email),
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : String(error)
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       // Don't throw - don't reveal if email exists
@@ -407,7 +407,7 @@ export class AuthenticationService {
         action: AUDIT_EVENTS.PASSWORD_RESET_COMPLETED,
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
       
       // TODO: Send password changed notification email
@@ -417,11 +417,11 @@ export class AuthenticationService {
         action: 'password_reset_failed',
         details: { 
           token: request.token,
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : String(error)
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw error;
@@ -441,7 +441,7 @@ export class AuthenticationService {
         action: AUDIT_EVENTS.EMAIL_VERIFIED,
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
     } catch (error) {
       // Log failed email verification
@@ -449,11 +449,11 @@ export class AuthenticationService {
         action: 'email_verification_failed',
         details: { 
           token: request.token,
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : String(error)
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw error;
@@ -492,7 +492,7 @@ export class AuthenticationService {
         action: AUDIT_EVENTS.PASSWORD_CHANGED,
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
       
       // TODO: Send password changed notification email
@@ -504,7 +504,7 @@ export class AuthenticationService {
         details: { error: error instanceof Error ? error.message : String(error) },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw error;
@@ -525,14 +525,14 @@ export class AuthenticationService {
   async healthCheck(): Promise<{ status: string; checks: Record<string, boolean> }> {
     const checks = {
       database: await this.dbService.healthCheck(),
-      redis: await this.redisService.healthCheck(),
+      redis: await this.redisService.healthCheck()
     };
     
     const allHealthy = Object.values(checks).every(check => check);
     
     return {
       status: allHealthy ? 'healthy' : 'unhealthy',
-      checks,
+      checks
     };
   }
 
@@ -556,7 +556,7 @@ export class AuthenticationService {
       sessionData.ipAddress,
       sessionData.userAgent,
       JSON.stringify(sessionData.deviceInfo || {}),
-      new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+      new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
     ]);
     
     return sessionId;
@@ -579,7 +579,7 @@ export class AuthenticationService {
       timezone: profileResult.rows[0].timezone,
       locale: profileResult.rows[0].locale,
       createdAt: profileResult.rows[0].created_at,
-      updatedAt: profileResult.rows[0].updated_at,
+      updatedAt: profileResult.rows[0].updated_at
     } : undefined;
 
     // Get user roles and permissions
@@ -594,7 +594,7 @@ export class AuthenticationService {
       lastLoginAt: user.lastLoginAt,
       profile,
       roles,
-      permissions,
+      permissions
     };
   }
 
@@ -612,7 +612,7 @@ export class AuthenticationService {
       scope: row.scope,
       organizationId: row.organization_id,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     }));
   }
 
@@ -631,7 +631,7 @@ export class AuthenticationService {
       action: row.action,
       scope: row.scope,
       conditions: row.conditions ? JSON.parse(row.conditions) : undefined,
-      createdAt: row.created_at,
+      createdAt: row.created_at
     }));
   }
 
@@ -643,24 +643,24 @@ export class AuthenticationService {
   // Service registry for accessing individual services
   getService(serviceName: string): any {
     switch (serviceName) {
-      case 'user':
-        return this.userService;
-      case 'token':
-        return this.tokenService;
-      case 'audit':
-        return this.auditService;
-      case 'rateLimit':
-        return this.rateLimitService;
-      case 'passwordReset':
-        return this.passwordResetService;
-      case 'email':
-        return this.emailService;
-      case 'database':
-        return this.dbService;
-      case 'redis':
-        return this.redisService;
-      default:
-        throw new Error(`Unknown service: ${serviceName}`);
+    case 'user':
+      return this.userService;
+    case 'token':
+      return this.tokenService;
+    case 'audit':
+      return this.auditService;
+    case 'rateLimit':
+      return this.rateLimitService;
+    case 'passwordReset':
+      return this.passwordResetService;
+    case 'email':
+      return this.emailService;
+    case 'database':
+      return this.dbService;
+    case 'redis':
+      return this.redisService;
+    default:
+      throw new Error(`Unknown service: ${serviceName}`);
     }
   }
 
@@ -676,13 +676,13 @@ export class AuthenticationService {
       return {
         database: dbHealth,
         redis: redisHealth,
-        authentication: 'healthy',
+        authentication: 'healthy'
       };
     } catch (error) {
       return {
         database: 'unhealthy',
         redis: 'unhealthy',
-        authentication: 'unhealthy',
+        authentication: 'unhealthy'
       };
     }
   }

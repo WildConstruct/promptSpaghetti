@@ -17,40 +17,40 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 }) => {
   const renderSpinner = () => {
     switch (variant) {
-      case 'dots':
-        return (
-          <div className="spinner-dots">
-            <div className="dot"></div>
-            <div className="dot"></div>
-            <div className="dot"></div>
-          </div>
-        );
+    case 'dots':
+      return (
+        <div className="spinner-dots">
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+        </div>
+      );
       
-      case 'pulse':
-        return (
-          <div className="spinner-pulse">
-            <div className="pulse-ring"></div>
-            <div className="pulse-ring"></div>
-            <div className="pulse-ring"></div>
-          </div>
-        );
+    case 'pulse':
+      return (
+        <div className="spinner-pulse">
+          <div className="pulse-ring"></div>
+          <div className="pulse-ring"></div>
+          <div className="pulse-ring"></div>
+        </div>
+      );
       
-      default:
-        return (
-          <div className="spinner-circle">
-            <svg className="circular" viewBox="25 25 50 50">
-              <circle
-                className="path"
-                cx="50"
-                cy="50"
-                r="20"
-                fill="none"
-                strokeWidth="2"
-                strokeMiterlimit="10"
-              />
-            </svg>
-          </div>
-        );
+    default:
+      return (
+        <div className="spinner-circle">
+          <svg className="circular" viewBox="25 25 50 50">
+            <circle
+              className="path"
+              cx="50"
+              cy="50"
+              r="20"
+              fill="none"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+            />
+          </svg>
+        </div>
+      );
     }
   };
 

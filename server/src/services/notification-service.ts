@@ -284,26 +284,26 @@ This is an automated notification from the Feature Toggle Scheduling System.
     const { conditions } = notification;
 
     switch (event.type) {
-      case 'execution_success':
-        return conditions.onSuccess === true;
+    case 'execution_success':
+      return conditions.onSuccess === true;
       
-      case 'execution_failure':
-        if (conditions.onFailure === false) return false;
-        if (conditions.afterFailureCount && event.execution) {
-          // Check if failure count threshold is reached
-          const schedule = event.schedule;
-          return schedule.failureCount >= conditions.afterFailureCount;
-        }
-        return conditions.onFailure === true;
+    case 'execution_failure':
+      if (conditions.onFailure === false) return false;
+      if (conditions.afterFailureCount && event.execution) {
+        // Check if failure count threshold is reached
+        const schedule = event.schedule;
+        return schedule.failureCount >= conditions.afterFailureCount;
+      }
+      return conditions.onFailure === true;
       
-      case 'conflict_detected':
-        return true; // Always notify about conflicts
+    case 'conflict_detected':
+      return true; // Always notify about conflicts
       
-      case 'schedule_expired':
-        return true; // Always notify about expiration
+    case 'schedule_expired':
+      return true; // Always notify about expiration
       
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
@@ -365,47 +365,47 @@ This is an automated notification from the Feature Toggle Scheduling System.
     let eventSpecificVariables = {};
 
     switch (event.type) {
-      case 'execution_success':
-      case 'execution_failure':
-        if (execution) {
-          eventSpecificVariables = {
-            executionTime: execution.executionTime.toLocaleString(),
-            duration: execution.duration,
-            affectedUsers: execution.affectedUsers || 0,
-            status: execution.status,
-            beforeValue: JSON.stringify(execution.beforeValue),
-            afterValue: JSON.stringify(execution.afterValue),
-            errorCode: execution.error?.code,
-            errorMessage: execution.error?.message,
-            retryable: execution.error?.retryable,
-            retryAttempt: metadata.retryAttempt || 1,
-            nextRetry: metadata.nextRetry
-          };
-        }
-        break;
-
-      case 'conflict_detected':
-        if (conflict) {
-          eventSpecificVariables = {
-            conflictType: conflict.conflictType,
-            severity: conflict.severity,
-            conflictDescription: conflict.description,
-            conflictingScheduleNames: metadata.conflictingScheduleNames || 'Unknown',
-            autoResolvable: conflict.autoResolvable,
-            suggestedResolution: conflict.suggestedResolution?.action || 'Manual review required',
-            conflictsUrl: `${process.env.BASE_URL}/admin/schedules/conflicts`
-          };
-        }
-        break;
-
-      case 'schedule_expired':
+    case 'execution_success':
+    case 'execution_failure':
+      if (execution) {
         eventSpecificVariables = {
-          successfulExecutions: metadata.successfulExecutions || 0,
-          failedExecutions: metadata.failedExecutions || 0,
-          successRate: metadata.successRate || 0,
-          averageDuration: metadata.averageDuration || 0
+          executionTime: execution.executionTime.toLocaleString(),
+          duration: execution.duration,
+          affectedUsers: execution.affectedUsers || 0,
+          status: execution.status,
+          beforeValue: JSON.stringify(execution.beforeValue),
+          afterValue: JSON.stringify(execution.afterValue),
+          errorCode: execution.error?.code,
+          errorMessage: execution.error?.message,
+          retryable: execution.error?.retryable,
+          retryAttempt: metadata.retryAttempt || 1,
+          nextRetry: metadata.nextRetry
         };
-        break;
+      }
+      break;
+
+    case 'conflict_detected':
+      if (conflict) {
+        eventSpecificVariables = {
+          conflictType: conflict.conflictType,
+          severity: conflict.severity,
+          conflictDescription: conflict.description,
+          conflictingScheduleNames: metadata.conflictingScheduleNames || 'Unknown',
+          autoResolvable: conflict.autoResolvable,
+          suggestedResolution: conflict.suggestedResolution?.action || 'Manual review required',
+          conflictsUrl: `${process.env.BASE_URL}/admin/schedules/conflicts`
+        };
+      }
+      break;
+
+    case 'schedule_expired':
+      eventSpecificVariables = {
+        successfulExecutions: metadata.successfulExecutions || 0,
+        failedExecutions: metadata.failedExecutions || 0,
+        successRate: metadata.successRate || 0,
+        averageDuration: metadata.averageDuration || 0
+      };
+      break;
     }
 
     return { ...baseVariables, ...eventSpecificVariables };
@@ -446,24 +446,24 @@ This is an automated notification from the Feature Toggle Scheduling System.
     recipients: string[]
   ): Promise<void> {
     switch (channel.type) {
-      case 'email':
-        await this.sendEmail(channel, notification, recipients);
-        break;
+    case 'email':
+      await this.sendEmail(channel, notification, recipients);
+      break;
       
-      case 'slack':
-        await this.sendSlack(channel, notification);
-        break;
+    case 'slack':
+      await this.sendSlack(channel, notification);
+      break;
       
-      case 'webhook':
-        await this.sendWebhook(channel, notification, recipients);
-        break;
+    case 'webhook':
+      await this.sendWebhook(channel, notification, recipients);
+      break;
       
-      case 'in_app':
-        await this.sendInApp(channel, notification, recipients);
-        break;
+    case 'in_app':
+      await this.sendInApp(channel, notification, recipients);
+      break;
       
-      default:
-        console.warn(`Unsupported channel type: ${channel.type}`);
+    default:
+      console.warn(`Unsupported channel type: ${channel.type}`);
     }
   }
 

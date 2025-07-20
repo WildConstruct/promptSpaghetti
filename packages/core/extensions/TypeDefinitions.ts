@@ -189,32 +189,32 @@ export class ExtensionTypeChecker {
 
     // Validate specific extension type
     switch (extensionType) {
-      case 'node':
-        if (!ExtensionTypeGuards.isNodeExtension(extension)) {
-          errors.push('Object does not implement NodeExtension interface');
-        }
-        break;
+    case 'node':
+      if (!ExtensionTypeGuards.isNodeExtension(extension)) {
+        errors.push('Object does not implement NodeExtension interface');
+      }
+      break;
       
-      case 'ui':
-        if (!ExtensionTypeGuards.isUIExtension(extension)) {
-          errors.push('Object does not implement UIExtension interface');
-        }
-        break;
+    case 'ui':
+      if (!ExtensionTypeGuards.isUIExtension(extension)) {
+        errors.push('Object does not implement UIExtension interface');
+      }
+      break;
       
-      case 'transform':
-        if (!ExtensionTypeGuards.isTransformExtension(extension)) {
-          errors.push('Object does not implement TransformExtension interface');
-        }
-        break;
+    case 'transform':
+      if (!ExtensionTypeGuards.isTransformExtension(extension)) {
+        errors.push('Object does not implement TransformExtension interface');
+      }
+      break;
       
-      case 'storage':
-        if (!ExtensionTypeGuards.isStorageExtension(extension)) {
-          errors.push('Object does not implement StorageExtension interface');
-        }
-        break;
+    case 'storage':
+      if (!ExtensionTypeGuards.isStorageExtension(extension)) {
+        errors.push('Object does not implement StorageExtension interface');
+      }
+      break;
       
-      default:
-        errors.push(`Unknown extension type: ${extensionType}`);
+    default:
+      errors.push(`Unknown extension type: ${extensionType}`);
     }
 
     return {
@@ -307,8 +307,8 @@ declare module '${extensionId}' {
 
   private getTypeSpecificJSDoc(extensionType: string): string {
     switch (extensionType) {
-      case 'node':
-        return `
+    case 'node':
+      return `
 /**
  * @typedef {Object} NodeExtension
  * @extends BaseExtension
@@ -321,8 +321,8 @@ declare module '${extensionId}' {
  */
 `;
       
-      case 'ui':
-        return `
+    case 'ui':
+      return `
 /**
  * @typedef {Object} UIExtension
  * @extends BaseExtension
@@ -336,8 +336,8 @@ declare module '${extensionId}' {
  */
 `;
       
-      case 'transform':
-        return `
+    case 'transform':
+      return `
 /**
  * @typedef {Object} TransformExtension
  * @extends BaseExtension
@@ -350,8 +350,8 @@ declare module '${extensionId}' {
  */
 `;
       
-      case 'storage':
-        return `
+    case 'storage':
+      return `
 /**
  * @typedef {Object} StorageExtension
  * @extends BaseExtension
@@ -364,8 +364,8 @@ declare module '${extensionId}' {
  */
 `;
       
-      default:
-        return '';
+    default:
+      return '';
     }
   }
 

@@ -44,8 +44,8 @@ describe('useTheme', () => {
         removeListener: jest.fn(),
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
+        dispatchEvent: jest.fn()
+      }))
     });
   });
 
@@ -78,8 +78,8 @@ describe('useTheme', () => {
         removeListener: jest.fn(),
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
+        dispatchEvent: jest.fn()
+      }))
     });
     
     renderWithTheme('system');
@@ -152,8 +152,8 @@ describe('useTheme', () => {
         removeListener: jest.fn(),
         addEventListener: mockAddEventListener,
         removeEventListener: mockRemoveEventListener,
-        dispatchEvent: jest.fn(),
-      })),
+        dispatchEvent: jest.fn()
+      }))
     });
     
     const { unmount } = renderWithTheme('system');

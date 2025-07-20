@@ -53,7 +53,7 @@ export const UserRoleAssignment: React.FC = () => {
   // Assignment form state
   const [assignmentForm, setAssignmentForm] = useState<AssignRoleData>({
     userId: '',
-    roleId: '',
+    roleId: ''
   });
   const [assignmentExpiry, setAssignmentExpiry] = useState('');
   const [assignmentContext, setAssignmentContext] = useState('');
@@ -68,9 +68,9 @@ export const UserRoleAssignment: React.FC = () => {
     try {
       const response = await fetch('/api/auth/users?' + new URLSearchParams({
         ...(searchQuery && { search: searchQuery }),
-        limit: '50',
+        limit: '50'
       }), {
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (response.ok) {
@@ -87,9 +87,9 @@ export const UserRoleAssignment: React.FC = () => {
   const loadRoles = async () => {
     try {
       const response = await fetch('/api/auth/rbac/roles?' + new URLSearchParams({
-        ...(roleFilter && { scope: roleFilter }),
+        ...(roleFilter && { scope: roleFilter })
       }), {
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (response.ok) {
@@ -104,7 +104,7 @@ export const UserRoleAssignment: React.FC = () => {
   const loadUserRoles = async (userId: string) => {
     try {
       const response = await fetch(`/api/auth/rbac/users/${userId}/roles`, {
-        credentials: 'include',
+        credentials: 'include'
       });
 
       if (response.ok) {
@@ -119,7 +119,7 @@ export const UserRoleAssignment: React.FC = () => {
           grantedBy: role.grantedBy,
           grantedAt: role.grantedAt,
           expiresAt: role.expiresAt,
-          scopeContext: role.scopeContext,
+          scopeContext: role.scopeContext
         }));
         setUserRoles(userRolesWithDetails);
       }
@@ -141,7 +141,7 @@ export const UserRoleAssignment: React.FC = () => {
     try {
       const assignmentData: AssignRoleData = {
         userId: selectedUser.id,
-        roleId: assignmentForm.roleId,
+        roleId: assignmentForm.roleId
       };
 
       if (assignmentExpiry) {
@@ -160,10 +160,10 @@ export const UserRoleAssignment: React.FC = () => {
       const response = await fetch('/api/auth/rbac/assign-role', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify(assignmentData),
+        body: JSON.stringify(assignmentData)
       });
 
       if (response.ok) {
@@ -195,13 +195,13 @@ export const UserRoleAssignment: React.FC = () => {
       const response = await fetch('/api/auth/rbac/remove-role', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify({
           userId: selectedUser.id,
-          roleId,
-        }),
+          roleId
+        })
       });
 
       if (response.ok) {
@@ -354,8 +354,8 @@ export const UserRoleAssignment: React.FC = () => {
                               <div className="flex items-center space-x-2 mt-1">
                                 <span className={`px-2 py-1 text-xs rounded-full ${
                                   userRole.roleScope === 'global' ? 'bg-blue-100 text-blue-800' :
-                                  userRole.roleScope === 'organization' ? 'bg-green-100 text-green-800' :
-                                  'bg-yellow-100 text-yellow-800'
+                                    userRole.roleScope === 'organization' ? 'bg-green-100 text-green-800' :
+                                      'bg-yellow-100 text-yellow-800'
                                 }`}>
                                   {userRole.roleScope}
                                 </span>
@@ -373,8 +373,8 @@ export const UserRoleAssignment: React.FC = () => {
                                     )}
                                     <span className={`text-xs ${
                                       isRoleExpired(userRole.expiresAt) ? 'text-red-600' :
-                                      isRoleExpiringSoon(userRole.expiresAt) ? 'text-yellow-600' :
-                                      'text-gray-500'
+                                        isRoleExpiringSoon(userRole.expiresAt) ? 'text-yellow-600' :
+                                          'text-gray-500'
                                     }`}>
                                       {isRoleExpired(userRole.expiresAt) ? 'Expired' : 'Expires'}{' '}
                                       {new Date(userRole.expiresAt).toLocaleDateString()}

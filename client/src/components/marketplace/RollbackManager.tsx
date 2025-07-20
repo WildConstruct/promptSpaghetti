@@ -166,16 +166,16 @@ export const RollbackManager: React.FC = () => {
 
   const validateStep = (step: number): boolean => {
     switch (step) {
-      case 1: // Version Selection
-        return !!rollbackData.to_version_id;
-      case 2: // Rollback Details
-        return !!(rollbackData.rollback_reason && rollbackData.rollback_type);
-      case 3: // Impact Assessment
-        return !!(rollbackData.impact_assessment && rollbackData.rollback_plan);
-      case 4: // Verification Steps
-        return rollbackData.verification_steps.some(step => step.trim().length > 0);
-      default:
-        return true;
+    case 1: // Version Selection
+      return !!rollbackData.to_version_id;
+    case 2: // Rollback Details
+      return !!(rollbackData.rollback_reason && rollbackData.rollback_type);
+    case 3: // Impact Assessment
+      return !!(rollbackData.impact_assessment && rollbackData.rollback_plan);
+    case 4: // Verification Steps
+      return rollbackData.verification_steps.some(step => step.trim().length > 0);
+    default:
+      return true;
     }
   };
 
@@ -294,8 +294,8 @@ export const RollbackManager: React.FC = () => {
                 <span className="version-number">v{version.version_number}</span>
                 <span className="compatibility-badge" style={{ 
                   backgroundColor: version.compatibility_level === 'breaking' ? '#ef4444' : 
-                                 version.compatibility_level === 'major' ? '#f59e0b' :
-                                 version.compatibility_level === 'minor' ? '#10b981' : '#3b82f6'
+                    version.compatibility_level === 'major' ? '#f59e0b' :
+                      version.compatibility_level === 'minor' ? '#10b981' : '#3b82f6'
                 }}>
                   {version.compatibility_level}
                 </span>

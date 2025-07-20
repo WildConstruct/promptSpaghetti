@@ -7,7 +7,7 @@ import {
   AdaptorTestFramework,
   EnhancedOpenAIAdaptor,
   AdvancedBaseAdaptor,
-  AdvancedAdaptorConfig,
+  AdvancedAdaptorConfig
 } from '../index';
 
 describe('Enhanced Adaptor Framework', () => {
@@ -35,14 +35,14 @@ describe('Enhanced Adaptor Framework', () => {
           await enhancedOpenAI.initialize({
             openai: {
               apiKey: 'test-key',
-              model: 'gpt-4',
+              model: 'gpt-4'
             },
             monitoring: {
               enableTiming: true,
-              enableEvents: true,
-            },
+              enableEvents: true
+            }
           });
-        },
+        }
       });
 
       expect(results.passedTests).toBeGreaterThan(results.failedTests);
@@ -52,7 +52,7 @@ describe('Enhanced Adaptor Framework', () => {
 
     test('should handle advanced pipeline configuration', async () => {
       await enhancedOpenAI.initialize({
-        openai: { apiKey: 'test-key', model: 'gpt-4' },
+        openai: { apiKey: 'test-key', model: 'gpt-4' }
       });
 
       const config: AdvancedAdaptorConfig = {
@@ -62,22 +62,22 @@ describe('Enhanced Adaptor Framework', () => {
           skipOptimization: false,
           retries: {
             maxAttempts: 3,
-            backoffMs: 100,
-          },
+            backoffMs: 100
+          }
         },
         monitoring: {
           enableTiming: true,
           enableMemoryTracking: true,
-          enableEvents: true,
-        },
+          enableEvents: true
+        }
       };
 
       const graph = {
         nodes: [
           { id: '1', type: 'system', data: { text: 'You are a creative writing assistant' } },
-          { id: '2', type: 'user', data: { text: 'Write a story about time travel' } },
+          { id: '2', type: 'user', data: { text: 'Write a story about time travel' } }
         ],
-        edges: [{ id: 'e1', source: '1', target: '2' }],
+        edges: [{ id: 'e1', source: '1', target: '2' }]
       };
 
       const result = await enhancedOpenAI.transform(graph, config);
@@ -91,7 +91,7 @@ describe('Enhanced Adaptor Framework', () => {
     test('should emit pipeline events', async () => {
       await enhancedOpenAI.initialize({
         openai: { apiKey: 'test-key' },
-        monitoring: { enableEvents: true },
+        monitoring: { enableEvents: true }
       });
 
       const events: string[] = [];
@@ -104,7 +104,7 @@ describe('Enhanced Adaptor Framework', () => {
 
       const graph = {
         nodes: [{ id: '1', type: 'output', data: { text: 'Test prompt' } }],
-        edges: [],
+        edges: []
       };
 
       await enhancedOpenAI.transform(graph);
@@ -116,12 +116,12 @@ describe('Enhanced Adaptor Framework', () => {
 
     test('should track performance statistics', async () => {
       await enhancedOpenAI.initialize({
-        openai: { apiKey: 'test-key' },
+        openai: { apiKey: 'test-key' }
       });
 
       const graph = {
         nodes: [{ id: '1', type: 'output', data: { text: 'Test' } }],
-        edges: [],
+        edges: []
       };
 
       // Perform multiple operations
@@ -140,7 +140,7 @@ describe('Enhanced Adaptor Framework', () => {
 
     test('should handle complex conversation flows', async () => {
       await enhancedOpenAI.initialize({
-        openai: { apiKey: 'test-key', model: 'gpt-4' },
+        openai: { apiKey: 'test-key', model: 'gpt-4' }
       });
 
       const conversationGraph = {
@@ -164,18 +164,18 @@ describe('Enhanced Adaptor Framework', () => {
             id: '4', 
             type: 'user', 
             data: { text: 'Something about AI and consciousness' } 
-          },
+          }
         ],
         edges: [
           { id: 'e1', source: '1', target: '2' },
           { id: 'e2', source: '2', target: '3' },
-          { id: 'e3', source: '3', target: '4' },
-        ],
+          { id: 'e3', source: '3', target: '4' }
+        ]
       };
 
       const result = await enhancedOpenAI.transform(conversationGraph, {
         qualityPreference: 0.8,
-        stylePreference: 'default',
+        stylePreference: 'default'
       });
 
       expect(result.parameters.messages).toBeDefined();
@@ -185,7 +185,7 @@ describe('Enhanced Adaptor Framework', () => {
 
     test('should optimize based on content analysis', async () => {
       await enhancedOpenAI.initialize({
-        openai: { apiKey: 'test-key' },
+        openai: { apiKey: 'test-key' }
       });
 
       const creativeGraph = {
@@ -194,9 +194,9 @@ describe('Enhanced Adaptor Framework', () => {
             id: '1', 
             type: 'output', 
             data: { text: 'Write a creative story about magical creatures in an enchanted forest' } 
-          },
+          }
         ],
-        edges: [],
+        edges: []
       };
 
       const analyticalGraph = {
@@ -205,9 +205,9 @@ describe('Enhanced Adaptor Framework', () => {
             id: '1', 
             type: 'output', 
             data: { text: 'Analyze the economic impact of renewable energy adoption' } 
-          },
+          }
         ],
-        edges: [],
+        edges: []
       };
 
       const creativeResult = await enhancedOpenAI.transform(creativeGraph);
@@ -239,7 +239,7 @@ describe('Enhanced Adaptor Framework', () => {
             features: ['test'],
             styleSupport: false,
             negativePromptSupport: false,
-            parameterRanges: {},
+            parameterRanges: {}
           };
         }
 
@@ -255,7 +255,7 @@ describe('Enhanced Adaptor Framework', () => {
           return {
             platform: 'mock',
             prompt: 'success',
-            parameters: {},
+            parameters: {}
           };
         }
 
@@ -277,7 +277,7 @@ describe('Enhanced Adaptor Framework', () => {
 
       const graph = {
         nodes: [{ id: '1', type: 'output', data: { text: 'test' } }],
-        edges: [],
+        edges: []
       };
 
       const config: AdvancedAdaptorConfig = {
@@ -285,9 +285,9 @@ describe('Enhanced Adaptor Framework', () => {
           retries: {
             maxAttempts: 3,
             backoffMs: 10,
-            retryableErrors: ['NETWORK_ERROR'],
-          },
-        },
+            retryableErrors: ['NETWORK_ERROR']
+          }
+        }
       };
 
       // Should succeed after retries
@@ -299,7 +299,7 @@ describe('Enhanced Adaptor Framework', () => {
 
     test('should skip pipeline stages when configured', async () => {
       await enhancedOpenAI.initialize({
-        openai: { apiKey: 'test-key' },
+        openai: { apiKey: 'test-key' }
       });
 
       const events: string[] = [];
@@ -307,14 +307,14 @@ describe('Enhanced Adaptor Framework', () => {
 
       const graph = {
         nodes: [{ id: '1', type: 'output', data: { text: 'test' } }],
-        edges: [],
+        edges: []
       };
 
       await enhancedOpenAI.transform(graph, {
         pipeline: {
           skipValidation: true,
-          skipOptimization: true,
-        },
+          skipOptimization: true
+        }
       });
 
       expect(events).not.toContain('validation');
@@ -331,7 +331,7 @@ describe('Enhanced Adaptor Framework', () => {
           name: 'Fast Test',
           description: 'Quick test',
           graph: { nodes: [{ id: '1', type: 'output', data: { text: 'fast' } }], edges: [] },
-          shouldTranslate: true,
+          shouldTranslate: true
         },
         {
           name: 'Slow Test',
@@ -340,12 +340,12 @@ describe('Enhanced Adaptor Framework', () => {
             nodes: Array.from({ length: 20 }, (_, i) => ({
               id: `node-${i}`,
               type: 'text',
-              data: { text: `Content ${i}` },
+              data: { text: `Content ${i}` }
             })),
-            edges: [],
+            edges: []
           },
-          shouldTranslate: true,
-        },
+          shouldTranslate: true
+        }
       ];
 
       const results = await testFramework.runTestSuite({
@@ -354,9 +354,9 @@ describe('Enhanced Adaptor Framework', () => {
         testCases,
         setup: async () => {
           await enhancedOpenAI.initialize({
-            openai: { apiKey: 'test-key' },
+            openai: { apiKey: 'test-key' }
           });
-        },
+        }
       });
 
       const performanceReport = testFramework.generatePerformanceReport([results]);

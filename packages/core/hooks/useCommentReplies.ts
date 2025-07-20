@@ -51,14 +51,14 @@ export function useCommentReplies(options: UseCommentRepliesOptions) {
       const params = new URLSearchParams({
         page: pageNum.toString(),
         limit: limit.toString(),
-        sort_order: sortOrder,
+        sort_order: sortOrder
       });
 
       const response = await fetch(`${API_BASE}/comments/${commentId}/replies?${params}`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId,
-        },
+          'X-User-Id': userId
+        }
       });
 
       if (!response.ok) {
@@ -163,6 +163,6 @@ export function useCommentReplies(options: UseCommentRepliesOptions) {
     refresh,
     addReply,
     updateReply,
-    removeReply,
+    removeReply
   };
 }

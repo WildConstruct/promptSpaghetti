@@ -164,42 +164,42 @@ export const RecurrenceEditor: React.FC<RecurrenceEditorProps> = ({
     let description = '';
     
     switch (type) {
-      case 'daily':
-        description = interval === 1 ? 'Every day' : `Every ${interval} days`;
-        break;
-      case 'weekly':
-        if (daysOfWeek && daysOfWeek.length > 0) {
-          const dayNames = daysOfWeek.map(d => DAYS_OF_WEEK[d].label).join(', ');
-          description = interval === 1 
-            ? `Every week on ${dayNames}` 
-            : `Every ${interval} weeks on ${dayNames}`;
-        } else {
-          description = interval === 1 ? 'Every week' : `Every ${interval} weeks`;
-        }
-        break;
-      case 'monthly':
-        if (daysOfMonth && daysOfMonth.length > 0) {
-          const dayList = daysOfMonth.join(', ');
-          description = interval === 1 
-            ? `Every month on day ${dayList}` 
-            : `Every ${interval} months on day ${dayList}`;
-        } else {
-          description = interval === 1 ? 'Every month' : `Every ${interval} months`;
-        }
-        break;
-      case 'yearly':
-        if (monthsOfYear && monthsOfYear.length > 0) {
-          const monthNames = monthsOfYear.map(m => MONTHS_OF_YEAR[m - 1].label).join(', ');
-          description = interval === 1 
-            ? `Every year in ${monthNames}` 
-            : `Every ${interval} years in ${monthNames}`;
-        } else {
-          description = interval === 1 ? 'Every year' : `Every ${interval} years`;
-        }
-        break;
-      case 'custom':
-        description = recurrenceData.cronExpression || 'Custom schedule';
-        break;
+    case 'daily':
+      description = interval === 1 ? 'Every day' : `Every ${interval} days`;
+      break;
+    case 'weekly':
+      if (daysOfWeek && daysOfWeek.length > 0) {
+        const dayNames = daysOfWeek.map(d => DAYS_OF_WEEK[d].label).join(', ');
+        description = interval === 1 
+          ? `Every week on ${dayNames}` 
+          : `Every ${interval} weeks on ${dayNames}`;
+      } else {
+        description = interval === 1 ? 'Every week' : `Every ${interval} weeks`;
+      }
+      break;
+    case 'monthly':
+      if (daysOfMonth && daysOfMonth.length > 0) {
+        const dayList = daysOfMonth.join(', ');
+        description = interval === 1 
+          ? `Every month on day ${dayList}` 
+          : `Every ${interval} months on day ${dayList}`;
+      } else {
+        description = interval === 1 ? 'Every month' : `Every ${interval} months`;
+      }
+      break;
+    case 'yearly':
+      if (monthsOfYear && monthsOfYear.length > 0) {
+        const monthNames = monthsOfYear.map(m => MONTHS_OF_YEAR[m - 1].label).join(', ');
+        description = interval === 1 
+          ? `Every year in ${monthNames}` 
+          : `Every ${interval} years in ${monthNames}`;
+      } else {
+        description = interval === 1 ? 'Every year' : `Every ${interval} years`;
+      }
+      break;
+    case 'custom':
+      description = recurrenceData.cronExpression || 'Custom schedule';
+      break;
     }
 
     // Add end condition

@@ -30,7 +30,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   onDelete,
   onResolve,
   compact = false,
-  isLast = false,
+  isLast = false
 }) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
@@ -41,11 +41,11 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     error: repliesError,
     loadMore: loadMoreReplies,
     hasMore: hasMoreReplies,
-    refresh: refreshReplies,
+    refresh: refreshReplies
   } = useCommentReplies({
     commentId: comment.id,
     userId,
-    enabled: showReplies,
+    enabled: showReplies
   });
 
   const handleReply = async (content: string) => {

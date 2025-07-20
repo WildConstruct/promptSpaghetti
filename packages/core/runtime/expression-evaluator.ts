@@ -1,5 +1,10 @@
 // packages/core/runtime/expression-evaluator.ts
-// Safe expression evaluator using AST parsing
+// Safe expression evaluator using acorn AST parsing with enhanced security filtering
+
+import * as acorn from 'acorn';
+import { ASTNodeWhitelistFilter, createConditionalNodeFilter, NodeSafetyLevel } from './ast-node-whitelist';
+import { createAuditedSafeMathContext, MathFunctionAuditor } from './safe-math-context';
+import { securityAudit, SecuritySeverity, SecurityEventCategory } from './security-audit-logger';
 
 /**
  * Token types for expression parsing
@@ -92,7 +97,7 @@ class Tokenizer {
     }
 
     // Strings
-    if (char === '"' || char === "'") {
+    if (char === '"' || char === '\'') {
       const quote = char;
       let value = '';
       this.position++; // Skip opening quote
@@ -132,89 +137,89 @@ class Tokenizer {
 
     // Operators and punctuation
     switch (char) {
-      case '(':
-        this.position++;
-        return { type: TokenType.LPAREN, value: char, position: startPos };
-      case ')':
-        this.position++;
-        return { type: TokenType.RPAREN, value: char, position: startPos };
-      case '[':
-        this.position++;
-        return { type: TokenType.LBRACKET, value: char, position: startPos };
-      case ']':
-        this.position++;
-        return { type: TokenType.RBRACKET, value: char, position: startPos };
-      case '.':
-        this.position++;
-        return { type: TokenType.DOT, value: char, position: startPos };
-      case ',':
-        this.position++;
-        return { type: TokenType.COMMA, value: char, position: startPos };
-      case '!':
-        this.position++;
-        if (this.position < this.expression.length && this.expression[this.position] === '=') {
-          this.position++;
-          if (this.position < this.expression.length && this.expression[this.position] === '=') {
-            this.position++;
-            return { type: TokenType.OPERATOR, value: '!==', position: startPos };
-          }
-          return { type: TokenType.OPERATOR, value: '!=', position: startPos };
-        }
-        return { type: TokenType.OPERATOR, value: '!', position: startPos };
-      case '=':
+    case '(':
+      this.position++;
+      return { type: TokenType.LPAREN, value: char, position: startPos };
+    case ')':
+      this.position++;
+      return { type: TokenType.RPAREN, value: char, position: startPos };
+    case '[':
+      this.position++;
+      return { type: TokenType.LBRACKET, value: char, position: startPos };
+    case ']':
+      this.position++;
+      return { type: TokenType.RBRACKET, value: char, position: startPos };
+    case '.':
+      this.position++;
+      return { type: TokenType.DOT, value: char, position: startPos };
+    case ',':
+      this.position++;
+      return { type: TokenType.COMMA, value: char, position: startPos };
+    case '!':
+      this.position++;
+      if (this.position < this.expression.length && this.expression[this.position] === '=') {
         this.position++;
         if (this.position < this.expression.length && this.expression[this.position] === '=') {
           this.position++;
-          if (this.position < this.expression.length && this.expression[this.position] === '=') {
-            this.position++;
-            return { type: TokenType.OPERATOR, value: '===', position: startPos };
-          }
-          return { type: TokenType.OPERATOR, value: '==', position: startPos };
+          return { type: TokenType.OPERATOR, value: '!==', position: startPos };
         }
-        throw new Error(`Unexpected assignment operator at position ${startPos}`);
-      case '<':
+        return { type: TokenType.OPERATOR, value: '!=', position: startPos };
+      }
+      return { type: TokenType.OPERATOR, value: '!', position: startPos };
+    case '=':
+      this.position++;
+      if (this.position < this.expression.length && this.expression[this.position] === '=') {
         this.position++;
         if (this.position < this.expression.length && this.expression[this.position] === '=') {
           this.position++;
-          return { type: TokenType.OPERATOR, value: '<=', position: startPos };
+          return { type: TokenType.OPERATOR, value: '===', position: startPos };
         }
-        return { type: TokenType.OPERATOR, value: '<', position: startPos };
-      case '>':
+        return { type: TokenType.OPERATOR, value: '==', position: startPos };
+      }
+      throw new Error(`Unexpected assignment operator at position ${startPos}`);
+    case '<':
+      this.position++;
+      if (this.position < this.expression.length && this.expression[this.position] === '=') {
         this.position++;
-        if (this.position < this.expression.length && this.expression[this.position] === '=') {
-          this.position++;
-          return { type: TokenType.OPERATOR, value: '>=', position: startPos };
-        }
-        return { type: TokenType.OPERATOR, value: '>', position: startPos };
-      case '&':
+        return { type: TokenType.OPERATOR, value: '<=', position: startPos };
+      }
+      return { type: TokenType.OPERATOR, value: '<', position: startPos };
+    case '>':
+      this.position++;
+      if (this.position < this.expression.length && this.expression[this.position] === '=') {
         this.position++;
-        if (this.position < this.expression.length && this.expression[this.position] === '&') {
-          this.position++;
-          return { type: TokenType.OPERATOR, value: '&&', position: startPos };
-        }
-        throw new Error(`Unexpected bitwise operator at position ${startPos}`);
-      case '|':
+        return { type: TokenType.OPERATOR, value: '>=', position: startPos };
+      }
+      return { type: TokenType.OPERATOR, value: '>', position: startPos };
+    case '&':
+      this.position++;
+      if (this.position < this.expression.length && this.expression[this.position] === '&') {
         this.position++;
-        if (this.position < this.expression.length && this.expression[this.position] === '|') {
-          this.position++;
-          return { type: TokenType.OPERATOR, value: '||', position: startPos };
-        }
-        throw new Error(`Unexpected bitwise operator at position ${startPos}`);
-      case '+':
-      case '-':
-      case '*':
-      case '/':
-      case '%':
+        return { type: TokenType.OPERATOR, value: '&&', position: startPos };
+      }
+      throw new Error(`Unexpected bitwise operator at position ${startPos}`);
+    case '|':
+      this.position++;
+      if (this.position < this.expression.length && this.expression[this.position] === '|') {
         this.position++;
-        return { type: TokenType.OPERATOR, value: char, position: startPos };
-      case '?':
-        this.position++;
-        return { type: TokenType.OPERATOR, value: char, position: startPos };
-      case ':':
-        this.position++;
-        return { type: TokenType.OPERATOR, value: char, position: startPos };
-      default:
-        throw new Error(`Unexpected character '${char}' at position ${startPos}`);
+        return { type: TokenType.OPERATOR, value: '||', position: startPos };
+      }
+      throw new Error(`Unexpected bitwise operator at position ${startPos}`);
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case '%':
+      this.position++;
+      return { type: TokenType.OPERATOR, value: char, position: startPos };
+    case '?':
+      this.position++;
+      return { type: TokenType.OPERATOR, value: char, position: startPos };
+    case ':':
+      this.position++;
+      return { type: TokenType.OPERATOR, value: char, position: startPos };
+    default:
+      throw new Error(`Unexpected character '${char}' at position ${startPos}`);
     }
   }
 }
@@ -392,161 +397,297 @@ class Parser {
     const token = this.currentToken();
 
     switch (token.type) {
-      case TokenType.NUMBER:
-        this.consumeToken();
-        return { type: 'Literal', value: parseFloat(token.value) };
+    case TokenType.NUMBER:
+      this.consumeToken();
+      return { type: 'Literal', value: parseFloat(token.value) };
       
-      case TokenType.STRING:
-        this.consumeToken();
-        return { type: 'Literal', value: token.value };
+    case TokenType.STRING:
+      this.consumeToken();
+      return { type: 'Literal', value: token.value };
       
-      case TokenType.BOOLEAN:
-        this.consumeToken();
-        return { type: 'Literal', value: token.value === 'true' };
+    case TokenType.BOOLEAN:
+      this.consumeToken();
+      return { type: 'Literal', value: token.value === 'true' };
       
-      case TokenType.IDENTIFIER:
-        this.consumeToken();
-        return { type: 'Identifier', name: token.value };
+    case TokenType.IDENTIFIER:
+      this.consumeToken();
+      return { type: 'Identifier', name: token.value };
       
-      case TokenType.LPAREN:
-        this.consumeToken();
-        const node = this.parseExpression();
-        this.consumeToken(TokenType.RPAREN);
-        return node;
+    case TokenType.LPAREN:
+      this.consumeToken();
+      const node = this.parseExpression();
+      this.consumeToken(TokenType.RPAREN);
+      return node;
       
-      default:
-        throw new Error(`Unexpected token ${token.type} at position ${token.position}`);
+    default:
+      throw new Error(`Unexpected token ${token.type} at position ${token.position}`);
     }
   }
 }
 
 /**
- * Safe expression evaluator
+ * Extended acorn Node type to include all necessary AST node types
+ */
+type ExtendedAcornNode = acorn.Node & {
+  operator?: string;
+  left?: ExtendedAcornNode;
+  right?: ExtendedAcornNode;
+  argument?: ExtendedAcornNode;
+  test?: ExtendedAcornNode;
+  consequent?: ExtendedAcornNode;
+  alternate?: ExtendedAcornNode;
+  callee?: ExtendedAcornNode;
+  arguments?: ExtendedAcornNode[];
+  object?: ExtendedAcornNode;
+  property?: ExtendedAcornNode;
+  computed?: boolean;
+  name?: string;
+  value?: any;
+  raw?: string;
+};
+
+/**
+ * Acorn parser configuration for safe expression parsing
+ */
+const ACORN_OPTIONS: acorn.Options = {
+  ecmaVersion: 2020,
+  sourceType: 'script',
+  allowReserved: false,
+  allowReturnOutsideFunction: false,
+  allowImportExportEverywhere: false,
+  allowAwaitOutsideFunction: false,
+  allowHashBang: false,
+  locations: true,
+  ranges: true
+};
+
+/**
+ * Enhanced safe expression evaluator with AST node filtering
  */
 export class SafeExpressionEvaluator {
+  private static astFilter = createConditionalNodeFilter();
+
   /**
-   * Evaluate an expression safely with a given context
+   * Evaluate an expression safely with a given context and enhanced security filtering
    */
   static evaluate(expression: string, context: Record<string, any>): any {
-    // Tokenize
-    const tokenizer = new Tokenizer(expression);
-    const tokens = tokenizer.tokenize();
+    // Parse using acorn
+    const ast = this.parseExpressionWithAcorn(expression);
 
-    // Parse
-    const parser = new Parser(tokens);
-    const ast = parser.parse();
+    // Apply AST node security filtering
+    this.validateASTSecurity(ast);
 
     // Evaluate
     return this.evaluateAST(ast, context);
   }
 
-  private static evaluateAST(node: ASTNode, context: Record<string, any>): any {
+  /**
+   * Parse expression using acorn with security validation
+   */
+  private static parseExpressionWithAcorn(expression: string): ExtendedAcornNode {
+    try {
+      // Wrap expression to make it a valid JavaScript program
+      const wrappedExpression = `(${expression})`;
+      
+      // Parse using acorn
+      const program = acorn.parse(wrappedExpression, ACORN_OPTIONS) as any;
+      
+      // Extract the expression from the ExpressionStatement
+      if (program.type !== 'Program' || 
+          program.body.length !== 1 || 
+          program.body[0].type !== 'ExpressionStatement') {
+        throw new Error('Invalid expression structure');
+      }
+      
+      return program.body[0].expression as ExtendedAcornNode;
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(`Expression syntax error: ${error.message}`);
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Validate AST nodes against security whitelist
+   */
+  private static validateASTSecurity(ast: ExtendedAcornNode): void {
+    // Apply the whitelist filter directly to acorn AST
+    const filterResult = this.astFilter.filterAST(ast);
+    
+    if (!filterResult.allowed) {
+      const blockedNode = filterResult.blockedNodes[0];
+      throw new Error(
+        `Unsafe AST node detected: ${blockedNode.nodeType} (${blockedNode.safetyLevel}) - ${blockedNode.reason}`
+      );
+    }
+  }
+
+
+  private static evaluateAST(node: ExtendedAcornNode, context: Record<string, any>): any {
     switch (node.type) {
-      case 'Literal':
-        return node.value;
+    case 'Literal':
+      return node.value;
       
-      case 'Identifier':
-        if (!(node.name in context)) {
-          throw new Error(`Undefined variable: ${node.name}`);
-        }
-        return context[node.name];
+    case 'Identifier':
+      if (!node.name || !(node.name in context)) {
+        throw new Error(`Undefined variable: ${node.name || 'unknown'}`);
+      }
+      return context[node.name];
       
-      case 'BinaryExpression':
-        const left = this.evaluateAST(node.left, context);
-        const right = this.evaluateAST(node.right, context);
+    case 'BinaryExpression':
+      const left = this.evaluateAST(node.left!, context);
+      const right = this.evaluateAST(node.right!, context);
         
-        switch (node.operator) {
-          case '+': return left + right;
-          case '-': return left - right;
-          case '*': return left * right;
-          case '/': return left / right;
-          case '%': return left % right;
-          case '<': return left < right;
-          case '>': return left > right;
-          case '<=': return left <= right;
-          case '>=': return left >= right;
-          case '==': return left == right;
-          case '!=': return left != right;
-          case '===': return left === right;
-          case '!==': return left !== right;
-          default:
-            throw new Error(`Unknown binary operator: ${node.operator}`);
-        }
-      
-      case 'UnaryExpression':
-        const argument = this.evaluateAST(node.argument, context);
-        
-        switch (node.operator) {
-          case '!': return !argument;
-          case '-': return -argument;
-          case '+': return +argument;
-          default:
-            throw new Error(`Unknown unary operator: ${node.operator}`);
-        }
-      
-      case 'LogicalExpression':
-        const leftLogical = this.evaluateAST(node.left, context);
-        
-        if (node.operator === '&&') {
-          return leftLogical && this.evaluateAST(node.right, context);
-        } else if (node.operator === '||') {
-          return leftLogical || this.evaluateAST(node.right, context);
-        }
-        
-        throw new Error(`Unknown logical operator: ${node.operator}`);
-      
-      case 'ConditionalExpression':
-        const test = this.evaluateAST(node.test, context);
-        return test 
-          ? this.evaluateAST(node.consequent, context)
-          : this.evaluateAST(node.alternate, context);
-      
-      case 'MemberExpression':
-        const object = this.evaluateAST(node.object, context);
-        
-        if (object == null) {
-          throw new Error('Cannot access property of null or undefined');
-        }
-        
-        let property: string;
-        if (node.computed) {
-          property = String(this.evaluateAST(node.property, context));
-        } else {
-          property = (node.property as any).name;
-        }
-        
-        // Security check: prevent access to dangerous properties
-        const dangerousProps = ['constructor', 'prototype', '__proto__', '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__'];
-        if (dangerousProps.includes(property)) {
-          throw new Error(`Access to property '${property}' is not allowed`);
-        }
-        
-        return object[property];
-      
-      case 'CallExpression':
-        const callee = this.evaluateAST(node.callee, context);
-        
-        if (typeof callee !== 'function') {
-          throw new Error('Attempted to call a non-function');
-        }
-        
-        const args = node.arguments.map(arg => this.evaluateAST(arg, context));
-        
-        // Security: Only allow whitelisted functions
-        if (!this.isSafeFunction(callee, context)) {
-          throw new Error('Function call not allowed');
-        }
-        
-        return callee(...args);
-      
+      switch (node.operator) {
+      case '+': return left + right;
+      case '-': return left - right;
+      case '*': return left * right;
+      case '/': return left / right;
+      case '%': return left % right;
+      case '<': return left < right;
+      case '>': return left > right;
+      case '<=': return left <= right;
+      case '>=': return left >= right;
+      case '==': return left == right;
+      case '!=': return left != right;
+      case '===': return left === right;
+      case '!==': return left !== right;
       default:
-        throw new Error(`Unknown AST node type: ${(node as any).type}`);
+        throw new Error(`Unknown binary operator: ${node.operator}`);
+      }
+      
+    case 'UnaryExpression':
+      const argument = this.evaluateAST(node.argument!, context);
+        
+      switch (node.operator) {
+      case '!': return !argument;
+      case '-': return -argument;
+      case '+': return +argument;
+      default:
+        throw new Error(`Unknown unary operator: ${node.operator}`);
+      }
+      
+    case 'LogicalExpression':
+      const leftLogical = this.evaluateAST(node.left!, context);
+        
+      if (node.operator === '&&') {
+        return leftLogical && this.evaluateAST(node.right!, context);
+      } else if (node.operator === '||') {
+        return leftLogical || this.evaluateAST(node.right!, context);
+      }
+        
+      throw new Error(`Unknown logical operator: ${node.operator}`);
+      
+    case 'ConditionalExpression':
+      const test = this.evaluateAST(node.test!, context);
+      return test 
+        ? this.evaluateAST(node.consequent!, context)
+        : this.evaluateAST(node.alternate!, context);
+      
+    case 'MemberExpression':
+      const object = this.evaluateAST(node.object!, context);
+        
+      if (object == null) {
+        throw new Error('Cannot access property of null or undefined');
+      }
+        
+      let property: string;
+      if (node.computed) {
+        property = String(this.evaluateAST(node.property!, context));
+      } else {
+        const propNode = node.property! as any;
+        property = propNode.name || String(propNode.value);
+      }
+        
+      // Security check: prevent access to dangerous properties
+      const dangerousProps = ['constructor', 'prototype', '__proto__', '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__'];
+      if (dangerousProps.includes(property)) {
+        securityAudit.logPrototypePollutionAttempt(property, {
+          nodeType: 'MemberExpression',
+          expression: `[object].${property}`
+        });
+        throw new Error(`Access to property '${property}' is not allowed`);
+      }
+        
+      return object[property];
+      
+    case 'CallExpression':
+      const callee = this.evaluateAST(node.callee!, context);
+        
+      if (typeof callee !== 'function') {
+        throw new Error('Attempted to call a non-function');
+      }
+        
+      const args = node.arguments!.map(arg => this.evaluateAST(arg, context));
+        
+      // Security: Only allow whitelisted functions
+      if (!this.isSafeFunction(callee, context)) {
+        throw new Error('Function call not allowed');
+      }
+        
+      return callee(...args);
+      
+    default:
+      throw new Error(`Unknown AST node type: ${(node as any).type}`);
     }
   }
 
   private static isSafeFunction(func: Function, context: Record<string, any>): boolean {
     // Check if the function is one of our safe context functions
     const safeFunctions = new Set(Object.values(context).filter(v => typeof v === 'function'));
+    
+    // Also check if it's from our safe Math context
+    if (context.Math && typeof context.Math === 'object') {
+      const mathFunctions = Object.values(context.Math).filter(v => typeof v === 'function');
+      for (const mathFunc of mathFunctions) {
+        if (func === mathFunc) {
+          return true;
+        }
+      }
+    }
+    
     return safeFunctions.has(func);
+  }
+  
+  /**
+   * Create a safe evaluation context with restricted Math functions
+   */
+  static createSafeContext(variables: Record<string, any> = {}): Record<string, any> {
+    const context: Record<string, any> = { ...variables };
+    
+    // Add safe Math context with auditing
+    context.Math = createAuditedSafeMathContext('expression-evaluator');
+    
+    // Add safe utility functions
+    context.getType = (value: any) => typeof value;
+    context.length = (value: any) => value?.length ?? 0;
+    context.isEmpty = (value: any) => !value || value.length === 0;
+    context.includes = (value: any, item: any) => {
+      if (typeof value === 'string') {
+        return String(value).includes(String(item));
+      } else if (Array.isArray(value)) {
+        return value.includes(item);
+      }
+      return false;
+    };
+    context.startsWith = (str: string, prefix: string) => String(str).startsWith(String(prefix));
+    context.endsWith = (str: string, suffix: string) => String(str).endsWith(String(suffix));
+    
+    return context;
+  }
+  
+  /**
+   * Get Math function audit log
+   */
+  static getMathAuditLog(): any[] {
+    return MathFunctionAuditor.getAuditLog();
+  }
+  
+  /**
+   * Clear Math function audit log
+   */
+  static clearMathAuditLog(): void {
+    MathFunctionAuditor.clearAuditLog();
   }
 }

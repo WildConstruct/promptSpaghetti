@@ -19,7 +19,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
     deleteRule,
     toggleRule,
     clearAllRules,
-    applyCorrections,
+    applyCorrections
   } = useCorrectionsStore();
 
   const [activeTab, setActiveTab] = useState<TabType>('rules');
@@ -33,7 +33,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
     replaceWith: '',
     isRegex: false,
     isActive: true,
-    priority: rules.length,
+    priority: rules.length
   });
 
   // Filter rules based on search
@@ -59,7 +59,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
         replaceWith: '',
         isRegex: false,
         isActive: true,
-        priority: rules.length,
+        priority: rules.length
       });
       setActiveTab('rules');
     }
@@ -95,7 +95,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
         color: '#fff',
         zIndex: 1000,
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column'
       }}
     >
       {/* Header */}
@@ -118,7 +118,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
             color: '#a0aec0',
             cursor: 'pointer',
             fontSize: '20px',
-            padding: '4px 8px',
+            padding: '4px 8px'
           }}
         >
           ×
@@ -150,7 +150,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
               cursor: 'pointer',
               fontSize: '14px',
               fontWeight: 500,
-              transition: 'all 0.2s ease',
+              transition: 'all 0.2s ease'
             }}
           >
             {tab.label}
@@ -188,7 +188,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '8px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
             </div>
@@ -202,7 +202,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                     background: '#2a2e37',
                     border: '1px solid #444',
                     borderRadius: '8px',
-                    padding: '16px',
+                    padding: '16px'
                   }}
                 >
                   <div style={{ 
@@ -240,7 +240,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                         padding: '6px 12px',
                         borderRadius: '4px',
                         cursor: 'pointer',
-                        fontSize: '12px',
+                        fontSize: '12px'
                       }}
                     >
                       Edit
@@ -314,7 +314,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   borderRadius: '6px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  fontWeight: 500,
+                  fontWeight: 500
                 }}
               >
                 Load Defaults
@@ -334,7 +334,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   borderRadius: '6px',
                   cursor: 'pointer',
                   fontSize: '14px',
-                  fontWeight: 500,
+                  fontWeight: 500
                 }}
               >
                 Clear All
@@ -360,7 +360,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                 border: '1px solid #444',
                 borderRadius: '8px',
                 fontSize: '16px',
-                resize: 'vertical',
+                resize: 'vertical'
               }}
             />
             {testText && (
@@ -375,7 +375,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                     marginTop: '8px',
                     fontSize: '16px',
                     lineHeight: '1.5',
-                    wordBreak: 'break-word',
+                    wordBreak: 'break-word'
                   }}
                 >
                   {handleTestCorrections()}
@@ -401,7 +401,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '8px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
               <input
@@ -415,7 +415,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '8px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
               <input
@@ -429,7 +429,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '8px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
               <input
@@ -443,7 +443,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '8px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
               
@@ -480,7 +480,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
                   fontSize: '16px',
                   fontWeight: 500,
-                  marginTop: '8px',
+                  marginTop: '8px'
                 }}
               >
                 Add Rule
@@ -498,7 +498,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h4 style={{ fontSize: '16px', marginBottom: '8px' }}>Statistics</h4>
                 <p style={{ fontSize: '14px', color: '#a0aec0', marginBottom: '8px' }}>
@@ -516,7 +516,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                 background: '#2a2e37',
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #444',
+                border: '1px solid #444'
               }}>
                 <h4 style={{ fontSize: '16px', marginBottom: '8px' }}>Export/Import</h4>
                 <p style={{ fontSize: '14px', color: '#a0aec0', marginBottom: '12px' }}>
@@ -536,7 +536,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '14px',
+                      fontSize: '14px'
                     }}
                   >
                     Export
@@ -554,7 +554,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                       border: 'none',
                       borderRadius: '6px',
                       cursor: 'pointer',
-                      fontSize: '14px',
+                      fontSize: '14px'
                     }}
                   >
                     Import
@@ -580,7 +580,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 1001,
-            padding: '20px',
+            padding: '20px'
           }}
         >
           <div
@@ -591,7 +591,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
               width: '100%',
               maxWidth: '400px',
               maxHeight: '80vh',
-              overflow: 'auto',
+              overflow: 'auto'
             }}
           >
             <div style={{ 
@@ -608,7 +608,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   border: 'none',
                   color: '#a0aec0',
                   cursor: 'pointer',
-                  fontSize: '20px',
+                  fontSize: '20px'
                 }}
               >
                 ×
@@ -627,7 +627,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '6px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
               <input
@@ -641,7 +641,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '6px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
               <input
@@ -655,7 +655,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '6px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
               <input
@@ -669,7 +669,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                   color: '#fff',
                   border: '1px solid #444',
                   borderRadius: '6px',
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
               
@@ -706,7 +706,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                     borderRadius: '6px',
                     cursor: 'pointer',
                     fontSize: '16px',
-                    fontWeight: 500,
+                    fontWeight: 500
                   }}
                 >
                   Save
@@ -722,7 +722,7 @@ export const MobileCorrectionsPanel: React.FC<MobileCorrectionsPanelProps> = ({
                     borderRadius: '6px',
                     cursor: 'pointer',
                     fontSize: '16px',
-                    fontWeight: 500,
+                    fontWeight: 500
                   }}
                 >
                   Delete

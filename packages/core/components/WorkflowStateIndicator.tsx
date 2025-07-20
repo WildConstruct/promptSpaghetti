@@ -38,12 +38,12 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({
 }) => {
   const getStateIcon = (iconName?: string) => {
     switch (iconName) {
-      case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
-      case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
-      case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
-      case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
-      case 'DocumentTextIcon': 
-      default: return <DocumentTextIcon className="h-4 w-4" />;
+    case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
+    case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
+    case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
+    case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
+    case 'DocumentTextIcon': 
+    default: return <DocumentTextIcon className="h-4 w-4" />;
     }
   };
 
@@ -145,12 +145,12 @@ export const WorkflowStateBadge: React.FC<{
     const iconSize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
     
     switch (iconName) {
-      case 'CheckCircleIcon': return <CheckCircleIcon className={iconSize} />;
-      case 'EyeIcon': return <EyeIcon className={iconSize} />;
-      case 'GlobeAltIcon': return <GlobeAltIcon className={iconSize} />;
-      case 'ArchiveBoxIcon': return <ArchiveBoxIcon className={iconSize} />;
-      case 'DocumentTextIcon': 
-      default: return <DocumentTextIcon className={iconSize} />;
+    case 'CheckCircleIcon': return <CheckCircleIcon className={iconSize} />;
+    case 'EyeIcon': return <EyeIcon className={iconSize} />;
+    case 'GlobeAltIcon': return <GlobeAltIcon className={iconSize} />;
+    case 'ArchiveBoxIcon': return <ArchiveBoxIcon className={iconSize} />;
+    case 'DocumentTextIcon': 
+    default: return <DocumentTextIcon className={iconSize} />;
     }
   };
 

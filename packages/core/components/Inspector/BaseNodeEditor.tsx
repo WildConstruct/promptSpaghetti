@@ -1,5 +1,5 @@
-import React from "react";
-import { ZodSchema, ZodTypeAny } from "zod";
+import React from 'react';
+import { ZodSchema, ZodTypeAny } from 'zod';
 
 export interface BaseNodeEditorProps {
   nodeId: string;
@@ -26,8 +26,8 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
   nodeData,
   schema,
   onChange,
-  className = "",
-  children,
+  className = '',
+  children
 }) => {
   const [values, setValues] = React.useState<Record<string, unknown>>(nodeData || {});
   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
@@ -50,7 +50,7 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
           const parsed = fieldSchema.safeParse(val);
           setFieldErrors((prev) => ({ 
             ...prev, 
-            [key]: parsed.success ? "" : parsed.error.issues[0]?.message || "Invalid" 
+            [key]: parsed.success ? '' : parsed.error.issues[0]?.message || 'Invalid' 
           }));
         }
       } catch (error) {
@@ -93,14 +93,14 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
       fieldKey: key,
       zodType,
       error: fieldErrors[key],
-      onChange: (value) => updateField(key, value),
+      onChange: (value) => updateField(key, value)
     };
 
     // Allow custom field rendering via children
     if (children && React.isValidElement(children)) {
       return React.cloneElement(children as React.ReactElement, {
         key,
-        ...fieldProps,
+        ...fieldProps
       });
     }
 
@@ -110,37 +110,37 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
         <label 
           htmlFor={`field-${nodeId}-${key}`} 
           style={{ 
-            display: "block", 
+            display: 'block', 
             fontWeight: 500, 
             marginBottom: 4,
-            color: "#e2e8f0",
-            fontSize: 12,
+            color: '#e2e8f0',
+            fontSize: 12
           }}
         >
           {key}
         </label>
         <input
           id={`field-${nodeId}-${key}`}
-          type={(zodType as any)._def?.typeName === "ZodNumber" ? "number" : "text"}
-          value={String(fieldProps.value ?? "")}
+          type={(zodType as any)._def?.typeName === 'ZodNumber' ? 'number' : 'text'}
+          value={String(fieldProps.value ?? '')}
           onChange={(e) => {
-            const isNumber = (zodType as any)._def?.typeName === "ZodNumber";
+            const isNumber = (zodType as any)._def?.typeName === 'ZodNumber';
             updateField(key, isNumber ? Number(e.target.value) : e.target.value);
           }}
           style={{ 
-            width: "100%", 
+            width: '100%', 
             padding: 6, 
-            border: fieldErrors[key] ? "1px solid #f56565" : "1px solid #4a5568", 
+            border: fieldErrors[key] ? '1px solid #f56565' : '1px solid #4a5568', 
             borderRadius: 4,
-            background: "#2d3748",
-            color: "#e2e8f0",
-            fontSize: 12,
+            background: '#2d3748',
+            color: '#e2e8f0',
+            fontSize: 12
           }}
           placeholder={`Enter ${key}...`}
         />
         {fieldErrors[key] && (
           <div style={{ 
-            color: "#f56565", 
+            color: '#f56565', 
             fontSize: 10, 
             marginTop: 2 
           }}>
@@ -185,11 +185,11 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
         fieldKeys.map(renderField)
       ) : (
         <div style={{ 
-          color: "#a0aec0", 
-          fontStyle: "italic", 
-          textAlign: "center",
+          color: '#a0aec0', 
+          fontStyle: 'italic', 
+          textAlign: 'center',
           padding: 16,
-          fontSize: 12,
+          fontSize: 12
         }}>
           No editable properties found
         </div>

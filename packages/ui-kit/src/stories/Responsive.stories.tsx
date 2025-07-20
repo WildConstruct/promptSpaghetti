@@ -21,8 +21,8 @@ import { useEnhancedResponsive, useBreakpointValue } from '../responsive/utiliti
 const meta: Meta = {
   title: 'Responsive/Overview',
   parameters: {
-    layout: 'fullscreen',
-  },
+    layout: 'fullscreen'
+  }
 };
 
 export default meta;
@@ -108,7 +108,7 @@ export const GridSystemDemo: StoryObj = {
         </Row>
       </Container>
     </>
-  ),
+  )
 };
 
 // Adaptive Layout Demo
@@ -167,7 +167,7 @@ export const AdaptiveLayoutDemo: StoryObj = {
         />
       </>
     );
-  },
+  }
 };
 
 // Collapsible Panels Demo
@@ -208,7 +208,7 @@ export const CollapsiblePanelsDemo: StoryObj = {
         </div>
       </Container>
     </>
-  ),
+  )
 };
 
 // Responsive Tabs Demo
@@ -224,7 +224,7 @@ export const ResponsiveTabsDemo: StoryObj = {
             <h3>Overview Content</h3>
             <p>This is the overview tab content.</p>
           </div>
-        ),
+        )
       },
       {
         id: 'details',
@@ -235,7 +235,7 @@ export const ResponsiveTabsDemo: StoryObj = {
             <h3>Details Content</h3>
             <p>This is the details tab content.</p>
           </div>
-        ),
+        )
       },
       {
         id: 'settings',
@@ -246,7 +246,7 @@ export const ResponsiveTabsDemo: StoryObj = {
             <h3>Settings Content</h3>
             <p>This is the settings tab content.</p>
           </div>
-        ),
+        )
       },
       {
         id: 'help',
@@ -258,8 +258,8 @@ export const ResponsiveTabsDemo: StoryObj = {
             <p>This is the help tab content.</p>
           </div>
         ),
-        disabled: true,
-      },
+        disabled: true
+      }
     ];
     
     return (
@@ -291,7 +291,7 @@ export const ResponsiveTabsDemo: StoryObj = {
         </Container>
       </>
     );
-  },
+  }
 };
 
 // Responsive Values Demo
@@ -302,14 +302,14 @@ export const ResponsiveValuesDemo: StoryObj = {
       sm: 12,
       md: 16,
       lg: 24,
-      xl: 32,
+      xl: 32
     }, 16);
     
     const columns = useBreakpointValue({
       xs: 1,
       sm: 2,
       md: 3,
-      lg: 4,
+      lg: 4
     }, 1);
     
     return (
@@ -347,5 +347,5 @@ export const ResponsiveValuesDemo: StoryObj = {
         </Container>
       </>
     );
-  },
+  }
 };

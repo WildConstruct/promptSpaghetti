@@ -228,19 +228,19 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
     };
 
     switch (nodeType) {
-      case 'WeightedChoice':
-        return { ...baseStyles, borderColor: theme.colors.primary };
-      case 'Concat':
-        return { ...baseStyles, borderColor: theme.colors.secondary };
-      case 'Output':
-        return { ...baseStyles, borderColor: theme.colors.success };
-      case 'Include':
-        return { ...baseStyles, borderColor: theme.colors.info };
-      case 'SetVariable':
-      case 'GetVariable':
-        return { ...baseStyles, borderColor: theme.colors.warning };
-      default:
-        return { ...baseStyles, borderColor: theme.colors.accent };
+    case 'WeightedChoice':
+      return { ...baseStyles, borderColor: theme.colors.primary };
+    case 'Concat':
+      return { ...baseStyles, borderColor: theme.colors.secondary };
+    case 'Output':
+      return { ...baseStyles, borderColor: theme.colors.success };
+    case 'Include':
+      return { ...baseStyles, borderColor: theme.colors.info };
+    case 'SetVariable':
+    case 'GetVariable':
+      return { ...baseStyles, borderColor: theme.colors.warning };
+    default:
+      return { ...baseStyles, borderColor: theme.colors.accent };
     }
   };
 

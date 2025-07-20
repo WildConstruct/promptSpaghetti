@@ -161,11 +161,11 @@ export class ComparisonDAO {
     const params: any[] = [sourceVersionId, targetVersionId];
 
     if (comparisonType) {
-      query += ` AND comparison_type = ?`;
+      query += ' AND comparison_type = ?';
       params.push(comparisonType);
     }
 
-    query += ` ORDER BY created_at DESC LIMIT 1`;
+    query += ' ORDER BY created_at DESC LIMIT 1';
 
     const stmt = this.db.prepare(query);
     const row = stmt.get(...params) as any;
@@ -252,7 +252,7 @@ export class ComparisonDAO {
   }
 
   async deleteComparison(id: string): Promise<boolean> {
-    const stmt = this.db.prepare(`DELETE FROM graph_comparisons WHERE id = ?`);
+    const stmt = this.db.prepare('DELETE FROM graph_comparisons WHERE id = ?');
     const result = stmt.run(id);
     return result.changes > 0;
   }
@@ -462,7 +462,7 @@ export class ComparisonDAO {
   }
 
   async deleteDiffSession(id: string): Promise<boolean> {
-    const stmt = this.db.prepare(`DELETE FROM visual_diff_sessions WHERE id = ?`);
+    const stmt = this.db.prepare('DELETE FROM visual_diff_sessions WHERE id = ?');
     const result = stmt.run(id);
     return result.changes > 0;
   }

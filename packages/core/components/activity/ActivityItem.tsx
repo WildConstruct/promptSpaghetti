@@ -19,7 +19,7 @@ export const ActivityItem: React.FC<ActivityItemProps> = ({
   onClick,
   compact = false,
   showProject = true,
-  isLast = false,
+  isLast = false
 }) => {
   const getActivityIcon = (eventType: string) => {
     if (eventType.includes('created')) return '✨';
@@ -36,43 +36,43 @@ export const ActivityItem: React.FC<ActivityItemProps> = ({
     const actorDisplay = actor_name || actor_id;
 
     switch (event_type) {
-      case 'workspace.created':
-        return `${actorDisplay} created the workspace`;
-      case 'workspace.updated':
-        return `${actorDisplay} updated workspace settings`;
-      case 'workspace.archived':
-        return `${actorDisplay} archived the workspace`;
+    case 'workspace.created':
+      return `${actorDisplay} created the workspace`;
+    case 'workspace.updated':
+      return `${actorDisplay} updated workspace settings`;
+    case 'workspace.archived':
+      return `${actorDisplay} archived the workspace`;
       
-      case 'project.created':
-        return `${actorDisplay} created project "${event_data.project_name}"`;
-      case 'project.updated':
-        return `${actorDisplay} updated project settings`;
-      case 'project.deleted':
-        return `${actorDisplay} deleted a project`;
+    case 'project.created':
+      return `${actorDisplay} created project "${event_data.project_name}"`;
+    case 'project.updated':
+      return `${actorDisplay} updated project settings`;
+    case 'project.deleted':
+      return `${actorDisplay} deleted a project`;
       
-      case 'resource.created':
-        return `${actorDisplay} created ${event_data.resource_type} "${event_data.resource_name}"`;
-      case 'resource.updated':
-        return `${actorDisplay} updated a ${event_data.resource_type}`;
-      case 'resource.deleted':
-        return `${actorDisplay} deleted a ${event_data.resource_type}`;
+    case 'resource.created':
+      return `${actorDisplay} created ${event_data.resource_type} "${event_data.resource_name}"`;
+    case 'resource.updated':
+      return `${actorDisplay} updated a ${event_data.resource_type}`;
+    case 'resource.deleted':
+      return `${actorDisplay} deleted a ${event_data.resource_type}`;
       
-      case 'comment.created':
-        return `${actorDisplay} added a comment`;
-      case 'comment.updated':
-        return `${actorDisplay} edited a comment`;
-      case 'comment.deleted':
-        return `${actorDisplay} deleted a comment`;
+    case 'comment.created':
+      return `${actorDisplay} added a comment`;
+    case 'comment.updated':
+      return `${actorDisplay} edited a comment`;
+    case 'comment.deleted':
+      return `${actorDisplay} deleted a comment`;
       
-      case 'user.invited':
-        return `${actorDisplay} invited ${event_data.invited_user} as ${event_data.role}`;
-      case 'user.joined':
-        return `${actorDisplay} joined the workspace`;
-      case 'user.left':
-        return `${actorDisplay} left the workspace`;
+    case 'user.invited':
+      return `${actorDisplay} invited ${event_data.invited_user} as ${event_data.role}`;
+    case 'user.joined':
+      return `${actorDisplay} joined the workspace`;
+    case 'user.left':
+      return `${actorDisplay} left the workspace`;
       
-      default:
-        return `${actorDisplay} performed ${event_type.replace(/[._]/g, ' ')}`;
+    default:
+      return `${actorDisplay} performed ${event_type.replace(/[._]/g, ' ')}`;
     }
   };
 
@@ -82,30 +82,30 @@ export const ActivityItem: React.FC<ActivityItemProps> = ({
     if (compact) return null;
 
     switch (event_type) {
-      case 'workspace.updated':
-        return event_data.changes ? 
-          `Updated: ${event_data.changes.join(', ')}` : 
-          'Updated workspace settings';
+    case 'workspace.updated':
+      return event_data.changes ? 
+        `Updated: ${event_data.changes.join(', ')}` : 
+        'Updated workspace settings';
       
-      case 'project.created':
-        return event_data.description || 'New project created';
+    case 'project.created':
+      return event_data.description || 'New project created';
       
-      case 'resource.created':
-        return `Created new ${event_data.resource_type} in the project`;
+    case 'resource.created':
+      return `Created new ${event_data.resource_type} in the project`;
       
-      case 'comment.created':
-        if (event_data.target_type === 'node') {
-          return 'Commented on a graph node';
-        } else if (event_data.target_type === 'region') {
-          return 'Commented on a graph region';
-        }
-        return 'Added a comment to the resource';
+    case 'comment.created':
+      if (event_data.target_type === 'node') {
+        return 'Commented on a graph node';
+      } else if (event_data.target_type === 'region') {
+        return 'Commented on a graph region';
+      }
+      return 'Added a comment to the resource';
       
-      case 'user.invited':
-        return `Invited with ${event_data.role} permissions`;
+    case 'user.invited':
+      return `Invited with ${event_data.role} permissions`;
       
-      default:
-        return null;
+    default:
+      return null;
     }
   };
 

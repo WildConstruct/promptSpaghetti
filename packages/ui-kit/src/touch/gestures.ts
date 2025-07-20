@@ -140,7 +140,7 @@ export const graphGestures = {
   
   // Undo/Redo
   undo: 'swipe', // Two-finger right swipe
-  redo: 'swipe', // Two-finger left swipe
+  redo: 'swipe' // Two-finger left swipe
 } as const;
 
 /**
@@ -266,9 +266,9 @@ export const gestureHelpers = {
     const duration = (gesture.endTime || Date.now()) - gesture.startTime;
     const movement = gesture.touches[0] 
       ? getDistance(
-          { x: gesture.touches[0].startX, y: gesture.touches[0].startY },
-          { x: gesture.touches[0].x, y: gesture.touches[0].y }
-        )
+        { x: gesture.touches[0].startX, y: gesture.touches[0].startY },
+        { x: gesture.touches[0].x, y: gesture.touches[0].y }
+      )
       : 0;
     
     return (
@@ -282,9 +282,9 @@ export const gestureHelpers = {
     const duration = Date.now() - gesture.startTime;
     const movement = gesture.touches[0]
       ? getDistance(
-          { x: gesture.touches[0].startX, y: gesture.touches[0].startY },
-          { x: gesture.touches[0].x, y: gesture.touches[0].y }
-        )
+        { x: gesture.touches[0].startX, y: gesture.touches[0].startY },
+        { x: gesture.touches[0].x, y: gesture.touches[0].y }
+      )
       : 0;
     
     return (

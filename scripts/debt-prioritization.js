@@ -425,13 +425,13 @@ class DebtReportGenerator {
 
 ### Priority Distribution
 ${Object.entries(summary.priorityDistribution).map(([priority, count]) => 
-  `- **${priority}**: ${count} items`
-).join('\n')}
+    `- **${priority}**: ${count} items`
+  ).join('\n')}
 
 ### Category Distribution
 ${Object.entries(summary.categoryDistribution).map(([category, count]) => 
-  `- **${category}**: ${count} items`
-).join('\n')}
+    `- **${category}**: ${count} items`
+  ).join('\n')}
 
 ### Effort Summary
 - **Total Effort**: ${summary.totalEffort} hours
@@ -537,7 +537,7 @@ async function main() {
     console.log(`🟠 Medium (P2): ${report.summary.priorityDistribution.P2}`);
     console.log(`🟢 Low (P3): ${report.summary.priorityDistribution.P3}`);
     
-    console.log(`\n📋 Reports saved:`);
+    console.log('\n📋 Reports saved:');
     console.log(`   JSON: ${reportPath}`);
     console.log(`   Markdown: ${markdownPath}`);
     

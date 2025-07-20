@@ -21,7 +21,7 @@ process.env.NODE_ENV = 'test';
 jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
   existsSync: jest.fn(),
-  readFileSync: jest.fn(),
+  readFileSync: jest.fn()
 }));
 
 // Mock the engine-wrapper module with a more controllable implementation

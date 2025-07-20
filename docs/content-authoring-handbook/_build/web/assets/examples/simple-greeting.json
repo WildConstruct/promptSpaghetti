@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "name": "Simple Greeting Generator",
+    "version": "1.0.0",
+    "author": "Handbook Examples",
+    "description": "A basic generator demonstrating fundamental concepts"
+  },
+  "grammar": {
+    "start": "[greeting], [subject]!",
+    "greeting": ["Hello", "Hi", "Hey", "Greetings", "Welcome"],
+    "subject": ["friend", "there", "world", "everyone", "stranger"]
+  }
+}

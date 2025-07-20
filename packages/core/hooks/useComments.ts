@@ -53,14 +53,14 @@ export function useComments(options: UseCommentsOptions) {
         target_id: targetId,
         page: pageNum.toString(),
         limit: limit.toString(),
-        sort_order: sortOrder,
+        sort_order: sortOrder
       });
 
       const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/comments?${params}`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId,
-        },
+          'X-User-Id': userId
+        }
       });
 
       if (!response.ok) {
@@ -93,9 +93,9 @@ export function useComments(options: UseCommentsOptions) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Id': userId,
+        'X-User-Id': userId
       },
-      body: JSON.stringify(commentData),
+      body: JSON.stringify(commentData)
     });
 
     if (!response.ok) {
@@ -123,9 +123,9 @@ export function useComments(options: UseCommentsOptions) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Id': userId,
+        'X-User-Id': userId
       },
-      body: JSON.stringify(updates),
+      body: JSON.stringify(updates)
     });
 
     if (!response.ok) {
@@ -149,8 +149,8 @@ export function useComments(options: UseCommentsOptions) {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Id': userId,
-      },
+        'X-User-Id': userId
+      }
     });
 
     if (!response.ok) {
@@ -180,8 +180,8 @@ export function useComments(options: UseCommentsOptions) {
       const response = await fetch(`${API_BASE}/comments/${commentId}`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-User-Id': userId,
-        },
+          'X-User-Id': userId
+        }
       });
 
       if (!response.ok) {
@@ -231,6 +231,6 @@ export function useComments(options: UseCommentsOptions) {
     deleteComment,
     loadMore,
     refresh,
-    getComment,
+    getComment
   };
 }

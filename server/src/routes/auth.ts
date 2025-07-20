@@ -20,25 +20,25 @@ const LoginRequestSchema = z.object({
     fingerprint: z.string().optional(),
     userAgent: z.string().optional(),
     language: z.string().optional(),
-    timezone: z.string().optional(),
-  }).optional(),
+    timezone: z.string().optional()
+  }).optional()
 });
 
 const RefreshTokenRequestSchema = z.object({
-  refreshToken: z.string(),
+  refreshToken: z.string()
 });
 
 const UnlockAccountRequestSchema = z.object({
   email: z.string().email(),
-  unlockToken: z.string(),
+  unlockToken: z.string()
 });
 
 const RequestUnlockRequestSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email()
 });
 
 const LogoutRequestSchema = z.object({
-  sessionId: z.string().optional(),
+  sessionId: z.string().optional()
 });
 
 interface AuthenticatedRequest extends FastifyRequest {
@@ -63,9 +63,9 @@ export async function authRoutes(fastify: FastifyInstance) {
     userAgent: request.headers['user-agent'],
     geoLocation: {
       country: request.headers['cf-ipcountry'] as string, // Cloudflare header
-      timezone: request.headers['cf-timezone'] as string,
+      timezone: request.headers['cf-timezone'] as string
     },
-    fingerprint: (request.headers['x-fingerprint'] || '') as string,
+    fingerprint: (request.headers['x-fingerprint'] || '') as string
   });
 
   // Login endpoint
@@ -83,16 +83,16 @@ export async function authRoutes(fastify: FastifyInstance) {
             createdAt: z.string(),
             lastLoginAt: z.string().nullable(),
             roles: z.array(z.string()),
-            permissions: z.array(z.string()),
+            permissions: z.array(z.string())
           }),
           expiresAt: z.string(),
-          sessionId: z.string(),
+          sessionId: z.string()
         }),
         400: z.object({ message: z.string() }),
         401: z.object({ message: z.string() }),
-        429: z.object({ message: z.string() }),
-      },
-    },
+        429: z.object({ message: z.string() })
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = LoginRequestSchema.parse(request.body);
@@ -107,7 +107,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
       if (!rateLimitResult.allowed) {
         return reply.status(429).send({
-          message: 'Too many login attempts. Please try again later.',
+          message: 'Too many login attempts. Please try again later.'
         });
       }
 
@@ -118,14 +118,14 @@ export async function authRoutes(fastify: FastifyInstance) {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 15 * 60 * 1000, // 15 minutes
+        maxAge: 15 * 60 * 1000 // 15 minutes
       });
 
       reply.setCookie('refreshToken', result.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: body.rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000, // 30 days or 1 day
+        maxAge: body.rememberMe ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000 // 30 days or 1 day
       });
 
       return {
@@ -133,7 +133,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         refreshToken: result.refreshToken,
         user: result.user,
         expiresAt: result.expiresAt.toISOString(),
-        sessionId: result.sessionId,
+        sessionId: result.sessionId
       };
     } catch (error: any) {
       if (error.message.includes('Invalid email or password')) {
@@ -159,9 +159,9 @@ export async function authRoutes(fastify: FastifyInstance) {
     schema: {
       body: LogoutRequestSchema,
       response: {
-        200: z.object({ message: z.string() }),
-      },
-    },
+        200: z.object({ message: z.string() })
+      }
+    }
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       const body = LogoutRequestSchema.parse(request.body);
@@ -189,11 +189,11 @@ export async function authRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           accessToken: z.string(),
-          refreshToken: z.string(),
+          refreshToken: z.string()
         }),
-        401: z.object({ message: z.string() }),
-      },
-    },
+        401: z.object({ message: z.string() })
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = RefreshTokenRequestSchema.parse(request.body);
@@ -206,14 +206,14 @@ export async function authRoutes(fastify: FastifyInstance) {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 15 * 60 * 1000, // 15 minutes
+        maxAge: 15 * 60 * 1000 // 15 minutes
       });
 
       reply.setCookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
       });
 
       return tokens;
@@ -230,9 +230,9 @@ export async function authRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({ message: z.string() }),
         400: z.object({ message: z.string() }),
-        429: z.object({ message: z.string() }),
-      },
-    },
+        429: z.object({ message: z.string() })
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = RequestUnlockRequestSchema.parse(request.body);
@@ -247,7 +247,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
       if (!rateLimitResult.allowed) {
         return reply.status(429).send({
-          message: 'Too many unlock requests. Please try again later.',
+          message: 'Too many unlock requests. Please try again later.'
         });
       }
 
@@ -267,7 +267,7 @@ export async function authRoutes(fastify: FastifyInstance) {
           displayName: user.displayName,
           unlockToken,
           unlockUrl: `${process.env.FRONTEND_URL}/auth/unlock?token=${unlockToken}&email=${encodeURIComponent(user.email)}`,
-          expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+          expiresAt: new Date(Date.now() + 60 * 60 * 1000) // 1 hour
         });
       }
 
@@ -285,9 +285,9 @@ export async function authRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({ message: z.string() }),
         400: z.object({ message: z.string() }),
-        401: z.object({ message: z.string() }),
-      },
-    },
+        401: z.object({ message: z.string() })
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = UnlockAccountRequestSchema.parse(request.body);
@@ -318,11 +318,11 @@ export async function authRoutes(fastify: FastifyInstance) {
           createdAt: z.string(),
           lastLoginAt: z.string().nullable(),
           roles: z.array(z.string()),
-          permissions: z.array(z.string()),
+          permissions: z.array(z.string())
         }),
-        401: z.object({ message: z.string() }),
-      },
-    },
+        401: z.object({ message: z.string() })
+      }
+    }
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     if (!request.user) {
       return reply.status(401).send({ message: 'Unauthorized' });
@@ -341,7 +341,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         createdAt: user.createdAt.toISOString(),
         lastLoginAt: user.lastLoginAt?.toISOString() || null,
         roles: ['user'], // Would fetch actual roles
-        permissions: ['graphs:create:own'], // Would fetch actual permissions
+        permissions: ['graphs:create:own'] // Would fetch actual permissions
       };
     } catch (error: any) {
       fastify.log.error('Get user profile error:', error);
@@ -354,7 +354,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     preValidation: [fastify.authenticate], // Requires authentication middleware
     schema: {
       querystring: z.object({
-        timeframe: z.enum(['day', 'week', 'month']).default('week'),
+        timeframe: z.enum(['day', 'week', 'month']).default('week')
       }),
       response: {
         200: z.object({
@@ -365,24 +365,24 @@ export async function authRoutes(fastify: FastifyInstance) {
           topFailureReasons: z.array(z.object({
             reason: z.string(),
             count: z.number(),
-            percentage: z.number(),
+            percentage: z.number()
           })),
           suspiciousActivity: z.array(z.object({
             type: z.string(),
             description: z.string(),
             count: z.number(),
-            severity: z.enum(['low', 'medium', 'high']),
+            severity: z.enum(['low', 'medium', 'high'])
           })),
           deviceAnalysis: z.object({
             newDevices: z.number(),
             returningDevices: z.number(),
-            suspiciousDevices: z.number(),
-          }),
+            suspiciousDevices: z.number()
+          })
         }),
         401: z.object({ message: z.string() }),
-        403: z.object({ message: z.string() }),
-      },
-    },
+        403: z.object({ message: z.string() })
+      }
+    }
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     // TODO: Add admin role check
     // if (!request.user?.roles.includes('admin')) {
@@ -410,12 +410,12 @@ export async function authRoutes(fastify: FastifyInstance) {
           user: z.object({
             id: z.string(),
             email: z.string(),
-            roles: z.array(z.string()),
-          }),
+            roles: z.array(z.string())
+          })
         }),
-        401: z.object({ message: z.string() }),
-      },
-    },
+        401: z.object({ message: z.string() })
+      }
+    }
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     if (!request.user) {
       return reply.status(401).send({ message: 'Invalid session' });
@@ -423,7 +423,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
     return {
       valid: true,
-      user: request.user,
+      user: request.user
     };
   });
 
@@ -432,18 +432,18 @@ export async function authRoutes(fastify: FastifyInstance) {
     schema: {
       body: z.object({
         email: z.string().email(),
-        captchaToken: z.string().optional(),
+        captchaToken: z.string().optional()
       }),
       response: {
         200: z.object({
           success: z.boolean(),
           message: z.string(),
-          estimatedDelivery: z.string().optional(),
+          estimatedDelivery: z.string().optional()
         }),
         400: z.object({ message: z.string() }),
-        429: z.object({ message: z.string() }),
-      },
-    },
+        429: z.object({ message: z.string() })
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = request.body as { email: string; captchaToken?: string };
@@ -455,8 +455,8 @@ export async function authRoutes(fastify: FastifyInstance) {
         clientInfo: {
           userAgent: context.userAgent,
           ipAddress: context.ipAddress,
-          fingerprint: context.fingerprint,
-        },
+          fingerprint: context.fingerprint
+        }
       };
 
       const result = await passwordResetService.requestPasswordReset(passwordResetRequest);
@@ -464,7 +464,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       return {
         success: result.success,
         message: result.message,
-        estimatedDelivery: result.estimatedDelivery?.toISOString(),
+        estimatedDelivery: result.estimatedDelivery?.toISOString()
       };
     } catch (error: any) {
       fastify.log.error('Password reset request error:', error);
@@ -476,7 +476,7 @@ export async function authRoutes(fastify: FastifyInstance) {
   fastify.get('/api/auth/password-reset/validate/:token', {
     schema: {
       params: z.object({
-        token: z.string().min(1),
+        token: z.string().min(1)
       }),
       response: {
         200: z.object({
@@ -484,11 +484,11 @@ export async function authRoutes(fastify: FastifyInstance) {
           error: z.string().optional(),
           canRetry: z.boolean().optional(),
           email: z.string().optional(),
-          tokenExpiresAt: z.string().optional(),
+          tokenExpiresAt: z.string().optional()
         }),
-        400: z.object({ message: z.string() }),
-      },
-    },
+        400: z.object({ message: z.string() })
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const params = request.params as { token: string };
@@ -499,7 +499,7 @@ export async function authRoutes(fastify: FastifyInstance) {
         error: validation.error,
         canRetry: validation.canRetry,
         email: validation.email,
-        tokenExpiresAt: validation.tokenExpiresAt?.toISOString(),
+        tokenExpiresAt: validation.tokenExpiresAt?.toISOString()
       };
     } catch (error: any) {
       fastify.log.error('Password reset token validation error:', error);
@@ -513,17 +513,17 @@ export async function authRoutes(fastify: FastifyInstance) {
       body: z.object({
         token: z.string().min(1),
         newPassword: z.string().min(8).max(128),
-        confirmPassword: z.string().min(8).max(128),
+        confirmPassword: z.string().min(8).max(128)
       }),
       response: {
         200: z.object({
           success: z.boolean(),
-          message: z.string(),
+          message: z.string()
         }),
         400: z.object({ message: z.string() }),
-        429: z.object({ message: z.string() }),
-      },
-    },
+        429: z.object({ message: z.string() })
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const body = request.body as {
@@ -540,15 +540,15 @@ export async function authRoutes(fastify: FastifyInstance) {
         clientInfo: {
           userAgent: context.userAgent,
           ipAddress: context.ipAddress,
-          fingerprint: context.fingerprint,
-        },
+          fingerprint: context.fingerprint
+        }
       };
 
       const result = await passwordResetService.confirmPasswordReset(confirmation);
 
       return {
         success: result.success,
-        message: result.message,
+        message: result.message
       };
     } catch (error: any) {
       fastify.log.error('Password reset confirmation error:', error);
@@ -571,11 +571,11 @@ export async function authRoutes(fastify: FastifyInstance) {
           services: z.object({
             database: z.string(),
             redis: z.string(),
-            authentication: z.string(),
-          }),
-        }),
-      },
-    },
+            authentication: z.string()
+          })
+        })
+      }
+    }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const health = await authService.getHealthStatus();
@@ -583,7 +583,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       return {
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        services: health,
+        services: health
       };
     } catch (error: any) {
       fastify.log.error('Health check error:', error);
@@ -593,8 +593,8 @@ export async function authRoutes(fastify: FastifyInstance) {
         services: {
           database: 'error',
           redis: 'error',
-          authentication: 'error',
-        },
+          authentication: 'error'
+        }
       };
     }
   });

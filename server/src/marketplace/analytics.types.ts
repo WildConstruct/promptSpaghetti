@@ -229,9 +229,9 @@ export const AnalyticsEventSchema = z.object({
     location: z.object({
       country: z.string().optional(),
       region: z.string().optional(),
-      city: z.string().optional(),
-    }).optional(),
-  }),
+      city: z.string().optional()
+    }).optional()
+  })
 });
 
 export const AnalyticsQuerySchema = z.object({
@@ -248,14 +248,14 @@ export const AnalyticsQuerySchema = z.object({
     device_types: z.array(z.string()).optional(),
     user_segments: z.array(z.string()).optional(),
     min_value: z.number().optional(),
-    max_value: z.number().optional(),
+    max_value: z.number().optional()
   }).optional(),
   sort: z.object({
     field: z.string(),
-    direction: z.enum(['asc', 'desc']),
+    direction: z.enum(['asc', 'desc'])
   }).optional(),
   limit: z.number().min(1).max(1000).default(100),
-  offset: z.number().min(0).default(0),
+  offset: z.number().min(0).default(0)
 });
 
 export const CustomReportSchema = z.object({
@@ -268,16 +268,16 @@ export const CustomReportSchema = z.object({
       layout: z.nativeEnum(DashboardLayout),
       show_legend: z.boolean().default(true),
       show_grid: z.boolean().default(true),
-      color_scheme: z.string().default('default'),
+      color_scheme: z.string().default('default')
     }),
-    refresh_interval: z.number().min(60).optional(),
+    refresh_interval: z.number().min(60).optional()
   }),
   is_scheduled: z.boolean().default(false),
   schedule: z.object({
     frequency: z.enum(['daily', 'weekly', 'monthly']),
     time: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
-    recipients: z.array(z.string().email()),
-  }).optional(),
+    recipients: z.array(z.string().email())
+  }).optional()
 });
 
 // Export schema types

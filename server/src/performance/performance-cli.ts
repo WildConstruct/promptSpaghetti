@@ -282,13 +282,13 @@ program
         const avgLatency = metrics.reduce((acc, m) => acc + m.responseTime, 0) / metrics.length;
         const successRate = (metrics.filter(m => m.errorRate === 0).length / metrics.length) * 100;
         
-        console.log(`✅ System health check completed:`);
+        console.log('✅ System health check completed:');
         console.log(`   Connection: ${successRate === 100 ? '🟢 Healthy' : '🟡 Issues detected'}`);
         console.log(`   Average latency: ${avgLatency.toFixed(0)}ms`);
         console.log(`   Success rate: ${successRate.toFixed(1)}%`);
         
         if (successRate < 100) {
-          console.log(`⚠️  Performance issues detected. Consider running optimization.`);
+          console.log('⚠️  Performance issues detected. Consider running optimization.');
         }
       } else {
         console.log('❌ Unable to connect to server or collect metrics');

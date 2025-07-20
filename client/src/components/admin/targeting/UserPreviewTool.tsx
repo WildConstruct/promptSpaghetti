@@ -137,14 +137,14 @@ export const UserPreviewTool: React.FC<UserPreviewToolProps> = ({
           name: 'Experimental AI Features',
           enabled: false,
           value: false,
-          reason: 'Feature disabled for user type',
+          reason: 'Feature disabled for user type'
         },
         {
           key: 'claude_model_v2',
           name: 'Claude Model V2',
           enabled: true,
           value: 'sonnet-4',
-          reason: 'Percentage rollout (user in 25%)',
+          reason: 'Percentage rollout (user in 25%)'
         }
       ];
       
@@ -178,18 +178,18 @@ export const UserPreviewTool: React.FC<UserPreviewToolProps> = ({
 
   const getUserTypeColor = (userType: string): string => {
     switch (userType) {
-      case 'admin': return 'red';
-      case 'beta_tester': return 'purple';
-      case 'premium': return 'gold';
-      default: return 'blue';
+    case 'admin': return 'red';
+    case 'beta_tester': return 'purple';
+    case 'premium': return 'gold';
+    default: return 'blue';
     }
   };
 
   const getSubscriptionColor = (tier: string): string => {
     switch (tier) {
-      case 'enterprise': return 'purple';
-      case 'pro': return 'blue';
-      default: return 'gray';
+    case 'enterprise': return 'purple';
+    case 'pro': return 'blue';
+    default: return 'gray';
     }
   };
 

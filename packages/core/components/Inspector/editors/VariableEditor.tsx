@@ -1,40 +1,40 @@
-import React, { useState } from "react";
-import { BaseNodeEditor, BaseNodeEditorProps } from "../BaseNodeEditor";
-import { TextFieldEditor } from "../TextFieldEditor";
-import { TextAreaEditor } from "../TextAreaEditor";
-import { SelectEditor, SelectOption } from "../SelectEditor";
-import { CollapsibleSection } from "../CollapsibleSection";
+import React, { useState } from 'react';
+import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { TextAreaEditor } from '../TextAreaEditor';
+import { SelectEditor, SelectOption } from '../SelectEditor';
+import { CollapsibleSection } from '../CollapsibleSection';
 
 export interface VariableEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   nodeType: 'SetVariable' | 'GetVariable';
 }
 
 const VARIABLE_TYPES: SelectOption[] = [
-  { value: "string", label: "Text (String)" },
-  { value: "number", label: "Number" },
-  { value: "boolean", label: "Boolean (true/false)" },
-  { value: "array", label: "Array/List" },
-  { value: "object", label: "Object/JSON" },
-  { value: "auto", label: "Auto-detect type" },
+  { value: 'string', label: 'Text (String)' },
+  { value: 'number', label: 'Number' },
+  { value: 'boolean', label: 'Boolean (true/false)' },
+  { value: 'array', label: 'Array/List' },
+  { value: 'object', label: 'Object/JSON' },
+  { value: 'auto', label: 'Auto-detect type' }
 ];
 
 const SCOPE_OPTIONS: SelectOption[] = [
-  { value: "global", label: "Global (entire execution)" },
-  { value: "local", label: "Local (current branch)" },
-  { value: "session", label: "Session (persistent)" },
+  { value: 'global', label: 'Global (entire execution)' },
+  { value: 'local', label: 'Local (current branch)' },
+  { value: 'session', label: 'Session (persistent)' }
 ];
 
 export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
   const { nodeData, onChange, nodeType } = props;
   
   // Variable specific fields
-  const label = (nodeData.label as string) || "";
-  const variableName = (nodeData.variableName as string) || "";
-  const variableType = (nodeData.variableType as string) || "auto";
-  const defaultValue = (nodeData.defaultValue as string) || "";
-  const scope = (nodeData.scope as string) || "global";
+  const label = (nodeData.label as string) || '';
+  const variableName = (nodeData.variableName as string) || '';
+  const variableType = (nodeData.variableType as string) || 'auto';
+  const defaultValue = (nodeData.defaultValue as string) || '';
+  const scope = (nodeData.scope as string) || 'global';
   const persistent = (nodeData.persistent as boolean) ?? false;
-  const value = (nodeData.value as string) || ""; // For SetVariable
+  const value = (nodeData.value as string) || ''; // For SetVariable
   const allowOverwrite = (nodeData.allowOverwrite as boolean) ?? true; // For SetVariable
   const required = (nodeData.required as boolean) ?? false; // For GetVariable
 
@@ -66,7 +66,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
           value={label}
           fieldKey="label"
           zodType={null as any}
-          onChange={(value) => handleFieldChange("label", value)}
+          onChange={(value) => handleFieldChange('label', value)}
           placeholder={`Enter ${nodeType.toLowerCase()} label...`}
         />
 
@@ -75,7 +75,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
           value={variableName}
           fieldKey="variableName"
           zodType={null as any}
-          onChange={(value) => handleFieldChange("variableName", value)}
+          onChange={(value) => handleFieldChange('variableName', value)}
           placeholder="Enter variable name (e.g., userInput, counter)..."
         />
 
@@ -85,7 +85,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
           fieldKey="variableType"
           options={VARIABLE_TYPES}
           zodType={null as any}
-          onChange={(value) => handleFieldChange("variableType", value)}
+          onChange={(value) => handleFieldChange('variableType', value)}
         />
       </CollapsibleSection>
 
@@ -101,7 +101,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
             value={value}
             fieldKey="value"
             zodType={null as any}
-            onChange={(value) => handleFieldChange("value", value)}
+            onChange={(value) => handleFieldChange('value', value)}
             placeholder="Enter the value to set for this variable..."
             rows={3}
             showWordCount
@@ -109,30 +109,30 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
 
           <div style={{ marginBottom: 16 }}>
             <label style={{
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               gap: 8,
               fontSize: 12,
-              color: "#e2e8f0",
-              cursor: "pointer",
+              color: '#e2e8f0',
+              cursor: 'pointer'
             }}>
               <input
                 type="checkbox"
                 checked={allowOverwrite}
-                onChange={(e) => handleFieldChange("allowOverwrite", e.target.checked)}
+                onChange={(e) => handleFieldChange('allowOverwrite', e.target.checked)}
                 style={{
                   width: 14,
                   height: 14,
-                  cursor: "pointer",
+                  cursor: 'pointer'
                 }}
               />
               Allow overwriting existing variable
             </label>
             <div style={{
               fontSize: 10,
-              color: "#a0aec0",
+              color: '#a0aec0',
               marginTop: 2,
-              marginLeft: 22,
+              marginLeft: 22
             }}>
               If unchecked, setting an existing variable will fail
             </div>
@@ -152,37 +152,37 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
             value={defaultValue}
             fieldKey="defaultValue"
             zodType={null as any}
-            onChange={(value) => handleFieldChange("defaultValue", value)}
+            onChange={(value) => handleFieldChange('defaultValue', value)}
             placeholder="Value to use if variable doesn't exist (optional)..."
             rows={2}
           />
 
           <div style={{ marginBottom: 16 }}>
             <label style={{
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               gap: 8,
               fontSize: 12,
-              color: "#e2e8f0",
-              cursor: "pointer",
+              color: '#e2e8f0',
+              cursor: 'pointer'
             }}>
               <input
                 type="checkbox"
                 checked={required}
-                onChange={(e) => handleFieldChange("required", e.target.checked)}
+                onChange={(e) => handleFieldChange('required', e.target.checked)}
                 style={{
                   width: 14,
                   height: 14,
-                  cursor: "pointer",
+                  cursor: 'pointer'
                 }}
               />
               Variable is required
             </label>
             <div style={{
               fontSize: 10,
-              color: "#a0aec0",
+              color: '#a0aec0',
               marginTop: 2,
-              marginLeft: 22,
+              marginLeft: 22
             }}>
               If checked, execution will fail if variable doesn't exist and no default is provided
             </div>
@@ -202,35 +202,35 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
           fieldKey="scope"
           options={SCOPE_OPTIONS}
           zodType={null as any}
-          onChange={(value) => handleFieldChange("scope", value)}
+          onChange={(value) => handleFieldChange('scope', value)}
         />
 
         <div style={{ marginBottom: 16 }}>
           <label style={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
             fontSize: 12,
-            color: "#e2e8f0",
-            cursor: "pointer",
+            color: '#e2e8f0',
+            cursor: 'pointer'
           }}>
             <input
               type="checkbox"
               checked={persistent}
-              onChange={(e) => handleFieldChange("persistent", e.target.checked)}
+              onChange={(e) => handleFieldChange('persistent', e.target.checked)}
               style={{
                 width: 14,
                 height: 14,
-                cursor: "pointer",
+                cursor: 'pointer'
               }}
             />
             Persistent across sessions
           </label>
           <div style={{
             fontSize: 10,
-            color: "#a0aec0",
+            color: '#a0aec0',
             marginTop: 2,
-            marginLeft: 22,
+            marginLeft: 22
           }}>
             Variable will be saved and restored between executions
           </div>
@@ -238,40 +238,40 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
       </CollapsibleSection>
 
       {/* Type Conversion Help */}
-      {variableType !== "auto" && (
+      {variableType !== 'auto' && (
         <CollapsibleSection 
           title="Type Information" 
           collapsed={typeInfoCollapsed}
           onToggle={() => setTypeInfoCollapsed(!typeInfoCollapsed)}
         >
           <div style={{
-            background: "#1a202c",
-            border: "1px solid #4a5568",
+            background: '#1a202c',
+            border: '1px solid #4a5568',
             borderRadius: 4,
             padding: 12,
             fontSize: 11,
-            color: "#e2e8f0",
-            lineHeight: 1.4,
+            color: '#e2e8f0',
+            lineHeight: 1.4
           }}>
             <div style={{ fontWeight: 500, marginBottom: 8 }}>
               {VARIABLE_TYPES.find(t => t.value === variableType)?.label} Format:
             </div>
             
-            {variableType === "string" && (
+            {variableType === 'string' && (
               <div>
                 <div>• Any text value</div>
                 <div>• Example: "Hello World"</div>
               </div>
             )}
             
-            {variableType === "number" && (
+            {variableType === 'number' && (
               <div>
                 <div>• Numeric values (integer or decimal)</div>
                 <div>• Examples: 42, 3.14, -10</div>
               </div>
             )}
             
-            {variableType === "boolean" && (
+            {variableType === 'boolean' && (
               <div>
                 <div>• true or false values</div>
                 <div>• Examples: true, false</div>
@@ -279,17 +279,17 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
               </div>
             )}
             
-            {variableType === "array" && (
+            {variableType === 'array' && (
               <div>
                 <div>• JSON array format</div>
                 <div>• Examples: ["item1", "item2"], [1, 2, 3]</div>
               </div>
             )}
             
-            {variableType === "object" && (
+            {variableType === 'object' && (
               <div>
                 <div>• JSON object format</div>
-                <div>• Example: {"{"}"name": "John", "age": 30{"}"}</div>
+                <div>• Example: {'{'}"name": "John", "age": 30{'}'}</div>
               </div>
             )}
           </div>
@@ -303,43 +303,43 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
         onToggle={() => setPreviewCollapsed(!previewCollapsed)}
       >
         <div style={{
-          background: "#1a202c",
-          border: "1px solid #4a5568",
+          background: '#1a202c',
+          border: '1px solid #4a5568',
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: "#e2e8f0",
+          color: '#e2e8f0'
         }}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
-            {isSetVariable ? "Set Variable" : "Get Variable"} Configuration:
+            {isSetVariable ? 'Set Variable' : 'Get Variable'} Configuration:
           </div>
           
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Variable:</span> {variableName || "〈not set〉"}
+            <span style={{ color: '#a0aec0' }}>Variable:</span> {variableName || '〈not set〉'}
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Type:</span> {VARIABLE_TYPES.find(t => t.value === variableType)?.label}
+            <span style={{ color: '#a0aec0' }}>Type:</span> {VARIABLE_TYPES.find(t => t.value === variableType)?.label}
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Scope:</span> {SCOPE_OPTIONS.find(s => s.value === scope)?.label}
+            <span style={{ color: '#a0aec0' }}>Scope:</span> {SCOPE_OPTIONS.find(s => s.value === scope)?.label}
           </div>
           
           {isSetVariable && (
             <>
               <div style={{ marginBottom: 4 }}>
-                <span style={{ color: "#a0aec0" }}>Allow Overwrite:</span> {allowOverwrite ? "Yes" : "No"}
+                <span style={{ color: '#a0aec0' }}>Allow Overwrite:</span> {allowOverwrite ? 'Yes' : 'No'}
               </div>
               {value && (
                 <div style={{ 
                   marginTop: 8, 
                   padding: 8, 
-                  background: "rgba(66, 153, 225, 0.1)",
-                  borderRadius: 2,
+                  background: 'rgba(66, 153, 225, 0.1)',
+                  borderRadius: 2
                 }}>
-                  <div style={{ color: "#a0aec0", fontSize: 10, marginBottom: 4 }}>
+                  <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                     Value to set:
                   </div>
-                  <div style={{ fontFamily: "monospace", fontSize: 11 }}>
+                  <div style={{ fontFamily: 'monospace', fontSize: 11 }}>
                     {value}
                   </div>
                 </div>
@@ -350,19 +350,19 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
           {isGetVariable && (
             <>
               <div style={{ marginBottom: 4 }}>
-                <span style={{ color: "#a0aec0" }}>Required:</span> {required ? "Yes" : "No"}
+                <span style={{ color: '#a0aec0' }}>Required:</span> {required ? 'Yes' : 'No'}
               </div>
               {defaultValue && (
                 <div style={{ 
                   marginTop: 8, 
                   padding: 8, 
-                  background: "rgba(66, 153, 225, 0.1)",
-                  borderRadius: 2,
+                  background: 'rgba(66, 153, 225, 0.1)',
+                  borderRadius: 2
                 }}>
-                  <div style={{ color: "#a0aec0", fontSize: 10, marginBottom: 4 }}>
+                  <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                     Default value:
                   </div>
-                  <div style={{ fontFamily: "monospace", fontSize: 11 }}>
+                  <div style={{ fontFamily: 'monospace', fontSize: 11 }}>
                     {defaultValue}
                   </div>
                 </div>
@@ -370,8 +370,8 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
             </>
           )}
           
-          <div style={{ marginTop: 8, fontSize: 10, color: "#a0aec0" }}>
-            {persistent && "• Persistent across sessions"}
+          <div style={{ marginTop: 8, fontSize: 10, color: '#a0aec0' }}>
+            {persistent && '• Persistent across sessions'}
           </div>
         </div>
       </CollapsibleSection>

@@ -9,15 +9,15 @@ jest.mock('../graphStore', () => ({
     addVariation: jest.fn(),
     removeVariation: jest.fn(),
     updateVariation: jest.fn(),
-    reorderVariations: jest.fn(),
-  }),
+    reorderVariations: jest.fn()
+  })
 }));
 
 describe('InspectorPanel', () => {
   const mockSchema = z.object({
     label: z.string().default('Test Node'),
     value: z.string().default(''),
-    variations: z.array(z.string()).default([]),
+    variations: z.array(z.string()).default([])
   });
 
   const mockNode = {
@@ -26,14 +26,14 @@ describe('InspectorPanel', () => {
     data: {
       label: 'Test Node',
       value: 'test value',
-      variations: ['var1', 'var2'],
-    },
+      variations: ['var1', 'var2']
+    }
   };
 
   const defaultProps = {
     node: mockNode,
     schema: mockSchema,
-    onChange: jest.fn(),
+    onChange: jest.fn()
   };
 
   beforeEach(() => {

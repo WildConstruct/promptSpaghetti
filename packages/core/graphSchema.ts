@@ -18,44 +18,44 @@ export const NodeTypeEnum = z.enum([
   'Sequential',
   'Markov',
   // Epic 8 Python Integration
-  'PythonTransform',
+  'PythonTransform'
 ]);
 
 export const BaseNode = z.object({
   id: z.string(),
   type: NodeTypeEnum,
-  inputs: z.array(z.string()).optional(), // ids of upstream nodes (ordered)
+  inputs: z.array(z.string()).optional() // ids of upstream nodes (ordered)
 });
 
 export const WeightedChoiceNodeSchema = BaseNode.extend({
   type: z.literal('WeightedChoice'),
   choices: z.array(
     z.object({ value: z.string(), weight: z.number().positive() })
-  ),
+  )
 });
 
 export const ConcatNodeSchema = BaseNode.extend({
-  type: z.literal('Concat'),
+  type: z.literal('Concat')
 });
 
 export const OutputNodeSchema = BaseNode.extend({
-  type: z.literal('Output'),
+  type: z.literal('Output')
 });
 
 export const IncludeNodeSchema = BaseNode.extend({
   type: z.literal('Include'),
-  name: SecureValidation.safePropertyKey(),
+  name: SecureValidation.safePropertyKey()
 });
 
 export const SetVariableNodeSchema = BaseNode.extend({
   type: z.literal('SetVariable'),
-  key: SecureValidation.safePropertyKey(),
-  value: SecureValidation.safeValue(),
+  key: SecureValidation.variableName(),
+  value: SecureValidation.safeValue()
 });
 
 export const GetVariableNodeSchema = BaseNode.extend({
   type: z.literal('GetVariable'),
-  key: z.string(),
+  key: SecureValidation.variableName()
 });
 
 // Epic 7 Advanced Node Schemas
@@ -68,8 +68,8 @@ export const WeightedAdvancedNodeSchema = BaseNode.extend({
     type: z.enum(['linear', 'exponential', 'gaussian', 'custom']),
     parameters: z.record(z.number()).optional(),
     normalize: z.boolean().optional(),
-    minWeight: z.number().min(0).optional(),
-  }).optional(),
+    minWeight: z.number().min(0).optional()
+  }).optional()
 });
 
 export const ConditionalNodeSchema = BaseNode.extend({
@@ -86,7 +86,7 @@ export const ConditionalNodeSchema = BaseNode.extend({
     allowVariableAccess: z.boolean().optional(),
     strictMode: z.boolean().optional(),
     customFunctions: z.record(SecureValidation.safeValue()).optional()
-  }).optional(),
+  }).optional()
 });
 
 export const SequentialNodeSchema = BaseNode.extend({
@@ -99,7 +99,7 @@ export const SequentialNodeSchema = BaseNode.extend({
       allowRepeats: z.boolean().optional(),
       custom: z.record(z.any()).optional()
     }).optional()
-  }).optional(),
+  }).optional()
 });
 
 export const MarkovNodeSchema = BaseNode.extend({
@@ -113,7 +113,7 @@ export const MarkovNodeSchema = BaseNode.extend({
     terminationStates: z.array(z.string()).optional(),
     detectLoops: z.boolean().optional(),
     custom: z.record(z.any()).optional()
-  }).optional(),
+  }).optional()
 });
 
 // Epic 8 Python Integration
@@ -129,8 +129,8 @@ export const PythonTransformNodeSchema = BaseNode.extend({
     executorUrl: z.string().optional(),
     retryAttempts: z.number().min(0).optional(),
     fallbackBehavior: z.enum(['error', 'skip', 'default']).optional(),
-    defaultOutput: z.string().optional(),
-  }).optional(),
+    defaultOutput: z.string().optional()
+  }).optional()
 });
 
 export const AnyNodeSchema = z.discriminatedUnion('type', [
@@ -146,12 +146,12 @@ export const AnyNodeSchema = z.discriminatedUnion('type', [
   SequentialNodeSchema,
   MarkovNodeSchema,
   // Epic 8 Python Integration
-  PythonTransformNodeSchema,
+  PythonTransformNodeSchema
 ]);
 
 export const GraphSchema = z.object({
   nodes: z.array(AnyNodeSchema),
-  seed: z.union([z.string(), z.number()]).optional(),
+  seed: z.union([z.string(), z.number()]).optional()
 });
 
 export type Graph = z.infer<typeof GraphSchema>;

@@ -209,7 +209,7 @@ export const CreateCorrectionRuleSchema = z.object({
   suggested_by: z.string().optional(),
   suggestion_reason: z.string().optional(),
   category: z.string().max(100).optional(),
-  tags: z.array(z.string()).optional(), // Will be JSON stringified
+  tags: z.array(z.string()).optional() // Will be JSON stringified
 });
 
 export const UpdateCorrectionRuleSchema = z.object({
@@ -229,7 +229,7 @@ export const UpdateCorrectionRuleSchema = z.object({
   deprecation_reason: z.string().optional(),
   category: z.string().max(100).optional(),
   tags: z.array(z.string()).optional(), // Will be JSON stringified
-  user_rating: z.number().min(0).max(5).optional(),
+  user_rating: z.number().min(0).max(5).optional()
 });
 
 export const CreateCorrectionSetSchema = z.object({
@@ -238,7 +238,7 @@ export const CreateCorrectionSetSchema = z.object({
   version: z.string().default('1.0.0'),
   created_by: z.number().int().positive().default(1),
   export_format: z.enum(['json', 'yaml', 'csv']).default('json'),
-  is_public: z.boolean().default(false),
+  is_public: z.boolean().default(false)
 });
 
 export const UpdateUserPreferencesSchema = z.object({
@@ -249,20 +249,20 @@ export const UpdateUserPreferencesSchema = z.object({
   timeout_ms: z.number().int().min(100).max(30000).optional(),
   notify_on_rule_conflicts: z.boolean().optional(),
   notify_on_performance_issues: z.boolean().optional(),
-  advanced_settings: z.string().optional(),
+  advanced_settings: z.string().optional()
 });
 
 // Workflow operation schemas
 export const ApproveRuleSchema = z.object({
   rule_id: z.number().int().positive(),
   approved_by: z.number().int().positive(),
-  comment: z.string().optional(),
+  comment: z.string().optional()
 });
 
 export const DeprecateRuleSchema = z.object({
   rule_id: z.number().int().positive(),
   deprecated_by: z.number().int().positive(),
-  reason: z.string().min(1),
+  reason: z.string().min(1)
 });
 
 export const CreateNotificationSchema = z.object({
@@ -272,7 +272,7 @@ export const CreateNotificationSchema = z.object({
   title: z.string().min(1).max(255),
   message: z.string().min(1),
   action_url: z.string().url().optional(),
-  metadata: z.object({}).passthrough().optional(),
+  metadata: z.object({}).passthrough().optional()
 });
 
 // Type definitions for API

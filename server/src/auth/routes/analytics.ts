@@ -12,14 +12,14 @@ const FieldInteractionSchema = z.object({
   eventType: z.enum(['focus', 'blur', 'change', 'error']),
   fieldValueLength: z.number().optional(),
   errorMessage: z.string().optional(),
-  timeSpentMs: z.number().optional(),
+  timeSpentMs: z.number().optional()
 });
 
 const FormStepSchema = z.object({
   sessionId: z.string(),
   stepNumber: z.number().int().min(1),
   formType: z.string(),
-  durationMs: z.number().optional(),
+  durationMs: z.number().optional()
 });
 
 const FormCompletionSchema = z.object({
@@ -28,7 +28,7 @@ const FormCompletionSchema = z.object({
   formType: z.string(),
   totalTime: z.number(),
   fieldInteractions: z.record(z.any()).optional(),
-  stepTimes: z.record(z.number()).optional(),
+  stepTimes: z.record(z.number()).optional()
 });
 
 const FormAbandonmentSchema = z.object({
@@ -37,7 +37,7 @@ const FormAbandonmentSchema = z.object({
   formType: z.string(),
   timeOnForm: z.number(),
   reason: z.string().optional(),
-  fieldInteractions: z.record(z.any()).optional(),
+  fieldInteractions: z.record(z.any()).optional()
 });
 
 export async function analyticsRoutes(fastify: FastifyInstance) {
@@ -51,11 +51,11 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            success: { type: 'boolean' },
-          },
-        },
-      },
-    },
+            success: { type: 'boolean' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof FieldInteractionSchema> }>, reply: FastifyReply) => {
     try {
       await analyticsService.trackFormFieldInteraction(
@@ -65,7 +65,7 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         {
           fieldValueLength: request.body.fieldValueLength,
           errorMessage: request.body.errorMessage,
-          timeSpentMs: request.body.timeSpentMs,
+          timeSpentMs: request.body.timeSpentMs
         }
       );
 
@@ -83,11 +83,11 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            success: { type: 'boolean' },
-          },
-        },
-      },
-    },
+            success: { type: 'boolean' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof FormStepSchema> }>, reply: FastifyReply) => {
     try {
       await analyticsService.trackRegistrationFunnel(
@@ -96,9 +96,9 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         {
           stepData: {
             formType: request.body.formType,
-            stepNumber: request.body.stepNumber,
+            stepNumber: request.body.stepNumber
           },
-          durationMs: request.body.durationMs,
+          durationMs: request.body.durationMs
         }
       );
 
@@ -116,11 +116,11 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            success: { type: 'boolean' },
-          },
-        },
-      },
-    },
+            success: { type: 'boolean' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof FormCompletionSchema> }>, reply: FastifyReply) => {
     try {
       const eventType = request.body.success ? 'completed' : 'failed';
@@ -131,8 +131,8 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           formType: request.body.formType,
           totalTime: request.body.totalTime,
           fieldInteractions: request.body.fieldInteractions,
-          stepTimes: request.body.stepTimes,
-        },
+          stepTimes: request.body.stepTimes
+        }
       });
 
       reply.send({ success: true });
@@ -149,11 +149,11 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         200: {
           type: 'object',
           properties: {
-            success: { type: 'boolean' },
-          },
-        },
-      },
-    },
+            success: { type: 'boolean' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: z.infer<typeof FormAbandonmentSchema> }>, reply: FastifyReply) => {
     try {
       await analyticsService.trackRegistrationEvent('abandoned', {
@@ -163,8 +163,8 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           currentStep: request.body.currentStep,
           timeOnForm: request.body.timeOnForm,
           reason: request.body.reason,
-          fieldInteractions: request.body.fieldInteractions,
-        },
+          fieldInteractions: request.body.fieldInteractions
+        }
       });
 
       reply.send({ success: true });
@@ -187,8 +187,8 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       querystring: {
         type: 'object',
         properties: {
-          timeframe: { type: 'string', enum: ['day', 'week', 'month'] },
-        },
+          timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
+        }
       },
       response: {
         200: {
@@ -206,15 +206,15 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                 properties: {
                   step: { type: 'string' },
                   count: { type: 'number' },
-                  percentage: { type: 'number' },
-                },
-              },
+                  percentage: { type: 'number' }
+                }
+              }
             },
-            sourceBreakdown: { type: 'object' },
-          },
-        },
-      },
-    },
+            sourceBreakdown: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Querystring: { timeframe?: 'day' | 'week' | 'month' } }>, reply: FastifyReply) => {
     try {
       const timeframe = request.query.timeframe || 'week';
@@ -238,8 +238,8 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       querystring: {
         type: 'object',
         properties: {
-          timeframe: { type: 'string', enum: ['day', 'week', 'month'] },
-        },
+          timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
+        }
       },
       response: {
         200: {
@@ -254,15 +254,15 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                 properties: {
                   field: { type: 'string' },
                   errorRate: { type: 'number' },
-                  averageTime: { type: 'number' },
-                },
-              },
+                  averageTime: { type: 'number' }
+                }
+              }
             },
-            stepCompletionRates: { type: 'object' },
-          },
-        },
-      },
-    },
+            stepCompletionRates: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Querystring: { timeframe?: 'day' | 'week' | 'month' } }>, reply: FastifyReply) => {
     try {
       const timeframe = request.query.timeframe || 'week';
@@ -286,9 +286,9 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       params: {
         type: 'object',
         properties: {
-          experimentName: { type: 'string' },
+          experimentName: { type: 'string' }
         },
-        required: ['experimentName'],
+        required: ['experimentName']
       },
       response: {
         200: {
@@ -302,16 +302,16 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                   variant: { type: 'string' },
                   participants: { type: 'number' },
                   conversions: { type: 'number' },
-                  conversionRate: { type: 'number' },
-                },
-              },
+                  conversionRate: { type: 'number' }
+                }
+              }
             },
             winner: { type: 'string' },
-            confidence: { type: 'number' },
-          },
-        },
-      },
-    },
+            confidence: { type: 'number' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Params: { experimentName: string } }>, reply: FastifyReply) => {
     try {
       const results = await analyticsService.getABTestResults(request.params.experimentName);
@@ -334,8 +334,8 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
       querystring: {
         type: 'object',
         properties: {
-          timeframe: { type: 'string', enum: ['day', 'week', 'month'] },
-        },
+          timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
+        }
       },
       response: {
         200: {
@@ -344,11 +344,11 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
             deliveryRates: { type: 'object' },
             openRates: { type: 'object' },
             clickRates: { type: 'object' },
-            bounceRates: { type: 'object' },
-          },
-        },
-      },
-    },
+            bounceRates: { type: 'object' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Querystring: { timeframe?: 'day' | 'week' | 'month' } }>, reply: FastifyReply) => {
     try {
       const timeframe = request.query.timeframe || 'week';
@@ -367,23 +367,23 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         properties: {
           eventName: { type: 'string' },
           eventData: { type: 'object' },
-          sessionId: { type: 'string' },
+          sessionId: { type: 'string' }
         },
-        required: ['eventName'],
+        required: ['eventName']
       },
       response: {
         200: {
           type: 'object',
           properties: {
-            success: { type: 'boolean' },
-          },
-        },
-      },
-    },
+            success: { type: 'boolean' }
+          }
+        }
+      }
+    }
   }, async (request: FastifyRequest<{ Body: { eventName: string; eventData?: any; sessionId?: string } }>, reply: FastifyReply) => {
     try {
       await analyticsService.trackRegistrationEvent(request.body.eventName, {
-        additionalData: request.body.eventData,
+        additionalData: request.body.eventData
       });
 
       reply.send({ success: true });

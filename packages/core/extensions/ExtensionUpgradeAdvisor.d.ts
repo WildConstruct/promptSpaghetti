@@ -1,3 +1,7 @@
+/**
+ * Extension Upgrade Advisor - Epic 8.4 Story 8.4.4
+ * Provides intelligent upgrade recommendations and migration assistance
+ */
 import { ExtensionManifest } from './ExtensionManifest';
 import { UpgradePath } from './ExtensionVersionManager';
 import { ExtensionCompatibilityResult } from './ExtensionCompatibilityChecker';
@@ -8,20 +12,65 @@ export declare class ExtensionUpgradeAdvisor {
     private breakingChanges;
     private constructor();
     static getInstance(): ExtensionUpgradeAdvisor;
+    /**
+     * Get upgrade recommendations for an extension
+     */
     getUpgradeRecommendations(currentExtension: ExtensionManifest, availableVersions: string[], context: UpgradeContext): UpgradeRecommendation;
+    /**
+     * Analyze upgrade path for specific target version
+     */
     analyzeUpgradePath(currentExtension: ExtensionManifest, targetVersion: string, availableVersions: string[], context: UpgradeContext): UpgradeAnalysis;
+    /**
+     * Generate migration plan for upgrade
+     */
     generateMigrationPlan(currentExtension: ExtensionManifest, targetVersion: string, context: UpgradeContext): MigrationPlan;
+    /**
+     * Check for breaking changes between versions
+     */
     checkBreakingChanges(extensionId: string, fromVersion: string, toVersion: string): BreakingChangeAnalysis;
+    /**
+     * Validate upgrade compatibility
+     */
     validateUpgradeCompatibility(currentExtension: ExtensionManifest, targetExtension: ExtensionManifest, context: UpgradeContext): UpgradeCompatibilityResult;
+    /**
+     * Determine upgrade strategy based on context
+     */
     private determineUpgradeStrategy;
+    /**
+     * Get conservative upgrade recommendations
+     */
     private getConservativeRecommendations;
+    /**
+     * Get moderate upgrade recommendations
+     */
     private getModerateRecommendations;
+    /**
+     * Get aggressive upgrade recommendations
+     */
     private getAggressiveRecommendations;
+    /**
+     * Get security-focused upgrade recommendations
+     */
     private getSecurityRecommendations;
+    /**
+     * Generate migration tasks
+     */
     private generateMigrationTasks;
+    /**
+     * Assess upgrade risks
+     */
     private assessUpgradeRisks;
+    /**
+     * Identify upgrade benefits
+     */
     private identifyUpgradeBenefits;
+    /**
+     * Initialize default upgrade strategies
+     */
     private initializeDefaultStrategies;
+    /**
+     * Helper methods
+     */
     private calculateImpactLevel;
     private checkDependencyConflicts;
     private analyzePermissionChanges;

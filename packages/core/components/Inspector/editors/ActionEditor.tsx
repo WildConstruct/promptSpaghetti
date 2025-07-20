@@ -1,54 +1,54 @@
-import React, { useState } from "react";
-import { BaseNodeEditor, BaseNodeEditorProps } from "../BaseNodeEditor";
-import { TextFieldEditor } from "../TextFieldEditor";
-import { SelectEditor, SelectOption } from "../SelectEditor";
-import { VariationList } from "../VariationList";
-import { CollapsibleSection } from "../CollapsibleSection";
+import React, { useState } from 'react';
+import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { TextFieldEditor } from '../TextFieldEditor';
+import { SelectEditor, SelectOption } from '../SelectEditor';
+import { VariationList } from '../VariationList';
+import { CollapsibleSection } from '../CollapsibleSection';
 
 export interface ActionEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Action specific props can be added here
 }
 
 const VERB_TENSES: SelectOption[] = [
-  { value: "present", label: "Present (walk, walks)" },
-  { value: "past", label: "Past (walked)" },
-  { value: "future", label: "Future (will walk)" },
-  { value: "present_continuous", label: "Present Continuous (walking)" },
-  { value: "past_continuous", label: "Past Continuous (was walking)" },
-  { value: "present_perfect", label: "Present Perfect (has walked)" },
-  { value: "any", label: "Any tense" },
+  { value: 'present', label: 'Present (walk, walks)' },
+  { value: 'past', label: 'Past (walked)' },
+  { value: 'future', label: 'Future (will walk)' },
+  { value: 'present_continuous', label: 'Present Continuous (walking)' },
+  { value: 'past_continuous', label: 'Past Continuous (was walking)' },
+  { value: 'present_perfect', label: 'Present Perfect (has walked)' },
+  { value: 'any', label: 'Any tense' }
 ];
 
 const VERB_MOODS: SelectOption[] = [
-  { value: "indicative", label: "Indicative (statement)" },
-  { value: "imperative", label: "Imperative (command)" },
-  { value: "subjunctive", label: "Subjunctive (wish/hypothetical)" },
-  { value: "conditional", label: "Conditional (would/could)" },
-  { value: "any", label: "Any mood" },
+  { value: 'indicative', label: 'Indicative (statement)' },
+  { value: 'imperative', label: 'Imperative (command)' },
+  { value: 'subjunctive', label: 'Subjunctive (wish/hypothetical)' },
+  { value: 'conditional', label: 'Conditional (would/could)' },
+  { value: 'any', label: 'Any mood' }
 ];
 
 const ACTION_TYPES: SelectOption[] = [
-  { value: "physical", label: "Physical Action", group: "Action Types" },
-  { value: "mental", label: "Mental Action", group: "Action Types" },
-  { value: "verbal", label: "Verbal Action", group: "Action Types" },
-  { value: "emotional", label: "Emotional Action", group: "Action Types" },
-  { value: "social", label: "Social Action", group: "Action Types" },
-  { value: "creative", label: "Creative Action", group: "Action Types" },
-  { value: "transitive", label: "Transitive (requires object)", group: "Grammar" },
-  { value: "intransitive", label: "Intransitive (no object)", group: "Grammar" },
-  { value: "linking", label: "Linking Verb (is, seems)", group: "Grammar" },
+  { value: 'physical', label: 'Physical Action', group: 'Action Types' },
+  { value: 'mental', label: 'Mental Action', group: 'Action Types' },
+  { value: 'verbal', label: 'Verbal Action', group: 'Action Types' },
+  { value: 'emotional', label: 'Emotional Action', group: 'Action Types' },
+  { value: 'social', label: 'Social Action', group: 'Action Types' },
+  { value: 'creative', label: 'Creative Action', group: 'Action Types' },
+  { value: 'transitive', label: 'Transitive (requires object)', group: 'Grammar' },
+  { value: 'intransitive', label: 'Intransitive (no object)', group: 'Grammar' },
+  { value: 'linking', label: 'Linking Verb (is, seems)', group: 'Grammar' }
 ];
 
 export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
   const { nodeData, onChange } = props;
   
   // Action specific fields
-  const label = (nodeData.label as string) || "";
+  const label = (nodeData.label as string) || '';
   const variations = (nodeData.variations as string[]) || [];
-  const baseForm = (nodeData.baseForm as string) || "";
-  const tense = (nodeData.tense as string) || "present";
-  const mood = (nodeData.mood as string) || "indicative";
-  const actionType = (nodeData.actionType as string) || "physical";
+  const baseForm = (nodeData.baseForm as string) || '';
+  const tense = (nodeData.tense as string) || 'present';
+  const mood = (nodeData.mood as string) || 'indicative';
+  const actionType = (nodeData.actionType as string) || 'physical';
   const intensity = (nodeData.intensity as number) || 5;
   const requiresObject = (nodeData.requiresObject as boolean) ?? false;
   const adverbVariations = (nodeData.adverbVariations as string[]) || [];
@@ -67,15 +67,15 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
   };
 
   const handleVariationsChange = (newVariations: string[]) => {
-    handleFieldChange("variations", newVariations);
+    handleFieldChange('variations', newVariations);
   };
 
   const handleAdverbVariationsChange = (newAdverbs: string[]) => {
-    handleFieldChange("adverbVariations", newAdverbs);
+    handleFieldChange('adverbVariations', newAdverbs);
   };
 
   const handleContextHintsChange = (newHints: string[]) => {
-    handleFieldChange("contextHints", newHints);
+    handleFieldChange('contextHints', newHints);
   };
 
   // Auto-generate verb forms based on base form
@@ -121,18 +121,18 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
           value={label}
           fieldKey="label"
           zodType={null as any}
-          onChange={(value) => handleFieldChange("label", value)}
+          onChange={(value) => handleFieldChange('label', value)}
           placeholder="Enter action label..."
         />
 
-        <div style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
           <div style={{ flex: 1 }}>
             <TextFieldEditor
               label="Base Form"
               value={baseForm}
               fieldKey="baseForm"
               zodType={null as any}
-              onChange={(value) => handleFieldChange("baseForm", value)}
+              onChange={(value) => handleFieldChange('baseForm', value)}
               placeholder="Enter base verb form (e.g., 'walk', 'run', 'think')..."
             />
           </div>
@@ -140,15 +140,15 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
             onClick={generateVerbForms}
             disabled={!baseForm.trim()}
             style={{
-              padding: "8px 12px",
+              padding: '8px 12px',
               fontSize: 11,
-              background: baseForm.trim() ? "#4299e1" : "#4a5568",
-              border: "none",
+              background: baseForm.trim() ? '#4299e1' : '#4a5568',
+              border: 'none',
               borderRadius: 4,
-              color: "white",
-              cursor: baseForm.trim() ? "pointer" : "not-allowed",
+              color: 'white',
+              cursor: baseForm.trim() ? 'pointer' : 'not-allowed',
               marginBottom: 16,
-              whiteSpace: "nowrap",
+              whiteSpace: 'nowrap'
             }}
           >
             Generate Forms
@@ -161,7 +161,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
           fieldKey="actionType"
           options={ACTION_TYPES}
           zodType={null as any}
-          onChange={(value) => handleFieldChange("actionType", value)}
+          onChange={(value) => handleFieldChange('actionType', value)}
         />
       </CollapsibleSection>
 
@@ -173,11 +173,11 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
-            display: "block", 
+            display: 'block', 
             fontWeight: 500, 
             marginBottom: 8,
-            color: "#e2e8f0",
-            fontSize: 12,
+            color: '#e2e8f0',
+            fontSize: 12
           }}>
             Verb Variations
           </label>
@@ -206,9 +206,9 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
           />
           <div style={{
             fontSize: 10,
-            color: "#a0aec0",
+            color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4,
+            lineHeight: 1.4
           }}>
             Include different tenses, persons, and numbers: walk, walks, walked, walking, etc.
           </div>
@@ -227,7 +227,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
           fieldKey="tense"
           options={VERB_TENSES}
           zodType={null as any}
-          onChange={(value) => handleFieldChange("tense", value)}
+          onChange={(value) => handleFieldChange('tense', value)}
         />
 
         <SelectEditor
@@ -236,35 +236,35 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
           fieldKey="mood"
           options={VERB_MOODS}
           zodType={null as any}
-          onChange={(value) => handleFieldChange("mood", value)}
+          onChange={(value) => handleFieldChange('mood', value)}
         />
 
         <div style={{ marginBottom: 16 }}>
           <label style={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
             fontSize: 12,
-            color: "#e2e8f0",
-            cursor: "pointer",
+            color: '#e2e8f0',
+            cursor: 'pointer'
           }}>
             <input
               type="checkbox"
               checked={requiresObject}
-              onChange={(e) => handleFieldChange("requiresObject", e.target.checked)}
+              onChange={(e) => handleFieldChange('requiresObject', e.target.checked)}
               style={{
                 width: 14,
                 height: 14,
-                cursor: "pointer",
+                cursor: 'pointer'
               }}
             />
             Requires direct object (transitive)
           </label>
           <div style={{
             fontSize: 10,
-            color: "#a0aec0",
+            color: '#a0aec0',
             marginTop: 2,
-            marginLeft: 22,
+            marginLeft: 22
           }}>
             E.g., "eat" requires an object ("eat food"), while "sleep" doesn't
           </div>
@@ -279,11 +279,11 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
       >
         <div style={{ marginBottom: 16 }}>
           <label style={{ 
-            display: "block", 
+            display: 'block', 
             fontWeight: 500, 
             marginBottom: 8,
-            color: "#e2e8f0",
-            fontSize: 12,
+            color: '#e2e8f0',
+            fontSize: 12
           }}>
             Intensity Level: {intensity}/10
           </label>
@@ -292,17 +292,17 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
             min="1"
             max="10"
             value={intensity}
-            onChange={(e) => handleFieldChange("intensity", parseInt(e.target.value))}
+            onChange={(e) => handleFieldChange('intensity', parseInt(e.target.value))}
             style={{
-              width: "100%",
-              marginBottom: 4,
+              width: '100%',
+              marginBottom: 4
             }}
           />
           <div style={{
-            display: "flex",
-            justifyContent: "space-between",
+            display: 'flex',
+            justifyContent: 'space-between',
             fontSize: 10,
-            color: "#a0aec0",
+            color: '#a0aec0'
           }}>
             <span>Gentle</span>
             <span>Moderate</span>
@@ -312,11 +312,11 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
 
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
-            display: "block", 
+            display: 'block', 
             fontWeight: 500, 
             marginBottom: 8,
-            color: "#e2e8f0",
-            fontSize: 12,
+            color: '#e2e8f0',
+            fontSize: 12
           }}>
             Adverb Modifiers
           </label>
@@ -345,9 +345,9 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
           />
           <div style={{
             fontSize: 10,
-            color: "#a0aec0",
+            color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4,
+            lineHeight: 1.4
           }}>
             Adverbs that can be randomly selected to modify this action
           </div>
@@ -362,11 +362,11 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
-            display: "block", 
+            display: 'block', 
             fontWeight: 500, 
             marginBottom: 8,
-            color: "#e2e8f0",
-            fontSize: 12,
+            color: '#e2e8f0',
+            fontSize: 12
           }}>
             Context Hints
           </label>
@@ -395,9 +395,9 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
           />
           <div style={{
             fontSize: 10,
-            color: "#a0aec0",
+            color: '#a0aec0',
             marginTop: 4,
-            lineHeight: 1.4,
+            lineHeight: 1.4
           }}>
             Hints help other nodes understand the context and requirements of this action
           </div>
@@ -411,52 +411,52 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
         onToggle={() => setPreviewCollapsed(!previewCollapsed)}
       >
         <div style={{
-          background: "#1a202c",
-          border: "1px solid #4a5568",
+          background: '#1a202c',
+          border: '1px solid #4a5568',
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: "#e2e8f0",
+          color: '#e2e8f0'
         }}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Action Configuration:
           </div>
           
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Type:</span> {ACTION_TYPES.find(t => t.value === actionType)?.label}
+            <span style={{ color: '#a0aec0' }}>Type:</span> {ACTION_TYPES.find(t => t.value === actionType)?.label}
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Tense:</span> {VERB_TENSES.find(t => t.value === tense)?.label}
+            <span style={{ color: '#a0aec0' }}>Tense:</span> {VERB_TENSES.find(t => t.value === tense)?.label}
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Mood:</span> {VERB_MOODS.find(m => m.value === mood)?.label}
+            <span style={{ color: '#a0aec0' }}>Mood:</span> {VERB_MOODS.find(m => m.value === mood)?.label}
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Intensity:</span> {intensity}/10
+            <span style={{ color: '#a0aec0' }}>Intensity:</span> {intensity}/10
           </div>
           <div style={{ marginBottom: 4 }}>
-            <span style={{ color: "#a0aec0" }}>Requires Object:</span> {requiresObject ? "Yes" : "No"}
+            <span style={{ color: '#a0aec0' }}>Requires Object:</span> {requiresObject ? 'Yes' : 'No'}
           </div>
 
           {variations.length > 0 && (
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
-              background: "rgba(66, 153, 225, 0.1)",
-              borderRadius: 2,
+              background: 'rgba(66, 153, 225, 0.1)',
+              borderRadius: 2
             }}>
-              <div style={{ color: "#a0aec0", fontSize: 10, marginBottom: 4 }}>
+              <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Verb forms ({variations.length}):
               </div>
               <div style={{ fontSize: 11 }}>
                 {variations.slice(0, 4).map((variation, index) => (
                   <span key={index}>
                     "{variation}"
-                    {index < Math.min(3, variations.length - 1) ? ", " : ""}
+                    {index < Math.min(3, variations.length - 1) ? ', ' : ''}
                   </span>
                 ))}
                 {variations.length > 4 && (
-                  <span style={{ color: "#a0aec0", fontStyle: "italic" }}>
+                  <span style={{ color: '#a0aec0', fontStyle: 'italic' }}>
                     ... +{variations.length - 4} more
                   </span>
                 )}
@@ -468,14 +468,14 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
             <div style={{ 
               marginTop: 8, 
               padding: 8, 
-              background: "rgba(34, 197, 94, 0.1)",
-              borderRadius: 2,
+              background: 'rgba(34, 197, 94, 0.1)',
+              borderRadius: 2
             }}>
-              <div style={{ color: "#a0aec0", fontSize: 10, marginBottom: 4 }}>
+              <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Available adverbs:
               </div>
               <div style={{ fontSize: 11 }}>
-                {adverbVariations.slice(0, 5).join(", ")}
+                {adverbVariations.slice(0, 5).join(', ')}
                 {adverbVariations.length > 5 && ` ... +${adverbVariations.length - 5} more`}
               </div>
             </div>

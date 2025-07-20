@@ -226,20 +226,20 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
     let distributedChoices: WeightedChoice[];
 
     switch (type) {
-      case 'linear':
-        distributedChoices = this.applyLinearDistribution(choices);
-        break;
-      case 'exponential':
-        distributedChoices = this.applyExponentialDistribution(choices, parameters.factor || 1.5);
-        break;
-      case 'gaussian':
-        distributedChoices = this.applyGaussianDistribution(choices, parameters.mean || 0.5, parameters.std || 0.2);
-        break;
-      case 'custom':
-        distributedChoices = this.applyCustomDistribution(choices, parameters);
-        break;
-      default:
-        distributedChoices = choices;
+    case 'linear':
+      distributedChoices = this.applyLinearDistribution(choices);
+      break;
+    case 'exponential':
+      distributedChoices = this.applyExponentialDistribution(choices, parameters.factor || 1.5);
+      break;
+    case 'gaussian':
+      distributedChoices = this.applyGaussianDistribution(choices, parameters.mean || 0.5, parameters.std || 0.2);
+      break;
+    case 'custom':
+      distributedChoices = this.applyCustomDistribution(choices, parameters);
+      break;
+    default:
+      distributedChoices = choices;
     }
 
     // Apply minimum weight threshold

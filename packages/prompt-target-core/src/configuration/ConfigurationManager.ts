@@ -209,17 +209,17 @@ export class ConfigurationManager {
     try {
       // Parse data based on format
       switch (format) {
-        case 'json':
-          parsedData = typeof data === 'string' ? JSON.parse(data) : data;
-          break;
-        case 'yaml':
-          // Note: Would need yaml library in real implementation
-          throw new Error('YAML import not implemented yet');
-        case 'env':
-          parsedData = this.parseEnvironmentVariables(data as string);
-          break;
-        default:
-          throw new Error(`Unsupported format: ${format}`);
+      case 'json':
+        parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+        break;
+      case 'yaml':
+        // Note: Would need yaml library in real implementation
+        throw new Error('YAML import not implemented yet');
+      case 'env':
+        parsedData = this.parseEnvironmentVariables(data as string);
+        break;
+      default:
+        throw new Error(`Unsupported format: ${format}`);
       }
 
       const result: ImportResult = {
@@ -308,15 +308,15 @@ export class ConfigurationManager {
     const configs = this.getConfigurationsForExport(adaptorIds, options);
 
     switch (format) {
-      case 'json':
-        return JSON.stringify(configs, null, options.pretty ? 2 : 0);
-      case 'yaml':
-        // Note: Would need yaml library in real implementation
-        throw new Error('YAML export not implemented yet');
-      case 'env':
-        return this.exportAsEnvironmentVariables(configs);
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    case 'json':
+      return JSON.stringify(configs, null, options.pretty ? 2 : 0);
+    case 'yaml':
+      // Note: Would need yaml library in real implementation
+      throw new Error('YAML export not implemented yet');
+    case 'env':
+      return this.exportAsEnvironmentVariables(configs);
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
   }
 

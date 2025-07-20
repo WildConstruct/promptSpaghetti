@@ -11,7 +11,7 @@ import {
   AdaptorRegistry,
   TranslationError,
   ValidationError,
-  TranslationCache,
+  TranslationCache
 } from '../types';
 import { createHash } from 'crypto';
 
@@ -54,7 +54,7 @@ export class DefaultMappingEngine implements MappingEngine {
       maxConcurrency: 10,
       translationTimeout: 30000, // 30 seconds
       enableLogging: true,
-      ...config,
+      ...config
     };
   }
 
@@ -182,10 +182,10 @@ export class DefaultMappingEngine implements MappingEngine {
           errors: [{
             code: 'NO_ADAPTOR_FOUND',
             message: `No adaptor found for platform: ${targetPlatform}`,
-            severity: 'error',
+            severity: 'error'
           }],
           warnings: [],
-          compatibilityScore: 0,
+          compatibilityScore: 0
         };
       }
 
@@ -382,12 +382,12 @@ export class DefaultMappingEngine implements MappingEngine {
     cacheEnabled: boolean;
     cacheStats?: any;
     configuration: MappingEngineConfig;
-  } {
+    } {
     return {
       activeTranslations: this.activeTranslations.size,
       cacheEnabled: this.config.enableCaching && !!this.cache,
       cacheStats: this.cache ? undefined : undefined, // TODO: Implement cache.stats()
-      configuration: this.config,
+      configuration: this.config
     };
   }
 

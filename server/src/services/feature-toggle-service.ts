@@ -210,38 +210,38 @@ export class FeatureToggleService {
     context: ToggleEvaluationContext
   ): ToggleEvaluationResult {
     switch (toggle.type) {
-      case ToggleType.BOOLEAN:
-        return this.evaluateBooleanToggle(toggle.value as BooleanToggleValue);
+    case ToggleType.BOOLEAN:
+      return this.evaluateBooleanToggle(toggle.value as BooleanToggleValue);
         
-      case ToggleType.PERCENTAGE_ROLLOUT:
-        return this.evaluatePercentageToggle(
+    case ToggleType.PERCENTAGE_ROLLOUT:
+      return this.evaluatePercentageToggle(
           toggle.value as PercentageRolloutValue,
           toggle.key,
           context
-        );
+      );
         
-      case ToggleType.MULTIVARIATE:
-        return this.evaluateMultivariateToggle(
+    case ToggleType.MULTIVARIATE:
+      return this.evaluateMultivariateToggle(
           toggle.value as MultivariateValue,
           toggle.key,
           context
-        );
+      );
         
-      case ToggleType.SCHEDULED:
-        return this.evaluateScheduledToggle(toggle.value as ScheduledValue, context);
+    case ToggleType.SCHEDULED:
+      return this.evaluateScheduledToggle(toggle.value as ScheduledValue, context);
         
-      case ToggleType.SEGMENTATION:
-        return this.evaluateSegmentationToggle(
+    case ToggleType.SEGMENTATION:
+      return this.evaluateSegmentationToggle(
           toggle.value as SegmentationValue,
           context
-        );
+      );
         
-      default:
-        return {
-          enabled: false,
-          value: false,
-          reason: 'Unknown toggle type'
-        };
+    default:
+      return {
+        enabled: false,
+        value: false,
+        reason: 'Unknown toggle type'
+      };
     }
   }
 
@@ -366,7 +366,7 @@ export class FeatureToggleService {
     
     // Combine rules with logical operators (default AND)
     let finalResult = true;
-    let reasons: string[] = [];
+    const reasons: string[] = [];
     
     for (let i = 0; i < ruleResults.length; i++) {
       const result = ruleResults[i];
@@ -408,104 +408,104 @@ export class FeatureToggleService {
     }
     
     switch (rule.operator) {
-      case 'equals':
-        return { 
-          matches: attributeValue === rule.value,
-          reason: `${rule.attribute} ${attributeValue === rule.value ? '==' : '!='} ${rule.value}`
-        };
+    case 'equals':
+      return { 
+        matches: attributeValue === rule.value,
+        reason: `${rule.attribute} ${attributeValue === rule.value ? '==' : '!='} ${rule.value}`
+      };
         
-      case 'not_equals':
-        return { 
-          matches: attributeValue !== rule.value,
-          reason: `${rule.attribute} ${attributeValue !== rule.value ? '!=' : '=='} ${rule.value}`
-        };
+    case 'not_equals':
+      return { 
+        matches: attributeValue !== rule.value,
+        reason: `${rule.attribute} ${attributeValue !== rule.value ? '!=' : '=='} ${rule.value}`
+      };
         
-      case 'in':
-        const inArray = Array.isArray(rule.value) ? rule.value : [rule.value];
-        return { 
-          matches: inArray.includes(attributeValue),
-          reason: `${rule.attribute} ${inArray.includes(attributeValue) ? 'in' : 'not in'} [${inArray.join(',')}]`
-        };
+    case 'in':
+      const inArray = Array.isArray(rule.value) ? rule.value : [rule.value];
+      return { 
+        matches: inArray.includes(attributeValue),
+        reason: `${rule.attribute} ${inArray.includes(attributeValue) ? 'in' : 'not in'} [${inArray.join(',')}]`
+      };
         
-      case 'not_in':
-        const notInArray = Array.isArray(rule.value) ? rule.value : [rule.value];
-        return { 
-          matches: !notInArray.includes(attributeValue),
-          reason: `${rule.attribute} ${!notInArray.includes(attributeValue) ? 'not in' : 'in'} [${notInArray.join(',')}]`
-        };
+    case 'not_in':
+      const notInArray = Array.isArray(rule.value) ? rule.value : [rule.value];
+      return { 
+        matches: !notInArray.includes(attributeValue),
+        reason: `${rule.attribute} ${!notInArray.includes(attributeValue) ? 'not in' : 'in'} [${notInArray.join(',')}]`
+      };
         
-      case 'greater_than':
-        return { 
-          matches: Number(attributeValue) > Number(rule.value),
-          reason: `${rule.attribute} (${attributeValue}) ${Number(attributeValue) > Number(rule.value) ? '>' : '<='} ${rule.value}`
-        };
+    case 'greater_than':
+      return { 
+        matches: Number(attributeValue) > Number(rule.value),
+        reason: `${rule.attribute} (${attributeValue}) ${Number(attributeValue) > Number(rule.value) ? '>' : '<='} ${rule.value}`
+      };
         
-      case 'less_than':
-        return { 
-          matches: Number(attributeValue) < Number(rule.value),
-          reason: `${rule.attribute} (${attributeValue}) ${Number(attributeValue) < Number(rule.value) ? '<' : '>='} ${rule.value}`
-        };
+    case 'less_than':
+      return { 
+        matches: Number(attributeValue) < Number(rule.value),
+        reason: `${rule.attribute} (${attributeValue}) ${Number(attributeValue) < Number(rule.value) ? '<' : '>='} ${rule.value}`
+      };
         
-      case 'contains':
-        return { 
-          matches: String(attributeValue).includes(String(rule.value)),
-          reason: `${rule.attribute} ${String(attributeValue).includes(String(rule.value)) ? 'contains' : 'does not contain'} '${rule.value}'`
-        };
+    case 'contains':
+      return { 
+        matches: String(attributeValue).includes(String(rule.value)),
+        reason: `${rule.attribute} ${String(attributeValue).includes(String(rule.value)) ? 'contains' : 'does not contain'} '${rule.value}'`
+      };
         
-      default:
-        return { 
-          matches: false, 
-          reason: `Unknown operator: ${rule.operator}` 
-        };
+    default:
+      return { 
+        matches: false, 
+        reason: `Unknown operator: ${rule.operator}` 
+      };
     }
   }
 
   private getAttributeValue(attribute: string, context: ToggleEvaluationContext): any {
     switch (attribute) {
-      case 'user_id':
-        return context.userId;
-      case 'org_id':
-        return context.orgId;
-      case 'timestamp':
-        return context.timestamp?.toISOString();
-      case 'ip_address':
-        return context.ipAddress;
-      case 'user_agent':
-        return context.userAgent;
-      default:
-        return context.userAttributes?.[attribute];
+    case 'user_id':
+      return context.userId;
+    case 'org_id':
+      return context.orgId;
+    case 'timestamp':
+      return context.timestamp?.toISOString();
+    case 'ip_address':
+      return context.ipAddress;
+    case 'user_agent':
+      return context.userAgent;
+    default:
+      return context.userAttributes?.[attribute];
     }
   }
 
   private validateToggleValue(type: ToggleType, value: any): void {
     switch (type) {
-      case ToggleType.BOOLEAN:
-        if (typeof value.enabled !== 'boolean') {
-          throw new Error('Boolean toggle must have "enabled" boolean property');
-        }
-        break;
+    case ToggleType.BOOLEAN:
+      if (typeof value.enabled !== 'boolean') {
+        throw new Error('Boolean toggle must have "enabled" boolean property');
+      }
+      break;
         
-      case ToggleType.PERCENTAGE_ROLLOUT:
-        if (typeof value.percentage !== 'number' || value.percentage < 0 || value.percentage > 100) {
-          throw new Error('Percentage rollout must have percentage between 0 and 100');
-        }
-        break;
+    case ToggleType.PERCENTAGE_ROLLOUT:
+      if (typeof value.percentage !== 'number' || value.percentage < 0 || value.percentage > 100) {
+        throw new Error('Percentage rollout must have percentage between 0 and 100');
+      }
+      break;
         
-      case ToggleType.MULTIVARIATE:
-        if (!Array.isArray(value.variants)) {
-          throw new Error('Multivariate toggle must have variants array');
-        }
-        const totalPercentage = value.variants.reduce((sum: number, v: any) => sum + (v.percentage || 0), 0);
-        if (totalPercentage > 100) {
-          throw new Error('Multivariate variant percentages cannot exceed 100%');
-        }
-        break;
+    case ToggleType.MULTIVARIATE:
+      if (!Array.isArray(value.variants)) {
+        throw new Error('Multivariate toggle must have variants array');
+      }
+      const totalPercentage = value.variants.reduce((sum: number, v: any) => sum + (v.percentage || 0), 0);
+      if (totalPercentage > 100) {
+        throw new Error('Multivariate variant percentages cannot exceed 100%');
+      }
+      break;
         
-      case ToggleType.SEGMENTATION:
-        if (!Array.isArray(value.rules)) {
-          throw new Error('Segmentation toggle must have rules array');
-        }
-        break;
+    case ToggleType.SEGMENTATION:
+      if (!Array.isArray(value.rules)) {
+        throw new Error('Segmentation toggle must have rules array');
+      }
+      break;
     }
   }
 
@@ -529,18 +529,18 @@ export class FeatureToggleService {
 
   private getCacheTTL(type: ToggleType): number {
     switch (type) {
-      case ToggleType.BOOLEAN:
-        return 3600; // 1 hour
-      case ToggleType.PERCENTAGE_ROLLOUT:
-        return 1800; // 30 minutes
-      case ToggleType.MULTIVARIATE:
-        return 1800; // 30 minutes
-      case ToggleType.SCHEDULED:
-        return 300; // 5 minutes
-      case ToggleType.SEGMENTATION:
-        return 600; // 10 minutes
-      default:
-        return 300; // 5 minutes default
+    case ToggleType.BOOLEAN:
+      return 3600; // 1 hour
+    case ToggleType.PERCENTAGE_ROLLOUT:
+      return 1800; // 30 minutes
+    case ToggleType.MULTIVARIATE:
+      return 1800; // 30 minutes
+    case ToggleType.SCHEDULED:
+      return 300; // 5 minutes
+    case ToggleType.SEGMENTATION:
+      return 600; // 10 minutes
+    default:
+      return 300; // 5 minutes default
     }
   }
 

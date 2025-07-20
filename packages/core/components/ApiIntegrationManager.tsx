@@ -512,9 +512,9 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
             <code className="block bg-gray-100 p-3 rounded text-sm mt-2">
               POST /api/workflow/transition
               {JSON.stringify({
-                resource_id: "resource_uuid",
-                to_state_id: "state_uuid",
-                comment: "Transition comment"
+                resource_id: 'resource_uuid',
+                to_state_id: 'state_uuid',
+                comment: 'Transition comment'
               }, null, 2)}
             </code>
           </div>
@@ -523,9 +523,9 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
             <code className="block bg-gray-100 p-3 rounded text-sm mt-2">
               POST /api/workflow/approvals
               {JSON.stringify({
-                resource_id: "resource_uuid",
-                transition_id: "transition_uuid",
-                requester_id: "user_id"
+                resource_id: 'resource_uuid',
+                transition_id: 'transition_uuid',
+                requester_id: 'user_id'
               }, null, 2)}
             </code>
           </div>
@@ -539,14 +539,14 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
         </p>
         <code className="block bg-gray-100 p-3 rounded text-sm">
           {JSON.stringify({
-            event: "state_changed",
-            timestamp: "2024-01-20T10:30:00Z",
-            workspace_id: "workspace_uuid",
-            resource_id: "resource_uuid",
+            event: 'state_changed',
+            timestamp: '2024-01-20T10:30:00Z',
+            workspace_id: 'workspace_uuid',
+            resource_id: 'resource_uuid',
             data: {
-              previous_state: "draft",
-              new_state: "approved",
-              actor_id: "user_id"
+              previous_state: 'draft',
+              new_state: 'approved',
+              actor_id: 'user_id'
             }
           }, null, 2)}
         </code>

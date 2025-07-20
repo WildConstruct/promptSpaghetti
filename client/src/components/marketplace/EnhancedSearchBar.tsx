@@ -92,31 +92,31 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
     }
 
     switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setSelectedSuggestion(prev => 
-          prev < suggestions.length - 1 ? prev + 1 : 0
-        );
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setSelectedSuggestion(prev => 
-          prev > 0 ? prev - 1 : suggestions.length - 1
-        );
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
-          handleSuggestionSelect(suggestions[selectedSuggestion]);
-        } else {
-          handleSubmit();
-        }
-        break;
-      case 'Escape':
-        setShowSuggestions(false);
-        setSelectedSuggestion(-1);
-        inputRef.current?.blur();
-        break;
+    case 'ArrowDown':
+      e.preventDefault();
+      setSelectedSuggestion(prev => 
+        prev < suggestions.length - 1 ? prev + 1 : 0
+      );
+      break;
+    case 'ArrowUp':
+      e.preventDefault();
+      setSelectedSuggestion(prev => 
+        prev > 0 ? prev - 1 : suggestions.length - 1
+      );
+      break;
+    case 'Enter':
+      e.preventDefault();
+      if (selectedSuggestion >= 0 && selectedSuggestion < suggestions.length) {
+        handleSuggestionSelect(suggestions[selectedSuggestion]);
+      } else {
+        handleSubmit();
+      }
+      break;
+    case 'Escape':
+      setShowSuggestions(false);
+      setSelectedSuggestion(-1);
+      inputRef.current?.blur();
+      break;
     }
   };
 
@@ -239,8 +239,8 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
               <span className="suggestion-text">{suggestion}</span>
               <div className="suggestion-type">
                 {suggestion.includes('#') ? 'Tag' : 
-                 suggestion.includes('@') ? 'User' :
-                 suggestion.charAt(0).toUpperCase() + suggestion.slice(1).includes(' ') ? 'Template' : 'Search'}
+                  suggestion.includes('@') ? 'User' :
+                    suggestion.charAt(0).toUpperCase() + suggestion.slice(1).includes(' ') ? 'Template' : 'Search'}
               </div>
             </button>
           ))}

@@ -181,7 +181,7 @@ describe('Android Adaptations', () => {
         <MaterialAppBar title="Test" type="large" />
       );
       
-      let appBar = container.querySelector('.material-app-bar');
+      const appBar = container.querySelector('.material-app-bar');
       expect(appBar).toHaveStyle('height: 152px');
       
       rerender(<MaterialAppBar title="Test" type="medium" />);

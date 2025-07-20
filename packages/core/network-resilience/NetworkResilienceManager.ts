@@ -513,30 +513,30 @@ export class NetworkResilienceManager extends EventEmitter {
       const message = JSON.parse(event.data);
       
       switch (message.type) {
-        case 'auth_response':
-          if (message.payload.success) {
-            console.log('Authentication successful');
-          } else {
-            console.error('Authentication failed:', message.payload.message);
-          }
-          break;
+      case 'auth_response':
+        if (message.payload.success) {
+          console.log('Authentication successful');
+        } else {
+          console.error('Authentication failed:', message.payload.message);
+        }
+        break;
           
-        case 'graph_update':
-          this.handleRemoteGraphUpdate(message.payload);
-          break;
+      case 'graph_update':
+        this.handleRemoteGraphUpdate(message.payload);
+        break;
           
-        case 'conflict_detected':
-          this.handleConflictDetected(message.payload);
-          break;
+      case 'conflict_detected':
+        this.handleConflictDetected(message.payload);
+        break;
           
-        case 'pong':
-          this.connectionState.updateMetrics({
-            latency: Date.now() - message.payload.timestamp
-          });
-          break;
+      case 'pong':
+        this.connectionState.updateMetrics({
+          latency: Date.now() - message.payload.timestamp
+        });
+        break;
           
-        default:
-          console.log('Unhandled message type:', message.type);
+      default:
+        console.log('Unhandled message type:', message.type);
       }
       
     } catch (error) {

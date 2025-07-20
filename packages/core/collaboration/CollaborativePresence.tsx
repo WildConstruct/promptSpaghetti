@@ -215,21 +215,21 @@ export const CollaborationStatus: React.FC<CollaborationStatusProps> = ({
 
   const getStatusColor = () => {
     switch (connectionStatus) {
-      case 'connected': return '#10b981';
-      case 'connecting': return '#f59e0b';
-      case 'disconnected': return '#6b7280';
-      case 'error': return '#ef4444';
-      default: return '#6b7280';
+    case 'connected': return '#10b981';
+    case 'connecting': return '#f59e0b';
+    case 'disconnected': return '#6b7280';
+    case 'error': return '#ef4444';
+    default: return '#6b7280';
     }
   };
 
   const getStatusText = () => {
     switch (connectionStatus) {
-      case 'connected': return `Connected • ${connectedUserCount} user${connectedUserCount !== 1 ? 's' : ''}`;
-      case 'connecting': return 'Connecting...';
-      case 'disconnected': return 'Disconnected';
-      case 'error': return 'Connection error';
-      default: return 'Unknown';
+    case 'connected': return `Connected • ${connectedUserCount} user${connectedUserCount !== 1 ? 's' : ''}`;
+    case 'connecting': return 'Connecting...';
+    case 'disconnected': return 'Disconnected';
+    case 'error': return 'Connection error';
+    default: return 'Unknown';
     }
   };
 

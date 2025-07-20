@@ -774,20 +774,20 @@ export class WebSocketServer extends EventEmitter {
    */
   private mapOperationTypeToConflictType(operationType: string): ConflictType {
     switch (operationType) {
-      case 'node_add':
-        return ConflictType.NODE_CREATION;
-      case 'node_remove':
-        return ConflictType.NODE_DELETION;
-      case 'node_update':
-        return ConflictType.NODE_PROPERTIES;
-      case 'edge_add':
-        return ConflictType.EDGE_CREATION;
-      case 'edge_remove':
-        return ConflictType.EDGE_DELETION;
-      case 'edge_update':
-        return ConflictType.EDGE_PROPERTIES;
-      default:
-        return ConflictType.NODE_PROPERTIES;
+    case 'node_add':
+      return ConflictType.NODE_CREATION;
+    case 'node_remove':
+      return ConflictType.NODE_DELETION;
+    case 'node_update':
+      return ConflictType.NODE_PROPERTIES;
+    case 'edge_add':
+      return ConflictType.EDGE_CREATION;
+    case 'edge_remove':
+      return ConflictType.EDGE_DELETION;
+    case 'edge_update':
+      return ConflictType.EDGE_PROPERTIES;
+    default:
+      return ConflictType.NODE_PROPERTIES;
     }
   }
 
@@ -910,27 +910,27 @@ export class WebSocketServer extends EventEmitter {
    */
   private determineInteractionType(updatePayload: any): AnalyticsEventType {
     switch (updatePayload.type) {
-      case 'node_created':
-      case 'add_node':
-        return AnalyticsEventType.NODE_CREATED;
-      case 'node_updated':
-      case 'update_node':
-        return AnalyticsEventType.NODE_UPDATED;
-      case 'node_deleted':
-      case 'delete_node':
-        return AnalyticsEventType.NODE_DELETED;
-      case 'connection_created':
-      case 'add_connection':
-        return AnalyticsEventType.CONNECTION_CREATED;
-      case 'connection_deleted':
-      case 'delete_connection':
-        return AnalyticsEventType.CONNECTION_DELETED;
-      case 'canvas_pan':
-      case 'canvas_zoom':
-      case 'canvas_interaction':
-        return AnalyticsEventType.CANVAS_INTERACTION;
-      default:
-        return AnalyticsEventType.CANVAS_INTERACTION;
+    case 'node_created':
+    case 'add_node':
+      return AnalyticsEventType.NODE_CREATED;
+    case 'node_updated':
+    case 'update_node':
+      return AnalyticsEventType.NODE_UPDATED;
+    case 'node_deleted':
+    case 'delete_node':
+      return AnalyticsEventType.NODE_DELETED;
+    case 'connection_created':
+    case 'add_connection':
+      return AnalyticsEventType.CONNECTION_CREATED;
+    case 'connection_deleted':
+    case 'delete_connection':
+      return AnalyticsEventType.CONNECTION_DELETED;
+    case 'canvas_pan':
+    case 'canvas_zoom':
+    case 'canvas_interaction':
+      return AnalyticsEventType.CANVAS_INTERACTION;
+    default:
+      return AnalyticsEventType.CANVAS_INTERACTION;
     }
   }
 }

@@ -27,10 +27,10 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
   showStats = true,
   showFilters = true,
   maxItems,
-  compact = false,
+  compact = false
 }) => {
   const [filters, setFilters] = useState<ActivityEventFilter>({
-    project_id: projectId,
+    project_id: projectId
   });
   const [selectedEvent, setSelectedEvent] = useState<ActivityEventWithActorInfo | null>(null);
 
@@ -42,10 +42,10 @@ export const ActivityFeed: React.FC<ActivityFeedProps> = ({
     stats,
     eventTypes,
     loadMore,
-    refresh,
+    refresh
   } = useActivityFeed(workspaceId, userId, filters, {
     limit: maxItems || 20,
-    autoRefresh: true,
+    autoRefresh: true
   });
 
   const handleFilterChange = (newFilters: Partial<ActivityEventFilter>) => {

@@ -222,7 +222,7 @@ export const CreateTemplateSchema = z.object({
   price_cents: z.number().int().min(0).default(0),
   is_ai_generated: z.boolean().default(false),
   claude_compat: z.array(z.string()).default(['claude-3-sonnet']),
-  categories: z.array(z.string().uuid()).optional(),
+  categories: z.array(z.string().uuid()).optional()
 });
 
 export const UpdateTemplateSchema = z.object({
@@ -233,7 +233,7 @@ export const UpdateTemplateSchema = z.object({
   is_ai_generated: z.boolean().optional(),
   claude_compat: z.array(z.string()).optional(),
   status: z.nativeEnum(TemplateStatus).optional(),
-  categories: z.array(z.string().uuid()).optional(),
+  categories: z.array(z.string().uuid()).optional()
 });
 
 export const CreateVersionSchema = z.object({
@@ -241,7 +241,7 @@ export const CreateVersionSchema = z.object({
   graph_json: z.record(z.any()),
   prompt_yaml: z.string().optional(),
   changelog_md: z.string().optional(),
-  token_per_run_estimate: z.number().int().min(0).default(0),
+  token_per_run_estimate: z.number().int().min(0).default(0)
 });
 
 export const SearchSchema = z.object({
@@ -256,19 +256,19 @@ export const SearchSchema = z.object({
   is_free: z.boolean().optional(),
   is_featured: z.boolean().optional(),
   page: z.number().int().min(1).default(1),
-  limit: z.number().int().min(1).max(100).default(20),
+  limit: z.number().int().min(1).max(100).default(20)
 });
 
 export const CreateReviewSchema = z.object({
   template_id: z.string().uuid(),
   stars: z.number().int().min(1).max(5),
-  comment: z.string().max(2000).optional(),
+  comment: z.string().max(2000).optional()
 });
 
 export const CreatePurchaseSchema = z.object({
   template_id: z.string().uuid(),
   version_id: z.string().uuid().optional(), // If not provided, use current version
-  payment_method_id: z.string(), // Stripe payment method ID
+  payment_method_id: z.string() // Stripe payment method ID
 });
 
 // Analytics interfaces
@@ -357,7 +357,7 @@ export type {
   TemplateAnalytics,
   CreatorAnalytics,
   PreviewRequest,
-  PreviewResponse,
+  PreviewResponse
 };
 
 export {
@@ -366,5 +366,5 @@ export {
   CreateVersionSchema,
   SearchSchema,
   CreateReviewSchema,
-  CreatePurchaseSchema,
+  CreatePurchaseSchema
 };

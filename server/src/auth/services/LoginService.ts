@@ -6,7 +6,7 @@ import {
   LoginResponse,
   User,
   AuthConfig,
-  UserSession,
+  UserSession
 } from '../types';
 import { UserService } from './UserService';
 import { TokenService } from './TokenService';
@@ -134,7 +134,7 @@ export class LoginService {
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         timestamp: new Date(),
-        deviceFingerprint: context.deviceFingerprint,
+        deviceFingerprint: context.deviceFingerprint
       });
 
       // Track login analytics
@@ -145,7 +145,7 @@ export class LoginService {
         refreshToken: tokens.refreshToken,
         user: await this.toPublicUser(user),
         expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes
-        sessionId: session.id,
+        sessionId: session.id
       };
     } catch (error) {
       // Log failed login attempt
@@ -157,7 +157,7 @@ export class LoginService {
         userAgent: context.userAgent,
         timestamp: new Date(),
         failureReason: error.message,
-        deviceFingerprint: context.deviceFingerprint,
+        deviceFingerprint: context.deviceFingerprint
       });
 
       // Track failure analytics
@@ -189,7 +189,7 @@ export class LoginService {
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId,
-        severity: 'info',
+        severity: 'info'
       });
     } catch (error) {
       console.error('Logout error:', error);
@@ -214,7 +214,7 @@ export class LoginService {
         action: 'token_refreshed',
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'info',
+        severity: 'info'
       });
 
       return tokens;
@@ -225,7 +225,7 @@ export class LoginService {
         details: { error: error.message },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw error;
@@ -244,7 +244,7 @@ export class LoginService {
       userId,
       action: '2fa_attempted',
       details: { method },
-      severity: 'info',
+      severity: 'info'
     });
 
     // For now, return true for development
@@ -270,7 +270,7 @@ export class LoginService {
     await this.userService.updateUser(user.id, {
       accountLocked: false,
       lockedUntil: undefined,
-      failedLoginAttempts: 0,
+      failedLoginAttempts: 0
     });
 
     // Log account unlock
@@ -280,7 +280,7 @@ export class LoginService {
       details: { method: 'token' },
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      severity: 'info',
+      severity: 'info'
     });
 
     // Send confirmation email
@@ -288,7 +288,7 @@ export class LoginService {
       displayName: user.displayName,
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
   }
 
@@ -296,7 +296,7 @@ export class LoginService {
     const timeframes = {
       day: '1 day',
       week: '1 week',
-      month: '1 month',
+      month: '1 month'
     };
 
     try {
@@ -374,19 +374,19 @@ export class LoginService {
         topFailureReasons: failureReasons.rows.map(row => ({
           reason: row.reason,
           count: parseInt(row.count),
-          percentage: totalAttempts > 0 ? Math.round((parseInt(row.count) / totalAttempts) * 100) : 0,
+          percentage: totalAttempts > 0 ? Math.round((parseInt(row.count) / totalAttempts) * 100) : 0
         })),
         suspiciousActivity: suspiciousActivity.rows.map(row => ({
           type: row.type,
           description: this.getActivityDescription(row.type),
           count: parseInt(row.count),
-          severity: row.severity,
+          severity: row.severity
         })),
         deviceAnalysis: {
           newDevices: parseInt(deviceAnalysis.rows[0]?.new_devices || '0'),
           returningDevices: parseInt(deviceAnalysis.rows[0]?.returning_devices || '0'),
-          suspiciousDevices: parseInt(deviceAnalysis.rows[0]?.suspicious_devices || '0'),
-        },
+          suspiciousDevices: parseInt(deviceAnalysis.rows[0]?.suspicious_devices || '0')
+        }
       };
     } catch (error) {
       console.error('Failed to get login analytics:', error);
@@ -411,11 +411,11 @@ export class LoginService {
         details: { 
           email: this.hashEmail(email),
           ipAddress: context.ipAddress,
-          rateLimitExceeded: true,
+          rateLimitExceeded: true
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
       
       throw new Error('Too many login attempts. Please try again later.');
@@ -465,7 +465,7 @@ export class LoginService {
   }> {
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenService.generateAccessToken(user),
-      this.tokenService.generateRefreshToken(user),
+      this.tokenService.generateRefreshToken(user)
     ]);
 
     return { accessToken, refreshToken };
@@ -495,9 +495,9 @@ export class LoginService {
         ...deviceInfo,
         fingerprint: context.deviceFingerprint,
         rememberMe: request.rememberMe,
-        ...request.deviceInfo,
+        ...request.deviceInfo
       }),
-      new Date(Date.now() + (request.rememberMe ? 30 : 1) * 24 * 60 * 60 * 1000), // 30 days or 1 day
+      new Date(Date.now() + (request.rememberMe ? 30 : 1) * 24 * 60 * 60 * 1000) // 30 days or 1 day
     ]);
 
     return this.mapDatabaseSession(session.rows[0]);
@@ -508,7 +508,7 @@ export class LoginService {
       lastLoginAt: new Date(),
       failedLoginAttempts: 0,
       accountLocked: false,
-      lockedUntil: undefined,
+      lockedUntil: undefined
     });
   }
 
@@ -530,7 +530,7 @@ export class LoginService {
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         deviceInfo: this.formatDeviceInfo(context),
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       // Log security event
@@ -540,12 +540,12 @@ export class LoginService {
         details: {
           reason: isNewDevice ? 'new_device' : 'unusual_location',
           deviceFingerprint: context.deviceFingerprint,
-          location: context.geoLocation,
+          location: context.geoLocation
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: session.id,
-        severity: 'warning',
+        severity: 'warning'
       });
     }
   }
@@ -559,11 +559,11 @@ export class LoginService {
         details: {
           type: 'rapid_attempts',
           ipAddress: context.ipAddress,
-          email: this.hashEmail(email),
+          email: this.hashEmail(email)
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
     }
 
@@ -575,11 +575,11 @@ export class LoginService {
         action: 'suspicious_activity_detected',
         details: {
           type: 'multiple_emails',
-          ipAddress: context.ipAddress,
+          ipAddress: context.ipAddress
         },
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
-        severity: 'warning',
+        severity: 'warning'
       });
     }
   }
@@ -594,11 +594,11 @@ export class LoginService {
         email: this.hashEmail(attempt.email),
         success: attempt.success,
         failureReason: attempt.failureReason,
-        deviceFingerprint: attempt.deviceFingerprint,
+        deviceFingerprint: attempt.deviceFingerprint
       },
       ipAddress: attempt.ipAddress,
       userAgent: attempt.userAgent,
-      severity: attempt.success ? 'info' : 'warning',
+      severity: attempt.success ? 'info' : 'warning'
     });
   }
 
@@ -615,7 +615,7 @@ export class LoginService {
       total: 1,
       success: outcome === 'success' ? 1 : 0,
       failure: outcome === 'failure' ? 1 : 0,
-      averageDuration: duration,
+      averageDuration: duration
     };
 
     await this.redis.setex(metricsKey, 86400, JSON.stringify(metrics)); // 24 hour TTL
@@ -686,7 +686,7 @@ export class LoginService {
       browser,
       os,
       device,
-      userAgent,
+      userAgent
     };
   }
 
@@ -724,7 +724,7 @@ export class LoginService {
       'suspicious_login': 'Login from new device or location',
       'unusual_location': 'Login from unusual geographical location',
       'rapid_attempts': 'Rapid successive login attempts',
-      'multiple_emails': 'Multiple email addresses attempted from same IP',
+      'multiple_emails': 'Multiple email addresses attempted from same IP'
     };
 
     return descriptions[activityType] || 'Suspicious activity detected';
@@ -739,7 +739,7 @@ export class LoginService {
       createdAt: user.createdAt,
       lastLoginAt: user.lastLoginAt,
       roles: ['user'], // Would fetch actual roles
-      permissions: ['graphs:create:own'], // Would fetch actual permissions
+      permissions: ['graphs:create:own'] // Would fetch actual permissions
     };
   }
 
@@ -756,7 +756,7 @@ export class LoginService {
       createdAt: row.created_at,
       lastAccessedAt: row.last_accessed_at,
       revoked: row.revoked,
-      revokedAt: row.revoked_at,
+      revokedAt: row.revoked_at
     };
   }
 

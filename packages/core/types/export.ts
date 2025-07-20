@@ -56,7 +56,7 @@ export const ExportTemplateSchema = z.object({
   
   // Usage statistics
   usage_count: z.number().int().min(0).default(0),
-  last_used_at: z.string().datetime().optional(),
+  last_used_at: z.string().datetime().optional()
 });
 
 export const CreateExportTemplateSchema = ExportTemplateSchema.omit({
@@ -64,7 +64,7 @@ export const CreateExportTemplateSchema = ExportTemplateSchema.omit({
   created_at: true,
   updated_at: true,
   usage_count: true,
-  last_used_at: true,
+  last_used_at: true
 });
 
 export const UpdateExportTemplateSchema = CreateExportTemplateSchema.partial();
@@ -125,7 +125,7 @@ export const ExportJobSchema = z.object({
   // Performance metrics
   processing_duration: z.number().int().min(0).optional(),
   memory_usage: z.number().int().min(0).optional(),
-  cpu_usage: z.number().min(0).max(100).optional(),
+  cpu_usage: z.number().min(0).max(100).optional()
 });
 
 export const CreateExportJobSchema = ExportJobSchema.omit({
@@ -142,7 +142,7 @@ export const CreateExportJobSchema = ExportJobSchema.omit({
   processing_log: true,
   processing_duration: true,
   memory_usage: true,
-  cpu_usage: true,
+  cpu_usage: true
 });
 
 export const UpdateExportJobSchema = z.object({
@@ -158,7 +158,7 @@ export const UpdateExportJobSchema = z.object({
   processing_log: z.string().optional(),
   processing_duration: z.number().int().min(0).optional(),
   memory_usage: z.number().int().min(0).optional(),
-  cpu_usage: z.number().min(0).max(100).optional(),
+  cpu_usage: z.number().min(0).max(100).optional()
 });
 
 // Export Schedule Types
@@ -190,7 +190,7 @@ export const ExportScheduleSchema = z.object({
   next_run_at: z.string().datetime().optional(),
   total_runs: z.number().int().min(0).default(0),
   successful_runs: z.number().int().min(0).default(0),
-  failed_runs: z.number().int().min(0).default(0),
+  failed_runs: z.number().int().min(0).default(0)
 });
 
 export const CreateExportScheduleSchema = ExportScheduleSchema.omit({
@@ -201,7 +201,7 @@ export const CreateExportScheduleSchema = ExportScheduleSchema.omit({
   next_run_at: true,
   total_runs: true,
   successful_runs: true,
-  failed_runs: true,
+  failed_runs: true
 });
 
 export const UpdateExportScheduleSchema = CreateExportScheduleSchema.partial();
@@ -230,7 +230,7 @@ export const ExportShareSchema = z.object({
   
   // Share statistics
   last_accessed_at: z.string().datetime().optional(),
-  access_count: z.number().int().min(0).default(0),
+  access_count: z.number().int().min(0).default(0)
 });
 
 export const CreateExportShareSchema = ExportShareSchema.omit({
@@ -238,7 +238,7 @@ export const CreateExportShareSchema = ExportShareSchema.omit({
   created_at: true,
   download_count: true,
   last_accessed_at: true,
-  access_count: true,
+  access_count: true
 });
 
 export const UpdateExportShareSchema = z.object({
@@ -248,7 +248,7 @@ export const UpdateExportShareSchema = z.object({
   allowed_downloads: z.number().int().optional(),
   allowed_ips: z.array(z.string()).optional(),
   expires_at: z.string().datetime().optional(),
-  is_active: z.boolean().optional(),
+  is_active: z.boolean().optional()
 });
 
 // Export Analytics Types
@@ -272,14 +272,14 @@ export const ExportAnalyticsSchema = z.object({
   // Temporal data
   exported_at: z.string().datetime(),
   date_bucket: z.string().date(),
-  hour_bucket: z.string().datetime(),
+  hour_bucket: z.string().datetime()
 });
 
 export const CreateExportAnalyticsSchema = ExportAnalyticsSchema.omit({
   id: true,
   exported_at: true,
   date_bucket: true,
-  hour_bucket: true,
+  hour_bucket: true
 });
 
 // Export Format Definition Types
@@ -309,13 +309,13 @@ export const ExportFormatDefinitionSchema = z.object({
   is_system_format: z.boolean().default(true),
   
   created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  updated_at: z.string().datetime()
 });
 
 export const CreateExportFormatDefinitionSchema = ExportFormatDefinitionSchema.omit({
   id: true,
   created_at: true,
-  updated_at: true,
+  updated_at: true
 });
 
 export const UpdateExportFormatDefinitionSchema = CreateExportFormatDefinitionSchema.partial();
@@ -333,7 +333,7 @@ export const CommonExportOptionsSchema = z.object({
   // Filtering options
   date_range: z.object({
     start: z.string().datetime().optional(),
-    end: z.string().datetime().optional(),
+    end: z.string().datetime().optional()
   }).optional(),
   
   user_filters: z.array(z.string().uuid()).optional(),
@@ -341,40 +341,40 @@ export const CommonExportOptionsSchema = z.object({
   // Output options
   compress_output: z.boolean().default(false),
   encrypt_output: z.boolean().default(false),
-  encryption_key: z.string().optional(),
+  encryption_key: z.string().optional()
 });
 
 export const JsonExportOptionsSchema = CommonExportOptionsSchema.extend({
   pretty: z.boolean().default(true),
   include_schema: z.boolean().default(false),
-  array_format: z.boolean().default(false),
+  array_format: z.boolean().default(false)
 });
 
 export const YamlExportOptionsSchema = CommonExportOptionsSchema.extend({
   include_comments: z.boolean().default(true),
   flow_style: z.boolean().default(false),
-  explicit_start: z.boolean().default(false),
+  explicit_start: z.boolean().default(false)
 });
 
 export const XmlExportOptionsSchema = CommonExportOptionsSchema.extend({
   pretty: z.boolean().default(true),
   include_schema: z.boolean().default(true),
   namespace: z.string().optional(),
-  root_element: z.string().default('export'),
+  root_element: z.string().default('export')
 });
 
 export const CsvExportOptionsSchema = CommonExportOptionsSchema.extend({
   delimiter: z.string().default(','),
   include_headers: z.boolean().default(true),
   quote_all: z.boolean().default(false),
-  flatten_objects: z.boolean().default(true),
+  flatten_objects: z.boolean().default(true)
 });
 
 export const MarkdownExportOptionsSchema = CommonExportOptionsSchema.extend({
   include_toc: z.boolean().default(true),
   format: z.enum(['github', 'commonmark']).default('github'),
   heading_level: z.number().int().min(1).max(6).default(1),
-  code_blocks: z.boolean().default(true),
+  code_blocks: z.boolean().default(true)
 });
 
 export const PdfExportOptionsSchema = CommonExportOptionsSchema.extend({
@@ -386,27 +386,27 @@ export const PdfExportOptionsSchema = CommonExportOptionsSchema.extend({
     top: z.number().min(0).default(20),
     right: z.number().min(0).default(20),
     bottom: z.number().min(0).default(20),
-    left: z.number().min(0).default(20),
+    left: z.number().min(0).default(20)
   }).default({
     top: 20,
     right: 20,
     bottom: 20,
-    left: 20,
-  }),
+    left: 20
+  })
 });
 
 export const HtmlExportOptionsSchema = CommonExportOptionsSchema.extend({
   include_css: z.boolean().default(true),
   standalone: z.boolean().default(true),
   theme: z.enum(['default', 'dark', 'light']).default('default'),
-  minify: z.boolean().default(false),
+  minify: z.boolean().default(false)
 });
 
 export const ZipExportOptionsSchema = CommonExportOptionsSchema.extend({
   compression_level: z.number().int().min(0).max(9).default(6),
   include_metadata: z.boolean().default(true),
   separate_files: z.boolean().default(false),
-  folder_structure: z.boolean().default(true),
+  folder_structure: z.boolean().default(true)
 });
 
 // Export Result Types
@@ -417,7 +417,7 @@ export const ExportResultSchema = z.object({
   file_size: z.number().int().min(0).optional(),
   expires_at: z.string().datetime().optional(),
   share_token: z.string().optional(),
-  error_message: z.string().optional(),
+  error_message: z.string().optional()
 });
 
 export const ExportProgressSchema = z.object({
@@ -426,7 +426,7 @@ export const ExportProgressSchema = z.object({
   progress_percentage: z.number().int().min(0).max(100),
   current_step: z.string().optional(),
   estimated_completion: z.string().datetime().optional(),
-  processing_log: z.string().optional(),
+  processing_log: z.string().optional()
 });
 
 // Export Statistics Types
@@ -440,10 +440,10 @@ export const ExportStatisticsSchema = z.object({
   most_used_templates: z.array(z.object({
     template_id: z.string().uuid(),
     template_name: z.string(),
-    usage_count: z.number().int().min(0),
+    usage_count: z.number().int().min(0)
   })),
   success_rate: z.number().min(0).max(100),
-  last_export_at: z.string().datetime().optional(),
+  last_export_at: z.string().datetime().optional()
 });
 
 // TypeScript type exports
@@ -509,24 +509,24 @@ export type ExportScheduleWithStats = ExportSchedule & {
 // Validation helpers
 export const validateExportOptions = (format: ExportFormat, options: any) => {
   switch (format) {
-    case 'json':
-      return JsonExportOptionsSchema.safeParse(options);
-    case 'yaml':
-      return YamlExportOptionsSchema.safeParse(options);
-    case 'xml':
-      return XmlExportOptionsSchema.safeParse(options);
-    case 'csv':
-      return CsvExportOptionsSchema.safeParse(options);
-    case 'markdown':
-      return MarkdownExportOptionsSchema.safeParse(options);
-    case 'pdf':
-      return PdfExportOptionsSchema.safeParse(options);
-    case 'html':
-      return HtmlExportOptionsSchema.safeParse(options);
-    case 'zip':
-      return ZipExportOptionsSchema.safeParse(options);
-    default:
-      return CommonExportOptionsSchema.safeParse(options);
+  case 'json':
+    return JsonExportOptionsSchema.safeParse(options);
+  case 'yaml':
+    return YamlExportOptionsSchema.safeParse(options);
+  case 'xml':
+    return XmlExportOptionsSchema.safeParse(options);
+  case 'csv':
+    return CsvExportOptionsSchema.safeParse(options);
+  case 'markdown':
+    return MarkdownExportOptionsSchema.safeParse(options);
+  case 'pdf':
+    return PdfExportOptionsSchema.safeParse(options);
+  case 'html':
+    return HtmlExportOptionsSchema.safeParse(options);
+  case 'zip':
+    return ZipExportOptionsSchema.safeParse(options);
+  default:
+    return CommonExportOptionsSchema.safeParse(options);
   }
 };
 

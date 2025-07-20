@@ -28,5 +28,5 @@ async function executeGraphFromFile(graphPath, options = {}) {
 }
 
 module.exports = {
-  executeGraphFromFile,
+  executeGraphFromFile
 };

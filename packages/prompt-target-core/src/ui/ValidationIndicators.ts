@@ -224,16 +224,16 @@ export class ValidationIndicators {
     };
 
     switch (severity) {
-      case 'critical':
-        return { ...baseStyle, color: '#d32f2f', border: '2px solid #f44336' };
-      case 'high':
-        return { ...baseStyle, color: '#f57c00', border: '2px solid #ff9800' };
-      case 'medium':
-        return { ...baseStyle, color: '#fbc02d', border: '2px solid #ffeb3b' };
-      case 'low':
-        return { ...baseStyle, color: '#1976d2', border: '2px solid #2196f3' };
-      default:
-        return { ...baseStyle, color: '#9e9e9e', border: '1px solid #bdbdbd' };
+    case 'critical':
+      return { ...baseStyle, color: '#d32f2f', border: '2px solid #f44336' };
+    case 'high':
+      return { ...baseStyle, color: '#f57c00', border: '2px solid #ff9800' };
+    case 'medium':
+      return { ...baseStyle, color: '#fbc02d', border: '2px solid #ffeb3b' };
+    case 'low':
+      return { ...baseStyle, color: '#1976d2', border: '2px solid #2196f3' };
+    default:
+      return { ...baseStyle, color: '#9e9e9e', border: '1px solid #bdbdbd' };
     }
   }
 
@@ -455,17 +455,17 @@ export class ValidationIndicators {
     const changes: string[] = [];
 
     switch (suggestion.action.type) {
-      case 'node_remove':
-        changes.push(`Remove node: ${suggestion.action.targetId}`);
-        break;
-      case 'edge_remove':
-        changes.push(`Remove edge: ${suggestion.action.targetId}`);
-        break;
-      case 'node_update':
-        changes.push(`Update node: ${suggestion.action.targetId}`);
-        break;
-      default:
-        changes.push('Apply suggested fix');
+    case 'node_remove':
+      changes.push(`Remove node: ${suggestion.action.targetId}`);
+      break;
+    case 'edge_remove':
+      changes.push(`Remove edge: ${suggestion.action.targetId}`);
+      break;
+    case 'node_update':
+      changes.push(`Update node: ${suggestion.action.targetId}`);
+      break;
+    default:
+      changes.push('Apply suggested fix');
     }
 
     return changes;

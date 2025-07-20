@@ -49,5 +49,14 @@ export { useCollaborativeGraphStore, useCollaborationEnabled, useConnectedUsers,
 export type { UserPresence, CollaborativeGraphState } from './collaboration/collaborativeGraphStore';
 export { useCollaborativeReactFlow, useNodeCollaborators, useCollaborationStatus } from './collaboration/useCollaborativeReactFlow';
 export { CollaborativePresence, CollaborationStatus, UserAvatars } from './collaboration/CollaborativePresence';
+export { WorkflowStateManager } from './components/WorkflowStateManager';
+export { WorkflowStateIndicator, WorkflowStateBadge } from './components/WorkflowStateIndicator';
+export { WorkflowTransitionControls } from './components/WorkflowTransitionControls';
+export { WorkflowHistoryVisualization } from './components/WorkflowHistoryVisualization';
+export { AuditTrailViewer } from './components/AuditTrailViewer';
+export { ApiIntegrationManager } from './components/ApiIntegrationManager';
+export { ScheduledExecutionManager } from './components/ScheduledExecutionManager';
+export { useWorkflowStore } from './stores/workflowStore';
+export type { WorkflowState, WorkflowTransition, WorkflowApproval, WorkflowLock, WorkflowHistoryEntry, WorkflowStatistics } from './stores/workflowStore';
 export { RandomizerPanel, GraphPreview, RandomizerWorkflow, RandomizerSystem, LLMRandomizerSystem } from './llm-randomizer';
 //# sourceMappingURL=index.d.ts.map

@@ -386,34 +386,34 @@ export class SynchronizationRecovery extends EventEmitter {
       let resolvedOperation: DocumentOperation;
 
       switch (resolution.strategy) {
-        case 'mine':
-          resolvedOperation = conflict.operation1;
-          break;
+      case 'mine':
+        resolvedOperation = conflict.operation1;
+        break;
           
-        case 'theirs':
-          if (!conflict.operation2) {
-            throw new Error('Cannot use "theirs" strategy without second operation');
-          }
-          resolvedOperation = conflict.operation2;
-          break;
+      case 'theirs':
+        if (!conflict.operation2) {
+          throw new Error('Cannot use "theirs" strategy without second operation');
+        }
+        resolvedOperation = conflict.operation2;
+        break;
           
-        case 'merge':
-          resolvedOperation = await this.mergeOperations(conflict.operation1, conflict.operation2);
-          break;
+      case 'merge':
+        resolvedOperation = await this.mergeOperations(conflict.operation1, conflict.operation2);
+        break;
           
-        case 'manual':
-          if (!resolution.result) {
-            throw new Error('Manual resolution requires result data');
-          }
-          resolvedOperation = {
-            ...conflict.operation1,
-            data: resolution.result,
-            id: uuidv4() // New ID for resolved operation
-          };
-          break;
+      case 'manual':
+        if (!resolution.result) {
+          throw new Error('Manual resolution requires result data');
+        }
+        resolvedOperation = {
+          ...conflict.operation1,
+          data: resolution.result,
+          id: uuidv4() // New ID for resolved operation
+        };
+        break;
           
-        default:
-          throw new Error(`Unknown resolution strategy: ${resolution.strategy}`);
+      default:
+        throw new Error(`Unknown resolution strategy: ${resolution.strategy}`);
       }
 
       // Apply resolved operation

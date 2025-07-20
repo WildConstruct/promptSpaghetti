@@ -368,65 +368,65 @@ export class OpenAIGPTAdaptor extends BaseAdaptor {
 
     // Process current node content
     switch (node.type) {
-      case 'text':
-        content += (content ? ' ' : '') + (node.data.content || '');
-        break;
+    case 'text':
+      content += (content ? ' ' : '') + (node.data.content || '');
+      break;
         
-      case 'concat':
-        // Content already processed from inputs
+    case 'concat':
+      // Content already processed from inputs
+      transformations.push({
+        step: 'process_concat',
+        sourceNodeId: node.id,
+        action: 'Concatenated input nodes'
+      });
+      break;
+        
+    case 'weighted':
+      // For simplicity, take the first option (could be enhanced with actual weighting)
+      if (node.data.options && node.data.options.length > 0) {
+        content += (content ? ' ' : '') + node.data.options[0].text;
         transformations.push({
-          step: 'process_concat',
+          step: 'process_weighted',
           sourceNodeId: node.id,
-          action: 'Concatenated input nodes'
+          action: 'Selected first weighted option',
+          details: { selectedOption: 0 }
         });
-        break;
+      }
+      break;
         
-      case 'weighted':
-        // For simplicity, take the first option (could be enhanced with actual weighting)
-        if (node.data.options && node.data.options.length > 0) {
-          content += (content ? ' ' : '') + node.data.options[0].text;
-          transformations.push({
-            step: 'process_weighted',
-            sourceNodeId: node.id,
-            action: 'Selected first weighted option',
-            details: { selectedOption: 0 }
-          });
-        }
-        break;
-        
-      case 'conditional':
-        // For simplicity, take the 'true' branch (could be enhanced with condition evaluation)
-        if (node.data.trueBranch) {
-          content += (content ? ' ' : '') + node.data.trueBranch;
-          transformations.push({
-            step: 'process_conditional',
-            sourceNodeId: node.id,
-            action: 'Selected true branch',
-            details: { condition: node.data.condition }
-          });
-        }
-        break;
-        
-      case 'output':
-        // Content already processed from inputs
+    case 'conditional':
+      // For simplicity, take the 'true' branch (could be enhanced with condition evaluation)
+      if (node.data.trueBranch) {
+        content += (content ? ' ' : '') + node.data.trueBranch;
         transformations.push({
-          step: 'process_output',
+          step: 'process_conditional',
           sourceNodeId: node.id,
-          action: 'Processed output node'
+          action: 'Selected true branch',
+          details: { condition: node.data.condition }
         });
-        break;
+      }
+      break;
         
-      default:
-        // For unsupported node types, try to extract any text content
-        if (node.data.content) {
-          content += (content ? ' ' : '') + node.data.content;
-          transformations.push({
-            step: 'process_fallback',
-            sourceNodeId: node.id,
-            action: `Processed unsupported node type: ${node.type}`,
-            details: { nodeType: node.type }
-          });
-        }
+    case 'output':
+      // Content already processed from inputs
+      transformations.push({
+        step: 'process_output',
+        sourceNodeId: node.id,
+        action: 'Processed output node'
+      });
+      break;
+        
+    default:
+      // For unsupported node types, try to extract any text content
+      if (node.data.content) {
+        content += (content ? ' ' : '') + node.data.content;
+        transformations.push({
+          step: 'process_fallback',
+          sourceNodeId: node.id,
+          action: `Processed unsupported node type: ${node.type}`,
+          details: { nodeType: node.type }
+        });
+      }
     }
 
     return content.trim();
