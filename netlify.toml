@@ -1,15 +1,15 @@
 [build]
   # Build from root to handle monorepo properly
-  base = ""
+  base = "client"
   # Skip automatic installation and use our build script
-  command = "./netlify-build-skip.sh"
-  publish = "client/dist"
+  command = "npm run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_CONFIG_LEGACY_PEER_DEPS = "true"
   # Skip Netlify's automatic dependency installation
-  NPM_FLAGS = "--version"
+  # NPM_FLAGS removed
   # Production API URL - Update this to your actual API endpoint
   VITE_API_URL = "https://api.promptscape.app"
   # Enable analytics in production
