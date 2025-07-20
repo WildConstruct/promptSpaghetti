@@ -93,6 +93,9 @@ Hi [Other Agent]! Brief summary of what was accomplished.
 - Task flow: UNASSIGNED → IN_PROGRESS → REVIEW → COMPLETED
 
 **For QA Agents:**
+- **CRITICAL**: Use `node src/run-qa-agent.js` for reviewing tasks (NOT qa-review-workflow.js)
+  - This ensures proper commit tracking and GitHub automation
+  - The run-qa-agent.js script integrates with the ticket system
 - When you set a task status to APPROVED, it automatically triggers:
   - GitHub PR creation (if enabled in configuration)
   - Commit tracking for auto-push (every 10 commits by default)

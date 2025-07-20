@@ -419,14 +419,16 @@ export class TLSConfigManager {
   /**
    * Watch certificate files for changes
    */
-  watchCertificates(callback: (event: string, filename: string) => void): void {
+  watchCertificates(callback: (event: string, filename: string | null) => void): void {
     if (this.certificateWatcher) {
       this.certificateWatcher.close();
     }
 
     if (this.config.enabled) {
       const certDir = path.dirname(this.config.certificates.cert);
-      this.certificateWatcher = fs.watch(certDir, callback);
+      this.certificateWatcher = fs.watch(certDir, (eventType, filename) => {
+        callback(eventType, filename);
+      });
     }
   }
 

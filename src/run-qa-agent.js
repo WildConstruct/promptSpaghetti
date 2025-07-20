@@ -190,10 +190,70 @@ class QAAgent {
       // Save state
       this.saveState();
       
+      // Track this approval for commit counting
+      this.trackCommitForApproval(taskId);
+      
       console.log('🎯 GitHub automation will now:');
       console.log(`   - Create PR for task ${taskId}`);
       console.log('   - Increment commit counter');
       console.log('   - Auto-push when threshold reached (10 commits)');
+      
+      // Check if we need to trigger GitHub automation
+      this.checkGitHubAutomationThreshold();
+    }
+  }
+  
+  // Track commits for approved tasks
+  trackCommitForApproval(taskId) {
+    const fs = require('fs');
+    const path = require('path');
+    const commitTrackingFile = path.join(__dirname, 'data', 'commit-tracking.json');
+    
+    let commitData = { unpushedApprovals: [], lastPushTimestamp: null };
+    
+    // Load existing commit tracking data
+    if (fs.existsSync(commitTrackingFile)) {
+      try {
+        commitData = JSON.parse(fs.readFileSync(commitTrackingFile, 'utf8'));
+      } catch (error) {
+        console.log('⚠️  Could not load commit tracking, starting fresh');
+      }
+    }
+    
+    // Add this approval to unpushed list
+    commitData.unpushedApprovals.push({
+      taskId: taskId,
+      approvedAt: new Date().toISOString()
+    });
+    
+    // Save updated tracking data
+    fs.writeFileSync(commitTrackingFile, JSON.stringify(commitData, null, 2));
+    
+    console.log(`📊 Commit tracking: ${commitData.unpushedApprovals.length} unpushed approvals`);
+  }
+  
+  // Check if we need to trigger GitHub automation
+  checkGitHubAutomationThreshold() {
+    const fs = require('fs');
+    const path = require('path');
+    const commitTrackingFile = path.join(__dirname, 'data', 'commit-tracking.json');
+    
+    if (!fs.existsSync(commitTrackingFile)) return;
+    
+    const commitData = JSON.parse(fs.readFileSync(commitTrackingFile, 'utf8'));
+    const unpushedCount = commitData.unpushedApprovals.length;
+    
+    if (unpushedCount >= 10) {
+      console.log('');
+      console.log('🚀 GITHUB AUTOMATION TRIGGERED!');
+      console.log(`   ${unpushedCount} approved tasks ready for commit and push`);
+      console.log('   Run: git add . && git commit -m "feat: approved tasks" && git push');
+      console.log('');
+      
+      // Mark these as ready for push (but don't auto-push)
+      commitData.readyForPush = true;
+      commitData.thresholdReachedAt = new Date().toISOString();
+      fs.writeFileSync(commitTrackingFile, JSON.stringify(commitData, null, 2));
     }
   }
 

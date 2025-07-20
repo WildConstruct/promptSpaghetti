@@ -58,6 +58,10 @@ createTaskForStory(storyId, storyTitle) // Still needed
 
 ### QA Agent
 ```typescript
+// CRITICAL: Use the correct script for task reviews
++ // Always use: node src/run-qa-agent.js
++ // DO NOT use: qa-review-workflow.js (doesn't track commits)
++
 // ADD: Webhook trigger awareness
 + // When setting task to APPROVED:
 + // - Triggers webhook to create GitHub PR
@@ -68,6 +72,11 @@ createTaskForStory(storyId, storyTitle) // Still needed
 +   await updateTaskStatus(taskId, 'APPROVED');
 + }
 ```
+
+**Important QA Agent Update**:
+- QA agents must use `node src/run-qa-agent.js` for reviewing tasks
+- This script properly integrates with commit tracking and GitHub automation
+- The `qa-review-workflow.js` script should NOT be used as it doesn't track commits
 
 ## Database Schema Reference
 

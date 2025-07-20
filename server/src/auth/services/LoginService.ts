@@ -13,6 +13,7 @@ import { TokenService } from './TokenService';
 import { AuditService } from './AuditService';
 import { RateLimitService } from './RateLimitService';
 import { EmailService } from './EmailService';
+import { AccountLockoutService } from './AccountLockoutService';
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 import { AUDIT_EVENTS, RATE_LIMIT_RULES } from '../config';
@@ -66,6 +67,7 @@ export class LoginService {
   private auditService: AuditService;
   private rateLimitService: RateLimitService;
   private emailService: EmailService;
+  private lockoutService: AccountLockoutService;
   private db: DatabaseService;
   private redis: RedisService;
   private config: AuthConfig;
@@ -77,6 +79,7 @@ export class LoginService {
     auditService: AuditService,
     rateLimitService: RateLimitService,
     emailService: EmailService,
+    lockoutService: AccountLockoutService,
     db: DatabaseService,
     redis: RedisService
   ) {
@@ -86,6 +89,7 @@ export class LoginService {
     this.auditService = auditService;
     this.rateLimitService = rateLimitService;
     this.emailService = emailService;
+    this.lockoutService = lockoutService;
     this.db = db;
     this.redis = redis;
   }
@@ -110,8 +114,27 @@ export class LoginService {
       // Pre-login security checks
       await this.performSecurityChecks(request.email, context);
 
+      // Check account lockout status
+      const lockoutStatus = await this.lockoutService.getLockoutStatus(request.email);
+      if (lockoutStatus.isLocked) {
+        const lockoutError = lockoutStatus.lockedUntil 
+          ? `Account is locked until ${lockoutStatus.lockedUntil.toLocaleString()}`
+          : 'Account is currently locked';
+        throw new Error(lockoutError);
+      }
+
       // Get user and validate credentials
       user = await this.validateCredentials(request.email, request.password);
+
+      // Record successful login attempt
+      await this.lockoutService.recordLoginAttempt({
+        userId: user.id,
+        email: request.email,
+        success: true,
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+        timestamp: new Date()
+      });
 
       // Post-login security validations
       await this.validateUserAccount(user, context);
@@ -148,7 +171,18 @@ export class LoginService {
         sessionId: session.id
       };
     } catch (error) {
-      // Log failed login attempt
+      // Record failed login attempt with lockout service
+      await this.lockoutService.recordLoginAttempt({
+        userId: user?.id,
+        email: request.email,
+        success: false,
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+        timestamp: new Date(),
+        failureReason: error.message
+      });
+
+      // Log failed login attempt for audit
       await this.logLoginAttempt({
         userId: user?.id,
         email: request.email,
@@ -256,40 +290,14 @@ export class LoginService {
     unlockToken: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
-    const user = await this.userService.getUserByEmail(email);
-    if (!user) {
-      throw new Error('Invalid unlock request');
-    }
-
-    // Verify unlock token (implementation would check a secure token)
-    if (!this.verifyUnlockToken(user, unlockToken)) {
+    // Use the lockout service to verify and unlock
+    const success = await this.lockoutService.verifyUnlockToken(email, unlockToken);
+    if (!success) {
       throw new Error('Invalid or expired unlock token');
     }
 
-    // Unlock account
-    await this.userService.updateUser(user.id, {
-      accountLocked: false,
-      lockedUntil: undefined,
-      failedLoginAttempts: 0
-    });
-
-    // Log account unlock
-    await this.auditService.logEvent({
-      userId: user.id,
-      action: AUDIT_EVENTS.ACCOUNT_UNLOCKED,
-      details: { method: 'token' },
-      ipAddress: context.ipAddress,
-      userAgent: context.userAgent,
-      severity: 'info'
-    });
-
-    // Send confirmation email
-    await this.emailService.sendAccountUnlocked(user.email, {
-      displayName: user.displayName,
-      ipAddress: context.ipAddress,
-      userAgent: context.userAgent,
-      timestamp: new Date()
-    });
+    // Account has been unlocked by the lockout service
+    // Additional logging is handled by the lockout service
   }
 
   async getLoginAnalytics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<LoginAnalytics> {

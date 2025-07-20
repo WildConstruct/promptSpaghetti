@@ -44,6 +44,11 @@ commands:
   - review {story}: execute the task review-story for the highest sequence story in docs/stories unless another is specified - keep any specified technical-preferences in mind as needed
   - create-doc {template}: execute task create-doc (no template = ONLY show available templates listed under dependencies/templates below)
   - exit: Say goodbye as the QA Engineer, and then abandon inhabiting this persona
+qa-workflow-instructions:
+  - IMPORTANT: When reviewing tasks in the ticket system, use 'node src/run-qa-agent.js' for proper commit tracking
+  - DO NOT use 'qa-review-workflow.js' as it doesn't integrate with GitHub automation
+  - The run-qa-agent.js script ensures approved tasks are tracked for automated PR creation
+  - This is critical for the ticket system's GitHub integration to work correctly
 dependencies:
   tasks:
     - review-story.md

@@ -1,0 +1,151 @@
+{
+  "unpushedApprovals": [
+    {
+      "taskId": "T-1752989143997-417",
+      "approvedAt": "2025-07-20T06:15:25.247Z"
+    },
+    {
+      "taskId": "T-1752989143997-523",
+      "approvedAt": "2025-07-20T06:15:28.259Z"
+    },
+    {
+      "taskId": "T-1752989143997-587",
+      "approvedAt": "2025-07-20T14:34:52.709Z"
+    },
+    {
+      "taskId": "T-1752989143997-458",
+      "approvedAt": "2025-07-20T14:36:46.939Z"
+    },
+    {
+      "taskId": "T-1752989143997-257",
+      "approvedAt": "2025-07-20T14:36:48.942Z"
+    },
+    {
+      "taskId": "T-1752989143997-26",
+      "approvedAt": "2025-07-20T14:47:48.430Z"
+    },
+    {
+      "taskId": "T-1752989143997-368",
+      "approvedAt": "2025-07-20T14:49:06.084Z"
+    },
+    {
+      "taskId": "T-1752989143997-LOCKOUT-1753022938032",
+      "approvedAt": "2025-07-20T14:49:09.092Z"
+    },
+    {
+      "taskId": "T-1752989143997-935",
+      "approvedAt": "2025-07-20T14:53:13.234Z"
+    },
+    {
+      "taskId": "T-1752989143997-961",
+      "approvedAt": "2025-07-20T14:53:16.242Z"
+    },
+    {
+      "taskId": "T-1752989143997-369",
+      "approvedAt": "2025-07-20T14:53:20.345Z"
+    },
+    {
+      "taskId": "T-1752989143997-324",
+      "approvedAt": "2025-07-20T14:53:22.257Z"
+    },
+    {
+      "taskId": "T-1752989143997-187",
+      "approvedAt": "2025-07-20T14:53:26.362Z"
+    }
+  ],
+  "lastPushTimestamp": "2025-07-20T06:14:56.321Z",
+  "pushedHistory": [
+    {
+      "pushedAt": "2025-07-20T06:14:56.322Z",
+      "taskCount": 21,
+      "tasks": [
+        {
+          "taskId": "previously-approved-1",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-2",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-3",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-4",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-5",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-6",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-7",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-8",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-9",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-10",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-11",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-12",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-13",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-14",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-15",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-16",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-17",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-18",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-19",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-20",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        },
+        {
+          "taskId": "previously-approved-21",
+          "approvedAt": "2025-07-20T05:14:56.322Z"
+        }
+      ]
+    }
+  ],
+  "readyForPush": true,
+  "thresholdReachedAt": "2025-07-20T14:53:26.368Z"
+}

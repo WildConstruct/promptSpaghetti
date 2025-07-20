@@ -4,6 +4,7 @@
 import { AuthConfig, Role, Permission, UserRole, PermissionCheck, PermissionContext } from '../types';
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
+import { SessionRotationService, PrivilegeChangeEvent } from './SessionRotationService';
 
 export interface CreateRoleData {
   name: string;
@@ -38,6 +39,7 @@ export class RBACService {
   private config: AuthConfig;
   private dbService: DatabaseService;
   private auditService: AuditService;
+  private sessionRotationService?: SessionRotationService;
 
   // Permission cache to improve performance
   private permissionCache: Map<string, { permissions: Permission[]; expiresAt: Date }> = new Map();
@@ -50,6 +52,11 @@ export class RBACService {
 
     // Start cache cleanup interval
     setInterval(() => this.cleanupCache(), this.cacheTimeoutMs);
+  }
+
+  // Set session rotation service (injected after initialization to avoid circular dependencies)
+  setSessionRotationService(sessionRotationService: SessionRotationService): void {
+    this.sessionRotationService = sessionRotationService;
   }
 
   // Role Management
@@ -363,10 +370,14 @@ export class RBACService {
   // User Role Assignment
   async assignRole(
     data: AssignRoleData,
-    context: { ipAddress?: string; userAgent?: string } = {}
+    context: { ipAddress?: string; userAgent?: string; currentSessionId?: string } = {}
   ): Promise<UserRole> {
     const userRoleId = require('crypto').randomUUID();
     const now = new Date();
+
+    // Get existing roles before assignment for session rotation
+    const existingRoles = await this.getUserRoles(data.userId);
+    const existingRoleIds = existingRoles.map(r => r.id);
 
     await this.dbService.query(`
       INSERT INTO user_roles (id, user_id, role_id, granted_by, granted_at, expires_at, scope_context)
@@ -405,6 +416,28 @@ export class RBACService {
       severity: 'info'
     });
 
+    // Trigger session rotation if service is available
+    if (this.sessionRotationService) {
+      const rotationEvent: PrivilegeChangeEvent = {
+        userId: data.userId,
+        changeType: 'role_added',
+        oldValue: existingRoleIds,
+        newValue: [...existingRoleIds, data.roleId],
+        reason: `Role ${role?.name} assigned`,
+        performedBy: data.grantedBy
+      };
+
+      try {
+        await this.sessionRotationService.handlePrivilegeChange(
+          rotationEvent,
+          context.currentSessionId
+        );
+      } catch (error) {
+        console.error('Failed to rotate sessions after role assignment:', error);
+        // Don't fail the role assignment if session rotation fails
+      }
+    }
+
     return {
       id: userRoleId,
       userId: data.userId,
@@ -419,8 +452,12 @@ export class RBACService {
   async removeRole(
     userId: string,
     roleId: string,
-    context: { ipAddress?: string; userAgent?: string; removedBy?: string } = {}
+    context: { ipAddress?: string; userAgent?: string; removedBy?: string; currentSessionId?: string } = {}
   ): Promise<void> {
+    // Get existing roles before removal for session rotation
+    const existingRoles = await this.getUserRoles(userId);
+    const existingRoleIds = existingRoles.map(r => r.id);
+
     const result = await this.dbService.query(`
       DELETE FROM user_roles 
       WHERE user_id = $1 AND role_id = $2
@@ -452,6 +489,28 @@ export class RBACService {
       userAgent: context.userAgent,
       severity: 'info'
     });
+
+    // Trigger session rotation if service is available
+    if (this.sessionRotationService) {
+      const rotationEvent: PrivilegeChangeEvent = {
+        userId,
+        changeType: 'role_removed',
+        oldValue: existingRoleIds,
+        newValue: existingRoleIds.filter(id => id !== roleId),
+        reason: `Role ${role?.name} removed`,
+        performedBy: context.removedBy
+      };
+
+      try {
+        await this.sessionRotationService.handlePrivilegeChange(
+          rotationEvent,
+          context.currentSessionId
+        );
+      } catch (error) {
+        console.error('Failed to rotate sessions after role removal:', error);
+        // Don't fail the role removal if session rotation fails
+      }
+    }
   }
 
   async getUserRoles(userId: string): Promise<Role[]> {

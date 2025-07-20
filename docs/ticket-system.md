@@ -120,12 +120,16 @@ A convenience script is provided at `scripts/github-automation.sh`:
 
 ## Integration with QA Agent
 
+**CRITICAL**: QA agents must use `node src/run-qa-agent.js` for task reviews
+- This script properly integrates with commit tracking and GitHub automation
+- DO NOT use `qa-review-workflow.js` as it doesn't track commits correctly
+
 The QA agent should:
 
-1. Retrieve tickets in "in_review" status
-2. Perform testing/validation
-3. Update ticket status to "approved" when tests pass
-4. The system will automatically create a PR
+1. Run `node src/run-qa-agent.js` to review tasks in REVIEW status
+2. The script will automatically perform testing/validation
+3. Approved tasks will have their status updated to "approved"
+4. The system will automatically create a PR and track commits
 
 Example QA integration:
 

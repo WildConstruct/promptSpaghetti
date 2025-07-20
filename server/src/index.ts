@@ -26,6 +26,9 @@ import { authRoutes, jwtAuthMiddleware } from './auth/routes';
 import { buildAuthConfig, CORS_CONFIG } from './auth/config';
 import { marketplaceRoutes } from './marketplace/routes';
 import { featureToggleRoutes } from './routes/feature-toggles';
+import { securityHeadersMiddleware, defaultSecurityConfig } from './middleware/security-headers';
+import { SecurityAuditService, defaultAuditConfig } from './services/security-audit-service';
+import { securityAuditRoutes } from './routes/security-audit';
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -147,6 +150,19 @@ try {
   console.log('Analytics system initialized successfully');
 } catch (error) {
   console.error('Failed to initialize analytics:', error);
+}
+
+// Initialize security headers middleware
+server.addHook('onRequest', securityHeadersMiddleware(defaultSecurityConfig));
+
+// Initialize security audit service
+let securityAuditService: SecurityAuditService | undefined;
+try {
+  securityAuditService = new SecurityAuditService(server, defaultAuditConfig);
+  securityAuditService.start();
+  console.log('Security audit service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize security audit service:', error);
 }
 
 // Initialize extension system on startup
@@ -349,6 +365,18 @@ try {
   console.error('Failed to register feature toggle routes:', error);
 }
 
+// Register security audit routes
+if (securityAuditService) {
+  try {
+    server.register(async (fastify) => {
+      await securityAuditRoutes(fastify, securityAuditService!);
+    }, { prefix: '/api' });
+    console.log('Security audit routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register security audit routes:', error);
+  }
+}
+
 // Setup analytics WebSocket server
 if (analyticsWebSocketServer) {
   analyticsWebSocketServer.setupWebSocketServer(server);
@@ -497,6 +525,9 @@ process.on('SIGTERM', async () => {
   if (analyticsWebSocketServer) {
     analyticsWebSocketServer.stop();
   }
+  if (securityAuditService) {
+    securityAuditService.stop();
+  }
   await server.close();
   process.exit(0);
 });
@@ -506,6 +537,9 @@ process.on('SIGINT', async () => {
   await wsServer.stop();
   if (analyticsWebSocketServer) {
     analyticsWebSocketServer.stop();
+  }
+  if (securityAuditService) {
+    securityAuditService.stop();
   }
   await server.close();
   process.exit(0);

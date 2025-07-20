@@ -55,6 +55,10 @@ The agent system has been updated to work with the new ticket management system.
 - **Triggers GitHub automation on approval**
 - Monitors PR creation and auto-push events
 
+**CRITICAL: Use `node src/run-qa-agent.js` for task reviews**
+- DO NOT use `qa-review-workflow.js` - it doesn't track commits properly
+- The `run-qa-agent.js` script integrates with GitHub automation
+
 **Key Events:**
 - `TASK_MOVED_TO_REVIEW` → Performs QA review
 - `PR_CREATED` → Logs automated PR creation

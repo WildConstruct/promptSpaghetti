@@ -499,3 +499,203 @@ export interface SecurityEvent {
   success: boolean;
   metadata?: Record<string, any>;
 }
+
+// CAPTCHA/Challenge System Types
+// Task: T-1752989143997-26 - Add CAPTCHA or challenge system
+
+export interface ChallengeRequest {
+  type: ChallengeType;
+  difficulty?: ChallengeDifficulty;
+  context?: ChallengeContext;
+  clientInfo: {
+    userAgent: string;
+    ipAddress: string;
+    fingerprint?: string;
+  };
+}
+
+export interface ChallengeResponse {
+  id: string;
+  type: ChallengeType;
+  challenge: string | ChallengeData;
+  expiresAt: Date;
+  maxAttempts: number;
+  remainingAttempts: number;
+}
+
+export interface ChallengeValidation {
+  challengeId: string;
+  solution: string;
+  clientInfo: {
+    userAgent: string;
+    ipAddress: string;
+    fingerprint?: string;
+  };
+}
+
+export interface ChallengeResult {
+  valid: boolean;
+  challengeId: string;
+  remainingAttempts: number;
+  error?: string;
+  retryAfter?: number;
+  escalationRequired?: boolean;
+}
+
+export interface ChallengeData {
+  imageUrl?: string;
+  audioUrl?: string;
+  text?: string;
+  options?: string[];
+  metadata?: Record<string, any>;
+}
+
+export enum ChallengeType {
+  RECAPTCHA_V2 = 'recaptcha_v2',
+  RECAPTCHA_V3 = 'recaptcha_v3',
+  HCAPTCHA = 'hcaptcha',
+  MATH_PUZZLE = 'math_puzzle',
+  IMAGE_SELECTION = 'image_selection',
+  TEXT_CAPTCHA = 'text_captcha',
+  AUDIO_CAPTCHA = 'audio_captcha',
+  SLIDER_PUZZLE = 'slider_puzzle',
+  PATTERN_RECOGNITION = 'pattern_recognition'
+}
+
+export enum ChallengeDifficulty {
+  EASY = 'easy',
+  MEDIUM = 'medium',
+  HARD = 'hard',
+  ADAPTIVE = 'adaptive'
+}
+
+export interface ChallengeContext {
+  action: string;
+  resource?: string;
+  riskScore?: number;
+  userBehaviorScore?: number;
+  deviceTrust?: number;
+  previousFailures?: number;
+  suspiciousActivity?: boolean;
+}
+
+export interface ChallengeConfig {
+  providers: {
+    recaptcha?: {
+      siteKey: string;
+      secretKey: string;
+      v2Enabled: boolean;
+      v3Enabled: boolean;
+      v3Threshold: number;
+    };
+    hcaptcha?: {
+      siteKey: string;
+      secretKey: string;
+      enabled: boolean;
+    };
+    custom?: {
+      enabled: boolean;
+      difficulty: ChallengeDifficulty;
+      maxAttempts: number;
+      expiryMinutes: number;
+    };
+  };
+  rules: ChallengeRule[];
+  escalation: {
+    enabled: boolean;
+    thresholds: {
+      failedAttempts: number;
+      timeWindow: number;
+      escalateAfter: number;
+    };
+  };
+  progressive: {
+    enabled: boolean;
+    stages: ProgressiveStage[];
+  };
+}
+
+export interface ChallengeRule {
+  id: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  priority: number;
+  conditions: ChallengeCondition[];
+  challengeType: ChallengeType;
+  difficulty: ChallengeDifficulty;
+  maxAttempts: number;
+  expiryMinutes: number;
+  metadata?: Record<string, any>;
+}
+
+export interface ChallengeCondition {
+  type: 'action' | 'riskScore' | 'failedAttempts' | 'ipReputation' | 'deviceTrust' | 'timeOfDay' | 'custom';
+  operator: 'equals' | 'greaterThan' | 'lessThan' | 'in' | 'contains' | 'between';
+  value: any;
+  values?: any[];
+  metadata?: Record<string, any>;
+}
+
+export interface ProgressiveStage {
+  stage: number;
+  challengeType: ChallengeType;
+  difficulty: ChallengeDifficulty;
+  triggerConditions: {
+    failedAttempts: number;
+    timeWindow: number;
+  };
+  escalationDelay: number;
+}
+
+export interface ChallengeSession {
+  id: string;
+  userId?: string;
+  ipAddress: string;
+  userAgent: string;
+  context: ChallengeContext;
+  challenges: ChallengeAttempt[];
+  currentStage: number;
+  status: 'active' | 'completed' | 'failed' | 'expired';
+  createdAt: Date;
+  expiresAt: Date;
+  completedAt?: Date;
+  failedAt?: Date;
+}
+
+export interface ChallengeAttempt {
+  id: string;
+  challengeId: string;
+  challengeType: ChallengeType;
+  difficulty: ChallengeDifficulty;
+  solution: string;
+  correct: boolean;
+  attempts: number;
+  completedAt?: Date;
+  timeToComplete?: number;
+  metadata?: Record<string, any>;
+}
+
+export interface ChallengeStats {
+  totalChallenges: number;
+  successfulChallenges: number;
+  failedChallenges: number;
+  averageCompletionTime: number;
+  typeBreakdown: Record<ChallengeType, number>;
+  difficultyBreakdown: Record<ChallengeDifficulty, number>;
+  suspiciousActivity: number;
+}
+
+export interface IChallengeService {
+  generateChallenge(request: ChallengeRequest): Promise<ChallengeResponse>;
+  validateChallenge(validation: ChallengeValidation): Promise<ChallengeResult>;
+  getChallenge(challengeId: string): Promise<ChallengeResponse | null>;
+  refreshChallenge(challengeId: string): Promise<ChallengeResponse>;
+  invalidateChallenge(challengeId: string): Promise<void>;
+  getStats(filters?: {
+    startDate?: Date;
+    endDate?: Date;
+    userId?: string;
+    challengeType?: ChallengeType;
+  }): Promise<ChallengeStats>;
+}
