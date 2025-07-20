@@ -40,6 +40,8 @@ import { initializeTimeoutManager } from './services/TimeoutManager';
 import { createTimeoutMonitoringService } from './services/timeout-monitoring';
 import { AnomalyDetectionService, AnomalyDetectionConfig } from './services/AnomalyDetectionService';
 import { anomalyDetectionRoutes } from './routes/anomaly-detection';
+import { VerificationThresholdService } from './services/VerificationThresholdService';
+import { verificationThresholdRoutes } from './routes/verification-threshold';
 import referrerPolicyPlugin from './plugins/referrer-policy';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
@@ -218,6 +220,33 @@ try {
 } catch (error) {
   console.error('Failed to initialize anomaly detection service:', error);
   // Continue without anomaly detection - this is non-critical for basic operation
+}
+
+// Initialize verification threshold service
+let verificationThresholdService: VerificationThresholdService | undefined;
+try {
+  const db = getDatabase();
+  const auditService = new AuditService(db as any);
+  
+  verificationThresholdService = new VerificationThresholdService(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService,
+    {
+      // Environment-based configuration overrides
+      lowRisk: parseInt(process.env.VERIFICATION_LOW_RISK_THRESHOLD || '30'),
+      mediumRisk: parseInt(process.env.VERIFICATION_MEDIUM_RISK_THRESHOLD || '60'),
+      highRisk: parseInt(process.env.VERIFICATION_HIGH_RISK_THRESHOLD || '80'),
+      criticalRisk: parseInt(process.env.VERIFICATION_CRITICAL_RISK_THRESHOLD || '95'),
+      offHoursMultiplier: parseFloat(process.env.VERIFICATION_OFF_HOURS_MULTIPLIER || '1.5'),
+      weekendMultiplier: parseFloat(process.env.VERIFICATION_WEEKEND_MULTIPLIER || '1.2')
+    }
+  );
+
+  console.log('Verification threshold service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize verification threshold service:', error);
+  // Continue without verification threshold service - this is non-critical for basic operation
 }
 
 // Initialize security headers middleware
@@ -494,6 +523,18 @@ if (anomalyDetectionService) {
   }
 }
 
+// Register verification threshold routes
+if (verificationThresholdService) {
+  try {
+    server.register(async (fastify) => {
+      await verificationThresholdRoutes(fastify, verificationThresholdService);
+    }, { prefix: '/api/auth' });
+    console.log('Verification threshold routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register verification threshold routes:', error);
+  }
+}
+
 // Setup analytics WebSocket server
 if (analyticsWebSocketServer) {
   analyticsWebSocketServer.setupWebSocketServer(server);
@@ -633,6 +674,18 @@ const start = async () => {
       } catch (error) {
         console.error('Failed to start anomaly detection service:', error);
         // Continue without anomaly detection
+      }
+    }
+
+    // Configure verification threshold service with Redis
+    if (verificationThresholdService && redisService) {
+      try {
+        // Set Redis service on verification threshold service
+        (verificationThresholdService as any).redis = redisService;
+        console.log('Verification threshold service configured with Redis successfully');
+      } catch (error) {
+        console.error('Failed to configure verification threshold service:', error);
+        // Continue without Redis - service can still function
       }
     }
 
