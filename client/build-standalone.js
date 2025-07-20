@@ -22,6 +22,9 @@ console.log('Current working directory:', process.cwd());
 const coreDir = path.join(__dirname, 'src', 'core');
 const sourceCore = path.join(__dirname, '..', 'packages', 'core');
 const appPath = path.join(__dirname, 'src', 'App.tsx');
+// Paths for CRDT research package
+const crdtDir = path.join(__dirname, 'src', 'crdt-research');
+const sourceCRDT = path.join(__dirname, '..', 'packages', 'crdt-research');
 
 console.log('Core directory exists:', fs.existsSync(coreDir));
 console.log('Source core exists:', fs.existsSync(sourceCore));
@@ -37,6 +40,18 @@ if (!fs.existsSync(coreDir)) {
   execSync(`cp -r "${sourceCore}" "${path.join(__dirname, 'src')}"`, { stdio: 'inherit' });
 } else {
   console.log('Core files already exist locally');
+}
+
+// Copy crdt-research package
+if (!fs.existsSync(crdtDir)) {
+  if (!fs.existsSync(sourceCRDT)) {
+    console.error('ERROR: Cannot find crdt-research package at:', sourceCRDT);
+    process.exit(1);
+  }
+  console.log('Copying crdt-research files...');
+  execSync(`cp -r "${sourceCRDT}" "${path.join(__dirname, 'src')}"`, { stdio: 'inherit' });
+} else {
+  console.log('crdt-research files already exist locally');
 }
 
 // Update App.tsx import to use local core
