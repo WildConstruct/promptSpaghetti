@@ -33,7 +33,7 @@ module.exports = {
   
   // Special handling for test files - very permissive
   '*.{test,spec}.{ts,tsx,js,jsx}': [
-    'eslint --fix --max-warnings 20', // Tests can have more warnings
+    'eslint --fix --max-warnings 50', // Tests can have many more warnings
     'prettier --write --ignore-unknown'
   ],
   

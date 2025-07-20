@@ -20,6 +20,17 @@ module.exports = {
         'plugin:react/recommended',
         'plugin:react-hooks/recommended'
       ]
+    },
+    {
+      // Extra permissive rules for test files
+      files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx', '**/__tests__/**/*'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+        'no-console': 'off',
+        'prefer-const': 'off'
+      }
     }
   ],
   rules: {

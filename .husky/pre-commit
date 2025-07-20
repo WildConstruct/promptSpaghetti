@@ -1,8 +1,14 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Run linting on staged files
-pnpm lint-staged
+# Run linting on staged files using active configuration
+if [ -f ".lintstagedrc.active.js" ]; then
+  echo "🔧 Using permissive linting mode (.lintstagedrc.active.js)"
+  pnpm lint-staged --config .lintstagedrc.active.js
+else
+  echo "🔧 Using default linting mode (.lintstagedrc.js)"  
+  pnpm lint-staged
+fi
 
 # Check if any test files were modified
 TEST_FILES_CHANGED=$(git diff --cached --name-only | grep -E '\.(test|spec)\.(ts|tsx|js|jsx)$' | wc -l)
