@@ -114,7 +114,7 @@ export interface TimeoutConfiguration {
     rules: Array<{
       field: string;
       constraint: 'min' | 'max' | 'range' | 'regex' | 'custom';
-      value: any;
+      value: string | number | boolean;
       message: string;
     }>;
     
@@ -144,6 +144,39 @@ export interface TimeoutConfiguration {
   };
 }
 
+export interface TimeoutMetrics {
+  configurationId: string;
+  timeRange: {
+    start: Date;
+    end: Date;
+  };
+  usage: {
+    totalSessions: number;
+    timeoutOccurrences: Record<string, number>;
+    averageSessionDuration: number;
+    extensionsGranted: number;
+    overridesUsed: number;
+  };
+  performance: {
+    systemLoad: number;
+    responseTime: number;
+    errorRate: number;
+    availability: number;
+  };
+  effectiveness: {
+    securityIncidents: number;
+    userComplaints: number;
+    productivityImpact: number;
+    complianceScore: number;
+  };
+  recommendations: Array<{
+    type: string;
+    description: string;
+    impact: string;
+    priority: 'low' | 'medium' | 'high';
+  }>;
+}
+
 export interface TimeoutTemplate {
   id: string;
   name: string;
@@ -156,13 +189,18 @@ export interface TimeoutTemplate {
     name: string;
     type: 'number' | 'boolean' | 'string' | 'array';
     description: string;
-    defaultValue: any;
-    validation?: any;
+    defaultValue: string | number | boolean | unknown[];
+    validation?: {
+      min?: number;
+      max?: number;
+      pattern?: string;
+      required?: boolean;
+    };
   }>;
   
   recommendations: Array<{
     scenario: string;
-    settings: Record<string, any>;
+    settings: Record<string, string | number | boolean>;
     reasoning: string;
   }>;
 }
@@ -186,8 +224,8 @@ export interface TimeoutAdjustment {
   
   changes: Array<{
     field: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: string | number | boolean | null;
+    newValue: string | number | boolean | null;
     changeReason: string;
   }>;
   
@@ -706,7 +744,14 @@ export class ConfigurableTimeoutService extends EventEmitter {
 
   // Private helper methods
 
-  private async getApplicableConfiguration(context: any): Promise<TimeoutConfiguration | null> {
+  private async getApplicableConfiguration(context: {
+    userId?: string;
+    organizationId?: string;
+    userRole?: string;
+    environment?: string;
+    deviceType?: string;
+    sessionType?: string;
+  }): Promise<TimeoutConfiguration | null> {
     // Check cache first
     const cacheKey = `timeout_config:${JSON.stringify(context)}`;
     const cached = await this.redis.get(cacheKey);
@@ -736,7 +781,18 @@ export class ConfigurableTimeoutService extends EventEmitter {
     return bestMatch;
   }
 
-  private calculateMatchScore(config: TimeoutConfiguration, context: any): number {
+  /**
+   * Calculate match score for configuration based on context
+   * Higher scores indicate better matches for the given context
+   */
+  private calculateMatchScore(config: TimeoutConfiguration, context: {
+    userId?: string;
+    organizationId?: string;
+    userRole?: string;
+    environment?: string;
+    deviceType?: string;
+    sessionType?: string;
+  }): number {
     let score = 0;
 
     // Global scope gets base score
@@ -745,10 +801,9 @@ export class ConfigurableTimeoutService extends EventEmitter {
     }
 
     // More specific scopes get higher scores
-    if (config.scope.userRoles && context.userRoles) {
-      const matches = config.scope.userRoles.filter(role => context.userRoles.includes(role));
-      if (matches.length > 0) {
-        score += matches.length * 10;
+    if (config.scope.userRoles && context.userRole) {
+      if (config.scope.userRoles.includes(context.userRole)) {
+        score += 10;
       }
     }
 
@@ -773,12 +828,22 @@ export class ConfigurableTimeoutService extends EventEmitter {
     return score;
   }
 
+  /**
+   * Extract timeout value from configuration using dot notation path
+   * @param config The timeout configuration
+   * @param timeoutType Dot notation path (e.g., 'session.idle.duration')
+   * @returns The timeout value in seconds
+   */
   private extractTimeoutValue(config: TimeoutConfiguration, timeoutType: string): number {
     const parts = timeoutType.split('.');
-    let value: any = config.timeouts;
+    let value: Record<string, unknown> | number = config.timeouts;
 
     for (const part of parts) {
-      value = value[part];
+      if (typeof value === 'object' && value !== null && part in value) {
+        value = (value as Record<string, unknown>)[part];
+      } else {
+        value = undefined;
+      }
       if (value === undefined) {
         break;
       }
@@ -787,6 +852,10 @@ export class ConfigurableTimeoutService extends EventEmitter {
     return typeof value === 'number' ? value : this.getDefaultTimeout(timeoutType);
   }
 
+  /**
+   * Get default timeout value for a given timeout type
+   * Used as fallback when configuration is not available
+   */
   private getDefaultTimeout(timeoutType: string): number {
     const defaults: Record<string, number> = {
       'session.absolute.duration': 3600, // 1 hour
@@ -802,6 +871,10 @@ export class ConfigurableTimeoutService extends EventEmitter {
     return defaults[timeoutType] || 300; // 5 minute fallback
   }
 
+  /**
+   * Initialize default timeout configuration templates
+   * Provides standard templates for common use cases
+   */
   private initializeDefaultTemplates(): void {
     const templates: Array<Omit<TimeoutTemplate, 'id'>> = [
       {
@@ -872,18 +945,441 @@ export class ConfigurableTimeoutService extends EventEmitter {
     });
   }
 
+  /**
+   * Generate unique identifier for timeout configuration
+   */
   private generateConfigurationId(): string {
     return `TIMEOUT-CONFIG-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
   }
 
+  /**
+   * Generate unique identifier for timeout template
+   */
   private generateTemplateId(): string {
     return `TIMEOUT-TEMPLATE-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
   }
 
-  private async logConfigurationEvent(action: string, configurationId: string, userId: string, details: any): Promise<void> {
-    console.log(`Timeout Configuration Event: ${action} - ${configurationId} by ${userId}`, details);
+  /**
+   * Save configuration to database with validation
+   */
+  private async saveConfigurationToDatabase(configuration: TimeoutConfiguration): Promise<void> {
+    try {
+      // Validate configuration before saving
+      const validation = await this.validationEngine.validate(configuration);
+      if (!validation.valid) {
+        throw new Error(`Configuration validation failed: ${validation.errors.join(', ')}`);
+      }
+
+      // Use proper database service instead of console.log
+      if (this.db) {
+        await this.db.query(`
+          INSERT INTO timeout_configurations (id, name, config_data, status, created_by, created_at, updated_at)
+          VALUES ($1, $2, $3, $4, $5, $6, $7)
+          ON CONFLICT (id) DO UPDATE SET
+            name = $2, config_data = $3, status = $4, updated_at = $7
+        `, [
+          configuration.id,
+          configuration.name,
+          JSON.stringify(configuration),
+          configuration.status.active ? 'active' : 'inactive',
+          configuration.createdBy,
+          configuration.createdAt,
+          new Date()
+        ]);
+      }
+    } catch (error) {
+      throw new Error(`Failed to save configuration to database: ${error.message}`);
+    }
   }
 
+  /**
+   * Apply configuration to Redis with security validation
+   */
+  private async applyToRedis(configuration: TimeoutConfiguration): Promise<void> {
+    try {
+      // Validate configuration security before applying
+      if (!this.validateSecurityConstraints(configuration)) {
+        throw new Error('Configuration failed security validation');
+      }
+
+      if (this.redis) {
+        const configKey = `timeout:config:${configuration.id}`;
+        const configData = JSON.stringify({
+          timeouts: configuration.timeouts,
+          policies: configuration.policies,
+          scope: configuration.scope,
+          deployedAt: configuration.status.deployedAt
+        });
+        
+        await this.redis.setex(configKey, 86400, configData); // 24 hour TTL
+        await this.redis.set('timeout:active_config', configuration.id);
+      }
+    } catch (error) {
+      throw new Error(`Failed to apply configuration to Redis: ${error.message}`);
+    }
+  }
+
+  /**
+   * Apply configuration to active sessions with security checks
+   */
+  private async applyToActiveSessions(configuration: TimeoutConfiguration): Promise<void> {
+    try {
+      // Security check: Validate that new timeouts don't create security vulnerabilities
+      if (!this.validateSessionSecurityConstraints(configuration)) {
+        throw new Error('Configuration creates session security vulnerabilities');
+      }
+
+      if (this.redis) {
+        // Get all active sessions
+        const sessionKeys = await this.redis.keys('session:*');
+        
+        for (const sessionKey of sessionKeys) {
+          const sessionData = await this.redis.get(sessionKey);
+          if (sessionData) {
+            const session = JSON.parse(sessionData);
+            
+            // Apply new timeout settings to session
+            session.timeoutConfig = {
+              idle: configuration.timeouts.session.idle.duration,
+              absolute: configuration.timeouts.session.absolute.duration,
+              updatedAt: new Date().toISOString()
+            };
+            
+            // Update session with new timeout config
+            await this.redis.setex(sessionKey, configuration.timeouts.session.absolute.duration, JSON.stringify(session));
+          }
+        }
+      }
+    } catch (error) {
+      throw new Error(`Failed to apply configuration to active sessions: ${error.message}`);
+    }
+  }
+
+  /**
+   * Validate security constraints for configuration
+   */
+  private validateSecurityConstraints(configuration: TimeoutConfiguration): boolean {
+    // Check minimum timeout values for security
+    const minSessionTimeout = 300; // 5 minutes minimum
+    const maxSessionTimeout = 86400; // 24 hours maximum
+    const minIdleTimeout = 60; // 1 minute minimum
+    
+    if (configuration.timeouts.session.absolute.duration < minSessionTimeout ||
+        configuration.timeouts.session.absolute.duration > maxSessionTimeout) {
+      return false;
+    }
+    
+    if (configuration.timeouts.session.idle.duration < minIdleTimeout) {
+      return false;
+    }
+    
+    // Check for dangerous authentication timeouts
+    if (configuration.timeouts.authentication.loginTimeout < 30 || // Minimum 30 seconds
+        configuration.timeouts.authentication.loginTimeout > 3600) { // Maximum 1 hour
+      return false;
+    }
+    
+    return true;
+  }
+
+  /**
+   * Validate session security constraints
+   */
+  private validateSessionSecurityConstraints(configuration: TimeoutConfiguration): boolean {
+    // Ensure idle timeout is not longer than absolute timeout
+    if (configuration.timeouts.session.idle.duration >= configuration.timeouts.session.absolute.duration) {
+      return false;
+    }
+    
+    // Ensure warning period is reasonable
+    if (configuration.timeouts.session.idle.warningPeriod >= configuration.timeouts.session.idle.duration) {
+      return false;
+    }
+    
+    return true;
+  }
+
+  /**
+   * Log configuration events with proper typing
+   */
+  private async logConfigurationEvent(
+    action: string, 
+    configurationId: string, 
+    userId: string, 
+    details: Record<string, unknown>
+  ): Promise<void> {
+    try {
+      // Use proper audit logging instead of console.log
+      if (this.db) {
+        await this.db.query(`
+          INSERT INTO timeout_audit_log (action, configuration_id, user_id, details, timestamp)
+          VALUES ($1, $2, $3, $4, $5)
+        `, [action, configurationId, userId, JSON.stringify(details), new Date()]);
+      }
+    } catch (error) {
+      // Fallback to console.error for critical audit failures
+      console.error(`Failed to log timeout configuration event: ${error.message}`, {
+        action,
+        configurationId,
+        userId,
+        details
+      });
+    }
+  }
+
+  /**
+   * Load the currently active configuration from storage
+   */
+  private async loadActiveConfiguration(): Promise<void> {
+    try {
+      if (this.redis) {
+        const activeConfigId = await this.redis.get('timeout:active_config');
+        if (activeConfigId && this.db) {
+          const result = await this.db.query(
+            'SELECT config_data FROM timeout_configurations WHERE id = $1 AND status = $2',
+            [activeConfigId, 'active']
+          );
+          if (result.rows.length > 0) {
+            this.activeConfig = JSON.parse(result.rows[0].config_data);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load active configuration:', error.message);
+    }
+  }
+
+  /**
+   * Check if configuration updates require approval
+   */
+  private async requiresApproval(
+    existingConfig: TimeoutConfiguration,
+    updatedConfig: TimeoutConfiguration
+  ): Promise<boolean> {
+    // Check if this is a significant change that requires approval
+    const significantFields = [
+      'timeouts.session.absolute.duration',
+      'timeouts.session.idle.duration',
+      'timeouts.authentication.loginTimeout'
+    ];
+
+    for (const field of significantFields) {
+      const oldValue = this.extractTimeoutValue(existingConfig, field);
+      const newValue = this.extractTimeoutValue(updatedConfig, field);
+      
+      if (Math.abs(oldValue - newValue) / oldValue > 0.2) { // 20% change threshold
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Create an adjustment record for configuration changes
+   */
+  private async createAdjustmentRecord(
+    configurationId: string,
+    existingConfig: TimeoutConfiguration,
+    updatedConfig: TimeoutConfiguration,
+    adjustmentType: string,
+    triggeredBy: string
+  ): Promise<TimeoutAdjustment> {
+    const changes = [];
+    
+    // Compare configurations and record changes
+    if (existingConfig.timeouts.session.idle.duration !== updatedConfig.timeouts.session.idle.duration) {
+      changes.push({
+        field: 'timeouts.session.idle.duration',
+        oldValue: existingConfig.timeouts.session.idle.duration,
+        newValue: updatedConfig.timeouts.session.idle.duration,
+        changeReason: 'Configuration update'
+      });
+    }
+
+    const adjustment: TimeoutAdjustment = {
+      id: `ADJ-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+      configurationId,
+      adjustmentType: adjustmentType as 'manual' | 'automatic' | 'policy' | 'emergency',
+      trigger: {
+        reason: 'Configuration update',
+        triggeredBy,
+        triggeredAt: new Date()
+      },
+      changes,
+      impact: {
+        affectedSessions: 0,
+        estimatedUsers: 0,
+        riskAssessment: 'low',
+        rollbackPlan: 'Revert to previous configuration version'
+      }
+    };
+
+    this.adjustments.set(adjustment.id, adjustment);
+    return adjustment;
+  }
+
+  /**
+   * Assess the impact of applying a configuration
+   */
+  private async assessConfigurationImpact(configuration: TimeoutConfiguration): Promise<{
+    affectedSessions: number;
+    estimatedUsers: number;
+    riskLevel: 'low' | 'medium' | 'high';
+    recommendations: string[];
+  }> {
+    // Mock implementation - would analyze current sessions and user activity
+    return {
+      affectedSessions: 150,
+      estimatedUsers: 75,
+      riskLevel: 'low',
+      recommendations: [
+        'Monitor session timeout rates for the first 24 hours',
+        'Prepare rollback plan if user complaints increase'
+      ]
+    };
+  }
+
+  /**
+   * Backup current configuration before changes
+   */
+  private async backupConfiguration(configuration: TimeoutConfiguration): Promise<void> {
+    try {
+      if (this.db) {
+        await this.db.query(`
+          INSERT INTO timeout_configuration_backups (config_id, config_data, backed_up_at)
+          VALUES ($1, $2, $3)
+        `, [configuration.id, JSON.stringify(configuration), new Date()]);
+      }
+    } catch (error) {
+      console.error('Failed to backup configuration:', error.message);
+    }
+  }
+
+  /**
+   * Validate template variables
+   */
+  private validateTemplateVariables(
+    template: TimeoutTemplate,
+    variables: Record<string, unknown>
+  ): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    for (const variable of template.variables) {
+      const value = variables[variable.name];
+      
+      if (variable.validation?.required && value === undefined) {
+        errors.push(`Required variable '${variable.name}' is missing`);
+        continue;
+      }
+
+      if (value !== undefined) {
+        // Type validation
+        if (variable.type === 'number' && typeof value !== 'number') {
+          errors.push(`Variable '${variable.name}' must be a number`);
+        }
+        
+        // Range validation
+        if (variable.type === 'number' && typeof value === 'number') {
+          if (variable.validation?.min !== undefined && value < variable.validation.min) {
+            errors.push(`Variable '${variable.name}' must be at least ${variable.validation.min}`);
+          }
+          if (variable.validation?.max !== undefined && value > variable.validation.max) {
+            errors.push(`Variable '${variable.name}' must be at most ${variable.validation.max}`);
+          }
+        }
+      }
+    }
+
+    return { valid: errors.length === 0, errors };
+  }
+
+  /**
+   * Generate configuration from template
+   */
+  private async generateFromTemplate(
+    template: TimeoutTemplate,
+    variables: Record<string, unknown>,
+    configName: string,
+    createdBy: string
+  ): Promise<TimeoutConfiguration> {
+    const config = JSON.parse(JSON.stringify(template.template));
+    
+    // Apply variables to template
+    for (const variable of template.variables) {
+      const value = variables[variable.name] ?? variable.defaultValue;
+      
+      // Apply variable substitution (simplified implementation)
+      if (variable.name === 'sessionDuration') {
+        config.timeouts.session.absolute.duration = value;
+      }
+      if (variable.name === 'idleDuration') {
+        config.timeouts.session.idle.duration = value;
+      }
+    }
+
+    return {
+      ...config,
+      name: configName,
+      description: `Generated from template: ${template.name}`,
+      createdBy,
+      id: '', // Will be set by createConfiguration
+      version: 1,
+      createdAt: new Date(),
+      status: {
+        active: false,
+        validated: false,
+        lastModified: new Date()
+      }
+    } as TimeoutConfiguration;
+  }
+
+  /**
+   * Analyze metrics to generate recommendations
+   */
+  private async analyzeMetricsForRecommendations(
+    configuration: TimeoutConfiguration,
+    metrics: TimeoutMetrics,
+    depth: 'basic' | 'detailed' | 'comprehensive'
+  ): Promise<{
+    recommendations: Array<{
+      field: string;
+      currentValue: number;
+      recommendedValue: number;
+      reasoning: string;
+      confidence: number;
+      impact: string;
+    }>;
+    riskAssessment: string;
+    implementationPlan?: string;
+  }> {
+    const recommendations = [];
+    
+    // Analyze session timeout patterns
+    if (metrics.usage.timeoutOccurrences['session.idle'] > metrics.usage.totalSessions * 0.1) {
+      recommendations.push({
+        field: 'timeouts.session.idle.duration',
+        currentValue: configuration.timeouts.session.idle.duration,
+        recommendedValue: configuration.timeouts.session.idle.duration * 1.2,
+        reasoning: 'High idle timeout rate suggests users need more time',
+        confidence: 0.8,
+        impact: 'May reduce user frustration and improve productivity'
+      });
+    }
+
+    return {
+      recommendations,
+      riskAssessment: 'Low risk - recommendations based on usage patterns',
+      implementationPlan: depth === 'comprehensive' 
+        ? 'Implement changes gradually over 3 phases with monitoring'
+        : undefined
+    };
+  }
+
+  /**
+   * Clean up resources and destroy the service instance
+   * Clears all configurations, templates, and adjustments from memory
+   */
   destroy(): void {
     this.configurations.clear();
     this.templates.clear();
@@ -893,7 +1389,16 @@ export class ConfigurableTimeoutService extends EventEmitter {
 
 // Helper classes
 
+/**
+ * Validation engine for timeout configurations
+ * Provides comprehensive validation of timeout values and policies
+ */
 class TimeoutValidationEngine {
+  /**
+   * Validate a timeout configuration
+   * @param config The timeout configuration to validate
+   * @returns Validation result with errors and warnings
+   */
   async validate(config: TimeoutConfiguration): Promise<{
     valid: boolean;
     errors: string[];
@@ -933,7 +1438,17 @@ class TimeoutValidationEngine {
   }
 }
 
+/**
+ * Metrics collector for timeout configurations
+ * Gathers usage statistics and performance metrics for analysis
+ */
 class TimeoutMetricsCollector {
+  /**
+   * Collect metrics for a timeout configuration over a time range
+   * @param configurationId The configuration to analyze
+   * @param timeRange The time period for analysis
+   * @returns Comprehensive metrics and analytics
+   */
   async collectMetrics(configurationId: string, timeRange: { start: Date; end: Date }): Promise<TimeoutMetrics> {
     // Mock implementation - would collect real metrics
     return {

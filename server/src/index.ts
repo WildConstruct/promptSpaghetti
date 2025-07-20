@@ -34,6 +34,10 @@ import { setupRateLimiting } from './middleware/rate-limit-setup';
 import { RedisService } from './auth/database/RedisService';
 import { TOTPService } from './auth/services/TOTPService';
 import { AuditService } from './auth/services/AuditService';
+import { createTimeoutMiddleware } from './middleware/timeout-middleware';
+import { timeoutManagementRoutes } from './routes/timeout-management';
+import { initializeTimeoutManager } from './services/TimeoutManager';
+import { createTimeoutMonitoringService } from './services/timeout-monitoring';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -158,6 +162,22 @@ try {
   console.log('Analytics system initialized successfully');
 } catch (error) {
   console.error('Failed to initialize analytics:', error);
+}
+
+// Initialize timeout manager and monitoring
+let timeoutManager: any;
+let timeoutMonitoringService: any;
+try {
+  timeoutManager = initializeTimeoutManager();
+  timeoutMonitoringService = createTimeoutMonitoringService(timeoutManager);
+  
+  // Register timeout middleware
+  server.register(createTimeoutMiddleware());
+  
+  console.log('Timeout management system initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize timeout management:', error);
+  // Continue without timeout management - this is non-critical for basic operation
 }
 
 // Initialize security headers middleware
@@ -400,6 +420,18 @@ try {
   console.error('Failed to register TOTP routes:', error);
 }
 
+// Register timeout management routes
+if (timeoutMonitoringService) {
+  try {
+    server.register(async (fastify) => {
+      await timeoutManagementRoutes(fastify, timeoutMonitoringService);
+    }, { prefix: '/api/timeout' });
+    console.log('Timeout management routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register timeout management routes:', error);
+  }
+}
+
 // Setup analytics WebSocket server
 if (analyticsWebSocketServer) {
   analyticsWebSocketServer.setupWebSocketServer(server);
@@ -571,6 +603,12 @@ process.on('SIGTERM', async () => {
   if (securityAuditService) {
     securityAuditService.stop();
   }
+  if (timeoutManager) {
+    await timeoutManager.cleanup();
+  }
+  if (timeoutMonitoringService) {
+    await timeoutMonitoringService.stop();
+  }
   await server.close();
   process.exit(0);
 });
@@ -583,6 +621,12 @@ process.on('SIGINT', async () => {
   }
   if (securityAuditService) {
     securityAuditService.stop();
+  }
+  if (timeoutManager) {
+    await timeoutManager.cleanup();
+  }
+  if (timeoutMonitoringService) {
+    await timeoutMonitoringService.stop();
   }
   await server.close();
   process.exit(0);
