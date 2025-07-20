@@ -12,10 +12,13 @@ import {
   RuntimeNode,
   SetVariableNode,
   WeightedChoiceNode,
-  // Epic 7 Advanced Node Capabilities
+} from '../../packages/core/runtime/index.js';
+
+// Import advanced capabilities separately
+import {
   AdvancedExecutionContext,
   AdvancedExecutionUtils,
-} from '../../packages/core/runtime';
+} from '../../packages/core/runtime/advanced.js';
 
 // Epic 13 Analytics Integration
 import { AnalyticsCollector, AnalyticsEventType } from './analytics/AnalyticsCollector';
@@ -24,12 +27,12 @@ import { getDatabase } from './database/connection';
 import { v4 as uuidv4 } from 'uuid';
 
 // Import advanced nodes directly to avoid circular dependencies
-import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/WeightedAdvanced';
-import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional';
-import { SequentialNode, createSequencePattern } from '../../packages/core/runtime/nodes/Sequential';
-import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/nodes/Markov';
+import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/WeightedAdvanced.js';
+import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional.js';
+import { SequentialNode, createSequencePattern } from '../../packages/core/runtime/nodes/Sequential.js';
+import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/nodes/Markov.js';
 // Temporarily disabled due to compilation issues
-// import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform';
+// import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform.js';
 
 // Epic 8.4 Extension System imports
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager';
