@@ -119,7 +119,7 @@ export class GraphParser {
             semanticErrors = result.errors;
             warnings = result.warnings;
         }
-        const semanticTime = Date.now() - semanticStart;
+        semanticTime = Date.now() - semanticStart;
         const totalTime = Date.now() - startTime;
         // Build result
         const result = {
