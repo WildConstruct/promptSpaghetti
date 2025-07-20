@@ -227,17 +227,9 @@ export class CertificateManager {
     keySize: number = 2048,
     validityDays: number = 365
   ): { cert: string; key: string } {
-    const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
-      modulusLength: keySize,
-      publicKeyEncoding: { type: 'spki', format: 'pem' },
-      privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
-    });
-
-    // Create certificate request
-    const cert = new crypto.X509Certificate();
-    // Note: This is a simplified example. In production, use a proper certificate authority
-    
-    throw new Error('Self-signed certificate generation requires OpenSSL integration');
+    // This is a placeholder implementation
+    // In a real scenario, this would integrate with OpenSSL or use a proper certificate library
+    throw new Error('Self-signed certificate generation requires OpenSSL integration. Use the generate-dev-certs.sh script instead.');
   }
 }
 
@@ -369,7 +361,13 @@ export class TLSConfigManager {
     const options: https.ServerOptions = {
       cert: certificates.cert,
       key: certificates.key,
-      ...this.config.options
+      // Only include valid TLS options
+      secureProtocol: this.config.options.secureProtocol,
+      ciphers: this.config.options.ciphers,
+      honorCipherOrder: this.config.options.honorCipherOrder,
+      // Type assertion for Node.js version compatibility
+      minVersion: this.config.options.minVersion as any,
+      maxVersion: this.config.options.maxVersion as any
     };
 
     if (certificates.ca) {

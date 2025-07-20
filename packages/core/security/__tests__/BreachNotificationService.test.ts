@@ -13,8 +13,7 @@ import {
   BreachCategory,
   NotificationType,
   DataSubjectCategory,
-  IncidentStatus,
-  ComplianceFramework
+  IncidentStatus
 } from '../BreachNotificationService';
 
 // Mock crypto for deterministic testing
@@ -31,7 +30,20 @@ describe('BreachNotificationService', () => {
     // Mock Date.now() for consistent testing
     mockDate = new Date('2025-01-15T10:00:00Z');
     jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-    jest.spyOn(global, 'Date').mockImplementation(() => mockDate as any);
+    
+    // Mock Date constructor
+    const mockDateConstructor = jest.fn().mockImplementation((dateString?: string) => {
+      if (dateString) {
+        return new Date(dateString);
+      }
+      return mockDate;
+    });
+    mockDateConstructor.now = jest.fn().mockReturnValue(mockDate.getTime());
+    
+    (global as any).Date = mockDateConstructor;
+    
+    // Mock Math.random for deterministic IDs
+    jest.spyOn(Math, 'random').mockReturnValue(0.123456789);
     
     service = new BreachNotificationService({
       detection: {
@@ -581,16 +593,36 @@ describe('BreachNotificationService', () => {
       const customService = new BreachNotificationService({
         notifications: {
           gdpr: {
+            enabled: true,
+            supervisoryAuthority: 'Custom Authority',
+            contactEmail: 'custom-dpo@test.com',
             deadline: 24, // Custom 24-hour deadline
             autoFile: true
           },
           internal: {
-            securityTeam: ['custom-security@test.com']
+            securityTeam: ['custom-security@test.com'],
+            management: ['custom-management@test.com'],
+            legal: ['custom-legal@test.com'],
+            dpo: 'custom-dpo@test.com'
+          },
+          external: {
+            customers: {
+              enabled: true,
+              highRiskThreshold: BreachSeverity.HIGH,
+              template: 'customer_template'
+            },
+            media: {
+              enabled: false,
+              criticalThreshold: BreachSeverity.CRITICAL,
+              contactList: []
+            }
           }
         },
         automation: {
           containmentActions: false,
-          evidenceCollection: true
+          evidenceCollection: true,
+          reportGeneration: true,
+          statusUpdates: true
         }
       });
 

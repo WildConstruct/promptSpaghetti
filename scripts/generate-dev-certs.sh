@@ -1,0 +1,407 @@
+#!/bin/bash
+
+# Development Certificate Generation Script
+# Task: T-1752989143997-22 - Ensure proper TLS configuration
+# Epic 19: Authentication Enhancement & Security Hardening
+
+set -e
+
+# Configuration
+CERT_DIR="./certs"
+DOMAIN="localhost"
+COUNTRY="US"
+STATE="CA"
+CITY="San Francisco"
+ORG="PromptScape Development"
+OU="Development Team"
+EMAIL="dev@promptscape.com"
+DAYS=365
+KEY_SIZE=2048
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Print colored output
+print_status() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARN]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+# Check if OpenSSL is installed
+check_openssl() {
+    if ! command -v openssl &> /dev/null; then
+        print_error "OpenSSL is not installed. Please install OpenSSL and try again."
+        print_status "On macOS: brew install openssl"
+        print_status "On Ubuntu/Debian: apt-get install openssl"
+        print_status "On CentOS/RHEL: yum install openssl"
+        exit 1
+    fi
+}
+
+# Create certificate directory
+create_cert_dir() {
+    if [ ! -d "$CERT_DIR" ]; then
+        print_status "Creating certificate directory: $CERT_DIR"
+        mkdir -p "$CERT_DIR"
+    fi
+}
+
+# Generate private key
+generate_private_key() {
+    print_status "Generating private key..."
+    
+    openssl genpkey \
+        -algorithm RSA \
+        -pkcs8 \
+        -out "$CERT_DIR/localhost.key" \
+        -pkcs8 \
+        -v1 PBE-SHA1-RC4-128 \
+        -pass pass: \
+        2>/dev/null
+    
+    # Remove passphrase for development ease
+    openssl rsa \
+        -in "$CERT_DIR/localhost.key" \
+        -out "$CERT_DIR/localhost.key" \
+        -passin pass: \
+        2>/dev/null
+    
+    # Set appropriate permissions
+    chmod 600 "$CERT_DIR/localhost.key"
+    
+    print_success "Private key generated: $CERT_DIR/localhost.key"
+}
+
+# Create certificate configuration
+create_cert_config() {
+    print_status "Creating certificate configuration..."
+    
+    cat > "$CERT_DIR/localhost.conf" << EOF
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+C = $COUNTRY
+ST = $STATE
+L = $CITY
+O = $ORG
+OU = $OU
+CN = $DOMAIN
+emailAddress = $EMAIL
+
+[v3_req]
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = localhost
+DNS.2 = *.localhost
+DNS.3 = 127.0.0.1
+DNS.4 = ::1
+IP.1 = 127.0.0.1
+IP.2 = ::1
+EOF
+
+    print_success "Certificate configuration created: $CERT_DIR/localhost.conf"
+}
+
+# Generate certificate signing request
+generate_csr() {
+    print_status "Generating certificate signing request..."
+    
+    openssl req \
+        -new \
+        -key "$CERT_DIR/localhost.key" \
+        -out "$CERT_DIR/localhost.csr" \
+        -config "$CERT_DIR/localhost.conf"
+    
+    print_success "Certificate signing request generated: $CERT_DIR/localhost.csr"
+}
+
+# Generate self-signed certificate
+generate_certificate() {
+    print_status "Generating self-signed certificate..."
+    
+    openssl x509 \
+        -req \
+        -in "$CERT_DIR/localhost.csr" \
+        -signkey "$CERT_DIR/localhost.key" \
+        -out "$CERT_DIR/localhost.crt" \
+        -days $DAYS \
+        -extensions v3_req \
+        -extfile "$CERT_DIR/localhost.conf"
+    
+    # Set appropriate permissions
+    chmod 644 "$CERT_DIR/localhost.crt"
+    
+    print_success "Self-signed certificate generated: $CERT_DIR/localhost.crt"
+}
+
+# Generate certificate bundle
+generate_bundle() {
+    print_status "Creating certificate bundle..."
+    
+    cat "$CERT_DIR/localhost.crt" "$CERT_DIR/localhost.key" > "$CERT_DIR/localhost.pem"
+    chmod 600 "$CERT_DIR/localhost.pem"
+    
+    print_success "Certificate bundle created: $CERT_DIR/localhost.pem"
+}
+
+# Verify certificate
+verify_certificate() {
+    print_status "Verifying certificate..."
+    
+    if openssl x509 -in "$CERT_DIR/localhost.crt" -text -noout > /dev/null 2>&1; then
+        print_success "Certificate verification passed"
+        
+        # Show certificate details
+        print_status "Certificate Details:"
+        openssl x509 -in "$CERT_DIR/localhost.crt" -text -noout | grep -A 5 "Subject:"
+        openssl x509 -in "$CERT_DIR/localhost.crt" -text -noout | grep -A 5 "Validity"
+        openssl x509 -in "$CERT_DIR/localhost.crt" -text -noout | grep -A 10 "Subject Alternative Name"
+    else
+        print_error "Certificate verification failed"
+        exit 1
+    fi
+}
+
+# Create environment configuration
+create_env_config() {
+    print_status "Creating environment configuration..."
+    
+    cat > "$CERT_DIR/.env.development" << EOF
+# TLS Configuration for Development
+# Generated by generate-dev-certs.sh
+
+# Enable TLS in development
+TLS_ENABLED=true
+HTTPS_PORT=8443
+
+# Certificate paths (relative to server root)
+TLS_CERT_PATH=./certs/localhost.crt
+TLS_KEY_PATH=./certs/localhost.key
+
+# TLS Options
+TLS_MIN_VERSION=TLSv1.2
+TLS_MAX_VERSION=TLSv1.3
+
+# HSTS Configuration (disabled for development)
+HSTS_MAX_AGE=0
+
+# Development URLs
+DEVELOPMENT_HTTPS_URL=https://localhost:8443
+DEVELOPMENT_HTTP_URL=http://localhost:8000
+EOF
+
+    print_success "Environment configuration created: $CERT_DIR/.env.development"
+}
+
+# Create installation instructions
+create_instructions() {
+    print_status "Creating installation instructions..."
+    
+    cat > "$CERT_DIR/README.md" << EOF
+# Development TLS Certificates
+
+This directory contains self-signed TLS certificates for development use.
+
+## Files Generated
+
+- \`localhost.key\` - Private key (keep secure)
+- \`localhost.crt\` - Self-signed certificate
+- \`localhost.csr\` - Certificate signing request
+- \`localhost.conf\` - Certificate configuration
+- \`localhost.pem\` - Certificate bundle (cert + key)
+- \`.env.development\` - Environment configuration
+
+## Installation Instructions
+
+### 1. Trust the Certificate (macOS)
+
+\`\`\`bash
+# Add to keychain
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain certs/localhost.crt
+\`\`\`
+
+### 2. Trust the Certificate (Linux)
+
+\`\`\`bash
+# Copy to system certificates
+sudo cp certs/localhost.crt /usr/local/share/ca-certificates/localhost.crt
+sudo update-ca-certificates
+\`\`\`
+
+### 3. Trust the Certificate (Windows)
+
+1. Double-click \`localhost.crt\`
+2. Click "Install Certificate"
+3. Choose "Local Machine"
+4. Select "Place all certificates in the following store"
+5. Browse and select "Trusted Root Certification Authorities"
+6. Click "OK" and "Finish"
+
+### 4. Browser Configuration
+
+For Chrome/Edge:
+- Navigate to \`chrome://flags/#allow-insecure-localhost\`
+- Enable "Allow invalid certificates for resources loaded from localhost"
+
+For Firefox:
+- Navigate to \`about:config\`
+- Set \`security.tls.insecure_fallback_hosts\` to \`localhost\`
+
+### 5. Environment Setup
+
+Copy the environment variables from \`.env.development\` to your main \`.env\` file or load them directly:
+
+\`\`\`bash
+# Load development TLS configuration
+source certs/.env.development
+\`\`\`
+
+### 6. Start the Server
+
+\`\`\`bash
+# Start with TLS enabled
+npm run dev:tls
+
+# Or start the enhanced server directly
+node server/src/enhanced-server.js
+\`\`\`
+
+### 7. Test the Setup
+
+\`\`\`bash
+# Test HTTP redirect
+curl -I http://localhost:8000
+
+# Test HTTPS endpoint
+curl -k https://localhost:8443/health
+
+# Test TLS-specific health check
+curl -k https://localhost:8443/health/tls
+\`\`\`
+
+## Security Notes
+
+⚠️ **These certificates are for development only!**
+
+- Do not use in production
+- Self-signed certificates will show browser warnings
+- Private key has no passphrase for development ease
+- Certificate expires in $DAYS days
+
+## Regeneration
+
+To regenerate certificates:
+
+\`\`\`bash
+# Remove old certificates
+rm -rf certs/
+
+# Run generation script again
+./scripts/generate-dev-certs.sh
+\`\`\`
+
+## Troubleshooting
+
+### Certificate Not Trusted
+- Make sure you've installed the certificate in your system's trust store
+- Restart your browser after installation
+- Check that the certificate is valid: \`openssl x509 -in certs/localhost.crt -text -noout\`
+
+### Connection Refused
+- Verify the server is running on HTTPS port 8443
+- Check that TLS_ENABLED=true in your environment
+- Ensure no firewall is blocking the port
+
+### Mixed Content Errors
+- Make sure all resources are loaded over HTTPS
+- Check for hardcoded HTTP URLs in your application
+- Verify that the frontend is configured for HTTPS
+
+For more help, check the TLS configuration documentation.
+EOF
+
+    print_success "Installation instructions created: $CERT_DIR/README.md"
+}
+
+# Cleanup function
+cleanup() {
+    if [ -f "$CERT_DIR/localhost.csr" ]; then
+        rm "$CERT_DIR/localhost.csr"
+        print_status "Cleaned up temporary CSR file"
+    fi
+}
+
+# Main execution
+main() {
+    print_status "=== Development TLS Certificate Generation ==="
+    print_status "Domain: $DOMAIN"
+    print_status "Organization: $ORG"
+    print_status "Validity: $DAYS days"
+    print_status "Key Size: $KEY_SIZE bits"
+    echo
+    
+    # Check prerequisites
+    check_openssl
+    
+    # Check if certificates already exist
+    if [ -f "$CERT_DIR/localhost.crt" ] && [ -f "$CERT_DIR/localhost.key" ]; then
+        print_warning "Certificates already exist in $CERT_DIR"
+        read -p "Do you want to regenerate them? (y/N): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_status "Keeping existing certificates"
+            exit 0
+        fi
+        print_status "Regenerating certificates..."
+        rm -f "$CERT_DIR/localhost".*
+    fi
+    
+    # Generate certificates
+    create_cert_dir
+    create_cert_config
+    generate_private_key
+    generate_csr
+    generate_certificate
+    generate_bundle
+    verify_certificate
+    cleanup
+    
+    # Create additional files
+    create_env_config
+    create_instructions
+    
+    echo
+    print_success "=== Certificate Generation Complete ==="
+    print_status "Certificates generated in: $CERT_DIR/"
+    print_status "Next steps:"
+    print_status "1. Review the installation instructions: cat $CERT_DIR/README.md"
+    print_status "2. Trust the certificate in your system"
+    print_status "3. Load the environment configuration"
+    print_status "4. Start the server with TLS enabled"
+    echo
+    print_warning "Remember: These are development certificates only!"
+}
+
+# Run main function
+main "$@"
