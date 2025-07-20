@@ -269,20 +269,100 @@ export class LoginService {
   async validateTwoFactorAuth(
     userId: string,
     token: string,
-    method: 'totp' | 'sms' | 'email'
+    method: 'totp' | 'sms' | 'email',
+    isBackupCode: boolean = false,
+    context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<boolean> {
-    // Placeholder for 2FA implementation
-    // This would integrate with TOTP libraries, SMS services, etc.
-    
-    await this.auditService.logEvent({
-      userId,
-      action: '2fa_attempted',
-      details: { method },
-      severity: 'info'
-    });
+    try {
+      await this.auditService.logEvent({
+        userId,
+        action: '2fa_attempted',
+        details: { method, isBackupCode },
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+        severity: 'info'
+      });
 
-    // For now, return true for development
-    return true;
+      if (method === 'totp') {
+        // Use the TOTP service for validation
+        const TOTPService = require('./TOTPService').TOTPService;
+        const totpService = new TOTPService(this.db, this.redis, this.auditService);
+
+        let result;
+        if (isBackupCode) {
+          result = await totpService.authenticateWithBackupCode(
+            userId,
+            token,
+            context.ipAddress
+          );
+        } else {
+          result = await totpService.authenticateUser(
+            userId,
+            token,
+            context.ipAddress
+          );
+        }
+
+        if (result.success) {
+          await this.auditService.logEvent({
+            userId,
+            action: '2fa_success',
+            details: { 
+              method, 
+              isBackupCode,
+              remainingBackupCodes: result.remainingCodes 
+            },
+            ipAddress: context.ipAddress,
+            userAgent: context.userAgent,
+            severity: 'info'
+          });
+          return true;
+        } else {
+          await this.auditService.logEvent({
+            userId,
+            action: '2fa_failed',
+            details: { 
+              method, 
+              isBackupCode,
+              reason: result.message 
+            },
+            ipAddress: context.ipAddress,
+            userAgent: context.userAgent,
+            severity: 'warning'
+          });
+          return false;
+        }
+      }
+
+      // TODO: Implement SMS and email 2FA methods
+      if (method === 'sms') {
+        // Placeholder for SMS OTP validation
+        console.log('SMS 2FA not yet implemented');
+        return false;
+      }
+
+      if (method === 'email') {
+        // Placeholder for email OTP validation
+        console.log('Email 2FA not yet implemented');
+        return false;
+      }
+
+      return false;
+    } catch (error) {
+      console.error('2FA validation error:', error);
+      await this.auditService.logEvent({
+        userId,
+        action: '2fa_error',
+        details: { 
+          method, 
+          error: error.message 
+        },
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+        severity: 'error'
+      });
+      return false;
+    }
   }
 
   async unlockAccount(

@@ -29,6 +29,14 @@ import { featureToggleRoutes } from './routes/feature-toggles';
 import { securityHeadersMiddleware, defaultSecurityConfig } from './middleware/security-headers';
 import { SecurityAuditService, defaultAuditConfig } from './services/security-audit-service';
 import { securityAuditRoutes } from './routes/security-audit';
+import { totpRoutes } from './routes/totp';
+import { setupRateLimiting } from './middleware/rate-limit-setup';
+import { RedisService } from './auth/database/RedisService';
+import { TOTPService } from './auth/services/TOTPService';
+import { AuditService } from './auth/services/AuditService';
+
+// Rate limiting is integrated with Redis from auth system for distributed rate limiting
+// Fallback to in-memory rate limiting if Redis is unavailable
 
 // Feature flag for preview API - can be disabled for rollback if needed
 const ENABLE_PREVIEW_API = process.env.ENABLE_PREVIEW_API !== 'false';
@@ -154,6 +162,7 @@ try {
 
 // Initialize security headers middleware
 server.addHook('onRequest', securityHeadersMiddleware(defaultSecurityConfig));
+
 
 // Initialize security audit service
 let securityAuditService: SecurityAuditService | undefined;
@@ -377,6 +386,20 @@ if (securityAuditService) {
   }
 }
 
+// Register TOTP routes
+try {
+  const db = getDatabase();
+  const auditService = new AuditService(db as any);
+  const totpService = new TOTPService(db, undefined, auditService); // Redis will be initialized separately
+  
+  server.register(async (fastify) => {
+    await totpRoutes(fastify, totpService);
+  }, { prefix: '/api' });
+  console.log('TOTP routes registered successfully');
+} catch (error) {
+  console.error('Failed to register TOTP routes:', error);
+}
+
 // Setup analytics WebSocket server
 if (analyticsWebSocketServer) {
   analyticsWebSocketServer.setupWebSocketServer(server);
@@ -486,6 +509,26 @@ server.post<{
 // Start server
 const start = async () => {
   try {
+    // Initialize Redis service for rate limiting (using auth Redis configuration)
+    let redisService: RedisService | undefined;
+    try {
+      redisService = new RedisService(authConfig.redis);
+      await redisService.connect();
+      console.log('Redis service connected successfully');
+    } catch (error) {
+      console.error('Failed to connect to Redis:', error);
+      // Continue without Redis - rate limiting will fall back to in-memory
+    }
+
+    // Setup rate limiting middleware
+    try {
+      await setupRateLimiting(server, redisService);
+      console.log('Rate limiting middleware configured successfully');
+    } catch (error) {
+      console.error('Failed to setup rate limiting:', error);
+      // Continue without rate limiting - better to have a working server
+    }
+
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8000;
     await server.listen({ port, host: '0.0.0.0' });
     const address = server.server.address();

@@ -58,13 +58,18 @@ export class TOTPService {
     algorithm: 'SHA1', // Most compatible with authenticator apps
     digits: 6,
     period: 30,
-    issuer: 'PromptScape',
+    issuer: 'PromptSpaghetti',
     window: 1 // Allow 1 period of clock skew (±30 seconds)
   };
 
   private configurations: Map<string, TOTPConfiguration> = new Map();
 
-  constructor(private recoveryCodeService?: any) {
+  constructor(
+    private db: any,
+    private redis: any,
+    private auditService: any,
+    private recoveryCodeService?: any
+  ) {
     // Configure otplib defaults
     authenticator.options = {
       digits: this.defaultOptions.digits,
@@ -443,54 +448,168 @@ export class TOTPService {
     return `TOTP-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
   }
 
-  // Database interaction methods (would be implemented with actual database)
+  // Database interaction methods
   
   private async storeTempConfiguration(config: TOTPConfiguration): Promise<void> {
-    // Store temporarily with expiration
-    this.configurations.set(`temp_${config.id}`, config);
-    
-    // Remove after 10 minutes
-    setTimeout(() => {
-      this.configurations.delete(`temp_${config.id}`);
-    }, 10 * 60 * 1000);
+    try {
+      await this.db.query(`
+        INSERT INTO temp_totp_configurations (
+          id, user_id, secret, algorithm, digits, period, issuer, 
+          account_name, label, backup_codes, expires_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        ON CONFLICT (id) DO UPDATE SET
+          secret = $3, algorithm = $4, digits = $5, period = $6,
+          issuer = $7, account_name = $8, label = $9, backup_codes = $10,
+          expires_at = $11
+      `, [
+        config.id, config.userId, config.secret, config.algorithm,
+        config.digits, config.period, config.issuer, config.accountName,
+        config.label, JSON.stringify(config.backupCodes),
+        new Date(Date.now() + 10 * 60 * 1000) // 10 minutes expiry
+      ]);
+    } catch (error) {
+      console.error('Error storing temp TOTP configuration:', error);
+      throw new Error('Failed to store temporary configuration');
+    }
   }
 
   private async getTempConfiguration(configId: string): Promise<TOTPConfiguration | null> {
-    return this.configurations.get(`temp_${configId}`) || null;
+    try {
+      const result = await this.db.query(`
+        SELECT * FROM temp_totp_configurations 
+        WHERE id = $1 AND expires_at > NOW()
+      `, [configId]);
+
+      if (result.rows.length === 0) {
+        return null;
+      }
+
+      const row = result.rows[0];
+      return {
+        id: row.id,
+        userId: row.user_id,
+        secret: row.secret,
+        algorithm: row.algorithm,
+        digits: row.digits,
+        period: row.period,
+        issuer: row.issuer,
+        accountName: row.account_name,
+        label: row.label,
+        createdAt: row.created_at,
+        enabled: false, // Temp configs are never enabled
+        backupCodes: JSON.parse(row.backup_codes)
+      };
+    } catch (error) {
+      console.error('Error getting temp TOTP configuration:', error);
+      return null;
+    }
   }
 
   private async removeTempConfiguration(configId: string): Promise<void> {
-    this.configurations.delete(`temp_${configId}`);
+    try {
+      await this.db.query(`
+        DELETE FROM temp_totp_configurations WHERE id = $1
+      `, [configId]);
+    } catch (error) {
+      console.error('Error removing temp TOTP configuration:', error);
+    }
   }
 
   private async storeConfiguration(config: TOTPConfiguration): Promise<void> {
-    this.configurations.set(config.id, config);
+    try {
+      await this.db.query(`
+        INSERT INTO user_totp_secrets (
+          user_id, secret, algorithm, digits, period, issuer, 
+          account_name, label, is_enabled, backup_codes, 
+          used_backup_codes, last_used_at, last_used_code
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        ON CONFLICT (user_id) DO UPDATE SET
+          secret = $2, algorithm = $3, digits = $4, period = $5,
+          issuer = $6, account_name = $7, label = $8, is_enabled = $9,
+          backup_codes = $10, used_backup_codes = $11, 
+          last_used_at = $12, last_used_code = $13
+      `, [
+        config.userId, config.secret, config.algorithm, config.digits,
+        config.period, config.issuer, config.accountName, config.label,
+        config.enabled, JSON.stringify(config.backupCodes),
+        JSON.stringify([]), config.lastUsedAt, config.lastUsedCode
+      ]);
+    } catch (error) {
+      console.error('Error storing TOTP configuration:', error);
+      throw new Error('Failed to store TOTP configuration');
+    }
   }
 
   private async updateConfiguration(config: TOTPConfiguration): Promise<void> {
-    this.configurations.set(config.id, config);
+    try {
+      await this.db.query(`
+        UPDATE user_totp_secrets SET
+          last_used_at = $1, last_used_code = $2
+        WHERE user_id = $3
+      `, [config.lastUsedAt, config.lastUsedCode, config.userId]);
+    } catch (error) {
+      console.error('Error updating TOTP configuration:', error);
+    }
   }
 
   private async getUserConfigurations(userId: string): Promise<TOTPConfiguration[]> {
-    return Array.from(this.configurations.values()).filter(c => c.userId === userId);
+    try {
+      const result = await this.db.query(`
+        SELECT * FROM user_totp_secrets WHERE user_id = $1
+      `, [userId]);
+
+      return result.rows.map((row: any) => ({
+        id: row.id.toString(),
+        userId: row.user_id,
+        secret: row.secret,
+        algorithm: row.algorithm,
+        digits: row.digits,
+        period: row.period,
+        issuer: row.issuer,
+        accountName: row.account_name,
+        label: row.label,
+        createdAt: row.created_at,
+        lastUsedAt: row.last_used_at,
+        lastUsedCode: row.last_used_code,
+        enabled: row.is_enabled,
+        backupCodes: JSON.parse(row.backup_codes || '[]')
+      }));
+    } catch (error) {
+      console.error('Error getting user TOTP configurations:', error);
+      return [];
+    }
   }
 
   private async wasCodeRecentlyUsed(configId: string, code: string): Promise<boolean> {
-    // Check if code was used in the last period to prevent replay attacks
-    const config = this.configurations.get(configId);
-    if (!config) return false;
-    
-    if (config.lastUsedCode === code && config.lastUsedAt) {
-      const timeSinceLastUse = Date.now() - config.lastUsedAt.getTime();
-      return timeSinceLastUse < (config.period * 1000 * 2); // 2 periods
+    try {
+      // Check if this exact code was used recently
+      const codeHash = crypto.createHash('sha256').update(code).digest('hex');
+      const result = await this.db.query(`
+        SELECT COUNT(*) as count FROM used_totp_codes 
+        WHERE config_id = $1 AND code_hash = $2 AND expires_at > NOW()
+      `, [parseInt(configId), codeHash]);
+
+      return parseInt(result.rows[0]?.count || '0') > 0;
+    } catch (error) {
+      console.error('Error checking used code:', error);
+      return false;
     }
-    
-    return false;
   }
 
   private async storeUsedCode(configId: string, code: string, usedAt: Date): Promise<void> {
-    // Implementation would store used codes with expiration
-    console.log(`Storing used code for config ${configId} at ${usedAt.toISOString()}`);
+    try {
+      const codeHash = crypto.createHash('sha256').update(code).digest('hex');
+      await this.db.query(`
+        INSERT INTO used_totp_codes (config_id, code_hash, used_at, expires_at)
+        VALUES ($1, $2, $3, $4)
+        ON CONFLICT (config_id, code_hash) DO NOTHING
+      `, [
+        parseInt(configId), codeHash, usedAt,
+        new Date(usedAt.getTime() + 2 * 60 * 1000) // 2 minutes expiry
+      ]);
+    } catch (error) {
+      console.error('Error storing used code:', error);
+    }
   }
 
   private async logTOTPEvent(event: {
@@ -498,9 +617,33 @@ export class TOTPService {
     action: string;
     configurationId?: string;
     sourceIP?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
-    console.log(`TOTP Event: ${event.action} for user ${event.userId}`);
+    try {
+      // Log to TOTP events table
+      await this.db.query(`
+        INSERT INTO totp_events (
+          user_id, configuration_id, action, ip_address, metadata
+        ) VALUES ($1, $2, $3, $4, $5)
+      `, [
+        event.userId, event.configurationId, event.action,
+        event.sourceIP, JSON.stringify(event.metadata || {})
+      ]);
+
+      // Also log to audit service
+      await this.auditService.logEvent({
+        userId: event.userId,
+        action: `totp_${event.action}`,
+        details: {
+          configurationId: event.configurationId,
+          ...event.metadata
+        },
+        ipAddress: event.sourceIP,
+        severity: event.action.includes('failed') ? 'warning' : 'info'
+      });
+    } catch (error) {
+      console.error('Error logging TOTP event:', error);
+    }
   }
 
   // Public utility methods
@@ -537,18 +680,220 @@ export class TOTPService {
   /**
    * Disable TOTP configuration
    */
-  async disableConfiguration(configurationId: string, reason: string): Promise<void> {
-    const config = this.configurations.get(configurationId);
-    if (config) {
-      config.enabled = false;
-      await this.updateConfiguration(config);
+  async disableConfiguration(userId: string, reason: string): Promise<void> {
+    try {
+      await this.db.query(`
+        UPDATE user_totp_secrets SET is_enabled = false WHERE user_id = $1
+      `, [userId]);
+
+      await this.db.query(`
+        UPDATE users SET two_factor_enabled = false, two_factor_method = NULL
+        WHERE user_id = $1
+      `, [userId]);
       
       await this.logTOTPEvent({
-        userId: config.userId,
+        userId,
         action: 'configuration_disabled',
-        configurationId,
         metadata: { reason }
       });
+    } catch (error) {
+      console.error('Error disabling TOTP configuration:', error);
+      throw new Error('Failed to disable TOTP configuration');
+    }
+  }
+
+  /**
+   * Regenerate backup codes for a user
+   */
+  async regenerateBackupCodes(userId: string): Promise<string[]> {
+    try {
+      const backupCodes = await this.generateBackupCodes();
+      
+      await this.db.query(`
+        UPDATE user_totp_secrets 
+        SET backup_codes = $1, used_backup_codes = '[]'::jsonb
+        WHERE user_id = $2 AND is_enabled = true
+      `, [JSON.stringify(backupCodes), userId]);
+
+      await this.logTOTPEvent({
+        userId,
+        action: 'codes_regenerated',
+        metadata: { codesCount: backupCodes.length }
+      });
+
+      return backupCodes;
+    } catch (error) {
+      console.error('Error regenerating backup codes:', error);
+      throw new Error('Failed to regenerate backup codes');
+    }
+  }
+
+  /**
+   * Authenticate with backup code
+   */
+  async authenticateWithBackupCode(
+    userId: string,
+    code: string,
+    sourceIP: string = '127.0.0.1'
+  ): Promise<{ success: boolean; message: string; remainingCodes?: number }> {
+    try {
+      const result = await this.db.query(`
+        SELECT backup_codes, used_backup_codes FROM user_totp_secrets 
+        WHERE user_id = $1 AND is_enabled = true
+      `, [userId]);
+
+      if (result.rows.length === 0) {
+        return { success: false, message: 'TOTP not configured' };
+      }
+
+      const { backup_codes, used_backup_codes } = result.rows[0];
+      const backupCodes = JSON.parse(backup_codes || '[]');
+      const usedCodes = JSON.parse(used_backup_codes || '[]');
+
+      if (!backupCodes.includes(code)) {
+        return { success: false, message: 'Invalid backup code' };
+      }
+
+      if (usedCodes.includes(code)) {
+        return { success: false, message: 'Backup code already used' };
+      }
+
+      // Mark code as used
+      const newUsedCodes = [...usedCodes, code];
+      await this.db.query(`
+        UPDATE user_totp_secrets 
+        SET used_backup_codes = $1, last_used_at = NOW()
+        WHERE user_id = $2
+      `, [JSON.stringify(newUsedCodes), userId]);
+
+      const remainingCodes = backupCodes.length - newUsedCodes.length;
+
+      await this.logTOTPEvent({
+        userId,
+        action: 'backup_code_used',
+        sourceIP,
+        metadata: { remainingCodes }
+      });
+
+      return {
+        success: true,
+        message: 'Backup code authenticated successfully',
+        remainingCodes
+      };
+    } catch (error) {
+      console.error('Error authenticating backup code:', error);
+      return { success: false, message: 'Authentication service error' };
+    }
+  }
+
+  /**
+   * Check and enforce rate limiting
+   */
+  async checkRateLimit(
+    userId: string,
+    ipAddress: string,
+    attemptType: 'enrollment' | 'authentication'
+  ): Promise<{ allowed: boolean; remainingAttempts?: number; resetTime?: Date }> {
+    try {
+      const maxAttempts = attemptType === 'enrollment' ? 5 : 10;
+      const windowMinutes = attemptType === 'enrollment' ? 10 : 5;
+
+      const result = await this.db.query(`
+        SELECT attempts, window_start, blocked_until FROM totp_rate_limits
+        WHERE user_id = $1 AND attempt_type = $2 AND ip_address = $3
+      `, [userId, attemptType, ipAddress]);
+
+      const now = new Date();
+
+      if (result.rows.length === 0) {
+        // No rate limit record, create one
+        await this.db.query(`
+          INSERT INTO totp_rate_limits (user_id, attempt_type, ip_address, attempts, window_start)
+          VALUES ($1, $2, $3, 1, $4)
+        `, [userId, attemptType, ipAddress, now]);
+
+        return { allowed: true, remainingAttempts: maxAttempts - 1 };
+      }
+
+      const { attempts, window_start, blocked_until } = result.rows[0];
+
+      // Check if currently blocked
+      if (blocked_until && blocked_until > now) {
+        return { allowed: false, resetTime: blocked_until };
+      }
+
+      // Check if window has expired
+      const windowStart = new Date(window_start);
+      const windowEnd = new Date(windowStart.getTime() + windowMinutes * 60 * 1000);
+
+      if (now > windowEnd) {
+        // Reset window
+        await this.db.query(`
+          UPDATE totp_rate_limits 
+          SET attempts = 1, window_start = $1, blocked_until = NULL
+          WHERE user_id = $2 AND attempt_type = $3 AND ip_address = $4
+        `, [now, userId, attemptType, ipAddress]);
+
+        return { allowed: true, remainingAttempts: maxAttempts - 1 };
+      }
+
+      // Check if limit exceeded
+      if (attempts >= maxAttempts) {
+        const blockUntil = new Date(now.getTime() + 30 * 60 * 1000); // 30 minute block
+        await this.db.query(`
+          UPDATE totp_rate_limits 
+          SET blocked_until = $1
+          WHERE user_id = $2 AND attempt_type = $3 AND ip_address = $4
+        `, [blockUntil, userId, attemptType, ipAddress]);
+
+        return { allowed: false, resetTime: blockUntil };
+      }
+
+      // Increment attempts
+      await this.db.query(`
+        UPDATE totp_rate_limits 
+        SET attempts = attempts + 1
+        WHERE user_id = $2 AND attempt_type = $3 AND ip_address = $4
+      `, [userId, attemptType, ipAddress]);
+
+      return { allowed: true, remainingAttempts: maxAttempts - attempts - 1 };
+    } catch (error) {
+      console.error('Error checking rate limit:', error);
+      return { allowed: true }; // Fail open
+    }
+  }
+
+  /**
+   * Get TOTP statistics for admin dashboard
+   */
+  async getTOTPStatistics(): Promise<{
+    totalActiveUsers: number;
+    enrollmentsToday: number;
+    authenticationsToday: number;
+    failedAttemptsToday: number;
+    averageBackupCodesRemaining: number;
+  }> {
+    try {
+      const stats = await this.db.query(`
+        SELECT 
+          (SELECT COUNT(*) FROM user_totp_secrets WHERE is_enabled = true) as total_active_users,
+          (SELECT COUNT(*) FROM totp_events WHERE action = 'enrollment_completed' AND timestamp >= CURRENT_DATE) as enrollments_today,
+          (SELECT COUNT(*) FROM totp_events WHERE action = 'authentication_success' AND timestamp >= CURRENT_DATE) as authentications_today,
+          (SELECT COUNT(*) FROM totp_events WHERE action = 'authentication_failed' AND timestamp >= CURRENT_DATE) as failed_attempts_today,
+          (SELECT AVG(jsonb_array_length(backup_codes) - jsonb_array_length(used_backup_codes)) FROM user_totp_secrets WHERE is_enabled = true) as avg_backup_codes
+      `);
+
+      const row = stats.rows[0];
+      return {
+        totalActiveUsers: parseInt(row.total_active_users || '0'),
+        enrollmentsToday: parseInt(row.enrollments_today || '0'),
+        authenticationsToday: parseInt(row.authentications_today || '0'),
+        failedAttemptsToday: parseInt(row.failed_attempts_today || '0'),
+        averageBackupCodesRemaining: parseFloat(row.avg_backup_codes || '0')
+      };
+    } catch (error) {
+      console.error('Error getting TOTP statistics:', error);
+      throw error;
     }
   }
 }

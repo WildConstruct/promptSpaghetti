@@ -3,7 +3,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
 console.log('🔍 QA Agent - Starting task review process\n');
 
@@ -151,7 +150,7 @@ class QAAgent {
   }
 
   // Generate realistic QA issues
-  generateQAIssues(task) {
+  generateQAIssues() {
     const allIssues = [
       'Missing unit tests for edge cases',
       'Code style violations detected',
@@ -215,7 +214,7 @@ class QAAgent {
     if (fs.existsSync(commitTrackingFile)) {
       try {
         commitData = JSON.parse(fs.readFileSync(commitTrackingFile, 'utf8'));
-      } catch (error) {
+      } catch {
         console.log('⚠️  Could not load commit tracking, starting fresh');
       }
     }

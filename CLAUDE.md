@@ -37,6 +37,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npx promptgraph exec <graph.json> --seed 1234` - Execute a graph via CLI
 - `pnpm --filter cli exec <graph.json>` - Execute using local CLI package
 
+### Task Management (CRITICAL)
+- `node src/finish-task.js <task-id>` - **MUST be called when implementation is complete**
+- `node src/run-qa-agent.js` - Review tasks in REVIEW status
+- Failing to call finish-task.js leaves tasks stuck in IN_PROGRESS state
+
 ## Architecture Overview
 
 ### Monorepo Structure

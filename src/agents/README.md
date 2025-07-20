@@ -97,9 +97,12 @@ node monitor-available-tasks.js
 # Grab tasks (self-assign) - SAFE for concurrent agents
 node grab-tasks.js dev_A 2
 
-# Submit for review
+# Submit for review - CRITICAL STEP
 node finish-task.js T-12345 REVIEW
 ```
+
+**🚨 CRITICAL**: Every agent MUST call `finish-task.js` when implementation is complete.
+Not calling this script leaves tasks stuck in IN_PROGRESS status even when work is done.
 
 **⚡ IMPORTANT: Race Condition Protection**
 The `grab-tasks.js` script now uses file locking to prevent multiple agents from grabbing the same tasks simultaneously. You'll see lock acquisition/release messages during operation.

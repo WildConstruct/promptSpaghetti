@@ -42,13 +42,16 @@ Developers can now self-assign and manage tasks directly without waiting for ASS
 
 3. **Complete work and submit for review:**
    ```bash
-   # Move to REVIEW when done
+   # CRITICAL: ALWAYS call this when your implementation is done
    node finish-task.js <task-id>
    
    # Other state transitions:
    node finish-task.js <task-id> COMPLETED
    node finish-task.js <task-id> BLOCKED
    ```
+   
+   **⚠️ IMPORTANT**: Every agent MUST call `finish-task.js` when they complete implementation.
+   Failing to do this leaves tasks stuck in IN_PROGRESS even when the work is done.
 
 **Task States:**
 - UNASSIGNED: Available for anyone to grab
