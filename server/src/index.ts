@@ -38,6 +38,9 @@ import { createTimeoutMiddleware } from './middleware/timeout-middleware';
 import { timeoutManagementRoutes } from './routes/timeout-management';
 import { initializeTimeoutManager } from './services/TimeoutManager';
 import { createTimeoutMonitoringService } from './services/timeout-monitoring';
+import { AnomalyDetectionService, AnomalyDetectionConfig } from './services/AnomalyDetectionService';
+import { anomalyDetectionRoutes } from './routes/anomaly-detection';
+import referrerPolicyPlugin from './plugins/referrer-policy';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -180,8 +183,55 @@ try {
   // Continue without timeout management - this is non-critical for basic operation
 }
 
+// Initialize anomaly detection service
+let anomalyDetectionService: AnomalyDetectionService | undefined;
+try {
+  const db = getDatabase();
+  const auditService = new AuditService(db as any);
+  
+  // Anomaly detection configuration
+  const anomalyConfig: AnomalyDetectionConfig = {
+    enabled: process.env.ANOMALY_DETECTION_ENABLED !== 'false',
+    checkIntervalSeconds: parseInt(process.env.ANOMALY_CHECK_INTERVAL || '300'), // 5 minutes
+    retentionDays: parseInt(process.env.ANOMALY_RETENTION_DAYS || '90'),
+    patterns: [], // Will be loaded from database
+    notification: {
+      email: process.env.SECURITY_ALERT_EMAILS?.split(',') || [],
+      webhook: process.env.SECURITY_WEBHOOK_URL,
+      slack: process.env.SECURITY_SLACK_WEBHOOK
+    },
+    responseConfig: {
+      autoBlock: process.env.ANOMALY_AUTO_BLOCK === 'true',
+      autoDisable: process.env.ANOMALY_AUTO_DISABLE === 'true',
+      requireManualReview: process.env.ANOMALY_REQUIRE_REVIEW !== 'false'
+    }
+  };
+
+  anomalyDetectionService = new AnomalyDetectionService(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService,
+    anomalyConfig
+  );
+
+  console.log('Anomaly detection service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize anomaly detection service:', error);
+  // Continue without anomaly detection - this is non-critical for basic operation
+}
+
 // Initialize security headers middleware
 server.addHook('onRequest', securityHeadersMiddleware(defaultSecurityConfig));
+
+// Register referrer policy plugin
+server.register(referrerPolicyPlugin, {
+  enabled: process.env.REFERRER_POLICY_ENABLED !== 'false',
+  defaultPolicy: (process.env.REFERRER_POLICY_DEFAULT as any) || 'strict-origin-when-cross-origin',
+  strictMode: process.env.REFERRER_POLICY_STRICT_MODE !== 'false',
+  enableReporting: process.env.REFERRER_POLICY_REPORTING !== 'false',
+  maxViolationHistory: parseInt(process.env.REFERRER_POLICY_MAX_HISTORY || '10000'),
+  cacheTimeout: parseInt(process.env.REFERRER_POLICY_CACHE_TIMEOUT || '3600')
+});
 
 
 // Initialize security audit service
@@ -432,6 +482,18 @@ if (timeoutMonitoringService) {
   }
 }
 
+// Register anomaly detection routes
+if (anomalyDetectionService) {
+  try {
+    server.register(async (fastify) => {
+      await anomalyDetectionRoutes(fastify, anomalyDetectionService);
+    }, { prefix: '/api/security' });
+    console.log('Anomaly detection routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register anomaly detection routes:', error);
+  }
+}
+
 // Setup analytics WebSocket server
 if (analyticsWebSocketServer) {
   analyticsWebSocketServer.setupWebSocketServer(server);
@@ -561,6 +623,19 @@ const start = async () => {
       // Continue without rate limiting - better to have a working server
     }
 
+    // Start anomaly detection service with Redis connection
+    if (anomalyDetectionService && redisService) {
+      try {
+        // Set Redis service on anomaly detection
+        (anomalyDetectionService as any).redis = redisService;
+        await anomalyDetectionService.start();
+        console.log('Anomaly detection service started successfully');
+      } catch (error) {
+        console.error('Failed to start anomaly detection service:', error);
+        // Continue without anomaly detection
+      }
+    }
+
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8000;
     await server.listen({ port, host: '0.0.0.0' });
     const address = server.server.address();
@@ -609,6 +684,9 @@ process.on('SIGTERM', async () => {
   if (timeoutMonitoringService) {
     await timeoutMonitoringService.stop();
   }
+  if (anomalyDetectionService) {
+    await anomalyDetectionService.stop();
+  }
   await server.close();
   process.exit(0);
 });
@@ -627,6 +705,9 @@ process.on('SIGINT', async () => {
   }
   if (timeoutMonitoringService) {
     await timeoutMonitoringService.stop();
+  }
+  if (anomalyDetectionService) {
+    await anomalyDetectionService.stop();
   }
   await server.close();
   process.exit(0);

@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-20T15:28:55.976Z"
+    "updated": "2025-07-20T15:34:26.735Z"
   },
   "product_goals": [
     {
@@ -20957,12 +20957,12 @@
       "id": "T-1752989143997-625",
       "story_id": "S-1752989143996-19-1",
       "title": "Configure Referrer-Policy header",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "Epic18-QA-Agent",
       "wip_class": "FEAT",
       "est": 3,
       "created": "2025-07-20T05:25:43.997Z",
-      "updated": "2025-07-20T05:25:43.997Z",
+      "updated": "2025-07-20T15:30:21.538Z",
       "dependencies": [],
       "notes": []
     },
@@ -20970,12 +20970,12 @@
       "id": "T-1752989143997-428",
       "story_id": "S-1752989143996-19-1",
       "title": "Create risk scoring algorithm",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "dev_james",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.997Z",
-      "updated": "2025-07-20T05:25:43.997Z",
+      "updated": "2025-07-20T15:34:26.735Z",
       "dependencies": [],
       "notes": []
     },
@@ -30966,7 +30966,8 @@
       "T-1752989143997-590",
       "T-1752989143997-483",
       "T-1752989143997-229",
-      "T-1752989143997-25"
+      "T-1752989143997-25",
+      "T-1752989143997-625"
     ],
     "Testing-Lock-Agent": [
       "T-1752989143997-331",
@@ -31001,6 +31002,9 @@
       "T-1752989143997-312",
       "T-1752989143997-28",
       "T-1752989143997-273"
+    ],
+    "dev_james": [
+      "T-1752989143997-428"
     ]
   },
   "metrics": {

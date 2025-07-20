@@ -624,7 +624,7 @@ export class AnomalyDetectionService extends EventEmitter {
         UPDATE anomaly_actions_log 
         SET status = 'failed', error_message = $2
         WHERE id = $1
-      `, [actionLogId, error.message]);
+      `, [actionLogId, error instanceof Error ? error.message : String(error)]);
       
       throw error;
     }

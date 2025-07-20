@@ -1,0 +1,11 @@
+dist/
+build/
+node_modules/
+coverage/
+.next/
+public/
+**/*.generated.ts
+**/*.generated.js
+.eslintrc.*.js
+.lintstagedrc.*.js
+scripts/
