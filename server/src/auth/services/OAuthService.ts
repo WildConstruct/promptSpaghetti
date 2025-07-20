@@ -6,6 +6,7 @@ import { UserService } from './UserService';
 import { TokenService } from './TokenService';
 import { AuditService } from './AuditService';
 import { DatabaseService } from '../database/DatabaseService';
+import { CertificatePinningManager, loadPinConfigFromEnv } from '../../security/tls-config';
 
 export interface OAuthProviderConfig {
   clientId: string;
@@ -40,6 +41,8 @@ export class OAuthService {
   private auditService: AuditService;
   private dbService: DatabaseService;
   private providerConfigs: Map<OAuthProvider, OAuthProviderConfig>;
+  private certificatePinningManager: CertificatePinningManager;
+  private pinnedFetch: typeof fetch;
 
   constructor(
     config: AuthConfig,
@@ -54,6 +57,12 @@ export class OAuthService {
     this.auditService = auditService;
     this.dbService = dbService;
     this.providerConfigs = new Map();
+    
+    // Initialize certificate pinning for OAuth security
+    const pinConfig = loadPinConfigFromEnv();
+    this.certificatePinningManager = new CertificatePinningManager(pinConfig);
+    this.pinnedFetch = this.certificatePinningManager.createPinnedFetch();
+    
     this.initializeProviders();
   }
 
@@ -359,7 +368,7 @@ export class OAuthService {
       params.append('grant_type', 'authorization_code');
     }
 
-    const response = await fetch(providerConfig.tokenUrl, {
+    const response = await this.pinnedFetch(providerConfig.tokenUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -382,7 +391,7 @@ export class OAuthService {
       throw new Error(`Unsupported OAuth provider: ${provider}`);
     }
 
-    const response = await fetch(providerConfig.userInfoUrl, {
+    const response = await this.pinnedFetch(providerConfig.userInfoUrl, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Accept': 'application/json'
@@ -542,5 +551,27 @@ export class OAuthService {
     `, [state]);
 
     return JSON.parse(result.rows[0].data);
+  }
+
+  /**
+   * Get certificate pinning status and statistics
+   */
+  getCertificatePinningStatus(): {
+    enabled: boolean;
+    statistics: any;
+    pinnedDomains: string[];
+  } {
+    return {
+      enabled: this.certificatePinningManager.getConfig().enabled,
+      statistics: this.certificatePinningManager.getStatistics(),
+      pinnedDomains: this.certificatePinningManager.getConfig().pinnedDomains
+    };
+  }
+
+  /**
+   * Validate all OAuth provider certificate pins
+   */
+  async validateOAuthCertificatePins(): Promise<{ valid: boolean; results: Record<string, any> }> {
+    return await this.certificatePinningManager.validateAllPins();
   }
 }

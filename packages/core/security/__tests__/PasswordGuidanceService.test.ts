@@ -22,7 +22,7 @@ describe('PasswordGuidanceService', () => {
 
   beforeEach(() => {
     mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
     
     service = new PasswordGuidanceService();
   });
@@ -148,7 +148,7 @@ describe('PasswordGuidanceService', () => {
       expect(session.id).toMatch(/^PWD-\d+-[A-F0-9]+$/);
       expect(session.userId).toBe(userId);
       expect(session.riskLevel).toBeDefined();
-      expect(session.recommendations).toHaveLength(expect.any(Number));
+      expect(session.recommendations.length).toBeGreaterThan(0);
       expect(session.status).toBe('active');
       expect(session.expiresAt).toBeInstanceOf(Date);
     });
@@ -217,8 +217,8 @@ describe('PasswordGuidanceService', () => {
       expect(mfaRec.steps[2].title).toBe('Complete MFA Setup');
       
       // Verify benefits and risks are documented
-      expect(mfaRec.benefits).toHaveLength(expect.any(Number));
-      expect(mfaRec.risks).toHaveLength(expect.any(Number));
+      expect(mfaRec.benefits.length).toBeGreaterThan(0);
+      expect(mfaRec.risks.length).toBeGreaterThan(0);
     });
   });
 

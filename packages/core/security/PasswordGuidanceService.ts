@@ -724,11 +724,36 @@ export class PasswordGuidanceService extends EventEmitter {
       weightedSum += riskWeight;
     }
     
-    const averageRisk = weightedSum > 0 ? totalRisk / weightedSum : 0;
+    // Calculate max risk instead of average - if any single indicator is critical, treat as critical
+    const maxRisk = indicators.reduce((max, indicator) => {
+      let riskWeight = 0;
+      
+      switch (indicator.type) {
+        case CompromiseType.DATA_BREACH:
+          riskWeight = indicator.confidence >= 80 ? 4 : 3;
+          break;
+        case CompromiseType.CREDENTIAL_STUFFING:
+        case CompromiseType.MALWARE:
+        case CompromiseType.INSIDER_THREAT:
+          riskWeight = 4;
+          break;
+        case CompromiseType.PHISHING:
+        case CompromiseType.SOCIAL_ENGINEERING:
+        case CompromiseType.REUSED_PASSWORD:
+          riskWeight = 3;
+          break;
+        case CompromiseType.WEAK_PASSWORD:
+          riskWeight = 2;
+          break;
+      }
+      
+      const adjustedRisk = riskWeight * (indicator.confidence / 100);
+      return Math.max(max, adjustedRisk);
+    }, 0);
     
-    if (averageRisk >= 3.5) return RiskLevel.CRITICAL;
-    if (averageRisk >= 2.5) return RiskLevel.HIGH;
-    if (averageRisk >= 1.5) return RiskLevel.MEDIUM;
+    if (maxRisk >= 3.5) return RiskLevel.CRITICAL;
+    if (maxRisk >= 2.5) return RiskLevel.HIGH;
+    if (maxRisk >= 1.5) return RiskLevel.MEDIUM;
     return RiskLevel.LOW;
   }
   
@@ -966,6 +991,5 @@ export class PasswordGuidanceService extends EventEmitter {
 }
 
 // Export default instance
-export const passwordGuidanceService = new PasswordGuidanceService();
-
+export 
 export default PasswordGuidanceService;

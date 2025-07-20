@@ -4,6 +4,7 @@ import { InspectorPanel } from './components/Inspector';
 import { NodeRenderer } from './components/NodeRenderer';
 import { StatusBar } from './components/StatusBar';
 import { RestorePrompt } from './components/RestorePrompt';
+import { EncryptionState, EncryptionAlgorithm } from './components/EncryptionStatus';
 import { nodeSchemas } from './nodeSchemas';
 import { Palette, NodeMeta } from './Palette';
 import { useGraphStore } from './graphStore';
@@ -124,6 +125,12 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [dragPreview, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
+  
+  // Demo encryption state - in a real implementation, this would be managed by a security service
+  const [encryptionState, setEncryptionState] = useState<EncryptionState>({
+    status: 'not_encrypted',
+    dataSize: 1024 * 512 // 512KB demo graph
+  });
   
   const correctionsEnabled = useCorrectionsEnabled();
   const reactFlowInstance = useReactFlow();
@@ -272,9 +279,53 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     []
   );
 
+  // Demo encryption handlers - in a real implementation, these would call actual encryption services
+  const handleEncrypt = useCallback(() => {
+    setEncryptionState(prev => ({ ...prev, status: 'encrypting' }));
+    // Simulate encryption process
+    setTimeout(() => {
+      setEncryptionState(prev => ({
+        ...prev,
+        status: 'encrypted',
+        algorithm: 'AES-256-GCM',
+        keyId: 'demo-key-' + Date.now().toString(36),
+        lastEncrypted: Date.now(),
+        encryptionTime: 180,
+        strength: 'strong'
+      }));
+      setStatusMessage('Graph data encrypted successfully');
+      setTimeout(() => setStatusMessage(''), 3000);
+    }, 2000);
+  }, []);
 
+  const handleDecrypt = useCallback(() => {
+    setEncryptionState(prev => ({ ...prev, status: 'decrypting' }));
+    // Simulate decryption process
+    setTimeout(() => {
+      setEncryptionState(prev => ({
+        ...prev,
+        status: 'not_encrypted',
+        algorithm: undefined,
+        keyId: undefined,
+        lastDecrypted: Date.now(),
+        encryptionTime: 120,
+        strength: undefined
+      }));
+      setStatusMessage('Graph data decrypted successfully');
+      setTimeout(() => setStatusMessage(''), 3000);
+    }, 1500);
+  }, []);
 
-
+  const handleChangeAlgorithm = useCallback((algorithm: string) => {
+    setEncryptionState(prev => ({
+      ...prev,
+      algorithm: algorithm as EncryptionAlgorithm,
+      strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :
+                algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak'
+    }));
+    setStatusMessage(`Encryption algorithm changed to ${algorithm}`);
+    setTimeout(() => setStatusMessage(''), 3000);
+  }, []);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -445,6 +496,10 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         statsOpen={statsOpen}
         onExtensions={() => setExtensionsOpen(true)}
         extensionsOpen={extensionsOpen}
+        encryptionState={encryptionState}
+        onEncrypt={handleEncrypt}
+        onDecrypt={handleDecrypt}
+        onChangeAlgorithm={handleChangeAlgorithm}
       />
       <PreviewModal
         open={previewOpen}

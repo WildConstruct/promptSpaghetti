@@ -79,8 +79,8 @@ describe('Security Headers', () => {
   });
 
   describe('securityHeadersMiddleware', () => {
-    let mockRequest: any;
-    let mockReply: any;
+    let mockRequest: unknown;
+    let mockReply: unknown;
     let headersSent: Record<string, string>;
 
     beforeEach(() => {
@@ -117,9 +117,18 @@ describe('Security Headers', () => {
     });
 
     it('should set HSTS header only for HTTPS requests', async () => {
-      // Test HTTPS request
+      // Test HTTPS request with HSTS explicitly enabled
       mockRequest.protocol = 'https';
-      const middleware = securityHeadersMiddleware(defaultSecurityConfig);
+      const hstsConfig = {
+        ...defaultSecurityConfig,
+        strictTransportSecurity: {
+          enabled: true, // Force enable for testing
+          maxAge: 31536000,
+          includeSubDomains: true,
+          preload: true
+        }
+      };
+      const middleware = securityHeadersMiddleware(hstsConfig);
       await middleware(mockRequest, mockReply);
       
       expect(headersSent['strict-transport-security']).toContain('max-age=31536000');

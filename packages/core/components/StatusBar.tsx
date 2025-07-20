@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Edge, Node } from 'reactflow';
 import { ValidationError } from '../validation';
 import { WebSocketStatusIcon, WebSocketDetails } from './WebSocketStatus';
+import { EncryptionStatusIcon, EncryptionDetails, EncryptionState } from './EncryptionStatus';
 import { ConnectionState } from '../websocket/WebSocketClient';
 
 interface StatusBarProps {
@@ -22,6 +23,11 @@ interface StatusBarProps {
   onClearQueue?: () => void;
   onReconnect?: () => void;
   onDisconnect?: () => void;
+  // Encryption props
+  encryptionState?: EncryptionState;
+  onEncrypt?: () => void;
+  onDecrypt?: () => void;
+  onChangeAlgorithm?: (algorithm: string) => void;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
@@ -40,25 +46,34 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   queuedMessages = 0,
   onClearQueue,
   onReconnect,
-  onDisconnect
+  onDisconnect,
+  encryptionState,
+  onEncrypt,
+  onDecrypt,
+  onChangeAlgorithm
 }) => {
   const errorCount = errors.length;
   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
+  const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
   const wsDetailsRef = useRef<HTMLDivElement>(null);
+  const encryptionDetailsRef = useRef<HTMLDivElement>(null);
 
-  // Close WebSocket details when clicking outside
+  // Close details when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (wsDetailsRef.current && !wsDetailsRef.current.contains(event.target as Node)) {
         setShowWebSocketDetails(false);
       }
+      if (encryptionDetailsRef.current && !encryptionDetailsRef.current.contains(event.target as Node)) {
+        setShowEncryptionDetails(false);
+      }
     };
 
-    if (showWebSocketDetails) {
+    if (showWebSocketDetails || showEncryptionDetails) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [showWebSocketDetails]);
+  }, [showWebSocketDetails, showEncryptionDetails]);
 
   return (
     <div style={{ 
@@ -180,8 +195,39 @@ export const StatusBar: React.FC<StatusBarProps> = ({
         )}
       </div>
 
-      {/* Right side - WebSocket status */}
-      <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+      {/* Right side - Status indicators */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative' }}>
+        {/* Encryption status */}
+        {encryptionState && (
+          <>
+            <EncryptionStatusIcon 
+              encryptionState={encryptionState}
+              onClick={() => setShowEncryptionDetails(!showEncryptionDetails)}
+            />
+            
+            {showEncryptionDetails && (
+              <div 
+                ref={encryptionDetailsRef}
+                style={{
+                  position: 'absolute',
+                  bottom: '100%',
+                  right: '50%',
+                  marginBottom: 8,
+                  zIndex: 1000
+                }}
+              >
+                <EncryptionDetails
+                  encryptionState={encryptionState}
+                  onEncrypt={onEncrypt}
+                  onDecrypt={onDecrypt}
+                  onChangeAlgorithm={onChangeAlgorithm}
+                />
+              </div>
+            )}
+          </>
+        )}
+
+        {/* WebSocket status */}
         {connectionState && (
           <>
             <WebSocketStatusIcon 

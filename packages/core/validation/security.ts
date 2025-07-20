@@ -204,7 +204,9 @@ export class SecurityValidation {
       'propertyIsEnumerable',
       'toLocaleString',
       'toString',
-      'valueOf'
+      'valueOf',
+      'eval',
+      'Function'
     ];
     
     if (dangerousProperties.includes(key)) {

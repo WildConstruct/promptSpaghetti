@@ -574,4 +574,574 @@ export function loadTLSConfigFromEnv(): TLSConfig {
   return config;
 }
 
+// ========================================
+// Certificate Pinning System
+// ========================================
+
+export interface CertificatePinConfig {
+  enabled: boolean;
+  pins: Record<string, CertificatePin[]>;
+  backupPins: Record<string, CertificatePin[]>;
+  pinValidation: {
+    enforceBackupPins: boolean;
+    pinFailureAction: 'block' | 'warn' | 'log';
+    pinUpdateCheckInterval: number; // hours
+  };
+  allowedDomains: string[];
+  pinnedDomains: string[];
+}
+
+export interface CertificatePin {
+  type: 'sha256' | 'sha1' | 'subject' | 'spki';
+  value: string;
+  description?: string;
+  createdAt: Date;
+  expiresAt?: Date;
+}
+
+export interface PinValidationResult {
+  valid: boolean;
+  matchedPin?: CertificatePin;
+  hostname: string;
+  certificate: any;
+  errors: string[];
+  warnings: string[];
+}
+
+// Default pinned certificates for major OAuth providers
+const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
+  'oauth2.googleapis.com': [
+    {
+      type: 'sha256',
+      value: 'KwccWaCgrnaw6tsrrSO61FgLacNgG2MMLq8GE6+oP5I=',
+      description: 'Google OAuth2 Primary Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    },
+    {
+      type: 'sha256', 
+      value: 'FEzVOUp4dF3gI0ZVPRJhFbsd5E9tpuQdnee2qMBn/bU=',
+      description: 'Google OAuth2 Backup Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    }
+  ],
+  'www.googleapis.com': [
+    {
+      type: 'sha256',
+      value: 'KwccWaCgrnaw6tsrrSO61FgLacNgG2MMLq8GE6+oP5I=',
+      description: 'Google APIs Primary Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    }
+  ],
+  'github.com': [
+    {
+      type: 'sha256',
+      value: 'uUwZgwDOxcBXrQcntwu+kYFpkiVkOaezL0WYEZ3anJc=',
+      description: 'GitHub Primary Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    },
+    {
+      type: 'sha256',
+      value: 'k1Hdw5sdSn5kiqNcS7bFgKUEM1GSdWR6EaYCte7qK7Ig=',
+      description: 'GitHub Backup Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    }
+  ],
+  'api.github.com': [
+    {
+      type: 'sha256',
+      value: 'uUwZgwDOxcBXrQcntwu+kYFpkiVkOaezL0WYEZ3anJc=',
+      description: 'GitHub API Primary Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    }
+  ],
+  'login.microsoftonline.com': [
+    {
+      type: 'sha256',
+      value: 'qIg46vWbGq6kUVWOS4IPOzGokzIWr3j5DGVe4yF5aDM=',
+      description: 'Microsoft Login Primary Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    },
+    {
+      type: 'sha256',
+      value: 'Q4tiSEP1jqPOBdGl88Iuys8cdfyOd5VT5pJhpGtf2YY=',
+      description: 'Microsoft Login Backup Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    }
+  ],
+  'graph.microsoft.com': [
+    {
+      type: 'sha256',
+      value: 'qIg46vWbGq6kUVWOS4IPOzGokzIWr3j5DGVe4yF5aDM=',
+      description: 'Microsoft Graph Primary Pin',
+      createdAt: new Date('2025-01-01'),
+      expiresAt: new Date('2026-01-01')
+    }
+  ]
+};
+
+const DEFAULT_PIN_CONFIG: CertificatePinConfig = {
+  enabled: process.env.NODE_ENV === 'production',
+  pins: DEFAULT_CERTIFICATE_PINS,
+  backupPins: {},
+  pinValidation: {
+    enforceBackupPins: true,
+    pinFailureAction: 'block',
+    pinUpdateCheckInterval: 24 // Check every 24 hours
+  },
+  allowedDomains: ['*'], // Allow all domains by default
+  pinnedDomains: Object.keys(DEFAULT_CERTIFICATE_PINS)
+};
+
+export class CertificatePinningManager {
+  private config: CertificatePinConfig;
+  private pinCache: Map<string, PinValidationResult> = new Map();
+  private lastPinCheck: Map<string, Date> = new Map();
+
+  constructor(customConfig?: Partial<CertificatePinConfig>) {
+    this.config = { ...DEFAULT_PIN_CONFIG, ...customConfig };
+  }
+
+  /**
+   * Get current certificate pinning configuration
+   */
+  getConfig(): CertificatePinConfig {
+    return { ...this.config };
+  }
+
+  /**
+   * Update certificate pinning configuration
+   */
+  updateConfig(updates: Partial<CertificatePinConfig>): void {
+    this.config = { ...this.config, ...updates };
+  }
+
+  /**
+   * Add a new certificate pin for a domain
+   */
+  addPin(hostname: string, pin: CertificatePin): void {
+    if (!this.config.pins[hostname]) {
+      this.config.pins[hostname] = [];
+    }
+    this.config.pins[hostname].push(pin);
+    
+    // Clear cache for this hostname
+    this.clearCacheForHostname(hostname);
+  }
+
+  /**
+   * Remove a certificate pin for a domain
+   */
+  removePin(hostname: string, pinValue: string): boolean {
+    if (!this.config.pins[hostname]) {
+      return false;
+    }
+
+    const initialLength = this.config.pins[hostname].length;
+    this.config.pins[hostname] = this.config.pins[hostname].filter(
+      pin => pin.value !== pinValue
+    );
+
+    const removed = this.config.pins[hostname].length < initialLength;
+    if (removed) {
+      this.clearCacheForHostname(hostname);
+    }
+
+    return removed;
+  }
+
+  /**
+   * Validate certificate against pinned certificates
+   */
+  async validateCertificatePin(
+    hostname: string, 
+    certificate: crypto.X509Certificate
+  ): Promise<PinValidationResult> {
+    const cacheKey = `${hostname}:${certificate.fingerprint}`;
+    
+    // Check cache first
+    if (this.pinCache.has(cacheKey)) {
+      const cached = this.pinCache.get(cacheKey)!;
+      // Cache for 1 hour
+      if (Date.now() - cached.certificate?.checkedAt < 3600000) {
+        return cached;
+      }
+    }
+
+    const result = await this.performPinValidation(hostname, certificate);
+    
+    // Cache the result
+    result.certificate = { ...result.certificate, checkedAt: Date.now() };
+    this.pinCache.set(cacheKey, result);
+    
+    return result;
+  }
+
+  /**
+   * Perform actual pin validation
+   */
+  private async performPinValidation(
+    hostname: string,
+    certificate: crypto.X509Certificate
+  ): Promise<PinValidationResult> {
+    const errors: string[] = [];
+    const warnings: string[] = [];
+    let matchedPin: CertificatePin | undefined;
+
+    // Check if pinning is enabled
+    if (!this.config.enabled) {
+      return {
+        valid: true,
+        hostname,
+        certificate,
+        errors,
+        warnings: ['Certificate pinning is disabled']
+      };
+    }
+
+    // Check if this domain should be pinned
+    const pins = this.config.pins[hostname];
+    if (!pins || pins.length === 0) {
+      // If no pins are configured for this domain, allow the connection
+      // but warn if it's in the pinned domains list
+      if (this.config.pinnedDomains.includes(hostname)) {
+        warnings.push(`No pins configured for pinned domain: ${hostname}`);
+      }
+      
+      return {
+        valid: true,
+        hostname,
+        certificate,
+        errors,
+        warnings
+      };
+    }
+
+    // Validate against each pin
+    for (const pin of pins) {
+      // Check if pin has expired
+      if (pin.expiresAt && new Date() > pin.expiresAt) {
+        warnings.push(`Pin expired for ${hostname}: ${pin.description || pin.value}`);
+        continue;
+      }
+
+      const isMatch = await this.checkPinMatch(certificate, pin);
+      if (isMatch) {
+        matchedPin = pin;
+        break;
+      }
+    }
+
+    // If no pin matched, check backup pins
+    if (!matchedPin && this.config.backupPins[hostname]) {
+      for (const backupPin of this.config.backupPins[hostname]) {
+        if (backupPin.expiresAt && new Date() > backupPin.expiresAt) {
+          continue;
+        }
+
+        const isMatch = await this.checkPinMatch(certificate, backupPin);
+        if (isMatch) {
+          matchedPin = backupPin;
+          warnings.push(`Certificate matched backup pin for ${hostname}`);
+          break;
+        }
+      }
+    }
+
+    // Determine if validation passed
+    const valid = matchedPin !== undefined;
+
+    if (!valid) {
+      errors.push(`Certificate pinning failed for ${hostname}: No matching pins found`);
+      errors.push(`Certificate fingerprint: ${certificate.fingerprint}`);
+      errors.push(`Certificate subject: ${certificate.subject}`);
+    }
+
+    return {
+      valid,
+      matchedPin,
+      hostname,
+      certificate,
+      errors,
+      warnings
+    };
+  }
+
+  /**
+   * Check if certificate matches a specific pin
+   */
+  private async checkPinMatch(
+    certificate: crypto.X509Certificate,
+    pin: CertificatePin
+  ): Promise<boolean> {
+    try {
+      switch (pin.type) {
+        case 'sha256':
+          const sha256Hash = crypto.createHash('sha256')
+            .update(certificate.raw)
+            .digest('base64');
+          return sha256Hash === pin.value;
+
+        case 'sha1':
+          const sha1Hash = crypto.createHash('sha1')
+            .update(certificate.raw)
+            .digest('base64');
+          return sha1Hash === pin.value;
+
+        case 'spki':
+          // Subject Public Key Info pinning
+          const spkiHash = crypto.createHash('sha256')
+            .update(certificate.publicKey.export({ format: 'der', type: 'spki' }))
+            .digest('base64');
+          return spkiHash === pin.value;
+
+        case 'subject':
+          return certificate.subject === pin.value;
+
+        default:
+          return false;
+      }
+    } catch (error) {
+      // If there's an error checking the pin, consider it a non-match
+      return false;
+    }
+  }
+
+  /**
+   * Create a custom HTTPS agent with certificate pinning
+   */
+  createPinnedHTTPSAgent(): https.Agent {
+    return new https.Agent({
+      checkServerIdentity: (hostname: string, cert: any) => {
+        // First, perform standard hostname verification
+        const hostnameError = tls.checkServerIdentity(hostname, cert);
+        if (hostnameError) {
+          return hostnameError;
+        }
+
+        // Then perform certificate pinning validation
+        try {
+          const x509Cert = new crypto.X509Certificate(cert.raw);
+          const validationResult = this.performPinValidation(hostname, x509Cert);
+          
+          validationResult.then(result => {
+            if (!result.valid) {
+              const action = this.config.pinValidation.pinFailureAction;
+              
+              if (action === 'block') {
+                throw new Error(`Certificate pinning failed: ${result.errors.join(', ')}`);
+              } else if (action === 'warn') {
+                console.warn(`Certificate pinning warning for ${hostname}:`, result.errors);
+              } else if (action === 'log') {
+                console.log(`Certificate pinning info for ${hostname}:`, result.errors);
+              }
+            }
+          }).catch(error => {
+            if (this.config.pinValidation.pinFailureAction === 'block') {
+              throw error;
+            }
+          });
+
+          return undefined; // No error
+        } catch (error) {
+          if (this.config.pinValidation.pinFailureAction === 'block') {
+            return error as Error;
+          }
+          return undefined;
+        }
+      }
+    });
+  }
+
+  /**
+   * Create a pinned fetch function
+   */
+  createPinnedFetch(): typeof fetch {
+    const agent = this.createPinnedHTTPSAgent();
+    
+    return async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+      const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+      
+      // Only apply pinning to HTTPS URLs
+      if (url.startsWith('https://')) {
+        const modifiedInit = {
+          ...init,
+          // @ts-ignore - Node.js specific agent option
+          agent: agent
+        };
+        return fetch(input, modifiedInit);
+      }
+      
+      return fetch(input, init);
+    };
+  }
+
+  /**
+   * Validate all configured pins
+   */
+  async validateAllPins(): Promise<{ valid: boolean; results: Record<string, any> }> {
+    const results: Record<string, any> = {};
+    let allValid = true;
+
+    for (const [hostname, pins] of Object.entries(this.config.pins)) {
+      try {
+        // Test connection to the hostname
+        const testResult = await this.testPinnedConnection(hostname);
+        results[hostname] = testResult;
+        
+        if (!testResult.valid) {
+          allValid = false;
+        }
+      } catch (error) {
+        results[hostname] = {
+          valid: false,
+          error: error instanceof Error ? error.message : 'Unknown error'
+        };
+        allValid = false;
+      }
+    }
+
+    return { valid: allValid, results };
+  }
+
+  /**
+   * Test a pinned connection to a hostname
+   */
+  private async testPinnedConnection(hostname: string, port: number = 443): Promise<any> {
+    return new Promise((resolve) => {
+      const socket = tls.connect(port, hostname, {
+        checkServerIdentity: (host: string, cert: any) => {
+          try {
+            const x509Cert = new crypto.X509Certificate(cert.raw);
+            this.performPinValidation(host, x509Cert).then(result => {
+              resolve(result);
+            });
+            return undefined;
+          } catch (error) {
+            resolve({
+              valid: false,
+              hostname,
+              errors: [error instanceof Error ? error.message : 'Unknown error']
+            });
+            return error as Error;
+          }
+        }
+      });
+
+      socket.on('error', (error) => {
+        resolve({
+          valid: false,
+          hostname,
+          errors: [error.message]
+        });
+      });
+
+      socket.setTimeout(5000, () => {
+        socket.destroy();
+        resolve({
+          valid: false,
+          hostname,
+          errors: ['Connection timeout']
+        });
+      });
+    });
+  }
+
+  /**
+   * Clear cache for a specific hostname
+   */
+  private clearCacheForHostname(hostname: string): void {
+    for (const [key] of this.pinCache) {
+      if (key.startsWith(`${hostname}:`)) {
+        this.pinCache.delete(key);
+      }
+    }
+  }
+
+  /**
+   * Clear all cached pin validation results
+   */
+  clearCache(): void {
+    this.pinCache.clear();
+  }
+
+  /**
+   * Get statistics about pin validation
+   */
+  getStatistics(): {
+    totalPins: number;
+    pinnedDomains: number;
+    cacheSize: number;
+    lastChecks: Record<string, Date>;
+  } {
+    const totalPins = Object.values(this.config.pins)
+      .reduce((sum, pins) => sum + pins.length, 0);
+
+    return {
+      totalPins,
+      pinnedDomains: Object.keys(this.config.pins).length,
+      cacheSize: this.pinCache.size,
+      lastChecks: Object.fromEntries(this.lastPinCheck)
+    };
+  }
+}
+
+/**
+ * Create development certificate pinning configuration
+ */
+export function createDevelopmentPinConfig(): CertificatePinConfig {
+  return {
+    ...DEFAULT_PIN_CONFIG,
+    enabled: false, // Disabled for development
+    pinValidation: {
+      enforceBackupPins: false,
+      pinFailureAction: 'warn',
+      pinUpdateCheckInterval: 1 // Check every hour in dev
+    }
+  };
+}
+
+/**
+ * Create production certificate pinning configuration
+ */
+export function createProductionPinConfig(): CertificatePinConfig {
+  return {
+    ...DEFAULT_PIN_CONFIG,
+    enabled: true,
+    pinValidation: {
+      enforceBackupPins: true,
+      pinFailureAction: 'block',
+      pinUpdateCheckInterval: 24 // Check every 24 hours
+    }
+  };
+}
+
+/**
+ * Load certificate pinning configuration from environment
+ */
+export function loadPinConfigFromEnv(): CertificatePinConfig {
+  const config: CertificatePinConfig = { ...DEFAULT_PIN_CONFIG };
+
+  if (process.env.CERT_PINNING_ENABLED) {
+    config.enabled = process.env.CERT_PINNING_ENABLED === 'true';
+  }
+
+  if (process.env.CERT_PIN_FAILURE_ACTION) {
+    config.pinValidation.pinFailureAction = process.env.CERT_PIN_FAILURE_ACTION as any;
+  }
+
+  if (process.env.CERT_PIN_CHECK_INTERVAL) {
+    config.pinValidation.pinUpdateCheckInterval = parseInt(process.env.CERT_PIN_CHECK_INTERVAL);
+  }
+
+  return config;
+}
+
 export default TLSConfigManager;

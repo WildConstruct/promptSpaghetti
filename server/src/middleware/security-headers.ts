@@ -281,13 +281,20 @@ export function auditSecurityHeaders(responseHeaders: Record<string, string>): S
   ];
 
   const results = expectedHeaders.map(expected => {
-    const present = expected.name in responseHeaders || 
-      (expected.alternatives?.some(alt => alt in responseHeaders) ?? false);
+    // Case-insensitive header lookup
+    const headerKeys = Object.keys(responseHeaders);
+    const headerName = headerKeys.find(key => key.toLowerCase() === expected.name.toLowerCase()) || expected.name;
+    const altHeaderName = expected.alternatives?.find(alt => 
+      headerKeys.find(key => key.toLowerCase() === alt.toLowerCase())
+    );
+    
+    const present = headerName in responseHeaders || altHeaderName !== undefined;
+    const value = responseHeaders[headerName] || (altHeaderName ? responseHeaders[headerKeys.find(key => key.toLowerCase() === altHeaderName.toLowerCase())!] : undefined);
     
     return {
       name: expected.name,
       present,
-      value: responseHeaders[expected.name],
+      value,
       recommendation: present ? undefined : expected.recommendation,
       severity: expected.severity,
       score: present ? expected.score : 0

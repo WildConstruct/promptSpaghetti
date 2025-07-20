@@ -17,13 +17,13 @@ export const NodeTypeEnum = z.enum([
     'Sequential',
     'Markov',
     // Epic 8 Python Integration
-    'PythonTransform',
+    'PythonTransform'
 ]);
 // Base node schema for cross-platform compatibility
 export const BaseNodeSchema = z.object({
     id: z.string(),
     type: NodeTypeEnum,
-    inputs: z.array(z.string()).optional(), // ids of upstream nodes (ordered)
+    inputs: z.array(z.string()).optional() // ids of upstream nodes (ordered)
 });
 // Abstract base for runtime nodes
 export class RuntimeNode {

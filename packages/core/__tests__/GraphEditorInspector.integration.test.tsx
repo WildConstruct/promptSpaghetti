@@ -1,13 +1,11 @@
-/// <reference types="@testing-library/jest-dom" />
 
 import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-// @ts-ignore
 import userEvent from '@testing-library/user-event';
 import { GraphEditor } from '../GraphEditor';
 import { nodeSchemas } from '../nodeSchemas';
-import { Edge } from '../index';
+import type { Edge } from 'reactflow';
 
 describe('GraphEditor integration: InspectorSidebar', () => {
   const nodes = [

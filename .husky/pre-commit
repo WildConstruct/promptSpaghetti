@@ -1,6 +1,13 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Auto-fix TypeScript issues before linting
+if [ -f "scripts/auto-fix-typescript-issues.js" ]; then
+  echo "🔧 Auto-fixing TypeScript issues..."
+  node scripts/auto-fix-typescript-issues.js
+  git add . # Re-stage any auto-fixes
+fi
+
 # Run linting on staged files using active configuration
 if [ -f ".lintstagedrc.active.js" ]; then
   echo "🔧 Using permissive linting mode (.lintstagedrc.active.js)"

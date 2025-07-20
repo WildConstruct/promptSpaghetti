@@ -149,6 +149,39 @@ export class EmailService {
     await this.sendEmail(email, template);
   }
 
+  // Location verification method for LocationVerificationService
+  async sendLocationVerification(
+    userId: string,
+    data: {
+      code: string;
+      location: {
+        city: string;
+        country: string;
+        region: string;
+      };
+      ipAddress: string;
+      userAgent: string;
+      expiryMinutes: number;
+      timestamp: Date;
+    }
+  ): Promise<void> {
+    // In a real implementation, you'd get the user's email from the database
+    // For now, we'll use a placeholder email
+    const email = `user-${userId}@example.com`; // TODO: Get actual email from database
+    
+    const template = this.renderEmailTemplate('locationVerification', {
+      displayName: email.split('@')[0],
+      code: data.code,
+      location: data.location,
+      ipAddress: data.ipAddress,
+      userAgent: data.userAgent,
+      expiryMinutes: data.expiryMinutes,
+      timestamp: data.timestamp
+    });
+
+    await this.sendEmail(email, template);
+  }
+
   // Enhanced password reset methods for PasswordResetService
   async sendPasswordResetEmail(data: {
     to: string;
@@ -577,6 +610,106 @@ export class EmailService {
           Accept your invitation: ${data.invitationUrl}
           
           This invitation will expire in ${data.expiryDays} days.
+          
+          © 2025 PromptScape. All rights reserved.
+        `
+      },
+
+      locationVerification: {
+        subject: 'Verify your login location - PromptScape',
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Location Verification</title>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: #f59e0b; color: white; padding: 20px; text-align: center; }
+              .content { padding: 30px 20px; }
+              .verification-code { 
+                background: #f3f4f6; 
+                border: 2px solid #f59e0b; 
+                border-radius: 8px; 
+                padding: 20px; 
+                text-align: center; 
+                margin: 20px 0;
+                font-size: 24px;
+                font-weight: bold;
+                letter-spacing: 3px;
+                color: #1f2937;
+              }
+              .footer { background: #f8f9fa; padding: 20px; font-size: 12px; color: #666; }
+              .warning { background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 5px; margin: 20px 0; }
+              .location-info { background: #eff6ff; border: 1px solid #3b82f6; padding: 15px; border-radius: 5px; margin: 20px 0; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>🔐 Location Verification Required</h1>
+              </div>
+              <div class="content">
+                <h2>Hi ${data.displayName},</h2>
+                <p>We detected a login attempt from a new location and need to verify it's really you.</p>
+                
+                <div class="location-info">
+                  <h3>🌍 Login detected from:</h3>
+                  <p><strong>${data.location.city}, ${data.location.region}, ${data.location.country}</strong></p>
+                  <p><strong>IP Address:</strong> ${data.ipAddress}</p>
+                  <p><strong>Time:</strong> ${data.timestamp?.toLocaleString()}</p>
+                </div>
+                
+                <p>Please enter this verification code to complete your login:</p>
+                
+                <div class="verification-code">
+                  ${data.code}
+                </div>
+                
+                <div class="warning">
+                  <strong>⚡ This code expires in ${data.expiryMinutes} minutes.</strong> If you didn't attempt to log in, please secure your account immediately by changing your password.
+                </div>
+                
+                <h3>📱 Login attempt details:</h3>
+                <ul>
+                  <li><strong>Device:</strong> ${data.userAgent || 'Unknown device'}</li>
+                  <li><strong>Location:</strong> ${data.location.city}, ${data.location.country}</li>
+                  <li><strong>Time:</strong> ${data.timestamp?.toLocaleString()}</li>
+                </ul>
+                
+                <p>If this wasn't you, please:</p>
+                <ul>
+                  <li>Change your password immediately</li>
+                  <li>Enable two-factor authentication</li>
+                  <li>Contact our support team</li>
+                </ul>
+              </div>
+              <div class="footer">
+                <p>This verification was triggered by a login attempt from ${data.ipAddress}.</p>
+                <p>© 2025 PromptScape. All rights reserved.</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+        text: `
+          Location Verification Required
+          
+          Hi ${data.displayName},
+          
+          We detected a login attempt from a new location: ${data.location.city}, ${data.location.country}
+          
+          Verification code: ${data.code}
+          
+          This code expires in ${data.expiryMinutes} minutes.
+          
+          Login details:
+          - IP Address: ${data.ipAddress}
+          - Device: ${data.userAgent || 'Unknown device'}
+          - Time: ${data.timestamp?.toLocaleString()}
+          
+          If this wasn't you, please change your password immediately and contact support.
           
           © 2025 PromptScape. All rights reserved.
         `

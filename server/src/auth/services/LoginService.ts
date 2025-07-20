@@ -17,6 +17,7 @@ import { AccountLockoutService } from './AccountLockoutService';
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 import { AUDIT_EVENTS, RATE_LIMIT_RULES } from '../config';
+import { GeolocationService, GeolocationData } from './GeolocationService';
 
 export interface LoginAttempt {
   userId?: string;
@@ -27,6 +28,13 @@ export interface LoginAttempt {
   timestamp: Date;
   failureReason?: string;
   deviceFingerprint?: string;
+  geolocationData?: GeolocationData;
+  locationAnalysis?: {
+    isNewLocation: boolean;
+    isTypicalLocation: boolean;
+    distanceFromNearestKm?: number;
+    suspiciousIndicators: string[];
+  };
 }
 
 export interface LoginAnalytics {
@@ -68,6 +76,7 @@ export class LoginService {
   private rateLimitService: RateLimitService;
   private emailService: EmailService;
   private lockoutService: AccountLockoutService;
+  private geolocationService: GeolocationService;
   private db: DatabaseService;
   private redis: RedisService;
   private config: AuthConfig;
@@ -80,6 +89,7 @@ export class LoginService {
     rateLimitService: RateLimitService,
     emailService: EmailService,
     lockoutService: AccountLockoutService,
+    geolocationService: GeolocationService,
     db: DatabaseService,
     redis: RedisService
   ) {
@@ -90,8 +100,44 @@ export class LoginService {
     this.rateLimitService = rateLimitService;
     this.emailService = emailService;
     this.lockoutService = lockoutService;
+    this.geolocationService = geolocationService;
     this.db = db;
     this.redis = redis;
+  }
+
+  /**
+   * Get comprehensive geolocation data for login context
+   */
+  private async getLocationData(context: {
+    ipAddress?: string;
+    userAgent?: string;
+    deviceFingerprint?: string;
+    geoLocation?: {
+      country?: string;
+      city?: string;
+      timezone?: string;
+    };
+  }): Promise<GeolocationData> {
+    if (!context.ipAddress) {
+      return {
+        country: 'Unknown',
+        countryCode: 'XX',
+        region: 'Unknown',
+        regionCode: 'XX',
+        city: 'Unknown',
+        timezone: 'UTC',
+        confidence: 0.1,
+        source: 'fallback'
+      };
+    }
+
+    // Extract headers from context.geoLocation if available
+    const headers = context.geoLocation ? {
+      'cf-ipcountry': context.geoLocation.country,
+      'cf-timezone': context.geoLocation.timezone
+    } : undefined;
+
+    return await this.geolocationService.getGeolocationData(context.ipAddress, headers);
   }
 
   async login(
@@ -143,13 +189,23 @@ export class LoginService {
       const tokens = await this.generateTokens(user);
       const session = await this.createSession(user, request, context);
 
+      // Get comprehensive geolocation data
+      const geolocationData = await this.getLocationData(context);
+      
+      // Track user location for security analysis
+      const locationAnalysis = user ? await this.geolocationService.trackLoginLocation(
+        user.id,
+        context.ipAddress || '',
+        geolocationData
+      ) : undefined;
+
       // Update user login information
       await this.updateLoginData(user, context);
 
       // Send security notifications if needed
-      await this.handleSecurityNotifications(user, context, session);
+      await this.handleSecurityNotifications(user, context, session, locationAnalysis);
 
-      // Log successful login
+      // Log successful login with location data
       await this.logLoginAttempt({
         userId: user.id,
         email: request.email,
@@ -157,7 +213,9 @@ export class LoginService {
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         timestamp: new Date(),
-        deviceFingerprint: context.deviceFingerprint
+        deviceFingerprint: context.deviceFingerprint,
+        geolocationData,
+        locationAnalysis
       });
 
       // Track login analytics
@@ -171,6 +229,16 @@ export class LoginService {
         sessionId: session.id
       };
     } catch (error) {
+      // Get geolocation data for failed attempts too
+      const geolocationData = await this.getLocationData(context);
+      
+      // Track location for failed attempts (helps with security analysis)
+      const locationAnalysis = user ? await this.geolocationService.trackLoginLocation(
+        user.id,
+        context.ipAddress || '',
+        geolocationData
+      ) : undefined;
+
       // Record failed login attempt with lockout service
       await this.lockoutService.recordLoginAttempt({
         userId: user?.id,
@@ -182,7 +250,7 @@ export class LoginService {
         failureReason: error.message
       });
 
-      // Log failed login attempt for audit
+      // Log failed login attempt for audit with location data
       await this.logLoginAttempt({
         userId: user?.id,
         email: request.email,
@@ -191,7 +259,9 @@ export class LoginService {
         userAgent: context.userAgent,
         timestamp: new Date(),
         failureReason: error.message,
-        deviceFingerprint: context.deviceFingerprint
+        deviceFingerprint: context.deviceFingerprint,
+        geolocationData,
+        locationAnalysis
       });
 
       // Track failure analytics
@@ -603,15 +673,25 @@ export class LoginService {
   private async handleSecurityNotifications(
     user: User,
     context: any,
-    session: UserSession
+    session: UserSession,
+    locationAnalysis?: {
+      isNewLocation: boolean;
+      isTypicalLocation: boolean;
+      distanceFromNearestKm?: number;
+      suspiciousIndicators: string[];
+    }
   ): Promise<void> {
     // Check for new device
     const isNewDevice = await this.isNewDevice(user.id, context.deviceFingerprint);
     
-    // Check for unusual location
+    // Check for unusual location using new geolocation analysis
+    const hasLocationConcerns = locationAnalysis && (
+      locationAnalysis.isNewLocation || 
+      locationAnalysis.suspiciousIndicators.length > 0
+    );
     const isUnusualLocation = await this.isUnusualLocation(user.id, context.geoLocation);
 
-    if (isNewDevice || isUnusualLocation) {
+    if (isNewDevice || isUnusualLocation || hasLocationConcerns) {
       // Send security alert email
       await this.emailService.sendLoginAlert(user.email, {
         displayName: user.displayName,

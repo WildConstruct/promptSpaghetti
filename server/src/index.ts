@@ -42,7 +42,29 @@ import { AnomalyDetectionService, AnomalyDetectionConfig } from './services/Anom
 import { anomalyDetectionRoutes } from './routes/anomaly-detection';
 import { VerificationThresholdService } from './services/VerificationThresholdService';
 import { verificationThresholdRoutes } from './routes/verification-threshold';
+import { LocationDetectionService, LocationDetectionConfig } from './services/LocationDetectionService';
+import { locationDetectionRoutes } from './routes/location-detection';
+import { 
+  LocationHistoryAnalysisService,
+  LocationHistoryAnalysisConfig
+} from './services/LocationHistoryAnalysisService';
+import { locationHistoryAnalysisRoutes } from './routes/location-history-analysis';
+import { DeviceFingerprintingService, DeviceFingerprintConfig } from './services/DeviceFingerprintingService';
+import { deviceFingerprintingRoutes } from './routes/device-fingerprinting';
+import { NewDeviceDetectionService, NewDevicePolicy } from './services/NewDeviceDetectionService';
+import { newDeviceDetectionRoutes } from './routes/new-device-detection';
+import { BehaviorAnalyticsService, BehaviorAnalyticsConfig } from './auth/services/BehaviorAnalyticsService';
+import { behaviorAnalyticsRoutes } from './routes/behavior-analytics';
 import referrerPolicyPlugin from './plugins/referrer-policy';
+import { 
+  PayloadEncryptionService, 
+  defaultPayloadEncryptionConfig,
+  requestEncryptionMiddleware,
+  responseEncryptionMiddleware,
+  encryptionStatusMiddleware
+} from './middleware/payload-encryption';
+import { payloadEncryptionRoutes } from './routes/payload-encryption';
+import { KeyManagementService, KeyManagementConfig } from './services/KeyManagementService';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -189,7 +211,56 @@ try {
 let anomalyDetectionService: AnomalyDetectionService | undefined;
 try {
   const db = getDatabase();
-  const auditService = new AuditService(db as any);
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
+  };
+  const auditService = new AuditService(authConfig, db as any);
   
   // Anomaly detection configuration
   const anomalyConfig: AnomalyDetectionConfig = {
@@ -226,7 +297,56 @@ try {
 let verificationThresholdService: VerificationThresholdService | undefined;
 try {
   const db = getDatabase();
-  const auditService = new AuditService(db as any);
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
+  };
+  const auditService = new AuditService(authConfig, db as any);
   
   verificationThresholdService = new VerificationThresholdService(
     db as any,
@@ -249,8 +369,482 @@ try {
   // Continue without verification threshold service - this is non-critical for basic operation
 }
 
+// Initialize location detection service
+let locationDetectionService: LocationDetectionService | undefined;
+try {
+  const db = getDatabase();
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
+  };
+  const auditService = new AuditService(authConfig, db as any);
+  
+  // Location detection configuration
+  const locationConfig: LocationDetectionConfig = {
+    enabled: process.env.LOCATION_DETECTION_ENABLED !== 'false',
+    providers: {
+      primary: (process.env.LOCATION_PROVIDER as any) || 'ipapi',
+      fallback: process.env.LOCATION_FALLBACK_PROVIDERS?.split(',') || ['ipgeolocation'],
+      apiKeys: {
+        ipgeolocation: process.env.IPGEOLOCATION_API_KEY || '',
+        ipstack: process.env.IPSTACK_API_KEY || '',
+        maxmind: process.env.MAXMIND_LICENSE_KEY || ''
+      }
+    },
+    riskThresholds: {
+      newCountry: parseInt(process.env.LOCATION_NEW_COUNTRY_RISK || '50'),
+      newCity: parseInt(process.env.LOCATION_NEW_CITY_RISK || '25'),
+      impossibleTravel: parseInt(process.env.LOCATION_IMPOSSIBLE_TRAVEL_RISK || '80'),
+      proxyDetection: parseInt(process.env.LOCATION_PROXY_RISK || '60'),
+      maliciousIP: parseInt(process.env.LOCATION_MALICIOUS_IP_RISK || '90')
+    },
+    impossibleTravel: {
+      enabled: process.env.IMPOSSIBLE_TRAVEL_ENABLED !== 'false',
+      maxSpeedKmh: parseInt(process.env.IMPOSSIBLE_TRAVEL_MAX_SPEED || '1000'), // Commercial aircraft speed
+      minimumTimeMinutes: parseInt(process.env.IMPOSSIBLE_TRAVEL_MIN_TIME || '10'),
+      alertThresholdKm: parseInt(process.env.IMPOSSIBLE_TRAVEL_THRESHOLD || '100')
+    },
+    cache: {
+      ipLocationTtl: parseInt(process.env.LOCATION_IP_CACHE_TTL || '3600'), // 1 hour
+      userLocationTtl: parseInt(process.env.LOCATION_USER_CACHE_TTL || '1800'), // 30 minutes
+      riskScoreTtl: parseInt(process.env.LOCATION_RISK_CACHE_TTL || '900') // 15 minutes
+    },
+    regionalRisk: {
+      enabled: process.env.REGIONAL_RISK_ENABLED !== 'false',
+      highRiskCountries: process.env.HIGH_RISK_COUNTRIES?.split(',') || ['XX', 'YY'], // Fictional codes for demo
+      highRiskRegions: process.env.HIGH_RISK_REGIONS?.split(',') || [],
+      riskWeights: {}
+    },
+    notifications: {
+      enabled: process.env.LOCATION_NOTIFICATIONS_ENABLED !== 'false',
+      alertOnNewCountry: process.env.LOCATION_ALERT_NEW_COUNTRY !== 'false',
+      alertOnImpossibleTravel: process.env.LOCATION_ALERT_IMPOSSIBLE_TRAVEL !== 'false',
+      alertOnProxyDetection: process.env.LOCATION_ALERT_PROXY !== 'false',
+      webhookUrl: process.env.LOCATION_WEBHOOK_URL
+    }
+  };
+
+  locationDetectionService = new LocationDetectionService(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService,
+    locationConfig
+  );
+
+  console.log('Location detection service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize location detection service:', error);
+  // Continue without location detection service - this is non-critical for basic operation
+}
+
+// Initialize location history analysis service
+let locationHistoryAnalysisService: LocationHistoryAnalysisService | undefined;
+try {
+  const db = getDatabase();
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
+  };
+  const auditService = new AuditService(authConfig, db as any);
+  
+  // Location history analysis configuration
+  const historyAnalysisConfig: LocationHistoryAnalysisConfig = {
+    enabled: process.env.LOCATION_HISTORY_ANALYSIS_ENABLED !== 'false',
+    clustering: {
+      minPointsForCluster: parseInt(process.env.LOCATION_MIN_CLUSTER_POINTS || '3'),
+      maxDistanceKm: parseInt(process.env.LOCATION_MAX_CLUSTER_DISTANCE || '5'),
+      minTimeForHomeDetection: parseInt(process.env.LOCATION_MIN_HOME_DETECTION_DAYS || '7'),
+      confidenceThreshold: parseFloat(process.env.LOCATION_CONFIDENCE_THRESHOLD || '0.6')
+    },
+    travelAnalysis: {
+      enabled: process.env.TRAVEL_ANALYSIS_ENABLED !== 'false',
+      maxReasonableSpeedKmh: parseInt(process.env.TRAVEL_MAX_SPEED || '1000'),
+      minTravelDistanceKm: parseInt(process.env.TRAVEL_MIN_DISTANCE || '10'),
+      anomalyDetectionSensitivity: (process.env.TRAVEL_ANOMALY_SENSITIVITY as any) || 'medium'
+    },
+    riskScoring: {
+      noveltyWeight: parseFloat(process.env.RISK_NOVELTY_WEIGHT || '0.3'),
+      frequencyWeight: parseFloat(process.env.RISK_FREQUENCY_WEIGHT || '0.2'),
+      geopoliticalWeight: parseFloat(process.env.RISK_GEOPOLITICAL_WEIGHT || '0.2'),
+      temporalWeight: parseFloat(process.env.RISK_TEMPORAL_WEIGHT || '0.3')
+    },
+    anomalyDetection: {
+      enabled: process.env.LOCATION_ANOMALY_DETECTION_ENABLED !== 'false',
+      sensitivityLevel: parseFloat(process.env.LOCATION_ANOMALY_SENSITIVITY || '0.7'),
+      falsePositiveThreshold: parseFloat(process.env.LOCATION_FALSE_POSITIVE_THRESHOLD || '0.2'),
+      autoResolveAfterDays: parseInt(process.env.LOCATION_AUTO_RESOLVE_DAYS || '30')
+    },
+    cache: {
+      profileCacheTtl: parseInt(process.env.LOCATION_PROFILE_CACHE_TTL || '3600'), // 1 hour
+      analysisCacheTtl: parseInt(process.env.LOCATION_ANALYSIS_CACHE_TTL || '1800'), // 30 minutes
+      batchAnalysisSize: parseInt(process.env.LOCATION_BATCH_SIZE || '50')
+    }
+  };
+
+  locationHistoryAnalysisService = new LocationHistoryAnalysisService(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService,
+    historyAnalysisConfig
+  );
+
+  console.log('Location history analysis service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize location history analysis service:', error);
+  // Continue without location history analysis service - this is non-critical for basic operation
+}
+
+// Initialize device fingerprinting service
+let deviceFingerprintingService: DeviceFingerprintingService | undefined;
+try {
+  const db = getDatabase();
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
+  };
+  const auditService = new AuditService(authConfig, db as any);
+  
+  // Device fingerprinting configuration
+  const deviceFingerprintConfig: DeviceFingerprintConfig = {
+    enabled: process.env.DEVICE_FINGERPRINTING_ENABLED !== 'false',
+    components: {
+      collectCanvas: process.env.DEVICE_COLLECT_CANVAS !== 'false',
+      collectAudio: process.env.DEVICE_COLLECT_AUDIO !== 'false',
+      collectWebGL: process.env.DEVICE_COLLECT_WEBGL !== 'false',
+      collectFonts: process.env.DEVICE_COLLECT_FONTS !== 'false',
+      collectPlugins: process.env.DEVICE_COLLECT_PLUGINS !== 'false',
+      collectWebRTC: process.env.DEVICE_COLLECT_WEBRTC === 'true', // Disabled by default for privacy
+      collectHardware: process.env.DEVICE_COLLECT_HARDWARE !== 'false'
+    },
+    trustScoring: {
+      newDevicePenalty: parseInt(process.env.DEVICE_NEW_PENALTY || '10'),
+      consistencyBonus: parseInt(process.env.DEVICE_CONSISTENCY_BONUS || '5'),
+      anomalyPenalty: parseInt(process.env.DEVICE_ANOMALY_PENALTY || '15'),
+      verificationBonus: parseInt(process.env.DEVICE_VERIFICATION_BONUS || '20'),
+      ageBonus: parseInt(process.env.DEVICE_AGE_BONUS || '10')
+    },
+    thresholds: {
+      minimumTrustScore: parseInt(process.env.DEVICE_MIN_TRUST_SCORE || '40'),
+      suspiciousActivityThreshold: parseInt(process.env.DEVICE_SUSPICIOUS_THRESHOLD || '30'),
+      autoBlockThreshold: parseInt(process.env.DEVICE_AUTO_BLOCK_THRESHOLD || '20'),
+      fingerprintChangeThreshold: parseInt(process.env.DEVICE_FINGERPRINT_CHANGE_THRESHOLD || '90')
+    },
+    cache: {
+      deviceProfileTtl: parseInt(process.env.DEVICE_PROFILE_TTL || '3600'), // 1 hour
+      fingerprintTtl: parseInt(process.env.DEVICE_FINGERPRINT_TTL || '7200'), // 2 hours
+      trustScoreTtl: parseInt(process.env.DEVICE_TRUST_SCORE_TTL || '1800') // 30 minutes
+    },
+    privacy: {
+      hashSensitiveData: process.env.DEVICE_HASH_SENSITIVE !== 'false',
+      excludeFields: process.env.DEVICE_EXCLUDE_FIELDS?.split(',') || ['webRTC'],
+      anonymizeIPs: process.env.DEVICE_ANONYMIZE_IPS !== 'false'
+    }
+  };
+
+  deviceFingerprintingService = new DeviceFingerprintingService(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService,
+    deviceFingerprintConfig
+  );
+
+  console.log('Device fingerprinting service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize device fingerprinting service:', error);
+  // Continue without device fingerprinting service - this is non-critical for basic operation
+}
+
+// Initialize behavior analytics service
+let behaviorAnalyticsService: BehaviorAnalyticsService | undefined;
+try {
+  const db = getDatabase();
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
+  };
+  const auditService = new AuditService(authConfig, db as any);
+  
+  // Behavior analytics configuration
+  const behaviorAnalyticsConfig: BehaviorAnalyticsConfig = {
+    baselineWindowDays: parseInt(process.env.BEHAVIOR_BASELINE_DAYS || '30'),
+    anomalyThreshold: parseFloat(process.env.BEHAVIOR_ANOMALY_THRESHOLD || '0.8'),
+    updateFrequencyMinutes: parseInt(process.env.BEHAVIOR_UPDATE_FREQUENCY || '60'),
+    enablePatternDetection: process.env.BEHAVIOR_PATTERN_DETECTION !== 'false',
+    patternTypes: (
+      process.env.BEHAVIOR_PATTERN_TYPES?.split(',
+      '
+    ) as any) || ['login_time', 'action_sequence', 'resource_access', 'session_duration'],
+    minimumDataPoints: parseInt(process.env.BEHAVIOR_MIN_DATA_POINTS || '20'),
+    enableMLAnalysis: process.env.BEHAVIOR_ML_ANALYSIS === 'true',
+    modelUpdateFrequencyHours: parseInt(process.env.BEHAVIOR_ML_UPDATE_HOURS || '24'),
+    riskWeights: {
+      timeAnomaly: parseFloat(process.env.BEHAVIOR_TIME_WEIGHT || '0.2'),
+      sequenceAnomaly: parseFloat(process.env.BEHAVIOR_SEQUENCE_WEIGHT || '0.25'),
+      volumeAnomaly: parseFloat(process.env.BEHAVIOR_VOLUME_WEIGHT || '0.15'),
+      velocityAnomaly: parseFloat(process.env.BEHAVIOR_VELOCITY_WEIGHT || '0.2'),
+      patternDeviation: parseFloat(process.env.BEHAVIOR_PATTERN_WEIGHT || '0.2')
+    },
+    autoBlockThreshold: parseInt(process.env.BEHAVIOR_AUTO_BLOCK_THRESHOLD || '90'),
+    alertThreshold: parseInt(process.env.BEHAVIOR_ALERT_THRESHOLD || '70'),
+    requireManualReview: process.env.BEHAVIOR_REQUIRE_MANUAL_REVIEW !== 'false'
+  };
+
+  behaviorAnalyticsService = new BehaviorAnalyticsService(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService,
+    behaviorAnalyticsConfig
+  );
+
+  console.log('Behavior analytics service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize behavior analytics service:', error);
+  // Continue without behavior analytics service - this is non-critical for basic operation
+}
+
+// Initialize payload encryption service
+let payloadEncryptionService: PayloadEncryptionService | undefined;
+let keyManagementService: KeyManagementService | undefined;
+try {
+  const db = getDatabase();
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 }
+  };
+  const auditService = new AuditService(authConfig, db as any);
+  
+  // Key management configuration for payload encryption
+  const keyManagementConfig: KeyManagementConfig = {
+    keyEncryptionAlgorithm: 'aes-256-gcm',
+    defaultRotationIntervalDays: 90,
+    rotationOverlapHours: 24,
+    autoRotationEnabled: true,
+    enableAccessControl: true,
+    requireApprovalForSensitiveOps: false, // Auto-approve for payload encryption
+    defaultSecurityLevel: 'high',
+    cacheEnabled: true,
+    cacheTtlSeconds: 3600,
+    maxCachedKeys: 1000,
+    backupEnabled: true,
+    backupRetentionDays: 365,
+    backupEncryptionEnabled: true,
+    enableComplianceTracking: true,
+    auditAllOperations: true,
+    dataClassificationRequired: false
+  };
+
+  // Initialize key management service
+  keyManagementService = new KeyManagementService(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService,
+    keyManagementConfig
+  );
+
+  // Initialize payload encryption service
+  payloadEncryptionService = new PayloadEncryptionService(
+    keyManagementService,
+    defaultPayloadEncryptionConfig
+  );
+
+  console.log('Payload encryption service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize payload encryption service:', error);
+  // Continue without payload encryption service - this is non-critical for basic operation
+}
+
 // Initialize security headers middleware
 server.addHook('onRequest', securityHeadersMiddleware(defaultSecurityConfig));
+
+// Initialize payload encryption middleware
+if (payloadEncryptionService) {
+  server.addHook('onRequest', encryptionStatusMiddleware());
+  server.addHook('preHandler', requestEncryptionMiddleware(payloadEncryptionService));
+  server.addHook('onRequest', responseEncryptionMiddleware(payloadEncryptionService));
+}
 
 // Register referrer policy plugin
 server.register(referrerPolicyPlugin, {
@@ -488,7 +1082,56 @@ if (securityAuditService) {
 // Register TOTP routes
 try {
   const db = getDatabase();
-  const auditService = new AuditService(db as any);
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
+  };
+  const auditService = new AuditService(authConfig, db as any);
   const totpService = new TOTPService(db, undefined, auditService); // Redis will be initialized separately
   
   server.register(async (fastify) => {
@@ -532,6 +1175,66 @@ if (verificationThresholdService) {
     console.log('Verification threshold routes registered successfully');
   } catch (error) {
     console.error('Failed to register verification threshold routes:', error);
+  }
+}
+
+// Register location detection routes
+if (locationDetectionService) {
+  try {
+    server.register(async (fastify) => {
+      await locationDetectionRoutes(fastify, locationDetectionService);
+    }, { prefix: '/api/security' });
+    console.log('Location detection routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register location detection routes:', error);
+  }
+}
+
+// Register location history analysis routes
+if (locationHistoryAnalysisService) {
+  try {
+    server.register(async (fastify) => {
+      await locationHistoryAnalysisRoutes(fastify, locationHistoryAnalysisService);
+    }, { prefix: '/api/security' });
+    console.log('Location history analysis routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register location history analysis routes:', error);
+  }
+}
+
+// Register device fingerprinting routes
+if (deviceFingerprintingService) {
+  try {
+    server.register(async (fastify) => {
+      await deviceFingerprintingRoutes(fastify, deviceFingerprintingService);
+    }, { prefix: '/api' });
+    console.log('Device fingerprinting routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register device fingerprinting routes:', error);
+  }
+}
+
+// Register behavior analytics routes
+if (behaviorAnalyticsService) {
+  try {
+    server.register(async (fastify) => {
+      await behaviorAnalyticsRoutes(fastify, behaviorAnalyticsService);
+    }, { prefix: '/api' });
+    console.log('Behavior analytics routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register behavior analytics routes:', error);
+  }
+}
+
+// Register payload encryption routes
+if (payloadEncryptionService) {
+  try {
+    server.register(async (fastify) => {
+      await payloadEncryptionRoutes(fastify, payloadEncryptionService);
+    }, { prefix: '/api' });
+    console.log('Payload encryption routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register payload encryption routes:', error);
   }
 }
 
@@ -600,8 +1303,7 @@ server.post<{
       const { graph, runs = 5, seedStart = 1 } = request.body;
       
       // Validate request with Zod
-      const validatedInput = PreviewRequestSchema.parse(request.body);
-      
+            
       // Validate graph structure and rules
       const validationResult = validateGraph(graph);
       
@@ -689,6 +1391,73 @@ const start = async () => {
       }
     }
 
+    // Initialize location detection service with Redis and start it
+    if (locationDetectionService && redisService) {
+      try {
+        // Set Redis service on location detection service
+        (locationDetectionService as any).redis = redisService;
+        await locationDetectionService.initialize();
+        console.log('Location detection service started successfully');
+      } catch (error) {
+        console.error('Failed to start location detection service:', error);
+        // Continue without location detection
+      }
+    }
+
+    // Initialize location history analysis service with Redis and start it
+    if (locationHistoryAnalysisService && redisService) {
+      try {
+        // Set Redis service on location history analysis service
+        (locationHistoryAnalysisService as any).redis = redisService;
+        await locationHistoryAnalysisService.initialize();
+        console.log('Location history analysis service started successfully');
+      } catch (error) {
+        console.error('Failed to start location history analysis service:', error);
+        // Continue without location history analysis
+      }
+    }
+
+    // Initialize device fingerprinting service with Redis and start it
+    if (deviceFingerprintingService && redisService) {
+      try {
+        // Set Redis service on device fingerprinting service
+        (deviceFingerprintingService as any).redis = redisService;
+        await deviceFingerprintingService.initialize();
+        console.log('Device fingerprinting service started successfully');
+      } catch (error) {
+        console.error('Failed to start device fingerprinting service:', error);
+        // Continue without device fingerprinting
+      }
+    }
+
+    // Initialize behavior analytics service with Redis and start it
+    if (behaviorAnalyticsService && redisService) {
+      try {
+        // Set Redis service on behavior analytics service
+        (behaviorAnalyticsService as any).redis = redisService;
+        await behaviorAnalyticsService.initialize();
+        console.log('Behavior analytics service started successfully');
+      } catch (error) {
+        console.error('Failed to start behavior analytics service:', error);
+        // Continue without behavior analytics
+      }
+    }
+
+    // Initialize payload encryption service with Redis and start it
+    if (payloadEncryptionService && keyManagementService && redisService) {
+      try {
+        // Set Redis service on key management service
+        (keyManagementService as any).redis = redisService;
+        
+        // Initialize payload encryption service
+        await payloadEncryptionService.initialize();
+        console.log('Payload encryption service started successfully');
+      } catch (error) {
+        console.error('Failed to start payload encryption service:', error);
+        // Continue without payload encryption
+      }
+    }
+
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8000;
     await server.listen({ port, host: '0.0.0.0' });
     const address = server.server.address();
@@ -740,6 +1509,22 @@ process.on('SIGTERM', async () => {
   if (anomalyDetectionService) {
     await anomalyDetectionService.stop();
   }
+  if (locationDetectionService) {
+    console.log('Stopping location detection service...');
+  }
+  if (locationHistoryAnalysisService) {
+    console.log('Stopping location history analysis service...');
+  }
+  if (deviceFingerprintingService) {
+    console.log('Stopping device fingerprinting service...');
+  }
+  if (behaviorAnalyticsService) {
+    await behaviorAnalyticsService.stop();
+    console.log('Stopping behavior analytics service...');
+  }
+  if (payloadEncryptionService) {
+    console.log('Stopping payload encryption service...');
+  }
   await server.close();
   process.exit(0);
 });
@@ -761,6 +1546,22 @@ process.on('SIGINT', async () => {
   }
   if (anomalyDetectionService) {
     await anomalyDetectionService.stop();
+  }
+  if (locationDetectionService) {
+    console.log('Stopping location detection service...');
+  }
+  if (locationHistoryAnalysisService) {
+    console.log('Stopping location history analysis service...');
+  }
+  if (deviceFingerprintingService) {
+    console.log('Stopping device fingerprinting service...');
+  }
+  if (behaviorAnalyticsService) {
+    await behaviorAnalyticsService.stop();
+    console.log('Stopping behavior analytics service...');
+  }
+  if (payloadEncryptionService) {
+    console.log('Stopping payload encryption service...');
   }
   await server.close();
   process.exit(0);

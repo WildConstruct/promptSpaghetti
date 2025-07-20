@@ -5,7 +5,12 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,PUT,DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-payload-encrypted, x-response-encryption, x-encryption-algorithm, x-encryption-key-id');
+
+  // Add encryption capability headers
+  res.setHeader('x-encryption-available', 'true');
+  res.setHeader('x-encryption-algorithms', 'aes-256-gcm,aes-256-cbc,chacha20-poly1305');
+  res.setHeader('x-compression-available', 'true');
 
   // Handle preflight requests
   if (req.method === 'OPTIONS') {

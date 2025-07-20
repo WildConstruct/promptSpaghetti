@@ -104,6 +104,7 @@ export interface VerificationCode {
     locationData?: any;
     deliveryAttempts?: number;
     deliveryStatus?: string;
+    revocationReason?: string;
     additionalContext?: Record<string, any>;
   };
   securityFlags: {
@@ -323,7 +324,7 @@ export class VerificationCodeManager extends EventEmitter {
         return await this.validateFoundCode(code, request);
       }
 
-      // No matching code found - increment failed attempts for all user codes
+      // No matching code found - increment failed attempts for all user codes of this type
       userCodes.forEach(code => {
         code.attempts++;
         if (code.attempts >= code.maxAttempts) {
@@ -331,6 +332,15 @@ export class VerificationCodeManager extends EventEmitter {
         }
         this.codes.set(code.id, code);
       });
+
+      // If all codes are rate limited, return specific reason
+      if (userCodes.length > 0 && userCodes.every(code => code.status === CodeStatus.RATE_LIMITED)) {
+        return {
+          valid: false,
+          reason: 'too_many_attempts',
+          riskScore: 70
+        };
+      }
 
       this.logSecurityEvent(SecurityEvent.INVALID_CODE_ATTEMPT, {
         userId: request.userId,
@@ -903,6 +913,5 @@ export class VerificationCodeManager extends EventEmitter {
 }
 
 // Export default instance
-export const verificationCodeManager = new VerificationCodeManager();
-
+export 
 export default VerificationCodeManager;

@@ -31,9 +31,9 @@ module.exports = {
     'prettier --write --ignore-unknown'
   ],
   
-  // Special handling for test files - very permissive
+  // Special handling for test files - auto-fixed by pre-commit
   '*.{test,spec}.{ts,tsx,js,jsx}': [
-    'eslint --fix --max-warnings 50', // Tests can have many more warnings
+    'eslint --fix --max-warnings 20', // Should be clean after auto-fixing
     'prettier --write --ignore-unknown'
   ],
   
