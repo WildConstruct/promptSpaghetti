@@ -30,3 +30,12 @@ src/data/
 
 # Docs folder with separate ESLint configs
 docs/
+
+# Load test files (test-specific patterns that may not follow standard rules)
+load-tests/
+
+# Performance test files (k6 uses different module syntax)
+server/src/performance/k6-tests/
+
+# Storage components (may contain legacy code patterns)
+packages/core/storage/

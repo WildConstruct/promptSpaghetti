@@ -16,3 +16,24 @@ yarn-error.log*
 
 # Mac
 .DS_Store
+
+# Database files (runtime data)
+src/data/*.db
+src/data/*.sqlite
+src/data/*.sqlite3
+src/data/events.db
+src/data/state.json
+src/data/tasks.db
+src/data/commit-tracking.json
+
+# Auto-generated files
+src/create-epic*.js
+src/analyze-*.js
+src/count-*.js
+src/fix-*.js
+src/auto-*.js
+src/monitor-*.js
+
+# Load test results
+load-tests/results/
+load-tests/*.log
