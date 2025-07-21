@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T06:22:16.157Z"
+    "updated": "2025-07-21T06:22:56.229Z"
   },
   "product_goals": [
     {
@@ -22927,7 +22927,7 @@
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T06:21:25.544Z",
+      "updated": "2025-07-21T06:22:51.514Z",
       "dependencies": [],
       "notes": []
     },
@@ -22935,12 +22935,12 @@
       "id": "T-1752989143998-580",
       "story_id": "S-1752989143997-19-2",
       "title": "Add just-in-time consent prompts",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "claude_dev",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:22:51.635Z",
       "dependencies": [],
       "notes": []
     },
@@ -22948,12 +22948,12 @@
       "id": "T-1752989143998-106",
       "story_id": "S-1752989143998-19-4",
       "title": "Create security event logging guidance",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "claude",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:22:53.252Z",
       "dependencies": [],
       "notes": []
     },
@@ -22961,12 +22961,12 @@
       "id": "T-1752989143998-789",
       "story_id": "S-1752989143998-19-4",
       "title": "Build security dashboard configuration UI",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "claude",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:22:53.252Z",
       "dependencies": [],
       "notes": []
     },
@@ -22974,12 +22974,12 @@
       "id": "T-1752989143998-885",
       "story_id": "S-1752989143997-19-2",
       "title": "Create data filtering based on consent",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:22:56.229Z",
       "dependencies": [],
       "notes": []
     },
@@ -22987,12 +22987,12 @@
       "id": "T-1752989143998-258",
       "story_id": "S-1752989143998-19-3",
       "title": "Define rule schema and structure",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:22:56.229Z",
       "dependencies": [],
       "notes": []
     },
@@ -31609,7 +31609,9 @@
       "T-1752989143998-287",
       "T-1752989143998-837",
       "T-1752989143998-890",
-      "T-1752989143998-961"
+      "T-1752989143998-961",
+      "T-1752989143998-885",
+      "T-1752989143998-258"
     ],
     "dev_A": [
       "T-1752950863627",
@@ -31879,12 +31881,15 @@
       "T-1752989143998-408",
       "T-1752989143998-56",
       "T-1752989143998-667",
-      "T-1752989143998-840"
+      "T-1752989143998-840",
+      "T-1752989143998-580"
     ],
     "claude": [
       "T-1752989143998-694",
       "T-1752989143998-297",
-      "T-1752989143998-325"
+      "T-1752989143998-325",
+      "T-1752989143998-106",
+      "T-1752989143998-789"
     ],
     "T-1752989143998-724": [
       "T-1752989143998-618",
