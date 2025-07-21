@@ -73,6 +73,10 @@ import { auditTeamCollaborationRoutes } from './routes/audit-team-collaboration'
 import { auditEvidenceRoutes } from './routes/audit-evidence';
 import { dataAccessRoutes } from './routes/data-access';
 import { DataAccessControlService } from './services/DataAccessControlService';
+import { auditWorkflowRoutes } from './routes/audit-workflow';
+import { AuditWorkflowService } from './services/AuditWorkflowService';
+import { accessRequestWorkflowRoutes } from './routes/access-request-workflow';
+import { AccessRequestWorkflowService } from './services/AccessRequestWorkflowService';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -1431,12 +1435,18 @@ try {
   
   const auditService = new AuditService(authConfig, db as any);
   const dataAccessControlService = new DataAccessControlService(db as any, auditService);
+  const auditWorkflowService = new AuditWorkflowService(db as any, auditService, dataAccessControlService);
+  const accessRequestWorkflowService = new AccessRequestWorkflowService(db as any, auditService, dataAccessControlService);
   
-  // Make the service available to routes via Fastify's dependency injection
+  // Make the services available to routes via Fastify's dependency injection
   server.decorate('dataAccessControlService', dataAccessControlService);
+  server.decorate('auditWorkflowService', auditWorkflowService);
+  server.decorate('accessRequestWorkflowService', accessRequestWorkflowService);
   
   server.register(dataAccessRoutes, { prefix: '/api/data-access' });
-  console.log('Data access control routes registered successfully');
+  server.register(auditWorkflowRoutes, { prefix: '/api/audit-workflow' });
+  server.register(accessRequestWorkflowRoutes, { prefix: '/api/access-request-workflow' });
+  console.log('Data access control, audit workflow, and access request workflow routes registered successfully');
 } catch (error) {
   console.error('Failed to register data access control routes:', error);
 }
