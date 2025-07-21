@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T06:22:56.229Z"
+    "updated": "2025-07-21T06:24:03.440Z"
   },
   "product_goals": [
     {
@@ -22883,12 +22883,12 @@
       "id": "T-1752989143998-780",
       "story_id": "S-1752989143997-19-2",
       "title": "Implement consent collection UI",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "James",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T06:04:20.055Z",
+      "updated": "2025-07-21T06:24:03.440Z",
       "dependencies": [],
       "notes": []
     },
