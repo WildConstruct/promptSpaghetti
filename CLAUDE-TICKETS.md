@@ -18,31 +18,33 @@
    - Add your own comments following a similar structure
    - Prepend each new entry with the current date
 
-### TASK MANAGEMENT WORKFLOW (NEW - No More Phases!):
+### TASK MANAGEMENT WORKFLOW (UPDATED - No More Phases!):
+
+**CRITICAL**: Epic 19 privacy/compliance tasks should NOT be actively worked on. Focus on authentication and file browser priorities.
 
 Developers can now self-assign and manage tasks directly without waiting for ASSIGN/BUILD phases:
 
 1. **Check business priorities and available tasks:**
    ```bash
-   # See what you should be working on (CRITICAL FIRST STEP)
+   # ALWAYS check priorities first (CRITICAL STEP)
    node src/show-priority-tasks.js
    
-   # See full agent coordination dashboard 
+   # See team coordination dashboard 
    node src/monitor-available-tasks.js
    ```
 
 2. **Grab priority tasks to work on:**
    ```bash
-   # Grab 2 high-priority tasks (RECOMMENDED - follows business priorities)
+   # Grab high-priority business tasks (RECOMMENDED)
    node src/grab-tasks.js <your-dev-id> 2 --priority-only
    
-   # Grab authentication tasks (PRIORITY 1 per IMMEDIATE-PRIORITIES.md)
+   # Grab authentication tasks (PRIORITY 1)
    node src/grab-tasks.js <your-dev-id> 2 --story=20.1
    
    # Grab file browser tasks (PRIORITY 2)
    node src/grab-tasks.js <your-dev-id> 2 --story=20.2
    
-   # Basic usage (gets tasks in priority order automatically)
+   # Basic usage (gets mixed tasks - USE WITH CAUTION)
    node src/grab-tasks.js <your-dev-id> 3
    
    # Examples:
@@ -50,7 +52,7 @@ Developers can now self-assign and manage tasks directly without waiting for ASS
    node src/grab-tasks.js Dev-James-Security 1 --story=20.1
    ```
    
-   **🎯 PRIORITY GUIDANCE:** Always use `--priority-only` or story filters to align with business priorities!
+   **🎯 PRIORITY GUIDANCE**: Always use `--priority-only` or story filters to align with business priorities!
 
 3. **Complete work and submit for review:**
    ```bash
@@ -62,23 +64,103 @@ Developers can now self-assign and manage tasks directly without waiting for ASS
    node src/finish-task.js <task-id> BLOCKED
    ```
    
-   **⚠️ IMPORTANT**: Every agent MUST call `src/finish-task.js` when they complete implementation.
-   Failing to do this leaves tasks stuck in IN_PROGRESS even when the work is done.
+   **⚠️ IMPORTANT**: Every agent MUST call `finish-task.js` when they complete implementation.
+   Failing to do this leaves tasks stuck IN_PROGRESS even when the work is done.
 
-**Task States:**
-- UNASSIGNED: Available for anyone to grab
-- IN_PROGRESS: Being worked on
-- REVIEW: Work done, needs QA/review
-- COMPLETED: All done!
-- BLOCKED: Can't proceed
+### AGENT COORDINATION PROTOCOLS (NEW)
 
-### COMMUNICATION FORMAT:
+#### **Agent Selection Guidelines**
+- **Development Agents**: Use for coding, implementation, bug fixes
+- **QA Agents**: Use for code review, testing, quality assurance, task cleanup
+- **Scrum Master Agents**: Use for project planning, task creation, coordination
 
-When leaving updates for the other agent, use this structure:
+#### **Task Reservation System**
+- When you grab tasks, you have **2 hours maximum** to make meaningful progress
+- If blocked or unable to proceed, immediately call `finish-task.js <task-id> BLOCKED`
+- Other agents can pick up BLOCKED tasks after adding unblocking steps
+
+#### **Handoff Procedures**
+```bash
+# When passing work to another agent type:
+1. Complete your current task: node src/finish-task.js <task-id>
+2. Document handoff in task notes or create follow-up task
+3. Tag the next agent type in task description
+4. Use clear transition states (IN_PROGRESS → REVIEW → COMPLETED)
+```
+
+#### **Task Batching Strategy**
+- Grab **related tasks together** when working on large features
+- Example: If working on authentication, grab 2-3 AUTH-* tasks
+- Check dependencies before starting work
+- Coordinate with other agents via task assignment visibility
+
+#### **Escalation Process**
+1. **BLOCKED Tasks**: Use `finish-task.js <task-id> BLOCKED` immediately
+2. **Priority Conflicts**: Check `IMMEDIATE-PRIORITIES.md` for current focus
+3. **Technical Issues**: Create specific bug/fix tasks with details
+4. **Agent Conflicts**: Use task assignment system to avoid duplicate work
+
+### **Task States:**
+- **UNASSIGNED**: Available for anyone to grab
+- **IN_PROGRESS**: Being worked on (max 2 hours without progress)
+- **REVIEW**: Work done, needs QA/review
+- **COMPLETED**: All done!
+- **BLOCKED**: Can't proceed (include reason in task notes)
+
+### **Quality Gates (NEW)**
+
+#### **Before Marking Task as Complete:**
+- [ ] Implementation actually works (tested locally)
+- [ ] Code follows existing project conventions
+- [ ] No breaking changes to existing functionality  
+- [ ] Tests pass (if project has test suite)
+- [ ] Documentation updated if needed (README, comments)
+
+#### **QA Approval Criteria:**
+- Code quality meets project standards
+- Security best practices followed
+- Performance considerations addressed
+- Integration with existing system validated
+
+### **IMPORTANT NOTES FOR AGENT IMPLEMENTATION:**
+
+**For Developer Agents:**
+- **PRIORITY CHECK**: Always run `show-priority-tasks.js` first
+- Use `--priority-only` flag to avoid Epic 19 privacy tasks
+- Focus on authentication (Story 20.1) and file browser (Story 20.2) work
+- Call `finish-task.js` IMMEDIATELY when implementation complete
+
+**For QA Agents:**
+- **CRITICAL**: Use `node src/run-qa-agent.js` for reviewing tasks (NOT qa-review-workflow.js)
+- Review tasks stuck IN_PROGRESS using `node src/auto-detect-completed-tasks.js`
+- Use `node src/auto-fix-completed-tasks.js` to clean up completed work
+- Prioritize reviewing authentication and file browser features
+
+**For Scrum Master Agents:**
+- Monitor Epic 19 task creation - should be minimal
+- Focus task creation on authentication and file browser epics
+- Use `monitor-available-tasks.js` to track team coordination
+- Help resolve BLOCKED tasks quickly
+
+**Priority Focus (CRITICAL):**
+1. **Authentication System**: LOGIN functionality (Story 20.1)
+2. **File Browser**: Project save/load functionality (Story 20.2)  
+3. **Epic Integration**: Making completed Epic features visible to users
+4. **🚫 AVOID**: Epic 19 privacy/compliance tasks (deprioritized)
+
+### **Implementation Details:**
+- Database: SQLite with ticket persistence
+- GitHub Integration: Uses `gh` CLI for PR operations (if configured)
+- Webhooks: Triggered on APPROVED status changes
+- API: REST endpoints at `/api/tickets/*`
+
+### **Communication Format:**
+
+When leaving updates for other agents, use this structure:
 
 ```
 **[AGENT NAME] NOTE (Date - Task/Epic Description):**
-Hi [Other Agent]! Brief summary of what was accomplished.
+Hi team! Brief summary of what was accomplished.
 
 ### Work Completed:
 - **Component/Feature**: Brief description of what was done
@@ -96,40 +178,24 @@ Hi [Other Agent]! Brief summary of what was accomplished.
 ### Next Steps:
 - What needs to be done next
 - Any blockers or dependencies
-- Recommendations for the other agent
+- Recommendations for other agents
 ```
 
-### IMPORTANT NOTES FOR AGENT IMPLEMENTATION:
+### **WORKFLOW QUALITY METRICS:**
 
-**For Developer Agents:**
-- The phase-based system (ASSIGN/BUILD phases) has been REMOVED
-- Developers now self-assign tasks using `src/grab-tasks.js`
-- No need to wait for phase changes or assignment events
-- Task flow: UNASSIGNED → IN_PROGRESS → REVIEW → COMPLETED
+**Success Indicators:**
+- ✅ 80%+ agent effort on authentication + file browser tasks
+- ✅ <20% agent effort on Epic 19 privacy features  
+- ✅ Tasks transition IN_PROGRESS → REVIEW → COMPLETED within 2 hours
+- ✅ No tasks stuck in IN_PROGRESS for >24 hours
+- ✅ Priority tasks are grabbable and being worked on
 
-**For QA Agents:**
-- **CRITICAL**: Use `node src/run-qa-agent.js` for reviewing tasks (NOT qa-review-workflow.js)
-  - This ensures proper commit tracking and GitHub automation
-  - The run-qa-agent.js script integrates with the ticket system
-- When you set a task status to APPROVED, it automatically triggers:
-  - GitHub PR creation (if enabled in configuration)
-  - Commit tracking for auto-push (every 10 commits by default)
-- Use the database ticket system for status updates
-
-**For Scrum Master Agents:**
-- Phase management is NO LONGER NEEDED
-- Focus on:
-  - Creating tasks from stories
-  - Monitoring task progress
-  - Helping with blocked tasks
-  - Overall project coordination
-
-**Implementation Details:**
-- Database: SQLite with ticket persistence
-- GitHub Integration: Uses `gh` CLI for PR operations
-- Webhooks: Triggered on APPROVED status changes
-- API: REST endpoints at `/api/tickets/*`
+**Warning Signs:**
+- ❌ Epic 19 tasks being grabbed by default (use `--priority-only`)
+- ❌ Multiple agents working on same task (check assignment before starting)
+- ❌ Tasks marked COMPLETED but no actual work done
+- ❌ Long delays between task completion and QA review
 
 ---
 
-Note: For historical task completion logs and detailed implementation records, please refer to the project's issue tracking system or database.
+**🎯 Remember: Focus on user-facing features (authentication, file browser) that deliver business value, not internal compliance work.**

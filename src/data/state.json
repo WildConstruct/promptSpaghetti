@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T14:10:43.257Z"
+    "updated": "2025-07-21T14:19:12.946Z"
   },
   "product_goals": [
     {
@@ -31165,12 +31165,12 @@
       "id": "T-1752989145899",
       "story_id": "S-1752989144488-29-2",
       "title": "Write unit tests for Agent-based Systems",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "test-final-2",
       "wip_class": "CHORE",
       "est": 1,
       "created": "2025-07-20T05:25:45.899Z",
-      "updated": "2025-07-20T05:25:45.899Z",
+      "updated": "2025-07-21T14:19:12.946Z",
       "dependencies": [],
       "notes": []
     },
@@ -31178,12 +31178,12 @@
       "id": "T-1752989145916",
       "story_id": "S-1752989144488-29-3",
       "title": "Write unit tests for Prompt Evolution & Genetic Algorithms",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "test-agent-3",
       "wip_class": "CHORE",
       "est": 1,
       "created": "2025-07-20T05:25:45.916Z",
-      "updated": "2025-07-20T05:25:45.916Z",
+      "updated": "2025-07-21T14:15:22.712Z",
       "dependencies": [],
       "notes": []
     },
@@ -31908,7 +31908,7 @@
       "id": "FILE-985115-B006",
       "title": "Setup File Browser Foundation Components",
       "description": "Create FileBrowser main component with tree structure, FolderTree component with expand/collapse, FileItem component, drag-and-drop functionality, and context menu system.",
-      "state": "TODO",
+      "state": "IN_PROGRESS",
       "priority": "high",
       "estimate": "6 hours",
       "wipClass": "feature",
@@ -31931,7 +31931,7 @@
         "T-AUTH-API-INTEGRATION"
       ],
       "businessValue": "Users have a structured interface to browse their project files",
-      "assignee": "Unassigned",
+      "assignee": "claude_dev",
       "created": "2025-07-21T13:36:25.115Z",
       "lastUpdated": "2025-07-21T13:36:25.115Z",
       "metadata": {
@@ -31939,13 +31939,14 @@
         "category": "immediate-priority",
         "automated": true,
         "priority_level": 1
-      }
+      },
+      "updated": "2025-07-21T14:12:50.605Z"
     },
     "FILE-985115-27A6": {
       "id": "FILE-985115-27A6",
       "title": "Create File Management API Endpoints",
       "description": "Implement secure file management API endpoints (/api/files/*) for upload, delete, rename, move, and duplicate operations. Add proper validation and error handling.",
-      "state": "TODO",
+      "state": "IN_PROGRESS",
       "priority": "high",
       "estimate": "5 hours",
       "wipClass": "backend",
@@ -31967,7 +31968,7 @@
       ],
       "dependencies": [],
       "businessValue": "Backend supports all necessary file operations securely",
-      "assignee": "Unassigned",
+      "assignee": "test-agent",
       "created": "2025-07-21T13:36:25.115Z",
       "lastUpdated": "2025-07-21T13:36:25.115Z",
       "metadata": {
@@ -31975,7 +31976,8 @@
         "category": "immediate-priority",
         "automated": true,
         "priority_level": 1
-      }
+      },
+      "updated": "2025-07-21T14:14:59.889Z"
     },
     "FILE-985115-8397": {
       "id": "FILE-985115-8397",
@@ -32099,7 +32101,7 @@
       "id": "FILE-985116-DBFA",
       "title": "Create File Preview and Recent Files Features",
       "description": "Build FilePreview component with graph thumbnails, implement favorites/bookmarks system, create RecentFiles component, and add quick navigation sidebar.",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "priority": "medium",
       "estimate": "4 hours",
       "wipClass": "feature",
@@ -32132,7 +32134,7 @@
         "automated": true,
         "priority_level": 2
       },
-      "updated": "2025-07-21T14:10:43.257Z"
+      "updated": "2025-07-21T14:14:55.945Z"
     }
   },
   "assignments": {
@@ -32442,7 +32444,8 @@
       "T-1752989143998-428",
       "T-1752989143998-716",
       "AUTH-985113-F18F",
-      "AUTH-985113-C8A3"
+      "AUTH-985113-C8A3",
+      "FILE-985115-B006"
     ],
     "claude": [
       "T-1752989143998-694",
@@ -32503,7 +32506,8 @@
       "FILE-985116-5A41"
     ],
     "test-agent-3": [
-      "AUTH-985114-99B7"
+      "AUTH-985114-99B7",
+      "T-1752989145916"
     ],
     "test-agent-4": [
       "AUTH-985114-AF38"
@@ -32511,6 +32515,12 @@
     "dev": [
       "AUTH-985113-EC3E",
       "FILE-985116-DBFA"
+    ],
+    "test-agent": [
+      "FILE-985115-27A6"
+    ],
+    "test-final-2": [
+      "T-1752989145899"
     ]
   },
   "metrics": {

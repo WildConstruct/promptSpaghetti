@@ -778,9 +778,8 @@ try {
     updateFrequencyMinutes: parseInt(process.env.BEHAVIOR_UPDATE_FREQUENCY || '60'),
     enablePatternDetection: process.env.BEHAVIOR_PATTERN_DETECTION !== 'false',
     patternTypes: (
-      process.env.BEHAVIOR_PATTERN_TYPES?.split(',
-      '
-    ) as any) || ['login_time', 'action_sequence', 'resource_access', 'session_duration'],
+      process.env.BEHAVIOR_PATTERN_TYPES?.split(',') as any
+    ) || ['login_time', 'action_sequence', 'resource_access', 'session_duration'],
     minimumDataPoints: parseInt(process.env.BEHAVIOR_MIN_DATA_POINTS || '20'),
     enableMLAnalysis: process.env.BEHAVIOR_ML_ANALYSIS === 'true',
     modelUpdateFrequencyHours: parseInt(process.env.BEHAVIOR_ML_UPDATE_HOURS || '24'),

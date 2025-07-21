@@ -36,7 +36,36 @@ interface StatusBarProps {
   onChangeAlgorithm?: (algorithm: string) => void;
 }
 
-export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
+export const StatusBar: React.FC<StatusBarProps> = ({
+  statusMessage,
+  errors,
+  onPreview,
+  onSaveJson,
+  onExportBundle,
+  onSaveProject,
+  onLoadProject,
+  onNewProject,
+  hasUnsavedChanges,
+  currentProjectName,
+  onCorrections,
+  correctionsEnabled,
+  correctionsOpen,
+  onStats,
+  statsOpen,
+  onExtensions,
+  extensionsOpen,
+  connectionState,
+  queuedMessages,
+  onClearQueue,
+  onReconnect,
+  onDisconnect,
+  encryptionState,
+  onEncrypt,
+  onDecrypt,
+  onChangeAlgorithm,
+}) => {
+  const errorCount = errors.length;
+  const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
   const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
   const wsDetailsRef = useRef<HTMLDivElement>(null);
   const encryptionDetailsRef = useRef<HTMLDivElement>(null);
