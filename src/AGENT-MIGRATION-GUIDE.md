@@ -112,7 +112,7 @@ CREATE TABLE github_automation_config (
 
 1. **Monitor Available Tasks**:
    ```bash
-   node monitor-available-tasks.js
+   node monitor-system.js --mode tasks
    ```
 
 2. **Grab Tasks (Developer)**:

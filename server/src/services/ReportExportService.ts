@@ -75,7 +75,7 @@ export interface ExportConfig {
     encryption?: boolean;
     password?: string;
   };
-  delivery_config?: {
+  deliveryConfig?: {
     email?: {
       to: string[];
       cc?: string[];
@@ -154,7 +154,26 @@ export class ReportExportService extends EventEmitter {
   }
 
   /**
-   * Export report in specified format
+   * Export report in specified format with delivery options
+   * @param reportData - The report data to export including metadata, summary, and data arrays
+   * @param config - Export configuration specifying format, delivery method, and options
+   * @returns Promise<ExportResult> - Export result with metadata and success status
+   * @throws {Error} When unsupported format is specified or delivery fails
+   * @description Main export method that handles format conversion, compression, 
+   * encryption, and delivery. Emits events for export lifecycle tracking.
+   * @emits export_started - When export process begins
+   * @emits export_completed - When export completes successfully
+   * @emits export_failed - When export fails
+   * @example
+   * ```typescript
+   * const result = await exportService.exportReport(reportData, {
+   *   format: ExportFormat.PDF,
+   *   delivery: DeliveryMethod.EMAIL,
+   *   deliveryConfig: {
+   *     email: { to: ['user@example.com'], subject: 'Report' }
+   *   }
+   * });
+   * ```
    */
   async exportReport(reportData: ReportData, config: ExportConfig): Promise<ExportResult> {
     const exportId = uuidv4();
@@ -557,13 +576,13 @@ startxref
    * Deliver report via email
    */
   private async deliverViaEmail(content: Buffer | string, filename: string, config: ExportConfig): Promise<void> {
-    if (!config.delivery_config?.email) {
+    if (!config.deliveryConfig?.email) {
       throw new Error('Email configuration required for email delivery');
     }
 
     // Mock email delivery - in production, use nodemailer or similar
-    console.log(`Mock: Sending email to ${config.delivery_config.email.to.join(', ')}`);
-    console.log(`Subject: ${config.delivery_config.email.subject}`);
+    console.log(`Mock: Sending email to ${config.deliveryConfig.email.to.join(', ')}`);
+    console.log(`Subject: ${config.deliveryConfig.email.subject}`);
     console.log(`Attachment: ${filename} (${Buffer.isBuffer(content) ? content.length : content.length} bytes)`);
     
     // Simulate email sending delay
@@ -574,13 +593,13 @@ startxref
    * Deliver report via webhook
    */
   private async deliverViaWebhook(content: Buffer | string, filename: string, config: ExportConfig): Promise<void> {
-    if (!config.delivery_config?.webhook) {
+    if (!config.deliveryConfig?.webhook) {
       throw new Error('Webhook configuration required for webhook delivery');
     }
 
     // Mock webhook delivery - in production, use fetch or axios
-    console.log(`Mock: Sending to webhook ${config.delivery_config.webhook.url}`);
-    console.log(`Method: ${config.delivery_config.webhook.method || 'POST'}`);
+    console.log(`Mock: Sending to webhook ${config.deliveryConfig.webhook.url}`);
+    console.log(`Method: ${config.deliveryConfig.webhook.method || 'POST'}`);
     console.log(`Filename: ${filename}`);
     
     // Simulate webhook call delay
@@ -591,13 +610,13 @@ startxref
    * Deliver report via API
    */
   private async deliverViaAPI(content: Buffer | string, filename: string, config: ExportConfig): Promise<void> {
-    if (!config.delivery_config?.api) {
+    if (!config.deliveryConfig?.api) {
       throw new Error('API configuration required for API delivery');
     }
 
     // Mock API delivery - in production, use fetch or axios
-    console.log(`Mock: Sending to API ${config.delivery_config.api.endpoint}`);
-    console.log(`Method: ${config.delivery_config.api.method}`);
+    console.log(`Mock: Sending to API ${config.deliveryConfig.api.endpoint}`);
+    console.log(`Method: ${config.deliveryConfig.api.method}`);
     console.log(`Filename: ${filename}`);
     
     // Simulate API call delay

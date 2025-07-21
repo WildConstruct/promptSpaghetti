@@ -283,9 +283,33 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
 
     } catch (error) {
       fastify.log.error('Error fetching deployment approval requests:', error);
-      return reply.status(500).send({
-        error: 'Internal server error',
-        message: 'Failed to fetch deployment approval requests'
+      
+      // Determine error type and appropriate response
+      let statusCode = 500;
+      let errorType = 'internal_server_error';
+      let userMessage = 'Failed to fetch deployment approval requests';
+      
+      if (error.message?.includes('database') || error.code === 'SQLITE_ERROR') {
+        statusCode = 503;
+        errorType = 'database_unavailable';
+        userMessage = 'Database temporarily unavailable - please try again later';
+      } else if (error.message?.includes('timeout')) {
+        statusCode = 504;
+        errorType = 'request_timeout';
+        userMessage = 'Request timeout - query took too long to execute';
+      } else if (error.message?.includes('LIMIT') || error.message?.includes('parameter')) {
+        statusCode = 400;
+        errorType = 'invalid_parameters';
+        userMessage = 'Invalid query parameters provided';
+      }
+      
+      return reply.status(statusCode).send({
+        error: errorType,
+        message: userMessage,
+        timestamp: new Date().toISOString(),
+        request_id: fastify.generateRequestId?.() || 'unknown',
+        retry_after: statusCode >= 500 ? 30 : undefined,
+        help: statusCode >= 500 ? 'This is a temporary error. Please try again in a few moments.' : undefined
       });
     }
   });
@@ -319,41 +343,98 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
       const requestData = request.body;
       const requestId = `deploy-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-      // Get deployment approval rules for environment
-      const rules = getDeploymentApprovalRules(requestData.environment);
+      // Enhanced validation of request data
+      if (!requestData.deployment_id || requestData.deployment_id.trim().length === 0) {
+        return reply.status(400).send({
+          error: 'validation_error',
+          message: 'deployment_id is required and cannot be empty',
+          field: 'deployment_id',
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      if (!requestData.requested_by || requestData.requested_by.trim().length === 0) {
+        return reply.status(400).send({
+          error: 'validation_error',
+          message: 'requested_by is required and cannot be empty',
+          field: 'requested_by',
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      // Get deployment approval rules for environment with error handling
+      let rules;
+      try {
+        rules = getDeploymentApprovalRules(requestData.environment);
+      } catch (rulesError) {
+        fastify.log.error('Error getting deployment rules:', rulesError);
+        return reply.status(500).send({
+          error: 'configuration_error',
+          message: 'Failed to load deployment approval rules',
+          environment: requestData.environment,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
       if (!rules) {
         return reply.status(400).send({
-          error: 'Invalid environment',
-          message: `No approval rules defined for environment: ${requestData.environment}`
+          error: 'invalid_environment',
+          message: `No approval rules defined for environment: ${requestData.environment}`,
+          provided_environment: requestData.environment,
+          valid_environments: ['production', 'staging', 'preview', 'development'],
+          timestamp: new Date().toISOString()
         });
       }
 
-      // Check for auto-approval eligibility
-      const autoApprovalCheck = validateAutoApprovalCriteria(requestData.environment, {
-        testCoverage: requestData.metadata.test_coverage,
-        securityScan: {
-          status: requestData.metadata.security_scan_status,
-          criticalIssues: 0, // Would be extracted from scan results
-          highIssues: 0
-        },
-        performanceRegression: {
-          percent: requestData.metadata.performance_regression
-        },
-        breakingChanges: requestData.metadata.breaking_changes,
-        changedFiles: requestData.metadata.changed_files,
-        linesChanged: requestData.metadata.lines_changed
-      });
+      // Check for auto-approval eligibility with error handling
+      let autoApprovalCheck;
+      try {
+        autoApprovalCheck = validateAutoApprovalCriteria(requestData.environment, {
+          testCoverage: requestData.metadata.test_coverage,
+          securityScan: {
+            status: requestData.metadata.security_scan_status,
+            criticalIssues: 0, // Would be extracted from scan results
+            highIssues: 0
+          },
+          performanceRegression: {
+            percent: requestData.metadata.performance_regression
+          },
+          breakingChanges: requestData.metadata.breaking_changes,
+          changedFiles: requestData.metadata.changed_files,
+          linesChanged: requestData.metadata.lines_changed
+        });
+      } catch (autoApprovalError) {
+        fastify.log.error('Error validating auto-approval criteria:', autoApprovalError);
+        // Continue with manual approval process if auto-approval check fails
+        autoApprovalCheck = {
+          eligible: false,
+          reason: `Auto-approval validation failed: ${autoApprovalError.message}`,
+          passedCriteria: [],
+          failedCriteria: ['auto-approval-system-error']
+        };
+      }
 
       const isAutoApproved = !rules.required || autoApprovalCheck.eligible;
       const finalStatus = isAutoApproved ? 'approved' : 'pending';
 
-      // Create approval request
-      const insertRequest = database.prepare(`
-        INSERT INTO approval_requests (
-          id, workspace_id, resource_id, transition_id, title, description,
-          requested_by, urgency, status, metadata, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `);
+      // Create approval request with transaction safety
+      let insertRequest;
+      try {
+        insertRequest = database.prepare(`
+          INSERT INTO approval_requests (
+            id, workspace_id, resource_id, transition_id, title, description,
+            requested_by, urgency, status, metadata, created_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `);
+      } catch (prepareError) {
+        fastify.log.error('Failed to prepare approval request insertion:', prepareError);
+        return reply.status(503).send({
+          error: 'database_error',
+          message: 'Database temporarily unavailable',
+          timestamp: new Date().toISOString(),
+          retry_after: 30
+        });
+      }
 
       const metadata = {
         ...requestData.metadata,
@@ -363,19 +444,41 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
         sha: requestData.sha || requestData.deployment_id
       };
 
-      insertRequest.run(
-        requestId,
-        'deployment-workspace', // Would use actual workspace ID
-        requestData.deployment_id,
-        `deploy-${requestData.environment}`,
-        requestData.title,
-        requestData.description,
-        requestData.requested_by,
-        requestData.urgency,
-        finalStatus,
-        JSON.stringify(metadata),
-        new Date().toISOString()
-      );
+      try {
+        insertRequest.run(
+          requestId,
+          'deployment-workspace', // Would use actual workspace ID
+          requestData.deployment_id,
+          `deploy-${requestData.environment}`,
+          requestData.title,
+          requestData.description,
+          requestData.requested_by,
+          requestData.urgency,
+          finalStatus,
+          JSON.stringify(metadata),
+          new Date().toISOString()
+        );
+      } catch (insertError) {
+        fastify.log.error('Failed to insert approval request:', insertError);
+        
+        // Check for specific database errors
+        if (insertError.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+          return reply.status(409).send({
+            error: 'duplicate_request',
+            message: 'A deployment approval request with this ID already exists',
+            deployment_id: requestData.deployment_id,
+            existing_request_id: requestId,
+            timestamp: new Date().toISOString()
+          });
+        }
+        
+        return reply.status(500).send({
+          error: 'database_error',
+          message: 'Failed to create approval request due to database error',
+          timestamp: new Date().toISOString(),
+          retry_after: 30
+        });
+      }
 
       // Create approval criteria
       const criteriaToCreate = isAutoApproved ? [] : rules.requiredCriteria;
@@ -388,18 +491,36 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
 
       for (const criterion of criteriaToCreate) {
         const criterionId = `${requestId}-${criterion.type}`;
-        const reviewerAssignments = getReviewerAssignments(requestData.environment, requestData.requested_by);
+        let reviewerAssignments;
         
-        insertCriterion.run(
-          criterionId,
-          requestId,
-          criterion.type,
-          criterion.weight,
-          criterion.required ? 1 : 0,
-          criterion.description,
-          JSON.stringify(reviewerAssignments.reviewers),
-          'pending'
-        );
+        try {
+          reviewerAssignments = getReviewerAssignments(requestData.environment, requestData.requested_by);
+        } catch (reviewerError) {
+          fastify.log.error('Failed to get reviewer assignments:', reviewerError);
+          // Use default fallback reviewers
+          reviewerAssignments = {
+            reviewers: ['system-admin'],
+            method: 'fallback',
+            reason: 'reviewer assignment failed'
+          };
+        }
+        
+        try {
+          insertCriterion.run(
+            criterionId,
+            requestId,
+            criterion.type,
+            criterion.weight,
+            criterion.required ? 1 : 0,
+            criterion.description,
+            JSON.stringify(reviewerAssignments.reviewers),
+            'pending'
+          );
+        } catch (criterionError) {
+          fastify.log.error('Failed to insert approval criterion:', criterionError);
+          // Continue with other criteria, but log the failure
+          // In production, you might want to rollback the entire transaction
+        }
       }
 
       // If auto-approved, create system approval
@@ -443,9 +564,41 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
 
     } catch (error) {
       fastify.log.error('Error creating deployment approval request:', error);
-      return reply.status(500).send({
-        error: 'Internal server error',
-        message: 'Failed to create deployment approval request'
+      
+      // Provide detailed error information based on error type
+      let statusCode = 500;
+      let errorType = 'internal_server_error';
+      let userMessage = 'Failed to create deployment approval request';
+      let additionalInfo = {};
+      
+      if (error.message?.includes('database') || error.code?.startsWith('SQLITE_')) {
+        statusCode = 503;
+        errorType = 'database_error';
+        userMessage = 'Database temporarily unavailable';
+        additionalInfo.retry_after = 30;
+      } else if (error.message?.includes('validation')) {
+        statusCode = 400;
+        errorType = 'validation_error';
+        userMessage = 'Invalid request data provided';
+      } else if (error.message?.includes('permission') || error.message?.includes('unauthorized')) {
+        statusCode = 403;
+        errorType = 'permission_error';
+        userMessage = 'Insufficient permissions to create approval request';
+      } else if (error.message?.includes('timeout')) {
+        statusCode = 504;
+        errorType = 'timeout_error';
+        userMessage = 'Request timeout - approval creation took too long';
+        additionalInfo.retry_after = 30;
+      }
+      
+      return reply.status(statusCode).send({
+        error: errorType,
+        message: userMessage,
+        timestamp: new Date().toISOString(),
+        request_id: fastify.generateRequestId?.() || 'unknown',
+        deployment_id: request.body?.deployment_id,
+        environment: request.body?.environment,
+        ...additionalInfo
       });
     }
   });
@@ -593,12 +746,57 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
       const { requestId } = request.params;
       const { criterion_type, decision, comments, reviewer_name, reviewer_email } = request.body;
 
-      // Check if request exists
-      const approvalRequest = database.prepare('SELECT * FROM approval_requests WHERE id = ?').get(requestId);
+      // Enhanced request validation and existence check
+      if (!requestId || requestId.trim().length === 0) {
+        return reply.status(400).send({
+          error: 'validation_error',
+          message: 'requestId is required and cannot be empty',
+          field: 'requestId',
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      // Check if request exists with error handling
+      let approvalRequest;
+      try {
+        approvalRequest = database.prepare('SELECT * FROM approval_requests WHERE id = ?').get(requestId);
+      } catch (dbError) {
+        fastify.log.error('Database error checking approval request:', dbError);
+        return reply.status(503).send({
+          error: 'database_unavailable',
+          message: 'Database temporarily unavailable',
+          timestamp: new Date().toISOString(),
+          retry_after: 30
+        });
+      }
+      
       if (!approvalRequest) {
         return reply.status(404).send({
-          error: 'Not found',
-          message: 'Approval request not found'
+          error: 'not_found',
+          message: 'Approval request not found',
+          request_id: requestId,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      // Check if request is in a reviewable state
+      if (approvalRequest.status === 'approved') {
+        return reply.status(409).send({
+          error: 'already_approved',
+          message: 'This approval request has already been approved',
+          request_id: requestId,
+          current_status: approvalRequest.status,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      if (approvalRequest.status === 'rejected') {
+        return reply.status(409).send({
+          error: 'already_rejected',
+          message: 'This approval request has already been rejected',
+          request_id: requestId,
+          current_status: approvalRequest.status,
+          timestamp: new Date().toISOString()
         });
       }
 
@@ -677,9 +875,43 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
 
     } catch (error) {
       fastify.log.error('Error submitting deployment approval review:', error);
-      return reply.status(500).send({
-        error: 'Internal server error',
-        message: 'Failed to submit review'
+      
+      // Enhanced error handling for review submission
+      let statusCode = 500;
+      let errorType = 'internal_server_error';
+      let userMessage = 'Failed to submit review';
+      let additionalInfo = {};
+      
+      if (error.message?.includes('database') || error.code?.startsWith('SQLITE_')) {
+        if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+          statusCode = 409;
+          errorType = 'duplicate_review';
+          userMessage = 'You have already submitted a review for this criterion';
+          additionalInfo.criterion_type = request.body?.criterion_type;
+        } else {
+          statusCode = 503;
+          errorType = 'database_error';
+          userMessage = 'Database temporarily unavailable';
+          additionalInfo.retry_after = 30;
+        }
+      } else if (error.message?.includes('permission')) {
+        statusCode = 403;
+        errorType = 'permission_error';
+        userMessage = 'Insufficient permissions to submit review';
+      } else if (error.message?.includes('validation')) {
+        statusCode = 400;
+        errorType = 'validation_error';
+        userMessage = 'Invalid review data provided';
+      }
+      
+      return reply.status(statusCode).send({
+        error: errorType,
+        message: userMessage,
+        timestamp: new Date().toISOString(),
+        request_id: request.params?.requestId,
+        reviewer_email: request.body?.reviewer_email,
+        criterion_type: request.body?.criterion_type,
+        ...additionalInfo
       });
     }
   });

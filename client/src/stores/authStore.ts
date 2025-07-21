@@ -75,7 +75,7 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await fetch(`${API_BASE_URL}/auth/login`, {
+          const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -94,8 +94,8 @@ export const useAuthStore = create<AuthState>()(
 
           const data = await response.json();
           
-          // Calculate token expiration (typically 15 minutes for access token)
-          const tokenExpiration = Date.now() + (data.expiresIn * 1000);
+          // Calculate token expiration from expiresAt field
+          const tokenExpiration = new Date(data.expiresAt).getTime();
           
           set({
             user: data.user,
@@ -127,7 +127,7 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true, error: null });
         
         try {
-          const response = await fetch(`${API_BASE_URL}/auth/register`, {
+          const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ export const useAuthStore = create<AuthState>()(
             ...(returnUrl && { returnUrl })
           });
 
-          const response = await fetch(`${API_BASE_URL}/auth/oauth/authorize?${queryParams.toString()}`, {
+          const response = await fetch(`${API_BASE_URL}/api/auth/oauth/authorize?${queryParams.toString()}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -204,7 +204,7 @@ export const useAuthStore = create<AuthState>()(
             state
           });
 
-          const response = await fetch(`${API_BASE_URL}/auth/oauth/callback/${provider}?${queryParams.toString()}`, {
+          const response = await fetch(`${API_BASE_URL}/api/auth/oauth/callback/${provider}?${queryParams.toString()}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -252,12 +252,12 @@ export const useAuthStore = create<AuthState>()(
         
         // Call logout endpoint to invalidate refresh token on server
         if (refreshToken) {
-          fetch(`${API_BASE_URL}/auth/logout`, {
+          fetch(`${API_BASE_URL}/api/auth/logout`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${refreshToken}`,
             },
+            body: JSON.stringify({ sessionId: undefined }),
           }).catch(console.error); // Don't block logout on server error
         }
 
@@ -281,12 +281,12 @@ export const useAuthStore = create<AuthState>()(
         }
 
         try {
-          const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+          const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${refreshToken}`,
             },
+            body: JSON.stringify({ refreshToken }),
           });
 
           if (!response.ok) {
@@ -294,7 +294,7 @@ export const useAuthStore = create<AuthState>()(
           }
 
           const data = await response.json();
-          const tokenExpiration = Date.now() + (data.expiresIn * 1000);
+          const tokenExpiration = Date.now() + (15 * 60 * 1000); // 15 minutes
 
           set({
             accessToken: data.accessToken,
@@ -345,7 +345,7 @@ export const useAuthStore = create<AuthState>()(
 
         // Token is still valid, verify with server
         try {
-          const response = await fetch(`${API_BASE_URL}/auth/me`, {
+          const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`,
             },
@@ -401,7 +401,12 @@ export const getAuthHeaders = (): Record<string, string> => {
 };
 
 // Utility function to make authenticated API calls
-export   
+export const authenticatedFetch = async (
+  url: string, 
+  options: RequestInit = {}
+): Promise<Response> => {
+  const authHeaders = getAuthHeaders();
+  
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -432,7 +437,10 @@ export
 };
 
 // Auto-refresh token setup
-export     
+export const setupTokenRefresh = (): (() => void) => {
+  const checkAndRefresh = async () => {
+    const { isAuthenticated, tokenExpiration, refreshTokens } = useAuthStore.getState();
+    
     if (isAuthenticated && tokenExpiration) {
       // Refresh token 5 minutes before expiration
       const refreshTime = tokenExpiration - (5 * 60 * 1000);
@@ -444,7 +452,10 @@ export
   };
 
   // Check every minute
-  setInterval(checkAndRefresh, 60 * 1000);
+  const interval = setInterval(checkAndRefresh, 60 * 1000);
+  
+  // Return cleanup function
+  return () => clearInterval(interval);
 };
 
 export default useAuthStore;

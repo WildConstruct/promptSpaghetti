@@ -1,0 +1,10 @@
+{
+  "maxRetries": 5,
+  "retryDelay": 1500,
+  "timeout": 45000,
+  "batchSize": 15,
+  "enableLogging": true,
+  "logLevel": "INFO",
+  "enablePerformanceTracking": true,
+  "enableErrorRecovery": true
+}

@@ -10,8 +10,8 @@ import {
   TemplateImportResult,
   TemplateVersion,
   TemplateBundle
-} from '../templates/TemplateVersionManager';
-import { ProjectTemplate } from '../templates/ProjectTemplateManager';
+} from '../../templates/TemplateVersionManager';
+import { ProjectTemplate } from '../../templates/ProjectTemplateManager';
 import {
   FiUpload,
   FiDownload,
@@ -56,7 +56,18 @@ interface ValidationResult {
   };
 }
 
-export   const [importStep, setImportStep] = useState<ImportStep>('source');
+export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProps> = ({
+  isOpen,
+  onClose,
+  mode,
+  template,
+  onImportComplete,
+  onExportComplete,
+  className = ''
+}) => {
+  // Import state
+  const [importSource, setImportSource] = useState<ImportSource>('file');
+  const [importStep, setImportStep] = useState<ImportStep>('source');
   const [importFile, setImportFile] = useState<File | null>(null);
   const [importUrl, setImportUrl] = useState('');
   const [gitConfig, setGitConfig] = useState({
@@ -74,6 +85,8 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
   // Common state
   const [loading, setLoading] = useState(false);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
+  const [errors, setErrors] = useState<string[]>([]);
+  const [warnings, setWarnings] = useState<string[]>([]);
   const [importOptions, setImportOptions] = useState<TemplateImportOptions>({
     format: 'json',
     source: '',
@@ -111,9 +124,55 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
     }
   }, []);
 
-  const handleValidateTemplate = async () => {
+  const handleValidateTemplate = async (): Promise<void> => {
     setLoading(true);
+    setErrors([]);
+    setWarnings([]);
+    
     try {
+      // Validate input source
+      if (!importFile && !importUrl && !gitConfig.url) {
+        throw new Error('Please select a template source');
+      }
+      
+      if (importSource === 'file' && !importFile) {
+        throw new Error('Please select a file to import');
+      }
+      
+      if (importSource === 'url' && !importUrl) {
+        throw new Error('Please enter a valid URL');
+      }
+      
+      if (importSource === 'git' && !gitConfig.url) {
+        throw new Error('Please enter a valid Git repository URL');
+      }
+      
+      // Validate file type for file imports
+      if (importFile) {
+        const allowedExtensions = ['.json', '.yaml', '.yml', '.zip', '.bundle'];
+        const hasValidExtension = allowedExtensions.some(ext => 
+          importFile.name.toLowerCase().endsWith(ext)
+        );
+        
+        if (!hasValidExtension) {
+          throw new Error('Invalid file type. Supported formats: JSON, YAML, ZIP, Bundle');
+        }
+        
+        // Check file size (max 50MB)
+        if (importFile.size > 50 * 1024 * 1024) {
+          throw new Error('File size exceeds maximum limit of 50MB');
+        }
+      }
+      
+      // Validate URL format
+      if (importSource === 'url' && importUrl) {
+        try {
+          new URL(importUrl);
+        } catch {
+          throw new Error('Invalid URL format');
+        }
+      }
+      
       // Mock validation - in real implementation, would validate the template
       const mockValidation: ValidationResult = {
         valid: true,
@@ -128,26 +187,43 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
       };
       
       setValidation(mockValidation);
+      setWarnings(mockValidation.warnings);
+      
       if (mockValidation.valid) {
         setImportStep('preview');
       }
+      
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Validation failed';
       console.error('Validation failed:', error);
+      setErrors([errorMessage]);
       setValidation({
         valid: false,
         warnings: [],
-        errors: ['Failed to validate template: ' + (error as Error).message]
+        errors: [errorMessage]
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleImportTemplate = async () => {
+  const handleImportTemplate = async (): Promise<void> => {
     setLoading(true);
     setImportStep('import');
+    setErrors([]);
+    setWarnings([]);
     
     try {
+      // Additional validation before import
+      if (!validation?.valid) {
+        throw new Error('Template validation must pass before import');
+      }
+      
+      // Check for conflicts in merge strategy
+      if (importOptions.merge_strategy === 'manual' && importOptions.resolve_conflicts === 'auto') {
+        setWarnings(prev => [...prev, 'Manual merge strategy with auto conflict resolution may cause issues']);
+      }
+      
       // Mock import result - in real implementation, would call TemplateVersionManager
       const mockResult: TemplateImportResult = {
         success: true,
@@ -168,23 +244,43 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
         can_rollback: true
       };
       
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate import time
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       setImportStep('complete');
+      setWarnings(prev => [...prev, ...mockResult.warnings]);
       onImportComplete?.(mockResult);
+      
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Import failed';
       console.error('Import failed:', error);
+      setErrors([errorMessage]);
+      
+      // Reset to previous step on error
+      setImportStep('preview');
     } finally {
       setLoading(false);
     }
   };
 
   // Export handlers
-  const handleExportTemplate = async () => {
+  const handleExportTemplate = async (): Promise<void> => {
     setLoading(true);
     setExportStep('export');
+    setErrors([]);
+    setWarnings([]);
     
     try {
+      // Validate template exists
+      if (!template) {
+        throw new Error('No template selected for export');
+      }
+      
+      // Validate export options
+      if (exportOptions.include_version_history && !exportOptions.include_dependencies) {
+        setWarnings(prev => [...prev, 'Exporting version history without dependencies may cause import issues']);
+      }
+      
       // Mock export - in real implementation, would call TemplateVersionManager
       const mockResult = {
         download_url: 'https://example.com/download/template-export.json',
@@ -193,19 +289,26 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
         checksum: 'abc123def456'
       };
       
+      // Simulate processing time
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       setExportStep('complete');
       onExportComplete?.(mockResult);
+      
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Export failed';
       console.error('Export failed:', error);
+      setErrors([errorMessage]);
+      
+      // Reset to format selection on error
+      setExportStep('format');
     } finally {
       setLoading(false);
     }
   };
 
   // Render helpers
-  const renderImportStepIndicator = () => (
+  const renderImportStepIndicator = (): JSX.Element => (
     <div className="flex items-center justify-center mb-6 space-x-2">
       {['source', 'options', 'validation', 'preview', 'import', 'complete'].map((step, index) => (
         <div key={step} className="flex items-center">
@@ -222,7 +325,7 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
     </div>
   );
 
-  const renderSourceSelection = () => (
+  const renderSourceSelection = (): JSX.Element => (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">Select Import Source</h3>
       
@@ -343,7 +446,7 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
     </div>
   );
 
-  const renderImportOptions = () => (
+  const renderImportOptions = (): JSX.Element => (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">Import Options</h3>
 
@@ -483,7 +586,7 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
     </div>
   );
 
-  const renderValidationResults = () => (
+  const renderValidationResults = (): JSX.Element => (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Validation Results</h3>
       
@@ -552,7 +655,7 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
     </div>
   );
 
-  const renderExportOptions = () => (
+  const renderExportOptions = (): JSX.Element => (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold">Export Configuration</h3>
 
@@ -697,6 +800,24 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
             <>
               {renderImportStepIndicator()}
               
+              {/* Error Display */}
+              {errors.length > 0 && (
+                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center text-red-800 text-sm font-medium mb-2">
+                    <FiX className="mr-2" />
+                    {errors.length === 1 ? 'Error:' : 'Errors:'}
+                  </div>
+                  <ul className="text-red-700 text-sm space-y-1">
+                    {errors.map((error, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>{error}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
               <div className="min-h-[400px]">
                 {importStep === 'source' && renderSourceSelection()}
                 {importStep === 'options' && renderImportOptions()}
@@ -716,15 +837,43 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
                     <div className="text-sm text-gray-600">
                       This may take a few moments depending on the template size.
                     </div>
+                    
+                    {/* Show warnings during import */}
+                    {warnings.length > 0 && (
+                      <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div className="flex items-center text-yellow-800 text-sm">
+                          <FiAlert className="mr-2" />
+                          Processing with {warnings.length} warning{warnings.length > 1 ? 's' : ''}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
                 {importStep === 'complete' && (
                   <div className="text-center py-8">
                     <FiCheck className="text-6xl text-green-600 mx-auto mb-4" />
                     <div className="text-xl font-semibold mb-2">Import Complete!</div>
-                    <div className="text-gray-600">
+                    <div className="text-gray-600 mb-4">
                       Your template has been successfully imported and is ready to use.
                     </div>
+                    
+                    {/* Show any final warnings */}
+                    {warnings.length > 0 && (
+                      <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-left">
+                        <div className="flex items-center text-yellow-800 text-sm font-medium mb-2">
+                          <FiAlert className="mr-2" />
+                          Import completed with warnings:
+                        </div>
+                        <ul className="text-yellow-700 text-sm space-y-1">
+                          {warnings.map((warning, index) => (
+                            <li key={index} className="flex items-start">
+                              <span className="mr-2">•</span>
+                              <span>{warning}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -799,6 +948,17 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
           ) : (
             <>
               {/* Export UI */}
+              {/* Error Display for Export */}
+              {errors.length > 0 && (
+                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center text-red-800 text-sm font-medium mb-2">
+                    <FiX className="mr-2" />
+                    Export Error:
+                  </div>
+                  <div className="text-red-700 text-sm">{errors[0]}</div>
+                </div>
+              )}
+              
               <div className="min-h-[400px]">
                 {renderExportOptions()}
               </div>

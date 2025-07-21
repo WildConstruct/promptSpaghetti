@@ -12,7 +12,7 @@ ALWAYS start by checking what you should be working on:
 node src/show-priority-tasks.js
 
 # STEP 2: See full coordination dashboard 
-node src/monitor-available-tasks.js
+node src/monitor-system.js --mode tasks
 ```
 
 **💡 KEY INSIGHT:** The priority dashboard tells you what business needs most right now!
@@ -73,7 +73,7 @@ node src/finish-task.js T-1752951043927-918
 
 1. **Check available work:**
    ```bash
-   node src/monitor-available-tasks.js
+   node src/monitor-system.js --mode tasks
    ```
 
 2. **Grab priority tasks:**

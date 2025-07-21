@@ -1,0 +1,33 @@
+# CodeQL configuration for static security analysis
+name: "CodeQL Config"
+
+disable-default-queries: false
+
+queries:
+  - name: security-extended
+    uses: security-extended
+  - name: security-and-quality
+    uses: security-and-quality
+
+query-filters:
+  - exclude:
+      id: 
+        - js/unused-local-variable  # Handled by ESLint
+        - js/debugger-statement     # Handled by ESLint
+
+paths-ignore:
+  - "node_modules/**"
+  - "dist/**"
+  - "build/**"
+  - "coverage/**"
+  - "*.min.js"
+  - "*.test.ts"
+  - "*.test.tsx"
+  - "*.spec.ts"
+  - "*.spec.tsx"
+
+paths:
+  - "client/src/**"
+  - "server/src/**"
+  - "packages/*/src/**"
+  - "src/**"

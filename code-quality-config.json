@@ -1,0 +1,101 @@
+{
+  "name": "PromptSpaghetti Code Quality Configuration",
+  "version": "1.0.0",
+  "description": "Comprehensive static analysis configuration for the PromptSpaghetti project",
+  "tools": {
+    "eslint": {
+      "enabled": true,
+      "config": ".eslintrc.json",
+      "sonarConfig": ".eslintrc.sonar.json",
+      "rules": {
+        "complexity": 15,
+        "maxLines": 500,
+        "maxDepth": 4,
+        "maxParams": 5
+      }
+    },
+    "prettier": {
+      "enabled": true,
+      "printWidth": 80,
+      "tabWidth": 2,
+      "semi": true,
+      "singleQuote": true,
+      "trailingComma": "es5"
+    },
+    "typescript": {
+      "enabled": true,
+      "strict": true,
+      "noImplicitAny": true,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true
+    },
+    "sonarjs": {
+      "enabled": true,
+      "cognitiveComplexity": 15,
+      "duplicateStringThreshold": 5
+    },
+    "codeql": {
+      "enabled": true,
+      "config": ".codeqlconfig.yml",
+      "queries": ["security-extended", "security-and-quality"]
+    }
+  },
+  "qualityGates": {
+    "coverage": {
+      "global": 80,
+      "core": 90,
+      "validation": 95
+    },
+    "complexity": {
+      "cyclomaticComplexity": 15,
+      "cognitiveComplexity": 15,
+      "maxDepth": 4
+    },
+    "duplication": {
+      "maxDuplicateLines": 10,
+      "maxDuplicateBlocks": 0
+    },
+    "maintainability": {
+      "minMaintainabilityIndex": 65,
+      "maxTechnicalDebt": "2h"
+    }
+  },
+  "reportFormats": [
+    "json",
+    "html",
+    "sarif",
+    "checkstyle",
+    "junit"
+  ],
+  "integrations": {
+    "vscode": {
+      "eslint": true,
+      "prettier": true,
+      "typescript": true
+    },
+    "githubActions": {
+      "qualityGates": true,
+      "codeql": true,
+      "dependabot": true
+    },
+    "preCommit": {
+      "lint": true,
+      "format": true,
+      "typecheck": true,
+      "test": true
+    }
+  },
+  "excludePatterns": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "*.min.js",
+    "*.d.ts",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ]
+}

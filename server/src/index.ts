@@ -106,6 +106,8 @@ import { cryptographicEvidenceRoutes } from './routes/cryptographic-evidence';
 import openidConnectRoutes from './routes/openid-connect';
 import modelEvaluationWebhooks from './routes/model-evaluation-webhooks';
 import { ModelEvaluationTriggerService, defaultModelEvaluationConfig } from './services/ModelEvaluationTriggerService';
+import { conflictResolutionRoutes } from './api/collaboration/conflict-resolution';
+import { Epic23WorkspaceDAO } from './database/epic23-workspace-dao';
 
 // Error Handling & Resilience System
 import { errorHandlerPlugin } from './middleware/error-handler';
@@ -1600,6 +1602,18 @@ try {
   server.register(cryptographicEvidenceRoutes, { prefix: '/api/cryptographic-evidence' });
   server.register(openidConnectRoutes, { prefix: '/auth/oidc' });
   server.register(modelEvaluationWebhooks, { prefix: '/api/model-evaluation' });
+  
+  // Register Epic 23 collaboration routes - conflict resolution
+  try {
+    const epic23WorkspaceDAO = new Epic23WorkspaceDAO(db as any);
+    server.register(async (fastify) => {
+      await conflictResolutionRoutes(fastify, epic23WorkspaceDAO);
+    }, { prefix: '/api/collaboration' });
+    console.log('Epic 23 conflict resolution routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register Epic 23 conflict resolution routes:', error);
+  }
+  
   console.log(
     'Epic 19 security platform routes registered successfully: data access, ' +
     'audit workflow, access request workflow, policy update workflow, ' +

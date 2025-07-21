@@ -39,6 +39,52 @@ jobs:
         eslint-args: '--ext .js,.jsx,.ts,.tsx .'
         annotations: true
         
+    - name: Run comprehensive code quality analysis
+      run: |
+        echo "## 📊 Code Quality Analysis" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Run enhanced static analysis
+        node scripts/analyze-code-quality.js > quality-report.txt || true
+        
+        # Display key metrics
+        if [ -f quality-report.txt ]; then
+          echo "### 🎯 Key Findings" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          head -20 quality-report.txt >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+    - name: SonarJS analysis
+      run: |
+        # Install SonarJS if not present
+        if ! npm list eslint-plugin-sonarjs >/dev/null 2>&1; then
+          echo "Installing SonarJS plugin..."
+          npm install --save-dev eslint-plugin-sonarjs || true
+        fi
+        
+        # Run SonarJS analysis if available
+        if [ -f .eslintrc.sonar.json ]; then
+          echo "## 🧪 SonarJS Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          npx eslint . --config .eslintrc.sonar.json --ext .js,.jsx,.ts,.tsx --format json --output-file sonar-results.json || true
+          
+          if [ -f sonar-results.json ]; then
+            node -e "
+              const results = require('./sonar-results.json');
+              const issues = results.reduce((sum, file) => sum + file.errorCount + file.warningCount, 0);
+              console.log('| Metric | Count |');
+              console.log('|--------|-------|');
+              console.log(\`| Files analyzed | \${results.length} |\`);
+              console.log(\`| Issues found | \${issues} |\`);
+              console.log(\`| Code smells | \${results.reduce((sum, file) => sum + file.warningCount, 0)} |\`);
+              console.log(\`| Bugs | \${results.reduce((sum, file) => sum + file.errorCount, 0)} |\`);
+            " >> $GITHUB_STEP_SUMMARY
+          fi
+        fi
+        
     - name: TypeScript strict checks
       run: |
         echo "Checking for TypeScript errors..."
@@ -124,6 +170,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Full history for better analysis
     
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -138,6 +186,17 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
       
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: javascript
+        config-file: .codeqlconfig.yml
+        
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:javascript"
+        
     - name: Run security audit
       id: audit
       run: |

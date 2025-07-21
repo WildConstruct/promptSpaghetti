@@ -1697,4 +1697,228 @@ export class WorkspaceDAO {
       permissions: row.permissions
     }));
   }
+
+  // ====== RBAC PERMISSION METHODS ======
+
+  /**
+   * Get user's effective permissions for a workspace
+   * Combines permissions from all assigned roles
+   */
+  async getUserPermissions(
+    userId: string, 
+    workspaceId: string
+  ): Promise<{ permissions: number; roles: ACLRole[] } | null> {
+    // First check if user has workspace membership
+    const membershipStmt = this.db.prepare(`
+      SELECT id, status 
+      FROM user_memberships 
+      WHERE user_id = ? AND workspace_id = ? AND status = 'active'
+    `);
+    
+    const membership = membershipStmt.get(userId, workspaceId) as any;
+    if (!membership) {
+      return null; // User is not a member of this workspace
+    }
+
+    // Get all roles assigned to the user in this workspace
+    const rolesStmt = this.db.prepare(`
+      SELECT 
+        ar.id, ar.workspace_id, ar.name, ar.description, 
+        ar.permissions, ar.is_system_role, ar.created_at, ar.updated_at,
+        aa.scope_type, aa.scope_id, aa.expires_at
+      FROM acl_assignments aa
+      JOIN acl_roles ar ON aa.role_id = ar.id
+      WHERE aa.user_id = ? 
+        AND (
+          (aa.scope_type = 'workspace' AND aa.scope_id = ?) OR
+          (aa.scope_type = 'project' AND aa.scope_id IN (
+            SELECT id FROM projects WHERE workspace_id = ? AND status != 'deleted'
+          ))
+        )
+        AND (aa.expires_at IS NULL OR aa.expires_at > CURRENT_TIMESTAMP)
+      ORDER BY ar.permissions DESC
+    `);
+
+    const roleRows = rolesStmt.all(userId, workspaceId, workspaceId) as any[];
+    
+    if (roleRows.length === 0) {
+      return { permissions: 0, roles: [] }; // User has no roles assigned
+    }
+
+    // Combine permissions from all roles using bitwise OR
+    let combinedPermissions = 0;
+    const roles: ACLRole[] = [];
+
+    for (const row of roleRows) {
+      combinedPermissions |= row.permissions;
+      roles.push({
+        id: row.id,
+        workspace_id: row.workspace_id,
+        name: row.name,
+        description: row.description,
+        permissions: row.permissions,
+        is_system_role: Boolean(row.is_system_role),
+        created_at: new Date(row.created_at),
+        updated_at: new Date(row.updated_at)
+      });
+    }
+
+    return {
+      permissions: combinedPermissions,
+      roles: roles
+    };
+  }
+
+  /**
+   * Check if user has specific permissions in workspace or project
+   */
+  async hasPermissions(
+    userId: string,
+    workspaceId: string,
+    requiredPermissions: number,
+    projectId?: string
+  ): Promise<boolean> {
+    // Check if user is workspace owner (owners have all permissions)
+    const workspace = await this.getWorkspace(workspaceId);
+    if (workspace && workspace.owner_id === userId) {
+      return true;
+    }
+
+    const userPermissions = await this.getUserPermissions(userId, workspaceId);
+    if (!userPermissions) {
+      return false;
+    }
+
+    // Check if user has the required permissions using bitwise AND
+    return (userPermissions.permissions & requiredPermissions) === requiredPermissions;
+  }
+
+  /**
+   * Get all users with their roles in a workspace
+   */
+  async getWorkspaceMembers(workspaceId: string): Promise<Array<{
+    user_id: string;
+    membership: UserMembership;
+    roles: ACLRole[];
+    permissions: number;
+  }>> {
+    // Get all active memberships
+    const memberships = await this.getWorkspaceMemberships(workspaceId, { status: 'active' });
+    
+    const members = [];
+    for (const membership of memberships) {
+      const userPermissions = await this.getUserPermissions(membership.user_id, workspaceId);
+      if (userPermissions) {
+        members.push({
+          user_id: membership.user_id,
+          membership,
+          roles: userPermissions.roles,
+          permissions: userPermissions.permissions
+        });
+      }
+    }
+
+    return members;
+  }
+
+  /**
+   * Get workspace memberships with filtering
+   */
+  async getWorkspaceMemberships(
+    workspaceId: string, 
+    filter: { status?: string; user_id?: string } = {}
+  ): Promise<UserMembership[]> {
+    let query = `
+      SELECT id, user_id, workspace_id, status, invited_by, joined_at, last_active_at
+      FROM user_memberships
+      WHERE workspace_id = ?
+    `;
+    
+    const params: any[] = [workspaceId];
+    
+    if (filter.status) {
+      query += ' AND status = ?';
+      params.push(filter.status);
+    }
+    
+    if (filter.user_id) {
+      query += ' AND user_id = ?';
+      params.push(filter.user_id);
+    }
+    
+    query += ' ORDER BY joined_at DESC';
+    
+    const stmt = this.db.prepare(query);
+    const rows = stmt.all(...params) as any[];
+    
+    return rows.map(row => ({
+      id: row.id,
+      user_id: row.user_id,
+      workspace_id: row.workspace_id,
+      status: row.status,
+      invited_by: row.invited_by,
+      joined_at: new Date(row.joined_at),
+      last_active_at: new Date(row.last_active_at)
+    }));
+  }
+
+  /**
+   * Update user role assignments
+   */
+  async updateUserRole(
+    userId: string,
+    workspaceId: string,
+    newRoleName: string,
+    updatedBy: string
+  ): Promise<boolean> {
+    // Get the new role
+    const newRole = await this.getRole(workspaceId, newRoleName);
+    if (!newRole) {
+      throw new Error(`Role '${newRoleName}' not found`);
+    }
+
+    // Remove existing role assignments for this user in this workspace
+    const removeStmt = this.db.prepare(`
+      DELETE FROM acl_assignments 
+      WHERE user_id = ? AND scope_type = 'workspace' AND scope_id = ?
+    `);
+    removeStmt.run(userId, workspaceId);
+
+    // Create new role assignment
+    await this.createACLAssignment({
+      user_id: userId,
+      role_id: newRole.id,
+      scope_type: 'workspace',
+      scope_id: workspaceId
+    }, updatedBy);
+
+    return true;
+  }
+
+  /**
+   * Remove user from workspace (revoke all permissions)
+   */
+  async removeUserFromWorkspace(userId: string, workspaceId: string): Promise<boolean> {
+    // Remove user membership
+    const membershipStmt = this.db.prepare(`
+      UPDATE user_memberships 
+      SET status = 'left', last_active_at = CURRENT_TIMESTAMP
+      WHERE user_id = ? AND workspace_id = ?
+    `);
+    membershipStmt.run(userId, workspaceId);
+
+    // Remove all role assignments
+    const assignmentStmt = this.db.prepare(`
+      DELETE FROM acl_assignments 
+      WHERE user_id = ? AND (
+        (scope_type = 'workspace' AND scope_id = ?) OR
+        (scope_type = 'project' AND scope_id IN (
+          SELECT id FROM projects WHERE workspace_id = ?
+        ))
+      )
+    `);
+    assignmentStmt.run(userId, workspaceId, workspaceId);
+
+    return true;
+  }
 }

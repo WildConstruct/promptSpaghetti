@@ -52,73 +52,145 @@ async function checkAutoApprovalEligibility(deployment, environment) {
   try {
     // Check test coverage
     if (conditions.test_coverage) {
-      const coverage = await getTestCoverage(deployment.sha);
-      const eligible = coverage >= conditions.test_coverage;
-      checks.push({
-        name: 'test_coverage',
-        required: conditions.test_coverage,
-        actual: coverage,
-        passed: eligible
-      });
+      try {
+        const coverage = await getTestCoverage(deployment.sha);
+        const eligible = coverage >= conditions.test_coverage;
+        checks.push({
+          name: 'test_coverage',
+          required: conditions.test_coverage,
+          actual: coverage,
+          passed: eligible,
+          error: null
+        });
+      } catch (coverageError) {
+        console.error('Failed to get test coverage:', coverageError);
+        checks.push({
+          name: 'test_coverage',
+          required: conditions.test_coverage,
+          actual: 0,
+          passed: false,
+          error: `Failed to retrieve test coverage: ${coverageError.message}`
+        });
+      }
     }
 
     // Check security scan
     if (conditions.security_scan) {
-      const securityStatus = await getSecurityScanStatus(deployment.sha);
-      const eligible = securityStatus === conditions.security_scan;
-      checks.push({
-        name: 'security_scan',
-        required: conditions.security_scan,
-        actual: securityStatus,
-        passed: eligible
-      });
+      try {
+        const securityStatus = await getSecurityScanStatus(deployment.sha);
+        const eligible = securityStatus === conditions.security_scan;
+        checks.push({
+          name: 'security_scan',
+          required: conditions.security_scan,
+          actual: securityStatus,
+          passed: eligible,
+          error: null
+        });
+      } catch (securityError) {
+        console.error('Failed to get security scan status:', securityError);
+        checks.push({
+          name: 'security_scan',
+          required: conditions.security_scan,
+          actual: 'failed',
+          passed: false,
+          error: `Failed to retrieve security scan status: ${securityError.message}`
+        });
+      }
     }
 
     // Check performance regression
     if (conditions.performance_regression !== undefined) {
-      const hasRegression = await checkPerformanceRegression(deployment.sha);
-      const eligible = hasRegression === conditions.performance_regression;
-      checks.push({
-        name: 'performance_regression',
-        required: !conditions.performance_regression,
-        actual: !hasRegression,
-        passed: eligible
-      });
+      try {
+        const hasRegression = await checkPerformanceRegression(deployment.sha);
+        const eligible = hasRegression === conditions.performance_regression;
+        checks.push({
+          name: 'performance_regression',
+          required: !conditions.performance_regression,
+          actual: !hasRegression,
+          passed: eligible,
+          error: null
+        });
+      } catch (performanceError) {
+        console.error('Failed to check performance regression:', performanceError);
+        checks.push({
+          name: 'performance_regression',
+          required: !conditions.performance_regression,
+          actual: false,
+          passed: false,
+          error: `Failed to check performance regression: ${performanceError.message}`
+        });
+      }
     }
 
     // Check for breaking changes
     if (conditions.breaking_changes !== undefined) {
-      const hasBreaking = await checkBreakingChanges(deployment.sha);
-      const eligible = hasBreaking === conditions.breaking_changes;
-      checks.push({
-        name: 'breaking_changes',
-        required: !conditions.breaking_changes,
-        actual: !hasBreaking,
-        passed: eligible
-      });
+      try {
+        const hasBreaking = await checkBreakingChanges(deployment.sha);
+        const eligible = hasBreaking === conditions.breaking_changes;
+        checks.push({
+          name: 'breaking_changes',
+          required: !conditions.breaking_changes,
+          actual: !hasBreaking,
+          passed: eligible,
+          error: null
+        });
+      } catch (breakingError) {
+        console.error('Failed to check breaking changes:', breakingError);
+        checks.push({
+          name: 'breaking_changes',
+          required: !conditions.breaking_changes,
+          actual: false,
+          passed: false,
+          error: `Failed to check breaking changes: ${breakingError.message}`
+        });
+      }
     }
 
     const allPassed = checks.every(check => check.passed);
+    const hasErrors = checks.some(check => check.error);
     
     return {
-      eligible: allPassed,
+      eligible: allPassed && !hasErrors,
       checks,
-      reason: allPassed ? 'All auto-approval conditions met' : 'Some auto-approval conditions failed'
+      reason: hasErrors ? 'Auto-approval failed due to check errors' :
+              allPassed ? 'All auto-approval conditions met' : 
+              'Some auto-approval conditions failed',
+      hasErrors
     };
   } catch (error) {
     console.error('Error checking auto-approval eligibility:', error);
     return { 
       eligible: false, 
-      reason: `Auto-approval check failed: ${error.message}`,
-      checks
+      reason: `Auto-approval system error: ${error.message}`,
+      checks: checks.length > 0 ? checks : [{
+        name: 'system_error',
+        required: 'system_check',
+        actual: 'failed',
+        passed: false,
+        error: error.message
+      }],
+      systemError: true,
+      hasErrors: true
     };
   }
 }
 
-// Get approval status from database
+// Get approval status from database with comprehensive error handling
 async function getApprovalStatus(deploymentId, environment) {
+  if (!deploymentId) {
+    throw new Error('deploymentId is required for approval status check');
+  }
+  
+  if (!environment) {
+    throw new Error('environment is required for approval status check');
+  }
+  
   try {
     const db = getDatabase();
+    
+    if (!db) {
+      throw new Error('Database connection not available');
+    }
     
     // Query for approval requests related to this deployment
     const approvalQuery = `
@@ -145,7 +217,10 @@ async function getApprovalStatus(deploymentId, environment) {
       return {
         required: ENVIRONMENT_APPROVAL_RULES[environment]?.required || false,
         status: 'no_request',
-        approval_url: null
+        approval_url: null,
+        message: 'No approval request found for this deployment',
+        deployment_id: deploymentId,
+        environment
       };
     }
 
@@ -170,7 +245,21 @@ async function getApprovalStatus(deploymentId, environment) {
     };
   } catch (error) {
     console.error('Error getting approval status:', error);
-    throw error;
+    
+    // Return structured error information instead of throwing
+    return {
+      required: ENVIRONMENT_APPROVAL_RULES[environment]?.required || false,
+      status: 'error',
+      approval_url: null,
+      error: {
+        message: error.message,
+        type: 'database_error',
+        deployment_id: deploymentId,
+        environment,
+        timestamp: new Date().toISOString()
+      },
+      message: 'Failed to check approval status due to system error'
+    };
   }
 }
 
@@ -221,10 +310,26 @@ async function checkBreakingChanges(sha) {
   }
 }
 
-// Create automatic approval for eligible deployments
+// Create automatic approval for eligible deployments with validation
 async function createAutoApproval(deploymentId, environment, autoApprovalCheck) {
+  if (!deploymentId) {
+    throw new Error('deploymentId is required for auto-approval creation');
+  }
+  
+  if (!environment) {
+    throw new Error('environment is required for auto-approval creation');
+  }
+  
+  if (!autoApprovalCheck || !autoApprovalCheck.eligible) {
+    throw new Error('Invalid auto-approval check result provided');
+  }
+  
   try {
     const db = getDatabase();
+    
+    if (!db) {
+      throw new Error('Database connection not available for auto-approval creation');
+    }
     
     // Create approval request
     const requestId = `auto-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -282,7 +387,17 @@ async function createAutoApproval(deploymentId, environment, autoApprovalCheck) 
     };
   } catch (error) {
     console.error('Error creating auto-approval:', error);
-    throw error;
+    
+    // Enhance error with context
+    const enhancedError = new Error(
+      `Failed to create auto-approval for deployment ${deploymentId} in ${environment}: ${error.message}`
+    );
+    enhancedError.originalError = error;
+    enhancedError.deploymentId = deploymentId;
+    enhancedError.environment = environment;
+    enhancedError.timestamp = new Date().toISOString();
+    
+    throw enhancedError;
   }
 }
 
@@ -307,23 +422,42 @@ export default async function handler(req, res) {
       create_auto_approval = false
     } = req.method === 'GET' ? req.query : req.body;
 
+    // Enhanced input validation
     if (!deployment_id) {
       return res.status(400).json({
         error: 'Missing deployment_id parameter',
-        required_params: ['deployment_id']
+        message: 'deployment_id is required to check approval status',
+        required_params: ['deployment_id'],
+        optional_params: ['environment', 'sha', 'check_auto_approval', 'create_auto_approval'],
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    // Validate deployment_id format
+    if (typeof deployment_id !== 'string' || deployment_id.trim().length === 0) {
+      return res.status(400).json({
+        error: 'Invalid deployment_id format',
+        message: 'deployment_id must be a non-empty string',
+        provided: typeof deployment_id,
+        timestamp: new Date().toISOString()
       });
     }
 
     const actualDeploymentId = sha || deployment_id;
 
-    // Check environment-specific approval requirements
-    const environmentRules = ENVIRONMENT_APPROVAL_RULES[environment];
-    if (!environmentRules) {
+    // Enhanced environment validation
+    const validEnvironments = Object.keys(ENVIRONMENT_APPROVAL_RULES);
+    if (!validEnvironments.includes(environment)) {
       return res.status(400).json({
         error: 'Invalid environment',
-        valid_environments: Object.keys(ENVIRONMENT_APPROVAL_RULES)
+        message: `Environment '${environment}' is not supported`,
+        provided_environment: environment,
+        valid_environments: validEnvironments,
+        timestamp: new Date().toISOString()
       });
     }
+    
+    const environmentRules = ENVIRONMENT_APPROVAL_RULES[environment];
 
     // If approval is not required for this environment
     if (!environmentRules.required) {
@@ -355,8 +489,23 @@ export default async function handler(req, res) {
       }
     }
 
-    // Get current approval status
+    // Get current approval status with error handling
     const approvalStatus = await getApprovalStatus(actualDeploymentId, environment);
+    
+    // Handle approval status errors
+    if (approvalStatus.status === 'error') {
+      return res.status(503).json({
+        deployment_allowed: false,
+        approval_required: approvalStatus.required,
+        error: 'Service temporarily unavailable',
+        message: 'Unable to check approval status due to system error',
+        details: approvalStatus.error,
+        retry_after: 30,
+        environment,
+        deployment_id: actualDeploymentId,
+        timestamp: new Date().toISOString()
+      });
+    }
 
     // Determine if deployment is allowed
     const deploymentAllowed = !approvalStatus.required || approvalStatus.status === 'approved';
@@ -418,10 +567,49 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Deployment gate error:', error);
-    res.status(500).json({
-      error: 'Internal server error',
-      message: 'Failed to validate deployment approval',
-      deployment_allowed: false
-    });
+    
+    // Determine appropriate error response based on error type
+    let statusCode = 500;
+    let errorType = 'internal_server_error';
+    let userMessage = 'Failed to validate deployment approval due to system error';
+    
+    if (error.message.includes('Database')) {
+      statusCode = 503;
+      errorType = 'database_unavailable';
+      userMessage = 'Service temporarily unavailable - database connection failed';
+    } else if (error.message.includes('timeout')) {
+      statusCode = 504;
+      errorType = 'timeout_error';
+      userMessage = 'Request timeout - approval validation took too long';
+    } else if (error.message.includes('validation')) {
+      statusCode = 400;
+      errorType = 'validation_error';
+      userMessage = 'Invalid request parameters';
+    }
+    
+    const errorResponse = {
+      deployment_allowed: false,
+      error: errorType,
+      message: userMessage,
+      timestamp: new Date().toISOString(),
+      environment: req.method === 'GET' ? req.query.environment : req.body?.environment,
+      deployment_id: req.method === 'GET' ? req.query.deployment_id : req.body?.deployment_id
+    };
+    
+    // Add retry information for temporary errors
+    if (statusCode >= 500 && statusCode < 600) {
+      errorResponse.retry_after = 30;
+      errorResponse.help = 'This is a temporary error. Please try again in a few moments.';
+    }
+    
+    // Add debug information in development
+    if (process.env.NODE_ENV === 'development') {
+      errorResponse.debug = {
+        error_message: error.message,
+        stack: error.stack
+      };
+    }
+    
+    res.status(statusCode).json(errorResponse);
   }
 }

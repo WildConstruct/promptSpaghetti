@@ -186,6 +186,9 @@ class QAAgent {
       task.qa_approved_by = this.agentId;
       task.qa_approval_reason = reason;
       
+      // Clear assignment since task is approved and completed
+      this.clearTaskAssignment(task);
+      
       // Save state
       this.saveState();
       
@@ -199,6 +202,28 @@ class QAAgent {
       
       // Check if we need to trigger GitHub automation
       this.checkGitHubAutomationThreshold();
+    }
+  }
+
+  // Clear task assignment when task is approved  
+  clearTaskAssignment(task) {
+    if (task.assignee && state.assignments) {
+      const assignments = state.assignments[task.assignee];
+      if (assignments) {
+        // Handle both array and comma-separated string formats
+        const taskList = Array.isArray(assignments) 
+          ? assignments.filter(id => id !== task.id)
+          : assignments.split(',').filter(id => id !== task.id);
+        
+        if (taskList.length === 0) {
+          delete state.assignments[task.assignee];
+        } else {
+          // Keep as array format
+          state.assignments[task.assignee] = taskList;
+        }
+        
+        console.log(`🧹 Cleared assignment for ${task.assignee}`);
+      }
     }
   }
   

@@ -6,35 +6,22 @@
 
 import { z } from 'zod';
 import { graphSchema, type Graph } from './graphSchema';
+import { 
+  PSGFileSchema, 
+  parsePSGFile, 
+  serializePSGFile, 
+  createPSGFile,
+  PSGFile as EnhancedPSGFile,
+  ProjectMetadata as EnhancedProjectMetadata,
+  PSGError,
+  PSGErrorType,
+  PSG_FILE_EXTENSION,
+  PSG_MIME_TYPE
+} from './fileFormats/psg';
 
-// Project metadata schema
-const ProjectMetadataSchema = z.object({
-  name: z.string().min(1, 'Project name is required'),
-  description: z.string().optional(),
-  version: z.string().default('1.0.0'),
-  createdAt: z.string().datetime(),
-  lastModified: z.string().datetime(),
-  author: z.string().optional(),
-  tags: z.array(z.string()).default([]),
-  fileFormatVersion: z.string().default('1.0.0'),
-});
-
-// Complete .psg file format schema
-const PSGFileSchema = z.object({
-  metadata: ProjectMetadataSchema,
-  graph: graphSchema,
-  settings: z.object({
-    autoSave: z.boolean().default(true),
-    autoSaveInterval: z.number().default(5000), // milliseconds
-    theme: z.enum(['light', 'dark']).default('light'),
-    gridVisible: z.boolean().default(true),
-    snapToGrid: z.boolean().default(false),
-    miniMapVisible: z.boolean().default(true),
-  }).default({}),
-});
-
-export type ProjectMetadata = z.infer<typeof ProjectMetadataSchema>;
-export type PSGFile = z.infer<typeof PSGFileSchema>;
+// Re-export enhanced types from the PSG format module
+export type ProjectMetadata = EnhancedProjectMetadata;
+export type PSGFile = EnhancedPSGFile;
 export type ProjectSettings = PSGFile['settings'];
 
 export interface SaveProjectOptions {
@@ -48,6 +35,7 @@ export interface LoadProjectResult {
   success: boolean;
   data?: PSGFile;
   error?: string;
+  errorDetails?: PSGError;
   warnings?: string[];
 }
 
@@ -55,122 +43,96 @@ export interface SaveProjectResult {
   success: boolean;
   fileName?: string;
   error?: string;
+  errorDetails?: PSGError;
+  warnings?: string[];
 }
 
 /**
  * ProjectManager class handles all project file operations
  */
 export class ProjectManager {
-  private static readonly FILE_EXTENSION = '.psg';
+  private static readonly FILE_EXTENSION = PSG_FILE_EXTENSION;
+  private static readonly MIME_TYPE = PSG_MIME_TYPE;
   private static readonly FORMAT_VERSION = '1.0.0';
 
   /**
    * Create a new project file from graph data
    */
   static createProjectFile(
-    graph: Graph,
+    graph: Graph | { nodes: any[]; edges: any[]; seed?: number; viewport?: { x: number; y: number; zoom: number } },
     options: SaveProjectOptions,
     settings: Partial<ProjectSettings> = {}
   ): PSGFile {
-    const now = new Date().toISOString();
+    // Handle both Graph types and React Flow graph data
+    const nodes = 'nodes' in graph ? graph.nodes : [];
+    const edges = 'edges' in graph ? graph.edges : [];
+    const seed = 'seed' in graph ? graph.seed : undefined;
+    const viewport = 'viewport' in graph ? graph.viewport : undefined;
     
-    const metadata: ProjectMetadata = {
-      name: options.name,
-      description: options.description,
-      version: '1.0.0',
-      createdAt: now,
-      lastModified: now,
-      author: options.author,
-      tags: options.tags || [],
-      fileFormatVersion: this.FORMAT_VERSION,
-    };
-
-    const defaultSettings: ProjectSettings = {
-      autoSave: true,
-      autoSaveInterval: 5000,
-      theme: 'light',
-      gridVisible: true,
-      snapToGrid: false,
-      miniMapVisible: true,
-      ...settings,
-    };
-
-    return {
-      metadata,
-      graph,
-      settings: defaultSettings,
-    };
+    return createPSGFile(
+      nodes,
+      edges,
+      {
+        name: options.name,
+        description: options.description,
+        author: options.author,
+        tags: options.tags,
+      },
+      settings,
+      seed,
+      viewport
+    );
   }
 
   /**
-   * Serialize project to JSON string
+   * Serialize project to JSON string with enhanced error handling
    */
-  static serializeProject(projectData: PSGFile): string {
-    try {
-      return JSON.stringify(projectData, null, 2);
-    } catch (error) {
-      throw new Error(`Failed to serialize project: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
-
-  /**
-   * Parse and validate project file content
-   */
-  static parseProjectFile(content: string): LoadProjectResult {
-    try {
-      // Parse JSON
-      const parsedData = JSON.parse(content);
-      
-      // Validate against schema
-      const validationResult = PSGFileSchema.safeParse(parsedData);
-      
-      if (!validationResult.success) {
-        const errorMessages = validationResult.error.errors
-          .map(err => `${err.path.join('.')}: ${err.message}`)
-          .join('; ');
-        
-        return {
-          success: false,
-          error: `Invalid project file format: ${errorMessages}`,
-        };
-      }
-
-      const warnings: string[] = [];
-      
-      // Check format version compatibility
-      if (validationResult.data.metadata.fileFormatVersion !== this.FORMAT_VERSION) {
-        warnings.push(
-          `Project was created with format version ${validationResult.data.metadata.fileFormatVersion},
-          current version is ${this.FORMAT_VERSION}`
-        );
-      }
-
+  static serializeProject(projectData: PSGFile, pretty: boolean = true): SaveProjectResult {
+    const result = serializePSGFile(projectData, { pretty, validate: true });
+    
+    if (result.success) {
       return {
         success: true,
-        data: validationResult.data,
-        warnings: warnings.length > 0 ? warnings : undefined,
+        warnings: result.warnings
       };
-      
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        return {
-          success: false,
-          error: 'Invalid JSON format in project file',
-        };
-      }
-      
+    } else {
       return {
         success: false,
-        error: `Failed to parse project file: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        error: result.error.message,
+        errorDetails: result.error
       };
     }
   }
 
   /**
-   * Save project file to user's device
+   * Parse and validate project file content with comprehensive error handling
+   */
+  static parseProjectFile(content: string, options: {
+    maxFileSize?: number;
+    strictValidation?: boolean;
+  } = {}): LoadProjectResult {
+    const result = parsePSGFile(content, options);
+    
+    if (result.success) {
+      return {
+        success: true,
+        data: result.data,
+        warnings: result.warnings
+      };
+    } else {
+      return {
+        success: false,
+        error: result.error.message,
+        errorDetails: result.error
+      };
+    }
+  }
+
+  /**
+   * Save project file to user's device with enhanced error handling
    */
   static async saveProjectToDevice(
-    graph: Graph,
+    graph: Graph | { nodes: any[]; edges: any[]; seed?: number; viewport?: { x: number; y: number; zoom: number } },
     options: SaveProjectOptions,
     settings?: Partial<ProjectSettings>
   ): Promise<SaveProjectResult> {
@@ -178,15 +140,25 @@ export class ProjectManager {
       // Create project file
       const projectFile = this.createProjectFile(graph, options, settings);
       
-      // Serialize to JSON
-      const jsonContent = this.serializeProject(projectFile);
+      // Serialize to JSON with validation
+      const serializationResult = serializePSGFile(projectFile, { pretty: true, validate: true });
+      
+      if (!serializationResult.success) {
+        return {
+          success: false,
+          error: serializationResult.error.message,
+          errorDetails: serializationResult.error
+        };
+      }
+      
+      const jsonContent = serializationResult.data;
       
       // Create filename
       const sanitizedName = options.name.replace(/[^a-z0-9.-]/gi, '_');
       const fileName = `${sanitizedName}${this.FILE_EXTENSION}`;
       
-      // Create download
-      const blob = new Blob([jsonContent], { type: 'application/json' });
+      // Create download with proper MIME type
+      const blob = new Blob([jsonContent], { type: this.MIME_TYPE });
       const url = URL.createObjectURL(blob);
       
       // Create temporary download link
@@ -206,6 +178,7 @@ export class ProjectManager {
       return {
         success: true,
         fileName,
+        warnings: serializationResult.warnings
       };
       
     } catch (error) {

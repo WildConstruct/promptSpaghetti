@@ -35,7 +35,14 @@ interface RegistrationFormProps {
   className?: string;
 }
 
-export   const [formData, setFormData] = useState<Partial<RegistrationFormData>>({
+export const RegistrationForm: React.FC<RegistrationFormProps> = ({
+  invitationToken,
+  onSuccess,
+  onCancel,
+  className
+}) => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState<Partial<RegistrationFormData>>({
     marketingConsent: false
   });
   const [errors, setErrors] = useState<Record<string, string>>({});

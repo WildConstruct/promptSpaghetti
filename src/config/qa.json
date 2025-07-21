@@ -1,0 +1,14 @@
+{
+  "passThreshold": 3.5,
+  "autoApproveThreshold": 4.8,
+  "maxIssuesPerReject": 2,
+  "reviewTimeout": 240000,
+  "enableBatchProcessing": true,
+  "priorityWeighting": {
+    "security": 1.2,
+    "performance": 1.1,
+    "documentation": 0.9
+  },
+  "autoRetryRejected": false,
+  "enableDetailedFeedback": true
+}

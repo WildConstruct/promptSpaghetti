@@ -1,0 +1,62 @@
+{
+  "epic-list": {
+    "endpoint": "/api/epics",
+    "response": {
+      "epics": [
+        {
+          "number": 10,
+          "title": "Prompt Targeting System",
+          "category": "targeting",
+          "planFile": "epic10plan.md",
+          "stats": {
+            "total": 757,
+            "completed": 45,
+            "inProgress": 23,
+            "completion": 6.8
+          }
+        }
+      ]
+    }
+  },
+  "epic-detail": {
+    "endpoint": "/api/epics/10",
+    "response": {
+      "epic": {
+        "number": 10,
+        "title": "Prompt Targeting System",
+        "category": "targeting",
+        "planFile": "epic10plan.md",
+        "detailsFile": "epic10details.md",
+        "stories": {
+          "10.1": {
+            "title": "Cross-Model Export Architecture",
+            "tasks": 45
+          },
+          "10.2": {
+            "title": "Platform Adapters Implementation",
+            "tasks": 38
+          }
+        }
+      }
+    }
+  },
+  "story-tasks": {
+    "endpoint": "/api/tasks/by-story/10/10.1",
+    "response": {
+      "story": {
+        "id": "10.1",
+        "title": "Cross-Model Export Architecture",
+        "epic": 10
+      },
+      "tasks": [
+        {
+          "id": "T-EPIC10-123",
+          "title": "[10.1] Research existing prompt translation approaches",
+          "state": "COMPLETED",
+          "priority": 1,
+          "est": 4
+        }
+      ]
+    }
+  }
+}

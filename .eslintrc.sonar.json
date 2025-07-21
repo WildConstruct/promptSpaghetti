@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "./.eslintrc.json",
+    "plugin:sonarjs/recommended"
+  ],
+  "plugins": [
+    "sonarjs"
+  ],
+  "rules": {
+    // SonarJS code quality rules
+    "sonarjs/cognitive-complexity": ["warn", 15],
+    "sonarjs/no-duplicate-string": ["warn", 5],
+    "sonarjs/no-identical-functions": "warn",
+    "sonarjs/no-redundant-boolean": "error",
+    "sonarjs/no-small-switch": "warn",
+    "sonarjs/prefer-immediate-return": "warn",
+    "sonarjs/prefer-object-literal": "warn",
+    "sonarjs/prefer-single-boolean-return": "warn",
+    "sonarjs/no-collapsible-if": "warn",
+    "sonarjs/no-collection-size-mischeck": "error",
+    "sonarjs/no-duplicated-branches": "warn",
+    "sonarjs/no-element-overwrite": "error",
+    "sonarjs/no-identical-expressions": "error",
+    "sonarjs/no-inverted-boolean-check": "warn",
+    "sonarjs/no-one-iteration-loop": "error",
+    "sonarjs/no-redundant-jump": "warn",
+    "sonarjs/no-same-line-conditional": "error",
+    "sonarjs/no-unused-collection": "error",
+    "sonarjs/no-use-of-empty-return-value": "error",
+    "sonarjs/no-useless-catch": "error",
+    "sonarjs/non-existent-operator": "error"
+  }
+}

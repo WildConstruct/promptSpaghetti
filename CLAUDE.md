@@ -39,8 +39,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Task Management (CRITICAL)
 - `node src/finish-task.js <task-id>` - **MUST be called when implementation is complete**
-- `node src/run-qa-agent.js` - Review tasks in REVIEW status
 - Failing to call finish-task.js leaves tasks stuck in IN_PROGRESS state
+
+### Unified Automation System (NEW)
+The automation infrastructure has been completely unified and consolidated:
+- **System Health**: `node src/fix-system.js --health-check` - Comprehensive health monitoring (96/100 health score)
+- **System Repair**: `node src/fix-system.js --all` - Automated violation fixes and maintenance
+- **QA Processing**: `node src/workflow-orchestrator.js --workflow qa-pipeline` - Complete QA automation
+- **Daily Maintenance**: `node src/workflow-orchestrator.js --workflow daily-maintenance` - Automated daily operations
+- **Real-time Monitoring**: `node src/monitor-system.js` - Unified monitoring dashboard with 5 modes
+- **Epic Management**: `node src/create-epic-tasks-unified.js` - Consolidated epic task creation
+- **Analytics**: `node src/analyze-system.js overview` - Comprehensive system analysis
+
+### Key Automation Improvements
+- **99.7% Code Reduction**: Epic creation scripts (23 → 2)
+- **95% Code Reduction**: Fix scripts (5+ → 1 modular system) 
+- **90% Code Reduction**: Analysis scripts (6+ → 1 dashboard)
+- **85% Code Reduction**: Monitoring scripts (3+ → 1 unified system)
+- **Workflow Orchestration**: 6 predefined workflows with conditional execution
+- **Database v2.0.0**: Enhanced indexing for 5,906 tasks with epic/story metadata
+
+### Cost Tracking (NEW)
+Enhanced Claude API cost tracking with ccusage integration:
+- `node src/claude-cost-integration.js report` - Generate detailed cost report with actual usage
+- `node src/claude-cost-integration.js install` - Install ccusage for accurate tracking  
+- `node src/claude-cost-integration.js check` - Verify ccusage availability
+- **Dashboard integration**: Real-time cost widget shows actual vs estimated costs
+- **Automatic detection**: Uses actual ccusage data when available, falls back to estimates
 
 ## Architecture Overview
 

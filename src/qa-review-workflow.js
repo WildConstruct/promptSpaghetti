@@ -3,6 +3,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { getLogger } = require('./utils/AutomationLogger');
+
+// Initialize logger
+const logger = getLogger('qa-review-workflow');
 
 console.log('🔍 QA Review Workflow - Processing submitted work\n');
 
@@ -272,9 +276,37 @@ class QAReviewWorkflow {
       task.qa_approved_by = this.agentId;
       task.qa_approval_reason = reason;
       
+      // Clear assignment since task is approved and completed
+      this.clearTaskAssignment(task);
+      
+      logger.qaApprove(taskId, 5.0, reason);
+      
       console.log('   🎯 GitHub automation will:');
       console.log(`      - Create PR for task ${taskId}`);
       console.log('      - Track commits and trigger auto-push\n');
+    }
+  }
+
+  // Clear task assignment when task is approved  
+  clearTaskAssignment(task) {
+    if (task.assignee && state.assignments) {
+      const assignments = state.assignments[task.assignee];
+      if (assignments) {
+        // Handle both array and comma-separated string formats
+        const taskList = Array.isArray(assignments) 
+          ? assignments.filter(id => id !== task.id)
+          : assignments.split(',').filter(id => id !== task.id);
+        
+        if (taskList.length === 0) {
+          delete state.assignments[task.assignee];
+        } else {
+          // Keep as array format
+          state.assignments[task.assignee] = taskList;
+        }
+        
+        logger.assignmentClear(task.id, task.assignee);
+        console.log('   🧹 Cleared assignment for', task.assignee);
+      }
     }
   }
 
@@ -285,6 +317,8 @@ class QAReviewWorkflow {
       task.state = 'IN_PROGRESS'; // Send back to developer
       task.updated = new Date().toISOString();
       task.qa_issues = issues;
+      
+      logger.qaReject(taskId, 2.5, issues);
       
       // Add detailed feedback
       if (!task.notes) task.notes = [];
@@ -314,6 +348,7 @@ class QAReviewWorkflow {
 
   // Main workflow execution
   async runWorkflow() {
+    logger.start('QA Review Workflow');
     console.log('🚀 Starting QA Review Workflow\n');
 
     // Step 1: Move completed tasks to review
@@ -328,6 +363,7 @@ class QAReviewWorkflow {
     
     if (tasksToReview.length === 0) {
       console.log('📝 No tasks in REVIEW status to process.\n');
+      logger.finish('QA workflow completed - no tasks to review', { moved: movedCount });
       return {
         moved: movedCount,
         reviewed: 0,
@@ -336,6 +372,7 @@ class QAReviewWorkflow {
       };
     }
 
+    logger.qaStart(tasksToReview.length, 'Starting QA processing');
     console.log(`📋 Reviewing ${tasksToReview.length} tasks:\n`);
 
     const results = [];
@@ -370,6 +407,13 @@ class QAReviewWorkflow {
     if (rejected > 0) {
       console.log(`\n🔄 ${rejected} tasks sent back to developers for fixes`);
     }
+
+    logger.qaFinish({ 
+      moved: movedCount, 
+      reviewed: results.length, 
+      approved, 
+      rejected 
+    });
 
     return {
       moved: movedCount,

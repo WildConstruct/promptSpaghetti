@@ -651,19 +651,248 @@ export class WorkspaceService {
     userId: string,
     requiredPermission: number
   ): Promise<boolean> {
-    // For now, implement basic logic
-    // In full implementation, this would check ACL assignments and role permissions
-    
-    // Check if user is workspace owner
-    const workspace = await this.dao.getWorkspace(workspaceId);
-    if (workspace && workspace.owner_id === userId) {
-      return true; // Owner has all permissions
+    return this.dao.hasPermissions(userId, workspaceId, requiredPermission);
+  }
+
+  // ====== RBAC MANAGEMENT METHODS ======
+
+  async getUserPermissions(
+    workspaceId: string,
+    userId: string,
+    requestingUserId: string
+  ): Promise<{ permissions: number; roles: any[] } | null> {
+    // Check if requesting user can view permissions (admin permission required)
+    const hasAccess = await this.checkWorkspaceAccess(
+      workspaceId,
+      requestingUserId,
+      PERMISSIONS.WORKSPACE_ADMIN
+    );
+    if (!hasAccess) {
+      throw new Error('Insufficient permissions to view user permissions');
     }
 
-    // TODO: Implement full permission checking
-    // This would query user memberships and role assignments
-    // For development, allow access if user has any membership
-    return true;
+    return this.dao.getUserPermissions(userId, workspaceId);
+  }
+
+  async getWorkspaceMembers(
+    workspaceId: string,
+    userId: string
+  ): Promise<Array<{
+    user_id: string;
+    membership: any;
+    roles: any[];
+    permissions: number;
+  }>> {
+    // Check access
+    const hasAccess = await this.checkWorkspaceAccess(
+      workspaceId,
+      userId,
+      PERMISSIONS.WORKSPACE_READ
+    );
+    if (!hasAccess) {
+      throw new Error('Access denied to workspace members');
+    }
+
+    return this.dao.getWorkspaceMembers(workspaceId);
+  }
+
+  async updateUserRole(
+    workspaceId: string,
+    targetUserId: string,
+    newRoleName: string,
+    requestingUserId: string
+  ): Promise<boolean> {
+    // Check permissions (admin required to change roles)
+    const hasAccess = await this.checkWorkspaceAccess(
+      workspaceId,
+      requestingUserId,
+      PERMISSIONS.USER_ASSIGN_ROLES
+    );
+    if (!hasAccess) {
+      throw new Error('Insufficient permissions to assign roles');
+    }
+
+    // Prevent self-demotion (owners can't remove their own admin rights)
+    const workspace = await this.dao.getWorkspace(workspaceId);
+    if (workspace && workspace.owner_id === targetUserId && requestingUserId === targetUserId) {
+      throw new Error('Workspace owners cannot change their own role');
+    }
+
+    const success = await this.dao.updateUserRole(targetUserId, workspaceId, newRoleName, requestingUserId);
+    
+    if (success) {
+      // Log activity
+      await this.dao.createActivityEvent({
+        workspace_id: workspaceId,
+        actor_id: requestingUserId,
+        event_type: 'user.role_changed',
+        event_data: { 
+          target_user: targetUserId, 
+          new_role: newRoleName 
+        }
+      });
+    }
+
+    return success;
+  }
+
+  async removeUserFromWorkspace(
+    workspaceId: string,
+    targetUserId: string,
+    requestingUserId: string
+  ): Promise<boolean> {
+    // Check permissions (admin or user remove permission required)
+    const hasAccess = await this.checkWorkspaceAccess(
+      workspaceId,
+      requestingUserId,
+      PERMISSIONS.USER_REMOVE
+    );
+    if (!hasAccess && requestingUserId !== targetUserId) {
+      throw new Error('Insufficient permissions to remove users from workspace');
+    }
+
+    // Prevent owner removal by others
+    const workspace = await this.dao.getWorkspace(workspaceId);
+    if (workspace && workspace.owner_id === targetUserId && requestingUserId !== targetUserId) {
+      throw new Error('Workspace owner cannot be removed by others');
+    }
+
+    const success = await this.dao.removeUserFromWorkspace(targetUserId, workspaceId);
+    
+    if (success) {
+      // Log activity
+      await this.dao.createActivityEvent({
+        workspace_id: workspaceId,
+        actor_id: requestingUserId,
+        event_type: requestingUserId === targetUserId ? 'user.left' : 'user.removed',
+        event_data: { 
+          target_user: targetUserId 
+        }
+      });
+    }
+
+    return success;
+  }
+
+  // ====== WORKSPACE CONTEXT MANAGEMENT ======
+
+  /**
+   * Switch user's active workspace context (for multi-tenant isolation)
+   */
+  async switchWorkspaceContext(
+    userId: string,
+    targetWorkspaceId: string
+  ): Promise<{ success: boolean; workspaceInfo?: any; permissions?: number }> {
+    // Verify user has access to target workspace
+    const hasAccess = await this.checkWorkspaceAccess(
+      targetWorkspaceId,
+      userId,
+      PERMISSIONS.WORKSPACE_READ
+    );
+    if (!hasAccess) {
+      return { success: false };
+    }
+
+    // Get workspace info and user permissions
+    const workspace = await this.dao.getWorkspace(targetWorkspaceId);
+    const userPermissions = await this.dao.getUserPermissions(userId, targetWorkspaceId);
+
+    if (!workspace || !userPermissions) {
+      return { success: false };
+    }
+
+    // Update user's last active time in this workspace
+    const memberships = await this.dao.getWorkspaceMemberships(targetWorkspaceId, { user_id: userId });
+    if (memberships.length > 0) {
+      // Would update last_active_at in production
+    }
+
+    // Log activity
+    await this.dao.createActivityEvent({
+      workspace_id: targetWorkspaceId,
+      actor_id: userId,
+      event_type: 'workspace.context_switched',
+      event_data: {}
+    });
+
+    return {
+      success: true,
+      workspaceInfo: {
+        id: workspace.id,
+        name: workspace.name,
+        description: workspace.description,
+        owner_id: workspace.owner_id
+      },
+      permissions: userPermissions.permissions
+    };
+  }
+
+  // ====== RESOURCE QUOTA ENFORCEMENT ======
+
+  /**
+   * Check resource quotas to prevent workspace abuse
+   */
+  async checkResourceQuotas(
+    workspaceId: string,
+    resourceType: 'projects' | 'resources' | 'storage',
+    requestedAmount: number = 1
+  ): Promise<{ allowed: boolean; current: number; limit: number; reason?: string }> {
+    const workspace = await this.dao.getWorkspace(workspaceId);
+    if (!workspace) {
+      return { allowed: false, current: 0, limit: 0, reason: 'Workspace not found' };
+    }
+
+    // Define default quotas (these would be configurable per workspace tier)
+    const defaultQuotas = {
+      projects: 100,
+      resources: 1000,
+      storage: 10 * 1024 * 1024 * 1024 // 10GB in bytes
+    };
+
+    const quotas = workspace.settings?.quotas || defaultQuotas;
+    const limit = quotas[resourceType] || defaultQuotas[resourceType];
+
+    // Get current usage
+    let current = 0;
+    switch (resourceType) {
+      case 'projects':
+        const projects = await this.dao.getProjectsInWorkspace(workspaceId, { status: ['active', 'draft'] });
+        current = projects.data.length;
+        break;
+      
+      case 'resources':
+        // Would query total resources across all projects
+        current = 0; // Placeholder
+        break;
+      
+      case 'storage':
+        // Would query total storage usage
+        current = 0; // Placeholder
+        break;
+    }
+
+    const allowed = (current + requestedAmount) <= limit;
+    
+    return {
+      allowed,
+      current,
+      limit,
+      reason: allowed ? undefined : `${resourceType} quota exceeded (${current + requestedAmount}/${limit})`
+    };
+  }
+
+  /**
+   * Multi-tenant isolation check - ensure user can only access their workspaces
+   */
+  async enforceWorkspaceIsolation(
+    userId: string,
+    workspaceId: string,
+    requiredPermission: number = PERMISSIONS.WORKSPACE_READ
+  ): Promise<void> {
+    const hasAccess = await this.checkWorkspaceAccess(workspaceId, userId, requiredPermission);
+    if (!hasAccess) {
+      throw new Error('Cross-tenant access violation: User does not have access to this workspace');
+    }
   }
 
   // ====== NOTIFICATIONS ======

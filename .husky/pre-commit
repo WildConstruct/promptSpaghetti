@@ -8,6 +8,9 @@ if [ -f "scripts/auto-fix-typescript-issues.js" ]; then
   git add . # Re-stage any auto-fixes
 fi
 
+# Run enhanced static analysis on staged files
+echo "🔍 Running enhanced static analysis..."
+
 # Run linting on staged files using active configuration
 if [ -f ".lintstagedrc.active.js" ]; then
   echo "🔧 Using permissive linting mode (.lintstagedrc.active.js)"
@@ -15,6 +18,15 @@ if [ -f ".lintstagedrc.active.js" ]; then
 else
   echo "🔧 Using default linting mode (.lintstagedrc.js)"  
   pnpm lint-staged
+fi
+
+# Run SonarJS analysis if available
+if [ -f ".eslintrc.sonar.json" ]; then
+  echo "🧪 Running SonarJS analysis on staged files..."
+  STAGED_FILES=$(git diff --cached --name-only | grep -E '\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
+  if [ ! -z "$STAGED_FILES" ]; then
+    pnpm lint:sonar $STAGED_FILES --quiet || echo "⚠️  SonarJS warnings found"
+  fi
 fi
 
 # Check if any test files were modified

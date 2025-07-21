@@ -6,22 +6,30 @@ import * as argon2 from 'argon2';
 import { IUserService, User, RegisterRequest, UserProfile, AuthConfig } from '../types';
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
+import { PasswordBreachService } from './PasswordBreachService';
 import { PASSWORD_RULES, AUDIT_EVENTS } from '../config';
 
 export class UserService implements IUserService {
   private db: DatabaseService;
   private audit: AuditService;
   private config: AuthConfig;
+  private passwordBreachService?: PasswordBreachService;
 
-  constructor(config: AuthConfig, db: DatabaseService, audit: AuditService) {
+  constructor(
+    config: AuthConfig, 
+    db: DatabaseService, 
+    audit: AuditService, 
+    passwordBreachService?: PasswordBreachService
+  ) {
     this.config = config;
     this.db = db;
     this.audit = audit;
+    this.passwordBreachService = passwordBreachService;
   }
 
   async createUser(data: RegisterRequest): Promise<User> {
-    // Validate password strength
-    this.validatePassword(data.password);
+    // Validate password strength with breach detection
+    await this.validatePassword(data.password, undefined, false);
     
     // Check if user already exists
     const existingUser = await this.getUserByEmail(data.email);
@@ -264,8 +272,8 @@ export class UserService implements IUserService {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<User> {
-    // Validate new password
-    this.validatePassword(newPassword);
+    // Validate new password with breach detection
+    await this.validatePassword(newPassword, undefined, false);
 
     const user = await this.db.query(`
       SELECT * FROM users 
@@ -345,8 +353,8 @@ export class UserService implements IUserService {
       throw new Error('Current password is incorrect');
     }
 
-    // Validate new password
-    this.validatePassword(newPassword);
+    // Validate new password with breach detection
+    await this.validatePassword(newPassword, userId, false);
 
     // Hash new password
     const hashedPassword = await this.hashPassword(newPassword);
@@ -397,7 +405,7 @@ export class UserService implements IUserService {
     }
   }
 
-  private validatePassword(password: string): void {
+  private async validatePassword(password: string, userId?: string, skipBreachCheck: boolean = false): Promise<void> {
     const rules = PASSWORD_RULES;
 
     if (password.length < rules.minLength) {
@@ -427,6 +435,71 @@ export class UserService implements IUserService {
     // Check against common passwords
     if (rules.forbiddenPasswords.includes(password.toLowerCase())) {
       throw new Error('This password is too common and not allowed');
+    }
+
+    // Enhanced breach detection using k-anonymity hash-prefix queries
+    if (!skipBreachCheck && this.passwordBreachService) {
+      try {
+        const breachResult = await this.passwordBreachService.checkPasswordBreach(password, userId);
+        
+        if (breachResult.isBreached) {
+          // Log breach detection for security monitoring
+          await this.audit.logEvent({
+            userId: userId || 'unknown',
+            action: 'password_breach_detected',
+            details: {
+              occurrences: breachResult.occurrenceCount,
+              source: breachResult.source,
+              responseTime: breachResult.responseTime
+            },
+            severity: 'critical'
+          });
+
+          // Provide user-friendly error message without revealing sensitive details
+          const errorMessage = breachResult.occurrenceCount > 100000 
+            ? 'This password has been found in major data breaches and is not secure. Please choose a different password.'
+            : 'This password has been found in known data breaches. Please choose a different password for your security.';
+          
+          throw new Error(errorMessage);
+        }
+
+        // Log successful breach check
+        if (userId) {
+          await this.audit.logEvent({
+            userId,
+            action: 'password_breach_check_passed',
+            details: {
+              responseTime: breachResult.responseTime,
+              cacheHit: breachResult.cacheHit,
+              source: breachResult.source
+            },
+            severity: 'info'
+          });
+        }
+        
+      } catch (error) {
+        // Handle breach detection service errors gracefully
+        if (error.message.includes('data breach')) {
+          // Re-throw breach detection errors
+          throw error;
+        }
+
+        // Log service errors but don't block password validation
+        if (userId) {
+          await this.audit.logEvent({
+            userId,
+            action: 'password_breach_check_error',
+            details: {
+              error: error.message,
+              service: 'PasswordBreachService'
+            },
+            severity: 'warning'
+          });
+        }
+        
+        console.warn('Password breach check failed:', error.message);
+        // Continue with password validation - don't block users due to service issues
+      }
     }
   }
 

@@ -55,9 +55,10 @@ The agent system has been updated to work with the new ticket management system.
 - **Triggers GitHub automation on approval**
 - Monitors PR creation and auto-push events
 
-**CRITICAL: Use `node src/run-qa-agent.js` for task reviews**
-- DO NOT use `qa-review-workflow.js` - it doesn't track commits properly
-- The `run-qa-agent.js` script integrates with GitHub automation
+**CRITICAL: Use unified QA workflow for task reviews**
+- Use `node src/workflow-orchestrator.js --workflow qa-pipeline` for complete QA automation
+- Or use `node src/run-qa-agent.js` for manual QA reviews
+- The unified workflow integrates with GitHub automation and system health monitoring
 
 **Key Events:**
 - `TASK_MOVED_TO_REVIEW` → Performs QA review
@@ -92,7 +93,7 @@ Developers no longer wait for agent assignments:
 
 ```bash
 # Check available tasks
-node src/monitor-available-tasks.js
+node src/monitor-system.js --mode tasks
 
 # Grab tasks (self-assign) - SAFE for concurrent agents
 node src/grab-tasks.js dev_A 2
