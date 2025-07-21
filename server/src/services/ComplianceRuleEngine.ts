@@ -401,7 +401,7 @@ export interface RuleEngineConfiguration {
 }
 
 // Enums and Types
-export type ComplianceFramework = 'GDPR' | 'CCPA' | 'SOX' | 'HIPAA' | 'PCI_DSS' | 'ISO_27001' | 'NIST' | 'PIPEDA' | 'LGPD' | 'PDPA' | 'CUSTOM';
+export type ComplianceFramework = 'GDPR' | 'CCPA' | 'SOX' | 'HIPAA' | 'PCI_DSS' | 'ISO_27001' | 'SOC_2' | 'NIST' | 'PIPEDA' | 'LGPD' | 'PDPA' | 'CUSTOM';
 export type RuleCategory = 'DATA_PROTECTION' | 'PRIVACY' | 'SECURITY' | 'GOVERNANCE' | 'AUDIT' | 'RETENTION' | 'ACCESS' | 'CONSENT' | 'NOTIFICATION' | 'BREACH' | 'TRANSFER' | 'RIGHTS';
 export type RuleStatus = 'DRAFT' | 'REVIEW' | 'APPROVED' | 'ACTIVE' | 'INACTIVE' | 'DEPRECATED' | 'ARCHIVED';
 export type RulePriority = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';

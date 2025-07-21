@@ -871,7 +871,7 @@ export class ConsentCollectionService {
     const recommendations: string[] = [];
 
     // Mock compliance validation
-    let compliant = true;
+    const compliant = true;
 
     if (framework === 'GDPR') {
       // Check for explicit consent requirements

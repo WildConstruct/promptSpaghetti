@@ -824,18 +824,18 @@ export class DataAgingTrackingService {
   private async evaluateAlertConditions(record: DataAgingRecord, alert: AgingAlert): Promise<boolean> {
     for (const condition of alert.conditions) {
       switch (alert.type) {
-        case AlertType.AGE_THRESHOLD:
-          condition.currentValue = record.agingMetrics.chronologicalAge.days;
-          condition.met = condition.currentValue >= condition.threshold;
-          break;
-        case AlertType.ACCESS_DECLINE:
-          condition.currentValue = record.accessAnalytics.accessFrequency.monthly;
-          condition.met = condition.currentValue < condition.threshold;
-          break;
-        case AlertType.VALUE_DECAY:
-          condition.currentValue = record.valueAssessment.overallValue.overall;
-          condition.met = condition.currentValue < condition.threshold;
-          break;
+      case AlertType.AGE_THRESHOLD:
+        condition.currentValue = record.agingMetrics.chronologicalAge.days;
+        condition.met = condition.currentValue >= condition.threshold;
+        break;
+      case AlertType.ACCESS_DECLINE:
+        condition.currentValue = record.accessAnalytics.accessFrequency.monthly;
+        condition.met = condition.currentValue < condition.threshold;
+        break;
+      case AlertType.VALUE_DECAY:
+        condition.currentValue = record.valueAssessment.overallValue.overall;
+        condition.met = condition.currentValue < condition.threshold;
+        break;
       }
     }
     
@@ -998,7 +998,7 @@ export class DataAgingTrackingService {
   }
 
   private async getAgingRecord(agingId: string): Promise<DataAgingRecord | null> {
-    const query = `SELECT * FROM data_aging_records WHERE aging_id = $1`;
+    const query = 'SELECT * FROM data_aging_records WHERE aging_id = $1';
     const result = await this.db.query(query, [agingId]);
     return result.rows[0] || null;
   }

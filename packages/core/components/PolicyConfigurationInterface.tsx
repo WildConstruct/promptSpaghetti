@@ -97,7 +97,19 @@ interface NotificationConfig {
 
 // Validation schemas
 const PolicyFormSchema = z.object({
-  policyType: z.enum(['PRIVACY_POLICY', 'TERMS_OF_SERVICE', 'COOKIE_POLICY', 'DATA_PROCESSING_AGREEMENT', 'CONSENT_POLICY', 'RETENTION_POLICY', 'SECURITY_POLICY', 'ACCEPTABLE_USE_POLICY', 'GDPR_POLICY', 'CCPA_POLICY', 'CUSTOM']),
+  policyType: z.enum(
+    ['PRIVACY_POLICY',
+    'TERMS_OF_SERVICE',
+    'COOKIE_POLICY',
+    'DATA_PROCESSING_AGREEMENT',
+    'CONSENT_POLICY',
+    'RETENTION_POLICY',
+    'SECURITY_POLICY',
+    'ACCEPTABLE_USE_POLICY',
+    'GDPR_POLICY',
+    'CCPA_POLICY',
+    'CUSTOM']
+  ),
   title: z.string().min(5, 'Title must be at least 5 characters').max(200, 'Title must be less than 200 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters').max(1000, 'Description must be less than 1000 characters'),
   jurisdiction: z.array(z.string()).min(1, 'At least one jurisdiction is required'),
@@ -356,7 +368,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       <div className="policy-config-header">
         <h2 className="policy-config-title">
           {mode === 'create' ? 'Create New Policy' : 
-           mode === 'edit' ? 'Edit Policy' : 'View Policy'}
+            mode === 'edit' ? 'Edit Policy' : 'View Policy'}
         </h2>
         {initialPolicy && (
           <div className="policy-info">
@@ -707,7 +719,10 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         if (e.target.checked) {
                           updateFormField('complianceFrameworks', [...formData.complianceFrameworks, framework]);
                         } else {
-                          updateFormField('complianceFrameworks', formData.complianceFrameworks.filter(f => f !== framework));
+                          updateFormField(
+                            'complianceFrameworks',
+                            formData.complianceFrameworks.filter(f => f !== framework
+                          ));
                         }
                       }}
                       disabled={mode === 'view'}

@@ -21,7 +21,17 @@ import {
 
 // Request/Response Schemas
 const GenerateReportRequestSchema = z.object({
-  reportType: z.enum(['COMPLIANCE_ASSESSMENT', 'RISK_ASSESSMENT', 'AUDIT_READINESS', 'GAP_ANALYSIS', 'CERTIFICATION_PREP', 'POLICY_EFFECTIVENESS', 'INCIDENT_ANALYSIS', 'METRICS_DASHBOARD', 'CUSTOM']),
+  reportType: z.enum(
+    ['COMPLIANCE_ASSESSMENT',
+    'RISK_ASSESSMENT',
+    'AUDIT_READINESS',
+    'GAP_ANALYSIS',
+    'CERTIFICATION_PREP',
+    'POLICY_EFFECTIVENESS',
+    'INCIDENT_ANALYSIS',
+    'METRICS_DASHBOARD',
+    'CUSTOM']
+  ),
   framework: z.enum(['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO_27001', 'NIST', 'CUSTOM']),
   scope: z.object({
     scopeId: z.string().min(1),
@@ -115,7 +125,15 @@ const GetMetricsQuerySchema = z.object({
 });
 
 const CreateCertificationRequestSchema = z.object({
-  certificationType: z.enum(['SOC2_TYPE1', 'SOC2_TYPE2', 'ISO_27001', 'PCI_DSS', 'HIPAA_COMPLIANCE', 'GDPR_CERTIFICATION', 'CUSTOM']),
+  certificationType: z.enum(
+    ['SOC2_TYPE1',
+    'SOC2_TYPE2',
+    'ISO_27001',
+    'PCI_DSS',
+    'HIPAA_COMPLIANCE',
+    'GDPR_CERTIFICATION',
+    'CUSTOM']
+  ),
   framework: z.enum(['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO_27001', 'NIST', 'CUSTOM']),
   scope: z.string().min(1),
   targetDate: z.string().datetime(),
@@ -177,7 +195,17 @@ const UpdateCertificationStatusRequestSchema = z.object({
 });
 
 const ScheduleReportRequestSchema = z.object({
-  reportType: z.enum(['COMPLIANCE_ASSESSMENT', 'RISK_ASSESSMENT', 'AUDIT_READINESS', 'GAP_ANALYSIS', 'CERTIFICATION_PREP', 'POLICY_EFFECTIVENESS', 'INCIDENT_ANALYSIS', 'METRICS_DASHBOARD', 'CUSTOM']),
+  reportType: z.enum(
+    ['COMPLIANCE_ASSESSMENT',
+    'RISK_ASSESSMENT',
+    'AUDIT_READINESS',
+    'GAP_ANALYSIS',
+    'CERTIFICATION_PREP',
+    'POLICY_EFFECTIVENESS',
+    'INCIDENT_ANALYSIS',
+    'METRICS_DASHBOARD',
+    'CUSTOM']
+  ),
   framework: z.enum(['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO_27001', 'NIST', 'CUSTOM']),
   schedule: z.object({
     frequency: z.enum(['DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'ANNUALLY']),
@@ -584,21 +612,21 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         // Calculate next execution time
         const nextExecution = new Date();
         switch (request.body.schedule.frequency) {
-          case 'DAILY':
-            nextExecution.setDate(nextExecution.getDate() + 1);
-            break;
-          case 'WEEKLY':
-            nextExecution.setDate(nextExecution.getDate() + 7);
-            break;
-          case 'MONTHLY':
-            nextExecution.setMonth(nextExecution.getMonth() + 1);
-            break;
-          case 'QUARTERLY':
-            nextExecution.setMonth(nextExecution.getMonth() + 3);
-            break;
-          case 'ANNUALLY':
-            nextExecution.setFullYear(nextExecution.getFullYear() + 1);
-            break;
+        case 'DAILY':
+          nextExecution.setDate(nextExecution.getDate() + 1);
+          break;
+        case 'WEEKLY':
+          nextExecution.setDate(nextExecution.getDate() + 7);
+          break;
+        case 'MONTHLY':
+          nextExecution.setMonth(nextExecution.getMonth() + 1);
+          break;
+        case 'QUARTERLY':
+          nextExecution.setMonth(nextExecution.getMonth() + 3);
+          break;
+        case 'ANNUALLY':
+          nextExecution.setFullYear(nextExecution.getFullYear() + 1);
+          break;
         }
 
         reply.send({

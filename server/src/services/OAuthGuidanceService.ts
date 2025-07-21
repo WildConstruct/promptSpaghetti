@@ -882,7 +882,7 @@ export class OAuthGuidanceService {
       },
       securityHeaders: {
         strictTransportSecurity: true,
-        contentSecurityPolicy: "default-src 'self'",
+        contentSecurityPolicy: 'default-src \'self\'',
         frameOptions: 'DENY',
         contentTypeOptions: true,
         referrerPolicy: 'strict-origin-when-cross-origin',
@@ -1248,11 +1248,11 @@ window.location.href = authUrl.toString();
     let score = 0;
     findings.forEach(finding => {
       switch (finding.severity) {
-        case 'CRITICAL': score += 25; break;
-        case 'HIGH': score += 15; break;
-        case 'MEDIUM': score += 8; break;
-        case 'LOW': score += 3; break;
-        case 'INFO': score += 1; break;
+      case 'CRITICAL': score += 25; break;
+      case 'HIGH': score += 15; break;
+      case 'MEDIUM': score += 8; break;
+      case 'LOW': score += 3; break;
+      case 'INFO': score += 1; break;
       }
     });
     return Math.min(100, score);

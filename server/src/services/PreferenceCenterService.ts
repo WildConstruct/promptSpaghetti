@@ -1915,20 +1915,20 @@ export class PreferenceCenterService extends EventEmitter {
     let mimeType: string;
 
     switch (format) {
-      case DataExportFormat.JSON:
-        formattedData = JSON.stringify(exportData, null, 2);
-        mimeType = 'application/json';
-        break;
-      case DataExportFormat.CSV:
-        formattedData = this.convertToCSV(exportData);
-        mimeType = 'text/csv';
-        break;
-      case DataExportFormat.XML:
-        formattedData = this.convertToXML(exportData);
-        mimeType = 'application/xml';
-        break;
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    case DataExportFormat.JSON:
+      formattedData = JSON.stringify(exportData, null, 2);
+      mimeType = 'application/json';
+      break;
+    case DataExportFormat.CSV:
+      formattedData = this.convertToCSV(exportData);
+      mimeType = 'text/csv';
+      break;
+    case DataExportFormat.XML:
+      formattedData = this.convertToXML(exportData);
+      mimeType = 'application/xml';
+      break;
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
 
     // Store export record
@@ -2831,12 +2831,12 @@ export class PreferenceCenterService extends EventEmitter {
     const xmlEscape = (str: string): string => {
       return str.replace(/[<>&'"]/g, (c) => {
         switch (c) {
-          case '<': return '&lt;';
-          case '>': return '&gt;';
-          case '&': return '&amp;';
-          case "'": return '&apos;';
-          case '"': return '&quot;';
-          default: return c;
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '&': return '&amp;';
+        case '\'': return '&apos;';
+        case '"': return '&quot;';
+        default: return c;
         }
       });
     };
@@ -2951,7 +2951,7 @@ export class PreferenceCenterService extends EventEmitter {
   }
 
   private calculateCompletionScore(preferences: UserPreferenceCenter): number {
-    let totalSections = 8;
+    const totalSections = 8;
     let completedSections = 0;
 
     // Check if each section has been customized from defaults

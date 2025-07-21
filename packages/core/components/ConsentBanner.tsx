@@ -237,37 +237,37 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
 
   const getPositionClasses = () => {
     switch (position) {
-      case 'top':
-        return 'top-0 left-0 right-0';
-      case 'bottom':
-        return 'bottom-0 left-0 right-0';
-      case 'overlay':
-        return 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4';
-      case 'modal':
-        return 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4';
-      default:
-        return 'bottom-0 left-0 right-0';
+    case 'top':
+      return 'top-0 left-0 right-0';
+    case 'bottom':
+      return 'bottom-0 left-0 right-0';
+    case 'overlay':
+      return 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4';
+    case 'modal':
+      return 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4';
+    default:
+      return 'bottom-0 left-0 right-0';
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'essential':
-        return <Shield className="w-5 h-5 text-green-600" />;
-      case 'functional':
-        return <Settings className="w-5 h-5 text-blue-600" />;
-      case 'analytics':
-        return <Eye className="w-5 h-5 text-purple-600" />;
-      case 'marketing':
-        return <Target className="w-5 h-5 text-orange-600" />;
-      case 'advertising':
-        return <MessageSquare className="w-5 h-5 text-red-600" />;
-      case 'socialMedia':
-        return <MessageSquare className="w-5 h-5 text-indigo-600" />;
-      case 'personalization':
-        return <Cookie className="w-5 h-5 text-pink-600" />;
-      default:
-        return <Cookie className="w-5 h-5 text-gray-600" />;
+    case 'essential':
+      return <Shield className="w-5 h-5 text-green-600" />;
+    case 'functional':
+      return <Settings className="w-5 h-5 text-blue-600" />;
+    case 'analytics':
+      return <Eye className="w-5 h-5 text-purple-600" />;
+    case 'marketing':
+      return <Target className="w-5 h-5 text-orange-600" />;
+    case 'advertising':
+      return <MessageSquare className="w-5 h-5 text-red-600" />;
+    case 'socialMedia':
+      return <MessageSquare className="w-5 h-5 text-indigo-600" />;
+    case 'personalization':
+      return <Cookie className="w-5 h-5 text-pink-600" />;
+    default:
+      return <Cookie className="w-5 h-5 text-gray-600" />;
     }
   };
 

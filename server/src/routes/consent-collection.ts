@@ -63,13 +63,13 @@ const CollectConsentRequestSchema = z.object({
     purposeId: z.string(),
     category: z.enum(
       ['ESSENTIAL',
-      'FUNCTIONAL',
-      'ANALYTICS',
-      'MARKETING',
-      'ADVERTISING',
-      'SOCIAL_MEDIA',
-      'PERSONALIZATION',
-      'RESEARCH']
+        'FUNCTIONAL',
+        'ANALYTICS',
+        'MARKETING',
+        'ADVERTISING',
+        'SOCIAL_MEDIA',
+        'PERSONALIZATION',
+        'RESEARCH']
     ),
     name: z.string(),
     description: z.string(),
@@ -130,11 +130,11 @@ const CollectConsentRequestSchema = z.object({
   }),
   legalBasis: z.enum(
     ['CONSENT',
-    'CONTRACT',
-    'LEGAL_OBLIGATION',
-    'VITAL_INTERESTS',
-    'PUBLIC_TASK',
-    'LEGITIMATE_INTERESTS']
+      'CONTRACT',
+      'LEGAL_OBLIGATION',
+      'VITAL_INTERESTS',
+      'PUBLIC_TASK',
+      'LEGITIMATE_INTERESTS']
   ),
   jurisdiction: z.array(z.string()).default(['US']),
   dataCategories: z.array(z.object({
@@ -153,11 +153,11 @@ const CollectConsentRequestSchema = z.object({
     purpose: z.string(),
     legalBasis: z.enum(
       ['CONSENT',
-      'CONTRACT',
-      'LEGAL_OBLIGATION',
-      'VITAL_INTERESTS',
-      'PUBLIC_TASK',
-      'LEGITIMATE_INTERESTS']
+        'CONTRACT',
+        'LEGAL_OBLIGATION',
+        'VITAL_INTERESTS',
+        'PUBLIC_TASK',
+        'LEGITIMATE_INTERESTS']
     ),
     dataCategories: z.array(z.string()),
     retentionPeriod: z.number(),
@@ -420,21 +420,21 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
         }
         if (
           ['US',
-          'GB',
-          'DE',
-          'FR',
-          'IT',
-          'ES',
-          'NL',
-          'BE',
-          'AT',
-          'SE',
-          'DK',
-          'FI',
-          'IE',
-          'PT',
-          'LU'].includes(context.geolocation?.country || ''
-        )) {
+            'GB',
+            'DE',
+            'FR',
+            'IT',
+            'ES',
+            'NL',
+            'BE',
+            'AT',
+            'SE',
+            'DK',
+            'FI',
+            'IE',
+            'PT',
+            'LU'].includes(context.geolocation?.country || ''
+          )) {
           applicableFrameworks.push('GDPR');
         }
 

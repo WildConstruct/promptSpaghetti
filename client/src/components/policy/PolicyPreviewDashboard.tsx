@@ -199,49 +199,42 @@ const PolicyPreviewDashboard: React.FC = () => {
 
   const getStatusColor = (status: PreviewStatus) => {
     switch (status) {
-      case PreviewStatus.DRAFT: return 'bg-gray-100 text-gray-800';
-      case PreviewStatus.VALIDATING: return 'bg-blue-100 text-blue-800';
-      case PreviewStatus.STAGED: return 'bg-green-100 text-green-800';
-      case PreviewStatus.TESTING: return 'bg-yellow-100 text-yellow-800';
-      case PreviewStatus.APPROVED: return 'bg-emerald-100 text-emerald-800';
-      case PreviewStatus.REJECTED: return 'bg-red-100 text-red-800';
-      case PreviewStatus.EXPIRED: return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case PreviewStatus.DRAFT: return 'bg-gray-100 text-gray-800';
+    case PreviewStatus.VALIDATING: return 'bg-blue-100 text-blue-800';
+    case PreviewStatus.STAGED: return 'bg-green-100 text-green-800';
+    case PreviewStatus.TESTING: return 'bg-yellow-100 text-yellow-800';
+    case PreviewStatus.APPROVED: return 'bg-emerald-100 text-emerald-800';
+    case PreviewStatus.REJECTED: return 'bg-red-100 text-red-800';
+    case PreviewStatus.EXPIRED: return 'bg-orange-100 text-orange-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getDeploymentStatusColor = (status: StagingDeploymentStatus) => {
     switch (status) {
-      case StagingDeploymentStatus.DEPLOYING: return 'bg-blue-100 text-blue-800';
-      case StagingDeploymentStatus.ACTIVE: return 'bg-green-100 text-green-800';
-      case StagingDeploymentStatus.MONITORING: return 'bg-yellow-100 text-yellow-800';
-      case StagingDeploymentStatus.ISSUE_DETECTED: return 'bg-orange-100 text-orange-800';
-      case StagingDeploymentStatus.ROLLING_BACK: return 'bg-red-100 text-red-800';
-      case StagingDeploymentStatus.ROLLED_BACK: return 'bg-gray-100 text-gray-800';
-      case StagingDeploymentStatus.COMPLETED: return 'bg-emerald-100 text-emerald-800';
-      case StagingDeploymentStatus.FAILED: return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case StagingDeploymentStatus.DEPLOYING: return 'bg-blue-100 text-blue-800';
+    case StagingDeploymentStatus.ACTIVE: return 'bg-green-100 text-green-800';
+    case StagingDeploymentStatus.MONITORING: return 'bg-yellow-100 text-yellow-800';
+    case StagingDeploymentStatus.ISSUE_DETECTED: return 'bg-orange-100 text-orange-800';
+    case StagingDeploymentStatus.ROLLING_BACK: return 'bg-red-100 text-red-800';
+    case StagingDeploymentStatus.ROLLED_BACK: return 'bg-gray-100 text-gray-800';
+    case StagingDeploymentStatus.COMPLETED: return 'bg-emerald-100 text-emerald-800';
+    case StagingDeploymentStatus.FAILED: return 'bg-red-100 text-red-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'low': return 'text-green-600';
-      case 'medium': return 'text-yellow-600';
-      case 'high': return 'text-orange-600';
-      case 'critical': return 'text-red-600';
-      default: return 'text-gray-600';
+    case 'low': return 'text-green-600';
+    case 'medium': return 'text-yellow-600';
+    case 'high': return 'text-orange-600';
+    case 'critical': return 'text-red-600';
+    default: return 'text-gray-600';
     }
   };
 
-  const handleDeployToStaging = async (previewId: string, environmentId: string) => {
-    try {
-      const response = await fetch(`/api/policy-preview/previews/${previewId}/deploy`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ environmentId })
-      });
-
+  
       if (response.ok) {
         fetchDeployments();
         fetchPreviews();
@@ -267,14 +260,7 @@ const PolicyPreviewDashboard: React.FC = () => {
     }
   };
 
-  const handlePromoteToProduction = async (previewId: string, effectiveDate: string) => {
-    try {
-      const response = await fetch(`/api/policy-preview/previews/${previewId}/promote`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ effectiveDate })
-      });
-
+  
       if (response.ok) {
         fetchPreviews();
       }

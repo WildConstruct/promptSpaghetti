@@ -176,15 +176,15 @@ export class RegulatoryReportingService {
     const sections: ReportSection[] = [];
 
     switch (regulation) {
-      case ComplianceRegulation.GDPR:
-        sections.push(...await this.generateGDPRSections(reportType, periodStart, periodEnd));
-        break;
-      case ComplianceRegulation.CCPA:
-        sections.push(...await this.generateCCPASections(reportType, periodStart, periodEnd));
-        break;
-      case ComplianceRegulation.HIPAA:
-        sections.push(...await this.generateHIPAASections(reportType, periodStart, periodEnd));
-        break;
+    case ComplianceRegulation.GDPR:
+      sections.push(...await this.generateGDPRSections(reportType, periodStart, periodEnd));
+      break;
+    case ComplianceRegulation.CCPA:
+      sections.push(...await this.generateCCPASections(reportType, periodStart, periodEnd));
+      break;
+    case ComplianceRegulation.HIPAA:
+      sections.push(...await this.generateHIPAASections(reportType, periodStart, periodEnd));
+      break;
     }
 
     return sections;
@@ -350,14 +350,14 @@ export class RegulatoryReportingService {
     
     // Add regulation-specific findings
     switch (regulation) {
-      case ComplianceRegulation.GDPR:
-        findings.push('GDPR compliance assessment completed');
-        findings.push('Consent management review conducted');
-        break;
-      case ComplianceRegulation.CCPA:
-        findings.push('Consumer rights requests processed');
-        findings.push('Data sale opt-out mechanisms verified');
-        break;
+    case ComplianceRegulation.GDPR:
+      findings.push('GDPR compliance assessment completed');
+      findings.push('Consent management review conducted');
+      break;
+    case ComplianceRegulation.CCPA:
+      findings.push('Consumer rights requests processed');
+      findings.push('Data sale opt-out mechanisms verified');
+      break;
     }
     
     return findings;
@@ -389,16 +389,16 @@ export class RegulatoryReportingService {
     
     // Different regulations have different review cycles
     switch (regulation) {
-      case ComplianceRegulation.GDPR:
-      case ComplianceRegulation.CCPA:
-        nextReview.setMonth(nextReview.getMonth() + 3); // Quarterly
-        break;
-      case ComplianceRegulation.HIPAA:
-      case ComplianceRegulation.SOX:
-        nextReview.setMonth(nextReview.getMonth() + 1); // Monthly
-        break;
-      default:
-        nextReview.setMonth(nextReview.getMonth() + 6); // Semi-annually
+    case ComplianceRegulation.GDPR:
+    case ComplianceRegulation.CCPA:
+      nextReview.setMonth(nextReview.getMonth() + 3); // Quarterly
+      break;
+    case ComplianceRegulation.HIPAA:
+    case ComplianceRegulation.SOX:
+      nextReview.setMonth(nextReview.getMonth() + 1); // Monthly
+      break;
+    default:
+      nextReview.setMonth(nextReview.getMonth() + 6); // Semi-annually
     }
     
     return nextReview;

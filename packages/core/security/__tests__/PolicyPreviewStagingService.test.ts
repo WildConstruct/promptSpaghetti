@@ -178,7 +178,7 @@ describe('PolicyPreviewStagingService', () => {
     });
 
     test('should emit previewCreated event', async () => {
-      const eventHandler = jest.fn();
+      const eventHandler = jest.fn<unknown[], unknown>();
       service.on('previewCreated', eventHandler);
 
       await service.createPolicyPreview(
@@ -244,7 +244,7 @@ describe('PolicyPreviewStagingService', () => {
   });
 
   describe('Staging Deployment', () => {
-    let testPreview: any;
+    let testPreview: unknown;
 
     beforeEach(async () => {
       testPreview = await service.createPolicyPreview(
@@ -342,7 +342,7 @@ describe('PolicyPreviewStagingService', () => {
     });
 
     test('should emit stagingDeploymentCreated event', async () => {
-      const eventHandler = jest.fn();
+      const eventHandler = jest.fn<unknown[], unknown>();
       service.on('stagingDeploymentCreated', eventHandler);
 
       await service.deployToStaging(
@@ -380,7 +380,7 @@ describe('PolicyPreviewStagingService', () => {
   });
 
   describe('Validation System', () => {
-    let testPreview: any;
+    let testPreview: unknown;
 
     beforeEach(async () => {
       testPreview = await service.createPolicyPreview(
@@ -424,7 +424,7 @@ describe('PolicyPreviewStagingService', () => {
     });
 
     test('should emit validationCompleted event', async () => {
-      const eventHandler = jest.fn();
+      const eventHandler = jest.fn<unknown[], unknown>();
       service.on('validationCompleted', eventHandler);
 
       await service.runValidations(testPreview, [ValidationType.SYNTAX]);
@@ -463,7 +463,7 @@ describe('PolicyPreviewStagingService', () => {
   });
 
   describe('User Feedback Collection', () => {
-    let testPreview: any;
+    let testPreview: unknown;
 
     beforeEach(async () => {
       testPreview = await service.createPolicyPreview(
@@ -549,7 +549,7 @@ describe('PolicyPreviewStagingService', () => {
     });
 
     test('should emit userFeedbackReceived event', async () => {
-      const eventHandler = jest.fn();
+      const eventHandler = jest.fn<unknown[], unknown>();
       service.on('userFeedbackReceived', eventHandler);
 
       await service.collectUserFeedback(
@@ -613,7 +613,7 @@ describe('PolicyPreviewStagingService', () => {
     });
 
     test('should emit comparisonReportGenerated event', async () => {
-      const eventHandler = jest.fn();
+      const eventHandler = jest.fn<unknown[], unknown>();
       service.on('comparisonReportGenerated', eventHandler);
 
       await service.generateComparisonReport('v1.0.0', 'v1.1.0', 'policy-123');
@@ -629,7 +629,7 @@ describe('PolicyPreviewStagingService', () => {
   });
 
   describe('Preview Analytics', () => {
-    let testPreview: any;
+    let testPreview: unknown;
 
     beforeEach(async () => {
       testPreview = await service.createPolicyPreview(
@@ -677,7 +677,7 @@ describe('PolicyPreviewStagingService', () => {
   });
 
   describe('Production Promotion', () => {
-    let testPreview: any;
+    let testPreview: unknown;
 
     beforeEach(async () => {
       testPreview = await service.createPolicyPreview(
@@ -738,7 +738,7 @@ describe('PolicyPreviewStagingService', () => {
     });
 
     test('should emit previewPromoted event on successful promotion', async () => {
-      const eventHandler = jest.fn();
+      const eventHandler = jest.fn<unknown[], unknown>();
       service.on('previewPromoted', eventHandler);
 
       await service.promoteToProduction(
@@ -760,7 +760,7 @@ describe('PolicyPreviewStagingService', () => {
   });
 
   describe('Rollback Functionality', () => {
-    let testDeployment: any;
+    let testDeployment: unknown;
 
     beforeEach(async () => {
       const testPreview = await service.createPolicyPreview(
@@ -807,7 +807,7 @@ describe('PolicyPreviewStagingService', () => {
     });
 
     test('should emit stagingRollback event', async () => {
-      const eventHandler = jest.fn();
+      const eventHandler = jest.fn<unknown[], unknown>();
       service.on('stagingRollback', eventHandler);
 
       await service.rollbackStagingDeployment(
@@ -906,7 +906,7 @@ describe('PolicyPreviewStagingService', () => {
     });
 
     test('should emit error events for monitoring', () => {
-      const errorHandler = jest.fn();
+      const errorHandler = jest.fn<unknown[], unknown>();
       service.on('error', errorHandler);
 
       // Error events should be emitted for monitoring
@@ -992,18 +992,18 @@ declare global {
 }
 
 expect.extend({
-  toBeOneOf(received: any, values: any[]) {
+  toBeOneOf(received: unknown, values: any[]) {
     const pass = values.includes(received);
     if (pass) {
       return {
         message: () => `expected ${received} not to be one of ${values}`,
-        pass: true,
+        pass: true
       };
     } else {
       return {
         message: () => `expected ${received} to be one of ${values}`,
-        pass: false,
+        pass: false
       };
     }
-  },
+  }
 });

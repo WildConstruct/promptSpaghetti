@@ -1709,7 +1709,7 @@ export class GDPRComplianceRuleset {
     rulesByCategory: Record<RuleCategory, number>;
     rulesByPriority: Record<RulePriority, number>;
     rulesBySeverity: Record<RuleSeverity, number>;
-  } {
+    } {
     const rules = Array.from(this.rules.values());
     
     const rulesByCategory = {} as Record<RuleCategory, number>;

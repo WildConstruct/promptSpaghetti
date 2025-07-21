@@ -27,7 +27,7 @@ function displayTaskDetails(taskId) {
   }
 
   console.log('═'.repeat(80));
-  console.log(`📋 TASK DETAILS`);
+  console.log('📋 TASK DETAILS');
   console.log('═'.repeat(80));
   console.log(`ID: ${task.id}`);
   console.log(`Title: ${task.title}`);

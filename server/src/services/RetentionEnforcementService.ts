@@ -168,7 +168,10 @@ export class RetentionEnforcementService {
     this.retentionService = retentionService;
   }
 
-  async createEnforcementPolicy(policy: Omit<EnforcementPolicy, 'policyId' | 'createdAt' | 'updatedAt'>): Promise<EnforcementPolicy> {
+  async createEnforcementPolicy(
+    policy: Omit<EnforcementPolicy,
+    'policyId' | 'createdAt' | 'updatedAt'>
+  ): Promise<EnforcementPolicy> {
     const policyId = `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
     
@@ -235,24 +238,24 @@ export class RetentionEnforcementService {
 
     try {
       switch (rule.action) {
-        case EnforcementAction.DELETE_IMMEDIATELY:
-          await this.executeImmediateDeletion(event);
-          break;
-        case EnforcementAction.ARCHIVE_THEN_DELETE:
-          await this.executeArchiveThenDelete(event);
-          break;
-        case EnforcementAction.ANONYMIZE:
-          await this.executeAnonymization(event);
-          break;
-        case EnforcementAction.QUARANTINE:
-          await this.executeQuarantine(event);
-          break;
-        case EnforcementAction.REQUEST_APPROVAL:
-          await this.executeApprovalRequest(event, rule);
-          break;
-        case EnforcementAction.NOTIFY_ADMIN:
-          await this.executeNotification(event, rule);
-          break;
+      case EnforcementAction.DELETE_IMMEDIATELY:
+        await this.executeImmediateDeletion(event);
+        break;
+      case EnforcementAction.ARCHIVE_THEN_DELETE:
+        await this.executeArchiveThenDelete(event);
+        break;
+      case EnforcementAction.ANONYMIZE:
+        await this.executeAnonymization(event);
+        break;
+      case EnforcementAction.QUARANTINE:
+        await this.executeQuarantine(event);
+        break;
+      case EnforcementAction.REQUEST_APPROVAL:
+        await this.executeApprovalRequest(event, rule);
+        break;
+      case EnforcementAction.NOTIFY_ADMIN:
+        await this.executeNotification(event, rule);
+        break;
       }
 
       if (event.status !== EnforcementStatus.AWAITING_APPROVAL) {
@@ -436,15 +439,15 @@ export class RetentionEnforcementService {
     
     // Map categories to compliance frameworks
     switch (record.category) {
-      case DataCategory.PERSONAL_IDENTIFIABLE:
-        frameworks.push('GDPR', 'CCPA');
-        break;
-      case DataCategory.HEALTH:
-        frameworks.push('HIPAA');
-        break;
-      case DataCategory.FINANCIAL:
-        frameworks.push('SOX', 'PCI-DSS');
-        break;
+    case DataCategory.PERSONAL_IDENTIFIABLE:
+      frameworks.push('GDPR', 'CCPA');
+      break;
+    case DataCategory.HEALTH:
+      frameworks.push('HIPAA');
+      break;
+    case DataCategory.FINANCIAL:
+      frameworks.push('SOX', 'PCI-DSS');
+      break;
     }
     
     return frameworks;
@@ -552,7 +555,7 @@ export class RetentionEnforcementService {
   }
 
   private async getEnforcementEvent(eventId: string): Promise<EnforcementEvent | null> {
-    const query = `SELECT * FROM enforcement_events WHERE event_id = $1`;
+    const query = 'SELECT * FROM enforcement_events WHERE event_id = $1';
     const result = await this.db.query(query, [eventId]);
     return result.rows[0] || null;
   }

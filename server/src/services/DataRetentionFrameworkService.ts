@@ -169,15 +169,15 @@ export class DataRetentionFrameworkService {
 
     try {
       switch (job.jobType) {
-        case RetentionJobType.SCHEDULED_CLEANUP:
-          await this.executeScheduledCleanup(job);
-          break;
-        case RetentionJobType.ARCHIVE_OLD_DATA:
-          await this.executeArchiving(job);
-          break;
-        case RetentionJobType.COMPLIANCE_REVIEW:
-          await this.executeComplianceReview(job);
-          break;
+      case RetentionJobType.SCHEDULED_CLEANUP:
+        await this.executeScheduledCleanup(job);
+        break;
+      case RetentionJobType.ARCHIVE_OLD_DATA:
+        await this.executeArchiving(job);
+        break;
+      case RetentionJobType.COMPLIANCE_REVIEW:
+        await this.executeComplianceReview(job);
+        break;
       }
 
       job.status = JobStatus.COMPLETED;
@@ -410,7 +410,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async getRetentionRecord(recordId: string): Promise<RetentionRecord | null> {
-    const query = `SELECT * FROM data_retention_records WHERE record_id = $1`;
+    const query = 'SELECT * FROM data_retention_records WHERE record_id = $1';
     const result = await this.db.query(query, [recordId]);
     return result.rows[0] || null;
   }
@@ -457,7 +457,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async getRetentionJob(jobId: string): Promise<RetentionJob | null> {
-    const query = `SELECT * FROM retention_jobs WHERE job_id = $1`;
+    const query = 'SELECT * FROM retention_jobs WHERE job_id = $1';
     const result = await this.db.query(query, [jobId]);
     return result.rows[0] || null;
   }

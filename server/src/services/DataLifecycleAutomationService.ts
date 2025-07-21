@@ -400,21 +400,21 @@ export class DataLifecycleAutomationService {
 
     try {
       switch (job.type) {
-        case AutomationJobType.STAGE_TRANSITION:
-          await this.executeStageTransitionJob(job);
-          break;
-        case AutomationJobType.BULK_CLASSIFICATION:
-          await this.executeBulkClassificationJob(job);
-          break;
-        case AutomationJobType.ARCHIVAL_PREPARATION:
-          await this.executeArchivalPreparationJob(job);
-          break;
-        case AutomationJobType.DELETION_EXECUTION:
-          await this.executeDeletionJob(job);
-          break;
-        case AutomationJobType.COMPLIANCE_CHECK:
-          await this.executeComplianceCheckJob(job);
-          break;
+      case AutomationJobType.STAGE_TRANSITION:
+        await this.executeStageTransitionJob(job);
+        break;
+      case AutomationJobType.BULK_CLASSIFICATION:
+        await this.executeBulkClassificationJob(job);
+        break;
+      case AutomationJobType.ARCHIVAL_PREPARATION:
+        await this.executeArchivalPreparationJob(job);
+        break;
+      case AutomationJobType.DELETION_EXECUTION:
+        await this.executeDeletionJob(job);
+        break;
+      case AutomationJobType.COMPLIANCE_CHECK:
+        await this.executeComplianceCheckJob(job);
+        break;
       }
 
       job.status = JobStatus.COMPLETED;
@@ -562,29 +562,29 @@ export class DataLifecycleAutomationService {
     const daysSinceCreation = currentAge / (1000 * 60 * 60 * 24);
 
     switch (record.currentStage) {
-      case LifecycleStage.CREATED:
-        return LifecycleStage.ACTIVE;
-      case LifecycleStage.ACTIVE:
-        if (daysSinceCreation > 90 && this.hasLowAccessPattern(record)) {
-          return LifecycleStage.AGING;
-        }
-        break;
-      case LifecycleStage.AGING:
-        if (daysSinceCreation > 365) {
-          return LifecycleStage.ARCHIVAL_READY;
-        }
-        break;
-      case LifecycleStage.ARCHIVAL_READY:
-        return LifecycleStage.ARCHIVED;
-      case LifecycleStage.ARCHIVED:
-        if (this.isRetentionExpired(record)) {
-          return LifecycleStage.RETENTION_EXPIRED;
-        }
-        break;
-      case LifecycleStage.RETENTION_EXPIRED:
-        return LifecycleStage.DELETION_PENDING;
-      case LifecycleStage.DELETION_PENDING:
-        return LifecycleStage.DELETED;
+    case LifecycleStage.CREATED:
+      return LifecycleStage.ACTIVE;
+    case LifecycleStage.ACTIVE:
+      if (daysSinceCreation > 90 && this.hasLowAccessPattern(record)) {
+        return LifecycleStage.AGING;
+      }
+      break;
+    case LifecycleStage.AGING:
+      if (daysSinceCreation > 365) {
+        return LifecycleStage.ARCHIVAL_READY;
+      }
+      break;
+    case LifecycleStage.ARCHIVAL_READY:
+      return LifecycleStage.ARCHIVED;
+    case LifecycleStage.ARCHIVED:
+      if (this.isRetentionExpired(record)) {
+        return LifecycleStage.RETENTION_EXPIRED;
+      }
+      break;
+    case LifecycleStage.RETENTION_EXPIRED:
+      return LifecycleStage.DELETION_PENDING;
+    case LifecycleStage.DELETION_PENDING:
+      return LifecycleStage.DELETED;
     }
 
     return null;
@@ -774,13 +774,13 @@ export class DataLifecycleAutomationService {
   }
 
   private async getLifecycleRecord(lifecycleId: string): Promise<DataLifecycleRecord | null> {
-    const query = `SELECT * FROM data_lifecycle_records WHERE lifecycle_id = $1`;
+    const query = 'SELECT * FROM data_lifecycle_records WHERE lifecycle_id = $1';
     const result = await this.db.query(query, [lifecycleId]);
     return result.rows[0] || null;
   }
 
   private async getAutomationJob(jobId: string): Promise<LifecycleAutomationJob | null> {
-    const query = `SELECT * FROM lifecycle_automation_jobs WHERE job_id = $1`;
+    const query = 'SELECT * FROM lifecycle_automation_jobs WHERE job_id = $1';
     const result = await this.db.query(query, [jobId]);
     return result.rows[0] || null;
   }

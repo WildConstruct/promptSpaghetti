@@ -1705,7 +1705,10 @@ export class PolicyNotificationService extends EventEmitter {
   /**
    * Send policy notification to specified audience
    */
-  async sendNotification(notification: Omit<PolicyNotification, 'notificationId' | 'createdAt' | 'deliveryStatus' | 'deliveryAttempts' | 'userInteractions' | 'status'>): Promise<{ notificationId: string }> {
+  async sendNotification(
+    notification: Omit<PolicyNotification,
+    'notificationId' | 'createdAt' | 'deliveryStatus' | 'deliveryAttempts' | 'userInteractions' | 'status'>
+  ): Promise<{ notificationId: string }> {
     const notificationId = await this.generateNotificationId();
 
     try {
@@ -2051,26 +2054,26 @@ export class PolicyNotificationService extends EventEmitter {
   ): Promise<AttemptResponse> {
     // Mock implementation - would integrate with actual channel providers
     switch (channel.type) {
-      case 'EMAIL':
-        return {
-          statusCode: 200,
-          externalId: `email-${Date.now()}`,
-          trackingInfo: { messageId: `msg-${Date.now()}` }
-        };
-      case 'SMS':
-        return {
-          statusCode: 200,
-          externalId: `sms-${Date.now()}`,
-          trackingInfo: { sid: `sid-${Date.now()}` }
-        };
-      case 'PUSH':
-        return {
-          statusCode: 200,
-          externalId: `push-${Date.now()}`,
-          trackingInfo: { notificationId: `notif-${Date.now()}` }
-        };
-      default:
-        throw new Error(`Unsupported channel type: ${channel.type}`);
+    case 'EMAIL':
+      return {
+        statusCode: 200,
+        externalId: `email-${Date.now()}`,
+        trackingInfo: { messageId: `msg-${Date.now()}` }
+      };
+    case 'SMS':
+      return {
+        statusCode: 200,
+        externalId: `sms-${Date.now()}`,
+        trackingInfo: { sid: `sid-${Date.now()}` }
+      };
+    case 'PUSH':
+      return {
+        statusCode: 200,
+        externalId: `push-${Date.now()}`,
+        trackingInfo: { notificationId: `notif-${Date.now()}` }
+      };
+    default:
+      throw new Error(`Unsupported channel type: ${channel.type}`);
     }
   }
 
@@ -2106,8 +2109,7 @@ export class PolicyNotificationService extends EventEmitter {
   private calculateEngagementMetrics(interactions: UserInteraction[]): EngagementMetrics {
     const opens = interactions.filter(i => i.interactionType === 'OPENED').length;
     const clicks = interactions.filter(i => i.interactionType === 'CLICKED').length;
-    const unsubscribes = interactions.filter(i => i.interactionType === 'UNSUBSCRIBED').length;
-
+    
     return {
       opened: opens > 0,
       clicked: clicks > 0,
@@ -2125,17 +2127,26 @@ export class PolicyNotificationService extends EventEmitter {
     return totalLatency / completedAttempts.length;
   }
 
-  private async applyAudienceFilters(targets: NotificationTarget[], filters: AudienceFilter[]): Promise<NotificationTarget[]> {
+  private async applyAudienceFilters(
+    targets: NotificationTarget[],
+    filters: AudienceFilter[]
+  ): Promise<NotificationTarget[]> {
     // Implementation would apply audience filters
     return targets;
   }
 
-  private async applySegmentation(targets: NotificationTarget[], segmentation: AudienceSegmentation): Promise<NotificationTarget[]> {
+  private async applySegmentation(
+    targets: NotificationTarget[],
+    segmentation: AudienceSegmentation
+  ): Promise<NotificationTarget[]> {
     // Implementation would apply audience segmentation
     return targets;
   }
 
-  private async applyExclusions(targets: NotificationTarget[], exclusions: NotificationExclusion[]): Promise<NotificationTarget[]> {
+  private async applyExclusions(
+    targets: NotificationTarget[],
+    exclusions: NotificationExclusion[]
+  ): Promise<NotificationTarget[]> {
     // Implementation would apply exclusions
     return targets;
   }
@@ -2161,7 +2172,10 @@ export class PolicyNotificationService extends EventEmitter {
     // Implementation would validate user preferences
   }
 
-  private async applyComplianceOverrides(userId: string, preferences: NotificationPreferences): Promise<NotificationPreferences> {
+  private async applyComplianceOverrides(
+    userId: string,
+    preferences: NotificationPreferences
+  ): Promise<NotificationPreferences> {
     // Implementation would apply compliance overrides
     return preferences;
   }

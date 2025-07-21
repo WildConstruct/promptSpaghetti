@@ -539,7 +539,10 @@ export class PolicyAuthoringService {
   /**
    * Create a new policy document
    */
-  async createPolicy(request: PolicyAuthoringRequest, authorId: string): Promise<{ policyId: string; version: string }> {
+  async createPolicy(
+    request: PolicyAuthoringRequest,
+    authorId: string
+  ): Promise<{ policyId: string; version: string }> {
     const policyId = `POL-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
     
     await this.auditService.logEvent({
@@ -604,7 +607,10 @@ export class PolicyAuthoringService {
   /**
    * Update an existing policy
    */
-  async updatePolicy(request: PolicyUpdateRequest, authorId: string): Promise<{ versionId: string; newVersion: string }> {
+  async updatePolicy(
+    request: PolicyUpdateRequest,
+    authorId: string
+  ): Promise<{ versionId: string; newVersion: string }> {
     const policy = this.policies.get(request.policyId);
     if (!policy) {
       throw new Error(`Policy ${request.policyId} not found`);
@@ -807,7 +813,12 @@ export class PolicyAuthoringService {
   /**
    * Export policy in specified format
    */
-  async exportPolicy(policyId: string, version: string, format: string, options: any): Promise<{ downloadUrl: string; size: number }> {
+  async exportPolicy(
+    policyId: string,
+    version: string,
+    format: string,
+    options: any
+  ): Promise<{ downloadUrl: string; size: number }> {
     const policy = this.policies.get(policyId);
     if (!policy) {
       throw new Error(`Policy ${policyId} not found`);
@@ -963,15 +974,15 @@ export class PolicyAuthoringService {
     const [major, minor, patch] = currentVersion.split('.').map(Number);
     
     switch (impact) {
-      case 'CRITICAL':
-      case 'HIGH':
-        return `${major + 1}.0.0`;
-      case 'MEDIUM':
-        return `${major}.${minor + 1}.0`;
-      case 'LOW':
-      case 'NONE':
-      default:
-        return `${major}.${minor}.${patch + 1}`;
+    case 'CRITICAL':
+    case 'HIGH':
+      return `${major + 1}.0.0`;
+    case 'MEDIUM':
+      return `${major}.${minor + 1}.0`;
+    case 'LOW':
+    case 'NONE':
+    default:
+      return `${major}.${minor}.${patch + 1}`;
     }
   }
 

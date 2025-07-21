@@ -1647,7 +1647,7 @@ export class RetentionExceptionTrackingService {
     }
 
     if (exception.status !== ExceptionStatus.DRAFT) {
-      throw new Error(`Exception must be in DRAFT status to submit for approval`);
+      throw new Error('Exception must be in DRAFT status to submit for approval');
     }
 
     // Validate completeness
@@ -1717,7 +1717,7 @@ export class RetentionExceptionTrackingService {
     }
 
     if (exception.approval.overallStatus !== ApprovalStatus.APPROVED) {
-      throw new Error(`Exception must be approved before activation`);
+      throw new Error('Exception must be approved before activation');
     }
 
     exception.status = ExceptionStatus.ACTIVE;
@@ -1742,7 +1742,7 @@ export class RetentionExceptionTrackingService {
     }
 
     if (exception.status !== ExceptionStatus.ACTIVE) {
-      throw new Error(`Exception must be active to monitor`);
+      throw new Error('Exception must be active to monitor');
     }
 
     // Collect monitoring data
@@ -2237,7 +2237,7 @@ export class RetentionExceptionTrackingService {
   }
 
   private async getRetentionException(exceptionId: string): Promise<RetentionException | null> {
-    const query = `SELECT * FROM retention_exceptions WHERE exception_id = $1`;
+    const query = 'SELECT * FROM retention_exceptions WHERE exception_id = $1';
     const result = await this.db.query(query, [exceptionId]);
     return result.rows[0] || null;
   }

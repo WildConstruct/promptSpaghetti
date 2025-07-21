@@ -175,7 +175,7 @@ export const JustInTimeConsentPrompt: React.FC<JustInTimeConsentPromptProps> = (
       baseClass,
       `${baseClass}--${appearance.style}`,
       `${baseClass}--${appearance.theme}`,
-      `${baseClass}--${appearance.size}`,
+      `${baseClass}--${appearance.size}`
     ];
     
     if (appearance.position) {

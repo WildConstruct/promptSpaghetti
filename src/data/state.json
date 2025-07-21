@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T08:03:17.207Z"
+    "updated": "2025-07-21T13:30:07.613Z"
   },
   "product_goals": [
     {
@@ -23364,12 +23364,12 @@
       "id": "T-1752989143998-280",
       "story_id": "S-1752989143998-19-3",
       "title": "Build SOC2 compliance framework",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "claude_code_agent",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T07:51:53.253Z",
+      "updated": "2025-07-21T13:27:34.534Z",
       "dependencies": [],
       "notes": []
     },
@@ -23377,12 +23377,12 @@
       "id": "T-1752989143998-102",
       "story_id": "S-1752989143998-19-3",
       "title": "Add ISO 27001 controls mapping",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "claude_code_agent",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T07:51:53.253Z",
+      "updated": "2025-07-21T13:18:16.207Z",
       "dependencies": [],
       "notes": []
     },
@@ -23416,12 +23416,12 @@
       "id": "T-1752989143998-103",
       "story_id": "S-1752989143998-19-3",
       "title": "Build rule testing environment",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "REVIEW",
+      "assignee": "claude_dev",
       "wip_class": "CHORE",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T13:30:07.612Z",
       "dependencies": [],
       "notes": []
     },
@@ -23429,12 +23429,12 @@
       "id": "T-1752989143998-446",
       "story_id": "S-1752989143998-19-3",
       "title": "Implement rule version control",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "--help",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T13:21:19.333Z",
       "dependencies": [],
       "notes": []
     },
@@ -23442,12 +23442,12 @@
       "id": "T-1752989143998-160",
       "story_id": "S-1752989143998-19-3",
       "title": "Add rule dependency tracking",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "--help",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T13:21:19.333Z",
       "dependencies": [],
       "notes": []
     },
@@ -23455,12 +23455,12 @@
       "id": "T-1752989143998-70",
       "story_id": "S-1752989143998-19-3",
       "title": "Create rule evaluation engine",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T13:27:19.938Z",
       "dependencies": [],
       "notes": []
     },
@@ -23468,12 +23468,12 @@
       "id": "T-1752989143998-275",
       "story_id": "S-1752989143998-19-3",
       "title": "Create evidence integrity protection",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T13:27:19.938Z",
       "dependencies": [],
       "notes": []
     },
@@ -31660,7 +31660,9 @@
       "T-1752989143998-567",
       "T-1752989143998-913",
       "T-1752989143998-620",
-      "T-1752989143998-791"
+      "T-1752989143998-791",
+      "T-1752989143998-70",
+      "T-1752989143998-275"
     ],
     "dev_A": [
       "T-1752950863627",
@@ -31933,7 +31935,8 @@
       "T-1752989143998-667",
       "T-1752989143998-840",
       "T-1752989143998-580",
-      "T-1752989143998-261"
+      "T-1752989143998-261",
+      "T-1752989143998-103"
     ],
     "claude": [
       "T-1752989143998-694",
@@ -31981,6 +31984,10 @@
     "claude_code_agent": [
       "T-1752989143998-280",
       "T-1752989143998-102"
+    ],
+    "--help": [
+      "T-1752989143998-446",
+      "T-1752989143998-160"
     ]
   },
   "metrics": {

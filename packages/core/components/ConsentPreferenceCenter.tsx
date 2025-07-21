@@ -395,13 +395,13 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
 
   const getRequestDescription = (type: DataRequestType): string => {
     switch (type) {
-      case 'ACCESS': return 'Request for access to personal data';
-      case 'PORTABILITY': return 'Request for data portability';
-      case 'RECTIFICATION': return 'Request to correct personal data';
-      case 'ERASURE': return 'Request to delete personal data';
-      case 'RESTRICTION': return 'Request to restrict processing';
-      case 'OBJECTION': return 'Objection to data processing';
-      default: return 'Data subject rights request';
+    case 'ACCESS': return 'Request for access to personal data';
+    case 'PORTABILITY': return 'Request for data portability';
+    case 'RECTIFICATION': return 'Request to correct personal data';
+    case 'ERASURE': return 'Request to delete personal data';
+    case 'RESTRICTION': return 'Request to restrict processing';
+    case 'OBJECTION': return 'Objection to data processing';
+    default: return 'Data subject rights request';
     }
   };
 
@@ -421,7 +421,10 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
     }));
   };
 
-  const updateCommunicationPreference = (channel: keyof CommunicationPreferences, updates: Partial<ChannelPreference>) => {
+  const updateCommunicationPreference = (
+    channel: keyof CommunicationPreferences,
+    updates: Partial<ChannelPreference>
+  ) => {
     setSettings(prev => ({
       ...prev,
       communications: {
@@ -434,40 +437,29 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
     }));
   };
 
-  const updateDataProcessingConsent = (type: keyof DataProcessingPreferences, updates: Partial<ProcessingConsent>) => {
-    setSettings(prev => ({
-      ...prev,
-      dataProcessing: {
-        ...prev.dataProcessing,
-        [type]: {
-          ...prev.dataProcessing[type],
-          ...updates
-        }
-      }
-    }));
-  };
+    };
 
   const getSectionIcon = (section: string) => {
     switch (section) {
-      case 'overview': return <Settings className="w-5 h-5" />;
-      case 'categories': return <Cookie className="w-5 h-5" />;
-      case 'communications': return <MessageSquare className="w-5 h-5" />;
-      case 'processing': return <Eye className="w-5 h-5" />;
-      case 'retention': return <Clock className="w-5 h-5" />;
-      case 'sharing': return <Globe className="w-5 h-5" />;
-      case 'rights': return <Shield className="w-5 h-5" />;
-      case 'history': return <History className="w-5 h-5" />;
-      default: return <Settings className="w-5 h-5" />;
+    case 'overview': return <Settings className="w-5 h-5" />;
+    case 'categories': return <Cookie className="w-5 h-5" />;
+    case 'communications': return <MessageSquare className="w-5 h-5" />;
+    case 'processing': return <Eye className="w-5 h-5" />;
+    case 'retention': return <Clock className="w-5 h-5" />;
+    case 'sharing': return <Globe className="w-5 h-5" />;
+    case 'rights': return <Shield className="w-5 h-5" />;
+    case 'history': return <History className="w-5 h-5" />;
+    default: return <Settings className="w-5 h-5" />;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'COMPLETED': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'IN_PROGRESS': return <RefreshCw className="w-4 h-4 text-blue-600 animate-spin" />;
-      case 'SUBMITTED': return <Clock className="w-4 h-4 text-yellow-600" />;
-      case 'REJECTED': return <AlertCircle className="w-4 h-4 text-red-600" />;
-      default: return <Clock className="w-4 h-4 text-gray-600" />;
+    case 'COMPLETED': return <CheckCircle className="w-4 h-4 text-green-600" />;
+    case 'IN_PROGRESS': return <RefreshCw className="w-4 h-4 text-blue-600 animate-spin" />;
+    case 'SUBMITTED': return <Clock className="w-4 h-4 text-yellow-600" />;
+    case 'REJECTED': return <AlertCircle className="w-4 h-4 text-red-600" />;
+    default: return <Clock className="w-4 h-4 text-gray-600" />;
     }
   };
 
@@ -811,9 +803,9 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
                           </div>
                           <span className={`px-2 py-1 rounded text-xs font-medium ${
                             request.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                            request.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :
-                            request.status === 'SUBMITTED' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
+                              request.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :
+                                request.status === 'SUBMITTED' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800'
                           }`}>
                             {request.status}
                           </span>

@@ -25,8 +25,33 @@ const RegisterRuleRequestSchema = z.object({
   ruleId: z.string().min(1).max(100),
   name: z.string().min(1).max(200),
   description: z.string().min(1).max(1000),
-  framework: z.enum(['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO_27001', 'NIST', 'PIPEDA', 'LGPD', 'PDPA', 'CUSTOM']),
-  category: z.enum(['DATA_PROTECTION', 'PRIVACY', 'SECURITY', 'GOVERNANCE', 'AUDIT', 'RETENTION', 'ACCESS', 'CONSENT', 'NOTIFICATION', 'BREACH', 'TRANSFER', 'RIGHTS']),
+  framework: z.enum(
+    ['GDPR',
+    'CCPA',
+    'SOX',
+    'HIPAA',
+    'PCI_DSS',
+    'ISO_27001',
+    'NIST',
+    'PIPEDA',
+    'LGPD',
+    'PDPA',
+    'CUSTOM']
+  ),
+  category: z.enum(
+    ['DATA_PROTECTION',
+    'PRIVACY',
+    'SECURITY',
+    'GOVERNANCE',
+    'AUDIT',
+    'RETENTION',
+    'ACCESS',
+    'CONSENT',
+    'NOTIFICATION',
+    'BREACH',
+    'TRANSFER',
+    'RIGHTS']
+  ),
   subcategory: z.string().max(100),
   version: z.string().regex(/^\d+\.\d+\.\d+$/),
   priority: z.enum(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']),
@@ -38,8 +63,31 @@ const RegisterRuleRequestSchema = z.object({
       conditional: z.boolean(),
       conditions: z.array(z.object({
         conditionId: z.string(),
-        type: z.enum(['DATA_FIELD', 'CONTEXT_PROPERTY', 'TIME_BASED', 'EVENT_BASED', 'THRESHOLD', 'PATTERN', 'EXPRESSION', 'CUSTOM']),
-        operator: z.enum(['EQUALS', 'NOT_EQUALS', 'GREATER_THAN', 'LESS_THAN', 'GREATER_EQUAL', 'LESS_EQUAL', 'CONTAINS', 'NOT_CONTAINS', 'STARTS_WITH', 'ENDS_WITH', 'MATCHES', 'IN', 'NOT_IN']),
+        type: z.enum(
+          ['DATA_FIELD',
+          'CONTEXT_PROPERTY',
+          'TIME_BASED',
+          'EVENT_BASED',
+          'THRESHOLD',
+          'PATTERN',
+          'EXPRESSION',
+          'CUSTOM']
+        ),
+        operator: z.enum(
+          ['EQUALS',
+          'NOT_EQUALS',
+          'GREATER_THAN',
+          'LESS_THAN',
+          'GREATER_EQUAL',
+          'LESS_EQUAL',
+          'CONTAINS',
+          'NOT_CONTAINS',
+          'STARTS_WITH',
+          'ENDS_WITH',
+          'MATCHES',
+          'IN',
+          'NOT_IN']
+        ),
         value: z.any(),
         context: z.record(z.any()).default({}),
         weight: z.number().min(0).max(1),
@@ -80,7 +128,14 @@ const RegisterRuleRequestSchema = z.object({
       activityId: z.string(),
       type: z.string(),
       purpose: z.string(),
-      legalBasis: z.enum(['CONSENT', 'CONTRACT', 'LEGAL_OBLIGATION', 'VITAL_INTERESTS', 'PUBLIC_TASK', 'LEGITIMATE_INTERESTS']),
+      legalBasis: z.enum(
+        ['CONSENT',
+        'CONTRACT',
+        'LEGAL_OBLIGATION',
+        'VITAL_INTERESTS',
+        'PUBLIC_TASK',
+        'LEGITIMATE_INTERESTS']
+      ),
       automated: z.boolean(),
       profiling: z.boolean(),
       decisionMaking: z.boolean(),
@@ -139,8 +194,31 @@ const RegisterRuleRequestSchema = z.object({
   }),
   conditions: z.array(z.object({
     conditionId: z.string(),
-    type: z.enum(['DATA_FIELD', 'CONTEXT_PROPERTY', 'TIME_BASED', 'EVENT_BASED', 'THRESHOLD', 'PATTERN', 'EXPRESSION', 'CUSTOM']),
-    operator: z.enum(['EQUALS', 'NOT_EQUALS', 'GREATER_THAN', 'LESS_THAN', 'GREATER_EQUAL', 'LESS_EQUAL', 'CONTAINS', 'NOT_CONTAINS', 'STARTS_WITH', 'ENDS_WITH', 'MATCHES', 'IN', 'NOT_IN']),
+    type: z.enum(
+      ['DATA_FIELD',
+      'CONTEXT_PROPERTY',
+      'TIME_BASED',
+      'EVENT_BASED',
+      'THRESHOLD',
+      'PATTERN',
+      'EXPRESSION',
+      'CUSTOM']
+    ),
+    operator: z.enum(
+      ['EQUALS',
+      'NOT_EQUALS',
+      'GREATER_THAN',
+      'LESS_THAN',
+      'GREATER_EQUAL',
+      'LESS_EQUAL',
+      'CONTAINS',
+      'NOT_CONTAINS',
+      'STARTS_WITH',
+      'ENDS_WITH',
+      'MATCHES',
+      'IN',
+      'NOT_IN']
+    ),
     operands: z.array(z.object({
       operandId: z.string(),
       type: z.string(),
@@ -168,7 +246,20 @@ const RegisterRuleRequestSchema = z.object({
   })).min(1),
   actions: z.array(z.object({
     actionId: z.string(),
-    type: z.enum(['ALLOW', 'DENY', 'REQUIRE', 'MODIFY', 'LOG', 'NOTIFY', 'ESCALATE', 'QUARANTINE', 'DELETE', 'ENCRYPT', 'ANONYMIZE', 'AUDIT']),
+    type: z.enum(
+      ['ALLOW',
+      'DENY',
+      'REQUIRE',
+      'MODIFY',
+      'LOG',
+      'NOTIFY',
+      'ESCALATE',
+      'QUARANTINE',
+      'DELETE',
+      'ENCRYPT',
+      'ANONYMIZE',
+      'AUDIT']
+    ),
     operation: z.object({
       operationType: z.string(),
       target: z.record(z.any()),
@@ -357,8 +448,33 @@ const EvaluateRulesRequestSchema = z.object({
       alertingEnabled: z.boolean()
     }).optional()
   }),
-  frameworks: z.array(z.enum(['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO_27001', 'NIST', 'PIPEDA', 'LGPD', 'PDPA', 'CUSTOM'])).default([]),
-  categories: z.array(z.enum(['DATA_PROTECTION', 'PRIVACY', 'SECURITY', 'GOVERNANCE', 'AUDIT', 'RETENTION', 'ACCESS', 'CONSENT', 'NOTIFICATION', 'BREACH', 'TRANSFER', 'RIGHTS'])).default([]),
+  frameworks: z.array(
+    z.enum(['GDPR',
+    'CCPA',
+    'SOX',
+    'HIPAA',
+    'PCI_DSS',
+    'ISO_27001',
+    'NIST',
+    'PIPEDA',
+    'LGPD',
+    'PDPA',
+    'CUSTOM']
+  )).default([]),
+  categories: z.array(
+    z.enum(['DATA_PROTECTION',
+    'PRIVACY',
+    'SECURITY',
+    'GOVERNANCE',
+    'AUDIT',
+    'RETENTION',
+    'ACCESS',
+    'CONSENT',
+    'NOTIFICATION',
+    'BREACH',
+    'TRANSFER',
+    'RIGHTS']
+  )).default([]),
   options: z.object({
     includeEvidence: z.boolean().default(true),
     includePerformanceMetrics: z.boolean().default(false),
@@ -1031,24 +1147,24 @@ export async function complianceRuleEngineRoutes(fastify: FastifyInstance) {
         rules.sort((a, b) => {
           let aValue, bValue;
           switch (sortBy) {
-            case 'name':
-              aValue = a.name;
-              bValue = b.name;
-              break;
-            case 'priority':
-              const priorityOrder = { 'CRITICAL': 4, 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1 };
-              aValue = priorityOrder[a.priority];
-              bValue = priorityOrder[b.priority];
-              break;
-            case 'createdAt':
-              aValue = a.metadata.createdAt.getTime();
-              bValue = b.metadata.createdAt.getTime();
-              break;
-            case 'lastModified':
-            default:
-              aValue = a.metadata.lastModified.getTime();
-              bValue = b.metadata.lastModified.getTime();
-              break;
+          case 'name':
+            aValue = a.name;
+            bValue = b.name;
+            break;
+          case 'priority':
+            const priorityOrder = { 'CRITICAL': 4, 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1 };
+            aValue = priorityOrder[a.priority];
+            bValue = priorityOrder[b.priority];
+            break;
+          case 'createdAt':
+            aValue = a.metadata.createdAt.getTime();
+            bValue = b.metadata.createdAt.getTime();
+            break;
+          case 'lastModified':
+          default:
+            aValue = a.metadata.lastModified.getTime();
+            bValue = b.metadata.lastModified.getTime();
+            break;
           }
           
           if (sortOrder === 'desc') {

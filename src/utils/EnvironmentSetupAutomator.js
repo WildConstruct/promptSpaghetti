@@ -820,14 +820,14 @@ class EnvironmentSetupAutomator {
       
       try {
         switch (dbName) {
-          case 'postgresql':
-            await this.setupPostgreSQL(config);
-            break;
-          case 'redis':
-            await this.setupRedis(config);
-            break;
-          default:
-            this.warnings.push(`Unknown database type: ${dbName}`);
+        case 'postgresql':
+          await this.setupPostgreSQL(config);
+          break;
+        case 'redis':
+          await this.setupRedis(config);
+          break;
+        default:
+          this.warnings.push(`Unknown database type: ${dbName}`);
         }
       } catch (error) {
         this.warnings.push(`Failed to set up ${dbName}: ${error.message}`);
@@ -1418,41 +1418,41 @@ if (require.main === module) {
     await automator.initialize();
     
     switch (command) {
-      case 'setup':
-        const mode = args[0] || 'standard';
-        const options = {
-          includeOptional: args.includes('--include-optional'),
-          configureGit: !args.includes('--no-git'),
-          databases: {}
-        };
+    case 'setup':
+      const mode = args[0] || 'standard';
+      const options = {
+        includeOptional: args.includes('--include-optional'),
+        configureGit: !args.includes('--no-git'),
+        databases: {}
+      };
         
-        if (args.includes('--with-postgres')) {
-          options.databases.postgresql = true;
-        }
+      if (args.includes('--with-postgres')) {
+        options.databases.postgresql = true;
+      }
         
-        if (args.includes('--with-redis')) {
-          options.databases.redis = true;
-        }
+      if (args.includes('--with-redis')) {
+        options.databases.redis = true;
+      }
         
-        await automator.setupEnvironment(mode, options);
-        break;
+      await automator.setupEnvironment(mode, options);
+      break;
         
-      case 'validate':
-        await automator.validateSetup();
-        break;
+    case 'validate':
+      await automator.validateSetup();
+      break;
         
-      case 'diagnostics':
-        await automator.runDiagnostics();
-        break;
+    case 'diagnostics':
+      await automator.runDiagnostics();
+      break;
         
-      case 'history':
-        const history = await automator.getSetupHistory();
-        console.log(JSON.stringify(history, null, 2));
-        break;
+    case 'history':
+      const history = await automator.getSetupHistory();
+      console.log(JSON.stringify(history, null, 2));
+      break;
         
-      case 'help':
-      default:
-        console.log(`Environment Setup Automator
+    case 'help':
+    default:
+      console.log(`Environment Setup Automator
 
 Usage: node EnvironmentSetupAutomator.js <command> [options]
 
