@@ -21,7 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Full history for better analysis
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -58,7 +58,6 @@ jobs:
           mkdir -p src/data/{logs,reports,tracking,estimation,quality,health}
           chmod +x src/utils/*.js
           
-          # Environment setup validation
           node src/utils/EnvironmentSetupAutomator.js validate || {
             echo "Environment validation failed, attempting auto-setup..."
             node src/utils/EnvironmentSetupAutomator.js setup minimal
@@ -109,65 +108,21 @@ jobs:
 
       - name: Comprehensive QA Pre-Check
         run: |
-          echo "🛡️ Running comprehensive QA pre-check..."
+          echo "Running comprehensive QA pre-check..."
           node src/utils/QAPrecheck.js check --ci-mode --comprehensive
-          
-          # Generate summary for GitHub
-          echo "## 🛡️ QA Pre-Check Results" >> $GITHUB_STEP_SUMMARY
-          
-          if [ -f src/data/reports/qa-precheck-report.json ]; then
-            node -e "
-              const report = require('./src/data/reports/qa-precheck-report.json');
-              console.log('| Check Type | Status | Issues |');
-              console.log('|-----------|--------|--------|');
-              Object.entries(report.checks || {}).forEach(([type, result]) => {
-                const status = result.passed ? '✅ Pass' : '❌ Fail';
-                const issues = result.issues ? result.issues.length : 0;
-                console.log(\`| \${type} | \${status} | \${issues} |\`);
-              });
-            " >> $GITHUB_STEP_SUMMARY
-          fi
 
       - name: Enhanced Code Quality Scan
         run: |
-          echo "🔍 Running enhanced code quality scan..."
+          echo "Running enhanced code quality scan..."
           node src/utils/CodeQualityScanner.js scan --ci-mode --auto-fix
-          
-          echo "## 🔍 Code Quality Scan Results" >> $GITHUB_STEP_SUMMARY
-          if [ -f src/data/reports/quality-scan-report.json ]; then
-            node -e "
-              const report = require('./src/data/reports/quality-scan-report.json');
-              console.log('| Metric | Score | Status |');
-              console.log('|--------|-------|--------|');
-              console.log(\`| Overall Quality | \${report.overallScore || 'N/A'} | \${report.overallScore >= 80 ? '✅' : '⚠️'} |\`);
-              console.log(\`| Security Issues | \${report.securityIssues || 0} | \${!report.securityIssues ? '✅' : '❌'} |\`);
-              console.log(\`| Performance Issues | \${report.performanceIssues || 0} | \${!report.performanceIssues ? '✅' : '⚠️'} |\`);
-            " >> $GITHUB_STEP_SUMMARY
-          fi
 
       - name: Conflict Detection
         run: |
-          echo "🤝 Checking for potential conflicts..."
+          echo "Checking for potential conflicts..."
           node src/utils/ConflictResolutionAssistant.js detect --ci-mode
-          
-          if [ -f src/data/reports/conflict-report.json ]; then
-            echo "## 🤝 Conflict Detection Results" >> $GITHUB_STEP_SUMMARY
-            node -e "
-              const report = require('./src/data/reports/conflict-report.json');
-              const conflicts = report.potentialConflicts || [];
-              console.log(\`Found \${conflicts.length} potential conflicts\`);
-              if (conflicts.length > 0) {
-                console.log('| File | Conflict Type | Severity |');
-                console.log('|------|---------------|----------|');
-                conflicts.slice(0, 10).forEach(conflict => {
-                  console.log(\`| \${conflict.file} | \${conflict.type} | \${conflict.severity} |\`);
-                });
-              }
-            " >> $GITHUB_STEP_SUMMARY
-          fi
 
-  intelligent-testing:
-    name: Intelligent Test Generation and Execution
+  build-and-test:
+    name: Build and Test with Performance Tracking
     runs-on: ubuntu-latest
     needs: setup-and-validate
     
@@ -204,9 +159,7 @@ jobs:
 
       - name: Generate Missing Test Cases
         run: |
-          echo "🧪 Generating intelligent test cases..."
-          
-          # Find files that need tests
+          echo "Generating intelligent test cases..."
           find src packages -name "*.js" -o -name "*.ts" | grep -v test | grep -v spec | head -20 | while read file; do
             test_file="${file%.*}.test.${file##*.}"
             if [[ ! -f "$test_file" ]]; then
@@ -217,82 +170,12 @@ jobs:
 
       - name: Run Enhanced Test Suite
         run: |
-          echo "🧪 Running enhanced test suite with coverage..."
+          echo "Running enhanced test suite with coverage..."
           pnpm test -- --coverage --ci --detectOpenHandles --forceExit || true
 
-      - name: Test Coverage Analysis
+      - name: Build with Performance Tracking
         run: |
-          echo "📊 Analyzing test coverage..."
-          
-          echo "## 🧪 Test Coverage Analysis" >> $GITHUB_STEP_SUMMARY
-          
-          if [ -f coverage/coverage-summary.json ]; then
-            node -e "
-              const coverage = require('./coverage/coverage-summary.json');
-              const total = coverage.total;
-              console.log('| Metric | Coverage | Status |');
-              console.log('|--------|----------|--------|');
-              console.log(\`| Lines | \${total.lines.pct}% | \${total.lines.pct >= 80 ? '✅' : '⚠️'} |\`);
-              console.log(\`| Statements | \${total.statements.pct}% | \${total.statements.pct >= 80 ? '✅' : '⚠️'} |\`);
-              console.log(\`| Functions | \${total.functions.pct}% | \${total.functions.pct >= 80 ? '✅' : '⚠️'} |\`);
-              console.log(\`| Branches | \${total.branches.pct}% | \${total.branches.pct >= 70 ? '✅' : '⚠️'} |\`);
-            " >> $GITHUB_STEP_SUMMARY
-          else
-            echo "No coverage data available" >> $GITHUB_STEP_SUMMARY
-          fi
-
-      - name: Upload Coverage Reports
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/lcov.info
-          flags: unittests
-          fail_ci_if_error: false
-
-  build-and-performance:
-    name: Build and Performance Analysis
-    runs-on: ubuntu-latest
-    needs: setup-and-validate
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.pnpm-store
-            node_modules
-            */node_modules
-          key: ${{ needs.setup-and-validate.outputs.cache-key }}
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Initialize Utilities
-        run: |
-          mkdir -p src/data/{logs,reports,tracking,estimation,quality,health}
-          chmod +x src/utils/*.js
-
-      - name: Performance Baseline Check
-        run: |
-          echo "📈 Checking performance baselines..."
-          node src/utils/AgentProductivityDashboard.js performance-baseline || true
-
-      - name: Build Client with Performance Tracking
-        run: |
-          echo "🏗️ Building client with performance tracking..."
+          echo "Building client with performance tracking..."
           start_time=$(date +%s)
           pnpm --filter client build
           end_time=$(date +%s)
@@ -300,59 +183,10 @@ jobs:
           build_time=$((end_time - start_time))
           echo "Client build completed in ${build_time} seconds"
           
-          # Track build performance
           node src/utils/AgentProductivityDashboard.js track-build --component client --duration $build_time
 
-      - name: Build Server with Performance Tracking
-        run: |
-          echo "🔧 Building server with performance tracking..."
-          start_time=$(date +%s)
-          pnpm --filter server build
-          end_time=$(date +%s)
-          
-          build_time=$((end_time - start_time))
-          echo "Server build completed in ${build_time} seconds"
-          
-          # Track build performance
-          node src/utils/AgentProductivityDashboard.js track-build --component server --duration $build_time
-
-      - name: Bundle Size Analysis
-        run: |
-          echo "📦 Analyzing bundle sizes..."
-          
-          echo "## 📦 Bundle Size Analysis" >> $GITHUB_STEP_SUMMARY
-          echo "| Component | File | Size |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|------|------|" >> $GITHUB_STEP_SUMMARY
-          
-          # Client bundle analysis
-          if [ -d "client/dist" ]; then
-            find client/dist -name "*.js" -o -name "*.css" | head -10 | while read file; do
-              size=$(du -h "$file" | cut -f1)
-              name=$(basename "$file")
-              echo "| Client | $name | $size |" >> $GITHUB_STEP_SUMMARY
-            done
-          fi
-          
-          # Server bundle analysis
-          if [ -d "server/dist" ]; then
-            find server/dist -name "*.js" | head -5 | while read file; do
-              size=$(du -h "$file" | cut -f1)
-              name=$(basename "$file")
-              echo "| Server | $name | $size |" >> $GITHUB_STEP_SUMMARY
-            done
-          fi
-
-      - name: Docker Build with Optimization
-        run: |
-          echo "🐳 Building optimized Docker image..."
-          if [ -f "server/Dockerfile" ]; then
-            docker build -t promptscape-server ./server
-          else
-            echo "No Dockerfile found, skipping Docker build"
-          fi
-
-  dependency-and-security:
-    name: Dependency and Security Analysis
+  security-and-dependencies:
+    name: Security and Dependency Analysis
     runs-on: ubuntu-latest
     needs: setup-and-validate
     
@@ -389,114 +223,18 @@ jobs:
 
       - name: Task Dependency Analysis
         run: |
-          echo "🔗 Analyzing task dependencies..."
+          echo "Analyzing task dependencies..."
           node src/utils/TaskDependencyResolver.js analyze --ci-mode || true
 
       - name: Enhanced Security Audit
         run: |
-          echo "🔒 Running enhanced security audit..."
+          echo "Running enhanced security audit..."
           node src/utils/CodeQualityScanner.js security --comprehensive --ci-mode
-          
-          # Also run traditional audit
-          pnpm audit --json > audit.json || true
-          
-          echo "## 🔒 Security Audit Results" >> $GITHUB_STEP_SUMMARY
-          
-          if [ -f audit.json ]; then
-            node -e "
-              const fs = require('fs');
-              const audit = JSON.parse(fs.readFileSync('audit.json', 'utf8'));
-              
-              const severities = { critical: 0, high: 0, moderate: 0, low: 0, info: 0 };
-              
-              if (audit.vulnerabilities) {
-                Object.values(audit.vulnerabilities).forEach(vuln => {
-                  if (vuln.severity && severities.hasOwnProperty(vuln.severity)) {
-                    severities[vuln.severity]++;
-                  }
-                });
-              }
-              
-              console.log('| Severity | Count | Status |');
-              console.log('|----------|-------|--------|');
-              Object.entries(severities).forEach(([sev, count]) => {
-                const emoji = sev === 'critical' || sev === 'high' ? '🔴' : 
-                             sev === 'moderate' ? '🟡' : '🟢';
-                const status = (sev === 'critical' || sev === 'high') && count > 0 ? '❌' : '✅';
-                console.log(\`| \${emoji} \${sev} | \${count} | \${status} |\`);
-              });
-            " >> $GITHUB_STEP_SUMMARY
-          fi
-
-      - name: License Compliance Check
-        run: |
-          echo "📜 Checking license compliance..."
-          node src/utils/CodeQualityScanner.js licenses --ci-mode || true
-
-  workload-and-estimation:
-    name: Workload Analysis and Estimation
-    runs-on: ubuntu-latest
-    needs: setup-and-validate
-    if: github.event_name == 'pull_request'
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.pnpm-store
-            node_modules
-            */node_modules
-          key: ${{ needs.setup-and-validate.outputs.cache-key }}
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Initialize Utilities
-        run: |
-          mkdir -p src/data/{logs,reports,tracking,estimation,quality,health}
-          chmod +x src/utils/*.js
-
-      - name: PR Complexity Estimation
-        run: |
-          echo "🔮 Estimating PR complexity and effort..."
-          
-          # Analyze changed files
-          git diff --name-only origin/main...HEAD | head -20 | while read file; do
-            if [[ "$file" == src/* ]] || [[ "$file" == packages/* ]]; then
-              echo "Analyzing complexity for $file..."
-              
-              # Estimate effort for changes
-              lines_changed=$(git diff origin/main...HEAD -- "$file" | grep -E '^\+|^-' | wc -l)
-              echo "File: $file, Lines changed: $lines_changed"
-              
-              # Use estimation utility
-              node src/utils/TaskEstimationImprover.js estimate-change --file "$file" --lines "$lines_changed" || true
-            fi
-          done
-
-      - name: Workload Balance Check
-        run: |
-          echo "⚖️ Checking workload balance implications..."
-          node src/utils/AgentWorkloadBalancer.js pr-impact --ci-mode || true
 
   system-health-monitoring:
     name: System Health and Integration Monitoring
     runs-on: ubuntu-latest
-    needs: [enhanced-quality-gates, intelligent-testing, build-and-performance]
+    needs: [enhanced-quality-gates, build-and-test, security-and-dependencies]
     if: always()
     
     steps:
@@ -513,15 +251,6 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.pnpm-store
-            node_modules
-            */node_modules
-          key: ${{ needs.setup-and-validate.outputs.cache-key }}
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -532,46 +261,36 @@ jobs:
 
       - name: Comprehensive Health Check
         run: |
-          echo "🏥 Running comprehensive system health check..."
+          echo "Running comprehensive system health check..."
           node src/utils/IntegrationHealthMonitor.js comprehensive-check --ci-mode
 
       - name: Generate CI Summary Dashboard
         run: |
-          echo "📊 Generating CI summary dashboard..."
-          node src/utils/AgentProductivityDashboard.js ci-summary --jobs-status '{
-            "quality-gates": "${{ needs.enhanced-quality-gates.result }}",
-            "testing": "${{ needs.intelligent-testing.result }}",
-            "build": "${{ needs.build-and-performance.result }}"
-          }'
+          echo "Generating CI summary dashboard..."
+          node src/utils/AgentProductivityDashboard.js ci-summary
 
       - name: Update Knowledge Base
         run: |
-          echo "📚 Updating knowledge base with CI insights..."
+          echo "Updating knowledge base with CI insights..."
           node src/utils/KnowledgeBaseIndexer.js ci-update || true
 
       - name: Final Status Check
         run: |
-          echo "🎯 Final CI status evaluation..."
+          echo "Final CI status evaluation..."
           
-          # Check critical job results
           if [[ "${{ needs.enhanced-quality-gates.result }}" == "failure" ]]; then
-            echo "❌ Quality gates failed - blocking merge"
+            echo "Quality gates failed - blocking merge"
             exit 1
           fi
           
-          if [[ "${{ needs.intelligent-testing.result }}" == "failure" ]]; then
-            echo "❌ Testing failed - blocking merge"  
+          if [[ "${{ needs.build-and-test.result }}" == "failure" ]]; then
+            echo "Build/test failed - blocking merge"
             exit 1
           fi
           
-          if [[ "${{ needs.build-and-performance.result }}" == "failure" ]]; then
-            echo "❌ Build failed - blocking merge"
-            exit 1
-          fi
-          
-          echo "✅ All critical checks passed!"
+          echo "All critical checks passed!"
 
-  documentation-and-knowledge:
+  documentation-update:
     name: Documentation and Knowledge Update
     runs-on: ubuntu-latest
     needs: system-health-monitoring
@@ -603,18 +322,13 @@ jobs:
 
       - name: Generate Fresh Documentation
         run: |
-          echo "📝 Generating updated documentation..."
+          echo "Generating updated documentation..."
           node src/utils/DocumentationAutoGenerator.js generate --comprehensive
 
       - name: Update Knowledge Base
         run: |
-          echo "🧠 Updating knowledge base..."
+          echo "Updating knowledge base..."
           node src/utils/KnowledgeBaseIndexer.js index --comprehensive
-
-      - name: Generate API Documentation
-        run: |
-          echo "📖 Generating API documentation..."
-          node src/utils/DocumentationAutoGenerator.js api-docs --comprehensive
 
       - name: Commit Documentation Updates
         run: |
@@ -625,12 +339,7 @@ jobs:
             git add docs/ README.md src/data/
             git commit -m "docs: Auto-update documentation and knowledge base [skip ci]
 
-🤖 Generated with Enhanced CI and Agent Productivity Utilities
-
-- Updated API documentation
-- Refreshed knowledge base
-- Generated performance reports
-- Updated system health metrics
+Generated with Enhanced CI and Agent Productivity Utilities
 
 Co-Authored-By: Agent Productivity Utilities <noreply@github.com>" || true
             git push || true

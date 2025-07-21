@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T05:47:59.736Z"
+    "updated": "2025-07-21T05:51:00.981Z"
   },
   "product_goals": [
     {
@@ -22726,12 +22726,12 @@
       "id": "T-1752989143998-597",
       "story_id": "S-1752989143997-19-2",
       "title": "Set up policy compliance monitoring",
-      "state": "UNASSIGNED",
+      "state": "REVIEW",
       "assignee": null,
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:50:51.774Z",
       "dependencies": [],
       "notes": []
     },
@@ -22739,12 +22739,12 @@
       "id": "T-1752989143998-287",
       "story_id": "S-1752989143997-19-2",
       "title": "Create policy implementation verification",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:51:00.981Z",
       "dependencies": [],
       "notes": []
     },
@@ -22752,12 +22752,12 @@
       "id": "T-1752989143998-837",
       "story_id": "S-1752989143997-19-2",
       "title": "Build policy version audit trails",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:51:00.981Z",
       "dependencies": [],
       "notes": []
     },
@@ -31530,7 +31530,9 @@
       "T-1752989143997-289",
       "T-1752989143997-424",
       "T-1752989143998-451",
-      "T-1752989143998-824"
+      "T-1752989143998-824",
+      "T-1752989143998-287",
+      "T-1752989143998-837"
     ],
     "dev_A": [
       "T-1752950863627",

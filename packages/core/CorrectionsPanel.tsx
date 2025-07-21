@@ -73,6 +73,9 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
 
   if (!isOpen) return null;
 
+  // Don't render if corrections are not enabled
+  if (!isEnabled) return null;
+
   return (
     <div
       style={{
@@ -192,7 +195,7 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
             </div>
           </div>
 
-          {rules.map((rule, index) => (
+          {rules.map((rule, _index) => (
             <div
               key={rule.id}
               style={{
@@ -203,7 +206,12 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
                 marginBottom: '8px'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '8px'
+              }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <input
                     type="checkbox"

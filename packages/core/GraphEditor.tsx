@@ -1,5 +1,22 @@
 import React, { useCallback, useState, useMemo, useRef } from 'react';
-import { Edge, Node, ReactFlowProvider, addEdge, Background, Controls, MiniMap, ReactFlow, Connection, OnConnect, OnEdgesChange, OnNodesChange, EdgeChange, NodeChange, ConnectionLineType, useReactFlow } from 'reactflow';
+import {
+  Edge,
+  Node,
+  ReactFlowProvider,
+  addEdge,
+  Background,
+  Controls,
+  MiniMap,
+  ReactFlow,
+  Connection,
+  OnConnect,
+  OnEdgesChange,
+  OnNodesChange,
+  EdgeChange,
+  NodeChange,
+  ConnectionLineType,
+  useReactFlow
+} from 'reactflow';
 import { InspectorPanel } from './components/Inspector';
 import { NodeRenderer } from './components/NodeRenderer';
 import { StatusBar } from './components/StatusBar';
@@ -124,7 +141,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   const [statsOpen, setStatsOpen] = useState(false);
   const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
-  const [dragPreview, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
+  const [, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
   
   // Demo encryption state - in a real implementation, this would be managed by a security service
   const [encryptionState, setEncryptionState] = useState<EncryptionState>({
@@ -137,7 +154,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
 
   // Custom hooks
   const { getNodeMeta, getCategoryColor } = useNodeUtils({ nodeTypes: NODE_TYPES });
-  const { showRestorePrompt, restoreDraft, setShowRestorePrompt, setRestoreDraft } = useAutosave({ nodes, edges });
+  const { showRestorePrompt, restoreDraft, setShowRestorePrompt } = useAutosave({ nodes, edges });
   
   // Highlighted nodes & edges from preview result hover
   const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
@@ -152,16 +169,20 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   });
 
   // Memoized node render component using modular NodeRenderer
-  const NodeRender = useMemo(() => (props: any) => (
-    <NodeRenderer
-      id={props.id}
-      data={props.data}
-      selected={selectedNodeId === props.id}
-      onSelect={setSelectedNodeId}
-      getNodeMeta={getNodeMeta}
-      getCategoryColor={getCategoryColor}
-    />
-  ), [selectedNodeId, getNodeMeta, getCategoryColor]);
+  const NodeRender = useMemo(() => {
+    const NodeRenderComponent = (props: { id: string; data: Record<string, unknown>; selected?: boolean }) => (
+      <NodeRenderer
+        id={props.id}
+        data={props.data}
+        selected={selectedNodeId === props.id}
+        onSelect={setSelectedNodeId}
+        getNodeMeta={getNodeMeta}
+        getCategoryColor={getCategoryColor}
+      />
+    );
+    NodeRenderComponent.displayName = 'NodeRenderComponent';
+    return NodeRenderComponent;
+  }, [selectedNodeId, getNodeMeta, getCategoryColor]);
 
   // Node types mapping - SIMPLIFIED to prevent infinite loops
   const nodeTypes = useMemo(() => {
@@ -171,13 +192,21 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
 
   // Preview-5 modal state
   const [previewOpen, setPreviewOpen] = useState(false);
-  const { loading: previewLoading, error: previewError, results: previewResults, runPreview, cancelPreview } = usePreviewSeeds();
+  const {
+    loading: previewLoading,
+    error: previewError,
+    results: previewResults,
+    runPreview,
+    cancelPreview
+  } = usePreviewSeeds();
   const lastChangeRef = useRef<number>(Date.now());
   const previewTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Selected node & schema for inspector
   const selectedNode = nodes.find((n) => n.id === selectedNodeId) || null;
-  const selectedSchema = selectedNode && selectedNode.data?.nodeType ? nodeSchemas[selectedNode.data.nodeType as keyof typeof nodeSchemas] ?? null : null;
+  const selectedSchema = selectedNode && selectedNode.data?.nodeType
+    ? nodeSchemas[selectedNode.data.nodeType as keyof typeof nodeSchemas] ?? null
+    : null;
 
   const handleInspectorChange = (partial: Record<string, unknown>) => {
     if (!selectedNode) return;
@@ -200,7 +229,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   );
 
   // Handle node drag from palette
-  const handlePaletteDragStart = (nodeId: string) => {
+  const handlePaletteDragStart = (_nodeId: string) => {
     // No-op: drag data set in Palette, handled on drop
   };
 
