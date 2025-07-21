@@ -425,12 +425,12 @@ export class LocationHistoryAnalysisService {
         // Calculate cluster center
         const centerLat = nearbyLocations.reduce(
           (sum,
-          loc
-        ) => sum + loc.location.latitude!, 0) / nearbyLocations.length;
+            loc
+          ) => sum + loc.location.latitude!, 0) / nearbyLocations.length;
         const centerLon = nearbyLocations.reduce(
           (sum,
-          loc
-        ) => sum + loc.location.longitude!, 0) / nearbyLocations.length;
+            loc
+          ) => sum + loc.location.longitude!, 0) / nearbyLocations.length;
         
         // Calculate cluster metrics
         const totalAccess = nearbyLocations.reduce((sum, loc) => sum + loc.accessCount, 0);

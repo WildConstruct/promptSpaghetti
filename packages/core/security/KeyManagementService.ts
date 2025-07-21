@@ -777,19 +777,19 @@ export class KeyManagementService extends EventEmitter {
 
   private async generateKeyMaterial(options: KeyGenerationOptions): Promise<Partial<CryptographicKey>> {
     switch (options.type) {
-      case KeyType.SYMMETRIC:
-        return this.generateSymmetricKey(options);
-      case KeyType.ASYMMETRIC_RSA:
-        return this.generateRSAKeyPair(options);
-      case KeyType.ASYMMETRIC_ECDSA:
-      case KeyType.ASYMMETRIC_ECDH:
-        return this.generateECKeyPair(options);
-      case KeyType.HMAC:
-        return this.generateHMACKey(options);
-      case KeyType.DERIVATION:
-        return this.generateDerivationKey(options);
-      default:
-        throw new Error(`Unsupported key type: ${options.type}`);
+    case KeyType.SYMMETRIC:
+      return this.generateSymmetricKey(options);
+    case KeyType.ASYMMETRIC_RSA:
+      return this.generateRSAKeyPair(options);
+    case KeyType.ASYMMETRIC_ECDSA:
+    case KeyType.ASYMMETRIC_ECDH:
+      return this.generateECKeyPair(options);
+    case KeyType.HMAC:
+      return this.generateHMACKey(options);
+    case KeyType.DERIVATION:
+      return this.generateDerivationKey(options);
+    default:
+      throw new Error(`Unsupported key type: ${options.type}`);
     }
   }
 
@@ -861,12 +861,12 @@ export class KeyManagementService extends EventEmitter {
 
   private async performKeyDerivation(parentKey: Buffer, params: KeyDerivationParameters): Promise<Buffer> {
     switch (params.algorithm) {
-      case KeyAlgorithm.PBKDF2_SHA256:
-        return await pbkdf2Async(parentKey, params.salt, params.iterations || 100000, params.keyLength, 'sha256');
-      case KeyAlgorithm.SCRYPT:
-        return await scryptAsync(parentKey, params.salt, params.keyLength) as Buffer;
-      default:
-        throw new Error(`Unsupported derivation algorithm: ${params.algorithm}`);
+    case KeyAlgorithm.PBKDF2_SHA256:
+      return await pbkdf2Async(parentKey, params.salt, params.iterations || 100000, params.keyLength, 'sha256');
+    case KeyAlgorithm.SCRYPT:
+      return await scryptAsync(parentKey, params.salt, params.keyLength) as Buffer;
+    default:
+      throw new Error(`Unsupported derivation algorithm: ${params.algorithm}`);
     }
   }
 
@@ -1035,21 +1035,21 @@ export class KeyManagementService extends EventEmitter {
 
   private getDefaultKeySize(algorithm: KeyAlgorithm): number {
     switch (algorithm) {
-      case KeyAlgorithm.AES_256_GCM:
-      case KeyAlgorithm.AES_256_CBC:
-        return 256;
-      case KeyAlgorithm.RSA_2048:
-        return 2048;
-      case KeyAlgorithm.RSA_4096:
-        return 4096;
-      case KeyAlgorithm.ECDSA_P256:
-      case KeyAlgorithm.ECDH_P256:
-        return 256;
-      case KeyAlgorithm.ECDSA_P384:
-      case KeyAlgorithm.ECDH_P384:
-        return 384;
-      default:
-        return 256;
+    case KeyAlgorithm.AES_256_GCM:
+    case KeyAlgorithm.AES_256_CBC:
+      return 256;
+    case KeyAlgorithm.RSA_2048:
+      return 2048;
+    case KeyAlgorithm.RSA_4096:
+      return 4096;
+    case KeyAlgorithm.ECDSA_P256:
+    case KeyAlgorithm.ECDH_P256:
+      return 256;
+    case KeyAlgorithm.ECDSA_P384:
+    case KeyAlgorithm.ECDH_P384:
+      return 384;
+    default:
+      return 256;
     }
   }
 
@@ -1081,15 +1081,15 @@ export class KeyManagementService extends EventEmitter {
 
   private calculateEventRiskScore(event: KeyAuditEvent['event'], details: Record<string, any>): number {
     switch (event) {
-      case 'created': return 10;
-      case 'accessed': return 5;
-      case 'modified': return 30;
-      case 'rotated': return 20;
-      case 'revoked': return 50;
-      case 'expired': return 15;
-      case 'backed_up': return 25;
-      case 'restored': return 40;
-      default: return 10;
+    case 'created': return 10;
+    case 'accessed': return 5;
+    case 'modified': return 30;
+    case 'rotated': return 20;
+    case 'revoked': return 50;
+    case 'expired': return 15;
+    case 'backed_up': return 25;
+    case 'restored': return 40;
+    default: return 10;
     }
   }
 

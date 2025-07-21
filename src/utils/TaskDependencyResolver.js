@@ -156,7 +156,7 @@ class TaskDependencyResolver {
       await this.saveDependencies();
       await this.saveAnalysis();
       
-      console.log(`\n✅ Dependency analysis complete:`);
+      console.log('\n✅ Dependency analysis complete:');
       console.log(`📊 Found ${dependenciesFound} dependency relationships`);
       console.log(`🔗 Generated dependency graph with ${this.dependencyGraph.size} nodes`);
       console.log(`⚠️  Identified ${this.analysis.blockers.length} potential blockers`);
@@ -957,29 +957,29 @@ class TaskDependencyResolver {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     
     switch (format) {
-      case 'json':
-        const jsonFile = path.join(this.dataDir, `dependencies-export-${timestamp}.json`);
-        await fs.writeFile(jsonFile, JSON.stringify({
-          dependencies: Object.fromEntries(this.dependencies),
-          analysis: this.analysis,
-          statistics: await this.getStatistics()
-        }, null, 2));
-        return jsonFile;
+    case 'json':
+      const jsonFile = path.join(this.dataDir, `dependencies-export-${timestamp}.json`);
+      await fs.writeFile(jsonFile, JSON.stringify({
+        dependencies: Object.fromEntries(this.dependencies),
+        analysis: this.analysis,
+        statistics: await this.getStatistics()
+      }, null, 2));
+      return jsonFile;
         
-      case 'csv':
-        const csvFile = path.join(this.dataDir, `dependencies-export-${timestamp}.csv`);
-        const csvContent = this.generateCSV();
-        await fs.writeFile(csvFile, csvContent);
-        return csvFile;
+    case 'csv':
+      const csvFile = path.join(this.dataDir, `dependencies-export-${timestamp}.csv`);
+      const csvContent = this.generateCSV();
+      await fs.writeFile(csvFile, csvContent);
+      return csvFile;
         
-      case 'mermaid':
-        const mermaidFile = path.join(this.dataDir, `dependencies-diagram-${timestamp}.md`);
-        const mermaidContent = this.generateMermaidDiagram();
-        await fs.writeFile(mermaidFile, mermaidContent);
-        return mermaidFile;
+    case 'mermaid':
+      const mermaidFile = path.join(this.dataDir, `dependencies-diagram-${timestamp}.md`);
+      const mermaidContent = this.generateMermaidDiagram();
+      await fs.writeFile(mermaidFile, mermaidContent);
+      return mermaidFile;
         
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
   }
 
@@ -1028,41 +1028,41 @@ if (require.main === module) {
       await resolver.initialize();
       
       switch (command) {
-        case 'analyze':
-          console.log('🔍 Analyzing all task dependencies...\n');
-          const result = await resolver.analyzeAllTasks();
-          await resolver.generateVisualization();
-          console.log(`\n✅ Analysis complete! Found ${result.dependenciesFound} dependencies`);
-          break;
+      case 'analyze':
+        console.log('🔍 Analyzing all task dependencies...\n');
+        const result = await resolver.analyzeAllTasks();
+        await resolver.generateVisualization();
+        console.log(`\n✅ Analysis complete! Found ${result.dependenciesFound} dependencies`);
+        break;
           
-        case 'visualize':
-          await resolver.generateVisualization();
-          console.log('📊 Visualization generated successfully');
-          break;
+      case 'visualize':
+        await resolver.generateVisualization();
+        console.log('📊 Visualization generated successfully');
+        break;
           
-        case 'order':
-          const ordering = resolver.getOptimalTaskOrdering();
-          console.log('📋 Optimal task ordering:');
-          ordering.forEach((taskId, index) => {
-            console.log(`${index + 1}. ${taskId}`);
-          });
-          break;
+      case 'order':
+        const ordering = resolver.getOptimalTaskOrdering();
+        console.log('📋 Optimal task ordering:');
+        ordering.forEach((taskId, index) => {
+          console.log(`${index + 1}. ${taskId}`);
+        });
+        break;
           
-        case 'stats':
-          const stats = await resolver.getStatistics();
-          console.log('📊 Dependency Statistics:');
-          console.log(JSON.stringify(stats, null, 2));
-          break;
+      case 'stats':
+        const stats = await resolver.getStatistics();
+        console.log('📊 Dependency Statistics:');
+        console.log(JSON.stringify(stats, null, 2));
+        break;
           
-        case 'export':
-          const format = args[1] || 'json';
-          const exportFile = await resolver.exportDependencies(format);
-          console.log(`📤 Dependencies exported to: ${exportFile}`);
-          break;
+      case 'export':
+        const format = args[1] || 'json';
+        const exportFile = await resolver.exportDependencies(format);
+        console.log(`📤 Dependencies exported to: ${exportFile}`);
+        break;
           
-        case 'help':
-        default:
-          console.log(`
+      case 'help':
+      default:
+        console.log(`
 🔗 Task Dependency Resolver
 
 USAGE:
@@ -1088,7 +1088,7 @@ OUTPUT FILES:
   - dependency-graph.html      Interactive visualization
   - dependencies-export-*.csv  CSV export
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

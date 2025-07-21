@@ -33,7 +33,7 @@ for (const detection of detectedCompletedTasks) {
     const command = `node ${path.join(__dirname, 'finish-task.js')} ${task.id} REVIEW`;
     execSync(command, { encoding: 'utf8', cwd: __dirname });
     
-    console.log(`   ✅ Moved to REVIEW`);
+    console.log('   ✅ Moved to REVIEW');
     movedCount++;
     
   } catch (error) {

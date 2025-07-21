@@ -450,7 +450,7 @@ export class CORSPolicyService {
       },
       security: {
         contentSecurityPolicy: useCase.sensitiveData 
-          ? "default-src 'self'; script-src 'self'; object-src 'none';"
+          ? 'default-src \'self\'; script-src \'self\'; object-src \'none\';'
           : undefined,
         frameOptions: 'DENY',
         contentTypeOptions: true,
@@ -464,7 +464,7 @@ export class CORSPolicyService {
     if (useCase.environment === 'production') {
       basePolicy.origins.localhostAllowed = false;
       basePolicy.security.contentSecurityPolicy = basePolicy.security.contentSecurityPolicy || 
-        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';";
+        'default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\';';
     }
 
     // Adjust for sensitive data
@@ -553,7 +553,7 @@ export class CORSPolicyService {
         allowPrivateNetwork: false
       },
       security: {
-        contentSecurityPolicy: "default-src 'self'; script-src 'self'; object-src 'none';",
+        contentSecurityPolicy: 'default-src \'self\'; script-src \'self\'; object-src \'none\';',
         frameOptions: 'DENY',
         contentTypeOptions: true,
         xssProtection: true,

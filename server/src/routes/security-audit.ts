@@ -234,7 +234,7 @@ export async function securityAuditRoutes(
             endpoint: r.endpoint,
             alerts: r.alerts.slice(0, 3), // Show top 3 alerts
             severity: r.alerts.some(a => a.includes('CRITICAL')) ? 'critical' :
-                     r.alerts.some(a => a.includes('HIGH')) ? 'high' : 'medium'
+              r.alerts.some(a => a.includes('HIGH')) ? 'high' : 'medium'
           }))
       };
     } catch (error) {

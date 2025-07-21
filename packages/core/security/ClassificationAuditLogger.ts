@@ -550,18 +550,18 @@ export class ClassificationAuditLogger extends EventEmitter {
     const logs = await this.queryLogs(filter);
     
     switch (format) {
-      case ExportFormat.JSON:
-        return this.exportAsJSON(logs);
-      case ExportFormat.CSV:
-        return this.exportAsCSV(logs);
-      case ExportFormat.SYSLOG:
-        return this.exportAsSyslog(logs);
-      case ExportFormat.CEF:
-        return this.exportAsCEF(logs);
-      case ExportFormat.LEEF:
-        return this.exportAsLEEF(logs);
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    case ExportFormat.JSON:
+      return this.exportAsJSON(logs);
+    case ExportFormat.CSV:
+      return this.exportAsCSV(logs);
+    case ExportFormat.SYSLOG:
+      return this.exportAsSyslog(logs);
+    case ExportFormat.CEF:
+      return this.exportAsCEF(logs);
+    case ExportFormat.LEEF:
+      return this.exportAsLEEF(logs);
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
   }
   
@@ -853,10 +853,10 @@ export class ClassificationAuditLogger extends EventEmitter {
         this.mapToSeverity(log),
         `src=${log.actor.ipAddress}`,
         `duser=${log.actor.userId || 'system'}`,
-        `dvchost=classification-system`,
+        'dvchost=classification-system',
         `msg=${JSON.stringify(log.action)}`,
         `cs1=${log.integrity.hash}`,
-        `cs1Label=EventHash`
+        'cs1Label=EventHash'
       ];
       
       return cef.join('|');
@@ -894,11 +894,11 @@ export class ClassificationAuditLogger extends EventEmitter {
     severity: AlertSeverity
   ): 'low' | 'medium' | 'high' | 'critical' {
     switch (severity) {
-      case AlertSeverity.INFO: return 'low';
-      case AlertSeverity.WARNING: return 'medium';
-      case AlertSeverity.ERROR: return 'high';
-      case AlertSeverity.CRITICAL: return 'critical';
-      default: return 'medium';
+    case AlertSeverity.INFO: return 'low';
+    case AlertSeverity.WARNING: return 'medium';
+    case AlertSeverity.ERROR: return 'high';
+    case AlertSeverity.CRITICAL: return 'critical';
+    default: return 'medium';
     }
   }
   
@@ -922,18 +922,18 @@ export class ClassificationAuditLogger extends EventEmitter {
     }
     
     switch (framework) {
-      case ComplianceFramework.GDPR:
-        recommendations.push('Ensure data minimization principles are followed');
-        recommendations.push('Implement regular data protection impact assessments');
-        break;
-      case ComplianceFramework.HIPAA:
-        recommendations.push('Review access controls for protected health information');
-        recommendations.push('Ensure encryption is enabled for all PHI data');
-        break;
-      case ComplianceFramework.PCI_DSS:
-        recommendations.push('Implement network segmentation for cardholder data');
-        recommendations.push('Enable comprehensive logging for all access to payment data');
-        break;
+    case ComplianceFramework.GDPR:
+      recommendations.push('Ensure data minimization principles are followed');
+      recommendations.push('Implement regular data protection impact assessments');
+      break;
+    case ComplianceFramework.HIPAA:
+      recommendations.push('Review access controls for protected health information');
+      recommendations.push('Ensure encryption is enabled for all PHI data');
+      break;
+    case ComplianceFramework.PCI_DSS:
+      recommendations.push('Implement network segmentation for cardholder data');
+      recommendations.push('Enable comprehensive logging for all access to payment data');
+      break;
     }
     
     return recommendations;

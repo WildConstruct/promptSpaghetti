@@ -62,7 +62,7 @@ async function verifyAuditLogger() {
     console.log('\nTest 4: Statistics');
     const stats = logger.getStatistics();
     console.log(`✓ Total operations: ${stats.totalOperations}`);
-    console.log(`  Operation breakdown:`, stats.operationCounts);
+    console.log('  Operation breakdown:', stats.operationCounts);
     
     // Test 5: Custom storage backend
     console.log('\nTest 5: Custom storage backend');

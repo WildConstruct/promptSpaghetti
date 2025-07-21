@@ -308,19 +308,19 @@ export class ActiveSessionListingService extends EventEmitter {
         
         return searchFields.some(field => {
           switch (field) {
-            case 'userId':
-              return session.userId.toLowerCase().includes(searchLower);
-            case 'deviceName':
-              return session.deviceInfo.name.toLowerCase().includes(searchLower);
-            case 'ipAddress':
-              return session.location.ipAddress.includes(searchLower);
-            case 'location':
-              return session.location.city?.toLowerCase().includes(searchLower) ||
+          case 'userId':
+            return session.userId.toLowerCase().includes(searchLower);
+          case 'deviceName':
+            return session.deviceInfo.name.toLowerCase().includes(searchLower);
+          case 'ipAddress':
+            return session.location.ipAddress.includes(searchLower);
+          case 'location':
+            return session.location.city?.toLowerCase().includes(searchLower) ||
                      session.location.country?.toLowerCase().includes(searchLower);
-            case 'userAgent':
-              return session.deviceInfo.name.toLowerCase().includes(searchLower);
-            default:
-              return false;
+          case 'userAgent':
+            return session.deviceInfo.name.toLowerCase().includes(searchLower);
+          default:
+            return false;
           }
         });
       });
@@ -426,26 +426,26 @@ export class ActiveSessionListingService extends EventEmitter {
       let mimeType: string;
 
       switch (format) {
-        case 'csv':
-          data = this.convertToCSV(result.sessions);
-          filename = `sessions_export_${Date.now()}.csv`;
-          mimeType = 'text/csv';
-          break;
+      case 'csv':
+        data = this.convertToCSV(result.sessions);
+        filename = `sessions_export_${Date.now()}.csv`;
+        mimeType = 'text/csv';
+        break;
           
-        case 'json':
-          data = JSON.stringify(result, null, 2);
-          filename = `sessions_export_${Date.now()}.json`;
-          mimeType = 'application/json';
-          break;
+      case 'json':
+        data = JSON.stringify(result, null, 2);
+        filename = `sessions_export_${Date.now()}.json`;
+        mimeType = 'application/json';
+        break;
           
-        case 'excel':
-          data = await this.convertToExcel(result.sessions);
-          filename = `sessions_export_${Date.now()}.xlsx`;
-          mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-          break;
+      case 'excel':
+        data = await this.convertToExcel(result.sessions);
+        filename = `sessions_export_${Date.now()}.xlsx`;
+        mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        break;
           
-        default:
-          throw new Error(`Unsupported export format: ${format}`);
+      default:
+        throw new Error(`Unsupported export format: ${format}`);
       }
 
       // Log export event
@@ -503,21 +503,21 @@ export class ActiveSessionListingService extends EventEmitter {
       let comparison = 0;
       
       switch (sortBy) {
-        case 'createdAt':
-          comparison = a.timing.createdAt.getTime() - b.timing.createdAt.getTime();
-          break;
-        case 'lastActivity':
-          comparison = a.timing.lastActivity.getTime() - b.timing.lastActivity.getTime();
-          break;
-        case 'expiresAt':
-          comparison = a.timing.expiresAt.getTime() - b.timing.expiresAt.getTime();
-          break;
-        case 'deviceName':
-          comparison = a.deviceInfo.name.localeCompare(b.deviceInfo.name);
-          break;
-        case 'location':
-          comparison = (a.location.city || '').localeCompare(b.location.city || '');
-          break;
+      case 'createdAt':
+        comparison = a.timing.createdAt.getTime() - b.timing.createdAt.getTime();
+        break;
+      case 'lastActivity':
+        comparison = a.timing.lastActivity.getTime() - b.timing.lastActivity.getTime();
+        break;
+      case 'expiresAt':
+        comparison = a.timing.expiresAt.getTime() - b.timing.expiresAt.getTime();
+        break;
+      case 'deviceName':
+        comparison = a.deviceInfo.name.localeCompare(b.deviceInfo.name);
+        break;
+      case 'location':
+        comparison = (a.location.city || '').localeCompare(b.location.city || '');
+        break;
       }
       
       return sortOrder === 'asc' ? comparison : -comparison;
@@ -737,7 +737,7 @@ export class ActiveSessionListingService extends EventEmitter {
       location,
       count: data.count,
       riskLevel: data.riskTotal / data.count > 70 ? 'high' : 
-                 data.riskTotal / data.count > 40 ? 'medium' : 'low'
+        data.riskTotal / data.count > 40 ? 'medium' : 'low'
     }));
   }
 

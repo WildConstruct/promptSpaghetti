@@ -221,7 +221,7 @@ class TypeScriptAutoFixer {
     console.log(`Issues fixed: ${this.stats.issuesFixed}`);
     
     if (this.stats.errors.length > 0) {
-      console.log(`\n❌ Errors encountered:`);
+      console.log('\n❌ Errors encountered:');
       this.stats.errors.forEach(({ file, error }) => {
         console.log(`  ${file}: ${error}`);
       });

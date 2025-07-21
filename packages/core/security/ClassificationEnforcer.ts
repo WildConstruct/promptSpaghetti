@@ -348,50 +348,50 @@ export class ClassificationEnforcer {
     
     // Validate based on operation type
     switch (operation.operation) {
-      case 'read':
-        if (requirements.access.auditLogging !== 'STANDARD') {
-          requiredControls.push('enhanced-audit-logging');
-        }
-        break;
+    case 'read':
+      if (requirements.access.auditLogging !== 'STANDARD') {
+        requiredControls.push('enhanced-audit-logging');
+      }
+      break;
         
-      case 'write':
-      case 'update':
-        if (requirements.storage.encryptionRequired) {
-          requiredControls.push('encryption-at-rest');
-        }
-        if (requirements.processing.auditTrailRequired) {
-          requiredControls.push('audit-trail');
-        }
-        break;
+    case 'write':
+    case 'update':
+      if (requirements.storage.encryptionRequired) {
+        requiredControls.push('encryption-at-rest');
+      }
+      if (requirements.processing.auditTrailRequired) {
+        requiredControls.push('audit-trail');
+      }
+      break;
         
-      case 'delete':
-        if (requirements.processing.auditTrailRequired) {
-          requiredControls.push('deletion-audit');
-        }
-        if (requirements.storage.retentionDays > 0) {
-          issues.push(`Data must be retained for ${requirements.storage.retentionDays} days`);
-        }
-        break;
+    case 'delete':
+      if (requirements.processing.auditTrailRequired) {
+        requiredControls.push('deletion-audit');
+      }
+      if (requirements.storage.retentionDays > 0) {
+        issues.push(`Data must be retained for ${requirements.storage.retentionDays} days`);
+      }
+      break;
         
-      case 'export':
-        if (requirements.access.exportRestrictions) {
-          issues.push('Export restrictions apply to this classification');
-          requiredControls.push('export-control');
-        }
-        if (requirements.transmission.endToEndEncryption) {
-          requiredControls.push('end-to-end-encryption');
-        }
-        break;
+    case 'export':
+      if (requirements.access.exportRestrictions) {
+        issues.push('Export restrictions apply to this classification');
+        requiredControls.push('export-control');
+      }
+      if (requirements.transmission.endToEndEncryption) {
+        requiredControls.push('end-to-end-encryption');
+      }
+      break;
         
-      case 'share':
-        if (requirements.access.approvalWorkflow) {
-          issues.push('Approval workflow required for sharing');
-          requiredControls.push('approval-workflow');
-        }
-        if (requirements.transmission.certificatePinning) {
-          requiredControls.push('certificate-pinning');
-        }
-        break;
+    case 'share':
+      if (requirements.access.approvalWorkflow) {
+        issues.push('Approval workflow required for sharing');
+        requiredControls.push('approval-workflow');
+      }
+      if (requirements.transmission.certificatePinning) {
+        requiredControls.push('certificate-pinning');
+      }
+      break;
     }
     
     // Check environment restrictions

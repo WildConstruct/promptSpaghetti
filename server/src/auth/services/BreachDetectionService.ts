@@ -318,25 +318,25 @@ export class BreachDetectionService extends EventEmitter {
 
   private async executeSecurityAction(userId: string, action: SecurityAction, event: SecurityEvent): Promise<void> {
     switch (action) {
-      case SecurityAction.LOCK_ACCOUNT:
-        await this.lockUserAccount(userId, event.id);
-        break;
+    case SecurityAction.LOCK_ACCOUNT:
+      await this.lockUserAccount(userId, event.id);
+      break;
         
-      case SecurityAction.BLOCK_IP:
-        this.ipBlacklist.add(event.sourceIP);
-        break;
+    case SecurityAction.BLOCK_IP:
+      this.ipBlacklist.add(event.sourceIP);
+      break;
         
-      case SecurityAction.REQUIRE_MFA:
-        await this.requireAdditionalMFA(userId);
-        break;
+    case SecurityAction.REQUIRE_MFA:
+      await this.requireAdditionalMFA(userId);
+      break;
         
-      case SecurityAction.NOTIFY_USER:
-        await this.notifyUserOfSuspiciousActivity(userId, event);
-        break;
+    case SecurityAction.NOTIFY_USER:
+      await this.notifyUserOfSuspiciousActivity(userId, event);
+      break;
         
-      case SecurityAction.FORCE_PASSWORD_RESET:
-        await this.forcePasswordReset(userId);
-        break;
+    case SecurityAction.FORCE_PASSWORD_RESET:
+      await this.forcePasswordReset(userId);
+      break;
     }
   }
 

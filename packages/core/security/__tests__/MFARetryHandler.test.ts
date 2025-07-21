@@ -104,7 +104,7 @@ describe('MFARetryHandler', () => {
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValue('success' as unknown);
 
-            const resultPromise = customHandler.executeWithRetry(
+      const resultPromise = customHandler.executeWithRetry(
         MFAOperation.TOTP_VERIFICATION,
         mockOperation
       );

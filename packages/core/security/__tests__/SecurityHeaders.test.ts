@@ -32,17 +32,17 @@ describe('Security Headers Test Suite', () => {
       
       // CSP Header
       res.setHeader('Content-Security-Policy', 
-        "default-src 'self'; " +
-        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-        "font-src 'self' https://fonts.gstatic.com; " +
-        "img-src 'self' data: https:; " +
-        "connect-src 'self' https://api.example.com; " +
-        "frame-ancestors 'none'; " +
-        "form-action 'self'; " +
-        "base-uri 'self'; " +
-        "object-src 'none'; " +
-        "upgrade-insecure-requests"
+        'default-src \'self\'; ' +
+        'script-src \'self\' \'unsafe-inline\' https://cdn.jsdelivr.net; ' +
+        'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; ' +
+        'font-src \'self\' https://fonts.gstatic.com; ' +
+        'img-src \'self\' data: https:; ' +
+        'connect-src \'self\' https://api.example.com; ' +
+        'frame-ancestors \'none\'; ' +
+        'form-action \'self\'; ' +
+        'base-uri \'self\'; ' +
+        'object-src \'none\'; ' +
+        'upgrade-insecure-requests'
       );
       
       // Additional Security Headers
@@ -132,16 +132,16 @@ describe('Security Headers Test Suite', () => {
       const cspDirectives = parseCSPHeader(cspHeader);
       
       // object-src should be 'none' to prevent Flash/plugin content
-      expect(cspDirectives['object-src']).toBe("'none'");
+      expect(cspDirectives['object-src']).toBe('\'none\'');
       
       // base-uri should be restricted to prevent base tag injection
-      expect(cspDirectives['base-uri']).toContain("'self'");
+      expect(cspDirectives['base-uri']).toContain('\'self\'');
       
       // frame-ancestors should be 'none' or restricted to prevent clickjacking
-      expect(cspDirectives['frame-ancestors']).toBe("'none'");
+      expect(cspDirectives['frame-ancestors']).toBe('\'none\'');
       
       // form-action should be restricted
-      expect(cspDirectives['form-action']).toContain("'self'");
+      expect(cspDirectives['form-action']).toContain('\'self\'');
     });
     
     test('should include upgrade-insecure-requests directive', async () => {
@@ -155,7 +155,7 @@ describe('Security Headers Test Suite', () => {
       const response = await request(app).get('/test');
       const cspHeader = response.headers['content-security-policy'];
       
-      expect(cspHeader).not.toContain("'unsafe-eval'");
+      expect(cspHeader).not.toContain('\'unsafe-eval\'');
     });
     
     test('should validate nonce generation for inline scripts', () => {
@@ -203,9 +203,9 @@ describe('Security Headers Test Suite', () => {
       const cspDirectives = parseCSPHeader(cspHeader);
       
       if (xFrameOptions === 'DENY') {
-        expect(cspDirectives['frame-ancestors']).toBe("'none'");
+        expect(cspDirectives['frame-ancestors']).toBe('\'none\'');
       } else if (xFrameOptions === 'SAMEORIGIN') {
-        expect(cspDirectives['frame-ancestors']).toContain("'self'");
+        expect(cspDirectives['frame-ancestors']).toContain('\'self\'');
       }
     });
   });
@@ -292,10 +292,10 @@ describe('Security Headers Test Suite', () => {
   describe('CSP Reporting and Monitoring', () => {
     test('should support CSP reporting endpoint', () => {
       const cspWithReporting = 
-        "default-src 'self'; " +
-        "script-src 'self'; " +
-        "report-uri /csp-report; " +
-        "report-to csp-endpoint";
+        'default-src \'self\'; ' +
+        'script-src \'self\'; ' +
+        'report-uri /csp-report; ' +
+        'report-to csp-endpoint';
       
       const directives = parseCSPHeader(cspWithReporting);
       expect(directives).toHaveProperty('report-uri');
@@ -309,7 +309,7 @@ describe('Security Headers Test Suite', () => {
           'referrer': '',
           'violated-directive': 'script-src',
           'effective-directive': 'script-src',
-          'original-policy': "default-src 'self'; script-src 'self'",
+          'original-policy': 'default-src \'self\'; script-src \'self\'',
           'blocked-uri': 'https://evil.com/script.js',
           'status-code': 200
         }
@@ -338,7 +338,7 @@ describe('Security Headers Test Suite', () => {
       // Test app with insecure headers
       const insecureApp = express();
       insecureApp.use((req, res, next) => {
-        res.setHeader('Content-Security-Policy', "default-src *; script-src * 'unsafe-eval' 'unsafe-inline'");
+        res.setHeader('Content-Security-Policy', 'default-src *; script-src * \'unsafe-eval\' \'unsafe-inline\'');
         next();
       });
       insecureApp.get('/test', (req, res) => res.json({ test: true }));
@@ -466,10 +466,10 @@ function analyzeSecurityHeaders(headers: Record<string, string>): string[] {
   // Check CSP for common issues
   const csp = headers['content-security-policy'];
   if (csp) {
-    if (csp.includes("'unsafe-eval'")) {
+    if (csp.includes('\'unsafe-eval\'')) {
       warnings.push('CSP_UNSAFE_EVAL');
     }
-    if (csp.includes("'unsafe-inline'")) {
+    if (csp.includes('\'unsafe-inline\'')) {
       warnings.push('CSP_UNSAFE_INLINE');
     }
     if (csp.includes('default-src *') || csp.includes('script-src *')) {
@@ -516,7 +516,7 @@ export class SecurityHeaderScanner {
       score: 85,
       headers: {
         'strict-transport-security': 'max-age=31536000; includeSubDomains',
-        'content-security-policy': "default-src 'self'",
+        'content-security-policy': 'default-src \'self\'',
         'x-content-type-options': 'nosniff',
         'x-frame-options': 'DENY'
       },

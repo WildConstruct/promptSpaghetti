@@ -423,99 +423,99 @@ function applyDynamicSecurityHeaders(res: Response, level: DataSensitivityLevel)
   let securityConfig: Partial<SecurityConfig>;
 
   switch (level) {
-    case DataSensitivityLevel.RESTRICTED:
-      // Maximum security for restricted data
-      securityConfig = {
-        ...SecurityPresets.production,
-        hsts: {
-          enabled: true,
-          maxAge: 63072000, // 2 years
-          includeSubDomains: true,
-          preload: true
-        },
-        csp: {
-          enabled: true,
-          reportOnly: false,
-          useNonces: true,
-          directives: {
-            'default-src': "'none'",
-            'script-src': "'self'",
-            'style-src': "'self'",
-            'img-src': "'self' data:",
-            'connect-src': "'self'",
-            'frame-ancestors': "'none'",
-            'form-action': "'self'",
-            'base-uri': "'self'",
-            'object-src': "'none'",
-            'upgrade-insecure-requests': '',
-            'block-all-mixed-content': ''
-          }
-        },
-        permissionsPolicy: {
-          enabled: true,
-          directives: {
-            camera: '()',
-            microphone: '()',
-            geolocation: '()',
-            payment: '()',
-            usb: '()',
-            magnetometer: '()',
-            gyroscope: '()',
-            accelerometer: '()',
-            'display-capture': '()',
-            'document-domain': '()',
-            'execution-while-not-rendered': '()',
-            'execution-while-out-of-viewport': '()'
-          }
+  case DataSensitivityLevel.RESTRICTED:
+    // Maximum security for restricted data
+    securityConfig = {
+      ...SecurityPresets.production,
+      hsts: {
+        enabled: true,
+        maxAge: 63072000, // 2 years
+        includeSubDomains: true,
+        preload: true
+      },
+      csp: {
+        enabled: true,
+        reportOnly: false,
+        useNonces: true,
+        directives: {
+          'default-src': '\'none\'',
+          'script-src': '\'self\'',
+          'style-src': '\'self\'',
+          'img-src': '\'self\' data:',
+          'connect-src': '\'self\'',
+          'frame-ancestors': '\'none\'',
+          'form-action': '\'self\'',
+          'base-uri': '\'self\'',
+          'object-src': '\'none\'',
+          'upgrade-insecure-requests': '',
+          'block-all-mixed-content': ''
         }
-      };
-      break;
-
-    case DataSensitivityLevel.CONFIDENTIAL:
-      // High security for confidential data
-      securityConfig = SecurityPresets.production;
-      break;
-
-    case DataSensitivityLevel.INTERNAL:
-      // Moderate security for internal data
-      securityConfig = {
-        ...SecurityPresets.production,
-        hsts: {
-          enabled: true,
-          maxAge: 31536000, // 1 year
-          includeSubDomains: true,
-          preload: false
+      },
+      permissionsPolicy: {
+        enabled: true,
+        directives: {
+          camera: '()',
+          microphone: '()',
+          geolocation: '()',
+          payment: '()',
+          usb: '()',
+          magnetometer: '()',
+          gyroscope: '()',
+          accelerometer: '()',
+          'display-capture': '()',
+          'document-domain': '()',
+          'execution-while-not-rendered': '()',
+          'execution-while-out-of-viewport': '()'
         }
-      };
-      break;
+      }
+    };
+    break;
 
-    case DataSensitivityLevel.PUBLIC:
-    default:
-      // Basic security for public data
-      securityConfig = {
-        hsts: {
-          enabled: true,
-          maxAge: 86400, // 1 day
-          includeSubDomains: false,
-          preload: false
-        },
-        csp: {
-          enabled: true,
-          reportOnly: false,
-          directives: {
-            'default-src': "'self'",
-            'script-src': "'self' 'unsafe-inline'",
-            'style-src': "'self' 'unsafe-inline'",
-            'img-src': "'self' data: https:",
-            'connect-src': "'self' https:",
-            'frame-ancestors': "'self'",
-            'form-action': "'self'",
-            'base-uri': "'self'",
-            'object-src': "'none'"
-          }
+  case DataSensitivityLevel.CONFIDENTIAL:
+    // High security for confidential data
+    securityConfig = SecurityPresets.production;
+    break;
+
+  case DataSensitivityLevel.INTERNAL:
+    // Moderate security for internal data
+    securityConfig = {
+      ...SecurityPresets.production,
+      hsts: {
+        enabled: true,
+        maxAge: 31536000, // 1 year
+        includeSubDomains: true,
+        preload: false
+      }
+    };
+    break;
+
+  case DataSensitivityLevel.PUBLIC:
+  default:
+    // Basic security for public data
+    securityConfig = {
+      hsts: {
+        enabled: true,
+        maxAge: 86400, // 1 day
+        includeSubDomains: false,
+        preload: false
+      },
+      csp: {
+        enabled: true,
+        reportOnly: false,
+        directives: {
+          'default-src': '\'self\'',
+          'script-src': '\'self\' \'unsafe-inline\'',
+          'style-src': '\'self\' \'unsafe-inline\'',
+          'img-src': '\'self\' data: https:',
+          'connect-src': '\'self\' https:',
+          'frame-ancestors': '\'self\'',
+          'form-action': '\'self\'',
+          'base-uri': '\'self\'',
+          'object-src': '\'none\''
         }
-      };
-      break;
+      }
+    };
+    break;
   }
 
   // Apply the security middleware

@@ -602,19 +602,19 @@ export class SessionActivityTrackingService extends EventEmitter {
       let mimeType: string;
       
       switch (format) {
-        case 'csv':
-          data = await this.convertToCSV(activities, options.includeMetadata);
-          mimeType = 'text/csv';
-          break;
+      case 'csv':
+        data = await this.convertToCSV(activities, options.includeMetadata);
+        mimeType = 'text/csv';
+        break;
           
-        case 'parquet':
-          data = await this.convertToParquet(activities);
-          mimeType = 'application/octet-stream';
-          break;
+      case 'parquet':
+        data = await this.convertToParquet(activities);
+        mimeType = 'application/octet-stream';
+        break;
           
-        default:
-          data = Buffer.from(JSON.stringify(activities, null, 2));
-          mimeType = 'application/json';
+      default:
+        data = Buffer.from(JSON.stringify(activities, null, 2));
+        mimeType = 'application/json';
       }
       
       // Compress if requested
@@ -692,10 +692,10 @@ export class SessionActivityTrackingService extends EventEmitter {
         activity, context, performance, outcome,
         security, metadata
       ) VALUES ${values.map((_, i) => 
-        `($${i * 10 + 1}, $${i * 10 + 2}, $${i * 10 + 3}, $${i * 10 + 4}, 
+    `($${i * 10 + 1}, $${i * 10 + 2}, $${i * 10 + 3}, $${i * 10 + 4}, 
           $${i * 10 + 5}, $${i * 10 + 6}, $${i * 10 + 7}, $${i * 10 + 8}, 
           $${i * 10 + 9}, $${i * 10 + 10})`
-      ).join(', ')}
+  ).join(', ')}
     `;
     
     await this.db.query(query, values.flat());
@@ -812,24 +812,24 @@ export class SessionActivityTrackingService extends EventEmitter {
       const fieldValue = this.getFieldValue(activity, condition.field);
       
       switch (condition.operator) {
-        case 'equals':
-          if (fieldValue !== condition.value) return false;
-          break;
-        case 'contains':
-          if (!String(fieldValue).includes(condition.value)) return false;
-          break;
-        case 'gt':
-          if (!(fieldValue > condition.value)) return false;
-          break;
-        case 'lt':
-          if (!(fieldValue < condition.value)) return false;
-          break;
-        case 'in':
-          if (!condition.value.includes(fieldValue)) return false;
-          break;
-        case 'regex':
-          if (!new RegExp(condition.value).test(String(fieldValue))) return false;
-          break;
+      case 'equals':
+        if (fieldValue !== condition.value) return false;
+        break;
+      case 'contains':
+        if (!String(fieldValue).includes(condition.value)) return false;
+        break;
+      case 'gt':
+        if (!(fieldValue > condition.value)) return false;
+        break;
+      case 'lt':
+        if (!(fieldValue < condition.value)) return false;
+        break;
+      case 'in':
+        if (!condition.value.includes(fieldValue)) return false;
+        break;
+      case 'regex':
+        if (!new RegExp(condition.value).test(String(fieldValue))) return false;
+        break;
       }
     }
     
@@ -851,22 +851,22 @@ export class SessionActivityTrackingService extends EventEmitter {
   private async handlePatternMatches(activity: SessionActivity, patterns: ActivityPattern[]): Promise<void> {
     for (const pattern of patterns) {
       switch (pattern.response.action) {
-        case 'log':
-          console.log(`Pattern detected: ${pattern.name} for activity ${activity.id}`);
-          break;
+      case 'log':
+        console.log(`Pattern detected: ${pattern.name} for activity ${activity.id}`);
+        break;
           
-        case 'alert':
-          await this.sendPatternAlert(pattern, activity);
-          break;
+      case 'alert':
+        await this.sendPatternAlert(pattern, activity);
+        break;
           
-        case 'block':
-          activity.security.blocked = true;
-          activity.outcome.success = false;
-          break;
+      case 'block':
+        activity.security.blocked = true;
+        activity.outcome.success = false;
+        break;
           
-        case 'terminate':
-          await this.requestSessionTermination(activity.sessionId, pattern);
-          break;
+      case 'terminate':
+        await this.requestSessionTermination(activity.sessionId, pattern);
+        break;
       }
       
       this.emit('patternDetected', {

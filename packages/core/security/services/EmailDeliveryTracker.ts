@@ -328,27 +328,27 @@ export class EmailDeliveryTracker extends EventEmitter {
 
     // Update timestamps
     switch (status) {
-      case DeliveryStatus.SENT:
-        record.sentAt = new Date();
-        break;
-      case DeliveryStatus.DELIVERED:
-        record.deliveredAt = new Date();
-        break;
-      case DeliveryStatus.OPENED:
-        record.openedAt = new Date();
-        break;
-      case DeliveryStatus.CLICKED:
-        record.clickedAt = new Date();
-        break;
-      case DeliveryStatus.BOUNCED:
-        record.bouncedAt = new Date();
-        if (additionalData?.bounceInfo) {
-          record.bounceInfo = additionalData.bounceInfo;
-        }
-        break;
-      case DeliveryStatus.FAILED:
-        record.failedAt = new Date();
-        break;
+    case DeliveryStatus.SENT:
+      record.sentAt = new Date();
+      break;
+    case DeliveryStatus.DELIVERED:
+      record.deliveredAt = new Date();
+      break;
+    case DeliveryStatus.OPENED:
+      record.openedAt = new Date();
+      break;
+    case DeliveryStatus.CLICKED:
+      record.clickedAt = new Date();
+      break;
+    case DeliveryStatus.BOUNCED:
+      record.bouncedAt = new Date();
+      if (additionalData?.bounceInfo) {
+        record.bounceInfo = additionalData.bounceInfo;
+      }
+      break;
+    case DeliveryStatus.FAILED:
+      record.failedAt = new Date();
+      break;
     }
 
     // Update provider data if provided
@@ -384,22 +384,22 @@ export class EmailDeliveryTracker extends EventEmitter {
     if (!record) return;
 
     switch (eventType) {
-      case 'open':
-        record.tracking.opens.push(eventData as EmailOpenEvent);
-        if (record.status === DeliveryStatus.DELIVERED) {
-          this.updateStatus(emailId, DeliveryStatus.OPENED);
-        }
-        break;
-      case 'click':
-        record.tracking.clicks.push(eventData as EmailClickEvent);
-        if (record.status !== DeliveryStatus.CLICKED) {
-          this.updateStatus(emailId, DeliveryStatus.CLICKED);
-        }
-        break;
-      case 'unsubscribe':
-        record.tracking.unsubscribes.push(eventData as EmailUnsubscribeEvent);
-        this.updateStatus(emailId, DeliveryStatus.UNSUBSCRIBED);
-        break;
+    case 'open':
+      record.tracking.opens.push(eventData as EmailOpenEvent);
+      if (record.status === DeliveryStatus.DELIVERED) {
+        this.updateStatus(emailId, DeliveryStatus.OPENED);
+      }
+      break;
+    case 'click':
+      record.tracking.clicks.push(eventData as EmailClickEvent);
+      if (record.status !== DeliveryStatus.CLICKED) {
+        this.updateStatus(emailId, DeliveryStatus.CLICKED);
+      }
+      break;
+    case 'unsubscribe':
+      record.tracking.unsubscribes.push(eventData as EmailUnsubscribeEvent);
+      this.updateStatus(emailId, DeliveryStatus.UNSUBSCRIBED);
+      break;
     }
 
     this.deliveryRecords.set(emailId, record);
@@ -641,30 +641,30 @@ export class EmailDeliveryTracker extends EventEmitter {
 
     // Update status-specific counts
     switch (newStatus) {
-      case DeliveryStatus.SENT:
-        this.statistics.sentEmails++;
-        break;
-      case DeliveryStatus.DELIVERED:
-        this.statistics.deliveredEmails++;
-        break;
-      case DeliveryStatus.OPENED:
-        this.statistics.openedEmails++;
-        break;
-      case DeliveryStatus.CLICKED:
-        this.statistics.clickedEmails++;
-        break;
-      case DeliveryStatus.BOUNCED:
-        this.statistics.bouncedEmails++;
-        break;
-      case DeliveryStatus.REJECTED:
-        this.statistics.rejectedEmails++;
-        break;
-      case DeliveryStatus.SPAM:
-        this.statistics.spamEmails++;
-        break;
-      case DeliveryStatus.FAILED:
-        this.statistics.failedEmails++;
-        break;
+    case DeliveryStatus.SENT:
+      this.statistics.sentEmails++;
+      break;
+    case DeliveryStatus.DELIVERED:
+      this.statistics.deliveredEmails++;
+      break;
+    case DeliveryStatus.OPENED:
+      this.statistics.openedEmails++;
+      break;
+    case DeliveryStatus.CLICKED:
+      this.statistics.clickedEmails++;
+      break;
+    case DeliveryStatus.BOUNCED:
+      this.statistics.bouncedEmails++;
+      break;
+    case DeliveryStatus.REJECTED:
+      this.statistics.rejectedEmails++;
+      break;
+    case DeliveryStatus.SPAM:
+      this.statistics.spamEmails++;
+      break;
+    case DeliveryStatus.FAILED:
+      this.statistics.failedEmails++;
+      break;
     }
 
     // Recalculate rates
@@ -693,16 +693,16 @@ export class EmailDeliveryTracker extends EventEmitter {
   private getSenderAddress(emailType: EmailType): string {
     // Return appropriate sender address based on email type
     switch (emailType) {
-      case EmailType.ACCOUNT_VERIFICATION:
-        return 'verify@example.com';
-      case EmailType.PASSWORD_RESET:
-        return 'security@example.com';
-      case EmailType.MFA_CODE:
-        return 'auth@example.com';
-      case EmailType.SECURITY_ALERT:
-        return 'alerts@example.com';
-      default:
-        return 'noreply@example.com';
+    case EmailType.ACCOUNT_VERIFICATION:
+      return 'verify@example.com';
+    case EmailType.PASSWORD_RESET:
+      return 'security@example.com';
+    case EmailType.MFA_CODE:
+      return 'auth@example.com';
+    case EmailType.SECURITY_ALERT:
+      return 'alerts@example.com';
+    default:
+      return 'noreply@example.com';
     }
   }
 

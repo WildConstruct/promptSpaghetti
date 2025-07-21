@@ -874,15 +874,15 @@ expect.extend({
     if (pass) {
       return {
         message: () => `expected ${received} not to be within range ${floor} - ${ceiling}`,
-        pass: true,
+        pass: true
       };
     } else {
       return {
         message: () => `expected ${received} to be within range ${floor} - ${ceiling}`,
-        pass: false,
+        pass: false
       };
     }
-  },
+  }
 });
 
 declare global {

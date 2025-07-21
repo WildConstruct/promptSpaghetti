@@ -299,7 +299,7 @@ describe('EmailTemplateManager', () => {
       const result = templateManager.renderTemplate('helper-test', {
         name: 'john',
         title: 'DEVELOPER'
-      } as any);
+      } as TemplateVariables);
 
       expect(result!.subject).toContain('John'); // Capitalized
       expect(result!.content).toContain('JOHN'); // Uppercase
@@ -331,7 +331,7 @@ describe('EmailTemplateManager', () => {
         hasWarning: true,
         isUrgent: true,
         warningMessage: 'System alert'
-      } as any);
+      } as TemplateVariables);
 
       expect(result!.content).toContain('URGENT:');
       expect(result!.content).toContain('System alert');
@@ -394,7 +394,7 @@ describe('EmailTemplateManager', () => {
 
       const result = templateManager.renderTemplate('security-test', {
         name: 'Test User'
-      } as any);
+      } as TemplateVariables);
 
       // Script tags should be preserved as text, not executed
       expect(result!.content).toContain('<script>');

@@ -987,14 +987,14 @@ export class ActivityDetectionService extends EventEmitter {
   private matchesAntiPattern(activity: DetectedActivity, pattern: string): boolean {
     // Check for common anti-patterns
     switch (pattern) {
-      case 'rapid_successive_calls':
-        return this.checkRapidSuccessiveCalls(activity);
-      case 'no_referrer_rapid_navigation':
-        return !activity.source.referrer && this.checkRapidNavigation(activity);
-      case 'impossible_speed':
-        return this.checkImpossibleSpeed(activity);
-      default:
-        return false;
+    case 'rapid_successive_calls':
+      return this.checkRapidSuccessiveCalls(activity);
+    case 'no_referrer_rapid_navigation':
+      return !activity.source.referrer && this.checkRapidNavigation(activity);
+    case 'impossible_speed':
+      return this.checkImpossibleSpeed(activity);
+    default:
+      return false;
     }
   }
 

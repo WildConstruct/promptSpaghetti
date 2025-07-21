@@ -127,7 +127,7 @@ function runAutoFix() {
       }
     });
 
-    console.log(`\n📊 Summary:`);
+    console.log('\n📊 Summary:');
     console.log(`   Files processed: ${stagedFiles.length + commonProblematicFiles.length}`);
     console.log(`   Files fixed: ${fixedCount}`);
     

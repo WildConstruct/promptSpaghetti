@@ -88,11 +88,11 @@ const SubmitUpdateRequestSchema = z.object({
   reviewRequirements: z.array(z.object({
     reviewType: z.enum(
       ['LEGAL_REVIEW',
-      'COMPLIANCE_REVIEW',
-      'TECHNICAL_REVIEW',
-      'BUSINESS_REVIEW',
-      'SECURITY_REVIEW',
-      'PRIVACY_REVIEW'] as const
+        'COMPLIANCE_REVIEW',
+        'TECHNICAL_REVIEW',
+        'BUSINESS_REVIEW',
+        'SECURITY_REVIEW',
+        'PRIVACY_REVIEW'] as const
     ),
     reviewerRole: z.string(),
     requiredQualifications: z.array(z.string()).default([]),

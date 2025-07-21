@@ -565,7 +565,7 @@ export class IPAccountLimitingService extends EventEmitter {
     const fingerprintData = {
       userAgent,
       acceptLanguage: headers['accept-language'] || '',
-      acceptEncoding: headers['accept-encoding'] || '',
+      acceptEncoding: headers['accept-encoding'] || ''
       // Additional fingerprinting data would be collected client-side
     };
     

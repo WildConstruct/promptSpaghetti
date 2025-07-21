@@ -428,7 +428,7 @@ export class DeviceFingerprintingService extends EventEmitter {
     topCountries: Array<{ country: string; count: number }>;
     deviceTypes: Record<DeviceType, number>;
     avgConfidence: number;
-  } {
+    } {
     const fingerprints = Array.from(this.fingerprints.values());
     const assessments = Array.from(this.riskAssessments.values());
     const locations = Array.from(this.ipLocationCache.values());

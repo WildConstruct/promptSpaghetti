@@ -712,24 +712,24 @@ export class CodeGenerationUtils {
    */
   static formatCodeForDisplay(code: string, format: CodeFormat): string {
     switch (format) {
-      case CodeFormat.NUMERIC:
-        // Format as XXX XXX for 6-digit codes
-        if (code.length === 6) {
-          return `${code.slice(0, 3)} ${code.slice(3)}`;
-        }
-        return code;
+    case CodeFormat.NUMERIC:
+      // Format as XXX XXX for 6-digit codes
+      if (code.length === 6) {
+        return `${code.slice(0, 3)} ${code.slice(3)}`;
+      }
+      return code;
       
-      case CodeFormat.ALPHANUMERIC:
-      case CodeFormat.BASE32:
-        // Format in groups of 4
-        return code.match(/.{1,4}/g)?.join(' ') || code;
+    case CodeFormat.ALPHANUMERIC:
+    case CodeFormat.BASE32:
+      // Format in groups of 4
+      return code.match(/.{1,4}/g)?.join(' ') || code;
       
-      case CodeFormat.HEX:
-        // Format in groups of 8
-        return code.match(/.{1,8}/g)?.join(' ') || code;
+    case CodeFormat.HEX:
+      // Format in groups of 8
+      return code.match(/.{1,8}/g)?.join(' ') || code;
       
-      default:
-        return code;
+    default:
+      return code;
     }
   }
 }

@@ -378,9 +378,9 @@ class StaleTaskCleanup {
         ).filter(Boolean))],
         avgStaleHours: cleanupEvents.length > 0 
           ? cleanupEvents.reduce((sum, event) => {
-              const hours = event.message.match(/\((\d+)h stale\)/)?.[1];
-              return sum + (parseInt(hours) || 0);
-            }, 0) / cleanupEvents.length 
+            const hours = event.message.match(/\((\d+)h stale\)/)?.[1];
+            return sum + (parseInt(hours) || 0);
+          }, 0) / cleanupEvents.length 
           : 0
       };
 
@@ -493,23 +493,23 @@ class StaleTaskCleanup {
       const action = await ask('\nChoose action: (c)leanup, (s)tats, (d)ry-run, (q)uit: ');
       
       switch (action.toLowerCase()) {
-        case 'c':
-          this.config.actions.dryRun = false;
-          await this.cleanup();
-          break;
-        case 's':
-          const stats = await this.getStats();
-          console.log('\n📊 Cleanup Statistics:', stats);
-          break;
-        case 'd':
-          this.config.actions.dryRun = true;
-          await this.cleanup();
-          break;
-        case 'q':
-          console.log('👋 Goodbye!');
-          break;
-        default:
-          console.log('❌ Invalid option');
+      case 'c':
+        this.config.actions.dryRun = false;
+        await this.cleanup();
+        break;
+      case 's':
+        const stats = await this.getStats();
+        console.log('\n📊 Cleanup Statistics:', stats);
+        break;
+      case 'd':
+        this.config.actions.dryRun = true;
+        await this.cleanup();
+        break;
+      case 'q':
+        console.log('👋 Goodbye!');
+        break;
+      default:
+        console.log('❌ Invalid option');
       }
     } finally {
       rl.close();
@@ -527,27 +527,27 @@ if (require.main === module) {
   async function main() {
     try {
       switch (command) {
-        case 'cleanup':
-        case 'clean':
-          await cleanup.cleanup();
-          break;
-        case 'dry-run':
-        case 'dryrun':
-          cleanup.config.actions.dryRun = true;
-          await cleanup.cleanup();
-          break;
-        case 'stats':
-          const days = parseInt(args[1]) || 7;
-          const stats = await cleanup.getStats(days);
-          console.log('📊 Cleanup Statistics:', stats);
-          break;
-        case 'interactive':
-        case 'i':
-          await cleanup.interactive();
-          break;
-        case 'help':
-        default:
-          console.log(`
+      case 'cleanup':
+      case 'clean':
+        await cleanup.cleanup();
+        break;
+      case 'dry-run':
+      case 'dryrun':
+        cleanup.config.actions.dryRun = true;
+        await cleanup.cleanup();
+        break;
+      case 'stats':
+        const days = parseInt(args[1]) || 7;
+        const stats = await cleanup.getStats(days);
+        console.log('📊 Cleanup Statistics:', stats);
+        break;
+      case 'interactive':
+      case 'i':
+        await cleanup.interactive();
+        break;
+      case 'help':
+      default:
+        console.log(`
 🧹 Stale Task Cleanup Utility
 
 USAGE:
@@ -573,7 +573,7 @@ CONFIGURATION:
   - Exclusion patterns and agents
   - Notification settings
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

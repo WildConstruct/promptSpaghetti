@@ -1428,22 +1428,22 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
     // Data classification risk
     switch (permission.dataClassification) {
-      case 'RESTRICTED': riskScore += 40; break;
-      case 'CONFIDENTIAL': riskScore += 25; break;
-      case 'INTERNAL': riskScore += 10; break;
-      case 'PUBLIC': riskScore += 0; break;
+    case 'RESTRICTED': riskScore += 40; break;
+    case 'CONFIDENTIAL': riskScore += 25; break;
+    case 'INTERNAL': riskScore += 10; break;
+    case 'PUBLIC': riskScore += 0; break;
     }
 
     // Operation risk
     switch (permission.operation) {
-      case 'DELETE':
-      case 'PURGE': riskScore += 30; break;
-      case 'EXPORT':
-      case 'SHARE': riskScore += 25; break;
-      case 'WRITE':
-      case 'UPDATE': riskScore += 15; break;
-      case 'read': riskScore += 5; break;
-      default: riskScore += 10; break;
+    case 'DELETE':
+    case 'PURGE': riskScore += 30; break;
+    case 'EXPORT':
+    case 'SHARE': riskScore += 25; break;
+    case 'WRITE':
+    case 'UPDATE': riskScore += 15; break;
+    case 'read': riskScore += 5; break;
+    default: riskScore += 10; break;
     }
 
     // Scope risk
@@ -1625,10 +1625,10 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
   private determineReportingFrequency(riskLevel: string): 'REALTIME' | 'HOURLY' | 'DAILY' | 'WEEKLY' {
     switch (riskLevel) {
-      case 'CRITICAL': return 'REALTIME';
-      case 'HIGH': return 'HOURLY';
-      case 'MEDIUM': return 'DAILY';
-      default: return 'WEEKLY';
+    case 'CRITICAL': return 'REALTIME';
+    case 'HIGH': return 'HOURLY';
+    case 'MEDIUM': return 'DAILY';
+    default: return 'WEEKLY';
     }
   }
 
@@ -1754,24 +1754,24 @@ export class TemporaryAccessGrantService extends EventEmitter {
     // Check if resource is in the allowed targets
     const matchesTarget = scope.targets.some(target => {
       switch (target.type) {
-        case 'RESOURCE_ID':
-          return target.value === resourceId;
-        case 'RESOURCE_PATTERN':
-          return new RegExp(target.value).test(resourceId);
-        default:
-          return false;
+      case 'RESOURCE_ID':
+        return target.value === resourceId;
+      case 'RESOURCE_PATTERN':
+        return new RegExp(target.value).test(resourceId);
+      default:
+        return false;
       }
     });
 
     // Check if resource is excluded
     const isExcluded = scope.exclusions.some(exclusion => {
       switch (exclusion.type) {
-        case 'RESOURCE_ID':
-          return exclusion.value === resourceId;
-        case 'RESOURCE_PATTERN':
-          return new RegExp(exclusion.value).test(resourceId);
-        default:
-          return false;
+      case 'RESOURCE_ID':
+        return exclusion.value === resourceId;
+      case 'RESOURCE_PATTERN':
+        return new RegExp(exclusion.value).test(resourceId);
+      default:
+        return false;
       }
     });
 
@@ -1825,35 +1825,35 @@ export class TemporaryAccessGrantService extends EventEmitter {
     context: OperationContext
   ): Promise<{ valid: boolean; reason?: string; remediation?: string[] }> {
     switch (condition.type) {
-      case 'MFA_REQUIRED':
-        // Check if MFA was used in this session
-        const mfaUsed = context.sessionId && context.sessionId.includes('mfa');
-        return {
-          valid: mfaUsed,
-          reason: mfaUsed ? undefined : 'Multi-factor authentication required',
-          remediation: ['Complete MFA challenge']
-        };
+    case 'MFA_REQUIRED':
+      // Check if MFA was used in this session
+      const mfaUsed = context.sessionId && context.sessionId.includes('mfa');
+      return {
+        valid: mfaUsed,
+        reason: mfaUsed ? undefined : 'Multi-factor authentication required',
+        remediation: ['Complete MFA challenge']
+      };
 
-      case 'VPN_REQUIRED':
-        // Check if request comes from VPN
-        const isVPN = context.ipAddress?.startsWith('10.') || context.ipAddress?.startsWith('172.16.');
-        return {
-          valid: isVPN,
-          reason: isVPN ? undefined : 'VPN connection required',
-          remediation: ['Connect to corporate VPN']
-        };
+    case 'VPN_REQUIRED':
+      // Check if request comes from VPN
+      const isVPN = context.ipAddress?.startsWith('10.') || context.ipAddress?.startsWith('172.16.');
+      return {
+        valid: isVPN,
+        reason: isVPN ? undefined : 'VPN connection required',
+        remediation: ['Connect to corporate VPN']
+      };
 
-      case 'DEVICE_TRUSTED':
-        // Check if device is trusted (simplified check)
-        const isTrusted = context.userAgent?.includes('TrustedDevice');
-        return {
-          valid: isTrusted,
-          reason: isTrusted ? undefined : 'Trusted device required',
-          remediation: ['Use a trusted device', 'Register current device']
-        };
+    case 'DEVICE_TRUSTED':
+      // Check if device is trusted (simplified check)
+      const isTrusted = context.userAgent?.includes('TrustedDevice');
+      return {
+        valid: isTrusted,
+        reason: isTrusted ? undefined : 'Trusted device required',
+        remediation: ['Use a trusted device', 'Register current device']
+      };
 
-      default:
-        return { valid: true };
+    default:
+      return { valid: true };
     }
   }
 
@@ -2103,27 +2103,27 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
   private async getMetricValue(grant: TemporaryAccessGrant, metric: string): Promise<number> {
     switch (metric) {
-      case 'requests_per_hour':
-        return grant.usage.totalRequests; // Simplified
-      case 'violations_per_day':
-        return grant.usage.violationCount;
-      case 'active_sessions':
-        return grant.usage.activeSessions;
-      default:
-        return 0;
+    case 'requests_per_hour':
+      return grant.usage.totalRequests; // Simplified
+    case 'violations_per_day':
+      return grant.usage.violationCount;
+    case 'active_sessions':
+      return grant.usage.activeSessions;
+    default:
+      return 0;
     }
   }
 
   private evaluateThreshold(value: number, threshold: AlertThreshold): boolean {
     switch (threshold.operator) {
-      case 'GREATER_THAN':
-        return value > threshold.value;
-      case 'LESS_THAN':
-        return value < threshold.value;
-      case 'EQUALS':
-        return value === threshold.value;
-      default:
-        return false;
+    case 'GREATER_THAN':
+      return value > threshold.value;
+    case 'LESS_THAN':
+      return value < threshold.value;
+    case 'EQUALS':
+      return value === threshold.value;
+    default:
+      return false;
     }
   }
 
@@ -2142,21 +2142,21 @@ export class TemporaryAccessGrantService extends EventEmitter {
     };
 
     switch (threshold.action) {
-      case 'LOG':
-        this.emit('threshold_alert', alert);
-        break;
-      case 'ALERT':
-        this.emit('threshold_critical', alert);
-        break;
-      case 'SUSPEND':
-        grant.status = 'SUSPENDED';
-        this.emit('grant_suspended', { grant, reason: 'Threshold exceeded' });
-        break;
-      case 'REVOKE':
-        grant.status = 'REVOKED';
-        grant.revokedAt = new Date();
-        this.emit('grant_revoked', { grant, reason: 'Threshold exceeded', revokedBy: 'system' });
-        break;
+    case 'LOG':
+      this.emit('threshold_alert', alert);
+      break;
+    case 'ALERT':
+      this.emit('threshold_critical', alert);
+      break;
+    case 'SUSPEND':
+      grant.status = 'SUSPENDED';
+      this.emit('grant_suspended', { grant, reason: 'Threshold exceeded' });
+      break;
+    case 'REVOKE':
+      grant.status = 'REVOKED';
+      grant.revokedAt = new Date();
+      this.emit('grant_revoked', { grant, reason: 'Threshold exceeded', revokedBy: 'system' });
+      break;
     }
   }
 

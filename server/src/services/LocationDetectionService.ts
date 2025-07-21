@@ -326,16 +326,16 @@ export class LocationDetectionService {
     
     try {
       switch (provider) {
-        case 'ipapi':
-          return await this.geolocateWithIPAPI(ipAddress);
-        case 'maxmind':
-          return await this.geolocateWithMaxMind(ipAddress);
-        case 'ipgeolocation':
-          return await this.geolocateWithIPGeolocation(ipAddress);
-        case 'ipstack':
-          return await this.geolocateWithIPStack(ipAddress);
-        default:
-          throw new Error(`Unknown geolocation provider: ${provider}`);
+      case 'ipapi':
+        return await this.geolocateWithIPAPI(ipAddress);
+      case 'maxmind':
+        return await this.geolocateWithMaxMind(ipAddress);
+      case 'ipgeolocation':
+        return await this.geolocateWithIPGeolocation(ipAddress);
+      case 'ipstack':
+        return await this.geolocateWithIPStack(ipAddress);
+      default:
+        throw new Error(`Unknown geolocation provider: ${provider}`);
       }
     } catch (error) {
       console.error(`Primary provider ${provider} failed:`, error);
@@ -344,14 +344,14 @@ export class LocationDetectionService {
       for (const fallbackProvider of this.config.providers.fallback || []) {
         try {
           switch (fallbackProvider) {
-            case 'ipapi':
-              return await this.geolocateWithIPAPI(ipAddress);
-            case 'maxmind':
-              return await this.geolocateWithMaxMind(ipAddress);
-            case 'ipgeolocation':
-              return await this.geolocateWithIPGeolocation(ipAddress);
-            case 'ipstack':
-              return await this.geolocateWithIPStack(ipAddress);
+          case 'ipapi':
+            return await this.geolocateWithIPAPI(ipAddress);
+          case 'maxmind':
+            return await this.geolocateWithMaxMind(ipAddress);
+          case 'ipgeolocation':
+            return await this.geolocateWithIPGeolocation(ipAddress);
+          case 'ipstack':
+            return await this.geolocateWithIPStack(ipAddress);
           }
         } catch (fallbackError) {
           console.error(`Fallback provider ${fallbackProvider} failed:`, fallbackError);
@@ -676,7 +676,7 @@ export class LocationDetectionService {
       alerts.push({
         alertType: 'malicious_ip',
         severity: 'critical',
-        description: `Access from known malicious IP address`,
+        description: 'Access from known malicious IP address',
         metadata: {
           riskFactors: ['malicious_ip_address']
         }

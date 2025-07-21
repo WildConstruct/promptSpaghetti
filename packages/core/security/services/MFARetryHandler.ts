@@ -203,23 +203,23 @@ export class MFARetryHandler extends EventEmitter {
     if (!circuitBreaker) return true;
 
     switch (circuitBreaker.state) {
-      case CircuitBreakerStateEnum.CLOSED:
+    case CircuitBreakerStateEnum.CLOSED:
+      return true;
+
+    case CircuitBreakerStateEnum.OPEN:
+      if (circuitBreaker.nextAttemptTime && new Date() >= circuitBreaker.nextAttemptTime) {
+        // Transition to half-open
+        circuitBreaker.state = CircuitBreakerStateEnum.HALF_OPEN;
+        circuitBreaker.halfOpenAttempts = 0;
         return true;
+      }
+      return false;
 
-      case CircuitBreakerStateEnum.OPEN:
-        if (circuitBreaker.nextAttemptTime && new Date() >= circuitBreaker.nextAttemptTime) {
-          // Transition to half-open
-          circuitBreaker.state = CircuitBreakerStateEnum.HALF_OPEN;
-          circuitBreaker.halfOpenAttempts = 0;
-          return true;
-        }
-        return false;
+    case CircuitBreakerStateEnum.HALF_OPEN:
+      return circuitBreaker.halfOpenAttempts < this.config.circuitBreaker.halfOpenMaxAttempts;
 
-      case CircuitBreakerStateEnum.HALF_OPEN:
-        return circuitBreaker.halfOpenAttempts < this.config.circuitBreaker.halfOpenMaxAttempts;
-
-      default:
-        return true;
+    default:
+      return true;
     }
   }
 
@@ -404,34 +404,34 @@ export class MFARetryHandler extends EventEmitter {
     let delay: number;
 
     switch (config.strategy) {
-      case RetryStrategy.EXPONENTIAL:
-        delay = Math.min(
-          config.baseDelayMs * Math.pow(config.backoffMultiplier, attempt - 1),
-          config.maxDelayMs
-        );
-        break;
+    case RetryStrategy.EXPONENTIAL:
+      delay = Math.min(
+        config.baseDelayMs * Math.pow(config.backoffMultiplier, attempt - 1),
+        config.maxDelayMs
+      );
+      break;
 
-      case RetryStrategy.LINEAR:
-        delay = Math.min(
-          config.baseDelayMs * attempt,
-          config.maxDelayMs
-        );
-        break;
+    case RetryStrategy.LINEAR:
+      delay = Math.min(
+        config.baseDelayMs * attempt,
+        config.maxDelayMs
+      );
+      break;
 
-      case RetryStrategy.FIXED:
+    case RetryStrategy.FIXED:
+      delay = config.baseDelayMs;
+      break;
+
+    case RetryStrategy.CUSTOM:
+      if (config.customDelayFunction) {
+        delay = config.customDelayFunction(attempt, config.baseDelayMs);
+      } else {
         delay = config.baseDelayMs;
-        break;
+      }
+      break;
 
-      case RetryStrategy.CUSTOM:
-        if (config.customDelayFunction) {
-          delay = config.customDelayFunction(attempt, config.baseDelayMs);
-        } else {
-          delay = config.baseDelayMs;
-        }
-        break;
-
-      default:
-        delay = config.baseDelayMs;
+    default:
+      delay = config.baseDelayMs;
     }
 
     // Add jitter to prevent thundering herd

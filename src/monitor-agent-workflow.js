@@ -138,10 +138,10 @@ console.log('🎯 Recommendations:');
 
 const totalDetected = detectedCompletedTasks.length;
 if (totalDetected > 0) {
-  console.log(`\n🔧 IMMEDIATE ACTION NEEDED:`);
+  console.log('\n🔧 IMMEDIATE ACTION NEEDED:');
   console.log(`   ${totalDetected} tasks have implementations but are stuck in IN_PROGRESS`);
-  console.log(`   Run: node src/auto-fix-completed-tasks.js`);
-  console.log(`   This will move completed tasks to REVIEW status`);
+  console.log('   Run: node src/auto-fix-completed-tasks.js');
+  console.log('   This will move completed tasks to REVIEW status');
 }
 
 const agentsWithViolations = Object.keys(tasksByAssignee).filter(assignee => {
@@ -150,33 +150,33 @@ const agentsWithViolations = Object.keys(tasksByAssignee).filter(assignee => {
 });
 
 if (agentsWithViolations.length > 0) {
-  console.log(`\n📚 AGENT TRAINING NEEDED:`);
+  console.log('\n📚 AGENT TRAINING NEEDED:');
   console.log(`   Agents with workflow violations: ${agentsWithViolations.join(', ')}`);
-  console.log(`   Ensure all agents understand they MUST call finish-task.js when work is complete`);
-  console.log(`   Documentation updated in:`);
-  console.log(`   - CLAUDE-TICKETS.md`);
-  console.log(`   - src/agents/README.md`);
-  console.log(`   - .bmad-core/agents/qa.md`);
+  console.log('   Ensure all agents understand they MUST call finish-task.js when work is complete');
+  console.log('   Documentation updated in:');
+  console.log('   - CLAUDE-TICKETS.md');
+  console.log('   - src/agents/README.md');
+  console.log('   - .bmad-core/agents/qa.md');
 }
 
-console.log(`\n🔄 PROCESS IMPROVEMENTS:`);
-console.log(`   1. Add finish-task.js calls to agent templates`);
-console.log(`   2. Create automated reminders for long-running IN_PROGRESS tasks`);
-console.log(`   3. Implement auto-detection as part of CI/CD pipeline`);
-console.log(`   4. Add workflow compliance metrics to agent dashboards`);
+console.log('\n🔄 PROCESS IMPROVEMENTS:');
+console.log('   1. Add finish-task.js calls to agent templates');
+console.log('   2. Create automated reminders for long-running IN_PROGRESS tasks');
+console.log('   3. Implement auto-detection as part of CI/CD pipeline');
+console.log('   4. Add workflow compliance metrics to agent dashboards');
 
 // Summary statistics
 const totalInProgress = allTasks.filter(t => t.state === 'IN_PROGRESS').length;
 const totalWithAssignees = allTasks.filter(t => t.assignee && t.assignee !== 'Unassigned').length;
 
-console.log(`\n📈 Summary Statistics:`);
+console.log('\n📈 Summary Statistics:');
 console.log(`   Total tasks with assignees: ${totalWithAssignees}`);
 console.log(`   Total IN_PROGRESS: ${totalInProgress}`);
 console.log(`   Detected completed but stuck: ${totalDetected}`);
 console.log(`   Workflow compliance rate: ${Math.round(((totalInProgress - totalDetected) / totalInProgress) * 100)}%`);
 
 if (totalDetected === 0) {
-  console.log(`\n🎉 Excellent! All agents are following the workflow correctly.`);
+  console.log('\n🎉 Excellent! All agents are following the workflow correctly.');
 } else {
-  console.log(`\n⚠️  Workflow issues detected. Run the recommended fixes above.`);
+  console.log('\n⚠️  Workflow issues detected. Run the recommended fixes above.');
 }

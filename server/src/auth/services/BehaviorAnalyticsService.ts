@@ -414,7 +414,7 @@ export class BehaviorAnalyticsService {
     const suspiciousSequences = [
       ['login', 'export', 'logout'], // Quick data exfiltration
       ['settings', 'delete', 'delete', 'delete'], // Mass deletion
-      ['admin', 'create', 'admin', 'create'], // Privilege escalation
+      ['admin', 'create', 'admin', 'create'] // Privilege escalation
     ];
     
     for (const suspicious of suspiciousSequences) {
@@ -697,7 +697,7 @@ export class BehaviorAnalyticsService {
     // Take the highest severity in the group
     const maxSeverity = anomalies.reduce((max, a) => 
       severityScores[a.severity] > severityScores[max] ? a.severity : max,
-      anomalies[0].severity
+    anomalies[0].severity
     );
     
     // Apply a multiplier for multiple anomalies
@@ -872,7 +872,7 @@ export class BehaviorAnalyticsService {
     const loginHour = sessionData.startTime.getHours();
     const dayOfWeek = sessionData.startTime.getDay();
     
-    let timeWindow = baseline.typicalLoginTimes.find(w => 
+    const timeWindow = baseline.typicalLoginTimes.find(w => 
       w.dayOfWeek === dayOfWeek && 
       w.startHour <= loginHour && 
       w.endHour >= loginHour
@@ -1218,16 +1218,16 @@ export class BehaviorAnalyticsService {
     // In production, this would use more sophisticated algorithms
     
     switch (type) {
-      case 'login_time':
-        return this.detectLoginTimePattern(sessions);
-      case 'action_sequence':
-        return this.detectActionSequencePattern(sessions);
-      case 'resource_access':
-        return this.detectResourceAccessPattern(sessions);
-      case 'session_duration':
-        return this.detectSessionDurationPattern(sessions);
-      default:
-        return null;
+    case 'login_time':
+      return this.detectLoginTimePattern(sessions);
+    case 'action_sequence':
+      return this.detectActionSequencePattern(sessions);
+    case 'resource_access':
+      return this.detectResourceAccessPattern(sessions);
+    case 'session_duration':
+      return this.detectSessionDurationPattern(sessions);
+    default:
+      return null;
     }
   }
 

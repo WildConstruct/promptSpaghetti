@@ -400,41 +400,41 @@ export class ClassificationInheritanceService {
     let value: any;
 
     switch (condition.type) {
-      case 'PARENT_TYPE':
-        value = context.parentElement.type;
-        break;
-      case 'PARENT_CLASSIFICATION':
-        value = context.parentElement.classification?.classification;
-        break;
-      case 'CHILD_TYPE':
-        value = context.childElement.type;
-        break;
-      case 'RELATIONSHIP_TYPE':
-        value = context.relationship[condition.field as keyof DataRelationship];
-        break;
-      case 'CONTEXT_MATCH':
-        value = context.businessContext?.[condition.field as keyof ClassificationContext];
-        break;
-      default:
-        return false;
+    case 'PARENT_TYPE':
+      value = context.parentElement.type;
+      break;
+    case 'PARENT_CLASSIFICATION':
+      value = context.parentElement.classification?.classification;
+      break;
+    case 'CHILD_TYPE':
+      value = context.childElement.type;
+      break;
+    case 'RELATIONSHIP_TYPE':
+      value = context.relationship[condition.field as keyof DataRelationship];
+      break;
+    case 'CONTEXT_MATCH':
+      value = context.businessContext?.[condition.field as keyof ClassificationContext];
+      break;
+    default:
+      return false;
     }
 
     if (!value && condition.required) return false;
     if (!value) return true; // Optional condition with no value
 
     switch (condition.operator) {
-      case 'EQUALS':
-        return value === condition.value;
-      case 'CONTAINS':
-        return typeof value === 'string' && value.toLowerCase().includes(String(condition.value).toLowerCase());
-      case 'MATCHES':
-        return new RegExp(String(condition.value), 'i').test(String(value));
-      case 'IN':
-        return Array.isArray(condition.value) && condition.value.includes(value);
-      case 'NOT_IN':
-        return Array.isArray(condition.value) && !condition.value.includes(value);
-      default:
-        return false;
+    case 'EQUALS':
+      return value === condition.value;
+    case 'CONTAINS':
+      return typeof value === 'string' && value.toLowerCase().includes(String(condition.value).toLowerCase());
+    case 'MATCHES':
+      return new RegExp(String(condition.value), 'i').test(String(value));
+    case 'IN':
+      return Array.isArray(condition.value) && condition.value.includes(value);
+    case 'NOT_IN':
+      return Array.isArray(condition.value) && !condition.value.includes(value);
+    default:
+      return false;
     }
   }
 
@@ -457,29 +457,29 @@ export class ClassificationInheritanceService {
     let requiresReview = false;
 
     switch (rule.action.type) {
-      case 'INHERIT_EXACT':
-        // Keep same classification
-        break;
-      case 'INHERIT_ELEVATED':
-        targetIndex = Math.min(CLASSIFICATION_LEVELS.length - 1, parentIndex + (rule.action.elevationLevel || 1));
+    case 'INHERIT_EXACT':
+      // Keep same classification
+      break;
+    case 'INHERIT_ELEVATED':
+      targetIndex = Math.min(CLASSIFICATION_LEVELS.length - 1, parentIndex + (rule.action.elevationLevel || 1));
+      requiresReview = true;
+      break;
+    case 'INHERIT_REDUCED':
+      targetIndex = Math.max(0, parentIndex - Math.abs(rule.action.elevationLevel || 1));
+      requiresReview = true;
+      break;
+    case 'APPLY_MINIMUM':
+      if (rule.action.customClassification) {
+        const minIndex = CLASSIFICATION_LEVELS.indexOf(rule.action.customClassification);
+        targetIndex = Math.max(parentIndex, minIndex);
+      }
+      break;
+    case 'APPLY_CUSTOM':
+      if (rule.action.customClassification) {
+        targetIndex = CLASSIFICATION_LEVELS.indexOf(rule.action.customClassification);
         requiresReview = true;
-        break;
-      case 'INHERIT_REDUCED':
-        targetIndex = Math.max(0, parentIndex - Math.abs(rule.action.elevationLevel || 1));
-        requiresReview = true;
-        break;
-      case 'APPLY_MINIMUM':
-        if (rule.action.customClassification) {
-          const minIndex = CLASSIFICATION_LEVELS.indexOf(rule.action.customClassification);
-          targetIndex = Math.max(parentIndex, minIndex);
-        }
-        break;
-      case 'APPLY_CUSTOM':
-        if (rule.action.customClassification) {
-          targetIndex = CLASSIFICATION_LEVELS.indexOf(rule.action.customClassification);
-          requiresReview = true;
-        }
-        break;
+      }
+      break;
     }
 
     const classification = CLASSIFICATION_LEVELS[targetIndex];
@@ -501,18 +501,18 @@ export class ClassificationInheritanceService {
 
     // Adjust based on relationship strength
     switch (context.relationship.strength) {
-      case 'ABSOLUTE':
-        confidence += 25;
-        break;
-      case 'STRONG':
-        confidence += 15;
-        break;
-      case 'MODERATE':
-        confidence += 5;
-        break;
-      case 'WEAK':
-        confidence -= 10;
-        break;
+    case 'ABSOLUTE':
+      confidence += 25;
+      break;
+    case 'STRONG':
+      confidence += 15;
+      break;
+    case 'MODERATE':
+      confidence += 5;
+      break;
+    case 'WEAK':
+      confidence -= 10;
+      break;
     }
 
     // Adjust based on rule priority

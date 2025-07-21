@@ -270,37 +270,37 @@ export class LocationVerificationService {
       let verificationResult = { success: false, message: 'Invalid verification code' };
 
       switch (attempt.challengeType) {
-        case LocationChallengeType.EMAIL_VERIFICATION:
-        case LocationChallengeType.SMS_VERIFICATION:
-          if (attempt.verificationCodeId) {
-            const validationResult = await this.verificationCodeManager.validateCode({
-              userId: attempt.userId,
-              code: response,
-              type: attempt.challengeType === LocationChallengeType.EMAIL_VERIFICATION 
-                ? VerificationCodeType.EMAIL_VERIFICATION 
-                : VerificationCodeType.SMS_VERIFICATION,
-              ipAddress: context.ipAddress,
-              userAgent: context.userAgent
-            });
+      case LocationChallengeType.EMAIL_VERIFICATION:
+      case LocationChallengeType.SMS_VERIFICATION:
+        if (attempt.verificationCodeId) {
+          const validationResult = await this.verificationCodeManager.validateCode({
+            userId: attempt.userId,
+            code: response,
+            type: attempt.challengeType === LocationChallengeType.EMAIL_VERIFICATION 
+              ? VerificationCodeType.EMAIL_VERIFICATION 
+              : VerificationCodeType.SMS_VERIFICATION,
+            ipAddress: context.ipAddress,
+            userAgent: context.userAgent
+          });
             
-            verificationResult = {
-              success: validationResult.valid,
-              message: validationResult.reason || 'Invalid verification code'
-            };
-          }
-          break;
-
-        case LocationChallengeType.TOTP_VERIFICATION:
-          // Would integrate with TOTP service
-          const totpResult = await this.verifyTOTPCode(attempt.userId, response);
           verificationResult = {
-            success: totpResult.success,
-            message: totpResult.message || 'TOTP verification failed'
+            success: validationResult.valid,
+            message: validationResult.reason || 'Invalid verification code'
           };
-          break;
+        }
+        break;
 
-        default:
-          verificationResult = { success: false, message: 'Unsupported challenge type' };
+      case LocationChallengeType.TOTP_VERIFICATION:
+        // Would integrate with TOTP service
+        const totpResult = await this.verifyTOTPCode(attempt.userId, response);
+        verificationResult = {
+          success: totpResult.success,
+          message: totpResult.message || 'TOTP verification failed'
+        };
+        break;
+
+      default:
+        verificationResult = { success: false, message: 'Unsupported challenge type' };
       }
 
       // Update attempt count
@@ -654,16 +654,16 @@ export class LocationVerificationService {
     const location = `${geoData.city}, ${geoData.country}`;
 
     switch (challengeType) {
-      case LocationChallengeType.EMAIL_VERIFICATION:
-        return `We detected a login from ${location}. Please check your email for a verification code.`;
-      case LocationChallengeType.SMS_VERIFICATION:
-        return `We detected a login from ${location}. Please check your phone for a verification code.`;
-      case LocationChallengeType.TOTP_VERIFICATION:
-        return `We detected a login from ${location}. Please enter your authenticator code.`;
-      case LocationChallengeType.MANUAL_REVIEW:
-        return `We detected a high-risk login from ${location}. Your account is under manual review.`;
-      default:
-        return `We detected a login from ${location}. Additional verification is required.`;
+    case LocationChallengeType.EMAIL_VERIFICATION:
+      return `We detected a login from ${location}. Please check your email for a verification code.`;
+    case LocationChallengeType.SMS_VERIFICATION:
+      return `We detected a login from ${location}. Please check your phone for a verification code.`;
+    case LocationChallengeType.TOTP_VERIFICATION:
+      return `We detected a login from ${location}. Please enter your authenticator code.`;
+    case LocationChallengeType.MANUAL_REVIEW:
+      return `We detected a high-risk login from ${location}. Your account is under manual review.`;
+    default:
+      return `We detected a login from ${location}. Additional verification is required.`;
     }
   }
 

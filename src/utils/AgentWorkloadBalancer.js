@@ -480,20 +480,20 @@ class AgentWorkloadBalancer {
    */
   applySelectionStrategy(agentScores, taskAnalysis) {
     switch (this.config.balancing.strategy) {
-      case 'round_robin':
-        return this.selectRoundRobin(agentScores);
+    case 'round_robin':
+      return this.selectRoundRobin(agentScores);
         
-      case 'weighted_round_robin':
-        return this.selectWeightedRoundRobin(agentScores);
+    case 'weighted_round_robin':
+      return this.selectWeightedRoundRobin(agentScores);
         
-      case 'least_loaded':
-        return this.selectLeastLoaded(agentScores);
+    case 'least_loaded':
+      return this.selectLeastLoaded(agentScores);
         
-      case 'skill_based':
-        return this.selectSkillBased(agentScores, taskAnalysis);
+    case 'skill_based':
+      return this.selectSkillBased(agentScores, taskAnalysis);
         
-      default:
-        return agentScores[0]; // Highest score
+    default:
+      return agentScores[0]; // Highest score
     }
   }
 
@@ -1085,63 +1085,63 @@ if (require.main === module) {
       await balancer.initialize();
       
       switch (command) {
-        case 'register':
-          const agentData = {
-            id: args[1] || `agent-${Date.now()}`,
-            name: args[2] || args[1],
-            skills: JSON.parse(args[3] || '{}'),
-            capacity: parseInt(args[4]) || 40
-          };
+      case 'register':
+        const agentData = {
+          id: args[1] || `agent-${Date.now()}`,
+          name: args[2] || args[1],
+          skills: JSON.parse(args[3] || '{}'),
+          capacity: parseInt(args[4]) || 40
+        };
           
-          const agent = await balancer.registerAgent(agentData);
-          console.log(`✅ Agent registered: ${JSON.stringify(agent, null, 2)}`);
-          break;
+        const agent = await balancer.registerAgent(agentData);
+        console.log(`✅ Agent registered: ${JSON.stringify(agent, null, 2)}`);
+        break;
           
-        case 'assign':
-          const taskData = {
-            id: args[1],
-            title: args[2] || 'Test Task',
-            priority: args[3] || 'medium',
-            estimate: parseInt(args[4]) || 4
-          };
+      case 'assign':
+        const taskData = {
+          id: args[1],
+          title: args[2] || 'Test Task',
+          priority: args[3] || 'medium',
+          estimate: parseInt(args[4]) || 4
+        };
           
-          const assignment = await balancer.assignTask(taskData);
-          console.log(`✅ Task assigned: ${JSON.stringify(assignment, null, 2)}`);
-          break;
+        const assignment = await balancer.assignTask(taskData);
+        console.log(`✅ Task assigned: ${JSON.stringify(assignment, null, 2)}`);
+        break;
           
-        case 'complete':
-          const assignmentId = args[1];
-          const completionData = {
-            actualEffort: parseInt(args[2]) || null,
-            qualityScore: parseFloat(args[3]) || 1.0
-          };
+      case 'complete':
+        const assignmentId = args[1];
+        const completionData = {
+          actualEffort: parseInt(args[2]) || null,
+          qualityScore: parseFloat(args[3]) || 1.0
+        };
           
-          const completed = await balancer.completeTask(assignmentId, completionData);
-          console.log(`✅ Task completed: ${JSON.stringify(completed, null, 2)}`);
-          break;
+        const completed = await balancer.completeTask(assignmentId, completionData);
+        console.log(`✅ Task completed: ${JSON.stringify(completed, null, 2)}`);
+        break;
           
-        case 'rebalance':
-          await balancer.rebalanceWorkloads();
-          console.log('✅ Workload rebalancing completed');
-          break;
+      case 'rebalance':
+        await balancer.rebalanceWorkloads();
+        console.log('✅ Workload rebalancing completed');
+        break;
           
-        case 'stats':
-          const stats = await balancer.getStatistics();
-          console.log('📊 Workload Balancer Statistics:');
-          console.log(JSON.stringify(stats, null, 2));
-          break;
+      case 'stats':
+        const stats = await balancer.getStatistics();
+        console.log('📊 Workload Balancer Statistics:');
+        console.log(JSON.stringify(stats, null, 2));
+        break;
           
-        case 'agents':
-          const agents = Array.from(balancer.agents.values());
-          console.log('👥 Registered Agents:');
-          agents.forEach(agent => {
-            console.log(`  ${agent.name}: ${(agent.utilizationRate * 100).toFixed(1)}% utilized`);
-          });
-          break;
+      case 'agents':
+        const agents = Array.from(balancer.agents.values());
+        console.log('👥 Registered Agents:');
+        agents.forEach(agent => {
+          console.log(`  ${agent.name}: ${(agent.utilizationRate * 100).toFixed(1)}% utilized`);
+        });
+        break;
           
-        case 'help':
-        default:
-          console.log(`
+      case 'help':
+      default:
+        console.log(`
 ⚖️  Agent Workload Balancer
 
 USAGE:
@@ -1166,7 +1166,7 @@ SKILLS:
   Skills are JSON objects with skill names and levels (1-4):
   {"frontend": 3, "backend": 2, "testing": 4}
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

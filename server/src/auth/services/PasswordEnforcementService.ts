@@ -637,7 +637,7 @@ export class PasswordEnforcementService extends EventEmitter {
     };
 
     // Store enforcement action
-    let userEnforcements = this.activeEnforcements.get(context.userId) || [];
+    const userEnforcements = this.activeEnforcements.get(context.userId) || [];
     userEnforcements.push(action);
     this.activeEnforcements.set(context.userId, userEnforcements);
 

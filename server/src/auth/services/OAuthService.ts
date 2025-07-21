@@ -560,7 +560,7 @@ export class OAuthService {
     enabled: boolean;
     statistics: any;
     pinnedDomains: string[];
-  } {
+    } {
     return {
       enabled: this.certificatePinningManager.getConfig().enabled,
       statistics: this.certificatePinningManager.getStatistics(),

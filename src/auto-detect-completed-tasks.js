@@ -189,7 +189,7 @@ if (detectedCompletedTasks.length === 0) {
   console.log('   node src/auto-fix-completed-tasks.js');
 }
 
-console.log(`\n📊 Summary:`);
+console.log('\n📊 Summary:');
 console.log(`   Total IN_PROGRESS tasks: ${inProgressTasks.length}`);
 console.log(`   Detected completed: ${detectedCompletedTasks.length}`);
 console.log(`   Still in progress: ${inProgressTasks.length - detectedCompletedTasks.length}`);

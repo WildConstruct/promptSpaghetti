@@ -429,7 +429,7 @@ describe('PasswordStrengthIndicator', () => {
           removeListener: jest.fn(),
           addEventListener: jest.fn(),
           removeEventListener: jest.fn(),
-          dispatchEvent: jest.fn(),
+          dispatchEvent: jest.fn()
         }))
       });
 

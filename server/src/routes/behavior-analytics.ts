@@ -378,18 +378,18 @@ export async function behaviorAnalyticsRoutes(
 
       // Handle different update types
       switch (updateType) {
-        case 'reset':
-          // Reset profile to learning mode
-          await (behaviorAnalyticsService as any).resetUserProfile(userId, reason);
-          break;
-        case 'recalibrate':
-          // Force recalibration of baseline
-          await (behaviorAnalyticsService as any).recalibrateUserProfile(userId, reason);
-          break;
-        case 'suspend':
-          // Suspend profile monitoring
-          await (behaviorAnalyticsService as any).suspendUserProfile(userId, reason);
-          break;
+      case 'reset':
+        // Reset profile to learning mode
+        await (behaviorAnalyticsService as any).resetUserProfile(userId, reason);
+        break;
+      case 'recalibrate':
+        // Force recalibration of baseline
+        await (behaviorAnalyticsService as any).recalibrateUserProfile(userId, reason);
+        break;
+      case 'suspend':
+        // Suspend profile monitoring
+        await (behaviorAnalyticsService as any).suspendUserProfile(userId, reason);
+        break;
       }
 
       return reply.status(200).send({ 
@@ -536,8 +536,8 @@ export async function behaviorAnalyticsRoutes(
         userId,
         riskScore: profile.riskScore,
         riskLevel: profile.riskScore >= 80 ? 'critical' : 
-                   profile.riskScore >= 60 ? 'high' :
-                   profile.riskScore >= 40 ? 'medium' : 'low',
+          profile.riskScore >= 60 ? 'high' :
+            profile.riskScore >= 40 ? 'medium' : 'low',
         profileStatus: profile.status,
         lastUpdated: profile.lastUpdated
       });

@@ -554,14 +554,14 @@ export class RateLimitingMiddleware {
 
     // Update status based on window type
     switch (rule.limits.windowType) {
-      case 'fixed':
-        return this.checkFixedWindow(rule, status, now);
-      case 'sliding':
-        return this.checkSlidingWindow(rule, status, identifier, now);
-      case 'token_bucket':
-        return this.checkTokenBucket(rule, status, identifier, now);
-      default:
-        return { allowed: true, status };
+    case 'fixed':
+      return this.checkFixedWindow(rule, status, now);
+    case 'sliding':
+      return this.checkSlidingWindow(rule, status, identifier, now);
+    case 'token_bucket':
+      return this.checkTokenBucket(rule, status, identifier, now);
+    default:
+      return { allowed: true, status };
     }
   }
 

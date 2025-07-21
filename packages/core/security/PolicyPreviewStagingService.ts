@@ -948,12 +948,12 @@ export class PolicyPreviewStagingService extends EventEmitter {
 
       let triggerValue = 0;
       switch (trigger.triggerType) {
-        case RollbackTriggerType.ERROR_RATE:
-          triggerValue = deployment.metrics.errorRates;
-          break;
-        case RollbackTriggerType.PERFORMANCE_DEGRADATION:
-          triggerValue = deployment.metrics.pageLoadTimes.reduce((a, b) => a + b, 0) / deployment.metrics.pageLoadTimes.length;
-          break;
+      case RollbackTriggerType.ERROR_RATE:
+        triggerValue = deployment.metrics.errorRates;
+        break;
+      case RollbackTriggerType.PERFORMANCE_DEGRADATION:
+        triggerValue = deployment.metrics.pageLoadTimes.reduce((a, b) => a + b, 0) / deployment.metrics.pageLoadTimes.length;
+        break;
         // Add other trigger types
       }
 

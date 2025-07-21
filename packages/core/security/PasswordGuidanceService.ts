@@ -694,30 +694,30 @@ export class PasswordGuidanceService extends EventEmitter {
       let riskWeight = 0;
       
       switch (indicator.type) {
-        case CompromiseType.DATA_BREACH:
-          riskWeight = indicator.confidence >= 80 ? 4 : 3;
-          break;
-        case CompromiseType.CREDENTIAL_STUFFING:
-          riskWeight = 4;
-          break;
-        case CompromiseType.PHISHING:
-          riskWeight = 3;
-          break;
-        case CompromiseType.MALWARE:
-          riskWeight = 4;
-          break;
-        case CompromiseType.SOCIAL_ENGINEERING:
-          riskWeight = 3;
-          break;
-        case CompromiseType.INSIDER_THREAT:
-          riskWeight = 4;
-          break;
-        case CompromiseType.WEAK_PASSWORD:
-          riskWeight = 2;
-          break;
-        case CompromiseType.REUSED_PASSWORD:
-          riskWeight = 3;
-          break;
+      case CompromiseType.DATA_BREACH:
+        riskWeight = indicator.confidence >= 80 ? 4 : 3;
+        break;
+      case CompromiseType.CREDENTIAL_STUFFING:
+        riskWeight = 4;
+        break;
+      case CompromiseType.PHISHING:
+        riskWeight = 3;
+        break;
+      case CompromiseType.MALWARE:
+        riskWeight = 4;
+        break;
+      case CompromiseType.SOCIAL_ENGINEERING:
+        riskWeight = 3;
+        break;
+      case CompromiseType.INSIDER_THREAT:
+        riskWeight = 4;
+        break;
+      case CompromiseType.WEAK_PASSWORD:
+        riskWeight = 2;
+        break;
+      case CompromiseType.REUSED_PASSWORD:
+        riskWeight = 3;
+        break;
       }
       
       totalRisk += riskWeight * (indicator.confidence / 100);
@@ -729,22 +729,22 @@ export class PasswordGuidanceService extends EventEmitter {
       let riskWeight = 0;
       
       switch (indicator.type) {
-        case CompromiseType.DATA_BREACH:
-          riskWeight = indicator.confidence >= 80 ? 4 : 3;
-          break;
-        case CompromiseType.CREDENTIAL_STUFFING:
-        case CompromiseType.MALWARE:
-        case CompromiseType.INSIDER_THREAT:
-          riskWeight = 4;
-          break;
-        case CompromiseType.PHISHING:
-        case CompromiseType.SOCIAL_ENGINEERING:
-        case CompromiseType.REUSED_PASSWORD:
-          riskWeight = 3;
-          break;
-        case CompromiseType.WEAK_PASSWORD:
-          riskWeight = 2;
-          break;
+      case CompromiseType.DATA_BREACH:
+        riskWeight = indicator.confidence >= 80 ? 4 : 3;
+        break;
+      case CompromiseType.CREDENTIAL_STUFFING:
+      case CompromiseType.MALWARE:
+      case CompromiseType.INSIDER_THREAT:
+        riskWeight = 4;
+        break;
+      case CompromiseType.PHISHING:
+      case CompromiseType.SOCIAL_ENGINEERING:
+      case CompromiseType.REUSED_PASSWORD:
+        riskWeight = 3;
+        break;
+      case CompromiseType.WEAK_PASSWORD:
+        riskWeight = 2;
+        break;
       }
       
       const adjustedRisk = riskWeight * (indicator.confidence / 100);

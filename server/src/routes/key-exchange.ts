@@ -355,7 +355,7 @@ export async function keyExchangeRoutes(
       
       const params: any[] = [];
       if (state) {
-        query += ` WHERE state = $1`;
+        query += ' WHERE state = $1';
         params.push(state);
       }
       
@@ -366,8 +366,8 @@ export async function keyExchangeRoutes(
 
       // Get total count
       const countQuery = state ? 
-        `SELECT COUNT(*) as total FROM key_exchange_sessions WHERE state = $1` :
-        `SELECT COUNT(*) as total FROM key_exchange_sessions`;
+        'SELECT COUNT(*) as total FROM key_exchange_sessions WHERE state = $1' :
+        'SELECT COUNT(*) as total FROM key_exchange_sessions';
       const countParams = state ? [state] : [];
       const countResult = await (keyExchangeService as any).db.query(countQuery, countParams);
       const total = parseInt(countResult.rows[0].total);

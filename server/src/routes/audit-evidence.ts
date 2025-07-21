@@ -312,10 +312,10 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           recommendations: validation.is_complete 
             ? ['Evidence mapping is complete for this framework']
             : [
-                'Review missing mappings and create appropriate evidence collection processes',
-                'Validate evidence types are properly configured',
-                'Ensure all audit requirements have adequate evidence coverage'
-              ]
+              'Review missing mappings and create appropriate evidence collection processes',
+              'Validate evidence types are properly configured',
+              'Ensure all audit requirements have adequate evidence coverage'
+            ]
         }
       });
     } catch (error) {

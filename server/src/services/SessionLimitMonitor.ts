@@ -706,37 +706,37 @@ export class SessionLimitMonitor extends EventEmitter {
   
   private async getMetricValue(condition: AlertCondition, metrics: SessionLimitMetrics): Promise<number> {
     switch (condition.metric) {
-      case 'active_sessions_total':
-        return metrics.activeSessionsTotal;
-      case 'violations_total':
-        return metrics.violations.total;
-      case 'violations_pending':
-        return metrics.violations.pending;
-      case 'response_time':
-        return metrics.performance.averageCheckTime;
-      case 'error_rate':
-        return metrics.performance.errorRate;
-      default:
-        return 0;
+    case 'active_sessions_total':
+      return metrics.activeSessionsTotal;
+    case 'violations_total':
+      return metrics.violations.total;
+    case 'violations_pending':
+      return metrics.violations.pending;
+    case 'response_time':
+      return metrics.performance.averageCheckTime;
+    case 'error_rate':
+      return metrics.performance.errorRate;
+    default:
+      return 0;
     }
   }
   
   private evaluateCondition(condition: AlertCondition, value: number): boolean {
     switch (condition.operator) {
-      case 'gt':
-        return value > condition.threshold;
-      case 'gte':
-        return value >= condition.threshold;
-      case 'lt':
-        return value < condition.threshold;
-      case 'lte':
-        return value <= condition.threshold;
-      case 'eq':
-        return value === condition.threshold;
-      case 'neq':
-        return value !== condition.threshold;
-      default:
-        return false;
+    case 'gt':
+      return value > condition.threshold;
+    case 'gte':
+      return value >= condition.threshold;
+    case 'lt':
+      return value < condition.threshold;
+    case 'lte':
+      return value <= condition.threshold;
+    case 'eq':
+      return value === condition.threshold;
+    case 'neq':
+      return value !== condition.threshold;
+    default:
+      return false;
     }
   }
   
@@ -787,24 +787,24 @@ export class SessionLimitMonitor extends EventEmitter {
   
   private async executeAlertAction(alert: Alert, action: AlertAction): Promise<void> {
     switch (action.type) {
-      case 'websocket':
-        if (this.connectionManager) {
-          // Broadcast to admin connections
-          // Implementation would depend on connection manager API
-          console.log('Broadcasting alert via WebSocket:', alert.title);
-        }
-        break;
+    case 'websocket':
+      if (this.connectionManager) {
+        // Broadcast to admin connections
+        // Implementation would depend on connection manager API
+        console.log('Broadcasting alert via WebSocket:', alert.title);
+      }
+      break;
         
-      case 'log':
-        console.log(`ALERT [${alert.severity.toUpperCase()}]: ${alert.title}`);
-        break;
+    case 'log':
+      console.log(`ALERT [${alert.severity.toUpperCase()}]: ${alert.title}`);
+      break;
         
-      case 'webhook':
-        await this.sendWebhookAlert(action.target, alert);
-        break;
+    case 'webhook':
+      await this.sendWebhookAlert(action.target, alert);
+      break;
         
-      default:
-        console.log(`Unsupported alert action type: ${action.type}`);
+    default:
+      console.log(`Unsupported alert action type: ${action.type}`);
     }
   }
   

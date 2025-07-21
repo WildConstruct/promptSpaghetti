@@ -567,15 +567,15 @@ expect.extend({
     if (pass) {
       return {
         message: () => `expected ${received} not to be one of ${options.join(', ')}`,
-        pass: true,
+        pass: true
       };
     } else {
       return {
         message: () => `expected ${received} to be one of ${options.join(', ')}`,
-        pass: false,
+        pass: false
       };
     }
-  },
+  }
 });
 
 declare global {

@@ -518,17 +518,17 @@ export class KeyExchangeService extends EventEmitter {
 
   private getAlgorithmForSecurityLevel(level: string): 'secp256r1' | 'secp384r1' | 'secp521r1' {
     switch (level) {
-      case 'maximum': return 'secp521r1';
-      case 'high': return 'secp384r1';
-      default: return 'secp256r1';
+    case 'maximum': return 'secp521r1';
+    case 'high': return 'secp384r1';
+    default: return 'secp256r1';
     }
   }
 
   private getIterationsForSecurityLevel(level: string): number {
     switch (level) {
-      case 'maximum': return 500000;
-      case 'high': return 250000;
-      default: return 100000;
+    case 'maximum': return 500000;
+    case 'high': return 250000;
+    default: return 100000;
     }
   }
 

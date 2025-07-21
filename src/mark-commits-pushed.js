@@ -51,8 +51,8 @@ function markCommitsPushed() {
   fs.writeFileSync(commitTrackingFile, JSON.stringify(commitData, null, 2));
   
   console.log(`✅ Marked ${unpushedCount} approved tasks as pushed to GitHub`);
-  console.log(`📊 Commit counter reset to 0`);
-  console.log(`🎯 Next GitHub automation will trigger after 10 new approvals`);
+  console.log('📊 Commit counter reset to 0');
+  console.log('🎯 Next GitHub automation will trigger after 10 new approvals');
 }
 
 // Run if called directly

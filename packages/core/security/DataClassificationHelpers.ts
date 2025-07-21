@@ -283,14 +283,14 @@ export class DataClassificationHelpers {
     if (requiredAuth !== 'none') {
       const hasAppropriateAuth = currentSecurity.accessControl.some(control => {
         switch (requiredAuth) {
-          case 'mfa':
-            return control.includes('mfa') || control.includes('multi-factor');
-          case 'strong':
-            return control.includes('strong') || control.includes('2fa') || control.includes('mfa');
-          case 'basic':
-            return control.includes('auth') || control.includes('login');
-          default:
-            return true;
+        case 'mfa':
+          return control.includes('mfa') || control.includes('multi-factor');
+        case 'strong':
+          return control.includes('strong') || control.includes('2fa') || control.includes('mfa');
+        case 'basic':
+          return control.includes('auth') || control.includes('login');
+        default:
+          return true;
         }
       });
 
@@ -374,7 +374,7 @@ export class DataClassificationHelpers {
     complianceImpact.push(...Array.from(allFrameworks));
 
     // Determine risk level
-            const riskLevel = DataSensitivityUtils.getRiskLevel(
+    const riskLevel = DataSensitivityUtils.getRiskLevel(
       DataSensitivityUtils.getHigherSensitivityLevel(sourceLevel, targetLevel)
     );
 

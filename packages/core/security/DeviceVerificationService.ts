@@ -270,13 +270,13 @@ export class DeviceVerificationService extends EventEmitter {
       const riskAssessment = location 
         ? this.fingerprintService.assessRisk(fingerprint, location)
         : {
-            deviceId: fingerprint.id,
-            overallRisk: RiskLevel.MEDIUM,
-            riskScore: 50,
-            factors: [],
-            recommendations: [],
-            timestamp: new Date()
-          };
+          deviceId: fingerprint.id,
+          overallRisk: RiskLevel.MEDIUM,
+          riskScore: 50,
+          factors: [],
+          recommendations: [],
+          timestamp: new Date()
+        };
 
       // Create verification session
       const sessionId = this.generateSessionId();
@@ -535,50 +535,50 @@ export class DeviceVerificationService extends EventEmitter {
     session.updatedAt = new Date();
 
     switch (session.currentStep) {
-      case VerificationStep.FINGERPRINT_COLLECTION:
-        session.currentStep = VerificationStep.RISK_ASSESSMENT;
-        await this.performRiskAssessment(session);
-        break;
+    case VerificationStep.FINGERPRINT_COLLECTION:
+      session.currentStep = VerificationStep.RISK_ASSESSMENT;
+      await this.performRiskAssessment(session);
+      break;
 
-      case VerificationStep.RISK_ASSESSMENT:
-        if (session.riskScore < this.config.riskThresholds.lowRisk && this.config.enableAutomaticApproval) {
+    case VerificationStep.RISK_ASSESSMENT:
+      if (session.riskScore < this.config.riskThresholds.lowRisk && this.config.enableAutomaticApproval) {
+        session.currentStep = VerificationStep.DEVICE_REGISTRATION;
+        await this.completeVerification(session);
+      } else {
+        session.currentStep = VerificationStep.CHALLENGE_REQUIRED;
+        await this.createRequiredChallenges(session);
+      }
+      break;
+
+    case VerificationStep.CHALLENGE_REQUIRED:
+      // Check if all required challenges are completed
+      const requiredCompleted = session.requiredChallenges.every(challengeType =>
+        session.challenges.some(c => c.type === challengeType && c.status === 'completed')
+      );
+
+      if (requiredCompleted) {
+        if (session.riskScore >= this.config.riskThresholds.requireManualReview) {
+          session.currentStep = VerificationStep.MANUAL_REVIEW;
+          await this.requestManualReview(session);
+        } else {
           session.currentStep = VerificationStep.DEVICE_REGISTRATION;
           await this.completeVerification(session);
-        } else {
-          session.currentStep = VerificationStep.CHALLENGE_REQUIRED;
-          await this.createRequiredChallenges(session);
         }
-        break;
+      }
+      break;
 
-      case VerificationStep.CHALLENGE_REQUIRED:
-        // Check if all required challenges are completed
-        const requiredCompleted = session.requiredChallenges.every(challengeType =>
-          session.challenges.some(c => c.type === challengeType && c.status === 'completed')
-        );
+    case VerificationStep.MANUAL_REVIEW:
+      // Wait for admin action
+      break;
 
-        if (requiredCompleted) {
-          if (session.riskScore >= this.config.riskThresholds.requireManualReview) {
-            session.currentStep = VerificationStep.MANUAL_REVIEW;
-            await this.requestManualReview(session);
-          } else {
-            session.currentStep = VerificationStep.DEVICE_REGISTRATION;
-            await this.completeVerification(session);
-          }
-        }
-        break;
+    case VerificationStep.DEVICE_REGISTRATION:
+      await this.registerTrustedDevice(session);
+      session.currentStep = VerificationStep.VERIFICATION_COMPLETE;
+      break;
 
-      case VerificationStep.MANUAL_REVIEW:
-        // Wait for admin action
-        break;
-
-      case VerificationStep.DEVICE_REGISTRATION:
-        await this.registerTrustedDevice(session);
-        session.currentStep = VerificationStep.VERIFICATION_COMPLETE;
-        break;
-
-      case VerificationStep.VERIFICATION_COMPLETE:
-        // Verification is complete
-        break;
+    case VerificationStep.VERIFICATION_COMPLETE:
+      // Verification is complete
+      break;
     }
   }
 
@@ -637,18 +637,18 @@ export class DeviceVerificationService extends EventEmitter {
     };
 
     switch (type) {
-      case ChallengeType.EMAIL_CODE:
-        await this.createEmailChallenge(challenge, session);
-        break;
-      case ChallengeType.SMS_CODE:
-        await this.createSMSChallenge(challenge, session);
-        break;
-      case ChallengeType.CAPTCHA:
-        await this.createCaptchaChallenge(challenge, session);
-        break;
-      case ChallengeType.MANUAL_REVIEW:
-        await this.createManualReviewChallenge(challenge, session);
-        break;
+    case ChallengeType.EMAIL_CODE:
+      await this.createEmailChallenge(challenge, session);
+      break;
+    case ChallengeType.SMS_CODE:
+      await this.createSMSChallenge(challenge, session);
+      break;
+    case ChallengeType.CAPTCHA:
+      await this.createCaptchaChallenge(challenge, session);
+      break;
+    case ChallengeType.MANUAL_REVIEW:
+      await this.createManualReviewChallenge(challenge, session);
+      break;
     }
 
     return challenge;
@@ -756,19 +756,19 @@ export class DeviceVerificationService extends EventEmitter {
     response: string
   ): Promise<boolean> {
     switch (challenge.type) {
-      case ChallengeType.EMAIL_CODE:
-      case ChallengeType.SMS_CODE:
-        return challenge.challengeData.code === response;
+    case ChallengeType.EMAIL_CODE:
+    case ChallengeType.SMS_CODE:
+      return challenge.challengeData.code === response;
       
-      case ChallengeType.CAPTCHA:
-        return challenge.challengeData.expectedResponse === response;
+    case ChallengeType.CAPTCHA:
+      return challenge.challengeData.expectedResponse === response;
       
-      case ChallengeType.MANUAL_REVIEW:
-        // Manual review requires admin approval
-        return false;
+    case ChallengeType.MANUAL_REVIEW:
+      // Manual review requires admin approval
+      return false;
       
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 

@@ -610,7 +610,7 @@ export class SecurityAlertingAnalytics extends EventEmitter {
     threatSummary: ThreatSummary[];
     recommendations: MitigationRecommendation[];
     performance: PerformanceImpact;
-  } {
+    } {
     return {
       metrics: this.getMetrics(),
       activePatterns: this.getActivePatterns(),
@@ -678,7 +678,7 @@ export class SecurityAlertingAnalytics extends EventEmitter {
     recommendations: string[];
     trends: TrendAnalysis;
     compliance: ComplianceImpact[];
-  } {
+    } {
     const overallRiskScore = this.calculateOverallRiskScore();
     const topThreats = this.getTopThreats(10);
     const riskByClassification = this.calculateRiskByClassification();

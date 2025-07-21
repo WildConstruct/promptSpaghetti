@@ -44,58 +44,58 @@ class ChallengeGenerators {
    */
   static generateMathPuzzle(difficulty: ChallengeDifficulty): MathPuzzle {
     switch (difficulty) {
-      case ChallengeDifficulty.EASY:
-        const a = Math.floor(Math.random() * 10) + 1;
-        const b = Math.floor(Math.random() * 10) + 1;
-        const op = Math.random() > 0.5 ? '+' : '-';
-        const answer = op === '+' ? a + b : Math.max(a, b) - Math.min(a, b);
-        return {
-          question: `What is ${Math.max(a, b)} ${op} ${Math.min(a, b)}?`,
-          answer: answer.toString(),
-          difficulty
-        };
+    case ChallengeDifficulty.EASY:
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      const op = Math.random() > 0.5 ? '+' : '-';
+      const answer = op === '+' ? a + b : Math.max(a, b) - Math.min(a, b);
+      return {
+        question: `What is ${Math.max(a, b)} ${op} ${Math.min(a, b)}?`,
+        answer: answer.toString(),
+        difficulty
+      };
 
-      case ChallengeDifficulty.MEDIUM:
-        const x = Math.floor(Math.random() * 20) + 5;
-        const y = Math.floor(Math.random() * 10) + 2;
-        const operation = ['*', '/', '+', '-'][Math.floor(Math.random() * 4)];
-        let result: number;
-        let question: string;
+    case ChallengeDifficulty.MEDIUM:
+      const x = Math.floor(Math.random() * 20) + 5;
+      const y = Math.floor(Math.random() * 10) + 2;
+      const operation = ['*', '/', '+', '-'][Math.floor(Math.random() * 4)];
+      let result: number;
+      let question: string;
         
-        if (operation === '*') {
-          result = x * y;
-          question = `What is ${x} × ${y}?`;
-        } else if (operation === '/') {
-          result = x;
-          question = `What is ${x * y} ÷ ${y}?`;
-        } else if (operation === '+') {
-          result = x + y;
-          question = `What is ${x} + ${y}?`;
-        } else {
-          result = x - y;
-          question = `What is ${x + y} - ${y}?`;
-        }
+      if (operation === '*') {
+        result = x * y;
+        question = `What is ${x} × ${y}?`;
+      } else if (operation === '/') {
+        result = x;
+        question = `What is ${x * y} ÷ ${y}?`;
+      } else if (operation === '+') {
+        result = x + y;
+        question = `What is ${x} + ${y}?`;
+      } else {
+        result = x - y;
+        question = `What is ${x + y} - ${y}?`;
+      }
 
-        return {
-          question,
-          answer: result.toString(),
-          difficulty
-        };
+      return {
+        question,
+        answer: result.toString(),
+        difficulty
+      };
 
-      case ChallengeDifficulty.HARD:
-        const num1 = Math.floor(Math.random() * 50) + 10;
-        const num2 = Math.floor(Math.random() * 12) + 2;
-        const num3 = Math.floor(Math.random() * 8) + 2;
-        const complexResult = (num1 + num2) * num3;
+    case ChallengeDifficulty.HARD:
+      const num1 = Math.floor(Math.random() * 50) + 10;
+      const num2 = Math.floor(Math.random() * 12) + 2;
+      const num3 = Math.floor(Math.random() * 8) + 2;
+      const complexResult = (num1 + num2) * num3;
         
-        return {
-          question: `What is (${num1} + ${num2}) × ${num3}?`,
-          answer: complexResult.toString(),
-          difficulty
-        };
+      return {
+        question: `What is (${num1} + ${num2}) × ${num3}?`,
+        answer: complexResult.toString(),
+        difficulty
+      };
 
-      default:
-        return this.generateMathPuzzle(ChallengeDifficulty.MEDIUM);
+    default:
+      return this.generateMathPuzzle(ChallengeDifficulty.MEDIUM);
     }
   }
 
@@ -105,7 +105,7 @@ class ChallengeGenerators {
   static generateTextCaptcha(difficulty: ChallengeDifficulty): { text: string; answer: string } {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const length = difficulty === ChallengeDifficulty.EASY ? 4 : 
-                   difficulty === ChallengeDifficulty.MEDIUM ? 6 : 8;
+      difficulty === ChallengeDifficulty.MEDIUM ? 6 : 8;
     
     let text = '';
     for (let i = 0; i < length; i++) {
@@ -272,50 +272,50 @@ export class ChallengeService implements IChallengeService {
     let solution: string;
 
     switch (request.type) {
-      case ChallengeType.MATH_PUZZLE:
-        const mathPuzzle = ChallengeGenerators.generateMathPuzzle(
-          request.difficulty || ChallengeDifficulty.MEDIUM
-        );
-        challenge = { text: mathPuzzle.question };
-        solution = mathPuzzle.answer;
-        break;
+    case ChallengeType.MATH_PUZZLE:
+      const mathPuzzle = ChallengeGenerators.generateMathPuzzle(
+        request.difficulty || ChallengeDifficulty.MEDIUM
+      );
+      challenge = { text: mathPuzzle.question };
+      solution = mathPuzzle.answer;
+      break;
 
-      case ChallengeType.TEXT_CAPTCHA:
-        const textCaptcha = ChallengeGenerators.generateTextCaptcha(
-          request.difficulty || ChallengeDifficulty.MEDIUM
-        );
-        challenge = { 
-          text: `Enter the characters: ${textCaptcha.text}`,
-          metadata: { displayText: textCaptcha.text }
-        };
-        solution = textCaptcha.answer;
-        break;
+    case ChallengeType.TEXT_CAPTCHA:
+      const textCaptcha = ChallengeGenerators.generateTextCaptcha(
+        request.difficulty || ChallengeDifficulty.MEDIUM
+      );
+      challenge = { 
+        text: `Enter the characters: ${textCaptcha.text}`,
+        metadata: { displayText: textCaptcha.text }
+      };
+      solution = textCaptcha.answer;
+      break;
 
-      case ChallengeType.PATTERN_RECOGNITION:
-        const patternChallenge = ChallengeGenerators.generatePatternChallenge(
-          request.difficulty || ChallengeDifficulty.MEDIUM
-        );
-        challenge = {
-          text: `Complete the pattern: ${patternChallenge.pattern.join(', ')}`,
-          options: this.generatePatternOptions(patternChallenge.answer),
-          metadata: { pattern: patternChallenge.pattern }
-        };
-        solution = patternChallenge.answer;
-        break;
+    case ChallengeType.PATTERN_RECOGNITION:
+      const patternChallenge = ChallengeGenerators.generatePatternChallenge(
+        request.difficulty || ChallengeDifficulty.MEDIUM
+      );
+      challenge = {
+        text: `Complete the pattern: ${patternChallenge.pattern.join(', ')}`,
+        options: this.generatePatternOptions(patternChallenge.answer),
+        metadata: { pattern: patternChallenge.pattern }
+      };
+      solution = patternChallenge.answer;
+      break;
 
-      case ChallengeType.RECAPTCHA_V2:
-      case ChallengeType.RECAPTCHA_V3:
-        challenge = this.generateRecaptchaChallenge(request.type);
-        solution = 'external'; // Will be validated externally
-        break;
+    case ChallengeType.RECAPTCHA_V2:
+    case ChallengeType.RECAPTCHA_V3:
+      challenge = this.generateRecaptchaChallenge(request.type);
+      solution = 'external'; // Will be validated externally
+      break;
 
-      case ChallengeType.HCAPTCHA:
-        challenge = this.generateHCaptchaChallenge();
-        solution = 'external'; // Will be validated externally
-        break;
+    case ChallengeType.HCAPTCHA:
+      challenge = this.generateHCaptchaChallenge();
+      solution = 'external'; // Will be validated externally
+      break;
 
-      default:
-        throw new Error(`Unsupported challenge type: ${request.type}`);
+    default:
+      throw new Error(`Unsupported challenge type: ${request.type}`);
     }
 
     const challengeResponse: ChallengeResponse = {
@@ -387,19 +387,19 @@ export class ChallengeService implements IChallengeService {
     try {
       // Validate based on challenge type
       switch (storedChallenge.type) {
-        case ChallengeType.RECAPTCHA_V2:
-        case ChallengeType.RECAPTCHA_V3:
-          isValid = await this.validateRecaptchaResponse(validation.solution, storedChallenge.type);
-          break;
+      case ChallengeType.RECAPTCHA_V2:
+      case ChallengeType.RECAPTCHA_V3:
+        isValid = await this.validateRecaptchaResponse(validation.solution, storedChallenge.type);
+        break;
 
-        case ChallengeType.HCAPTCHA:
-          isValid = await this.validateHCaptchaResponse(validation.solution);
-          break;
+      case ChallengeType.HCAPTCHA:
+        isValid = await this.validateHCaptchaResponse(validation.solution);
+        break;
 
-        default:
-          // For custom challenges, compare solutions
-          isValid = this.compareSolutions(validation.solution, storedChallenge.solution);
-          break;
+      default:
+        // For custom challenges, compare solutions
+        isValid = this.compareSolutions(validation.solution, storedChallenge.solution);
+        break;
       }
 
       // Check for escalation based on failed attempts
@@ -518,12 +518,12 @@ export class ChallengeService implements IChallengeService {
 
   private getExpiryMinutes(type: ChallengeType): number {
     switch (type) {
-      case ChallengeType.RECAPTCHA_V2:
-      case ChallengeType.RECAPTCHA_V3:
-      case ChallengeType.HCAPTCHA:
-        return 5; // External providers typically expire quickly
-      default:
-        return this.config.providers.custom?.expiryMinutes || 10;
+    case ChallengeType.RECAPTCHA_V2:
+    case ChallengeType.RECAPTCHA_V3:
+    case ChallengeType.HCAPTCHA:
+      return 5; // External providers typically expire quickly
+    default:
+      return this.config.providers.custom?.expiryMinutes || 10;
     }
   }
 
@@ -535,12 +535,12 @@ export class ChallengeService implements IChallengeService {
     const baseAttempts = this.config.providers.custom?.maxAttempts || 3;
     
     switch (difficulty) {
-      case ChallengeDifficulty.EASY:
-        return baseAttempts + 2;
-      case ChallengeDifficulty.HARD:
-        return Math.max(1, baseAttempts - 1);
-      default:
-        return baseAttempts;
+    case ChallengeDifficulty.EASY:
+      return baseAttempts + 2;
+    case ChallengeDifficulty.HARD:
+      return Math.max(1, baseAttempts - 1);
+    default:
+      return baseAttempts;
     }
   }
 
@@ -702,19 +702,19 @@ export class ChallengeService implements IChallengeService {
     };
 
     switch (action) {
-      case 'generated':
-        stats.totalChallenges++;
-        stats.typeBreakdown[type] = (stats.typeBreakdown[type] || 0) + 1;
-        if (difficulty) {
-          stats.difficultyBreakdown[difficulty] = (stats.difficultyBreakdown[difficulty] || 0) + 1;
-        }
-        break;
-      case 'success':
-        stats.successfulChallenges++;
-        break;
-      case 'failure':
-        stats.failedChallenges++;
-        break;
+    case 'generated':
+      stats.totalChallenges++;
+      stats.typeBreakdown[type] = (stats.typeBreakdown[type] || 0) + 1;
+      if (difficulty) {
+        stats.difficultyBreakdown[difficulty] = (stats.difficultyBreakdown[difficulty] || 0) + 1;
+      }
+      break;
+    case 'success':
+      stats.successfulChallenges++;
+      break;
+    case 'failure':
+      stats.failedChallenges++;
+      break;
     }
 
     this.stats.set(key, stats);

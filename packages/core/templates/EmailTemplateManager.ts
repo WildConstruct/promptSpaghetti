@@ -93,15 +93,15 @@ class TemplateEngine {
   private static processHelpers(template: string, variables: TemplateVariables): string {
     return template.replace(this.HELPER_PATTERN, (match, helper, args) => {
       switch (helper) {
-        case 'capitalize':
-          const text = (variables as any)[args.trim()];
-          return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
-        case 'uppercase':
-          return ((variables as any)[args.trim()] || '').toUpperCase();
-        case 'lowercase':
-          return ((variables as any)[args.trim()] || '').toLowerCase();
-        default:
-          return match; // No helper found, leave as is
+      case 'capitalize':
+        const text = (variables as any)[args.trim()];
+        return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
+      case 'uppercase':
+        return ((variables as any)[args.trim()] || '').toUpperCase();
+      case 'lowercase':
+        return ((variables as any)[args.trim()] || '').toLowerCase();
+      default:
+        return match; // No helper found, leave as is
       }
     });
   }

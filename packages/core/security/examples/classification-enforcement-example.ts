@@ -204,15 +204,15 @@ async function processDataOperation(
   
   // Perform the operation
   switch (operation) {
-    case 'read':
-      console.log(`Reading ${classification} data ${dataId}`);
-      break;
-    case 'write':
-      console.log(`Writing ${classification} data ${dataId}`);
-      break;
-    case 'delete':
-      console.log(`Deleting ${classification} data ${dataId}`);
-      break;
+  case 'read':
+    console.log(`Reading ${classification} data ${dataId}`);
+    break;
+  case 'write':
+    console.log(`Writing ${classification} data ${dataId}`);
+    break;
+  case 'delete':
+    console.log(`Deleting ${classification} data ${dataId}`);
+    break;
   }
 }
 

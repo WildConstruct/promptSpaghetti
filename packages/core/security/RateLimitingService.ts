@@ -376,7 +376,7 @@ export class RateLimitingService extends EventEmitter {
     activeBackoffs: number;
     threatLevels: Record<ThreatLevel, number>;
     topEndpoints: Array<{ endpoint: string; attempts: number }>;
-  } {
+    } {
     let totalAttempts = 0;
     let blockedAttempts = 0;
     const threatCounts: Record<ThreatLevel, number> = {
@@ -668,20 +668,20 @@ export class RateLimitingService extends EventEmitter {
     let delay: number;
     
     switch (config.strategy) {
-      case BackoffStrategy.EXPONENTIAL:
-        delay = config.baseDelay * Math.pow(config.multiplier, level - 1);
-        break;
+    case BackoffStrategy.EXPONENTIAL:
+      delay = config.baseDelay * Math.pow(config.multiplier, level - 1);
+      break;
         
-      case BackoffStrategy.LINEAR:
-        delay = config.baseDelay * level * config.multiplier;
-        break;
+    case BackoffStrategy.LINEAR:
+      delay = config.baseDelay * level * config.multiplier;
+      break;
         
-      case BackoffStrategy.FIBONACCI:
-        delay = config.baseDelay * this.fibonacci(level);
-        break;
+    case BackoffStrategy.FIBONACCI:
+      delay = config.baseDelay * this.fibonacci(level);
+      break;
         
-      default:
-        delay = config.baseDelay * Math.pow(2, level - 1);
+    default:
+      delay = config.baseDelay * Math.pow(2, level - 1);
     }
     
     return Math.min(delay, config.maxDelay);

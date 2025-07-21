@@ -34,19 +34,19 @@ describe('BehaviorAnalyticsService', () => {
     // Create mock instances
     mockDb = {
       query: jest.fn<unknown[], unknown>(),
-      close: jest.fn<unknown[], unknown>(),
+      close: jest.fn<unknown[], unknown>()
     } as jest.Mocked<DatabaseService>;
     
     mockRedis = {
       get: jest.fn<unknown[], unknown>(),
       setex: jest.fn<unknown[], unknown>(),
       del: jest.fn<unknown[], unknown>(),
-      close: jest.fn<unknown[], unknown>(),
+      close: jest.fn<unknown[], unknown>()
     } as jest.Mocked<RedisService>;
 
     mockAuditService = {
       logEvent: jest.fn<unknown[], unknown>(),
-      logSecurityEvent: jest.fn<unknown[], unknown>(),
+      logSecurityEvent: jest.fn<unknown[], unknown>()
     } as jest.Mocked<AuditService>;
 
     const config: Partial<BehaviorAnalyticsConfig> = {

@@ -662,14 +662,14 @@ export class AccessControlManager extends EventEmitter {
     context: AccessContext
   ): Promise<boolean> {
     switch (constraint.type) {
-      case 'time':
-        return this.evaluateTimeConstraint(constraint, context);
-      case 'location':
-        return this.evaluateLocationConstraint(constraint, context);
-      case 'security_level':
-        return await this.evaluateSecurityLevelConstraint(constraint, keyId);
-      default:
-        return true;
+    case 'time':
+      return this.evaluateTimeConstraint(constraint, context);
+    case 'location':
+      return this.evaluateLocationConstraint(constraint, context);
+    case 'security_level':
+      return await this.evaluateSecurityLevelConstraint(constraint, keyId);
+    default:
+      return true;
     }
   }
 
@@ -787,17 +787,17 @@ export class AccessControlManager extends EventEmitter {
   ): Promise<boolean> {
     // Simplified condition evaluation - would be expanded
     switch (condition.type) {
-      case 'operation':
-        return condition.operator === 'equals' 
-          ? operation === condition.value
-          : true;
-      case 'time':
-        const currentHour = context.timestamp.getHours();
-        return condition.operator === 'between'
-          ? currentHour >= condition.value[0] && currentHour <= condition.value[1]
-          : true;
-      default:
-        return false;
+    case 'operation':
+      return condition.operator === 'equals' 
+        ? operation === condition.value
+        : true;
+    case 'time':
+      const currentHour = context.timestamp.getHours();
+      return condition.operator === 'between'
+        ? currentHour >= condition.value[0] && currentHour <= condition.value[1]
+        : true;
+    default:
+      return false;
     }
   }
 

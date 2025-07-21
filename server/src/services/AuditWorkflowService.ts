@@ -689,7 +689,7 @@ export class AuditWorkflowService {
       params.push(filters.priority);
     }
 
-    query += ` ORDER BY priority DESC, created_at ASC`;
+    query += ' ORDER BY priority DESC, created_at ASC';
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapToAuditWorkflow);

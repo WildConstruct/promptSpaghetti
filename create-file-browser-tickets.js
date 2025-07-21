@@ -8,7 +8,7 @@
 const tickets = [
   // Story 1: Project File Format & Core Save/Load System - Phase 1: File Format Specification
   {
-    title: "Design .psg file format JSON schema structure",
+    title: 'Design .psg file format JSON schema structure',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 1: File Format Specification - Step 1
@@ -34,14 +34,14 @@ Design the complete JSON schema structure for .psg (PromptGraph project) files t
 - Define TypeScript interfaces
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Format Specification",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Format Specification',
     step_number: 1
   },
   {
-    title: "Create TypeScript interfaces for project file format",
+    title: 'Create TypeScript interfaces for project file format',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 1: File Format Specification - Step 2
@@ -67,14 +67,14 @@ Create comprehensive TypeScript interfaces for the .psg project file format base
 - Update packages/core/types/index.ts
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Format Specification",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Format Specification',
     step_number: 2
   },
   {
-    title: "Define project metadata structure (name, dates, version, etc.)",
+    title: 'Define project metadata structure (name, dates, version, etc.)',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 1: File Format Specification - Step 3
@@ -100,14 +100,14 @@ Define the comprehensive project metadata structure that will be included in .ps
 - Create validation schemas for metadata
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Format Specification",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Format Specification',
     step_number: 3
   },
   {
-    title: "Create Zod schema for .psg file validation",
+    title: 'Create Zod schema for .psg file validation',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 1: File Format Specification - Step 4
@@ -134,14 +134,14 @@ Create comprehensive Zod validation schemas for .psg project files to ensure dat
 - Integrate with existing validation.ts
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Format Specification",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Format Specification',
     step_number: 4
   },
   {
-    title: "Document .psg file format specification",
+    title: 'Document .psg file format specification',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 1: File Format Specification - Step 5
@@ -169,16 +169,16 @@ Create comprehensive documentation for the .psg file format specification includ
 - Update main documentation index
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Format Specification",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Format Specification',
     step_number: 5
   },
 
   // Phase 2: Core Save Functionality
   {
-    title: "Create /packages/core/projectManager.ts module",
+    title: 'Create /packages/core/projectManager.ts module',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 2: Core Save Functionality - Step 6
@@ -205,14 +205,14 @@ Create the core ProjectManager module that will handle all project file operatio
 - packages/core/index.ts (export ProjectManager)
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Save Functionality",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Save Functionality',
     step_number: 6
   },
   {
-    title: "Implement project serialization from graphStore state",
+    title: 'Implement project serialization from graphStore state',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 2: Core Save Functionality - Step 7
@@ -239,14 +239,14 @@ Implement the core serialization logic that converts the current graphStore stat
 - Add unit tests for serialization logic
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Save Functionality",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Save Functionality',
     step_number: 7
   },
   {
-    title: "Add project metadata generation (timestamps, version)",
+    title: 'Add project metadata generation (timestamps, version)',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 2: Core Save Functionality - Step 8
@@ -273,14 +273,14 @@ Implement automatic generation of project metadata including timestamps, version
 - packages/core/utils/projectUtils.ts (new utility functions)
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Save Functionality",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Save Functionality',
     step_number: 8
   },
   {
-    title: "Create save project function with file validation",
+    title: 'Create save project function with file validation',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 2: Core Save Functionality - Step 9
@@ -307,14 +307,14 @@ Implement the main save project function that validates the serialized data and 
 - Add comprehensive error types and handling
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Save Functionality",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Save Functionality',
     step_number: 9
   },
   {
-    title: "Implement browser file download for .psg files",
+    title: 'Implement browser file download for .psg files',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 2: Core Save Functionality - Step 10
@@ -341,16 +341,16 @@ Implement browser-based file download functionality to save .psg project files t
 - packages/core/projectManager.ts (integrate download functionality)
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Save Functionality",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Save Functionality',
     step_number: 10
   },
 
   // Phase 3: Core Load Functionality
   {
-    title: "Implement .psg file parsing and validation",
+    title: 'Implement .psg file parsing and validation',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 3: Core Load Functionality - Step 11
@@ -377,14 +377,14 @@ Implement parsing and validation of .psg project files to safely load project da
 - Add security validation utilities
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Load Functionality",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Load Functionality',
     step_number: 11
   },
   {
-    title: "Create project deserialization to graphStore state",
+    title: 'Create project deserialization to graphStore state',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 3: Core Load Functionality - Step 12
@@ -411,14 +411,14 @@ Implement deserialization logic that converts validated .psg file data back into
 - Integration with graphStore state management
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Load Functionality",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Load Functionality',
     step_number: 12
   },
   {
-    title: "Add version compatibility checking for .psg files",
+    title: 'Add version compatibility checking for .psg files',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 3: Core Load Functionality - Step 13
@@ -446,14 +446,14 @@ Implement version compatibility checking to handle .psg files created with diffe
 - Version compatibility configuration
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Load Functionality",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Load Functionality',
     step_number: 13
   },
   {
-    title: "Implement state restoration with existing graph validation",
+    title: 'Implement state restoration with existing graph validation',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 3: Core Load Functionality - Step 14
@@ -480,14 +480,14 @@ Integrate project loading with existing graph validation systems to ensure loade
 - Ensure compatibility with existing validation systems
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Load Functionality",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Load Functionality',
     step_number: 14
   },
   {
-    title: "Create load project function with error handling",
+    title: 'Create load project function with error handling',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 3: Core Load Functionality - Step 15
@@ -514,16 +514,16 @@ Implement the main loadProject() function that coordinates the complete project 
 - Complete error handling and user feedback systems
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Core Load Functionality",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Core Load Functionality',
     step_number: 15
   },
 
   // Phase 4: GraphStore Integration
   {
-    title: "Extend graphStore with project save/load actions",
+    title: 'Extend graphStore with project save/load actions',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 4: GraphStore Integration - Step 16
@@ -550,14 +550,14 @@ Extend the existing Zustand graphStore with new actions for project save and loa
 - Update store type definitions
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "GraphStore Integration",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'GraphStore Integration',
     step_number: 16
   },
   {
-    title: "Add project metadata to graphStore state",
+    title: 'Add project metadata to graphStore state',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 4: GraphStore Integration - Step 17
@@ -584,14 +584,14 @@ Extend graphStore state to include project metadata information, allowing the ap
 - Update TypeScript interfaces for store state
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "GraphStore Integration",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'GraphStore Integration',
     step_number: 17
   },
   {
-    title: "Implement state serialization helpers",
+    title: 'Implement state serialization helpers',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 4: GraphStore Integration - Step 18
@@ -618,14 +618,14 @@ Create utility functions that help with serializing and deserializing specific p
 - packages/core/utils/index.ts (export utilities)
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "GraphStore Integration",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'GraphStore Integration',
     step_number: 18
   },
   {
-    title: "Add state restoration validation",
+    title: 'Add state restoration validation',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 4: GraphStore Integration - Step 19
@@ -652,14 +652,14 @@ Implement validation logic specifically for state restoration to ensure loaded p
 - Integrate with graphStore state restoration
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "GraphStore Integration",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'GraphStore Integration',
     step_number: 19
   },
   {
-    title: "Ensure existing graphStore operations work with loaded projects",
+    title: 'Ensure existing graphStore operations work with loaded projects',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 4: GraphStore Integration - Step 20
@@ -686,16 +686,16 @@ Test and ensure that all existing graphStore operations (node creation, editing,
 - Test existing graphStore functionality with loaded state
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "GraphStore Integration",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'GraphStore Integration',
     step_number: 20
   },
 
   // Phase 5: File Validation & Error Handling
   {
-    title: "Create comprehensive .psg file validation rules",
+    title: 'Create comprehensive .psg file validation rules',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 5: File Validation & Error Handling - Step 21
@@ -722,14 +722,14 @@ Implement comprehensive validation rules for .psg files covering all aspects of 
 - Extend existing validation infrastructure
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Validation & Error Handling",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Validation & Error Handling',
     step_number: 21
   },
   {
-    title: "Implement error messages for corrupted files",
+    title: 'Implement error messages for corrupted files',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 5: File Validation & Error Handling - Step 22
@@ -756,14 +756,14 @@ Create user-friendly error messages and recovery suggestions for various types o
 - packages/core/utils/errorRecovery.ts (new)
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Validation & Error Handling",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Validation & Error Handling',
     step_number: 22
   },
   {
-    title: "Add version migration for older .psg file formats",
+    title: 'Add version migration for older .psg file formats',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 5: File Validation & Error Handling - Step 23
@@ -790,14 +790,14 @@ Implement automatic migration system for older .psg file formats to maintain bac
 - Migration strategy documentation
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "low",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Validation & Error Handling",
+    priority: 'low',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Validation & Error Handling',
     step_number: 23
   },
   {
-    title: "Create file size validation and warnings",
+    title: 'Create file size validation and warnings',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 5: File Validation & Error Handling - Step 24
@@ -824,14 +824,14 @@ Implement file size validation to warn users about potentially problematic large
 - Performance monitoring and optimization utilities
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "low",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Validation & Error Handling",
+    priority: 'low',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Validation & Error Handling',
     step_number: 24
   },
   {
-    title: "Test save/load with various graph complexities",
+    title: 'Test save/load with various graph complexities',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 5: File Validation & Error Handling - Step 25
@@ -858,16 +858,16 @@ Create comprehensive test suite covering save/load operations with projects of v
 - Test utilities for project generation
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "File Validation & Error Handling",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'File Validation & Error Handling',
     step_number: 25
   },
 
   // Phase 6: Performance & Testing
   {
-    title: "Optimize serialization for large graphs (100+ nodes)",
+    title: 'Optimize serialization for large graphs (100+ nodes)',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 6: Performance & Testing - Step 26
@@ -894,14 +894,14 @@ Optimize the serialization process to handle large graphs efficiently, targeting
 - packages/core/utils/performanceUtils.ts (new)
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Performance & Testing",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Performance & Testing',
     step_number: 26
   },
   {
-    title: "Add progress indicators for large file operations",
+    title: 'Add progress indicators for large file operations',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 6: Performance & Testing - Step 27
@@ -928,14 +928,14 @@ Implement progress indicators and user feedback for save/load operations, especi
 - Progress tracking integration in ProjectManager
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Performance & Testing",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Performance & Testing',
     step_number: 27
   },
   {
-    title: "Test memory usage during save/load operations",
+    title: 'Test memory usage during save/load operations',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 6: Performance & Testing - Step 28
@@ -962,14 +962,14 @@ Implement comprehensive memory usage testing to ensure save/load operations don'
 - Memory monitoring utilities
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "low",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Performance & Testing",
+    priority: 'low',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Performance & Testing',
     step_number: 28
   },
   {
-    title: "Validate cross-browser file API compatibility",
+    title: 'Validate cross-browser file API compatibility',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 6: Performance & Testing - Step 29
@@ -996,14 +996,14 @@ Ensure file save/load operations work consistently across all major browsers and
 - Browser compatibility utilities
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Performance & Testing",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Performance & Testing',
     step_number: 29
   },
   {
-    title: "Performance test with complex graphs and large files",
+    title: 'Performance test with complex graphs and large files',
     description: `Epic: File Browser & Project Management
 Story 1: Project File Format & Core Save/Load System
 Phase 6: Performance & Testing - Step 30
@@ -1030,16 +1030,16 @@ Conduct comprehensive performance testing with complex graph structures and larg
 - Performance benchmarking utilities and reporting
 
 **Epic Context:** Story 1 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "Project File Format & Core Save/Load System",
-    phase: "Performance & Testing",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'Project File Format & Core Save/Load System',
+    phase: 'Performance & Testing',
     step_number: 30
   },
 
   // Story 2: File Browser Interface & Project Management UI - Phase 1: File Browser Component Structure
   {
-    title: "Create /packages/core/components/FileBrowser/ directory",
+    title: 'Create /packages/core/components/FileBrowser/ directory',
     description: `Epic: File Browser & Project Management
 Story 2: File Browser Interface & Project Management UI
 Phase 1: File Browser Component Structure - Step 1
@@ -1067,14 +1067,14 @@ Create the foundational directory structure for the file browser components, est
 - packages/core/components/index.ts (update exports)
 
 **Epic Context:** Story 2 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "File Browser Interface & Project Management UI",
-    phase: "File Browser Component Structure",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'File Browser Interface & Project Management UI',
+    phase: 'File Browser Component Structure',
     step_number: 1
   },
   {
-    title: "Create FileBrowser.tsx main component",
+    title: 'Create FileBrowser.tsx main component',
     description: `Epic: File Browser & Project Management
 Story 2: File Browser Interface & Project Management UI
 Phase 1: File Browser Component Structure - Step 2
@@ -1101,14 +1101,14 @@ Create the main FileBrowser component that will serve as the container for all f
 - Component props and state interfaces
 
 **Epic Context:** Story 2 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "File Browser Interface & Project Management UI",
-    phase: "File Browser Component Structure",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'File Browser Interface & Project Management UI',
+    phase: 'File Browser Component Structure',
     step_number: 2
   },
   {
-    title: "Create ProjectCard.tsx component for project display",
+    title: 'Create ProjectCard.tsx component for project display',
     description: `Epic: File Browser & Project Management
 Story 2: File Browser Interface & Project Management UI
 Phase 1: File Browser Component Structure - Step 3
@@ -1135,14 +1135,14 @@ Create the ProjectCard component to display individual project information inclu
 - ProjectCard props and styling interfaces
 
 **Epic Context:** Story 2 of 3 in File Browser & Project Management Epic`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "File Browser Interface & Project Management UI",
-    phase: "File Browser Component Structure",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'File Browser Interface & Project Management UI',
+    phase: 'File Browser Component Structure',
     step_number: 3
   },
   {
-    title: "Create ProjectList.tsx component for project listing",
+    title: 'Create ProjectList.tsx component for project listing',
     description: `Epic: File Browser & Project Management
 Story 2: File Browser Interface & Project Management UI
 Phase 1: File Browser Component Structure - Step 4
@@ -1169,14 +1169,14 @@ Create the ProjectList component to manage the display of multiple projects usin
 - List virtualization and layout utilities
 
 **Epic Context:** Story 2 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "File Browser Interface & Project Management UI",
-    phase: "File Browser Component Structure",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'File Browser Interface & Project Management UI',
+    phase: 'File Browser Component Structure',
     step_number: 4
   },
   {
-    title: "Design file browser layout and responsive structure",
+    title: 'Design file browser layout and responsive structure',
     description: `Epic: File Browser & Project Management
 Story 2: File Browser Interface & Project Management UI
 Phase 1: File Browser Component Structure - Step 5
@@ -1203,10 +1203,10 @@ Design the overall layout structure for the file browser interface ensuring resp
 - Responsive layout utilities and breakpoints
 
 **Epic Context:** Story 2 of 3 in File Browser & Project Management Epic`,
-    priority: "medium",
-    epic: "File Browser & Project Management",
-    story: "File Browser Interface & Project Management UI",
-    phase: "File Browser Component Structure",
+    priority: 'medium',
+    epic: 'File Browser & Project Management',
+    story: 'File Browser Interface & Project Management UI',
+    phase: 'File Browser Component Structure',
     step_number: 5
   }
 ];

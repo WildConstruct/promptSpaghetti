@@ -480,8 +480,8 @@ export class ChallengeTelemetryService extends EventEmitter {
       if (matches) {
         patterns.push(pattern.name);
         riskScore += (pattern.severity === 'critical' ? 30 : 
-                     pattern.severity === 'high' ? 20 :
-                     pattern.severity === 'medium' ? 10 : 5);
+          pattern.severity === 'high' ? 20 :
+            pattern.severity === 'medium' ? 10 : 5);
         
         // Add recommendations based on pattern
         pattern.actions.forEach(action => {
@@ -679,7 +679,7 @@ export class ChallengeTelemetryService extends EventEmitter {
     fraudAlerts: Array<{ level: string; description: string; timestamp: Date }>;
     performanceMetrics: Array<{ metric: string; value: number; trend: 'up' | 'down' | 'stable' }>;
     geographicDistribution: Array<{ country: string; attempts: number; successRate: number }>;
-  } {
+    } {
     const now = new Date();
     const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
     
@@ -869,18 +869,18 @@ export class ChallengeTelemetryService extends EventEmitter {
   
   private evaluateCondition(value: any, operator: string, target: any): boolean {
     switch (operator) {
-      case 'equals':
-        return value === target;
-      case 'greater_than':
-        return value > target;
-      case 'less_than':
-        return value < target;
-      case 'contains':
-        return String(value).includes(String(target));
-      case 'in_range':
-        return Array.isArray(target) && value >= target[0] && value <= target[1];
-      default:
-        return false;
+    case 'equals':
+      return value === target;
+    case 'greater_than':
+      return value > target;
+    case 'less_than':
+      return value < target;
+    case 'contains':
+      return String(value).includes(String(target));
+    case 'in_range':
+      return Array.isArray(target) && value >= target[0] && value <= target[1];
+    default:
+      return false;
     }
   }
   

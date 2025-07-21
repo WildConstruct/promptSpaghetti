@@ -603,49 +603,49 @@ export class PasswordComplexityValidator {
    */
   private getDefaultRules(mode: string): PasswordComplexityRule[] {
     switch (mode) {
-      case 'strict':
-        return [
-          PasswordRules.minLength(12),
-          PasswordRules.maxLength(128),
-          PasswordRules.requireUppercase(2),
-          PasswordRules.requireLowercase(2),
-          PasswordRules.requireDigits(2),
-          PasswordRules.requireSpecialChars(2),
-          PasswordRules.noConsecutiveIdentical(2),
-          PasswordRules.noCommonSequences(),
-          PasswordRules.noPersonalInfo(),
-          PasswordRules.minimumEntropy(60),
-          PasswordRules.notInHistory(10)
-        ];
+    case 'strict':
+      return [
+        PasswordRules.minLength(12),
+        PasswordRules.maxLength(128),
+        PasswordRules.requireUppercase(2),
+        PasswordRules.requireLowercase(2),
+        PasswordRules.requireDigits(2),
+        PasswordRules.requireSpecialChars(2),
+        PasswordRules.noConsecutiveIdentical(2),
+        PasswordRules.noCommonSequences(),
+        PasswordRules.noPersonalInfo(),
+        PasswordRules.minimumEntropy(60),
+        PasswordRules.notInHistory(10)
+      ];
 
-      case 'balanced':
-        return [
-          PasswordRules.minLength(8),
-          PasswordRules.maxLength(128),
-          PasswordRules.requireUppercase(1),
-          PasswordRules.requireLowercase(1),
-          PasswordRules.requireDigits(1),
-          PasswordRules.requireSpecialChars(1),
-          PasswordRules.noConsecutiveIdentical(3),
-          PasswordRules.noCommonSequences(),
-          PasswordRules.noPersonalInfo(),
-          PasswordRules.minimumEntropy(40),
-          PasswordRules.notInHistory(5)
-        ];
+    case 'balanced':
+      return [
+        PasswordRules.minLength(8),
+        PasswordRules.maxLength(128),
+        PasswordRules.requireUppercase(1),
+        PasswordRules.requireLowercase(1),
+        PasswordRules.requireDigits(1),
+        PasswordRules.requireSpecialChars(1),
+        PasswordRules.noConsecutiveIdentical(3),
+        PasswordRules.noCommonSequences(),
+        PasswordRules.noPersonalInfo(),
+        PasswordRules.minimumEntropy(40),
+        PasswordRules.notInHistory(5)
+      ];
 
-      case 'lenient':
-        return [
-          PasswordRules.minLength(6),
-          PasswordRules.maxLength(128),
-          PasswordRules.requireUppercase(1),
-          PasswordRules.requireLowercase(1),
-          PasswordRules.requireDigits(1),
-          PasswordRules.noPersonalInfo(),
-          PasswordRules.notInHistory(3)
-        ];
+    case 'lenient':
+      return [
+        PasswordRules.minLength(6),
+        PasswordRules.maxLength(128),
+        PasswordRules.requireUppercase(1),
+        PasswordRules.requireLowercase(1),
+        PasswordRules.requireDigits(1),
+        PasswordRules.noPersonalInfo(),
+        PasswordRules.notInHistory(3)
+      ];
 
-      default:
-        return [];
+    default:
+      return [];
     }
   }
 

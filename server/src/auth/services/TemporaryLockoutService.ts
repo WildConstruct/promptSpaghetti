@@ -628,16 +628,16 @@ export class TemporaryLockoutService extends EventEmitter {
 
   private isAttemptRelevantToTrigger(attempt: LockoutAttempt, trigger: LockoutTrigger): boolean {
     switch (trigger.type) {
-      case 'failed_login':
-        return attempt.attemptType === 'authentication' && !attempt.success;
-      case 'rate_limit':
-        return attempt.details.responseCode === 429;
-      case 'suspicious_activity':
-        return this.isSuspiciousAttempt(attempt);
-      case 'security_violation':
-        return this.isSecurityViolation(attempt);
-      default:
-        return false;
+    case 'failed_login':
+      return attempt.attemptType === 'authentication' && !attempt.success;
+    case 'rate_limit':
+      return attempt.details.responseCode === 429;
+    case 'suspicious_activity':
+      return this.isSuspiciousAttempt(attempt);
+    case 'security_violation':
+      return this.isSecurityViolation(attempt);
+    default:
+      return false;
     }
   }
 
@@ -838,18 +838,18 @@ export class TemporaryLockoutService extends EventEmitter {
     const restrictions = [];
     
     switch (lockout.triggerType) {
-      case 'failed_login':
-        restrictions.push('Login disabled');
-        break;
-      case 'rate_limit':
-        restrictions.push('API access limited');
-        break;
-      case 'suspicious_activity':
-        restrictions.push('All access suspended');
-        break;
-      case 'security_violation':
-        restrictions.push('Complete account lockdown');
-        break;
+    case 'failed_login':
+      restrictions.push('Login disabled');
+      break;
+    case 'rate_limit':
+      restrictions.push('API access limited');
+      break;
+    case 'suspicious_activity':
+      restrictions.push('All access suspended');
+      break;
+    case 'security_violation':
+      restrictions.push('Complete account lockdown');
+      break;
     }
     
     if (lockout.severity === 'critical') {

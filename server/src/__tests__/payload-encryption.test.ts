@@ -273,7 +273,7 @@ describe('PayloadEncryptionService', () => {
 
     it('should reject invalid payload structure', async () => {
       const invalidPayload = {
-        data: 'encrypted-data',
+        data: 'encrypted-data'
         // Missing required fields
       } as EncryptedPayload;
 

@@ -349,25 +349,25 @@ export class SessionLimitManager extends EventEmitter {
   ): Promise<void> {
     try {
       switch (action.action) {
-        case 'terminate':
-          await this.terminateSession(sessionId, action.reason, action.notifyUser);
-          break;
+      case 'terminate':
+        await this.terminateSession(sessionId, action.reason, action.notifyUser);
+        break;
           
-        case 'warn':
-          await this.warnUser(userId, sessionId, action.reason, action.details);
-          break;
+      case 'warn':
+        await this.warnUser(userId, sessionId, action.reason, action.details);
+        break;
           
-        case 'extend_grace':
-          await this.extendGracePeriod(
-            sessionId,
-            action.gracePeriodMinutes || 5,
-            action.reason
-          );
-          break;
+      case 'extend_grace':
+        await this.extendGracePeriod(
+          sessionId,
+          action.gracePeriodMinutes || 5,
+          action.reason
+        );
+        break;
           
-        case 'upgrade_required':
-          await this.notifyUpgradeRequired(userId, action.reason, action.details);
-          break;
+      case 'upgrade_required':
+        await this.notifyUpgradeRequired(userId, action.reason, action.details);
+        break;
       }
       
       // Log enforcement action
@@ -624,7 +624,7 @@ export class SessionLimitManager extends EventEmitter {
         params.push(filters.severity);
       }
       
-      query += ` ORDER BY created_at DESC`;
+      query += ' ORDER BY created_at DESC';
       
       if (filters?.limit) {
         query += ` LIMIT $${paramIndex++}`;

@@ -145,7 +145,7 @@ export function PasswordValidator({
           </div>
           <Progress 
             value={validationResult.score} 
-            className={`h-2 bg-gray-200`}
+            className={'h-2 bg-gray-200'}
             indicatorClassName={`bg-${strengthConfig.color}-500`}
           />
           <div className="flex items-center justify-between text-xs text-gray-500">

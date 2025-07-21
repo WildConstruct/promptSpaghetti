@@ -313,7 +313,7 @@ describe('SecureCodeGenerator', () => {
       
       expect(generator.validateCodeFormat('123abc', 'numeric')).toEqual({
         valid: false,
-        reason: "Invalid character 'A' in code"
+        reason: 'Invalid character \'A\' in code'
       });
     });
     
@@ -323,7 +323,7 @@ describe('SecureCodeGenerator', () => {
       
       expect(generator.validateCodeFormat('ABC0123', 'alphanumeric')).toEqual({
         valid: false,
-        reason: "Invalid character '0' in code"
+        reason: 'Invalid character \'0\' in code'
       });
     });
     

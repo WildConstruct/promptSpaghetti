@@ -8,7 +8,7 @@
 const remainingTickets = [
   // Story 2 Phase 2: Save/Open Dialog Components (Steps 6-10)
   {
-    title: "Create /packages/core/components/ProjectDialogs/ directory",
+    title: 'Create /packages/core/components/ProjectDialogs/ directory',
     description: `Epic: File Browser & Project Management
 Story 2: File Browser Interface & Project Management UI
 Phase 2: Save/Open Dialog Components - Step 6
@@ -25,14 +25,14 @@ Create the directory structure for project dialog components including save, ope
 **Files to create/modify:**
 - packages/core/components/ProjectDialogs/ (new directory)
 - packages/core/components/ProjectDialogs/index.ts`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "File Browser Interface & Project Management UI",
-    phase: "Save/Open Dialog Components",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'File Browser Interface & Project Management UI',
+    phase: 'Save/Open Dialog Components',
     step_number: 6
   },
   {
-    title: "Create SaveProjectDialog.tsx with form validation",
+    title: 'Create SaveProjectDialog.tsx with form validation',
     description: `Epic: File Browser & Project Management
 Story 2: File Browser Interface & Project Management UI
 Phase 2: Save/Open Dialog Components - Step 7
@@ -48,17 +48,17 @@ Create the save project dialog with form validation for project naming and save 
 
 **Files to create/modify:**
 - packages/core/components/ProjectDialogs/SaveProjectDialog.tsx`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "File Browser Interface & Project Management UI",
-    phase: "Save/Open Dialog Components",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'File Browser Interface & Project Management UI',
+    phase: 'Save/Open Dialog Components',
     step_number: 7
   },
   // Continue with remaining Story 2 tasks...
 
   // Story 3: Auto-Recovery & Recent Files Features - Phase 1: Auto-Save Infrastructure (Steps 1-5)
   {
-    title: "Create /packages/core/autoSave.ts module",
+    title: 'Create /packages/core/autoSave.ts module',
     description: `Epic: File Browser & Project Management
 Story 3: Auto-Recovery & Recent Files Features
 Phase 1: Auto-Save Infrastructure - Step 1
@@ -74,10 +74,10 @@ Create the core auto-save module that handles automatic saving of project state 
 
 **Files to create/modify:**
 - packages/core/autoSave.ts (new)`,
-    priority: "high",
-    epic: "File Browser & Project Management",
-    story: "Auto-Recovery & Recent Files Features",
-    phase: "Auto-Save Infrastructure",
+    priority: 'high',
+    epic: 'File Browser & Project Management',
+    story: 'Auto-Recovery & Recent Files Features',
+    phase: 'Auto-Save Infrastructure',
     step_number: 1
   }
   // ... Continue with all remaining 55 tasks

@@ -774,18 +774,18 @@ export class IdleTimeoutDetectionService extends EventEmitter {
     session.status.state = 'terminated';
 
     switch (policy.actions.onTimeout.action) {
-      case 'logout':
-        await this.performLogout(session, policy.actions.onTimeout.gracefulShutdown);
-        break;
-      case 'lock':
-        await this.performSessionLock(session);
-        break;
-      case 'prompt_reauth':
-        await this.promptReauthentication(session);
-        break;
-      case 'degrade_session':
-        await this.degradeSession(session);
-        break;
+    case 'logout':
+      await this.performLogout(session, policy.actions.onTimeout.gracefulShutdown);
+      break;
+    case 'lock':
+      await this.performSessionLock(session);
+      break;
+    case 'prompt_reauth':
+      await this.promptReauthentication(session);
+      break;
+    case 'degrade_session':
+      await this.degradeSession(session);
+      break;
     }
 
     // Clean up session tracking

@@ -744,10 +744,10 @@ class AgentProductivityDashboard {
     const { velocity, avgCompletionTime, qualityScore } = metrics;
     
     const velocityScore = velocity.daily >= this.config.thresholds.excellentVelocity ? 2 : 
-                         velocity.daily >= this.config.thresholds.goodVelocity ? 1 : 0;
+      velocity.daily >= this.config.thresholds.goodVelocity ? 1 : 0;
     
     const timeScore = avgCompletionTime <= this.config.thresholds.fastCompletion ? 2 :
-                     avgCompletionTime <= this.config.thresholds.slowCompletion ? 1 : 0;
+      avgCompletionTime <= this.config.thresholds.slowCompletion ? 1 : 0;
     
     const qualityScoreValue = qualityScore >= 0.9 ? 2 : qualityScore >= 0.7 ? 1 : 0;
     
@@ -851,19 +851,19 @@ class AgentProductivityDashboard {
       
       // Categorize by state
       switch (task.state) {
-        case 'TODO':
-        case 'ASSIGNED':
-          agentData.assigned.push(task);
-          break;
-        case 'IN_PROGRESS':
-          agentData.inProgress.push(task);
-          break;
-        case 'REVIEW':
-          agentData.inReview.push(task);
-          break;
-        case 'COMPLETED':
-          agentData.completed.push(task);
-          break;
+      case 'TODO':
+      case 'ASSIGNED':
+        agentData.assigned.push(task);
+        break;
+      case 'IN_PROGRESS':
+        agentData.inProgress.push(task);
+        break;
+      case 'REVIEW':
+        agentData.inReview.push(task);
+        break;
+      case 'COMPLETED':
+        agentData.completed.push(task);
+        break;
       }
     });
     
@@ -936,19 +936,19 @@ class AgentProductivityDashboard {
     const filename = `productivity-metrics-${timestamp}`;
     
     switch (format) {
-      case 'json':
-        const jsonFile = path.join(this.dataDir, `${filename}.json`);
-        await fs.writeFile(jsonFile, JSON.stringify(data, null, 2));
-        return jsonFile;
+    case 'json':
+      const jsonFile = path.join(this.dataDir, `${filename}.json`);
+      await fs.writeFile(jsonFile, JSON.stringify(data, null, 2));
+      return jsonFile;
       
-      case 'csv':
-        const csvFile = path.join(this.dataDir, `${filename}.csv`);
-        const csvContent = this.convertToCSV(data);
-        await fs.writeFile(csvFile, csvContent);
-        return csvFile;
+    case 'csv':
+      const csvFile = path.join(this.dataDir, `${filename}.csv`);
+      const csvContent = this.convertToCSV(data);
+      await fs.writeFile(csvFile, csvContent);
+      return csvFile;
       
-      default:
-        throw new Error(`Unsupported format: ${format}`);
+    default:
+      throw new Error(`Unsupported format: ${format}`);
     }
   }
 
@@ -984,14 +984,14 @@ class AgentProductivityDashboard {
     console.log('📊 AGENT PRODUCTIVITY SUMMARY');
     console.log('='.repeat(60));
     
-    console.log(`\n🎯 TEAM OVERVIEW:`);
+    console.log('\n🎯 TEAM OVERVIEW:');
     console.log(`   Active Agents: ${this.teamMetrics.teamSize}`);
     console.log(`   Total Daily Velocity: ${this.teamMetrics.totalVelocity?.daily?.toFixed(1) || 0} tasks/day`);
     console.log(`   Average Completion Time: ${this.teamMetrics.avgCompletionTime?.toFixed(1) || 0} hours`);
     console.log(`   Team Quality Score: ${((this.teamMetrics.avgQualityScore || 0) * 100).toFixed(1)}%`);
     
     if (agents.length > 0) {
-      console.log(`\n🏆 TOP PERFORMERS:`);
+      console.log('\n🏆 TOP PERFORMERS:');
       const sortedAgents = agents.sort((a, b) => b.velocity.daily - a.velocity.daily);
       sortedAgents.slice(0, 3).forEach((agent, index) => {
         const medal = ['🥇', '🥈', '🥉'][index];
@@ -1000,7 +1000,7 @@ class AgentProductivityDashboard {
     }
     
     if (this.insights.length > 0) {
-      console.log(`\n💡 KEY INSIGHTS:`);
+      console.log('\n💡 KEY INSIGHTS:');
       this.insights.slice(0, 3).forEach(insight => {
         const icon = { positive: '✅', warning: '⚠️', attention: '📍' }[insight.level] || '•';
         console.log(`   ${icon} ${insight.message}`);
@@ -1023,34 +1023,34 @@ if (require.main === module) {
       await dashboard.initialize();
       
       switch (command) {
-        case 'collect':
-        case 'run':
-          await dashboard.collectMetrics();
-          dashboard.generateSummaryReport();
-          break;
+      case 'collect':
+      case 'run':
+        await dashboard.collectMetrics();
+        dashboard.generateSummaryReport();
+        break;
           
-        case 'dashboard':
-        case 'html':
-          await dashboard.collectMetrics();
-          const dashboardFile = await dashboard.generateDashboard();
-          console.log(`🎨 Dashboard available at: file://${dashboardFile}`);
-          break;
+      case 'dashboard':
+      case 'html':
+        await dashboard.collectMetrics();
+        const dashboardFile = await dashboard.generateDashboard();
+        console.log(`🎨 Dashboard available at: file://${dashboardFile}`);
+        break;
           
-        case 'export':
-          const format = args[1] || 'json';
-          await dashboard.collectMetrics();
-          const exportFile = await dashboard.exportMetrics(format);
-          console.log(`📁 Metrics exported to: ${exportFile}`);
-          break;
+      case 'export':
+        const format = args[1] || 'json';
+        await dashboard.collectMetrics();
+        const exportFile = await dashboard.exportMetrics(format);
+        console.log(`📁 Metrics exported to: ${exportFile}`);
+        break;
           
-        case 'summary':
-          await dashboard.collectMetrics();
-          dashboard.generateSummaryReport();
-          break;
+      case 'summary':
+        await dashboard.collectMetrics();
+        dashboard.generateSummaryReport();
+        break;
           
-        case 'help':
-        default:
-          console.log(`
+      case 'help':
+      default:
+        console.log(`
 📊 Agent Productivity Dashboard
 
 USAGE:
@@ -1081,7 +1081,7 @@ OUTPUT:
   🎨 Dashboard: src/data/productivity/dashboard.html
   📁 Exports: src/data/productivity/
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

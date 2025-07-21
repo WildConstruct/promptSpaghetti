@@ -32,25 +32,25 @@ describe('UnusualLocationDetectionService', () => {
     // Create mock instances
     mockDb = {
       query: jest.fn<unknown[], unknown>(),
-      close: jest.fn<unknown[], unknown>(),
+      close: jest.fn<unknown[], unknown>()
     } as jest.Mocked<DatabaseService>;
     
     mockRedis = {
       get: jest.fn<unknown[], unknown>(),
       setex: jest.fn<unknown[], unknown>(),
       del: jest.fn<unknown[], unknown>(),
-      close: jest.fn<unknown[], unknown>(),
+      close: jest.fn<unknown[], unknown>()
     } as jest.Mocked<RedisService>;
 
     mockAuditService = {
       logSecurityEvent: jest.fn<unknown[], unknown>(),
-      logEvent: jest.fn<unknown[], unknown>(),
+      logEvent: jest.fn<unknown[], unknown>()
     } as jest.Mocked<AuditService>;
 
     mockGeolocationService = {
       getGeolocationData: jest.fn<unknown[], unknown>(),
       getUserLocationHistory: jest.fn<unknown[], unknown>(),
-      trackLoginLocation: jest.fn<unknown[], unknown>(),
+      trackLoginLocation: jest.fn<unknown[], unknown>()
     } as jest.Mocked<GeolocationService>;
 
     const config: Partial<UnusualLocationConfig> = {
@@ -59,7 +59,7 @@ describe('UnusualLocationDetectionService', () => {
       riskScoreThreshold: 75,
       enableMLDetection: false, // Disable for tests
       trustedCountries: ['US', 'CA', 'GB'],
-      blockedCountries: ['XX'],
+      blockedCountries: ['XX']
     };
 
     service = new UnusualLocationDetectionService(
@@ -309,10 +309,10 @@ describe('UnusualLocationDetectionService', () => {
         .mockResolvedValueOnce({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] }) // Recent locations query
         .mockResolvedValueOnce(
           { rows: [{ insertId: 'event123' }],
-          command: '',
-          rowCount: 1,
-          oid: 0,
-          fields: [] }
+            command: '',
+            rowCount: 1,
+            oid: 0,
+            fields: [] }
         ); // Event insertion
 
       const result = await service.detectUnusualLocation(
@@ -379,10 +379,10 @@ describe('UnusualLocationDetectionService', () => {
         .mockResolvedValueOnce({ rows: [], command: '', rowCount: 0, oid: 0, fields: [] }) // Recent locations query
         .mockResolvedValueOnce(
           { rows: [{ insertId: 'event123' }],
-          command: '',
-          rowCount: 1,
-          oid: 0,
-          fields: [] }
+            command: '',
+            rowCount: 1,
+            oid: 0,
+            fields: [] }
         ); // Event insertion
 
       const result = await service.detectUnusualLocation(

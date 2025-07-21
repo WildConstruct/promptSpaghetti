@@ -409,7 +409,7 @@ export class SessionTimeoutController extends EventEmitter {
     extensionUsage: number;
     timeoutReasons: Record<TimeoutReason, number>;
     policyDistribution: Record<TimeoutPolicy, number>;
-  } {
+    } {
     const states = Array.from(this.sessionStates.values());
     const activeStates = states.filter(s => s.isActive);
     
@@ -491,11 +491,11 @@ export class SessionTimeoutController extends EventEmitter {
       
       let intensityScore = 0;
       switch (activity.intensity) {
-        case ActivityLevel.CRITICAL: intensityScore = 1.0; break;
-        case ActivityLevel.HIGH: intensityScore = 0.8; break;
-        case ActivityLevel.MEDIUM: intensityScore = 0.5; break;
-        case ActivityLevel.LOW: intensityScore = 0.2; break;
-        case ActivityLevel.NONE: intensityScore = 0; break;
+      case ActivityLevel.CRITICAL: intensityScore = 1.0; break;
+      case ActivityLevel.HIGH: intensityScore = 0.8; break;
+      case ActivityLevel.MEDIUM: intensityScore = 0.5; break;
+      case ActivityLevel.LOW: intensityScore = 0.2; break;
+      case ActivityLevel.NONE: intensityScore = 0; break;
       }
       
       score += intensityScore * ageMultiplier;
@@ -640,29 +640,29 @@ export class SessionTimeoutController extends EventEmitter {
     let newTimeout: number;
     
     switch (state.configuration.policy) {
-      case TimeoutPolicy.STRICT:
-        newTimeout = state.configuration.idleTimeout;
-        break;
+    case TimeoutPolicy.STRICT:
+      newTimeout = state.configuration.idleTimeout;
+      break;
         
-      case TimeoutPolicy.FLEXIBLE:
-        // Extend based on activity level
-        const activityMultiplier = 1 + (state.activityScore * 0.5);
-        newTimeout = state.configuration.idleTimeout * activityMultiplier;
-        break;
+    case TimeoutPolicy.FLEXIBLE:
+      // Extend based on activity level
+      const activityMultiplier = 1 + (state.activityScore * 0.5);
+      newTimeout = state.configuration.idleTimeout * activityMultiplier;
+      break;
         
-      case TimeoutPolicy.ADAPTIVE:
-        // Adapt based on patterns and trust factors
-        newTimeout = this.calculateAdaptiveTimeout(state);
-        break;
+    case TimeoutPolicy.ADAPTIVE:
+      // Adapt based on patterns and trust factors
+      newTimeout = this.calculateAdaptiveTimeout(state);
+      break;
         
-      case TimeoutPolicy.PROGRESSIVE:
-        // Decrease timeout with each extension
-        const progressiveMultiplier = Math.max(0.5, 1 - (state.extensionsUsed * 0.1));
-        newTimeout = state.configuration.idleTimeout * progressiveMultiplier;
-        break;
+    case TimeoutPolicy.PROGRESSIVE:
+      // Decrease timeout with each extension
+      const progressiveMultiplier = Math.max(0.5, 1 - (state.extensionsUsed * 0.1));
+      newTimeout = state.configuration.idleTimeout * progressiveMultiplier;
+      break;
         
-      default:
-        newTimeout = state.configuration.idleTimeout;
+    default:
+      newTimeout = state.configuration.idleTimeout;
     }
     
     // Apply trust factors

@@ -791,12 +791,12 @@ export class DataPermissionHierarchyManager extends EventEmitter {
   private async evaluateCondition(condition: PermissionCondition, request: PermissionRequest): Promise<boolean> {
     // Simplified condition evaluation
     switch (condition.type) {
-      case 'CLASSIFICATION':
-        return condition.value === request.dataClassification;
-      case 'PURPOSE':
-        return condition.value === request.purpose;
-      default:
-        return true;
+    case 'CLASSIFICATION':
+      return condition.value === request.dataClassification;
+    case 'PURPOSE':
+      return condition.value === request.purpose;
+    default:
+      return true;
     }
   }
 

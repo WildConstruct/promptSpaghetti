@@ -290,7 +290,7 @@ export class DataRetentionExemptionService {
       params.push(`%${filters.dataCategory}%`);
     }
 
-    query += ` ORDER BY end_date ASC`;
+    query += ' ORDER BY end_date ASC';
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapToExemptionRecord);
@@ -421,44 +421,44 @@ export class DataRetentionExemptionService {
 
   private getRequiredApprovals(exemptionType: ExemptionType): { approverId: string; type: ApprovalType }[] {
     switch (exemptionType) {
-      case ExemptionType.LEGAL_HOLD:
-        return [
-          { approverId: 'legal-counsel', type: ApprovalType.LEGAL },
-          { approverId: 'ciso', type: ApprovalType.SECURITY }
-        ];
-      case ExemptionType.BUSINESS_CONTINUITY:
-        return [
-          { approverId: 'business-director', type: ApprovalType.BUSINESS },
-          { approverId: 'compliance-officer', type: ApprovalType.COMPLIANCE }
-        ];
-      case ExemptionType.TECHNICAL_SYSTEM:
-        return [
-          { approverId: 'it-security-manager', type: ApprovalType.TECHNICAL },
-          { approverId: 'data-protection-officer', type: ApprovalType.COMPLIANCE }
-        ];
-      case ExemptionType.REGULATORY_COMPLIANCE:
-        return [
-          { approverId: 'compliance-officer', type: ApprovalType.COMPLIANCE },
-          { approverId: 'legal-counsel', type: ApprovalType.LEGAL }
-        ];
-      default:
-        throw new Error(`Unknown exemption type: ${exemptionType}`);
+    case ExemptionType.LEGAL_HOLD:
+      return [
+        { approverId: 'legal-counsel', type: ApprovalType.LEGAL },
+        { approverId: 'ciso', type: ApprovalType.SECURITY }
+      ];
+    case ExemptionType.BUSINESS_CONTINUITY:
+      return [
+        { approverId: 'business-director', type: ApprovalType.BUSINESS },
+        { approverId: 'compliance-officer', type: ApprovalType.COMPLIANCE }
+      ];
+    case ExemptionType.TECHNICAL_SYSTEM:
+      return [
+        { approverId: 'it-security-manager', type: ApprovalType.TECHNICAL },
+        { approverId: 'data-protection-officer', type: ApprovalType.COMPLIANCE }
+      ];
+    case ExemptionType.REGULATORY_COMPLIANCE:
+      return [
+        { approverId: 'compliance-officer', type: ApprovalType.COMPLIANCE },
+        { approverId: 'legal-counsel', type: ApprovalType.LEGAL }
+      ];
+    default:
+      throw new Error(`Unknown exemption type: ${exemptionType}`);
     }
   }
 
   private calculateNextReviewDate(exemptionType: ExemptionType): Date {
     const now = new Date();
     switch (exemptionType) {
-      case ExemptionType.LEGAL_HOLD:
-        return new Date(now.getTime() + 6 * 30 * 24 * 60 * 60 * 1000); // 6 months
-      case ExemptionType.BUSINESS_CONTINUITY:
-        return new Date(now.getTime() + 12 * 30 * 24 * 60 * 60 * 1000); // 12 months
-      case ExemptionType.TECHNICAL_SYSTEM:
-        return new Date(now.getTime() + 24 * 30 * 24 * 60 * 60 * 1000); // 24 months
-      case ExemptionType.REGULATORY_COMPLIANCE:
-        return new Date(now.getTime() + 12 * 30 * 24 * 60 * 60 * 1000); // 12 months
-      default:
-        return new Date(now.getTime() + 12 * 30 * 24 * 60 * 60 * 1000); // Default 12 months
+    case ExemptionType.LEGAL_HOLD:
+      return new Date(now.getTime() + 6 * 30 * 24 * 60 * 60 * 1000); // 6 months
+    case ExemptionType.BUSINESS_CONTINUITY:
+      return new Date(now.getTime() + 12 * 30 * 24 * 60 * 60 * 1000); // 12 months
+    case ExemptionType.TECHNICAL_SYSTEM:
+      return new Date(now.getTime() + 24 * 30 * 24 * 60 * 60 * 1000); // 24 months
+    case ExemptionType.REGULATORY_COMPLIANCE:
+      return new Date(now.getTime() + 12 * 30 * 24 * 60 * 60 * 1000); // 12 months
+    default:
+      return new Date(now.getTime() + 12 * 30 * 24 * 60 * 60 * 1000); // Default 12 months
     }
   }
 

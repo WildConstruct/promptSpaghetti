@@ -349,26 +349,26 @@ export class PayloadEncryptionService {
 
   private getKeyLength(): number {
     switch (this.config.algorithm) {
-      case 'aes-256-gcm':
-      case 'aes-256-cbc':
-        return 256;
-      case 'chacha20-poly1305':
-        return 256;
-      default:
-        return 256;
+    case 'aes-256-gcm':
+    case 'aes-256-cbc':
+      return 256;
+    case 'chacha20-poly1305':
+      return 256;
+    default:
+      return 256;
     }
   }
 
   private getIVLength(): number {
     switch (this.config.algorithm) {
-      case 'aes-256-gcm':
-        return 12; // 96 bits recommended for GCM
-      case 'aes-256-cbc':
-        return 16; // 128 bits for CBC
-      case 'chacha20-poly1305':
-        return 12; // 96 bits for ChaCha20
-      default:
-        return 16;
+    case 'aes-256-gcm':
+      return 12; // 96 bits recommended for GCM
+    case 'aes-256-cbc':
+      return 16; // 128 bits for CBC
+    case 'chacha20-poly1305':
+      return 12; // 96 bits for ChaCha20
+    default:
+      return 16;
     }
   }
 }

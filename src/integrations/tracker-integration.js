@@ -98,15 +98,15 @@ class TrackerIntegration {
       const parsed = JSON.parse(data);
       
       switch (source) {
-        case 'stateFile':
-          await this.processStateChanges(parsed);
-          break;
-        case 'commitFile':
-          await this.processCommitChanges(parsed);
-          break;
-        case 'qaFile':
-          await this.processQAChanges(parsed);
-          break;
+      case 'stateFile':
+        await this.processStateChanges(parsed);
+        break;
+      case 'commitFile':
+        await this.processCommitChanges(parsed);
+        break;
+      case 'qaFile':
+        await this.processQAChanges(parsed);
+        break;
       }
       
     } catch (error) {

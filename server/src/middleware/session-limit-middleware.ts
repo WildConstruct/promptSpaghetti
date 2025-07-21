@@ -367,42 +367,42 @@ export class SessionLimitMiddleware {
     // Handle different types of violations
     if (limitCheck.action) {
       switch (limitCheck.action.action) {
-        case 'terminate':
-          // Terminate conflicting sessions
-          if (limitCheck.conflictingSessions) {
-            for (const sessionId of limitCheck.conflictingSessions) {
-              await this.sessionService.revokeSession(
-                sessionId,
-                'Session terminated due to concurrent session limit'
-              );
-            }
+      case 'terminate':
+        // Terminate conflicting sessions
+        if (limitCheck.conflictingSessions) {
+          for (const sessionId of limitCheck.conflictingSessions) {
+            await this.sessionService.revokeSession(
+              sessionId,
+              'Session terminated due to concurrent session limit'
+            );
           }
+        }
           
-          // Allow new session
-          reply.header('X-Session-Action', 'terminated_conflicting');
-          return;
+        // Allow new session
+        reply.header('X-Session-Action', 'terminated_conflicting');
+        return;
           
-        case 'warn':
-          // Send warning response but allow session
-          reply.header('X-Session-Warning', limitCheck.reason);
-          reply.header('X-Grace-Period', limitCheck.gracePeriodMinutes?.toString() || '5');
-          return;
+      case 'warn':
+        // Send warning response but allow session
+        reply.header('X-Session-Warning', limitCheck.reason);
+        reply.header('X-Grace-Period', limitCheck.gracePeriodMinutes?.toString() || '5');
+        return;
           
-        case 'extend_grace':
-          // Extend grace period for existing sessions
-          reply.header('X-Session-Action', 'grace_extended');
-          reply.header('X-Grace-Period', limitCheck.gracePeriodMinutes?.toString() || '5');
-          return;
+      case 'extend_grace':
+        // Extend grace period for existing sessions
+        reply.header('X-Session-Action', 'grace_extended');
+        reply.header('X-Grace-Period', limitCheck.gracePeriodMinutes?.toString() || '5');
+        return;
           
-        case 'upgrade_required':
-          reply.status(402).send({
-            error: 'Session limit exceeded',
-            code: 'UPGRADE_REQUIRED',
-            message: 'Your current plan has reached its session limit. Please upgrade to continue.',
-            action: 'upgrade_required',
-            details: limitCheck.action.details
-          });
-          return;
+      case 'upgrade_required':
+        reply.status(402).send({
+          error: 'Session limit exceeded',
+          code: 'UPGRADE_REQUIRED',
+          message: 'Your current plan has reached its session limit. Please upgrade to continue.',
+          action: 'upgrade_required',
+          details: limitCheck.action.details
+        });
+        return;
       }
     }
     

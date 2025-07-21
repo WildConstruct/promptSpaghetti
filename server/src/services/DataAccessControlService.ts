@@ -747,12 +747,12 @@ export class DataAccessControlService {
 
   private mapToAccessLevel(level: string): AccessLevel {
     switch (level.toLowerCase()) {
-      case 'none': return 'NONE';
-      case 'limited': return 'LIMITED';
-      case 'standard': return 'STANDARD';
-      case 'elevated': return 'ELEVATED';
-      case 'full': return 'FULL_ACCESS';
-      default: return 'STANDARD';
+    case 'none': return 'NONE';
+    case 'limited': return 'LIMITED';
+    case 'standard': return 'STANDARD';
+    case 'elevated': return 'ELEVATED';
+    case 'full': return 'FULL_ACCESS';
+    default: return 'STANDARD';
     }
   }
 

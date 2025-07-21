@@ -399,7 +399,7 @@ export class TLSConfigManager {
       'X-Frame-Options': 'DENY',
       'X-XSS-Protection': '1; mode=block',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'"
+      'Content-Security-Policy': 'default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data: https:; font-src \'self\'; connect-src \'self\''
     };
 
     if (this.config.hsts.enabled) {
@@ -883,30 +883,30 @@ export class CertificatePinningManager {
   ): Promise<boolean> {
     try {
       switch (pin.type) {
-        case 'sha256':
-          const sha256Hash = crypto.createHash('sha256')
-            .update(certificate.raw)
-            .digest('base64');
-          return sha256Hash === pin.value;
+      case 'sha256':
+        const sha256Hash = crypto.createHash('sha256')
+          .update(certificate.raw)
+          .digest('base64');
+        return sha256Hash === pin.value;
 
-        case 'sha1':
-          const sha1Hash = crypto.createHash('sha1')
-            .update(certificate.raw)
-            .digest('base64');
-          return sha1Hash === pin.value;
+      case 'sha1':
+        const sha1Hash = crypto.createHash('sha1')
+          .update(certificate.raw)
+          .digest('base64');
+        return sha1Hash === pin.value;
 
-        case 'spki':
-          // Subject Public Key Info pinning
-          const spkiHash = crypto.createHash('sha256')
-            .update(certificate.publicKey.export({ format: 'der', type: 'spki' }))
-            .digest('base64');
-          return spkiHash === pin.value;
+      case 'spki':
+        // Subject Public Key Info pinning
+        const spkiHash = crypto.createHash('sha256')
+          .update(certificate.publicKey.export({ format: 'der', type: 'spki' }))
+          .digest('base64');
+        return spkiHash === pin.value;
 
-        case 'subject':
-          return certificate.subject === pin.value;
+      case 'subject':
+        return certificate.subject === pin.value;
 
-        default:
-          return false;
+      default:
+        return false;
       }
     } catch (error) {
       // If there's an error checking the pin, consider it a non-match
@@ -1080,7 +1080,7 @@ export class CertificatePinningManager {
     pinnedDomains: number;
     cacheSize: number;
     lastChecks: Record<string, Date>;
-  } {
+    } {
     const totalPins = Object.values(this.config.pins)
       .reduce((sum, pins) => sum + pins.length, 0);
 

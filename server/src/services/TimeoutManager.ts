@@ -155,19 +155,19 @@ export class TimeoutManager extends EventEmitter {
         connect: parseInt(process.env.DB_CONNECT_TIMEOUT || '10000'),
         query: parseInt(process.env.DB_QUERY_TIMEOUT || '30000'),
         transaction: parseInt(process.env.DB_TRANSACTION_TIMEOUT || '60000'),
-        migration: parseInt(process.env.DB_MIGRATION_TIMEOUT || '300000'),
+        migration: parseInt(process.env.DB_MIGRATION_TIMEOUT || '300000')
       },
       redis: {
         connect: parseInt(process.env.REDIS_CONNECT_TIMEOUT || '5000'),
         operation: parseInt(process.env.REDIS_OP_TIMEOUT || '10000'),
         pipeline: parseInt(process.env.REDIS_PIPELINE_TIMEOUT || '15000'),
-        publish: parseInt(process.env.REDIS_PUBLISH_TIMEOUT || '5000'),
+        publish: parseInt(process.env.REDIS_PUBLISH_TIMEOUT || '5000')
       },
       api: {
         authentication: parseInt(process.env.API_AUTH_TIMEOUT || '15000'),
         webhook: parseInt(process.env.API_WEBHOOK_TIMEOUT || '30000'),
         notification: parseInt(process.env.API_NOTIFICATION_TIMEOUT || '10000'),
-        export: parseInt(process.env.API_EXPORT_TIMEOUT || '120000'),
+        export: parseInt(process.env.API_EXPORT_TIMEOUT || '120000')
       },
       auth: {
         login: parseInt(process.env.AUTH_LOGIN_TIMEOUT || '10000'),
@@ -175,19 +175,19 @@ export class TimeoutManager extends EventEmitter {
         passwordReset: parseInt(process.env.AUTH_PASSWORD_RESET_TIMEOUT || '30000'),
         tokenRefresh: parseInt(process.env.AUTH_TOKEN_REFRESH_TIMEOUT || '5000'),
         captcha: parseInt(process.env.AUTH_CAPTCHA_TIMEOUT || '10000'),
-        twoFactor: parseInt(process.env.AUTH_2FA_TIMEOUT || '30000'),
+        twoFactor: parseInt(process.env.AUTH_2FA_TIMEOUT || '30000')
       },
       file: {
         upload: parseInt(process.env.FILE_UPLOAD_TIMEOUT || '120000'),
         download: parseInt(process.env.FILE_DOWNLOAD_TIMEOUT || '60000'),
         processing: parseInt(process.env.FILE_PROCESSING_TIMEOUT || '300000'),
-        validation: parseInt(process.env.FILE_VALIDATION_TIMEOUT || '30000'),
+        validation: parseInt(process.env.FILE_VALIDATION_TIMEOUT || '30000')
       },
       email: {
         send: parseInt(process.env.EMAIL_SEND_TIMEOUT || '15000'),
         verify: parseInt(process.env.EMAIL_VERIFY_TIMEOUT || '10000'),
-        template: parseInt(process.env.EMAIL_TEMPLATE_TIMEOUT || '5000'),
-      },
+        template: parseInt(process.env.EMAIL_TEMPLATE_TIMEOUT || '5000')
+      }
     };
 
     return this.mergeDeep(defaultConfig, overrides || {});
@@ -557,7 +557,7 @@ export class TimeoutManager extends EventEmitter {
     openCircuitBreakers: number;
     totalTimeouts: number;
     operationTypes: string[];
-  } {
+    } {
     const openCircuitBreakers = Array.from(this.circuitBreakers.values())
       .filter(cb => cb.state === CircuitBreakerState.OPEN).length;
 

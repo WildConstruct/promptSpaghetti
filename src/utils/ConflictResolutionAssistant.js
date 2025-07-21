@@ -49,7 +49,7 @@ class ConflictResolutionAssistant {
         
         // Time windows for conflict detection
         activeTaskWindow: 24 * 60 * 60 * 1000, // 24 hours
-        preventionWindow: 4 * 60 * 60 * 1000,  // 4 hours ahead
+        preventionWindow: 4 * 60 * 60 * 1000  // 4 hours ahead
       },
       
       resolution: {
@@ -134,7 +134,7 @@ class ConflictResolutionAssistant {
       await this.saveConflicts(analyzedConflicts);
       await this.generateConflictReport(analyzedConflicts);
       
-      console.log(`\n✅ Conflict scan complete:`);
+      console.log('\n✅ Conflict scan complete:');
       console.log(`⚠️  Found ${analyzedConflicts.length} potential conflicts`);
       console.log(`🔥 ${analyzedConflicts.filter(c => c.severity === 'high').length} high-severity conflicts`);
       console.log(`⚡ ${analyzedConflicts.filter(c => c.autoResolvable).length} auto-resolvable conflicts`);
@@ -1104,34 +1104,34 @@ if (require.main === module) {
       await assistant.initialize();
       
       switch (command) {
-        case 'scan':
-          console.log('🔍 Scanning for conflicts...\n');
-          const conflicts = await assistant.scanForConflicts();
-          console.log(`\nFound ${conflicts.length} potential conflicts`);
-          break;
+      case 'scan':
+        console.log('🔍 Scanning for conflicts...\n');
+        const conflicts = await assistant.scanForConflicts();
+        console.log(`\nFound ${conflicts.length} potential conflicts`);
+        break;
           
-        case 'resolve':
-          const autoResolve = args.includes('--auto');
-          if (autoResolve) {
-            console.log('🔧 Auto-resolving conflicts...\n');
-            const resolutions = await assistant.autoResolveConflicts(
-              Array.from(assistant.detectedConflicts.values())
-            );
-            console.log(`Resolved ${resolutions.length} conflicts automatically`);
-          } else {
-            console.log('Manual resolution mode not implemented in CLI');
-          }
-          break;
+      case 'resolve':
+        const autoResolve = args.includes('--auto');
+        if (autoResolve) {
+          console.log('🔧 Auto-resolving conflicts...\n');
+          const resolutions = await assistant.autoResolveConflicts(
+            Array.from(assistant.detectedConflicts.values())
+          );
+          console.log(`Resolved ${resolutions.length} conflicts automatically`);
+        } else {
+          console.log('Manual resolution mode not implemented in CLI');
+        }
+        break;
           
-        case 'stats':
-          const stats = await assistant.getStatistics();
-          console.log('📊 Conflict Resolution Statistics:');
-          console.log(JSON.stringify(stats, null, 2));
-          break;
+      case 'stats':
+        const stats = await assistant.getStatistics();
+        console.log('📊 Conflict Resolution Statistics:');
+        console.log(JSON.stringify(stats, null, 2));
+        break;
           
-        case 'help':
-        default:
-          console.log(`
+      case 'help':
+      default:
+        console.log(`
 🔧 Conflict Resolution Assistant
 
 USAGE:
@@ -1153,7 +1153,7 @@ OUTPUT FILES:
   - conflict-resolutions.json  Resolution history
   - conflict-report-*.json     Detailed reports
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

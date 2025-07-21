@@ -314,8 +314,8 @@ describe('ClassificationEncryptionPolicyService', () => {
         'data1',
         'INTERNAL',
         { encrypted: true,
-        algorithm: 'AES-256',
-        keyLength: 256 },
+          algorithm: 'AES-256',
+          keyLength: 256 },
         mockContext
       );
       await service.validateEncryptionCompliance('data2', 'CONFIDENTIAL', { encrypted: false }, mockContext);
@@ -333,16 +333,16 @@ describe('ClassificationEncryptionPolicyService', () => {
         'data1',
         'INTERNAL',
         { encrypted: true,
-        algorithm: 'AES-256',
-        keyLength: 256 },
+          algorithm: 'AES-256',
+          keyLength: 256 },
         mockContext
       );
       await service.validateEncryptionCompliance(
         'data2',
         'CONFIDENTIAL',
         { encrypted: true,
-        algorithm: 'AES-256-GCM',
-        keyLength: 256 },
+          algorithm: 'AES-256-GCM',
+          keyLength: 256 },
         mockContext
       );
 
@@ -437,8 +437,8 @@ describe('ClassificationEncryptionPolicyService', () => {
         'data1',
         'INTERNAL',
         { encrypted: true,
-        algorithm: 'AES-256',
-        keyLength: 256 },
+          algorithm: 'AES-256',
+          keyLength: 256 },
         mockContext
       );
       await service.validateEncryptionCompliance('data2', 'INTERNAL', { encrypted: false }, mockContext);
@@ -458,8 +458,8 @@ describe('ClassificationEncryptionPolicyService', () => {
         'data1',
         'CONFIDENTIAL',
         { encrypted: true,
-        algorithm: 'AES-256-GCM',
-        keyLength: 256 },
+          algorithm: 'AES-256-GCM',
+          keyLength: 256 },
         mockContext
       );
 

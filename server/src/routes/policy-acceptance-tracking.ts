@@ -67,11 +67,11 @@ const RecordAcceptanceSchema = z.object({
     legalBasis: z.array(z.object({
       basisType: z.enum(
         ['CONSENT',
-        'CONTRACT',
-        'LEGAL_OBLIGATION',
-        'VITAL_INTERESTS',
-        'PUBLIC_TASK',
-        'LEGITIMATE_INTERESTS'] as const
+          'CONTRACT',
+          'LEGAL_OBLIGATION',
+          'VITAL_INTERESTS',
+          'PUBLIC_TASK',
+          'LEGITIMATE_INTERESTS'] as const
       ),
       description: z.string(),
       regulation: z.string(),
@@ -84,11 +84,11 @@ const RecordAcceptanceSchema = z.object({
       description: z.string(),
       legalBasis: z.enum(
         ['CONSENT',
-        'CONTRACT',
-        'LEGAL_OBLIGATION',
-        'VITAL_INTERESTS',
-        'PUBLIC_TASK',
-        'LEGITIMATE_INTERESTS'] as const
+          'CONTRACT',
+          'LEGAL_OBLIGATION',
+          'VITAL_INTERESTS',
+          'PUBLIC_TASK',
+          'LEGITIMATE_INTERESTS'] as const
       ),
       dataTypes: z.array(z.string()),
       retentionPeriod: z.number().min(1),
@@ -152,9 +152,9 @@ const RecordAcceptanceSchema = z.object({
     signatureId: z.string(),
     signatureMethod: z.enum(
       ['DIGITAL_CERTIFICATE',
-      'ELECTRONIC_SIGNATURE',
-      'BIOMETRIC_SIGNATURE',
-      'CRYPTOGRAPHIC_HASH'] as const
+        'ELECTRONIC_SIGNATURE',
+        'BIOMETRIC_SIGNATURE',
+        'CRYPTOGRAPHIC_HASH'] as const
     ),
     signatureData: z.string(),
     certificateId: z.string().optional(),

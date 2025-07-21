@@ -380,16 +380,16 @@ export class NewDeviceDetectionService extends EventEmitter {
 
   private getVerificationMethods(riskLevel: string): string[] {
     switch (riskLevel) {
-      case 'low':
-        return this.policy.verification.lowRiskMethods;
-      case 'medium':
-        return this.policy.verification.mediumRiskMethods;
-      case 'high':
-        return this.policy.verification.highRiskMethods;
-      case 'critical':
-        return this.policy.verification.criticalRiskMethods;
-      default:
-        return [];
+    case 'low':
+      return this.policy.verification.lowRiskMethods;
+    case 'medium':
+      return this.policy.verification.mediumRiskMethods;
+    case 'high':
+      return this.policy.verification.highRiskMethods;
+    case 'critical':
+      return this.policy.verification.criticalRiskMethods;
+    default:
+      return [];
     }
   }
 
@@ -631,17 +631,17 @@ export class NewDeviceDetectionService extends EventEmitter {
       }
 
       let body = `Hello ${display_name || 'User'},\n\n`;
-      body += `We detected a login to your account from a new device:\n\n`;
+      body += 'We detected a login to your account from a new device:\n\n';
 
       if (this.policy.notifications.includeDeviceDetails) {
-        body += `Device Details:\n`;
+        body += 'Device Details:\n';
         body += `- Browser/App: ${context.userAgent.substring(0, 50)}...\n`;
         body += `- Trust Score: ${result.trustScore}/100\n`;
         body += `- Risk Level: ${result.riskLevel.toUpperCase()}\n`;
       }
 
       if (this.policy.notifications.includeLocationDetails && context.location) {
-        body += `\nLocation:\n`;
+        body += '\nLocation:\n';
         body += `- Country: ${context.location.country}\n`;
         body += `- City: ${context.location.city}\n`;
       }
@@ -649,18 +649,18 @@ export class NewDeviceDetectionService extends EventEmitter {
       body += `\nLogin Time: ${context.metadata?.loginTime || new Date()}\n`;
 
       if (result.requiresVerification) {
-        body += `\n⚠️ Additional verification is required for this device.\n`;
+        body += '\n⚠️ Additional verification is required for this device.\n';
         body += `Verification methods: ${result.verificationMethods.join(', ')}\n`;
       }
 
       if (result.recommendations.length > 0) {
-        body += `\nSecurity Recommendations:\n`;
+        body += '\nSecurity Recommendations:\n';
         result.recommendations.forEach(rec => {
           body += `• ${rec}\n`;
         });
       }
 
-      body += `\nIf this wasn't you, please secure your account immediately.\n`;
+      body += '\nIf this wasn\'t you, please secure your account immediately.\n';
 
       await this.emailService.sendEmail({
         to: email,
@@ -702,7 +702,7 @@ export class NewDeviceDetectionService extends EventEmitter {
           similarDevicesCount: result.similarDevices?.length || 0
         },
         severity: result.riskLevel === 'critical' ? 'error' : 
-                 result.riskLevel === 'high' ? 'warning' : 'info',
+          result.riskLevel === 'high' ? 'warning' : 'info',
         ipAddress: context.ipAddress,
         userAgent: context.userAgent
       });

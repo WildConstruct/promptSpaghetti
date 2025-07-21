@@ -511,15 +511,15 @@ export class AuditEvidenceMapper {
       const evidenceType = this.evidenceTypes.get(typeId);
       if (evidenceType) {
         switch (evidenceType.collection_method) {
-          case 'automatic':
-            suggestions.push(`Configure automated collection for ${evidenceType.name}`);
-            break;
-          case 'manual':
-            suggestions.push(`Establish manual collection process for ${evidenceType.name}`);
-            break;
-          case 'triggered':
-            suggestions.push(`Set up triggered collection for ${evidenceType.name}`);
-            break;
+        case 'automatic':
+          suggestions.push(`Configure automated collection for ${evidenceType.name}`);
+          break;
+        case 'manual':
+          suggestions.push(`Establish manual collection process for ${evidenceType.name}`);
+          break;
+        case 'triggered':
+          suggestions.push(`Set up triggered collection for ${evidenceType.name}`);
+          break;
         }
       }
     });
@@ -535,18 +535,18 @@ export class AuditEvidenceMapper {
     let daysToAdd = 30; // default
 
     switch (criticality) {
-      case 'critical':
-        daysToAdd = 7;
-        break;
-      case 'high':
-        daysToAdd = 14;
-        break;
-      case 'medium':
-        daysToAdd = 30;
-        break;
-      case 'low':
-        daysToAdd = 60;
-        break;
+    case 'critical':
+      daysToAdd = 7;
+      break;
+    case 'high':
+      daysToAdd = 14;
+      break;
+    case 'medium':
+      daysToAdd = 30;
+      break;
+    case 'low':
+      daysToAdd = 60;
+      break;
     }
 
     const deadline = new Date(now.getTime() + (daysToAdd * 24 * 60 * 60 * 1000));
@@ -658,24 +658,24 @@ export class AuditEvidenceMapper {
     let monthsToAdd = 12; // default 1 year
 
     switch (evidenceType.retention_period) {
-      case '1_year':
-        monthsToAdd = 12;
-        break;
-      case '2_years':
-        monthsToAdd = 24;
-        break;
-      case '3_years':
-        monthsToAdd = 36;
-        break;
-      case '5_years':
-        monthsToAdd = 60;
-        break;
-      case '7_years':
-        monthsToAdd = 84;
-        break;
-      case '10_years':
-        monthsToAdd = 120;
-        break;
+    case '1_year':
+      monthsToAdd = 12;
+      break;
+    case '2_years':
+      monthsToAdd = 24;
+      break;
+    case '3_years':
+      monthsToAdd = 36;
+      break;
+    case '5_years':
+      monthsToAdd = 60;
+      break;
+    case '7_years':
+      monthsToAdd = 84;
+      break;
+    case '10_years':
+      monthsToAdd = 120;
+      break;
     }
 
     const expiry = new Date(now.getFullYear(), now.getMonth() + monthsToAdd, now.getDate());

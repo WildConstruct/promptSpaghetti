@@ -165,7 +165,7 @@ describe('DeviceFingerprintingService', () => {
 
     it('should throw error for missing required components', async () => {
       const incompleteComponents = {
-        userAgent: 'Mozilla/5.0',
+        userAgent: 'Mozilla/5.0'
         // Missing timezone and language
       };
 

@@ -841,7 +841,7 @@ export class EnhancedSessionService extends EventEmitter {
       return {
         valid: false,
         reason: 'IP address change detected for high-security session'
-        };
+      };
     }
     
     return { valid: true, session };

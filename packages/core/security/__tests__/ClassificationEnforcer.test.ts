@@ -176,7 +176,7 @@ describe('ClassificationEnforcer', () => {
         ['auth-strong_mfa']
       );
       
-      expect(result.violations).toContain("Storage location 'development' not approved");
+      expect(result.violations).toContain('Storage location \'development\' not approved');
     });
     
     it('should allow operations in grace period', async () => {
@@ -553,7 +553,7 @@ describe('ClassificationEnforcer', () => {
       );
       
       expect(result.valid).toBe(false);
-      expect(result.issues).toContain("Environment 'development' not approved for this classification");
+      expect(result.issues).toContain('Environment \'development\' not approved for this classification');
     });
     
     it('should check third-party processing restrictions', async () => {

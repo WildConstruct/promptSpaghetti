@@ -410,14 +410,14 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
 
   private async evaluateConstraint(constraint: any, request: AccessRequest): Promise<boolean> {
     switch (constraint.type) {
-      case 'TIME':
-        return this.evaluateTimeConstraint(constraint, request.timestamp);
-      case 'LOCATION':
-        return this.evaluateLocationConstraint(constraint, request.environment.location);
-      case 'PURPOSE':
-        return this.evaluatePurposeConstraint(constraint, request.action.purpose);
-      default:
-        return true;
+    case 'TIME':
+      return this.evaluateTimeConstraint(constraint, request.timestamp);
+    case 'LOCATION':
+      return this.evaluateLocationConstraint(constraint, request.environment.location);
+    case 'PURPOSE':
+      return this.evaluatePurposeConstraint(constraint, request.action.purpose);
+    default:
+      return true;
     }
   }
 
@@ -530,27 +530,27 @@ export class DataClassificationAccessControlEngine implements AccessDecisionEngi
     const attributeValue = this.getAttributeValue(expression.attribute, attributes);
     
     switch (expression.operator) {
-      case 'EQUALS':
-        return attributeValue === expression.value;
-      case 'NOT_EQUALS':
-        return attributeValue !== expression.value;
-      case 'IN':
-        return Array.isArray(expression.value) && expression.value.includes(attributeValue);
-      case 'NOT_IN':
-        return Array.isArray(expression.value) && !expression.value.includes(attributeValue);
-      case 'GREATER_THAN':
-        return attributeValue > expression.value;
-      case 'LESS_THAN':
-        return attributeValue < expression.value;
-      case 'CONTAINS':
-        return String(attributeValue).includes(String(expression.value));
-      case 'MATCHES':
-        return new RegExp(String(expression.value)).test(String(attributeValue));
-      case 'BETWEEN':
-        return Array.isArray(expression.value) && expression.value.length === 2 &&
+    case 'EQUALS':
+      return attributeValue === expression.value;
+    case 'NOT_EQUALS':
+      return attributeValue !== expression.value;
+    case 'IN':
+      return Array.isArray(expression.value) && expression.value.includes(attributeValue);
+    case 'NOT_IN':
+      return Array.isArray(expression.value) && !expression.value.includes(attributeValue);
+    case 'GREATER_THAN':
+      return attributeValue > expression.value;
+    case 'LESS_THAN':
+      return attributeValue < expression.value;
+    case 'CONTAINS':
+      return String(attributeValue).includes(String(expression.value));
+    case 'MATCHES':
+      return new RegExp(String(expression.value)).test(String(attributeValue));
+    case 'BETWEEN':
+      return Array.isArray(expression.value) && expression.value.length === 2 &&
                attributeValue >= expression.value[0] && attributeValue <= expression.value[1];
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 

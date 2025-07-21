@@ -14,7 +14,7 @@ describe('ReferrerPolicyService Basic Tests', () => {
   // Mock dependencies
   const mockDb = {
     query: jest.fn(),
-    close: jest.fn(),
+    close: jest.fn()
   } as any;
   
   const mockRedis = {
@@ -22,7 +22,7 @@ describe('ReferrerPolicyService Basic Tests', () => {
     setex: jest.fn().mockResolvedValue('OK'),
     del: jest.fn().mockResolvedValue(1),
     keys: jest.fn().mockResolvedValue([]),
-    close: jest.fn(),
+    close: jest.fn()
   } as any;
 
   beforeEach(() => {
@@ -433,7 +433,7 @@ describe('ReferrerPolicyService Integration', () => {
   
   const mockDb = {
     query: jest.fn(),
-    close: jest.fn(),
+    close: jest.fn()
   } as any;
   
   const mockRedis = {
@@ -441,7 +441,7 @@ describe('ReferrerPolicyService Integration', () => {
     setex: jest.fn().mockResolvedValue('OK'),
     del: jest.fn().mockResolvedValue(1),
     keys: jest.fn().mockResolvedValue([]),
-    close: jest.fn(),
+    close: jest.fn()
   } as any;
 
   beforeEach(() => {

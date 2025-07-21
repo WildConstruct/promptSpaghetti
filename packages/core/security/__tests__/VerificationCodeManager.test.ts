@@ -925,7 +925,7 @@ describe('VerificationCodeManager', () => {
       expect(initialStats.expiredCodes).toBe(1);
 
       // Mock cleanup to use shorter threshold
-            (quickCleanupManager as any).performCleanup = function() {
+      (quickCleanupManager as any).performCleanup = function() {
         const now = new Date();
         const cleanupThreshold = new Date(now.getTime() - 1); // 1ms ago instead of 24 hours
         
@@ -966,7 +966,7 @@ describe('VerificationCodeManager', () => {
       const failingManager = new VerificationCodeManager();
       
       // Override a critical method to cause failure
-            (failingManager as any).generateCodeByFormat = () => {
+      (failingManager as any).generateCodeByFormat = () => {
         throw new Error('Code generation failed');
       };
 

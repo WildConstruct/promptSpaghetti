@@ -264,48 +264,48 @@ export class PasswordExpirationService extends EventEmitter {
     let message = '';
 
     switch (status.status) {
-      case 'active':
-        allowedActions.push('login', 'api_access', 'password_change');
-        message = `Password is active (expires in ${status.daysUntilExpiry} days)`;
-        break;
+    case 'active':
+      allowedActions.push('login', 'api_access', 'password_change');
+      message = `Password is active (expires in ${status.daysUntilExpiry} days)`;
+      break;
 
-      case 'warning':
-        allowedActions.push('login', 'api_access', 'password_change');
-        if (status.canExtend) allowedActions.push('extend_password');
-        message = `Password expires in ${status.daysUntilExpiry} days. Change recommended.`;
-        break;
+    case 'warning':
+      allowedActions.push('login', 'api_access', 'password_change');
+      if (status.canExtend) allowedActions.push('extend_password');
+      message = `Password expires in ${status.daysUntilExpiry} days. Change recommended.`;
+      break;
 
-      case 'expired':
-        if (mostRestrictiveRule.expirationPolicy.gracePeriod > 0) {
-          allowedActions.push('password_change');
-          if (status.canExtend) allowedActions.push('extend_password');
-          blockedActions.push('login', 'api_access');
-          required = true;
-          message = `Password expired ${Math.abs(status.daysUntilExpiry)} days ago. Change required.`;
-        }
-        break;
-
-      case 'grace':
+    case 'expired':
+      if (mostRestrictiveRule.expirationPolicy.gracePeriod > 0) {
         allowedActions.push('password_change');
         if (status.canExtend) allowedActions.push('extend_password');
-        blockedActions.push('api_access');
-        required = true;
-        const graceDaysLeft = status.gracePeriodEnds ? 
-          Math.ceil((status.gracePeriodEnds.getTime() - Date.now()) / (24 * 60 * 60 * 1000)) : 0;
-        message = `Password in grace period (${graceDaysLeft} days left). Change required.`;
-        break;
-
-      case 'locked':
-        allowedActions.push('password_change');
         blockedActions.push('login', 'api_access');
         required = true;
-        message = 'Account locked due to expired password. Change required to unlock.';
-        break;
+        message = `Password expired ${Math.abs(status.daysUntilExpiry)} days ago. Change required.`;
+      }
+      break;
 
-      case 'extended':
-        allowedActions.push('login', 'api_access', 'password_change');
-        message = `Password extended (expires in ${status.daysUntilExpiry} days)`;
-        break;
+    case 'grace':
+      allowedActions.push('password_change');
+      if (status.canExtend) allowedActions.push('extend_password');
+      blockedActions.push('api_access');
+      required = true;
+      const graceDaysLeft = status.gracePeriodEnds ? 
+        Math.ceil((status.gracePeriodEnds.getTime() - Date.now()) / (24 * 60 * 60 * 1000)) : 0;
+      message = `Password in grace period (${graceDaysLeft} days left). Change required.`;
+      break;
+
+    case 'locked':
+      allowedActions.push('password_change');
+      blockedActions.push('login', 'api_access');
+      required = true;
+      message = 'Account locked due to expired password. Change required to unlock.';
+      break;
+
+    case 'extended':
+      allowedActions.push('login', 'api_access', 'password_change');
+      message = `Password extended (expires in ${status.daysUntilExpiry} days)`;
+      break;
     }
 
     // Determine next action

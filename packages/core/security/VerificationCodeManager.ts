@@ -544,21 +544,21 @@ export class VerificationCodeManager extends EventEmitter {
     codes.forEach(code => {
       // Status counts
       switch (code.status) {
-        case CodeStatus.ACTIVE:
-          stats.activeCodes++;
-          break;
-        case CodeStatus.USED:
-          stats.usedCodes++;
-          completedCodes++;
-          break;
-        case CodeStatus.EXPIRED:
-          stats.expiredCodes++;
-          completedCodes++;
-          break;
-        case CodeStatus.REVOKED:
-          stats.revokedCodes++;
-          completedCodes++;
-          break;
+      case CodeStatus.ACTIVE:
+        stats.activeCodes++;
+        break;
+      case CodeStatus.USED:
+        stats.usedCodes++;
+        completedCodes++;
+        break;
+      case CodeStatus.EXPIRED:
+        stats.expiredCodes++;
+        completedCodes++;
+        break;
+      case CodeStatus.REVOKED:
+        stats.revokedCodes++;
+        completedCodes++;
+        break;
       }
 
       // Type and channel counts
@@ -646,20 +646,20 @@ export class VerificationCodeManager extends EventEmitter {
 
   private generateCodeByFormat(format: CodeFormat): string {
     switch (format) {
-      case CodeFormat.NUMERIC_4:
-        return this.generateNumericCode(4);
-      case CodeFormat.NUMERIC_6:
-        return this.generateNumericCode(6);
-      case CodeFormat.NUMERIC_8:
-        return this.generateNumericCode(8);
-      case CodeFormat.ALPHANUMERIC_6:
-        return this.generateAlphanumericCode(6);
-      case CodeFormat.ALPHANUMERIC_8:
-        return this.generateAlphanumericCode(8);
-      case CodeFormat.UUID:
-        return this.generateUUID();
-      default:
-        return this.generateNumericCode(6);
+    case CodeFormat.NUMERIC_4:
+      return this.generateNumericCode(4);
+    case CodeFormat.NUMERIC_6:
+      return this.generateNumericCode(6);
+    case CodeFormat.NUMERIC_8:
+      return this.generateNumericCode(8);
+    case CodeFormat.ALPHANUMERIC_6:
+      return this.generateAlphanumericCode(6);
+    case CodeFormat.ALPHANUMERIC_8:
+      return this.generateAlphanumericCode(8);
+    case CodeFormat.UUID:
+      return this.generateUUID();
+    default:
+      return this.generateNumericCode(6);
     }
   }
 

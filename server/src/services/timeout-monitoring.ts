@@ -238,15 +238,15 @@ export class TimeoutMonitoringService extends EventEmitter {
     const promises = this.alertChannels.map(async (channel) => {
       try {
         switch (channel.type) {
-          case 'email':
-            await this.sendEmailAlert(alert, channel.config);
-            break;
-          case 'slack':
-            await this.sendSlackAlert(alert, channel.config);
-            break;
-          case 'webhook':
-            await this.sendWebhookAlert(alert, channel.config);
-            break;
+        case 'email':
+          await this.sendEmailAlert(alert, channel.config);
+          break;
+        case 'slack':
+          await this.sendSlackAlert(alert, channel.config);
+          break;
+        case 'webhook':
+          await this.sendWebhookAlert(alert, channel.config);
+          break;
         }
       } catch (error) {
         console.error(`Failed to send alert via ${channel.type}:`, error);
@@ -345,11 +345,11 @@ export class TimeoutMonitoringService extends EventEmitter {
    */
   private getSlackColorForSeverity(severity: string): string {
     switch (severity) {
-      case 'critical': return 'danger';
-      case 'high': return 'warning';
-      case 'medium': return '#ffeb3b';
-      case 'low': return 'good';
-      default: return '#cccccc';
+    case 'critical': return 'danger';
+    case 'high': return 'warning';
+    case 'medium': return '#ffeb3b';
+    case 'low': return 'good';
+    default: return '#cccccc';
     }
   }
 
@@ -452,7 +452,7 @@ export class TimeoutMonitoringService extends EventEmitter {
     recentAlerts: TimeoutAlert[];
     circuitBreakerStates: any;
     healthStatus: any;
-  } {
+    } {
     const allMetrics = this.timeoutManager.getMetrics() as Map<string, TimeoutMetrics>;
     const totalOperations = Array.from(allMetrics.values())
       .reduce((sum, metrics) => sum + metrics.totalOperations, 0);

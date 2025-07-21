@@ -102,7 +102,7 @@ async function basicAuditLogging() {
   const stats = auditLogger.getStatistics();
   console.log('\nAudit Statistics:');
   console.log(`  Total operations: ${stats.totalOperations}`);
-  console.log(`  Operation breakdown:`, stats.operationCounts);
+  console.log('  Operation breakdown:', stats.operationCounts);
   
   auditLogger.destroy();
 }
@@ -342,7 +342,7 @@ async function auditEventsExample() {
   
   auditLogger.on('anomaly', (event) => {
     console.log(`⚠️  ANOMALY DETECTED: ${event.type}`);
-    console.log(`   Details:`, event.entry);
+    console.log('   Details:', event.entry);
   });
   
   auditLogger.on('error', (error) => {
@@ -440,7 +440,7 @@ async function workflowAuditExample() {
   const workflowLogs = await auditLogger.query({});
   const correlatedLogs = workflowLogs.filter(log => log.correlationId === correlationId);
   
-  console.log(`\n📋 Workflow Audit Trail Summary:`);
+  console.log('\n📋 Workflow Audit Trail Summary:');
   console.log(`  Correlation ID: ${correlationId}`);
   console.log(`  Total Steps: ${correlatedLogs.length}`);
   console.log(`  Duration: ${

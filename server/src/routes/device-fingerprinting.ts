@@ -461,8 +461,8 @@ export async function deviceFingerprintingRoutes(
         paramIndex++;
       }
       
-      query += ` GROUP BY df.fingerprint, dtp.verification_status, dtp.behavior_metrics`;
-      query += ` ORDER BY df.last_seen DESC`;
+      query += ' GROUP BY df.fingerprint, dtp.verification_status, dtp.behavior_metrics';
+      query += ' ORDER BY df.last_seen DESC';
       query += ` LIMIT $${paramIndex}`;
       params.push(limit);
       

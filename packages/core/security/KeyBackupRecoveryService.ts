@@ -1018,25 +1018,25 @@ export class KeyBackupRecoveryService extends EventEmitter {
 
   private updateStatistics(operation: string, duration: number, success: boolean): void {
     switch (operation) {
-      case 'backup_created':
-        this.statistics.totalBackups++;
-        if (success) {
-          this.statistics.successfulBackups++;
-          this.statistics.averageBackupTime = 
+    case 'backup_created':
+      this.statistics.totalBackups++;
+      if (success) {
+        this.statistics.successfulBackups++;
+        this.statistics.averageBackupTime = 
             (this.statistics.averageBackupTime + duration) / 2;
-        } else {
-          this.statistics.failedBackups++;
-        }
-        break;
+      } else {
+        this.statistics.failedBackups++;
+      }
+      break;
         
-      case 'recovery_completed':
-        this.statistics.totalRecoveries++;
-        if (success) {
-          this.statistics.successfulRecoveries++;
-          this.statistics.averageRecoveryTime = 
+    case 'recovery_completed':
+      this.statistics.totalRecoveries++;
+      if (success) {
+        this.statistics.successfulRecoveries++;
+        this.statistics.averageRecoveryTime = 
             (this.statistics.averageRecoveryTime + duration) / 2;
-        }
-        break;
+      }
+      break;
     }
   }
 

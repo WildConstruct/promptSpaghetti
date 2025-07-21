@@ -658,22 +658,22 @@ export class SecurityLogger extends EventEmitter {
       let aValue: any, bValue: any;
       
       switch (sortBy) {
-        case 'timestamp':
-          aValue = a.timestamp.getTime();
-          bValue = b.timestamp.getTime();
-          break;
-        case 'severity':
-          const severityOrder = { low: 1, medium: 2, high: 3, critical: 4 };
-          aValue = severityOrder[a.severity as keyof typeof severityOrder];
-          bValue = severityOrder[b.severity as keyof typeof severityOrder];
-          break;
-        case 'eventType':
-          aValue = a.eventType;
-          bValue = b.eventType;
-          break;
-        default:
-          aValue = a.timestamp.getTime();
-          bValue = b.timestamp.getTime();
+      case 'timestamp':
+        aValue = a.timestamp.getTime();
+        bValue = b.timestamp.getTime();
+        break;
+      case 'severity':
+        const severityOrder = { low: 1, medium: 2, high: 3, critical: 4 };
+        aValue = severityOrder[a.severity as keyof typeof severityOrder];
+        bValue = severityOrder[b.severity as keyof typeof severityOrder];
+        break;
+      case 'eventType':
+        aValue = a.eventType;
+        bValue = b.eventType;
+        break;
+      default:
+        aValue = a.timestamp.getTime();
+        bValue = b.timestamp.getTime();
       }
       
       if (sortOrder === 'desc') {
@@ -750,17 +750,17 @@ export class SecurityLogger extends EventEmitter {
     let data: string;
     
     switch (format) {
-      case 'json':
-        data = JSON.stringify(exportData, null, 2);
-        break;
-      case 'csv':
-        data = this.convertToCSV(result.logs);
-        break;
-      case 'xml':
-        data = this.convertToXML(exportData);
-        break;
-      default:
-        data = JSON.stringify(exportData, null, 2);
+    case 'json':
+      data = JSON.stringify(exportData, null, 2);
+      break;
+    case 'csv':
+      data = this.convertToCSV(result.logs);
+      break;
+    case 'xml':
+      data = this.convertToXML(exportData);
+      break;
+    default:
+      data = JSON.stringify(exportData, null, 2);
     }
     
     const metadata = {
@@ -829,13 +829,13 @@ export class SecurityLogger extends EventEmitter {
     const baseFrameworks = [ComplianceFramework.ISO_27001, ComplianceFramework.NIST];
     
     switch (reason) {
-      case LockoutReason.SUSPICIOUS_ACTIVITY:
-      case LockoutReason.SYSTEM_SECURITY_ALERT:
-        return [...baseFrameworks, ComplianceFramework.GDPR];
-      case LockoutReason.COMPLIANCE_REQUIREMENT:
-        return [...baseFrameworks, ComplianceFramework.SOX, ComplianceFramework.GDPR];
-      default:
-        return baseFrameworks;
+    case LockoutReason.SUSPICIOUS_ACTIVITY:
+    case LockoutReason.SYSTEM_SECURITY_ALERT:
+      return [...baseFrameworks, ComplianceFramework.GDPR];
+    case LockoutReason.COMPLIANCE_REQUIREMENT:
+      return [...baseFrameworks, ComplianceFramework.SOX, ComplianceFramework.GDPR];
+    default:
+      return baseFrameworks;
     }
   }
   

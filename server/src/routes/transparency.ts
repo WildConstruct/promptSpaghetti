@@ -705,11 +705,11 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
   // Helper methods
   function getContentType(format: string): string {
     switch (format) {
-      case 'JSON': return 'application/json';
-      case 'XML': return 'application/xml';
-      case 'CSV': return 'text/csv';
-      case 'PDF': return 'application/pdf';
-      default: return 'application/octet-stream';
+    case 'JSON': return 'application/json';
+    case 'XML': return 'application/xml';
+    case 'CSV': return 'text/csv';
+    case 'PDF': return 'application/pdf';
+    default: return 'application/octet-stream';
     }
   }
 

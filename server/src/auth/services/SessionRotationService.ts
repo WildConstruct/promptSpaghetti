@@ -185,22 +185,22 @@ export class SessionRotationService {
 
   private shouldRotateSessions(event: PrivilegeChangeEvent, policy: SessionRotationPolicy): boolean {
     switch (event.changeType) {
-      case 'role_added':
-      case 'role_removed':
-        return policy.rotateOnRoleChange;
+    case 'role_added':
+    case 'role_removed':
+      return policy.rotateOnRoleChange;
       
-      case 'permission_added':
-      case 'permission_removed':
-        return policy.rotateOnPermissionChange;
+    case 'permission_added':
+    case 'permission_removed':
+      return policy.rotateOnPermissionChange;
       
-      case 'organization_change':
-        return policy.rotateOnOrganizationChange;
+    case 'organization_change':
+      return policy.rotateOnOrganizationChange;
       
-      case 'status_change':
-        return policy.rotateOnStatusChange;
+    case 'status_change':
+      return policy.rotateOnStatusChange;
       
-      default:
-        return true; // Default to rotating for unknown change types
+    default:
+      return true; // Default to rotating for unknown change types
     }
   }
 

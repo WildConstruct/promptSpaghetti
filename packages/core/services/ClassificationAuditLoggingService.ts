@@ -635,29 +635,29 @@ export class ClassificationAuditLoggingService {
     if (!report) return null;
 
     switch (report.format) {
-      case 'JSON':
-        return JSON.stringify(report, null, 2);
+    case 'JSON':
+      return JSON.stringify(report, null, 2);
       
-      case 'CSV':
-        const headers = [
-          'timestamp', 'userId', 'action', 'classification', 'dataId',
-          'resourceType', 'success', 'riskScore', 'violationsDetected'
-        ];
-        const rows = report.entries.map(entry => [
-          entry.timestamp.toISOString(),
-          entry.userId,
-          entry.action,
-          entry.classification,
-          entry.dataId,
-          entry.resourceType,
-          entry.outcome.success,
-          entry.riskScore,
-          entry.outcome.violationsDetected.join('; ')
-        ]);
-        return [headers, ...rows].map(row => row.join(',')).join('\n');
+    case 'CSV':
+      const headers = [
+        'timestamp', 'userId', 'action', 'classification', 'dataId',
+        'resourceType', 'success', 'riskScore', 'violationsDetected'
+      ];
+      const rows = report.entries.map(entry => [
+        entry.timestamp.toISOString(),
+        entry.userId,
+        entry.action,
+        entry.classification,
+        entry.dataId,
+        entry.resourceType,
+        entry.outcome.success,
+        entry.riskScore,
+        entry.outcome.violationsDetected.join('; ')
+      ]);
+      return [headers, ...rows].map(row => row.join(',')).join('\n');
       
-      default:
-        return JSON.stringify(report, null, 2);
+    default:
+      return JSON.stringify(report, null, 2);
     }
   }
 
@@ -782,7 +782,7 @@ export class ClassificationAuditLoggingService {
     entriesByAction: Record<string, number>;
     averageRiskScore: number;
     recentViolations: number;
-  } {
+    } {
     const entries = Array.from(this.auditLogs.values());
     const entriesByClassification = {} as Record<DataClassificationLevel, number>;
     const entriesByAction = {} as Record<string, number>;

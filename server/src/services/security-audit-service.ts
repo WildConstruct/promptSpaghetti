@@ -314,7 +314,7 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
       passed: boolean;
       alertCount: number;
     }>;
-  } {
+    } {
     const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentRecords = this.auditHistory.filter(r => r.timestamp > last24h);
     

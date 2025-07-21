@@ -56,16 +56,16 @@ const DEFAULT_CONFIG: SecurityConfig = {
     reportOnly: false,
     useNonces: true,
     directives: {
-      'default-src': "'self'",
-      'script-src': "'self'",
-      'style-src': "'self' 'unsafe-inline' https://fonts.googleapis.com",
-      'font-src': "'self' https://fonts.gstatic.com",
-      'img-src': "'self' data: https:",
-      'connect-src': "'self'",
-      'frame-ancestors': "'none'",
-      'form-action': "'self'",
-      'base-uri': "'self'",
-      'object-src': "'none'",
+      'default-src': '\'self\'',
+      'script-src': '\'self\'',
+      'style-src': '\'self\' \'unsafe-inline\' https://fonts.googleapis.com',
+      'font-src': '\'self\' https://fonts.gstatic.com',
+      'img-src': '\'self\' data: https:',
+      'connect-src': '\'self\'',
+      'frame-ancestors': '\'none\'',
+      'form-action': '\'self\'',
+      'base-uri': '\'self\'',
+      'object-src': '\'none\'',
       'upgrade-insecure-requests': ''
     }
   },
@@ -298,16 +298,16 @@ export const SecurityPresets = {
       enabled: true,
       reportOnly: true, // Use report-only mode in development
       directives: {
-        'default-src': "'self'",
-        'script-src': "'self' 'unsafe-inline' 'unsafe-eval'", // Allow inline scripts for dev tools
-        'style-src': "'self' 'unsafe-inline'",
-        'img-src': "'self' data: blob:",
-        'connect-src': "'self' ws: wss:", // Allow WebSocket connections for dev servers
-        'font-src': "'self' data:",
-        'frame-ancestors': "'none'",
-        'form-action': "'self'",
-        'base-uri': "'self'",
-        'object-src': "'none'"
+        'default-src': '\'self\'',
+        'script-src': '\'self\' \'unsafe-inline\' \'unsafe-eval\'', // Allow inline scripts for dev tools
+        'style-src': '\'self\' \'unsafe-inline\'',
+        'img-src': '\'self\' data: blob:',
+        'connect-src': '\'self\' ws: wss:', // Allow WebSocket connections for dev servers
+        'font-src': '\'self\' data:',
+        'frame-ancestors': '\'none\'',
+        'form-action': '\'self\'',
+        'base-uri': '\'self\'',
+        'object-src': '\'none\''
       }
     },
     xssProtection: {
@@ -331,16 +331,16 @@ export const SecurityPresets = {
       useNonces: true,
       reportUri: '/csp-report',
       directives: {
-        'default-src': "'self'",
-        'script-src': "'self'",
-        'style-src': "'self' https://fonts.googleapis.com",
-        'font-src': "'self' https://fonts.gstatic.com",
-        'img-src': "'self' data: https:",
-        'connect-src': "'self'",
-        'frame-ancestors': "'none'",
-        'form-action': "'self'",
-        'base-uri': "'self'",
-        'object-src': "'none'",
+        'default-src': '\'self\'',
+        'script-src': '\'self\'',
+        'style-src': '\'self\' https://fonts.googleapis.com',
+        'font-src': '\'self\' https://fonts.gstatic.com',
+        'img-src': '\'self\' data: https:',
+        'connect-src': '\'self\'',
+        'frame-ancestors': '\'none\'',
+        'form-action': '\'self\'',
+        'base-uri': '\'self\'',
+        'object-src': '\'none\'',
         'upgrade-insecure-requests': ''
       }
     }
@@ -352,15 +352,15 @@ export const SecurityPresets = {
   mfa: {
     csp: {
       directives: {
-        'default-src': "'self'",
-        'script-src': "'self'", // No inline scripts for security
-        'style-src': "'self' 'unsafe-inline'", // Allow inline styles for dynamic UI
-        'img-src': "'self' data: https:", // Allow QR code data URLs
-        'connect-src': "'self' https:", // Allow API calls for verification
-        'frame-ancestors': "'none'", // Prevent embedding in frames
-        'form-action': "'self'", // Only allow form submissions to same origin
-        'base-uri': "'self'",
-        'object-src': "'none'",
+        'default-src': '\'self\'',
+        'script-src': '\'self\'', // No inline scripts for security
+        'style-src': '\'self\' \'unsafe-inline\'', // Allow inline styles for dynamic UI
+        'img-src': '\'self\' data: https:', // Allow QR code data URLs
+        'connect-src': '\'self\' https:', // Allow API calls for verification
+        'frame-ancestors': '\'none\'', // Prevent embedding in frames
+        'form-action': '\'self\'', // Only allow form submissions to same origin
+        'base-uri': '\'self\'',
+        'object-src': '\'none\'',
         'upgrade-insecure-requests': '',
         'block-all-mixed-content': '' // Block mixed content
       }
@@ -448,11 +448,11 @@ export class SecurityHeaderValidator {
       score -= 25;
     } else {
       const csp = headers['content-security-policy'] || headers['content-security-policy-report-only'];
-      if (csp.includes("'unsafe-eval'")) {
+      if (csp.includes('\'unsafe-eval\'')) {
         warnings.push('CSP allows unsafe-eval');
         score -= 10;
       }
-      if (csp.includes("'unsafe-inline'") && !csp.includes("'nonce-")) {
+      if (csp.includes('\'unsafe-inline\'') && !csp.includes('\'nonce-')) {
         warnings.push('CSP allows unsafe-inline without nonce');
         score -= 5;
       }

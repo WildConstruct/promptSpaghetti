@@ -662,26 +662,26 @@ export class ReferrerPolicyService {
     policy: ReferrerPolicyValue
   ): boolean {
     switch (policy) {
-      case 'no-referrer':
-        return true; // Any referrer violates no-referrer policy
+    case 'no-referrer':
+      return true; // Any referrer violates no-referrer policy
       
-      case 'origin':
-        return referrerUrl.pathname !== '/' || referrerUrl.search !== '';
+    case 'origin':
+      return referrerUrl.pathname !== '/' || referrerUrl.search !== '';
       
-      case 'same-origin':
-        return referrerUrl.origin !== requestUrl.origin;
+    case 'same-origin':
+      return referrerUrl.origin !== requestUrl.origin;
       
-      case 'strict-origin':
+    case 'strict-origin':
+      return referrerUrl.protocol === 'https:' && requestUrl.protocol === 'http:';
+      
+    case 'strict-origin-when-cross-origin':
+      if (referrerUrl.origin !== requestUrl.origin) {
         return referrerUrl.protocol === 'https:' && requestUrl.protocol === 'http:';
+      }
+      return false;
       
-      case 'strict-origin-when-cross-origin':
-        if (referrerUrl.origin !== requestUrl.origin) {
-          return referrerUrl.protocol === 'https:' && requestUrl.protocol === 'http:';
-        }
-        return false;
-      
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 

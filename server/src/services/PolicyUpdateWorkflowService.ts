@@ -865,17 +865,17 @@ export class PolicyUpdateWorkflowService {
     const rejections = stage.approvers.filter(a => a.status === ApprovalStatus.REJECTED);
 
     switch (stage.approvalType) {
-      case ApprovalType.ANY:
-        return approvals.length > 0 || rejections.length > 0;
-      case ApprovalType.UNANIMOUS:
-        return approvals.length === stage.approvers.length || rejections.length > 0;
-      case ApprovalType.MAJORITY:
-        const majority = Math.ceil(stage.approvers.length / 2);
-        return approvals.length >= majority || rejections.length >= majority;
-      case ApprovalType.QUORUM:
-        return approvals.length >= stage.requiredApprovals || rejections.length > 0;
-      default:
-        return false;
+    case ApprovalType.ANY:
+      return approvals.length > 0 || rejections.length > 0;
+    case ApprovalType.UNANIMOUS:
+      return approvals.length === stage.approvers.length || rejections.length > 0;
+    case ApprovalType.MAJORITY:
+      const majority = Math.ceil(stage.approvers.length / 2);
+      return approvals.length >= majority || rejections.length >= majority;
+    case ApprovalType.QUORUM:
+      return approvals.length >= stage.requiredApprovals || rejections.length > 0;
+    default:
+      return false;
     }
   }
 

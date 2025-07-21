@@ -359,7 +359,7 @@ export class ClassificationMonitor extends EventEmitter {
     recentAnomalies: ClassificationAnomaly[];
     alerts: MonitoringEvent[];
     healthStatus: 'healthy' | 'warning' | 'critical';
-  } {
+    } {
     const healthStatus = this.calculateHealthStatus();
     
     return {

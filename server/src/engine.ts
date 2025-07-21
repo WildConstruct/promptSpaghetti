@@ -397,7 +397,7 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
       return extensionNode;
     }
     // Exhaustive check
-        throw new Error(`Unsupported node type ${(node as any).type}`);
+    throw new Error(`Unsupported node type ${(node as any).type}`);
   }
 }
 

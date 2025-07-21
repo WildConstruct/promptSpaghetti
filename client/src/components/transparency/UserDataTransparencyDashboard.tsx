@@ -15,18 +15,18 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/components/ui/card';
 import {
   Tabs,
   TabsContent,
   TabsList,
-  TabsTrigger,
+  TabsTrigger
 } from '@/components/ui/tabs';
 import {
   Alert,
   AlertDescription,
-  AlertTitle,
+  AlertTitle
 } from '@/components/ui/alert';
 import {
   Badge,
@@ -227,30 +227,30 @@ const UserDataTransparencyDashboard: React.FC = () => {
 
   const getClassificationColor = (classification: string) => {
     switch (classification) {
-      case 'PUBLIC': return 'bg-green-100 text-green-800';
-      case 'INTERNAL': return 'bg-blue-100 text-blue-800';
-      case 'CONFIDENTIAL': return 'bg-yellow-100 text-yellow-800';
-      case 'RESTRICTED': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'PUBLIC': return 'bg-green-100 text-green-800';
+    case 'INTERNAL': return 'bg-blue-100 text-blue-800';
+    case 'CONFIDENTIAL': return 'bg-yellow-100 text-yellow-800';
+    case 'RESTRICTED': return 'bg-red-100 text-red-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'LOW': return 'text-green-600';
-      case 'MEDIUM': return 'text-yellow-600';
-      case 'HIGH': return 'text-orange-600';
-      case 'CRITICAL': return 'text-red-600';
-      default: return 'text-gray-600';
+    case 'LOW': return 'text-green-600';
+    case 'MEDIUM': return 'text-yellow-600';
+    case 'HIGH': return 'text-orange-600';
+    case 'CRITICAL': return 'text-red-600';
+    default: return 'text-gray-600';
     }
   };
 
   const getTrendIcon = (direction: string) => {
     switch (direction) {
-      case 'IMPROVING': return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case 'DEGRADING': return <TrendingDown className="h-4 w-4 text-red-600" />;
-      case 'STABLE': return <Minus className="h-4 w-4 text-gray-600" />;
-      default: return null;
+    case 'IMPROVING': return <TrendingUp className="h-4 w-4 text-green-600" />;
+    case 'DEGRADING': return <TrendingDown className="h-4 w-4 text-red-600" />;
+    case 'STABLE': return <Minus className="h-4 w-4 text-gray-600" />;
+    default: return null;
     }
   };
 

@@ -395,33 +395,33 @@ class IntegrationHealthMonitor {
     
     try {
       switch (utility.checkMethod) {
-        case 'file_exists':
-          result.status = await this.checkFileExists(utility.file) ? 'healthy' : 'unhealthy';
-          if (result.status === 'healthy') {
-            // Additional checks for file integrity
-            const stats = await fs.stat(path.resolve(__dirname, utility.file));
-            result.details.fileSize = stats.size;
-            result.details.lastModified = stats.mtime.toISOString();
-          }
-          break;
+      case 'file_exists':
+        result.status = await this.checkFileExists(utility.file) ? 'healthy' : 'unhealthy';
+        if (result.status === 'healthy') {
+          // Additional checks for file integrity
+          const stats = await fs.stat(path.resolve(__dirname, utility.file));
+          result.details.fileSize = stats.size;
+          result.details.lastModified = stats.mtime.toISOString();
+        }
+        break;
           
-        case 'executable':
-          result.status = await this.checkExecutable(utility.command) ? 'healthy' : 'unhealthy';
-          break;
+      case 'executable':
+        result.status = await this.checkExecutable(utility.command) ? 'healthy' : 'unhealthy';
+        break;
           
-        case 'http_endpoint':
-          const httpResult = await this.checkHttpEndpoint(utility.healthEndpoint);
-          result.status = httpResult.status;
-          result.details = httpResult.details;
-          break;
+      case 'http_endpoint':
+        const httpResult = await this.checkHttpEndpoint(utility.healthEndpoint);
+        result.status = httpResult.status;
+        result.details = httpResult.details;
+        break;
           
-        case 'process_running':
-          result.status = await this.checkProcessRunning(utility.processPattern) ? 'healthy' : 'unhealthy';
-          break;
+      case 'process_running':
+        result.status = await this.checkProcessRunning(utility.processPattern) ? 'healthy' : 'unhealthy';
+        break;
           
-        default:
-          result.status = 'unknown';
-          result.error = `Unknown check method: ${utility.checkMethod}`;
+      default:
+        result.status = 'unknown';
+        result.error = `Unknown check method: ${utility.checkMethod}`;
       }
       
     } catch (error) {
@@ -449,42 +449,42 @@ class IntegrationHealthMonitor {
     
     try {
       switch (dependency.checkMethod) {
-        case 'version_check':
-          const versionResult = await this.checkVersion(dependency.command, dependency.expectedPattern);
-          result.status = versionResult.success ? 'healthy' : 'unhealthy';
-          result.details.version = versionResult.version;
-          if (!versionResult.success) {
-            result.error = versionResult.error;
-          }
-          break;
+      case 'version_check':
+        const versionResult = await this.checkVersion(dependency.command, dependency.expectedPattern);
+        result.status = versionResult.success ? 'healthy' : 'unhealthy';
+        result.details.version = versionResult.version;
+        if (!versionResult.success) {
+          result.error = versionResult.error;
+        }
+        break;
           
-        case 'file_exists':
-          result.status = await this.checkFileExists(dependency.file) ? 'healthy' : 'unhealthy';
-          break;
+      case 'file_exists':
+        result.status = await this.checkFileExists(dependency.file) ? 'healthy' : 'unhealthy';
+        break;
           
-        case 'disk_space':
-          const diskResult = await this.checkDiskSpace(dependency.path);
-          result.status = diskResult.usage < this.config.monitoring.diskThreshold ? 'healthy' : 'unhealthy';
-          result.details.diskUsage = diskResult.usage;
-          result.details.freeSpace = diskResult.free;
-          if (result.status === 'unhealthy') {
-            result.error = `Disk usage ${(diskResult.usage * 100).toFixed(1)}% exceeds threshold`;
-          }
-          break;
+      case 'disk_space':
+        const diskResult = await this.checkDiskSpace(dependency.path);
+        result.status = diskResult.usage < this.config.monitoring.diskThreshold ? 'healthy' : 'unhealthy';
+        result.details.diskUsage = diskResult.usage;
+        result.details.freeSpace = diskResult.free;
+        if (result.status === 'unhealthy') {
+          result.error = `Disk usage ${(diskResult.usage * 100).toFixed(1)}% exceeds threshold`;
+        }
+        break;
           
-        case 'memory_check':
-          const memoryResult = await this.checkMemoryUsage();
-          result.status = memoryResult.usage < this.config.monitoring.memoryThreshold ? 'healthy' : 'unhealthy';
-          result.details.memoryUsage = memoryResult.usage;
-          result.details.freeMemory = memoryResult.free;
-          if (result.status === 'unhealthy') {
-            result.error = `Memory usage ${(memoryResult.usage * 100).toFixed(1)}% exceeds threshold`;
-          }
-          break;
+      case 'memory_check':
+        const memoryResult = await this.checkMemoryUsage();
+        result.status = memoryResult.usage < this.config.monitoring.memoryThreshold ? 'healthy' : 'unhealthy';
+        result.details.memoryUsage = memoryResult.usage;
+        result.details.freeMemory = memoryResult.free;
+        if (result.status === 'unhealthy') {
+          result.error = `Memory usage ${(memoryResult.usage * 100).toFixed(1)}% exceeds threshold`;
+        }
+        break;
           
-        default:
-          result.status = 'unknown';
-          result.error = `Unknown check method: ${dependency.checkMethod}`;
+      default:
+        result.status = 'unknown';
+        result.error = `Unknown check method: ${dependency.checkMethod}`;
       }
       
     } catch (error) {
@@ -881,7 +881,7 @@ class IntegrationHealthMonitor {
         <div class="card">
             <h3>🚨 Recent Alerts</h3>
             ${data.alerts.length === 0 ? '<p style="color: #666;">No recent alerts</p>' : 
-              data.alerts.slice(-5).map(alert => `
+    data.alerts.slice(-5).map(alert => `
                 <div class="alert alert-${alert.criticality}">
                     <strong>${alert.system}</strong>
                     <div style="font-size: 0.9em; margin-top: 5px;">${alert.message}</div>
@@ -917,7 +917,7 @@ class IntegrationHealthMonitor {
         <div class="card">
             <h3>🔥 Open Incidents</h3>
             ${data.incidents.length === 0 ? '<p style="color: #28a745;">✅ No open incidents</p>' : 
-              data.incidents.map(incident => `
+    data.incidents.map(incident => `
                 <div class="alert alert-${incident.criticality}">
                     <strong>${incident.system}</strong>
                     <div style="font-size: 0.9em; margin-top: 5px;">${incident.error || 'Unknown error'}</div>
@@ -1062,7 +1062,7 @@ class IntegrationHealthMonitor {
       return {
         success: match,
         version: output.trim(),
-        error: match ? null : `Version output doesn't match expected pattern`
+        error: match ? null : 'Version output doesn\'t match expected pattern'
       };
     } catch (error) {
       return {
@@ -1414,68 +1414,68 @@ if (require.main === module) {
       await monitor.initialize();
       
       switch (command) {
-        case 'start':
-          await monitor.startMonitoring();
-          console.log('🔍 Health monitor started. Press Ctrl+C to stop.');
+      case 'start':
+        await monitor.startMonitoring();
+        console.log('🔍 Health monitor started. Press Ctrl+C to stop.');
           
-          // Keep process running
-          process.on('SIGINT', async () => {
-            console.log('\n🛑 Stopping health monitor...');
-            await monitor.stopMonitoring();
-            process.exit(0);
+        // Keep process running
+        process.on('SIGINT', async () => {
+          console.log('\n🛑 Stopping health monitor...');
+          await monitor.stopMonitoring();
+          process.exit(0);
+        });
+          
+        // Keep alive
+        setInterval(() => {}, 1000);
+        break;
+          
+      case 'check':
+        console.log('🔍 Running one-time health check...\n');
+        const result = await monitor.runFullHealthCheck();
+          
+        if (result.overallHealth < 80) {
+          process.exit(1);
+        }
+        break;
+          
+      case 'dashboard':
+        await monitor.runFullHealthCheck();
+        await monitor.generateHealthDashboard();
+        console.log(`📊 Dashboard generated: ${monitor.dashboardFile}`);
+        break;
+          
+      case 'stats':
+        const stats = await monitor.getStatistics();
+        console.log('📊 Integration Health Statistics:');
+        console.log(JSON.stringify(stats, null, 2));
+        break;
+          
+      case 'alerts':
+        console.log('🚨 Recent Alerts:');
+        const recentAlerts = monitor.alerts.slice(-10);
+        recentAlerts.forEach(alert => {
+          console.log(`${monitor.getAlertIcon(alert.criticality)} [${alert.criticality.toUpperCase()}] ${alert.system}: ${alert.message}`);
+          console.log(`   ${new Date(alert.timestamp).toLocaleString()}`);
+        });
+        break;
+          
+      case 'incidents':
+        console.log('🔥 Open Incidents:');
+        const openIncidents = monitor.incidents.filter(i => i.status === 'open');
+        if (openIncidents.length === 0) {
+          console.log('✅ No open incidents');
+        } else {
+          openIncidents.forEach(incident => {
+            console.log(`🔥 ${incident.system} (${incident.criticality}): ${incident.error}`);
+            console.log(`   Detected: ${new Date(incident.detectedAt).toLocaleString()}`);
+            console.log(`   Recovery attempts: ${incident.autoRecoveryAttempts}`);
           });
+        }
+        break;
           
-          // Keep alive
-          setInterval(() => {}, 1000);
-          break;
-          
-        case 'check':
-          console.log('🔍 Running one-time health check...\n');
-          const result = await monitor.runFullHealthCheck();
-          
-          if (result.overallHealth < 80) {
-            process.exit(1);
-          }
-          break;
-          
-        case 'dashboard':
-          await monitor.runFullHealthCheck();
-          await monitor.generateHealthDashboard();
-          console.log(`📊 Dashboard generated: ${monitor.dashboardFile}`);
-          break;
-          
-        case 'stats':
-          const stats = await monitor.getStatistics();
-          console.log('📊 Integration Health Statistics:');
-          console.log(JSON.stringify(stats, null, 2));
-          break;
-          
-        case 'alerts':
-          console.log('🚨 Recent Alerts:');
-          const recentAlerts = monitor.alerts.slice(-10);
-          recentAlerts.forEach(alert => {
-            console.log(`${monitor.getAlertIcon(alert.criticality)} [${alert.criticality.toUpperCase()}] ${alert.system}: ${alert.message}`);
-            console.log(`   ${new Date(alert.timestamp).toLocaleString()}`);
-          });
-          break;
-          
-        case 'incidents':
-          console.log('🔥 Open Incidents:');
-          const openIncidents = monitor.incidents.filter(i => i.status === 'open');
-          if (openIncidents.length === 0) {
-            console.log('✅ No open incidents');
-          } else {
-            openIncidents.forEach(incident => {
-              console.log(`🔥 ${incident.system} (${incident.criticality}): ${incident.error}`);
-              console.log(`   Detected: ${new Date(incident.detectedAt).toLocaleString()}`);
-              console.log(`   Recovery attempts: ${incident.autoRecoveryAttempts}`);
-            });
-          }
-          break;
-          
-        case 'help':
-        default:
-          console.log(`
+      case 'help':
+      default:
+        console.log(`
 🔍 Integration Health Monitor
 
 USAGE:
@@ -1513,7 +1513,7 @@ EXIT CODES:
   0 = All systems healthy
   1 = Health issues detected
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

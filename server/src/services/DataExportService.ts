@@ -440,26 +440,26 @@ export class DataExportService {
     await this.updateJobStatus(jobId, ExportJobStatus.PROCESSING, 20);
 
     switch (request.exportType) {
-      case ExportType.USER_DATA:
-        data = await this.extractUserData(request);
-        break;
-      case ExportType.ACCESS_LOGS:
-        data = await this.extractAccessLogs(request);
-        break;
-      case ExportType.AUDIT_TRAIL:
-        data = await this.extractAuditTrail(request);
-        break;
-      case ExportType.SYSTEM_LOGS:
-        data = await this.extractSystemLogs(request);
-        break;
-      case ExportType.COMPLIANCE_REPORT:
-        data = await this.extractComplianceData(request);
-        break;
-      case ExportType.SECURITY_EVENTS:
-        data = await this.extractSecurityEvents(request);
-        break;
-      default:
-        throw new Error(`Unsupported export type: ${request.exportType}`);
+    case ExportType.USER_DATA:
+      data = await this.extractUserData(request);
+      break;
+    case ExportType.ACCESS_LOGS:
+      data = await this.extractAccessLogs(request);
+      break;
+    case ExportType.AUDIT_TRAIL:
+      data = await this.extractAuditTrail(request);
+      break;
+    case ExportType.SYSTEM_LOGS:
+      data = await this.extractSystemLogs(request);
+      break;
+    case ExportType.COMPLIANCE_REPORT:
+      data = await this.extractComplianceData(request);
+      break;
+    case ExportType.SECURITY_EVENTS:
+      data = await this.extractSecurityEvents(request);
+      break;
+    default:
+      throw new Error(`Unsupported export type: ${request.exportType}`);
     }
 
     await this.updateJobStatus(jobId, ExportJobStatus.PROCESSING, 60);
@@ -494,17 +494,17 @@ export class DataExportService {
     const filePath = path.join(this.exportDir, fileName);
 
     switch (request.format) {
-      case ExportFormat.JSON:
-        await this.writeJsonFile(filePath, data);
-        break;
-      case ExportFormat.CSV:
-        await this.writeCsvFile(filePath, data);
-        break;
-      case ExportFormat.XML:
-        await this.writeXmlFile(filePath, data);
-        break;
-      default:
-        throw new Error(`Unsupported format: ${request.format}`);
+    case ExportFormat.JSON:
+      await this.writeJsonFile(filePath, data);
+      break;
+    case ExportFormat.CSV:
+      await this.writeCsvFile(filePath, data);
+      break;
+    case ExportFormat.XML:
+      await this.writeXmlFile(filePath, data);
+      break;
+    default:
+      throw new Error(`Unsupported format: ${request.format}`);
     }
 
     if (request.encryptOutput) {
@@ -571,12 +571,12 @@ export class DataExportService {
   private getContentType(fileName: string): string {
     const ext = path.extname(fileName).toLowerCase();
     switch (ext) {
-      case '.json': return 'application/json';
-      case '.csv': return 'text/csv';
-      case '.xml': return 'application/xml';
-      case '.pdf': return 'application/pdf';
-      case '.xlsx': return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-      default: return 'application/octet-stream';
+    case '.json': return 'application/json';
+    case '.csv': return 'text/csv';
+    case '.xml': return 'application/xml';
+    case '.pdf': return 'application/pdf';
+    case '.xlsx': return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    default: return 'application/octet-stream';
     }
   }
 

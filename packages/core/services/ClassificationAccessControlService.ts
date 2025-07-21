@@ -485,21 +485,21 @@ export class ClassificationAccessControlService {
 
     for (const condition of conditions) {
       switch (condition.type) {
-        case 'TIME_RESTRICTION':
-          if (!this.validateTimeRestriction(condition, context)) {
-            errors.push('Access attempted outside allowed time window');
-          }
-          break;
-        case 'PURPOSE_LIMITATION':
-          if (!this.validatePurposeRestriction(condition, context)) {
-            errors.push('Access purpose does not match approved purpose');
-          }
-          break;
-        case 'EXPORT_RESTRICTED':
-          if (context.operation === 'export' && !condition.parameters.allowExport) {
-            errors.push('Export operation not permitted for this classification');
-          }
-          break;
+      case 'TIME_RESTRICTION':
+        if (!this.validateTimeRestriction(condition, context)) {
+          errors.push('Access attempted outside allowed time window');
+        }
+        break;
+      case 'PURPOSE_LIMITATION':
+        if (!this.validatePurposeRestriction(condition, context)) {
+          errors.push('Access purpose does not match approved purpose');
+        }
+        break;
+      case 'EXPORT_RESTRICTED':
+        if (context.operation === 'export' && !condition.parameters.allowExport) {
+          errors.push('Export operation not permitted for this classification');
+        }
+        break;
       }
     }
 

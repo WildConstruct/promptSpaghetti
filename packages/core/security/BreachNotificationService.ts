@@ -332,7 +332,7 @@ export class BreachNotificationService extends EventEmitter {
     // Create timeline entry
     const timelineEvent: TimelineEvent = {
       timestamp: new Date(),
-      event: `Incident updated`,
+      event: 'Incident updated',
       actor,
       details: updates
     };
@@ -497,14 +497,14 @@ export class BreachNotificationService extends EventEmitter {
     }
     
     switch (format) {
-      case 'summary':
-        return this.generateSummaryReport(incident);
-      case 'detailed':
-        return this.generateDetailedReport(incident);
-      case 'regulatory':
-        return this.generateRegulatoryReport(incident);
-      default:
-        throw new Error(`Unknown report format: ${format}`);
+    case 'summary':
+      return this.generateSummaryReport(incident);
+    case 'detailed':
+      return this.generateDetailedReport(incident);
+    case 'regulatory':
+      return this.generateRegulatoryReport(incident);
+    default:
+      throw new Error(`Unknown report format: ${format}`);
     }
   }
   
@@ -699,12 +699,12 @@ export class BreachNotificationService extends EventEmitter {
   
   private async handleStatusChange(incident: BreachIncident, oldStatus: IncidentStatus): Promise<void> {
     switch (incident.status) {
-      case IncidentStatus.CONTAINED:
-        await this.handleContainment(incident);
-        break;
-      case IncidentStatus.CLOSED:
-        await this.handleClosure(incident);
-        break;
+    case IncidentStatus.CONTAINED:
+      await this.handleContainment(incident);
+      break;
+    case IncidentStatus.CLOSED:
+      await this.handleClosure(incident);
+      break;
     }
   }
   

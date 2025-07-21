@@ -220,7 +220,7 @@ export class EnhancedServer {
     http: { running: boolean; port?: number };
     https: { running: boolean; port?: number; tls?: any };
     config: any;
-  } {
+    } {
     const config = this.tlsManager.getConfig();
     
     return {

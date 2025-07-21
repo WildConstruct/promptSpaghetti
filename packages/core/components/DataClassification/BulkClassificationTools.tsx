@@ -189,18 +189,18 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
         
         for (const condition of rule.conditions) {
           switch (condition.type) {
-            case 'FIELD_NAME':
-              if (new RegExp(condition.pattern, 'i').test(element.name)) {
-                ruleScore += condition.weight;
-              }
-              break;
-            case 'CONTENT_PATTERN':
-              if (element.content && new RegExp(condition.pattern, 'i').test(element.content)) {
-                ruleScore += condition.weight;
-              }
-              break;
-            default:
-              break;
+          case 'FIELD_NAME':
+            if (new RegExp(condition.pattern, 'i').test(element.name)) {
+              ruleScore += condition.weight;
+            }
+            break;
+          case 'CONTENT_PATTERN':
+            if (element.content && new RegExp(condition.pattern, 'i').test(element.content)) {
+              ruleScore += condition.weight;
+            }
+            break;
+          default:
+            break;
           }
         }
 
@@ -257,23 +257,23 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
       let rationale: string;
 
       switch (state.operationType) {
-        case 'manual':
-          classification = state.manualClassification || 'INTERNAL';
-          rationale = state.rationale || `Manual classification as ${classification}`;
-          break;
-        case 'template':
-          classification = state.selectedTemplate?.classification || 'INTERNAL';
-          rationale = state.selectedTemplate?.rationale || 'Applied from template';
-          break;
-        case 'rules':
-        case 'ai':
-          const suggestion = suggestions.get(element.id);
-          classification = suggestion?.classification || 'INTERNAL';
-          rationale = suggestion?.reason || 'Default classification applied';
-          break;
-        default:
-          classification = 'INTERNAL';
-          rationale = 'Default classification';
+      case 'manual':
+        classification = state.manualClassification || 'INTERNAL';
+        rationale = state.rationale || `Manual classification as ${classification}`;
+        break;
+      case 'template':
+        classification = state.selectedTemplate?.classification || 'INTERNAL';
+        rationale = state.selectedTemplate?.rationale || 'Applied from template';
+        break;
+      case 'rules':
+      case 'ai':
+        const suggestion = suggestions.get(element.id);
+        classification = suggestion?.classification || 'INTERNAL';
+        rationale = suggestion?.reason || 'Default classification applied';
+        break;
+      default:
+        classification = 'INTERNAL';
+        rationale = 'Default classification';
       }
 
       return {
@@ -457,9 +457,9 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
                   </div>
                   <span className={`px-2 py-1 rounded text-xs font-medium ${
                     template.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
-                    template.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
-                    template.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
+                      template.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
+                        template.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
                   }`}>
                     {template.classification}
                   </span>
@@ -547,9 +547,9 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
                     {element.existingClassification && (
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
                         element.existingClassification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
-                        element.existingClassification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
-                        element.existingClassification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
+                          element.existingClassification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
+                            element.existingClassification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
                       }`}>
                         {element.existingClassification.classification}
                       </span>
@@ -604,9 +604,9 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
                   </div>
                   <span className={`px-2 py-1 rounded text-xs font-medium ${
                     classification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
-                    classification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
-                    classification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
+                      classification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
+                        classification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
                   }`}>
                     {classification.classification}
                   </span>

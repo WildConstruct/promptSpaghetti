@@ -27,7 +27,7 @@ describe('ReferrerPolicyService', () => {
     // Create mock instances with required constructors
     mockDb = {
       query: jest.fn(),
-      close: jest.fn(),
+      close: jest.fn()
     } as any as jest.Mocked<DatabaseService>;
     
     mockRedis = {
@@ -35,7 +35,7 @@ describe('ReferrerPolicyService', () => {
       setex: jest.fn().mockResolvedValue('OK'),
       del: jest.fn().mockResolvedValue(1),
       keys: jest.fn().mockResolvedValue([]),
-      close: jest.fn(),
+      close: jest.fn()
     } as any as jest.Mocked<RedisService>;
 
     service = new ReferrerPolicyService(mockDb, mockRedis, {

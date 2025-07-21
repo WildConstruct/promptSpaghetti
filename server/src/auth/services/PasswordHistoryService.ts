@@ -383,7 +383,7 @@ export class PasswordHistoryService {
     complianceRate: number;
     commonPatterns: Array<{ pattern: string; count: number; severity: string }>;
     riskDistribution: Record<string, number>;
-  } {
+    } {
     const allHistories = Array.from(this.passwordHistory.values());
     const totalUsers = allHistories.length;
     

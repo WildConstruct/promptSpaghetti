@@ -44,14 +44,14 @@ const AuditQuerySchema = z.object({
   offset: z.coerce.number().min(0).default(0),
   operation: z.enum(
     ['read',
-    'write',
-    'delete',
-    'export',
-    'share',
-    'modify',
-    'create',
-    'list',
-    'search'] as const
+      'write',
+      'delete',
+      'export',
+      'share',
+      'modify',
+      'create',
+      'list',
+      'search'] as const
   ).optional(),
   allowed: z.coerce.boolean().optional(),
   startDate: z.string().datetime().optional().transform(val => val ? new Date(val) : undefined),

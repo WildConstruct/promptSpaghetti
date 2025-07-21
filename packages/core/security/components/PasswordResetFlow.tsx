@@ -401,11 +401,11 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
 
   const getPasswordStrengthColor = (strength: PasswordStrength) => {
     switch (strength) {
-      case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
-      case PasswordStrength.FAIR: return 'text-orange-600 bg-orange-100';
-      case PasswordStrength.GOOD: return 'text-blue-600 bg-blue-100';
-      case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
+    case PasswordStrength.FAIR: return 'text-orange-600 bg-orange-100';
+    case PasswordStrength.GOOD: return 'text-blue-600 bg-blue-100';
+    case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -438,11 +438,11 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
         <div className="flex items-center justify-between text-sm">
           <div className={`flex items-center space-x-2 ${
             currentStep === ResetStep.REQUEST ? 'text-blue-600' : 
-            ['verify', 'reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400'
+              ['verify', 'reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400'
           }`}>
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
               currentStep === ResetStep.REQUEST ? 'bg-blue-600 text-white' :
-              ['verify', 'reset', 'success'].includes(currentStep) ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
+                ['verify', 'reset', 'success'].includes(currentStep) ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
             }`}>
               {['verify', 'reset', 'success'].includes(currentStep) ? '✓' : '1'}
             </div>
@@ -455,11 +455,11 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
 
           <div className={`flex items-center space-x-2 ${
             currentStep === ResetStep.VERIFY ? 'text-blue-600' : 
-            ['reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400'
+              ['reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400'
           }`}>
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
               currentStep === ResetStep.VERIFY ? 'bg-blue-600 text-white' :
-              ['reset', 'success'].includes(currentStep) ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
+                ['reset', 'success'].includes(currentStep) ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
             }`}>
               {['reset', 'success'].includes(currentStep) ? '✓' : '2'}
             </div>
@@ -472,11 +472,11 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
 
           <div className={`flex items-center space-x-2 ${
             currentStep === ResetStep.RESET ? 'text-blue-600' : 
-            currentStep === ResetStep.SUCCESS ? 'text-green-600' : 'text-gray-400'
+              currentStep === ResetStep.SUCCESS ? 'text-green-600' : 'text-gray-400'
           }`}>
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
               currentStep === ResetStep.RESET ? 'bg-blue-600 text-white' :
-              currentStep === ResetStep.SUCCESS ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
+                currentStep === ResetStep.SUCCESS ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
             }`}>
               {currentStep === ResetStep.SUCCESS ? '✓' : '3'}
             </div>
@@ -678,8 +678,8 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({
                   <div 
                     className={`h-2 rounded-full transition-all duration-300 ${
                       passwordValidation.strength === PasswordStrength.WEAK ? 'bg-red-500' :
-                      passwordValidation.strength === PasswordStrength.FAIR ? 'bg-orange-500' :
-                      passwordValidation.strength === PasswordStrength.GOOD ? 'bg-blue-500' : 'bg-green-500'
+                        passwordValidation.strength === PasswordStrength.FAIR ? 'bg-orange-500' :
+                          passwordValidation.strength === PasswordStrength.GOOD ? 'bg-blue-500' : 'bg-green-500'
                     }`}
                     style={{ width: getPasswordStrengthWidth(passwordValidation.score) }}
                   />

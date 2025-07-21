@@ -213,7 +213,7 @@ export class SecureSessionManager extends EventEmitter {
     const csrfToken = this.generateCSRFToken();
     const refreshToken = config.securityLevel === SessionSecurityLevel.HIGH || 
                         config.securityLevel === SessionSecurityLevel.CRITICAL 
-                        ? this.generateSecureToken() : undefined;
+      ? this.generateSecureToken() : undefined;
     
     const now = new Date();
     const session: SecureSession = {
@@ -490,7 +490,7 @@ export class SecureSessionManager extends EventEmitter {
     bySecurityLevel: Record<SessionSecurityLevel, number>;
     byDevice: Record<string, number>;
     averageSessionDuration: number;
-  } {
+    } {
     const sessions = Array.from(this.sessions.values());
     const now = new Date();
     

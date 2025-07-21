@@ -344,7 +344,7 @@ class TaskEstimationImprover {
       await this.saveModels();
       await this.saveMetrics();
       
-      console.log(`✅ Model training complete:`);
+      console.log('✅ Model training complete:');
       console.log(`   Linear model accuracy: ${(evaluation.linear.accuracy * 100).toFixed(1)}%`);
       console.log(`   Polynomial model accuracy: ${(evaluation.polynomial.accuracy * 100).toFixed(1)}%`);
       console.log(`   Exponential model accuracy: ${(evaluation.exponential.accuracy * 100).toFixed(1)}%`);
@@ -1070,14 +1070,14 @@ class TaskEstimationImprover {
 
   predictWithModel(model, features) {
     switch (model.type) {
-      case 'linear':
-        return this.predictLinearSample(features, model);
-      case 'polynomial':
-        return this.predictLinearSample(this.createPolynomialFeatures(features), model.baseModel);
-      case 'exponential':
-        return this.predictExponentialSample(features, model);
-      default:
-        return 4; // Default
+    case 'linear':
+      return this.predictLinearSample(features, model);
+    case 'polynomial':
+      return this.predictLinearSample(this.createPolynomialFeatures(features), model.baseModel);
+    case 'exponential':
+      return this.predictExponentialSample(features, model);
+    default:
+      return 4; // Default
     }
   }
 
@@ -1450,72 +1450,72 @@ if (require.main === module) {
       await improver.initialize();
       
       switch (command) {
-        case 'estimate':
-          const taskData = {
-            id: args[1] || 'test-task',
-            title: args[2] || 'Test Task',
-            description: args[3] || 'A test task for estimation',
-            priority: args[4] || 'medium',
-            tags: (args[5] || '').split(',').filter(t => t.trim())
-          };
+      case 'estimate':
+        const taskData = {
+          id: args[1] || 'test-task',
+          title: args[2] || 'Test Task',
+          description: args[3] || 'A test task for estimation',
+          priority: args[4] || 'medium',
+          tags: (args[5] || '').split(',').filter(t => t.trim())
+        };
           
-          console.log('🔮 Generating estimation...\n');
-          const suggestion = await improver.getEstimationSuggestion(taskData);
+        console.log('🔮 Generating estimation...\n');
+        const suggestion = await improver.getEstimationSuggestion(taskData);
           
-          console.log('\n📋 Estimation Suggestion:');
-          console.log(`   Estimated Hours: ${suggestion.estimatedHours}`);
-          console.log(`   Range: ${suggestion.range.min} - ${suggestion.range.max} hours`);
-          console.log(`   Confidence: ${(suggestion.confidence * 100).toFixed(1)}% (${suggestion.confidenceLevel})`);
+        console.log('\n📋 Estimation Suggestion:');
+        console.log(`   Estimated Hours: ${suggestion.estimatedHours}`);
+        console.log(`   Range: ${suggestion.range.min} - ${suggestion.range.max} hours`);
+        console.log(`   Confidence: ${(suggestion.confidence * 100).toFixed(1)}% (${suggestion.confidenceLevel})`);
           
-          if (suggestion.reasoning.length > 0) {
-            console.log('\n💭 Reasoning:');
-            suggestion.reasoning.forEach(reason => console.log(`   • ${reason}`));
-          }
+        if (suggestion.reasoning.length > 0) {
+          console.log('\n💭 Reasoning:');
+          suggestion.reasoning.forEach(reason => console.log(`   • ${reason}`));
+        }
           
-          if (suggestion.recommendations.length > 0) {
-            console.log('\n💡 Recommendations:');
-            suggestion.recommendations.forEach(rec => console.log(`   • ${rec}`));
-          }
-          break;
+        if (suggestion.recommendations.length > 0) {
+          console.log('\n💡 Recommendations:');
+          suggestion.recommendations.forEach(rec => console.log(`   • ${rec}`));
+        }
+        break;
           
-        case 'record':
-          const taskId = args[1];
-          const actualHours = parseFloat(args[2]);
-          const agentId = args[3] || null;
+      case 'record':
+        const taskId = args[1];
+        const actualHours = parseFloat(args[2]);
+        const agentId = args[3] || null;
           
-          if (!taskId || isNaN(actualHours)) {
-            console.error('Usage: node TaskEstimationImprover.js record <taskId> <actualHours> [agentId]');
-            process.exit(1);
-          }
+        if (!taskId || isNaN(actualHours)) {
+          console.error('Usage: node TaskEstimationImprover.js record <taskId> <actualHours> [agentId]');
+          process.exit(1);
+        }
           
-          console.log(`📝 Recording completion: ${taskId} = ${actualHours}h`);
-          const completion = await improver.recordCompletion(taskId, actualHours, agentId);
+        console.log(`📝 Recording completion: ${taskId} = ${actualHours}h`);
+        const completion = await improver.recordCompletion(taskId, actualHours, agentId);
           
-          if (completion.accuracy !== undefined) {
-            console.log(`📊 Estimation accuracy: ${(completion.accuracy * 100).toFixed(1)}%`);
-          }
-          break;
+        if (completion.accuracy !== undefined) {
+          console.log(`📊 Estimation accuracy: ${(completion.accuracy * 100).toFixed(1)}%`);
+        }
+        break;
           
-        case 'train':
-          console.log('🧠 Training estimation models...\n');
-          const success = await improver.trainModels();
+      case 'train':
+        console.log('🧠 Training estimation models...\n');
+        const success = await improver.trainModels();
           
-          if (success) {
-            console.log('✅ Model training completed successfully');
-          } else {
-            console.log('⚠️  Training skipped due to insufficient data');
-          }
-          break;
+        if (success) {
+          console.log('✅ Model training completed successfully');
+        } else {
+          console.log('⚠️  Training skipped due to insufficient data');
+        }
+        break;
           
-        case 'stats':
-          const stats = await improver.getStatistics();
-          console.log('📊 Task Estimation Statistics:');
-          console.log(JSON.stringify(stats, null, 2));
-          break;
+      case 'stats':
+        const stats = await improver.getStatistics();
+        console.log('📊 Task Estimation Statistics:');
+        console.log(JSON.stringify(stats, null, 2));
+        break;
           
-        case 'help':
-        default:
-          console.log(`
+      case 'help':
+      default:
+        console.log(`
 🔮 Task Estimation Improver
 
 USAGE:
@@ -1554,7 +1554,7 @@ FEATURES ANALYZED:
   - Historical performance patterns
   - Current workload and context
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

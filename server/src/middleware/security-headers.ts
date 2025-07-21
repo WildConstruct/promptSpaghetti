@@ -51,20 +51,20 @@ export const defaultSecurityConfig: SecurityHeadersConfig = {
   contentSecurityPolicy: {
     enabled: true,
     directives: {
-      'default-src': ["'self'"],
-      'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      'style-src': ["'self'", "'unsafe-inline'"],
-      'img-src': ["'self'", 'data:', 'https:'],
-      'font-src': ["'self'", 'https:', 'data:'],
-      'connect-src': ["'self'", 'ws:', 'wss:'],
-      'media-src': ["'self'"],
-      'object-src': ["'none'"],
-      'child-src': ["'self'"],
-      'worker-src': ["'self'"],
-      'frame-ancestors': ["'none'"],
-      'form-action': ["'self'"],
-      'base-uri': ["'self'"],
-      'manifest-src': ["'self'"]
+      'default-src': ['\'self\''],
+      'script-src': ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\''],
+      'style-src': ['\'self\'', '\'unsafe-inline\''],
+      'img-src': ['\'self\'', 'data:', 'https:'],
+      'font-src': ['\'self\'', 'https:', 'data:'],
+      'connect-src': ['\'self\'', 'ws:', 'wss:'],
+      'media-src': ['\'self\''],
+      'object-src': ['\'none\''],
+      'child-src': ['\'self\''],
+      'worker-src': ['\'self\''],
+      'frame-ancestors': ['\'none\''],
+      'form-action': ['\'self\''],
+      'base-uri': ['\'self\''],
+      'manifest-src': ['\'self\'']
     },
     reportOnly: false
   },
@@ -92,9 +92,9 @@ export const defaultSecurityConfig: SecurityHeadersConfig = {
       'microphone': [],
       'geolocation': [],
       'payment': [],
-      'autoplay': ["'self'"],
-      'fullscreen': ["'self'"],
-      'picture-in-picture': ["'self'"]
+      'autoplay': ['\'self\''],
+      'fullscreen': ['\'self\''],
+      'picture-in-picture': ['\'self\'']
     }
   },
   crossOriginEmbedderPolicy: {

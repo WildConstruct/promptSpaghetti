@@ -540,10 +540,10 @@ export class AdvancedClassificationEngine extends EventEmitter {
     
     // Base risk from classification level
     switch (baseResult.level) {
-      case ClassificationLevel.PUBLIC: riskScore = 10; break;
-      case ClassificationLevel.INTERNAL: riskScore = 30; break;
-      case ClassificationLevel.CONFIDENTIAL: riskScore = 70; break;
-      case ClassificationLevel.RESTRICTED: riskScore = 90; break;
+    case ClassificationLevel.PUBLIC: riskScore = 10; break;
+    case ClassificationLevel.INTERNAL: riskScore = 30; break;
+    case ClassificationLevel.CONFIDENTIAL: riskScore = 70; break;
+    case ClassificationLevel.RESTRICTED: riskScore = 90; break;
     }
     
     // Adjust for ML predictions
@@ -565,11 +565,11 @@ export class AdvancedClassificationEngine extends EventEmitter {
 
   private getClassificationRisk(level: ClassificationLevel): number {
     switch (level) {
-      case ClassificationLevel.PUBLIC: return 10;
-      case ClassificationLevel.INTERNAL: return 30;
-      case ClassificationLevel.CONFIDENTIAL: return 70;
-      case ClassificationLevel.RESTRICTED: return 90;
-      default: return 30;
+    case ClassificationLevel.PUBLIC: return 10;
+    case ClassificationLevel.INTERNAL: return 30;
+    case ClassificationLevel.CONFIDENTIAL: return 70;
+    case ClassificationLevel.RESTRICTED: return 90;
+    default: return 30;
     }
   }
 
@@ -693,21 +693,21 @@ export class AdvancedClassificationEngine extends EventEmitter {
     context: ClassificationContext
   ): boolean {
     switch (trigger.type) {
-      case 'classification_complete':
-        return true; // Always trigger on completion if specified
+    case 'classification_complete':
+      return true; // Always trigger on completion if specified
         
-      case 'threshold_exceeded':
-        const threshold = trigger.conditions.riskScore || 80;
-        return result.riskScore > threshold;
+    case 'threshold_exceeded':
+      const threshold = trigger.conditions.riskScore || 80;
+      return result.riskScore > threshold;
         
-      case 'compliance_violation':
-        return result.complianceRequirements.length > 0;
+    case 'compliance_violation':
+      return result.complianceRequirements.length > 0;
         
-      case 'manual_review_required':
-        return result.reviewRequired;
+    case 'manual_review_required':
+      return result.reviewRequired;
         
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
@@ -743,12 +743,12 @@ export class AdvancedClassificationEngine extends EventEmitter {
 
   private evaluateCondition(condition: WorkflowCondition, value: any): boolean {
     switch (condition.operator) {
-      case 'equals': return value === condition.value;
-      case 'greater_than': return value > condition.value;
-      case 'less_than': return value < condition.value;
-      case 'contains': return String(value).includes(String(condition.value));
-      case 'matches': return condition.value instanceof RegExp && condition.value.test(String(value));
-      default: return false;
+    case 'equals': return value === condition.value;
+    case 'greater_than': return value > condition.value;
+    case 'less_than': return value < condition.value;
+    case 'contains': return String(value).includes(String(condition.value));
+    case 'matches': return condition.value instanceof RegExp && condition.value.test(String(value));
+    default: return false;
     }
   }
 
@@ -758,24 +758,24 @@ export class AdvancedClassificationEngine extends EventEmitter {
     context: ClassificationContext
   ): Promise<void> {
     switch (action.type) {
-      case 'notify':
-        await this.executeNotifyAction(action, result, context);
-        break;
-      case 'encrypt':
-        await this.executeEncryptAction(action, result, context);
-        break;
-      case 'quarantine':
-        await this.executeQuarantineAction(action, result, context);
-        break;
-      case 'audit_log':
-        await this.executeAuditLogAction(action, result, context);
-        break;
-      case 'escalate':
-        await this.executeEscalateAction(action, result, context);
-        break;
-      case 'auto_remediate':
-        await this.executeAutoRemediateAction(action, result, context);
-        break;
+    case 'notify':
+      await this.executeNotifyAction(action, result, context);
+      break;
+    case 'encrypt':
+      await this.executeEncryptAction(action, result, context);
+      break;
+    case 'quarantine':
+      await this.executeQuarantineAction(action, result, context);
+      break;
+    case 'audit_log':
+      await this.executeAuditLogAction(action, result, context);
+      break;
+    case 'escalate':
+      await this.executeEscalateAction(action, result, context);
+      break;
+    case 'auto_remediate':
+      await this.executeAutoRemediateAction(action, result, context);
+      break;
     }
   }
 
@@ -841,7 +841,7 @@ export class AdvancedClassificationEngine extends EventEmitter {
   ): Promise<void> {
     this.emit('workflowEscalation', {
       escalationLevel: action.parameters.level || 'level-1',
-      reason: `High-risk data classification requires review`,
+      reason: 'High-risk data classification requires review',
       classification: result.level,
       riskScore: result.riskScore,
       assignee: action.parameters.assignee || 'security-manager',
@@ -930,11 +930,11 @@ export class AdvancedClassificationEngine extends EventEmitter {
 
   private mapClearanceToNumber(clearance: string): number {
     switch (clearance.toLowerCase()) {
-      case 'low': return 1;
-      case 'medium': return 2;
-      case 'high': return 3;
-      case 'critical': return 4;
-      default: return 1;
+    case 'low': return 1;
+    case 'medium': return 2;
+    case 'high': return 3;
+    case 'critical': return 4;
+    default: return 1;
     }
   }
 

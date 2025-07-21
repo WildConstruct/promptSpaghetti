@@ -474,8 +474,8 @@ export async function keyRotationPolicyRoutes(
             Math.round((metrics.successfulRotations / metrics.totalRotations) * 100) : 100,
           averageRotationTimeFormatted: `${Math.round(metrics.averageRotationTime)} minutes`,
           complianceStatus: metrics.complianceScore >= 95 ? 'excellent' : 
-                           metrics.complianceScore >= 90 ? 'good' : 
-                           metrics.complianceScore >= 80 ? 'fair' : 'poor',
+            metrics.complianceScore >= 90 ? 'good' : 
+              metrics.complianceScore >= 80 ? 'fair' : 'poor',
           actionRequired: metrics.overdueRotations > 0 || metrics.emergencyRotations > 0
         },
         recommendations: [

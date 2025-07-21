@@ -89,7 +89,7 @@ class EnhancedTicketTracker {
         highProductivity: 50,
         mediumProductivity: 25,
         slowApprovalTime: 3600000, // 1 hour in ms
-        largeCommit: 10, // 10+ tickets
+        largeCommit: 10 // 10+ tickets
       },
       
       // Data collection settings

@@ -282,7 +282,7 @@ export async function locationHistoryAnalysisRoutes(
           averageAccessesPerWeek: cluster.accessCount / Math.max(
             1,
             (Date.now(
-          ) - cluster.firstSeen.getTime()) / (1000 * 60 * 60 * 24 * 7)),
+            ) - cluster.firstSeen.getTime()) / (1000 * 60 * 60 * 24 * 7)),
           riskLevel: cluster.riskScore > 70 ? 'high' : cluster.riskScore > 40 ? 'medium' : 'low'
         }
       }));

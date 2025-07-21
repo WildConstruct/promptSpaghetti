@@ -468,30 +468,30 @@ export class AnomalyDetectionService extends EventEmitter {
     const record = row as Record<string, unknown>;
     
     switch (aggregateType) {
-      case 'count':
-        return parseInt(record.event_count as string);
-      case 'distinct_count':
-        return parseInt(record.unique_users as string);
-      case 'rate':
-        const duration = (new Date(record.last_event as string).getTime() - 
+    case 'count':
+      return parseInt(record.event_count as string);
+    case 'distinct_count':
+      return parseInt(record.unique_users as string);
+    case 'rate':
+      const duration = (new Date(record.last_event as string).getTime() - 
                          new Date(record.first_event as string).getTime()) / 1000;
-        return duration > 0 ? parseInt(record.event_count as string) / duration : 0;
-      case 'average':
-        return parseFloat(record.event_count as string); // Simplified
-      default:
-        return 0;
+      return duration > 0 ? parseInt(record.event_count as string) / duration : 0;
+    case 'average':
+      return parseFloat(record.event_count as string); // Simplified
+    default:
+      return 0;
     }
   }
 
   private evaluateThreshold(value: number, threshold: number, operator: string): boolean {
     switch (operator) {
-      case '>': return value > threshold;
-      case '<': return value < threshold;
-      case '>=': return value >= threshold;
-      case '<=': return value <= threshold;
-      case '==': return value === threshold;
-      case '!=': return value !== threshold;
-      default: return false;
+    case '>': return value > threshold;
+    case '<': return value < threshold;
+    case '>=': return value >= threshold;
+    case '<=': return value <= threshold;
+    case '==': return value === threshold;
+    case '!=': return value !== threshold;
+    default: return false;
     }
   }
 
@@ -594,21 +594,21 @@ export class AnomalyDetectionService extends EventEmitter {
   ): Promise<void> {
     try {
       switch (action.type) {
-        case 'block_ip':
-          await this.blockIP(affectedEntities.ipAddress as string, action.config);
-          break;
-        case 'disable_account':
-          await this.disableAccount(affectedEntities.userId as string, action.config);
-          break;
-        case 'require_2fa':
-          await this.requireTwoFactor(affectedEntities.userId as string, action.config);
-          break;
-        case 'notify':
-          await this.sendNotification(action.config, affectedEntities);
-          break;
-        case 'create_incident':
-          await this.createIncident(action.config, affectedEntities);
-          break;
+      case 'block_ip':
+        await this.blockIP(affectedEntities.ipAddress as string, action.config);
+        break;
+      case 'disable_account':
+        await this.disableAccount(affectedEntities.userId as string, action.config);
+        break;
+      case 'require_2fa':
+        await this.requireTwoFactor(affectedEntities.userId as string, action.config);
+        break;
+      case 'notify':
+        await this.sendNotification(action.config, affectedEntities);
+        break;
+      case 'create_incident':
+        await this.createIncident(action.config, affectedEntities);
+        break;
       }
 
       // Mark action as executed
@@ -697,7 +697,7 @@ export class AnomalyDetectionService extends EventEmitter {
       ) VALUES ($1, $2, $3, $4, $5, 'open', NOW())
     `, [
       `Security Anomaly: ${config.category || 'Unknown'}`,
-      `Automated incident created due to anomaly detection`,
+      'Automated incident created due to anomaly detection',
       config.priority || 'medium',
       config.category || 'anomaly',
       JSON.stringify(affectedEntities)

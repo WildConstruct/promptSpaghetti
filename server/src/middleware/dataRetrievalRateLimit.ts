@@ -187,17 +187,17 @@ function determineOperation(request: FastifyRequest): DataOperation {
   if (path.includes('/purge')) return 'PURGE';
 
   switch (method) {
-    case 'GET':
-      return 'read';
-    case 'POST':
-      return path.includes('/request') ? 'APPROVE' : 'WRITE';
-    case 'PUT':
-    case 'PATCH':
-      return 'UPDATE';
-    case 'DELETE':
-      return 'DELETE';
-    default:
-      return 'read';
+  case 'GET':
+    return 'read';
+  case 'POST':
+    return path.includes('/request') ? 'APPROVE' : 'WRITE';
+  case 'PUT':
+  case 'PATCH':
+    return 'UPDATE';
+  case 'DELETE':
+    return 'DELETE';
+  default:
+    return 'read';
   }
 }
 

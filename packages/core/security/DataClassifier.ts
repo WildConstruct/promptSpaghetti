@@ -243,38 +243,38 @@ export class DataClassifier extends EventEmitter {
     keyStorage: string;
   } {
     switch (level) {
-      case ClassificationLevel.RESTRICTED:
-        return {
-          atRest: true,
-          inTransit: true,
-          algorithm: 'AES-256-GCM',
-          keyRotation: '90 days',
-          keyStorage: 'HSM'
-        };
-      case ClassificationLevel.CONFIDENTIAL:
-        return {
-          atRest: true,
-          inTransit: true,
-          algorithm: 'AES-256-CBC',
-          keyRotation: '1 year',
-          keyStorage: 'Cloud KMS'
-        };
-      case ClassificationLevel.INTERNAL:
-        return {
-          atRest: false,
-          inTransit: true,
-          algorithm: 'TLS 1.3',
-          keyRotation: 'N/A',
-          keyStorage: 'Certificate store'
-        };
-      default:
-        return {
-          atRest: false,
-          inTransit: false,
-          algorithm: 'None',
-          keyRotation: 'N/A',
-          keyStorage: 'N/A'
-        };
+    case ClassificationLevel.RESTRICTED:
+      return {
+        atRest: true,
+        inTransit: true,
+        algorithm: 'AES-256-GCM',
+        keyRotation: '90 days',
+        keyStorage: 'HSM'
+      };
+    case ClassificationLevel.CONFIDENTIAL:
+      return {
+        atRest: true,
+        inTransit: true,
+        algorithm: 'AES-256-CBC',
+        keyRotation: '1 year',
+        keyStorage: 'Cloud KMS'
+      };
+    case ClassificationLevel.INTERNAL:
+      return {
+        atRest: false,
+        inTransit: true,
+        algorithm: 'TLS 1.3',
+        keyRotation: 'N/A',
+        keyStorage: 'Certificate store'
+      };
+    default:
+      return {
+        atRest: false,
+        inTransit: false,
+        algorithm: 'None',
+        keyRotation: 'N/A',
+        keyStorage: 'N/A'
+      };
     }
   }
   
@@ -295,30 +295,30 @@ export class DataClassifier extends EventEmitter {
     }
     
     switch (level) {
-      case ClassificationLevel.RESTRICTED:
-        return {
-          period: '7 years',
-          disposal: 'Cryptographic erasure',
-          archival: true
-        };
-      case ClassificationLevel.CONFIDENTIAL:
-        return {
-          period: '3 years',
-          disposal: 'Secure deletion',
-          archival: true
-        };
-      case ClassificationLevel.INTERNAL:
-        return {
-          period: '1 year',
-          disposal: 'Standard deletion',
-          archival: false
-        };
-      default:
-        return {
-          period: 'As needed',
-          disposal: 'Standard deletion',
-          archival: false
-        };
+    case ClassificationLevel.RESTRICTED:
+      return {
+        period: '7 years',
+        disposal: 'Cryptographic erasure',
+        archival: true
+      };
+    case ClassificationLevel.CONFIDENTIAL:
+      return {
+        period: '3 years',
+        disposal: 'Secure deletion',
+        archival: true
+      };
+    case ClassificationLevel.INTERNAL:
+      return {
+        period: '1 year',
+        disposal: 'Standard deletion',
+        archival: false
+      };
+    default:
+      return {
+        period: 'As needed',
+        disposal: 'Standard deletion',
+        archival: false
+      };
     }
   }
   
@@ -490,19 +490,19 @@ export class DataClassifier extends EventEmitter {
         let contextMatches = false;
         
         switch (contextRule.condition) {
-          case 'equals':
-            contextMatches = contextValue === contextRule.value;
-            break;
-          case 'contains':
-            contextMatches = String(contextValue).includes(String(contextRule.value));
-            break;
-          case 'matches':
-            contextMatches = contextRule.value instanceof RegExp && 
+        case 'equals':
+          contextMatches = contextValue === contextRule.value;
+          break;
+        case 'contains':
+          contextMatches = String(contextValue).includes(String(contextRule.value));
+          break;
+        case 'matches':
+          contextMatches = contextRule.value instanceof RegExp && 
                            contextRule.value.test(String(contextValue));
-            break;
-          case 'exists':
-            contextMatches = contextValue !== undefined && contextValue !== null;
-            break;
+          break;
+        case 'exists':
+          contextMatches = contextValue !== undefined && contextValue !== null;
+          break;
         }
         
         if (contextMatches) {
@@ -581,28 +581,28 @@ export class DataClassifier extends EventEmitter {
   
   private getAccessControls(level: ClassificationLevel): string[] {
     switch (level) {
-      case ClassificationLevel.RESTRICTED:
-        return [
-          'mfa-required',
-          'need-to-know',
-          'privileged-access-management',
-          'dual-authorization',
-          'continuous-monitoring'
-        ];
-      case ClassificationLevel.CONFIDENTIAL:
-        return [
-          'mfa-required',
-          'role-based-access',
-          'audit-logging',
-          'data-loss-prevention'
-        ];
-      case ClassificationLevel.INTERNAL:
-        return [
-          'authenticated-users',
-          'role-based-access'
-        ];
-      default:
-        return [];
+    case ClassificationLevel.RESTRICTED:
+      return [
+        'mfa-required',
+        'need-to-know',
+        'privileged-access-management',
+        'dual-authorization',
+        'continuous-monitoring'
+      ];
+    case ClassificationLevel.CONFIDENTIAL:
+      return [
+        'mfa-required',
+        'role-based-access',
+        'audit-logging',
+        'data-loss-prevention'
+      ];
+    case ClassificationLevel.INTERNAL:
+      return [
+        'authenticated-users',
+        'role-based-access'
+      ];
+    default:
+      return [];
     }
   }
 }

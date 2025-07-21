@@ -226,7 +226,7 @@ describe('ClassificationAuditLoggingService', () => {
 
     it('should filter audit logs by date range', () => {
       const now = new Date();
-            const twoHoursAgo = new Date(now.getTime() - 7200000);
+      const twoHoursAgo = new Date(now.getTime() - 7200000);
       
       const query: AuditQuery = { 
         startDate: twoHoursAgo,

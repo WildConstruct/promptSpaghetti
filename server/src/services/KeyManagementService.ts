@@ -653,7 +653,7 @@ export class KeyManagementService extends EventEmitter {
         paramIndex++;
       }
       
-      query += ` ORDER BY created_at DESC`;
+      query += ' ORDER BY created_at DESC';
       
       if (options.limit) {
         query += ` LIMIT $${paramIndex}`;
@@ -728,34 +728,34 @@ export class KeyManagementService extends EventEmitter {
 
   private getDefaultAlgorithm(purpose: KeyPurpose): string {
     switch (purpose) {
-      case 'data_encryption':
-      case 'session_encryption':
-      case 'backup_encryption':
-        return 'aes-256-gcm';
-      case 'key_encryption':
-        return 'aes-256-gcm';
-      case 'token_signing':
-      case 'api_signing':
-      case 'audit_signing':
-        return 'hmac-sha256';
-      default:
-        return 'aes-256-gcm';
+    case 'data_encryption':
+    case 'session_encryption':
+    case 'backup_encryption':
+      return 'aes-256-gcm';
+    case 'key_encryption':
+      return 'aes-256-gcm';
+    case 'token_signing':
+    case 'api_signing':
+    case 'audit_signing':
+      return 'hmac-sha256';
+    default:
+      return 'aes-256-gcm';
     }
   }
 
   private getDefaultKeyLength(algorithm: string): number {
     switch (algorithm) {
-      case 'aes-128-gcm':
-      case 'aes-128-cbc':
-        return 128;
-      case 'aes-256-gcm':
-      case 'aes-256-cbc':
-      case 'chacha20-poly1305':
-        return 256;
-      case 'hmac-sha256':
-        return 256;
-      default:
-        return 256;
+    case 'aes-128-gcm':
+    case 'aes-128-cbc':
+      return 128;
+    case 'aes-256-gcm':
+    case 'aes-256-cbc':
+    case 'chacha20-poly1305':
+      return 256;
+    case 'hmac-sha256':
+      return 256;
+    default:
+      return 256;
     }
   }
 
@@ -768,7 +768,7 @@ export class KeyManagementService extends EventEmitter {
     const cipher = crypto.createCipher('aes-256-gcm', this.keyEncryptionKey);
     cipher.setAAD(Buffer.from(keyId)); // Use keyId as additional authenticated data
     
-    let encrypted = cipher.update(keyMaterial);
+    const encrypted = cipher.update(keyMaterial);
     cipher.final();
     const authTag = cipher.getAuthTag();
     
@@ -787,7 +787,7 @@ export class KeyManagementService extends EventEmitter {
     decipher.setAuthTag(encryptedKey.authTag);
     decipher.setAAD(Buffer.from(keyId));
     
-    let decrypted = decipher.update(encryptedKey.encryptedData);
+    const decrypted = decipher.update(encryptedKey.encryptedData);
     decipher.final();
     
     return decrypted;

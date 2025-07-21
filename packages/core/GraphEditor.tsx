@@ -321,7 +321,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
       ...prev,
       algorithm: algorithm as EncryptionAlgorithm,
       strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :
-                algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak'
+        algorithm.includes('128') || algorithm.includes('2048') ? 'medium' : 'weak'
     }));
     setStatusMessage(`Encryption algorithm changed to ${algorithm}`);
     setTimeout(() => setStatusMessage(''), 3000);

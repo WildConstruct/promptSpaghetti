@@ -68,15 +68,15 @@ export class LocationRiskIntegrationService {
     // Track location for the user
     const locationAnalysis = loginAttempt.userId 
       ? await this.geolocationService.trackLoginLocation(
-          loginAttempt.userId,
-          context.ipAddress || '',
-          geolocationData
-        )
+        loginAttempt.userId,
+        context.ipAddress || '',
+        geolocationData
+      )
       : {
-          isNewLocation: true,
-          isTypicalLocation: false,
-          suspiciousIndicators: []
-        };
+        isNewLocation: true,
+        isTypicalLocation: false,
+        suspiciousIndicators: []
+      };
 
     // Get user profile for risk scoring
     const userProfile = loginAttempt.userId 
@@ -221,7 +221,7 @@ export class LocationRiskIntegrationService {
       params.push(ipAddress);
     }
 
-    query += ` ORDER BY created_at DESC LIMIT 100`;
+    query += ' ORDER BY created_at DESC LIMIT 100';
 
     const result = await this.db.query(query, params);
 

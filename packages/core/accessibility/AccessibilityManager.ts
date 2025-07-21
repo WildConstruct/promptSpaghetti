@@ -372,8 +372,8 @@ export class AccessibilityManager extends EventEmitter {
     // Calculate difficulty
     const difficultyScore = this.calculateDifficultyScore(context, profile);
     const estimatedDifficulty = difficultyScore > 75 ? 'critical' : 
-                               difficultyScore > 50 ? 'high' :
-                               difficultyScore > 25 ? 'medium' : 'low';
+      difficultyScore > 50 ? 'high' :
+        difficultyScore > 25 ? 'medium' : 'low';
     
     // Generate alternatives
     const alternatives = this.generateAuthenticationAlternatives(context, profile);
@@ -715,7 +715,7 @@ export class AccessibilityManager extends EventEmitter {
       frequency: number;
       severity: 'critical' | 'major' | 'minor';
     }>;
-  } {
+    } {
     const profiles = Array.from(this.userProfiles.values());
     const activeProfiles = profiles.filter(p => p.isActive);
     

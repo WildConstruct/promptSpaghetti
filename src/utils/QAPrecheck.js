@@ -164,35 +164,35 @@ class QAPrecheck {
       let result;
       
       switch (checkName) {
-        case 'syntax':
-          result = await this.checkSyntax(files);
-          break;
-        case 'typescript':
-          result = await this.checkTypeScript();
-          break;
-        case 'eslint':
-          result = await this.checkESLint(files);
-          break;
-        case 'tests':
-          result = await this.checkTests();
-          break;
-        case 'testCoverage':
-          result = await this.checkTestCoverage();
-          break;
-        case 'security':
-          result = await this.checkSecurity(files);
-          break;
-        case 'dependencies':
-          result = await this.checkDependencies();
-          break;
-        case 'fileSize':
-          result = await this.checkFileSize(files);
-          break;
-        case 'codeComplexity':
-          result = await this.checkComplexity(files);
-          break;
-        default:
-          result = { status: 'skipped', message: `Unknown check: ${checkName}` };
+      case 'syntax':
+        result = await this.checkSyntax(files);
+        break;
+      case 'typescript':
+        result = await this.checkTypeScript();
+        break;
+      case 'eslint':
+        result = await this.checkESLint(files);
+        break;
+      case 'tests':
+        result = await this.checkTests();
+        break;
+      case 'testCoverage':
+        result = await this.checkTestCoverage();
+        break;
+      case 'security':
+        result = await this.checkSecurity(files);
+        break;
+      case 'dependencies':
+        result = await this.checkDependencies();
+        break;
+      case 'fileSize':
+        result = await this.checkFileSize(files);
+        break;
+      case 'codeComplexity':
+        result = await this.checkComplexity(files);
+        break;
+      default:
+        result = { status: 'skipped', message: `Unknown check: ${checkName}` };
       }
       
       this.results.checks[checkName] = result;
@@ -674,21 +674,21 @@ class QAPrecheck {
     this.results.summary.total++;
     
     switch (result.status) {
-      case 'passed':
-        this.results.summary.passed++;
-        break;
-      case 'failed':
-        this.results.summary.failed++;
-        if (result.message) {
-          this.results.blockers.push(result.message);
-        }
-        break;
-      case 'warning':
-        this.results.summary.warnings++;
-        if (result.message) {
-          this.results.warnings.push(result.message);
-        }
-        break;
+    case 'passed':
+      this.results.summary.passed++;
+      break;
+    case 'failed':
+      this.results.summary.failed++;
+      if (result.message) {
+        this.results.blockers.push(result.message);
+      }
+      break;
+    case 'warning':
+      this.results.summary.warnings++;
+      if (result.message) {
+        this.results.warnings.push(result.message);
+      }
+      break;
     }
   }
 
@@ -733,7 +733,7 @@ class QAPrecheck {
     console.log('='.repeat(60));
     
     const statusIcon = this.results.overall === 'passed' ? '✅' : 
-                      this.results.overall === 'failed' ? '❌' : '⚠️';
+      this.results.overall === 'failed' ? '❌' : '⚠️';
     
     console.log(`Overall Status: ${statusIcon} ${this.results.overall.toUpperCase()}`);
     console.log(`Checks Run: ${this.results.summary.total}`);
@@ -800,34 +800,34 @@ if (require.main === module) {
       await precheck.initialize();
       
       switch (command) {
-        case 'check':
-        case 'run':
-          const files = args.slice(1);
-          const results = await precheck.runAllChecks({ files });
-          process.exit(results.overall === 'failed' ? 1 : 0);
-          break;
-        case 'syntax':
-          await precheck.runCheck('syntax');
-          break;
-        case 'typescript':
-          await precheck.runCheck('typescript');
-          break;
-        case 'eslint':
-          await precheck.runCheck('eslint');
-          break;
-        case 'tests':
-          await precheck.runCheck('tests');
-          break;
-        case 'security':
-          await precheck.runCheck('security');
-          break;
-        case 'config':
-          console.log('Current configuration:');
-          console.log(JSON.stringify(precheck.config, null, 2));
-          break;
-        case 'help':
-        default:
-          console.log(`
+      case 'check':
+      case 'run':
+        const files = args.slice(1);
+        const results = await precheck.runAllChecks({ files });
+        process.exit(results.overall === 'failed' ? 1 : 0);
+        break;
+      case 'syntax':
+        await precheck.runCheck('syntax');
+        break;
+      case 'typescript':
+        await precheck.runCheck('typescript');
+        break;
+      case 'eslint':
+        await precheck.runCheck('eslint');
+        break;
+      case 'tests':
+        await precheck.runCheck('tests');
+        break;
+      case 'security':
+        await precheck.runCheck('security');
+        break;
+      case 'config':
+        console.log('Current configuration:');
+        console.log(JSON.stringify(precheck.config, null, 2));
+        break;
+      case 'help':
+      default:
+        console.log(`
 🔍 QA Pre-check Utility
 
 USAGE:
@@ -856,7 +856,7 @@ EXIT CODES:
 CONFIGURATION:
   Edit src/data/qa-precheck-config.json to customize checks and thresholds
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

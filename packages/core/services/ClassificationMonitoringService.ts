@@ -238,15 +238,15 @@ export class ClassificationMonitoringService {
     stats.totalEvents++;
     
     switch (event.result) {
-      case 'SUCCESS':
-        stats.successCount++;
-        break;
-      case 'FAILURE':
-        stats.failureCount++;
-        break;
-      case 'WARNING':
-        stats.warningCount++;
-        break;
+    case 'SUCCESS':
+      stats.successCount++;
+      break;
+    case 'FAILURE':
+      stats.failureCount++;
+      break;
+    case 'WARNING':
+      stats.warningCount++;
+      break;
     }
 
     // Update processing time (moving average)
@@ -414,30 +414,30 @@ export class ClassificationMonitoringService {
    */
   private getMetricValue(metric: string, event: MonitoringEvent): number | null {
     switch (metric) {
-      case 'violationRate':
-        const stats = this.classificationStats.get(event.classification);
-        return stats ? stats.violationRate : null;
+    case 'violationRate':
+      const stats = this.classificationStats.get(event.classification);
+      return stats ? stats.violationRate : null;
       
-      case 'complianceScore':
-        return event.metrics?.complianceScore ?? null;
+    case 'complianceScore':
+      return event.metrics?.complianceScore ?? null;
       
-      case 'restrictedAccessRate':
-        const recentRestrictedEvents = this.events.filter(e => 
-          e.classification === 'RESTRICTED' &&
+    case 'restrictedAccessRate':
+      const recentRestrictedEvents = this.events.filter(e => 
+        e.classification === 'RESTRICTED' &&
           e.timestamp.getTime() > Date.now() - 3600000 // Last hour
-        ).length;
-        return recentRestrictedEvents;
+      ).length;
+      return recentRestrictedEvents;
       
-      case 'averageProcessingTime':
-        const classStats = this.classificationStats.get(event.classification);
-        return classStats ? classStats.averageProcessingTime : null;
+    case 'averageProcessingTime':
+      const classStats = this.classificationStats.get(event.classification);
+      return classStats ? classStats.averageProcessingTime : null;
       
-      case 'userViolationCount':
-        const userActivity = this.userActivities.get(event.userId);
-        return userActivity ? userActivity.violationCount : null;
+    case 'userViolationCount':
+      const userActivity = this.userActivities.get(event.userId);
+      return userActivity ? userActivity.violationCount : null;
       
-      default:
-        return null;
+    default:
+      return null;
     }
   }
 
@@ -446,13 +446,13 @@ export class ClassificationMonitoringService {
    */
   private evaluateThreshold(value: number, operator: string, threshold: number): boolean {
     switch (operator) {
-      case '>': return value > threshold;
-      case '<': return value < threshold;
-      case '>=': return value >= threshold;
-      case '<=': return value <= threshold;
-      case '==': return value === threshold;
-      case '!=': return value !== threshold;
-      default: return false;
+    case '>': return value > threshold;
+    case '<': return value < threshold;
+    case '>=': return value >= threshold;
+    case '<=': return value <= threshold;
+    case '==': return value === threshold;
+    case '!=': return value !== threshold;
+    default: return false;
     }
   }
 

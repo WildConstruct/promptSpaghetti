@@ -755,7 +755,7 @@ export class ExemptionManager extends EventEmitter {
       averageUsagePerExemption: number;
       mostUsedExemptions: Array<{ id: string; usage: number }>;
     };
-  } {
+    } {
     const exemptions = Array.from(this.exemptions.values());
     const now = new Date();
     const soonThreshold = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);

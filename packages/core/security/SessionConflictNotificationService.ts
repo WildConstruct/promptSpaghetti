@@ -469,21 +469,21 @@ export class SessionConflictNotificationService extends EventEmitter {
         stats.channelStats[channelName].sent++;
 
         switch (status.status) {
-          case DeliveryStatus.DELIVERED:
-          case DeliveryStatus.READ:
-          case DeliveryStatus.CLICKED:
-            stats.channelStats[channelName].delivered++;
-            deliveredCount++;
-            if (status.deliveredAt) {
-              const deliveryTime = status.deliveredAt.getTime() - notification.createdAt.getTime();
-              totalDeliveryTime += deliveryTime;
-            }
-            break;
-          case DeliveryStatus.FAILED:
-          case DeliveryStatus.BOUNCED:
-            stats.channelStats[channelName].failed++;
-            failedCount++;
-            break;
+        case DeliveryStatus.DELIVERED:
+        case DeliveryStatus.READ:
+        case DeliveryStatus.CLICKED:
+          stats.channelStats[channelName].delivered++;
+          deliveredCount++;
+          if (status.deliveredAt) {
+            const deliveryTime = status.deliveredAt.getTime() - notification.createdAt.getTime();
+            totalDeliveryTime += deliveryTime;
+          }
+          break;
+        case DeliveryStatus.FAILED:
+        case DeliveryStatus.BOUNCED:
+          stats.channelStats[channelName].failed++;
+          failedCount++;
+          break;
         }
       });
 
@@ -678,22 +678,22 @@ export class SessionConflictNotificationService extends EventEmitter {
   private async deliverToChannel(notification: NotificationMessage, channel: NotificationChannel): Promise<boolean> {
     // In a real implementation, this would integrate with actual delivery services
     switch (channel) {
-      case NotificationChannel.EMAIL:
-        return this.sendEmail(notification);
-      case NotificationChannel.SMS:
-        return this.sendSMS(notification);
-      case NotificationChannel.PUSH:
-        return this.sendPush(notification);
-      case NotificationChannel.IN_APP:
-        return this.sendInApp(notification);
-      case NotificationChannel.WEBHOOK:
-        return this.sendWebhook(notification);
-      case NotificationChannel.SLACK:
-        return this.sendSlack(notification);
-      case NotificationChannel.TEAMS:
-        return this.sendTeams(notification);
-      default:
-        return false;
+    case NotificationChannel.EMAIL:
+      return this.sendEmail(notification);
+    case NotificationChannel.SMS:
+      return this.sendSMS(notification);
+    case NotificationChannel.PUSH:
+      return this.sendPush(notification);
+    case NotificationChannel.IN_APP:
+      return this.sendInApp(notification);
+    case NotificationChannel.WEBHOOK:
+      return this.sendWebhook(notification);
+    case NotificationChannel.SLACK:
+      return this.sendSlack(notification);
+    case NotificationChannel.TEAMS:
+      return this.sendTeams(notification);
+    default:
+      return false;
     }
   }
 
@@ -974,22 +974,22 @@ export class SessionConflictNotificationService extends EventEmitter {
 
   private mapSeverityToPriority(severity: string): NotificationPriority {
     switch (severity) {
-      case 'critical': return NotificationPriority.CRITICAL;
-      case 'high': return NotificationPriority.HIGH;
-      case 'medium': return NotificationPriority.NORMAL;
-      case 'low': return NotificationPriority.LOW;
-      default: return NotificationPriority.NORMAL;
+    case 'critical': return NotificationPriority.CRITICAL;
+    case 'high': return NotificationPriority.HIGH;
+    case 'medium': return NotificationPriority.NORMAL;
+    case 'low': return NotificationPriority.LOW;
+    default: return NotificationPriority.NORMAL;
     }
   }
 
   private getResolutionLabel(resolution: ConflictResolution): string {
     switch (resolution) {
-      case ConflictResolution.REJECT_NEW: return 'Keep Current Session';
-      case ConflictResolution.EVICT_OLDEST: return 'Use Newest Session';
-      case ConflictResolution.EVICT_LOWEST_PRIORITY: return 'Use Highest Priority';
-      case ConflictResolution.PROMPT_USER: return 'Let Me Choose';
-      case ConflictResolution.MERGE_SESSIONS: return 'Merge Sessions';
-      default: return 'Resolve Automatically';
+    case ConflictResolution.REJECT_NEW: return 'Keep Current Session';
+    case ConflictResolution.EVICT_OLDEST: return 'Use Newest Session';
+    case ConflictResolution.EVICT_LOWEST_PRIORITY: return 'Use Highest Priority';
+    case ConflictResolution.PROMPT_USER: return 'Let Me Choose';
+    case ConflictResolution.MERGE_SESSIONS: return 'Merge Sessions';
+    default: return 'Resolve Automatically';
     }
   }
 

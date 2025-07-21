@@ -51,66 +51,66 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({
 }) => {
   const getStatusColor = (status: EncryptionStatusType): string => {
     switch (status) {
-      case 'encrypted':
-        return 'text-green-500';
-      case 'encrypting':
-      case 'decrypting':
-        return 'text-yellow-500';
-      case 'not_encrypted':
-        return 'text-orange-500';
-      case 'error':
-        return 'text-red-500';
-      case 'unknown':
-      default:
-        return 'text-gray-500';
+    case 'encrypted':
+      return 'text-green-500';
+    case 'encrypting':
+    case 'decrypting':
+      return 'text-yellow-500';
+    case 'not_encrypted':
+      return 'text-orange-500';
+    case 'error':
+      return 'text-red-500';
+    case 'unknown':
+    default:
+      return 'text-gray-500';
     }
   };
 
   const getStatusIcon = (status: EncryptionStatusType): string => {
     switch (status) {
-      case 'encrypted':
-        return '🔒';
-      case 'encrypting':
-      case 'decrypting':
-        return '🔄';
-      case 'not_encrypted':
-        return '🔓';
-      case 'error':
-        return '⚠️';
-      case 'unknown':
-      default:
-        return '❓';
+    case 'encrypted':
+      return '🔒';
+    case 'encrypting':
+    case 'decrypting':
+      return '🔄';
+    case 'not_encrypted':
+      return '🔓';
+    case 'error':
+      return '⚠️';
+    case 'unknown':
+    default:
+      return '❓';
     }
   };
 
   const getStatusText = (status: EncryptionStatusType): string => {
     switch (status) {
-      case 'encrypted':
-        return 'Encrypted';
-      case 'encrypting':
-        return 'Encrypting...';
-      case 'decrypting':
-        return 'Decrypting...';
-      case 'not_encrypted':
-        return 'Not Encrypted';
-      case 'error':
-        return 'Encryption Error';
-      case 'unknown':
-      default:
-        return 'Unknown';
+    case 'encrypted':
+      return 'Encrypted';
+    case 'encrypting':
+      return 'Encrypting...';
+    case 'decrypting':
+      return 'Decrypting...';
+    case 'not_encrypted':
+      return 'Not Encrypted';
+    case 'error':
+      return 'Encryption Error';
+    case 'unknown':
+    default:
+      return 'Unknown';
     }
   };
 
   const getStrengthColor = (strength?: string): string => {
     switch (strength) {
-      case 'strong':
-        return 'text-green-600';
-      case 'medium':
-        return 'text-yellow-600';
-      case 'weak':
-        return 'text-red-600';
-      default:
-        return 'text-gray-600';
+    case 'strong':
+      return 'text-green-600';
+    case 'medium':
+      return 'text-yellow-600';
+    case 'weak':
+      return 'text-red-600';
+    default:
+      return 'text-gray-600';
     }
   };
 
@@ -264,18 +264,18 @@ export const EncryptionDetails: React.FC<{
 
   const getStrengthDetails = (algorithm?: EncryptionAlgorithm): string => {
     switch (algorithm) {
-      case 'AES-256-GCM':
-      case 'AES-256-CBC':
-      case 'ChaCha20-Poly1305':
-        return 'Strong encryption (256-bit)';
-      case 'AES-128-GCM':
-        return 'Medium encryption (128-bit)';
-      case 'RSA-2048':
-        return 'Medium encryption (RSA 2048-bit)';
-      case 'RSA-4096':
-        return 'Strong encryption (RSA 4096-bit)';
-      default:
-        return 'Unknown encryption strength';
+    case 'AES-256-GCM':
+    case 'AES-256-CBC':
+    case 'ChaCha20-Poly1305':
+      return 'Strong encryption (256-bit)';
+    case 'AES-128-GCM':
+      return 'Medium encryption (128-bit)';
+    case 'RSA-2048':
+      return 'Medium encryption (RSA 2048-bit)';
+    case 'RSA-4096':
+      return 'Strong encryption (RSA 4096-bit)';
+    default:
+      return 'Unknown encryption strength';
     }
   };
 

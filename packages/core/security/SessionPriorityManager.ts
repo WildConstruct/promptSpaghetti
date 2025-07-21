@@ -293,20 +293,20 @@ export class SessionPriorityManager extends EventEmitter {
     conflict: SessionConflict
   ): { resolved: boolean; evicted?: string[]; gracePeriod?: number } {
     switch (conflict.recommendedResolution) {
-      case ConflictResolution.REJECT_NEW:
-        return { resolved: false };
+    case ConflictResolution.REJECT_NEW:
+      return { resolved: false };
 
-      case ConflictResolution.EVICT_OLDEST:
-        return this.evictOldestSession(conflict.affectedSessions);
+    case ConflictResolution.EVICT_OLDEST:
+      return this.evictOldestSession(conflict.affectedSessions);
 
-      case ConflictResolution.EVICT_LOWEST_PRIORITY:
-        return this.evictLowestPrioritySession(conflict.affectedSessions);
+    case ConflictResolution.EVICT_LOWEST_PRIORITY:
+      return this.evictLowestPrioritySession(conflict.affectedSessions);
 
-      case ConflictResolution.PROMPT_USER:
-        return this.offerUserChoice(conflict);
+    case ConflictResolution.PROMPT_USER:
+      return this.offerUserChoice(conflict);
 
-      default:
-        return this.applyEvictionPolicy(conflict.affectedSessions);
+    default:
+      return this.applyEvictionPolicy(conflict.affectedSessions);
     }
   }
 
@@ -522,11 +522,11 @@ export class SessionPriorityManager extends EventEmitter {
 
   private getRoleScore(role: string): number {
     switch (role) {
-      case 'admin': return 100;
-      case 'moderator': return 80;
-      case 'user': return 60;
-      case 'guest': return 30;
-      default: return 40;
+    case 'admin': return 100;
+    case 'moderator': return 80;
+    case 'user': return 60;
+    case 'guest': return 30;
+    default: return 40;
     }
   }
 
@@ -537,12 +537,12 @@ export class SessionPriorityManager extends EventEmitter {
 
   private getPriorityWeight(priority: SessionPriority): number {
     switch (priority) {
-      case SessionPriority.CRITICAL: return 100;
-      case SessionPriority.HIGH: return 80;
-      case SessionPriority.MEDIUM: return 60;
-      case SessionPriority.LOW: return 40;
-      case SessionPriority.MINIMAL: return 20;
-      default: return 50;
+    case SessionPriority.CRITICAL: return 100;
+    case SessionPriority.HIGH: return 80;
+    case SessionPriority.MEDIUM: return 60;
+    case SessionPriority.LOW: return 40;
+    case SessionPriority.MINIMAL: return 20;
+    default: return 50;
     }
   }
 
@@ -597,46 +597,46 @@ export class SessionPriorityManager extends EventEmitter {
     let sessionToEvict: PrioritySessionData;
 
     switch (this.config.evictionPolicy) {
-      case EvictionPolicy.LRU:
-        sessionToEvict = sessions.reduce((oldest, current) => 
-          current.lastActivity < oldest.lastActivity ? current : oldest
-        );
-        break;
+    case EvictionPolicy.LRU:
+      sessionToEvict = sessions.reduce((oldest, current) => 
+        current.lastActivity < oldest.lastActivity ? current : oldest
+      );
+      break;
 
-      case EvictionPolicy.LFU:
-        sessionToEvict = sessions.reduce((least, current) => 
-          current.accessCount < least.accessCount ? current : least
-        );
-        break;
+    case EvictionPolicy.LFU:
+      sessionToEvict = sessions.reduce((least, current) => 
+        current.accessCount < least.accessCount ? current : least
+      );
+      break;
 
-      case EvictionPolicy.PRIORITY_BASED:
-        sessionToEvict = sessions.reduce((lowest, current) => 
-          current.score < lowest.score ? current : lowest
-        );
-        break;
+    case EvictionPolicy.PRIORITY_BASED:
+      sessionToEvict = sessions.reduce((lowest, current) => 
+        current.score < lowest.score ? current : lowest
+      );
+      break;
 
-      case EvictionPolicy.HYBRID:
-        sessionToEvict = sessions.reduce((best, current) => {
-          const currentScore = this.calculateHybridScore(current);
-          const bestScore = this.calculateHybridScore(best);
-          return currentScore < bestScore ? current : best;
-        });
-        break;
+    case EvictionPolicy.HYBRID:
+      sessionToEvict = sessions.reduce((best, current) => {
+        const currentScore = this.calculateHybridScore(current);
+        const bestScore = this.calculateHybridScore(best);
+        return currentScore < bestScore ? current : best;
+      });
+      break;
 
-      case EvictionPolicy.FIFO:
-        sessionToEvict = sessions.reduce((oldest, current) => 
-          current.createdAt < oldest.createdAt ? current : oldest
-        );
-        break;
+    case EvictionPolicy.FIFO:
+      sessionToEvict = sessions.reduce((oldest, current) => 
+        current.createdAt < oldest.createdAt ? current : oldest
+      );
+      break;
 
-      case EvictionPolicy.ACTIVITY_BASED:
-        sessionToEvict = sessions.reduce((least, current) => 
-          current.factors.activityLevel < least.factors.activityLevel ? current : least
-        );
-        break;
+    case EvictionPolicy.ACTIVITY_BASED:
+      sessionToEvict = sessions.reduce((least, current) => 
+        current.factors.activityLevel < least.factors.activityLevel ? current : least
+      );
+      break;
 
-      default:
-        sessionToEvict = sessions[0];
+    default:
+      sessionToEvict = sessions[0];
     }
 
     if (sessionToEvict.evictionProtection) {

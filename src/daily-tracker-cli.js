@@ -26,34 +26,34 @@ class DailyTrackerCLI {
       await this.initialize();
 
       switch (command) {
-        case 'track-approval':
-          await this.trackApproval(args[1], args[2]);
-          break;
-        case 'track-push':
-          await this.trackPush(args[1], args[2], args[3]);
-          break;
-        case 'stats':
-          await this.showStats(args[1]);
-          break;
-        case 'report':
-          await this.generateReport(args[1] === '--timeline');
-          break;
-        case 'history':
-          await this.showHistory(parseInt(args[1]) || 7);
-          break;
-        case 'reset':
-          await this.resetTracker();
-          break;
-        case 'config':
-          await this.showConfig();
-          break;
-        case 'monitor':
-          await this.startMonitor();
-          break;
-        case 'help':
-        default:
-          this.showHelp();
-          break;
+      case 'track-approval':
+        await this.trackApproval(args[1], args[2]);
+        break;
+      case 'track-push':
+        await this.trackPush(args[1], args[2], args[3]);
+        break;
+      case 'stats':
+        await this.showStats(args[1]);
+        break;
+      case 'report':
+        await this.generateReport(args[1] === '--timeline');
+        break;
+      case 'history':
+        await this.showHistory(parseInt(args[1]) || 7);
+        break;
+      case 'reset':
+        await this.resetTracker();
+        break;
+      case 'config':
+        await this.showConfig();
+        break;
+      case 'monitor':
+        await this.startMonitor();
+        break;
+      case 'help':
+      default:
+        this.showHelp();
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

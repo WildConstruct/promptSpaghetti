@@ -527,19 +527,19 @@ export class PasswordResetTokenManager extends EventEmitter {
     tokens.forEach(token => {
       // Status counts
       switch (token.status) {
-        case TokenStatus.ACTIVE:
-          stats.activeTokens++;
-          break;
-        case TokenStatus.USED:
-          stats.usedTokens++;
-          usedTokensCount++;
-          break;
-        case TokenStatus.EXPIRED:
-          stats.expiredTokens++;
-          break;
-        case TokenStatus.REVOKED:
-          stats.revokedTokens++;
-          break;
+      case TokenStatus.ACTIVE:
+        stats.activeTokens++;
+        break;
+      case TokenStatus.USED:
+        stats.usedTokens++;
+        usedTokensCount++;
+        break;
+      case TokenStatus.EXPIRED:
+        stats.expiredTokens++;
+        break;
+      case TokenStatus.REVOKED:
+        stats.revokedTokens++;
+        break;
       }
 
       // Type counts
@@ -618,12 +618,12 @@ export class PasswordResetTokenManager extends EventEmitter {
 
     // Adjust based on security level
     switch (securityLevel) {
-      case SecurityLevel.ENHANCED:
-        baseExpiration = Math.min(baseExpiration, 30 * 60 * 1000); // Max 30 minutes
-        break;
-      case SecurityLevel.MAXIMUM:
-        baseExpiration = Math.min(baseExpiration, 15 * 60 * 1000); // Max 15 minutes
-        break;
+    case SecurityLevel.ENHANCED:
+      baseExpiration = Math.min(baseExpiration, 30 * 60 * 1000); // Max 30 minutes
+      break;
+    case SecurityLevel.MAXIMUM:
+      baseExpiration = Math.min(baseExpiration, 15 * 60 * 1000); // Max 15 minutes
+      break;
     }
 
     if (requestedMinutes) {
@@ -741,12 +741,12 @@ export class PasswordResetTokenManager extends EventEmitter {
 
     // Check security level
     switch (token.securityLevel) {
-      case SecurityLevel.ENHANCED:
-        riskScore *= 0.8; // Lower base risk for enhanced security
-        break;
-      case SecurityLevel.MAXIMUM:
-        riskScore *= 0.6; // Even lower base risk for maximum security
-        break;
+    case SecurityLevel.ENHANCED:
+      riskScore *= 0.8; // Lower base risk for enhanced security
+      break;
+    case SecurityLevel.MAXIMUM:
+      riskScore *= 0.6; // Even lower base risk for maximum security
+      break;
     }
 
     return Math.min(100, Math.max(0, riskScore));

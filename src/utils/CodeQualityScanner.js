@@ -602,10 +602,10 @@ class CodeQualityScanner {
               
               // Update metrics
               switch (category) {
-                case 'xss': metrics.xssVulnerabilities++; break;
-                case 'injection': metrics.injectionRisks++; break;
-                case 'secrets': metrics.hardcodedSecrets++; break;
-                case 'insecure': metrics.insecurePatterns++; break;
+              case 'xss': metrics.xssVulnerabilities++; break;
+              case 'injection': metrics.injectionRisks++; break;
+              case 'secrets': metrics.hardcodedSecrets++; break;
+              case 'insecure': metrics.insecurePatterns++; break;
               }
             }
           }
@@ -1585,10 +1585,10 @@ class CodeQualityScanner {
     // Deduct points for issues
     for (const issue of this.qualityResults.issues) {
       switch (issue.severity) {
-        case 'critical': score -= 2; break;
-        case 'high': score -= 1; break;
-        case 'medium': score -= 0.5; break;
-        case 'low': score -= 0.1; break;
+      case 'critical': score -= 2; break;
+      case 'high': score -= 1; break;
+      case 'medium': score -= 0.5; break;
+      case 'low': score -= 0.1; break;
       }
     }
     
@@ -1708,22 +1708,22 @@ class CodeQualityScanner {
   applyFix(content, issue) {
     // Apply a specific fix to content
     switch (issue.subtype) {
-      case 'trailing_whitespace':
-        return content.replace(/[ \t]+$/gm, '');
+    case 'trailing_whitespace':
+      return content.replace(/[ \t]+$/gm, '');
         
-      case 'inconsistent_style':
-        // Simple quote normalization
-        if (issue.message.includes('quotation')) {
-          return content.replace(/'/g, '"');
-        }
-        break;
+    case 'inconsistent_style':
+      // Simple quote normalization
+      if (issue.message.includes('quotation')) {
+        return content.replace(/'/g, '"');
+      }
+      break;
         
-      case 'missing_semicolon':
-        // Add semicolons where missing (simplified)
-        return content.replace(/([^;\s])\s*\n/g, '$1;\n');
+    case 'missing_semicolon':
+      // Add semicolons where missing (simplified)
+      return content.replace(/([^;\s])\s*\n/g, '$1;\n');
         
-      default:
-        return content;
+    default:
+      return content;
     }
     
     return content;
@@ -2026,51 +2026,51 @@ if (require.main === module) {
       await scanner.initialize();
       
       switch (command) {
-        case 'scan':
-          console.log('🔍 Running full quality scan...\n');
-          const report = args.includes('--report');
-          const fix = args.includes('--fix');
+      case 'scan':
+        console.log('🔍 Running full quality scan...\n');
+        const report = args.includes('--report');
+        const fix = args.includes('--fix');
           
-          const result = await scanner.runFullScan({ report, fix });
+        const result = await scanner.runFullScan({ report, fix });
           
-          console.log(`\n📊 Overall Quality Score: ${result.overallScore}/10`);
-          if (result.overallScore < 7) {
-            process.exit(1);
-          }
-          break;
+        console.log(`\n📊 Overall Quality Score: ${result.overallScore}/10`);
+        if (result.overallScore < 7) {
+          process.exit(1);
+        }
+        break;
           
-        case 'quick-scan':
-          console.log('⚡ Running quick quality scan...\n');
-          // Quick scan implementation
-          const quickResult = await scanner.runFullScan({ 
-            paths: ['src/'], 
-            report: false 
-          });
+      case 'quick-scan':
+        console.log('⚡ Running quick quality scan...\n');
+        // Quick scan implementation
+        const quickResult = await scanner.runFullScan({ 
+          paths: ['src/'], 
+          report: false 
+        });
           
-          if (quickResult.overallScore < 5) {
-            process.exit(1);
-          }
-          break;
+        if (quickResult.overallScore < 5) {
+          process.exit(1);
+        }
+        break;
           
-        case 'fix':
-          console.log('🔧 Applying automatic fixes...\n');
-          await scanner.runFullScan({ fix: true });
-          break;
+      case 'fix':
+        console.log('🔧 Applying automatic fixes...\n');
+        await scanner.runFullScan({ fix: true });
+        break;
           
-        case 'stats':
-          const stats = await scanner.getStatistics();
-          console.log('📊 Code Quality Statistics:');
-          console.log(JSON.stringify(stats, null, 2));
-          break;
+      case 'stats':
+        const stats = await scanner.getStatistics();
+        console.log('📊 Code Quality Statistics:');
+        console.log(JSON.stringify(stats, null, 2));
+        break;
           
-        case 'setup-hooks':
-          await scanner.setupGitHooks();
-          console.log('✅ Git hooks installed');
-          break;
+      case 'setup-hooks':
+        await scanner.setupGitHooks();
+        console.log('✅ Git hooks installed');
+        break;
           
-        case 'help':
-        default:
-          console.log(`
+      case 'help':
+      default:
+        console.log(`
 🔍 Code Quality Scanner
 
 USAGE:
@@ -2099,7 +2099,7 @@ EXIT CODES:
   0 = Quality checks passed
   1 = Quality issues found (severity depends on thresholds)
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

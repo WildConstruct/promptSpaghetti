@@ -268,59 +268,59 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({
     if (!challenge) return null;
 
     switch (challenge.type) {
-      case ChallengeType.MATH_PUZZLE:
-      case ChallengeType.TEXT_CAPTCHA:
-        return (
-          <div className="challenge-text">
-            <p>{challenge.data.text}</p>
-            <input
-              type="text"
-              value={solution}
-              onChange={(e) => setSolution(e.target.value)}
-              placeholder="Enter your answer"
-              disabled={loading}
-              className="challenge-input"
-            />
+    case ChallengeType.MATH_PUZZLE:
+    case ChallengeType.TEXT_CAPTCHA:
+      return (
+        <div className="challenge-text">
+          <p>{challenge.data.text}</p>
+          <input
+            type="text"
+            value={solution}
+            onChange={(e) => setSolution(e.target.value)}
+            placeholder="Enter your answer"
+            disabled={loading}
+            className="challenge-input"
+          />
+        </div>
+      );
+
+    case ChallengeType.PATTERN_RECOGNITION:
+      return (
+        <div className="challenge-pattern">
+          <p>{challenge.data.text}</p>
+          <div className="pattern-options">
+            {challenge.data.options?.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => setSolution(option)}
+                disabled={loading}
+                className={`pattern-option ${solution === option ? 'selected' : ''}`}
+              >
+                {option}
+              </button>
+            ))}
           </div>
-        );
+        </div>
+      );
 
-      case ChallengeType.PATTERN_RECOGNITION:
-        return (
-          <div className="challenge-pattern">
-            <p>{challenge.data.text}</p>
-            <div className="pattern-options">
-              {challenge.data.options?.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSolution(option)}
-                  disabled={loading}
-                  className={`pattern-option ${solution === option ? 'selected' : ''}`}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
+    case ChallengeType.IMAGE_SELECTION:
+      return (
+        <div className="challenge-images">
+          <p>{challenge.data.text}</p>
+          <div className="image-grid">
+            {/* Image selection implementation */}
           </div>
-        );
+        </div>
+      );
 
-      case ChallengeType.IMAGE_SELECTION:
-        return (
-          <div className="challenge-images">
-            <p>{challenge.data.text}</p>
-            <div className="image-grid">
-              {/* Image selection implementation */}
-            </div>
-          </div>
-        );
+    case ChallengeType.RECAPTCHA_V2:
+      return <div ref={recaptchaRef} className="recaptcha-container" />;
 
-      case ChallengeType.RECAPTCHA_V2:
-        return <div ref={recaptchaRef} className="recaptcha-container" />;
+    case ChallengeType.HCAPTCHA:
+      return <div ref={hcaptchaRef} className="hcaptcha-container" />;
 
-      case ChallengeType.HCAPTCHA:
-        return <div ref={hcaptchaRef} className="hcaptcha-container" />;
-
-      default:
-        return <p>Unsupported challenge type</p>;
+    default:
+      return <p>Unsupported challenge type</p>;
     }
   };
 

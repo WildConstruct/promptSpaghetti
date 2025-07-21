@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T05:29:52.485Z"
+    "updated": "2025-07-21T05:36:47.023Z"
   },
   "product_goals": [
     {
@@ -22494,12 +22494,12 @@
       "id": "T-1752989143998-667",
       "story_id": "S-1752989143997-19-2",
       "title": "Build temporary access grant mechanism",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "claude_dev",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T05:13:09.539Z",
+      "updated": "2025-07-21T05:34:53.862Z",
       "dependencies": [],
       "notes": []
     },
@@ -22635,12 +22635,12 @@
       "id": "T-1752989143998-917",
       "story_id": "S-1752989143997-19-2",
       "title": "Add version comparison functionality",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "James",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:31:37.550Z",
       "dependencies": [],
       "notes": []
     },
@@ -22648,12 +22648,12 @@
       "id": "T-1752989143998-971",
       "story_id": "S-1752989143997-19-2",
       "title": "Build policy deployment workflow",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "James",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:31:37.550Z",
       "dependencies": [],
       "notes": []
     },
@@ -22661,12 +22661,12 @@
       "id": "T-1752989143998-451",
       "story_id": "S-1752989143997-19-2",
       "title": "Implement user policy interactions",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:36:47.023Z",
       "dependencies": [],
       "notes": []
     },
@@ -22674,12 +22674,12 @@
       "id": "T-1752989143998-824",
       "story_id": "S-1752989143997-19-2",
       "title": "Create policy acceptance UI",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:36:47.023Z",
       "dependencies": [],
       "notes": []
     },
@@ -31518,7 +31518,9 @@
   "assignments": {
     "2": [
       "T-1752989143997-289",
-      "T-1752989143997-424"
+      "T-1752989143997-424",
+      "T-1752989143998-451",
+      "T-1752989143998-824"
     ],
     "dev_A": [
       "T-1752950863627",
@@ -31684,7 +31686,9 @@
       "T-1752989143998-845",
       "T-1752989143998-61",
       "T-1752989143998-787",
-      "T-1752989143998-196"
+      "T-1752989143998-196",
+      "T-1752989143998-917",
+      "T-1752989143998-971"
     ],
     "dev_james": [
       "T-1752989143997-428",

@@ -587,7 +587,7 @@ export class AccountLockoutService extends EventEmitter {
     await this.sendNotification(lockout, {
       type: NotificationType.UNLOCK_NOTIFICATION,
       recipient: lockout.userEmail,
-      content: `Your account has been unlocked by an administrator. You may now log in normally.`
+      content: 'Your account has been unlocked by an administrator. You may now log in normally.'
     });
     
     // Log security event
@@ -648,20 +648,20 @@ export class AccountLockoutService extends EventEmitter {
   
   private getLockoutReasonText(reason: LockoutReason): string {
     switch (reason) {
-      case LockoutReason.EXCESSIVE_FAILED_ATTEMPTS:
-        return 'multiple failed login attempts';
-      case LockoutReason.SUSPICIOUS_ACTIVITY:
-        return 'suspicious account activity';
-      case LockoutReason.SECURITY_POLICY_VIOLATION:
-        return 'security policy violation';
-      case LockoutReason.ADMIN_MANUAL_LOCK:
-        return 'administrative action';
-      case LockoutReason.SYSTEM_SECURITY_ALERT:
-        return 'security system alert';
-      case LockoutReason.COMPLIANCE_REQUIREMENT:
-        return 'compliance requirement';
-      default:
-        return 'security concerns';
+    case LockoutReason.EXCESSIVE_FAILED_ATTEMPTS:
+      return 'multiple failed login attempts';
+    case LockoutReason.SUSPICIOUS_ACTIVITY:
+      return 'suspicious account activity';
+    case LockoutReason.SECURITY_POLICY_VIOLATION:
+      return 'security policy violation';
+    case LockoutReason.ADMIN_MANUAL_LOCK:
+      return 'administrative action';
+    case LockoutReason.SYSTEM_SECURITY_ALERT:
+      return 'security system alert';
+    case LockoutReason.COMPLIANCE_REQUIREMENT:
+      return 'compliance requirement';
+    default:
+      return 'security concerns';
     }
   }
   
@@ -669,20 +669,20 @@ export class AccountLockoutService extends EventEmitter {
     const now = new Date();
     
     switch (reason) {
-      case LockoutReason.EXCESSIVE_FAILED_ATTEMPTS:
-        return new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes
-      case LockoutReason.SUSPICIOUS_ACTIVITY:
-        return new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours
-      case LockoutReason.SECURITY_POLICY_VIOLATION:
-        return undefined; // Manual unlock required
-      case LockoutReason.ADMIN_MANUAL_LOCK:
-        return undefined; // Manual unlock required
-      case LockoutReason.SYSTEM_SECURITY_ALERT:
-        return new Date(now.getTime() + 60 * 60 * 1000); // 1 hour
-      case LockoutReason.COMPLIANCE_REQUIREMENT:
-        return undefined; // Manual unlock required
-      default:
-        return new Date(now.getTime() + 60 * 60 * 1000); // 1 hour default
+    case LockoutReason.EXCESSIVE_FAILED_ATTEMPTS:
+      return new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes
+    case LockoutReason.SUSPICIOUS_ACTIVITY:
+      return new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours
+    case LockoutReason.SECURITY_POLICY_VIOLATION:
+      return undefined; // Manual unlock required
+    case LockoutReason.ADMIN_MANUAL_LOCK:
+      return undefined; // Manual unlock required
+    case LockoutReason.SYSTEM_SECURITY_ALERT:
+      return new Date(now.getTime() + 60 * 60 * 1000); // 1 hour
+    case LockoutReason.COMPLIANCE_REQUIREMENT:
+      return undefined; // Manual unlock required
+    default:
+      return new Date(now.getTime() + 60 * 60 * 1000); // 1 hour default
     }
   }
   

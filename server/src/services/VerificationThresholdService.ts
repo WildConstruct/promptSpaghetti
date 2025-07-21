@@ -469,26 +469,26 @@ export class VerificationThresholdService {
         (Date.now() - new Date(event.last_occurrence).getTime()) / (1000 * 60 * 60) : 999;
 
       switch (event.action) {
-        case 'login_failed':
-          if (count > 3) {
-            securityScore += Math.min(count * 5, 30);
-            events.push(`${count} failed logins`);
-          }
-          break;
-        case 'password_reset_requested':
-          securityScore += 25;
-          events.push('recent password reset');
-          break;
-        case 'suspicious_activity':
-          securityScore += 40;
-          events.push('suspicious activity detected');
-          break;
-        case 'account_locked':
-          if (hoursAgo < 24) {
-            securityScore += 50;
-            events.push('recent account lockout');
-          }
-          break;
+      case 'login_failed':
+        if (count > 3) {
+          securityScore += Math.min(count * 5, 30);
+          events.push(`${count} failed logins`);
+        }
+        break;
+      case 'password_reset_requested':
+        securityScore += 25;
+        events.push('recent password reset');
+        break;
+      case 'suspicious_activity':
+        securityScore += 40;
+        events.push('suspicious activity detected');
+        break;
+      case 'account_locked':
+        if (hoursAgo < 24) {
+          securityScore += 50;
+          events.push('recent account lockout');
+        }
+        break;
       }
     }
 
@@ -572,21 +572,21 @@ export class VerificationThresholdService {
     factors.forEach(factor => {
       if (factor.score > 60) {
         switch (factor.factor) {
-          case 'device_trust':
-            recommendations.push('Consider adding this device to trusted devices after verification');
-            break;
-          case 'location_risk':
-            recommendations.push('Verify this login location is legitimate');
-            break;
-          case 'behavior_anomalies':
-            recommendations.push('Review recent account activity for suspicious behavior');
-            break;
-          case 'time_factors':
-            recommendations.push('Off-hours access detected - verify this is expected');
-            break;
-          case 'security_events':
-            recommendations.push('Recent security events require additional verification');
-            break;
+        case 'device_trust':
+          recommendations.push('Consider adding this device to trusted devices after verification');
+          break;
+        case 'location_risk':
+          recommendations.push('Verify this login location is legitimate');
+          break;
+        case 'behavior_anomalies':
+          recommendations.push('Review recent account activity for suspicious behavior');
+          break;
+        case 'time_factors':
+          recommendations.push('Off-hours access detected - verify this is expected');
+          break;
+        case 'security_events':
+          recommendations.push('Recent security events require additional verification');
+          break;
         }
       }
     });

@@ -170,38 +170,38 @@ export class ConditionEvaluator {
 
     try {
       switch (condition.type) {
-        case 'ip':
-          result = this.evaluateIP(condition, context.ip);
-          break;
-        case 'user':
-          result = this.evaluateUser(condition, context.userId);
-          break;
-        case 'endpoint':
-          result = this.evaluateEndpoint(condition, context.path);
-          break;
-        case 'method':
-          result = this.evaluateMethod(condition, context.method);
-          break;
-        case 'header':
-          result = this.evaluateHeader(condition, context.headers);
-          break;
-        case 'query':
-          result = this.evaluateQuery(condition, context.query);
-          break;
-        case 'body':
-          result = this.evaluateBody(condition, context.body);
-          break;
-        case 'time':
-          result = this.evaluateTime(condition, new Date());
-          break;
-        case 'geo':
-          result = this.evaluateGeo(condition, context.geo);
-          break;
-        case 'custom':
-          result = this.evaluateCustom(condition, context);
-          break;
-        default:
-          result = false;
+      case 'ip':
+        result = this.evaluateIP(condition, context.ip);
+        break;
+      case 'user':
+        result = this.evaluateUser(condition, context.userId);
+        break;
+      case 'endpoint':
+        result = this.evaluateEndpoint(condition, context.path);
+        break;
+      case 'method':
+        result = this.evaluateMethod(condition, context.method);
+        break;
+      case 'header':
+        result = this.evaluateHeader(condition, context.headers);
+        break;
+      case 'query':
+        result = this.evaluateQuery(condition, context.query);
+        break;
+      case 'body':
+        result = this.evaluateBody(condition, context.body);
+        break;
+      case 'time':
+        result = this.evaluateTime(condition, new Date());
+        break;
+      case 'geo':
+        result = this.evaluateGeo(condition, context.geo);
+        break;
+      case 'custom':
+        result = this.evaluateCustom(condition, context);
+        break;
+      default:
+        result = false;
       }
     } catch (error) {
       console.error('Condition evaluation error:', error);
@@ -215,20 +215,20 @@ export class ConditionEvaluator {
     if (!ip) return false;
 
     switch (condition.operator) {
-      case 'equals':
-        return ip === condition.value;
-      case 'contains':
-        return ip.includes(condition.value);
-      case 'startsWith':
-        return ip.startsWith(condition.value);
-      case 'in':
-        return condition.values?.includes(ip) || false;
-      case 'regex':
-        return new RegExp(condition.value).test(ip);
-      case 'range':
-        return this.isIPInRange(ip, condition.value);
-      default:
-        return false;
+    case 'equals':
+      return ip === condition.value;
+    case 'contains':
+      return ip.includes(condition.value);
+    case 'startsWith':
+      return ip.startsWith(condition.value);
+    case 'in':
+      return condition.values?.includes(ip) || false;
+    case 'regex':
+      return new RegExp(condition.value).test(ip);
+    case 'range':
+      return this.isIPInRange(ip, condition.value);
+    default:
+      return false;
     }
   }
 
@@ -236,14 +236,14 @@ export class ConditionEvaluator {
     if (!userId) return condition.operator === 'exists' ? false : true; // Anonymous user
 
     switch (condition.operator) {
-      case 'equals':
-        return userId === condition.value;
-      case 'in':
-        return condition.values?.includes(userId) || false;
-      case 'exists':
-        return true;
-      default:
-        return false;
+    case 'equals':
+      return userId === condition.value;
+    case 'in':
+      return condition.values?.includes(userId) || false;
+    case 'exists':
+      return true;
+    default:
+      return false;
     }
   }
 
@@ -251,20 +251,20 @@ export class ConditionEvaluator {
     if (!path) return false;
 
     switch (condition.operator) {
-      case 'equals':
-        return path === condition.value;
-      case 'contains':
-        return path.includes(condition.value);
-      case 'startsWith':
-        return path.startsWith(condition.value);
-      case 'endsWith':
-        return path.endsWith(condition.value);
-      case 'regex':
-        return new RegExp(condition.value).test(path);
-      case 'in':
-        return condition.values?.includes(path) || false;
-      default:
-        return false;
+    case 'equals':
+      return path === condition.value;
+    case 'contains':
+      return path.includes(condition.value);
+    case 'startsWith':
+      return path.startsWith(condition.value);
+    case 'endsWith':
+      return path.endsWith(condition.value);
+    case 'regex':
+      return new RegExp(condition.value).test(path);
+    case 'in':
+      return condition.values?.includes(path) || false;
+    default:
+      return false;
     }
   }
 
@@ -275,12 +275,12 @@ export class ConditionEvaluator {
     const conditionValue = condition.value?.toUpperCase();
 
     switch (condition.operator) {
-      case 'equals':
-        return normalizedMethod === conditionValue;
-      case 'in':
-        return condition.values?.map(v => v.toUpperCase()).includes(normalizedMethod) || false;
-      default:
-        return false;
+    case 'equals':
+      return normalizedMethod === conditionValue;
+    case 'in':
+      return condition.values?.map(v => v.toUpperCase()).includes(normalizedMethod) || false;
+    default:
+      return false;
     }
   }
 
@@ -318,15 +318,15 @@ export class ConditionEvaluator {
     const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
     switch (condition.operator) {
-      case 'range':
-        if (condition.value?.start && condition.value?.end) {
-          return timeString >= condition.value.start && timeString <= condition.value.end;
-        }
-        return false;
-      case 'in':
-        return condition.values?.includes(day) || false;
-      default:
-        return false;
+    case 'range':
+      if (condition.value?.start && condition.value?.end) {
+        return timeString >= condition.value.start && timeString <= condition.value.end;
+      }
+      return false;
+    case 'in':
+      return condition.values?.includes(day) || false;
+    default:
+      return false;
     }
   }
 
@@ -338,12 +338,12 @@ export class ConditionEvaluator {
     const city = geo.city;
 
     switch (condition.operator) {
-      case 'equals':
-        return country === condition.value;
-      case 'in':
-        return condition.values?.includes(country) || false;
-      default:
-        return false;
+    case 'equals':
+      return country === condition.value;
+    case 'in':
+      return condition.values?.includes(country) || false;
+    default:
+      return false;
     }
   }
 
@@ -358,24 +358,24 @@ export class ConditionEvaluator {
     const conditionValue = condition.caseSensitive ? condition.value : condition.value?.toLowerCase();
 
     switch (condition.operator) {
-      case 'equals':
-        return compareValue === conditionValue;
-      case 'contains':
-        return compareValue.includes(conditionValue);
-      case 'startsWith':
-        return compareValue.startsWith(conditionValue);
-      case 'endsWith':
-        return compareValue.endsWith(conditionValue);
-      case 'regex':
-        return new RegExp(condition.value, condition.caseSensitive ? 'g' : 'gi').test(value);
-      case 'in':
-        return condition.values?.some(v => 
-          condition.caseSensitive ? v === value : v.toLowerCase() === compareValue
-        ) || false;
-      case 'exists':
-        return true;
-      default:
-        return false;
+    case 'equals':
+      return compareValue === conditionValue;
+    case 'contains':
+      return compareValue.includes(conditionValue);
+    case 'startsWith':
+      return compareValue.startsWith(conditionValue);
+    case 'endsWith':
+      return compareValue.endsWith(conditionValue);
+    case 'regex':
+      return new RegExp(condition.value, condition.caseSensitive ? 'g' : 'gi').test(value);
+    case 'in':
+      return condition.values?.some(v => 
+        condition.caseSensitive ? v === value : v.toLowerCase() === compareValue
+      ) || false;
+    case 'exists':
+      return true;
+    default:
+      return false;
     }
   }
 
@@ -729,49 +729,49 @@ export class RateLimitConfigurationManager {
 
     // Default generators based on scope
     switch (scope) {
-      case RateLimitScope.IP:
-        return RateLimitKeyGenerator.byIP;
-      case RateLimitScope.USER:
-        return RateLimitKeyGenerator.byUser;
-      case RateLimitScope.ENDPOINT:
-        return RateLimitKeyGenerator.byEndpoint;
-      case RateLimitScope.GLOBAL:
-        return () => 'global';
-      default:
-        return RateLimitKeyGenerator.byIP;
+    case RateLimitScope.IP:
+      return RateLimitKeyGenerator.byIP;
+    case RateLimitScope.USER:
+      return RateLimitKeyGenerator.byUser;
+    case RateLimitScope.ENDPOINT:
+      return RateLimitKeyGenerator.byEndpoint;
+    case RateLimitScope.GLOBAL:
+      return () => 'global';
+    default:
+      return RateLimitKeyGenerator.byIP;
     }
   }
 
   private createActionHandler(action: RateLimitAction): (context: any, info: any) => void {
     return (context, info) => {
       switch (action.type) {
-        case 'block':
-          // Default blocking behavior
-          break;
-        case 'delay':
-          // Implement delay logic
-          if (action.delayMs) {
-            setTimeout(() => {}, action.delayMs);
-          }
-          break;
-        case 'throttle':
-          // Implement throttling logic
-          break;
-        case 'captcha':
-          // Trigger CAPTCHA challenge
-          break;
-        case 'redirect':
-          // Handle redirect
-          if (action.redirectUrl) {
-            context.redirect = action.redirectUrl;
-          }
-          break;
-        case 'custom':
-          // Handle custom action
-          if (action.customHandler) {
-            // Execute custom handler
-          }
-          break;
+      case 'block':
+        // Default blocking behavior
+        break;
+      case 'delay':
+        // Implement delay logic
+        if (action.delayMs) {
+          setTimeout(() => {}, action.delayMs);
+        }
+        break;
+      case 'throttle':
+        // Implement throttling logic
+        break;
+      case 'captcha':
+        // Trigger CAPTCHA challenge
+        break;
+      case 'redirect':
+        // Handle redirect
+        if (action.redirectUrl) {
+          context.redirect = action.redirectUrl;
+        }
+        break;
+      case 'custom':
+        // Handle custom action
+        if (action.customHandler) {
+          // Execute custom handler
+        }
+        break;
       }
     };
   }

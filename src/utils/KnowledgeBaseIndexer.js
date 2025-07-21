@@ -220,7 +220,7 @@ class KnowledgeBaseIndexer {
       // Save all data
       await this.saveKnowledgeBase();
       
-      console.log(`\n✅ Knowledge indexing complete:`);
+      console.log('\n✅ Knowledge indexing complete:');
       console.log(`📋 Tasks processed: ${processedCount}`);
       console.log(`🔍 Patterns extracted: ${extractedPatterns}`);
       console.log(`💡 Solutions indexed: ${newSolutions}`);
@@ -1064,27 +1064,27 @@ class KnowledgeBaseIndexer {
   
   getSearchableText(item, type) {
     switch (type) {
-      case 'pattern':
-        return `${item.problem || ''} ${item.solution || ''} ${(item.keywords || []).join(' ')}`;
-      case 'solution':
-        return `${item.title || ''} ${item.description || ''} ${(item.keywords || []).join(' ')}`;
-      case 'faq':
-        return `${item.question || ''} ${item.answer || ''} ${(item.keywords || []).join(' ')}`;
-      default:
-        return '';
+    case 'pattern':
+      return `${item.problem || ''} ${item.solution || ''} ${(item.keywords || []).join(' ')}`;
+    case 'solution':
+      return `${item.title || ''} ${item.description || ''} ${(item.keywords || []).join(' ')}`;
+    case 'faq':
+      return `${item.question || ''} ${item.answer || ''} ${(item.keywords || []).join(' ')}`;
+    default:
+      return '';
     }
   }
   
   getItemTitle(item, type) {
     switch (type) {
-      case 'pattern':
-        return item.problem || item.title || 'Untitled Pattern';
-      case 'solution':
-        return item.title || 'Untitled Solution';
-      case 'faq':
-        return item.question || 'Untitled FAQ';
-      default:
-        return 'Untitled';
+    case 'pattern':
+      return item.problem || item.title || 'Untitled Pattern';
+    case 'solution':
+      return item.title || 'Untitled Solution';
+    case 'faq':
+      return item.question || 'Untitled FAQ';
+    default:
+      return 'Untitled';
     }
   }
   
@@ -1292,61 +1292,61 @@ if (require.main === module) {
       await indexer.initialize();
       
       switch (command) {
-        case 'index':
-          console.log('📚 Starting knowledge base indexing...\n');
-          const result = await indexer.indexCompletedTasks();
+      case 'index':
+        console.log('📚 Starting knowledge base indexing...\n');
+        const result = await indexer.indexCompletedTasks();
           
-          console.log(`\n✅ Indexing complete:`);
-          console.log(`📋 Tasks processed: ${result.processedCount}`);
-          console.log(`🔍 Patterns extracted: ${result.extractedPatterns}`);
-          console.log(`💡 Solutions indexed: ${result.newSolutions}`);
-          console.log(`❓ FAQ entries generated: ${result.generatedFAQs}`);
-          break;
+        console.log('\n✅ Indexing complete:');
+        console.log(`📋 Tasks processed: ${result.processedCount}`);
+        console.log(`🔍 Patterns extracted: ${result.extractedPatterns}`);
+        console.log(`💡 Solutions indexed: ${result.newSolutions}`);
+        console.log(`❓ FAQ entries generated: ${result.generatedFAQs}`);
+        break;
           
-        case 'search':
-          const query = args.slice(1).join(' ');
-          if (!query) {
-            console.error('❌ Search query required');
-            process.exit(1);
+      case 'search':
+        const query = args.slice(1).join(' ');
+        if (!query) {
+          console.error('❌ Search query required');
+          process.exit(1);
+        }
+          
+        console.log(`🔍 Searching for: "${query}"\n`);
+        const searchResult = await indexer.search(query, { includeContent: true });
+          
+        console.log(`📊 Found ${searchResult.totalResults} results:\n`);
+          
+        for (const [index, result] of searchResult.results.entries()) {
+          console.log(`${index + 1}. [${result.type.toUpperCase()}] ${result.title}`);
+          console.log(`   Category: ${result.category}`);
+          console.log(`   Score: ${result.score.toFixed(2)}`);
+          if (result.description) {
+            console.log(`   ${result.description.substring(0, 100)}...`);
           }
+          console.log('');
+        }
           
-          console.log(`🔍 Searching for: "${query}"\n`);
-          const searchResult = await indexer.search(query, { includeContent: true });
+        if (searchResult.suggestions.length > 0) {
+          console.log('💡 Suggestions:');
+          searchResult.suggestions.forEach(suggestion => 
+            console.log(`   • ${suggestion}`)
+          );
+        }
+        break;
           
-          console.log(`📊 Found ${searchResult.totalResults} results:\n`);
+      case 'analytics':
+        await indexer.generateAnalytics();
+        console.log('✅ Analytics generated');
+        break;
           
-          for (const [index, result] of searchResult.results.entries()) {
-            console.log(`${index + 1}. [${result.type.toUpperCase()}] ${result.title}`);
-            console.log(`   Category: ${result.category}`);
-            console.log(`   Score: ${result.score.toFixed(2)}`);
-            if (result.description) {
-              console.log(`   ${result.description.substring(0, 100)}...`);
-            }
-            console.log('');
-          }
+      case 'stats':
+        const stats = await indexer.getStatistics();
+        console.log('📊 Knowledge Base Statistics:');
+        console.log(JSON.stringify(stats, null, 2));
+        break;
           
-          if (searchResult.suggestions.length > 0) {
-            console.log('💡 Suggestions:');
-            searchResult.suggestions.forEach(suggestion => 
-              console.log(`   • ${suggestion}`)
-            );
-          }
-          break;
-          
-        case 'analytics':
-          await indexer.generateAnalytics();
-          console.log('✅ Analytics generated');
-          break;
-          
-        case 'stats':
-          const stats = await indexer.getStatistics();
-          console.log('📊 Knowledge Base Statistics:');
-          console.log(JSON.stringify(stats, null, 2));
-          break;
-          
-        case 'help':
-        default:
-          console.log(`
+      case 'help':
+      default:
+        console.log(`
 📚 Knowledge Base Indexer
 
 USAGE:
@@ -1379,7 +1379,7 @@ KNOWLEDGE EXTRACTION:
   • Frequently asked questions
   • Technical solutions and workarounds
 `);
-          break;
+        break;
       }
     } catch (error) {
       console.error('❌ Error:', error.message);

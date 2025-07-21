@@ -43,7 +43,7 @@ describe('SecurityAuditService', () => {
       // Mock successful response with security headers
       (fetch as jest.Mock).mockResolvedValueOnce({
         headers: new Map([
-          ['content-security-policy', "default-src 'self'"],
+          ['content-security-policy', 'default-src \'self\''],
           ['x-frame-options', 'DENY'],
           ['x-content-type-options', 'nosniff']
         ])
@@ -169,7 +169,7 @@ describe('SecurityAuditService', () => {
       // Mock response with good security headers
       (fetch as jest.Mock).mockResolvedValueOnce({
         headers: new Map([
-          ['content-security-policy', "default-src 'self'"], // 15 points
+          ['content-security-policy', 'default-src \'self\''], // 15 points
           ['x-frame-options', 'DENY'], // 10 points
           ['x-content-type-options', 'nosniff'], // 8 points
           ['strict-transport-security', 'max-age=31536000'], // 12 points

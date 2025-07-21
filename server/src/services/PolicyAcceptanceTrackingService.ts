@@ -892,18 +892,18 @@ export class PolicyAcceptanceTrackingService {
     // Deduct for compliance flags
     flags.forEach(flag => {
       switch (flag.severity) {
-        case FlagSeverity.CRITICAL:
-          score -= 50;
-          break;
-        case FlagSeverity.HIGH:
-          score -= 30;
-          break;
-        case FlagSeverity.MEDIUM:
-          score -= 15;
-          break;
-        case FlagSeverity.LOW:
-          score -= 5;
-          break;
+      case FlagSeverity.CRITICAL:
+        score -= 50;
+        break;
+      case FlagSeverity.HIGH:
+        score -= 30;
+        break;
+      case FlagSeverity.MEDIUM:
+        score -= 15;
+        break;
+      case FlagSeverity.LOW:
+        score -= 5;
+        break;
       }
     });
 

@@ -272,23 +272,23 @@ export class RateLimitKeyGenerator {
       
       for (const factor of factors) {
         switch (factor) {
-          case 'ip':
-            parts.push(context.ip || 'unknown');
-            break;
-          case 'user':
-            parts.push(context.userId || 'anonymous');
-            break;
-          case 'endpoint':
-            parts.push(`${context.method || 'GET'}:${context.path || '/'}`);
-            break;
-          case 'session':
-            parts.push(context.sessionId || 'unknown');
-            break;
-          case 'org':
-            parts.push(context.organizationId || 'unknown');
-            break;
-          default:
-            parts.push(factor);
+        case 'ip':
+          parts.push(context.ip || 'unknown');
+          break;
+        case 'user':
+          parts.push(context.userId || 'anonymous');
+          break;
+        case 'endpoint':
+          parts.push(`${context.method || 'GET'}:${context.path || '/'}`);
+          break;
+        case 'session':
+          parts.push(context.sessionId || 'unknown');
+          break;
+        case 'org':
+          parts.push(context.organizationId || 'unknown');
+          break;
+        default:
+          parts.push(factor);
         }
       }
       

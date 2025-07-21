@@ -873,15 +873,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     let quickStart = '';
     
     if (scripts.dev) {
-      quickStart += `\`\`\`bash\n# Start development server\nnpm run dev\n\`\`\`\n\n`;
+      quickStart += '```bash\n# Start development server\nnpm run dev\n```\n\n';
     }
     
     if (scripts.build) {
-      quickStart += `\`\`\`bash\n# Build for production\nnpm run build\n\`\`\`\n\n`;
+      quickStart += '```bash\n# Build for production\nnpm run build\n```\n\n';
     }
     
     if (scripts.test) {
-      quickStart += `\`\`\`bash\n# Run tests\nnpm test\n\`\`\`\n\n`;
+      quickStart += '```bash\n# Run tests\nnpm test\n```\n\n';
     }
     
     return quickStart || 'No quick start information available.';
@@ -1127,57 +1127,57 @@ This document contains code examples for common use cases.
   // CLI command handling
   async handleCommand(command, args) {
     switch (command) {
-      case 'generate':
-        return await this.generateAll();
+    case 'generate':
+      return await this.generateAll();
         
-      case 'api':
-        return await this.generateAPIDocumentation();
+    case 'api':
+      return await this.generateAPIDocumentation();
         
-      case 'readme':
-        return await this.generateREADMEs();
+    case 'readme':
+      return await this.generateREADMEs();
         
-      case 'changelog':
-        return await this.generateChangelog();
+    case 'changelog':
+      return await this.generateChangelog();
         
-      case 'guides':
-        return await this.generateGuides();
+    case 'guides':
+      return await this.generateGuides();
         
-      case 'examples':
-        return await this.generateExamples();
+    case 'examples':
+      return await this.generateExamples();
         
-      case 'analyze':
-        const analysis = await this.analyzeProject();
-        console.log('Project Analysis:');
-        console.log(`Name: ${analysis.name}`);
-        console.log(`Description: ${analysis.description}`);
-        console.log(`Version: ${analysis.version}`);
-        console.log(`Modules: ${analysis.modules.length}`);
-        console.log(`APIs: ${analysis.apis.length}`);
-        console.log(`Examples: ${analysis.examples.length}`);
-        return analysis;
+    case 'analyze':
+      const analysis = await this.analyzeProject();
+      console.log('Project Analysis:');
+      console.log(`Name: ${analysis.name}`);
+      console.log(`Description: ${analysis.description}`);
+      console.log(`Version: ${analysis.version}`);
+      console.log(`Modules: ${analysis.modules.length}`);
+      console.log(`APIs: ${analysis.apis.length}`);
+      console.log(`Examples: ${analysis.examples.length}`);
+      return analysis;
         
-      case 'config':
-        if (args.length > 0) {
-          // Update configuration
-          const [key, value] = args;
-          this.updateConfig(key, value);
-          await this.saveConfiguration();
-          console.log(`Updated configuration: ${key} = ${value}`);
-        } else {
-          // Show configuration
-          console.log('Current Configuration:');
-          console.log(JSON.stringify(this.config, null, 2));
-        }
-        return this.config;
+    case 'config':
+      if (args.length > 0) {
+        // Update configuration
+        const [key, value] = args;
+        this.updateConfig(key, value);
+        await this.saveConfiguration();
+        console.log(`Updated configuration: ${key} = ${value}`);
+      } else {
+        // Show configuration
+        console.log('Current Configuration:');
+        console.log(JSON.stringify(this.config, null, 2));
+      }
+      return this.config;
         
-      case 'clean':
-        await this.cleanGeneratedDocs();
-        console.log('Cleaned generated documentation');
-        return { cleaned: true };
+    case 'clean':
+      await this.cleanGeneratedDocs();
+      console.log('Cleaned generated documentation');
+      return { cleaned: true };
         
-      default:
-        this.showHelp();
-        return null;
+    default:
+      this.showHelp();
+      return null;
     }
   }
   

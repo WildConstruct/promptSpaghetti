@@ -7,7 +7,7 @@ describe('Security Headers', () => {
   describe('auditSecurityHeaders', () => {
     it('should pass audit with all required headers present', () => {
       const headers = {
-        'content-security-policy': "default-src 'self'",
+        'content-security-policy': 'default-src \'self\'',
         'x-frame-options': 'DENY',
         'x-content-type-options': 'nosniff',
         'referrer-policy': 'strict-origin-when-cross-origin',
@@ -39,7 +39,7 @@ describe('Security Headers', () => {
 
     it('should accept CSP report-only header as alternative', () => {
       const headers = {
-        'content-security-policy-report-only': "default-src 'self'",
+        'content-security-policy-report-only': 'default-src \'self\'',
         'x-frame-options': 'DENY',
         'x-content-type-options': 'nosniff',
         'referrer-policy': 'strict-origin-when-cross-origin'
@@ -105,7 +105,7 @@ describe('Security Headers', () => {
       await middleware(mockRequest, mockReply);
 
       // Check CSP header
-      expect(headersSent['content-security-policy']).toContain("default-src 'self'");
+      expect(headersSent['content-security-policy']).toContain('default-src \'self\'');
       
       // Check other headers
       expect(headersSent['x-frame-options']).toBe('DENY');
@@ -147,9 +147,9 @@ describe('Security Headers', () => {
         contentSecurityPolicy: {
           enabled: true,
           directives: {
-            'default-src': ["'self'"],
-            'script-src': ["'self'", "'unsafe-inline'"],
-            'style-src': ["'self'", "'unsafe-inline'"]
+            'default-src': ['\'self\''],
+            'script-src': ['\'self\'', '\'unsafe-inline\''],
+            'style-src': ['\'self\'', '\'unsafe-inline\'']
           }
         }
       };
@@ -158,9 +158,9 @@ describe('Security Headers', () => {
       await middleware(mockRequest, mockReply);
 
       const cspHeader = headersSent['content-security-policy'];
-      expect(cspHeader).toContain("default-src 'self'");
-      expect(cspHeader).toContain("script-src 'self' 'unsafe-inline'");
-      expect(cspHeader).toContain("style-src 'self' 'unsafe-inline'");
+      expect(cspHeader).toContain('default-src \'self\'');
+      expect(cspHeader).toContain('script-src \'self\' \'unsafe-inline\'');
+      expect(cspHeader).toContain('style-src \'self\' \'unsafe-inline\'');
     });
 
     it('should use report-only CSP when configured', async () => {
@@ -168,7 +168,7 @@ describe('Security Headers', () => {
         ...defaultSecurityConfig,
         contentSecurityPolicy: {
           enabled: true,
-          directives: { 'default-src': ["'self'"] },
+          directives: { 'default-src': ['\'self\''] },
           reportOnly: true
         }
       };
@@ -202,8 +202,8 @@ describe('Security Headers', () => {
           directives: {
             'camera': [],
             'microphone': [],
-            'autoplay': ["'self'"],
-            'fullscreen': ["'self'", 'https://example.com']
+            'autoplay': ['\'self\''],
+            'fullscreen': ['\'self\'', 'https://example.com']
           }
         }
       };
@@ -214,8 +214,8 @@ describe('Security Headers', () => {
       const ppHeader = headersSent['permissions-policy'];
       expect(ppHeader).toContain('camera=()');
       expect(ppHeader).toContain('microphone=()');
-      expect(ppHeader).toContain("autoplay=('self')");
-      expect(ppHeader).toContain("fullscreen=('self' https://example.com)");
+      expect(ppHeader).toContain('autoplay=(\'self\')');
+      expect(ppHeader).toContain('fullscreen=(\'self\' https://example.com)');
     });
 
     it('should remove server fingerprinting headers', async () => {

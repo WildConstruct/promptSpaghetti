@@ -287,7 +287,7 @@ export class EnhancedDeviceIdentificationService {
       features: {
         behavioralBiometrics: true,
         machineLearnin
-: false,
+        : false,
         crossDeviceLinking: true,
         realTimeMonitoring: true
       },

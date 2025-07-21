@@ -500,11 +500,11 @@ export const usePasswordReset = (options: UsePasswordResetOptions = {}): UsePass
   // Utility functions
   const getPasswordStrengthColor = useCallback((strength: PasswordStrength): string => {
     switch (strength) {
-      case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
-      case PasswordStrength.FAIR: return 'text-orange-600 bg-orange-100';
-      case PasswordStrength.GOOD: return 'text-blue-600 bg-blue-100';
-      case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
+    case PasswordStrength.FAIR: return 'text-orange-600 bg-orange-100';
+    case PasswordStrength.GOOD: return 'text-blue-600 bg-blue-100';
+    case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   }, []);
 

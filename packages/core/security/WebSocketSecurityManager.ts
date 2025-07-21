@@ -422,14 +422,14 @@ export class WebSocketSecurityManager extends EventEmitter {
       // Classify message data
       const classification = this.config.enableDataClassification
         ? this.dataClassifier.classify({
-            id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            fieldName: 'payload',
-            value: JSON.stringify(message),
-            dataType: 'json',
-            context: { messageType: message.type },
-            source: 'websocket',
-            timestamp: new Date()
-          })
+          id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          fieldName: 'payload',
+          value: JSON.stringify(message),
+          dataType: 'json',
+          context: { messageType: message.type },
+          source: 'websocket',
+          timestamp: new Date()
+        })
         : { level: ClassificationLevel.PUBLIC, category: 'operational', confidence: 100, matchedRules: [], complianceRequirements: [], encryptionRequired: false, retentionPeriod: '1 year', accessControls: [], reasoning: [] };
 
       // Check if encryption is required based on classification
@@ -746,11 +746,11 @@ export class WebSocketSecurityManager extends EventEmitter {
     // Map from risk levels to threat levels - handle both enum values and strings
     const normalizedRisk = typeof riskLevel === 'string' ? riskLevel.toLowerCase() : riskLevel;
     switch (normalizedRisk) {
-      case 'low': return 'low';
-      case 'medium': return 'medium';
-      case 'high': return 'high';
-      case 'critical': return 'critical';
-      default: return 'medium';
+    case 'low': return 'low';
+    case 'medium': return 'medium';
+    case 'high': return 'high';
+    case 'critical': return 'critical';
+    default: return 'medium';
     }
   }
 

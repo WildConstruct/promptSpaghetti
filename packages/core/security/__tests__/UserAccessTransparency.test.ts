@@ -781,12 +781,12 @@ expect.extend({
     if (pass) {
       return {
         message: () => `expected ${received} not to be a valid date`,
-        pass: true,
+        pass: true
       };
     } else {
       return {
         message: () => `expected ${received} to be a valid date`,
-        pass: false,
+        pass: false
       };
     }
   },
@@ -796,15 +796,15 @@ expect.extend({
     if (pass) {
       return {
         message: () => `expected ${received} not to be within range ${start} - ${end}`,
-        pass: true,
+        pass: true
       };
     } else {
       return {
         message: () => `expected ${received} to be within range ${start} - ${end}`,
-        pass: false,
+        pass: false
       };
     }
-  },
+  }
 });
 
 declare global {

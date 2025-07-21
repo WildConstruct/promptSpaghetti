@@ -411,102 +411,102 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       // Handle user choice if provided and allowed
       if (userChoice && policy.enforcement.allowUserChoice) {
         switch (userChoice.action) {
-          case 'terminate_selected':
-            if (userChoice.selectedSessions) {
-              sessionsToTerminate = userChoice.selectedSessions;
-              resolutionAction = 'terminate_oldest'; // Use as base action
-            }
-            break;
-          case 'terminate_oldest':
-            resolutionAction = 'terminate_oldest';
-            break;
-          case 'block_new':
-            resolutionAction = 'block_new';
-            break;
+        case 'terminate_selected':
+          if (userChoice.selectedSessions) {
+            sessionsToTerminate = userChoice.selectedSessions;
+            resolutionAction = 'terminate_oldest'; // Use as base action
+          }
+          break;
+        case 'terminate_oldest':
+          resolutionAction = 'terminate_oldest';
+          break;
+        case 'block_new':
+          resolutionAction = 'block_new';
+          break;
         }
       }
 
       // Execute enforcement action
       switch (resolutionAction) {
-        case 'terminate_oldest':
-          if (sessionsToTerminate.length === 0) {
-            // Find oldest sessions to terminate
-            const sessionsNeeded = conflict.conflict.currentSessionCount - conflict.conflict.allowedSessionCount + 1;
-            sessionsToTerminate = this.selectOldestSessions(conflict.sessions, sessionsNeeded);
-          }
+      case 'terminate_oldest':
+        if (sessionsToTerminate.length === 0) {
+          // Find oldest sessions to terminate
+          const sessionsNeeded = conflict.conflict.currentSessionCount - conflict.conflict.allowedSessionCount + 1;
+          sessionsToTerminate = this.selectOldestSessions(conflict.sessions, sessionsNeeded);
+        }
           
-          for (const sessionId of sessionsToTerminate) {
-            try {
-              const result = await this.terminationService.requestSessionTermination(
-                sessionId,
-                enforcedBy,
-                {
-                  type: 'policy_violation',
-                  description: `Concurrent session limit exceeded for policy: ${policy.name}`,
-                  severity: conflict.conflict.severity
-                },
-                {
-                  ipAddress: '127.0.0.1', // System IP
-                  userAgent: 'ConcurrentSessionPolicyService'
-                }
-              );
-              
-              if (result.success) {
-                actionsPerformed.push(`Terminated session ${sessionId}`);
-              } else {
-                errors.push(`Failed to terminate session ${sessionId}: ${result.message}`);
+        for (const sessionId of sessionsToTerminate) {
+          try {
+            const result = await this.terminationService.requestSessionTermination(
+              sessionId,
+              enforcedBy,
+              {
+                type: 'policy_violation',
+                description: `Concurrent session limit exceeded for policy: ${policy.name}`,
+                severity: conflict.conflict.severity
+              },
+              {
+                ipAddress: '127.0.0.1', // System IP
+                userAgent: 'ConcurrentSessionPolicyService'
               }
-            } catch (error) {
-              errors.push(`Error terminating session ${sessionId}: ${error.message}`);
-            }
-          }
-          break;
-
-        case 'terminate_all':
-          for (const session of conflict.sessions) {
-            try {
-              const result = await this.terminationService.requestSessionTermination(
-                session.sessionId,
-                enforcedBy,
-                {
-                  type: 'policy_violation',
-                  description: `All sessions terminated due to policy violation: ${policy.name}`,
-                  severity: 'high'
-                },
-                {
-                  ipAddress: '127.0.0.1',
-                  userAgent: 'ConcurrentSessionPolicyService'
-                }
-              );
+            );
               
-              if (result.success) {
-                actionsPerformed.push(`Terminated session ${session.sessionId}`);
-              } else {
-                errors.push(`Failed to terminate session ${session.sessionId}: ${result.message}`);
-              }
-            } catch (error) {
-              errors.push(`Error terminating session ${session.sessionId}: ${error.message}`);
+            if (result.success) {
+              actionsPerformed.push(`Terminated session ${sessionId}`);
+            } else {
+              errors.push(`Failed to terminate session ${sessionId}: ${result.message}`);
             }
+          } catch (error) {
+            errors.push(`Error terminating session ${sessionId}: ${error.message}`);
           }
-          break;
+        }
+        break;
 
-        case 'degrade_oldest':
-          const oldestSession = this.selectOldestSessions(conflict.sessions, 1)[0];
-          if (oldestSession) {
-            await this.degradeSession(oldestSession, policy);
-            actionsPerformed.push(`Degraded session ${oldestSession}`);
+      case 'terminate_all':
+        for (const session of conflict.sessions) {
+          try {
+            const result = await this.terminationService.requestSessionTermination(
+              session.sessionId,
+              enforcedBy,
+              {
+                type: 'policy_violation',
+                description: `All sessions terminated due to policy violation: ${policy.name}`,
+                severity: 'high'
+              },
+              {
+                ipAddress: '127.0.0.1',
+                userAgent: 'ConcurrentSessionPolicyService'
+              }
+            );
+              
+            if (result.success) {
+              actionsPerformed.push(`Terminated session ${session.sessionId}`);
+            } else {
+              errors.push(`Failed to terminate session ${session.sessionId}: ${result.message}`);
+            }
+          } catch (error) {
+            errors.push(`Error terminating session ${session.sessionId}: ${error.message}`);
           }
-          break;
+        }
+        break;
 
-        case 'block_new':
-          // Blocking is handled at the session creation level
-          actionsPerformed.push('Blocked new session creation');
-          break;
+      case 'degrade_oldest':
+        const oldestSession = this.selectOldestSessions(conflict.sessions, 1)[0];
+        if (oldestSession) {
+          await this.degradeSession(oldestSession, policy);
+          actionsPerformed.push(`Degraded session ${oldestSession}`);
+        }
+        break;
 
-        case 'require_approval':
-          await this.escalateForApproval(conflict, policy);
-          actionsPerformed.push('Escalated for manual approval');
-          break;
+      case 'block_new':
+        // Blocking is handled at the session creation level
+        actionsPerformed.push('Blocked new session creation');
+        break;
+
+      case 'require_approval':
+        await this.escalateForApproval(conflict, policy);
+        actionsPerformed.push('Escalated for manual approval');
+        break;
       }
 
       // Update conflict resolution
@@ -875,47 +875,47 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     suggestedActions: string[];
   }> {
     switch (policy.enforcement.action) {
-      case 'block_new':
-        return {
-          allowSession: false,
-          requiresUserChoice: false,
-          suggestedActions: ['Session blocked due to concurrent session limit']
-        };
+    case 'block_new':
+      return {
+        allowSession: false,
+        requiresUserChoice: false,
+        suggestedActions: ['Session blocked due to concurrent session limit']
+      };
 
-      case 'terminate_oldest':
-        return {
-          allowSession: true,
-          requiresUserChoice: policy.enforcement.allowUserChoice || false,
-          suggestedActions: ['Oldest session will be terminated', 'New session will be allowed']
-        };
+    case 'terminate_oldest':
+      return {
+        allowSession: true,
+        requiresUserChoice: policy.enforcement.allowUserChoice || false,
+        suggestedActions: ['Oldest session will be terminated', 'New session will be allowed']
+      };
 
-      case 'terminate_all':
-        return {
-          allowSession: true,
-          requiresUserChoice: false,
-          suggestedActions: ['All existing sessions will be terminated', 'New session will be allowed']
-        };
+    case 'terminate_all':
+      return {
+        allowSession: true,
+        requiresUserChoice: false,
+        suggestedActions: ['All existing sessions will be terminated', 'New session will be allowed']
+      };
 
-      case 'require_approval':
-        return {
-          allowSession: false,
-          requiresUserChoice: true,
-          suggestedActions: ['Admin approval required', 'Choose sessions to terminate or wait for approval']
-        };
+    case 'require_approval':
+      return {
+        allowSession: false,
+        requiresUserChoice: true,
+        suggestedActions: ['Admin approval required', 'Choose sessions to terminate or wait for approval']
+      };
 
-      case 'degrade_oldest':
-        return {
-          allowSession: true,
-          requiresUserChoice: false,
-          suggestedActions: ['Oldest session will be degraded', 'New session will be allowed']
-        };
+    case 'degrade_oldest':
+      return {
+        allowSession: true,
+        requiresUserChoice: false,
+        suggestedActions: ['Oldest session will be degraded', 'New session will be allowed']
+      };
 
-      default:
-        return {
-          allowSession: false,
-          requiresUserChoice: false,
-          suggestedActions: ['Unknown enforcement action']
-        };
+    default:
+      return {
+        allowSession: false,
+        requiresUserChoice: false,
+        suggestedActions: ['Unknown enforcement action']
+      };
     }
   }
 

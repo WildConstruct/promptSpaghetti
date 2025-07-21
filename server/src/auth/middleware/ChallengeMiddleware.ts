@@ -340,17 +340,17 @@ export class ChallengeMiddleware {
     }
 
     switch (condition.type) {
-      case 'failedAttempts':
-        const ip = this.extractIP(request);
-        const attempts = this.getFailureCount(ip);
-        return attempts >= (condition.threshold || 3);
+    case 'failedAttempts':
+      const ip = this.extractIP(request);
+      const attempts = this.getFailureCount(ip);
+      return attempts >= (condition.threshold || 3);
       
-      case 'riskScore':
-        // Would need async evaluation - simplified for now
-        return false;
+    case 'riskScore':
+      // Would need async evaluation - simplified for now
+      return false;
       
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 

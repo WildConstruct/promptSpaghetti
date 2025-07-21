@@ -264,7 +264,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
       
       const message = result.completed 
         ? (validatedBody.decision === 'APPROVED' ? 'Request approved and access provisioned' : 'Request rejected')
-        : `Decision recorded, moved to next approval stage`;
+        : 'Decision recorded, moved to next approval stage';
 
       reply.send({
         nextStage: result.nextStage,

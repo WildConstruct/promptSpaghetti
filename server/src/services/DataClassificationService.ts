@@ -1056,20 +1056,20 @@ export class DataClassificationService {
     let fieldValue: any;
     
     switch (condition.field) {
-      case 'content':
-        fieldValue = data.content;
-        break;
-      case 'filename':
-        fieldValue = data.filename;
-        break;
-      case 'size':
-        fieldValue = data.size;
-        break;
-      case 'metadata':
-        fieldValue = JSON.stringify(data.metadata);
-        break;
-      default:
-        fieldValue = data.metadata[condition.field] || '';
+    case 'content':
+      fieldValue = data.content;
+      break;
+    case 'filename':
+      fieldValue = data.filename;
+      break;
+    case 'size':
+      fieldValue = data.size;
+      break;
+    case 'metadata':
+      fieldValue = JSON.stringify(data.metadata);
+      break;
+    default:
+      fieldValue = data.metadata[condition.field] || '';
     }
 
     const normalizedValue = condition.caseSensitive !== false ? 
@@ -1084,48 +1084,48 @@ export class DataClassificationService {
     let reason = '';
 
     switch (condition.operator) {
-      case 'contains':
-        matches = typeof normalizedValue === 'string' && 
+    case 'contains':
+      matches = typeof normalizedValue === 'string' && 
                  typeof normalizedConditionValue === 'string' &&
                  normalizedValue.includes(normalizedConditionValue);
-        reason = `Field "${condition.field}" ${matches ? 'contains' : 'does not contain'} "${condition.value}"`;
-        break;
+      reason = `Field "${condition.field}" ${matches ? 'contains' : 'does not contain'} "${condition.value}"`;
+      break;
         
-      case 'equals':
-        matches = normalizedValue === normalizedConditionValue;
-        reason = `Field "${condition.field}" ${matches ? 'equals' : 'does not equal'} "${condition.value}"`;
-        break;
+    case 'equals':
+      matches = normalizedValue === normalizedConditionValue;
+      reason = `Field "${condition.field}" ${matches ? 'equals' : 'does not equal'} "${condition.value}"`;
+      break;
         
-      case 'matches':
-      case 'pattern':
-        try {
-          const regex = new RegExp(condition.value as string, condition.caseSensitive !== false ? '' : 'i');
-          matches = typeof normalizedValue === 'string' && regex.test(normalizedValue);
-          reason = `Field "${condition.field}" ${matches ? 'matches' : 'does not match'} pattern "${condition.value}"`;
-        } catch (error) {
-          matches = false;
-          reason = `Invalid regex pattern "${condition.value}"`;
-        }
-        break;
-        
-      case 'gt':
-        matches = typeof fieldValue === 'number' && fieldValue > (condition.value as number);
-        reason = `Field "${condition.field}" (${fieldValue}) ${matches ? 'is greater than' : 'is not greater than'} ${condition.value}`;
-        break;
-        
-      case 'lt':
-        matches = typeof fieldValue === 'number' && fieldValue < (condition.value as number);
-        reason = `Field "${condition.field}" (${fieldValue}) ${matches ? 'is less than' : 'is not less than'} ${condition.value}`;
-        break;
-        
-      case 'in':
-        matches = Array.isArray(condition.value) && condition.value.includes(normalizedValue);
-        reason = `Field "${condition.field}" ${matches ? 'is in' : 'is not in'} allowed values`;
-        break;
-        
-      default:
+    case 'matches':
+    case 'pattern':
+      try {
+        const regex = new RegExp(condition.value as string, condition.caseSensitive !== false ? '' : 'i');
+        matches = typeof normalizedValue === 'string' && regex.test(normalizedValue);
+        reason = `Field "${condition.field}" ${matches ? 'matches' : 'does not match'} pattern "${condition.value}"`;
+      } catch (error) {
         matches = false;
-        reason = `Unknown operator "${condition.operator}"`;
+        reason = `Invalid regex pattern "${condition.value}"`;
+      }
+      break;
+        
+    case 'gt':
+      matches = typeof fieldValue === 'number' && fieldValue > (condition.value as number);
+      reason = `Field "${condition.field}" (${fieldValue}) ${matches ? 'is greater than' : 'is not greater than'} ${condition.value}`;
+      break;
+        
+    case 'lt':
+      matches = typeof fieldValue === 'number' && fieldValue < (condition.value as number);
+      reason = `Field "${condition.field}" (${fieldValue}) ${matches ? 'is less than' : 'is not less than'} ${condition.value}`;
+      break;
+        
+    case 'in':
+      matches = Array.isArray(condition.value) && condition.value.includes(normalizedValue);
+      reason = `Field "${condition.field}" ${matches ? 'is in' : 'is not in'} allowed values`;
+      break;
+        
+    default:
+      matches = false;
+      reason = `Unknown operator "${condition.operator}"`;
     }
 
     return { matches, reason };
@@ -1183,44 +1183,44 @@ export class DataClassificationService {
     let reason = '';
 
     switch (condition.type) {
-      case 'user_role':
-        if (condition.operator === 'in' && Array.isArray(condition.value)) {
-          matches = request.userRoles.some(role => (condition.value as string[]).includes(role));
-          reason = `User roles ${matches ? 'include' : 'do not include'} required roles`;
-        } else if (condition.operator === 'equals') {
-          matches = request.userRoles.includes(condition.value as string);
-          reason = `User ${matches ? 'has' : 'does not have'} required role "${condition.value}"`;
-        }
-        break;
+    case 'user_role':
+      if (condition.operator === 'in' && Array.isArray(condition.value)) {
+        matches = request.userRoles.some(role => (condition.value as string[]).includes(role));
+        reason = `User roles ${matches ? 'include' : 'do not include'} required roles`;
+      } else if (condition.operator === 'equals') {
+        matches = request.userRoles.includes(condition.value as string);
+        reason = `User ${matches ? 'has' : 'does not have'} required role "${condition.value}"`;
+      }
+      break;
         
-      case 'time_window':
-        const now = new Date();
-        const currentHour = now.getHours();
-        if (condition.operator === 'between' && typeof condition.value === 'object' && 'start' in condition.value) {
-          const start = parseInt(condition.value.start);
-          const end = parseInt(condition.value.end);
-          matches = currentHour >= start && currentHour <= end;
-          reason = `Current time ${matches ? 'is within' : 'is outside'} allowed window (${start}-${end})`;
-        }
-        break;
+    case 'time_window':
+      const now = new Date();
+      const currentHour = now.getHours();
+      if (condition.operator === 'between' && typeof condition.value === 'object' && 'start' in condition.value) {
+        const start = parseInt(condition.value.start);
+        const end = parseInt(condition.value.end);
+        matches = currentHour >= start && currentHour <= end;
+        reason = `Current time ${matches ? 'is within' : 'is outside'} allowed window (${start}-${end})`;
+      }
+      break;
         
-      case 'approval_status':
-        matches = condition.operator === 'equals' ? 
-          (request.approvedBy !== undefined) === (condition.value === 'approved') :
-          false;
-        reason = `Transfer ${matches ? 'has' : 'does not have'} required approval status`;
-        break;
+    case 'approval_status':
+      matches = condition.operator === 'equals' ? 
+        (request.approvedBy !== undefined) === (condition.value === 'approved') :
+        false;
+      reason = `Transfer ${matches ? 'has' : 'does not have'} required approval status`;
+      break;
         
-      case 'encryption_status':
-        matches = condition.operator === 'equals' ? 
-          request.encryptionRequired === (condition.value === 'required') :
-          false;
-        reason = `Encryption ${matches ? 'meets' : 'does not meet'} requirements`;
-        break;
+    case 'encryption_status':
+      matches = condition.operator === 'equals' ? 
+        request.encryptionRequired === (condition.value === 'required') :
+        false;
+      reason = `Encryption ${matches ? 'meets' : 'does not meet'} requirements`;
+      break;
         
-      default:
-        matches = false;
-        reason = `Unknown condition type "${condition.type}"`;
+    default:
+      matches = false;
+      reason = `Unknown condition type "${condition.type}"`;
     }
 
     return { matches, reason };
@@ -1550,7 +1550,7 @@ export class DataClassificationService {
         id: this.generateId('alert'),
         type: 'rule_instability',
         severity: 'high',
-        message: `Oscillating classification pattern detected for data item`,
+        message: 'Oscillating classification pattern detected for data item',
         dataItems: [driftEvent.dataId],
         affectedPercentage: 0,
         timeWindow: 'recent_history',

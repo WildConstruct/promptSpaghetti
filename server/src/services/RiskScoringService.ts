@@ -255,7 +255,7 @@ export class RiskScoringService {
     // Simple heuristic: check for known VPN/Tor IP ranges
     // This would be replaced with actual threat intelligence APIs
     const suspiciousRanges = [
-      '10.', '172.', '192.168.', // Private ranges (simplified)
+      '10.', '172.', '192.168.' // Private ranges (simplified)
     ];
     
     const isSuspicious = suspiciousRanges.some(range => ipAddress.startsWith(range));
@@ -395,7 +395,7 @@ export class RiskScoringService {
     
     // Simple heuristic: check for suspicious patterns
     const suspiciousPatterns = [
-      /^(185|194|195)\./, // Some known malicious ranges (simplified)
+      /^(185|194|195)\./ // Some known malicious ranges (simplified)
     ];
     
     const isThreat = suspiciousPatterns.some(pattern => pattern.test(ipAddress));
@@ -404,10 +404,10 @@ export class RiskScoringService {
 
   private mapAccountRiskLevel(riskLevel: string): number {
     switch (riskLevel) {
-      case 'low': return 0.1;
-      case 'medium': return 0.4;
-      case 'high': return 0.7;
-      default: return 0.3;
+    case 'low': return 0.1;
+    case 'medium': return 0.4;
+    case 'high': return 0.7;
+    default: return 0.3;
     }
   }
 
