@@ -580,10 +580,8 @@ export class DataClassifierIntegration {
   }
 }
 
-// Export all utilities
+// Export all utilities (classes already exported with their declarations)
 export {
-  DataClassificationHelpers,
-  DataClassifierIntegration,
   type EnhancedDataElement,
   type SecurityPolicyEnforcementResult,
   type DataFlowSecurityAssessment
