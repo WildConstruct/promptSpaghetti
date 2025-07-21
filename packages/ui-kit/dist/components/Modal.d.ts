@@ -1,0 +1,8 @@
+/**
+ * Cross-platform Modal component
+ */
+import React from 'react';
+import { ModalProps } from '../types';
+export declare const Modal: React.ForwardRefExoticComponent<ModalProps & React.RefAttributes<HTMLDivElement>>;
+export declare const modalAnimationStyles = "\n  .ui-modal-overlay {\n    animation: ui-modal-overlay-enter 200ms ease-out;\n  }\n  \n  .ui-modal {\n    animation: ui-modal-enter 200ms ease-out;\n  }\n  \n  @keyframes ui-modal-overlay-enter {\n    from {\n      opacity: 0;\n      backdrop-filter: blur(0px);\n      -webkit-backdrop-filter: blur(0px);\n    }\n    to {\n      opacity: 1;\n      backdrop-filter: blur(4px);\n      -webkit-backdrop-filter: blur(4px);\n    }\n  }\n  \n  @keyframes ui-modal-enter {\n    from {\n      opacity: 0;\n      transform: scale(0.95) translateY(-10px);\n    }\n    to {\n      opacity: 1;\n      transform: scale(1) translateY(0);\n    }\n  }\n  \n  @media (prefers-reduced-motion: reduce) {\n    .ui-modal-overlay,\n    .ui-modal {\n      animation: none;\n    }\n  }\n  \n  /* Mobile responsiveness */\n  @media (max-width: 768px) {\n    .ui-modal-overlay {\n      padding: 16px;\n      align-items: flex-end;\n    }\n    \n    .ui-modal {\n      width: 100% !important;\n      max-height: 90vh;\n      border-radius: 16px 16px 0 0;\n    }\n    \n    @keyframes ui-modal-enter {\n      from {\n        opacity: 0;\n        transform: translateY(100%);\n      }\n      to {\n        opacity: 1;\n        transform: translateY(0);\n      }\n    }\n  }\n";
+//# sourceMappingURL=Modal.d.ts.map

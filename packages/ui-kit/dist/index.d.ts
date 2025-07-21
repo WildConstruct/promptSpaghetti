@@ -6,6 +6,6 @@ export * from './components';
 export * from './hooks';
 export * from './types';
 export * from './platform';
-export declare const VERSION = "0.1.0";
-export declare const PACKAGE_NAME = "@prompt-spaghetti/ui-kit";
-//# sourceMappingURL=index.d.ts.map
+export * from './responsive';
+export * from './mobile';
+export declare export declare //# sourceMappingURL=index.d.ts.map

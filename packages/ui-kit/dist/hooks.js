@@ -1,22 +1,13 @@
 /**
- * Cross-platform hooks
+ * UI Kit hooks for cross-platform functionality
  */
-import { useState, useEffect } from 'react';
-export function usePlatform() {
-    const [platform, setPlatform] = useState('web');
-    useEffect(() => {
-        // TODO: Implement platform detection
-        // For now, default to web
-        setPlatform('web');
-    }, []);
-    return platform;
-}
-export function useResponsive() {
-    // TODO: Implement responsive breakpoint hook
-    return {
-        isMobile: false,
-        isTablet: false,
-        isDesktop: true
-    };
-}
+export * from './hooks/useTheme';
+export * from './hooks/useResponsive';
+export * from './hooks/usePlatform';
+export * from './hooks/useUIState';
+// Re-export specific hooks for convenience
+export { useTheme, useThemeControls } from './hooks/useTheme';
+export { useResponsive, useBreakpoint, useMediaQuery } from './hooks/useResponsive';
+export { usePlatform, useIsMobile, useIsDesktop, useIsWeb, useTouchSupport, useHoverSupport, useKeyboardSupport } from './hooks/usePlatform';
+export { useUIState, useSelectedNode, useInspectorState, usePaletteState, useThemeState } from './hooks/useUIState';
 //# sourceMappingURL=hooks.js.map

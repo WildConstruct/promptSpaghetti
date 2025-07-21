@@ -1,5 +1,5 @@
 /**
- * UI Kit types for cross-platform components
+ * UI Kit cross-platform types
  */
 export {};
 //# sourceMappingURL=types.js.map

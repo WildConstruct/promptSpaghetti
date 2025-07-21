@@ -65,6 +65,7 @@ import {
 } from './middleware/payload-encryption';
 import { payloadEncryptionRoutes } from './routes/payload-encryption';
 import { KeyManagementService, KeyManagementConfig } from './services/KeyManagementService';
+import { AccessControlManager } from './services/AccessControlManager';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -792,7 +793,49 @@ try {
     jwtIssuer: 'promptgraph',
     jwtAudience: 'promptgraph-api',
     database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
-    redis: { host: 'localhost', port: 6379 }
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
   };
   const auditService = new AuditService(authConfig, db as any);
   
@@ -816,11 +859,19 @@ try {
     dataClassificationRequired: false
   };
 
+  // Initialize access control manager for key management
+  const accessControlManager = new AccessControlManager(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService
+  );
+
   // Initialize key management service
   keyManagementService = new KeyManagementService(
     db as any,
     undefined as any, // Redis will be set up later
     auditService,
+    accessControlManager,
     keyManagementConfig
   );
 

@@ -81,7 +81,7 @@ export class GraphCRDT {
         this.ydoc.transact(() => {
             // Validate that source and target nodes exist
             if (!this.nodes.has(edge.source) || !this.nodes.has(edge.target)) {
-                throw new Error(`Cannot create edge: source or target node does not exist`);
+                throw new Error('Cannot create edge: source or target node does not exist');
             }
             this.edges.set(edge.id, {
                 id: edge.id,

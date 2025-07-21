@@ -196,7 +196,7 @@ export class MidjourneyAdaptor extends BaseAdaptor {
                     autoFixable: true,
                     suggestions: [{
                             type: 'fix',
-                            description: `Remove parameter or upgrade to compatible version`
+                            description: 'Remove parameter or upgrade to compatible version'
                         }]
                 }));
             });

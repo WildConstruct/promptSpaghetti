@@ -59,12 +59,13 @@ export class AdaptorTestFramework {
             return this.testResults;
         }
         catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
             this.logger.error('Adaptor test suite failed', {
                 adaptorId: adaptor.id,
-                error: error.message
+                error: errorMessage
             });
             this.testResults.overall.passed = false;
-            this.testResults.overall.summary = `Test suite failed: ${error.message}`;
+            this.testResults.overall.summary = `Test suite failed: ${errorMessage}`;
             return this.testResults;
         }
     }
@@ -90,7 +91,7 @@ export class AdaptorTestFramework {
         catch (error) {
             this.testResults.compliance.errors.push({
                 test: 'compliance',
-                error: error.message,
+                error: error instanceof Error ? error.message : String(error),
                 timestamp: new Date()
             });
         }
@@ -215,7 +216,7 @@ export class AdaptorTestFramework {
         catch (error) {
             this.testResults.performance.errors.push({
                 test: 'performance',
-                error: error.message,
+                error: error instanceof Error ? error.message : String(error),
                 timestamp: new Date()
             });
         }
@@ -343,7 +344,7 @@ export class AdaptorTestFramework {
         catch (error) {
             this.testResults.functionality.errors.push({
                 test: 'functionality',
-                error: error.message,
+                error: error instanceof Error ? error.message : String(error),
                 timestamp: new Date()
             });
         }

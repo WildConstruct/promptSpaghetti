@@ -460,8 +460,8 @@ export class TLSConfigManager {
       socket.on('secureConnect', () => {
         const result = {
           connected: true,
-          protocol: socket.getProtocol(),
-          cipher: socket.getCipher(),
+          protocol: socket.getProtocol() || undefined,
+          cipher: socket.getCipher()?.name || undefined,
           certificate: socket.getPeerCertificate()
         };
         socket.end();
