@@ -157,6 +157,47 @@ jobs:
           mkdir -p src/data/{logs,reports,tracking,estimation,quality,health}
           chmod +x src/utils/*.js
 
+      - name: Validate Testing Infrastructure
+        run: |
+          echo "Validating testing infrastructure setup..."
+          
+          # Verify MSW setup
+          if [[ -f "tests/mocks/handlers.ts" ]]; then
+            echo "✅ MSW handlers found"
+          else
+            echo "❌ MSW handlers missing"
+            exit 1
+          fi
+          
+          # Verify jest-axe configuration
+          if [[ -f "tests/utils/axeSetup.ts" ]]; then
+            echo "✅ jest-axe setup found"
+          else
+            echo "❌ jest-axe setup missing"
+            exit 1
+          fi
+          
+          # Verify Testcontainers setup
+          if [[ -f "tests/utils/databaseTestSetup.ts" ]]; then
+            echo "✅ Testcontainers setup found"
+          else
+            echo "❌ Testcontainers setup missing"
+            exit 1
+          fi
+          
+          # Check for required dependencies
+          node -e "
+            const pkg = require('./package.json');
+            const required = ['msw', '@faker-js/faker', '@testcontainers/postgresql', 'jest-axe'];
+            const missing = required.filter(dep => !pkg.devDependencies[dep] && !pkg.dependencies[dep]);
+            if (missing.length > 0) {
+              console.log('❌ Missing dependencies:', missing.join(', '));
+              process.exit(1);
+            } else {
+              console.log('✅ All required testing dependencies found');
+            }
+          "
+
       - name: Generate Missing Test Cases
         run: |
           echo "Generating intelligent test cases..."
@@ -168,9 +209,30 @@ jobs:
             fi
           done
 
-      - name: Run Enhanced Test Suite
+      - name: Setup Docker for Testcontainers
         run: |
-          echo "Running enhanced test suite with coverage..."
+          echo "Setting up Docker for database testing..."
+          sudo systemctl start docker
+          docker --version
+
+      - name: Run Enhanced Test Suite with New Infrastructure
+        run: |
+          echo "Running enhanced test suite with MSW, jest-axe, and Testcontainers..."
+          
+          # Run accessibility tests
+          echo "Running accessibility tests..."
+          pnpm test -- --testPathPattern="accessibility" --coverage --ci || true
+          
+          # Run MSW integration tests
+          echo "Running MSW integration tests..."
+          pnpm test -- --testPathPattern="integration" --coverage --ci || true
+          
+          # Run database tests with Testcontainers
+          echo "Running database tests with Testcontainers..."
+          pnpm test -- --testPathPattern="database" --coverage --ci --runInBand || true
+          
+          # Run full test suite with coverage
+          echo "Running full test suite..."
           pnpm test -- --coverage --ci --detectOpenHandles --forceExit || true
 
       - name: Build with Performance Tracking

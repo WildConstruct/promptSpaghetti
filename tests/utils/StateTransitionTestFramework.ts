@@ -38,6 +38,7 @@ export class StateTransitionTestFramework {
   private states: Map<string, StateDefinition> = new Map();
   private transitionHistory: TransitionEvent[] = [];
   private currentTest: string | null = null;
+  private currentTestConfig: StateTestConfig | null = null;
 
   constructor(stateFilePath?: string) {
     this.stateLock = new StateLock(stateFilePath);
@@ -129,12 +130,8 @@ export class StateTransitionTestFramework {
       ...config
     };
 
-    // Store test configuration
-    await this.testDataManager.generate({
-      type: 'stateTestConfig',
-      count: 1,
-      options: { testName, config: testConfig }
-    });
+    // Store test configuration in memory (skip TestDataManager for now)
+    this.currentTestConfig = testConfig;
   }
 
   /**

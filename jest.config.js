@@ -7,7 +7,8 @@ module.exports = {
     '**/__tests__/**/*.(spec|test).[tj]s?(x)', 
     '**/?(*.)+(spec|test).[tj]s?(x)', 
     '**/tests/documentation/**/*.(spec|test).[tj]s?(x)',
-    '**/tests/infrastructure/**/*.(spec|test).[tj]s?(x)'
+    '**/tests/infrastructure/**/*.(spec|test).[tj]s?(x)',
+    '**/tests/**/*.(spec|test).[tj]s?(x)'
   ],
   testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*\\.spec\\.jsx$'],
   coverageDirectory: 'coverage',
@@ -24,11 +25,19 @@ module.exports = {
   ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '^reactflow$': '<rootDir>/client/__mocks__/reactflow.tsx'
+    '^reactflow$': '<rootDir>/client/__mocks__/reactflow.tsx',
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@tests/(.*)$': '<rootDir>/tests/$1',
+    '^@packages/(.*)$': '<rootDir>/packages/$1',
+    '^@client/(.*)$': '<rootDir>/client/$1',
+    '^@server/(.*)$': '<rootDir>/server/$1'
   },
   setupFilesAfterEnv: [
     '<rootDir>/jest.setup.js',
-    '<rootDir>/tests/utils/globalTestSetup.ts'
+    '<rootDir>/tests/utils/globalTestSetup.ts',
+    '<rootDir>/tests/utils/mswSetup.ts',
+    '<rootDir>/tests/utils/axeSetup.ts',
+    '@testing-library/jest-dom'
   ],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   transform: {

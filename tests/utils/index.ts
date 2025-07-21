@@ -31,5 +31,5 @@ export {
 } from './CustomMatchers';
 
 // Testing framework info
-export export 
-export } as const;
+export const TESTING_UTILITIES_VERSION = '1.0.0';
+export const EPIC_TASK_ID = 'E18-1753114562451-62A0CC';
