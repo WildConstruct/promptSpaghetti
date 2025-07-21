@@ -1,5 +1,10 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { useCorrectionsStore, CorrectionRule, DEFAULT_CORRECTION_RULES, useCorrectionsEnabled } from './correctionsStore';
+import {
+  useCorrectionsStore,
+  CorrectionRule,
+  DEFAULT_CORRECTION_RULES,
+  useCorrectionsEnabled
+} from './correctionsStore';
 import { WorkflowManager } from './components/WorkflowManager';
 import { NotificationSystem } from './components/NotificationSystem';
 
@@ -20,14 +25,9 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
     updateRule,
     deleteRule,
     toggleRule,
-    reorderRules,
     clearAllRules,
     applyCorrections,
-    getDraftRules,
-    getPublishedRules,
-    approveRule,
-    deprecateRule,
-    notifications
+    getDraftRules
   } = useCorrectionsStore();
 
   // UI State
@@ -72,9 +72,6 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  // Don't render if corrections are not enabled
-  if (!isEnabled) return null;
 
   // Filter and sort rules
   const filteredAndSortedRules = useMemo(() => {
@@ -252,6 +249,9 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   if (!isOpen) return null;
 
   const panelWidth = isMobile ? '100%' : isCollapsed ? '60px' : '500px';
+
+  // Don't render if corrections are not enabled
+  if (!isEnabled) return null;
 
   return (
     <div
@@ -605,7 +605,7 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <select
                     value={exportFormat}
-                    onChange={(e) => setExportFormat(e.target.value as any)}
+                    onChange={(e) => setExportFormat(e.target.value as 'json' | 'yaml' | 'csv')}
                     style={{
                       padding: '6px 8px',
                       background: '#2a2e37',

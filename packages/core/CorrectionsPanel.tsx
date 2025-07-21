@@ -1,5 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { useCorrectionsStore, CorrectionRule, DEFAULT_CORRECTION_RULES, useCorrectionsEnabled } from './correctionsStore';
+import {
+  useCorrectionsStore,
+  CorrectionRule,
+  DEFAULT_CORRECTION_RULES,
+  useCorrectionsEnabled
+} from './correctionsStore';
 
 interface CorrectionsPanelProps {
   isOpen: boolean;
@@ -14,7 +19,6 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
     updateRule,
     deleteRule,
     toggleRule,
-    reorderRules,
     clearAllRules,
     applyCorrections
   } = useCorrectionsStore();
@@ -30,9 +34,6 @@ export const CorrectionsPanel: React.FC<CorrectionsPanelProps> = ({ isOpen, onCl
     priority: rules.length
   });
   const [testText, setTestText] = useState('');
-
-  // Don't render if corrections are not enabled
-  if (!isEnabled) return null;
 
   const handleAddRule = useCallback(() => {
     if (newRule.name.trim() && newRule.findPattern.trim()) {

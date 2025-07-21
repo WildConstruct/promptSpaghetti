@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T05:45:20.632Z"
+    "updated": "2025-07-21T05:47:59.736Z"
   },
   "product_goals": [
     {
@@ -22622,12 +22622,12 @@
       "id": "T-1752989143998-196",
       "story_id": "S-1752989143997-19-2",
       "title": "Create policy authoring tools",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "James",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T05:29:52.485Z",
+      "updated": "2025-07-21T05:46:47.198Z",
       "dependencies": [],
       "notes": []
     },
@@ -22687,12 +22687,12 @@
       "id": "T-1752989143998-592",
       "story_id": "S-1752989143997-19-2",
       "title": "Build notification system for policy changes",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "James",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:46:52.588Z",
       "dependencies": [],
       "notes": []
     },
@@ -22700,12 +22700,12 @@
       "id": "T-1752989143998-120",
       "story_id": "S-1752989143997-19-2",
       "title": "Implement grandfathering rules for changes",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "James",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:46:52.588Z",
       "dependencies": [],
       "notes": []
     },
@@ -22713,12 +22713,12 @@
       "id": "T-1752989143998-320",
       "story_id": "S-1752989143997-19-2",
       "title": "Add policy effectiveness tracking",
-      "state": "UNASSIGNED",
+      "state": "REVIEW",
       "assignee": null,
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:47:59.735Z",
       "dependencies": [],
       "notes": []
     },
@@ -31698,7 +31698,9 @@
       "T-1752989143998-787",
       "T-1752989143998-196",
       "T-1752989143998-917",
-      "T-1752989143998-971"
+      "T-1752989143998-971",
+      "T-1752989143998-592",
+      "T-1752989143998-120"
     ],
     "dev_james": [
       "T-1752989143997-428",
