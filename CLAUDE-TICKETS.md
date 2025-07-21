@@ -22,35 +22,47 @@
 
 Developers can now self-assign and manage tasks directly without waiting for ASSIGN/BUILD phases:
 
-1. **Check available tasks:**
+1. **Check business priorities and available tasks:**
    ```bash
-   cd src && node monitor-available-tasks.js
+   # See what you should be working on (CRITICAL FIRST STEP)
+   node src/show-priority-tasks.js
+   
+   # See full agent coordination dashboard 
+   node src/monitor-available-tasks.js
    ```
 
-2. **Grab tasks to work on:**
+2. **Grab priority tasks to work on:**
    ```bash
-   # Grab 2 tasks (default)
-   node grab-tasks.js <your-dev-id>
+   # Grab 2 high-priority tasks (RECOMMENDED - follows business priorities)
+   node src/grab-tasks.js <your-dev-id> 2 --priority-only
    
-   # Grab specific number of tasks
-   node grab-tasks.js <your-dev-id> 3
+   # Grab authentication tasks (PRIORITY 1 per IMMEDIATE-PRIORITIES.md)
+   node src/grab-tasks.js <your-dev-id> 2 --story=20.1
+   
+   # Grab file browser tasks (PRIORITY 2)
+   node src/grab-tasks.js <your-dev-id> 2 --story=20.2
+   
+   # Basic usage (gets tasks in priority order automatically)
+   node src/grab-tasks.js <your-dev-id> 3
    
    # Examples:
-   node grab-tasks.js dev_A
-   node grab-tasks.js Dev-James-Security 1
+   node src/grab-tasks.js dev_A 2 --priority-only
+   node src/grab-tasks.js Dev-James-Security 1 --story=20.1
    ```
+   
+   **🎯 PRIORITY GUIDANCE:** Always use `--priority-only` or story filters to align with business priorities!
 
 3. **Complete work and submit for review:**
    ```bash
    # CRITICAL: ALWAYS call this when your implementation is done
-   node finish-task.js <task-id>
+   node src/finish-task.js <task-id>
    
    # Other state transitions:
-   node finish-task.js <task-id> COMPLETED
-   node finish-task.js <task-id> BLOCKED
+   node src/finish-task.js <task-id> COMPLETED
+   node src/finish-task.js <task-id> BLOCKED
    ```
    
-   **⚠️ IMPORTANT**: Every agent MUST call `finish-task.js` when they complete implementation.
+   **⚠️ IMPORTANT**: Every agent MUST call `src/finish-task.js` when they complete implementation.
    Failing to do this leaves tasks stuck in IN_PROGRESS even when the work is done.
 
 **Task States:**
@@ -91,7 +103,7 @@ Hi [Other Agent]! Brief summary of what was accomplished.
 
 **For Developer Agents:**
 - The phase-based system (ASSIGN/BUILD phases) has been REMOVED
-- Developers now self-assign tasks using `grab-tasks.js`
+- Developers now self-assign tasks using `src/grab-tasks.js`
 - No need to wait for phase changes or assignment events
 - Task flow: UNASSIGNED → IN_PROGRESS → REVIEW → COMPLETED
 

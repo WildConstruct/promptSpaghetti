@@ -335,6 +335,7 @@ export class RuleEvaluationEngine extends EventEmitter {
   private evaluationCache: Map<string, CacheEntry> = new Map();
   private conditionEvaluators: Map<string, ConditionEvaluator> = new Map();
   private activeBatches: Map<string, EvaluationBatch> = new Map();
+  private isShuttingDown: boolean = false;
   private performanceMetrics: PerformanceMetrics = {
     totalEvaluations: 0,
     averageEvaluationTime: 0,
@@ -373,6 +374,10 @@ export class RuleEvaluationEngine extends EventEmitter {
     context: RuleEvaluationContext,
     options: EvaluationOptions = {}
   ): Promise<RuleEvaluationResult> {
+    if (this.isShuttingDown) {
+      throw new Error('Engine is shutting down or stopped');
+    }
+
     const startTime = Date.now();
     const requestId = `eval_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -661,6 +666,66 @@ export class RuleEvaluationEngine extends EventEmitter {
    */
   public getPerformanceMetrics(): PerformanceMetrics {
     return { ...this.performanceMetrics };
+  }
+
+  /**
+   * Get configuration
+   */
+  public getConfiguration(): RuleEvaluationEngineConfig {
+    return { ...this.config };
+  }
+
+  /**
+   * Get cache statistics
+   */
+  public getCacheStats(): CacheStats {
+    const hitRate = this.performanceMetrics.totalEvaluations > 0 
+      ? this.performanceMetrics.cacheHitRate 
+      : 0;
+    
+    return {
+      enabled: this.config.caching.enabled,
+      strategy: this.config.caching.cacheStrategy,
+      size: this.evaluationCache.size,
+      maxSize: this.config.caching.maxCacheSize,
+      hitCount: Math.floor(this.performanceMetrics.totalEvaluations * hitRate),
+      missCount: Math.floor(this.performanceMetrics.totalEvaluations * (1 - hitRate)),
+      hitRate,
+      evictionCount: 0 // Simplified
+    };
+  }
+
+  /**
+   * Get registered evaluators
+   */
+  public getRegisteredEvaluators(): string[] {
+    return Array.from(this.conditionEvaluators.keys());
+  }
+
+  /**
+   * Get health status
+   */
+  public async getHealthStatus(): Promise<HealthStatus> {
+    return {
+      status: 'HEALTHY',
+      timestamp: new Date(),
+      checks: {
+        caching: this.config.caching.enabled ? 'HEALTHY' : 'DISABLED',
+        evaluators: this.conditionEvaluators.size > 0 ? 'HEALTHY' : 'ERROR',
+        performance: this.performanceMetrics.averageEvaluationTime < 1000 ? 'HEALTHY' : 'WARNING'
+      },
+      metrics: this.performanceMetrics
+    };
+  }
+
+  /**
+   * Shutdown engine
+   */
+  public async shutdown(): Promise<void> {
+    this.isShuttingDown = true;
+    this.evaluationCache.clear();
+    this.conditionEvaluators.clear();
+    this.activeBatches.clear();
   }
 
   /**
@@ -1035,6 +1100,28 @@ interface PerformanceMetrics {
   throughputPerSecond: number;
   currentMemoryUsage?: number;
   currentCPUUsage?: number;
+}
+
+interface CacheStats {
+  enabled: boolean;
+  strategy: CacheStrategy;
+  size: number;
+  maxSize: number;
+  hitCount: number;
+  missCount: number;
+  hitRate: number;
+  evictionCount: number;
+}
+
+interface HealthStatus {
+  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY';
+  timestamp: Date;
+  checks: {
+    caching: string;
+    evaluators: string;
+    performance: string;
+  };
+  metrics: PerformanceMetrics;
 }
 
 interface EngineStatus {

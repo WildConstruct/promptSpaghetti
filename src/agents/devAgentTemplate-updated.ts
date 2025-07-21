@@ -112,9 +112,9 @@ export function createDevAgent(devId: string): DevAgent {
 
 /**
  * Note: Developers now use the following workflow:
- * 1. Run `node grab-tasks.js <dev-id>` to self-assign tasks
+ * 1. Run `node src/grab-tasks.js <dev-id>` to self-assign tasks
  * 2. Work on tasks (automatically set to IN_PROGRESS)
- * 3. Run `node finish-task.js <task-id> REVIEW` when done
+ * 3. Run `node src/finish-task.js <task-id> REVIEW` when done
  * 4. QA approval triggers automatic GitHub PR creation
  * 
  * See docs/ticket-system.md for database schema and automation details

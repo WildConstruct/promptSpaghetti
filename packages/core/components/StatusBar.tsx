@@ -10,6 +10,12 @@ interface StatusBarProps {
   errors: ValidationError[];
   onPreview: () => void;
   onSaveJson: () => void;
+  onExportBundle?: () => void;
+  onSaveProject?: () => void;
+  onLoadProject?: () => void;
+  onNewProject?: () => void;
+  hasUnsavedChanges?: boolean;
+  currentProjectName?: string;
   onCorrections?: () => void;
   correctionsEnabled?: boolean;
   correctionsOpen?: boolean;
@@ -30,30 +36,7 @@ interface StatusBarProps {
   onChangeAlgorithm?: (algorithm: string) => void;
 }
 
-export const StatusBar: React.FC<StatusBarProps> = ({
-  statusMessage,
-  errors,
-  onPreview,
-  onSaveJson,
-  onCorrections,
-  correctionsEnabled = false,
-  correctionsOpen = false,
-  onStats,
-  statsOpen = false,
-  onExtensions,
-  extensionsOpen = false,
-  connectionState,
-  queuedMessages = 0,
-  onClearQueue,
-  onReconnect,
-  onDisconnect,
-  encryptionState,
-  onEncrypt,
-  onDecrypt,
-  onChangeAlgorithm
-}) => {
-  const errorCount = errors.length;
-  const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
+export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
   const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
   const wsDetailsRef = useRef<HTMLDivElement>(null);
   const encryptionDetailsRef = useRef<HTMLDivElement>(null);
@@ -92,6 +75,21 @@ export const StatusBar: React.FC<StatusBarProps> = ({
       <div aria-live="polite">
         {statusMessage && <span style={{ marginRight: 16 }}>{statusMessage}</span>}
         
+        {/* Current Project Indicator */}
+        {currentProjectName && (
+          <span style={{ 
+            marginRight: 16, 
+            padding: '4px 8px',
+            background: '#f8f9fa',
+            border: '1px solid #dee2e6',
+            borderRadius: 3,
+            fontSize: '13px',
+            color: '#495057'
+          }}>
+            📁 {currentProjectName}{hasUnsavedChanges ? ' •' : ''}
+          </span>
+        )}
+        
         <button
           onClick={onPreview}
           style={{ 
@@ -108,6 +106,64 @@ export const StatusBar: React.FC<StatusBarProps> = ({
           Preview
         </button>
         
+        {/* Project Management Buttons */}
+        {onNewProject && (
+          <button
+            onClick={onNewProject}
+            title="Create a new project"
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: '#eee', 
+              color: '#23272f', 
+              border: '1px solid #ccc', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            📄 New
+          </button>
+        )}
+        
+        {onSaveProject && (
+          <button
+            onClick={onSaveProject}
+            title="Save project as .psg file"
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: hasUnsavedChanges ? '#4CAF50' : '#eee', 
+              color: hasUnsavedChanges ? 'white' : '#23272f', 
+              border: hasUnsavedChanges ? '1px solid #45a049' : '1px solid #ccc', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            💾 Save Project{hasUnsavedChanges ? ' *' : ''}
+          </button>
+        )}
+        
+        {onLoadProject && (
+          <button
+            onClick={onLoadProject}
+            title="Load project from .psg file"
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: '#eee', 
+              color: '#23272f', 
+              border: '1px solid #ccc', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            📂 Load Project
+          </button>
+        )}
+
         <button
           onClick={onSaveJson}
           style={{ 
@@ -123,6 +179,25 @@ export const StatusBar: React.FC<StatusBarProps> = ({
         >
           Save as JSON
         </button>
+
+        {onExportBundle && (
+          <button
+            onClick={onExportBundle}
+            title="Export as GeneratorBundle format for use with randomizer engine"
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: '#4CAF50', 
+              color: 'white', 
+              border: '1px solid #45a049', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            📦 Export Bundle
+          </button>
+        )}
         
         {correctionsEnabled && onCorrections && (
           <button

@@ -5,25 +5,48 @@ No more ASSIGN/BUILD phases! Developers can directly grab and work on tasks usin
 
 ## Commands
 
-### 1. Monitor Available Tasks
-See what tasks are available and the current state:
+### 1. Check Business Priorities & Available Tasks
+ALWAYS start by checking what you should be working on:
 ```bash
-node monitor-available-tasks.js
+# STEP 1: See business priority guidance (CRITICAL)
+node src/show-priority-tasks.js
+
+# STEP 2: See full coordination dashboard 
+node src/monitor-available-tasks.js
 ```
 
-### 2. Grab Tasks (Race-Condition Safe)
-Automatically assign yourself the next available tasks using file locking:
+**💡 KEY INSIGHT:** The priority dashboard tells you what business needs most right now!
+
+### 2. Grab Priority Tasks (Race-Condition Safe)
+Automatically assign yourself priority tasks using smart filtering and file locking:
+
+**Recommended Approach (Business Priority Aligned):**
 ```bash
-# Grab 2 tasks (default) - SAFE for concurrent agents
-node grab-tasks.js <your-dev-id>
+# Grab high-priority business-critical tasks only
+node src/grab-tasks.js <your-dev-id> 2 --priority-only
 
-# Grab a specific number of tasks
-node grab-tasks.js <your-dev-id> 3
+# Focus on authentication (PRIORITY 1 per IMMEDIATE-PRIORITIES.md)
+node src/grab-tasks.js <your-dev-id> 2 --story=20.1
 
-# Examples:
-node grab-tasks.js dev_A
-node grab-tasks.js Dev-James-Security 1
+# Focus on file browser (PRIORITY 2)
+node src/grab-tasks.js <your-dev-id> 2 --story=20.2
 ```
+
+**Basic Usage (Automatically Priority Sorted):**
+```bash
+# Gets top priority tasks automatically
+node src/grab-tasks.js <your-dev-id> 3
+
+# Examples with filtering:
+node src/grab-tasks.js dev_A 2 --priority-only
+node src/grab-tasks.js Dev-James-Security 1 --story=20.1
+```
+
+**Available Filters:**
+- `--priority-only` - Only business-critical tasks
+- `--story=20.1` - Authentication tasks only  
+- `--story=20.2` - File browser tasks only
+- `--epic=19` - Specific epic (use cautiously)
 
 **🔒 Concurrent Access Protection:**
 - Uses file locking to prevent duplicate task assignments
@@ -35,39 +58,40 @@ node grab-tasks.js Dev-James-Security 1
 Move a task to review when you're done:
 ```bash
 # Move to REVIEW (default)
-node finish-task.js <task-id>
+node src/finish-task.js <task-id>
 
 # Move to a specific state
-node finish-task.js <task-id> REVIEW
-node finish-task.js <task-id> COMPLETED
-node finish-task.js <task-id> BLOCKED
+node src/finish-task.js <task-id> REVIEW
+node src/finish-task.js <task-id> COMPLETED
+node src/finish-task.js <task-id> BLOCKED
 
 # Example:
-node finish-task.js T-1752951043927-918
+node src/finish-task.js T-1752951043927-918
 ```
 
 ## Typical Workflow
 
 1. **Check available work:**
    ```bash
-   node monitor-available-tasks.js
+   node src/monitor-available-tasks.js
    ```
 
-2. **Grab some tasks:**
+2. **Grab priority tasks:**
    ```bash
-   node grab-tasks.js dev_A 2
+   # RECOMMENDED: Grab priority tasks aligned with business needs
+   node src/grab-tasks.js dev_A 2 --priority-only
    ```
    This will:
-   - Find up to 2 UNASSIGNED tasks
-   - Assign them to you
+   - Find up to 2 HIGH-PRIORITY tasks (auth/file-browser focus)
+   - Assign them to you in business priority order
    - Set them to IN_PROGRESS
-   - Show you what you're working on
+   - Show you what you're working on with priority context
 
 3. **Work on the tasks** (implement the features, write tests, etc.)
 
 4. **Submit for review:**
    ```bash
-   node finish-task.js T-1752951043927-918 REVIEW
+   node src/finish-task.js T-1752951043927-918 REVIEW
    ```
 
 5. **Repeat!**

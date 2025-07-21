@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { executeGraph, initializeAnalytics } from './engine';
 import { Graph } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
+import { graphToBundle, GeneratorBundle } from './exporter';
 import { initDatabase, healthCheck, getDatabase, runMigrations } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
 import { workspaceRoutes } from './routes/workspace';
@@ -1496,16 +1497,10 @@ try {
   server.register(complianceReportingRoutes, { prefix: '/api/compliance-reporting' });
   server.register(consentCollectionRoutes, { prefix: '/api/consent-collection' });
   console.log(
-    'Epic 19 security platform routes registered successfully: data access,
-    audit workflow,
-    access request workflow,
-    policy update workflow,
-    policy acceptance tracking,
-    OAuth guidance,
-    policy authoring,
-    policy notifications,
-    compliance reporting,
-    and consent collection'
+    'Epic 19 security platform routes registered successfully: data access, ' +
+    'audit workflow, access request workflow, policy update workflow, ' +
+    'policy acceptance tracking, OAuth guidance, policy authoring, ' +
+    'policy notifications, compliance reporting, and consent collection'
   );
 } catch (error) {
   console.error('Failed to register data access control routes:', error);
@@ -1612,6 +1607,79 @@ server.post<{
           error: `Server error: ${error instanceof Error ? error.message : String(error)}`
         });
       }
+    }
+  }
+});
+
+// Export endpoint - Convert graph to GeneratorBundle format
+server.post<{
+  Body: { 
+    graph: Graph; 
+    options: { 
+      name: string; 
+      version?: string; 
+      author?: string; 
+    } 
+  };
+}>('/export', {
+  schema: {
+    body: {
+      type: 'object',
+      required: ['graph', 'options'],
+      properties: {
+        graph: { type: 'object' },
+        options: {
+          type: 'object',
+          required: ['name'],
+          properties: {
+            name: { type: 'string', minLength: 1 },
+            version: { type: 'string' },
+            author: { type: 'string' }
+          }
+        }
+      }
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          bundle: { type: 'object' },
+          filename: { type: 'string' }
+        }
+      }
+    }
+  },
+  handler: async (request, reply) => {
+    try {
+      const { graph, options } = request.body;
+      
+      // Validate graph structure
+      const validationResult = validateGraph(graph);
+      
+      if (!validationResult.valid) {
+        reply.status(400).send({
+          error: 'Graph validation failed',
+          validationErrors: validationResult.errors
+        });
+        return;
+      }
+      
+      // Convert graph to GeneratorBundle
+      const bundle = graphToBundle(graph, options);
+      
+      // Generate filename
+      const safeName = options.name.replace(/[^a-zA-Z0-9-_]/g, '_');
+      const filename = `${safeName}_v${bundle.metadata.version}.bundle.json`;
+      
+      return { 
+        bundle,
+        filename
+      };
+    } catch (error: unknown) {
+      request.log.error(error);
+      reply.status(500).send({
+        error: `Export failed: ${error instanceof Error ? error.message : String(error)}`
+      });
     }
   }
 });

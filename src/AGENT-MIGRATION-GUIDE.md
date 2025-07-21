@@ -117,12 +117,12 @@ CREATE TABLE github_automation_config (
 
 2. **Grab Tasks (Developer)**:
    ```bash
-   node grab-tasks.js dev_A 2
+   node src/grab-tasks.js dev_A 2
    ```
 
 3. **Complete Task**:
    ```bash
-   node finish-task.js T-12345 REVIEW
+   node src/finish-task.js T-12345 REVIEW
    ```
 
 4. **Approve Task (QA)**:

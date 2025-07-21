@@ -52,7 +52,7 @@ release = await lockfile.lock(statePath, {
 
 **Before (Race Conditions):**
 ```bash
-$ node grab-tasks.js dev_A 2
+$ node src/grab-tasks.js dev_A 2
 Assigning 2 task(s) to dev_A:
 ✓ T-123: Task 1 (DUPLICATE ASSIGNMENT!)
 ✓ T-124: Task 2 (DUPLICATE ASSIGNMENT!)
@@ -60,7 +60,7 @@ Assigning 2 task(s) to dev_A:
 
 **After (Safe Locking):**
 ```bash
-$ node grab-tasks.js dev_A 2
+$ node src/grab-tasks.js dev_A 2
 🔒 Acquiring lock for dev_A...
 ✅ Lock acquired for dev_A
 🎯 Assigning 2 task(s) to dev_A:
@@ -72,7 +72,7 @@ $ node grab-tasks.js dev_A 2
 
 **If Another Agent is Active:**
 ```bash
-$ node grab-tasks.js dev_B 2
+$ node src/grab-tasks.js dev_B 2
 🔒 Acquiring lock for dev_B...
 🔄 Retrying lock acquisition... (attempt 2/10)
 ✅ Lock acquired for dev_B
@@ -115,7 +115,7 @@ if (error.code === 'ELOCKED') {
 Always use the standard `grab-tasks.js` (now includes locking):
 ```bash
 # ✅ CORRECT - Uses file locking
-node grab-tasks.js YourAgentName 2
+node src/grab-tasks.js YourAgentName 2
 
 # ❌ AVOID - Old version without locking  
 node grab-tasks-original.js YourAgentName 2

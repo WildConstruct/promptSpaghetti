@@ -69,9 +69,9 @@ The agent system has been updated to work with the new ticket management system.
 ```
 1. UNASSIGNED (created by Scrum Master)
    ↓
-2. IN_PROGRESS (developer grabs via grab-tasks.js)
+2. IN_PROGRESS (developer grabs via src/grab-tasks.js)
    ↓
-3. REVIEW (developer submits via finish-task.js)
+3. REVIEW (developer submits via src/finish-task.js)
    ↓
 4. APPROVED (QA agent approves)
    ↓ [Automatic GitHub PR creation]
@@ -92,20 +92,20 @@ Developers no longer wait for agent assignments:
 
 ```bash
 # Check available tasks
-node monitor-available-tasks.js
+node src/monitor-available-tasks.js
 
 # Grab tasks (self-assign) - SAFE for concurrent agents
-node grab-tasks.js dev_A 2
+node src/grab-tasks.js dev_A 2
 
 # Submit for review - CRITICAL STEP
-node finish-task.js T-12345 REVIEW
+node src/finish-task.js T-12345 REVIEW
 ```
 
-**🚨 CRITICAL**: Every agent MUST call `finish-task.js` when implementation is complete.
+**🚨 CRITICAL**: Every agent MUST call `src/finish-task.js` when implementation is complete.
 Not calling this script leaves tasks stuck in IN_PROGRESS status even when work is done.
 
 **⚡ IMPORTANT: Race Condition Protection**
-The `grab-tasks.js` script now uses file locking to prevent multiple agents from grabbing the same tasks simultaneously. You'll see lock acquisition/release messages during operation.
+The `src/grab-tasks.js` script now uses file locking to prevent multiple agents from grabbing the same tasks simultaneously. You'll see lock acquisition/release messages during operation.
 
 ## Configuration
 

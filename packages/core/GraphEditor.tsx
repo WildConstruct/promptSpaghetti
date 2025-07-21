@@ -31,6 +31,8 @@ import { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel';
 import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
 import { ExtensionManagerPanel } from './components/ExtensionManager/ExtensionManagerPanel';
 import { useCorrectionsEnabled } from './correctionsStore';
+import SaveProjectDialog from './components/ProjectDialogs/SaveProjectDialog';
+import LoadProjectDialog from './components/ProjectDialogs/LoadProjectDialog';
 import { useValidation } from './hooks/useValidation';
 import { useAutosave } from './hooks/useAutosave';
 import { useNodeUtils } from './hooks/useNodeUtils';
@@ -123,6 +125,42 @@ const NODE_TYPES: NodeMeta[] = [
     icon: GetVariableIcon,
     tooltip: 'Read a variable',
     category: 'variable'
+  },
+  // Epic 7 Advanced Node Types
+  {
+    id: 'WeightedAdvanced',
+    label: 'WeightedAdvanced',
+    icon: '🎲',
+    tooltip: 'Advanced weighted choice with distributions',
+    category: 'advanced'
+  },
+  {
+    id: 'Conditional',
+    label: 'Conditional',
+    icon: '🔀',
+    tooltip: 'Expression-based conditional branching',
+    category: 'advanced'
+  },
+  {
+    id: 'Sequential',
+    label: 'Sequential',
+    icon: '🔄',
+    tooltip: 'Sequential processing with patterns',
+    category: 'advanced'
+  },
+  {
+    id: 'Markov',
+    label: 'Markov',
+    icon: '🕸️',
+    tooltip: 'Markov chain state transitions',
+    category: 'advanced'
+  },
+  {
+    id: 'PythonTransform',
+    label: 'PythonTransform',
+    icon: '🐍',
+    tooltip: 'Python script transformation',
+    category: 'transform'
   }
 ];
 
@@ -142,6 +180,18 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   const [extensionsOpen, setExtensionsOpen] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
+  
+  // Project dialog states
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [loadDialogOpen, setLoadDialogOpen] = useState(false);
+  
+  // Graph store for project management
+  const { 
+    currentProject, 
+    hasUnsavedChanges, 
+    newProject,
+    markProjectModified 
+  } = useGraphStore();
   
   // Demo encryption state - in a real implementation, this would be managed by a security service
   const [encryptionState, setEncryptionState] = useState<EncryptionState>({
@@ -356,6 +406,113 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     setTimeout(() => setStatusMessage(''), 3000);
   }, []);
 
+  // Project management handlers
+  const handleNewProject = useCallback(() => {
+    if (hasUnsavedChanges) {
+      if (confirm('You have unsaved changes. Create a new project anyway?')) {
+        newProject();
+        setNodes([]);
+        setEdges([]);
+      }
+    } else {
+      newProject();
+      setNodes([]);
+      setEdges([]);
+    }
+  }, [hasUnsavedChanges, newProject]);
+
+  const handleSaveProject = useCallback(() => {
+    setSaveDialogOpen(true);
+  }, []);
+
+  const handleLoadProject = useCallback(() => {
+    setLoadDialogOpen(true);
+  }, []);
+
+  const handleSaveSuccess = useCallback((result: { success: boolean; error?: string }) => {
+    if (result.success) {
+      setStatusMessage('Project saved successfully!');
+      setTimeout(() => setStatusMessage(''), 3000);
+    } else {
+      setStatusMessage(`Save failed: ${result.error}`);
+      setTimeout(() => setStatusMessage(''), 5000);
+    }
+  }, []);
+
+  const handleLoadSuccess = useCallback((result: { success: boolean; error?: string; warnings?: string[] }) => {
+    if (result.success) {
+      // Sync with local state
+      const graphData = useGraphStore.getState().getGraphData();
+      setNodes(graphData.nodes);
+      setEdges(graphData.edges);
+      
+      let message = 'Project loaded successfully!';
+      if (result.warnings?.length) {
+        message += ` (${result.warnings.length} warning${result.warnings.length > 1 ? 's' : ''})`;
+      }
+      setStatusMessage(message);
+      setTimeout(() => setStatusMessage(''), 3000);
+    } else {
+      setStatusMessage(`Load failed: ${result.error}`);
+      setTimeout(() => setStatusMessage(''), 5000);
+    }
+  }, []);
+
+  const handleExportBundle = useCallback(async () => {
+    // Get bundle name from user or use project name
+    const bundleName = currentProject?.name || 'Untitled_Graph';
+    const bundleAuthor = currentProject?.author || 'PromptScape User';
+    const bundleVersion = '1.0.0';
+    
+    try {
+      setStatusMessage('Exporting bundle...');
+      
+      const response = await fetch('/export', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          graph: { nodes, edges },
+          options: {
+            name: bundleName,
+            version: bundleVersion,
+            author: bundleAuthor
+          }
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
+      
+      const { bundle, filename } = await response.json();
+      
+      // Download the bundle file
+      const blob = new Blob([
+        JSON.stringify(bundle, null, 2)
+      ], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 0);
+      
+      setStatusMessage('Bundle exported successfully!');
+      setTimeout(() => setStatusMessage(''), 3000);
+    } catch (error) {
+      console.error('Export bundle failed:', error);
+      setStatusMessage(`Export failed: ${error instanceof Error ? error.message : String(error)}`);
+      setTimeout(() => setStatusMessage(''), 5000);
+    }
+  }, [nodes, edges, currentProject]);
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <RestorePrompt
@@ -520,6 +677,12 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
             URL.revokeObjectURL(url);
           }, 0);
         }}
+        onExportBundle={handleExportBundle}
+        onSaveProject={handleSaveProject}
+        onLoadProject={handleLoadProject}
+        onNewProject={handleNewProject}
+        hasUnsavedChanges={hasUnsavedChanges}
+        currentProjectName={currentProject?.name}
         onCorrections={() => setCorrectionsOpen(true)}
         correctionsEnabled={correctionsEnabled}
         correctionsOpen={correctionsOpen}
@@ -571,6 +734,19 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
           onClose={() => setExtensionsOpen(false)}
         />
       )}
+
+      {/* Project Management Dialogs */}
+      <SaveProjectDialog
+        isOpen={saveDialogOpen}
+        onClose={() => setSaveDialogOpen(false)}
+        onSave={handleSaveSuccess}
+      />
+      
+      <LoadProjectDialog
+        isOpen={loadDialogOpen}
+        onClose={() => setLoadDialogOpen(false)}
+        onLoad={handleLoadSuccess}
+      />
     </div>
   );
 };

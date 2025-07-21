@@ -33,6 +33,19 @@ export { PreviewModal } from './PreviewModal';
 export { nodeSchemas } from './nodeSchemas';
 export { useGraphStore } from './graphStore';
 
+// Project Management System exports
+export { ProjectManager } from './projectManager';
+export type { 
+  ProjectMetadata, 
+  PSGFile, 
+  ProjectSettings, 
+  SaveProjectOptions,
+  LoadProjectResult,
+  SaveProjectResult 
+} from './projectManager';
+export { default as SaveProjectDialog } from './components/ProjectDialogs/SaveProjectDialog';
+export { default as LoadProjectDialog } from './components/ProjectDialogs/LoadProjectDialog';
+
 // Epic 8.2 - Corrections Manager GA exports
 export { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel';
 export { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';

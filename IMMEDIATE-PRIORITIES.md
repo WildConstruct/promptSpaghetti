@@ -19,27 +19,53 @@ Epic 19 privacy features are:
 
 ## 🎯 NEW AGENT PRIORITIES (IN ORDER)
 
-### **PRIORITY 1: Authentication Frontend Integration** 
+### **PRIORITY 1: Epic Integration - Expose Completed Features** ⚡ **NEW TOP PRIORITY**
+**Business Value: Make months of completed development work visible to users**
+
+**Primary Focus**: Epic 7 Advanced Nodes + Export System + Project Management
+**Key Issue**: Major features are implemented but hidden from users
+**Analysis**: `docs/EPIC-INTEGRATION-GAPS.md`
+
+**Critical Integration Tasks:**
+1. ~~**Expose Advanced Nodes**~~ ✅ **COMPLETE** - Advanced nodes now visible in palette!
+2. **Complete Export Integration** - Connect existing GeneratorBundle exporter to UI (2-3 hours)
+3. **Project Management Backend** - Create API endpoints for save/load system (3-4 hours)
+4. ~~**Python Node Integration**~~ ✅ **COMPLETE** - PythonTransform now in palette!
+
+**Existing Assets:**
+- ✅ All 4 advanced nodes fully implemented with 90%+ test coverage (`packages/core/runtime/nodes/`)
+- ✅ Complete GeneratorBundle exporter (`server/src/exporter.ts`)
+- ✅ Project dialogs already integrated in GraphEditor.tsx
+- ✅ Python node implementation exists
+
+**Estimated Impact**: 6+ months of hidden development work made visible
+**Estimated Time**: 8-12 hours total integration work
+
+---
+
+### **PRIORITY 2: Authentication Frontend Integration** 
 **Business Value: Users can log in and access personal accounts**
 
+**Status**: ✅ **PARTIALLY COMPLETE** - React Router and auth system integrated in App.tsx
 **Primary Epic**: Authentication Frontend Integration  
 **Key Story**: 20.1 User Authentication Routing Integration  
 **File**: `docs/stories/20.1.user-authentication-routing.md`
 
-**Critical Tasks Needed:**
-1. **React Router Setup** - Replace tab navigation with proper routing
-2. **Login/Register Pages** - Connect existing auth components to routes
-3. **Protected Routes** - Redirect unauthenticated users appropriately  
-4. **Auth State Management** - Zustand store for login state
-5. **JWT Token Handling** - Session management and refresh
+**Remaining Tasks:**
+1. ~~React Router Setup~~ ✅ **COMPLETE** - Implemented in App.tsx
+2. ~~Login/Register Pages~~ ✅ **COMPLETE** - Routes configured
+3. ~~Protected Routes~~ ✅ **COMPLETE** - PrivateRoute component working
+4. **Auth State Management** - Zustand store integration needs verification
+5. **JWT Token Handling** - Session management and refresh validation
 6. **Email Verification** - Connect to existing backend SMTP
 
 **Existing Assets:**
 - ✅ Backend auth APIs already built (`server/src/auth/`)
 - ✅ Frontend auth components exist (`client/src/components/auth/`)
+- ✅ React Router integration complete (`client/src/App.tsx`)
 - ✅ Authentication service infrastructure ready
 
-**Estimated Sprint**: 1-2 weeks for core functionality
+**Estimated Sprint**: 3-5 days remaining work
 
 ---
 
@@ -98,16 +124,23 @@ Epic 19 privacy features are:
 
 ### **For Development Agents:**
 ```bash
-# Stop grabbing Epic 19 tasks
-# Focus on authentication and file browser epics
+# STEP 1: Always check priorities first
+node src/show-priority-tasks.js
 
-# Grab authentication tasks:
-node grab-tasks.js <your-dev-id> 2  
+# STEP 2: Grab priority tasks with improved filtering
+# Grab authentication tasks (PRIORITY 1):
+node src/grab-tasks.js <your-dev-id> 2 --story=20.1
 
-# Look for tasks containing:
-# - "auth", "login", "register", "router"
-# - "file", "save", "load", "project"
-# - NOT "privacy", "consent", "policy", "compliance"
+# Grab file browser tasks (PRIORITY 2):
+node src/grab-tasks.js <your-dev-id> 2 --story=20.2
+
+# Grab any high-priority business-critical tasks:
+node src/grab-tasks.js <your-dev-id> 2 --priority-only
+
+# STEP 3: Monitor team coordination
+node src/monitor-available-tasks.js
+
+# AVOID: Epic 19 privacy tasks (automatically deprioritized)
 ```
 
 ### **For QA Agents:**  
