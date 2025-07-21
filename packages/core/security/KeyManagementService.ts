@@ -1155,5 +1155,4 @@ export class KeyManagementService extends EventEmitter {
 }
 
 // Export default instance
-export 
 export default KeyManagementService;

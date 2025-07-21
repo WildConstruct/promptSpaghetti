@@ -219,7 +219,7 @@ export interface ComplianceTrend {
  * Data Operation Context
  */
 export interface OperationContext {
-  operation: 'READ' | 'write' | 'update' | 'delete' | 'export' | 'share';
+  operation: 'read' | 'write' | 'update' | 'delete' | 'export' | 'share';
   userId: string;
   sessionId: string;
   purpose: string;

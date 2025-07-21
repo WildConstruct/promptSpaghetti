@@ -204,7 +204,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         executionTimeMs,
         totalOutputLength,
         graph.nodes.length,
-        graph.edges?.length || 0
+        countGraphConnections(graph)
       );
     }
 
@@ -219,10 +219,10 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         endTime,
         executionTimeMs,
         nodeCount: graph.nodes.length,
-        connectionCount: graph.edges?.length || 0,
+        connectionCount: countGraphConnections(graph),
         success: true,
         outputLength: totalOutputLength,
-        seedValue: graph.seed
+        seedValue: typeof graph.seed === 'number' ? graph.seed : undefined
       });
     }
 
@@ -238,7 +238,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         graphId,
         error instanceof Error ? error.message : String(error),
         graph.nodes.length,
-        graph.edges?.length || 0,
+        countGraphConnections(graph),
         executionTimeMs
       );
     }
@@ -254,15 +254,28 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         endTime,
         executionTimeMs,
         nodeCount: graph.nodes.length,
-        connectionCount: graph.edges?.length || 0,
+        connectionCount: countGraphConnections(graph),
         success: false,
         errorMessage: error instanceof Error ? error.message : String(error),
-        seedValue: graph.seed
+        seedValue: typeof graph.seed === 'number' ? graph.seed : undefined
       });
     }
 
     throw error;
   }
+}
+
+/**
+ * Count the number of connections (edges) in a graph
+ */
+function countGraphConnections(graph: Graph): number {
+  let connectionCount = 0;
+  for (const node of graph.nodes) {
+    if (node.inputs && node.inputs.length > 0) {
+      connectionCount += node.inputs.length;
+    }
+  }
+  return connectionCount;
 }
 
 /**
@@ -319,13 +332,29 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
       node.distributionConfig || { type: 'linear', normalize: true }
     );
     
-  case 'Conditional':
+  case 'Conditional': {
+    // Convert schema config to runtime config
+    const config: any = { ...node.conditionalConfig };
+    if (config.customFunctions) {
+      // Convert non-function values to constant functions
+      const funcs: Record<string, (...args: any[]) => any> = {};
+      for (const [key, value] of Object.entries(config.customFunctions)) {
+        if (typeof value === 'function') {
+          funcs[key] = value;
+        } else {
+          // Convert constants to functions that return the constant
+          funcs[key] = () => value;
+        }
+      }
+      config.customFunctions = funcs;
+    }
     return new ConditionalNode(
       node.id,
       node.branches || [],
       node.defaultOutput || '',
-      node.conditionalConfig || {}
+      config
     );
+  }
     
   case 'Sequential':
     const patternConfig = node.pattern?.config || {};
@@ -358,14 +387,8 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
     );
     
     // Epic 8 Python Integration - Temporarily disabled
-    // case 'PythonTransform':
-    //   return new PythonTransformNode(node.id, {
-    //     code: node.code,
-    //     timeout: node.timeout,
-    //     memoryLimit: node.memoryLimit,
-    //     allowedModules: node.allowedModules,
-    //     pythonConfig: node.pythonConfig
-    //   });
+  case 'PythonTransform':
+    throw new Error('PythonTransform node is not yet implemented');
     
   default:
     // Epic 8.4 Extension System - Try to find extension nodes
@@ -374,8 +397,7 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
       return extensionNode;
     }
     // Exhaustive check
-    const _exhaustive: never = node;
-    throw new Error(`Unsupported node type ${(node as any).type}`);
+        throw new Error(`Unsupported node type ${(node as any).type}`);
   }
 }
 

@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T00:17:37.690Z"
+    "updated": "2025-07-21T00:35:21.352Z"
   },
   "product_goals": [
     {
@@ -21899,12 +21899,12 @@
       "id": "T-1752989143997-879",
       "story_id": "S-1752989143997-19-2",
       "title": "Create secure WebSocket communications",
-      "state": "APPROVED",
+      "state": "REVIEW",
       "assignee": "claude-dev",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.997Z",
-      "updated": "2025-07-20T20:18:53.671Z",
+      "updated": "2025-07-21T00:31:05.071Z",
       "dependencies": [],
       "notes": [],
       "qa_approved_by": "qa_agent",
@@ -21914,12 +21914,12 @@
       "id": "T-1752989143997-117",
       "story_id": "S-1752989143997-19-2",
       "title": "Design classification framework",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "claude-dev",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.997Z",
-      "updated": "2025-07-20T20:03:51.777Z",
+      "updated": "2025-07-21T00:31:11.236Z",
       "dependencies": [],
       "notes": []
     },
@@ -22047,12 +22047,12 @@
       "id": "T-1752989143998-694",
       "story_id": "S-1752989143997-19-2",
       "title": "Build classification enforcement",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "claude",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T00:17:37.690Z",
+      "updated": "2025-07-21T00:32:24.428Z",
       "dependencies": [],
       "notes": []
     },
@@ -22060,12 +22060,12 @@
       "id": "T-1752989143998-357",
       "story_id": "S-1752989143997-19-2",
       "title": "Create access control based on classification",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "REVIEW",
+      "assignee": "claude_dev",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T00:25:18.651Z",
       "dependencies": [],
       "notes": []
     },
@@ -22073,12 +22073,12 @@
       "id": "T-1752989143998-546",
       "story_id": "S-1752989143997-19-2",
       "title": "Implement handling rules by classification level",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "REVIEW",
+      "assignee": "claude_dev",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T00:29:27.149Z",
       "dependencies": [],
       "notes": []
     },
@@ -22086,12 +22086,12 @@
       "id": "T-1752989143998-192",
       "story_id": "S-1752989143997-19-2",
       "title": "Add classification-based encryption policies",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "REVIEW",
+      "assignee": "claude_dev",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T00:33:30.534Z",
       "dependencies": [],
       "notes": []
     },
@@ -22099,12 +22099,12 @@
       "id": "T-1752989143998-882",
       "story_id": "S-1752989143997-19-2",
       "title": "Create data transfer controls by classification",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "REVIEW",
+      "assignee": "Dev-Claude-Security",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T00:32:04.650Z",
       "dependencies": [],
       "notes": []
     },
@@ -22112,12 +22112,12 @@
       "id": "T-1752989143998-599",
       "story_id": "S-1752989143997-19-2",
       "title": "Set up classification monitoring",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "claude_dev",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T00:35:21.352Z",
       "dependencies": [],
       "notes": []
     },
@@ -22125,12 +22125,12 @@
       "id": "T-1752989143998-256",
       "story_id": "S-1752989143997-19-2",
       "title": "Implement classification audit logging",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "claude_dev",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T00:35:21.352Z",
       "dependencies": [],
       "notes": []
     },
@@ -31020,6 +31020,18 @@
       ],
       "qa_approved_by": "qa_agent",
       "qa_approval_reason": "All checks passed: code quality good, tests comprehensive, security validated"
+    },
+    "T-1753069295-DELINT": {
+      "id": "T-1753069295-DELINT",
+      "title": "Fix TypeScript linting issues in admin components and server engine",
+      "description": "Addressed TypeScript linting issues in FeatureToggleDashboard.tsx by replacing any types with proper type definitions. Fixed compilation errors in server/src/engine.ts by handling missing edges property and type mismatches for seed values and ConditionalConfig.",
+      "state": "REVIEW",
+      "priority": "high",
+      "assignee": "BMad",
+      "created": "2025-07-21T00:28:22.459Z",
+      "updated": "2025-07-21T00:28:22.461Z",
+      "implementation": "Fixed any types in FeatureToggleDashboard handleCreateToggle. Added countGraphConnections helper function. Fixed ConditionalConfig type mismatch. Handled PythonTransform node case.",
+      "testingInstructions": "Run pnpm lint to verify no TypeScript errors in modified files"
     }
   },
   "assignments": {
@@ -31246,7 +31258,8 @@
       "T-1752989143997-277"
     ],
     "Dev-Claude-Security": [
-      "T-1752989143997-754"
+      "T-1752989143997-754",
+      "T-1752989143998-882"
     ],
     "Claude-Security-Dev": [
       "T-1752989143997-86"
@@ -31258,7 +31271,12 @@
       "T-1752989143998-594",
       "T-1752989143998-36",
       "T-1752989143998-945",
-      "T-1752989143998-418"
+      "T-1752989143998-418",
+      "T-1752989143998-357",
+      "T-1752989143998-546",
+      "T-1752989143998-192",
+      "T-1752989143998-599",
+      "T-1752989143998-256"
     ],
     "claude": [
       "T-1752989143998-694"

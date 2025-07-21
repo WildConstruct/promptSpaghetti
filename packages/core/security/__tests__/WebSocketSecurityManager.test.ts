@@ -12,7 +12,7 @@ import {
   SecureWebSocketMessage
 } from '../WebSocketSecurityManager';
 import { KeyManagementService, KeyManagementConfig } from '../KeyManagementService';
-import { DataClassifier, ClassificationLevel } from '../DataClassifier';
+import { DataClassifier, ClassificationLevel, DataCategory } from '../DataClassifier';
 import { DeviceFingerprintingService, RiskLevel } from '../DeviceFingerprintingService';
 import { TrustedDeviceManager } from '../TrustedDeviceManager';
 
@@ -82,17 +82,18 @@ describe('WebSocketSecurityManager', () => {
     // Setup spies
     jest.spyOn(mockKeyManagementService, 'generateKey');
     jest.spyOn(mockKeyManagementService, 'revokeKey');
-    jest.spyOn(mockDataClassifier, 'classifyData');
+    jest.spyOn(mockDataClassifier, 'classify');
     jest.spyOn(mockFingerprintService, 'generateFingerprint');
     jest.spyOn(mockFingerprintService, 'assessRisk');
-    jest.spyOn(mockTrustedDeviceManager, 'isDeviceTrusted');
+    jest.spyOn(mockTrustedDeviceManager, 'checkDeviceTrust');
+    jest.spyOn(mockTrustedDeviceManager, 'verifyDevice');
 
     // Setup default mock implementations
     mockFingerprintService.generateFingerprint.mockResolvedValue({
       id: 'fingerprint-123',
       type: 'ENHANCED' as any,
       confidence: 95,
-      createdAt: new Date( as unknown as unknown),
+      createdAt: new Date( as unknown),
       lastSeen: new Date(),
       seenCount: 1,
       basic: {
@@ -112,18 +113,41 @@ describe('WebSocketSecurityManager', () => {
       riskScore: 15,
       factors: [],
       recommendations: [],
-      timestamp: new Date( as unknown as unknown)
+      timestamp: new Date( as unknown)
     });
 
-    mockTrustedDeviceManager.isDeviceTrusted.mockResolvedValue(false as unknown as unknown);
+    mockTrustedDeviceManager.checkDeviceTrust.mockResolvedValue({
+      trusted: false,
+      reason: 'Device not previously trusted',
+      riskScore: 30,
+      requiresVerification: true,
+      factors: {
+        deviceMatch: false,
+        locationMatch: true,
+        riskAcceptable: true,
+        timingNormal: true
+      }
+    } as any as unknown);
 
-    mockDataClassifier.classifyData.mockResolvedValue({
+    mockTrustedDeviceManager.verifyDevice.mockResolvedValue({
+      id: 'device-123',
+      userId: 'user-456',
+      deviceId: 'fingerprint-123',
+      status: 'TRUSTED',
+      trustLevel: 'FULL'
+    } as any as unknown);
+
+    mockDataClassifier.classify.mockReturnValue({
       level: ClassificationLevel.INTERNAL,
-      confidence: 0.9,
-      patterns: [],
-      metadata: {},
-      timestamp: new Date( as unknown as unknown)
-    } as any);
+      category: DataCategory.OPERATIONAL,
+      confidence: 90,
+      matchedRules: [],
+      complianceRequirements: [],
+      encryptionRequired: false,
+      retentionPeriod: '1 year',
+      accessControls: [],
+      reasoning: []
+    } as unknown);
 
     mockKeyManagementService.generateKey.mockResolvedValue({
       metadata: {
@@ -131,7 +155,7 @@ describe('WebSocketSecurityManager', () => {
         name: 'test-session-key',
         status: 'ACTIVE' as any
       },
-      keyData: Buffer.from('test-encryption-key-data' as unknown as unknown)
+      keyData: Buffer.from('test-encryption-key-data' as unknown)
     } as any);
 
     // Initialize security manager
@@ -191,9 +215,12 @@ describe('WebSocketSecurityManager', () => {
         deviceId: 'fingerprint-123',
         overallRisk: RiskLevel.HIGH,
         riskScore: 85,
-        factors: ['vpn_detected', 'suspicious_patterns'],
+        factors: [
+          { category: 'network', factor: 'vpn_detected', impact: 0.8, confidence: 90, description: 'VPN detected' },
+          { category: 'behavior', factor: 'suspicious_patterns', impact: 0.7, confidence: 85, description: 'Suspicious patterns' }
+        ],
         recommendations: ['require_mfa'],
-        timestamp: new Date( as unknown as unknown)
+        timestamp: new Date( as unknown)
       });
 
       const context = await securityManager.initializeConnection(
@@ -208,7 +235,18 @@ describe('WebSocketSecurityManager', () => {
     });
 
     test('should handle trusted devices', async () => {
-      mockTrustedDeviceManager.isDeviceTrusted.mockResolvedValue(true as unknown as unknown);
+      mockTrustedDeviceManager.checkDeviceTrust.mockResolvedValue({
+        trusted: true,
+        reason: 'Device is trusted',
+        riskScore: 10,
+        requiresVerification: false,
+        factors: {
+          deviceMatch: true,
+          locationMatch: true,
+          riskAcceptable: true,
+          timingNormal: true
+        }
+      } as any as unknown);
 
       const context = await securityManager.initializeConnection(
         'conn-123',
@@ -273,7 +311,7 @@ describe('WebSocketSecurityManager', () => {
         riskScore: 85,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown as unknown)
+        timestamp: new Date( as unknown)
       });
 
       
@@ -364,13 +402,17 @@ describe('WebSocketSecurityManager', () => {
 
     test('should handle classification-based encryption', async () => {
       // Mock confidential data classification
-      mockDataClassifier.classifyData.mockResolvedValue({
+      mockDataClassifier.classify.mockReturnValue({
         level: ClassificationLevel.CONFIDENTIAL,
-        confidence: 0.95,
-        patterns: ['pii_detected'],
-        metadata: {},
-        timestamp: new Date( as unknown as unknown)
-      } as any);
+        category: 'PII' as any,
+        confidence: 95,
+        matchedRules: ['pii_detected'],
+        complianceRequirements: [],
+        encryptionRequired: true,
+        retentionPeriod: '7 years',
+        accessControls: [],
+        reasoning: ['PII detected']
+      } as unknown);
 
       const message = {
         type: 'user_data',
@@ -644,7 +686,9 @@ describe('WebSocketSecurityManager', () => {
     });
 
     test('should handle classification service errors', async () => {
-      mockDataClassifier.classifyData.mockRejectedValue(new Error('Classification failed'));
+      mockDataClassifier.classify.mockImplementation(() => {
+        throw new Error('Classification failed');
+      });
 
       const context = await securityManager.initializeConnection(
         'conn-123',

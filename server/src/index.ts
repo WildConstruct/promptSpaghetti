@@ -64,6 +64,8 @@ import {
   encryptionStatusMiddleware
 } from './middleware/payload-encryption';
 import { payloadEncryptionRoutes } from './routes/payload-encryption';
+import { dataClassificationRoutes } from './routes/data-classification';
+import { DataClassificationService } from './services/DataClassificationService';
 import { KeyManagementService, KeyManagementConfig } from './services/KeyManagementService';
 import { AccessControlManager } from './services/AccessControlManager';
 
@@ -786,6 +788,7 @@ try {
 // Initialize payload encryption service
 let payloadEncryptionService: PayloadEncryptionService | undefined;
 let keyManagementService: KeyManagementService | undefined;
+let dataClassificationService: DataClassificationService | undefined;
 try {
   const db = getDatabase();
   const authConfig = {
@@ -885,6 +888,74 @@ try {
 } catch (error) {
   console.error('Failed to initialize payload encryption service:', error);
   // Continue without payload encryption service - this is non-critical for basic operation
+}
+
+// Initialize data classification service
+try {
+  const db = getDatabase();
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN || '1h',
+    jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+    jwtIssuer: 'promptgraph-server',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    },
+    oauth: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+        redirectUri: process.env.GOOGLE_REDIRECT_URI || '',
+        scopes: ['email', 'profile'],
+        authorizationUrl: 'https://accounts.google.com/oauth/authorize',
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        redirectUri: process.env.GITHUB_REDIRECT_URI || '',
+        scopes: ['user:email'],
+        authorizationUrl: 'https://github.com/login/oauth/authorize',
+        tokenUrl: 'https://github.com/login/oauth/access_token',
+        userInfoUrl: 'https://api.github.com/user'
+      },
+      microsoft: {
+        clientId: process.env.MICROSOFT_CLIENT_ID || '',
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
+        redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
+        scopes: ['https://graph.microsoft.com/user.read'],
+        authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        userInfoUrl: 'https://graph.microsoft.com/v1.0/me'
+      }
+    }
+  };
+  const auditService = new AuditService(authConfig, db as any);
+
+  dataClassificationService = new DataClassificationService(
+    db as any,
+    undefined as any, // Redis will be set up later
+    auditService
+  );
+
+  console.log('Data classification service initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize data classification service:', error);
+  // Continue without data classification service - this is non-critical for basic operation
 }
 
 // Initialize security headers middleware
@@ -1286,6 +1357,18 @@ if (payloadEncryptionService) {
     console.log('Payload encryption routes registered successfully');
   } catch (error) {
     console.error('Failed to register payload encryption routes:', error);
+  }
+}
+
+// Register data classification routes
+if (dataClassificationService) {
+  try {
+    server.register(async (fastify) => {
+      await dataClassificationRoutes(fastify, dataClassificationService);
+    }, { prefix: '/api' });
+    console.log('Data classification routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register data classification routes:', error);
   }
 }
 

@@ -810,5 +810,4 @@ export class TrustedDeviceManager extends EventEmitter {
 }
 
 // Export default instance
-export 
 export default TrustedDeviceManager;

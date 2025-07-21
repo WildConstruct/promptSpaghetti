@@ -410,8 +410,8 @@ export class DataClassifier extends EventEmitter {
         category: DataCategory.SYSTEM_CONFIG,
         level: ClassificationLevel.CONFIDENTIAL,
         patterns: [
-          /(?i)api[_-]?key[s]?['"\s]*[:=]['"\s]*[A-Za-z0-9+/]{20,}/,
-          /(?i)secret[_-]?key['"\s]*[:=]['"\s]*[A-Za-z0-9+/]{20,}/
+          /api[_-]?key[s]?['"\s]*[:=]['"\s]*[A-Za-z0-9+/]{20,}/i,
+          /secret[_-]?key['"\s]*[:=]['"\s]*[A-Za-z0-9+/]{20,}/i
         ],
         keywords: ['api_key', 'secret_key', 'access_key'],
         complianceRequirements: [ComplianceFramework.NIST],
@@ -427,8 +427,8 @@ export class DataClassifier extends EventEmitter {
         category: DataCategory.SYSTEM_CONFIG,
         level: ClassificationLevel.CONFIDENTIAL,
         patterns: [
-          /(?i)(?:database|db)[_-]?(?:password|pwd)['"\s]*[:=]['"\s]*[^\s'"]+/,
-          /(?i)connectionstring['"\s]*[:=]['"\s]*[^'"]*password[^'"]*['"]/
+          /(?:database|db)[_-]?(?:password|pwd)['"\s]*[:=]['"\s]*[^\s'"]+/i,
+          /connectionstring['"\s]*[:=]['"\s]*[^'"]*password[^'"]*['"]/i
         ],
         keywords: ['database', 'connection', 'db_password'],
         complianceRequirements: [ComplianceFramework.NIST],
@@ -687,7 +687,4 @@ export interface ComplianceValidationResult {
 }
 
 // Export default instance
-export const dataClassifier = new DataClassifier();
-export const policyManager = new ClassificationPolicyManager();
-
 export default DataClassifier;

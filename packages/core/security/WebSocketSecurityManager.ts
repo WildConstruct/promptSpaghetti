@@ -11,7 +11,7 @@
  */
 
 import { EventEmitter } from 'events';
-import { createCipher, createDecipher, randomBytes, createHmac } from 'crypto';
+import { createCipheriv, createDecipheriv, randomBytes, createHmac } from 'crypto';
 import { 
   KeyManagementService, 
   KeyType, 
@@ -19,7 +19,7 @@ import {
   KeyAlgorithm, 
   StorageTier 
 } from './KeyManagementService';
-import { DataClassifier, DataClassification, ClassificationLevel } from './DataClassifier';
+import { DataClassifier, ClassificationLevel } from './DataClassifier';
 import { DeviceFingerprintingService, FingerprintContext } from './DeviceFingerprintingService';
 import { TrustedDeviceManager } from './TrustedDeviceManager';
 
@@ -204,13 +204,46 @@ export class WebSocketSecurityManager extends EventEmitter {
       );
 
       // Assess initial risk
-      const riskAssessment = this.fingerprintService.assessRisk(deviceFingerprint);
+      const riskAssessment = this.fingerprintService.assessRisk(deviceFingerprint, {
+        id: 'default-location',
+        timestamp: new Date(),
+        source: 'ip' as const,
+        accuracy: 1000,
+        confidence: 50,
+        coordinates: {
+          latitude: 0,
+          longitude: 0
+        },
+        address: {
+          country: 'Unknown',
+          countryCode: 'XX',
+          region: 'Unknown',
+          regionCode: 'XX',
+          city: 'Unknown'
+        },
+        network: {
+          ipAddress: requestInfo.ipAddress,
+          isp: 'Unknown',
+          timezone: 'UTC',
+          vpnDetected: false,
+          proxyDetected: false,
+          torDetected: false,
+          hostingProvider: false,
+          datacenter: false
+        },
+        metadata: {
+          language: 'en',
+          currency: 'USD',
+          callingCode: '+1'
+        }
+      });
 
       // Check if device is trusted
-      const deviceTrusted = await this.trustedDeviceManager.isDeviceTrusted(
+      const trustDecision = await this.trustedDeviceManager.checkDeviceTrust(
         userId,
-        deviceFingerprint.id
+        fingerprintContext
       );
+      const deviceTrusted = trustDecision.trusted;
 
       // Create security context
       const context: ConnectionSecurityContext = {
@@ -239,8 +272,8 @@ export class WebSocketSecurityManager extends EventEmitter {
         bytesReceived: 0,
         
         flags: {
-          vpnDetected: riskAssessment.factors.some(f => f.includes('vpn')),
-          proxyDetected: riskAssessment.factors.some(f => f.includes('proxy')),
+          vpnDetected: riskAssessment.factors.some(f => f.factor.includes('vpn')),
+          proxyDetected: riskAssessment.factors.some(f => f.factor.includes('proxy')),
           botDetected: false,
           repeatedLoginAttempts: false,
           anomalousPatterns: false
@@ -335,10 +368,10 @@ export class WebSocketSecurityManager extends EventEmitter {
 
       // Device verification
       if (this.config.requireDeviceVerification && credentials.deviceVerificationToken) {
-        const deviceVerified = await this.trustedDeviceManager.verifyDevice(
+        const verifiedDevice = await this.trustedDeviceManager.verifyDevice(
           credentials.deviceVerificationToken
         );
-        context.deviceVerified = deviceVerified;
+        context.deviceVerified = !!verifiedDevice;
       }
 
       // Update authentication state
@@ -388,8 +421,16 @@ export class WebSocketSecurityManager extends EventEmitter {
     try {
       // Classify message data
       const classification = this.config.enableDataClassification
-        ? await this.dataClassifier.classifyData(JSON.stringify(message))
-        : { level: ClassificationLevel.PUBLIC } as DataClassification;
+        ? this.dataClassifier.classify({
+            id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            fieldName: 'payload',
+            value: JSON.stringify(message),
+            dataType: 'json',
+            context: { messageType: message.type },
+            source: 'websocket',
+            timestamp: new Date()
+          })
+        : { level: ClassificationLevel.PUBLIC, category: 'operational', confidence: 100, matchedRules: [], complianceRequirements: [], encryptionRequired: false, retentionPeriod: '1 year', accessControls: [], reasoning: [] };
 
       // Check if encryption is required based on classification
       const shouldEncrypt = this.config.enableMessageEncryption ||
@@ -412,12 +453,22 @@ export class WebSocketSecurityManager extends EventEmitter {
       if (shouldEncrypt && context.encryptionSessionKey) {
         // Encrypt payload
         const iv = randomBytes(16);
-        const cipher = createCipher('aes-256-gcm', context.encryptionSessionKey);
+        // Ensure key is 32 bytes for AES-256
+        let key = context.encryptionSessionKey;
+        if (key.length < 32) {
+          // Pad key to 32 bytes if too short
+          key = Buffer.concat([key, Buffer.alloc(32 - key.length)]);
+        } else if (key.length > 32) {
+          key = key.slice(0, 32);
+        }
+        const cipher = createCipheriv('aes-256-gcm', key, iv);
         
         let encrypted = cipher.update(JSON.stringify(message.payload), 'utf8', 'hex');
         encrypted += cipher.final('hex');
+        const authTag = cipher.getAuthTag();
         
-        secureMessage.payload = encrypted;
+        // Store encrypted data with auth tag
+        secureMessage.payload = encrypted + ':' + authTag.toString('hex');
         secureMessage.iv = iv;
         secureMessage.encryptionKeyId = context.encryptionKeyId;
       }
@@ -493,9 +544,23 @@ export class WebSocketSecurityManager extends EventEmitter {
 
       // Decrypt if needed
       if (secureMessage.encrypted && context.encryptionSessionKey && secureMessage.iv) {
-        const decipher = createDecipher('aes-256-gcm', context.encryptionSessionKey);
+        // Ensure key is 32 bytes for AES-256
+        let key = context.encryptionSessionKey;
+        if (key.length < 32) {
+          // Pad key to 32 bytes if too short
+          key = Buffer.concat([key, Buffer.alloc(32 - key.length)]);
+        } else if (key.length > 32) {
+          key = key.slice(0, 32);
+        }
         
-        let decrypted = decipher.update(secureMessage.payload, 'hex', 'utf8');
+        // Split encrypted data and auth tag
+        const [encryptedData, authTagHex] = (secureMessage.payload as string).split(':');
+        const authTag = Buffer.from(authTagHex, 'hex');
+        
+        const decipher = createDecipheriv('aes-256-gcm', key, secureMessage.iv);
+        decipher.setAuthTag(authTag);
+        
+        let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
         decrypted += decipher.final('utf8');
         
         payload = JSON.parse(decrypted);
@@ -678,12 +743,13 @@ export class WebSocketSecurityManager extends EventEmitter {
   }
 
   private mapRiskLevelToThreatLevel(riskLevel: any): 'low' | 'medium' | 'high' | 'critical' {
-    // Map from DataClassifier risk levels to threat levels
-    switch (riskLevel) {
-      case 'LOW': return 'low';
-      case 'MEDIUM': return 'medium';
-      case 'HIGH': return 'high';
-      case 'CRITICAL': return 'critical';
+    // Map from risk levels to threat levels - handle both enum values and strings
+    const normalizedRisk = typeof riskLevel === 'string' ? riskLevel.toLowerCase() : riskLevel;
+    switch (normalizedRisk) {
+      case 'low': return 'low';
+      case 'medium': return 'medium';
+      case 'high': return 'high';
+      case 'critical': return 'critical';
       default: return 'medium';
     }
   }

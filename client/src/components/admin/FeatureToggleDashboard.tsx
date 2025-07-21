@@ -33,7 +33,7 @@ interface FeatureToggle {
   name: string;
   description?: string;
   type: 'boolean' | 'percentage_rollout' | 'multivariate' | 'scheduled' | 'segmentation';
-  value: any;
+  value: boolean | number | string | Record<string, unknown>;
   enabled: boolean;
   claudeImpact: 'NONE' | 'PROMPT_COST' | 'MODEL_VERSION' | 'OUTPUT_QUALITY' | 'HALLUCINATION_RISK';
   createdAt: string;
@@ -255,28 +255,31 @@ export const FeatureToggleDashboard: React.FC = () => {
     }
   };
 
-  const handleCreateToggle = async (toggleData: any) => {
-    try {
-      const response = await fetch('/api/feature-toggles/toggles', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(toggleData)
-      });
+  const handleCreateToggle = async (toggleData: {
+    key: string;
+    name: string;
+    description?: string;
+    type: string;
+    value: boolean | number | string | Record<string, unknown>;
+    claudeImpact: string;
+  }) => {
+    const response = await fetch('/api/feature-toggles/toggles', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(toggleData)
+    });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to create toggle');
-      }
-
-      // Refresh the toggles list
-      fetchToggles();
-      setShowCreateModal(false);
-    } catch (error) {
-      throw error; // Re-throw to let modal handle the error
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to create toggle');
     }
+
+    // Refresh the toggles list
+    fetchToggles();
+    setShowCreateModal(false);
   };
 
   return (
