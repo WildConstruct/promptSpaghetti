@@ -9,9 +9,15 @@ import { ZodSchema, ZodTypeAny, z } from 'zod';
  * - schema: Zod schema describing the form fields for this node type
  * - onChange: Callback when form values change (debounced)
  */
+interface NodeData {
+  id: string;
+  type: string;
+  data: Record<string, unknown>;
+}
+
 export interface InspectorSidebarProps {
-  node: any | null;
-  schema: ZodSchema<any> | null;
+  node: NodeData | null;
+  schema: ZodSchema<Record<string, unknown>> | null;
   onChange: (partial: Record<string, unknown>) => void;
 }
 
@@ -33,7 +39,8 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
 
     // Validate single field via schema.pick
     if (schema) {
-      const fieldSchema: any = (schema as any).shape?.[key] ?? (schema as any)._def?.shape?.()[key];
+      const fieldSchema: ZodTypeAny = (schema as unknown as { shape?: Record<string, ZodTypeAny> }).shape?.[key] ??
+        (schema as unknown as { _def?: { shape?: () => Record<string, ZodTypeAny> } })._def?.shape?.()[key];
       if (fieldSchema) {
         const parsed = fieldSchema.safeParse(val);
         setFieldErrors((prev) => ({ ...prev, [key]: parsed.success ? '' : parsed.error.issues[0]?.message || 'Invalid' }));
@@ -59,15 +66,16 @@ export const InspectorSidebar: React.FC<InspectorSidebarProps> = ({ node, schema
   // Generate form fields from schema (support different Zod versions)
   let shape: Record<string, ZodTypeAny> = {};
   if (schema) {
-    const maybeShape: any = (schema as any).shape;
+    const maybeShape: Record<string, ZodTypeAny> | (() => Record<string, ZodTypeAny>) | undefined = 
+      (schema as unknown as { shape?: Record<string, ZodTypeAny> | (() => Record<string, ZodTypeAny>) }).shape;
     if (typeof maybeShape === 'function') {
       try {
         shape = maybeShape();
       } catch {
-        shape = {} as any;
+        shape = {} as Record<string, ZodTypeAny>;
       }
     } else if (maybeShape) {
-      shape = maybeShape;
+      shape = maybeShape as Record<string, ZodTypeAny>;
     } else if ((schema as any)._def?.shape) {
       const s = (schema as any)._def.shape;
       shape = typeof s === 'function' ? s() : s;

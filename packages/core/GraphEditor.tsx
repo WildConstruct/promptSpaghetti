@@ -418,7 +418,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
             onKeyDown={(e) => {
               // Check if the event target is inside an input or textarea
               const target = e.target as HTMLElement;
-              const isFormElement = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT';
+              const isFormElement = target.tagName === 'INPUT' ||
+                target.tagName === 'TEXTAREA' ||
+                target.tagName === 'SELECT';
               const isInInspector = target.closest('aside') !== null;
                 
               if (isFormElement || isInInspector) {
