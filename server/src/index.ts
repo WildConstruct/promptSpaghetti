@@ -98,6 +98,7 @@ import { DataRetentionFrameworkService } from './services/DataRetentionFramework
 import financialServicesRoutes from './routes/financial-services';
 import { ConsentCollectionService } from './services/ConsentCollectionService';
 import { healthcareRoutes } from './routes/healthcare';
+import { trainingDataRoutes } from './routes/training-data-management';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -1523,12 +1524,14 @@ try {
   server.register(consentCollectionRoutes, { prefix: '/api/consent-collection' });
   server.register(financialServicesRoutes, { prefix: '/api/financial-services' });
   server.register(healthcareRoutes, { prefix: '/api' });
+  server.register(trainingDataRoutes, { prefix: '/api' });
   console.log(
     'Epic 19 security platform routes registered successfully: data access, ' +
     'audit workflow, access request workflow, policy update workflow, ' +
     'policy acceptance tracking, OAuth guidance, policy authoring, ' +
     'policy notifications, compliance reporting, consent collection, ' +
-    'financial data lifecycle management, and healthcare & life sciences toolkit'
+    'financial data lifecycle management, healthcare & life sciences toolkit, ' +
+    'and training data management'
   );
 } catch (error) {
   console.error('Failed to register data access control routes:', error);
