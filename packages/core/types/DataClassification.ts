@@ -242,12 +242,7 @@ export interface ClassificationService {
 }
 
 /**
- * Classification Constants
- */
-export 
-export 
-/**
- * Classification Decision Matrix
+ * Classification Constants and Decision Matrix
  */
 export interface ClassificationCriteria {
   legalRegulatory: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
@@ -256,7 +251,6 @@ export interface ClassificationCriteria {
   securityRisk: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
-export 
 /**
  * Utility Types
  */
