@@ -1,0 +1,489 @@
+name: Enhanced CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop, alpha ]
+  pull_request:
+    branches: [ main, develop ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Quality Gates - Fast feedback
+  quality-gates:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8.15.4
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      env:
+        PUPPETEER_SKIP_DOWNLOAD: true
+
+    - name: Type checking
+      run: pnpm typecheck
+
+    - name: Linting
+      run: pnpm lint
+
+    - name: Code style check
+      run: pnpm format:check
+
+    - name: Security analysis
+      run: pnpm test:security
+
+  # Comprehensive Test Suite
+  test-matrix:
+    name: Test Suite (${{ matrix.test-type }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: quality-gates
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        test-type: ['unit', 'integration', 'performance', 'documentation']
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8.15.4
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      env:
+        PUPPETEER_SKIP_DOWNLOAD: true
+
+    - name: Run unit tests
+      if: matrix.test-type == 'unit'
+      run: pnpm test:unit-only
+
+    - name: Run integration tests
+      if: matrix.test-type == 'integration'
+      run: pnpm test:comprehensive --integration-only
+
+    - name: Run performance tests
+      if: matrix.test-type == 'performance'
+      run: pnpm test:performance-only
+
+    - name: Run documentation tests
+      if: matrix.test-type == 'documentation'
+      run: pnpm test:docs
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.test-type }}
+        path: |
+          coverage/
+          test-results/
+          junit.xml
+        retention-days: 7
+
+    - name: Upload coverage to Codecov
+      if: matrix.test-type == 'unit' && (success() || failure())
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage/coverage-final.json
+        flags: unittests
+        name: codecov-umbrella
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+  # Cross-browser E2E Tests
+  e2e-tests:
+    name: E2E (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: quality-gates
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: ['chromium', 'firefox', 'webkit']
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8.15.4
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install Playwright browsers
+      run: pnpm test:cross-browser:install
+
+    - name: Build application
+      run: pnpm build
+
+    - name: Run E2E tests
+      run: pnpm test:cross-browser --project=${{ matrix.browser }}
+
+    - name: Upload E2E test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-results-${{ matrix.browser }}
+        path: |
+          playwright-report/
+          playwright-results.json
+          test-results/
+        retention-days: 7
+
+    - name: Upload E2E test videos
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: e2e-videos-${{ matrix.browser }}
+        path: test-results/
+        retention-days: 3
+
+  # Mobile Testing
+  mobile-tests:
+    name: Mobile (${{ matrix.device }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: quality-gates
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        device: ['mobile-chrome', 'mobile-safari']
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8.15.4
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install Playwright browsers
+      run: pnpm test:cross-browser:install
+
+    - name: Build application
+      run: pnpm build
+
+    - name: Run mobile tests
+      run: pnpm test:cross-browser:mobile --project=${{ matrix.device }}
+
+    - name: Upload mobile test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: mobile-results-${{ matrix.device }}
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 7
+
+  # Build Verification
+  build-verification:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: quality-gates
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8.15.4
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      env:
+        PUPPETEER_SKIP_DOWNLOAD: true
+
+    - name: Build client
+      run: pnpm build:web
+
+    - name: Build server  
+      run: pnpm --filter server build
+
+    - name: Verify build outputs
+      run: pnpm verify:build
+
+    - name: Docker build verification
+      run: |
+        docker build -t promptspaghetti-server ./server
+        echo "✅ Docker build successful"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          client/dist/
+          server/dist/
+        retention-days: 7
+
+  # Security Scanning
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: quality-gates
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8.15.4
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      env:
+        PUPPETEER_SKIP_DOWNLOAD: true
+
+    - name: Run dependency audit
+      run: pnpm audit --audit-level moderate
+      continue-on-error: true
+
+    - name: Run security tests
+      run: pnpm test:security
+
+    - name: Upload security results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-results
+        path: |
+          security-results.json
+          audit-results.json
+        retention-days: 30
+
+  # Performance Benchmarks
+  performance-benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [build-verification]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8.15.4
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Build application
+      run: pnpm build
+
+    - name: Install Playwright browsers
+      run: pnpm exec playwright install chromium
+
+    - name: Run performance benchmarks
+      run: |
+        # Start the application
+        pnpm --filter client dev &
+        pnpm --filter server dev &
+        
+        # Wait for services to start
+        sleep 15
+        
+        # Run performance tests
+        pnpm test:cross-browser:performance
+        
+        # Cleanup
+        pkill -f "vite" || true
+        pkill -f "node.*server" || true
+
+    - name: Upload performance results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: performance-benchmarks
+        path: |
+          playwright-report/
+          performance-results.json
+        retention-days: 30
+
+    - name: Comment performance results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          if (fs.existsSync('performance-results.json')) {
+            const results = JSON.parse(fs.readFileSync('performance-results.json', 'utf8'));
+            const comment = `## 🚀 Performance Benchmark Results
+            
+            | Metric | Value | Status |
+            |--------|--------|---------|
+            | Test Infrastructure | ${results.testsRun || 0} scenarios | ${results.testsRun > 0 ? '✅' : '⚠️'} |
+            | Pass Rate | ${results.passRate || 0}% | ${results.passRate >= 80 ? '✅' : '⚠️'} |
+            | Average Execution Time | ${results.avgExecutionTime || 'N/A'}ms | ${results.avgExecutionTime < 5000 ? '✅' : '⚠️'} |
+            | Memory Usage | ${results.avgMemoryUsage || 'N/A'}MB | ${results.avgMemoryUsage < 500 ? '✅' : '⚠️'} |
+            
+            _Performance thresholds: Pass Rate ≥ 80%, Execution Time < 5s, Memory < 500MB_`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+          }
+
+  # Test Results Summary
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [test-matrix, e2e-tests, mobile-tests, build-verification, security-scan]
+    if: always()
+    
+    steps:
+    - name: Download all test results
+      uses: actions/download-artifact@v4
+      with:
+        path: all-results
+
+    - name: Generate comprehensive test summary
+      run: |
+        echo "# 📊 Comprehensive Test Results Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Count different types of test results
+        UNIT_RESULTS=$(find all-results -name "*unit*" -type d | wc -l)
+        INTEGRATION_RESULTS=$(find all-results -name "*integration*" -type d | wc -l)
+        PERFORMANCE_RESULTS=$(find all-results -name "*performance*" -type d | wc -l)
+        DOC_RESULTS=$(find all-results -name "*documentation*" -type d | wc -l)
+        E2E_RESULTS=$(find all-results -name "*e2e*" -type d | wc -l)
+        MOBILE_RESULTS=$(find all-results -name "*mobile*" -type d | wc -l)
+        SECURITY_RESULTS=$(find all-results -name "*security*" -type d | wc -l)
+        BUILD_RESULTS=$(find all-results -name "*build*" -type d | wc -l)
+        
+        echo "| Test Category | Results Available | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|---------------|------------------|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Unit Tests | $UNIT_RESULTS | ${{ needs.test-matrix.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Integration Tests | $INTEGRATION_RESULTS | ${{ needs.test-matrix.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Performance Tests | $PERFORMANCE_RESULTS | ${{ needs.test-matrix.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Documentation Tests | $DOC_RESULTS | ${{ needs.test-matrix.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| E2E Tests | $E2E_RESULTS | ${{ needs.e2e-tests.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Mobile Tests | $MOBILE_RESULTS | ${{ needs.mobile-tests.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Security Tests | $SECURITY_RESULTS | ${{ needs.security-scan.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Build Verification | $BUILD_RESULTS | ${{ needs.build-verification.result == 'success' && '✅' || '❌' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Overall status
+        echo "## 📋 Overall Status" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Calculate overall success
+        TOTAL_JOBS=6
+        SUCCESS_JOBS=0
+        
+        [[ "${{ needs.test-matrix.result }}" == "success" ]] && ((SUCCESS_JOBS++))
+        [[ "${{ needs.e2e-tests.result }}" == "success" ]] && ((SUCCESS_JOBS++))
+        [[ "${{ needs.mobile-tests.result }}" == "success" ]] && ((SUCCESS_JOBS++))
+        [[ "${{ needs.build-verification.result }}" == "success" ]] && ((SUCCESS_JOBS++))
+        [[ "${{ needs.security-scan.result }}" == "success" ]] && ((SUCCESS_JOBS++))
+        
+        SUCCESS_RATE=$((SUCCESS_JOBS * 100 / TOTAL_JOBS))
+        
+        if [ $SUCCESS_RATE -eq 100 ]; then
+          echo "🎉 **All tests passed successfully!** ($SUCCESS_JOBS/$TOTAL_JOBS)" >> $GITHUB_STEP_SUMMARY
+        elif [ $SUCCESS_RATE -ge 80 ]; then
+          echo "⚠️ **Most tests passed** ($SUCCESS_JOBS/$TOTAL_JOBS) - $SUCCESS_RATE% success rate" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Multiple test failures** ($SUCCESS_JOBS/$TOTAL_JOBS) - $SUCCESS_RATE% success rate" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🔗 [View detailed results in artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+
+    - name: Final status check
+      run: |
+        # This job will fail if critical tests failed
+        CRITICAL_FAILURES=0
+        
+        [[ "${{ needs.test-matrix.result }}" != "success" ]] && ((CRITICAL_FAILURES++))
+        [[ "${{ needs.e2e-tests.result }}" != "success" ]] && ((CRITICAL_FAILURES++))
+        [[ "${{ needs.build-verification.result }}" != "success" ]] && ((CRITICAL_FAILURES++))
+        
+        if [ $CRITICAL_FAILURES -gt 0 ]; then
+          echo "❌ Critical test failures detected ($CRITICAL_FAILURES)"
+          exit 1
+        else
+          echo "✅ All critical tests passed"
+        fi
