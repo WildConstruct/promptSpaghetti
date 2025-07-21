@@ -1441,16 +1441,22 @@ try {
   const dataAccessControlService = new DataAccessControlService(db as any, auditService);
   const auditWorkflowService = new AuditWorkflowService(db as any, auditService, dataAccessControlService);
   const accessRequestWorkflowService = new AccessRequestWorkflowService(db as any, auditService, dataAccessControlService);
+  const policyUpdateWorkflowService = new PolicyUpdateWorkflowService(db as any, auditService);
+  const policyAcceptanceTrackingService = new PolicyAcceptanceTrackingService(db as any, auditService);
   
   // Make the services available to routes via Fastify's dependency injection
   server.decorate('dataAccessControlService', dataAccessControlService);
   server.decorate('auditWorkflowService', auditWorkflowService);
   server.decorate('accessRequestWorkflowService', accessRequestWorkflowService);
+  server.decorate('policyUpdateWorkflowService', policyUpdateWorkflowService);
+  server.decorate('policyAcceptanceTrackingService', policyAcceptanceTrackingService);
   
   server.register(dataAccessRoutes, { prefix: '/api/data-access' });
   server.register(auditWorkflowRoutes, { prefix: '/api/audit-workflow' });
   server.register(accessRequestWorkflowRoutes, { prefix: '/api/access-request-workflow' });
-  console.log('Data access control, audit workflow, and access request workflow routes registered successfully');
+  server.register(policyUpdateWorkflowRoutes, { prefix: '/api/policy-update-workflow' });
+  server.register(policyAcceptanceTrackingRoutes, { prefix: '/api/policy-acceptance-tracking' });
+  console.log('Epic 19 security platform routes registered successfully: data access, audit workflow, access request workflow, policy update workflow, and policy acceptance tracking');
 } catch (error) {
   console.error('Failed to register data access control routes:', error);
 }
