@@ -368,7 +368,7 @@ const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
 /**
  * Data sensitivity level validation schema
  */
-export 
+
 /**
  * Data element sensitivity classification
  */
