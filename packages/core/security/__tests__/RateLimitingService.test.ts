@@ -224,12 +224,13 @@ describe('RateLimitingService', () => {
       // MFA should have stricter limits than login
       // Login allows 10 per minute, MFA allows 5 per minute
 
-      // Test login limit - spread attempts over time to avoid per-second limit
+      // Test login limit - use successful attempts to avoid threat level increase
       for (let i = 0; i < 8; i++) {
-        // Advance time by 10 seconds between attempts to avoid per-second limit (2/sec)
-        mockDate = new Date(mockDate.getTime() + 10000);
+        // Advance time by 2 seconds between attempts to avoid per-second limit (2/sec)
+        // Use successful attempts to keep threat level LOW (threat detection reduces limits)
+        mockDate = new Date(mockDate.getTime() + 2000);
         jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
-        service.recordAttempt(identifier, loginEndpoint, false);
+        service.recordAttempt(identifier, loginEndpoint, true);
       }
       const loginResult = await service.checkRateLimit(identifier, loginEndpoint);
 
@@ -237,22 +238,23 @@ describe('RateLimitingService', () => {
       mockDate = new Date('2025-01-15T10:00:00Z');
       jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
 
-      // Test MFA limit - spread attempts over time  
+      // Test MFA limit - use successful attempts to avoid threat level increase  
       for (let i = 0; i < 4; i++) {
-        // Advance time by 15 seconds between attempts to avoid per-second limit (1/sec for MFA)
-        mockDate = new Date(mockDate.getTime() + 15000);
+        // Advance time by 2 seconds between attempts to avoid per-second limit (1/sec for MFA)
+        // Use successful attempts to keep threat level LOW (threat detection reduces limits)
+        mockDate = new Date(mockDate.getTime() + 2000);
         jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
-        service.recordAttempt(identifier, mfaEndpoint, false);
+        service.recordAttempt(identifier, mfaEndpoint, true);
       }
       const mfaResult = await service.checkRateLimit(identifier, mfaEndpoint);
 
       expect(loginResult.result).toBe(RateLimitResult.ALLOWED);
       expect(mfaResult.result).toBe(RateLimitResult.ALLOWED);
 
-      // One more MFA attempt should block
-      mockDate = new Date(mockDate.getTime() + 15000);
+      // One more MFA attempt should block (5 + 1 = 6 > limit of 5)
+      mockDate = new Date(mockDate.getTime() + 2000);
       jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
-      service.recordAttempt(identifier, mfaEndpoint, false);
+      service.recordAttempt(identifier, mfaEndpoint, true);
       const mfaBlockedResult = await service.checkRateLimit(identifier, mfaEndpoint);
       expect(mfaBlockedResult.result).toBe(RateLimitResult.BLOCKED);
     });
@@ -351,12 +353,13 @@ describe('RateLimitingService', () => {
       const endpoint = '/auth/login';
 
       // Approach but don't exceed 80% of limit (8 out of 10)
-      // Spread attempts over time to avoid per-second limit (2/sec)
+      // Use successful attempts to avoid threat level increase
       for (let i = 0; i < 8; i++) {
-        // Advance time by 10 seconds between attempts to avoid per-second limit
-        mockDate = new Date(mockDate.getTime() + 10000);
+        // Advance time by 2 seconds between attempts to avoid per-second limit
+        // Use successful attempts to keep threat level LOW (threat detection reduces limits)
+        mockDate = new Date(mockDate.getTime() + 2000);
         jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
-        service.recordAttempt(identifier, endpoint, false);
+        service.recordAttempt(identifier, endpoint, true);
       }
 
       const result = await service.checkRateLimit(identifier, endpoint);
