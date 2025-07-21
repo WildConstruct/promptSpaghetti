@@ -210,14 +210,22 @@ export class PasswordResetService {
       } catch (error) {
         if (error instanceof ZodError) {
           // Convert Zod validation errors to user-friendly messages
+          const firstError = error.errors[0];
+          
+          // Check for password mismatch (refine validation)
+          if (firstError.path.includes('confirmPassword') && firstError.message === 'Passwords don\'t match') {
+            throw new Error('Passwords don\'t match');
+          }
+          
+          // Check for password length issues
           const passwordErrors = error.errors.filter(e => 
             e.path.includes('newPassword') || e.path.includes('confirmPassword')
           );
-          if (passwordErrors.length > 0) {
+          if (passwordErrors.length > 0 && firstError.message.includes('least')) {
             throw new Error('Password must be at least 8 characters long');
           }
+          
           // Handle other validation errors
-          const firstError = error.errors[0];
           throw new Error(firstError.message);
         }
         throw error;

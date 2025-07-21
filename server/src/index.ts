@@ -71,6 +71,8 @@ import { AccessControlManager } from './services/AccessControlManager';
 import { AuditTeamCollaborationService } from './services/AuditTeamCollaborationService';
 import { auditTeamCollaborationRoutes } from './routes/audit-team-collaboration';
 import { auditEvidenceRoutes } from './routes/audit-evidence';
+import { dataAccessRoutes } from './routes/data-access';
+import { DataAccessControlService } from './services/DataAccessControlService';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -1401,6 +1403,42 @@ try {
   console.log('Audit evidence mapping routes registered successfully');
 } catch (error) {
   console.error('Failed to register audit evidence mapping routes:', error);
+}
+
+// Register data access control routes (Epic 19.4)
+try {
+  const db = getDatabase();
+  const authConfig = {
+    jwtSecret: process.env.JWT_SECRET || 'dev-secret',
+    jwtIssuer: 'promptgraph',
+    jwtAudience: 'promptgraph-api',
+    database: { host: 'localhost', port: 5432, database: 'dev', username: 'postgres', password: 'dev' },
+    redis: { host: 'localhost', port: 6379 },
+    security: {
+      passwordMinLength: 8,
+      passwordRequireUppercase: true,
+      passwordRequireLowercase: true,
+      passwordRequireNumbers: true,
+      passwordRequireSymbols: false,
+      maxFailedLoginAttempts: 5,
+      accountLockoutDuration: 30,
+      passwordResetTokenExpiry: 60,
+      emailVerificationTokenExpiry: 1440,
+      sessionTokenExpiry: 60,
+      refreshTokenExpiry: 7
+    }
+  };
+  
+  const auditService = new AuditService(authConfig, db as any);
+  const dataAccessControlService = new DataAccessControlService(db as any, auditService);
+  
+  // Make the service available to routes via Fastify's dependency injection
+  server.decorate('dataAccessControlService', dataAccessControlService);
+  
+  server.register(dataAccessRoutes, { prefix: '/api/data-access' });
+  console.log('Data access control routes registered successfully');
+} catch (error) {
+  console.error('Failed to register data access control routes:', error);
 }
 
 // Setup analytics WebSocket server

@@ -15,7 +15,8 @@ module.exports = {
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', {
-      useESM: true
+      useESM: true,
+      isolatedModules: true
     }],
     '^.+\\.(js|jsx)$': ['babel-jest', {
       presets: [
@@ -25,6 +26,10 @@ module.exports = {
         }],
         ['@babel/preset-react', {
           runtime: 'automatic'
+        }],
+        ['@babel/preset-typescript', {
+          isTSX: true,
+          allExtensions: true
         }]
       ]
     }]

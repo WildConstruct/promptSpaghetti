@@ -7,11 +7,11 @@
  * Provides commands to track tickets, view stats, and manage the system.
  */
 
-const DailyTicketTracker = require('./utils/DailyTicketTracker');
+const EnhancedTicketTracker = require('./utils/EnhancedTicketTracker');
 
 class DailyTrackerCLI {
   constructor() {
-    this.tracker = new DailyTicketTracker();
+    this.tracker = new EnhancedTicketTracker();
   }
 
   async initialize() {
@@ -97,11 +97,19 @@ class DailyTrackerCLI {
       console.log('\n📊 DETAILED DAILY STATISTICS');
       console.log('═'.repeat(50));
       console.log(`Date: ${stats.date}`);
-      console.log(`Total Tickets: ${stats.total} (${stats.approved} approved + ${stats.pushed} pushed)`);
+      console.log(`Total Tickets: ${stats.summary.totalTickets} (${stats.metrics.approved} approved + ${stats.metrics.pushed} pushed)`);
       console.log(`Active Agents: ${stats.agents.count}`);
-      console.log(`Session Duration: ${stats.session.hoursActive} hours`);
-      console.log(`Productivity: ${stats.session.avgTicketsPerHour} tickets/hour`);
+      console.log(`Session Duration: ${stats.timeAnalysis.hoursActive} hours`);
+      console.log(`Productivity: ${stats.summary.productivity} tickets/hour`);
+      console.log(`Quality Score: ${stats.summary.qualityScore}%`);
       console.log(`Last Update: ${stats.lastUpdate.toLocaleTimeString()}`);
+
+      // Complexity breakdown
+      console.log('\n📊 COMPLEXITY DISTRIBUTION:');
+      console.log('-'.repeat(30));
+      console.log(`Simple (<1hr): ${stats.summary.complexityDistribution.simple}`);
+      console.log(`Medium (1-4hr): ${stats.summary.complexityDistribution.medium}`);
+      console.log(`Complex (>4hr): ${stats.summary.complexityDistribution.complex}`);
 
       if (stats.agents.count > 0) {
         console.log('\n👥 AGENT BREAKDOWN:');
@@ -127,21 +135,22 @@ class DailyTrackerCLI {
 
   async showQuickStats() {
     const stats = this.tracker.getCurrentStats();
-    console.log(`\n📊 Today (${stats.date}): ${stats.total} tickets | ${stats.approved} approved | ${stats.pushed} pushed | ${stats.agents.count} agents`);
+    console.log(`\n📊 Today (${stats.date}): ${stats.summary.totalTickets} tickets | ${stats.metrics.approved} approved | ${stats.metrics.pushed} pushed | ${stats.agents.count} agents`);
   }
 
   async generateReport(includeTimeline = false) {
     console.log('\n📋 GENERATING DAILY REPORT...');
-    const report = await this.tracker.generateDailyReport(includeTimeline);
+    const report = await this.tracker.generateEnhancedReport(includeTimeline);
 
-    console.log('\n📊 DAILY TICKET REPORT');
+    console.log('\n📊 ENHANCED DAILY TICKET REPORT');
     console.log('═'.repeat(50));
     console.log(`Date: ${report.summary.date}`);
-    console.log(`Total Tickets: ${report.summary.total}`);
-    console.log(`├─ Approved: ${report.summary.approved}`);
-    console.log(`└─ Pushed: ${report.summary.pushed}`);
+    console.log(`Total Tickets: ${report.summary.totalTickets}`);
+    console.log(`├─ Approved: ${report.metrics.approved}`);
+    console.log(`└─ Pushed: ${report.metrics.pushed}`);
     console.log(`Active Agents: ${report.summary.activeAgents}`);
     console.log(`Productivity: ${report.summary.productivity} tickets/hour`);
+    console.log(`Quality Score: ${report.summary.qualityScore}%`);
 
     if (report.milestones.length > 0) {
       console.log('\n🏆 MILESTONES ACHIEVED:');
@@ -151,15 +160,15 @@ class DailyTrackerCLI {
     }
 
     if (report.historical) {
-      console.log('\n📈 7-DAY TREND:');
-      console.log(`Total: ${report.historical.total} tickets`);
+      console.log('\n📈 HISTORICAL TREND:');
+      console.log(`Total: ${report.historical.totalTickets} tickets`);
       console.log(`Average: ${report.historical.avgPerDay} tickets/day`);
-      console.log(`Trend: ${report.historical.trend}`);
+      console.log(`Weekly Trend: ${report.historical.weeklyTrend}`);
     }
 
-    if (Object.keys(report.agents).length > 0) {
+    if (Object.keys(report.agents.breakdown).length > 0) {
       console.log('\n👥 TOP AGENTS TODAY:');
-      const sortedAgents = Object.entries(report.agents)
+      const sortedAgents = Object.entries(report.agents.breakdown)
         .sort(([,a], [,b]) => b.total - a.total)
         .slice(0, 5);
       
@@ -168,6 +177,11 @@ class DailyTrackerCLI {
         console.log(`   ${rank} ${agent}: ${data.total} tickets`);
       });
     }
+
+    // Show complexity and type distribution
+    console.log('\n📊 TYPE DISTRIBUTION:');
+    console.log(`Features: ${report.typeDistribution.features} | Bugfixes: ${report.typeDistribution.bugfixes} | Refactoring: ${report.typeDistribution.refactoring}`);
+    console.log(`Documentation: ${report.typeDistribution.documentation} | Tests: ${report.typeDistribution.tests} | Infrastructure: ${report.typeDistribution.infrastructure}`);
 
     if (includeTimeline && report.timeline) {
       console.log('\n⏰ ACTIVITY TIMELINE:');
@@ -196,15 +210,15 @@ class DailyTrackerCLI {
 
     console.log('═'.repeat(50));
     console.log(`Period: ${history.days} days`);
-    console.log(`Total Tickets: ${history.total}`);
+    console.log(`Total Tickets: ${history.totalTickets}`);
     console.log(`Average per Day: ${history.avgPerDay}`);
-    console.log(`Trend: ${history.trend}`);
+    console.log(`Weekly Trend: ${history.weeklyTrend}`);
 
     console.log('\n📅 DAILY BREAKDOWN:');
     console.log('-'.repeat(40));
     history.dailyBreakdown.forEach(day => {
-      const bar = '█'.repeat(Math.min(Math.floor(day.total / 5), 20));
-      console.log(`${day.date}: ${day.total.toString().padStart(3)} ${bar}`);
+      const bar = '█'.repeat(Math.min(Math.floor(day.tickets / 5), 20));
+      console.log(`${day.date}: ${day.tickets.toString().padStart(3)} ${bar}`);
     });
   }
 
@@ -224,7 +238,7 @@ class DailyTrackerCLI {
     rl.close();
 
     if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
-      await this.tracker.manualReset();
+      await this.tracker.resetDaily();
       console.log('✅ Tracker reset complete');
     } else {
       console.log('❌ Reset cancelled');
@@ -252,7 +266,7 @@ class DailyTrackerCLI {
     const interval = setInterval(async () => {
       process.stdout.write('\r' + ' '.repeat(80) + '\r'); // Clear line
       const stats = this.tracker.getCurrentStats();
-      process.stdout.write(`📊 Live: ${stats.total} tickets | ${stats.agents.count} agents | ${stats.session.avgTicketsPerHour}/hr | ${new Date().toLocaleTimeString()}`);
+      process.stdout.write(`📊 Live: ${stats.summary.totalTickets} tickets | ${stats.agents.count} agents | ${stats.summary.productivity}/hr | ${new Date().toLocaleTimeString()}`);
     }, 5000);
 
     // Handle graceful shutdown

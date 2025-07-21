@@ -121,7 +121,7 @@ export class SecurityValidation {
     if (expression.length > 500) return false; // Prevent DoS via long expressions
     
     // Check against dangerous patterns first
-    if (!this.validateSafeString(expression)) {
+    if (!SecurityValidation.validateSafeString(expression)) {
       return false;
     }
     
@@ -179,7 +179,7 @@ export class SecurityValidation {
     }
     
     // Then check for dangerous patterns using the general property key validation
-    return this.validateSafePropertyKey(name);
+    return SecurityValidation.validateSafePropertyKey(name);
   }
 
   /**
@@ -234,7 +234,7 @@ export class SecurityValidation {
     
     // Check primitive types
     if (typeof value === 'string') {
-      return this.validateSafeString(value) && value.length <= 10000;
+      return SecurityValidation.validateSafeString(value) && value.length <= 10000;
     }
     
     if (typeof value === 'number') {
@@ -248,7 +248,7 @@ export class SecurityValidation {
     // Check arrays
     if (Array.isArray(value)) {
       if (value.length > 1000) return false; // Prevent DoS via large arrays
-      return value.every(item => this.validateSafeValue(item));
+      return value.every(item => SecurityValidation.validateSafeValue(item));
     }
     
     // Check objects
@@ -258,8 +258,8 @@ export class SecurityValidation {
       
       // Validate all keys and values
       for (const key of keys) {
-        if (!this.validateSafePropertyKey(key)) return false;
-        if (!this.validateSafeValue(value[key])) return false;
+        if (!SecurityValidation.validateSafePropertyKey(key)) return false;
+        if (!SecurityValidation.validateSafeValue(value[key])) return false;
       }
       
       return true;
@@ -298,7 +298,7 @@ export class SecurityValidation {
       return fallback;
     }
     
-    if (!this.validateSafePropertyKey(key)) {
+    if (!SecurityValidation.validateSafePropertyKey(key)) {
       return fallback;
     }
     

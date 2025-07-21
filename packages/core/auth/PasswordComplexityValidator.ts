@@ -562,11 +562,14 @@ export class PasswordComplexityValidator {
    * Create configuration with defaults
    */
   private createConfig(customConfig?: Partial<PasswordComplexityConfig>): PasswordComplexityConfig {
+    // Determine the mode first (custom config takes precedence)
+    const mode = customConfig?.mode || 'balanced';
+    
     const defaultConfig: PasswordComplexityConfig = {
       enabled: true,
       mode: 'balanced',
       minimumScore: 70,
-      rules: this.getDefaultRules('balanced'),
+      rules: this.getDefaultRules(mode), // Use the actual mode
       allowOverrides: {
         enabled: false,
         roles: ['admin', 'security-officer'],
@@ -585,7 +588,14 @@ export class PasswordComplexityValidator {
       }
     };
 
-    return { ...defaultConfig, ...customConfig };
+    const config = { ...defaultConfig, ...customConfig };
+    
+    // If rules weren't provided in customConfig, ensure they match the mode
+    if (!customConfig?.rules) {
+      config.rules = this.getDefaultRules(config.mode);
+    }
+    
+    return config;
   }
 
   /**

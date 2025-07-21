@@ -5,13 +5,13 @@
  * Automatically tracks ticket approvals and pushes from various sources.
  */
 
-const DailyTicketTracker = require('../utils/DailyTicketTracker');
+const EnhancedTicketTracker = require('../utils/EnhancedTicketTracker');
 const fs = require('fs').promises;
 const path = require('path');
 
 class TrackerIntegration {
   constructor() {
-    this.tracker = new DailyTicketTracker();
+    this.tracker = new EnhancedTicketTracker();
     this.initialized = false;
     this.watchedFiles = new Map(); // File -> last modified time
     this.watchInterval = null;
@@ -254,7 +254,7 @@ class TrackerIntegration {
    */
   async generateReport(includeTimeline = false) {
     if (!this.initialized) return null;
-    return await this.tracker.generateDailyReport(includeTimeline);
+    return await this.tracker.generateEnhancedReport(includeTimeline);
   }
 
   /**
