@@ -13,6 +13,7 @@ import { approvalRoutes } from './routes/approval';
 import lockingRoutes from './routes/locking';
 import { randomizerRoutes } from './routes/randomizer';
 import { analyticsRoutes } from './routes/analytics';
+import { registerFileBrowserAnalyticsRoutes } from './routes/file-browser-analytics';
 import { ticketRoutes } from './routes/tickets';
 import { AnalyticsDashboard } from './analytics/AnalyticsDashboard';
 import { AnalyticsCollector } from './analytics/AnalyticsCollector';
@@ -100,6 +101,11 @@ import financialServicesRoutes from './routes/financial-services';
 import { ConsentCollectionService } from './services/ConsentCollectionService';
 import { healthcareRoutes } from './routes/healthcare';
 import { trainingDataRoutes } from './routes/training-data-management';
+import { webhookAuthRoutes } from './routes/webhook-auth';
+import { cryptographicEvidenceRoutes } from './routes/cryptographic-evidence';
+import openidConnectRoutes from './routes/openid-connect';
+import modelEvaluationWebhooks from './routes/model-evaluation-webhooks';
+import { ModelEvaluationTriggerService, defaultModelEvaluationConfig } from './services/ModelEvaluationTriggerService';
 
 // Error Handling & Resilience System
 import { errorHandlerPlugin } from './middleware/error-handler';
@@ -108,6 +114,11 @@ import { retryService } from './services/RetryService';
 import { healthMonitoringService } from './services/HealthMonitoringService';
 import { operationalMetricsService } from './services/OperationalMetricsService';
 import systemMonitoringRoutes from './routes/system-monitoring';
+
+// Token Influence Analysis System
+import TokenInfluenceAnalyzer from './analytics/TokenInfluenceAnalyzer';
+import PromptAnalyzer from './analytics/PromptAnalyzer';
+import modelInterpretationRoutes from './routes/model-interpretation';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -1259,6 +1270,9 @@ server.register(randomizerRoutes, { prefix: '/api/randomizer' });
 // Register ticket routes
 server.register(ticketRoutes, { prefix: '/api' });
 
+// Register file browser analytics routes
+server.register(registerFileBrowserAnalyticsRoutes);
+
 // Register analytics routes
 if (analyticsDashboard && costTracker) {
   server.register(async (fastify) => {
@@ -1538,6 +1552,12 @@ try {
   );
   const consentCollectionService = new ConsentCollectionService(auditService);
   
+  // Initialize Model Evaluation Trigger Service (Epic 26.3)
+  const modelEvaluationService = new ModelEvaluationTriggerService(
+    defaultModelEvaluationConfig,
+    auditService
+  );
+  
   // Initialize Financial Data Lifecycle Service for Epic 19.2.6
   const dataLifecycleAutomationService = new DataLifecycleAutomationService(db as any, auditService);
   const dataRetentionFrameworkService = new DataRetentionFrameworkService(db as any, auditService);
@@ -1561,6 +1581,7 @@ try {
   server.decorate('complianceReportingService', complianceReportingService);
   server.decorate('consentCollectionService', consentCollectionService);
   server.decorate('financialDataLifecycleService', financialDataLifecycleService);
+  server.decorate('modelEvaluationService', modelEvaluationService);
   
   server.register(dataAccessRoutes, { prefix: '/api/data-access' });
   server.register(auditWorkflowRoutes, { prefix: '/api/audit-workflow' });
@@ -1575,18 +1596,41 @@ try {
   server.register(financialServicesRoutes, { prefix: '/api/financial-services' });
   server.register(healthcareRoutes, { prefix: '/api' });
   server.register(trainingDataRoutes, { prefix: '/api' });
+  server.register(webhookAuthRoutes, { prefix: '/api' });
+  server.register(cryptographicEvidenceRoutes, { prefix: '/api/cryptographic-evidence' });
+  server.register(openidConnectRoutes, { prefix: '/auth/oidc' });
+  server.register(modelEvaluationWebhooks, { prefix: '/api/model-evaluation' });
   console.log(
     'Epic 19 security platform routes registered successfully: data access, ' +
     'audit workflow, access request workflow, policy update workflow, ' +
     'policy acceptance tracking, OAuth guidance, policy authoring, ' +
     'policy notifications, compliance reporting, consent collection, ' +
     'financial data lifecycle management, healthcare & life sciences toolkit, ' +
-    'and training data management'
+    'training data management, cryptographic evidence signing, OpenID Connect, and model evaluation'
   );
 
   // Register System Monitoring & Error Handling routes
   server.register(systemMonitoringRoutes, { prefix: '/api' });
   console.log('System monitoring and error handling routes registered successfully');
+
+  // Register Model Interpretation & Token Analysis routes
+  try {
+    const analyticsCollector = new AnalyticsCollector(db);
+    const tokenInfluenceAnalyzer = TokenInfluenceAnalyzer.getInstance(analyticsCollector);
+    const promptAnalyzer = PromptAnalyzer.getInstance(analyticsCollector);
+    
+    server.register(async (fastify) => {
+      await modelInterpretationRoutes(fastify, {
+        tokenAnalyzer: tokenInfluenceAnalyzer,
+        promptAnalyzer,
+        analyticsCollector,
+      });
+    }, { prefix: '/api' });
+    
+    console.log('Model interpretation and token analysis routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register model interpretation routes:', error);
+  }
 } catch (error) {
   console.error('Failed to register data access control routes:', error);
 }

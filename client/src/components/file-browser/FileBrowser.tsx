@@ -11,6 +11,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../../stores/authStore';
+import { useFileOperationTracking } from '../../hooks/useFileBrowserAnalytics';
 import { FolderTree } from './FolderTree';
 import { ContextMenu } from './ContextMenu';
 import { FileSearchBar } from './FileSearchBar';
@@ -130,6 +131,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
   className = ''
 }) => {
   const { user, isAuthenticated } = useAuthStore();
+  const analytics = useFileOperationTracking();
   const [state, setState] = useState<FileBrowserState>({
     ...initialState,
     currentPath: initialPath
@@ -147,6 +149,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
 
   // File operations
   const loadDirectory = useCallback(async (path: string) => {
+    const stopTimer = analytics.startTimer('directory_load');
     setState(prev => ({ ...prev, isLoading: true, error: null }));
     
     try {
@@ -158,15 +161,26 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
       await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
       setTreeData(mockFiles);
       
+      // Track successful directory load
+      await analytics.trackDirectoryLoad(path, mockFiles.length);
+      stopTimer();
+      
       setState(prev => ({ ...prev, isLoading: false }));
     } catch (error) {
+      stopTimer();
+      
+      // Track failed directory load
+      await analytics.trackFileOperation('directory_load', '', path, false, {
+        errorMessage: error instanceof Error ? error.message : 'Failed to load directory'
+      });
+      
       setState(prev => ({ 
         ...prev, 
         isLoading: false, 
         error: error instanceof Error ? error.message : 'Failed to load directory'
       }));
     }
-  }, []);
+  }, [analytics]);
 
   const handleItemSelect = useCallback((itemId: string, multiSelect = false) => {
     setState(prev => {
@@ -180,27 +194,42 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
         newSelection = [itemId];
       }
 
+      // Track file selection
+      analytics.trackFileOperation('select', itemId, itemId, true, {
+        multiSelect,
+        selectionCount: newSelection.length
+      });
+
       onSelectionChange?.(newSelection);
       return { ...prev, selectedItems: newSelection };
     });
-  }, [allowMultiSelect, onSelectionChange]);
+  }, [allowMultiSelect, onSelectionChange, analytics]);
 
   const handleFolderExpand = useCallback((folderId: string) => {
+    // Track folder expansion
+    analytics.trackFileOperation('expand_folder', '', folderId, true);
+    
     setState(prev => ({
       ...prev,
       expandedFolders: new Set([...prev.expandedFolders, folderId])
     }));
-  }, []);
+  }, [analytics]);
 
   const handleFolderCollapse = useCallback((folderId: string) => {
+    // Track folder collapse
+    analytics.trackFileOperation('collapse_folder', '', folderId, true);
+    
     setState(prev => {
       const newExpanded = new Set(prev.expandedFolders);
       newExpanded.delete(folderId);
       return { ...prev, expandedFolders: newExpanded };
     });
-  }, []);
+  }, [analytics]);
 
   const handleContextMenu = useCallback((item: FileItem, x: number, y: number) => {
+    // Track context menu usage
+    analytics.trackFileOperation('context_menu', item.name, item.path, true);
+    
     const menuItems = [
       {
         id: 'open',
@@ -209,6 +238,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
         onClick: () => {
           if (item.type === 'file') {
             const fileNode = item as any; // Type assertion for file node
+            analytics.trackFileOperation('open', item.name, item.path, true);
             onFileDoubleClick?.(fileNode);
           }
         }
@@ -310,10 +340,20 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
 
   // Search and filter handlers
   const handleSearch = useCallback((searchTerm: string) => {
+    // Track search operation
+    if (searchTerm.trim()) {
+      // Simulate search results for analytics
+      const mockResults = treeData.flatMap(node => 
+        node.children?.filter(child => 
+          child.name.toLowerCase().includes(searchTerm.toLowerCase())
+        ) || []
+      );
+      
+      analytics.trackSearchWithResults(searchTerm, mockResults);
+    }
+    
     setState(prev => ({ ...prev, searchTerm }));
-  }, []);
-
-    }, []);
+  }, [analytics, treeData]);
 
   const filteredAndSortedData = React.useMemo(() => {
     // TODO: Implement proper filtering and sorting

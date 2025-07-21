@@ -9,6 +9,7 @@ import {
   mergeNodeData
 } from './utils/nodeDataUtils';
 import { ProjectManager, ProjectMetadata, ProjectSettings, SaveProjectOptions } from './projectManager';
+import { ServerProjectManager } from './serverProjectManager';
 
 export interface GraphState {
   nodes: Node[];
@@ -33,9 +34,21 @@ export interface GraphState {
   duplicateNode: (nodeId: string) => void;
   deleteNode: (nodeId: string) => void;
   
-  // Project operations
+  // Project operations (file-based)
   saveProject: (options: SaveProjectOptions) => Promise<{ success: boolean; error?: string }>;
   loadProject: () => Promise<{ success: boolean; error?: string }>;
+  
+  // Project operations (server-based)
+  saveProjectToServer: (options: SaveProjectOptions & { userId?: number }) => Promise<{ success: boolean; error?: string; projectId?: string }>;
+  loadProjectFromServer: (projectId: string, userId?: number) => Promise<{ success: boolean; error?: string }>;
+  updateProjectOnServer: (
+    projectId: string,
+    options: SaveProjectOptions & { userId?: number }
+  ) => Promise<{ success: boolean; error?: string }>;
+  deleteProjectFromServer: (projectId: string, userId?: number) => Promise<{ success: boolean; error?: string }>;
+  listUserProjects: (userId?: number, query?: any) => Promise<{ success: boolean; projects?: any[]; error?: string }>;
+  
+  // Common project operations
   newProject: () => void;
   setCurrentProject: (metadata: ProjectMetadata) => void;
   updateProjectSettings: (settings: Partial<ProjectSettings>) => void;
@@ -167,5 +180,145 @@ export       if (!nodeToClone) return state;
   
   loadGraphData: (nodes: Node[], edges: Edge[]) => {
     set({ nodes, edges, hasUnsavedChanges: false });
-  }
+  },
+
+  // Server-based project operations
+  saveProjectToServer: async (options: SaveProjectOptions & { userId?: number }) => {
+    const state = get();
+    try {
+      const result = await ServerProjectManager.saveProjectToServer(
+        { nodes: state.nodes, edges: state.edges },
+        options,
+        state.projectSettings,
+        options.userId
+      );
+      
+      if (result.success) {
+        set({ 
+          hasUnsavedChanges: false,
+          currentProject: {
+            name: options.name,
+            description: options.description,
+            version: '1.0.0',
+            createdAt: new Date().toISOString(),
+            lastModified: new Date().toISOString(),
+            author: options.author,
+            tags: options.tags || [],
+            fileFormatVersion: '1.0.0',
+          }
+        });
+      }
+      
+      return {
+        success: result.success,
+        error: result.error,
+        projectId: result.projectId,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  },
+
+  loadProjectFromServer: async (projectId: string, userId?: number) => {
+    try {
+      const result = await ServerProjectManager.loadProjectFromServer(projectId, userId);
+      
+      if (result.success && result.data) {
+        set({
+          nodes: result.data.graph.nodes,
+          edges: result.data.graph.edges,
+          currentProject: result.data.metadata,
+          projectSettings: { ...get().projectSettings, ...result.data.settings },
+          hasUnsavedChanges: false
+        });
+        
+        return { success: true, warnings: result.warnings };
+      }
+      
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  },
+
+  updateProjectOnServer: async (projectId: string, options: SaveProjectOptions & { userId?: number }) => {
+    const state = get();
+    try {
+      const result = await ServerProjectManager.updateProjectOnServer(
+        projectId,
+        { nodes: state.nodes, edges: state.edges },
+        options,
+        state.projectSettings,
+        options.userId
+      );
+      
+      if (result.success) {
+        set({ 
+          hasUnsavedChanges: false,
+          currentProject: {
+            ...state.currentProject,
+            name: options.name,
+            description: options.description,
+            author: options.author,
+            tags: options.tags || [],
+            lastModified: new Date().toISOString(),
+          }
+        });
+      }
+      
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  },
+
+  deleteProjectFromServer: async (projectId: string, userId?: number) => {
+    try {
+      const result = await ServerProjectManager.deleteProjectFromServer(projectId, userId);
+      return {
+        success: result.success,
+        error: result.error,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  },
+
+  listUserProjects: async (userId?: number, query?: any) => {
+    try {
+      const result = await ServerProjectManager.getUserProjects({
+        userId,
+        ...query,
+      });
+      
+      if ('error' in result) {
+        return {
+          success: false,
+          error: result.error,
+        };
+      }
+      
+      return {
+        success: true,
+        projects: result.projects,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  },
 }));

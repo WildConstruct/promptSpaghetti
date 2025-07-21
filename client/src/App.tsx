@@ -10,6 +10,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import PasswordResetPage from './pages/PasswordResetPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
+import { OAuthCallback } from './components/auth/OAuthCallback';
 import 'reactflow/dist/style.css';
 import './randomizer.css';
 
@@ -171,6 +172,9 @@ export default function App() {
         <Route path="/reset-password" element={<PasswordResetPage />} />
         <Route path="/verify-email" element={<EmailVerificationPage />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        
+        {/* OAuth Callback Route */}
+        <Route path="/auth/callback" element={<OAuthCallback />} />
         
         {/* Protected Routes */}
         <Route path="/" element={

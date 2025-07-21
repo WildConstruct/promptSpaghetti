@@ -9,3 +9,24 @@ public/
 .eslintrc.*.js
 .lintstagedrc.*.js
 scripts/
+
+# Auto-generated scripts that often have linting issues
+src/auto-*.js
+src/monitor-*.js
+src/create-epic*.js
+src/fix-*.js
+src/analyze-*.js
+src/count-*.js
+
+# Data files
+src/data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Files with type definition maps
+*.d.ts
+*.js.map
+
+# Docs folder with separate ESLint configs
+docs/

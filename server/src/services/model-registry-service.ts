@@ -3,10 +3,14 @@
  * Service for managing AI model registration, versioning, metadata, and search capabilities
  * 
  * Provides comprehensive model lifecycle management including model registration, 
- * version control, performance tracking, lineage management, and search functionality
+ * version control, performance tracking, lineage management, and search functionality.
+ * 
+ * Enhanced with CI evaluation triggering (Epic 26.3) - automatically triggers
+ * evaluation workflows when models are uploaded or updated.
  */
 
 import { z } from 'zod';
+import { ModelEvaluationTriggerService, ModelEvaluationTriggerRequest } from './ModelEvaluationTriggerService';
 
 // Model registry types and schemas
 const ModelMetadataSchema = z.object({
@@ -168,12 +172,17 @@ export class ModelRegistryService {
   private versions: Map<string, ModelVersion[]>;
   private lineages: Map<string, ModelLineage>;
   private searchIndex: Map<string, Set<string>>; // term -> Set of model IDs
+  private evaluationTriggerService?: ModelEvaluationTriggerService;
 
-  constructor(initializeSampleData: boolean = true) {
+  constructor(
+    initializeSampleData: boolean = true,
+    evaluationTriggerService?: ModelEvaluationTriggerService
+  ) {
     this.models = new Map();
     this.versions = new Map();
     this.lineages = new Map();
     this.searchIndex = new Map();
+    this.evaluationTriggerService = evaluationTriggerService;
     if (initializeSampleData) {
       this.initializeSampleData();
     }
@@ -245,6 +254,9 @@ export class ModelRegistryService {
       // Update search index
       this.updateSearchIndex(validatedModel);
 
+      // Trigger evaluation if enabled
+      await this.triggerEvaluationIfEnabled(validatedModel, 'model_upload');
+
       return validatedModel;
     } catch (error) {
       throw new Error(`Model registration failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -279,6 +291,11 @@ export class ModelRegistryService {
 
       // Update search index
       this.updateSearchIndex(validatedModel);
+
+      // Trigger evaluation if enabled and this is a significant update
+      if (this.isSignificantUpdate(updates)) {
+        await this.triggerEvaluationIfEnabled(validatedModel, 'model_update');
+      }
 
       return validatedModel;
     } catch (error) {
@@ -751,6 +768,97 @@ export class ModelRegistryService {
     }
 
     return recommendations;
+  }
+
+  /**
+   * Trigger model evaluation if evaluation service is enabled
+   */
+  private async triggerEvaluationIfEnabled(
+    model: ModelMetadata, 
+    triggeredBy: 'model_upload' | 'model_update'
+  ): Promise<void> {
+    if (!this.evaluationTriggerService) {
+      return; // No evaluation service configured
+    }
+
+    try {
+      const evaluationRequest: ModelEvaluationTriggerRequest = {
+        modelId: model.id,
+        modelName: model.name,
+        version: model.version,
+        modelType: model.modelType,
+        framework: model.framework,
+        owner: model.owner,
+        artifactPath: model.artifactPath,
+        configPath: model.configPath,
+        triggeredBy,
+        evaluationSuite: this.selectEvaluationSuite(model),
+        priority: this.determinePriority(model, triggeredBy)
+      };
+
+      await this.evaluationTriggerService.triggerEvaluation(evaluationRequest);
+
+      console.log(`Evaluation triggered for model ${model.name} (${model.id}) version ${model.version}`);
+    } catch (error) {
+      // Don't fail the model registration/update if evaluation fails
+      console.error(`Failed to trigger evaluation for model ${model.id}:`, error);
+    }
+  }
+
+  /**
+   * Determine if an update is significant enough to trigger evaluation
+   */
+  private isSignificantUpdate(updates: ModelUpdateRequest): boolean {
+    // Trigger evaluation for performance metric updates, status changes to ready, or metadata changes
+    return !!(
+      updates.performanceMetrics ||
+      updates.status === 'ready' ||
+      (updates.metadata && Object.keys(updates.metadata).length > 0)
+    );
+  }
+
+  /**
+   * Select appropriate evaluation suite based on model characteristics
+   */
+  private selectEvaluationSuite(model: ModelMetadata): 'standard' | 'comprehensive' | 'security' | 'performance' {
+    // Production models get comprehensive evaluation
+    if (model.status === 'ready' && model.tags.includes('production')) {
+      return 'comprehensive';
+    }
+
+    // Security-sensitive models get security-focused evaluation
+    if (model.tags.some(tag => ['security', 'finance', 'healthcare', 'pii'].includes(tag))) {
+      return 'security';
+    }
+
+    // Performance-critical models get performance-focused evaluation
+    if (model.tags.some(tag => ['realtime', 'low-latency', 'high-throughput'].includes(tag))) {
+      return 'performance';
+    }
+
+    // Default to standard evaluation
+    return 'standard';
+  }
+
+  /**
+   * Determine evaluation priority based on model and trigger context
+   */
+  private determinePriority(
+    model: ModelMetadata, 
+    triggeredBy: 'model_upload' | 'model_update'
+  ): 'low' | 'medium' | 'high' | 'critical' {
+    // Production models get high priority
+    if (model.status === 'ready' && model.tags.includes('production')) {
+      return 'critical';
+    }
+
+    // Security or healthcare models get high priority
+    if (model.tags.some(tag => ['security', 'healthcare', 'finance'].includes(tag))) {
+      return 'high';
+    }
+
+    // New uploads get medium priority, updates get lower
+    return triggeredBy === 'model_upload' ? 'medium' : 'low';
   }
 
   private initializeSampleData(): void {

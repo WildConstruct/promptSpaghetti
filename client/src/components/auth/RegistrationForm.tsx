@@ -9,6 +9,7 @@ import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 import { EmailSuggestions } from './EmailSuggestions';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { ValidationMessage } from '../common/ValidationMessage';
+import { OAuthProviderButtons } from './OAuthProviderButtons';
 
 // Registration form schema
 const RegistrationSchema = z.object({
@@ -34,14 +35,7 @@ interface RegistrationFormProps {
   className?: string;
 }
 
-export const RegistrationForm: React.FC<RegistrationFormProps> = ({
-  invitationToken,
-  onSuccess,
-  onCancel,
-  className = ''
-}) => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<Partial<RegistrationFormData>>({
+export   const [formData, setFormData] = useState<Partial<RegistrationFormData>>({
     marketingConsent: false
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -468,6 +462,15 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
   return (
     <div className={`max-w-2xl mx-auto ${className}`}>
+      {/* OAuth Provider Buttons */}
+      <div style={{ marginBottom: '20px' }}>
+        <OAuthProviderButtons 
+          mode="register" 
+          onError={(error) => setErrors({ oauth: error })}
+          onSuccess={onSuccess}
+        />
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-8">
         {renderStepIndicator()}
         

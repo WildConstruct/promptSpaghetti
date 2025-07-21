@@ -44,6 +44,8 @@ export interface AuthState {
     firstName: string;
     lastName: string;
   }) => Promise<boolean>;
+  oauthLogin: (provider: string, returnUrl?: string) => Promise<{ url: string; state: string }>;
+  processOAuthCallback: (provider: string, code: string, state: string) => Promise<boolean>;
   logout: () => void;
   refreshTokens: () => Promise<boolean>;
   clearError: () => void;
@@ -152,6 +154,93 @@ export const useAuthStore = create<AuthState>()(
           set({
             isLoading: false,
             error: error instanceof Error ? error.message : 'Registration failed',
+          });
+          return false;
+        }
+      },
+
+      // OAuth login initiation
+      oauthLogin: async (provider: string, returnUrl?: string) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const queryParams = new URLSearchParams({
+            provider,
+            ...(returnUrl && { returnUrl })
+          });
+
+          const response = await fetch(`${API_BASE_URL}/auth/oauth/authorize?${queryParams.toString()}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'OAuth authorization failed');
+          }
+
+          const data = await response.json();
+          
+          set({ isLoading: false });
+          return { url: data.url, state: data.state };
+        } catch (error) {
+          set({
+            isLoading: false,
+            error: error instanceof Error ? error.message : 'OAuth authorization failed',
+          });
+          throw error;
+        }
+      },
+
+      // Process OAuth callback
+      processOAuthCallback: async (provider: string, code: string, state: string) => {
+        set({ isLoading: true, error: null });
+        
+        try {
+          const queryParams = new URLSearchParams({
+            code,
+            state
+          });
+
+          const response = await fetch(`${API_BASE_URL}/auth/oauth/callback/${provider}?${queryParams.toString()}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'OAuth callback failed');
+          }
+
+          const data = await response.json();
+          
+          // Calculate token expiration
+          const tokenExpiration = new Date(data.tokens.expiresAt).getTime();
+          
+          set({
+            user: data.user,
+            isAuthenticated: true,
+            isLoading: false,
+            accessToken: data.tokens.accessToken,
+            refreshToken: data.tokens.refreshToken,
+            tokenExpiration,
+            error: null,
+          });
+
+          return true;
+        } catch (error) {
+          set({
+            isLoading: false,
+            error: error instanceof Error ? error.message : 'OAuth callback failed',
+            isAuthenticated: false,
+            user: null,
+            accessToken: null,
+            refreshToken: null,
+            tokenExpiration: null,
           });
           return false;
         }

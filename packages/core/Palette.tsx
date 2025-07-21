@@ -97,7 +97,7 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
               return acc;
             }, {} as Record<string, typeof nodes>);
 
-            const categoryOrder = ['text', 'logic', 'advanced', 'transform', 'output', 'variable', 'other'];
+            const categoryOrder = ['text', 'logic', 'output', 'variable', 'advanced', 'transform', 'other'];
             const categoryLabels = {
               text: 'Text Elements',
               logic: 'Logic & Flow',

@@ -14,6 +14,9 @@ import { ExportTemplateList } from './ExportTemplateList';
 import { ExportJobList } from './ExportJobList';
 import { ExportWizard } from './ExportWizard';
 import { ExportStatsDashboard } from './ExportStatsDashboard';
+import { ShareManager } from './ShareManager';
+import { ShareDialog } from './ShareDialog';
+import { ImportDialog } from './ImportDialog';
 import { 
   FiDownload, 
   FiFile, 
@@ -21,7 +24,9 @@ import {
   FiBarChart3, 
   FiPlus,
   FiRefreshCw,
-  FiSettings
+  FiSettings,
+  FiShare2,
+  FiUpload
 } from 'react-icons/fi';
 
 interface ExportManagerProps {
@@ -29,7 +34,7 @@ interface ExportManagerProps {
   className?: string;
 }
 
-type ActiveTab = 'templates' | 'jobs' | 'statistics' | 'wizard';
+type ActiveTab = 'templates' | 'jobs' | 'statistics' | 'shares' | 'wizard';
 
 export const ExportManager: React.FC<ExportManagerProps> = ({
   projectId,
@@ -39,6 +44,8 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
   const [showWizard, setShowWizard] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ExportTemplate | null>(null);
   const [refreshInterval, setRefreshInterval] = useState<NodeJS.Timer | null>(null);
+  const [shareDialogJob, setShareDialogJob] = useState<ExportJob | null>(null);
+  const [showImportDialog, setShowImportDialog] = useState(false);
 
   const {
     templates,
@@ -109,6 +116,32 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
     setSelectedTemplate(null);
   };
 
+  const handleShareExport = (job: ExportJob) => {
+    if (job.status !== 'completed') {
+      alert('Only completed exports can be shared');
+      return;
+    }
+    setShareDialogJob(job);
+  };
+
+  const handleShareDialogClose = () => {
+    setShareDialogJob(null);
+  };
+
+  const handleShareCreated = (share: any) => {
+    // Refresh data after creating a share
+    fetchJobs();
+    fetchStatistics();
+  };
+
+  const handleImportComplete = (result: any) => {
+    // Refresh data after import
+    fetchTemplates();
+    fetchJobs();
+    fetchStatistics();
+    setShowImportDialog(false);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
     case 'templates':
@@ -127,6 +160,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
           jobs={jobs}
           onCancel={cancelExportJob}
           onRefresh={fetchJobs}
+          onShare={handleShareExport}
           loading={loading}
           error={error}
         />
@@ -137,6 +171,12 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
           statistics={statistics}
           loading={loading}
           error={error}
+        />
+      );
+    case 'shares':
+      return (
+        <ShareManager
+          projectId={projectId}
         />
       );
     default:
@@ -174,6 +214,13 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
             >
               <FiPlus className="w-4 h-4" />
               <span>New Export</span>
+            </button>
+            <button
+              onClick={() => setShowImportDialog(true)}
+              className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            >
+              <FiUpload className="w-4 h-4" />
+              <span>Import</span>
             </button>
             <button
               onClick={refetch}
@@ -240,6 +287,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
             {[
               { id: 'templates', label: 'Templates', icon: FiFile },
               { id: 'jobs', label: 'Export Jobs', icon: FiDownload },
+              { id: 'shares', label: 'Shares', icon: FiShare2 },
               { id: 'statistics', label: 'Statistics', icon: FiBarChart3 }
             ].map((tab) => (
               <button
@@ -288,6 +336,31 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
               template={selectedTemplate}
               onComplete={handleWizardComplete}
               onCancel={handleWizardCancel}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Share Dialog Modal */}
+      {shareDialogJob && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4 p-6">
+            <ShareDialog
+              exportJob={shareDialogJob}
+              onClose={handleShareDialogClose}
+              onShareCreated={handleShareCreated}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Import Dialog Modal */}
+      {showImportDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4 p-6">
+            <ImportDialog
+              onClose={() => setShowImportDialog(false)}
+              onImportComplete={handleImportComplete}
             />
           </div>
         </div>

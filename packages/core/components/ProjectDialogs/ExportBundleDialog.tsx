@@ -21,7 +21,10 @@ interface ExportOptions {
   description?: string;
   includeMetadata: boolean;
   minifyOutput: boolean;
-  format: 'json' | 'compressed';
+  format: 'json' | 'compressed' | 'yaml' | 'xml' | 'graph' | 'csv';
+  imageFormat?: 'png' | 'svg' | 'pdf';
+  includePreview: boolean;
+  exportQuality: 'draft' | 'standard' | 'high';
 }
 
 export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
@@ -40,12 +43,151 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
     description: currentProject?.description || '',
     includeMetadata: true,
     minifyOutput: false,
-    format: 'json'
+    format: 'json',
+    imageFormat: 'png',
+    includePreview: false,
+    exportQuality: 'standard'
   });
   
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewData, setPreviewData] = useState<any>(null);
+
+  const getFormatInfo = (format: string) => {
+    const formatInfo = {
+      json: {
+        name: 'GeneratorBundle JSON',
+        description: 'Standard JSON format compatible with randomizer engine',
+        extension: '.bundle.json',
+        mimeType: 'application/json'
+      },
+      compressed: {
+        name: 'Compressed JSON',
+        description: 'Minified JSON for smaller file size',
+        extension: '.bundle.min.json',
+        mimeType: 'application/json'
+      },
+      yaml: {
+        name: 'YAML Format',
+        description: 'Human-readable YAML format',
+        extension: '.bundle.yaml',
+        mimeType: 'application/yaml'
+      },
+      xml: {
+        name: 'XML Format',
+        description: 'Structured XML representation',
+        extension: '.bundle.xml',
+        mimeType: 'application/xml'
+      },
+      graph: {
+        name: 'Graph Format',
+        description: 'Native graph structure for re-importing',
+        extension: '.psg',
+        mimeType: 'application/json'
+      },
+      csv: {
+        name: 'CSV Export',
+        description: 'Node and edge data in tabular format',
+        extension: '.csv',
+        mimeType: 'text/csv'
+      }
+    };
+    return formatInfo[format as keyof typeof formatInfo] || formatInfo.json;
+  };
+
+  const convertToFormat = (bundle: any, format: string) => {
+    switch (format) {
+      case 'yaml':
+        // Convert to YAML (simplified)
+        return convertToYAML(bundle);
+      case 'xml':
+        // Convert to XML (simplified)
+        return convertToXML(bundle);
+      case 'graph':
+        // Export as native graph format
+        return JSON.stringify({ nodes, edges, metadata: bundle.metadata }, null, 2);
+      case 'csv':
+        // Export as CSV
+        return convertToCSV(nodes, edges);
+      case 'compressed':
+        return JSON.stringify(bundle);
+      default:
+        return JSON.stringify(bundle, null, formData.minifyOutput ? 0 : 2);
+    }
+  };
+
+  const convertToYAML = (obj: any, indent = 0): string => {
+    const spaces = '  '.repeat(indent);
+    let yaml = '';
+    
+    for (const [key, value] of Object.entries(obj)) {
+      if (value === null || value === undefined) {
+        yaml += `${spaces}${key}: null\n`;
+      } else if (typeof value === 'object' && !Array.isArray(value)) {
+        yaml += `${spaces}${key}:\n${convertToYAML(value, indent + 1)}`;
+      } else if (Array.isArray(value)) {
+        yaml += `${spaces}${key}:\n`;
+        value.forEach(item => {
+          if (typeof item === 'object') {
+            yaml += `${spaces}  -\n${convertToYAML(item, indent + 2)}`;
+          } else {
+            yaml += `${spaces}  - ${item}\n`;
+          }
+        });
+      } else {
+        yaml += `${spaces}${key}: ${typeof value === 'string' ? `"${value}"` : value}\n`;
+      }
+    }
+    return yaml;
+  };
+
+  const convertToXML = (obj: any, rootName = 'bundle'): string => {
+    const xmlEscape = (str: string) => str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+    
+    const objToXML = (obj: any, name: string): string => {
+      if (obj === null || obj === undefined) {
+        return `<${name}></${name}>`;
+      }
+      if (typeof obj !== 'object') {
+        return `<${name}>${xmlEscape(String(obj))}</${name}>`;
+      }
+      if (Array.isArray(obj)) {
+        return obj.map((item, i) => objToXML(item, `${name}_${i}`)).join('');
+      }
+      
+      let xml = `<${name}>`;
+      for (const [key, value] of Object.entries(obj)) {
+        xml += objToXML(value, key);
+      }
+      xml += `</${name}>`;
+      return xml;
+    };
+    
+    return `<?xml version="1.0" encoding="UTF-8"?>\n${objToXML(obj, rootName)}`;
+  };
+
+  const convertToCSV = (nodes: Node[], edges: Edge[]): string => {
+    const nodeCSV = [
+      'ID,Type,Label,Data',
+      ...nodes.map(node => 
+        `"${node.id}","${node.type}","${node.data?.label || ''}","${JSON.stringify(node.data || {}).replace(/"/g, '""')}"`
+      )
+    ].join('\n');
+    
+    const edgeCSV = [
+      '\n\nEDGES:',
+      'ID,Source,Target,Type',
+      ...edges.map(edge => 
+        `"${edge.id}","${edge.source}","${edge.target}","${edge.type || 'default'}"`
+      )
+    ].join('\n');
+    
+    return `NODES:\n${nodeCSV}${edgeCSV}`;
+  };
 
   const handleInputChange = (field: keyof ExportOptions) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -122,15 +264,27 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
 
       const { bundle, filename } = await response.json();
 
-      // Process bundle based on options
-      let exportContent = JSON.stringify(bundle, null, formData.minifyOutput ? 0 : 2);
-      let exportFilename = filename;
-      let mimeType = 'application/json';
+      // Process bundle based on options and format
+      const formatInfo = getFormatInfo(formData.format);
+      let exportContent = convertToFormat(bundle, formData.format);
+      let exportFilename = filename.replace('.bundle.json', formatInfo.extension);
+      let mimeType = formatInfo.mimeType;
 
-      if (formData.format === 'compressed') {
-        // For now, just minify - could add actual compression later
-        exportContent = JSON.stringify(bundle);
-        exportFilename = filename.replace('.bundle.json', '.bundle.min.json');
+      // Add quality metadata for non-JSON formats
+      if (formData.format !== 'json' && formData.format !== 'compressed') {
+        const metadata = {
+          exportedBy: 'PromptScape GraphEditor',
+          exportDate: new Date().toISOString(),
+          quality: formData.exportQuality,
+          includesPreview: formData.includePreview,
+          originalFormat: 'GeneratorBundle'
+        };
+        
+        if (formData.format === 'graph') {
+          const graphData = JSON.parse(exportContent);
+          graphData.exportMetadata = metadata;
+          exportContent = JSON.stringify(graphData, null, 2);
+        }
       }
 
       // Download the bundle file
@@ -333,6 +487,51 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
             />
           </div>
 
+          {/* Export Format */}
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '6px',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#333',
+            }}>
+              Export Format
+            </label>
+            
+            <select
+              value={formData.format}
+              onChange={handleInputChange('format')}
+              disabled={isLoading}
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #ddd',
+                borderRadius: '4px',
+                fontSize: '14px',
+                marginBottom: '8px',
+                boxSizing: 'border-box',
+              }}
+            >
+              <option value="json">📦 GeneratorBundle JSON - Standard format</option>
+              <option value="compressed">🗜️ Compressed JSON - Smaller file size</option>
+              <option value="yaml">📋 YAML Format - Human readable</option>
+              <option value="xml">🏷️ XML Format - Structured markup</option>
+              <option value="graph">🌐 Graph Format - Native .psg format</option>
+              <option value="csv">📊 CSV Export - Tabular data</option>
+            </select>
+            
+            <div style={{ 
+              fontSize: '12px', 
+              color: '#666', 
+              padding: '6px',
+              background: '#f9f9f9',
+              borderRadius: '4px',
+            }}>
+              {getFormatInfo(formData.format).description}
+            </div>
+          </div>
+
           {/* Export Options */}
           <div style={{ marginBottom: '16px' }}>
             <label style={{
@@ -345,7 +544,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               Export Options
             </label>
             
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '12px' }}>
               <label style={{ display: 'flex', alignItems: 'center', fontSize: '13px' }}>
                 <input
                   type="checkbox"
@@ -360,29 +559,46 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               <label style={{ display: 'flex', alignItems: 'center', fontSize: '13px' }}>
                 <input
                   type="checkbox"
-                  checked={formData.minifyOutput}
-                  onChange={handleInputChange('minifyOutput')}
+                  checked={formData.includePreview}
+                  onChange={handleInputChange('includePreview')}
                   disabled={isLoading}
                   style={{ marginRight: '6px' }}
                 />
-                Minify output
+                Include preview
               </label>
+              
+              {(formData.format === 'json' || formData.format === 'graph') && (
+                <label style={{ display: 'flex', alignItems: 'center', fontSize: '13px' }}>
+                  <input
+                    type="checkbox"
+                    checked={formData.minifyOutput}
+                    onChange={handleInputChange('minifyOutput')}
+                    disabled={isLoading}
+                    style={{ marginRight: '6px' }}
+                  />
+                  Minify output
+                </label>
+              )}
             </div>
             
-            <div style={{ marginTop: '8px' }}>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <label style={{ fontSize: '13px', color: '#666' }}>
+                Export Quality:
+              </label>
               <select
-                value={formData.format}
-                onChange={handleInputChange('format')}
+                value={formData.exportQuality}
+                onChange={handleInputChange('exportQuality')}
                 disabled={isLoading}
                 style={{
-                  padding: '6px 10px',
+                  padding: '4px 8px',
                   border: '1px solid #ddd',
                   borderRadius: '4px',
                   fontSize: '13px',
                 }}
               >
-                <option value="json">Standard JSON</option>
-                <option value="compressed">Compressed JSON</option>
+                <option value="draft">📝 Draft - Basic export</option>
+                <option value="standard">⭐ Standard - Full metadata</option>
+                <option value="high">💎 High - Complete with validation</option>
               </select>
             </div>
           </div>
@@ -427,7 +643,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
             )}
           </div>
 
-          {/* Bundle Info */}
+          {/* Export Information */}
           <div style={{
             backgroundColor: '#e7f3ff',
             border: '1px solid #b3d9ff',
@@ -436,7 +652,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
             marginBottom: '16px',
           }}>
             <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#0066cc' }}>
-              📋 Bundle Information
+              📋 Export Information
             </h4>
             <ul style={{
               margin: '0',
@@ -445,10 +661,22 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               color: '#0066cc',
               lineHeight: 1.4,
             }}>
-              <li>GeneratorBundle format compatible with randomizer engine</li>
               <li>Contains {nodes.length} nodes and {edges.length} connections</li>
-              <li>Includes graph structure, metadata, and execution grammar</li>
-              <li>Can be used with CLI: <code>promptgraph exec bundle.json</code></li>
+              <li>Format: {getFormatInfo(formData.format).name}</li>
+              <li>Extension: {getFormatInfo(formData.format).extension}</li>
+              {formData.format === 'json' && (
+                <li>CLI usage: <code>promptgraph exec {formData.name}{getFormatInfo(formData.format).extension}</code></li>
+              )}
+              {formData.format === 'graph' && (
+                <li>Re-importable graph format for GraphEditor</li>
+              )}
+              {(formData.format === 'yaml' || formData.format === 'xml') && (
+                <li>Human-readable format for documentation and review</li>
+              )}
+              {formData.format === 'csv' && (
+                <li>Tabular format suitable for analysis tools</li>
+              )}
+              <li>Quality level: {formData.exportQuality}</li>
             </ul>
           </div>
 

@@ -66,6 +66,179 @@ export class OAuthService {
     this.initializeProviders();
   }
 
+  /**
+   * Enhanced redirect URI validation following OAuth 2.1 security best practices
+   * Implements strict validation to prevent redirect URI attacks
+   */
+  private validateRedirectUriStrict(
+    registeredUris: string[], 
+    requestedUri: string
+  ): boolean {
+    return registeredUris.some(registered => {
+      // OAuth 2.1: Exact string matching - no partial matches
+      if (registered !== requestedUri) return false;
+      
+      // Enforce HTTPS in production environments
+      if (process.env.NODE_ENV === 'production' && !requestedUri.startsWith('https://')) {
+        this.auditService.logEvent({
+          eventType: 'OAUTH_HTTP_REDIRECT_BLOCKED',
+          details: { requestedUri, environment: 'production' },
+          severity: 'MEDIUM'
+        });
+        return false;
+      }
+      
+      // Prevent path traversal attacks - check the normalized URL
+      try {
+        const url = new URL(requestedUri);
+        const normalizedPath = url.pathname;
+        
+        if (normalizedPath.includes('..') || normalizedPath.includes('/./') || 
+            requestedUri.includes('..') || requestedUri.includes('/./')) {
+          this.auditService.logEvent({
+            eventType: 'OAUTH_PATH_TRAVERSAL_ATTEMPT',
+            details: { requestedUri },
+            severity: 'HIGH'
+          });
+          return false;
+        }
+      } catch (urlError) {
+        // If URL parsing fails, treat as path traversal for security
+        if (requestedUri.includes('..') || requestedUri.includes('/./')) {
+          this.auditService.logEvent({
+            eventType: 'OAUTH_PATH_TRAVERSAL_ATTEMPT',
+            details: { requestedUri },
+            severity: 'HIGH'
+          });
+          return false;
+        }
+      }
+      
+      // Additional security checks
+      try {
+        const url = new URL(requestedUri);
+        
+        // Block suspicious query parameters that could be used for attacks
+        const suspiciousParams = ['javascript:', 'data:', 'vbscript:', 'file:'];
+        if (suspiciousParams.some(param => url.href.toLowerCase().includes(param))) {
+          this.auditService.logEvent({
+            eventType: 'OAUTH_SUSPICIOUS_REDIRECT_URI',
+            details: { requestedUri, reason: 'suspicious_scheme' },
+            severity: 'HIGH'
+          });
+          return false;
+        }
+        
+        return true;
+      } catch (error) {
+        this.auditService.logEvent({
+          eventType: 'OAUTH_INVALID_REDIRECT_URI',
+          details: { requestedUri, error: error.message },
+          severity: 'MEDIUM'
+        });
+        return false;
+      }
+    });
+  }
+
+  /**
+   * PKCE downgrade protection following OAuth 2.1 security requirements
+   * Prevents attacks that attempt to bypass PKCE validation
+   */
+  private validatePkceRequirement(
+    clientId: string, 
+    codeChallenge?: string,
+    clientType: 'public' | 'confidential' = 'public'
+  ): void {
+    // OAuth 2.1: PKCE is mandatory for all public clients
+    if (clientType === 'public' && !codeChallenge) {
+      this.auditService.logEvent({
+        eventType: 'OAUTH_PKCE_REQUIRED_VIOLATION',
+        details: { clientId, clientType },
+        severity: 'HIGH'
+      });
+      throw new Error('PKCE is required for public clients (OAuth 2.1 compliance)');
+    }
+    
+    // For existing clients that support PKCE, prevent downgrade attacks
+    // Only apply to public clients to allow confidential clients legacy support
+    if (clientType === 'public') {
+      const clientSupportsPkce = this.checkClientPkceCapability(clientId);
+      if (clientSupportsPkce && !codeChallenge) {
+        this.auditService.logEvent({
+          eventType: 'OAUTH_PKCE_DOWNGRADE_ATTEMPT',
+          details: { clientId },
+          severity: 'HIGH'
+        });
+        throw new Error('PKCE downgrade attempt detected - client supports PKCE but none provided');
+      }
+    }
+  }
+
+  /**
+   * Check if a client has PKCE capability based on registration
+   * This would typically be stored in client configuration
+   */
+  private checkClientPkceCapability(clientId: string): boolean {
+    // Implementation would check client configuration
+    // For now, assume all clients support PKCE (OAuth 2.1 best practice)
+    return true;
+  }
+
+  /**
+   * Enhanced authorization URL generation with security improvements
+   */
+  async generateSecureAuthorizationUrl(
+    provider: OAuthProvider,
+    state: string,
+    codeChallenge?: string,
+    clientId?: string
+  ): Promise<string> {
+    const config = this.providerConfigs.get(provider);
+    if (!config) {
+      throw new Error(`OAuth provider not configured: ${provider}`);
+    }
+
+    // Validate PKCE requirements
+    if (clientId) {
+      this.validatePkceRequirement(clientId, codeChallenge);
+    }
+
+    // Validate redirect URI against registered URIs
+    const registeredUris = [config.redirectUri]; // In production, this would come from client registration
+    if (!this.validateRedirectUriStrict(registeredUris, config.redirectUri)) {
+      throw new Error('Invalid redirect URI configuration');
+    }
+
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: config.clientId,
+      redirect_uri: config.redirectUri,
+      scope: config.scopes.join(' '),
+      state,
+      ...(codeChallenge && { 
+        code_challenge: codeChallenge,
+        code_challenge_method: 'S256' 
+      })
+    });
+    
+    const authUrl = `${config.authorizationUrl}?${params.toString()}`;
+    
+    // Log authorization request for audit trail
+    this.auditService.logEvent({
+      eventType: 'OAUTH_AUTHORIZATION_URL_GENERATED',
+      details: {
+        provider,
+        clientId: config.clientId,
+        scopes: config.scopes,
+        pkceUsed: !!codeChallenge
+      },
+      severity: 'LOW'
+    });
+    
+    return authUrl;
+  }
+
   private initializeProviders(): void {
     // Google OAuth Configuration
     this.providerConfigs.set('google', {

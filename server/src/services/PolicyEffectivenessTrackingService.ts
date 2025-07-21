@@ -436,7 +436,7 @@ export interface DropOffPoint {
   improvementSuggestions: string[];
 }
 
-export interface Stageification {
+export interface Stagesatisfaction {
   stage: string;
   satisfactionScore: number;
   feedbackCount: number;
@@ -461,7 +461,7 @@ export interface FunnelStage {
 export interface ProcessImprovement {
   processName: string;
   improvementType: string;
-  efficiency.gain: number;
+  efficiencyGain: number;
   quantifiableBenefit: string;
   implementationDate: Date;
 }
@@ -651,7 +651,7 @@ export interface ActionItem {
 export interface RecommendationEvidence {
   evidenceType: string;
   source: string;
-  data: any;
+  data: Record<string, unknown>;
   reliability: number;
   relevance: number;
   date: Date;
@@ -805,6 +805,29 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     trackingPeriod: TrackingPeriod,
     context: OperationContext
   ): Promise<PolicyEffectivenessMetrics> {
+    // Input validation
+    if (!policyId || policyId.trim().length === 0) {
+      throw new Error('Policy ID is required and cannot be empty');
+    }
+    if (!policyVersion || policyVersion.trim().length === 0) {
+      throw new Error('Policy version is required and cannot be empty');
+    }
+    if (!policyType) {
+      throw new Error('Policy type is required');
+    }
+    if (!trackingPeriod) {
+      throw new Error('Tracking period is required');
+    }
+    if (!trackingPeriod.startDate || !trackingPeriod.endDate) {
+      throw new Error('Tracking period must have start and end dates');
+    }
+    if (trackingPeriod.startDate >= trackingPeriod.endDate) {
+      throw new Error('Tracking period start date must be before end date');
+    }
+    if (!context || !context.requestOrigin) {
+      throw new Error('Valid operation context is required');
+    }
+
     const trackingId = await this.generateTrackingId();
 
     try {
@@ -854,25 +877,50 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
       return metrics;
 
     } catch (error) {
-      await this.auditService.logEvent({
-        action: 'POLICY_EFFECTIVENESS_TRACKING_START_FAILED',
-        userId: context.requestOrigin,
-        resourceType: 'policy_effectiveness_tracking',
-        resourceId: trackingId,
-        details: {
-          error: error.message,
-          policyId,
-          policyVersion
-        },
-        context,
-        outcome: {
-          success: false,
-          statusCode: 500,
-          error: error.message
-        }
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to start policy effectiveness tracking:', {
+        error: errorMessage,
+        policyId,
+        policyVersion,
+        policyType,
+        trackingId,
+        timestamp: new Date().toISOString()
       });
 
-      throw error;
+      try {
+        await this.auditService.logEvent({
+          action: 'POLICY_EFFECTIVENESS_TRACKING_START_FAILED',
+          userId: context.requestOrigin,
+          resourceType: 'policy_effectiveness_tracking',
+          resourceId: trackingId,
+          details: {
+            error: errorMessage,
+            policyId,
+            policyVersion
+          },
+          context,
+          outcome: {
+            success: false,
+            statusCode: 500,
+            error: errorMessage
+          }
+        });
+      } catch (auditError) {
+        console.error('Failed to log audit event:', auditError);
+      }
+
+      // Provide specific error messages for common issues
+      if (errorMessage.includes('connection')) {
+        throw new Error('Database connection failed. Please try again.');
+      }
+      if (errorMessage.includes('timeout')) {
+        throw new Error('Operation timed out. Please try again.');
+      }
+      if (errorMessage.includes('foreign key')) {
+        throw new Error('Invalid policy reference or context data');
+      }
+      
+      throw new Error(`Failed to start policy effectiveness tracking: ${errorMessage}`);
     }
   }
 
@@ -883,49 +931,86 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     trackingId: string,
     context: OperationContext
   ): Promise<PolicyEffectivenessMetrics> {
-    const metrics = this.trackingRecords.get(trackingId);
-    if (!metrics) {
-      throw new Error('Tracking record not found');
+    // Input validation
+    if (!trackingId || trackingId.trim().length === 0) {
+      throw new Error('Tracking ID is required and cannot be empty');
+    }
+    if (!context || !context.requestOrigin) {
+      throw new Error('Valid operation context is required');
     }
 
+    const metrics = this.trackingRecords.get(trackingId);
+    if (!metrics) {
+      // Try to load from database before failing
+      const loadedMetrics = await this.loadTrackingRecord(trackingId);
+      if (!loadedMetrics) {
+        throw new Error(`Tracking record with ID ${trackingId} not found`);
+      }
+      this.trackingRecords.set(trackingId, loadedMetrics);
+    }
+
+    const metricsToUpdate = this.trackingRecords.get(trackingId)!;
+
     try {
-      // Update all metric categories
-      metrics.adoption = await this.updateAdoptionMetrics(metrics);
-      metrics.compliance = await this.updateComplianceMetrics(metrics);
-      metrics.userBehavior = await this.updateUserBehaviorMetrics(metrics);
-      metrics.businessImpact = await this.updateBusinessImpactMetrics(metrics);
-      metrics.goalAchievement = await this.updateGoalAchievementMetrics(metrics);
+      // Update all metric categories with error handling for each category
+      metricsToUpdate.adoption = await this.updateAdoptionMetrics(metricsToUpdate);
+      metricsToUpdate.compliance = await this.updateComplianceMetrics(metricsToUpdate);
+      metricsToUpdate.userBehavior = await this.updateUserBehaviorMetrics(metricsToUpdate);
+      metricsToUpdate.businessImpact = await this.updateBusinessImpactMetrics(metricsToUpdate);
+      metricsToUpdate.goalAchievement = await this.updateGoalAchievementMetrics(metricsToUpdate);
       
       // Recalculate effectiveness score
-      metrics.effectivenessScore = await this.calculateEffectivenessScore(metrics);
+      metricsToUpdate.effectivenessScore = await this.calculateEffectivenessScore(metricsToUpdate);
       
       // Generate new recommendations
-      metrics.recommendations = await this.generateRecommendations(metrics);
+      metricsToUpdate.recommendations = await this.generateRecommendations(metricsToUpdate);
       
-      metrics.lastUpdated = new Date();
+      metricsToUpdate.lastUpdated = new Date();
 
       // Persist updates
-      await this.updateTrackingRecord(metrics);
+      await this.updateTrackingRecord(metricsToUpdate);
 
-      this.emit('metrics_updated', { metrics, context });
-      return metrics;
+      this.emit('metrics_updated', { metrics: metricsToUpdate, context });
+      return metricsToUpdate;
 
     } catch (error) {
-      await this.auditService.logEvent({
-        action: 'POLICY_EFFECTIVENESS_UPDATE_FAILED',
-        userId: context.requestOrigin,
-        resourceType: 'policy_effectiveness_tracking',
-        resourceId: trackingId,
-        details: { error: error.message },
-        context,
-        outcome: {
-          success: false,
-          statusCode: 500,
-          error: error.message
-        }
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to update effectiveness metrics:', {
+        error: errorMessage,
+        trackingId,
+        timestamp: new Date().toISOString()
       });
 
-      throw error;
+      try {
+        await this.auditService.logEvent({
+          action: 'POLICY_EFFECTIVENESS_UPDATE_FAILED',
+          userId: context.requestOrigin,
+          resourceType: 'policy_effectiveness_tracking',
+          resourceId: trackingId,
+          details: { error: errorMessage },
+          context,
+          outcome: {
+            success: false,
+            statusCode: 500,
+            error: errorMessage
+          }
+        });
+      } catch (auditError) {
+        console.error('Failed to log audit event:', auditError);
+      }
+
+      // Provide specific error messages for common database issues
+      if (errorMessage.includes('connection')) {
+        throw new Error('Database connection failed. Please try again.');
+      }
+      if (errorMessage.includes('timeout')) {
+        throw new Error('Operation timed out. Please try again.');
+      }
+      if (errorMessage.includes('constraint')) {
+        throw new Error('Data constraint violation. Please check input values.');
+      }
+
+      throw new Error(`Failed to update effectiveness metrics: ${errorMessage}`);
     }
   }
 
@@ -933,17 +1018,37 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
    * Get effectiveness metrics for a policy
    */
   async getEffectivenessMetrics(trackingId: string): Promise<PolicyEffectivenessMetrics | null> {
-    let metrics = this.trackingRecords.get(trackingId);
-    
-    if (!metrics) {
-      // Try to load from database
-      metrics = await this.loadTrackingRecord(trackingId);
-      if (metrics) {
-        this.trackingRecords.set(trackingId, metrics);
-      }
+    // Input validation
+    if (!trackingId || trackingId.trim().length === 0) {
+      throw new Error('Tracking ID is required and cannot be empty');
     }
 
-    return metrics;
+    try {
+      let metrics = this.trackingRecords.get(trackingId);
+      
+      if (!metrics) {
+        // Try to load from database
+        metrics = await this.loadTrackingRecord(trackingId);
+        if (metrics) {
+          this.trackingRecords.set(trackingId, metrics);
+        }
+      }
+
+      return metrics;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to get effectiveness metrics:', {
+        error: errorMessage,
+        trackingId,
+        timestamp: new Date().toISOString()
+      });
+
+      if (errorMessage.includes('connection')) {
+        throw new Error('Database connection failed. Please try again.');
+      }
+      
+      throw new Error(`Failed to retrieve effectiveness metrics: ${errorMessage}`);
+    }
   }
 
   /**
@@ -1024,7 +1129,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     return `PEC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private async initializeAdoptionMetrics(policyId: string): Promise<AdoptionMetrics> {
+  private async initializeAdoptionMetrics(_policyId: string): Promise<AdoptionMetrics> {
     // Implementation would fetch current adoption data
     return {
       totalUsers: 0,
@@ -1050,7 +1155,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     };
   }
 
-  private async initializeComplianceMetrics(policyId: string): Promise<ComplianceMetrics> {
+  private async initializeComplianceMetrics(_policyId: string): Promise<ComplianceMetrics> {
     return {
       overallCompliance: 0,
       complianceByFramework: [],
@@ -1076,7 +1181,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     };
   }
 
-  private async initializeUserBehaviorMetrics(policyId: string): Promise<UserBehaviorMetrics> {
+  private async initializeUserBehaviorMetrics(_policyId: string): Promise<UserBehaviorMetrics> {
     return {
       averageReadTime: 0,
       comprehensionRate: 0,
@@ -1112,7 +1217,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     };
   }
 
-  private async initializeBusinessImpactMetrics(policyId: string): Promise<BusinessImpactMetrics> {
+  private async initializeBusinessImpactMetrics(_policyId: string): Promise<BusinessImpactMetrics> {
     return {
       operationalEfficiency: 0,
       processImprovements: [],
@@ -1136,7 +1241,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     };
   }
 
-  private async initializeGoalAchievementMetrics(policyId: string): Promise<GoalAchievementMetrics> {
+  private async initializeGoalAchievementMetrics(_policyId: string): Promise<GoalAchievementMetrics> {
     return {
       primaryObjectives: [],
       secondaryObjectives: [],
@@ -1232,7 +1337,10 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     const userSatisfactionScore = metrics.userBehavior.satisfactionRating * 20; // Convert to 0-100 scale
     const businessImpactScore = Math.min(100, Math.max(0, metrics.businessImpact.roi * 10 + 50));
     const goalAchievementScore = metrics.goalAchievement.primaryObjectives.length > 0
-      ? metrics.goalAchievement.primaryObjectives.reduce((sum, obj) => sum + obj.achievementRate, 0) / metrics.goalAchievement.primaryObjectives.length
+      ? metrics.goalAchievement.primaryObjectives.reduce(
+        (sum,
+        obj
+      ) => sum + obj.achievementRate, 0) / metrics.goalAchievement.primaryObjectives.length
       : 0;
 
     const weights = {
@@ -1315,103 +1423,221 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async persistTrackingRecord(metrics: PolicyEffectivenessMetrics): Promise<void> {
-    await this.db.query(`
-      INSERT INTO policy_effectiveness_tracking (
-        tracking_id, policy_id, policy_version, policy_type, tracking_period,
-        adoption_metrics, compliance_metrics, user_behavior_metrics, 
-        business_impact_metrics, goal_achievement_metrics, effectiveness_score,
-        recommendations, metadata, created_at, last_updated
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
-    `, [
-      metrics.trackingId,
-      metrics.policyId,
-      metrics.policyVersion,
-      metrics.policyType,
-      JSON.stringify(metrics.trackingPeriod),
-      JSON.stringify(metrics.adoption),
-      JSON.stringify(metrics.compliance),
-      JSON.stringify(metrics.userBehavior),
-      JSON.stringify(metrics.businessImpact),
-      JSON.stringify(metrics.goalAchievement),
-      JSON.stringify(metrics.effectivenessScore),
-      JSON.stringify(metrics.recommendations),
-      JSON.stringify(metrics.metadata),
-      metrics.createdAt,
-      metrics.lastUpdated
-    ]);
+    try {
+      await this.db.query(`
+        INSERT INTO policy_effectiveness_tracking (
+          tracking_id, policy_id, policy_version, policy_type, 
+          tracking_period, adoption_metrics, compliance_metrics, 
+          user_behavior_metrics, business_impact_metrics, 
+          goal_achievement_metrics, effectiveness_score,
+          recommendations, metadata, created_at, last_updated
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+      `, [
+        metrics.trackingId,
+        metrics.policyId,
+        metrics.policyVersion,
+        metrics.policyType,
+        JSON.stringify(metrics.trackingPeriod),
+        JSON.stringify(metrics.adoption),
+        JSON.stringify(metrics.compliance),
+        JSON.stringify(metrics.userBehavior),
+        JSON.stringify(metrics.businessImpact),
+        JSON.stringify(metrics.goalAchievement),
+        JSON.stringify(metrics.effectivenessScore),
+        JSON.stringify(metrics.recommendations),
+        JSON.stringify(metrics.metadata),
+        metrics.createdAt,
+        metrics.lastUpdated
+      ]);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to persist tracking record:', {
+        error: errorMessage,
+        trackingId: metrics.trackingId,
+        policyId: metrics.policyId,
+        timestamp: new Date().toISOString()
+      });
+      
+      if (errorMessage.includes('duplicate key')) {
+        throw new Error(`Tracking record with ID ${metrics.trackingId} already exists`);
+      }
+      if (errorMessage.includes('foreign key')) {
+        throw new Error('Invalid policy reference in tracking record');
+      }
+      if (errorMessage.includes('connection')) {
+        throw new Error('Database connection failed while persisting tracking record');
+      }
+      
+      throw new Error(
+        `Failed to persist tracking record: ${errorMessage}`
+      );
+    }
   }
 
-  private async updateTrackingRecord(metrics: PolicyEffectivenessMetrics): Promise<void> {
-    await this.db.query(`
-      UPDATE policy_effectiveness_tracking 
-      SET adoption_metrics = $1, compliance_metrics = $2, user_behavior_metrics = $3,
-          business_impact_metrics = $4, goal_achievement_metrics = $5, effectiveness_score = $6,
-          recommendations = $7, metadata = $8, last_updated = $9
-      WHERE tracking_id = $10
-    `, [
-      JSON.stringify(metrics.adoption),
-      JSON.stringify(metrics.compliance),
-      JSON.stringify(metrics.userBehavior),
-      JSON.stringify(metrics.businessImpact),
-      JSON.stringify(metrics.goalAchievement),
-      JSON.stringify(metrics.effectivenessScore),
-      JSON.stringify(metrics.recommendations),
-      JSON.stringify(metrics.metadata),
-      metrics.lastUpdated,
-      metrics.trackingId
-    ]);
+  private async updateTrackingRecord(
+    metrics: PolicyEffectivenessMetrics
+  ): Promise<void> {
+    try {
+      const result = await this.db.query(`
+        UPDATE policy_effectiveness_tracking 
+        SET adoption_metrics = $1, compliance_metrics = $2, 
+            user_behavior_metrics = $3, business_impact_metrics = $4, 
+            goal_achievement_metrics = $5, effectiveness_score = $6,
+            recommendations = $7, metadata = $8, last_updated = $9
+        WHERE tracking_id = $10
+      `, [
+        JSON.stringify(metrics.adoption),
+        JSON.stringify(metrics.compliance),
+        JSON.stringify(metrics.userBehavior),
+        JSON.stringify(metrics.businessImpact),
+        JSON.stringify(metrics.goalAchievement),
+        JSON.stringify(metrics.effectivenessScore),
+        JSON.stringify(metrics.recommendations),
+        JSON.stringify(metrics.metadata),
+        metrics.lastUpdated,
+        metrics.trackingId
+      ]);
+
+      if (result.rowCount === 0) {
+        throw new Error(`No tracking record found with ID ${metrics.trackingId}`);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to update tracking record:', {
+        error: errorMessage,
+        trackingId: metrics.trackingId,
+        timestamp: new Date().toISOString()
+      });
+      
+      if (errorMessage.includes('connection')) {
+        throw new Error('Database connection failed while updating tracking record');
+      }
+      
+      throw new Error(`Failed to update tracking record: ${errorMessage}`);
+    }
   }
 
   private async loadTrackingRecord(trackingId: string): Promise<PolicyEffectivenessMetrics | null> {
-    const result = await this.db.query(
-      'SELECT * FROM policy_effectiveness_tracking WHERE tracking_id = $1',
-      [trackingId]
-    );
+    try {
+      const result = await this.db.query(
+        'SELECT * FROM policy_effectiveness_tracking WHERE tracking_id = $1',
+        [trackingId]
+      );
 
-    if (result.rows.length === 0) return null;
+      if (result.rows.length === 0) return null;
 
-    const row = result.rows[0];
-    return {
-      trackingId: row.tracking_id,
-      policyId: row.policy_id,
-      policyVersion: row.policy_version,
-      policyType: row.policy_type,
-      trackingPeriod: JSON.parse(row.tracking_period),
-      adoption: JSON.parse(row.adoption_metrics),
-      compliance: JSON.parse(row.compliance_metrics),
-      userBehavior: JSON.parse(row.user_behavior_metrics),
-      businessImpact: JSON.parse(row.business_impact_metrics),
-      goalAchievement: JSON.parse(row.goal_achievement_metrics),
-      effectivenessScore: JSON.parse(row.effectiveness_score),
-      recommendations: JSON.parse(row.recommendations),
-      metadata: JSON.parse(row.metadata),
-      createdAt: row.created_at,
-      lastUpdated: row.last_updated
-    };
+      const row = result.rows[0];
+      
+      // Safely parse JSON fields with error handling
+      const parseJSONField = (
+        field: string, 
+        fieldName: string
+      ): Record<string, unknown> => {
+        try {
+          return JSON.parse(field);
+        } catch (parseError) {
+          console.warn(
+            `Failed to parse ${fieldName} field for tracking ID ${trackingId}:`, 
+            parseError
+          );
+          return {};
+        }
+      };
+
+      return {
+        trackingId: row.tracking_id,
+        policyId: row.policy_id,
+        policyVersion: row.policy_version,
+        policyType: row.policy_type,
+        trackingPeriod: parseJSONField(
+          row.tracking_period, 
+          'trackingPeriod'
+        ) as TrackingPeriod,
+        adoption: parseJSONField(
+          row.adoption_metrics, 
+          'adoption'
+        ) as AdoptionMetrics,
+        compliance: parseJSONField(
+          row.compliance_metrics, 
+          'compliance'
+        ) as ComplianceMetrics,
+        userBehavior: parseJSONField(
+          row.user_behavior_metrics, 
+          'userBehavior'
+        ) as UserBehaviorMetrics,
+        businessImpact: parseJSONField(
+          row.business_impact_metrics, 
+          'businessImpact'
+        ) as BusinessImpactMetrics,
+        goalAchievement: parseJSONField(
+          row.goal_achievement_metrics, 
+          'goalAchievement'
+        ) as GoalAchievementMetrics,
+        effectivenessScore: parseJSONField(
+          row.effectiveness_score, 
+          'effectivenessScore'
+        ) as EffectivenessScore,
+        recommendations: parseJSONField(
+          row.recommendations, 
+          'recommendations'
+        ) as EffectivenessRecommendation[],
+        metadata: parseJSONField(
+          row.metadata, 
+          'metadata'
+        ) as TrackingMetadata,
+        createdAt: row.created_at,
+        lastUpdated: row.last_updated
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Failed to load tracking record:', {
+        error: errorMessage,
+        trackingId,
+        timestamp: new Date().toISOString()
+      });
+      
+      if (errorMessage.includes('connection')) {
+        throw new Error('Database connection failed while loading tracking record');
+      }
+      
+      throw new Error(`Failed to load tracking record: ${errorMessage}`);
+    }
   }
 
   // Additional helper methods would be implemented here...
-  private async generateReportSummary(metrics: PolicyEffectivenessMetrics): Promise<any> {
+  private async generateReportSummary(
+    _metrics: PolicyEffectivenessMetrics
+  ): Promise<Record<string, unknown>> {
     return {};
   }
 
-  private async generateKeyFindings(metrics: PolicyEffectivenessMetrics): Promise<any[]> {
+  private async generateKeyFindings(
+    _metrics: PolicyEffectivenessMetrics
+  ): Promise<Array<Record<string, unknown>>> {
     return [];
   }
 
-  private async generateAppendices(metrics: PolicyEffectivenessMetrics): Promise<any> {
+  private async generateAppendices(
+    _metrics: PolicyEffectivenessMetrics
+  ): Promise<Record<string, unknown>> {
     return {};
   }
 
-  private async generateRankings(comparisons: PolicyComparison[]): Promise<any> {
+  private async generateRankings(
+    _comparisons: PolicyComparison[]
+  ): Promise<Record<string, unknown>> {
     return {};
   }
 
-  private async generateComparisonInsights(comparisons: PolicyComparison[]): Promise<any[]> {
+  private async generateComparisonInsights(
+    _comparisons: PolicyComparison[]
+  ): Promise<Array<Record<string, unknown>>> {
     return [];
   }
 
-  private async generateComparisonRecommendations(comparisons: PolicyComparison[]): Promise<any[]> {
+  private async generateComparisonRecommendations(
+    _comparisons: PolicyComparison[]
+  ): Promise<Array<Record<string, unknown>>> {
     return [];
   }
 }
@@ -1423,18 +1649,18 @@ export interface EffectivenessReport {
   policyId: string;
   reportType: 'SUMMARY' | 'DETAILED' | 'EXECUTIVE';
   generatedAt: Date;
-  summary: any;
-  keyFindings: any[];
+  summary: Record<string, unknown>;
+  keyFindings: Array<Record<string, unknown>>;
   recommendations: EffectivenessRecommendation[];
-  appendices?: any;
+  appendices?: Record<string, unknown>;
 }
 
 export interface EffectivenessComparison {
   comparisonId: string;
   policies: PolicyComparison[];
-  rankingBy: any;
-  insights: any[];
-  recommendations: any[];
+  rankingBy: Record<string, unknown>;
+  insights: Array<Record<string, unknown>>;
+  recommendations: Array<Record<string, unknown>>;
   generatedAt: Date;
 }
 

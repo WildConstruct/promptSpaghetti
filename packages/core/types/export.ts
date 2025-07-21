@@ -207,30 +207,46 @@ export const CreateExportScheduleSchema = ExportScheduleSchema.omit({
 export const UpdateExportScheduleSchema = CreateExportScheduleSchema.partial();
 
 // Export Share Types
+export const ShareAccessLevelSchema = z.enum([
+  'public',
+  'password_protected', 
+  'private'
+]);
+
 export const ExportShareSchema = z.object({
   id: z.string().uuid(),
   export_job_id: z.string().uuid(),
   
   // Share configuration
   share_token: z.string().min(1).max(255),
-  share_name: z.string().max(255).optional(),
-  password_protected: z.boolean().default(false),
-  password_hash: z.string().max(255).optional(),
+  access_level: ShareAccessLevelSchema.default('public'),
+  password: z.string().optional(),
+  description: z.string().optional(),
   
   // Access control
-  allowed_downloads: z.number().int().default(-1), // -1 for unlimited
+  max_downloads: z.number().int().min(1).optional(), // null for unlimited
   download_count: z.number().int().min(0).default(0),
   allowed_ips: z.array(z.string()).default([]),
+  
+  // Share permissions  
+  allow_download: z.boolean().default(true),
+  allow_preview: z.boolean().default(true),
+  track_access: z.boolean().default(true),
+  notify_on_access: z.boolean().default(false),
   
   // Share metadata
   created_by: z.string().uuid(),
   created_at: z.string().datetime(),
   expires_at: z.string().datetime().optional(),
+  expires_in_days: z.number().int().min(1).optional(),
   is_active: z.boolean().default(true),
   
   // Share statistics
   last_accessed_at: z.string().datetime().optional(),
-  access_count: z.number().int().min(0).default(0)
+  access_count: z.number().int().min(0).default(0),
+  
+  // Share URL
+  share_url: z.string().url().optional()
 });
 
 export const CreateExportShareSchema = ExportShareSchema.omit({
@@ -507,11 +523,7 @@ export type ExportScheduleWithStats = ExportSchedule & {
 };
 
 // Validation helpers
-export const validateExportOptions = (format: ExportFormat, options: any) => {
-  switch (format) {
-  case 'json':
-    return JsonExportOptionsSchema.safeParse(options);
-  case 'yaml':
+export   case 'yaml':
     return YamlExportOptionsSchema.safeParse(options);
   case 'xml':
     return XmlExportOptionsSchema.safeParse(options);
@@ -531,39 +543,42 @@ export const validateExportOptions = (format: ExportFormat, options: any) => {
 };
 
 // Constants
-export const EXPORT_FORMATS = [
-  'json',
-  'yaml',
-  'xml',
-  'csv',
-  'markdown',
-  'pdf',
-  'html',
-  'zip'
-] as const;
-
-export const TEMPLATE_TYPES = [
-  'full',
-  'summary',
-  'diff',
-  'custom'
-] as const;
-
-export const EXPORT_TYPES = [
-  'version',
-  'branch',
-  'comparison',
-  'full_project'
-] as const;
-
-export const EXPORT_JOB_STATUSES = [
-  'pending',
-  'processing',
-  'completed',
-  'failed',
-  'cancelled'
-] as const;
-
-export const DEFAULT_EXPORT_EXPIRATION_HOURS = 24;
-export const MAX_EXPORT_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-export const MAX_CONCURRENT_EXPORTS = 3;
+export 
+export 
+export 
+export 
+export export const MAX_EXPORT_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+export 
+// TypeScript type exports
+export type ShareAccessLevel = z.infer<typeof ShareAccessLevelSchema>;
+export type ExportFormat = z.infer<typeof ExportFormatSchema>;
+export type TemplateType = z.infer<typeof TemplateTypeSchema>;
+export type ExportType = z.infer<typeof ExportTypeSchema>;
+export type ExportJobStatus = z.infer<typeof ExportJobStatusSchema>;
+export type ExportTemplate = z.infer<typeof ExportTemplateSchema>;
+export type CreateExportTemplate = z.infer<typeof CreateExportTemplateSchema>;
+export type UpdateExportTemplate = z.infer<typeof UpdateExportTemplateSchema>;
+export type ExportJob = z.infer<typeof ExportJobSchema>;
+export type CreateExportJob = z.infer<typeof CreateExportJobSchema>;
+export type UpdateExportJob = z.infer<typeof UpdateExportJobSchema>;
+export type ExportSchedule = z.infer<typeof ExportScheduleSchema>;
+export type CreateExportSchedule = z.infer<typeof CreateExportScheduleSchema>;
+export type UpdateExportSchedule = z.infer<typeof UpdateExportScheduleSchema>;
+export type ExportShare = z.infer<typeof ExportShareSchema>;
+export type CreateExportShare = z.infer<typeof CreateExportShareSchema>;
+export type UpdateExportShare = z.infer<typeof UpdateExportShareSchema>;
+export type ExportAnalytics = z.infer<typeof ExportAnalyticsSchema>;
+export type CreateExportAnalytics = z.infer<typeof CreateExportAnalyticsSchema>;
+export type ExportFormatDefinition = z.infer<typeof ExportFormatDefinitionSchema>;
+export type CreateExportFormatDefinition = z.infer<typeof CreateExportFormatDefinitionSchema>;
+export type UpdateExportFormatDefinition = z.infer<typeof UpdateExportFormatDefinitionSchema>;
+export type CommonExportOptions = z.infer<typeof CommonExportOptionsSchema>;
+export type JsonExportOptions = z.infer<typeof JsonExportOptionsSchema>;
+export type YamlExportOptions = z.infer<typeof YamlExportOptionsSchema>;
+export type XmlExportOptions = z.infer<typeof XmlExportOptionsSchema>;
+export type CsvExportOptions = z.infer<typeof CsvExportOptionsSchema>;
+export type MarkdownExportOptions = z.infer<typeof MarkdownExportOptionsSchema>;
+export type PdfExportOptions = z.infer<typeof PdfExportOptionsSchema>;
+export type HtmlExportOptions = z.infer<typeof HtmlExportOptionsSchema>;
+export type ZipExportOptions = z.infer<typeof ZipExportOptionsSchema>;
+export type ExportStatistics = z.infer<typeof ExportStatisticsSchema>;

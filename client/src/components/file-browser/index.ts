@@ -10,6 +10,7 @@ export { FileItem } from './FileItem';
 export { ContextMenu } from './ContextMenu';
 export { FileSearchBar } from './FileSearchBar';
 export { FileOperationToast } from './FileOperationToast';
+export { AnalyticsDashboard } from './AnalyticsDashboard';
 
 export * from './types';
 

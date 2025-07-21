@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuthStore } from '../../stores/authStore';
+import { OAuthProviderButtons } from './OAuthProviderButtons';
 
 // Login form validation schema
 const loginSchema = z.object({
@@ -107,8 +108,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-      {/* Email Field */}
+    <div style={{ width: '100%' }}>
+      {/* OAuth Provider Buttons */}
+      <OAuthProviderButtons 
+        mode="login" 
+        onError={onError}
+        onSuccess={onSuccess}
+      />
+
+      <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+        {/* Email Field */}
       <div style={{ marginBottom: '20px' }}>
         <label style={{
           display: 'block',
@@ -245,7 +254,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       >
         {isLoading ? 'Signing in...' : 'Sign In'}
       </button>
-    </form>
+      </form>
+    </div>
   );
 };
 
