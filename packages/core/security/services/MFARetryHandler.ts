@@ -319,6 +319,8 @@ export class MFARetryHandler extends EventEmitter {
 
         this.handleSuccess(operation, context);
         
+        // Record successful attempt before breaking
+        attempts.push(attemptData);
         break;
       } catch (error) {
         attemptData.error = error instanceof Error ? error : new Error(String(error));
@@ -328,6 +330,9 @@ export class MFARetryHandler extends EventEmitter {
         lastError = attemptData.error;
 
         this.handleFailure(operation, context, attemptData.error);
+
+        // Record failed attempt
+        attempts.push(attemptData);
 
         // Check if error is retryable
         const failureType = this.categorizeError(attemptData.error);
@@ -359,8 +364,6 @@ export class MFARetryHandler extends EventEmitter {
           error: attemptData.error.message
         });
       }
-
-      attempts.push(attemptData);
     }
 
     const totalDurationMs = new Date().getTime() - startTime.getTime();
@@ -733,6 +736,5 @@ export class MFARetryHandler extends EventEmitter {
   }
 }
 
-// Export default instance
-export 
+// Export default class
 export default MFARetryHandler;
