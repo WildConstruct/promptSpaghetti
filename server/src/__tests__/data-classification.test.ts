@@ -8,7 +8,10 @@ import {
   DataTransferRequest,
   ClassificationRule,
   TransferPolicy,
-  DataClassification
+  DataClassification,
+  ClassificationDriftEvent,
+  DriftAnalysisResult,
+  DriftAlert
 } from '../services/DataClassificationService';
 
 describe('DataClassificationService', () => {
@@ -23,19 +26,19 @@ describe('DataClassificationService', () => {
   beforeEach(() => {
     // Mock database
     mockDb = {
-      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown)
+      query: jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown)
     };
 
     // Mock Redis
     mockRedis = {
-      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown),
-      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown),
-      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown)
+      get: jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown),
+      setex: jest.fn<unknown[], unknown>().mockResolvedValue('OK' as unknown as unknown),
+      del: jest.fn<unknown[], unknown>().mockResolvedValue(1 as unknown as unknown)
     };
 
     // Mock audit service
     mockAuditService = {
-      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown)
+      logEvent: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
     };
 
     // Test configuration
@@ -58,6 +61,21 @@ describe('DataClassificationService', () => {
         restricted: true,
         internal: false,
         public: false
+      },
+      driftDetection: {
+        enabled: true,
+        thresholds: {
+          significantChange: 10.0,
+          rapidChange: 5.0,
+          timeWindow: 24
+        },
+        alerting: {
+          enabled: true,
+          notifyOnSignificant: true,
+          notifyOnRapid: true,
+          notifyOnDowngrade: true,
+          notifyOnUpgrade: false
+        }
       }
     };
 
@@ -464,7 +482,7 @@ describe('DataClassificationService', () => {
       };
 
       // Mock current time to be within business hours (e.g., 14:00)
-      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(14 as unknown);
+      jest.spyOn(Date.prototype, 'getHours').mockReturnValue(14 as unknown as unknown);
 
       const decision = await dataClassificationService.evaluateTransferRequest(transferRequest);
       
@@ -870,6 +888,637 @@ describe('DataClassificationService', () => {
       const decision = await dataClassificationService.evaluateTransferRequest(sensitiveRequest);
 
       expect(decision.requiresEncryption).toBe(true);
+    });
+  });
+
+  describe('classification drift detection', () => {
+    beforeEach(() => {
+      // Mock getClassificationHistory to return previous classifications
+      jest.spyOn(dataClassificationService, 'getClassificationHistory')
+        .mockImplementation(async (dataId: string) => {
+          if (dataId === 'data-with-history') {
+            return [
+              {
+                dataId: 'data-with-history',
+                classification: 'internal',
+                confidence: 0.8,
+                ruleId: 'rule-1',
+                ruleName: 'Previous Rule',
+                reasoning: ['Previous classification'],
+                metadata: {},
+                classifiedAt: new Date(Date.now() - 60000) // 1 minute ago
+              }
+            ];
+          }
+          return [];
+        });
+    });
+
+    it('should detect classification drift when classification changes', async () => {
+      const confidentialRule: ClassificationRule = {
+        id: 'rule-2',
+        name: 'Confidential Rule',
+        description: 'Classifies confidential data',
+        priority: 100,
+        conditions: [
+          {
+            field: 'content',
+            operator: 'contains',
+            value: 'confidential',
+            caseSensitive: false
+          }
+        ],
+        classification: 'confidential',
+        enabled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      testConfig.classificationRules = [confidentialRule];
+      dataClassificationService = new DataClassificationService(
+        mockDb,
+        mockRedis,
+        mockAuditService,
+        testConfig
+      );
+
+      // Override getClassificationHistory for this specific test
+      jest.spyOn(dataClassificationService, 'getClassificationHistory')
+        .mockResolvedValueOnce([
+          {
+            dataId: 'data-with-history',
+            classification: 'internal',
+            confidence: 0.8,
+            ruleId: 'rule-1',
+            ruleName: 'Previous Rule',
+            reasoning: ['Previous classification'],
+            metadata: {},
+            classifiedAt: new Date(Date.now() - 60000)
+          }
+        ]);
+
+      await dataClassificationService.classifyData(
+        'data-with-history',
+        'This document contains confidential information'
+      );
+
+      // Verify drift event was stored
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO classification_drift_events'),
+        expect.arrayContaining([
+          expect.stringContaining('drift_'),
+          'data-with-history',
+          'internal',
+          'confidential',
+          'rule-1',
+          'rule-2',
+          'upgrade',
+          expect.any(String), // severity
+          expect.any(Number), // confidence
+          expect.any(String), // reasoning JSON
+          expect.any(String), // metadata JSON
+          expect.any(Date)   // detected_at
+        ])
+      );
+
+      // Verify audit event was logged
+      expect(mockAuditService.logEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          action: 'classification_drift_detected',
+          details: expect.objectContaining({
+            dataId: 'data-with-history',
+            driftType: 'upgrade',
+            previousClassification: 'internal',
+            newClassification: 'confidential'
+          })
+        })
+      );
+    });
+
+    it('should not detect drift when classification remains the same', async () => {
+      const internalRule: ClassificationRule = {
+        id: 'rule-1',
+        name: 'Internal Rule',
+        description: 'Classifies internal data',
+        priority: 100,
+        conditions: [
+          {
+            field: 'content',
+            operator: 'contains',
+            value: 'internal',
+            caseSensitive: false
+          }
+        ],
+        classification: 'internal',
+        enabled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      testConfig.classificationRules = [internalRule];
+      dataClassificationService = new DataClassificationService(
+        mockDb,
+        mockRedis,
+        mockAuditService,
+        testConfig
+      );
+
+      await dataClassificationService.classifyData(
+        'data-with-history',
+        'This document contains internal information'
+      );
+
+      // Verify drift event was NOT stored
+      expect(mockDb.query).not.toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO classification_drift_events'),
+        expect.anything()
+      );
+    });
+
+    it('should detect oscillation pattern in classification history', async () => {
+      // Mock oscillating history: confidential -> internal -> confidential -> internal
+      jest.spyOn(dataClassificationService, 'getClassificationHistory')
+        .mockResolvedValueOnce([
+          {
+            dataId: 'oscillating-data',
+            classification: 'internal',
+            confidence: 0.7,
+            ruleId: 'rule-2',
+            ruleName: 'Internal Rule',
+            reasoning: ['Latest classification'],
+            metadata: {},
+            classifiedAt: new Date(Date.now() - 60000)
+          },
+          {
+            dataId: 'oscillating-data',
+            classification: 'confidential',
+            confidence: 0.8,
+            ruleId: 'rule-1',
+            ruleName: 'Confidential Rule',
+            reasoning: ['Previous classification'],
+            metadata: {},
+            classifiedAt: new Date(Date.now() - 120000)
+          },
+          {
+            dataId: 'oscillating-data',
+            classification: 'internal',
+            confidence: 0.7,
+            ruleId: 'rule-2',
+            ruleName: 'Internal Rule',
+            reasoning: ['Earlier classification'],
+            metadata: {},
+            classifiedAt: new Date(Date.now() - 180000)
+          },
+          {
+            dataId: 'oscillating-data',
+            classification: 'confidential',
+            confidence: 0.8,
+            ruleId: 'rule-1',
+            ruleName: 'Confidential Rule',
+            reasoning: ['Earliest classification'],
+            metadata: {},
+            classifiedAt: new Date(Date.now() - 240000)
+          }
+        ]);
+
+      const confidentialRule: ClassificationRule = {
+        id: 'rule-1',
+        name: 'Confidential Rule',
+        description: 'Classifies confidential data',
+        priority: 100,
+        conditions: [
+          {
+            field: 'content',
+            operator: 'contains',
+            value: 'confidential',
+            caseSensitive: false
+          }
+        ],
+        classification: 'confidential',
+        enabled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      testConfig.classificationRules = [confidentialRule];
+      dataClassificationService = new DataClassificationService(
+        mockDb,
+        mockRedis,
+        mockAuditService,
+        testConfig
+      );
+
+      await dataClassificationService.classifyData(
+        'oscillating-data',
+        'This document contains confidential information'
+      );
+
+      // Verify oscillation was detected (drift_type should be 'oscillation')
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO classification_drift_events'),
+        expect.arrayContaining([
+          expect.stringContaining('drift_'),
+          'oscillating-data',
+          'internal',
+          'confidential',
+          'rule-2',
+          'rule-1',
+          'oscillation', // Should detect oscillation
+          expect.any(String),
+          expect.any(Number),
+          expect.any(String),
+          expect.any(String),
+          expect.any(Date)
+        ])
+      );
+
+      // Verify rule instability alert was created
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO classification_drift_alerts'),
+        expect.arrayContaining([
+          expect.stringContaining('alert_'),
+          'rule_instability',
+          'high',
+          expect.stringContaining('Oscillating classification pattern'),
+          expect.stringContaining('oscillating-data'),
+          0,
+          'recent_history',
+          expect.any(Date)
+        ])
+      );
+    });
+
+    it('should determine correct drift types', async () => {
+      const testCases = [
+        { from: 'public', to: 'internal', expected: 'upgrade' },
+        { from: 'internal', to: 'confidential', expected: 'upgrade' },
+        { from: 'confidential', to: 'restricted', expected: 'upgrade' },
+        { from: 'restricted', to: 'confidential', expected: 'downgrade' },
+        { from: 'confidential', to: 'internal', expected: 'downgrade' },
+        { from: 'internal', to: 'public', expected: 'downgrade' },
+        { from: 'internal', to: 'internal', expected: 'lateral' }
+      ];
+
+      for (const testCase of testCases) {
+        jest.spyOn(dataClassificationService, 'getClassificationHistory')
+          .mockResolvedValueOnce([
+            {
+              dataId: 'test-data',
+              classification: testCase.from as DataClassification,
+              confidence: 0.8,
+              ruleId: 'previous-rule',
+              ruleName: 'Previous Rule',
+              reasoning: ['Previous'],
+              metadata: {},
+              classifiedAt: new Date(Date.now() - 60000)
+            }
+          ]);
+
+        const rule: ClassificationRule = {
+          id: 'current-rule',
+          name: 'Current Rule',
+          description: 'Current rule',
+          priority: 100,
+          conditions: [
+            {
+              field: 'content',
+              operator: 'contains',
+              value: 'test',
+              caseSensitive: false
+            }
+          ],
+          classification: testCase.to as DataClassification,
+          enabled: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+
+        testConfig.classificationRules = [rule];
+        dataClassificationService = new DataClassificationService(
+          mockDb,
+          mockRedis,
+          mockAuditService,
+          testConfig
+        );
+
+        await dataClassificationService.classifyData('test-data', 'test content');
+
+        if (testCase.from !== testCase.to) {
+          expect(mockDb.query).toHaveBeenCalledWith(
+            expect.stringContaining('INSERT INTO classification_drift_events'),
+            expect.arrayContaining([
+              expect.anything(),
+              'test-data',
+              testCase.from,
+              testCase.to,
+              'previous-rule',
+              'current-rule',
+              testCase.expected,
+              expect.any(String),
+              expect.any(Number),
+              expect.any(String),
+              expect.any(String),
+              expect.any(Date)
+            ])
+          );
+        }
+
+        jest.clearAllMocks();
+      }
+    });
+
+    it('should create appropriate alerts for downgrades', async () => {
+      testConfig.driftDetection.alerting.notifyOnDowngrade = true;
+      
+      jest.spyOn(dataClassificationService, 'getClassificationHistory')
+        .mockResolvedValueOnce([
+          {
+            dataId: 'sensitive-data',
+            classification: 'restricted',
+            confidence: 0.9,
+            ruleId: 'restricted-rule',
+            ruleName: 'Restricted Rule',
+            reasoning: ['Was restricted'],
+            metadata: {},
+            classifiedAt: new Date(Date.now() - 60000)
+          }
+        ]);
+
+      // Rule that classifies as internal (downgrade from restricted)
+      const internalRule: ClassificationRule = {
+        id: 'internal-rule',
+        name: 'Internal Rule',
+        description: 'Internal classification',
+        priority: 100,
+        conditions: [
+          {
+            field: 'content',
+            operator: 'contains',
+            value: 'internal',
+            caseSensitive: false
+          }
+        ],
+        classification: 'internal',
+        enabled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      testConfig.classificationRules = [internalRule];
+      dataClassificationService = new DataClassificationService(
+        mockDb,
+        mockRedis,
+        mockAuditService,
+        testConfig
+      );
+
+      await dataClassificationService.classifyData(
+        'sensitive-data',
+        'This document contains internal information'
+      );
+
+      // Verify downgrade alert was created
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO classification_drift_alerts'),
+        expect.arrayContaining([
+          expect.stringContaining('alert_'),
+          'classification_downgrade',
+          expect.any(String), // severity
+          expect.stringContaining('downgraded from restricted to internal'),
+          expect.stringContaining('sensitive-data'),
+          0,
+          'immediate',
+          expect.any(Date)
+        ])
+      );
+    });
+  });
+
+  describe('drift analysis', () => {
+    it('should analyze drift patterns over time range', async () => {
+      const mockDriftEvents: any[] = [
+        {
+          id: 'drift-1',
+          dataId: 'data-1',
+          previousClassification: 'internal',
+          newClassification: 'confidential',
+          driftType: 'upgrade',
+          severity: 'medium',
+          detectedAt: new Date()
+        },
+        {
+          id: 'drift-2',
+          dataId: 'data-2',
+          previousClassification: 'confidential',
+          newClassification: 'internal',
+          driftType: 'downgrade',
+          severity: 'high',
+          detectedAt: new Date()
+        },
+        {
+          id: 'drift-3',
+          dataId: 'data-3',
+          previousClassification: 'internal',
+          newClassification: 'internal',
+          driftType: 'oscillation',
+          severity: 'critical',
+          detectedAt: new Date()
+        }
+      ];
+
+      // Mock getDriftEvents
+      jest.spyOn(dataClassificationService, 'getDriftEvents')
+        .mockResolvedValueOnce(mockDriftEvents);
+
+      // Mock getTotalClassificationsInRange
+      mockDb.query.mockResolvedValueOnce({ rows: [{ count: '30' }] });
+
+      const timeRange = {
+        start: new Date(Date.now() - 24 * 60 * 60 * 1000), // 24 hours ago
+        end: new Date()
+      };
+
+      const analysis = await dataClassificationService.analyzeDrift(timeRange);
+
+      expect(analysis.driftEvents).toBe(3);
+      expect(analysis.driftPercentage).toBe(10); // 3/30 * 100
+      expect(analysis.driftPatterns.upgrades).toBe(1);
+      expect(analysis.driftPatterns.downgrades).toBe(1);
+      expect(analysis.driftPatterns.oscillations).toBe(1);
+      expect(analysis.severityBreakdown.medium).toBe(1);
+      expect(analysis.severityBreakdown.high).toBe(1);
+      expect(analysis.severityBreakdown.critical).toBe(1);
+      expect(analysis.recommendations).toContain(
+        expect.stringContaining('Monitor drift patterns regularly')
+      );
+    });
+
+    it('should generate recommendations based on drift patterns', async () => {
+      const mockDriftEvents = Array.from({ length: 10 }, (_, i) => ({
+        id: `drift-${i}`,
+        dataId: `data-${i}`,
+        previousClassification: 'internal',
+        newClassification: 'confidential',
+        driftType: i < 3 ? 'oscillation' : 'upgrade', // 30% oscillations
+        severity: i < 2 ? 'critical' : 'low',
+        confidence: i < 4 ? 0.5 : 0.9, // 40% low confidence
+        detectedAt: new Date()
+      }));
+
+      jest.spyOn(dataClassificationService, 'getDriftEvents')
+        .mockResolvedValueOnce(mockDriftEvents);
+
+      mockDb.query.mockResolvedValueOnce({ rows: [{ count: '100' }] });
+
+      const timeRange = {
+        start: new Date(Date.now() - 24 * 60 * 60 * 1000),
+        end: new Date()
+      };
+
+      const analysis = await dataClassificationService.analyzeDrift(timeRange);
+
+      expect(analysis.recommendations).toContain(
+        expect.stringContaining('High oscillation rate detected')
+      );
+      expect(analysis.recommendations).toContain(
+        expect.stringContaining('Many low-confidence classifications detected')
+      );
+      expect(analysis.recommendations).toContain(
+        expect.stringContaining('High-severity drift events detected')
+      );
+    });
+  });
+
+  describe('drift event queries', () => {
+    it('should retrieve drift events with filters', async () => {
+      const mockRows = [
+        {
+          id: 'drift-1',
+          data_id: 'data-1',
+          previous_classification: 'internal',
+          new_classification: 'confidential',
+          previous_rule_id: 'rule-1',
+          new_rule_id: 'rule-2',
+          drift_type: 'upgrade',
+          severity: 'medium',
+          confidence: 0.8,
+          reasoning: JSON.stringify(['Test reasoning']),
+          metadata: JSON.stringify({}),
+          detected_at: new Date()
+        }
+      ];
+
+      mockDb.query.mockResolvedValueOnce({ rows: mockRows });
+
+      const events = await dataClassificationService.getDriftEvents({
+        dataId: 'data-1',
+        driftType: 'upgrade',
+        severity: 'medium',
+        limit: 10
+      });
+
+      expect(events).toHaveLength(1);
+      expect(events[0].dataId).toBe('data-1');
+      expect(events[0].driftType).toBe('upgrade');
+      expect(events[0].severity).toBe('medium');
+      expect(events[0].reasoning).toEqual(['Test reasoning']);
+
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT * FROM classification_drift_events'),
+        expect.arrayContaining(['data-1', 'upgrade', 'medium', 10])
+      );
+    });
+
+    it('should retrieve drift alerts with filters', async () => {
+      const mockRows = [
+        {
+          id: 'alert-1',
+          type: 'significant_change',
+          severity: 'high',
+          message: 'Test alert message',
+          data_items: JSON.stringify(['data-1', 'data-2']),
+          affected_percentage: 15.5,
+          time_window: '24 hours',
+          created_at: new Date()
+        }
+      ];
+
+      mockDb.query.mockResolvedValueOnce({ rows: mockRows });
+
+      const alerts = await dataClassificationService.getDriftAlerts({
+        type: 'significant_change',
+        severity: 'high',
+        limit: 5
+      });
+
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].type).toBe('significant_change');
+      expect(alerts[0].severity).toBe('high');
+      expect(alerts[0].dataItems).toEqual(['data-1', 'data-2']);
+      expect(alerts[0].affectedPercentage).toBe(15.5);
+
+      expect(mockDb.query).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT * FROM classification_drift_alerts'),
+        expect.arrayContaining(['high', 'significant_change', 5])
+      );
+    });
+  });
+
+  describe('drift detection with disabled configuration', () => {
+    it('should skip drift detection when disabled', async () => {
+      testConfig.driftDetection.enabled = false;
+      dataClassificationService = new DataClassificationService(
+        mockDb,
+        mockRedis,
+        mockAuditService,
+        testConfig
+      );
+
+      jest.spyOn(dataClassificationService, 'getClassificationHistory')
+        .mockResolvedValueOnce([
+          {
+            dataId: 'test-data',
+            classification: 'internal',
+            confidence: 0.8,
+            ruleId: 'rule-1',
+            ruleName: 'Previous Rule',
+            reasoning: ['Previous'],
+            metadata: {},
+            classifiedAt: new Date(Date.now() - 60000)
+          }
+        ]);
+
+      const confidentialRule: ClassificationRule = {
+        id: 'rule-2',
+        name: 'Confidential Rule',
+        description: 'Confidential classification',
+        priority: 100,
+        conditions: [
+          {
+            field: 'content',
+            operator: 'contains',
+            value: 'confidential',
+            caseSensitive: false
+          }
+        ],
+        classification: 'confidential',
+        enabled: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      testConfig.classificationRules = [confidentialRule];
+
+      await dataClassificationService.classifyData(
+        'test-data',
+        'This document contains confidential information'
+      );
+
+      // Verify drift detection was skipped
+      expect(mockDb.query).not.toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO classification_drift_events'),
+        expect.anything()
+      );
     });
   });
 });

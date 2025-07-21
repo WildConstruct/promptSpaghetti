@@ -68,6 +68,8 @@ import { dataClassificationRoutes } from './routes/data-classification';
 import { DataClassificationService } from './services/DataClassificationService';
 import { KeyManagementService, KeyManagementConfig } from './services/KeyManagementService';
 import { AccessControlManager } from './services/AccessControlManager';
+import { AuditTeamCollaborationService } from './services/AuditTeamCollaborationService';
+import { auditTeamCollaborationRoutes } from './routes/audit-team-collaboration';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -789,6 +791,7 @@ try {
 let payloadEncryptionService: PayloadEncryptionService | undefined;
 let keyManagementService: KeyManagementService | undefined;
 let dataClassificationService: DataClassificationService | undefined;
+let auditTeamCollaborationService: AuditTeamCollaborationService | undefined;
 try {
   const db = getDatabase();
   const authConfig = {
@@ -952,7 +955,14 @@ try {
     auditService
   );
 
+  // Initialize audit team collaboration service
+  auditTeamCollaborationService = new AuditTeamCollaborationService(
+    db as any,
+    auditService
+  );
+
   console.log('Data classification service initialized successfully');
+  console.log('Audit team collaboration service initialized successfully');
 } catch (error) {
   console.error('Failed to initialize data classification service:', error);
   // Continue without data classification service - this is non-critical for basic operation
@@ -1369,6 +1379,18 @@ if (dataClassificationService) {
     console.log('Data classification routes registered successfully');
   } catch (error) {
     console.error('Failed to register data classification routes:', error);
+  }
+}
+
+// Register audit team collaboration routes
+if (auditTeamCollaborationService) {
+  try {
+    server.register(async (fastify) => {
+      await auditTeamCollaborationRoutes(fastify, auditTeamCollaborationService);
+    }, { prefix: '/api/audit-collaboration' });
+    console.log('Audit team collaboration routes registered successfully');
+  } catch (error) {
+    console.error('Failed to register audit team collaboration routes:', error);
   }
 }
 

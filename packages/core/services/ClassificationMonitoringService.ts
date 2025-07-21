@@ -301,10 +301,10 @@ export class ClassificationMonitoringService {
 
     if (event.result === 'FAILURE' && event.eventType === 'VIOLATION') {
       activity.violationCount++;
-      
-      // Check for suspicious patterns
-      this.detectSuspiciousActivity(activity, event);
     }
+
+    // Check for suspicious patterns on all events
+    this.detectSuspiciousActivity(activity, event);
 
     // Update risk score
     activity.riskScore = this.calculateUserRiskScore(activity);

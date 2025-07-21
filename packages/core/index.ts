@@ -124,3 +124,52 @@ export {
   RandomizerSystem,
   LLMRandomizerSystem
 } from './llm-randomizer';
+
+// Epic 19 - Security and Audit Logging exports
+export {
+  AuditLogger,
+  createAuditLogger,
+  AuditOperation,
+  AuditLogLevel,
+  InMemoryStorageBackend,
+  type AuditLogEntry,
+  type AuditLoggerConfig,
+  type AuditStorageBackend,
+  type AuditQueryCriteria,
+  type AlertThresholds,
+  type AuditStatistics
+} from './security/AuditLogger';
+
+export {
+  AuditIntegration,
+  createAuditIntegration,
+  type ComplianceReport
+} from './security/AuditIntegration';
+
+export {
+  DataClassifier,
+  createDataClassifier,
+  type DataClassificationResult,
+  type ClassificationPattern,
+  type ClassificationConfig,
+  type ComplianceValidationResult
+} from './security/DataClassifier';
+
+export {
+  ClassificationEnforcer,
+  createClassificationEnforcer,
+  type EnforcementResult,
+  type ClassificationHandlingRequirements,
+  type ClassificationEnforcementConfig
+} from './security/ClassificationEnforcer';
+
+export {
+  ClassificationEnforcementMiddleware,
+  createClassificationMiddleware
+} from './security/ClassificationEnforcementMiddleware';
+
+export {
+  DataClassificationLevel,
+  type OperationContext,
+  type ClassificationResult
+} from './types/DataClassification';

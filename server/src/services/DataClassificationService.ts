@@ -27,6 +27,21 @@ export interface DataClassificationConfig {
     internal: boolean;
     public: boolean;
   };
+  driftDetection: {
+    enabled: boolean;
+    thresholds: {
+      significantChange: number; // Percentage of data items that changed classification
+      rapidChange: number; // Percentage change within short time window
+      timeWindow: number; // Hours for rapid change detection
+    };
+    alerting: {
+      enabled: boolean;
+      notifyOnSignificant: boolean;
+      notifyOnRapid: boolean;
+      notifyOnDowngrade: boolean; // Alert when classification level decreases
+      notifyOnUpgrade: boolean; // Alert when classification level increases
+    };
+  };
 }
 
 export type DataClassification = 'public' | 'internal' | 'confidential' | 'restricted';
@@ -136,6 +151,61 @@ export interface TransferAuditEvent {
   timestamp: Date;
 }
 
+export interface ClassificationDriftEvent {
+  id: string;
+  dataId: string;
+  previousClassification: DataClassification;
+  newClassification: DataClassification;
+  previousRuleId: string;
+  newRuleId: string;
+  driftType: DriftType;
+  severity: DriftSeverity;
+  confidence: number;
+  reasoning: string[];
+  metadata: Record<string, any>;
+  detectedAt: Date;
+}
+
+export type DriftType = 'upgrade' | 'downgrade' | 'lateral' | 'oscillation';
+export type DriftSeverity = 'low' | 'medium' | 'high' | 'critical';
+
+export interface DriftAnalysisResult {
+  analysisId: string;
+  timeRange: {
+    start: Date;
+    end: Date;
+  };
+  totalDataItems: number;
+  driftEvents: number;
+  driftPercentage: number;
+  driftPatterns: {
+    upgrades: number;
+    downgrades: number;
+    oscillations: number;
+    lateral: number;
+  };
+  severityBreakdown: Record<DriftSeverity, number>;
+  mostAffectedRules: Array<{
+    ruleId: string;
+    ruleName: string;
+    affectedItems: number;
+    percentage: number;
+  }>;
+  alerts: DriftAlert[];
+  recommendations: string[];
+}
+
+export interface DriftAlert {
+  id: string;
+  type: 'significant_change' | 'rapid_change' | 'classification_downgrade' | 'classification_upgrade' | 'rule_instability';
+  severity: DriftSeverity;
+  message: string;
+  dataItems: string[];
+  affectedPercentage: number;
+  timeWindow: string;
+  createdAt: Date;
+}
+
 export const defaultDataClassificationConfig: DataClassificationConfig = {
   enabled: true,
   defaultClassification: 'internal',
@@ -155,6 +225,21 @@ export const defaultDataClassificationConfig: DataClassificationConfig = {
     restricted: true,
     internal: false,
     public: false
+  },
+  driftDetection: {
+    enabled: true,
+    thresholds: {
+      significantChange: 10.0, // 10% of data items changed classification
+      rapidChange: 5.0, // 5% change within time window
+      timeWindow: 24 // 24 hours for rapid change detection
+    },
+    alerting: {
+      enabled: true,
+      notifyOnSignificant: true,
+      notifyOnRapid: true,
+      notifyOnDowngrade: true,
+      notifyOnUpgrade: false // Usually upgrades are less concerning
+    }
   }
 };
 
@@ -211,6 +296,10 @@ export class DataClassificationService {
         return parsed;
       }
 
+      // Get previous classification for drift detection
+      const previousClassifications = await this.getClassificationHistory(dataId);
+      const previousClassification = previousClassifications.length > 0 ? previousClassifications[0] : null;
+
       // Apply classification rules in priority order
       const rules = this.config.classificationRules
         .filter(rule => rule.enabled)
@@ -255,6 +344,11 @@ export class DataClassificationService {
 
       // Store classification in database
       await this.storeClassification(result);
+
+      // Detect and handle classification drift
+      if (this.config.driftDetection.enabled && previousClassification) {
+        await this.detectAndRecordDrift(previousClassification, result);
+      }
 
       // Cache for 1 hour
       await this.redis.setex(cacheKey, 3600, JSON.stringify(result));
@@ -538,6 +632,208 @@ export class DataClassificationService {
     }
   }
 
+  async analyzeDrift(timeRange: { start: Date; end: Date }): Promise<DriftAnalysisResult> {
+    try {
+      const analysisId = this.generateId('drift_analysis');
+      
+      // Get all drift events in the time range
+      const driftEvents = await this.getDriftEvents({
+        startDate: timeRange.start,
+        endDate: timeRange.end
+      });
+
+      // Get total number of data items classified in this period
+      const totalDataItems = await this.getTotalClassificationsInRange(timeRange.start, timeRange.end);
+
+      // Calculate drift statistics
+      const driftPercentage = totalDataItems > 0 ? (driftEvents.length / totalDataItems) * 100 : 0;
+
+      // Analyze drift patterns
+      const driftPatterns = {
+        upgrades: driftEvents.filter(e => e.driftType === 'upgrade').length,
+        downgrades: driftEvents.filter(e => e.driftType === 'downgrade').length,
+        oscillations: driftEvents.filter(e => e.driftType === 'oscillation').length,
+        lateral: driftEvents.filter(e => e.driftType === 'lateral').length
+      };
+
+      // Severity breakdown
+      const severityBreakdown = {
+        low: driftEvents.filter(e => e.severity === 'low').length,
+        medium: driftEvents.filter(e => e.severity === 'medium').length,
+        high: driftEvents.filter(e => e.severity === 'high').length,
+        critical: driftEvents.filter(e => e.severity === 'critical').length
+      };
+
+      // Find most affected rules
+      const ruleStats = new Map<string, { count: number; ruleName: string }>();
+      driftEvents.forEach(event => {
+        const current = ruleStats.get(event.newRuleId) || { count: 0, ruleName: '' };
+        current.count++;
+        if (!current.ruleName) {
+          const rule = this.config.classificationRules.find(r => r.id === event.newRuleId);
+          current.ruleName = rule?.name || 'Unknown Rule';
+        }
+        ruleStats.set(event.newRuleId, current);
+      });
+
+      const mostAffectedRules = Array.from(ruleStats.entries())
+        .map(([ruleId, stats]) => ({
+          ruleId,
+          ruleName: stats.ruleName,
+          affectedItems: stats.count,
+          percentage: totalDataItems > 0 ? (stats.count / totalDataItems) * 100 : 0
+        }))
+        .sort((a, b) => b.affectedItems - a.affectedItems)
+        .slice(0, 10);
+
+      // Generate alerts
+      const alerts = await this.generateDriftAlerts(driftEvents, driftPercentage, timeRange);
+
+      // Generate recommendations
+      const recommendations = this.generateDriftRecommendations(driftEvents, driftPatterns, severityBreakdown);
+
+      return {
+        analysisId,
+        timeRange,
+        totalDataItems,
+        driftEvents: driftEvents.length,
+        driftPercentage,
+        driftPatterns,
+        severityBreakdown,
+        mostAffectedRules,
+        alerts,
+        recommendations
+      };
+    } catch (error) {
+      console.error('Error analyzing drift:', error);
+      throw new Error('Failed to analyze classification drift');
+    }
+  }
+
+  async getDriftEvents(filters: {
+    dataId?: string;
+    startDate?: Date;
+    endDate?: Date;
+    driftType?: DriftType;
+    severity?: DriftSeverity;
+    limit?: number;
+  } = {}): Promise<ClassificationDriftEvent[]> {
+    try {
+      let query = 'SELECT * FROM classification_drift_events WHERE 1=1';
+      const params: any[] = [];
+      let paramIndex = 1;
+
+      if (filters.dataId) {
+        query += ` AND data_id = $${paramIndex++}`;
+        params.push(filters.dataId);
+      }
+
+      if (filters.startDate) {
+        query += ` AND detected_at >= $${paramIndex++}`;
+        params.push(filters.startDate);
+      }
+
+      if (filters.endDate) {
+        query += ` AND detected_at <= $${paramIndex++}`;
+        params.push(filters.endDate);
+      }
+
+      if (filters.driftType) {
+        query += ` AND drift_type = $${paramIndex++}`;
+        params.push(filters.driftType);
+      }
+
+      if (filters.severity) {
+        query += ` AND severity = $${paramIndex++}`;
+        params.push(filters.severity);
+      }
+
+      query += ' ORDER BY detected_at DESC';
+
+      if (filters.limit) {
+        query += ` LIMIT $${paramIndex++}`;
+        params.push(filters.limit);
+      }
+
+      const result = await this.db.query(query, params);
+
+      return result.rows.map(row => ({
+        id: row.id,
+        dataId: row.data_id,
+        previousClassification: row.previous_classification,
+        newClassification: row.new_classification,
+        previousRuleId: row.previous_rule_id,
+        newRuleId: row.new_rule_id,
+        driftType: row.drift_type,
+        severity: row.severity,
+        confidence: row.confidence,
+        reasoning: JSON.parse(row.reasoning || '[]'),
+        metadata: JSON.parse(row.metadata || '{}'),
+        detectedAt: row.detected_at
+      }));
+    } catch (error) {
+      console.error('Error getting drift events:', error);
+      return [];
+    }
+  }
+
+  async getDriftAlerts(filters: {
+    severity?: DriftSeverity;
+    type?: string;
+    startDate?: Date;
+    endDate?: Date;
+    limit?: number;
+  } = {}): Promise<DriftAlert[]> {
+    try {
+      let query = 'SELECT * FROM classification_drift_alerts WHERE 1=1';
+      const params: any[] = [];
+      let paramIndex = 1;
+
+      if (filters.severity) {
+        query += ` AND severity = $${paramIndex++}`;
+        params.push(filters.severity);
+      }
+
+      if (filters.type) {
+        query += ` AND type = $${paramIndex++}`;
+        params.push(filters.type);
+      }
+
+      if (filters.startDate) {
+        query += ` AND created_at >= $${paramIndex++}`;
+        params.push(filters.startDate);
+      }
+
+      if (filters.endDate) {
+        query += ` AND created_at <= $${paramIndex++}`;
+        params.push(filters.endDate);
+      }
+
+      query += ' ORDER BY created_at DESC';
+
+      if (filters.limit) {
+        query += ` LIMIT $${paramIndex++}`;
+        params.push(filters.limit);
+      }
+
+      const result = await this.db.query(query, params);
+
+      return result.rows.map(row => ({
+        id: row.id,
+        type: row.type,
+        severity: row.severity,
+        message: row.message,
+        dataItems: JSON.parse(row.data_items || '[]'),
+        affectedPercentage: row.affected_percentage,
+        timeWindow: row.time_window,
+        createdAt: row.created_at
+      }));
+    } catch (error) {
+      console.error('Error getting drift alerts:', error);
+      return [];
+    }
+  }
+
   // Private helper methods
 
   private async createTables(): Promise<void> {
@@ -616,6 +912,34 @@ export class DataClassificationService {
         audit_level VARCHAR(20) NOT NULL,
         metadata JSONB,
         timestamp TIMESTAMP WITH TIME ZONE NOT NULL
+      )`,
+      
+      // Classification drift events table
+      `CREATE TABLE IF NOT EXISTS classification_drift_events (
+        id VARCHAR(255) PRIMARY KEY,
+        data_id VARCHAR(255) NOT NULL,
+        previous_classification VARCHAR(50) NOT NULL,
+        new_classification VARCHAR(50) NOT NULL,
+        previous_rule_id VARCHAR(255) NOT NULL,
+        new_rule_id VARCHAR(255) NOT NULL,
+        drift_type VARCHAR(20) NOT NULL,
+        severity VARCHAR(20) NOT NULL,
+        confidence DECIMAL(3,2) NOT NULL,
+        reasoning JSONB,
+        metadata JSONB,
+        detected_at TIMESTAMP WITH TIME ZONE NOT NULL
+      )`,
+      
+      // Classification drift alerts table
+      `CREATE TABLE IF NOT EXISTS classification_drift_alerts (
+        id VARCHAR(255) PRIMARY KEY,
+        type VARCHAR(50) NOT NULL,
+        severity VARCHAR(20) NOT NULL,
+        message TEXT NOT NULL,
+        data_items JSONB NOT NULL,
+        affected_percentage DECIMAL(5,2) NOT NULL,
+        time_window VARCHAR(50) NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL
       )`
     ];
 
@@ -630,7 +954,14 @@ export class DataClassificationService {
       'CREATE INDEX IF NOT EXISTS idx_transfer_audit_log_data_id ON transfer_audit_log(data_id)',
       'CREATE INDEX IF NOT EXISTS idx_transfer_audit_log_user_id ON transfer_audit_log(user_id)',
       'CREATE INDEX IF NOT EXISTS idx_transfer_audit_log_timestamp ON transfer_audit_log(timestamp)',
-      'CREATE INDEX IF NOT EXISTS idx_transfer_decisions_request_id ON transfer_decisions(request_id)'
+      'CREATE INDEX IF NOT EXISTS idx_transfer_decisions_request_id ON transfer_decisions(request_id)',
+      'CREATE INDEX IF NOT EXISTS idx_drift_events_data_id ON classification_drift_events(data_id)',
+      'CREATE INDEX IF NOT EXISTS idx_drift_events_detected_at ON classification_drift_events(detected_at)',
+      'CREATE INDEX IF NOT EXISTS idx_drift_events_drift_type ON classification_drift_events(drift_type)',
+      'CREATE INDEX IF NOT EXISTS idx_drift_events_severity ON classification_drift_events(severity)',
+      'CREATE INDEX IF NOT EXISTS idx_drift_alerts_created_at ON classification_drift_alerts(created_at)',
+      'CREATE INDEX IF NOT EXISTS idx_drift_alerts_severity ON classification_drift_alerts(severity)',
+      'CREATE INDEX IF NOT EXISTS idx_drift_alerts_type ON classification_drift_alerts(type)'
     ];
 
     for (const index of indexes) {
@@ -1006,5 +1337,388 @@ export class DataClassificationService {
 
   private generateId(prefix: string): string {
     return `${prefix}_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
+  }
+
+  private async detectAndRecordDrift(
+    previousClassification: ClassificationResult,
+    newClassification: ClassificationResult
+  ): Promise<void> {
+    try {
+      // Only detect drift if classification actually changed
+      if (previousClassification.classification === newClassification.classification) {
+        return;
+      }
+
+      // Determine drift type and severity
+      const driftType = this.determineDriftType(
+        previousClassification.classification,
+        newClassification.classification,
+        newClassification.dataId
+      );
+      
+      const severity = this.determineDriftSeverity(
+        previousClassification.classification,
+        newClassification.classification,
+        newClassification.confidence
+      );
+
+      // Check for oscillation pattern
+      const recentHistory = await this.getClassificationHistory(newClassification.dataId);
+      const isOscillation = this.detectOscillationPattern(recentHistory);
+
+      const finalDriftType = isOscillation ? 'oscillation' : driftType;
+      const finalSeverity = isOscillation ? this.escalateSeverity(severity) : severity;
+
+      // Create drift event
+      const driftEvent: ClassificationDriftEvent = {
+        id: this.generateId('drift'),
+        dataId: newClassification.dataId,
+        previousClassification: previousClassification.classification,
+        newClassification: newClassification.classification,
+        previousRuleId: previousClassification.ruleId,
+        newRuleId: newClassification.ruleId,
+        driftType: finalDriftType,
+        severity: finalSeverity,
+        confidence: newClassification.confidence,
+        reasoning: [
+          `Classification changed from ${previousClassification.classification} to ${newClassification.classification}`,
+          `Previous rule: ${previousClassification.ruleName}`,
+          `New rule: ${newClassification.ruleName}`,
+          ...newClassification.reasoning
+        ],
+        metadata: {
+          previousConfidence: previousClassification.confidence,
+          newConfidence: newClassification.confidence,
+          timeSinceLastClassification: new Date().getTime() - previousClassification.classifiedAt.getTime(),
+          isOscillation
+        },
+        detectedAt: new Date()
+      };
+
+      // Store drift event
+      await this.storeDriftEvent(driftEvent);
+
+      // Check if this triggers any alerts
+      await this.checkAndCreateDriftAlerts(driftEvent);
+
+      // Audit drift detection
+      await this.auditDriftDetection(driftEvent);
+
+    } catch (error) {
+      console.error('Error detecting drift:', error);
+      // Don't throw - drift detection failure shouldn't block classification
+    }
+  }
+
+  private determineDriftType(
+    previousClassification: DataClassification,
+    newClassification: DataClassification,
+    dataId: string
+  ): DriftType {
+    const classificationLevels = {
+      'public': 0,
+      'internal': 1,
+      'confidential': 2,
+      'restricted': 3
+    };
+
+    const previousLevel = classificationLevels[previousClassification];
+    const newLevel = classificationLevels[newClassification];
+
+    if (newLevel > previousLevel) {
+      return 'upgrade';
+    } else if (newLevel < previousLevel) {
+      return 'downgrade';
+    } else {
+      return 'lateral';
+    }
+  }
+
+  private determineDriftSeverity(
+    previousClassification: DataClassification,
+    newClassification: DataClassification,
+    confidence: number
+  ): DriftSeverity {
+    const classificationLevels = {
+      'public': 0,
+      'internal': 1,
+      'confidential': 2,
+      'restricted': 3
+    };
+
+    const previousLevel = classificationLevels[previousClassification];
+    const newLevel = classificationLevels[newClassification];
+    const levelDifference = Math.abs(newLevel - previousLevel);
+
+    // Low confidence changes are more concerning
+    if (confidence < 0.6) {
+      if (levelDifference >= 2) return 'critical';
+      if (levelDifference === 1) return 'high';
+      return 'medium';
+    }
+
+    // High confidence changes
+    if (levelDifference >= 3) return 'high';
+    if (levelDifference === 2) return 'medium';
+    if (levelDifference === 1) return 'low';
+    
+    return 'low';
+  }
+
+  private detectOscillationPattern(history: ClassificationResult[]): boolean {
+    if (history.length < 4) return false;
+
+    // Check if the last 4 classifications show an oscillating pattern
+    const recent = history.slice(0, 4);
+    const classifications = recent.map(h => h.classification);
+
+    // Pattern: A-B-A-B or similar back-and-forth
+    return (
+      classifications[0] === classifications[2] &&
+      classifications[1] === classifications[3] &&
+      classifications[0] !== classifications[1]
+    );
+  }
+
+  private escalateSeverity(severity: DriftSeverity): DriftSeverity {
+    const escalation = {
+      'low': 'medium',
+      'medium': 'high',
+      'high': 'critical',
+      'critical': 'critical'
+    };
+    return escalation[severity] as DriftSeverity;
+  }
+
+  private async storeDriftEvent(event: ClassificationDriftEvent): Promise<void> {
+    await this.db.query(`
+      INSERT INTO classification_drift_events (
+        id, data_id, previous_classification, new_classification,
+        previous_rule_id, new_rule_id, drift_type, severity,
+        confidence, reasoning, metadata, detected_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+    `, [
+      event.id,
+      event.dataId,
+      event.previousClassification,
+      event.newClassification,
+      event.previousRuleId,
+      event.newRuleId,
+      event.driftType,
+      event.severity,
+      event.confidence,
+      JSON.stringify(event.reasoning),
+      JSON.stringify(event.metadata),
+      event.detectedAt
+    ]);
+  }
+
+  private async checkAndCreateDriftAlerts(driftEvent: ClassificationDriftEvent): Promise<void> {
+    const alerts: DriftAlert[] = [];
+
+    // Check for downgrade alerts
+    if (this.config.driftDetection.alerting.notifyOnDowngrade && driftEvent.driftType === 'downgrade') {
+      alerts.push({
+        id: this.generateId('alert'),
+        type: 'classification_downgrade',
+        severity: driftEvent.severity,
+        message: `Data classification downgraded from ${driftEvent.previousClassification} to ${driftEvent.newClassification}`,
+        dataItems: [driftEvent.dataId],
+        affectedPercentage: 0, // Will be calculated in batch analysis
+        timeWindow: 'immediate',
+        createdAt: new Date()
+      });
+    }
+
+    // Check for upgrade alerts
+    if (this.config.driftDetection.alerting.notifyOnUpgrade && driftEvent.driftType === 'upgrade') {
+      alerts.push({
+        id: this.generateId('alert'),
+        type: 'classification_upgrade',
+        severity: driftEvent.severity,
+        message: `Data classification upgraded from ${driftEvent.previousClassification} to ${driftEvent.newClassification}`,
+        dataItems: [driftEvent.dataId],
+        affectedPercentage: 0,
+        timeWindow: 'immediate',
+        createdAt: new Date()
+      });
+    }
+
+    // Check for oscillation alerts
+    if (driftEvent.driftType === 'oscillation') {
+      alerts.push({
+        id: this.generateId('alert'),
+        type: 'rule_instability',
+        severity: 'high',
+        message: `Oscillating classification pattern detected for data item`,
+        dataItems: [driftEvent.dataId],
+        affectedPercentage: 0,
+        timeWindow: 'recent_history',
+        createdAt: new Date()
+      });
+    }
+
+    // Store alerts
+    for (const alert of alerts) {
+      await this.storeDriftAlert(alert);
+    }
+  }
+
+  private async storeDriftAlert(alert: DriftAlert): Promise<void> {
+    await this.db.query(`
+      INSERT INTO classification_drift_alerts (
+        id, type, severity, message, data_items,
+        affected_percentage, time_window, created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    `, [
+      alert.id,
+      alert.type,
+      alert.severity,
+      alert.message,
+      JSON.stringify(alert.dataItems),
+      alert.affectedPercentage,
+      alert.timeWindow,
+      alert.createdAt
+    ]);
+  }
+
+  private async auditDriftDetection(driftEvent: ClassificationDriftEvent): Promise<void> {
+    try {
+      await this.auditService.logEvent({
+        userId: undefined,
+        action: 'classification_drift_detected',
+        details: {
+          dataId: driftEvent.dataId,
+          driftType: driftEvent.driftType,
+          severity: driftEvent.severity,
+          previousClassification: driftEvent.previousClassification,
+          newClassification: driftEvent.newClassification,
+          confidence: driftEvent.confidence
+        },
+        severity: driftEvent.severity === 'critical' ? 'warning' : 'info'
+      });
+    } catch (error) {
+      console.error('Error auditing drift detection:', error);
+    }
+  }
+
+  private async getTotalClassificationsInRange(start: Date, end: Date): Promise<number> {
+    try {
+      const result = await this.db.query(`
+        SELECT COUNT(DISTINCT data_id) as count
+        FROM data_classifications
+        WHERE classified_at >= $1 AND classified_at <= $2
+      `, [start, end]);
+      
+      return parseInt(result.rows[0]?.count || '0');
+    } catch (error) {
+      console.error('Error getting total classifications:', error);
+      return 0;
+    }
+  }
+
+  private async generateDriftAlerts(
+    driftEvents: ClassificationDriftEvent[],
+    driftPercentage: number,
+    timeRange: { start: Date; end: Date }
+  ): Promise<DriftAlert[]> {
+    const alerts: DriftAlert[] = [];
+
+    // Check for significant change threshold
+    if (this.config.driftDetection.alerting.notifyOnSignificant && 
+        driftPercentage >= this.config.driftDetection.thresholds.significantChange) {
+      alerts.push({
+        id: this.generateId('alert'),
+        type: 'significant_change',
+        severity: driftPercentage >= 20 ? 'critical' : driftPercentage >= 15 ? 'high' : 'medium',
+        message: `Significant classification drift detected: ${driftPercentage.toFixed(1)}% of data items changed classification`,
+        dataItems: driftEvents.map(e => e.dataId),
+        affectedPercentage: driftPercentage,
+        timeWindow: `${timeRange.start.toISOString()} to ${timeRange.end.toISOString()}`,
+        createdAt: new Date()
+      });
+    }
+
+    // Check for rapid change threshold (within configured time window)
+    const rapidTimeWindow = new Date(timeRange.end.getTime() - (this.config.driftDetection.thresholds.timeWindow * 60 * 60 * 1000));
+    const rapidEvents = driftEvents.filter(e => e.detectedAt >= rapidTimeWindow);
+    const rapidPercentage = driftEvents.length > 0 ? (rapidEvents.length / driftEvents.length) * 100 : 0;
+
+    if (this.config.driftDetection.alerting.notifyOnRapid && 
+        rapidPercentage >= this.config.driftDetection.thresholds.rapidChange) {
+      alerts.push({
+        id: this.generateId('alert'),
+        type: 'rapid_change',
+        severity: rapidPercentage >= 10 ? 'critical' : 'high',
+        message: `Rapid classification drift detected: ${rapidPercentage.toFixed(1)}% of changes occurred within ${this.config.driftDetection.thresholds.timeWindow} hours`,
+        dataItems: rapidEvents.map(e => e.dataId),
+        affectedPercentage: rapidPercentage,
+        timeWindow: `Last ${this.config.driftDetection.thresholds.timeWindow} hours`,
+        createdAt: new Date()
+      });
+    }
+
+    return alerts;
+  }
+
+  private generateDriftRecommendations(
+    driftEvents: ClassificationDriftEvent[],
+    driftPatterns: { upgrades: number; downgrades: number; oscillations: number; lateral: number },
+    severityBreakdown: Record<DriftSeverity, number>
+  ): string[] {
+    const recommendations: string[] = [];
+
+    // High oscillation recommendations
+    if (driftPatterns.oscillations > driftEvents.length * 0.2) {
+      recommendations.push(
+        'High oscillation rate detected - Review classification rules for conflicts or ambiguous conditions'
+      );
+      recommendations.push(
+        'Consider consolidating overlapping rules or adjusting rule priorities'
+      );
+    }
+
+    // High downgrade rate recommendations
+    if (driftPatterns.downgrades > driftEvents.length * 0.6) {
+      recommendations.push(
+        'High classification downgrade rate - Review if data sensitivity is being properly maintained'
+      );
+      recommendations.push(
+        'Consider implementing approval workflow for classification downgrades'
+      );
+    }
+
+    // High severity events recommendations
+    if (severityBreakdown.critical > 0 || severityBreakdown.high > driftEvents.length * 0.3) {
+      recommendations.push(
+        'High-severity drift events detected - Review classification rules accuracy and data quality'
+      );
+      recommendations.push(
+        'Consider implementing manual review for high-impact classification changes'
+      );
+    }
+
+    // Low confidence recommendations
+    const lowConfidenceEvents = driftEvents.filter(e => e.confidence < 0.7);
+    if (lowConfidenceEvents.length > driftEvents.length * 0.4) {
+      recommendations.push(
+        'Many low-confidence classifications detected - Review and refine classification rules'
+      );
+      recommendations.push(
+        'Consider implementing human-in-the-loop validation for low-confidence classifications'
+      );
+    }
+
+    // General recommendations
+    if (driftEvents.length > 0) {
+      recommendations.push(
+        'Monitor drift patterns regularly to identify systemic issues'
+      );
+      recommendations.push(
+        'Establish baseline metrics and set up automated alerting for unusual drift patterns'
+      );
+    }
+
+    return recommendations;
   }
 }

@@ -143,9 +143,9 @@ export interface MonitorConfig {
  */
 export class ClassificationMonitor extends EventEmitter {
   private events: MonitoringEvent[] = [];
-  private performanceMetrics: ClassificationPerformanceMetrics;
-  private statistics: ClassificationStatistics;
-  private complianceMetrics: ComplianceMetrics;
+  private performanceMetrics!: ClassificationPerformanceMetrics;
+  private statistics!: ClassificationStatistics;
+  private complianceMetrics!: ComplianceMetrics;
   private anomalies: Map<string, ClassificationAnomaly> = new Map();
   private alertQueue: MonitoringEvent[] = [];
   private metricsTimer?: NodeJS.Timeout;
