@@ -1,5 +1,5 @@
 import { randomBytes, createHash } from 'crypto';
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
 import { DatabaseService } from '../database/DatabaseService';
 import { EmailService } from './EmailService';
 import { AuditService } from './AuditService';
@@ -203,8 +203,25 @@ export class PasswordResetService {
     confirmation: PasswordResetConfirmation
   ): Promise<PasswordResetResponse> {
     try {
-      // Validate input
-      const validatedConfirmation = PASSWORD_RESET_CONFIRM_SCHEMA.parse(confirmation);
+      // Validate input with better error handling
+      let validatedConfirmation;
+      try {
+        validatedConfirmation = PASSWORD_RESET_CONFIRM_SCHEMA.parse(confirmation);
+      } catch (error) {
+        if (error instanceof ZodError) {
+          // Convert Zod validation errors to user-friendly messages
+          const passwordErrors = error.errors.filter(e => 
+            e.path.includes('newPassword') || e.path.includes('confirmPassword')
+          );
+          if (passwordErrors.length > 0) {
+            throw new Error('Password must be at least 8 characters long');
+          }
+          // Handle other validation errors
+          const firstError = error.errors[0];
+          throw new Error(firstError.message);
+        }
+        throw error;
+      }
       const { token, newPassword, clientInfo } = validatedConfirmation;
 
       // Validate token first

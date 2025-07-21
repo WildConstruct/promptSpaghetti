@@ -151,7 +151,7 @@ export interface Evidence {
   taskId?: string;
   
   title: string;
-  description: string;
+  description?: string;
   type: EvidenceType;
   
   // File information
@@ -206,7 +206,7 @@ export interface InvestigationComment {
   
   author: string;
   content: string;
-  commentType: 'COMMENT' | 'STATUS_UPDATE' | 'FINDING' | 'QUESTION' | 'DECISION';
+  commentType?: 'COMMENT' | 'STATUS_UPDATE' | 'FINDING' | 'QUESTION' | 'DECISION';
   
   createdAt: Date;
   editedAt?: Date;
@@ -581,7 +581,10 @@ export class AuditTeamCollaborationService extends EventEmitter {
   /**
    * Create a task within an investigation
    */
-  async createTask(task: Omit<InvestigationTask, 'id' | 'createdAt' | 'updatedAt' | 'status'>): Promise<InvestigationTask> {
+  async createTask(
+    task: Omit<InvestigationTask,
+    'id' | 'createdAt' | 'updatedAt' | 'status'>
+  ): Promise<InvestigationTask> {
     const id = uuidv4();
     const now = new Date();
 
@@ -626,7 +629,11 @@ export class AuditTeamCollaborationService extends EventEmitter {
   /**
    * Add evidence to an investigation
    */
-  async addEvidence(evidence: Omit<Evidence, 'id' | 'custodyChain' | 'collectedBy' | 'collectedAt' | 'verified'>, collectedBy: string = 'system'): Promise<Evidence> {
+  async addEvidence(
+    evidence: Omit<Evidence,
+    'id' | 'custodyChain' | 'collectedBy' | 'collectedAt' | 'verified'>,
+    collectedBy: string = 'system'
+  ): Promise<Evidence> {
     const id = uuidv4();
     const collectedAt = new Date();
 
@@ -698,7 +705,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       `, [
         id, comment.investigationId, comment.taskId, comment.author,
-        comment.content, comment.commentType, now, comment.mentions,
+        comment.content, comment.commentType || 'COMMENT', now, comment.mentions,
         comment.attachments, JSON.stringify(comment.metadata)
       ]);
 

@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T00:53:04.348Z"
+    "updated": "2025-07-21T01:01:40.768Z"
   },
   "product_goals": [
     {
@@ -22224,12 +22224,12 @@
       "id": "T-1752989143998-391",
       "story_id": "S-1752989143998-19-3",
       "title": "Create audit evidence mapping",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "Dev-Claude-Security",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T00:52:28.693Z",
+      "updated": "2025-07-21T01:01:40.767Z",
       "dependencies": [],
       "notes": []
     },
@@ -22263,12 +22263,12 @@
       "id": "T-1752989143998-241",
       "story_id": "S-1752989143997-19-2",
       "title": "Document access control policies",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "Claude-Security-Dev",
       "wip_class": "FEAT",
       "est": 2,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T00:57:20.336Z",
       "dependencies": [],
       "notes": []
     },
@@ -22276,12 +22276,12 @@
       "id": "T-1752989143998-6",
       "story_id": "S-1752989143997-19-2",
       "title": "Define delegation and inheritance rules",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "Claude-Security-Dev",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T00:57:20.336Z",
       "dependencies": [],
       "notes": []
     },
@@ -31314,7 +31314,9 @@
       "T-1752989143998-391"
     ],
     "Claude-Security-Dev": [
-      "T-1752989143997-86"
+      "T-1752989143997-86",
+      "T-1752989143998-241",
+      "T-1752989143998-6"
     ],
     "claude_dev": [
       "T-1752989143997-991",

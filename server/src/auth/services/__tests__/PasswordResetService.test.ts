@@ -15,7 +15,7 @@ jest.mock('../AuditService');
 jest.mock('../RateLimitService');
 jest.mock('crypto', () => ({
   randomBytes: jest.fn(() => ({ toString: () => 'mock-token-hex' })),
-  createHash: jest.fn(() => ({ update: jest.fn().mockReturnThis(), digest: () => 'mock-hash' }))
+  createHash: jest.fn(() => ({ update: jest.fn<unknown[], unknown>().mockReturnThis(), digest: () => 'mock-hash' }))
 }));
 
 describe('PasswordResetService', () => {
@@ -55,10 +55,10 @@ describe('PasswordResetService', () => {
     );
 
     // Setup default mock implementations
-    mockRateLimit.checkLimit = jest.fn().mockResolvedValue(undefined);
-    mockAudit.logSecurityEvent = jest.fn().mockResolvedValue(undefined);
-    mockEmail.sendPasswordResetEmail = jest.fn().mockResolvedValue(undefined);
-    mockEmail.sendPasswordResetConfirmationEmail = jest.fn().mockResolvedValue(undefined);
+    mockRateLimit.checkLimit = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
+    mockAudit.logSecurityEvent = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
+    mockEmail.sendPasswordResetEmail = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
+    mockEmail.sendPasswordResetConfirmationEmail = jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown);
   });
 
   describe('requestPasswordReset', () => {
@@ -69,8 +69,8 @@ describe('PasswordResetService', () => {
 
     it('should successfully process password reset request for valid user', async () => {
       // Setup mocks
-      mockDb.findUserByEmail = jest.fn().mockResolvedValue(mockUser);
-      mockDb.query = jest.fn()
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockDb.query = jest.fn<unknown[], unknown>()
         .mockResolvedValueOnce({ rows: [] }) // cleanup expired tokens
         .mockResolvedValueOnce({ rows: [] }) // get active tokens
         .mockResolvedValueOnce({ rowCount: 1 }); // store token
@@ -99,7 +99,7 @@ describe('PasswordResetService', () => {
     });
 
     it('should return success response even for non-existent user (prevent email enumeration)', async () => {
-      mockDb.findUserByEmail = jest.fn().mockResolvedValue(null);
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockResolvedValue(null as unknown as unknown);
 
       const result = await passwordResetService.requestPasswordReset(validRequest);
 
@@ -108,7 +108,7 @@ describe('PasswordResetService', () => {
       expect(mockEmail.sendPasswordResetEmail).not.toHaveBeenCalled();
       expect(mockAudit.logSecurityEvent).toHaveBeenCalledWith({
         type: 'PASSWORD_RESET_INVALID_EMAIL',
-        userId: null,
+        userId: undefined,
         email: validRequest.email,
         ipAddress: mockClientInfo.ipAddress,
         userAgent: mockClientInfo.userAgent,
@@ -119,7 +119,7 @@ describe('PasswordResetService', () => {
 
     it('should handle suspended account', async () => {
       const suspendedUser = { ...mockUser, status: 'suspended' };
-      mockDb.findUserByEmail = jest.fn().mockResolvedValue(suspendedUser);
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockResolvedValue(suspendedUser as unknown as unknown);
 
       const result = await passwordResetService.requestPasswordReset(validRequest);
 
@@ -137,7 +137,7 @@ describe('PasswordResetService', () => {
     });
 
     it('should enforce rate limiting', async () => {
-      mockRateLimit.checkLimit = jest.fn().mockRejectedValue(new Error('Rate limit exceeded'));
+      mockRateLimit.checkLimit = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Rate limit exceeded'));
 
       await expect(passwordResetService.requestPasswordReset(validRequest))
         .rejects.toThrow('Rate limit exceeded');
@@ -151,8 +151,8 @@ describe('PasswordResetService', () => {
         created_at: new Date(Date.now() - i * 1000)
       }));
 
-      mockDb.findUserByEmail = jest.fn().mockResolvedValue(mockUser);
-      mockDb.query = jest.fn()
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockDb.query = jest.fn<unknown[], unknown>()
         .mockResolvedValueOnce({ rows: [] }) // cleanup expired tokens
         .mockResolvedValueOnce({ rows: activeTokens }) // get active tokens
         .mockResolvedValueOnce({ rowCount: 1 }) // revoke oldest token
@@ -191,8 +191,8 @@ describe('PasswordResetService', () => {
         created_at: new Date()
       };
 
-      mockDb.query = jest.fn().mockResolvedValue({ rows: [tokenRecord] });
-      mockDb.findUserById = jest.fn().mockResolvedValue(mockUser);
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [tokenRecord] } as unknown as unknown);
+      mockDb.findUserById = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
 
       const result = await passwordResetService.validatePasswordResetToken(validToken);
 
@@ -202,7 +202,7 @@ describe('PasswordResetService', () => {
     });
 
     it('should reject invalid token', async () => {
-      mockDb.query = jest.fn().mockResolvedValue({ rows: [] });
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown);
 
       const result = await passwordResetService.validatePasswordResetToken('invalid-token');
 
@@ -221,7 +221,7 @@ describe('PasswordResetService', () => {
         created_at: new Date()
       };
 
-      mockDb.query = jest.fn()
+      mockDb.query = jest.fn<unknown[], unknown>()
         .mockResolvedValueOnce({ rows: [expiredTokenRecord] }) // get token
         .mockResolvedValueOnce({ rowCount: 1 }); // revoke token
 
@@ -242,7 +242,7 @@ describe('PasswordResetService', () => {
         created_at: new Date()
       };
 
-      mockDb.query = jest.fn().mockResolvedValue({ rows: [usedTokenRecord] });
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [usedTokenRecord] } as unknown as unknown);
 
       const result = await passwordResetService.validatePasswordResetToken(validToken);
 
@@ -263,8 +263,8 @@ describe('PasswordResetService', () => {
 
       const inactiveUser = { ...mockUser, status: 'suspended' };
 
-      mockDb.query = jest.fn().mockResolvedValue({ rows: [tokenRecord] });
-      mockDb.findUserById = jest.fn().mockResolvedValue(inactiveUser);
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [tokenRecord] } as unknown as unknown);
+      mockDb.findUserById = jest.fn<unknown[], unknown>().mockResolvedValue(inactiveUser as unknown as unknown);
 
       const result = await passwordResetService.validatePasswordResetToken(validToken);
 
@@ -285,7 +285,7 @@ describe('PasswordResetService', () => {
     beforeEach(() => {
       // Mock argon2 module
       jest.doMock('argon2', () => ({
-        hash: jest.fn().mockResolvedValue('hashed-new-password'),
+        hash: jest.fn<unknown[], unknown>().mockResolvedValue('hashed-new-password' as unknown as unknown),
         argon2id: 'argon2id'
       }), { virtual: true });
     });
@@ -301,14 +301,14 @@ describe('PasswordResetService', () => {
         created_at: new Date()
       };
 
-      mockDb.query = jest.fn()
+      mockDb.query = jest.fn<unknown[], unknown>()
         .mockResolvedValueOnce({ rows: [tokenRecord] }) // validate token
         .mockResolvedValueOnce({ rows: [] }); // invalidate sessions
 
-      mockDb.findUserById = jest.fn().mockResolvedValue(mockUser);
-      mockDb.getClient = jest.fn().mockResolvedValue({
-        query: jest.fn().mockResolvedValue({ rowCount: 1 }),
-        release: jest.fn()
+      mockDb.findUserById = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockDb.getClient = jest.fn<unknown[], unknown>().mockResolvedValue({
+        query: jest.fn<unknown[], unknown>( as unknown).mockResolvedValue({ rowCount: 1 } as unknown as unknown),
+        release: jest.fn<unknown[], unknown>()
       });
 
       const result = await passwordResetService.confirmPasswordReset(validConfirmation);
@@ -368,8 +368,8 @@ describe('PasswordResetService', () => {
         created_at: new Date()
       };
 
-      mockDb.query = jest.fn().mockResolvedValueOnce({ rows: [tokenRecord] });
-      mockDb.findUserById = jest.fn().mockResolvedValue(mockUser);
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValueOnce({ rows: [tokenRecord] });
+      mockDb.findUserById = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
 
       await expect(passwordResetService.confirmPasswordReset(commonPasswordConfirmation))
         .rejects.toThrow('Password is too common');
@@ -392,8 +392,8 @@ describe('PasswordResetService', () => {
         created_at: new Date()
       };
 
-      mockDb.query = jest.fn().mockResolvedValueOnce({ rows: [tokenRecord] });
-      mockDb.findUserById = jest.fn().mockResolvedValue(mockUser);
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValueOnce({ rows: [tokenRecord] });
+      mockDb.findUserById = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
 
       await expect(passwordResetService.confirmPasswordReset(emailPasswordConfirmation))
         .rejects.toThrow('Password cannot contain your email address');
@@ -410,30 +410,33 @@ describe('PasswordResetService', () => {
         created_at: new Date()
       };
 
-      mockDb.query = jest.fn().mockResolvedValueOnce({ rows: [tokenRecord] });
-      mockDb.findUserById = jest.fn().mockResolvedValue(mockUser);
-      mockRateLimit.checkLimit = jest.fn()
-        .mockResolvedValueOnce(undefined) // pass token validation rate limit
-        .mockRejectedValueOnce(new Error('Rate limit exceeded')); // fail confirmation rate limit
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValueOnce({ rows: [tokenRecord] });
+      mockDb.findUserById = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockDb.getClient = jest.fn<unknown[], unknown>().mockResolvedValue({
+        query: jest.fn<unknown[], unknown>( as unknown),
+        release: jest.fn<unknown[], unknown>()
+      });
+      mockRateLimit.checkLimit = jest.fn<unknown[], unknown>()
+        .mockRejectedValue(new Error('Rate limit exceeded')); // fail confirmation rate limit
 
       await expect(passwordResetService.confirmPasswordReset(validConfirmation))
         .rejects.toThrow('Rate limit exceeded');
     });
 
     it('should handle invalid token during confirmation', async () => {
-      mockDb.query = jest.fn().mockResolvedValue({ rows: [] }); // no token found
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: [] } as unknown as unknown); // no token found
 
       await expect(passwordResetService.confirmPasswordReset(validConfirmation))
-        .rejects.toThrow('Invalid reset token');
+        .rejects.toThrow('Invalid or expired reset token');
 
       expect(mockAudit.logSecurityEvent).toHaveBeenCalledWith({
         type: 'PASSWORD_RESET_INVALID_TOKEN',
-        userId: null,
-        email: null,
+        userId: undefined,
+        email: undefined,
         ipAddress: mockClientInfo.ipAddress,
         userAgent: mockClientInfo.userAgent,
         success: false,
-        metadata: { error: 'Invalid reset token' }
+        metadata: { error: 'Invalid or expired reset token' }
       });
     });
   });
@@ -457,7 +460,7 @@ describe('PasswordResetService', () => {
         }
       ];
 
-      mockDb.query = jest.fn().mockResolvedValue({ rows: mockAttempts });
+      mockDb.query = jest.fn<unknown[], unknown>().mockResolvedValue({ rows: mockAttempts } as unknown as unknown);
 
       const result = await passwordResetService.getPasswordResetAttempts('user-123');
 
@@ -476,8 +479,8 @@ describe('PasswordResetService', () => {
     it('should hash tokens before storage', async () => {
       const mockCrypto = require('crypto');
       
-      mockDb.findUserByEmail = jest.fn().mockResolvedValue(mockUser);
-      mockDb.query = jest.fn()
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockDb.query = jest.fn<unknown[], unknown>()
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rowCount: 1 });
@@ -497,8 +500,8 @@ describe('PasswordResetService', () => {
     it('should generate secure random tokens', async () => {
       const mockCrypto = require('crypto');
       
-      mockDb.findUserByEmail = jest.fn().mockResolvedValue(mockUser);
-      mockDb.query = jest.fn()
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockDb.query = jest.fn<unknown[], unknown>()
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rowCount: 1 });
@@ -512,8 +515,8 @@ describe('PasswordResetService', () => {
     });
 
     it('should clean up expired tokens', async () => {
-      mockDb.findUserByEmail = jest.fn().mockResolvedValue(mockUser);
-      mockDb.query = jest.fn()
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockDb.query = jest.fn<unknown[], unknown>()
         .mockResolvedValueOnce({ rows: [] }) // cleanup call
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rowCount: 1 });
@@ -532,7 +535,7 @@ describe('PasswordResetService', () => {
 
   describe('Error Handling', () => {
     it('should handle database errors gracefully', async () => {
-      mockDb.findUserByEmail = jest.fn().mockRejectedValue(new Error('Database error'));
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Database error'));
 
       await expect(passwordResetService.requestPasswordReset({
         email: 'user@example.com',
@@ -541,7 +544,7 @@ describe('PasswordResetService', () => {
 
       expect(mockAudit.logSecurityEvent).toHaveBeenCalledWith({
         type: 'PASSWORD_RESET_ERROR',
-        userId: null,
+        userId: undefined,
         email: 'user@example.com',
         ipAddress: mockClientInfo.ipAddress,
         userAgent: mockClientInfo.userAgent,
@@ -551,12 +554,12 @@ describe('PasswordResetService', () => {
     });
 
     it('should handle email service errors', async () => {
-      mockDb.findUserByEmail = jest.fn().mockResolvedValue(mockUser);
-      mockDb.query = jest.fn()
+      mockDb.findUserByEmail = jest.fn<unknown[], unknown>().mockResolvedValue(mockUser as unknown as unknown);
+      mockDb.query = jest.fn<unknown[], unknown>()
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rowCount: 1 });
-      mockEmail.sendPasswordResetEmail = jest.fn().mockRejectedValue(new Error('Email service error'));
+      mockEmail.sendPasswordResetEmail = jest.fn<unknown[], unknown>().mockRejectedValue(new Error('Email service error'));
 
       await expect(passwordResetService.requestPasswordReset({
         email: 'user@example.com',

@@ -70,6 +70,7 @@ import { KeyManagementService, KeyManagementConfig } from './services/KeyManagem
 import { AccessControlManager } from './services/AccessControlManager';
 import { AuditTeamCollaborationService } from './services/AuditTeamCollaborationService';
 import { auditTeamCollaborationRoutes } from './routes/audit-team-collaboration';
+import { auditEvidenceRoutes } from './routes/audit-evidence';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -1392,6 +1393,14 @@ if (auditTeamCollaborationService) {
   } catch (error) {
     console.error('Failed to register audit team collaboration routes:', error);
   }
+}
+
+// Register audit evidence mapping routes (Epic 19.3)
+try {
+  server.register(auditEvidenceRoutes, { prefix: '/api/evidence-mapping' });
+  console.log('Audit evidence mapping routes registered successfully');
+} catch (error) {
+  console.error('Failed to register audit evidence mapping routes:', error);
 }
 
 // Setup analytics WebSocket server
