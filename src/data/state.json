@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T05:29:02.972Z"
+    "updated": "2025-07-21T05:29:52.485Z"
   },
   "product_goals": [
     {
@@ -22559,27 +22559,38 @@
       "id": "T-1752989143998-845",
       "story_id": "S-1752989143997-19-2",
       "title": "Define policy update workflow",
-      "state": "REVIEW",
+      "state": "APPROVED",
       "assignee": "James",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T05:28:57.987Z",
+      "updated": "2025-07-21T05:29:43.603Z",
       "dependencies": [],
-      "notes": []
+      "notes": [],
+      "qa_approved_by": "qa_agent",
+      "qa_approval_reason": "All checks passed: code quality good, tests comprehensive, security validated"
     },
     "T-1752989143998-61": {
       "id": "T-1752989143998-61",
       "story_id": "S-1752989143997-19-2",
       "title": "Design policy acceptance tracking",
-      "state": "REVIEW",
+      "state": "IN_PROGRESS",
       "assignee": "James",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T05:29:02.971Z",
+      "updated": "2025-07-21T05:29:46.612Z",
       "dependencies": [],
-      "notes": []
+      "notes": [
+        {
+          "timestamp": "2025-07-21T05:29:46.612Z",
+          "author": "qa_agent",
+          "content": "QA Review: Changes requested - Missing type annotations"
+        }
+      ],
+      "qa_issues": [
+        "Missing type annotations"
+      ]
     },
     "T-1752989143998-98": {
       "id": "T-1752989143998-98",
@@ -22598,12 +22609,12 @@
       "id": "T-1752989143998-787",
       "story_id": "S-1752989143998-19-5",
       "title": "Create OAuth guidance",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "James",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:29:52.485Z",
       "dependencies": [],
       "notes": []
     },
@@ -22611,12 +22622,12 @@
       "id": "T-1752989143998-196",
       "story_id": "S-1752989143997-19-2",
       "title": "Create policy authoring tools",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "James",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T05:29:52.485Z",
       "dependencies": [],
       "notes": []
     },
@@ -31671,7 +31682,9 @@
       "T-1752989143998-905",
       "T-1752989143998-444",
       "T-1752989143998-845",
-      "T-1752989143998-61"
+      "T-1752989143998-61",
+      "T-1752989143998-787",
+      "T-1752989143998-196"
     ],
     "dev_james": [
       "T-1752989143997-428",

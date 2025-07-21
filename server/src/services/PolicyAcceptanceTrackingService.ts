@@ -703,7 +703,7 @@ export class PolicyAcceptanceTrackingService {
    * Export user data for GDPR compliance
    */
   async exportUserData(userId: string, format: 'JSON' | 'CSV' | 'XML' = 'JSON'): Promise<{
-    userData: any;
+    userData: Record<string, unknown>;
     acceptances: PolicyAcceptance[];
     consents: GranularConsent[];
     withdrawals: ConsentWithdrawal[];
@@ -734,7 +734,7 @@ export class PolicyAcceptanceTrackingService {
 
   // Private helper methods
 
-  private async validateAcceptanceData(acceptance: any): Promise<void> {
+  private async validateAcceptanceData(acceptance: Partial<PolicyAcceptance>): Promise<void> {
     if (!acceptance.userId) {
       throw new Error('User ID is required');
     }
@@ -798,7 +798,7 @@ export class PolicyAcceptanceTrackingService {
     }
   }
 
-  private async scheduleConsentRenewal(acceptanceId: string, acceptance: any): Promise<void> {
+  private async scheduleConsentRenewal(acceptanceId: string, acceptance: PolicyAcceptance): Promise<void> {
     // Calculate renewal date based on policy type and retention period
     const renewalDate = new Date();
     renewalDate.setDate(renewalDate.getDate() + (acceptance.consentData.retentionPeriod || 365));
@@ -820,7 +820,7 @@ export class PolicyAcceptanceTrackingService {
     ]);
   }
 
-  private async validateWithdrawalRequest(withdrawal: any): Promise<void> {
+  private async validateWithdrawalRequest(withdrawal: Partial<ConsentWithdrawal>): Promise<void> {
     if (!withdrawal.acceptanceId) {
       throw new Error('Acceptance ID is required');
     }
@@ -834,7 +834,7 @@ export class PolicyAcceptanceTrackingService {
     }
   }
 
-  private async assessWithdrawalImpact(withdrawal: any): Promise<WithdrawalImpact> {
+  private async assessWithdrawalImpact(withdrawal: ConsentWithdrawal): Promise<WithdrawalImpact> {
     // Simplified impact assessment
     return {
       affectedServices: ['core_service'],
@@ -956,22 +956,22 @@ export class PolicyAcceptanceTrackingService {
     };
   }
 
-  private async getAcceptanceStats(filters?: any): Promise<AcceptanceStats> {
+  private async getAcceptanceStats(filters?: Record<string, unknown>): Promise<AcceptanceStats> {
     // Implementation for acceptance statistics
     return {} as AcceptanceStats;
   }
 
-  private async getComplianceMetrics(filters?: any): Promise<ComplianceMetrics> {
+  private async getComplianceMetrics(filters?: Record<string, unknown>): Promise<ComplianceMetrics> {
     // Implementation for compliance metrics
     return {} as ComplianceMetrics;
   }
 
-  private async getRiskAnalysis(filters?: any): Promise<RiskAnalysis> {
+  private async getRiskAnalysis(filters?: Record<string, unknown>): Promise<RiskAnalysis> {
     // Implementation for risk analysis
     return {} as RiskAnalysis;
   }
 
-  private async getRenewalMetrics(filters?: any): Promise<RenewalMetrics> {
+  private async getRenewalMetrics(filters?: Record<string, unknown>): Promise<RenewalMetrics> {
     // Implementation for renewal metrics
     return {} as RenewalMetrics;
   }
@@ -988,7 +988,7 @@ export class PolicyAcceptanceTrackingService {
     return `PRN-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private mapToPolicyAcceptance(row: any): PolicyAcceptance {
+  private mapToPolicyAcceptance(row: Record<string, unknown>): PolicyAcceptance {
     return {
       acceptanceId: row.acceptance_id,
       userId: row.user_id,
@@ -1009,7 +1009,7 @@ export class PolicyAcceptanceTrackingService {
     };
   }
 
-  private mapToComplianceFlag(row: any): ComplianceFlag {
+  private mapToComplianceFlag(row: Record<string, unknown>): ComplianceFlag {
     return {
       flagId: row.flag_id,
       flagType: row.flag_type,
@@ -1022,7 +1022,7 @@ export class PolicyAcceptanceTrackingService {
     };
   }
 
-  private mapToConsentRenewal(row: any): ConsentRenewal {
+  private mapToConsentRenewal(row: Record<string, unknown>): ConsentRenewal {
     return {
       renewalId: row.renewal_id,
       originalAcceptanceId: row.original_acceptance_id,
@@ -1036,7 +1036,7 @@ export class PolicyAcceptanceTrackingService {
     };
   }
 
-  private mapToConsentWithdrawal(row: any): ConsentWithdrawal {
+  private mapToConsentWithdrawal(row: Record<string, unknown>): ConsentWithdrawal {
     return {
       withdrawalId: row.withdrawal_id,
       acceptanceId: row.acceptance_id,
