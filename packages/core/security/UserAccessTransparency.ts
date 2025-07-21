@@ -706,7 +706,7 @@ export class UserAccessTransparencyService extends EventEmitter {
   // Additional helper methods would be implemented here...
   private fetchUserAccessActivities(
     userId: string,
-    timeRange?: any,
+    timeRange?: { start: Date; end: Date },
     limit?: number
   ): Promise<UserAccessActivity[]> { return Promise.resolve([]); }
   private enrichActivityWithTransparencyData(activity: UserAccessActivity): UserAccessActivity { return activity; }
@@ -716,12 +716,12 @@ export class UserAccessTransparencyService extends EventEmitter {
     urgency: string
   ): Date { return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); }
   private processDBARAutomatically(request: DataSubjectAccessRequest): Promise<void> { return Promise.resolve(); }
-  private getDefaultSettings(userId: string): TransparencySettings { return {} as any; }
-  private isInQuietHours(quietHours: any): boolean { return false; }
+  private getDefaultSettings(userId: string): TransparencySettings { return {} as TransparencySettings; }
+  private isInQuietHours(quietHours: { start: string; end: string }): boolean { return false; }
   private queueNotification(notification: TransparencyNotification): void { this.notificationQueue.push(notification); }
   private deliverNotification(notification: TransparencyNotification): Promise<void> { return Promise.resolve(); }
-  private gatherUserDataForExport(userId: string, categories?: string[]): Promise<any> { return Promise.resolve({}); }
-  private generateDataExport(data: any, format: string): Promise<DSARResponse> { return Promise.resolve({} as any); }
+  private gatherUserDataForExport(userId: string, categories?: string[]): Promise<Record<string, unknown>> { return Promise.resolve({}); }
+  private generateDataExport(data: Record<string, unknown>, format: string): Promise<DSARResponse> { return Promise.resolve({} as DSARResponse); }
   private startPeriodicTasks(): void { /* Implementation */ }
   private processNotificationQueue(): void { /* Implementation */ }
 }

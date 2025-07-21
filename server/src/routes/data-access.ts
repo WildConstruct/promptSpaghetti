@@ -15,7 +15,7 @@ const CheckAccessSchema = z.object({
     ipAddress: z.string().optional(),
     userAgent: z.string().optional(),
     purpose: z.string().optional(),
-    additionalData: z.record(z.any()).optional()
+    additionalData: z.record(z.unknown()).optional()
   }).optional()
 });
 
@@ -107,7 +107,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
 
       // Verify token (implementation depends on your JWT setup)
       const token = authHeader.slice(7);
-      const user = await fastify.jwt.verify(token) as any;
+      const user = await fastify.jwt.verify(token) as { id: string; email: string; roles: string[] };
       
       if (!user?.id) {
         return reply.code(401).send({
@@ -196,7 +196,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
   }, async (request: CheckAccessRequest, reply: FastifyReply) => {
     try {
       const { resourceId } = request.params;
-      const { resourceType, operation } = request.query as any;
+      const { resourceType, operation } = request.query as { resourceType: string; operation: string };
 
       const accessRequest: DataAccessRequest = {
         userId: request.user!.id,
