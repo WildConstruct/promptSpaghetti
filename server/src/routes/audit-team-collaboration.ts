@@ -342,14 +342,7 @@ export async function auditTeamCollaborationRoutes(
       // Get current user (implement based on your auth system)
       const collectedBy = 'current-user'; // TODO: Extract from JWT
       
-      const processedData = {
-        ...evidenceData,
-        collectedBy,
-        collectedAt: new Date(),
-        verified: false
-      };
-
-      const evidence = await collaborationService.addEvidence(processedData);
+      const evidence = await collaborationService.addEvidence(evidenceData, collectedBy);
 
       reply.status(201).send({
         success: true,
