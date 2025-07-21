@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useRef } from 'react';
+import React, { useCallback, useState, useMemo, useRef, useEffect } from 'react';
 import {
   Edge,
   Node,
@@ -197,6 +197,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   const [optimizationControlsOpen, setOptimizationControlsOpen] = useState(false);
   const [performanceMonitorVisible, setPerformanceMonitorVisible] = useState(false);
   const [graphAnalysisOpen, setGraphAnalysisOpen] = useState(false);
+  const [optimizationMenuOpen, setOptimizationMenuOpen] = useState(false);
   const [optimizationSettings, setOptimizationSettings] = useState<OptimizationSettings>({
     deadCodeElimination: true,
     constantPropagation: true,
@@ -497,7 +498,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
 
   // Optimization handlers
   const handleOptimizationOpen = useCallback(() => {
-    setOptimizationControlsOpen(true);
+    setOptimizationMenuOpen(prev => !prev);
   }, []);
 
   const handleOptimizationSettingsChange = useCallback((newSettings: OptimizationSettings) => {
@@ -506,9 +507,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     setTimeout(() => setStatusMessage(''), 3000);
   }, []);
 
-  const handleGraphAnalysisOpen = useCallback(() => {
-    setGraphAnalysisOpen(true);
-  }, []);
+    }, []);
 
   const handlePerformanceMonitorToggle = useCallback(() => {
     setPerformanceMonitorVisible(prev => !prev);
@@ -516,6 +515,21 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
 
   // Check if any optimization features are enabled
   const isOptimizationEnabled = Object.values(optimizationSettings).some(value => value);
+
+  // Close optimization menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('[data-optimization-menu]') && !target.closest('[data-optimization-button]')) {
+        setOptimizationMenuOpen(false);
+      }
+    };
+
+    if (optimizationMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [optimizationMenuOpen]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -781,6 +795,79 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         isVisible={performanceMonitorVisible}
         onToggle={handlePerformanceMonitorToggle}
       />
+
+      {/* Optimization Menu */}
+      {optimizationMenuOpen && (
+        <div data-optimization-menu style={{
+          position: 'fixed',
+          bottom: '60px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: 'white',
+          border: '1px solid #ddd',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          padding: '8px',
+          zIndex: 1001,
+          display: 'flex',
+          gap: '8px',
+        }}>
+          <button
+            onClick={() => {
+              setGraphAnalysisOpen(true);
+              setOptimizationMenuOpen(false);
+            }}
+            style={{
+              padding: '12px 16px',
+              backgroundColor: '#17a2b8',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500',
+            }}
+          >
+            📊 Analyze Graph
+          </button>
+          <button
+            onClick={() => {
+              setOptimizationControlsOpen(true);
+              setOptimizationMenuOpen(false);
+            }}
+            style={{
+              padding: '12px 16px',
+              backgroundColor: '#28a745',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500',
+            }}
+          >
+            ⚙️ Settings
+          </button>
+          <button
+            onClick={() => {
+              setPerformanceMonitorVisible(true);
+              setOptimizationMenuOpen(false);
+            }}
+            style={{
+              padding: '12px 16px',
+              backgroundColor: '#fd7e14',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '500',
+            }}
+          >
+            📈 Monitor
+          </button>
+        </div>
+      )}
     </div>
   );
 };

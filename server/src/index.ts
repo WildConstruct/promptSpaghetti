@@ -25,6 +25,7 @@ import { WebSocketServer } from './websocket/WebSocketServer';
 import { WSServerConfig } from './websocket/types';
 import { AnalyticsWebSocketServer } from './websocket/AnalyticsWebSocketServer';
 import { authRoutes, jwtAuthMiddleware } from './auth/routes';
+import { enhancedSecurityRoutes } from './auth/routes/enhanced-security';
 import { buildAuthConfig, CORS_CONFIG } from './auth/config';
 import { marketplaceRoutes } from './marketplace/routes';
 import { featureToggleRoutes } from './routes/feature-toggles';
@@ -99,6 +100,14 @@ import financialServicesRoutes from './routes/financial-services';
 import { ConsentCollectionService } from './services/ConsentCollectionService';
 import { healthcareRoutes } from './routes/healthcare';
 import { trainingDataRoutes } from './routes/training-data-management';
+
+// Error Handling & Resilience System
+import { errorHandlerPlugin } from './middleware/error-handler';
+import { circuitBreakerService } from './services/CircuitBreakerService';
+import { retryService } from './services/RetryService';
+import { healthMonitoringService } from './services/HealthMonitoringService';
+import { operationalMetricsService } from './services/OperationalMetricsService';
+import systemMonitoringRoutes from './routes/system-monitoring';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -239,6 +248,44 @@ try {
 } catch (error) {
   console.error('Failed to initialize timeout management:', error);
   // Continue without timeout management - this is non-critical for basic operation
+}
+
+// Initialize Error Handling & Resilience System
+try {
+  // Register centralized error handler (this should be registered early)
+  server.register(errorHandlerPlugin);
+  
+  // Initialize health monitoring for critical dependencies
+        await healthCheck(); // Use existing healthCheck function
+      return true;
+    } catch {
+      return false;
+    }
+  });
+
+  // Initialize Redis health check if Redis is available
+  try {
+    const redisService = RedisService.getInstance();
+    healthMonitoringService.registerRedisHealthCheck(async () => {
+      try {
+        const client = await redisService.getClient();
+        await client.ping();
+        return true;
+      } catch {
+        return false;
+      }
+    });
+  } catch (error) {
+    console.log('Redis health check not configured - Redis may not be available');
+  }
+
+  // Start health monitoring (check every 30 seconds)
+  healthMonitoringService.startMonitoring(30000);
+  
+  console.log('Error Handling & Resilience System initialized successfully');
+} catch (error) {
+  console.error('Failed to initialize Error Handling & Resilience System:', error);
+  // Continue without enhanced error handling - basic error handling will still work
 }
 
 // Initialize anomaly detection service
@@ -1120,6 +1167,9 @@ server.get('/ws/documents/:documentId/users', async (request, reply) => {
 // Register authentication routes
 server.register(authRoutes, { prefix: '/auth' });
 
+// Register enhanced security routes (Epic 19)
+server.register(enhancedSecurityRoutes, { prefix: '/auth' });
+
 // Register JWT authentication middleware
 server.register(jwtAuthMiddleware);
 
@@ -1533,6 +1583,10 @@ try {
     'financial data lifecycle management, healthcare & life sciences toolkit, ' +
     'and training data management'
   );
+
+  // Register System Monitoring & Error Handling routes
+  server.register(systemMonitoringRoutes, { prefix: '/api' });
+  console.log('System monitoring and error handling routes registered successfully');
 } catch (error) {
   console.error('Failed to register data access control routes:', error);
 }

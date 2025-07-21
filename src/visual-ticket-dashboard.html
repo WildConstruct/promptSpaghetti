@@ -1321,16 +1321,40 @@
             }
         }
 
-        // Update statistics
+        // Update statistics with improved epic detection
         function updateStats() {
             const stats = {
                 total: allTasks.length,
                 unassigned: allTasks.filter(t => t.state === 'UNASSIGNED' || (t.state === 'TODO' && (!t.assignee || t.assignee === 'Unassigned'))).length,
                 inProgress: allTasks.filter(t => t.state === 'IN_PROGRESS').length,
-                auth: allTasks.filter(t => t.tags?.includes('auth') || t.story?.includes('20.1')).length,
-                file: allTasks.filter(t => t.tags?.includes('file-browser') || t.story?.includes('20.2')).length,
+                auth: 0,
+                file: 0,
                 completed: allTasks.filter(t => t.state === 'COMPLETED').length
             };
+
+            // Use same logic as getStoryLabel for consistency
+            allTasks.forEach(task => {
+                const title = (task.title || '').toLowerCase();
+                const story = (task.story || '').toLowerCase();
+                const tags = task.tags || [];
+                
+                // Authentication tasks
+                if (story.includes('20.1') || tags.includes('auth') || 
+                    title.includes('auth') || title.includes('login') ||
+                    title.includes('register') || title.includes('password') ||
+                    title.includes('jwt') || title.includes('token')) {
+                    stats.auth++;
+                }
+                
+                // File browser tasks
+                if (story.includes('20.2') || tags.includes('file-browser') || 
+                    title.includes('file browser') || title.includes('project') ||
+                    title.includes('save') || title.includes('load') ||
+                    (title.includes('export') && !story.includes('19')) ||
+                    (title.includes('import') && !story.includes('19'))) {
+                    stats.file++;
+                }
+            });
 
             document.getElementById('totalTasks').textContent = stats.total;
             document.getElementById('unassignedTasks').textContent = stats.unassigned;
@@ -1353,14 +1377,27 @@
                     return false;
                 }
 
-                // Priority filter
+                // Priority filter with improved epic detection
                 if (priorityFilter) {
+                    const title = (task.title || '').toLowerCase();
+                    const story = (task.story || '').toLowerCase();
+                    const tags = task.tags || [];
+                    
                     switch (priorityFilter) {
                         case 'auth':
-                            if (!task.tags?.includes('auth') && !task.story?.includes('20.1')) return false;
+                            const isAuthTask = story.includes('20.1') || tags.includes('auth') || 
+                                              title.includes('auth') || title.includes('login') ||
+                                              title.includes('register') || title.includes('password') ||
+                                              title.includes('jwt') || title.includes('token');
+                            if (!isAuthTask) return false;
                             break;
                         case 'file-browser':
-                            if (!task.tags?.includes('file-browser') && !task.story?.includes('20.2')) return false;
+                            const isFileTask = story.includes('20.2') || tags.includes('file-browser') || 
+                                              title.includes('file browser') || title.includes('project') ||
+                                              title.includes('save') || title.includes('load') ||
+                                              (title.includes('export') && !story.includes('19')) ||
+                                              (title.includes('import') && !story.includes('19'));
+                            if (!isFileTask) return false;
                             break;
                         case 'priority-automation':
                             if (task.metadata?.source !== 'priority-automation') return false;
@@ -1411,12 +1448,43 @@
             displayTasks();
         }
 
-        // Get priority score for sorting
+        // Get priority score for sorting with improved epic detection
         function getPriority(task) {
-            if (task.tags?.includes('auth') || task.story?.includes('20.1')) return 1;
-            if (task.tags?.includes('file-browser') || task.story?.includes('20.2')) return 2;
+            const title = (task.title || '').toLowerCase();
+            const story = (task.story || '').toLowerCase();
+            const tags = task.tags || [];
+            
+            // Authentication tasks (Priority 1)
+            if (story.includes('20.1') || tags.includes('auth') || 
+                title.includes('auth') || title.includes('login') ||
+                title.includes('register') || title.includes('password') ||
+                title.includes('jwt') || title.includes('token')) {
+                return 1;
+            }
+            
+            // File browser tasks (Priority 2)
+            if (story.includes('20.2') || tags.includes('file-browser') || 
+                title.includes('file browser') || title.includes('project') ||
+                title.includes('save') || title.includes('load') ||
+                (title.includes('export') && !story.includes('19')) ||
+                (title.includes('import') && !story.includes('19'))) {
+                return 2;
+            }
+            
+            // Priority automation tasks
             if (task.metadata?.source === 'priority-automation') return 3;
+            
+            // High priority tasks
             if (task.priority === 'high') return 4;
+            
+            // Epic 19 tasks (deprioritized)
+            if (story.includes('19') || title.includes('privacy') || 
+                title.includes('compliance') || title.includes('gdpr') || 
+                title.includes('policy') || title.includes('audit') ||
+                title.includes('iso 27001')) {
+                return 10; // Low priority
+            }
+            
             return 5;
         }
 
@@ -1513,14 +1581,42 @@
             }).join('');
         }
 
-        // Get story label
+        // Get story label with improved epic detection
         function getStoryLabel(task) {
-            if (task.story?.includes('20.1')) return '🔐 Authentication';
-            if (task.story?.includes('20.2')) return '📁 File Browser';
-            if (task.story) return task.story;
-            if (task.tags?.includes('auth')) return '🔐 Authentication';
-            if (task.tags?.includes('file-browser')) return '📁 File Browser';
-            return 'N/A';
+            const title = (task.title || '').toLowerCase();
+            const story = (task.story || '').toLowerCase();
+            const tags = task.tags || [];
+            
+            // Priority system matching (same as priority task system)
+            if (story.includes('20.1') || tags.includes('auth') || 
+                title.includes('auth') || title.includes('login') ||
+                title.includes('register') || title.includes('password') ||
+                title.includes('jwt') || title.includes('token')) {
+                return '🔐 Authentication (20.1)';
+            }
+            
+            if (story.includes('20.2') || tags.includes('file-browser') || 
+                title.includes('file browser') || title.includes('project') ||
+                title.includes('save') || title.includes('load') ||
+                (title.includes('export') && !story.includes('19')) ||
+                (title.includes('import') && !story.includes('19'))) {
+                return '📁 File Browser (20.2)';
+            }
+            
+            // Epic 19 detection
+            if (story.includes('19') || title.includes('privacy') || 
+                title.includes('compliance') || title.includes('gdpr') || 
+                title.includes('policy') || title.includes('audit') ||
+                title.includes('iso 27001')) {
+                return '🚫 Epic 19 (Privacy)';
+            }
+            
+            // Check for priority automation tasks
+            if (task.metadata?.source === 'priority-automation') {
+                return '⚡ Priority Task';
+            }
+            
+            return task.story || 'Other';
         }
 
         // Format date

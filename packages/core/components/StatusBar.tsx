@@ -39,38 +39,7 @@ interface StatusBarProps {
   optimizationEnabled?: boolean;
 }
 
-export const StatusBar: React.FC<StatusBarProps> = ({
-  statusMessage,
-  errors,
-  onPreview,
-  onSaveJson,
-  onExportBundle,
-  onSaveProject,
-  onLoadProject,
-  onNewProject,
-  hasUnsavedChanges,
-  currentProjectName,
-  onCorrections,
-  correctionsEnabled,
-  correctionsOpen,
-  onStats,
-  statsOpen,
-  onExtensions,
-  extensionsOpen,
-  connectionState,
-  queuedMessages,
-  onClearQueue,
-  onReconnect,
-  onDisconnect,
-  encryptionState,
-  onEncrypt,
-  onDecrypt,
-  onChangeAlgorithm,
-  onOptimization,
-  optimizationEnabled,
-}) => {
-  const errorCount = errors.length;
-  const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
+export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
   const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
   const wsDetailsRef = useRef<HTMLDivElement>(null);
   const encryptionDetailsRef = useRef<HTMLDivElement>(null);
@@ -289,6 +258,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
         
         {onOptimization && (
           <button
+            data-optimization-button
             onClick={onOptimization}
             title="Open graph optimization and performance tools"
             style={{ 

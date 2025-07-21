@@ -292,16 +292,24 @@ function taskExists(state, title) {
 }
 
 function createTaskObject(taskDef, taskId) {
+  // Determine epic story code based on task type
+  let storyCode = 'Other';
+  if (taskDef.story && taskDef.story.includes('20.1')) {
+    storyCode = '20.1';
+  } else if (taskDef.story && taskDef.story.includes('20.2')) {
+    storyCode = '20.2';
+  }
+  
   return {
     id: taskId,
     title: taskDef.title,
     description: taskDef.description,
-    state: 'TODO',
+    state: 'UNASSIGNED', // Changed from TODO to match system conventions
     priority: taskDef.priority,
     estimate: taskDef.estimate,
     wipClass: taskDef.wipClass,
     epic: taskDef.epic,
-    story: taskDef.story,
+    story: storyCode, // Simplified to just the code for dashboard compatibility
     tags: taskDef.tags,
     acceptanceCriteria: taskDef.acceptanceCriteria,
     dependencies: taskDef.dependencies || [],
@@ -313,7 +321,9 @@ function createTaskObject(taskDef, taskId) {
       source: 'priority-automation',
       category: 'immediate-priority',
       automated: true,
-      priority_level: taskDef.priority === 'high' ? 1 : 2
+      priority_level: taskDef.priority === 'high' ? 1 : 2,
+      epic: storyCode === '20.1' ? 'Authentication System' : 
+            storyCode === '20.2' ? 'File Browser System' : 'Other'
     }
   };
 }
