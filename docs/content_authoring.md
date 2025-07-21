@@ -291,4 +291,26 @@ Break complex graphs into reusable components:
 
 ---
 
+## Domain-Specific Toolkits
+
+### Content Creation & Media Toolkit
+For advanced content creation workflows including script writing, story development, and media production, see the dedicated [Content Creation & Media Toolkit Documentation](content-creation-media-toolkit.md).
+
+This specialized toolkit includes:
+- **Creative Writing Components**: Plot generation, character development, and tone adaptation
+- **Script Generation**: Screenplay, podcast, and video script templates
+- **Media Accessibility**: Alt-text generation and audio description tools
+- **Workflow Templates**: End-to-end content creation pipelines
+- **Advanced Features**: Multi-modal content integration and collaborative tools
+
+### Other Available Toolkits
+- **Healthcare & Life Sciences**: Medical text processing and HIPAA-compliant workflows
+- **Financial Services**: Transaction analysis and regulatory compliance tools
+- **Legal & Regulatory**: Contract analysis and legal document processing
+- **E-commerce & Retail**: Product descriptions and customer service automation
+
+*For more information on domain-specific toolkits, see [Epic 28 Implementation Plan](epic28plan.md).*
+
+---
+
 *Happy creating! Remember that great prompts come from thoughtful design and thorough testing.*
