@@ -626,8 +626,9 @@ export class AuditTeamCollaborationService extends EventEmitter {
   /**
    * Add evidence to an investigation
    */
-  async addEvidence(evidence: Omit<Evidence, 'id' | 'custodyChain' | 'collectedBy' | 'collectedAt' | 'verified'>): Promise<Evidence> {
+  async addEvidence(evidence: Omit<Evidence, 'id' | 'custodyChain' | 'collectedBy' | 'collectedAt' | 'verified'>, collectedBy: string = 'system'): Promise<Evidence> {
     const id = uuidv4();
+    const collectedAt = new Date();
 
     try {
       await this.db.query(`
@@ -640,32 +641,35 @@ export class AuditTeamCollaborationService extends EventEmitter {
       `, [
         id, evidence.investigationId, evidence.taskId, evidence.title,
         evidence.description, evidence.type, evidence.fileName, evidence.fileSize,
-        evidence.filePath, evidence.fileHash, evidence.collectedBy, evidence.collectedAt,
+        evidence.filePath, evidence.fileHash, collectedBy, collectedAt,
         evidence.source, evidence.content, evidence.confidentialityLevel,
         JSON.stringify(evidence.metadata)
       ]);
 
       // Create initial custody record
       const custodyId = uuidv4();
-      const signature = this.generateCustodySignature(id, evidence.collectedBy, evidence.collectedAt);
+      const signature = this.generateCustodySignature(id, collectedBy, collectedAt);
       
       await this.db.query(`
         INSERT INTO custody_chain (
           id, evidence_id, transferred_to, transferred_at, reason, signature
         ) VALUES ($1, $2, $3, $4, $5, $6)
       `, [
-        custodyId, id, evidence.collectedBy, evidence.collectedAt,
+        custodyId, id, collectedBy, collectedAt,
         'Initial collection', signature
       ]);
 
       const createdEvidence: Evidence = {
         ...evidence,
         id,
+        collectedBy,
+        collectedAt,
+        verified: false,
         custodyChain: [{
           id: custodyId,
           evidenceId: id,
-          transferredTo: evidence.collectedBy,
-          transferredAt: evidence.collectedAt,
+          transferredTo: collectedBy,
+          transferredAt: collectedAt,
           reason: 'Initial collection',
           signature
         }]

@@ -1,5 +1,10 @@
 {
-  "unpushedApprovals": [],
+  "unpushedApprovals": [
+    {
+      "taskId": "T-1752989143998-359",
+      "approvedAt": "2025-07-21T00:53:04.354Z"
+    }
+  ],
   "lastPushTimestamp": "2025-07-21T00:51:42.320Z",
   "pushedHistory": [
     {
