@@ -81,7 +81,7 @@ export enum EvidenceType {
 export interface Investigation {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   category: InvestigationCategory;
   priority: InvestigationPriority;
   status: InvestigationStatus;
@@ -125,7 +125,7 @@ export interface InvestigationTask {
   id: string;
   investigationId: string;
   title: string;
-  description: string;
+  description?: string;
   assignedTo: string;
   status: TaskStatus;
   priority: InvestigationPriority;
@@ -581,7 +581,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
   /**
    * Create a task within an investigation
    */
-  async createTask(task: Omit<InvestigationTask, 'id' | 'createdAt' | 'updatedAt'>): Promise<InvestigationTask> {
+  async createTask(task: Omit<InvestigationTask, 'id' | 'createdAt' | 'updatedAt' | 'status'>): Promise<InvestigationTask> {
     const id = uuidv4();
     const now = new Date();
 
