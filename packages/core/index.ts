@@ -35,6 +35,7 @@ export { useGraphStore } from './graphStore';
 
 // Project Management System exports
 export { ProjectManager } from './projectManager';
+export { ServerProjectManager } from './serverProjectManager';
 export type { 
   ProjectMetadata, 
   PSGFile, 
@@ -43,8 +44,15 @@ export type {
   LoadProjectResult,
   SaveProjectResult 
 } from './projectManager';
+export type {
+  ServerProjectMetadata,
+  ServerProject,
+  ProjectListResponse,
+  ProjectQuery
+} from './serverProjectManager';
 export { default as SaveProjectDialog } from './components/ProjectDialogs/SaveProjectDialog';
 export { default as LoadProjectDialog } from './components/ProjectDialogs/LoadProjectDialog';
+export { default as ExportBundleDialog } from './components/ProjectDialogs/ExportBundleDialog';
 
 // Epic 8.2 - Corrections Manager GA exports
 export { ResponsiveCorrectionsPanel } from './ResponsiveCorrectionsPanel';

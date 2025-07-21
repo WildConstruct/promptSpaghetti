@@ -8,11 +8,15 @@ import { VariableEditor } from './editors/VariableEditor';
 import { SubjectEditor } from './editors/SubjectEditor';
 import { ActionEditor } from './editors/ActionEditor';
 import { PythonTransformEditor } from './editors/PythonTransformEditor';
+import { ConditionalEditor } from './editors/ConditionalEditor';
+import { SequentialEditor } from './editors/SequentialEditor';
+import { MarkovEditor } from './editors/MarkovEditor';
+import { WeightedAdvancedEditor } from './editors/WeightedAdvancedEditor';
 import { BaseNodeEditor } from './BaseNodeEditor';
 
 interface NodeEditorRouterProps {
-  node: any;
-  schema: ZodSchema<any>;
+  node: Record<string, unknown>;
+  schema: ZodSchema<Record<string, unknown>>;
   onChange: (partial: Record<string, unknown>) => void;
 }
 
@@ -74,20 +78,16 @@ export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({
     
     // Advanced Nodes (Epic 7)
   case 'WeightedAdvanced':
-    // TODO: Create WeightedAdvancedEditor
-    return <BaseNodeEditor {...editorProps} />;
+    return <WeightedAdvancedEditor {...editorProps} />;
     
   case 'Conditional':
-    // TODO: Create ConditionalEditor
-    return <BaseNodeEditor {...editorProps} />;
+    return <ConditionalEditor {...editorProps} />;
     
   case 'Sequential':
-    // TODO: Create SequentialEditor
-    return <BaseNodeEditor {...editorProps} />;
+    return <SequentialEditor {...editorProps} />;
     
   case 'Markov':
-    // TODO: Create MarkovEditor
-    return <BaseNodeEditor {...editorProps} />;
+    return <MarkovEditor {...editorProps} />;
     
     // Python Node
   case 'PythonTransform':

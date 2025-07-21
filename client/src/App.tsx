@@ -4,6 +4,7 @@ import { ReactFlowProvider } from 'reactflow';
 import { GraphEditor, RandomizerPanel } from './core';
 import { PrivateRoute } from './components/auth/PrivateRoute';
 import { useAuthStore, setupTokenRefresh } from './stores/authStore';
+import EpicDashboard from './components/EpicDashboard';
 import LoginPage from './pages/LoginPage';
 import RegistrationPage from './pages/RegistrationPage';
 import PasswordResetPage from './pages/PasswordResetPage';
@@ -23,10 +24,11 @@ function MainApp() {
   const { isAuthenticated, logout } = useAuthStore();
 
   // Determine active tab based on current route
-  const activeTab = location.pathname === '/randomizer' ? 'randomizer' : 'editor';
+  const activeTab = location.pathname === '/randomizer' ? 'randomizer' : 
+                   location.pathname === '/epic-status' ? 'epic-status' : 'editor';
 
-  const handleTabChange = useCallback((tab: 'editor' | 'randomizer') => {
-    navigate(tab === 'editor' ? '/' : '/randomizer');
+  const handleTabChange = useCallback((tab: 'editor' | 'randomizer' | 'epic-status') => {
+    navigate(tab === 'editor' ? '/' : tab === 'randomizer' ? '/randomizer' : '/epic-status');
   }, [navigate]);
 
   const handleGraphGenerated = useCallback((graph: unknown) => {
@@ -84,6 +86,20 @@ function MainApp() {
             >
               LLM Randomizer
             </button>
+            <button
+              onClick={() => handleTabChange('epic-status')}
+              style={{
+                padding: '10px 20px',
+                border: 'none',
+                backgroundColor: activeTab === 'epic-status' ? '#fff' : 'transparent',
+                borderBottom: activeTab === 'epic-status' ? '2px solid #007bff' : '2px solid transparent',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: activeTab === 'epic-status' ? 'bold' : 'normal'
+              }}
+            >
+              Epic Status
+            </button>
           </div>
           
           {/* Authentication Controls */}
@@ -114,7 +130,7 @@ function MainApp() {
               initialNodes={generatedGraph?.nodes || []}
               initialEdges={generatedGraph?.edges || []}
             />
-          ) : (
+          ) : activeTab === 'randomizer' ? (
             <div style={{ 
               padding: '20px', 
               height: '100%', 
@@ -127,6 +143,8 @@ function MainApp() {
                 className="randomizer-main"
               />
             </div>
+          ) : (
+            <EpicDashboard />
           )}
         </div>
       </div>
@@ -161,6 +179,11 @@ export default function App() {
           </PrivateRoute>
         } />
         <Route path="/randomizer" element={
+          <PrivateRoute>
+            <MainApp />
+          </PrivateRoute>
+        } />
+        <Route path="/epic-status" element={
           <PrivateRoute>
             <MainApp />
           </PrivateRoute>

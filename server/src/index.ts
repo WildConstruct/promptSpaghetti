@@ -7,6 +7,7 @@ import { graphToBundle, GeneratorBundle } from './exporter';
 import { initDatabase, healthCheck, getDatabase, runMigrations } from './database/connection';
 import { correctionsRoutes } from './routes/corrections';
 import { workspaceRoutes } from './routes/workspace';
+import { projectRoutes } from './routes/projects';
 import { workflowRoutes } from './routes/workflow';
 import { approvalRoutes } from './routes/approval';
 import lockingRoutes from './routes/locking';
@@ -91,7 +92,12 @@ import { ComplianceReportingService } from './services/ComplianceReportingServic
 import { policyNotificationRoutes } from './routes/policy-notification';
 import { PolicyNotificationService } from './services/PolicyNotificationService';
 import { consentCollectionRoutes } from './routes/consent-collection';
+import { FinancialDataLifecycleService } from './services/FinancialDataLifecycleService';
+import { DataLifecycleAutomationService } from './services/DataLifecycleAutomationService';
+import { DataRetentionFrameworkService } from './services/DataRetentionFrameworkService';
+import financialServicesRoutes from './routes/financial-services';
 import { ConsentCollectionService } from './services/ConsentCollectionService';
+import { healthcareRoutes } from './routes/healthcare';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -1179,6 +1185,14 @@ server.register(correctionsRoutes, { prefix: '/api/corrections' });
 // Register workspace routes
 server.register(workspaceRoutes, { prefix: '/api' });
 
+// Register project management routes
+try {
+  server.register(projectRoutes, { prefix: '/api' });
+  console.log('Project management routes registered successfully');
+} catch (error) {
+  console.error('Failed to register project management routes:', error);
+}
+
 // Register workflow routes
 server.register(workflowRoutes, { prefix: '/api/workflow' });
 
@@ -1473,6 +1487,17 @@ try {
   );
   const consentCollectionService = new ConsentCollectionService(auditService);
   
+  // Initialize Financial Data Lifecycle Service for Epic 19.2.6
+  const dataLifecycleAutomationService = new DataLifecycleAutomationService(db as any, auditService);
+  const dataRetentionFrameworkService = new DataRetentionFrameworkService(db as any, auditService);
+  const financialDataLifecycleService = new FinancialDataLifecycleService(
+    db as any,
+    auditService,
+    dataLifecycleAutomationService,
+    dataRetentionFrameworkService,
+    dataClassificationService
+  );
+  
   // Make the services available to routes via Fastify's dependency injection
   server.decorate('dataAccessControlService', dataAccessControlService);
   server.decorate('auditWorkflowService', auditWorkflowService);
@@ -1484,6 +1509,7 @@ try {
   server.decorate('policyNotificationService', policyNotificationService);
   server.decorate('complianceReportingService', complianceReportingService);
   server.decorate('consentCollectionService', consentCollectionService);
+  server.decorate('financialDataLifecycleService', financialDataLifecycleService);
   
   server.register(dataAccessRoutes, { prefix: '/api/data-access' });
   server.register(auditWorkflowRoutes, { prefix: '/api/audit-workflow' });
@@ -1495,11 +1521,14 @@ try {
   server.register(policyNotificationRoutes, { prefix: '/api/policy-notification' });
   server.register(complianceReportingRoutes, { prefix: '/api/compliance-reporting' });
   server.register(consentCollectionRoutes, { prefix: '/api/consent-collection' });
+  server.register(financialServicesRoutes, { prefix: '/api/financial-services' });
+  server.register(healthcareRoutes, { prefix: '/api' });
   console.log(
     'Epic 19 security platform routes registered successfully: data access, ' +
     'audit workflow, access request workflow, policy update workflow, ' +
     'policy acceptance tracking, OAuth guidance, policy authoring, ' +
-    'policy notifications, compliance reporting, and consent collection'
+    'policy notifications, compliance reporting, consent collection, ' +
+    'financial data lifecycle management, and healthcare & life sciences toolkit'
   );
 } catch (error) {
   console.error('Failed to register data access control routes:', error);

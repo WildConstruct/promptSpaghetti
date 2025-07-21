@@ -34,6 +34,9 @@ interface StatusBarProps {
   onEncrypt?: () => void;
   onDecrypt?: () => void;
   onChangeAlgorithm?: (algorithm: string) => void;
+  // Optimization props
+  onOptimization?: () => void;
+  optimizationEnabled?: boolean;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
@@ -63,6 +66,8 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   onEncrypt,
   onDecrypt,
   onChangeAlgorithm,
+  onOptimization,
+  optimizationEnabled,
 }) => {
   const errorCount = errors.length;
   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
@@ -279,6 +284,25 @@ export const StatusBar: React.FC<StatusBarProps> = ({
             }}
           >
             🧩 Extensions
+          </button>
+        )}
+        
+        {onOptimization && (
+          <button
+            onClick={onOptimization}
+            title="Open graph optimization and performance tools"
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: optimizationEnabled ? '#17a2b8' : '#eee', 
+              color: optimizationEnabled ? 'white' : '#23272f', 
+              border: optimizationEnabled ? '1px solid #138496' : '1px solid #ccc', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            📊 Optimize
           </button>
         )}
         

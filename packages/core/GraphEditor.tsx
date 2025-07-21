@@ -33,6 +33,13 @@ import { ExtensionManagerPanel } from './components/ExtensionManager/ExtensionMa
 import { useCorrectionsEnabled } from './correctionsStore';
 import SaveProjectDialog from './components/ProjectDialogs/SaveProjectDialog';
 import LoadProjectDialog from './components/ProjectDialogs/LoadProjectDialog';
+import ExportBundleDialog from './components/ProjectDialogs/ExportBundleDialog';
+import { 
+  GraphAnalysisPanel, 
+  PerformanceMonitor, 
+  OptimizationControls, 
+  OptimizationSettings 
+} from './components/GraphOptimization';
 import { useValidation } from './hooks/useValidation';
 import { useAutosave } from './hooks/useAutosave';
 import { useNodeUtils } from './hooks/useNodeUtils';
@@ -184,6 +191,22 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   // Project dialog states
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [loadDialogOpen, setLoadDialogOpen] = useState(false);
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  
+  // Optimization panel states
+  const [optimizationControlsOpen, setOptimizationControlsOpen] = useState(false);
+  const [performanceMonitorVisible, setPerformanceMonitorVisible] = useState(false);
+  const [graphAnalysisOpen, setGraphAnalysisOpen] = useState(false);
+  const [optimizationSettings, setOptimizationSettings] = useState<OptimizationSettings>({
+    deadCodeElimination: true,
+    constantPropagation: true,
+    resultCaching: true,
+    parallelExecution: false,
+    memoryOptimization: true,
+    precompilation: false,
+    performanceMonitoring: true,
+    debugMode: false,
+  });
   
   // Graph store for project management
   const { 
@@ -458,60 +481,41 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     }
   }, []);
 
-  const handleExportBundle = useCallback(async () => {
-    // Get bundle name from user or use project name
-    const bundleName = currentProject?.name || 'Untitled_Graph';
-    const bundleAuthor = currentProject?.author || 'PromptScape User';
-    const bundleVersion = '1.0.0';
-    
-    try {
-      setStatusMessage('Exporting bundle...');
-      
-      const response = await fetch('/export', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          graph: { nodes, edges },
-          options: {
-            name: bundleName,
-            version: bundleVersion,
-            author: bundleAuthor
-          }
-        })
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP ${response.status}`);
-      }
-      
-      const { bundle, filename } = await response.json();
-      
-      // Download the bundle file
-      const blob = new Blob([
-        JSON.stringify(bundle, null, 2)
-      ], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 0);
-      
+  const handleExportBundle = useCallback(() => {
+    setExportDialogOpen(true);
+  }, []);
+
+  const handleExportSuccess = useCallback((result: { success: boolean; error?: string }) => {
+    if (result.success) {
       setStatusMessage('Bundle exported successfully!');
       setTimeout(() => setStatusMessage(''), 3000);
-    } catch (error) {
-      console.error('Export bundle failed:', error);
-      setStatusMessage(`Export failed: ${error instanceof Error ? error.message : String(error)}`);
+    } else {
+      setStatusMessage(`Export failed: ${result.error}`);
       setTimeout(() => setStatusMessage(''), 5000);
     }
-  }, [nodes, edges, currentProject]);
+  }, []);
+
+  // Optimization handlers
+  const handleOptimizationOpen = useCallback(() => {
+    setOptimizationControlsOpen(true);
+  }, []);
+
+  const handleOptimizationSettingsChange = useCallback((newSettings: OptimizationSettings) => {
+    setOptimizationSettings(newSettings);
+    setStatusMessage('Optimization settings updated');
+    setTimeout(() => setStatusMessage(''), 3000);
+  }, []);
+
+  const handleGraphAnalysisOpen = useCallback(() => {
+    setGraphAnalysisOpen(true);
+  }, []);
+
+  const handlePerformanceMonitorToggle = useCallback(() => {
+    setPerformanceMonitorVisible(prev => !prev);
+  }, []);
+
+  // Check if any optimization features are enabled
+  const isOptimizationEnabled = Object.values(optimizationSettings).some(value => value);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -694,6 +698,8 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         onEncrypt={handleEncrypt}
         onDecrypt={handleDecrypt}
         onChangeAlgorithm={handleChangeAlgorithm}
+        onOptimization={handleOptimizationOpen}
+        optimizationEnabled={isOptimizationEnabled}
       />
       <PreviewModal
         open={previewOpen}
@@ -746,6 +752,34 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         isOpen={loadDialogOpen}
         onClose={() => setLoadDialogOpen(false)}
         onLoad={handleLoadSuccess}
+      />
+      
+      <ExportBundleDialog
+        isOpen={exportDialogOpen}
+        onClose={() => setExportDialogOpen(false)}
+        nodes={nodes}
+        edges={edges}
+        onExport={handleExportSuccess}
+      />
+
+      {/* Graph Optimization Components */}
+      <OptimizationControls
+        settings={optimizationSettings}
+        onSettingsChange={handleOptimizationSettingsChange}
+        isOpen={optimizationControlsOpen}
+        onClose={() => setOptimizationControlsOpen(false)}
+      />
+      
+      <GraphAnalysisPanel
+        nodes={nodes}
+        edges={edges}
+        isOpen={graphAnalysisOpen}
+        onClose={() => setGraphAnalysisOpen(false)}
+      />
+      
+      <PerformanceMonitor
+        isVisible={performanceMonitorVisible}
+        onToggle={handlePerformanceMonitorToggle}
       />
     </div>
   );
