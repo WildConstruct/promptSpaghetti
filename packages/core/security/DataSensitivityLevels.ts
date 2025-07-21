@@ -674,9 +674,8 @@ const DATA_SENSITIVITY_GUIDELINES = {
   ]
 };
 
-// Export everything
+// Export everything (DataSensitivityLevel already exported with enum declaration)
 export {
-  DataSensitivityLevel,
   DataSensitivityUtils,
   DATA_SENSITIVITY_DEFINITIONS,
   DATA_SENSITIVITY_GUIDELINES,
