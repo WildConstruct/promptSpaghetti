@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Ticketing Dashboard with Daily Metrics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e1e5e9;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #1e1e2e;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            overflow: hidden;
+            border: 1px solid #2d2d44;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f29 100%);
+            color: #e1e5e9;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid #2d2d44;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #374151;
+            color: #e1e5e9;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: #4b5563;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #252538;
+            padding: 20px;
+            border-bottom: 1px solid #2d2d44;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #74c0fc;
+        }
+
+        .stat-label {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #252538;
+            border-bottom: 1px solid #2d2d44;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: transparent;
+            color: #9ca3af;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab:hover {
+            background: #2d2d44;
+            color: #e1e5e9;
+        }
+
+        .nav-tab.active {
+            color: #74c0fc;
+            border-bottom-color: #74c0fc;
+            background: #1e1e2e;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            min-height: 600px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Daily Metrics Styles */
+        .metrics-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: #252538;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #2d2d44;
+        }
+
+        .metric-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .metric-trend {
+            color: #10b981;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .metric-trend.down {
+            color: #ef4444;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: #252538;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #2d2d44;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #e1e5e9;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+
+        .chart-container.small {
+            height: 300px;
+        }
+
+        /* Epic Dashboard Styles (reused from original) */
+        .epic-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .epic-stat {
+            background: #252538;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #2d2d44;
+        }
+
+        .epic-stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+
+        .epic-stat-label {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* Controls and task styles from original dashboard */
+        .controls {
+            background: #1e1e2e;
+            padding: 25px;
+            border-bottom: 1px solid #2d2d44;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            font-weight: 500;
+        }
+
+        .control-group select,
+        .control-group input {
+            padding: 8px 12px;
+            border: 1px solid #374151;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            background: #2d2d44;
+            color: #e1e5e9;
+        }
+
+        .refresh-btn {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+            align-self: end;
+        }
+
+        .refresh-btn:hover {
+            background: #047857;
+        }
+
+        /* Sprint plan integration */
+        .sprint-plan-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .sprint-plan-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .sprint-phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .sprint-phase {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .phase-number {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .phase-title {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+            <h1>📈 Enhanced Dashboard with Daily Progress</h1>
+            <p>Sprint planning, task completion tracking, and comprehensive project metrics</p>
+        </div>
+
+        <div class="stats-bar" id="statsBar">
+            <div class="stat">
+                <div class="stat-number" id="totalTasks">5,900</div>
+                <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="completedToday">-</div>
+                <div class="stat-label">Completed Today</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="weeklyVelocity">-</div>
+                <div class="stat-label">Weekly Velocity</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="sprintProgress">-</div>
+                <div class="stat-label">Sprint Progress</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="authTasks">-</div>
+                <div class="stat-label">Auth Tasks</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="fileTasks">-</div>
+                <div class="stat-label">File Browser</div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('daily-metrics')">📈 Daily Progress</button>
+            <button class="nav-tab" onclick="switchTab('sprint-plan')">🚀 Sprint Plan</button>
+            <button class="nav-tab" onclick="switchTab('epic-status')">Epic Status</button>
+            <button class="nav-tab" onclick="switchTab('tasks')">Task Management</button>
+        </div>
+
+        <!-- Daily Metrics Tab -->
+        <div id="daily-metrics" class="tab-content active">
+            <div class="metrics-overview">
+                <div class="metric-card">
+                    <div class="metric-number" id="dailyCompleted">-</div>
+                    <div class="metric-label">Today's Completed</div>
+                    <div class="metric-trend" id="dailyTrend">-</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="weeklyAverage">-</div>
+                    <div class="metric-label">Weekly Average</div>
+                    <div class="metric-trend" id="weeklyTrend">-</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="monthlyTotal">-</div>
+                    <div class="metric-label">Monthly Total</div>
+                    <div class="metric-trend" id="monthlyTrend">-</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="burnRate">-</div>
+                    <div class="metric-label">Daily Burn Rate</div>
+                    <div class="metric-trend">tasks/day avg</div>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-title">📈 Daily Task Completion (Last 30 Days)</div>
+                    <div class="chart-container">
+                        <canvas id="dailyCompletionChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="chart-title">📊 Completion by Epic</div>
+                    <div class="chart-container small">
+                        <canvas id="epicCompletionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">🔥 Task State Distribution Over Time</div>
+                <div class="chart-container">
+                    <canvas id="stateDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sprint Plan Tab -->
+        <div id="sprint-plan" class="tab-content">
+            <div class="sprint-plan-summary">
+                <div class="sprint-plan-title">🚀 6-Month Sprint Plan Execution</div>
+                <p style="text-align: center; margin-bottom: 20px;">
+                    Systematic development of 5,900 tasks organized into focused sprints
+                </p>
+                
+                <div class="sprint-phases">
+                    <div class="sprint-phase">
+                        <div class="phase-number">Phase 1</div>
+                        <div class="phase-title">Foundation & Performance</div>
+                        <div style="font-size: 0.8rem; margin-top: 5px;">Epic 6, 9 (284 tasks)</div>
+                    </div>
+                    <div class="sprint-phase">
+                        <div class="phase-number">Phase 2</div>
+                        <div class="phase-title">Infrastructure & Security</div>
+                        <div style="font-size: 0.8rem; margin-top: 5px;">Epic 11, 14, 12 (1,241 tasks)</div>
+                    </div>
+                    <div class="sprint-phase">
+                        <div class="phase-number">Phase 3</div>
+                        <div class="phase-title">Business Logic</div>
+                        <div style="font-size: 0.8rem; margin-top: 5px;">Epic 10, 17, 18 (1,821 tasks)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="epic-overview">
+                <div class="epic-stat">
+                    <div class="epic-stat-number">173</div>
+                    <div class="epic-stat-label">Epic 6: Performance & Scalability</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number">226</div>
+                    <div class="epic-stat-label">Epic 7: Advanced Node Capabilities</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number">111</div>
+                    <div class="epic-stat-label">Epic 9: Error Handling & UX</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number">754</div>
+                    <div class="epic-stat-label">Epic 10: Advanced Analytics</div>
+                </div>
+            </div>
+
+            <div style="
+                background: #252538;
+                border-radius: 12px;
+                padding: 25px;
+                border: 1px solid #2d2d44;
+            ">
+                <h3 style="color: #e1e5e9; margin-bottom: 15px;">🎯 Next Actions (After Login + File Browser)</h3>
+                <div style="color: #9ca3af; line-height: 1.6;">
+                    <p style="margin-bottom: 10px;"><strong>Sprint 1-2 (4 weeks):</strong> Foundation - Epic 6 (Performance) + Epic 9 (Error Handling)</p>
+                    <p style="margin-bottom: 10px;"><strong>Sprint 3-4 (4 weeks):</strong> Advanced Capabilities - Epic 7 (Advanced Nodes) + Epic 11 (User Management)</p>
+                    <p style="margin-bottom: 10px;"><strong>Sprint 5-6 (4 weeks):</strong> Data & Security - Epic 12 (Data Integration) + Epic 14 (Security)</p>
+                    
+                    <div style="
+                        background: rgba(116, 192, 252, 0.1);
+                        border: 1px solid rgba(116, 192, 252, 0.3);
+                        border-radius: 8px;
+                        padding: 15px;
+                        margin-top: 20px;
+                    ">
+                        <strong style="color: #74c0fc;">Ready to Execute:</strong>
+                        <br>
+                        <code style="background: #374151; padding: 2px 6px; border-radius: 4px; margin-top: 5px; display: inline-block;">
+                            node src/grab-tasks.js &lt;agent-id&gt; --epic=6
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Epic Status Tab (simplified from original) -->
+        <div id="epic-status" class="tab-content">
+            <div class="epic-overview">
+                <div class="epic-stat">
+                    <div class="epic-stat-number">29</div>
+                    <div class="epic-stat-label">Total Epics</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number">5,900</div>
+                    <div class="epic-stat-label">Total Tasks</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number">100%</div>
+                    <div class="epic-stat-label">Epic Coverage</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number">6+</div>
+                    <div class="epic-stat-label">Months Planned</div>
+                </div>
+            </div>
+
+            <!-- Business Impact Summary -->
+            <div style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 12px;
+                padding: 25px;
+                color: white;
+                text-align: center;
+                margin-top: 30px;
+            ">
+                <h3 style="margin-bottom: 10px;">🎉 Epic Processing Complete!</h3>
+                <p style="margin-bottom: 15px;">
+                    <strong>Journey: 909 → 5,900 tasks</strong> with comprehensive sprint planning
+                </p>
+                <div style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                    gap: 15px;
+                    margin-top: 20px;
+                ">
+                    <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                        <div style="font-size: 1.2rem; font-weight: bold;">754</div>
+                        <div style="font-size: 0.9rem;">Epic 10 Analytics</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                        <div style="font-size: 1.2rem; font-weight: bold;">554</div>
+                        <div style="font-size: 0.9rem;">Epic 17 Workflows</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px;">
+                        <div style="font-size: 1.2rem; font-weight: bold;">513</div>
+                        <div style="font-size: 0.9rem;">Epic 18 Compliance</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Tab (simplified controls) -->
+        <div id="tasks" class="tab-content">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Quick Filter</label>
+                    <select id="quickFilter">
+                        <option value="">All Tasks</option>
+                        <option value="auth">🔐 Authentication Tasks</option>
+                        <option value="file-browser">📁 File Browser Tasks</option>
+                        <option value="epic-6">⚡ Epic 6: Performance</option>
+                        <option value="high-priority">🔥 High Priority</option>
+                        <option value="unassigned">📋 Available Tasks</option>
+                        <option value="completed-today">✅ Completed Today</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>Search Tasks</label>
+                    <input type="text" id="searchInput" placeholder="Search by title, ID, or tags...">
+                </div>
+
+                <button class="refresh-btn" onclick="loadDashboardData()">🔄 Refresh All Data</button>
+            </div>
+
+            <div id="tasksPreview" style="
+                background: #252538;
+                border-radius: 10px;
+                padding: 25px;
+                margin: 20px 0;
+                border: 1px solid #2d2d44;
+                text-align: center;
+                color: #9ca3af;
+            ">
+                <div style="font-size: 1.2rem; color: #e1e5e9; margin-bottom: 15px;">🔍 Task Management Integration</div>
+                <p style="margin-bottom: 15px;">
+                    Full task management interface available in the original complete-dashboard.html
+                </p>
+                <div style="
+                    background: rgba(116, 192, 252, 0.1);
+                    border: 1px solid rgba(116, 192, 252, 0.3);
+                    border-radius: 8px;
+                    padding: 15px;
+                ">
+                    <strong style="color: #74c0fc;">Access Full Task Management:</strong>
+                    <br>
+                    <code style="background: #374151; padding: 2px 6px; border-radius: 4px; margin-top: 5px; display: inline-block;">
+                        http://localhost:8000/src/complete-dashboard.html
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allTasks = [];
+        let dailyCompletionChart = null;
+        let epicCompletionChart = null;
+        let stateDistributionChart = null;
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tabName === 'daily-metrics') {
+                loadDashboardData();
+            }
+        }
+
+        // Load all dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('./data/state.json');
+                if (!response.ok) {
+                    throw new Error(`Failed to load data: ${response.statusText}`);
+                }
+                
+                const state = await response.json();
+                allTasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
+                    ...task,
+                    id: id
+                }));
+
+                updateMetrics();
+                createCharts();
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                // Show error in charts
+                document.querySelectorAll('.metric-number').forEach(el => {
+                    el.textContent = 'Error';
+                });
+            }
+        }
+
+        // Update metrics display
+        function updateMetrics() {
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+            // Filter completed tasks
+            const completedTasks = allTasks.filter(task => task.state === 'COMPLETED');
+            
+            // Calculate daily metrics
+            const completedToday = completedTasks.filter(task => {
+                if (!task.lastUpdated) return false;
+                const taskDate = new Date(task.lastUpdated).toISOString().split('T')[0];
+                return taskDate === today;
+            }).length;
+
+            const completedThisWeek = completedTasks.filter(task => {
+                if (!task.lastUpdated) return false;
+                const taskDate = new Date(task.lastUpdated);
+                return taskDate >= weekAgo;
+            }).length;
+
+            const completedThisMonth = completedTasks.filter(task => {
+                if (!task.lastUpdated) return false;
+                const taskDate = new Date(task.lastUpdated);
+                return taskDate >= monthAgo;
+            }).length;
+
+            // Update displays
+            document.getElementById('completedToday').textContent = completedToday;
+            document.getElementById('weeklyVelocity').textContent = Math.round(completedThisWeek / 7 * 10) / 10;
+            document.getElementById('sprintProgress').textContent = completedTasks.length + '/' + allTasks.length;
+
+            // Update metric cards
+            document.getElementById('dailyCompleted').textContent = completedToday;
+            document.getElementById('weeklyAverage').textContent = Math.round(completedThisWeek / 7 * 10) / 10;
+            document.getElementById('monthlyTotal').textContent = completedThisMonth;
+            document.getElementById('burnRate').textContent = Math.round(completedThisMonth / 30 * 10) / 10;
+
+            // Update auth and file tasks
+            const authTasks = allTasks.filter(task => isAuthTask(task)).length;
+            const fileTasks = allTasks.filter(task => isFileTask(task)).length;
+            
+            document.getElementById('authTasks').textContent = authTasks;
+            document.getElementById('fileTasks').textContent = fileTasks;
+
+            // Update trends (simplified)
+            const yesterdayCompleted = completedTasks.filter(task => {
+                if (!task.lastUpdated) return false;
+                const taskDate = new Date(task.lastUpdated);
+                const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+                return taskDate.toDateString() === yesterday.toDateString();
+            }).length;
+
+            const dailyTrend = document.getElementById('dailyTrend');
+            if (completedToday > yesterdayCompleted) {
+                dailyTrend.textContent = `+${completedToday - yesterdayCompleted} from yesterday`;
+                dailyTrend.className = 'metric-trend';
+            } else if (completedToday < yesterdayCompleted) {
+                dailyTrend.textContent = `${completedToday - yesterdayCompleted} from yesterday`;
+                dailyTrend.className = 'metric-trend down';
+            } else {
+                dailyTrend.textContent = 'Same as yesterday';
+                dailyTrend.className = 'metric-trend';
+            }
+        }
+
+        // Create charts
+        function createCharts() {
+            createDailyCompletionChart();
+            createEpicCompletionChart();
+            createStateDistributionChart();
+        }
+
+        // Daily completion chart
+        function createDailyCompletionChart() {
+            const ctx = document.getElementById('dailyCompletionChart').getContext('2d');
+            
+            // Generate last 30 days data
+            const last30Days = [];
+            const completionData = [];
+            const now = new Date();
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                const dateStr = date.toISOString().split('T')[0];
+                last30Days.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                
+                const completedOnDate = allTasks.filter(task => {
+                    if (task.state !== 'COMPLETED' || !task.lastUpdated) return false;
+                    const taskDate = new Date(task.lastUpdated).toISOString().split('T')[0];
+                    return taskDate === dateStr;
+                }).length;
+                
+                completionData.push(completedOnDate);
+            }
+
+            if (dailyCompletionChart) {
+                dailyCompletionChart.destroy();
+            }
+
+            dailyCompletionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: last30Days,
+                    datasets: [{
+                        label: 'Tasks Completed',
+                        data: completionData,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e1e5e9'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#9ca3af'
+                            },
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#9ca3af'
+                            },
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Epic completion chart
+        function createEpicCompletionChart() {
+            const ctx = document.getElementById('epicCompletionChart').getContext('2d');
+            
+            // Count tasks by epic
+            const epicCounts = {};
+            allTasks.forEach(task => {
+                let epicNum = 'Other';
+                if (task.id && task.id.includes('E')) {
+                    const match = task.id.match(/E(\d+)-/);
+                    if (match) epicNum = `Epic ${match[1]}`;
+                } else if (task.metadata?.source) {
+                    const match = task.metadata.source.match(/epic(\d+)/);
+                    if (match) epicNum = `Epic ${match[1]}`;
+                }
+                
+                if (!epicCounts[epicNum]) epicCounts[epicNum] = { total: 0, completed: 0 };
+                epicCounts[epicNum].total++;
+                if (task.state === 'COMPLETED') epicCounts[epicNum].completed++;
+            });
+
+            // Get top 6 epics by total tasks
+            const topEpics = Object.entries(epicCounts)
+                .sort((a, b) => b[1].total - a[1].total)
+                .slice(0, 6);
+
+            if (epicCompletionChart) {
+                epicCompletionChart.destroy();
+            }
+
+            epicCompletionChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: topEpics.map(([epic]) => epic),
+                    datasets: [{
+                        data: topEpics.map(([, data]) => data.completed),
+                        backgroundColor: [
+                            '#10b981', '#3b82f6', '#8b5cf6', '#f59e0b',
+                            '#ef4444', '#6b7280'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e1e5e9',
+                                padding: 15,
+                                usePointStyle: true,
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // State distribution chart
+        function createStateDistributionChart() {
+            const ctx = document.getElementById('stateDistributionChart').getContext('2d');
+            
+            // Count by state
+            const stateCounts = {};
+            allTasks.forEach(task => {
+                const state = task.state || 'Unknown';
+                stateCounts[state] = (stateCounts[state] || 0) + 1;
+            });
+
+            if (stateDistributionChart) {
+                stateDistributionChart.destroy();
+            }
+
+            stateDistributionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(stateCounts),
+                    datasets: [{
+                        label: 'Task Count',
+                        data: Object.values(stateCounts),
+                        backgroundColor: [
+                            '#6b7280', '#f59e0b', '#3b82f6', '#8b5cf6',
+                            '#10b981', '#ef4444'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#9ca3af'
+                            },
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#9ca3af'
+                            },
+                            grid: {
+                                color: 'rgba(156, 163, 175, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Helper functions
+        function isAuthTask(task) {
+            const title = (task.title || '').toLowerCase();
+            const story = (task.story || '').toLowerCase();
+            const tags = task.tags || [];
+            
+            return story.includes('20.1') || tags.includes('auth') || 
+                   title.includes('auth') || title.includes('login') ||
+                   title.includes('register') || title.includes('password');
+        }
+
+        function isFileTask(task) {
+            const title = (task.title || '').toLowerCase();
+            const story = (task.story || '').toLowerCase();
+            const tags = task.tags || [];
+            
+            return story.includes('20.2') || tags.includes('file-browser') || 
+                   title.includes('file browser') || title.includes('project') ||
+                   title.includes('save') || title.includes('load');
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                button.textContent = '🌙 Dark Mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.add('light-mode');
+                button.textContent = '☀️ Light Mode';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.querySelector('.theme-toggle').textContent = '☀️ Light Mode';
+            }
+            
+            loadDashboardData();
+        });
+
+        // Auto-refresh every minute
+        setInterval(loadDashboardData, 60000);
+    </script>
+</body>
+</html>

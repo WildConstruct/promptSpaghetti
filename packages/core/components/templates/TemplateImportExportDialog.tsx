@@ -48,7 +48,7 @@ interface ValidationResult {
   valid: boolean;
   warnings: string[];
   errors: string[];
-  template_info?: {
+  templateInfo?: {
     name: string;
     version: string;
     author: string;
@@ -119,7 +119,7 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
         valid: true,
         warnings: ['Template uses deprecated node type "LegacyTransform"'],
         errors: [],
-        template_info: {
+        templateInfo: {
           name: 'Sample Workflow Template',
           version: '2.1.0',
           author: 'Template Creator',
@@ -504,14 +504,14 @@ export   const [importStep, setImportStep] = useState<ImportStep>('source');
             </span>
           </div>
 
-          {validation.template_info && (
+          {validation.templateInfo && (
             <div className="bg-white p-3 rounded-lg mb-3">
               <h4 className="font-medium mb-2">Template Information</h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
-                <div><span className="font-medium">Name:</span> {validation.template_info.name}</div>
-                <div><span className="font-medium">Version:</span> {validation.template_info.version}</div>
-                <div><span className="font-medium">Author:</span> {validation.template_info.author}</div>
-                <div><span className="font-medium">Dependencies:</span> {validation.template_info.dependencies}</div>
+                <div><span className="font-medium">Name:</span> {validation.templateInfo.name}</div>
+                <div><span className="font-medium">Version:</span> {validation.templateInfo.version}</div>
+                <div><span className="font-medium">Author:</span> {validation.templateInfo.author}</div>
+                <div><span className="font-medium">Dependencies:</span> {validation.templateInfo.dependencies}</div>
               </div>
             </div>
           )}

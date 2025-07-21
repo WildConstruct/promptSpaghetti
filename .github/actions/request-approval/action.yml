@@ -1,0 +1,177 @@
+name: 'Request Deployment Approval'
+description: 'Request approval for deployment using the existing approval system'
+inputs:
+  workspace_id:
+    description: 'Workspace ID for the approval request'
+    required: true
+  resource_id:
+    description: 'Resource ID (typically commit SHA or deployment ID)'
+    required: true
+  transition_id:
+    description: 'Transition ID for the deployment action'
+    required: true
+  title:
+    description: 'Title for the approval request'
+    required: true
+  description:
+    description: 'Description of the deployment'
+    required: false
+    default: ''
+  urgency:
+    description: 'Urgency level (low, medium, high, critical)'
+    required: false
+    default: 'medium'
+  environment:
+    description: 'Target deployment environment'
+    required: false
+    default: 'production'
+  api_base_url:
+    description: 'Base URL for the approval API'
+    required: false
+    default: 'https://prompt-spaghetti.vercel.app'
+  api_token:
+    description: 'API token for authentication'
+    required: true
+
+outputs:
+  request_id:
+    description: 'Generated approval request ID'
+    value: ${{ steps.create-request.outputs.request_id }}
+  approval_url:
+    description: 'URL to view the approval request'
+    value: ${{ steps.create-request.outputs.approval_url }}
+  status:
+    description: 'Initial status of the approval request'
+    value: ${{ steps.create-request.outputs.status }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Create Approval Request
+      id: create-request
+      shell: bash
+      env:
+        WORKSPACE_ID: ${{ inputs.workspace_id }}
+        RESOURCE_ID: ${{ inputs.resource_id }}
+        TRANSITION_ID: ${{ inputs.transition_id }}
+        TITLE: ${{ inputs.title }}
+        DESCRIPTION: ${{ inputs.description }}
+        URGENCY: ${{ inputs.urgency }}
+        ENVIRONMENT: ${{ inputs.environment }}
+        API_BASE_URL: ${{ inputs.api_base_url }}
+        API_TOKEN: ${{ inputs.api_token }}
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_SHA: ${{ github.sha }}
+        GITHUB_REF: ${{ github.ref }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+      run: |
+        # Create approval request payload
+        cat << 'EOF' > approval_request.json
+        {
+          "workspaceId": "${{ env.WORKSPACE_ID }}",
+          "resourceId": "${{ env.RESOURCE_ID }}",
+          "transitionId": "${{ env.TRANSITION_ID }}",
+          "title": "${{ env.TITLE }}",
+          "description": "${{ env.DESCRIPTION }}",
+          "requestedBy": "${{ env.GITHUB_ACTOR }}",
+          "urgency": "${{ env.URGENCY }}",
+          "metadata": {
+            "environment": "${{ env.ENVIRONMENT }}",
+            "repository": "${{ env.GITHUB_REPOSITORY }}",
+            "sha": "${{ env.GITHUB_SHA }}",
+            "ref": "${{ env.GITHUB_REF }}",
+            "deployment_type": "github_actions",
+            "triggered_by": "ci_cd"
+          },
+          "criteria": [
+            {
+              "type": "security-review",
+              "required": true,
+              "weight": 0.3
+            },
+            {
+              "type": "performance-impact",
+              "required": true,
+              "weight": 0.2
+            },
+            {
+              "type": "business-approval",
+              "required": true,
+              "weight": 0.5
+            }
+          ]
+        }
+        EOF
+
+        # Submit approval request
+        RESPONSE=$(curl -s -X POST \
+          "$API_BASE_URL/api/approval/requests" \
+          -H "Authorization: Bearer $API_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d @approval_request.json)
+
+        # Parse response
+        REQUEST_ID=$(echo "$RESPONSE" | jq -r '.id // empty')
+        STATUS=$(echo "$RESPONSE" | jq -r '.status // "pending"')
+        
+        if [ -z "$REQUEST_ID" ]; then
+          echo "Error: Failed to create approval request"
+          echo "Response: $RESPONSE"
+          exit 1
+        fi
+
+        # Set outputs
+        echo "request_id=$REQUEST_ID" >> $GITHUB_OUTPUT
+        echo "approval_url=$API_BASE_URL/approval/dashboard?request=$REQUEST_ID" >> $GITHUB_OUTPUT
+        echo "status=$STATUS" >> $GITHUB_OUTPUT
+
+        # Create GitHub check for approval status
+        cat << 'EOF' > check_payload.json
+        {
+          "name": "Deployment Approval",
+          "head_sha": "${{ env.GITHUB_SHA }}",
+          "status": "in_progress",
+          "details_url": "${{ env.API_BASE_URL }}/approval/dashboard?request=${{ env.REQUEST_ID }}",
+          "output": {
+            "title": "Deployment Approval Required",
+            "summary": "This deployment requires approval before proceeding to ${{ env.ENVIRONMENT }}",
+            "text": "**Approval Request:** ${{ env.TITLE }}\n\n**Environment:** ${{ env.ENVIRONMENT }}\n\n**View Request:** [${{ env.API_BASE_URL }}/approval/dashboard?request=${{ env.REQUEST_ID }}](${{ env.API_BASE_URL }}/approval/dashboard?request=${{ env.REQUEST_ID }})"
+          }
+        }
+        EOF
+
+        # Create GitHub check (requires GITHUB_TOKEN)
+        if [ -n "$GITHUB_TOKEN" ]; then
+          curl -s -X POST \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d @check_payload.json > /dev/null
+        fi
+
+        echo "✅ Approval request created: $REQUEST_ID"
+        echo "🔗 View at: $API_BASE_URL/approval/dashboard?request=$REQUEST_ID"
+
+    - name: Add PR Comment
+      if: github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        APPROVAL_URL: ${{ steps.create-request.outputs.approval_url }}
+        REQUEST_ID: ${{ steps.create-request.outputs.request_id }}
+        ENVIRONMENT: ${{ inputs.environment }}
+      run: |
+        # Add comment to PR about approval requirement
+        cat << 'EOF' > pr_comment.json
+        {
+          "body": "## 🔒 Deployment Approval Required\n\nThis PR requires approval before deployment to **${{ env.ENVIRONMENT }}**.\n\n**Approval Request ID:** `${{ env.REQUEST_ID }}`\n\n[🔗 View Approval Request](${{ env.APPROVAL_URL }})\n\n### Required Approvals:\n- ✅ Security Review\n- ✅ Performance Impact Assessment  \n- ✅ Business Approval\n\n---\n*This comment will be updated when the approval status changes.*"
+        }
+        EOF
+
+        curl -s -X POST \
+          "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/${{ github.event.number }}/comments" \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -d @pr_comment.json > /dev/null
+
+        echo "✅ Added PR comment with approval details"

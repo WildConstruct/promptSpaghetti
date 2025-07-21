@@ -26,6 +26,9 @@
     },
     "api/export.js": {
       "maxDuration": 30
+    },
+    "api/deployment-gate.js": {
+      "maxDuration": 30
     }
   },
   "env": {

@@ -1,0 +1,510 @@
+name: Performance Testing with k6
+
+on:
+  # Run on pushes to main and development branches
+  push:
+    branches: [main, dev, alpha]
+  
+  # Run on pull requests to main
+  pull_request:
+    branches: [main]
+  
+  # Manual trigger with configurable parameters
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'ci'
+        type: choice
+        options:
+          - ci
+          - smoke
+          - staging
+          - production
+      scenario:
+        description: 'Load scenario'
+        required: false
+        default: 'moderate'
+        type: choice
+        options:
+          - light
+          - moderate
+          - heavy
+          - stress
+      environment:
+        description: 'Target environment'
+        required: false
+        default: 'local'
+        type: choice
+        options:
+          - local
+          - staging
+          - production
+
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: '8'
+  K6_VERSION: '0.47.0'
+
+jobs:
+  # Setup and validate environment
+  setup:
+    name: Environment Setup
+    runs-on: ubuntu-latest
+    outputs:
+      test-suite: ${{ steps.config.outputs.test-suite }}
+      scenario: ${{ steps.config.outputs.scenario }}
+      environment: ${{ steps.config.outputs.environment }}
+      should-run-performance: ${{ steps.config.outputs.should-run-performance }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure test parameters
+        id: config
+        run: |
+          # Determine test configuration based on trigger
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "test-suite=${{ github.event.inputs.test_suite }}" >> $GITHUB_OUTPUT
+            echo "scenario=${{ github.event.inputs.scenario }}" >> $GITHUB_OUTPUT
+            echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+            echo "should-run-performance=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "test-suite=ci" >> $GITHUB_OUTPUT
+              echo "scenario=moderate" >> $GITHUB_OUTPUT
+              echo "environment=local" >> $GITHUB_OUTPUT
+              echo "should-run-performance=true" >> $GITHUB_OUTPUT
+            else
+              echo "test-suite=smoke" >> $GITHUB_OUTPUT
+              echo "scenario=light" >> $GITHUB_OUTPUT
+              echo "environment=local" >> $GITHUB_OUTPUT
+              echo "should-run-performance=true" >> $GITHUB_OUTPUT
+            fi
+          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "test-suite=smoke" >> $GITHUB_OUTPUT
+            echo "scenario=light" >> $GITHUB_OUTPUT
+            echo "environment=local" >> $GITHUB_OUTPUT
+            echo "should-run-performance=true" >> $GITHUB_OUTPUT
+          else
+            echo "should-run-performance=false" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "🔧 Performance test configuration:"
+          echo "   Test suite: $(cat $GITHUB_OUTPUT | grep test-suite | cut -d= -f2)"
+          echo "   Scenario: $(cat $GITHUB_OUTPUT | grep scenario | cut -d= -f2)"
+          echo "   Environment: $(cat $GITHUB_OUTPUT | grep environment | cut -d= -f2)"
+
+  # Build and start services for testing
+  build-and-start:
+    name: Build & Start Services
+    runs-on: ubuntu-latest
+    needs: setup
+    if: needs.setup.outputs.should-run-performance == 'true'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.pnpm-store
+            node_modules
+            */node_modules
+          key: pnpm-performance-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-performance-
+            pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build client
+        run: pnpm --filter client build
+        
+      - name: Build server
+        run: pnpm --filter server build
+
+      - name: Setup test database
+        run: |
+          # Create in-memory SQLite database for testing
+          mkdir -p server/data
+          echo "Setting up test database..."
+          
+      - name: Start PromptScape server in background
+        run: |
+          echo "Starting PromptScape server for performance testing..."
+          cd server
+          nohup pnpm start > server.log 2>&1 &
+          
+          # Wait for server to be ready
+          echo "Waiting for server to start..."
+          for i in {1..30}; do
+            if curl -f http://localhost:8000/health > /dev/null 2>&1; then
+              echo "✅ Server is ready on port 8000"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "❌ Server failed to start within 30 seconds"
+              cat server.log
+              exit 1
+            fi
+            sleep 1
+          done
+          
+          # Verify WebSocket server
+          echo "Checking WebSocket server on port 8001..."
+          netstat -tuln | grep :8001 || echo "⚠️ WebSocket server may not be running"
+
+      - name: Server health check
+        run: |
+          echo "🏥 Performing comprehensive server health check..."
+          
+          # API health check
+          response=$(curl -s http://localhost:8000/health)
+          echo "Health response: $response"
+          
+          if echo "$response" | grep -q "ok"; then
+            echo "✅ API server health check passed"
+          else
+            echo "❌ API server health check failed"
+            exit 1
+          fi
+          
+          # Performance endpoint check
+          if curl -f -X POST http://localhost:8000/preview \
+               -H "Content-Type: application/json" \
+               -d '{"graph":{"nodes":[{"id":"test","type":"Output","data":{"template":"Hello World"}}],"edges":[]},"seeds":[1]}' \
+               > /dev/null 2>&1; then
+            echo "✅ Graph execution endpoint working"
+          else
+            echo "❌ Graph execution endpoint failed"
+            exit 1
+          fi
+
+      - name: Upload server logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-logs
+          path: server/server.log
+
+  # Install and configure k6
+  install-k6:
+    name: Install k6
+    runs-on: ubuntu-latest  
+    needs: setup
+    if: needs.setup.outputs.should-run-performance == 'true'
+    
+    steps:
+      - name: Download and install k6
+        run: |
+          echo "📦 Installing k6 version ${{ env.K6_VERSION }}..."
+          
+          # Download k6 binary
+          curl -LO "https://github.com/grafana/k6/releases/download/v${{ env.K6_VERSION }}/k6-v${{ env.K6_VERSION }}-linux-amd64.tar.gz"
+          tar -xzf "k6-v${{ env.K6_VERSION }}-linux-amd64.tar.gz"
+          sudo mv "k6-v${{ env.K6_VERSION }}-linux-amd64/k6" /usr/local/bin/
+          
+          # Verify installation
+          k6 version
+          
+          echo "✅ k6 installed successfully"
+
+      - name: Cache k6 binary
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/k6
+          key: k6-${{ env.K6_VERSION }}-linux-amd64
+          
+  # Run k6 performance tests
+  performance-tests:
+    name: k6 Performance Tests
+    runs-on: ubuntu-latest
+    needs: [setup, build-and-start, install-k6]
+    if: needs.setup.outputs.should-run-performance == 'true'
+    
+    strategy:
+      matrix:
+        test: [graph-execution-load, websocket-collaboration, auth-load]
+      fail-fast: false
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Restore k6 from cache
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/k6
+          key: k6-${{ env.K6_VERSION }}-linux-amd64
+
+      - name: Install k6 if not cached
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          curl -LO "https://github.com/grafana/k6/releases/download/v${{ env.K6_VERSION }}/k6-v${{ env.K6_VERSION }}-linux-amd64.tar.gz"
+          tar -xzf "k6-v${{ env.K6_VERSION }}-linux-amd64.tar.gz"
+          sudo mv "k6-v${{ env.K6_VERSION }}-linux-amd64/k6" /usr/local/bin/
+
+      - name: Run k6 test - ${{ matrix.test }}
+        run: |
+          echo "🚀 Running k6 test: ${{ matrix.test }}"
+          echo "📊 Configuration:"
+          echo "   Suite: ${{ needs.setup.outputs.test-suite }}"
+          echo "   Scenario: ${{ needs.setup.outputs.scenario }}"
+          echo "   Environment: ${{ needs.setup.outputs.environment }}"
+          
+          # Create results directory
+          mkdir -p performance-results
+          
+          # Set test configuration based on suite
+          if [[ "${{ needs.setup.outputs.test-suite }}" == "smoke" ]]; then
+            TEST_DURATION="2m"
+            MAX_VUS="10"
+          elif [[ "${{ needs.setup.outputs.test-suite }}" == "ci" ]]; then
+            TEST_DURATION="5m"
+            MAX_VUS="50"
+          else
+            TEST_DURATION="10m" 
+            MAX_VUS="200"
+          fi
+          
+          echo "   Duration: $TEST_DURATION"
+          echo "   Max VUs: $MAX_VUS"
+          
+          # Run the k6 test with comprehensive output
+          k6 run \
+            --out json=performance-results/${{ matrix.test }}-results.json \
+            --out csv=performance-results/${{ matrix.test }}-results.csv \
+            --env TEST_SUITE=${{ needs.setup.outputs.test-suite }} \
+            --env SCENARIO=${{ needs.setup.outputs.scenario }} \
+            --env ENVIRONMENT=${{ needs.setup.outputs.environment }} \
+            server/src/performance/k6-tests/${{ matrix.test }}.js
+          
+        continue-on-error: ${{ needs.setup.outputs.test-suite == 'smoke' }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-results-${{ matrix.test }}
+          path: performance-results/
+
+  # Analyze results and detect regressions
+  analyze-results:
+    name: Performance Analysis & Regression Detection  
+    runs-on: ubuntu-latest
+    needs: [setup, performance-tests]
+    if: always() && needs.setup.outputs.should-run-performance == 'true'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download all test results
+        uses: actions/download-artifact@v3
+        with:
+          path: performance-results/
+
+      - name: Performance regression analysis
+        run: |
+          echo "📊 Analyzing performance test results..."
+          
+          # Initialize analysis utilities
+          mkdir -p src/data/{logs,reports,tracking,estimation,quality,health}
+          chmod +x src/utils/*.js
+          
+          # Create combined results directory
+          mkdir -p combined-results
+          find performance-results/ -name "*.json" -exec cp {} combined-results/ \;
+          find performance-results/ -name "*.csv" -exec cp {} combined-results/ \;
+          
+          echo "📁 Results collected:"
+          ls -la combined-results/
+          
+          # Run performance analysis using existing infrastructure
+          node server/src/performance/performance-cli.ts analyze \
+            --input combined-results \
+            --suite ${{ needs.setup.outputs.test-suite }} \
+            --environment ${{ needs.setup.outputs.environment }}
+
+      - name: Generate performance report
+        run: |
+          echo "📝 Generating comprehensive performance report..."
+          
+          # Generate HTML report with charts and analysis
+          node server/src/performance/performance-cli.ts report \
+            --input combined-results \
+            --output performance-report.html \
+            --format html \
+            --include-recommendations
+            
+          # Generate JSON summary for API consumption
+          node server/src/performance/performance-cli.ts report \
+            --input combined-results \
+            --output performance-summary.json \
+            --format json
+            
+          echo "✅ Performance reports generated"
+
+      - name: Performance threshold validation
+        run: |
+          echo "🎯 Validating performance against Epic 20 thresholds..."
+          
+          # Use existing performance validation
+          VALIDATION_EXIT_CODE=0
+          
+          node server/src/performance/performance-cli.ts validate \
+            --input combined-results \
+            --thresholds epic20 \
+            --suite ${{ needs.setup.outputs.test-suite }} || VALIDATION_EXIT_CODE=$?
+          
+          if [[ $VALIDATION_EXIT_CODE -eq 0 ]]; then
+            echo "✅ All performance thresholds met"
+            echo "performance_status=passed" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ Some performance thresholds failed"
+            echo "performance_status=warning" >> $GITHUB_OUTPUT
+            
+            # Don't fail CI for smoke tests
+            if [[ "${{ needs.setup.outputs.test-suite }}" != "smoke" ]]; then
+              exit 1
+            fi
+          fi
+
+      - name: Update performance baselines
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          echo "📈 Updating performance baselines for future regression detection..."
+          
+          node server/src/performance/performance-cli.ts baseline \
+            --input combined-results \
+            --update main \
+            --commit ${{ github.sha }}
+
+      - name: Upload performance reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-reports
+          path: |
+            performance-report.html
+            performance-summary.json
+            combined-results/
+
+  # Comment on PR with performance results
+  pr-comment:
+    name: PR Performance Summary
+    runs-on: ubuntu-latest
+    needs: [setup, analyze-results]
+    if: github.event_name == 'pull_request' && always()
+    
+    steps:
+      - name: Download performance reports
+        uses: actions/download-artifact@v3
+        with:
+          name: performance-reports
+          path: reports/
+
+      - name: Create PR comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            
+            // Read performance summary
+            let summary = {};
+            try {
+              summary = JSON.parse(fs.readFileSync('reports/performance-summary.json', 'utf8'));
+            } catch (error) {
+              console.log('Could not read performance summary');
+              return;
+            }
+            
+            // Format comment
+            const comment = `## 🚀 Performance Test Results
+            
+            **Test Suite**: ${{ needs.setup.outputs.test-suite }}
+            **Scenario**: ${{ needs.setup.outputs.scenario }}
+            **Status**: ${summary.overall_status || 'Unknown'}
+            
+            ### Key Metrics
+            | Test | Response Time (p95) | Error Rate | Throughput |
+            |------|---------------------|------------|------------|
+            ${summary.tests?.map(test => 
+              `| ${test.name} | ${test.response_time_p95}ms | ${test.error_rate}% | ${test.throughput}/s |`
+            ).join('\n') || '| No data available | - | - | - |'}
+            
+            ### Epic 20 Targets
+            - **Graph Execution**: ${summary.graph_execution?.status || 'Unknown'}
+            - **WebSocket Collaboration**: ${summary.websocket?.status || 'Unknown'}  
+            - **Authentication**: ${summary.auth?.status || 'Unknown'}
+            
+            ${summary.regression_detected ? '⚠️ **Performance regression detected!**' : '✅ No performance regressions'}
+            
+            <details>
+            <summary>View detailed results</summary>
+            
+            ${summary.recommendations ? `### Recommendations
+            ${summary.recommendations.map(rec => `- ${rec}`).join('\n')}` : ''}
+            
+            [📊 Full Performance Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            </details>`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # Notification on performance failures
+  notify-performance-issues:
+    name: Performance Issue Notifications
+    runs-on: ubuntu-latest
+    needs: [setup, analyze-results]
+    if: failure() && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Notify performance degradation
+        run: |
+          echo "🚨 Performance degradation detected on main branch"
+          echo "This would trigger notifications to:"
+          echo "- Development team via Slack"
+          echo "- Performance monitoring dashboards" 
+          echo "- Epic 20 stakeholders"
+          
+          # In real implementation, integrate with:
+          # - Slack webhooks
+          # - PagerDuty alerts  
+          # - Monitoring systems (Datadog, New Relic, etc.)
+          # - Team notification systems

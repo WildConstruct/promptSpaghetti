@@ -1,0 +1,129 @@
+name: 'Check Approval Status'
+description: 'Check the current status of a deployment approval request'
+inputs:
+  approval_request_id:
+    description: 'Approval request ID to check'
+    required: true
+  api_base_url:
+    description: 'Base URL for the approval API'
+    required: false
+    default: 'https://prompt-spaghetti.vercel.app'
+  api_token:
+    description: 'API token for authentication'
+    required: true
+  required_status:
+    description: 'Required status for success (approved, pending, etc.)'
+    required: false
+    default: 'approved'
+
+outputs:
+  status:
+    description: 'Current approval status'
+    value: ${{ steps.check-status.outputs.status }}
+  is_approved:
+    description: 'Boolean indicating if approval is granted'
+    value: ${{ steps.check-status.outputs.is_approved }}
+  is_pending:
+    description: 'Boolean indicating if approval is pending'
+    value: ${{ steps.check-status.outputs.is_pending }}
+  approval_details:
+    description: 'Full approval request details as JSON'
+    value: ${{ steps.check-status.outputs.approval_details }}
+  approvers:
+    description: 'Comma-separated list of approvers'
+    value: ${{ steps.check-status.outputs.approvers }}
+  pending_reviewers:
+    description: 'Comma-separated list of pending reviewers'
+    value: ${{ steps.check-status.outputs.pending_reviewers }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check Approval Status
+      id: check-status
+      shell: bash
+      env:
+        REQUEST_ID: ${{ inputs.approval_request_id }}
+        API_BASE_URL: ${{ inputs.api_base_url }}
+        API_TOKEN: ${{ inputs.api_token }}
+        REQUIRED_STATUS: ${{ inputs.required_status }}
+      run: |
+        echo "🔍 Checking approval status for request: $REQUEST_ID"
+        
+        # Fetch approval request details
+        RESPONSE=$(curl -s -H "Authorization: Bearer $API_TOKEN" \
+          "$API_BASE_URL/api/approval/requests/$REQUEST_ID")
+        
+        # Check if request was found
+        if [ "$(echo "$RESPONSE" | jq -r '.error // empty')" != "" ]; then
+          echo "::error::Failed to fetch approval request: $(echo "$RESPONSE" | jq -r '.error')"
+          exit 1
+        fi
+        
+        # Extract status and details
+        STATUS=$(echo "$RESPONSE" | jq -r '.status // "unknown"')
+        
+        # Set basic outputs
+        echo "status=$STATUS" >> $GITHUB_OUTPUT
+        echo "approval_details=$(echo "$RESPONSE" | jq -c '.')" >> $GITHUB_OUTPUT
+        
+        # Set boolean status indicators
+        case $STATUS in
+          "approved")
+            echo "is_approved=true" >> $GITHUB_OUTPUT
+            echo "is_pending=false" >> $GITHUB_OUTPUT
+            ;;
+          "pending"|"in_review")
+            echo "is_approved=false" >> $GITHUB_OUTPUT
+            echo "is_pending=true" >> $GITHUB_OUTPUT
+            ;;
+          *)
+            echo "is_approved=false" >> $GITHUB_OUTPUT
+            echo "is_pending=false" >> $GITHUB_OUTPUT
+            ;;
+        esac
+        
+        # Extract approvers and pending reviewers
+        APPROVERS=$(echo "$RESPONSE" | jq -r '.approvals[]? | select(.decision == "approved") | .reviewerName' | tr '\n' ',' | sed 's/,$//')
+        PENDING_REVIEWERS=$(echo "$RESPONSE" | jq -r '.criteria[]? | select(.status == "pending") | .assignedReviewers[]?' | tr '\n' ',' | sed 's/,$//')
+        
+        echo "approvers=$APPROVERS" >> $GITHUB_OUTPUT
+        echo "pending_reviewers=$PENDING_REVIEWERS" >> $GITHUB_OUTPUT
+        
+        # Display status information
+        echo "📊 Current Status: $STATUS"
+        
+        if [ -n "$APPROVERS" ]; then
+          echo "✅ Approved by: $APPROVERS"
+        fi
+        
+        if [ -n "$PENDING_REVIEWERS" ]; then
+          echo "⏳ Waiting for: $PENDING_REVIEWERS"
+        fi
+        
+        # Show approval progress
+        TOTAL_CRITERIA=$(echo "$RESPONSE" | jq -r '.criteria | length // 0')
+        COMPLETED_APPROVALS=$(echo "$RESPONSE" | jq -r '.approvals | map(select(.decision == "approved")) | length // 0')
+        
+        if [ "$TOTAL_CRITERIA" -gt 0 ]; then
+          echo "📈 Progress: $COMPLETED_APPROVALS/$TOTAL_CRITERIA criteria approved"
+        fi
+        
+        # Show recent activity
+        RECENT_ACTIVITY=$(echo "$RESPONSE" | jq -r '.approvals[]? | select(.reviewedAt != null) | "\(.reviewerName): \(.decision) (\(.reviewedAt))"' | tail -3)
+        if [ -n "$RECENT_ACTIVITY" ]; then
+          echo "📝 Recent Activity:"
+          echo "$RECENT_ACTIVITY" | sed 's/^/  - /'
+        fi
+        
+        # Check if status meets requirement
+        if [ "$STATUS" = "$REQUIRED_STATUS" ]; then
+          echo "✅ Status matches requirement: $REQUIRED_STATUS"
+          exit 0
+        else
+          echo "⚠️ Status ($STATUS) does not match requirement ($REQUIRED_STATUS)"
+          if [ "$REQUIRED_STATUS" = "approved" ] && [ "$STATUS" != "approved" ]; then
+            echo "::warning::Approval is required but current status is: $STATUS"
+          fi
+          exit 1
+        fi

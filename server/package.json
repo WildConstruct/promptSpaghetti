@@ -12,7 +12,13 @@
     "perf:optimize": "ts-node src/performance/performance-cli.ts optimize",
     "perf:health": "ts-node src/performance/performance-cli.ts health",
     "perf:stress": "ts-node src/performance/performance-cli.ts test --stress",
-    "perf:report": "ts-node src/performance/performance-cli.ts report"
+    "perf:report": "ts-node src/performance/performance-cli.ts report",
+    "perf:k6:ci": "ts-node -r tsconfig-paths/register src/performance/k6-integration.ts ci",
+    "perf:k6:smoke": "ts-node -r tsconfig-paths/register src/performance/k6-integration.ts smoke",
+    "perf:k6:staging": "ts-node -r tsconfig-paths/register src/performance/k6-integration.ts staging",
+    "perf:k6:graph": "k6 run server/src/performance/k6-tests/graph-execution-load.js",
+    "perf:k6:websocket": "k6 run server/src/performance/k6-tests/websocket-collaboration.js",
+    "perf:k6:auth": "k6 run server/src/performance/k6-tests/auth-load.js"
   },
   "dependencies": {
     "@fastify/websocket": "^8.3.1",

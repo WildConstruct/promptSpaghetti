@@ -1,0 +1,223 @@
+name: 'Wait for Deployment Approval'
+description: 'Wait for deployment approval to be completed before proceeding'
+inputs:
+  approval_request_id:
+    description: 'Approval request ID to wait for'
+    required: true
+  timeout_minutes:
+    description: 'Maximum time to wait for approval (in minutes)'
+    required: false
+    default: '1440'  # 24 hours
+  poll_interval_seconds:
+    description: 'Interval between polling checks (in seconds)'
+    required: false
+    default: '30'
+  api_base_url:
+    description: 'Base URL for the approval API'
+    required: false
+    default: 'https://prompt-spaghetti.vercel.app'
+  api_token:
+    description: 'API token for authentication'
+    required: true
+  fail_on_rejection:
+    description: 'Fail the action if approval is rejected'
+    required: false
+    default: 'true'
+
+outputs:
+  final_status:
+    description: 'Final approval status (approved, rejected, expired)'
+    value: ${{ steps.wait-loop.outputs.final_status }}
+  approval_details:
+    description: 'JSON object with approval details'
+    value: ${{ steps.wait-loop.outputs.approval_details }}
+  elapsed_minutes:
+    description: 'Time elapsed waiting for approval'
+    value: ${{ steps.wait-loop.outputs.elapsed_minutes }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Wait for Approval
+      id: wait-loop
+      shell: bash
+      env:
+        REQUEST_ID: ${{ inputs.approval_request_id }}
+        TIMEOUT_MINUTES: ${{ inputs.timeout_minutes }}
+        POLL_INTERVAL: ${{ inputs.poll_interval_seconds }}
+        API_BASE_URL: ${{ inputs.api_base_url }}
+        API_TOKEN: ${{ inputs.api_token }}
+        FAIL_ON_REJECTION: ${{ inputs.fail_on_rejection }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_SHA: ${{ github.sha }}
+      run: |
+        echo "⏳ Waiting for approval request: $REQUEST_ID"
+        echo "⏰ Timeout: $TIMEOUT_MINUTES minutes"
+        echo "🔄 Poll interval: $POLL_INTERVAL seconds"
+        
+        START_TIME=$(date +%s)
+        TIMEOUT_SECONDS=$((TIMEOUT_MINUTES * 60))
+        CHECK_RUNS_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/check-runs"
+        
+        # Function to update GitHub check status
+        update_check_status() {
+          local status=$1
+          local conclusion=$2
+          local title=$3
+          local summary=$4
+          
+          if [ -n "$GITHUB_TOKEN" ]; then
+            cat << EOF > check_update.json
+        {
+          "name": "Deployment Approval",
+          "head_sha": "$GITHUB_SHA",
+          "status": "$status",
+          "conclusion": "$conclusion",
+          "output": {
+            "title": "$title",
+            "summary": "$summary"
+          }
+        }
+        EOF
+            curl -s -X POST "$CHECK_RUNS_URL" \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -d @check_update.json > /dev/null
+          fi
+        }
+        
+        # Main polling loop
+        while true; do
+          CURRENT_TIME=$(date +%s)
+          ELAPSED_SECONDS=$((CURRENT_TIME - START_TIME))
+          ELAPSED_MINUTES=$((ELAPSED_SECONDS / 60))
+          
+          # Check for timeout
+          if [ $ELAPSED_SECONDS -ge $TIMEOUT_SECONDS ]; then
+            echo "❌ Timeout reached ($TIMEOUT_MINUTES minutes)"
+            echo "final_status=expired" >> $GITHUB_OUTPUT
+            echo "elapsed_minutes=$ELAPSED_MINUTES" >> $GITHUB_OUTPUT
+            
+            update_check_status "completed" "timed_out" "Approval Timeout" "Approval request timed out after $TIMEOUT_MINUTES minutes"
+            
+            if [ "$FAIL_ON_REJECTION" = "true" ]; then
+              echo "::error::Approval request timed out"
+              exit 1
+            fi
+            exit 0
+          fi
+          
+          # Check approval status
+          RESPONSE=$(curl -s -H "Authorization: Bearer $API_TOKEN" \
+            "$API_BASE_URL/api/approval/requests/$REQUEST_ID")
+          
+          STATUS=$(echo "$RESPONSE" | jq -r '.status // "unknown"')
+          
+          case $STATUS in
+            "approved")
+              echo "✅ Approval granted!"
+              echo "final_status=approved" >> $GITHUB_OUTPUT
+              echo "approval_details=$(echo "$RESPONSE" | jq -c '.')" >> $GITHUB_OUTPUT
+              echo "elapsed_minutes=$ELAPSED_MINUTES" >> $GITHUB_OUTPUT
+              
+              # Get approval details for summary
+              APPROVERS=$(echo "$RESPONSE" | jq -r '.approvals[].reviewerName // empty' | tr '\n' ', ' | sed 's/,$//')
+              APPROVED_AT=$(echo "$RESPONSE" | jq -r '.approvedAt // empty')
+              
+              update_check_status "completed" "success" "Deployment Approved" "✅ Approved by: $APPROVERS\n⏰ Approved at: $APPROVED_AT"
+              
+              echo "📋 Approval Details:"
+              echo "$RESPONSE" | jq '.approvals[] | "  - \(.reviewerName): \(.decision) (\(.reviewedAt))"' -r
+              exit 0
+              ;;
+              
+            "rejected")
+              echo "❌ Approval rejected"
+              echo "final_status=rejected" >> $GITHUB_OUTPUT
+              echo "approval_details=$(echo "$RESPONSE" | jq -c '.')" >> $GITHUB_OUTPUT
+              echo "elapsed_minutes=$ELAPSED_MINUTES" >> $GITHUB_OUTPUT
+              
+              # Get rejection details
+              REJECTORS=$(echo "$RESPONSE" | jq -r '.approvals[] | select(.decision == "rejected") | .reviewerName' | tr '\n' ', ' | sed 's/,$//')
+              REJECTION_REASON=$(echo "$RESPONSE" | jq -r '.approvals[] | select(.decision == "rejected") | .comments // "No reason provided"' | head -1)
+              
+              update_check_status "completed" "failure" "Deployment Rejected" "❌ Rejected by: $REJECTORS\n📝 Reason: $REJECTION_REASON"
+              
+              echo "📋 Rejection Details:"
+              echo "$RESPONSE" | jq '.approvals[] | select(.decision == "rejected") | "  - \(.reviewerName): \(.comments // "No reason provided")"' -r
+              
+              if [ "$FAIL_ON_REJECTION" = "true" ]; then
+                echo "::error::Deployment approval was rejected"
+                exit 1
+              fi
+              exit 0
+              ;;
+              
+            "pending"|"in_review")
+              echo "⏳ Still waiting... ($ELAPSED_MINUTES minutes elapsed)"
+              echo "📊 Current status: $STATUS"
+              
+              # Show current progress
+              TOTAL_CRITERIA=$(echo "$RESPONSE" | jq -r '.criteria | length')
+              COMPLETED_APPROVALS=$(echo "$RESPONSE" | jq -r '.approvals | map(select(.decision == "approved")) | length')
+              
+              echo "📈 Progress: $COMPLETED_APPROVALS/$TOTAL_CRITERIA approvals completed"
+              
+              # List pending reviewers
+              PENDING_REVIEWERS=$(echo "$RESPONSE" | jq -r '.criteria[] | select(.status == "pending") | .assignedReviewers[]?' | tr '\n' ', ' | sed 's/,$//')
+              if [ -n "$PENDING_REVIEWERS" ]; then
+                echo "👥 Waiting for: $PENDING_REVIEWERS"
+              fi
+              
+              # Update GitHub check with progress
+              update_check_status "in_progress" "" "Waiting for Approval" "⏳ $COMPLETED_APPROVALS/$TOTAL_CRITERIA approvals completed\n👥 Pending reviewers: $PENDING_REVIEWERS\n⏰ Elapsed: $ELAPSED_MINUTES minutes"
+              ;;
+              
+            "cancelled"|"withdrawn")
+              echo "⚠️ Approval request cancelled"
+              echo "final_status=cancelled" >> $GITHUB_OUTPUT
+              echo "approval_details=$(echo "$RESPONSE" | jq -c '.')" >> $GITHUB_OUTPUT
+              echo "elapsed_minutes=$ELAPSED_MINUTES" >> $GITHUB_OUTPUT
+              
+              update_check_status "completed" "cancelled" "Approval Cancelled" "⚠️ The approval request was cancelled or withdrawn"
+              
+              if [ "$FAIL_ON_REJECTION" = "true" ]; then
+                echo "::error::Approval request was cancelled"
+                exit 1
+              fi
+              exit 0
+              ;;
+              
+            *)
+              echo "❓ Unknown status: $STATUS"
+              echo "Response: $RESPONSE"
+              ;;
+          esac
+          
+          # Wait before next poll
+          sleep $POLL_INTERVAL
+        done
+
+    - name: Log Final Status
+      shell: bash
+      env:
+        FINAL_STATUS: ${{ steps.wait-loop.outputs.final_status }}
+        ELAPSED_MINUTES: ${{ steps.wait-loop.outputs.elapsed_minutes }}
+      run: |
+        echo "🏁 Final approval status: $FINAL_STATUS"
+        echo "⏰ Total time elapsed: $ELAPSED_MINUTES minutes"
+        
+        case $FINAL_STATUS in
+          "approved")
+            echo "::notice::Deployment approved! Proceeding with deployment."
+            ;;
+          "rejected")
+            echo "::warning::Deployment was rejected. Check approval details for reasons."
+            ;;
+          "expired")
+            echo "::warning::Approval request timed out. Consider extending timeout or following up with reviewers."
+            ;;
+          "cancelled")
+            echo "::warning::Approval request was cancelled."
+            ;;
+        esac

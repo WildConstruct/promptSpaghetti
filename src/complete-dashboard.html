@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Ticketing Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -473,6 +474,48 @@
             border-radius: 2px;
         }
 
+        /* Chart Styles */
+        .charts-section {
+            margin: 30px 0;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: #252538;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #2d2d44;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #e1e5e9;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+
+        .chart-container.small {
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .ticket-footer {
             margin-top: auto;
             padding-top: 15px;
@@ -582,6 +625,25 @@
                 <div class="epic-stat">
                     <div class="epic-stat-number">6+</div>
                     <div class="epic-stat-label">Months of Work Ready</div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <div class="chart-title">📈 Tasks Approved by Day (Last 30 Days)</div>
+                        <div class="chart-container">
+                            <canvas id="approvedTasksChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-title">📊 Task Status Distribution</div>
+                        <div class="chart-container small">
+                            <canvas id="statusDistributionChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -811,6 +873,8 @@
     <script>
         let allTasks = [];
         let filteredTasks = [];
+        let approvedTasksChart = null;
+        let statusDistributionChart = null;
 
         // Tab switching functionality
         function switchTab(tabName) {
@@ -833,6 +897,11 @@
             // Load data for the active tab
             if (tabName === 'tasks') {
                 loadTasks();
+            } else if (tabName === 'epic-status' && allTasks.length > 0) {
+                // Refresh charts when switching to epic-status tab
+                setTimeout(() => {
+                    createCharts();
+                }, 100);
             }
         }
 
@@ -861,6 +930,7 @@
 
                 updateStats();
                 applyFilters();
+                createCharts();
                 
                 document.getElementById('loading').style.display = 'none';
                 

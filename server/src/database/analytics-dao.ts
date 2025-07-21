@@ -32,6 +32,19 @@ export interface AnalyticsSession {
   updatedAt: number;
 }
 
+/**
+ * Project execution statistics for health monitoring
+ */
+export interface ProjectExecutionStats {
+  projectId: string;
+  total: number;
+  successful: number;
+  failed: number;
+  averageExecutionTime: number;
+  lastExecution?: number;
+}
+}
+
 export interface GraphExecution {
   id: number;
   executionId: string;
@@ -781,5 +794,202 @@ export class AnalyticsDAO {
     if (eventType.includes('error')) return 'error';
     if (eventType.includes('warning')) return 'warning';
     return 'info';
+  }
+
+  /**
+   * Get project execution statistics for health monitoring
+   */
+  getProjectExecutions(projectId: string, days: number = 7): ProjectExecutionStats {
+    const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
+    
+    const stats = this.db.prepare(`
+      SELECT 
+        COUNT(*) as total,
+        SUM(CASE WHEN success = 1 THEN 1 ELSE 0 END) as successful,
+        SUM(CASE WHEN success = 0 THEN 1 ELSE 0 END) as failed,
+        AVG(execution_time_ms) as averageExecutionTime,
+        MAX(start_time) as lastExecution
+      FROM graph_executions 
+      WHERE graph_id = ? AND start_time >= ?
+    `).get(projectId, cutoffTime);
+
+    return {
+      projectId,
+      total: stats?.total || 0,
+      successful: stats?.successful || 0,
+      failed: stats?.failed || 0,
+      averageExecutionTime: stats?.averageExecutionTime || 0,
+      lastExecution: stats?.lastExecution
+    };
+  }
+
+  /**
+   * Get user activity statistics for a project
+   */
+  getProjectUserActivity(projectId: string, days: number = 7): Array<{
+    userId: number;
+    activityCount: number;
+    lastActivity: number;
+    errorRate: number;
+  }> {
+    const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
+    
+    return this.db.prepare(`
+      SELECT 
+        user_id as userId,
+        COUNT(*) as activityCount,
+        MAX(timestamp) as lastActivity,
+        (SUM(CASE WHEN event_type LIKE '%error%' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) as errorRate
+      FROM analytics_events 
+      WHERE JSON_EXTRACT(metadata, '$.projectId') = ? 
+        AND timestamp >= ?
+        AND user_id IS NOT NULL
+      GROUP BY user_id
+      ORDER BY activityCount DESC
+    `).all(projectId, cutoffTime);
+  }
+
+  /**
+   * Get activity timeline for a project
+   */
+  getProjectActivityTimeline(projectId: string, days: number = 30): Array<{
+    date: string;
+    activityCount: number;
+    uniqueUsers: number;
+    errorCount: number;
+  }> {
+    const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
+    
+    return this.db.prepare(`
+      SELECT 
+        date(timestamp / 1000, 'unixepoch') as date,
+        COUNT(*) as activityCount,
+        COUNT(DISTINCT user_id) as uniqueUsers,
+        SUM(CASE WHEN event_type LIKE '%error%' THEN 1 ELSE 0 END) as errorCount
+      FROM analytics_events 
+      WHERE JSON_EXTRACT(metadata, '$.projectId') = ? 
+        AND timestamp >= ?
+      GROUP BY date(timestamp / 1000, 'unixepoch')
+      ORDER BY date DESC
+    `).all(projectId, cutoffTime);
+  }
+
+  /**
+   * Get collaboration patterns for a project
+   */
+  getProjectCollaborationStats(projectId: string, days: number = 30): {
+    totalCollaborativeSessions: number;
+    averageSessionParticipants: number;
+    collaborationRate: number;
+    topCollaborators: Array<{ userId: number; collaborationCount: number }>;
+  } {
+    const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
+    
+    // Get collaborative sessions (sessions with multiple users)
+    const collaborativeSessions = this.db.prepare(`
+      SELECT 
+        session_id,
+        COUNT(DISTINCT user_id) as participants
+      FROM analytics_events 
+      WHERE JSON_EXTRACT(metadata, '$.projectId') = ? 
+        AND timestamp >= ?
+        AND user_id IS NOT NULL
+      GROUP BY session_id
+      HAVING participants > 1
+    `).all(projectId, cutoffTime);
+
+    const totalSessions = this.db.prepare(`
+      SELECT COUNT(DISTINCT session_id) as total
+      FROM analytics_events 
+      WHERE JSON_EXTRACT(metadata, '$.projectId') = ? 
+        AND timestamp >= ?
+    `).get(projectId, cutoffTime);
+
+    const topCollaborators = this.db.prepare(`
+      SELECT 
+        user_id as userId,
+        COUNT(*) as collaborationCount
+      FROM analytics_events 
+      WHERE JSON_EXTRACT(metadata, '$.projectId') = ? 
+        AND timestamp >= ?
+        AND session_id IN (
+          SELECT session_id FROM analytics_events 
+          WHERE JSON_EXTRACT(metadata, '$.projectId') = ?
+            AND timestamp >= ?
+          GROUP BY session_id 
+          HAVING COUNT(DISTINCT user_id) > 1
+        )
+      GROUP BY user_id
+      ORDER BY collaborationCount DESC
+      LIMIT 10
+    `).all(projectId, cutoffTime, projectId, cutoffTime);
+
+    const totalCollaborativeSessions = collaborativeSessions.length;
+    const averageSessionParticipants = totalCollaborativeSessions > 0
+      ? collaborativeSessions.reduce((sum, s) => sum + s.participants, 0) / totalCollaborativeSessions
+      : 0;
+    
+    const collaborationRate = totalSessions?.total > 0 
+      ? totalCollaborativeSessions / totalSessions.total 
+      : 0;
+
+    return {
+      totalCollaborativeSessions,
+      averageSessionParticipants,
+      collaborationRate,
+      topCollaborators
+    };
+  }
+
+  /**
+   * Get project health score based on multiple metrics
+   */
+  getProjectHealthScore(projectId: string): {
+    score: number;
+    factors: {
+      activityLevel: number;
+      errorRate: number;
+      collaborationLevel: number;
+      userEngagement: number;
+    };
+    recommendation: string;
+  } {
+    const execStats = this.getProjectExecutions(projectId, 7);
+    const userActivity = this.getProjectUserActivity(projectId, 7);
+    const collaborationStats = this.getProjectCollaborationStats(projectId, 7);
+    
+    // Calculate individual factor scores (0-100)
+    const activityLevel = Math.min(100, (execStats.total / 7) * 20); // 5 executions per day = 100
+    const errorRate = Math.max(0, 100 - (execStats.failed / Math.max(execStats.total, 1)) * 100);
+    const collaborationLevel = Math.min(100, collaborationStats.collaborationRate * 100);
+    const userEngagement = Math.min(100, userActivity.length * 25); // 4 active users = 100
+    
+    // Weighted overall score
+    const score = (
+      activityLevel * 0.3 +
+      errorRate * 0.3 +
+      collaborationLevel * 0.2 +
+      userEngagement * 0.2
+    );
+
+    let recommendation = 'Project is healthy';
+    if (score < 30) {
+      recommendation = 'Critical: Project needs immediate attention';
+    } else if (score < 50) {
+      recommendation = 'Warning: Project showing signs of stagnation';
+    } else if (score < 70) {
+      recommendation = 'Monitor: Consider increasing team engagement';
+    }
+
+    return {
+      score: Math.round(score),
+      factors: {
+        activityLevel: Math.round(activityLevel),
+        errorRate: Math.round(errorRate),
+        collaborationLevel: Math.round(collaborationLevel),
+        userEngagement: Math.round(userEngagement)
+      },
+      recommendation
+    };
   }
 }
