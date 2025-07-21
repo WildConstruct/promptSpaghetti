@@ -649,7 +649,7 @@ export class RateLimitingService extends EventEmitter {
       // Reset backoff on success
       state.level = 0;
       state.consecutiveFailures = 0;
-      state.nextAllowedTime = new Date();
+      state.nextAllowedTime = new Date(Date.now());
     } else {
       // Increase backoff on failure
       state.consecutiveFailures++;

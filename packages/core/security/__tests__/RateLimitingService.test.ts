@@ -224,14 +224,24 @@ describe('RateLimitingService', () => {
       // MFA should have stricter limits than login
       // Login allows 10 per minute, MFA allows 5 per minute
 
-      // Test login limit
+      // Test login limit - spread attempts over time to avoid per-second limit
       for (let i = 0; i < 8; i++) {
+        // Advance time by 10 seconds between attempts to avoid per-second limit (2/sec)
+        mockDate = new Date(mockDate.getTime() + 10000);
+        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
         service.recordAttempt(identifier, loginEndpoint, false);
       }
       const loginResult = await service.checkRateLimit(identifier, loginEndpoint);
 
-      // Test MFA limit  
+      // Reset time for MFA test
+      mockDate = new Date('2025-01-15T10:00:00Z');
+      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+
+      // Test MFA limit - spread attempts over time  
       for (let i = 0; i < 4; i++) {
+        // Advance time by 15 seconds between attempts to avoid per-second limit (1/sec for MFA)
+        mockDate = new Date(mockDate.getTime() + 15000);
+        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
         service.recordAttempt(identifier, mfaEndpoint, false);
       }
       const mfaResult = await service.checkRateLimit(identifier, mfaEndpoint);
@@ -240,6 +250,8 @@ describe('RateLimitingService', () => {
       expect(mfaResult.result).toBe(RateLimitResult.ALLOWED);
 
       // One more MFA attempt should block
+      mockDate = new Date(mockDate.getTime() + 15000);
+      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
       service.recordAttempt(identifier, mfaEndpoint, false);
       const mfaBlockedResult = await service.checkRateLimit(identifier, mfaEndpoint);
       expect(mfaBlockedResult.result).toBe(RateLimitResult.BLOCKED);
@@ -339,7 +351,11 @@ describe('RateLimitingService', () => {
       const endpoint = '/auth/login';
 
       // Approach but don't exceed 80% of limit (8 out of 10)
+      // Spread attempts over time to avoid per-second limit (2/sec)
       for (let i = 0; i < 8; i++) {
+        // Advance time by 10 seconds between attempts to avoid per-second limit
+        mockDate = new Date(mockDate.getTime() + 10000);
+        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
         service.recordAttempt(identifier, endpoint, false);
       }
 

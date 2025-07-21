@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T06:24:03.440Z"
+    "updated": "2025-07-21T06:37:46.930Z"
   },
   "product_goals": [
     {
@@ -22974,12 +22974,12 @@
       "id": "T-1752989143998-885",
       "story_id": "S-1752989143997-19-2",
       "title": "Create data filtering based on consent",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T06:22:56.229Z",
+      "updated": "2025-07-21T06:36:07.164Z",
       "dependencies": [],
       "notes": []
     },
@@ -22987,12 +22987,12 @@
       "id": "T-1752989143998-258",
       "story_id": "S-1752989143998-19-3",
       "title": "Define rule schema and structure",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "2",
       "wip_class": "FEAT",
       "est": 1,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T06:22:56.229Z",
+      "updated": "2025-07-21T06:33:28.476Z",
       "dependencies": [],
       "notes": []
     },
@@ -23000,12 +23000,12 @@
       "id": "T-1752989143998-302",
       "story_id": "S-1752989143998-19-3",
       "title": "Create rule evaluation model",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "claude",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:33:41.939Z",
       "dependencies": [],
       "notes": []
     },
@@ -23013,12 +23013,12 @@
       "id": "T-1752989143998-881",
       "story_id": "S-1752989143998-19-3",
       "title": "Create GDPR compliance ruleset",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "claude",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:33:41.939Z",
       "dependencies": [],
       "notes": []
     },
@@ -23026,12 +23026,12 @@
       "id": "T-1752989143998-35",
       "story_id": "S-1752989143997-19-2",
       "title": "Build regulatory reporting tools",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "IN_PROGRESS",
+      "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:36:39.376Z",
       "dependencies": [],
       "notes": []
     },
@@ -23039,12 +23039,12 @@
       "id": "T-1752989143998-282",
       "story_id": "S-1752989143997-19-2",
       "title": "Add consent verification testing",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "REVIEW",
+      "assignee": "2",
       "wip_class": "CHORE",
       "est": 2,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:37:46.929Z",
       "dependencies": [],
       "notes": []
     },
@@ -31611,7 +31611,9 @@
       "T-1752989143998-890",
       "T-1752989143998-961",
       "T-1752989143998-885",
-      "T-1752989143998-258"
+      "T-1752989143998-258",
+      "T-1752989143998-35",
+      "T-1752989143998-282"
     ],
     "dev_A": [
       "T-1752950863627",
@@ -31889,7 +31891,9 @@
       "T-1752989143998-297",
       "T-1752989143998-325",
       "T-1752989143998-106",
-      "T-1752989143998-789"
+      "T-1752989143998-789",
+      "T-1752989143998-302",
+      "T-1752989143998-881"
     ],
     "T-1752989143998-724": [
       "T-1752989143998-618",
