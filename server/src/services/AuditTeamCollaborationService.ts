@@ -594,13 +594,14 @@ export class AuditTeamCollaborationService extends EventEmitter {
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       `, [
         id, task.investigationId, task.title, task.description, task.assignedTo,
-        task.status, task.priority, now, now, task.dueDate,
+        TaskStatus.PENDING, task.priority, now, now, task.dueDate,
         task.dependencies, task.estimatedHours, JSON.stringify(task.metadata)
       ]);
 
       const createdTask: InvestigationTask = {
         ...task,
         id,
+        status: TaskStatus.PENDING,
         createdAt: now,
         updatedAt: now
       };
@@ -625,7 +626,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
   /**
    * Add evidence to an investigation
    */
-  async addEvidence(evidence: Omit<Evidence, 'id' | 'custodyChain'>): Promise<Evidence> {
+  async addEvidence(evidence: Omit<Evidence, 'id' | 'custodyChain' | 'collectedBy' | 'collectedAt' | 'verified'>): Promise<Evidence> {
     const id = uuidv4();
 
     try {
