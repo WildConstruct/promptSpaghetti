@@ -40,7 +40,7 @@ beforeEach(() => {
     }
   });
   
-  (useCorrectionsStore as unknown as jest.Mock).mockReturnValue(mockStore as unknown);
+  (useCorrectionsStore as unknown as jest.Mock).mockReturnValue(mockStore as unknown as unknown as unknown);
 });
 
 describe('CorrectionsPanel', () => {
@@ -167,22 +167,31 @@ describe('CorrectionsPanel', () => {
     // Verify that the rule name appears (to ensure the component is rendering the rule)
     expect(screen.getByText('Test Rule')).toBeInTheDocument();
     
-    // Find the specific checkbox for this rule using a better selector
-    // The onChange handler is: onChange={() => toggleRule(rule.id)}
-    // Let's find the checkbox that's checked and within the rule section
+    // Find the checkbox within the rule's container by using the rule name as a landmark
+    const ruleSection = screen.getByText('Test Rule').closest('div');
     const checkboxes = screen.getAllByRole('checkbox');
+    const ruleCheckbox = checkboxes.find(checkbox => 
+      ruleSection?.contains(checkbox)
+    );
     
-    // The rule checkbox should be checked since isActive is true
-    const checkedCheckboxes = checkboxes.filter(cb => cb.checked);
-    expect(checkedCheckboxes.length).toBeGreaterThanOrEqual(1);
+    expect(ruleCheckbox).toBeDefined();
+    expect(ruleCheckbox).toBeChecked(); // Should be checked since isActive is true
     
-    // The first checked checkbox should be our rule checkbox
-    const ruleCheckbox = checkedCheckboxes[0];
+    // Clear any previous mock calls
+    if (jest.isMockFunction(mockStore.toggleRule)) {
+      mockStore.toggleRule.mockClear();
+    }
     
-    // Click the checkbox
-    fireEvent.click(ruleCheckbox);
+    // Click the checkbox - try both click and change events
+    fireEvent.click(ruleCheckbox!);
+    fireEvent.change(ruleCheckbox!, { target: { checked: false } });
     
-    // Verify the store method was called
+    // Wait for any async operations
+    await waitFor(() => {
+      expect(mockStore.toggleRule).toHaveBeenCalled();
+    });
+    
+    // Verify the store method was called with the correct rule ID
     expect(mockStore.toggleRule).toHaveBeenCalledWith('1');
   });
 

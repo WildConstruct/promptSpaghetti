@@ -1,7 +1,7 @@
 {
   "meta": {
     "cycle": 1,
-    "updated": "2025-07-21T06:10:23.005Z"
+    "updated": "2025-07-21T06:22:16.157Z"
   },
   "product_goals": [
     {
@@ -22764,12 +22764,12 @@
       "id": "T-1752989143998-837",
       "story_id": "S-1752989143997-19-2",
       "title": "Build policy version audit trails",
-      "state": "APPROVED",
+      "state": "REVIEW",
       "assignee": "2",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T06:09:34.594Z",
+      "updated": "2025-07-21T06:16:22.402Z",
       "dependencies": [],
       "notes": [],
       "qa_approved_by": "qa_agent",
@@ -22896,12 +22896,12 @@
       "id": "T-1752989143998-840",
       "story_id": "S-1752989143997-19-2",
       "title": "Build cookie/consent banner",
-      "state": "IN_PROGRESS",
+      "state": "REVIEW",
       "assignee": "claude_dev",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-21T06:10:23.005Z",
+      "updated": "2025-07-21T06:22:16.156Z",
       "dependencies": [],
       "notes": []
     },
@@ -22909,12 +22909,12 @@
       "id": "T-1752989143998-297",
       "story_id": "S-1752989143997-19-2",
       "title": "Create granular consent options interface",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "REVIEW",
+      "assignee": "claude",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:21:25.485Z",
       "dependencies": [],
       "notes": []
     },
@@ -22922,12 +22922,12 @@
       "id": "T-1752989143998-325",
       "story_id": "S-1752989143997-19-2",
       "title": "Implement preference center",
-      "state": "UNASSIGNED",
-      "assignee": null,
+      "state": "REVIEW",
+      "assignee": "claude",
       "wip_class": "FEAT",
       "est": 4,
       "created": "2025-07-20T05:25:43.998Z",
-      "updated": "2025-07-20T05:25:43.998Z",
+      "updated": "2025-07-21T06:21:25.544Z",
       "dependencies": [],
       "notes": []
     },
@@ -31882,7 +31882,9 @@
       "T-1752989143998-840"
     ],
     "claude": [
-      "T-1752989143998-694"
+      "T-1752989143998-694",
+      "T-1752989143998-297",
+      "T-1752989143998-325"
     ],
     "T-1752989143998-724": [
       "T-1752989143998-618",

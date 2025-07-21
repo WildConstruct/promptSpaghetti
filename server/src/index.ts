@@ -89,6 +89,8 @@ import { complianceReportingRoutes } from './routes/compliance-reporting';
 import { ComplianceReportingService } from './services/ComplianceReportingService';
 import { policyNotificationRoutes } from './routes/policy-notification';
 import { PolicyNotificationService } from './services/PolicyNotificationService';
+import { consentCollectionRoutes } from './routes/consent-collection';
+import { ConsentCollectionService } from './services/ConsentCollectionService';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -1450,13 +1452,26 @@ try {
   const keyManagementService = new KeyManagementService({} as KeyManagementConfig, auditService);
   const dataAccessControlService = new DataAccessControlService(db as any, auditService);
   const auditWorkflowService = new AuditWorkflowService(db as any, auditService, dataAccessControlService);
-  const accessRequestWorkflowService = new AccessRequestWorkflowService(db as any, auditService, dataAccessControlService);
+  const accessRequestWorkflowService = new AccessRequestWorkflowService(
+    db as any,
+    auditService,
+    dataAccessControlService
+  );
   const policyUpdateWorkflowService = new PolicyUpdateWorkflowService(db as any, auditService);
   const policyAcceptanceTrackingService = new PolicyAcceptanceTrackingService(db as any, auditService);
   const oauthGuidanceService = new OAuthGuidanceService(auditService, dataClassificationService, keyManagementService);
-  const policyAuthoringService = new PolicyAuthoringService(auditService, policyUpdateWorkflowService, dataClassificationService);
+  const policyAuthoringService = new PolicyAuthoringService(
+    auditService,
+    policyUpdateWorkflowService,
+    dataClassificationService
+  );
   const policyNotificationService = new PolicyNotificationService(auditService, policyAuthoringService);
-  const complianceReportingService = new ComplianceReportingService(auditService, policyAuthoringService, policyNotificationService);
+  const complianceReportingService = new ComplianceReportingService(
+    auditService,
+    policyAuthoringService,
+    policyNotificationService
+  );
+  const consentCollectionService = new ConsentCollectionService(auditService);
   
   // Make the services available to routes via Fastify's dependency injection
   server.decorate('dataAccessControlService', dataAccessControlService);
@@ -1468,6 +1483,7 @@ try {
   server.decorate('policyAuthoringService', policyAuthoringService);
   server.decorate('policyNotificationService', policyNotificationService);
   server.decorate('complianceReportingService', complianceReportingService);
+  server.decorate('consentCollectionService', consentCollectionService);
   
   server.register(dataAccessRoutes, { prefix: '/api/data-access' });
   server.register(auditWorkflowRoutes, { prefix: '/api/audit-workflow' });
@@ -1478,7 +1494,19 @@ try {
   server.register(policyAuthoringRoutes, { prefix: '/api/policy-authoring' });
   server.register(policyNotificationRoutes, { prefix: '/api/policy-notification' });
   server.register(complianceReportingRoutes, { prefix: '/api/compliance-reporting' });
-  console.log('Epic 19 security platform routes registered successfully: data access, audit workflow, access request workflow, policy update workflow, policy acceptance tracking, OAuth guidance, policy authoring, policy notifications, and compliance reporting');
+  server.register(consentCollectionRoutes, { prefix: '/api/consent-collection' });
+  console.log(
+    'Epic 19 security platform routes registered successfully: data access,
+    audit workflow,
+    access request workflow,
+    policy update workflow,
+    policy acceptance tracking,
+    OAuth guidance,
+    policy authoring,
+    policy notifications,
+    compliance reporting,
+    and consent collection'
+  );
 } catch (error) {
   console.error('Failed to register data access control routes:', error);
 }
