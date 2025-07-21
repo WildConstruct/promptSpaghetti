@@ -85,6 +85,10 @@ import { oauthGuidanceRoutes } from './routes/oauth-guidance';
 import { OAuthGuidanceService } from './services/OAuthGuidanceService';
 import { policyAuthoringRoutes } from './routes/policy-authoring';
 import { PolicyAuthoringService } from './services/PolicyAuthoringService';
+import { complianceReportingRoutes } from './routes/compliance-reporting';
+import { ComplianceReportingService } from './services/ComplianceReportingService';
+import { policyNotificationRoutes } from './routes/policy-notification';
+import { PolicyNotificationService } from './services/PolicyNotificationService';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable
@@ -1451,6 +1455,8 @@ try {
   const policyAcceptanceTrackingService = new PolicyAcceptanceTrackingService(db as any, auditService);
   const oauthGuidanceService = new OAuthGuidanceService(auditService, dataClassificationService, keyManagementService);
   const policyAuthoringService = new PolicyAuthoringService(auditService, policyUpdateWorkflowService, dataClassificationService);
+  const policyNotificationService = new PolicyNotificationService(auditService, policyAuthoringService);
+  const complianceReportingService = new ComplianceReportingService(auditService, policyAuthoringService, policyNotificationService);
   
   // Make the services available to routes via Fastify's dependency injection
   server.decorate('dataAccessControlService', dataAccessControlService);
@@ -1460,6 +1466,8 @@ try {
   server.decorate('policyAcceptanceTrackingService', policyAcceptanceTrackingService);
   server.decorate('oauthGuidanceService', oauthGuidanceService);
   server.decorate('policyAuthoringService', policyAuthoringService);
+  server.decorate('policyNotificationService', policyNotificationService);
+  server.decorate('complianceReportingService', complianceReportingService);
   
   server.register(dataAccessRoutes, { prefix: '/api/data-access' });
   server.register(auditWorkflowRoutes, { prefix: '/api/audit-workflow' });
@@ -1468,7 +1476,9 @@ try {
   server.register(policyAcceptanceTrackingRoutes, { prefix: '/api/policy-acceptance-tracking' });
   server.register(oauthGuidanceRoutes, { prefix: '/api/oauth-guidance' });
   server.register(policyAuthoringRoutes, { prefix: '/api/policy-authoring' });
-  console.log('Epic 19 security platform routes registered successfully: data access, audit workflow, access request workflow, policy update workflow, policy acceptance tracking, OAuth guidance, and policy authoring');
+  server.register(policyNotificationRoutes, { prefix: '/api/policy-notification' });
+  server.register(complianceReportingRoutes, { prefix: '/api/compliance-reporting' });
+  console.log('Epic 19 security platform routes registered successfully: data access, audit workflow, access request workflow, policy update workflow, policy acceptance tracking, OAuth guidance, policy authoring, policy notifications, and compliance reporting');
 } catch (error) {
   console.error('Failed to register data access control routes:', error);
 }
