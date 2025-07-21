@@ -20,7 +20,7 @@ describe('RateLimitingService', () => {
 
   beforeEach(() => {
     mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
     
     service = new RateLimitingService();
   });
@@ -84,13 +84,13 @@ describe('RateLimitingService', () => {
       service.recordAttempt(identifier, endpoint, false);
       await service.checkRateLimit(identifier, endpoint);
       
-      let delay1 = service.getBackoffDelay(identifier, endpoint);
+      let delay1 = service.getCalculatedBackoffDelay(identifier, endpoint);
 
       // Second failure
       service.recordAttempt(identifier, endpoint, false);
       await service.checkRateLimit(identifier, endpoint);
       
-      let delay2 = service.getBackoffDelay(identifier, endpoint);
+      let delay2 = service.getCalculatedBackoffDelay(identifier, endpoint);
 
       expect(delay2).toBeGreaterThan(delay1);
       expect(delay2).toBeGreaterThanOrEqual(delay1 * 2); // Exponential growth

@@ -47,7 +47,13 @@ describe('Epic 12 - Randomizer Generator System', () => {
         temperature: 1.8 // High for OpenAI
       };
 
+      console.log('Input parameters:', parameters);
       const result = ParameterValidator.validate(parameters);
+      console.log('Validation result:', result);
+      console.log('Is valid:', result.isValid);
+      console.log('Errors:', result.errors);
+      console.log('Warnings generated:', result.warnings);
+      console.log('Warning messages:', result.warnings.map(w => w.message));
       
       expect(result.warnings.length).toBeGreaterThan(0);
       expect(result.warnings.some(w => w.message.includes('complexity'))).toBe(true);
@@ -261,11 +267,7 @@ describe('Epic 12 - Randomizer Generator System', () => {
         userContext: undefined
       };
 
-      const similarParams: RandomizerParameters = {
-        ...baseParams,
-        purpose: 'Build educational tools for interactive learning'
-      };
-
+      
       const differentParams: RandomizerParameters = {
         ...baseParams,
         purpose: 'Generate random entertainment content'

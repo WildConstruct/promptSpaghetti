@@ -146,7 +146,7 @@ describe('ClassificationEncryptionPolicyService', () => {
       const deprecationDate = new Date();
       service.deprecateAlgorithm('AES-128', deprecationDate);
 
-      const allAlgorithms = service.getApprovedAlgorithms();
+      const allAlgorithms = service.getAllAlgorithms();
       const aes128 = allAlgorithms.find(alg => alg.name === 'AES-128');
 
       expect(aes128?.approved).toBe(false);

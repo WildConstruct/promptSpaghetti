@@ -103,6 +103,7 @@ export class ParameterValidator {
       // Additional business logic validation
       return this.validateBusinessRules(result.data);
     } else {
+      console.log('Schema validation failed:', result.error.errors);
       return {
         isValid: false,
         errors: result.error.errors.map(err => ({
@@ -119,6 +120,7 @@ export class ParameterValidator {
    * Validate business rules beyond schema
    */
   private static validateBusinessRules(parameters: RandomizerParameters): ValidationResult {
+    console.log('validateBusinessRules called with parameters:', parameters);
     const errors: ValidationResult['errors'] = [];
     const warnings: ValidationResult['warnings'] = [];
 
@@ -144,6 +146,38 @@ export class ParameterValidator {
         field: 'purpose',
         message: 'Purpose description is quite brief',
         suggestion: 'Provide more detailed purpose for better graph generation'
+      });
+    }
+
+    // Purpose-complexity mismatch validation
+    const purposeLower = parameters.purpose.toLowerCase();
+    console.log('Purpose text (lowercase):', purposeLower);
+    console.log('Complexity setting:', parameters.complexity);
+    
+    const complexityKeywords = {
+      complex: ['complex', 'advanced', 'sophisticated', 'intricate', 'elaborate'],
+      moderate: ['moderate', 'medium', 'balanced', 'standard'],
+      simple: ['simple', 'basic', 'minimal', 'straightforward', 'easy']
+    };
+
+    // Check if purpose suggests higher complexity than setting
+    const hasComplexKeywords = complexityKeywords.complex.some(keyword => purposeLower.includes(keyword));
+    console.log('Has complex keywords:', hasComplexKeywords);
+    console.log('Is complexity simple:', parameters.complexity === 'simple');
+    
+    if (parameters.complexity === 'simple' && hasComplexKeywords) {
+      console.log('Adding complexity warning!');
+      warnings.push({
+        field: 'complexity',
+        message: 'Purpose suggests complex requirements but complexity is set to simple',
+        suggestion: 'Consider setting complexity to "moderate" or "complex" for better results'
+      });
+    } else if (parameters.complexity === 'moderate' && 
+               complexityKeywords.complex.some(keyword => purposeLower.includes(keyword))) {
+      warnings.push({
+        field: 'complexity',
+        message: 'Purpose suggests complex requirements but complexity is set to moderate',
+        suggestion: 'Consider setting complexity to "complex" for better results'
       });
     }
 
@@ -283,132 +317,4 @@ export class ParameterValidator {
 /**
  * Default parameter presets
  */
-export const defaultPresets: ParameterPreset[] = [
-  {
-    id: 'simple-greeting',
-    name: 'Simple Greeting Generator',
-    description: 'Basic personalized greeting system',
-    category: 'Getting Started',
-    parameters: {
-      purpose: 'Generate personalized greetings for users',
-      complexity: 'simple',
-      nodeCount: 5,
-      style: 'creative',
-      domain: 'social interaction',
-      nodeTypes: [
-        { nodeType: 'WeightedChoice', weight: 0.8, required: true },
-        { nodeType: 'GetVariable', weight: 0.6, required: false },
-        { nodeType: 'Concat', weight: 0.7, required: true },
-        { nodeType: 'Output', weight: 1.0, required: true }
-      ],
-      provider: 'openai',
-      temperature: 0.7,
-      maxRetries: 3,
-      includeMetadata: true,
-      validateOutput: true,
-      enablePreview: true,
-      qualityLevel: 'standard',
-      diversityScore: 0.6,
-      outputFormat: 'both',
-      includeExplanation: false,
-      specificRequirements: ['Include user name', 'Multiple greeting options'],
-      constraints: [],
-      focusAreas: ['personalization', 'friendliness'],
-      preferredPatterns: [],
-      avoidPatterns: [],
-      userContext: undefined
-    },
-    tags: ['beginner', 'greeting', 'simple'],
-    isDefault: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'content-generator',
-    name: 'Adaptive Content Generator',
-    description: 'Content generation with user preference adaptation',
-    category: 'Content Creation',
-    parameters: {
-      purpose: 'Create adaptive content based on user preferences and context',
-      complexity: 'moderate',
-      nodeCount: 15,
-      style: 'balanced',
-      domain: 'content creation',
-      nodeTypes: [
-        { nodeType: 'Conditional', weight: 0.8, required: true },
-        { nodeType: 'WeightedChoice', weight: 0.7, required: false },
-        { nodeType: 'Sequential', weight: 0.6, required: false },
-        { nodeType: 'Concat', weight: 0.8, required: true }
-      ],
-      provider: 'claude',
-      temperature: 0.6,
-      maxRetries: 3,
-      includeMetadata: true,
-      validateOutput: true,
-      enablePreview: true,
-      qualityLevel: 'high',
-      diversityScore: 0.7,
-      outputFormat: 'both',
-      includeExplanation: true,
-      specificRequirements: [
-        'Adapt to user experience level',
-        'Support multiple content types',
-        'Include personalization'
-      ],
-      constraints: [],
-      focusAreas: ['personalization', 'content quality', 'user experience'],
-      preferredPatterns: ['conditional branching', 'user adaptation'],
-      avoidPatterns: ['static content'],
-      userContext: undefined
-    },
-    tags: ['content', 'adaptive', 'moderate'],
-    isDefault: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'interactive-tutor',
-    name: 'Interactive Tutoring System',
-    description: 'Complex adaptive tutoring with progress tracking',
-    category: 'Education',
-    parameters: {
-      purpose: 'Build an adaptive tutoring system that adjusts to student responses and tracks progress',
-      complexity: 'complex',
-      nodeCount: 30,
-      style: 'logical',
-      domain: 'education technology',
-      nodeTypes: [
-        { nodeType: 'Conditional', weight: 0.9, required: true },
-        { nodeType: 'Sequential', weight: 0.8, required: true },
-        { nodeType: 'Markov', weight: 0.6, required: false },
-        { nodeType: 'SetVariable', weight: 0.7, required: true },
-        { nodeType: 'GetVariable', weight: 0.8, required: true }
-      ],
-      provider: 'gemini',
-      temperature: 0.4,
-      maxRetries: 5,
-      includeMetadata: true,
-      validateOutput: true,
-      enablePreview: true,
-      qualityLevel: 'high',
-      diversityScore: 0.5,
-      outputFormat: 'both',
-      includeExplanation: true,
-      specificRequirements: [
-        'Track student progress dynamically',
-        'Provide personalized feedback',
-        'Adapt difficulty based on performance',
-        'Include assessment paths'
-      ],
-      constraints: ['Educational content only', 'Age-appropriate language'],
-      focusAreas: ['adaptive learning', 'feedback loops', 'progress tracking'],
-      preferredPatterns: ['state tracking', 'conditional feedback'],
-      avoidPatterns: ['static content', 'one-size-fits-all'],
-      userContext: undefined
-    },
-    tags: ['education', 'adaptive', 'complex', 'tutoring'],
-    isDefault: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }
-];
+export ];

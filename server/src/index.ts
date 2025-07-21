@@ -77,6 +77,10 @@ import { auditWorkflowRoutes } from './routes/audit-workflow';
 import { AuditWorkflowService } from './services/AuditWorkflowService';
 import { accessRequestWorkflowRoutes } from './routes/access-request-workflow';
 import { AccessRequestWorkflowService } from './services/AccessRequestWorkflowService';
+import { policyUpdateWorkflowRoutes } from './routes/policy-update-workflow';
+import { PolicyUpdateWorkflowService } from './services/PolicyUpdateWorkflowService';
+import { policyAcceptanceTrackingRoutes } from './routes/policy-acceptance-tracking';
+import { PolicyAcceptanceTrackingService } from './services/PolicyAcceptanceTrackingService';
 
 // Rate limiting is integrated with Redis from auth system for distributed rate limiting
 // Fallback to in-memory rate limiting if Redis is unavailable

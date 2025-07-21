@@ -506,6 +506,13 @@ export class ClassificationEncryptionPolicyService {
   }
 
   /**
+   * Get all algorithms (including deprecated ones)
+   */
+  getAllAlgorithms(): EncryptionAlgorithm[] {
+    return this.approvedAlgorithms;
+  }
+
+  /**
    * Get compliance records
    */
   getComplianceRecords(classification?: DataClassificationLevel): EncryptionCompliance[] {

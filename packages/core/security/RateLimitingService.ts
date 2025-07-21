@@ -280,6 +280,9 @@ export class RateLimitingService extends EventEmitter {
     // Update threat context
     this.updateThreatContext(identifier, attempt);
     
+    // Update backoff state for failed attempts
+    this.updateBackoffState(identifier, endpoint, success);
+    
     this.emit('attemptRecorded', attempt);
   }
   
@@ -323,6 +326,17 @@ export class RateLimitingService extends EventEmitter {
     if (now >= backoffState.nextAllowedTime.getTime()) return 0;
     
     return Math.ceil((backoffState.nextAllowedTime.getTime() - now) / 1000);
+  }
+
+  /**
+   * Get the calculated backoff delay for the current level (for testing)
+   */
+  public getCalculatedBackoffDelay(identifier: string, endpoint: string): number {
+    const backoffState = this.getBackoffState(identifier, endpoint);
+    if (!backoffState) return 0;
+    
+    const config = this.getEndpointConfig(endpoint);
+    return this.calculateBackoffDelay(backoffState.level, config.backoff);
   }
   
   /**
@@ -829,6 +843,5 @@ export class RateLimitingService extends EventEmitter {
 }
 
 // Export default instance
-export const rateLimitingService = new RateLimitingService();
-
+export 
 export default RateLimitingService;

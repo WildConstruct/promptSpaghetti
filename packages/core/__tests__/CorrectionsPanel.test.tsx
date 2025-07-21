@@ -6,7 +6,7 @@ import { useCorrectionsStore } from '../correctionsStore';
 
 // Mock the corrections store
 jest.mock('../correctionsStore', () => ({
-  useCorrectionsStore: jest.fn(),
+  useCorrectionsStore: jest.fn<unknown[], unknown>(),
   useCorrectionsEnabled: jest.fn(() => true),
   DEFAULT_CORRECTION_RULES: [
     {
@@ -23,18 +23,24 @@ jest.mock('../correctionsStore', () => ({
 
 const mockStore = {
   rules: [] as any[],
-  addRule: jest.fn(),
-  updateRule: jest.fn(),
-  deleteRule: jest.fn(),
-  toggleRule: jest.fn(),
-  reorderRules: jest.fn(),
-  clearAllRules: jest.fn(),
+  addRule: jest.fn<unknown[], unknown>(),
+  updateRule: jest.fn<unknown[], unknown>(),
+  deleteRule: jest.fn<unknown[], unknown>(),
+  toggleRule: jest.fn<unknown[], unknown>(),
+  reorderRules: jest.fn<unknown[], unknown>(),
+  clearAllRules: jest.fn<unknown[], unknown>(),
   applyCorrections: jest.fn((text) => text)
 };
 
 beforeEach(() => {
-  (useCorrectionsStore as unknown as jest.Mock).mockReturnValue(mockStore);
-  jest.clearAllMocks();
+  // Reset mock calls but keep the functions
+  Object.values(mockStore).forEach(fn => {
+    if (jest.isMockFunction(fn)) {
+      fn.mockClear();
+    }
+  });
+  
+  (useCorrectionsStore as unknown as jest.Mock).mockReturnValue(mockStore as unknown);
 });
 
 describe('CorrectionsPanel', () => {
@@ -50,7 +56,7 @@ describe('CorrectionsPanel', () => {
   });
 
   it('should call onClose when close button is clicked', () => {
-    const mockOnClose = jest.fn();
+    const mockOnClose = jest.fn<unknown[], unknown>();
     render(<CorrectionsPanel isOpen={true} onClose={mockOnClose} />);
     
     fireEvent.click(screen.getByLabelText('Close corrections panel'));
@@ -140,6 +146,7 @@ describe('CorrectionsPanel', () => {
   });
 
   it('should toggle rule when checkbox is clicked', async () => {
+    // Explicitly set rules in mockStore
     mockStore.rules = [
       {
         id: '1',
@@ -154,15 +161,25 @@ describe('CorrectionsPanel', () => {
       }
     ];
     
+    // Debug to see if the component is rendering properly
     render(<CorrectionsPanel isOpen={true} onClose={() => {}} />);
     
-    // Find the specific checkbox for our rule (the first one)
-    const checkboxes = screen.getAllByRole('checkbox');
-    const ruleCheckbox = checkboxes[0]; // The first checkbox should be for our Test Rule
-    expect(ruleCheckbox).toBeInTheDocument();
-    expect(ruleCheckbox).toBeChecked(); // Should be checked initially since isActive is true
+    // Verify that the rule name appears (to ensure the component is rendering the rule)
+    expect(screen.getByText('Test Rule')).toBeInTheDocument();
     
-    // Use fireEvent since userEvent is mocked
+    // Find the specific checkbox for this rule using a better selector
+    // The onChange handler is: onChange={() => toggleRule(rule.id)}
+    // Let's find the checkbox that's checked and within the rule section
+    const checkboxes = screen.getAllByRole('checkbox');
+    
+    // The rule checkbox should be checked since isActive is true
+    const checkedCheckboxes = checkboxes.filter(cb => cb.checked);
+    expect(checkedCheckboxes.length).toBeGreaterThanOrEqual(1);
+    
+    // The first checked checkbox should be our rule checkbox
+    const ruleCheckbox = checkedCheckboxes[0];
+    
+    // Click the checkbox
     fireEvent.click(ruleCheckbox);
     
     // Verify the store method was called

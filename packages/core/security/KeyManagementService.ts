@@ -379,6 +379,13 @@ export class KeyManagementService extends EventEmitter {
   }
 
   /**
+   * Get key metadata without access validation (for administrative/testing purposes)
+   */
+  public async getKeyMetadata(keyId: string): Promise<CryptographicKey | null> {
+    return await this.loadKey(keyId);
+  }
+
+  /**
    * Retrieve a key by ID
    */
   public async getKey(keyId: string, requesterId: string): Promise<CryptographicKey | null> {
@@ -920,9 +927,14 @@ export class KeyManagementService extends EventEmitter {
   }
 
   private async storeKey(key: CryptographicKey): Promise<void> {
+    const existingKey = this.keys.get(key.metadata.id);
     this.keys.set(key.metadata.id, key);
-    key.metadata.status = KeyStatus.ACTIVE;
-    key.metadata.activatedAt = new Date();
+    
+    // Only set to ACTIVE if this is a new key (not an update)
+    if (!existingKey) {
+      key.metadata.status = KeyStatus.ACTIVE;
+      key.metadata.activatedAt = new Date();
+    }
   }
 
   private async loadKey(keyId: string): Promise<CryptographicKey | null> {

@@ -288,7 +288,7 @@ describe('KeyManagementService', () => {
       expect(newKey.metadata.metadata.rotatedFrom).toBe(originalKey.metadata.id);
       
       // Original key should be retired
-      const oldKey = await service.getKey(originalKey.metadata.id, testRequesterId);
+      const oldKey = await service.getKeyMetadata(originalKey.metadata.id);
       expect(oldKey!.metadata.status).toBe(KeyStatus.RETIRED);
     });
 
