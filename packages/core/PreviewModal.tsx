@@ -21,7 +21,18 @@ interface PreviewModalProps {
   onNodeHighlight?: (nodeIds: string[]) => void;
 }
 
-export   
+export const PreviewModal: React.FC<PreviewModalProps> = ({ 
+  open, 
+  loading, 
+  error, 
+  results, 
+  onClose, 
+  onCancel, 
+  onResultHover, 
+  onNodeHighlight 
+}) => {
+  const [showExecutionPaths, setShowExecutionPaths] = useState(false);
+  
   // Check if results have execution path data
   const hasExecutionPaths = results.length > 0 && 
     results.some(r => 'executionPath' in r && r.executionPath);
