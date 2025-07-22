@@ -439,7 +439,9 @@ export interface PerformanceMonitorProps {
   visible?: boolean;
 }
 
-export 
+export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({ optimizer, visible = true }) => {
+  const [metrics, setMetrics] = React.useState<PerformanceMetrics>(optimizer.getMetrics());
+
   React.useEffect(() => {
     if (!visible) return;
 
