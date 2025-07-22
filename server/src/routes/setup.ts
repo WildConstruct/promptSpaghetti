@@ -398,6 +398,50 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
     };
   });
 
+  // Export endpoint for result management
+  server.post('/api/export', async (request, reply) => {
+    try {
+      const { format, data, options, filename } = request.body as {
+        format: string;
+        data: any;
+        options: any;
+        filename: string;
+      };
+
+      // Import exporter functions
+      const { exportResults } = await import('../exporter');
+      
+      // Generate export based on format
+      const exportResult = await exportResults({
+        format,
+        data,
+        options,
+        filename
+      });
+
+      // Handle different response types
+      if (exportResult.type === 'binary') {
+        // Binary formats (ZIP, PDF)
+        reply.header('Content-Type', exportResult.mimeType);
+        reply.header('Content-Disposition', `attachment; filename="${filename}"`);
+        return exportResult.data;
+      } else {
+        // Text/JSON formats
+        reply.header('Content-Type', exportResult.mimeType);
+        if (exportResult.shouldDownload) {
+          reply.header('Content-Disposition', `attachment; filename="${filename}"`);
+        }
+        return exportResult.data;
+      }
+    } catch (error) {
+      request.log.error('Export error:', error);
+      reply.status(500).send({
+        error: 'Export failed',
+        details: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+
   server.post<{
     Body: PreviewRequest;
     Headers: { 'x-session-id'?: string; 'x-user-id'?: string };

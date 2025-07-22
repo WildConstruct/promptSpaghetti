@@ -151,7 +151,15 @@ const EXPORT_FORMATS: ExportFormat[] = [
   }
 ];
 
-export   const [selectedFormat, setSelectedFormat] = useState<ExportFormat | null>(null);
+export const ResultExportManager: React.FC<ResultExportManagerProps> = ({
+  results,
+  selectedResultIds,
+  onExportComplete,
+  onExportError,
+  className = ''
+}) => {
+  const [isExporting, setIsExporting] = useState(false);
+  const [selectedFormat, setSelectedFormat] = useState<ExportFormat | null>(null);
   const [exportOptions, setExportOptions] = useState<ExportOptions | null>(null);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   

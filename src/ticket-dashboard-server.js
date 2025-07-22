@@ -407,6 +407,12 @@ function handleDashboard(req, res) {
             border: 1px solid #1e40af;
         }
 
+        .story-status.review {
+            background: #581c87;
+            color: #c084fc;
+            border: 1px solid #7c3aed;
+        }
+
         .story-priority {
             margin-bottom: 15px;
         }
@@ -858,11 +864,15 @@ function handleDashboard(req, res) {
             document.getElementById('task-overview').innerHTML = \`
                 <div class="task-stat">
                     <div class="task-stat-number pending">\${statusCounts.UNASSIGNED || 0}</div>
-                    <div class="task-stat-label">Unassigned Tasks</div>
+                    <div class="task-stat-label">Unassigned</div>
                 </div>
                 <div class="task-stat">
                     <div class="task-stat-number in-progress">\${statusCounts.IN_PROGRESS || 0}</div>
                     <div class="task-stat-label">In Progress</div>
+                </div>
+                <div class="task-stat">
+                    <div class="task-stat-number" style="color: #8b5cf6;">\${statusCounts.REVIEW || 0}</div>
+                    <div class="task-stat-label">In Review</div>
                 </div>
                 <div class="task-stat">
                     <div class="task-stat-number completed">\${statusCounts.COMPLETED || 0}</div>
@@ -870,15 +880,11 @@ function handleDashboard(req, res) {
                 </div>
                 <div class="task-stat">
                     <div class="task-stat-number" style="color: #74c0fc;">\${totalTasks}</div>
-                    <div class="task-stat-label">Total Epic 8 Tasks</div>
+                    <div class="task-stat-label">Total Tasks</div>
                 </div>
                 <div class="task-stat">
                     <div class="task-stat-number" style="color: #10b981;">\${assignedTasks}</div>
-                    <div class="task-stat-label">Assigned to Agents</div>
-                </div>
-                <div class="task-stat">
-                    <div class="task-stat-number" style="color: #fbbf24;">\${totalEstimatedHours}h</div>
-                    <div class="task-stat-label">Total Effort</div>
+                    <div class="task-stat-label">Assigned</div>
                 </div>
             \`;
         }
@@ -894,13 +900,17 @@ function handleDashboard(req, res) {
                 
                 // Calculate story progress
                 const completedTasks = storyTasks.filter(t => (t.state || t.status) === 'COMPLETED').length;
+                const reviewTasks = storyTasks.filter(t => (t.state || t.status) === 'REVIEW').length;
                 const inProgressTasks = storyTasks.filter(t => (t.state || t.status) === 'IN_PROGRESS').length;
+                const unassignedTasks = storyTasks.filter(t => (t.state || t.status) === 'UNASSIGNED').length;
                 const assignedTasks = storyTasks.filter(t => t.assignee && t.assignee !== 'null').length;
                 
                 // Determine overall story status
-                let status = 'PENDING';
+                let status = 'UNASSIGNED';
                 if (completedTasks === taskCount && taskCount > 0) {
                     status = 'COMPLETED';
+                } else if (reviewTasks > 0) {
+                    status = 'REVIEW';
                 } else if (inProgressTasks > 0) {
                     status = 'IN_PROGRESS';
                 } else if (assignedTasks > 0) {
@@ -918,8 +928,9 @@ function handleDashboard(req, res) {
                     .map(t => t.assignee))];
                 const agentList = agents.length > 0 ? agents.join(', ') : 'Not assigned';
                 
-                // Calculate progress percentage
-                const progressPercent = taskCount > 0 ? Math.round((completedTasks / taskCount) * 100) : 0;
+                // Calculate progress percentage (completed + in review as partial progress)
+                const progressPercent = taskCount > 0 ? 
+                    Math.round(((completedTasks + reviewTasks * 0.8 + inProgressTasks * 0.5) / taskCount) * 100) : 0;
 
                 return \`
                     <div class="story-card" data-story="\${storyId}">
@@ -951,8 +962,9 @@ function handleDashboard(req, res) {
                         
                         <div class="story-tasks" style="margin: 10px 0; font-size: 0.85rem; color: #9ca3af;">
                             ✅ \${completedTasks} completed &nbsp; 
+                            👀 \${reviewTasks} in review &nbsp; 
                             🔄 \${inProgressTasks} in progress &nbsp; 
-                            📋 \${taskCount - completedTasks - inProgressTasks} pending
+                            📋 \${unassignedTasks} unassigned
                         </div>
                         
                         <div class="story-meta">
