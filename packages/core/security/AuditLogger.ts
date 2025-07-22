@@ -12,53 +12,8 @@
  * Epic 19 Task T-1752989143998-485: Implement audit logging for data access
  */
 
-// Browser-compatible event emitter and crypto
-class BrowserEventEmitter {
-  private listeners: { [event: string]: Function[] } = {};
-
-  on(event: string, listener: Function): this {
-    if (!this.listeners[event]) {
-      this.listeners[event] = [];
-    }
-    this.listeners[event].push(listener);
-    return this;
-  }
-
-  emit(event: string, ...args: any[]): boolean {
-    if (!this.listeners[event]) return false;
-    this.listeners[event].forEach(listener => listener(...args));
-    return true;
-  }
-
-  removeListener(event: string, listener: Function): this {
-    if (!this.listeners[event]) return this;
-    this.listeners[event] = this.listeners[event].filter(l => l !== listener);
-    return this;
-  }
-}
-
-// Browser-compatible crypto functions
-const browserCrypto = {
-  randomBytes: (size: number): { toString: (encoding: string) => string } => {
-    const array = new Uint8Array(size);
-    if (typeof window !== 'undefined' && window.crypto) {
-      window.crypto.getRandomValues(array);
-    } else {
-      // Fallback for environments without crypto
-      for (let i = 0; i < array.length; i++) {
-        array[i] = Math.floor(Math.random() * 256);
-      }
-    }
-    return {
-      toString: (encoding: string) => {
-        if (encoding === 'hex') {
-          return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-        }
-        return Array.from(array).join('');
-      }
-    };
-  }
-};
+import { EventEmitter } from 'events';
+import * as crypto from 'crypto';
 import { 
   DataClassificationLevel,
   type OperationContext
@@ -233,7 +188,7 @@ export enum AuditLogLevel {
 /**
  * Main audit logger implementation
  */
-export class AuditLogger extends BrowserEventEmitter {
+export class AuditLogger extends EventEmitter {
   private config: Required<AuditLoggerConfig>;
   private buffer: AuditLogEntry[] = [];
   private flushTimer?: ReturnType<typeof setTimeout>;
@@ -521,14 +476,14 @@ export class AuditLogger extends BrowserEventEmitter {
    * Generate unique audit ID
    */
   private generateAuditId(): string {
-    return `audit_${Date.now()}_${browserCrypto.randomBytes(8).toString('hex')}`;
+    return `audit_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
   }
   
   /**
    * Generate correlation ID
    */
   private generateCorrelationId(): string {
-    return `corr_${browserCrypto.randomBytes(16).toString('hex')}`;
+    return `corr_${crypto.randomBytes(16).toString('hex')}`;
   }
   
   /**

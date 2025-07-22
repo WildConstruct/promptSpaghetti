@@ -34,27 +34,7 @@ import {
 } from './DataClassificationHelpers';
 
 import { SecurityValidation } from '../validation/security';
-
-// Browser-compatible hash function
-async function browserHash(data: string): Promise<string> {
-  if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
-    // Use Web Crypto API when available
-    const encoder = new TextEncoder();
-    const dataBuffer = encoder.encode(data);
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', dataBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  } else {
-    // Fallback simple hash for environments without crypto
-    let hash = 0;
-    for (let i = 0; i < data.length; i++) {
-      const char = data.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32bit integer
-    }
-    return Math.abs(hash).toString(16).padStart(8, '0');
-  }
-}
+import { createHash } from 'crypto';
 
 /**
  * Enforcement configuration
@@ -143,7 +123,7 @@ export class ClassificationEnforcer {
     operation: OperationContext,
     currentControls: string[] = []
   ): Promise<EnforcementResult> {
-    const auditId = await this.generateAuditId(operation);
+    const auditId = this.generateAuditId(operation);
         
     try {
       // Get handling requirements for the classification
@@ -1105,10 +1085,9 @@ export class ClassificationEnforcer {
   /**
    * Generate audit ID
    */
-  private async generateAuditId(operation: OperationContext): Promise<string> {
+  private generateAuditId(operation: OperationContext): string {
     const data = `${operation.userId}-${operation.requestId}-${Date.now()}`;
-    const hash = await browserHash(data);
-    return hash.substring(0, 16);
+    return createHash('sha256').update(data).digest('hex').substring(0, 16);
   }
   
   /**
