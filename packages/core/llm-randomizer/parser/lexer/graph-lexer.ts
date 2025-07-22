@@ -215,9 +215,9 @@ export class GraphLexer {
       // TODO: Fix indentation validation logic
       // if (this.indentStack[this.indentStack.length - 1] !== indent) {
       //   this.addError(
-        'Indentation does not match any outer indentation level',
-        'Use consistent 2-space indentation'
-      );
+      //     'Indentation does not match any outer indentation level',
+      //     'Use consistent 2-space indentation'
+      //   );
       // }
     }
   }
