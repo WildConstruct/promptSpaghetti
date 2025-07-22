@@ -24,9 +24,6 @@ export const MEDIEVAL_PERIODS = {
   LATE_MEDIEVAL: HISTORICAL_ERAS.MEDIEVAL_LATE
 };
 
-export 
-export 
-export 
 /**
  * Medieval Demo Database
  */
@@ -483,5 +480,4 @@ export class MedievalDemoDatabase {
 /**
  * Medieval historical constraints specific to the demo
  */
-export 
 export default MedievalDemoDatabase;
