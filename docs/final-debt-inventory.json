@@ -1,0 +1,1921 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "createdAt": "2025-07-18T15:04:15.343Z",
+    "updatedAt": "2025-07-18T15:04:15.343Z",
+    "totalItems": 24,
+    "reviewer": "Terry",
+    "epic": "18.1.5",
+    "finalAnalysisDate": "2025-07-22T04:16:49.637Z",
+    "frameworkVersion": "2.2.0",
+    "epic18Task": "E18-1753114561979-82AADE",
+    "scoringCorrected": true,
+    "totalItemsProcessed": 24
+  },
+  "summary": {
+    "priorityDistribution": {
+      "P0": 3,
+      "P1": 0,
+      "P2": 2,
+      "P3": 7,
+      "P4": 12
+    },
+    "effortByPriority": {
+      "P0": 18,
+      "P1": 0,
+      "P2": 32,
+      "P3": 25,
+      "P4": 185
+    },
+    "categoryStats": {
+      "security": {
+        "count": 7,
+        "totalScore": 579,
+        "averageScore": 82.7,
+        "highestPriority": "P0"
+      },
+      "reliability": {
+        "count": 4,
+        "totalScore": 228,
+        "averageScore": 57,
+        "highestPriority": "P3"
+      },
+      "maintainability": {
+        "count": 5,
+        "totalScore": 259,
+        "averageScore": 51.8,
+        "highestPriority": "P3"
+      },
+      "performance": {
+        "count": 4,
+        "totalScore": 224,
+        "averageScore": 56,
+        "highestPriority": "P3"
+      },
+      "type_safety": {
+        "count": 2,
+        "totalScore": 110,
+        "averageScore": 55,
+        "highestPriority": "P4"
+      },
+      "developer_experience": {
+        "count": 2,
+        "totalScore": 88,
+        "averageScore": 44,
+        "highestPriority": "P4"
+      }
+    },
+    "overallAverageScore": 62,
+    "priorityChanges": 9,
+    "totalEffort": 260,
+    "criticalPathEffort": 18
+  },
+  "items": [
+    {
+      "id": "DEBT-001",
+      "title": "SetVariable Node Schema Vulnerability",
+      "description": "SetVariable node accepts z.any() type, bypassing all validation and allowing potential code injection",
+      "severity": "critical",
+      "priority": "P0",
+      "category": "security",
+      "effort": "S",
+      "impact": "Critical - Remote Code Execution",
+      "location": "packages/core/graphSchema.ts:52",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "security",
+        "deployment-blocker",
+        "validation"
+      ],
+      "blocksDeployment": true,
+      "estimatedHours": 6,
+      "actualHours": 0,
+      "successCriteria": [
+        "Replace z.any() with secure validation",
+        "Add security pattern detection",
+        "Implement comprehensive testing",
+        "Security audit approval"
+      ],
+      "remediation": {
+        "approach": "Replace with union type validation",
+        "codeExample": "value: z.union([z.string().max(10000), z.number().finite(), z.boolean(), z.array(z.string()).max(100)])",
+        "testingRequired": true,
+        "securityReviewRequired": true
+      },
+      "priorityScore": 100,
+      "calculatedPriority": "P0",
+      "scoreBreakdown": {
+        "impact": 10,
+        "risk": 6.5,
+        "effort": 6,
+        "strategic": 10,
+        "weighted": {
+          "impact": 4,
+          "risk": 2,
+          "effort": 1.2,
+          "strategic": 1
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 10,
+          "risk": 10,
+          "effort": 7,
+          "strategic": 10
+        },
+        "weightedScores": {
+          "impact": 40,
+          "risk": 30,
+          "effort": 14,
+          "strategic": 10
+        },
+        "baseScore": 94,
+        "adjustmentFactors": [
+          "Deployment Blocker (×1.5)"
+        ],
+        "finalScore": 100,
+        "calculatedPriority": "P0"
+      },
+      "priorityChange": {
+        "originalScore": 100,
+        "originalPriority": "P0",
+        "newScore": 100,
+        "newPriority": "P0",
+        "scoreChange": 0,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-002",
+      "title": "Conditional Node Expression Injection",
+      "description": "Conditional node allows arbitrary JavaScript execution through condition strings",
+      "severity": "critical",
+      "priority": "P0",
+      "category": "security",
+      "effort": "S",
+      "impact": "Critical - Remote Code Execution",
+      "location": "packages/core/graphSchema.ts:75-79",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "security",
+        "deployment-blocker",
+        "injection"
+      ],
+      "blocksDeployment": true,
+      "estimatedHours": 6,
+      "actualHours": 0,
+      "successCriteria": [
+        "Implement safe expression validation",
+        "Create expression whitelist",
+        "Add security testing",
+        "Penetration testing approval"
+      ],
+      "remediation": {
+        "approach": "Implement expression validation with whitelist",
+        "codeExample": "condition: z.string().max(500).refine((expr) => safePattern.test(expr))",
+        "testingRequired": true,
+        "securityReviewRequired": true
+      },
+      "priorityScore": 100,
+      "calculatedPriority": "P0",
+      "scoreBreakdown": {
+        "impact": 10,
+        "risk": 6.5,
+        "effort": 6,
+        "strategic": 10,
+        "weighted": {
+          "impact": 4,
+          "risk": 2,
+          "effort": 1.2,
+          "strategic": 1
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 10,
+          "risk": 10,
+          "effort": 7,
+          "strategic": 10
+        },
+        "weightedScores": {
+          "impact": 40,
+          "risk": 30,
+          "effort": 14,
+          "strategic": 10
+        },
+        "baseScore": 94,
+        "adjustmentFactors": [
+          "Deployment Blocker (×1.5)"
+        ],
+        "finalScore": 100,
+        "calculatedPriority": "P0"
+      },
+      "priorityChange": {
+        "originalScore": 100,
+        "originalPriority": "P0",
+        "newScore": 100,
+        "newPriority": "P0",
+        "scoreChange": 0,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-003",
+      "title": "IncludeNode Validation Bypass",
+      "description": "IncludeNode has no validation for lookup keys, allowing undefined access and potential property injection",
+      "severity": "critical",
+      "priority": "P0",
+      "category": "security",
+      "effort": "S",
+      "impact": "High - Property Injection",
+      "location": "packages/core/runtime/index.ts:64-67",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "security",
+        "deployment-blocker",
+        "validation"
+      ],
+      "blocksDeployment": true,
+      "estimatedHours": 6,
+      "actualHours": 0,
+      "successCriteria": [
+        "Add key validation",
+        "Implement safe property access",
+        "Add fallback mechanisms",
+        "Security testing"
+      ],
+      "remediation": {
+        "approach": "Add property validation and safe access",
+        "codeExample": "if (!lookup.hasOwnProperty(key) || key.includes('__proto__')) { return fallback; }",
+        "testingRequired": true,
+        "securityReviewRequired": true
+      },
+      "priorityScore": 100,
+      "calculatedPriority": "P0",
+      "scoreBreakdown": {
+        "impact": 10,
+        "risk": 6.5,
+        "effort": 6,
+        "strategic": 10,
+        "weighted": {
+          "impact": 4,
+          "risk": 2,
+          "effort": 1.2,
+          "strategic": 1
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 10,
+          "risk": 8,
+          "effort": 7,
+          "strategic": 10
+        },
+        "weightedScores": {
+          "impact": 40,
+          "risk": 24,
+          "effort": 14,
+          "strategic": 10
+        },
+        "baseScore": 88,
+        "adjustmentFactors": [
+          "Deployment Blocker (×1.5)"
+        ],
+        "finalScore": 100,
+        "calculatedPriority": "P0"
+      },
+      "priorityChange": {
+        "originalScore": 100,
+        "originalPriority": "P0",
+        "newScore": 100,
+        "newPriority": "P0",
+        "scoreChange": 0,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-004",
+      "title": "Preview API Schema Validation",
+      "description": "Preview API uses z.any() for graph schema validation, allowing malicious graph data injection",
+      "severity": "high",
+      "priority": "P1",
+      "category": "security",
+      "effort": "M",
+      "impact": "High - Data Injection",
+      "location": "server/src/index.ts:33-40",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "security",
+        "api",
+        "validation"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 16,
+      "actualHours": 0,
+      "successCriteria": [
+        "Replace z.any() with GraphSchema validation",
+        "Add request sanitization",
+        "Implement rate limiting",
+        "Add security headers"
+      ],
+      "remediation": {
+        "approach": "Replace with proper GraphSchema validation",
+        "testingRequired": true,
+        "securityReviewRequired": true
+      },
+      "priorityScore": 33,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 8.5,
+        "risk": 4,
+        "effort": 4.5,
+        "strategic": 10,
+        "weighted": {
+          "impact": 3.4,
+          "risk": 1.2,
+          "effort": 0.9,
+          "strategic": 1
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 8,
+          "effort": 5,
+          "strategic": 10
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 24,
+          "effort": 10,
+          "strategic": 10
+        },
+        "baseScore": 76,
+        "adjustmentFactors": [],
+        "finalScore": 76,
+        "calculatedPriority": "P2"
+      },
+      "priorityChange": {
+        "originalScore": 33,
+        "originalPriority": "P4",
+        "newScore": 76,
+        "newPriority": "P2",
+        "scoreChange": 43,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-005",
+      "title": "Import Rules Validation",
+      "description": "Import rules endpoint lacks comprehensive validation, allowing malformed rule data",
+      "severity": "high",
+      "priority": "P1",
+      "category": "security",
+      "effort": "M",
+      "impact": "High - Data Integrity",
+      "location": "server/src/routes/corrections.ts:27-29",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "security",
+        "api",
+        "validation"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 16,
+      "actualHours": 0,
+      "successCriteria": [
+        "Implement comprehensive rule schema validation",
+        "Add malformed data detection",
+        "Add input sanitization",
+        "Implement error handling"
+      ],
+      "remediation": {
+        "approach": "Create comprehensive rule validation schema",
+        "testingRequired": true,
+        "securityReviewRequired": true
+      },
+      "priorityScore": 33,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 8.5,
+        "risk": 4,
+        "effort": 4.5,
+        "strategic": 10,
+        "weighted": {
+          "impact": 3.4,
+          "risk": 1.2,
+          "effort": 0.9,
+          "strategic": 1
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 7,
+          "effort": 5,
+          "strategic": 10
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 21,
+          "effort": 10,
+          "strategic": 10
+        },
+        "baseScore": 73,
+        "adjustmentFactors": [],
+        "finalScore": 73,
+        "calculatedPriority": "P2"
+      },
+      "priorityChange": {
+        "originalScore": 33,
+        "originalPriority": "P4",
+        "newScore": 73,
+        "newPriority": "P2",
+        "scoreChange": 40,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-013",
+      "title": "Auth Device Info Validation",
+      "description": "Authentication device info lacks proper validation",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "security",
+      "effort": "XS",
+      "impact": "Low - Data Validation",
+      "location": "server/src/auth/",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "security",
+        "validation",
+        "auth"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 3,
+      "actualHours": 0,
+      "successCriteria": [
+        "Add device info validation schema",
+        "Implement sanitization",
+        "Add error handling",
+        "Add logging"
+      ],
+      "remediation": {
+        "approach": "Add device info validation schema",
+        "testingRequired": true,
+        "securityReviewRequired": true
+      },
+      "priorityScore": 26,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 6,
+        "risk": 3,
+        "effort": 8.3,
+        "strategic": 10,
+        "weighted": {
+          "impact": 2.4,
+          "risk": 0.9,
+          "effort": 1.7,
+          "strategic": 1
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 6,
+          "risk": 5,
+          "effort": 9,
+          "strategic": 10
+        },
+        "weightedScores": {
+          "impact": 24,
+          "risk": 15,
+          "effort": 18,
+          "strategic": 10
+        },
+        "baseScore": 67,
+        "adjustmentFactors": [],
+        "finalScore": 67,
+        "calculatedPriority": "P3"
+      },
+      "priorityChange": {
+        "originalScore": 26,
+        "originalPriority": "P4",
+        "newScore": 67,
+        "newPriority": "P3",
+        "scoreChange": 41,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-012",
+      "title": "Engine Execution Error Handling",
+      "description": "Engine execution lacks comprehensive error handling and recovery",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "reliability",
+      "effort": "S",
+      "impact": "Medium - User Experience",
+      "location": "server/src/engine.ts",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "reliability",
+        "error_handling",
+        "user_experience"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 6,
+      "actualHours": 0,
+      "successCriteria": [
+        "Add comprehensive error handling",
+        "Implement error recovery",
+        "Add user-friendly messages",
+        "Add error logging"
+      ],
+      "remediation": {
+        "approach": "Implement proper error handling with user-friendly messages",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.9,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 5,
+        "risk": 3,
+        "effort": 6.5,
+        "strategic": 7,
+        "weighted": {
+          "impact": 2,
+          "risk": 0.9,
+          "effort": 1.3,
+          "strategic": 0.7
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 4,
+          "effort": 8,
+          "strategic": 5
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 12,
+          "effort": 16,
+          "strategic": 5
+        },
+        "baseScore": 65,
+        "adjustmentFactors": [],
+        "finalScore": 65,
+        "calculatedPriority": "P3"
+      },
+      "priorityChange": {
+        "originalScore": 4.9,
+        "originalPriority": "P4",
+        "newScore": 65,
+        "newPriority": "P3",
+        "scoreChange": 60.1,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-024",
+      "title": "Dependency Vulnerabilities",
+      "description": "Dependency analysis indicates potential vulnerability management gaps",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "security",
+      "effort": "S",
+      "impact": "Medium - Security Posture",
+      "location": "package.json",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "security",
+        "dependencies",
+        "vulnerabilities"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 6,
+      "actualHours": 0,
+      "successCriteria": [
+        "Implement dependency scanning",
+        "Update vulnerable packages",
+        "Add automated monitoring",
+        "Add security policies"
+      ],
+      "remediation": {
+        "approach": "Implement dependency vulnerability scanning",
+        "testingRequired": true,
+        "securityReviewRequired": true
+      },
+      "priorityScore": 25.5,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 6,
+        "risk": 3,
+        "effort": 6,
+        "strategic": 10,
+        "weighted": {
+          "impact": 2.4,
+          "risk": 0.9,
+          "effort": 1.2,
+          "strategic": 1
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 6,
+          "risk": 5,
+          "effort": 7,
+          "strategic": 10
+        },
+        "weightedScores": {
+          "impact": 24,
+          "risk": 15,
+          "effort": 14,
+          "strategic": 10
+        },
+        "baseScore": 63,
+        "adjustmentFactors": [],
+        "finalScore": 63,
+        "calculatedPriority": "P3"
+      },
+      "priorityChange": {
+        "originalScore": 25.5,
+        "originalPriority": "P4",
+        "newScore": 63,
+        "newPriority": "P3",
+        "scoreChange": 37.5,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-018",
+      "title": "Complete DuplicateNode Implementation",
+      "description": "DuplicateNode functionality is incomplete",
+      "severity": "low",
+      "priority": "P3",
+      "category": "maintainability",
+      "effort": "XS",
+      "impact": "Low - Feature Parity",
+      "location": "packages/core/components/GraphEditor.tsx",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "maintainability",
+        "feature_completeness"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 3,
+      "actualHours": 0,
+      "successCriteria": [
+        "Complete implementation",
+        "Add comprehensive testing",
+        "Add documentation",
+        "Add user feedback"
+      ],
+      "remediation": {
+        "approach": "Complete the implementation",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.5,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 4,
+        "risk": 1,
+        "effort": 8.8,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 1.6,
+          "risk": 0.3,
+          "effort": 1.8,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 1,
+          "effort": 10,
+          "strategic": 8
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 3,
+          "effort": 20,
+          "strategic": 8
+        },
+        "baseScore": 63,
+        "adjustmentFactors": [],
+        "finalScore": 63,
+        "calculatedPriority": "P3"
+      },
+      "priorityChange": {
+        "originalScore": 4.5,
+        "originalPriority": "P4",
+        "newScore": 63,
+        "newPriority": "P3",
+        "scoreChange": 58.5,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-015",
+      "title": "Inspector Resize Optimization",
+      "description": "Inspector panel resize operations are not optimized, causing UI lag",
+      "severity": "low",
+      "priority": "P3",
+      "category": "performance",
+      "effort": "XS",
+      "impact": "Low - User Experience",
+      "location": "packages/core/components/Inspector/InspectorPanel.tsx",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "performance",
+        "ui",
+        "optimization"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 2,
+      "actualHours": 0,
+      "successCriteria": [
+        "Implement debounced resize handlers",
+        "Add performance monitoring",
+        "Optimize render cycles",
+        "Add smooth animations"
+      ],
+      "remediation": {
+        "approach": "Implement debounced resize handlers",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.8,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 4,
+        "risk": 2,
+        "effort": 8.8,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 1.6,
+          "risk": 0.6,
+          "effort": 1.8,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 1,
+          "effort": 10,
+          "strategic": 6
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 3,
+          "effort": 20,
+          "strategic": 6
+        },
+        "baseScore": 61,
+        "adjustmentFactors": [],
+        "finalScore": 61,
+        "calculatedPriority": "P3"
+      },
+      "priorityChange": {
+        "originalScore": 4.8,
+        "originalPriority": "P4",
+        "newScore": 61,
+        "newPriority": "P3",
+        "scoreChange": 56.2,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-017",
+      "title": "ReactFlow Import Optimization",
+      "description": "ReactFlow is imported in its entirety, increasing bundle size",
+      "severity": "low",
+      "priority": "P3",
+      "category": "performance",
+      "effort": "XS",
+      "impact": "Low - Bundle Size",
+      "location": "packages/core/components/GraphEditor.tsx",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "performance",
+        "bundle_size",
+        "optimization"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 1,
+      "actualHours": 0,
+      "successCriteria": [
+        "Use tree-shaking friendly imports",
+        "Measure bundle size impact",
+        "Add bundle analysis",
+        "Optimize dependencies"
+      ],
+      "remediation": {
+        "approach": "Use tree-shaking friendly imports",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.8,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 4,
+        "risk": 2,
+        "effort": 8.8,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 1.6,
+          "risk": 0.6,
+          "effort": 1.8,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 1,
+          "effort": 10,
+          "strategic": 6
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 3,
+          "effort": 20,
+          "strategic": 6
+        },
+        "baseScore": 61,
+        "adjustmentFactors": [],
+        "finalScore": 61,
+        "calculatedPriority": "P3"
+      },
+      "priorityChange": {
+        "originalScore": 4.8,
+        "originalPriority": "P4",
+        "newScore": 61,
+        "newPriority": "P3",
+        "scoreChange": 56.2,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-019",
+      "title": "Validation Performance Optimization",
+      "description": "Validation operations are not optimized, causing performance overhead",
+      "severity": "low",
+      "priority": "P3",
+      "category": "performance",
+      "effort": "S",
+      "impact": "Low - System Performance",
+      "location": "packages/core/validation.ts",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "performance",
+        "validation",
+        "optimization"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 4,
+      "actualHours": 0,
+      "successCriteria": [
+        "Implement caching",
+        "Add performance monitoring",
+        "Optimize algorithms",
+        "Add benchmarks"
+      ],
+      "remediation": {
+        "approach": "Implement caching and optimization",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.4,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 4,
+        "risk": 2,
+        "effort": 6.5,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 1.6,
+          "risk": 0.6,
+          "effort": 1.3,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 1,
+          "effort": 10,
+          "strategic": 6
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 3,
+          "effort": 20,
+          "strategic": 6
+        },
+        "baseScore": 61,
+        "adjustmentFactors": [],
+        "finalScore": 61,
+        "calculatedPriority": "P3"
+      },
+      "priorityChange": {
+        "originalScore": 4.4,
+        "originalPriority": "P4",
+        "newScore": 61,
+        "newPriority": "P3",
+        "scoreChange": 56.6,
+        "priorityChanged": true
+      }
+    },
+    {
+      "id": "DEBT-016",
+      "title": "WebSocket Analytics Error Handling",
+      "description": "WebSocket analytics lack proper error handling",
+      "severity": "low",
+      "priority": "P3",
+      "category": "reliability",
+      "effort": "XS",
+      "impact": "Low - Analytics Data",
+      "location": "server/src/analytics/",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "reliability",
+        "websocket",
+        "analytics"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 2,
+      "actualHours": 0,
+      "successCriteria": [
+        "Add error handling",
+        "Implement retry logic",
+        "Add connection monitoring",
+        "Add fallback mechanisms"
+      ],
+      "remediation": {
+        "approach": "Add error handling and retry logic",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.3,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 3,
+        "risk": 2,
+        "effort": 8.8,
+        "strategic": 7,
+        "weighted": {
+          "impact": 1.2,
+          "risk": 0.6,
+          "effort": 1.8,
+          "strategic": 0.7
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 5,
+          "risk": 4,
+          "effort": 10,
+          "strategic": 5
+        },
+        "weightedScores": {
+          "impact": 20,
+          "risk": 12,
+          "effort": 20,
+          "strategic": 5
+        },
+        "baseScore": 57,
+        "adjustmentFactors": [],
+        "finalScore": 57,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 4.3,
+        "originalPriority": "P4",
+        "newScore": 57,
+        "newPriority": "P4",
+        "scoreChange": 52.7,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-008",
+      "title": "Graph Store Type Safety",
+      "description": "Graph store uses any types, reducing type safety and IntelliSense support",
+      "severity": "high",
+      "priority": "P1",
+      "category": "type_safety",
+      "effort": "M",
+      "impact": "Medium - Developer Experience",
+      "location": "packages/core/graphStore.ts",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "type_safety",
+        "developer_experience"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 16,
+      "actualHours": 0,
+      "successCriteria": [
+        "Replace all any types",
+        "Add proper TypeScript interfaces",
+        "Enable strict mode",
+        "Add type validation"
+      ],
+      "remediation": {
+        "approach": "Implement proper TypeScript types",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.8,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 7,
+        "risk": 1,
+        "effort": 5,
+        "strategic": 7,
+        "weighted": {
+          "impact": 2.8,
+          "risk": 0.3,
+          "effort": 1,
+          "strategic": 0.7
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 1,
+          "effort": 6,
+          "strategic": 8
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 3,
+          "effort": 12,
+          "strategic": 8
+        },
+        "baseScore": 55,
+        "adjustmentFactors": [],
+        "finalScore": 55,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 4.8,
+        "originalPriority": "P4",
+        "newScore": 55,
+        "newPriority": "P4",
+        "scoreChange": 50.2,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-009",
+      "title": "Inspector Panel Any Types",
+      "description": "Inspector panel components use any types, reducing type safety",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "type_safety",
+      "effort": "M",
+      "impact": "Medium - Type Safety",
+      "location": "packages/core/components/Inspector/",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "type_safety",
+        "components"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 16,
+      "actualHours": 0,
+      "successCriteria": [
+        "Replace any types with proper interfaces",
+        "Add component prop validation",
+        "Enable strict mode",
+        "Add type guards"
+      ],
+      "remediation": {
+        "approach": "Replace any types with proper TypeScript interfaces",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 5,
+        "risk": 1,
+        "effort": 5,
+        "strategic": 7,
+        "weighted": {
+          "impact": 2,
+          "risk": 0.3,
+          "effort": 1,
+          "strategic": 0.7
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 1,
+          "effort": 6,
+          "strategic": 8
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 3,
+          "effort": 12,
+          "strategic": 8
+        },
+        "baseScore": 55,
+        "adjustmentFactors": [],
+        "finalScore": 55,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 4,
+        "originalPriority": "P4",
+        "newScore": 55,
+        "newPriority": "P4",
+        "scoreChange": 51,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-010",
+      "title": "Migration Transaction Handling",
+      "description": "Database migrations lack proper transaction handling and rollback mechanisms",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "reliability",
+      "effort": "S",
+      "impact": "Medium - Data Integrity",
+      "location": "server/src/database/migrations/",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "reliability",
+        "database",
+        "migrations"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 6,
+      "actualHours": 0,
+      "successCriteria": [
+        "Add transaction support",
+        "Implement rollback mechanisms",
+        "Add error handling",
+        "Add migration logging"
+      ],
+      "remediation": {
+        "approach": "Implement proper transaction handling",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.9,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 5,
+        "risk": 3,
+        "effort": 6.5,
+        "strategic": 7,
+        "weighted": {
+          "impact": 2,
+          "risk": 0.9,
+          "effort": 1.3,
+          "strategic": 0.7
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 5,
+          "risk": 4,
+          "effort": 8,
+          "strategic": 5
+        },
+        "weightedScores": {
+          "impact": 20,
+          "risk": 12,
+          "effort": 16,
+          "strategic": 5
+        },
+        "baseScore": 53,
+        "adjustmentFactors": [],
+        "finalScore": 53,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 4.9,
+        "originalPriority": "P4",
+        "newScore": 53,
+        "newPriority": "P4",
+        "scoreChange": 48.1,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-011",
+      "title": "Database Startup Reliability",
+      "description": "Database startup lacks proper error handling and retry mechanisms",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "reliability",
+      "effort": "S",
+      "impact": "Medium - System Stability",
+      "location": "server/src/database/",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "reliability",
+        "database",
+        "startup"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 6,
+      "actualHours": 0,
+      "successCriteria": [
+        "Add connection retry logic",
+        "Implement graceful degradation",
+        "Add health checks",
+        "Add monitoring"
+      ],
+      "remediation": {
+        "approach": "Add connection retry logic and graceful degradation",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.9,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 5,
+        "risk": 3,
+        "effort": 6.5,
+        "strategic": 7,
+        "weighted": {
+          "impact": 2,
+          "risk": 0.9,
+          "effort": 1.3,
+          "strategic": 0.7
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 5,
+          "risk": 4,
+          "effort": 8,
+          "strategic": 5
+        },
+        "weightedScores": {
+          "impact": 20,
+          "risk": 12,
+          "effort": 16,
+          "strategic": 5
+        },
+        "baseScore": 53,
+        "adjustmentFactors": [],
+        "finalScore": 53,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 4.9,
+        "originalPriority": "P4",
+        "newScore": 53,
+        "newPriority": "P4",
+        "scoreChange": 48.1,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-006",
+      "title": "Engine Complexity Reduction",
+      "description": "Engine execution logic is overly complex with cyclomatic complexity >15",
+      "severity": "high",
+      "priority": "P1",
+      "category": "maintainability",
+      "effort": "L",
+      "impact": "High - Code Complexity",
+      "location": "server/src/engine.ts",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "maintainability",
+        "complexity",
+        "refactoring"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 32,
+      "actualHours": 0,
+      "successCriteria": [
+        "Reduce cyclomatic complexity to <10",
+        "Split into smaller functions",
+        "Add comprehensive testing",
+        "Improve documentation"
+      ],
+      "remediation": {
+        "approach": "Refactor into smaller, focused functions",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 5.3,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 8.5,
+        "risk": 1,
+        "effort": 3.5,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 3.4,
+          "risk": 0.3,
+          "effort": 0.7,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 1,
+          "effort": 4,
+          "strategic": 8
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 3,
+          "effort": 8,
+          "strategic": 8
+        },
+        "baseScore": 51,
+        "adjustmentFactors": [],
+        "finalScore": 51,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 5.3,
+        "originalPriority": "P4",
+        "newScore": 51,
+        "newPriority": "P4",
+        "scoreChange": 45.7,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-007",
+      "title": "Node Type Definitions Centralization",
+      "description": "Node type definitions are scattered across multiple files, making extension difficult",
+      "severity": "high",
+      "priority": "P1",
+      "category": "maintainability",
+      "effort": "L",
+      "impact": "High - Maintainability",
+      "location": "packages/core/",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "maintainability",
+        "architecture",
+        "refactoring"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 32,
+      "actualHours": 0,
+      "successCriteria": [
+        "Create centralized node registry",
+        "Migrate all node definitions",
+        "Add plugin system",
+        "Update documentation"
+      ],
+      "remediation": {
+        "approach": "Create centralized node registry system",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 5.3,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 8.5,
+        "risk": 1,
+        "effort": 3.5,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 3.4,
+          "risk": 0.3,
+          "effort": 0.7,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 8,
+          "risk": 1,
+          "effort": 4,
+          "strategic": 8
+        },
+        "weightedScores": {
+          "impact": 32,
+          "risk": 3,
+          "effort": 8,
+          "strategic": 8
+        },
+        "baseScore": 51,
+        "adjustmentFactors": [],
+        "finalScore": 51,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 5.3,
+        "originalPriority": "P4",
+        "newScore": 51,
+        "newPriority": "P4",
+        "scoreChange": 45.7,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-022",
+      "title": "ESLint Configuration Missing",
+      "description": "ESLint configuration is missing or incomplete",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "maintainability",
+      "effort": "S",
+      "impact": "Medium - Code Standards",
+      "location": ".eslintrc.js",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "maintainability",
+        "code_standards",
+        "tooling"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 4,
+      "actualHours": 0,
+      "successCriteria": [
+        "Implement comprehensive ESLint config",
+        "Add security rules",
+        "Add complexity rules",
+        "Add accessibility rules"
+      ],
+      "remediation": {
+        "approach": "Implement comprehensive ESLint configuration",
+        "testingRequired": false,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 5,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 6,
+        "risk": 1,
+        "effort": 7,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 2.4,
+          "risk": 0.3,
+          "effort": 1.4,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 5,
+          "risk": 1,
+          "effort": 10,
+          "strategic": 8
+        },
+        "weightedScores": {
+          "impact": 20,
+          "risk": 3,
+          "effort": 20,
+          "strategic": 8
+        },
+        "baseScore": 51,
+        "adjustmentFactors": [],
+        "finalScore": 51,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 5,
+        "originalPriority": "P4",
+        "newScore": 51,
+        "newPriority": "P4",
+        "scoreChange": 46,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-014",
+      "title": "Build Script Integration",
+      "description": "Build scripts are not properly integrated, causing development friction",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "developer_experience",
+      "effort": "XS",
+      "impact": "Low - Developer Productivity",
+      "location": "package.json",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "developer_experience",
+        "build",
+        "tooling"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 3,
+      "actualHours": 0,
+      "successCriteria": [
+        "Integrate all build scripts",
+        "Add unified workflow",
+        "Add build optimization",
+        "Add documentation"
+      ],
+      "remediation": {
+        "approach": "Integrate all build scripts into unified workflow",
+        "testingRequired": false,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.9,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 5,
+        "risk": 1,
+        "effort": 9.3,
+        "strategic": 7,
+        "weighted": {
+          "impact": 2,
+          "risk": 0.3,
+          "effort": 1.9,
+          "strategic": 0.7
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 5,
+          "risk": 1,
+          "effort": 10,
+          "strategic": 5
+        },
+        "weightedScores": {
+          "impact": 20,
+          "risk": 3,
+          "effort": 20,
+          "strategic": 5
+        },
+        "baseScore": 48,
+        "adjustmentFactors": [],
+        "finalScore": 48,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 4.9,
+        "originalPriority": "P4",
+        "newScore": 48,
+        "newPriority": "P4",
+        "scoreChange": 43.1,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-021",
+      "title": "Test Coverage Gaps",
+      "description": "Test coverage is incomplete, missing critical test scenarios",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "maintainability",
+      "effort": "L",
+      "impact": "Medium - Code Quality",
+      "location": "Various test files",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "maintainability",
+        "testing",
+        "quality"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 40,
+      "actualHours": 0,
+      "successCriteria": [
+        "Achieve >80% test coverage",
+        "Add integration tests",
+        "Add end-to-end tests",
+        "Add performance tests"
+      ],
+      "remediation": {
+        "approach": "Implement comprehensive test suite",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4.3,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 6,
+        "risk": 1,
+        "effort": 3.5,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 2.4,
+          "risk": 0.3,
+          "effort": 0.7,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 7,
+          "risk": 1,
+          "effort": 2,
+          "strategic": 8
+        },
+        "weightedScores": {
+          "impact": 28,
+          "risk": 3,
+          "effort": 4,
+          "strategic": 8
+        },
+        "baseScore": 43,
+        "adjustmentFactors": [],
+        "finalScore": 43,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 4.3,
+        "originalPriority": "P4",
+        "newScore": 43,
+        "newPriority": "P4",
+        "scoreChange": 38.7,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-023",
+      "title": "Memory Leak Potential",
+      "description": "Memory analysis shows potential memory leaks (85MB peak usage)",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "performance",
+      "effort": "M",
+      "impact": "Medium - System Stability",
+      "location": "Various React components",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "performance",
+        "memory",
+        "stability"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 12,
+      "actualHours": 0,
+      "successCriteria": [
+        "Audit and fix memory leaks",
+        "Implement proper cleanup",
+        "Add memory monitoring",
+        "Add performance budgets"
+      ],
+      "remediation": {
+        "approach": "Audit and fix memory leaks",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 5.2,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 6,
+        "risk": 3,
+        "effort": 5,
+        "strategic": 8.5,
+        "weighted": {
+          "impact": 2.4,
+          "risk": 0.9,
+          "effort": 1,
+          "strategic": 0.9
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 5,
+          "risk": 1,
+          "effort": 6,
+          "strategic": 6
+        },
+        "weightedScores": {
+          "impact": 20,
+          "risk": 3,
+          "effort": 12,
+          "strategic": 6
+        },
+        "baseScore": 41,
+        "adjustmentFactors": [],
+        "finalScore": 41,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 5.2,
+        "originalPriority": "P4",
+        "newScore": 41,
+        "newPriority": "P4",
+        "scoreChange": 35.8,
+        "priorityChanged": false
+      }
+    },
+    {
+      "id": "DEBT-020",
+      "title": "Missing Build Pipeline",
+      "description": "Current build pipeline is incomplete, missing proper tooling integration",
+      "severity": "medium",
+      "priority": "P2",
+      "category": "developer_experience",
+      "effort": "M",
+      "impact": "Medium - Development Workflow",
+      "location": "Root level build configuration",
+      "assignee": null,
+      "status": "open",
+      "createdAt": "2025-07-18T15:04:15.343Z",
+      "updatedAt": "2025-07-18T15:04:15.343Z",
+      "tags": [
+        "developer_experience",
+        "build",
+        "tooling"
+      ],
+      "blocksDeployment": false,
+      "estimatedHours": 16,
+      "actualHours": 0,
+      "successCriteria": [
+        "Implement comprehensive build pipeline",
+        "Add turbo integration",
+        "Add webpack optimization",
+        "Add tooling integration"
+      ],
+      "remediation": {
+        "approach": "Implement comprehensive build pipeline",
+        "testingRequired": true,
+        "securityReviewRequired": false
+      },
+      "priorityScore": 4,
+      "calculatedPriority": "P4",
+      "scoreBreakdown": {
+        "impact": 5,
+        "risk": 1,
+        "effort": 5,
+        "strategic": 7,
+        "weighted": {
+          "impact": 2,
+          "risk": 0.3,
+          "effort": 1,
+          "strategic": 0.7
+        }
+      },
+      "finalScoring": {
+        "componentScores": {
+          "impact": 5,
+          "risk": 1,
+          "effort": 6,
+          "strategic": 5
+        },
+        "weightedScores": {
+          "impact": 20,
+          "risk": 3,
+          "effort": 12,
+          "strategic": 5
+        },
+        "baseScore": 40,
+        "adjustmentFactors": [],
+        "finalScore": 40,
+        "calculatedPriority": "P4"
+      },
+      "priorityChange": {
+        "originalScore": 4,
+        "originalPriority": "P4",
+        "newScore": 40,
+        "newPriority": "P4",
+        "scoreChange": 36,
+        "priorityChanged": false
+      }
+    }
+  ],
+  "recommendations": [
+    {
+      "type": "IMMEDIATE_ACTION",
+      "priority": "CRITICAL",
+      "title": "Critical Security Vulnerabilities - Deployment Blockers",
+      "message": "3 critical items are blocking deployment and must be resolved immediately",
+      "items": [
+        {
+          "id": "DEBT-001",
+          "title": "SetVariable Node Schema Vulnerability",
+          "effort": 6,
+          "score": 100,
+          "reason": "Deployment blocker"
+        },
+        {
+          "id": "DEBT-002",
+          "title": "Conditional Node Expression Injection",
+          "effort": 6,
+          "score": 100,
+          "reason": "Deployment blocker"
+        },
+        {
+          "id": "DEBT-003",
+          "title": "IncludeNode Validation Bypass",
+          "effort": 6,
+          "score": 100,
+          "reason": "Deployment blocker"
+        }
+      ],
+      "totalEffort": 18,
+      "timeframe": "Within 24-48 hours",
+      "impact": "Blocks production deployment",
+      "requiredResources": "Senior developer + security reviewer"
+    },
+    {
+      "type": "MEDIUM_PRIORITY_BATCH",
+      "priority": "MEDIUM",
+      "title": "Medium Priority Technical Debt",
+      "message": "2 medium priority items for upcoming sprints",
+      "totalEffort": 32,
+      "timeframe": "Next 4-6 weeks"
+    },
+    {
+      "type": "SECURITY_FOCUS",
+      "priority": "CRITICAL",
+      "title": "Security-First Approach Required",
+      "message": "3 security vulnerabilities need immediate resolution",
+      "recommendation": "Establish dedicated security remediation workflow",
+      "securityImplications": "Prevents potential data breaches and system compromise"
+    },
+    {
+      "type": "RESOURCE_ALLOCATION",
+      "priority": "HIGH",
+      "title": "Critical Path Resource Planning",
+      "message": "Critical path (P0 + P1) requires 18 hours",
+      "recommendation": "Allocate 1 developer(s) for immediate action",
+      "estimatedDuration": "1 week(s)",
+      "breakdown": {
+        "p0Effort": 18,
+        "p1Effort": 0,
+        "totalCriticalPath": 18
+      }
+    }
+  ]
+}

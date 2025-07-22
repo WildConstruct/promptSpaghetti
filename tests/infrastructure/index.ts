@@ -74,7 +74,7 @@ export const EPIC_TASK_ID = 'E18-1753114562510-5E3421';
 /**
  * Quick setup helper for common testing scenarios
  */
-export const createTestHarness = (config?: Partial<any>) => {
+export const createTestHarness = (config?: Partial<Record<string, unknown>>) => {
   const TestHarness = require('./TestHarness').default;
   return new TestHarness(config);
 };
