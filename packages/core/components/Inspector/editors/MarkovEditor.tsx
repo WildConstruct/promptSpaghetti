@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
 
 interface MarkovTransition {
@@ -12,8 +12,17 @@ interface MarkovTransition {
 }
 
 export interface MarkovEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
-  // Markov specific props can be added here
+  // Markov chain editor with three-tier progressive disclosure
 }
+
+/**
+ * Epic 8.4 - Markov Chain Editor with Progressive Disclosure
+ * 
+ * Three-tier disclosure system:
+ * - Basic: Node name, initial state, and simple states list (for filmmakers)
+ * - Advanced: Transition matrix and probability controls (power users)
+ * - Debug: Technical settings, loop detection, termination states
+ */"
 
 export   
   // Markov specific fields
@@ -25,12 +34,7 @@ export
   const detectLoops = (nodeData.detectLoops as boolean) ?? false;
   const terminationStates = (nodeData.terminationStates as string[]) || [];
 
-  // State for collapsible sections
-  const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
-  const [statesCollapsed, setStatesCollapsed] = useState(false);
-  const [transitionsCollapsed, setTransitionsCollapsed] = useState(false);
-  const [settingsCollapsed, setSettingsCollapsed] = useState(true);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // No manual collapse state needed - managed by ProgressiveDisclosureSection
 
   // Convert transitions object to array for easier editing
   const getTransitionArray = (): MarkovTransition[] => {
@@ -193,22 +197,27 @@ export
 
   return (
     <div className="markov-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={commonPropsCollapsed}
-        onToggle={() => setCommonPropsCollapsed(!commonPropsCollapsed)}
+      {/* BASIC LEVEL: Essential settings for filmmakers */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core Markov chain configuration for story generation"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="name"
       >
-        <TextFieldEditor
-          label="Name"
-          value={name}
-          fieldKey="name"
-          zodType={null}
-          onChange={handleNameChange}
-          placeholder="Enter node name..."
-        />
+        <div style={{ marginBottom: 16 }}>
+          <TextFieldEditor
+            label="Chain Name"
+            value={name}
+            fieldKey="name"
+            zodType={null}
+            onChange={handleNameChange}
+            placeholder="e.g., Character Emotions, Plot Progression, Dialogue Flow"
+          />
+        </div>
         
-        <div style={{ marginTop: 12 }}>
+        <div style={{ marginBottom: 16 }}>
           <label style={{ 
             display: 'block', 
             fontWeight: 500, 
@@ -216,7 +225,7 @@ export
             color: '#e2e8f0',
             fontSize: 12
           }}>
-            Initial State
+            Starting Point
           </label>
           <select
             value={initialState}
@@ -231,19 +240,125 @@ export
               fontSize: 12
             }}
           >
-            <option value="">Select initial state...</option>
+            <option value="">Choose where to begin...</option>
             {states.map((state, index) => (
               <option key={index} value={state}>{state}</option>
             ))}
           </select>
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4
+          }}>
+            The initial state your story generation will begin from
+          </div>
         </div>
-      </CollapsibleSection>
 
-      {/* States */}
-      <CollapsibleSection 
-        title="States" 
-        collapsed={statesCollapsed}
-        onToggle={() => setStatesCollapsed(!statesCollapsed)}
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            marginBottom: 8
+          }}>
+            <label style={{ 
+              fontWeight: 500, 
+              color: '#e2e8f0',
+              fontSize: 12
+            }}>
+              Story States
+            </label>
+            <button
+              onClick={handleAddState}
+              style={{
+                padding: '4px 8px',
+                fontSize: 10,
+                background: '#4299e1',
+                border: 'none',
+                borderRadius: 2,
+                color: '#fff',
+                cursor: 'pointer'
+              }}
+            >
+              Add State
+            </button>
+          </div>
+          
+          {states.length === 0 ? (
+            <div style={{
+              background: '#2d3748',
+              border: '1px solid #4a5568',
+              borderRadius: 4,
+              padding: 16,
+              textAlign: 'center',
+              color: '#a0aec0',
+              fontSize: 12,
+              fontStyle: 'italic'
+            }}>
+              No states defined. Add states like "Happy", "Sad", "Tense" to create your story chain.
+            </div>
+          ) : (
+            <div style={{
+              background: '#2d3748',
+              border: '1px solid #4a5568',
+              borderRadius: 4,
+              padding: 8
+            }}>
+              {states.map((state, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginBottom: index < states.length - 1 ? 8 : 0,
+                    gap: 8
+                  }}
+                >
+                  <input
+                    type="text"
+                    value={state}
+                    onChange={(e) => handleUpdateState(index, e.target.value)}
+                    style={{
+                      flex: 1,
+                      padding: 4,
+                      border: '1px solid #4a5568',
+                      borderRadius: 2,
+                      background: '#1a202c',
+                      color: '#e2e8f0',
+                      fontSize: 11
+                    }}
+                    placeholder={`e.g., "Joyful", "Mysterious", "Tense"`}
+                  />
+                  
+                  <button
+                    onClick={() => handleRemoveState(index)}
+                    style={{
+                      background: '#e53e3e',
+                      border: 'none',
+                      borderRadius: 2,
+                      color: '#fff',
+                      cursor: 'pointer',
+                      padding: '2px 6px',
+                      fontSize: 10
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </ProgressiveDisclosureSection>
+
+      {/* ADVANCED LEVEL: Transition matrix and probability controls */}
+      <ProgressiveDisclosureSection
+        title="Transition Controls"
+        level="advanced"
+        description="Fine-tune how states flow into each other"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="transitions"
       >
         <div style={{ marginBottom: 12 }}>
           <div style={{ 

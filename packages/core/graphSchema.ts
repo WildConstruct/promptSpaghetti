@@ -24,7 +24,18 @@ export const NodeTypeEnum = z.enum([
 export const BaseNode = z.object({
   id: z.string(),
   type: NodeTypeEnum,
-  inputs: z.array(z.string()).optional() // ids of upstream nodes (ordered)
+  inputs: z.array(z.string()).optional(), // ids of upstream nodes (ordered)
+  // Epic 8.2 Template Support
+  template: z.string().optional(), // Template with {variable} syntax
+  extractedVariables: z.array(z.object({
+    name: z.string(),
+    placeholder: z.string(),
+    startIndex: z.number(),
+    endIndex: z.number(),
+    isValid: z.boolean(),
+    inferredType: z.enum(['string', 'number', 'boolean', 'array', 'object', 'auto']).optional(),
+    defaultValue: z.string().optional()
+  })).optional()
 });
 
 export const WeightedChoiceNodeSchema = BaseNode.extend({

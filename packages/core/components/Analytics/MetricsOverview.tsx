@@ -149,6 +149,8 @@ const MetricCard: React.FC<MetricCardProps> = ({
 export interface MetricsOverviewProps {
   summary: any;
   dashboardData: any;
+  conversionData?: any;
+  performanceData?: any;
   loading: boolean;
 }
 
@@ -158,6 +160,8 @@ export interface MetricsOverviewProps {
 export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
   summary,
   dashboardData,
+  conversionData,
+  performanceData,
   loading
 }) => {
   if (loading) {
@@ -208,6 +212,11 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
   const executions = analytics.executions || {};
   const usage = analytics.usage || {};
   const costs = analytics.costs || {};
+  
+  // Enhanced metrics from conversion and performance data
+  const conversionMetrics = conversionData || {};
+  const performanceMetrics = performanceData || {};
+  const realTimeMetrics = conversionMetrics.realTimeMetrics || {};
 
   return (
     <div className="metrics-overview">
@@ -246,7 +255,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
         {/* Active Users */}
         <MetricCard
           title="Active Users"
-          value={usage.totalUsers || 0}
+          value={realTimeMetrics.activeUsers || usage.totalUsers || 0}
           subtitle={`${usage.activeSessions || 0} active sessions`}
           trend={{
             direction: 'up',
@@ -254,6 +263,33 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
             label: 'vs last period'
           }}
           icon={<Users className="w-5 h-5" />}
+        />
+
+        {/* Conversion Rate */}
+        <MetricCard
+          title="Conversions (24h)"
+          value={realTimeMetrics.conversionsLast24h || 0}
+          subtitle="Key user actions"
+          trend={{
+            direction: realTimeMetrics.conversionsLast24h > 5 ? 'up' : 'stable',
+            value: 15.7,
+            label: 'vs yesterday'
+          }}
+          icon={<CheckCircle className="w-5 h-5" />}
+        />
+
+        {/* Performance Health */}
+        <MetricCard
+          title="System Health"
+          value={`${performanceMetrics.overview?.healthScore || 100}%`}
+          subtitle={`${performanceMetrics.overview?.activeAlerts || 0} active alerts`}
+          progress={{
+            value: performanceMetrics.overview?.healthScore || 100,
+            max: 100,
+            color: (performanceMetrics.overview?.healthScore || 100) > 90 ? 'green' : 
+                   (performanceMetrics.overview?.healthScore || 100) > 70 ? 'yellow' : 'red'
+          }}
+          icon={<Activity className="w-5 h-5" />}
         />
 
         {/* Average Execution Time */}
@@ -303,19 +339,42 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
           icon={<Activity className="w-5 h-5" />}
         />
 
-        {/* Budget Alerts */}
+        {/* Top Converting Funnel */}
         <MetricCard
-          title="Budget Alerts"
-          value={costs.budgetAlerts?.length || 0}
-          subtitle={costs.budgetAlerts?.length > 0 ? 'Require attention' : 'All good'}
-          progress={costs.budgetAlerts?.length > 0 ? {
-            value: costs.budgetAlerts.length,
-            max: 5,
-            color: costs.budgetAlerts.length > 3 ? 'red' : costs.budgetAlerts.length > 1 ? 'yellow' : 'green'
-          } : undefined}
-          icon={costs.budgetAlerts?.length > 0 ? <XCircle className="w-5 h-5" /> : <CheckCircle className="w-5 h-5" />}
+          title="Top Converting Funnel"
+          value={realTimeMetrics.topConvertingFunnel || 'Director Onboarding'}
+          subtitle="Best performing flow"
+          icon={<TrendingUp className="w-5 h-5" />}
         />
       </div>
+
+      {/* Performance Metrics Section */}
+      {performanceMetrics.keyMetrics && performanceMetrics.keyMetrics.length > 0 && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="text-lg">Key Performance Metrics</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {performanceMetrics.keyMetrics.map((metric: any, index: number) => (
+                <div key={metric.name} className="performance-metric-card">
+                  <div className="metric-header">
+                    <span className="metric-name">{metric.name.replace('-', ' ')}</span>
+                    <Badge variant={metric.trend === 'improving' ? 'default' : 
+                                   metric.trend === 'degrading' ? 'destructive' : 'secondary'}>
+                      {metric.trend}
+                    </Badge>
+                  </div>
+                  <div className="metric-values">
+                    <div className="current-value">{metric.current.toFixed(2)}ms</div>
+                    <div className="average-value">avg: {metric.average.toFixed(2)}ms</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Popular Nodes Section */}
       {usage.popularNodes && usage.popularNodes.length > 0 && (
@@ -337,7 +396,10 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
                       <div 
                         className="bg-blue-500 h-2 rounded-full" 
                         style={{ 
-                          width: `${Math.min(100, (node.count / Math.max(...usage.popularNodes.map((n: any) => n.count))) * 100)}%` 
+                          width: `${Math.min(
+                            100,
+                            (node.count / Math.max(...usage.popularNodes.map((n: any
+                          ) => n.count))) * 100)}%` 
                         }}
                       />
                     </div>
@@ -367,6 +429,42 @@ const styles = `
   .metric-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .performance-metric-card {
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+  }
+
+  .metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .metric-name {
+    font-weight: 500;
+    color: #374151;
+    text-transform: capitalize;
+  }
+
+  .metric-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .current-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1f2937;
+  }
+
+  .average-value {
+    font-size: 0.875rem;
+    color: #9ca3af;
   }
 
   .metric-card .progress {

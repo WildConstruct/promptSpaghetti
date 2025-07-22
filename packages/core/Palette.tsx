@@ -1,4 +1,5 @@
 import React from 'react';
+import { professionalColors } from './styles/professional-design-system';
 
 export interface NodeMeta {
   id: string;
@@ -21,12 +22,12 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
       aria-label="Node Palette"
       style={{
         width: collapsed ? 56 : 200,
-        background: '#181b21',
-        color: '#fff',
-        borderRight: '1px solid #222',
+        background: professionalColors.background.primary,
+        color: professionalColors.text.primary,
+        borderRight: `1px solid ${professionalColors.ui.border}`,
         padding: 0,
         height: '100%',
-        transition: 'width 0.2s',
+        transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column'
@@ -37,14 +38,15 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
         aria-expanded={!collapsed}
         onClick={onToggle}
         style={{
-          background: 'none',
-          border: 'none',
-          color: '#fff',
+          background: professionalColors.ui.hover,
+          border: `1px solid ${professionalColors.ui.border}`,
+          color: professionalColors.text.primary,
           fontSize: 18,
           width: '100%',
           padding: '12px 0',
           cursor: 'pointer',
-          outline: 'none'
+          outline: 'none',
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
         }}
       >
         {collapsed ? '»' : '«'}

@@ -3,11 +3,20 @@ import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 
 export interface PythonTransformEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
-  // Python specific props can be added here
+  nodeId: string;
 }
+
+/**
+ * Epic 8.4 - Python Transform Editor with Progressive Disclosure
+ * 
+ * Three-tier disclosure system:
+ * - Basic: Essential code editor and validation (for filmmakers)
+ * - Advanced: Resource limits, modules, and execution settings (power users)
+ * - Debug: Raw configuration, executor settings, and technical details
+ */
 
 const MEMORY_LIMIT_OPTIONS: SelectOption[] = [
   { value: '64MB', label: '64MB' },
@@ -54,12 +63,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
   const fallbackBehavior = pythonConfig.fallbackBehavior || 'error';
   const defaultOutput = pythonConfig.defaultOutput || '';
 
-  // State for collapsible sections
-  const [codeEditorCollapsed, setCodeEditorCollapsed] = useState(false);
-  const [resourcesCollapsed, setResourcesCollapsed] = useState(false);
-  const [modulesCollapsed, setModulesCollapsed] = useState(true);
-  const [advancedCollapsed, setAdvancedCollapsed] = useState(true);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // No manual collapse state needed - managed by ProgressiveDisclosureSection
 
   // State for validation
   const [codeValidation, setCodeValidation] = useState<{
@@ -182,11 +186,14 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
 
   return (
     <div className="python-transform-editor">
-      {/* Code Editor */}
-      <CollapsibleSection 
-        title="Python Code" 
-        collapsed={codeEditorCollapsed}
-        onToggle={() => setCodeEditorCollapsed(!codeEditorCollapsed)}
+      {/* BASIC LEVEL: Essential code editor for filmmakers */}
+      <ProgressiveDisclosureSection
+        title="Python Code"
+        level="basic"
+        description="Write Python functions to transform your story data"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="code"
       >
         <div style={{ marginBottom: 8 }}>
           <div style={{
@@ -303,13 +310,16 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
             • Access context variables via <code>context['variable_name']</code>
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Resource Configuration */}
-      <CollapsibleSection 
-        title="Resource Limits" 
-        collapsed={resourcesCollapsed}
-        onToggle={() => setResourcesCollapsed(!resourcesCollapsed)}
+      {/* ADVANCED LEVEL: Resource limits and execution settings for power users */}
+      <ProgressiveDisclosureSection
+        title="Execution & Resource Settings"
+        level="advanced"
+        description="Configure Python execution limits and module access"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="resources"
       >
         <SelectEditor
           label="Memory Limit"
@@ -338,14 +348,8 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
           Resource limits help prevent runaway code from consuming excessive system resources.
           Set appropriate limits based on your expected processing requirements.
         </div>
-      </CollapsibleSection>
-
-      {/* Allowed Modules */}
-      <CollapsibleSection 
-        title="Allowed Modules" 
-        collapsed={modulesCollapsed}
-        onToggle={() => setModulesCollapsed(!modulesCollapsed)}
-      >
+        
+        <div style={{ marginBottom: 16 }}>
         <div style={{ marginBottom: 12 }}>
           <div style={{
             display: 'flex',
@@ -443,13 +447,16 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
             </div>
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Advanced Configuration */}
-      <CollapsibleSection 
-        title="Advanced Settings" 
-        collapsed={advancedCollapsed}
-        onToggle={() => setAdvancedCollapsed(!advancedCollapsed)}
+      {/* DEBUG LEVEL: Technical settings and configuration */}
+      <ProgressiveDisclosureSection
+        title="Technical Configuration & Debug"
+        level="debug"
+        description="Advanced Python execution settings and debugging tools"
+        defaultExpanded={false}
+        priority="supplementary"
+        fieldName="debug"
       >
         <div style={{ marginBottom: 16 }}>
           <label style={{
@@ -551,14 +558,8 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
             rows={3}
           />
         )}
-      </CollapsibleSection>
-
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Configuration Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
-      >
+        
+        <div style={{ marginTop: 16 }}>
         <div style={{
           background: '#1a202c',
           border: '1px solid #4a5568',
@@ -616,7 +617,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
             </div>
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor } from '../SelectEditor';
 import { VariationList } from '../VariationList';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
 import { SequencePatternConfig } from '../../../runtime/nodes/Sequential';
 
 export interface SequentialEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
-  // Sequential specific props can be added here
+  // Sequential node editor with three-tier progressive disclosure
 }
+
+/**
+ * Epic 8.4 - Sequential Editor with Progressive Disclosure
+ * 
+ * Three-tier disclosure system:
+ * - Basic: Node name and sequence items (essential for filmmakers)
+ * - Advanced: Pattern configuration and weight controls (power users)
+ * - Debug: Technical details and pattern behavior explanations
+ */
 
 export   
   // Sequential specific fields
@@ -22,11 +31,7 @@ export
   const weights = patternConfig.weights || [];
   const allowRepeats = patternConfig.allowRepeats ?? true;
 
-  // State for collapsible sections
-  const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
-  const [sequenceCollapsed, setSequenceCollapsed] = useState(false);
-  const [patternCollapsed, setPatternCollapsed] = useState(false);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // No manual collapse state needed - managed by ProgressiveDisclosureSection
 
   const handleSequenceChange = (newSequence: string[]) => {
     onChange({
@@ -91,29 +96,27 @@ export
 
   return (
     <div className="sequential-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={commonPropsCollapsed}
-        onToggle={() => setCommonPropsCollapsed(!commonPropsCollapsed)}
+      {/* BASIC LEVEL: Essential fields for filmmakers */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core sequence configuration for storytelling"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="sequence"
       >
-        <TextFieldEditor
-          label="Name"
-          value={name}
-          fieldKey="name"
-          zodType={null}
-          onChange={handleNameChange}
-          placeholder="Enter node name..."
-        />
-      </CollapsibleSection>
+        <div style={{ marginBottom: 16 }}>
+          <TextFieldEditor
+            label="Sequence Name"
+            value={name}
+            fieldKey="name"
+            zodType={null}
+            onChange={handleNameChange}
+            placeholder="e.g., Dialogue Styles, Scene Transitions, Character Arcs"
+          />
+        </div>
 
-      {/* Sequence Items */}
-      <CollapsibleSection 
-        title="Sequence Items" 
-        collapsed={sequenceCollapsed}
-        onToggle={() => setSequenceCollapsed(!sequenceCollapsed)}
-      >
-        <div style={{ marginBottom: 12 }}>
+        <div style={{ marginBottom: 8 }}>
           <label style={{ 
             display: 'block', 
             fontWeight: 500, 
@@ -121,7 +124,7 @@ export
             color: '#e2e8f0',
             fontSize: 12
           }}>
-            Items to Sequence Through
+            Sequence Items
           </label>
           <VariationList
             nodeId={nodeData.id as string}
@@ -142,28 +145,45 @@ export
               newSequence.splice(toIndex, 0, movedItem);
               handleSequenceChange(newSequence);
             }}
-            placeholder="Enter sequence item..."
+            placeholder="Add sequence item... e.g., 'Dramatic pause', 'Quick cut', 'Character entrance'"
             maxVariations={100}
             allowQuickEntry={true}
           />
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4
+          }}>
+            Add items that will be cycled through in your chosen pattern
+          </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Pattern Configuration */}
-      <CollapsibleSection 
-        title="Pattern Configuration" 
-        collapsed={patternCollapsed}
-        onToggle={() => setPatternCollapsed(!patternCollapsed)}
+      {/* ADVANCED LEVEL: Pattern configuration for power users */}
+      <ProgressiveDisclosureSection
+        title="Sequence Pattern"
+        level="advanced"
+        description="Control how items are selected from the sequence"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="patternType"
       >
         <div style={{ marginBottom: 16 }}>
           <SelectEditor
-            label="Sequence Pattern"
+            label="Selection Method"
             value={patternType}
             fieldKey="patternType"
             zodType={null}
             onChange={handlePatternTypeChange}
             options={patternOptions}
           />
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4
+          }}>
+            Choose how the system selects items from your sequence
+          </div>
         </div>
 
         {/* Pattern-specific configuration */}
@@ -328,13 +348,24 @@ export
             </div>
           </div>
         )}
+      </ProgressiveDisclosureSection>
 
+      {/* DEBUG LEVEL: Technical details and pattern behavior */}
+      <ProgressiveDisclosureSection
+        title="Technical Details & Preview"
+        level="debug"
+        description="Pattern behavior explanation and execution preview"
+        defaultExpanded={false}
+        priority="supplementary"
+        fieldName="preview"
+      >
         {/* Pattern Description */}
         <div style={{
           background: '#1a202c',
           border: '1px solid #4a5568',
           borderRadius: 4,
-          padding: 8
+          padding: 8,
+          marginBottom: 16
         }}>
           <div style={{
             fontSize: 11,
@@ -364,14 +395,33 @@ export
             }
           </div>
         </div>
-      </CollapsibleSection>
 
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
-      >
+        {/* Debug Node Information */}
+        <div style={{
+          background: '#1a202c',
+          border: '1px solid #4a5568',
+          borderRadius: 4,
+          padding: 8,
+          marginBottom: 16
+        }}>
+          <div style={{
+            fontSize: 11,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 4
+          }}>
+            Node Configuration:
+          </div>
+          <div style={{ fontSize: 10, color: '#a0aec0', lineHeight: 1.4 }}>
+            <div>Node ID: {nodeData.id as string}</div>
+            <div>Type: Sequential</div>
+            <div>Items: {sequence.length}</div>
+            <div>Pattern: {patternType}</div>
+            {patternType === 'weighted' && (
+              <div>Total Weight: {weights.reduce((sum, w) => sum + w, 0).toFixed(1)}</div>
+            )}
+          </div>
+        </div>
         <div style={{
           background: '#1a202c',
           border: '1px solid #4a5568',
@@ -491,7 +541,7 @@ export
             </div>
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

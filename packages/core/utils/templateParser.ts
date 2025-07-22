@@ -7,6 +7,8 @@ export interface ExtractedVariable {
   startIndex: number;    // Start position in template
   endIndex: number;      // End position in template
   isValid: boolean;      // Whether the variable name is valid
+  inferredType?: VariableType; // Auto-inferred type from context
+  defaultValue?: string; // Default value based on type inference
 }
 
 export interface TemplateParseResult {
@@ -21,6 +23,15 @@ export interface TemplateError {
   message: string;
   position: number;
   severity: 'error' | 'warning';
+}
+
+export type VariableType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'auto';
+
+export interface VariableTypeInference {
+  type: VariableType;
+  confidence: number; // 0-1, how confident we are about this inference
+  reason: string; // Human-readable explanation
+  defaultValue: string; // Suggested default value
 }
 
 export interface VariableSuggestion {
@@ -483,12 +494,15 @@ class TemplateParser {
       const validation = this.validateVariableName(variableName);
       
       if (validation.isValid) {
+        const inference = this.inferVariableType(variableName.trim(), template, this.currentNodeType);
         variables.push({
           name: variableName.trim(),
           placeholder: fullMatch,
           startIndex,
           endIndex,
-          isValid: true
+          isValid: true,
+          inferredType: inference.type,
+          defaultValue: inference.defaultValue
         });
       } else {
         variables.push({
@@ -595,6 +609,167 @@ class TemplateParser {
     // This would be used by the UI to highlight variables
     // For now, return template as-is since highlighting is done in React
     return template;
+  }
+
+  /**
+   * Infer variable type from name patterns and context
+   */
+  private inferVariableType(variableName: string, template: string, context?: string): VariableTypeInference {
+    const name = variableName.toLowerCase();
+    
+    // Number patterns
+    if (name.includes('count') || name.includes('number') || name.includes('qty') || 
+        name.includes('amount') || name.includes('total') || name.includes('sum') ||
+        name.includes('age') || name.includes('year') || name.includes('day') ||
+        name.includes('hour') || name.includes('minute') || name.includes('price') ||
+        name.includes('cost') || name.includes('rate') || name.includes('score')) {
+      return {
+        type: 'number',
+        confidence: 0.8,
+        reason: `"${variableName}" suggests a numeric value`,
+        defaultValue: '1'
+      };
+    }
+    
+    // Boolean patterns
+    if (name.startsWith('is') || name.startsWith('has') || name.startsWith('can') ||
+        name.startsWith('should') || name.startsWith('will') || name.includes('enabled') ||
+        name.includes('active') || name.includes('visible') || name.includes('checked') ||
+        name.includes('selected') || name.includes('open') || name.includes('closed')) {
+      return {
+        type: 'boolean',
+        confidence: 0.9,
+        reason: `"${variableName}" suggests a true/false value`,
+        defaultValue: 'true'
+      };
+    }
+    
+    // Array/List patterns
+    if (name.includes('list') || name.includes('items') || name.includes('options') ||
+        name.includes('choices') || name.includes('tags') || name.includes('categories') ||
+        name.endsWith('s') && (name.includes('name') || name.includes('type') || name.includes('id'))) {
+      return {
+        type: 'array',
+        confidence: 0.7,
+        reason: `"${variableName}" suggests a list of items`,
+        defaultValue: '["item1", "item2"]'
+      };
+    }
+    
+    // Object patterns
+    if (name.includes('config') || name.includes('settings') || name.includes('options') ||
+        name.includes('props') || name.includes('params') || name.includes('meta') ||
+        name.includes('data') && !name.includes('date')) {
+      return {
+        type: 'object',
+        confidence: 0.7,
+        reason: `"${variableName}" suggests structured data`,
+        defaultValue: '{"key": "value"}'
+      };
+    }
+    
+    // Context-based inference
+    if (context) {
+      const contextLower = context.toLowerCase();
+      
+      // If context mentions numbers, arrays, or objects
+      if (contextLower.includes('number') || contextLower.includes('count') || contextLower.includes('quantity')) {
+        return {
+          type: 'number',
+          confidence: 0.6,
+          reason: `Context "${context}" suggests numeric values`,
+          defaultValue: '1'
+        };
+      }
+      
+      if (contextLower.includes('list') || contextLower.includes('array') || contextLower.includes('multiple')) {
+        return {
+          type: 'array',
+          confidence: 0.6,
+          reason: `Context "${context}" suggests list/array values`,
+          defaultValue: '["item1", "item2"]'
+        };
+      }
+    }
+    
+    // Template context analysis
+    const surroundingText = this.extractSurroundingContext(variableName, template);
+    if (surroundingText) {
+      // Look for numeric context clues
+      if (/\b(count|number|amount|total|sum|\d+)\b/i.test(surroundingText)) {
+        return {
+          type: 'number',
+          confidence: 0.6,
+          reason: `Surrounding text suggests numeric context`,
+          defaultValue: '1'
+        };
+      }
+      
+      // Look for boolean context clues
+      if (/\b(is|has|can|should|will|enabled|disabled|active|inactive)\b/i.test(surroundingText)) {
+        return {
+          type: 'boolean',
+          confidence: 0.6,
+          reason: `Surrounding text suggests boolean context`,
+          defaultValue: 'true'
+        };
+      }
+    }
+    
+    // Creative/filmmaker-specific patterns (most variables in creative templates are strings)
+    if (name.includes('character') || name.includes('creature') || name.includes('location') ||
+        name.includes('setting') || name.includes('action') || name.includes('mood') ||
+        name.includes('style') || name.includes('color') || name.includes('texture') ||
+        name.includes('lighting') || name.includes('weather') || name.includes('atmosphere') ||
+        name.includes('genre') || name.includes('theme') || name.includes('tone')) {
+      
+      // Find matching suggestion for more contextual defaults
+      const matchingSuggestion = COMMON_VARIABLES.find(s => 
+        s.name === name || 
+        s.name.includes(name) || 
+        name.includes(s.name)
+      );
+      
+      const defaultValue = matchingSuggestion ? 
+        matchingSuggestion.examples[0] : 
+        `sample ${name}`;
+      
+      return {
+        type: 'string',
+        confidence: 0.9,
+        reason: `"${variableName}" is typically descriptive text in creative contexts`,
+        defaultValue
+      };
+    }
+    
+    // Default to string with lower confidence - try to find a good example
+    const genericSuggestion = COMMON_VARIABLES.find(s => 
+      s.category === 'descriptive' || s.priority >= 7
+    );
+    
+    const defaultValue = genericSuggestion ? 
+      genericSuggestion.examples[0] : 
+      `sample ${name}`;
+    
+    return {
+      type: 'string',
+      confidence: 0.5,
+      reason: `Default to text - most template variables are descriptive`,
+      defaultValue
+    };
+  }
+
+  /**
+   * Extract surrounding context for better type inference
+   */
+  private extractSurroundingContext(variableName: string, template: string): string {
+    const placeholder = `{${variableName}}`;
+    const index = template.indexOf(placeholder);
+    if (index === -1) return '';
+    
+    const start = Math.max(0, index - 30);
+    const end = Math.min(template.length, index + placeholder.length + 30);
+    return template.slice(start, end);
   }
 
   // User history storage for custom suggestions
@@ -840,4 +1015,58 @@ export type VariableCategory = typeof VARIABLE_CATEGORIES[number];
 // Get suggestions by category
 export 
 // Get all common variables
-export const getAllCommonVariables = (): VariableSuggestion[] => [...COMMON_VARIABLES];
+export 
+/**
+ * Generate smart default values for a template based on its variables
+ */
+export   const defaults: Record<string, string> = {};
+  
+  parseResult.variables
+    .filter(v => v.isValid)
+    .forEach(variable => {
+      if (variable.defaultValue) {
+        defaults[variable.name] = variable.defaultValue;
+      } else {
+        // Fallback to pattern matching
+        const suggestion = COMMON_VARIABLES.find(s => s.name === variable.name);
+        defaults[variable.name] = suggestion ? suggestion.examples[0] : `sample ${variable.name}`;
+      }
+    });
+  
+  return defaults;
+};
+
+/**
+ * Get contextual default values based on node type and template content
+ */
+export   
+  // Node-type specific defaults
+  if (nodeType === 'output') {
+    if (name.includes('title') || name.includes('headline')) return 'Epic Adventure Begins';
+    if (name.includes('description') || name.includes('summary')) return 'A thrilling tale of discovery and courage';
+  }
+  
+  if (nodeType === 'subject' || nodeType === 'character') {
+    if (name.includes('hero') || name.includes('protagonist')) return 'brave warrior';
+    if (name.includes('villain') || name.includes('antagonist')) return 'dark sorcerer';
+    if (name.includes('companion') || name.includes('sidekick')) return 'loyal friend';
+  }
+  
+  if (nodeType === 'action') {
+    if (name.includes('movement') || name.includes('motion')) return 'running swiftly';
+    if (name.includes('combat') || name.includes('fight')) return 'fierce battle';
+    if (name.includes('travel') || name.includes('journey')) return 'long voyage';
+  }
+  
+  // Template context analysis
+  const templateLower = template.toLowerCase();
+  if (templateLower.includes('cinematic') || templateLower.includes('camera')) {
+    if (name.includes('shot') || name.includes('angle')) return 'wide shot';
+    if (name.includes('lighting')) return 'golden hour';
+    if (name.includes('mood')) return 'dramatic';
+  }
+  
+  // General creative defaults
+  const suggestion = COMMON_VARIABLES.find(s => s.name === name);
+  return suggestion ? suggestion.examples[0] : `sample ${name}`;
+};

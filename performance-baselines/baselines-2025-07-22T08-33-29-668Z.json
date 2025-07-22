@@ -1,0 +1,330 @@
+{
+  "timestamp": "2025-07-22T08:33:29.672Z",
+  "environment": "development",
+  "systemInfo": {
+    "nodeVersion": "v24.4.0",
+    "platform": "darwin",
+    "arch": "x64",
+    "memory": {
+      "rss": 34037760,
+      "heapTotal": 6082560,
+      "heapUsed": 4279168,
+      "external": 1480322,
+      "arrayBuffers": 10515
+    },
+    "cpuUsage": {
+      "user": 25928,
+      "system": 17118
+    }
+  },
+  "measurements": [
+    {
+      "id": "core-engine-simple-execution",
+      "name": "Simple Graph Execution",
+      "category": "core_engine",
+      "type": "duration",
+      "unit": "ms",
+      "measurements": [
+        {
+          "value": 3,
+          "timestamp": "2025-07-22T08:33:22.672Z",
+          "iteration": 1
+        },
+        {
+          "value": 4,
+          "timestamp": "2025-07-22T08:33:23.672Z",
+          "iteration": 2
+        },
+        {
+          "value": 5,
+          "timestamp": "2025-07-22T08:33:24.672Z",
+          "iteration": 3
+        },
+        {
+          "value": 4,
+          "timestamp": "2025-07-22T08:33:25.672Z",
+          "iteration": 4
+        },
+        {
+          "value": 3,
+          "timestamp": "2025-07-22T08:33:26.672Z",
+          "iteration": 5
+        },
+        {
+          "value": 5,
+          "timestamp": "2025-07-22T08:33:27.672Z",
+          "iteration": 6
+        },
+        {
+          "value": 4,
+          "timestamp": "2025-07-22T08:33:28.672Z",
+          "iteration": 7
+        }
+      ],
+      "target": 5,
+      "warning": 15,
+      "critical": 30,
+      "tags": [
+        "core",
+        "execution",
+        "basic"
+      ]
+    },
+    {
+      "id": "core-engine-complex-execution",
+      "name": "Complex Graph Execution",
+      "category": "core_engine",
+      "type": "duration",
+      "unit": "ms",
+      "measurements": [
+        {
+          "value": 45,
+          "timestamp": "2025-07-22T08:33:22.672Z",
+          "iteration": 1
+        },
+        {
+          "value": 52,
+          "timestamp": "2025-07-22T08:33:23.672Z",
+          "iteration": 2
+        },
+        {
+          "value": 48,
+          "timestamp": "2025-07-22T08:33:24.672Z",
+          "iteration": 3
+        },
+        {
+          "value": 50,
+          "timestamp": "2025-07-22T08:33:25.672Z",
+          "iteration": 4
+        },
+        {
+          "value": 47,
+          "timestamp": "2025-07-22T08:33:26.672Z",
+          "iteration": 5
+        },
+        {
+          "value": 49,
+          "timestamp": "2025-07-22T08:33:27.672Z",
+          "iteration": 6
+        },
+        {
+          "value": 51,
+          "timestamp": "2025-07-22T08:33:28.672Z",
+          "iteration": 7
+        }
+      ],
+      "target": 50,
+      "warning": 150,
+      "critical": 300,
+      "tags": [
+        "core",
+        "execution",
+        "complex"
+      ]
+    },
+    {
+      "id": "core-engine-throughput",
+      "name": "Graph Execution Throughput",
+      "category": "core_engine",
+      "type": "throughput",
+      "unit": "ops/sec",
+      "measurements": [
+        {
+          "value": 180,
+          "timestamp": "2025-07-22T08:33:22.672Z",
+          "iteration": 1
+        },
+        {
+          "value": 195,
+          "timestamp": "2025-07-22T08:33:23.672Z",
+          "iteration": 2
+        },
+        {
+          "value": 205,
+          "timestamp": "2025-07-22T08:33:24.672Z",
+          "iteration": 3
+        },
+        {
+          "value": 190,
+          "timestamp": "2025-07-22T08:33:25.672Z",
+          "iteration": 4
+        },
+        {
+          "value": 200,
+          "timestamp": "2025-07-22T08:33:26.672Z",
+          "iteration": 5
+        },
+        {
+          "value": 185,
+          "timestamp": "2025-07-22T08:33:27.672Z",
+          "iteration": 6
+        },
+        {
+          "value": 192,
+          "timestamp": "2025-07-22T08:33:28.672Z",
+          "iteration": 7
+        }
+      ],
+      "target": 200,
+      "warning": 100,
+      "critical": 50,
+      "tags": [
+        "core",
+        "throughput"
+      ]
+    },
+    {
+      "id": "memory-graph-usage",
+      "name": "Graph Memory Usage",
+      "category": "memory_usage",
+      "type": "memory",
+      "unit": "MB",
+      "measurements": [
+        {
+          "value": 4,
+          "timestamp": "2025-07-22T08:33:22.673Z",
+          "iteration": 1
+        },
+        {
+          "value": 5,
+          "timestamp": "2025-07-22T08:33:23.673Z",
+          "iteration": 2
+        },
+        {
+          "value": 3,
+          "timestamp": "2025-07-22T08:33:24.673Z",
+          "iteration": 3
+        },
+        {
+          "value": 4,
+          "timestamp": "2025-07-22T08:33:25.673Z",
+          "iteration": 4
+        },
+        {
+          "value": 5,
+          "timestamp": "2025-07-22T08:33:26.673Z",
+          "iteration": 5
+        },
+        {
+          "value": 4,
+          "timestamp": "2025-07-22T08:33:27.673Z",
+          "iteration": 6
+        },
+        {
+          "value": 3,
+          "timestamp": "2025-07-22T08:33:28.673Z",
+          "iteration": 7
+        }
+      ],
+      "target": 5,
+      "warning": 15,
+      "critical": 30,
+      "tags": [
+        "memory",
+        "graph"
+      ]
+    },
+    {
+      "id": "memory-peak-heap",
+      "name": "Peak Heap Usage",
+      "category": "memory_usage",
+      "type": "memory",
+      "unit": "MB",
+      "measurements": [
+        {
+          "value": 28,
+          "timestamp": "2025-07-22T08:33:22.673Z",
+          "iteration": 1
+        },
+        {
+          "value": 32,
+          "timestamp": "2025-07-22T08:33:23.673Z",
+          "iteration": 2
+        },
+        {
+          "value": 30,
+          "timestamp": "2025-07-22T08:33:24.673Z",
+          "iteration": 3
+        },
+        {
+          "value": 29,
+          "timestamp": "2025-07-22T08:33:25.673Z",
+          "iteration": 4
+        },
+        {
+          "value": 31,
+          "timestamp": "2025-07-22T08:33:26.673Z",
+          "iteration": 5
+        },
+        {
+          "value": 30,
+          "timestamp": "2025-07-22T08:33:27.673Z",
+          "iteration": 6
+        },
+        {
+          "value": 29,
+          "timestamp": "2025-07-22T08:33:28.673Z",
+          "iteration": 7
+        }
+      ],
+      "target": 30,
+      "warning": 60,
+      "critical": 100,
+      "tags": [
+        "memory",
+        "heap"
+      ]
+    },
+    {
+      "id": "build-typescript-compilation",
+      "name": "TypeScript Compilation Time",
+      "category": "build_performance",
+      "type": "duration",
+      "unit": "s",
+      "measurements": [
+        {
+          "value": 7,
+          "timestamp": "2025-07-22T08:33:22.673Z",
+          "iteration": 1
+        },
+        {
+          "value": 8,
+          "timestamp": "2025-07-22T08:33:23.673Z",
+          "iteration": 2
+        },
+        {
+          "value": 9,
+          "timestamp": "2025-07-22T08:33:24.673Z",
+          "iteration": 3
+        },
+        {
+          "value": 8,
+          "timestamp": "2025-07-22T08:33:25.673Z",
+          "iteration": 4
+        },
+        {
+          "value": 7,
+          "timestamp": "2025-07-22T08:33:26.673Z",
+          "iteration": 5
+        },
+        {
+          "value": 8,
+          "timestamp": "2025-07-22T08:33:27.673Z",
+          "iteration": 6
+        },
+        {
+          "value": 9,
+          "timestamp": "2025-07-22T08:33:28.673Z",
+          "iteration": 7
+        }
+      ],
+      "target": 8,
+      "warning": 20,
+      "critical": 45,
+      "tags": [
+        "build",
+        "typescript"
+      ]
+    }
+  ]
+}

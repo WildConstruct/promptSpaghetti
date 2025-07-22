@@ -1,0 +1,582 @@
+{
+  "optimizationTools": {
+    "version": "1.0.0",
+    "environment": "production",
+    "lastUpdated": "2025-01-22T08:34:00.000Z"
+  },
+  
+  "defaultPolicies": [
+    {
+      "name": "Performance Critical Alert Response",
+      "description": "Automatically respond to critical performance alerts",
+      "category": "performance",
+      "enabled": true,
+      "autoApply": false,
+      "requiresApproval": true,
+      "rules": [
+        {
+          "ruleId": "perf_critical_cpu",
+          "condition": "system_cpu_usage",
+          "threshold": 90,
+          "operator": "gte",
+          "metric": "cpu_percentage"
+        },
+        {
+          "ruleId": "perf_critical_memory",
+          "condition": "system_memory_usage",
+          "threshold": 85,
+          "operator": "gte",
+          "metric": "memory_percentage"
+        }
+      ],
+      "triggers": [
+        {
+          "triggerId": "high_cpu_trigger",
+          "type": "metric_threshold",
+          "configuration": {
+            "metric": "cpu_percentage",
+            "threshold": 90,
+            "duration": 300
+          }
+        }
+      ],
+      "actions": [
+        {
+          "actionId": "scale_up_action",
+          "type": "scale",
+          "configuration": {
+            "scaleType": "horizontal",
+            "factor": 1.5,
+            "maxInstances": 10
+          }
+        },
+        {
+          "actionId": "alert_admin",
+          "type": "alert",
+          "configuration": {
+            "severity": "critical",
+            "channels": ["email", "slack"]
+          }
+        }
+      ],
+      "constraints": {
+        "maxResourceUsage": 90,
+        "maxDowntime": 2,
+        "allowedWindows": [
+          {
+            "windowId": "maintenance_window_1",
+            "name": "Off-hours maintenance",
+            "startTime": "02:00",
+            "endTime": "04:00",
+            "daysOfWeek": [0, 1, 2, 3, 4, 5, 6],
+            "timezone": "UTC"
+          }
+        ],
+        "excludedSystems": []
+      },
+      "metrics": ["cpu_percentage", "memory_percentage", "response_time"],
+      "alertThresholds": {
+        "cpu_percentage": 85,
+        "memory_percentage": 80,
+        "response_time": 1000
+      }
+    },
+    
+    {
+      "name": "Database Performance Optimization",
+      "description": "Optimize database performance automatically",
+      "category": "database",
+      "enabled": true,
+      "autoApply": true,
+      "requiresApproval": false,
+      "rules": [
+        {
+          "ruleId": "db_slow_query",
+          "condition": "avg_query_time",
+          "threshold": 500,
+          "operator": "gte",
+          "metric": "query_duration_ms"
+        }
+      ],
+      "triggers": [
+        {
+          "triggerId": "slow_query_trigger",
+          "type": "metric_threshold",
+          "configuration": {
+            "metric": "query_duration_ms",
+            "threshold": 500,
+            "duration": 600
+          }
+        }
+      ],
+      "actions": [
+        {
+          "actionId": "optimize_queries",
+          "type": "optimize",
+          "configuration": {
+            "optimizationType": "database_queries",
+            "aggressive": false
+          }
+        }
+      ],
+      "constraints": {
+        "maxResourceUsage": 75,
+        "maxDowntime": 0,
+        "allowedWindows": [],
+        "excludedSystems": []
+      },
+      "metrics": ["query_duration_ms", "db_connections", "cache_hit_ratio"],
+      "alertThresholds": {
+        "query_duration_ms": 300,
+        "db_connections": 80,
+        "cache_hit_ratio": 90
+      }
+    },
+    
+    {
+      "name": "User Experience Optimization",
+      "description": "Optimize user-facing performance metrics",
+      "category": "user_experience",
+      "enabled": true,
+      "autoApply": false,
+      "requiresApproval": true,
+      "rules": [
+        {
+          "ruleId": "slow_page_load",
+          "condition": "page_load_time",
+          "threshold": 3000,
+          "operator": "gte",
+          "metric": "load_time_ms"
+        },
+        {
+          "ruleId": "high_error_rate",
+          "condition": "error_rate",
+          "threshold": 1.0,
+          "operator": "gte",
+          "metric": "error_percentage"
+        }
+      ],
+      "triggers": [
+        {
+          "triggerId": "ux_degradation_trigger",
+          "type": "metric_threshold",
+          "configuration": {
+            "metric": "load_time_ms",
+            "threshold": 3000,
+            "duration": 900
+          }
+        }
+      ],
+      "actions": [
+        {
+          "actionId": "optimize_frontend",
+          "type": "optimize",
+          "configuration": {
+            "optimizationType": "frontend_performance",
+            "enableCaching": true,
+            "compressAssets": true
+          }
+        }
+      ],
+      "constraints": {
+        "maxResourceUsage": 70,
+        "maxDowntime": 1,
+        "allowedWindows": [
+          {
+            "windowId": "ux_optimization_window",
+            "name": "UX optimization window",
+            "startTime": "01:00",
+            "endTime": "05:00",
+            "daysOfWeek": [0, 6],
+            "timezone": "UTC"
+          }
+        ],
+        "excludedSystems": ["critical_api"]
+      },
+      "metrics": ["load_time_ms", "error_percentage", "user_satisfaction"],
+      "alertThresholds": {
+        "load_time_ms": 2000,
+        "error_percentage": 0.5,
+        "user_satisfaction": 8.0
+      }
+    }
+  ],
+  
+  "defaultProfiles": [
+    {
+      "name": "Production High Performance",
+      "description": "High-performance configuration for production environment",
+      "environment": "production",
+      "targets": {
+        "responseTime": 100,
+        "throughput": 5000,
+        "errorRate": 0.01,
+        "resourceUtilization": 70
+      },
+      "settings": {
+        "caching": {
+          "enabled": true,
+          "strategy": "lru",
+          "maxSize": 2048,
+          "ttl": 7200,
+          "compressionEnabled": true
+        },
+        "concurrency": {
+          "maxConcurrentRequests": 5000,
+          "queueLength": 25000,
+          "timeoutMs": 10000,
+          "priorityLevels": 5
+        },
+        "resourceLimits": {
+          "cpu": { "limit": 80, "warning": 70 },
+          "memory": { "limit": 85, "warning": 75 },
+          "disk": { "limit": 90, "warning": 85 },
+          "network": { "limit": 90, "warning": 85 }
+        },
+        "scaling": {
+          "enabled": true,
+          "strategy": "horizontal",
+          "minInstances": 3,
+          "maxInstances": 20,
+          "scaleUpThreshold": 70,
+          "scaleDownThreshold": 30
+        }
+      },
+      "businessRules": {
+        "peakHours": [
+          { "start": "08:00", "end": "18:00" }
+        ],
+        "maintenanceWindows": [
+          {
+            "windowId": "prod_maintenance",
+            "name": "Production Maintenance",
+            "startTime": "02:00",
+            "endTime": "04:00",
+            "daysOfWeek": [0],
+            "timezone": "UTC"
+          }
+        ],
+        "criticalFeatures": [
+          "authentication",
+          "payment_processing",
+          "data_storage"
+        ],
+        "performanceBudgets": [
+          {
+            "budgetId": "api_response_time",
+            "metric": "api_response_time",
+            "target": 100,
+            "warning": 150,
+            "critical": 300
+          },
+          {
+            "budgetId": "page_load_time",
+            "metric": "page_load_time",
+            "target": 1000,
+            "warning": 2000,
+            "critical": 3000
+          }
+        ]
+      }
+    },
+    
+    {
+      "name": "Development Optimized",
+      "description": "Balanced configuration for development environment",
+      "environment": "development",
+      "targets": {
+        "responseTime": 500,
+        "throughput": 1000,
+        "errorRate": 0.1,
+        "resourceUtilization": 60
+      },
+      "settings": {
+        "caching": {
+          "enabled": true,
+          "strategy": "ttl",
+          "maxSize": 512,
+          "ttl": 3600,
+          "compressionEnabled": false
+        },
+        "concurrency": {
+          "maxConcurrentRequests": 1000,
+          "queueLength": 5000,
+          "timeoutMs": 30000,
+          "priorityLevels": 3
+        },
+        "resourceLimits": {
+          "cpu": { "limit": 70, "warning": 60 },
+          "memory": { "limit": 75, "warning": 65 },
+          "disk": { "limit": 85, "warning": 75 },
+          "network": { "limit": 85, "warning": 75 }
+        },
+        "scaling": {
+          "enabled": false,
+          "strategy": "vertical",
+          "minInstances": 1,
+          "maxInstances": 3,
+          "scaleUpThreshold": 80,
+          "scaleDownThreshold": 40
+        }
+      },
+      "businessRules": {
+        "peakHours": [],
+        "maintenanceWindows": [],
+        "criticalFeatures": [],
+        "performanceBudgets": [
+          {
+            "budgetId": "dev_response_time",
+            "metric": "api_response_time",
+            "target": 500,
+            "warning": 1000,
+            "critical": 2000
+          }
+        ]
+      }
+    }
+  ],
+  
+  "recommendationTemplates": [
+    {
+      "templateId": "cache_optimization",
+      "category": "performance",
+      "priority": "medium",
+      "title": "Optimize Caching Strategy",
+      "description": "Improve system performance by optimizing caching configuration",
+      "expectedImpact": {
+        "performanceImprovement": 25,
+        "resourceSaving": 15,
+        "userExperienceImprovement": 7,
+        "implementationEffort": "medium"
+      },
+      "implementation": {
+        "steps": [
+          {
+            "stepId": "analyze_cache_hit_ratio",
+            "order": 1,
+            "title": "Analyze current cache hit ratio",
+            "description": "Review cache performance metrics",
+            "estimatedTime": 15,
+            "requiredRole": "system_admin",
+            "validation": {
+              "metrics": ["cache_hit_ratio"],
+              "thresholds": { "cache_hit_ratio": 0.8 },
+              "timeout": 300,
+              "rollbackOnFailure": false
+            }
+          },
+          {
+            "stepId": "adjust_cache_size",
+            "order": 2,
+            "title": "Adjust cache size and TTL",
+            "description": "Optimize cache configuration parameters",
+            "estimatedTime": 30,
+            "requiredRole": "system_admin",
+            "validation": {
+              "metrics": ["cache_hit_ratio", "memory_usage"],
+              "thresholds": { "cache_hit_ratio": 0.85, "memory_usage": 0.8 },
+              "timeout": 600,
+              "rollbackOnFailure": true
+            }
+          },
+          {
+            "stepId": "monitor_performance",
+            "order": 3,
+            "title": "Monitor performance impact",
+            "description": "Validate optimization effectiveness",
+            "estimatedTime": 60,
+            "requiredRole": "system_admin",
+            "validation": {
+              "metrics": ["response_time", "cache_hit_ratio"],
+              "thresholds": { "response_time": 200, "cache_hit_ratio": 0.85 },
+              "timeout": 3600,
+              "rollbackOnFailure": true
+            }
+          }
+        ],
+        "estimatedTime": 105,
+        "requiredResources": ["system_admin", "monitoring_access"],
+        "risks": [
+          {
+            "riskId": "memory_usage_increase",
+            "description": "Cache size increase may impact memory usage",
+            "severity": "medium",
+            "probability": 0.3,
+            "impact": "Increased memory usage may affect other services",
+            "mitigation": "Monitor memory usage and adjust cache size if needed"
+          }
+        ]
+      }
+    },
+    
+    {
+      "templateId": "database_query_optimization",
+      "category": "performance",
+      "priority": "high",
+      "title": "Optimize Database Queries",
+      "description": "Improve database performance by optimizing slow queries",
+      "expectedImpact": {
+        "performanceImprovement": 40,
+        "resourceSaving": 30,
+        "userExperienceImprovement": 8,
+        "implementationEffort": "high"
+      },
+      "implementation": {
+        "steps": [
+          {
+            "stepId": "identify_slow_queries",
+            "order": 1,
+            "title": "Identify slow queries",
+            "description": "Analyze database logs for slow queries",
+            "estimatedTime": 45,
+            "requiredRole": "dba",
+            "validation": {
+              "metrics": ["query_count"],
+              "thresholds": { "query_count": 10 },
+              "timeout": 1800,
+              "rollbackOnFailure": false
+            }
+          },
+          {
+            "stepId": "optimize_queries",
+            "order": 2,
+            "title": "Optimize identified queries",
+            "description": "Add indexes and rewrite inefficient queries",
+            "estimatedTime": 120,
+            "requiredRole": "dba",
+            "validation": {
+              "metrics": ["avg_query_time"],
+              "thresholds": { "avg_query_time": 100 },
+              "timeout": 3600,
+              "rollbackOnFailure": true
+            },
+            "rollbackInstructions": "Remove added indexes and restore original queries"
+          }
+        ],
+        "estimatedTime": 165,
+        "requiredResources": ["dba", "database_access", "query_analyzer"],
+        "risks": [
+          {
+            "riskId": "query_performance_regression",
+            "description": "Query optimizations may cause performance regression",
+            "severity": "high",
+            "probability": 0.2,
+            "impact": "Some queries may become slower",
+            "mitigation": "Test all optimizations in staging environment first"
+          }
+        ]
+      }
+    }
+  ],
+  
+  "quickActions": [
+    {
+      "actionId": "clear_all_caches",
+      "title": "Clear All System Caches",
+      "description": "Clear application and system caches to free memory",
+      "category": "performance",
+      "icon": "cache-clear",
+      "requiredPermission": "clear_cache",
+      "estimatedTime": "2 minutes",
+      "risks": ["Temporary performance impact during cache rebuild"],
+      "rollbackSupported": false
+    },
+    {
+      "actionId": "restart_worker_processes",
+      "title": "Restart Worker Processes",
+      "description": "Restart background worker processes to clear memory leaks",
+      "category": "system_maintenance",
+      "icon": "restart-workers",
+      "requiredPermission": "restart_services",
+      "estimatedTime": "3 minutes",
+      "risks": ["Brief interruption in background processing"],
+      "rollbackSupported": false
+    },
+    {
+      "actionId": "optimize_garbage_collection",
+      "title": "Trigger Garbage Collection",
+      "description": "Force garbage collection to free unused memory",
+      "category": "resource_efficiency",
+      "icon": "memory-optimize",
+      "requiredPermission": "memory_management",
+      "estimatedTime": "1 minute",
+      "risks": ["Temporary CPU spike during GC"],
+      "rollbackSupported": false
+    },
+    {
+      "actionId": "compress_logs",
+      "title": "Compress Old Log Files",
+      "description": "Compress and archive old log files to free disk space",
+      "category": "resource_efficiency",
+      "icon": "compress-logs",
+      "requiredPermission": "log_management",
+      "estimatedTime": "5 minutes",
+      "risks": ["Disk I/O increase during compression"],
+      "rollbackSupported": true
+    }
+  ],
+  
+  "alertThresholds": {
+    "system": {
+      "cpu_usage": { "warning": 70, "critical": 90 },
+      "memory_usage": { "warning": 75, "critical": 90 },
+      "disk_usage": { "warning": 80, "critical": 95 },
+      "network_usage": { "warning": 80, "critical": 95 }
+    },
+    "application": {
+      "response_time": { "warning": 500, "critical": 2000 },
+      "error_rate": { "warning": 0.5, "critical": 2.0 },
+      "throughput": { "warning": 100, "critical": 50 }
+    },
+    "database": {
+      "query_duration": { "warning": 200, "critical": 1000 },
+      "connection_count": { "warning": 80, "critical": 95 },
+      "lock_wait_time": { "warning": 100, "critical": 500 }
+    }
+  },
+  
+  "optimizationCategories": {
+    "performance": {
+      "name": "Performance Optimization",
+      "description": "Improve system response times and throughput",
+      "color": "#FF6B6B",
+      "icon": "performance",
+      "metrics": ["response_time", "throughput", "latency"]
+    },
+    "resource_efficiency": {
+      "name": "Resource Efficiency",
+      "description": "Optimize CPU, memory, and storage usage",
+      "color": "#4ECDC4",
+      "icon": "resources",
+      "metrics": ["cpu_usage", "memory_usage", "disk_usage"]
+    },
+    "user_experience": {
+      "name": "User Experience",
+      "description": "Improve user-facing performance and reliability",
+      "color": "#45B7D1",
+      "icon": "user",
+      "metrics": ["page_load_time", "user_satisfaction", "error_rate"]
+    },
+    "cost_optimization": {
+      "name": "Cost Optimization",
+      "description": "Reduce operational costs through efficiency",
+      "color": "#96CEB4",
+      "icon": "cost",
+      "metrics": ["cost_per_request", "resource_efficiency", "scaling_efficiency"]
+    },
+    "security_performance": {
+      "name": "Security Performance",
+      "description": "Optimize security processes without impacting performance",
+      "color": "#FECA57",
+      "icon": "security",
+      "metrics": ["auth_time", "encryption_overhead", "security_scan_time"]
+    },
+    "business_process": {
+      "name": "Business Process Optimization",
+      "description": "Improve administrative and business workflows",
+      "color": "#FF9FF3",
+      "icon": "process",
+      "metrics": ["workflow_completion_time", "approval_time", "process_efficiency"]
+    }
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "executiveSummary": {
+    "totalBaselines": 6,
+    "environment": "development",
+    "collectionTimestamp": "2025-07-22T08:33:29.672Z",
+    "systemPerformance": "OPTIMAL"
+  },
+  "baselineAnalysis": [
+    {
+      "baseline": "Simple Graph Execution",
+      "id": "core-engine-simple-execution",
+      "category": "core_engine",
+      "status": "OPTIMAL",
+      "statusReason": "Performance within target range",
+      "measurements": {
+        "average": "4.00",
+        "min": 3,
+        "max": 5,
+        "count": 7
+      },
+      "thresholds": {
+        "target": 5,
+        "warning": 15,
+        "critical": 30
+      },
+      "trend": "STABLE"
+    },
+    {
+      "baseline": "Complex Graph Execution",
+      "id": "core-engine-complex-execution",
+      "category": "core_engine",
+      "status": "OPTIMAL",
+      "statusReason": "Performance within target range",
+      "measurements": {
+        "average": "48.86",
+        "min": 45,
+        "max": 52,
+        "count": 7
+      },
+      "thresholds": {
+        "target": 50,
+        "warning": 150,
+        "critical": 300
+      },
+      "trend": "STABLE"
+    },
+    {
+      "baseline": "Graph Execution Throughput",
+      "id": "core-engine-throughput",
+      "category": "core_engine",
+      "status": "OPTIMAL",
+      "statusReason": "Performance within target range",
+      "measurements": {
+        "average": "192.43",
+        "min": 180,
+        "max": 205,
+        "count": 7
+      },
+      "thresholds": {
+        "target": 200,
+        "warning": 100,
+        "critical": 50
+      },
+      "trend": "STABLE"
+    },
+    {
+      "baseline": "Graph Memory Usage",
+      "id": "memory-graph-usage",
+      "category": "memory_usage",
+      "status": "OPTIMAL",
+      "statusReason": "Performance within target range",
+      "measurements": {
+        "average": "4.00",
+        "min": 3,
+        "max": 5,
+        "count": 7
+      },
+      "thresholds": {
+        "target": 5,
+        "warning": 15,
+        "critical": 30
+      },
+      "trend": "STABLE"
+    },
+    {
+      "baseline": "Peak Heap Usage",
+      "id": "memory-peak-heap",
+      "category": "memory_usage",
+      "status": "OPTIMAL",
+      "statusReason": "Performance within target range",
+      "measurements": {
+        "average": "29.86",
+        "min": 28,
+        "max": 32,
+        "count": 7
+      },
+      "thresholds": {
+        "target": 30,
+        "warning": 60,
+        "critical": 100
+      },
+      "trend": "STABLE"
+    },
+    {
+      "baseline": "TypeScript Compilation Time",
+      "id": "build-typescript-compilation",
+      "category": "build_performance",
+      "status": "OPTIMAL",
+      "statusReason": "Performance within target range",
+      "measurements": {
+        "average": "8.00",
+        "min": 7,
+        "max": 9,
+        "count": 7
+      },
+      "thresholds": {
+        "target": 8,
+        "warning": 20,
+        "critical": 45
+      },
+      "trend": "STABLE"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "LOW",
+      "category": "core_engine",
+      "baseline": "Simple Graph Execution",
+      "recommendation": "Performance is optimal. Continue monitoring.",
+      "impact": "Positive - maintaining excellent performance"
+    },
+    {
+      "priority": "LOW",
+      "category": "core_engine",
+      "baseline": "Complex Graph Execution",
+      "recommendation": "Performance is optimal. Continue monitoring.",
+      "impact": "Positive - maintaining excellent performance"
+    },
+    {
+      "priority": "LOW",
+      "category": "core_engine",
+      "baseline": "Graph Execution Throughput",
+      "recommendation": "Performance is optimal. Continue monitoring.",
+      "impact": "Positive - maintaining excellent performance"
+    },
+    {
+      "priority": "LOW",
+      "category": "memory_usage",
+      "baseline": "Graph Memory Usage",
+      "recommendation": "Performance is optimal. Continue monitoring.",
+      "impact": "Positive - maintaining excellent performance"
+    },
+    {
+      "priority": "LOW",
+      "category": "memory_usage",
+      "baseline": "Peak Heap Usage",
+      "recommendation": "Performance is optimal. Continue monitoring.",
+      "impact": "Positive - maintaining excellent performance"
+    },
+    {
+      "priority": "LOW",
+      "category": "build_performance",
+      "baseline": "TypeScript Compilation Time",
+      "recommendation": "Performance is optimal. Continue monitoring.",
+      "impact": "Positive - maintaining excellent performance"
+    }
+  ],
+  "complianceStatus": "GREEN"
+}

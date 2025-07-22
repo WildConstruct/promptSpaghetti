@@ -15,6 +15,10 @@ import { randomizerRoutes } from './routes/randomizer';
 import { analyticsRoutes } from './routes/analytics';
 import { registerFileBrowserAnalyticsRoutes } from './routes/file-browser-analytics';
 import { ticketRoutes } from './routes/tickets';
+import { registerVerificationRoutes } from './routes/verification-requests';
+import { registerPolicyVersioningRoutes } from './routes/policy-versioning';
+import { transactionTrackingRoutes } from './routes/transaction-tracking';
+import { revisionRequestRoutes } from './routes/revision-requests';
 import { AnalyticsDashboard } from './analytics/AnalyticsDashboard';
 import { AnalyticsCollector } from './analytics/AnalyticsCollector';
 import { CostTracker } from './analytics/CostTracker';
@@ -1325,6 +1329,18 @@ server.register(randomizerRoutes, { prefix: '/api/randomizer' });
 
 // Register ticket routes
 server.register(ticketRoutes, { prefix: '/api' });
+
+// Register verification request routes
+registerVerificationRoutes(server);
+
+// Register policy versioning routes
+registerPolicyVersioningRoutes(server);
+
+// Register transaction tracking routes
+server.register(transactionTrackingRoutes, { prefix: '/api' });
+
+// Register revision request routes
+server.register(revisionRequestRoutes, { prefix: '/api' });
 
 // Register file browser analytics routes
 server.register(registerFileBrowserAnalyticsRoutes);

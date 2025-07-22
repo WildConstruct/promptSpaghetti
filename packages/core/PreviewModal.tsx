@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PreviewResultWithPath } from './types/ExecutionPath.js';
 import { ExecutionPathVisualization } from './components/ExecutionPathVisualization.js';
+import { professionalColors } from './styles/professional-design-system';
 
 // Legacy interface for backward compatibility
 interface PreviewResult {
@@ -41,13 +42,15 @@ export
       justifyContent: 'center' 
     }}>
       <div style={{ 
-        background: '#fff', 
-        borderRadius: 8, 
+        background: professionalColors.background.elevated, 
+        borderRadius: 12, 
         padding: 24, 
         minWidth: 400, 
         maxWidth: hasExecutionPaths ? 800 : 600,
         maxHeight: '90vh',
-        overflow: 'auto'
+        overflow: 'auto',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
+        color: professionalColors.text.primary
       }}>
         <div style={{ 
           display: 'flex', 
@@ -55,7 +58,7 @@ export
           alignItems: 'center',
           marginBottom: 16
         }}>
-          <h2 style={{ margin: 0 }}>Preview Results</h2>
+          <h2 style={{ margin: 0 }}>Generated Content</h2>
           
           {hasExecutionPaths && (
             <button
@@ -76,8 +79,8 @@ export
           )}
         </div>
 
-        {loading && <div style={{marginBottom:12}}>Loading...</div>}
-        {error && <div style={{ color: '#c00' }}>Error: {error}</div>}
+        {loading && <div style={{marginBottom:12}}>✨ Generating content...</div>}
+        {error && <div style={{ color: '#c00' }}>⚠️ Something went wrong: {error}</div>}
         
         {!loading && !error && (
           <div>
@@ -139,7 +142,7 @@ export
                     )}
                     
                     {res.error ? (
-                      <div style={{ color: '#c00' }}>{res.error}</div>
+                      <div style={{ color: '#c00' }}>⚠️ {res.error}</div>
                     ) : (
                       <div style={{ fontFamily: 'monospace', whiteSpace:'pre-wrap' }}>
                         {res.output || ('output' in res ? res.output : '')}

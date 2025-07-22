@@ -217,5 +217,105 @@ CREATE INDEX IF NOT EXISTS idx_correction_rule_history_type ON correction_rule_h
 -- Insert default user
 INSERT OR IGNORE INTO users (id, username, email) VALUES (1, 'default', 'default@localhost');
 
+-- Epic 17 - Verification Display Configuration Tables
+
+-- Verification display configurations table
+CREATE TABLE IF NOT EXISTS verification_display_configs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    version INTEGER NOT NULL,
+    configuration_json TEXT NOT NULL,
+    updated_by VARCHAR(255) NOT NULL,
+    last_updated TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE(version)
+);
+
+-- Verification display configuration templates table
+CREATE TABLE IF NOT EXISTS verification_display_templates (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    configuration_json TEXT NOT NULL,
+    created_by VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- User reputation data table (Epic 17)
+CREATE TABLE IF NOT EXISTS user_reputation (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    
+    -- Overall reputation metrics
+    overall_trust_score INTEGER DEFAULT 0,
+    reputation_level VARCHAR(50) DEFAULT 'newcomer',
+    
+    -- Component scores
+    transaction_score INTEGER DEFAULT 0,
+    review_score INTEGER DEFAULT 0,
+    template_performance_score INTEGER DEFAULT 0,
+    verification_score INTEGER DEFAULT 0,
+    platform_contribution_score INTEGER DEFAULT 0,
+    
+    -- Verification status
+    verification_level VARCHAR(50) DEFAULT 'unverified',
+    verification_data TEXT DEFAULT '{}',
+    
+    -- Flags and administrative data
+    flagged BOOLEAN DEFAULT FALSE,
+    admin_notes TEXT DEFAULT '{}',
+    
+    -- Achievement data
+    achievement_count INTEGER DEFAULT 0,
+    badges_data TEXT DEFAULT '[]',
+    
+    -- Transaction metrics
+    transaction_metrics TEXT DEFAULT '{}',
+    
+    -- Risk assessment
+    risk_level VARCHAR(20) DEFAULT 'low',
+    flags_data TEXT DEFAULT '[]',
+    
+    -- Timestamps
+    last_calculated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE(user_id)
+);
+
+-- User reputation alerts table
+CREATE TABLE IF NOT EXISTS reputation_alerts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    alert_id VARCHAR(36) UNIQUE NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
+    alert_type VARCHAR(100) NOT NULL,
+    severity VARCHAR(20) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    trigger_score INTEGER NOT NULL,
+    current_score INTEGER NOT NULL,
+    risk_factors TEXT DEFAULT '[]',
+    suggested_actions TEXT DEFAULT '[]',
+    status VARCHAR(20) DEFAULT 'active',
+    assigned_to VARCHAR(255),
+    priority INTEGER DEFAULT 1,
+    escalated BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Verification display indexes
+CREATE INDEX IF NOT EXISTS idx_verification_configs_version ON verification_display_configs(version);
+CREATE INDEX IF NOT EXISTS idx_verification_templates_name ON verification_display_templates(name);
+CREATE INDEX IF NOT EXISTS idx_user_reputation_user_id ON user_reputation(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_reputation_level ON user_reputation(reputation_level);
+CREATE INDEX IF NOT EXISTS idx_user_reputation_trust_score ON user_reputation(overall_trust_score);
+CREATE INDEX IF NOT EXISTS idx_reputation_alerts_user_severity ON reputation_alerts(user_id, severity);
+CREATE INDEX IF NOT EXISTS idx_reputation_alerts_status ON reputation_alerts(status, created_at);
+
 -- Insert default user preferences
 INSERT OR IGNORE INTO user_preferences (user_id) VALUES (1);

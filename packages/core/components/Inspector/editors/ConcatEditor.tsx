@@ -112,8 +112,8 @@ export
           <TemplateEditor
             value={template}
             onChange={(value) => handleFieldChange('template', value)}
-            onVariablesChange={(variables) => {
-              handleFieldChange('extractedVariables', variables);
+            onVariablesChange={(variables, extractedVariables) => {
+              handleFieldChange('extractedVariables', extractedVariables || []);
             }}
             placeholder="Use a template like 'Combining {input1} and {input2}' for more control..."
             showPreview={true}

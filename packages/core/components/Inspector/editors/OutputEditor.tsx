@@ -88,8 +88,8 @@ export
           <TemplateEditor
             value={template}
             onChange={(value) => handleFieldChange('template', value)}
-            onVariablesChange={(variables) => {
-              handleFieldChange('extractedVariables', variables);
+            onVariablesChange={(variables, extractedVariables) => {
+              handleFieldChange('extractedVariables', extractedVariables || []);
             }}
             placeholder="Enter output template... Use {variable} syntax for dynamic content."
             showPreview={true}

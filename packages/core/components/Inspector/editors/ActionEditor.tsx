@@ -184,9 +184,9 @@ export
           <TemplateEditor
             value={template}
             onChange={(value) => handleFieldChange('template', value)}
-            onVariablesChange={(variables) => {
+            onVariablesChange={(variables, extractedVariables) => {
               // Store extracted variables for potential use in graph execution
-              handleFieldChange('extractedVariables', variables);
+              handleFieldChange('extractedVariables', extractedVariables || []);
             }}
             placeholder="Enter action template like '{verb} {adverb} through the {location}' or use the verb forms below..."
             showPreview={true}

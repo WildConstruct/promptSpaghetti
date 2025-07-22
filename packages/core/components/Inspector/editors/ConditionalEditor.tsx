@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { ConditionalBranch } from '../../../runtime/nodes/Conditional';
 
 export interface ConditionalEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   nodeId: string;
 }
+
+/**
+ * Epic 8.4 - Conditional Editor with Progressive Disclosure
+ * 
+ * Three-tier disclosure system:
+ * - Basic: Node name, default output, and simple conditional branches
+ * - Advanced: Branch management and conditional logic controls
+ * - Debug: Technical settings, strict mode, variable access controls
+ */
 
 export const ConditionalEditor: React.FC<ConditionalEditorProps> = (props) => {
   const { nodeData, onChange } = props;
@@ -19,11 +28,7 @@ export const ConditionalEditor: React.FC<ConditionalEditorProps> = (props) => {
   const allowVariableAccess = (nodeData.allowVariableAccess as boolean) ?? true;
   const strictMode = (nodeData.strictMode as boolean) ?? false;
 
-  // State for collapsible sections
-  const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
-  const [branchesCollapsed, setBranchesCollapsed] = useState(false);
-  const [settingsCollapsed, setSettingsCollapsed] = useState(true);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // No manual collapse state needed - managed by ProgressiveDisclosureSection
 
   const handleBranchesChange = (newBranches: ConditionalBranch[]) => {
     onChange({ branches: newBranches });
@@ -67,37 +72,54 @@ export const ConditionalEditor: React.FC<ConditionalEditorProps> = (props) => {
 
   return (
     <div className="conditional-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={commonPropsCollapsed}
-        onToggle={() => setCommonPropsCollapsed(!commonPropsCollapsed)}
+      {/* BASIC LEVEL: Essential conditional settings */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core conditional logic for smart storytelling"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="name"
       >
-        <TextFieldEditor
-          label="Name"
-          value={name}
-          fieldKey="name"
-          zodType={null}
-          onChange={handleNameChange}
-          placeholder="Enter node name..."
-        />
+        <div style={{ marginBottom: 16 }}>
+          <TextFieldEditor
+            label="Decision Name"
+            value={name}
+            fieldKey="name"
+            zodType={null}
+            onChange={handleNameChange}
+            placeholder="e.g., Character Response, Plot Branch, Scene Choice"
+          />
+        </div>
         
-        <TextAreaEditor
-          label="Default Output"
-          value={defaultOutput}
-          fieldKey="defaultOutput"
-          zodType={null}
-          onChange={handleDefaultOutputChange}
-          placeholder="Default output when no conditions match..."
-          rows={2}
-        />
-      </CollapsibleSection>
+        <div style={{ marginBottom: 16 }}>
+          <TextAreaEditor
+            label="Default Response"
+            value={defaultOutput}
+            fieldKey="defaultOutput"
+            zodType={null}
+            onChange={handleDefaultOutputChange}
+            placeholder="What should happen when no specific conditions are met..."
+            rows={2}
+          />
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4
+          }}>
+            This will be used when none of your conditions match
+          </div>
+        </div>
+      </ProgressiveDisclosureSection>
 
-      {/* Conditional Branches */}
-      <CollapsibleSection 
-        title="Conditional Branches" 
-        collapsed={branchesCollapsed}
-        onToggle={() => setBranchesCollapsed(!branchesCollapsed)}
+      {/* ADVANCED LEVEL: Conditional branches and logic controls */}
+      <ProgressiveDisclosureSection
+        title="Conditional Logic"
+        level="advanced"
+        description="Define conditions that trigger different responses"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="branches"
       >
         <div style={{ marginBottom: 12 }}>
           <div style={{ 
@@ -289,73 +311,105 @@ export const ConditionalEditor: React.FC<ConditionalEditorProps> = (props) => {
             • Regex: matches(str, &apos;pattern&apos;)
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Settings */}
-      <CollapsibleSection 
-        title="Settings" 
-        collapsed={settingsCollapsed}
-        onToggle={() => setSettingsCollapsed(!settingsCollapsed)}
+      {/* DEBUG LEVEL: Technical settings and advanced options */}
+      <ProgressiveDisclosureSection
+        title="Technical Settings & Preview"
+        level="debug"
+        description="Advanced expression controls and execution preview"
+        defaultExpanded={false}
+        priority="supplementary"
+        fieldName="settings"
       >
-        <div style={{ marginBottom: 12 }}>
-          <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: 12,
-            color: '#e2e8f0',
-            cursor: 'pointer'
-          }}>
-            <input
-              type="checkbox"
-              checked={allowVariableAccess}
-              onChange={(e) => handleAllowVariableAccessChange(e.target.checked)}
-              style={{ marginRight: 8 }}
-            />
-            Allow Variable Access
-          </label>
+        {/* Technical Settings */}
+        <div style={{ marginBottom: 16 }}>
           <div style={{
-            fontSize: 10,
-            color: '#a0aec0',
-            marginTop: 2,
-            marginLeft: 20
+            fontSize: 11,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 8
           }}>
-            Enable access to execution context variables in expressions
+            Expression Engine Settings:
+          </div>
+          
+          <div style={{ marginBottom: 12 }}>
+            <label style={{
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: 12,
+              color: '#e2e8f0',
+              cursor: 'pointer'
+            }}>
+              <input
+                type="checkbox"
+                checked={allowVariableAccess}
+                onChange={(e) => handleAllowVariableAccessChange(e.target.checked)}
+                style={{ marginRight: 8 }}
+              />
+              Allow Variable Access
+            </label>
+            <div style={{
+              fontSize: 10,
+              color: '#a0aec0',
+              marginTop: 2,
+              marginLeft: 20
+            }}>
+              Enable access to execution context variables in expressions
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <label style={{
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: 12,
+              color: '#e2e8f0',
+              cursor: 'pointer'
+            }}>
+              <input
+                type="checkbox"
+                checked={strictMode}
+                onChange={(e) => handleStrictModeChange(e.target.checked)}
+                style={{ marginRight: 8 }}
+              />
+              Strict Mode
+            </label>
+            <div style={{
+              fontSize: 10,
+              color: '#a0aec0',
+              marginTop: 2,
+              marginLeft: 20
+            }}>
+              Throw errors on expression evaluation failures (otherwise treats as false)
+            </div>
           </div>
         </div>
 
-        <div>
-          <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: 12,
-            color: '#e2e8f0',
-            cursor: 'pointer'
-          }}>
-            <input
-              type="checkbox"
-              checked={strictMode}
-              onChange={(e) => handleStrictModeChange(e.target.checked)}
-              style={{ marginRight: 8 }}
-            />
-            Strict Mode
-          </label>
+        {/* Debug Node Information */}
+        <div style={{
+          background: '#1a202c',
+          border: '1px solid #4a5568',
+          borderRadius: 4,
+          padding: 8,
+          marginBottom: 16
+        }}>
           <div style={{
-            fontSize: 10,
-            color: '#a0aec0',
-            marginTop: 2,
-            marginLeft: 20
+            fontSize: 11,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 4
           }}>
-            Throw errors on expression evaluation failures (otherwise treats as false)
+            Node Configuration:
+          </div>
+          <div style={{ fontSize: 10, color: '#a0aec0', lineHeight: 1.4 }}>
+            <div>Node ID: {props.nodeId}</div>
+            <div>Type: Conditional</div>
+            <div>Branches: {branches.length}</div>
+            <div>Variable Access: {allowVariableAccess ? 'Enabled' : 'Disabled'}</div>
+            <div>Strict Mode: {strictMode ? 'Enabled' : 'Disabled'}</div>
           </div>
         </div>
-      </CollapsibleSection>
-
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
-      >
         <div style={{
           background: '#1a202c',
           border: '1px solid #4a5568',
@@ -416,7 +470,7 @@ export const ConditionalEditor: React.FC<ConditionalEditorProps> = (props) => {
             </div>
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

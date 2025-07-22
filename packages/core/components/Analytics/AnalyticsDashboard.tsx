@@ -6,6 +6,8 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Alert, AlertDescription } from '../ui/Alert';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
+import { conversionTracker } from '../../analytics/ConversionTracker';
+import { performanceMonitor } from '../../utils/PerformanceMonitor';
 import { MetricsOverview } from './MetricsOverview';
 import { PerformanceCharts } from './PerformanceCharts';
 import { CostAnalysis } from './CostAnalysis';
@@ -13,6 +15,9 @@ import { UsagePatterns } from './UsagePatterns';
 import { AlertsPanel } from './AlertsPanel';
 import { RecommendationsPanel } from './RecommendationsPanel';
 import { ExportOptions } from './ExportOptions';
+import { ConversionFunnelDashboard } from './ConversionFunnelDashboard';
+import { DirectorAnalyticsView } from './DirectorAnalyticsView';
+import { RealTimeMetrics } from './RealTimeMetrics';
 
 /**
  * Time range options
@@ -49,6 +54,10 @@ interface DashboardState {
   recommendations: any[];
   timeRange: string;
   lastUpdated: Date | null;
+  conversionData: any;
+  realTimeMetrics: any;
+  performanceData: any;
+  userRole: 'director' | 'producer' | 'admin' | 'user';
 }
 
 /**
@@ -70,8 +79,14 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     alerts: [],
     recommendations: [],
     timeRange: '24h',
-    lastUpdated: null
+    lastUpdated: null,
+    conversionData: null,
+    realTimeMetrics: null,
+    performanceData: null,
+    userRole: 'director'
   });
+
+  const [selectedView, setSelectedView] = useState<'overview' | 'conversions' | 'director' | 'performance' | 'costs' | 'usage' | 'insights'>('overview');
 
   /**
    * Calculate time range based on selected option
@@ -105,6 +120,22 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         analyticsClient.getRecommendations(userId, organizationId)
       ]);
 
+      // Load conversion tracking data
+      const conversionData = conversionTracker.getDashboardData();
+      
+      // Load performance monitoring data
+      const performanceData = performanceMonitor.getDashboardData();
+      
+      // Combine real-time metrics
+      const realTimeMetrics = {
+        ...conversionData.realTimeMetrics,
+        performance: {
+          healthScore: performanceData.overview.healthScore,
+          activeAlerts: performanceData.overview.activeAlerts,
+          keyMetrics: performanceData.keyMetrics
+        }
+      };
+
       if (!summaryResponse.success) {
         throw new Error(summaryResponse.error || 'Failed to load summary');
       }
@@ -120,6 +151,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         dashboardData: dashboardResponse.data,
         alerts: alertsResponse.success ? alertsResponse.data : [],
         recommendations: recommendationsResponse.success ? recommendationsResponse.data : [],
+        conversionData,
+        realTimeMetrics,
+        performanceData,
         lastUpdated: new Date()
       }));
     } catch (error) {
@@ -271,8 +305,10 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
       {/* Main Dashboard Content */}
       <Tabs defaultValue="overview" className="dashboard-tabs">
-        <TabsList className="grid grid-cols-5 w-full">
+        <TabsList className="grid grid-cols-7 w-full">
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="conversions">Conversions</TabsTrigger>
+          <TabsTrigger value="director">Director</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="costs">Costs</TabsTrigger>
           <TabsTrigger value="usage">Usage</TabsTrigger>
@@ -281,12 +317,36 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
         <TabsContent value="overview" className="tab-content">
           <div className="overview-grid">
+            <RealTimeMetrics
+              metrics={state.realTimeMetrics}
+              loading={state.loading}
+            />
             <MetricsOverview
               summary={state.summary}
               dashboardData={state.dashboardData}
+              conversionData={state.conversionData}
+              performanceData={state.performanceData}
               loading={state.loading}
             />
           </div>
+        </TabsContent>
+
+        <TabsContent value="conversions" className="tab-content">
+          <ConversionFunnelDashboard
+            conversionData={state.conversionData}
+            timeRange={getTimeRange(state.timeRange)}
+            loading={state.loading}
+          />
+        </TabsContent>
+
+        <TabsContent value="director" className="tab-content">
+          <DirectorAnalyticsView
+            conversionData={state.conversionData}
+            performanceData={state.performanceData}
+            timeRange={getTimeRange(state.timeRange)}
+            userId={userId}
+            loading={state.loading}
+          />
         </TabsContent>
 
         <TabsContent value="performance" className="tab-content">

@@ -6,6 +6,8 @@ import {
   parseTemplate, 
   substituteVariables, 
   getPreviewWithSamples,
+  generateSmartDefaults,
+  getContextualDefaults,
   ExtractedVariable 
 } from '../utils/templateParser';
 
@@ -84,46 +86,24 @@ export const useTemplatePreview = (
     
     for (const variable of variables) {
       if (!variableValues[variable.name]) {
-        // Use sample from parser or generate based on variable name
-        const previewSample = getPreviewWithSamples(`{${variable.name}}`);
-        samples[variable.name] = previewSample.usedSamples[variable.name] || 
-          generateSmartSample(variable.name);
+        // First try to use the inferred default value from type inference
+        if (variable.defaultValue) {
+          samples[variable.name] = variable.defaultValue;
+        } else {
+          // Use contextual defaults based on node type and template
+          const contextualDefault = getContextualDefaults(variable.name, template, undefined);
+          samples[variable.name] = contextualDefault;
+        }
       }
     }
     
     return samples;
-  }, [variableValues]);
+  }, [variableValues, template]);
   
   // Generate intelligent sample values based on variable names
   const generateSmartSample = (variableName: string): string => {
-    const name = variableName.toLowerCase();
-    
-    // Character/creature samples
-    if (name.includes('character') || name.includes('creature') || name.includes('person')) {
-      const characters = ['wizard', 'warrior', 'rogue', 'archer', 'knight', 'mage'];
-      return characters[Math.floor(Math.random() * characters.length)];
-    }
-    
-    // Location/setting samples
-    if (name.includes('location') || name.includes('setting') || name.includes('place')) {
-      const places = ['ancient forest', 'crystal cave', 'mountain peak', 'desert oasis', 'floating city'];
-      return places[Math.floor(Math.random() * places.length)];
-    }
-    
-    // Action samples
-    if (name.includes('action') || name.includes('verb')) {
-      const actions = ['running', 'flying', 'exploring', 'battling', 'discovering'];
-      return actions[Math.floor(Math.random() * actions.length)];
-    }
-    
-    // Object samples
-    if (name.includes('object') || name.includes('item') || name.includes('prop')) {
-      const objects = ['magic sword', 'ancient scroll', 'golden key', 'crystal orb', 'silver chalice'];
-      return objects[Math.floor(Math.random() * objects.length)];
-    }
-    
-    // Default sample
-    return `sample_${name}`;
+    // Use our enhanced contextual defaults
+    return getContextualDefaults(variableName, template, undefined);
   };
   
   // Generate preview variants

@@ -146,9 +146,9 @@ export
           <TemplateEditor
             value={template}
             onChange={(value) => handleFieldChange('template', value)}
-            onVariablesChange={(variables) => {
+            onVariablesChange={(variables, extractedVariables) => {
               // Store extracted variables for potential use in graph execution
-              handleFieldChange('extractedVariables', variables);
+              handleFieldChange('extractedVariables', extractedVariables || []);
             }}
             placeholder="Enter natural language template like 'A {creature} in the {setting}' or use the variations list below..."
             showPreview={true}

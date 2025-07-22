@@ -1,0 +1,601 @@
+/**
+ * Trust Indicators Styles - E17-1753114397408-F8D885
+ * 
+ * Comprehensive styling for trust and credibility indicators
+ */
+
+/* Base Trust Indicator Styles */
+.trust-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.trust-indicator.small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.trust-indicator.medium {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.trust-indicator.large {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.trust-indicator.minimal {
+  padding: 0.25rem;
+}
+
+.trust-indicator.compact {
+  gap: 0.25rem;
+}
+
+/* Trust Level Colors */
+.trust-expert {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: white;
+}
+
+.trust-professional {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+}
+
+.trust-verified {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+}
+
+.trust-basic {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: white;
+}
+
+.trust-unverified {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+/* Trust Icons */
+.trust-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.trust-indicator.small .trust-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.trust-indicator.large .trust-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.expert-icon {
+  color: #fbbf24;
+}
+
+.professional-icon {
+  color: #ddd6fe;
+}
+
+.verified-icon {
+  color: #a7f3d0;
+}
+
+.basic-icon {
+  color: #fed7aa;
+}
+
+.unverified-icon {
+  color: #9ca3af;
+}
+
+/* Trust Score Display */
+.trust-score {
+  font-size: 0.75em;
+  opacity: 0.9;
+}
+
+/* Creator Trust Badge */
+.creator-trust-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.creator-trust-badge:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.creator-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.creator-avatar {
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.creator-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.creator-name {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.verified-icon {
+  width: 1rem;
+  height: 1rem;
+  color: #3b82f6;
+}
+
+.trust-indicators {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trust-details {
+  padding-top: 0.75rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Trust Score Display */
+.trust-score-display {
+  display: flex;
+  gap: 1rem;
+}
+
+.trust-score-display.vertical {
+  flex-direction: column;
+}
+
+.trust-score-display.horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
+.overall-score {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.score-circle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.score-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.score-max {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.score-tier {
+  display: flex;
+  align-items: center;
+}
+
+.tier-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tier-expert { background: #7c3aed; color: white; }
+.tier-professional { background: #2563eb; color: white; }
+.tier-verified { background: #059669; color: white; }
+.tier-basic { background: #d97706; color: white; }
+.tier-unverified { background: #6b7280; color: white; }
+
+.score-breakdown {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.component-score {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.component-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  min-width: 5rem;
+  text-align: right;
+}
+
+.component-progress {
+  flex: 1;
+  height: 0.5rem;
+}
+
+.component-progress.identity { --progress-color: #3b82f6; }
+.component-progress.professional { --progress-color: #7c3aed; }
+.component-progress.community { --progress-color: #059669; }
+.component-progress.activity { --progress-color: #d97706; }
+
+.component-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  min-width: 2rem;
+  text-align: left;
+}
+
+/* Verification Badges */
+.verification-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.verification-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.verification-badges.small .verification-badge {
+  padding: 0.125rem 0.375rem;
+  font-size: 0.625rem;
+}
+
+.verification-badges.large .verification-badge {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.verification-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.verification-badges.small .verification-icon {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+.verification-badges.large .verification-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.verification-professional {
+  background: #ede9fe;
+  color: #7c3aed;
+  border: 1px solid #c4b5fd;
+}
+
+.verification-verified {
+  background: #d1fae5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.verification-basic {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fed7aa;
+}
+
+.remaining-badge {
+  background: #f9fafb;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+/* Template Trust Indicator */
+.template-trust-indicator {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.trust-elements {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.creator-verified {
+  background: #2563eb;
+  color: white;
+  font-size: 0.75rem;
+}
+
+.quality-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.quality-premium {
+  background: #7c3aed;
+  color: white;
+}
+
+.quality-high {
+  background: #2563eb;
+  color: white;
+}
+
+.quality-good {
+  background: #059669;
+  color: white;
+}
+
+.quality-standard {
+  background: #6b7280;
+  color: white;
+}
+
+.popularity-badge {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fed7aa;
+}
+
+.rating-badge {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fed7aa;
+}
+
+.creator-trust-summary {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Inline Trust Status */
+.inline-trust-status {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.25rem;
+}
+
+.inline-icon {
+  transition: all 0.2s ease;
+}
+
+.inline-icon.small {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.inline-icon.medium {
+  width: 1rem;
+  height: 1rem;
+}
+
+.inline-icon.expert {
+  color: #7c3aed;
+}
+
+.inline-icon.professional {
+  color: #2563eb;
+}
+
+.inline-icon.verified {
+  color: #059669;
+}
+
+.inline-icon.basic {
+  color: #d97706;
+}
+
+/* Trust Tooltip */
+.trust-tooltip {
+  max-width: 16rem;
+  padding: 0.75rem;
+}
+
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.tooltip-score {
+  font-weight: 600;
+  color: #059669;
+}
+
+.tooltip-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.tooltip-badges {
+  margin-top: 0.5rem;
+}
+
+.tooltip-badges strong {
+  display: block;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+  color: #374151;
+}
+
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.tooltip-badge {
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .creator-trust-badge {
+    padding: 0.75rem;
+  }
+  
+  .creator-info {
+    gap: 0.5rem;
+  }
+  
+  .trust-score-display.horizontal {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .trust-elements {
+    gap: 0.375rem;
+  }
+  
+  .verification-badges {
+    gap: 0.25rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .trust-unverified {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .creator-trust-badge {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .creator-name {
+    color: #f9fafb;
+  }
+  
+  .score-value {
+    color: #f9fafb;
+  }
+  
+  .component-label {
+    color: #d1d5db;
+  }
+  
+  .component-value {
+    color: #f3f4f6;
+  }
+  
+  .template-trust-indicator {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .remaining-badge {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+}
+
+/* Animation Effects */
+@keyframes pulse-trust {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.trust-indicator:hover {
+  animation: pulse-trust 0.6s ease-in-out;
+}
+
+.verification-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus States for Accessibility */
+.trust-indicator:focus,
+.verification-badge:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .trust-expert,
+  .trust-professional,
+  .trust-verified,
+  .trust-basic {
+    border: 2px solid currentColor;
+  }
+  
+  .verification-badge {
+    border-width: 2px;
+  }
+}

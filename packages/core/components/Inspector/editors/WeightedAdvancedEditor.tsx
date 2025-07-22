@@ -2,15 +2,24 @@ import React, { useState } from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor } from '../SelectEditor';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
 import { WeightVisualizationPanel } from '../../WeightVisualization';
 import { WeightControlOption } from '../WeightControlSlider';
 import { WeightedChoice, WeightDistributionType } from '../../../runtime/nodes/WeightedAdvanced';
 
 export interface WeightedAdvancedEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
-  // WeightedAdvanced specific props can be added here
+  nodeId: string;
 }
+
+/**
+ * Epic 8.4 - WeightedAdvanced Editor with Progressive Disclosure
+ * 
+ * Three-tier disclosure system:
+ * - Basic: Essential name and choice options (for filmmakers)
+ * - Advanced: Distribution algorithms, weight controls, and normalization (power users)  
+ * - Debug: Technical details, visualization, and raw data (developers)
+ */
 
 export   
   // WeightedAdvanced specific fields
@@ -25,12 +34,7 @@ export
   const gaussianMean = (nodeData.gaussianMean as number) || 0.5;
   const gaussianStd = (nodeData.gaussianStd as number) || 0.2;
 
-  // State for collapsible sections
-  const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
-  const [choicesCollapsed, setChoicesCollapsed] = useState(false);
-  const [distributionCollapsed, setDistributionCollapsed] = useState(false);
-  const [visualizationCollapsed, setVisualizationCollapsed] = useState(false);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // No manual collapse state needed - managed by ProgressiveDisclosureSection
 
   // Convert WeightedChoice to WeightControlOptions for visualization
   const weightOptions: WeightControlOption[] = choices.map((choice, index) => ({
@@ -163,28 +167,26 @@ export
 
   return (
     <div className="weighted-advanced-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={commonPropsCollapsed}
-        onToggle={() => setCommonPropsCollapsed(!commonPropsCollapsed)}
+      {/* BASIC LEVEL: Essential settings for filmmakers */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core weighted selection configuration"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="name"
       >
-        <TextFieldEditor
-          label="Name"
-          value={name}
-          fieldKey="name"
-          zodType={null as any}
-          onChange={handleNameChange}
-          placeholder="Enter node name..."
-        />
-      </CollapsibleSection>
-
-      {/* Weighted Choices */}
-      <CollapsibleSection 
-        title="Weighted Choices" 
-        collapsed={choicesCollapsed}
-        onToggle={() => setChoicesCollapsed(!choicesCollapsed)}
-      >
+        <div style={{ marginBottom: 16 }}>
+          <TextFieldEditor
+            label="Choice Set Name"
+            value={name}
+            fieldKey="name"
+            zodType={null as any}
+            onChange={handleNameChange}
+            placeholder="e.g., Character Emotions, Scene Styles, Action Types"
+          />
+        </div>
+        
         <div style={{ marginBottom: 12 }}>
           <div style={{ 
             display: 'flex', 
@@ -197,7 +199,7 @@ export
               color: '#e2e8f0',
               fontSize: 12
             }}>
-              Choice Options & Weights
+              Story Choices
             </label>
             <button
               onClick={handleAddChoice}
@@ -226,7 +228,7 @@ export
               fontSize: 12,
               fontStyle: 'italic'
             }}>
-              No choices defined. Add choices to configure weighted selection.
+              No story choices defined. Add options like "Dramatic", "Comedy", "Action" to create weighted selection.
             </div>
           ) : (
             <div style={{
@@ -274,7 +276,7 @@ export
                           color: '#e2e8f0',
                           fontSize: 11
                         }}
-                        placeholder={`Choice ${index + 1}`}
+                        placeholder={`e.g., "Suspenseful", "Lighthearted", "Intense"`}
                       />
                       
                       <button
@@ -311,17 +313,13 @@ export
                         label="Raw Weight"
                       />
                       
-                      <div style={{ fontSize: 10, color: '#90cdf4', minWidth: 100 }}>
-                        Effective: {effectiveWeight.toFixed(3)}
-                      </div>
-                      
                       <div style={{ 
                         fontSize: 10, 
                         color: '#a0aec0',
-                        minWidth: 40,
+                        minWidth: 60,
                         textAlign: 'right'
                       }}>
-                        {percentage.toFixed(1)}%
+                        {percentage.toFixed(1)}% chance
                       </div>
                     </div>
                   </div>
@@ -329,12 +327,29 @@ export
               })}
             </div>
           )}
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4
+          }}>
+            Choose options and their relative likelihood. Higher weights = more likely to be selected.
+          </div>
         </div>
+      </ProgressiveDisclosureSection>
 
-        {/* Weight Controls */}
+      {/* ADVANCED LEVEL: Distribution algorithms and weight controls */}
+      <ProgressiveDisclosureSection
+        title="Advanced Weight Controls"
+        level="advanced"
+        description="Fine-tune selection algorithms and probability distributions"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="distribution"
+      >
+        {/* Weight adjustment tools */}
         {choices.length > 1 && (
           <div style={{ 
-            marginTop: 12, 
+            marginBottom: 16, 
             display: 'flex', 
             gap: 8,
             flexWrap: 'wrap'
@@ -385,14 +400,7 @@ export
             </button>
           </div>
         )}
-      </CollapsibleSection>
-
-      {/* Distribution Configuration */}
-      <CollapsibleSection 
-        title="Distribution Algorithm" 
-        collapsed={distributionCollapsed}
-        onToggle={() => setDistributionCollapsed(!distributionCollapsed)}
-      >
+        
         <div style={{ marginBottom: 16 }}>
           <SelectEditor
             label="Distribution Type"
@@ -544,14 +552,51 @@ export
             }
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+      {/* DEBUG LEVEL: Technical details and visualization */}
+      <ProgressiveDisclosureSection
+        title="Technical Analysis & Preview"
+        level="debug"
+        description="Advanced distribution analysis, visualization, and raw data"
+        defaultExpanded={false}
+        priority="supplementary"
+        fieldName="debug"
       >
+        {/* Debug Node Information */}
+        <div style={{
+          background: '#1a202c',
+          border: '1px solid #4a5568',
+          borderRadius: 4,
+          padding: 8,
+          marginBottom: 16
+        }}>
+          <div style={{
+            fontSize: 11,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 4
+          }}>
+            Node Configuration:
+          </div>
+          <div style={{ fontSize: 10, color: '#a0aec0', lineHeight: 1.4 }}>
+            <div>Node ID: {props.nodeId}</div>
+            <div>Type: WeightedAdvanced</div>
+            <div>Choices: {choices.length}</div>
+            <div>Distribution: {distributionType}</div>
+            <div>Normalization: {normalize ? 'Enabled' : 'Disabled'}</div>
+            <div>Min Weight: {minWeight}</div>
+            {distributionType === 'exponential' && <div>Exponential Factor: {exponentialFactor}</div>}
+            {distributionType === 'gaussian' && (
+              <>
+                <div>Gaussian Mean: {gaussianMean}</div>
+                <div>Gaussian Std: {gaussianStd}</div>
+              </>
+            )}
+          </div>
+        </div>
+        
+        {/* Selection Preview */}
         <div style={{
           background: '#1a202c',
           border: '1px solid #4a5568',
@@ -612,27 +657,28 @@ export
             </div>
           )}
         </div>
-      </CollapsibleSection>
-
-      {/* Weight Distribution Visualization */}
-      {choices.length > 0 && weightOptions.length > 0 && (
-        <WeightVisualizationPanel
-          options={weightOptions}
-          title="Advanced Weight Distribution"
-          defaultChartType="donut"
-          showChartControls={true}
-          showStatistics={true}
-          collapsed={visualizationCollapsed}
-          onCollapseChange={setVisualizationCollapsed}
-          onOptionHover={(option) => {
-            console.log('Advanced weight hovered:', option?.text);
-          }}
-          onOptionClick={(option) => {
-            console.log('Advanced weight clicked:', option.text);
-          }}
-          style={{ marginTop: 16 }}
-        />
-      )}
+        
+        {/* Weight Distribution Visualization */}
+        {choices.length > 0 && weightOptions.length > 0 && (
+          <div style={{ marginTop: 16 }}>
+            <WeightVisualizationPanel
+              options={weightOptions}
+              title="Distribution Visualization"
+              defaultChartType="donut"
+              showChartControls={true}
+              showStatistics={true}
+              collapsed={false}
+              onCollapseChange={() => {}}
+              onOptionHover={(option) => {
+                console.log('Advanced weight hovered:', option?.text);
+              }}
+              onOptionClick={(option) => {
+                console.log('Advanced weight clicked:', option.text);
+              }}
+            />
+          </div>
+        )}
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

@@ -3,9 +3,12 @@ import {
   parseTemplate,
   getVariableSuggestions,
   getPreviewWithSamples,
+  generateSmartDefaults,
+  getContextualDefaults,
   setTemplateContext,
   trackVariableUsage,
   VariableSuggestion,
+  ExtractedVariable,
   VARIABLE_CATEGORIES
 } from '../../utils/templateParser';
 import { useTemplatePreview } from '../../hooks/useTemplatePreview';
@@ -13,7 +16,7 @@ import { useTemplatePreview } from '../../hooks/useTemplatePreview';
 export interface TemplateEditorProps {
   value: string;
   onChange: (value: string) => void;
-  onVariablesChange?: (variables: string[]) => void;
+  onVariablesChange?: (variables: string[], extractedVariables?: ExtractedVariable[]) => void;
   variableValues?: Record<string, string>;
   nodeType?: string; // For contextual suggestions
   existingVariables?: string[]; // For related variable suggestions
@@ -102,10 +105,9 @@ export   const [showSuggestions, setShowSuggestions] = useState(false);
   // Update variables when they change
   useEffect(() => {
     if (onVariablesChange) {
-      const variableNames = parseResult.variables
-        .filter(v => v.isValid)
-        .map(v => v.name);
-      onVariablesChange(variableNames);
+      const validVariables = parseResult.variables.filter(v => v.isValid);
+      const variableNames = validVariables.map(v => v.name);
+      onVariablesChange(variableNames, validVariables);
     }
   }, [parseResult.variables, onVariablesChange]);
 

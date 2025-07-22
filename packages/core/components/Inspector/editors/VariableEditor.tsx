@@ -4,6 +4,9 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { TemplateEditor } from '../TemplateEditor';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { useUISettingsStore } from '../../stores/uiSettingsStore';
 
 export interface VariableEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   nodeType: 'SetVariable' | 'GetVariable';
@@ -24,27 +27,21 @@ const SCOPE_OPTIONS: SelectOption[] = [
   { value: 'session', label: 'Session (persistent)' }
 ];
 
-export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
-  const { nodeData, onChange, nodeType } = props;
+export   const { debugMode } = useUISettingsStore();
   
-  // Variable specific fields
+  // Simplified fields - focus on template-based workflow
   const label = (nodeData.label as string) || '';
+  const template = (nodeData.template as string) || '';
   const variableName = (nodeData.variableName as string) || '';
+  const value = (nodeData.value as string) || ''; // For SetVariable
+  
+  // Advanced fields only shown in debug mode
   const variableType = (nodeData.variableType as string) || 'auto';
   const defaultValue = (nodeData.defaultValue as string) || '';
   const scope = (nodeData.scope as string) || 'global';
   const persistent = (nodeData.persistent as boolean) ?? false;
-  const value = (nodeData.value as string) || ''; // For SetVariable
   const allowOverwrite = (nodeData.allowOverwrite as boolean) ?? true; // For SetVariable
   const required = (nodeData.required as boolean) ?? false; // For GetVariable
-
-  // State for collapsible sections
-  const [basicPropsCollapsed, setBasicPropsCollapsed] = useState(false);
-  const [setVarCollapsed, setSetVarCollapsed] = useState(false);
-  const [getVarCollapsed, setGetVarCollapsed] = useState(false);
-  const [scopeCollapsed, setScopeCollapsed] = useState(true);
-  const [typeInfoCollapsed, setTypeInfoCollapsed] = useState(true);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
 
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
@@ -55,326 +52,208 @@ export const VariableEditor: React.FC<VariableEditorProps> = (props) => {
 
   return (
     <div className="variable-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={basicPropsCollapsed}
-        onToggle={() => setBasicPropsCollapsed(!basicPropsCollapsed)}
+      {/* BASIC LEVEL: Simplified variable workflow */}
+      <ProgressiveDisclosureSection
+        title="Variable Settings"
+        level="basic"
+        description={isSetVariable ? "Define what value to store" : "Retrieve stored values"}
+        defaultExpanded={true}
+        priority="critical"
+        fieldName={isSetVariable ? "value" : "variableName"}
       >
         <TextFieldEditor
-          label="Label"
-          value={label}
-          fieldKey="label"
+          label={isSetVariable ? "Store As" : "Retrieve Variable"}
+          value={variableName || label}
+          fieldKey={isSetVariable ? "label" : "variableName"}
           zodType={null as any}
-          onChange={(value) => handleFieldChange('label', value)}
-          placeholder={`Enter ${nodeType.toLowerCase()} label...`}
+          onChange={(value) => handleFieldChange(isSetVariable ? 'label' : 'variableName', value)}
+          placeholder={isSetVariable ? "Name for this stored value..." : "Variable name to retrieve..."}
         />
 
-        <TextFieldEditor
-          label="Variable Name"
-          value={variableName}
-          fieldKey="variableName"
-          zodType={null as any}
-          onChange={(value) => handleFieldChange('variableName', value)}
-          placeholder="Enter variable name (e.g., userInput, counter)..."
-        />
-
-        <SelectEditor
-          label="Variable Type"
-          value={variableType}
-          fieldKey="variableType"
-          options={VARIABLE_TYPES}
-          zodType={null as any}
-          onChange={(value) => handleFieldChange('variableType', value)}
-        />
-      </CollapsibleSection>
-
-      {/* SetVariable Specific Settings */}
-      {isSetVariable && (
-        <CollapsibleSection 
-          title="Set Variable Configuration" 
-          collapsed={setVarCollapsed}
-          onToggle={() => setSetVarCollapsed(!setVarCollapsed)}
-        >
-          <TextAreaEditor
-            label="Value"
-            value={value}
-            fieldKey="value"
-            zodType={null as any}
-            onChange={(value) => handleFieldChange('value', value)}
-            placeholder="Enter the value to set for this variable..."
-            rows={3}
-            showWordCount
-          />
-
+        {isSetVariable && (
           <div style={{ marginBottom: 16 }}>
             <label style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
+              display: 'block',
               fontSize: 12,
+              fontWeight: 500,
               color: '#e2e8f0',
-              cursor: 'pointer'
+              marginBottom: 6
             }}>
-              <input
-                type="checkbox"
-                checked={allowOverwrite}
-                onChange={(e) => handleFieldChange('allowOverwrite', e.target.checked)}
-                style={{
-                  width: 14,
-                  height: 14,
-                  cursor: 'pointer'
-                }}
-              />
-              Allow overwriting existing variable
+              Value Template
             </label>
-            <div style={{
-              fontSize: 10,
-              color: '#a0aec0',
-              marginTop: 2,
-              marginLeft: 22
-            }}>
-              If unchecked, setting an existing variable will fail
-            </div>
-          </div>
-        </CollapsibleSection>
-      )}
-
-      {/* GetVariable Specific Settings */}
-      {isGetVariable && (
-        <CollapsibleSection 
-          title="Get Variable Configuration" 
-          collapsed={getVarCollapsed}
-          onToggle={() => setGetVarCollapsed(!getVarCollapsed)}
-        >
-          <TextAreaEditor
-            label="Default Value"
-            value={defaultValue}
-            fieldKey="defaultValue"
-            zodType={null as any}
-            onChange={(value) => handleFieldChange('defaultValue', value)}
-            placeholder="Value to use if variable doesn't exist (optional)..."
-            rows={2}
-          />
-
-          <div style={{ marginBottom: 16 }}>
-            <label style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              fontSize: 12,
-              color: '#e2e8f0',
-              cursor: 'pointer'
-            }}>
-              <input
-                type="checkbox"
-                checked={required}
-                onChange={(e) => handleFieldChange('required', e.target.checked)}
-                style={{
-                  width: 14,
-                  height: 14,
-                  cursor: 'pointer'
-                }}
-              />
-              Variable is required
-            </label>
-            <div style={{
-              fontSize: 10,
-              color: '#a0aec0',
-              marginTop: 2,
-              marginLeft: 22
-            }}>
-              If checked, execution will fail if variable doesn't exist and no default is provided
-            </div>
-          </div>
-        </CollapsibleSection>
-      )}
-
-      {/* Scope and Persistence */}
-      <CollapsibleSection 
-        title="Scope & Persistence" 
-        collapsed={scopeCollapsed}
-        onToggle={() => setScopeCollapsed(!scopeCollapsed)}
-      >
-        <SelectEditor
-          label="Scope"
-          value={scope}
-          fieldKey="scope"
-          options={SCOPE_OPTIONS}
-          zodType={null as any}
-          onChange={(value) => handleFieldChange('scope', value)}
-        />
-
-        <div style={{ marginBottom: 16 }}>
-          <label style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontSize: 12,
-            color: '#e2e8f0',
-            cursor: 'pointer'
-          }}>
-            <input
-              type="checkbox"
-              checked={persistent}
-              onChange={(e) => handleFieldChange('persistent', e.target.checked)}
-              style={{
-                width: 14,
-                height: 14,
-                cursor: 'pointer'
+            <TemplateEditor
+              value={template || value}
+              onChange={(val) => {
+                handleFieldChange('template', val);
+                handleFieldChange('value', val); // Maintain backward compatibility
               }}
+              onVariablesChange={(variables, extractedVariables) => {
+                handleFieldChange('extractedVariables', extractedVariables || []);
+                // Apply automatic type inference from the first variable (simplified)
+                if (extractedVariables && extractedVariables.length > 0) {
+                  const firstVar = extractedVariables[0];
+                  if (firstVar.inferredType && firstVar.inferredType !== 'auto') {
+                    handleFieldChange('variableType', firstVar.inferredType);
+                  }
+                  if (firstVar.defaultValue && !defaultValue) {
+                    handleFieldChange('defaultValue', firstVar.defaultValue);
+                  }
+                }
+              }}
+              placeholder="Enter value template... Use {variable} syntax for dynamic content."
+              showPreview={true}
+              autoComplete={true}
+              nodeType="setVariable"
             />
-            Persistent across sessions
-          </label>
-          <div style={{
-            fontSize: 10,
-            color: '#a0aec0',
-            marginTop: 2,
-            marginLeft: 22
-          }}>
-            Variable will be saved and restored between executions
-          </div>
-        </div>
-      </CollapsibleSection>
-
-      {/* Type Conversion Help */}
-      {variableType !== 'auto' && (
-        <CollapsibleSection 
-          title="Type Information" 
-          collapsed={typeInfoCollapsed}
-          onToggle={() => setTypeInfoCollapsed(!typeInfoCollapsed)}
-        >
-          <div style={{
-            background: '#1a202c',
-            border: '1px solid #4a5568',
-            borderRadius: 4,
-            padding: 12,
-            fontSize: 11,
-            color: '#e2e8f0',
-            lineHeight: 1.4
-          }}>
-            <div style={{ fontWeight: 500, marginBottom: 8 }}>
-              {VARIABLE_TYPES.find(t => t.value === variableType)?.label} Format:
+            <div style={{
+              fontSize: 10,
+              color: '#a0aec0',
+              marginTop: 4
+            }}>
+              Use natural language with {'{variable}'} syntax. Variables become input ports.
             </div>
             
-            {variableType === 'string' && (
-              <div>
-                <div>• Any text value</div>
-                <div>• Example: "Hello World"</div>
-              </div>
-            )}
-            
-            {variableType === 'number' && (
-              <div>
-                <div>• Numeric values (integer or decimal)</div>
-                <div>• Examples: 42, 3.14, -10</div>
-              </div>
-            )}
-            
-            {variableType === 'boolean' && (
-              <div>
-                <div>• true or false values</div>
-                <div>• Examples: true, false</div>
-                <div>• Also accepts: yes/no, 1/0</div>
-              </div>
-            )}
-            
-            {variableType === 'array' && (
-              <div>
-                <div>• JSON array format</div>
-                <div>• Examples: ["item1", "item2"], [1, 2, 3]</div>
-              </div>
-            )}
-            
-            {variableType === 'object' && (
-              <div>
-                <div>• JSON object format</div>
-                <div>• Example: {'{'}"name": "John", "age": 30{'}'}</div>
+            {/* Show type inference information (backward compatible) */}
+            {(nodeData.extractedVariables as any)?.length > 0 && (
+              <div style={{
+                fontSize: 10,
+                color: '#4299e1',
+                marginTop: 6,
+                padding: 6,
+                background: 'rgba(66, 153, 225, 0.1)',
+                borderRadius: 4,
+                border: '1px solid rgba(66, 153, 225, 0.3)'
+              }}>
+                <strong>🤖 Auto-detected:</strong> {' '}
+                {(nodeData.extractedVariables as any)?.map((v: any, idx: number) => (
+                  <span key={v.name || `var_${idx}`}>
+                    {v.name || 'variable'} ({v.inferredType || 'auto'})
+                    {v.defaultValue && ` = "${v.defaultValue}"`}
+                    {idx < (nodeData.extractedVariables as any).length - 1 ? ', ' : ''}
+                  </span>
+                )) || 'No variables detected'}
               </div>
             )}
           </div>
-        </CollapsibleSection>
-      )}
+        )}
 
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
-      >
-        <div style={{
-          background: '#1a202c',
-          border: '1px solid #4a5568',
-          borderRadius: 4,
-          padding: 12,
-          fontSize: 12,
-          color: '#e2e8f0'
-        }}>
-          <div style={{ marginBottom: 8, fontWeight: 500 }}>
-            {isSetVariable ? 'Set Variable' : 'Get Variable'} Configuration:
+        {isGetVariable && (
+          <div style={{
+            fontSize: 12,
+            color: '#a0aec0',
+            padding: 12,
+            background: 'rgba(66, 153, 225, 0.1)',
+            borderRadius: 6,
+            border: '1px solid rgba(66, 153, 225, 0.3)'
+          }}>
+            <strong>💡 Simplified Workflow:</strong> Variables are automatically managed by templates. 
+            This node retrieves values stored by template-based nodes.
           </div>
-          
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Variable:</span> {variableName || '〈not set〉'}
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Type:</span> {VARIABLE_TYPES.find(t => t.value === variableType)?.label}
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Scope:</span> {SCOPE_OPTIONS.find(s => s.value === scope)?.label}
-          </div>
-          
+        )}
+      </ProgressiveDisclosureSection>
+
+      {/* ADVANCED LEVEL: Technical settings (debug mode only) */}
+      {debugMode && (
+        <ProgressiveDisclosureSection
+          title="Advanced Settings"
+          level="advanced"
+          description="Technical configuration for developers"
+          defaultExpanded={false}
+          priority="optional"
+          fieldName="variableType"
+        >
+          <TextFieldEditor
+            label="Technical Variable Name"
+            value={variableName}
+            fieldKey="variableName"
+            zodType={null as any}
+            onChange={(value) => handleFieldChange('variableName', value)}
+            placeholder="Internal variable identifier..."
+          />
+
+          <SelectEditor
+            label="Variable Type"
+            value={variableType}
+            fieldKey="variableType"
+            options={VARIABLE_TYPES}
+            zodType={null as any}
+            onChange={(value) => handleFieldChange('variableType', value)}
+          />
+
           {isSetVariable && (
             <>
-              <div style={{ marginBottom: 4 }}>
-                <span style={{ color: '#a0aec0' }}>Allow Overwrite:</span> {allowOverwrite ? 'Yes' : 'No'}
-              </div>
-              {value && (
-                <div style={{ 
-                  marginTop: 8, 
-                  padding: 8, 
-                  background: 'rgba(66, 153, 225, 0.1)',
-                  borderRadius: 2
+              <div style={{ marginBottom: 16 }}>
+                <label style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  fontSize: 12,
+                  color: '#e2e8f0',
+                  cursor: 'pointer'
                 }}>
-                  <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
-                    Value to set:
-                  </div>
-                  <div style={{ fontFamily: 'monospace', fontSize: 11 }}>
-                    {value}
-                  </div>
-                </div>
-              )}
+                  <input
+                    type="checkbox"
+                    checked={allowOverwrite}
+                    onChange={(e) => handleFieldChange('allowOverwrite', e.target.checked)}
+                    style={{
+                      width: 14,
+                      height: 14,
+                      cursor: 'pointer'
+                    }}
+                  />
+                  Allow overwriting existing variable
+                </label>
+              </div>
+
+              <SelectEditor
+                label="Scope"
+                value={scope}
+                fieldKey="scope"
+                options={SCOPE_OPTIONS}
+                zodType={null as any}
+                onChange={(value) => handleFieldChange('scope', value)}
+              />
             </>
           )}
-          
+
           {isGetVariable && (
             <>
-              <div style={{ marginBottom: 4 }}>
-                <span style={{ color: '#a0aec0' }}>Required:</span> {required ? 'Yes' : 'No'}
-              </div>
-              {defaultValue && (
-                <div style={{ 
-                  marginTop: 8, 
-                  padding: 8, 
-                  background: 'rgba(66, 153, 225, 0.1)',
-                  borderRadius: 2
+              <div style={{ marginBottom: 16 }}>
+                <label style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  fontSize: 12,
+                  color: '#e2e8f0',
+                  cursor: 'pointer'
                 }}>
-                  <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
-                    Default value:
-                  </div>
-                  <div style={{ fontFamily: 'monospace', fontSize: 11 }}>
-                    {defaultValue}
-                  </div>
-                </div>
-              )}
+                  <input
+                    type="checkbox"
+                    checked={required}
+                    onChange={(e) => handleFieldChange('required', e.target.checked)}
+                    style={{
+                      width: 14,
+                      height: 14,
+                      cursor: 'pointer'
+                    }}
+                  />
+                  Variable is required
+                </label>
+              </div>
+
+              <TextFieldEditor
+                label="Default Value"
+                value={defaultValue}
+                fieldKey="defaultValue"
+                zodType={null as any}
+                onChange={(value) => handleFieldChange('defaultValue', value)}
+                placeholder="Fallback value if variable not found..."
+              />
             </>
           )}
-          
-          <div style={{ marginTop: 8, fontSize: 10, color: '#a0aec0' }}>
-            {persistent && '• Persistent across sessions'}
-          </div>
-        </div>
-      </CollapsibleSection>
+        </ProgressiveDisclosureSection>
+      )}
+
     </div>
   );
 };

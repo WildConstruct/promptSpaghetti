@@ -183,13 +183,13 @@ export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false)
             cursor: 'pointer' 
           }}
         >
-          Export File
+          📋 Share Template
         </button>
 
         {onExportBundle && (
           <button
             onClick={onExportBundle}
-            title="Export as bundle format for use with execution engine"
+            title="Export for use in production pipeline"
             style={{ 
               marginRight: 16, 
               padding: '6px 16px', 

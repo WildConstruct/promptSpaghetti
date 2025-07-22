@@ -45,6 +45,8 @@ import {
   OptimizationSettings 
 } from './components/GraphOptimization';
 import { StickyNotesManager } from './components/StickyNotes/StickyNotesManager';
+import { DirectorPreviewToolbar } from './components/DirectorToolbar/DirectorPreviewToolbar';
+import { ContextualHelpSystem, helpContentManager } from './components/ContextualHelp';
 import { useValidation } from './hooks/useValidation';
 import { useAutosave } from './hooks/useAutosave';
 import { useNodeUtils } from './hooks/useNodeUtils';
@@ -394,6 +396,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   const onConnect: OnConnect = useCallback(
     (connection: Connection) => {
       setEdges((eds) => addEdge(connection, eds));
+      
+      // Track progress for contextual help system
+      helpContentManager.updateProgress('connectionsBuilt', 1);
     },
     []
   );
@@ -438,6 +443,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
       globalAnimationManager.scheduleAnimation(() => {
         addNode(newNode);
         setNodes((prev) => [...prev, newNode]);
+        
+        // Track progress for contextual help system
+        helpContentManager.updateProgress('nodesCreated', 1);
         
         setTimeout(() => {
           setIsCreatingNode(false);
@@ -1017,6 +1025,58 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         }
       `}</style>
       
+      {/* Epic 8.3 - Director Preview Toolbar Integration */}
+      <DirectorPreviewToolbar
+        nodes={nodes}
+        edges={edges}
+        isPreviewOpen={previewOpen}
+        onPreviewToggle={() => {
+          if (previewOpen) {
+            setPreviewOpen(false);
+          } else {
+            const now = Date.now();
+            const sinceChange = now - lastChangeRef.current;
+            const run = () => {
+              runPreview({ nodes, edges });
+              setPreviewOpen(true);
+              
+              // Track progress for contextual help system
+              helpContentManager.updateProgress('previewsGenerated', 1);
+            };
+            if (sinceChange < 500) {
+              if (previewTimeoutRef.current) clearTimeout(previewTimeoutRef.current);
+              previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
+            } else {
+              run();
+            }
+          }
+        }}
+        onHighlightPath={(nodeIds, edgeIds) => {
+          // Highlight execution path on the canvas
+          setHighlightNodeIds(new Set(nodeIds));
+          setHighlightEdgeIds(new Set(edgeIds));
+        }}
+      />
+
+      {/* Epic 8.4 - Contextual Help System Integration */}
+      <ContextualHelpSystem
+        nodes={nodes}
+        edges={edges}
+        selectedNodeId={selectedNodeId}
+        selectedEdgeId={selectedEdgeId}
+        userLevel="beginner" // This could be dynamic based on user profile
+        enabled={true}
+        autoTrigger={true}
+        showProgressiveHints={true}
+        onHelpContentViewed={(contentId) => {
+          helpContentManager.markContentViewed(contentId);
+        }}
+        onUserLevelChange={(level) => {
+          console.log('User level changed to:', level);
+          // Could integrate with user profile management
+        }}
+      />
+
       <StatusBar
         statusMessage={statusMessage}
         errors={errors}
@@ -1026,6 +1086,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
           const run = () => {
             runPreview({ nodes, edges });
             setPreviewOpen(true);
+            
+            // Track progress for contextual help system
+            helpContentManager.updateProgress('previewsGenerated', 1);
           };
           if (sinceChange < 500) {
             if (previewTimeoutRef.current) clearTimeout(previewTimeoutRef.current);
