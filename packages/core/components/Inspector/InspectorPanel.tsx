@@ -2,6 +2,30 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ZodSchema } from 'zod';
 import { PropertiesSection } from './PropertiesSection';
 import { PreviewSection } from './PreviewSection';
+import { useUISettingsStore } from '../../stores/uiSettingsStore';
+
+// Map technical node types to filmmaker-friendly names
+const getFilmmakerFriendlyName = (nodeType: string): string => {
+  const friendlyNames: Record<string, string> = {
+    'WeightedChoice': 'Random Selection',
+    'Concat': 'Text Combiner', 
+    'Output': 'Final Output',
+    'Include': 'Scene Reference',
+    'SetVariable': 'Set Element',
+    'GetVariable': 'Use Element',
+    'Subject': 'Character/Object',
+    'Action': 'Action/Verb',
+    'Attribute': 'Description',
+    'Connector': 'Transition',
+    'Conditional': 'If/Then Logic',
+    'Sequential': 'Sequence',
+    'Markov': 'Smart Chain',
+    'WeightedAdvanced': 'Weighted Selection',
+    'PythonTransform': 'Text Transform'
+  };
+  
+  return friendlyNames[nodeType] || nodeType;
+};
 
 export interface InspectorPanelProps {
   node: any | null;
@@ -13,19 +37,17 @@ export interface InspectorPanelProps {
   maxWidth?: number;
 }
 
-export const InspectorPanel: React.FC<InspectorPanelProps> = ({
-  node,
-  schema,
-  onChange,
-  onClose,
-  initialWidth = 320,
-  minWidth = 280,
-  maxWidth = 600
-}) => {
-  const [width, setWidth] = useState(initialWidth);
-  const [isResizing, setIsResizing] = useState(false);
+export   const [isResizing, setIsResizing] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const resizeRef = useRef<HTMLDivElement>(null);
+  const { 
+    debugMode, 
+    setDebugMode, 
+    shouldShowTechnicalFields,
+    complexityLevel,
+    setComplexityLevel,
+    shouldShowAdvancedFeatures
+  } = useUISettingsStore();
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -181,10 +203,55 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
       >
         {!collapsed && (
           <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
-            <span style={{ color: '#4CAF50' }}>🔍</span> {node.data?.label || node.data?.nodeType || node.type} Properties
+            <span style={{ color: '#4CAF50' }}>🔍</span> {node.data?.label || getFilmmakerFriendlyName(node.data?.nodeType || node.type)} Properties
           </h3>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {!collapsed && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <select
+                value={complexityLevel}
+                onChange={(e) => setComplexityLevel(e.target.value as 'basic' | 'advanced' | 'expert')}
+                style={{
+                  background: '#2d3748',
+                  border: '1px solid #4a5568',
+                  borderRadius: 4,
+                  color: '#e2e8f0',
+                  fontSize: 10,
+                  padding: '2px 4px',
+                  cursor: 'pointer'
+                }}
+                title="Choose interface complexity level"
+              >
+                <option value="basic">🎭 Basic</option>
+                <option value="advanced">⚡ Advanced</option>
+                <option value="expert">👨‍💻 Debug</option>
+              </select>
+              <div
+                style={{
+                  fontSize: 8,
+                  color: '#a0aec0',
+                  fontWeight: 500,
+                  padding: '1px 4px',
+                  background: 
+                    complexityLevel === 'basic' ? '#22543d' : 
+                    complexityLevel === 'advanced' ? '#2a4365' : '#553c9a',
+                  borderRadius: 2,
+                  display: 'inline-block',
+                  minWidth: 40,
+                  textAlign: 'center'
+                }}
+                title={
+                  complexityLevel === 'basic' ? 'Basic: Essential fields only' :
+                  complexityLevel === 'advanced' ? 'Advanced: Power user options' :
+                  'Debug: All technical details'
+                }
+              >
+                {complexityLevel === 'basic' ? 'BASIC' : 
+                 complexityLevel === 'advanced' ? 'ADV' : 'DBG'}
+              </div>
+            </div>
+          )}
           {!collapsed && onClose && (
             <button
               onClick={onClose}

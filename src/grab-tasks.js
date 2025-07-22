@@ -86,6 +86,9 @@ async function grabTasksSafely() {
     
     if (priorityOnly) {
       unassignedTasks = unassignedTasks.filter(task => 
+        // PRIORITY 1: Epic 8 Demo-Ready Proof of Concept
+        (task.epic === 'Epic 8' || task.tags?.includes('epic-8') || task.tags?.includes('wild-construct')) ||
+        // PRIORITY 2: Authentication and File Browser
         task.priority === 'high' || 
         task.metadata?.source === 'priority-automation' ||
         (task.story && (task.story.includes('20.1') || task.story.includes('20.2'))) ||
@@ -95,15 +98,17 @@ async function grabTasksSafely() {
       console.log(`🎯 Filtering to priority tasks only`);
     }
     
-    // Sort by business priority (authentication > file-browser > other)
+    // Sort by business priority (Epic 8 > authentication > file-browser > other)
     unassignedTasks = unassignedTasks.sort((a, b) => {
       const getPriority = (task) => {
-        // Highest priority: Authentication tasks (Story 20.1 OR auth tag)
-        if (task.story?.includes('20.1') || task.tags?.includes('auth')) return 1;
-        // Second priority: File browser tasks (Story 20.2 OR file-browser tag) 
-        if (task.story?.includes('20.2') || task.tags?.includes('file-browser')) return 2;
-        // Third priority: Other priority automation tasks
-        if (task.metadata?.source === 'priority-automation') return 3;
+        // Highest priority: Epic 8 Demo-Ready Proof of Concept
+        if (task.epic === 'Epic 8' || task.tags?.includes('epic-8') || task.tags?.includes('wild-construct')) return 1;
+        // Second priority: Authentication tasks (Story 20.1 OR auth tag)
+        if (task.story?.includes('20.1') || task.tags?.includes('auth')) return 2;
+        // Third priority: File browser tasks (Story 20.2 OR file-browser tag) 
+        if (task.story?.includes('20.2') || task.tags?.includes('file-browser')) return 3;
+        // Fourth priority: Other priority automation tasks
+        if (task.metadata?.source === 'priority-automation') return 4;
         // Fourth priority: High priority tasks
         if (task.priority === 'high') return 4;
         // Lower priority: Everything else

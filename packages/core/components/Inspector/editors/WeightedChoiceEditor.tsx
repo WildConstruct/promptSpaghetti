@@ -1,25 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { VariationList } from '../VariationList';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { WeightSlider } from '../WeightSlider';
+import { WeightControlSlider, WeightControlOption, useWeightControlIntegration } from '../WeightControlSlider';
+import { useRealTimePreview } from '../../../hooks/useRealTimePreview';
+import { useUISettingsStore } from '../../../stores/uiSettingsStore';
 
 export interface WeightedChoiceEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // WeightedChoice specific props can be added here
 }
 
-export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props) => {
-  const { nodeData, onChange, nodeId } = props;
-  
+export   
   // WeightedChoice specific fields
   const choices = (nodeData.choices as string[]) || [];
   const weights = (nodeData.weights as number[]) || [];
   const name = (nodeData.name as string) || (nodeData.label as string) || 'WeightedChoice';
 
+  // UI settings
+  const { complexityLevel, shouldShowTechnicalFields } = useUISettingsStore();
+
   // State for collapsible sections
   const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
   const [choicesCollapsed, setChoicesCollapsed] = useState(false);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  const [weightsCollapsed, setWeightsCollapsed] = useState(false);
+  const [previewCollapsed, setPreviewCollapsed] = useState(complexityLevel === 'basic');
+
+  // Convert choices and weights to WeightControlOptions
+  const weightOptions: WeightControlOption[] = choices.map((choice, index) => ({
+    id: `choice_${index}`,
+    text: choice,
+    weight: weights[index] || 1
+  }));
+
+  // Real-time preview integration
+  const {
+    variants,
+    isGenerating,
+    performance,
+    error,
+    requestPreview,
+    forcePreview,
+    refreshVariant,
+    clearVariants,
+    getPerformanceInsights
+  } = useRealTimePreview(
+    name || 'WeightedChoice Result: {weighted_choice}',
+    {},
+    {
+      maxVariants: 5,
+      debounceMs: 300,
+      enablePerformanceTracking: complexityLevel !== 'basic'
+    }
+  );
+
+  // Weight control integration
+  const { handleOptionsChange } = useWeightControlIntegration(
+    weightOptions,
+    useCallback((newOptions: WeightControlOption[]) => {
+      // Update choices and weights
+      const newChoices = newOptions.map(option => option.text);
+      const newWeights = newOptions.map(option => option.weight);
+      
+      onChange({
+        choices: newChoices,
+        weights: newWeights
+      });
+      
+      // Trigger real-time preview update
+      requestPreview(newOptions);
+    }, [onChange, requestPreview])
+  );
 
   const handleChoicesChange = (newChoices: string[]) => {
     onChange({
@@ -29,9 +81,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
     });
   };
 
-  const handleWeightChange = (index: number, weight: number) => {
-    const newWeights = [...weights];
-    newWeights[index] = Math.max(0, weight); // Ensure non-negative weights
+      newWeights[index] = Math.max(0, weight); // Ensure non-negative weights
     onChange({ weights: newWeights });
   };
 
@@ -98,152 +148,174 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = (props)
           />
         </div>
 
-        {/* Weight Controls */}
-        {choices.length > 0 && (
-          <div style={{ marginTop: 16 }}>
-            <label style={{ 
-              display: 'block', 
-              fontWeight: 500, 
-              marginBottom: 8,
-              color: '#e2e8f0',
-              fontSize: 12
-            }}>
-              Weights
-            </label>
-            
-            <div style={{ 
-              background: '#2d3748', 
-              border: '1px solid #4a5568', 
-              borderRadius: 4,
-              padding: 8
-            }}>
-              {choices.map((choice, index) => {
-                const weight = weights[index] || 1;
-                const percentage = weights.length > 0 
-                  ? Math.round((weight / weights.reduce((sum, w) => sum + w, 0)) * 100)
-                  : Math.round(100 / choices.length);
-
-                return (
-                  <div 
-                    key={index} 
-                    style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      marginBottom: index < choices.length - 1 ? 8 : 0,
-                      gap: 8
-                    }}
-                  >
-                    <div style={{ 
-                      flex: 1, 
-                      fontSize: 12, 
-                      color: '#e2e8f0',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      {choice || `Choice ${index + 1}`}
-                    </div>
-                    
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.1"
-                      value={weight}
-                      onChange={(e) => handleWeightChange(index, parseFloat(e.target.value) || 0)}
-                      style={{
-                        width: 60,
-                        padding: 4,
-                        border: '1px solid #4a5568',
-                        borderRadius: 2,
-                        background: '#1a202c',
-                        color: '#e2e8f0',
-                        fontSize: 11,
-                        textAlign: 'center'
-                      }}
-                    />
-                    
-                    <div style={{ 
-                      width: 40, 
-                      fontSize: 10, 
-                      color: '#a0aec0',
-                      textAlign: 'right'
-                    }}>
-                      {percentage}%
-                    </div>
-                  </div>
-                );
-              })}
-              
-              {/* Total Weight Display */}
-              <div style={{ 
-                marginTop: 8, 
-                paddingTop: 8, 
-                borderTop: '1px solid #4a5568',
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontSize: 11,
-                color: '#a0aec0'
-              }}>
-                <span>Total Weight:</span>
-                <span>{weights.reduce((sum, w) => sum + w, 0).toFixed(1)}</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Quick Actions */}
-        {choices.length > 1 && (
-          <div style={{ 
-            marginTop: 12, 
-            display: 'flex', 
-            gap: 8,
-            flexWrap: 'wrap'
-          }}>
-            <button
-              onClick={() => {
-                const equalWeight = 1;
-                const newWeights = choices.map(() => equalWeight);
-                onChange({ weights: newWeights });
-              }}
-              style={{
-                padding: '4px 8px',
-                fontSize: 10,
-                background: '#4a5568',
-                border: 'none',
-                borderRadius: 2,
-                color: '#e2e8f0',
-                cursor: 'pointer'
-              }}
-            >
-              Equal Weights
-            </button>
-            
-            <button
-              onClick={() => {
-                const randomWeights = choices.map(() => Math.random() * 10 + 1);
-                onChange({ weights: randomWeights });
-              }}
-              style={{
-                padding: '4px 8px',
-                fontSize: 10,
-                background: '#4a5568',
-                border: 'none',
-                borderRadius: 2,
-                color: '#e2e8f0',
-                cursor: 'pointer'
-              }}
-            >
-              Random Weights
-            </button>
-          </div>
-        )}
       </CollapsibleSection>
 
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+      {/* Real-Time Weight Controls */}
+      {choices.length > 0 && (
+        <CollapsibleSection 
+          title="Weight Controls" 
+          collapsed={weightsCollapsed}
+          onToggle={() => setWeightsCollapsed(!weightsCollapsed)}
+        >
+          <WeightControlSlider
+            options={weightOptions}
+            onOptionsChange={handleOptionsChange}
+            onPreviewRequest={requestPreview}
+            showPreview={true}
+            previewDebounceMs={300}
+          />
+        </CollapsibleSection>
+      )}
+
+      {/* Real-Time Preview Results */}
+      {variants.length > 0 && (
+        <CollapsibleSection 
+          title="Real-Time Preview" 
+          collapsed={previewCollapsed}
+          onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+        >
+          <div style={{ marginBottom: 12 }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 8
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 500, color: '#e2e8f0' }}>
+                Live Results {isGenerating && '⚡'}
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  onClick={() => forcePreview(weightOptions)}
+                  disabled={isGenerating}
+                  style={{
+                    padding: '2px 6px',
+                    fontSize: 10,
+                    background: '#4a5568',
+                    border: 'none',
+                    borderRadius: 2,
+                    color: '#e2e8f0',
+                    cursor: isGenerating ? 'wait' : 'pointer',
+                    opacity: isGenerating ? 0.6 : 1
+                  }}
+                >
+                  🔄 Refresh
+                </button>
+                <button
+                  onClick={clearVariants}
+                  style={{
+                    padding: '2px 6px',
+                    fontSize: 10,
+                    background: '#4a5568',
+                    border: 'none',
+                    borderRadius: 2,
+                    color: '#e2e8f0',
+                    cursor: 'pointer'
+                  }}
+                >
+                  🗑️ Clear
+                </button>
+              </div>
+            </div>
+
+            {error && (
+              <div style={{
+                padding: 8,
+                background: '#fed7d7',
+                color: '#c53030',
+                borderRadius: 4,
+                fontSize: 12,
+                marginBottom: 8
+              }}>
+                Error: {error}
+              </div>
+            )}
+
+            <div style={{
+              background: '#1a202c',
+              border: '1px solid #4a5568',
+              borderRadius: 6,
+              padding: 12
+            }}>
+              {variants.map((variant, index) => (
+                <div
+                  key={variant.id}
+                  style={{
+                    marginBottom: index < variants.length - 1 ? 12 : 0,
+                    padding: 8,
+                    background: '#2d3748',
+                    borderRadius: 4
+                  }}
+                >
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 4
+                  }}>
+                    <div style={{
+                      fontSize: 10,
+                      color: '#a0aec0'
+                    }}>
+                      Variant {index + 1} • Seed {variant.seed}
+                    </div>
+                    <button
+                      onClick={() => refreshVariant(variant.id)}
+                      style={{
+                        padding: '1px 4px',
+                        fontSize: 9,
+                        background: 'none',
+                        border: '1px solid #4a5568',
+                        borderRadius: 2,
+                        color: '#a0aec0',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      🔄
+                    </button>
+                  </div>
+                  <div style={{
+                    color: '#e2e8f0',
+                    fontSize: 12,
+                    lineHeight: 1.4
+                  }}>
+                    "{variant.result}"
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Performance Insights (Advanced/Debug only) */}
+            {shouldShowTechnicalFields() && (
+              <div style={{
+                marginTop: 12,
+                padding: 8,
+                background: '#2d3748',
+                borderRadius: 4,
+                fontSize: 10,
+                color: '#a0aec0'
+              }}>
+                <div style={{ marginBottom: 4, fontWeight: 500 }}>Performance:</div>
+                <div>Avg. time: {performance.averageExecutionTime.toFixed(0)}ms</div>
+                <div>Generations: {performance.totalGenerations}</div>
+                <div>Success rate: {performance.successRate.toFixed(1)}%</div>
+                {getPerformanceInsights().length > 0 && (
+                  <div style={{ marginTop: 4 }}>
+                    {getPerformanceInsights().join(' • ')}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </CollapsibleSection>
+      )}
+
+      {/* Legacy Preview (Basic Mode Fallback) */}
+      {complexityLevel === 'basic' && variants.length === 0 && (
+        <CollapsibleSection 
+          title="Preview" 
+          collapsed={previewCollapsed}
+          onToggle={() => setPreviewCollapsed(!previewCollapsed)}
       >
         <div style={{
           background: '#1a202c',

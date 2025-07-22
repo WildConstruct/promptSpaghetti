@@ -64,7 +64,8 @@ class WorkflowOrchestrator {
       'qa-pipeline': this.createQAPipelineWorkflow(),
       'health-check': this.createHealthCheckWorkflow(),
       'full-automation': this.createFullAutomationWorkflow(),
-      'priority-setup': this.createPrioritySetupWorkflow()
+      'priority-setup': this.createPrioritySetupWorkflow(),
+      'epic8-demo-ready': this.createEpic8DemoReadyWorkflow()
     };
     
     logger.info('Workflow orchestrator initialized', { 
@@ -317,6 +318,49 @@ class WorkflowOrchestrator {
           name: 'Analyze Available Tasks',
           command: 'node src/monitor-system.js --mode tasks',
           timeout: 30000
+        }
+      ]
+    };
+  }
+
+  // Create Epic 8 Demo-Ready workflow
+  createEpic8DemoReadyWorkflow() {
+    return {
+      name: 'Epic 8 Demo-Ready Proof of Concept',
+      description: 'Wild Construct film industry integration - comprehensive Epic 8 development coordination',
+      parallel: false,
+      steps: [
+        {
+          id: 'epic8-setup',
+          name: 'Ensure Epic 8 Tasks Available',
+          command: 'node src/create-epic8-demo-tasks.js',
+          timeout: 60000,
+          continueOnError: true
+        },
+        {
+          id: 'system-health',
+          name: 'Verify System Health for Epic 8',
+          command: 'node src/fix-system.js --health-check',
+          timeout: 45000
+        },
+        {
+          id: 'epic8-task-analysis',
+          name: 'Analyze Epic 8 Task Distribution',
+          command: 'node src/monitor-system.js --mode tasks',
+          timeout: 30000
+        },
+        {
+          id: 'priority-alignment',
+          name: 'Align System Priorities with Epic 8',
+          command: 'node src/fix-system.js --module epic-assignments',
+          timeout: 90000,
+          conditions: ['system-health.healthScore >= 85']
+        },
+        {
+          id: 'epic8-progress-report',
+          name: 'Generate Epic 8 Progress Report',
+          command: 'node src/analyze-system.js epics',
+          timeout: 60000
         }
       ]
     };
@@ -794,6 +838,7 @@ class WorkflowOrchestrator {
     });
     
     console.log('\n🎯 Quick Commands:');
+    console.log('   Epic 8 Demo Ready: --workflow epic8-demo-ready');
     console.log('   Daily maintenance: --workflow daily-maintenance');
     console.log('   Health check: --workflow health-check');
     console.log('   QA pipeline: --workflow qa-pipeline');
@@ -832,6 +877,7 @@ async function main() {
     console.log('  --parallel             Force parallel execution (where applicable)');
     console.log('');
     console.log('Workflows:');
+    console.log('  epic8-demo-ready      Epic 8 Demo-Ready Proof of Concept (NEW)');
     console.log('  daily-maintenance      System health and maintenance');
     console.log('  epic-completion        Complete epic workflow');
     console.log('  qa-pipeline           QA automation pipeline');

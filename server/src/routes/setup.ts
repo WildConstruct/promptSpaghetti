@@ -9,6 +9,12 @@ import { z } from 'zod';
 import { executeGraph, initializeAnalytics } from '../engine';
 import { Graph } from '../../../packages/core/graphSchema';
 import { validateGraph } from '../graphValidator';
+import { GraphExecutionTracker, ExecutionPathAnalyzer } from '../../../packages/core/execution/ExecutionTracker.js';
+import { 
+  PreviewResultWithPath,
+  ExecutionPath,
+  NodeHighlightStyle
+} from '../../../packages/core/types/ExecutionPath.js';
 import { initDatabase, healthCheck, getDatabase, runMigrations } from '../database/connection';
 import { correctionsRoutes } from './corrections';
 import { workspaceRoutes } from './workspace';
@@ -51,7 +57,7 @@ const PreviewRequestSchema = z.object({
 type PreviewRequest = z.infer<typeof PreviewRequestSchema>;
 
 /**
- * Generate multiple outputs from a graph using different seeds
+ * Generate multiple outputs from a graph using different seeds with execution path tracking
  */
 export async function generatePreviewOutputs(
   graph: Graph, 
@@ -59,9 +65,10 @@ export async function generatePreviewOutputs(
   seedStart: number,
   sessionId?: string,
   userId?: number
-): Promise<Array<{seed: number, output: string}>> {
-  const results = [];
-  
+): Promise<PreviewResultWithPath[]> {
+  const results: PreviewResultWithPath[] = [];
+  const executionPaths: ExecutionPath[] = [];
+    
   for (let i = 0; i < runs; i++) {
     const seed = seedStart + i;
     const graphWithSeed: Graph = {
@@ -69,19 +76,84 @@ export async function generatePreviewOutputs(
       seed
     };
     
+    const startTime = Date.now();
+    
     try {
-      const outputs = await executeGraph(graphWithSeed, sessionId, userId);
-      results.push({
+      // The executeGraph function now handles execution tracking internally
+      const executionResult = await executeGraph(graphWithSeed, sessionId, userId);
+      const endTime = Date.now();
+      
+      const executionPath = executionResult.executionPath;
+      if (executionPath) {
+        executionPaths.push(executionPath);
+      }
+      
+      // Generate debugging information
+      const debugInfo = executionPath 
+        ? ExecutionPathAnalyzer.generateDebugInfo(executionPath)
+        : {
+            performanceBreakdown: {},
+            bottleneckNodes: [],
+            randomizationSummary: 'No execution path data available'
+          };
+      
+      const result: PreviewResultWithPath = {
         seed,
-        output: outputs[0] || ''
-      });
+        output: executionResult.outputs[0] || '',
+        executionTimeMs: endTime - startTime,
+        usedNodeIds: executionPath?.nodeExecutionOrder || [],
+        usedEdgeIds: [], // Will be calculated from execution flow
+        executionPath,
+        debugInfo: {
+          nodeExecutionOrder: executionPath?.nodeExecutionOrder || [],
+          randomChoices: executionPath?.randomizationPoints || [],
+          performanceBreakdown: debugInfo.performanceBreakdown
+        }
+      };
+      
+      results.push(result);
     } catch (error: unknown) {
       console.error(`Error generating preview for seed ${seed}:`, error);
-      results.push({
+      const errorResult: PreviewResultWithPath = {
         seed,
-        output: `Error: ${error instanceof Error ? error.message : String(error)}`
-      });
+        output: '',
+        error: error instanceof Error ? error.message : String(error),
+        executionTimeMs: Date.now() - startTime,
+        usedNodeIds: [],
+        usedEdgeIds: [],
+        debugInfo: {
+          nodeExecutionOrder: [],
+          randomChoices: [],
+          performanceBreakdown: {}
+        }
+      };
+      
+      results.push(errorResult);
     }
+  }
+  
+  // Analyze execution paths for variance and patterns
+  if (executionPaths.length > 1) {
+    const variance = ExecutionPathAnalyzer.calculatePathVariance(executionPaths);
+    const patterns = ExecutionPathAnalyzer.findCommonPatterns(executionPaths);
+    const pathColors = ExecutionPathAnalyzer.assignPathColors(executionPaths);
+    
+    // Add analysis data to results
+    results.forEach((result, index) => {
+      if (result.executionPath) {
+        result.pathVisualization = {
+          executionPath: result.executionPath,
+          pathColor: pathColors.get(result.executionPath.id) || '#6B7280',
+          highlightedNodes: result.executionPath.nodeExecutionOrder,
+          executionFlow: [], // Would be calculated from execution path
+          variance: variance,
+          creativityScore: result.executionPath.randomizationPoints.length / Math.max(
+            1,
+            result.executionPath.steps.length
+          )
+        };
+      }
+    });
   }
   
   return results;
@@ -352,8 +424,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
       
       try {
         const { graph, runs = 5, seedStart = 1 } = request.body;
-        const validatedInput = PreviewRequestSchema.parse(request.body);
-        const validationResult = validateGraph(graph);
+                const validationResult = validateGraph(graph);
         
         if (!validationResult.valid) {
           reply.status(400).send({

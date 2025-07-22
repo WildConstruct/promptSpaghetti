@@ -5,7 +5,59 @@ import { z } from 'zod';
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 
 /**
+ * Epic 8.6: Enhanced VFX/ControlNet parameter structures
+ */
+export const ControlNetParametersSchema = z.object({
+  poseGuidance: z.object({
+    enabled: z.boolean().default(false),
+    strength: z.number().min(0).max(2).default(1.0),
+    startStep: z.number().min(0).max(1000).default(0),
+    endStep: z.number().min(0).max(1000).default(1000),
+    keypoints: z.array(z.object({
+      x: z.number(),
+      y: z.number(),
+      confidence: z.number().min(0).max(1)
+    })).optional()
+  }).optional(),
+  depthMaps: z.object({
+    enabled: z.boolean().default(false),
+    strength: z.number().min(0).max(2).default(1.0),
+    preprocessor: z.enum(['depth_midas', 'depth_zoe', 'depth_leres']).default('depth_midas')
+  }).optional(),
+  edgeDetection: z.object({
+    enabled: z.boolean().default(false),
+    strength: z.number().min(0).max(2).default(1.0),
+    preprocessor: z.enum(['canny', 'hed', 'scribble', 'pidinet']).default('canny'),
+    lowThreshold: z.number().min(0).max(255).default(100),
+    highThreshold: z.number().min(0).max(255).default(200)
+  }).optional(),
+  animationSequence: z.object({
+    frameCount: z.number().min(1).max(10000).default(1),
+    fps: z.number().min(1).max(60).default(24),
+    interpolationMethod: z.enum(['linear', 'cubic', 'bezier']).default('linear'),
+    keyframes: z.array(z.object({
+      frame: z.number(),
+      parameters: z.record(z.string(), z.unknown())
+    })).default([])
+  }).optional(),
+  cameraParameters: z.object({
+    fov: z.number().min(1).max(180).default(70),
+    aspectRatio: z.number().min(0.1).max(10).default(1.777), // 16:9
+    nearPlane: z.number().min(0.001).max(1000).default(0.1),
+    farPlane: z.number().min(1).max(10000).default(1000),
+    position: z.tuple([z.number(), z.number(), z.number()]).default([0, 0, 5]),
+    rotation: z.tuple([z.number(), z.number(), z.number()]).default([0, 0, 0])
+  }).optional(),
+  billboardProjection: z.object({
+    enabled: z.boolean().default(false),
+    targetResolution: z.tuple([z.number(), z.number()]).default([1920, 1080]),
+    projectionMatrix: z.array(z.number()).length(16).optional() // 4x4 matrix
+  }).optional()
+});
+
+/**
  * GeneratorBundle schema matching the Randomizer Engine's expected format
+ * Epic 8.6: Enhanced with VFX/ControlNet compatibility
  */
 export const GeneratorBundleSchema = z.object({
   metadata: z.object({
@@ -16,6 +68,12 @@ export const GeneratorBundleSchema = z.object({
     debug: z.object({
       seed: z.number().optional(),
       originGraphGuid: z.string().optional()
+    }).optional(),
+    // Epic 8.6: VFX pipeline metadata
+    vfx: z.object({
+      exportFormat: z.literal('controlnet-compatible').default('controlnet-compatible'),
+      targetPipeline: z.enum(['stable-diffusion', 'midjourney', 'dalle', 'custom']).default('stable-diffusion'),
+      compatibilityVersion: z.string().default('1.0.0')
     }).optional()
   }),
   variables: z.record(z.string(), z.unknown()),
@@ -54,10 +112,350 @@ export const GeneratorBundleSchema = z.object({
     alternatives: z.array(z.string()).optional()
   }),
   lockedValues: z.record(z.string(), z.string()).optional(),
-  seed: z.number().optional()
+  seed: z.number().optional(),
+  // Epic 8.6: ControlNet integration parameters
+  controlNet: ControlNetParametersSchema.optional(),
+  // Epic 8.6 Task 3: Scene data integration
+  sceneData: SceneDataSchema.optional()
 });
 
 export type GeneratorBundle = z.infer<typeof GeneratorBundleSchema>;
+export type ControlNetParameters = z.infer<typeof ControlNetParametersSchema>;
+
+/**
+ * Epic 8.6 Task 3: Scene Data Integration Schema
+ * Professional scene data structure for film production workflows
+ */
+export const SceneDataSchema = z.object({
+  camera: z.object({
+    position: z.object({
+      x: z.number().default(0),
+      y: z.number().default(0), 
+      z: z.number().default(5)
+    }),
+    angle: z.object({
+      pitch: z.number().min(-90).max(90).default(0), // degrees
+      yaw: z.number().min(-180).max(180).default(0), // degrees  
+      roll: z.number().min(-180).max(180).default(0) // degrees
+    }),
+    distance: z.number().min(0.1).max(1000).default(5),
+    lens: z.object({
+      focalLength: z.number().min(10).max(500).default(50), // mm
+      aperture: z.number().min(1).max(22).default(2.8), // f-stop
+      focusDistance: z.number().min(0.1).max(1000).default(10) // meters
+    }).optional(),
+    movement: z.object({
+      type: z.enum(['static', 'pan', 'tilt', 'dolly', 'crane', 'handheld']).default('static'),
+      speed: z.enum(['slow', 'medium', 'fast']).default('medium'),
+      smoothness: z.number().min(0).max(1).default(0.8)
+    }).optional()
+  }),
+  lighting: z.object({
+    timeOfDay: z.enum(
+      ['dawn',
+      'morning',
+      'noon',
+      'afternoon',
+      'dusk',
+      'night',
+      'golden-hour',
+      'blue-hour']
+    ).default('noon'),
+    weather: z.enum(['clear', 'cloudy', 'overcast', 'foggy', 'rainy', 'stormy', 'snowy']).default('clear'),
+    mood: z.enum(['bright', 'dramatic', 'soft', 'harsh', 'moody', 'ethereal', 'cinematic']).default('bright'),
+    keyLight: z.object({
+      intensity: z.number().min(0).max(100).default(80),
+      temperature: z.number().min(2000).max(10000).default(5600), // Kelvin
+      angle: z.number().min(0).max(360).default(45) // degrees from subject
+    }).optional(),
+    fillLight: z.object({
+      intensity: z.number().min(0).max(100).default(40),
+      temperature: z.number().min(2000).max(10000).default(5600)
+    }).optional(),
+    backgroundColor: z.object({
+      intensity: z.number().min(0).max(100).default(20),
+      temperature: z.number().min(2000).max(10000).default(5600)
+    }).optional(),
+    ambient: z.object({
+      intensity: z.number().min(0).max(100).default(30),
+      color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#FFFFFF')
+    }).optional()
+  }),
+  environment: z.object({
+    setting: z.enum([
+      'interior-home', 'interior-office', 'interior-studio', 'interior-warehouse',
+      'exterior-urban', 'exterior-nature', 'exterior-beach', 'exterior-mountain',
+      'exterior-forest', 'exterior-desert', 'exterior-space', 'abstract'
+    ]).default('interior-studio'),
+    atmosphere: z.enum(['calm', 'tense', 'mysterious', 'energetic', 'peaceful', 'chaotic', 'surreal']).default('calm'),
+    scale: z.enum(['intimate', 'medium', 'wide', 'epic', 'macro', 'aerial']).default('medium'),
+    depth: z.object({
+      foreground: z.string().optional(),
+      midground: z.string().optional(), 
+      background: z.string().optional()
+    }).optional(),
+    props: z.array(z.string()).default([]),
+    postProcessing: z.object({
+      colorGrading: z.enum(['natural', 'warm', 'cool', 'vintage', 'high-contrast', 'desaturated']).default('natural'),
+      vignette: z.number().min(0).max(1).default(0),
+      filmGrain: z.number().min(0).max(1).default(0),
+      bloom: z.number().min(0).max(1).default(0)
+    }).optional()
+  }),
+  metadata: z.object({
+    sceneId: z.string().optional(),
+    shotNumber: z.string().optional(), 
+    takeNumber: z.number().default(1),
+    director: z.string().optional(),
+    cinematographer: z.string().optional(),
+    notes: z.string().optional()
+  }).optional()
+});
+
+export type SceneData = z.infer<typeof SceneDataSchema>;
+
+/**
+ * Epic 8.6: Extract ControlNet parameters from graph nodes
+ * Looks for nodes that have VFX-related configuration
+ */
+function extractControlNetParameters(graph: Graph): Partial<ControlNetParameters> {
+  const controlNetParams: Partial<ControlNetParameters> = {};
+  
+  // Look for nodes with VFX metadata or specific node types that indicate ControlNet usage
+  graph.nodes.forEach(node => {
+    // Check for camera-related variables
+    if (node.type === 'SetVariable' && node.key) {
+      const key = node.key.toLowerCase();
+      if (key.includes('camera') || key.includes('fov') || key.includes('position')) {
+        if (!controlNetParams.cameraParameters) {
+          controlNetParams.cameraParameters = {
+            fov: 70,
+            aspectRatio: 1.777,
+            nearPlane: 0.1,
+            farPlane: 1000,
+            position: [0, 0, 5],
+            rotation: [0, 0, 0]
+          };
+        }
+        
+        // Extract camera values from variable nodes
+        if (key.includes('fov') && typeof node.value === 'number') {
+          controlNetParams.cameraParameters.fov = node.value;
+        }
+      }
+    }
+    
+    // Check for animation-related configurations
+    if (node.type === 'Sequential' && node.sequence && node.sequence.length > 1) {
+      controlNetParams.animationSequence = {
+        frameCount: node.sequence.length,
+        fps: 24,
+        interpolationMethod: 'linear',
+        keyframes: node.sequence.map((item, index) => ({
+          frame: index,
+          parameters: { text: item }
+        }))
+      };
+    }
+    
+    // Look for edge detection hints in node names/descriptions
+    if (node.id.toLowerCase().includes('edge') || node.id.toLowerCase().includes('canny')) {
+      controlNetParams.edgeDetection = {
+        enabled: true,
+        strength: 1.0,
+        preprocessor: 'canny',
+        lowThreshold: 100,
+        highThreshold: 200
+      };
+    }
+    
+    // Look for depth-related hints
+    if (node.id.toLowerCase().includes('depth') || node.id.toLowerCase().includes('3d')) {
+      controlNetParams.depthMaps = {
+        enabled: true,
+        strength: 1.0,
+        preprocessor: 'depth_midas'
+      };
+    }
+  });
+  
+  return controlNetParams;
+}
+
+/**
+ * Epic 8.6 Task 3: Extract scene data from graph nodes
+ * Analyzes graph for scene-related variables and configurations
+ */
+function extractSceneData(graph: Graph): Partial<SceneData> {
+  const sceneData: Partial<SceneData> = {
+    camera: {
+      position: { x: 0, y: 0, z: 5 },
+      angle: { pitch: 0, yaw: 0, roll: 0 },
+      distance: 5
+    },
+    lighting: {
+      timeOfDay: 'noon',
+      weather: 'clear',
+      mood: 'bright'
+    },
+    environment: {
+      setting: 'interior-studio',
+      atmosphere: 'calm',
+      scale: 'medium',
+      props: []
+    }
+  };
+
+  // Extract scene data from variable nodes
+  graph.nodes.forEach(node => {
+    if (node.type === 'SetVariable' && node.key && node.value) {
+      const key = node.key.toLowerCase();
+      const value = node.value;
+
+      // Camera position variables
+      if (key.includes('camera') || key.includes('position')) {
+        if (key.includes('x') && typeof value === 'number') {
+          sceneData.camera!.position.x = value;
+        }
+        if (key.includes('y') && typeof value === 'number') {
+          sceneData.camera!.position.y = value;
+        }
+        if (key.includes('z') && typeof value === 'number') {
+          sceneData.camera!.position.z = value;
+        }
+      }
+
+      // Camera angles
+      if (key.includes('angle') || key.includes('rotation')) {
+        if (key.includes('pitch') && typeof value === 'number') {
+          sceneData.camera!.angle.pitch = Math.max(-90, Math.min(90, value));
+        }
+        if (key.includes('yaw') && typeof value === 'number') {
+          sceneData.camera!.angle.yaw = Math.max(-180, Math.min(180, value));
+        }
+        if (key.includes('roll') && typeof value === 'number') {
+          sceneData.camera!.angle.roll = Math.max(-180, Math.min(180, value));
+        }
+      }
+
+      // Distance
+      if (key.includes('distance') && typeof value === 'number') {
+        sceneData.camera!.distance = Math.max(0.1, Math.min(1000, value));
+      }
+
+      // Lighting conditions
+      if (key.includes('time') || key.includes('lighting')) {
+        const timeKeywords = ['dawn', 'morning', 'noon', 'afternoon', 'dusk', 'night', 'golden', 'blue'];
+        const stringValue = String(value).toLowerCase();
+        for (const keyword of timeKeywords) {
+          if (stringValue.includes(keyword)) {
+            if (keyword === 'golden') sceneData.lighting!.timeOfDay = 'golden-hour';
+            else if (keyword === 'blue') sceneData.lighting!.timeOfDay = 'blue-hour';
+            else sceneData.lighting!.timeOfDay = keyword as any;
+            break;
+          }
+        }
+      }
+
+      // Weather
+      if (key.includes('weather')) {
+        const weatherKeywords = ['clear', 'cloudy', 'overcast', 'foggy', 'rainy', 'stormy', 'snowy'];
+        const stringValue = String(value).toLowerCase();
+        for (const keyword of weatherKeywords) {
+          if (stringValue.includes(keyword)) {
+            sceneData.lighting!.weather = keyword as any;
+            break;
+          }
+        }
+      }
+
+      // Mood/atmosphere
+      if (key.includes('mood') || key.includes('atmosphere')) {
+        const moodKeywords = ['bright', 'dramatic', 'soft', 'harsh', 'moody', 'ethereal', 'cinematic'];
+        const stringValue = String(value).toLowerCase();
+        for (const keyword of moodKeywords) {
+          if (stringValue.includes(keyword)) {
+            sceneData.lighting!.mood = keyword as any;
+            break;
+          }
+        }
+      }
+
+      // Environment setting
+      if (key.includes('setting') || key.includes('location')) {
+        const settingKeywords = [
+          'interior-home', 'interior-office', 'interior-studio', 'interior-warehouse',
+          'exterior-urban', 'exterior-nature', 'exterior-beach', 'exterior-mountain',
+          'exterior-forest', 'exterior-desert', 'exterior-space', 'abstract'
+        ];
+        const stringValue = String(value).toLowerCase();
+        for (const keyword of settingKeywords) {
+          if (stringValue.includes(keyword.replace('-', '')) || stringValue.includes(keyword)) {
+            sceneData.environment!.setting = keyword as any;
+            break;
+          }
+        }
+      }
+
+      // Props
+      if (key.includes('prop') && typeof value === 'string') {
+        if (!sceneData.environment!.props) sceneData.environment!.props = [];
+        sceneData.environment!.props.push(value);
+      }
+    }
+
+    // Extract scene hints from node names and content
+    const nodeId = node.id.toLowerCase();
+    const nodeContent = JSON.stringify(node).toLowerCase();
+
+    // Camera movement hints
+    if (nodeId.includes('pan') || nodeContent.includes('pan')) {
+      if (!sceneData.camera!.movement) sceneData.camera!.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
+      sceneData.camera!.movement.type = 'pan';
+    }
+    if (nodeId.includes('dolly') || nodeContent.includes('dolly')) {
+      if (!sceneData.camera!.movement) sceneData.camera!.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
+      sceneData.camera!.movement.type = 'dolly';
+    }
+
+    // Lighting hints from node content
+    if (nodeContent.includes('dramatic') || nodeContent.includes('cinematic')) {
+      sceneData.lighting!.mood = 'dramatic';
+    }
+    if (nodeContent.includes('soft') || nodeContent.includes('gentle')) {
+      sceneData.lighting!.mood = 'soft';
+    }
+
+    // Scale hints
+    if (nodeContent.includes('close') || nodeContent.includes('intimate')) {
+      sceneData.environment!.scale = 'intimate';
+    }
+    if (nodeContent.includes('wide') || nodeContent.includes('vast')) {
+      sceneData.environment!.scale = 'wide';
+    }
+    if (nodeContent.includes('epic') || nodeContent.includes('grand')) {
+      sceneData.environment!.scale = 'epic';
+    }
+  });
+
+  // Generate scene metadata if we have enough information
+  const hasSceneData = 
+    sceneData.camera?.position.x !== 0 || 
+    sceneData.camera?.position.y !== 0 || 
+    sceneData.camera?.position.z !== 5 ||
+    sceneData.lighting?.timeOfDay !== 'noon' ||
+    sceneData.environment?.setting !== 'interior-studio';
+
+  if (hasSceneData) {
+    sceneData.metadata = {
+      sceneId: `scene-${Date.now()}`,
+      takeNumber: 1,
+      notes: 'Auto-generated scene data from graph variables'
+    };
+  }
+
+  return sceneData;
+}
 
 /**
  * Converts a graph to a generator bundle format
@@ -71,9 +469,14 @@ export function graphToBundle(
     name: string;
     version?: string;
     author?: string;
+    // Epic 8.6: ControlNet integration options
+    controlNetEnabled?: boolean;
+    targetPipeline?: 'stable-diffusion' | 'midjourney' | 'dalle' | 'custom';
+    // Epic 8.6 Task 3: Scene data integration options
+    includeSceneData?: boolean;
   }
 ): GeneratorBundle {
-  // Create default metadata
+  // Create default metadata with Epic 8.6 VFX enhancements
   const metadata = {
     name: options.name,
     version: options.version || '1.0.0',
@@ -82,7 +485,13 @@ export function graphToBundle(
     debug: {
       seed: typeof graph.seed === 'number' ? graph.seed : undefined,
       originGraphGuid: undefined // Could be added as an optional parameter if needed
-    }
+    },
+    // Epic 8.6: VFX pipeline metadata
+    vfx: options.controlNetEnabled ? {
+      exportFormat: 'controlnet-compatible' as const,
+      targetPipeline: options.targetPipeline || 'stable-diffusion',
+      compatibilityVersion: '1.0.0'
+    } : undefined
   };
 
   // Initialize bundle structure
@@ -95,6 +504,51 @@ export function graphToBundle(
       alternatives: []
     },
     seed: typeof graph.seed === 'number' ? graph.seed : undefined
+  };
+
+  // Epic 8.6: Extract and apply ControlNet parameters if enabled
+  if (options.controlNetEnabled) {
+    const extractedParams = extractControlNetParameters(graph);
+    
+    // Merge extracted parameters with defaults
+    bundle.controlNet = {
+      poseGuidance: extractedParams.poseGuidance || {
+        enabled: false,
+        strength: 1.0,
+        startStep: 0,
+        endStep: 1000
+      },
+      depthMaps: extractedParams.depthMaps || {
+        enabled: false,
+        strength: 1.0,
+        preprocessor: 'depth_midas'
+      },
+      edgeDetection: extractedParams.edgeDetection || {
+        enabled: false,
+        strength: 1.0,
+        preprocessor: 'canny',
+        lowThreshold: 100,
+        highThreshold: 200
+      },
+      animationSequence: extractedParams.animationSequence || {
+        frameCount: 1,
+        fps: 24,
+        interpolationMethod: 'linear',
+        keyframes: []
+      },
+      cameraParameters: extractedParams.cameraParameters || {
+        fov: 70,
+        aspectRatio: 1.777, // 16:9
+        nearPlane: 0.1,
+        farPlane: 1000,
+        position: [0, 0, 5],
+        rotation: [0, 0, 0]
+      },
+      billboardProjection: extractedParams.billboardProjection || {
+        enabled: false,
+        targetResolution: [1920, 1080]
+      }
+    }
   };
 
   // Find all variable declarations in the graph
@@ -132,6 +586,257 @@ export function graphToBundle(
     if (outputNodes.length > 1) {
       bundle.entry_points.alternatives = outputNodes.slice(1).map(n => n.id);
     }
+  }
+
+  // Epic 8.6 Task 3: Extract and integrate scene data if enabled
+  if (options.includeSceneData) {
+    const extractedSceneData = extractSceneData(graph);
+    
+    // Only include scene data if meaningful data was found
+    if (extractedSceneData.metadata) {
+      bundle.sceneData = extractedSceneData as SceneData;
+    }
+  }
+  
+  return bundle;
+}
+
+/**
+ * Epic 8.6: Enhanced VFX-focused export function
+ * Creates a ControlNet-compatible export with full VFX metadata
+ */
+export function graphToVFXBundle(
+  graph: Graph,
+  options: {
+    name: string;
+    targetPipeline?: 'stable-diffusion' | 'midjourney' | 'dalle' | 'custom';
+    version?: string;
+    author?: string;
+  }
+): GeneratorBundle {
+  return graphToBundle(graph, {
+    ...options,
+    controlNetEnabled: true,
+    includeSceneData: true, // Epic 8.6 Task 3: Always include scene data in VFX exports
+    targetPipeline: options.targetPipeline || 'stable-diffusion'
+  });
+}
+
+/**
+ * Epic 8.6: Validate ControlNet compatibility
+ * Checks if a graph has VFX-compatible structures
+ */
+export function validateVFXCompatibility(graph: Graph): {
+  compatible: boolean;
+  features: string[];
+  recommendations: string[];
+} {
+  const features: string[] = [];
+  const recommendations: string[] = [];
+  
+  // Check for camera variables
+  const hasCameraVars = graph.nodes.some(node => 
+    node.type === 'SetVariable' && 
+    node.key?.toLowerCase().includes('camera')
+  );
+  if (hasCameraVars) features.push('Camera controls detected');
+  else recommendations.push('Add camera position/angle variables for 3D scenes');
+  
+  // Check for animation sequences
+  const hasAnimation = graph.nodes.some(node => 
+    node.type === 'Sequential' && 
+    node.sequence && 
+    node.sequence.length > 1
+  );
+  if (hasAnimation) features.push('Animation sequence support');
+  else recommendations.push('Use Sequential nodes for multi-frame animations');
+  
+  // Check for depth/3D hints
+  const hasDepthHints = graph.nodes.some(node => 
+    node.id.toLowerCase().includes('depth') || 
+    node.id.toLowerCase().includes('3d')
+  );
+  if (hasDepthHints) features.push('Depth processing hints');
+  
+  // Check for edge detection hints
+  const hasEdgeHints = graph.nodes.some(node => 
+    node.id.toLowerCase().includes('edge') || 
+    node.id.toLowerCase().includes('canny')
+  );
+  if (hasEdgeHints) features.push('Edge detection support');
+
+  // Epic 8.6 Task 3: Check for scene data variables
+  const hasSceneVars = graph.nodes.some(node => 
+    node.type === 'SetVariable' && node.key && (
+      node.key.toLowerCase().includes('camera') ||
+      node.key.toLowerCase().includes('lighting') ||
+      node.key.toLowerCase().includes('weather') ||
+      node.key.toLowerCase().includes('setting') ||
+      node.key.toLowerCase().includes('mood')
+    )
+  );
+  if (hasSceneVars) features.push('Scene data variables (camera, lighting, environment)');
+  else recommendations.push('Add scene variables (camera_x, lighting_mood, weather_clear) for cinematic control');
+
+  // Check for camera position controls
+  const hasCameraControls = graph.nodes.some(node =>
+    node.type === 'SetVariable' && node.key && (
+      node.key.toLowerCase().includes('position') ||
+      node.key.toLowerCase().includes('angle') ||
+      node.key.toLowerCase().includes('distance')
+    )
+  );
+  if (hasCameraControls) features.push('Camera position and angle controls');
+  
+  const compatible = features.length >= 1; // Need at least one VFX feature
+  
+  if (!compatible) {
+    recommendations.push(
+      'Add VFX-related nodes (
+        camera variables,
+        sequential animations,
+        or depth/edge hints
+      ) for better ControlNet compatibility'
+    );
+  }
+  
+  return {
+    compatible,
+    features,
+    recommendations
+  };
+}
+
+/**
+ * Epic 8.6 Task 3: Generate scene-to-prompt data flow
+ * Creates natural language prompt additions based on scene data
+ */
+export function generateScenePromptFlow(sceneData: SceneData): {
+  cameraPrompt: string;
+  lightingPrompt: string;
+  environmentPrompt: string;
+  fullPrompt: string;
+} {
+  const prompts = {
+    cameraPrompt: '',
+    lightingPrompt: '',
+    environmentPrompt: '',
+    fullPrompt: ''
+  };
+
+  // Camera prompt generation
+  if (sceneData.camera) {
+    const { position, angle, distance, lens, movement } = sceneData.camera;
+    
+    // Distance and framing
+    if (distance < 2) prompts.cameraPrompt += 'extreme close-up, ';
+    else if (distance < 5) prompts.cameraPrompt += 'close-up shot, ';
+    else if (distance < 10) prompts.cameraPrompt += 'medium shot, ';
+    else if (distance < 20) prompts.cameraPrompt += 'wide shot, ';
+    else prompts.cameraPrompt += 'very wide shot, ';
+
+    // Camera angles
+    if (angle.pitch > 30) prompts.cameraPrompt += 'high angle, ';
+    else if (angle.pitch < -30) prompts.cameraPrompt += 'low angle, ';
+    else prompts.cameraPrompt += 'eye level, ';
+
+    // Lens characteristics
+    if (lens?.focalLength) {
+      if (lens.focalLength < 35) prompts.cameraPrompt += 'wide angle lens, ';
+      else if (lens.focalLength > 85) prompts.cameraPrompt += 'telephoto lens, ';
+      
+      if (lens.aperture < 2.8) prompts.cameraPrompt += 'shallow depth of field, ';
+      else if (lens.aperture > 8) prompts.cameraPrompt += 'deep focus, ';
+    }
+
+    // Camera movement
+    if (movement?.type && movement.type !== 'static') {
+      prompts.cameraPrompt += `${movement.type} camera movement, `;
+    }
+  }
+
+  // Lighting prompt generation  
+  if (sceneData.lighting) {
+    const { timeOfDay, weather, mood, keyLight } = sceneData.lighting;
+    
+    // Time and weather
+    prompts.lightingPrompt += `${timeOfDay.replace('-', ' ')} lighting, `;
+    if (weather !== 'clear') prompts.lightingPrompt += `${weather} weather, `;
+    
+    // Mood
+    prompts.lightingPrompt += `${mood} lighting mood, `;
+    
+    // Technical lighting
+    if (keyLight?.intensity) {
+      if (keyLight.intensity > 80) prompts.lightingPrompt += 'strong key light, ';
+      else if (keyLight.intensity < 40) prompts.lightingPrompt += 'soft key light, ';
+    }
+  }
+
+  // Environment prompt generation
+  if (sceneData.environment) {
+    const { setting, atmosphere, scale, depth, props } = sceneData.environment;
+    
+    // Setting and scale
+    const settingDesc = setting.replace('-', ' ').replace('interior', 'inside').replace('exterior', 'outside');
+    prompts.environmentPrompt += `${settingDesc} setting, `;
+    prompts.environmentPrompt += `${scale} scale composition, `;
+    
+    // Atmosphere
+    prompts.environmentPrompt += `${atmosphere} atmosphere, `;
+    
+    // Depth layers
+    if (depth?.foreground) prompts.environmentPrompt += `${depth.foreground} in foreground, `;
+    if (depth?.background) prompts.environmentPrompt += `${depth.background} in background, `;
+    
+    // Props
+    if (props.length > 0) {
+      prompts.environmentPrompt += `featuring ${props.join(', ')}, `;
+    }
+  }
+
+  // Combine all prompts
+  prompts.fullPrompt = [
+    prompts.cameraPrompt.trim(),
+    prompts.lightingPrompt.trim(),
+    prompts.environmentPrompt.trim()
+  ].filter(p => p.length > 0).join(' ');
+
+  // Clean up trailing commas and spaces
+  Object.keys(prompts).forEach(key => {
+    prompts[key as keyof typeof prompts] = prompts[key as keyof typeof prompts]
+      .replace(/,\s*$/, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  });
+
+  return prompts;
+}
+
+/**
+ * Epic 8.6 Task 3: Create a complete scene-aware export
+ * Combines VFX export with scene data and prompt flow
+ */
+export function graphToSceneAwareBundle(
+  graph: Graph,
+  options: {
+    name: string;
+    targetPipeline?: 'stable-diffusion' | 'midjourney' | 'dalle' | 'custom';
+    version?: string;
+    author?: string;
+    includePromptFlow?: boolean;
+  }
+): GeneratorBundle & { scenePromptFlow?: ReturnType<typeof generateScenePromptFlow> } {
+  const bundle = graphToVFXBundle(graph, options);
+  
+  // Add scene-to-prompt flow if requested and scene data exists
+  if (options.includePromptFlow && bundle.sceneData) {
+    const scenePromptFlow = generateScenePromptFlow(bundle.sceneData);
+    
+    return {
+      ...bundle,
+      scenePromptFlow
+    };
   }
   
   return bundle;

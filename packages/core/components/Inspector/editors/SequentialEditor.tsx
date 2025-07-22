@@ -4,15 +4,14 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor } from '../SelectEditor';
 import { VariationList } from '../VariationList';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { WeightSlider } from '../WeightSlider';
 import { SequencePatternConfig } from '../../../runtime/nodes/Sequential';
 
 export interface SequentialEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Sequential specific props can be added here
 }
 
-export const SequentialEditor: React.FC<SequentialEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
-  
+export   
   // Sequential specific fields
   const sequence = (nodeData.sequence as string[]) || [];
   const patternType = (nodeData.patternType as string) || 'linear';
@@ -213,23 +212,16 @@ export const SequentialEditor: React.FC<SequentialEditorProps> = (props) => {
                       {item || `Item ${index + 1}`}
                     </div>
                     
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.1"
-                      value={weight}
-                      onChange={(e) => handleWeightChange(index, parseFloat(e.target.value) || 0)}
-                      style={{
-                        width: 60,
-                        padding: 4,
-                        border: '1px solid #4a5568',
-                        borderRadius: 2,
-                        background: '#1a202c',
-                        color: '#e2e8f0',
-                        fontSize: 11,
-                        textAlign: 'center'
-                      }}
-                    />
+                    <div style={{ flex: 1, minWidth: 120 }}>
+                      <WeightSlider
+                        value={weight}
+                        onChange={(newWeight) => handleWeightChange(index, newWeight)}
+                        min={0}
+                        max={Math.max(10, Math.max(...(nodeData.patternConfig?.weights || [1])) * 1.5)}
+                        step={0.1}
+                        showNumeric={false}
+                      />
+                    </div>
                     
                     <div style={{ 
                       width: 40, 

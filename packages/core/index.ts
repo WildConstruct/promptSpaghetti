@@ -194,3 +194,47 @@ export {
   type OperationContext,
   type ClassificationResult
 } from './types/DataClassification';
+
+// Epic 8.8 - UTDG Historical Data Integration Foundation exports
+export {
+  UTDGManager
+} from './historical/UTDGManager';
+
+export {
+  ConstraintValidator
+} from './historical/ConstraintValidator';
+
+export {
+  ExternalDataService
+} from './historical/ExternalDataService';
+
+export {
+  MedievalDemoDatabase,
+  MEDIEVAL_DEMO_CONSTRAINTS,
+  MEDIEVAL_PERIODS,
+  MEDIEVAL_REGIONS,
+  MEDIEVAL_FABRICS,
+  MEDIEVAL_COLORS
+} from './historical/MedievalDemo';
+
+export type {
+  UTDGNode,
+  Era,
+  HistoricalConstraint,
+  ConstraintValidationResult,
+  DataSource,
+  HistoricalQuery,
+  HistoricalQueryResult,
+  MedievalClothing,
+  UTDGGraph,
+  ContentGenerationConfig,
+  GeneratedContent,
+  VFXExportData,
+  ValidationReport,
+  SocialClass,
+  Variation
+} from './types/UTDG';
+
+export {
+  HISTORICAL_ERAS
+} from './types/UTDG';

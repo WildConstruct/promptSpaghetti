@@ -26,6 +26,10 @@ import { AnalyticsDAO } from './database/analytics-dao';
 import { getDatabase } from './database/connection';
 import { v4 as uuidv4 } from 'uuid';
 
+// Epic 8.5 Execution Path Tracking
+import { GraphExecutionTracker } from '../../packages/core/execution/ExecutionTracker';
+import { NodeExecutionStep, RandomChoiceInfo, ExecutionInput } from '../../packages/core/types/ExecutionPath';
+
 // Import advanced nodes directly to avoid circular dependencies
 import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/WeightedAdvanced.js';
 import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional.js';
@@ -74,12 +78,20 @@ export function initializeAnalytics(): void {
  * Execute a graph and return the output(s) from all Output nodes (ordered by id).
  * Automatically detects and supports both basic and advanced nodes.
  * Epic 13 - Enhanced with comprehensive analytics collection.
+ * Epic 8.5 - Returns execution path data for visualization.
  */
-export async function executeGraph(graph: Graph, sessionId?: string, userId?: number): Promise<string[]> {
+export async function executeGraph(graph: Graph, sessionId?: string, userId?: number): Promise<{
+  outputs: string[];
+  executionPath?: ExecutionPath;
+}> {
   const graphId = graph.id || uuidv4();
   const executionId = uuidv4();
   const currentSessionId = sessionId || uuidv4();
   const startTime = Date.now();
+  
+  // Epic 8.5: Initialize execution tracking
+  const tracker = GraphExecutionTracker.getInstance();
+  const trackingId = tracker.startTracking(graph.seed ?? Date.now());
   
   // Record graph execution start
   if (analyticsCollector) {
@@ -134,9 +146,19 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       try {
         // Resolve inputs first (depth-first)
         const resolvedInputs: any[] = [];
+        const executionInputs: ExecutionInput[] = [];
         if (node.inputs) {
-          for (const inId of node.inputs) {
-            resolvedInputs.push(await dfs(inId));
+          for (let i = 0; i < node.inputs.length; i++) {
+            const inId = node.inputs[i];
+            const inputValue = await dfs(inId);
+            resolvedInputs.push(inputValue);
+            
+            // Epic 8.5: Track execution inputs
+            executionInputs.push({
+              sourceNodeId: inId,
+              value: inputValue,
+              inputIndex: i
+            });
           }
         }
 
@@ -148,6 +170,28 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         // Record successful node execution
         const nodeEndTime = Date.now();
         const executionTimeMs = nodeEndTime - nodeStartTime;
+        
+        // Epic 8.5: Record execution step
+        const executionStep: NodeExecutionStep = {
+          nodeId,
+          nodeType: node.type,
+          stepIndex: 0, // Will be set by tracker
+          timestamp: nodeStartTime,
+          executionTimeMs,
+          inputs: executionInputs,
+          output: result
+        };
+        
+        // Check if this is a randomization node and capture choice info
+        if (isRandomizationNode(node.type)) {
+          const randomChoice = extractRandomChoiceInfo(node, result, resolvedInputs);
+          if (randomChoice) {
+            executionStep.randomChoice = randomChoice;
+            tracker.recordRandomChoice(trackingId, randomChoice);
+          }
+        }
+        
+        tracker.recordNodeExecution(trackingId, executionStep);
         
         if (analyticsCollector) {
           analyticsCollector.recordNodeExecution(
@@ -226,7 +270,13 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       });
     }
 
-    return outputs;
+    // Epic 8.5: Finish execution tracking and get execution path
+    const executionPath = tracker.finishTracking(trackingId, outputs.join('\n'));
+
+    return {
+      outputs,
+      executionPath
+    };
 
   } catch (error) {
     // Record failed graph execution
@@ -263,6 +313,14 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
 
     throw error;
   }
+}
+
+/**
+ * Legacy wrapper for backward compatibility - returns just the output strings
+ */
+export async function executeGraphLegacy(graph: Graph, sessionId?: string, userId?: number): Promise<string[]> {
+  const result = await executeGraph(graph, sessionId, userId);
+  return result.outputs;
 }
 
 /**
@@ -399,6 +457,98 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
     // Exhaustive check
     throw new Error(`Unsupported node type ${(node as any).type}`);
   }
+}
+
+/**
+ * Check if a node type involves randomization for execution path tracking
+ */
+function isRandomizationNode(nodeType: string): boolean {
+  const randomizationTypes = [
+    'WeightedChoice',
+    'WeightedAdvanced',
+    'Conditional',
+    'Sequential',
+    'Markov'
+  ];
+  return randomizationTypes.includes(nodeType);
+}
+
+/**
+ * Extract random choice information for execution path tracking
+ */
+function extractRandomChoiceInfo(node: Node, result: any, resolvedInputs: any[]): RandomChoiceInfo | null {
+  try {
+    switch (node.type) {
+      case 'WeightedChoice': {
+        const choices = node.choices as string[] || [];
+        const weights = node.weights as number[] || [];
+        const selectedIndex = choices.indexOf(result);
+        
+        if (selectedIndex >= 0) {
+          const weight = weights[selectedIndex] || 1;
+          const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+          const probability = totalWeight > 0 ? weight / totalWeight : 1 / choices.length;
+          
+          return {
+            choiceType: 'weighted',
+            availableOptions: choices,
+            selectedOption: result,
+            selectionReason: `Selected "${result}" with weight ${weight}`,
+            probability,
+            weight
+          };
+        }
+        break;
+      }
+      
+      case 'WeightedAdvanced': {
+        const choices = node.choices as string[] || [];
+        if (choices.includes(result)) {
+          return {
+            choiceType: 'weighted',
+            availableOptions: choices,
+            selectedOption: result,
+            selectionReason: `Advanced weighted selection of "${result}"`
+          };
+        }
+        break;
+      }
+      
+      case 'Conditional': {
+        const branches = node.branches as any[] || [];
+        return {
+          choiceType: 'conditional',
+          availableOptions: branches.map((b, i) => `Branch ${i + 1}: ${b.condition || 'default'}`),
+          selectedOption: result,
+          selectionReason: `Conditional evaluation resulted in "${result}"`
+        };
+      }
+      
+      case 'Sequential': {
+        const sequence = node.sequence as string[] || [];
+        return {
+          choiceType: 'sequential',
+          availableOptions: sequence,
+          selectedOption: result,
+          selectionReason: `Sequential selection of "${result}"`
+        };
+      }
+      
+      case 'Markov': {
+        const states = node.states as string[] || [];
+        return {
+          choiceType: 'markov',
+          availableOptions: states,
+          selectedOption: result,
+          selectionReason: `Markov state transition to "${result}"`
+        };
+      }
+    }
+  } catch (error) {
+    console.warn(`Failed to extract random choice info for ${node.type}:`, error);
+  }
+  
+  return null;
 }
 
 /**

@@ -1,5 +1,28 @@
 import React from 'react';
 import { ZodSchema, ZodTypeAny } from 'zod';
+import { useUISettingsStore, shouldShowField, classifyField } from '../../stores/uiSettingsStore';
+
+// Convert technical error messages to filmmaker-friendly language
+const getFilmmakerFriendlyError = (message: string): string => {
+  const errorMappings: Record<string, string> = {
+    'Required': 'This field is required',
+    'String must contain at least 1 character(s)': 'Please enter some text',
+    'Number must be greater than 0': 'Please enter a positive number',
+    'Invalid enum value': 'Please select a valid option',
+    'Expected string, received number': 'Please enter text, not a number',
+    'Expected number, received string': 'Please enter a number',
+    'Array must contain at least 1 element(s)': 'Please add at least one item',
+    'Invalid': 'Please check this value'
+  };
+  
+  for (const [technical, friendly] of Object.entries(errorMappings)) {
+    if (message.includes(technical)) {
+      return friendly;
+    }
+  }
+  
+  return message; // Return original if no mapping found
+};
 
 export interface BaseNodeEditorProps {
   nodeId: string;
@@ -21,17 +44,8 @@ export interface EditorFieldProps {
   disabled?: boolean;
 }
 
-export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
-  nodeId,
-  nodeData,
-  schema,
-  onChange,
-  className = '',
-  children
-}) => {
-  const [values, setValues] = React.useState<Record<string, unknown>>(nodeData || {});
-  const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
-
+export   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
+  
   // Update local state when nodeData changes
   React.useEffect(() => {
     setValues(nodeData || {});
@@ -50,7 +64,7 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
           const parsed = fieldSchema.safeParse(val);
           setFieldErrors((prev) => ({ 
             ...prev, 
-            [key]: parsed.success ? '' : parsed.error.issues[0]?.message || 'Invalid' 
+            [key]: parsed.success ? '' : getFilmmakerFriendlyError(parsed.error.issues[0]?.message || 'Invalid value')
           }));
         }
       } catch (error) {
@@ -151,7 +165,7 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
     );
   };
 
-  // Get all field keys from schema
+  // Get all field keys from schema, filtered by UI settings
   const getFieldKeys = (): string[] => {
     if (!schema) return [];
     
@@ -170,7 +184,13 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
         shape = typeof s === 'function' ? s() : s;
       }
       
-      return Object.keys(shape);
+      const allKeys = Object.keys(shape);
+      
+      // Filter keys based on UI settings (hide technical fields unless in debug mode)
+      return allKeys.filter(key => {
+        const fieldType = classifyField(key);
+        return shouldShowField(key, fieldType);
+      });
     } catch (error) {
       console.warn('Error getting field keys:', error);
       return [];

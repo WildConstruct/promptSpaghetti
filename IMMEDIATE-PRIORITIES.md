@@ -1,8 +1,8 @@
 # IMMEDIATE DEVELOPMENT PRIORITIES
 
-**Date**: 2025-07-21  
-**Status**: SPRINT TRANSITION - PRIORITY UPDATES NEEDED  
-**Last Updated**: Testing Infrastructure Complete, 307+ Tasks Approved
+**Date**: 2025-07-22  
+**Status**: EPIC 8 LAUNCH - WILD CONSTRUCT DEMO-READY PROOF OF CONCEPT  
+**Last Updated**: Epic 8 Stories Complete, Ready for Implementation
 
 ---
 
@@ -20,7 +20,45 @@ Epic 19 privacy features are:
 
 ## 🎯 NEW AGENT PRIORITIES (IN ORDER)
 
-### **PRIORITY 1: Epic Integration - Expose Completed Features** ⚡ **TOP PRIORITY**
+### **PRIORITY 1: Epic 8 - Demo-Ready Proof of Concept** 🎬 **NEW TOP PRIORITY**
+**Business Value: $2.3B Film Industry Opportunity - Wild Construct Ecosystem Demo**
+
+**Status**: ✅ **STORIES COMPLETE** - 8 user stories with enhanced advanced prompting methodologies ready for implementation
+
+**Epic 8 Business Context:**
+- 🎯 **Target Market**: $2.3B film industry (Directors, VFX professionals, Creative teams)
+- 🚀 **Strategic Goal**: Demo-ready proof of concept for Wild Construct ecosystem
+- ⏰ **Timeline**: 4-6 weeks for complete demo readiness
+- 🏆 **Success Metric**: Filmmaker can create professional prompts in under 2 minutes without technical training
+
+**Epic 8 User Stories (Implementation Order):**
+1. **Story 8.1**: Professional Interface Polish - Cinema 4D/Substance Designer quality UI
+2. **Story 8.2**: Director-Friendly Variable System - Natural language templates with {variable} syntax
+3. **Story 8.4**: Progressive Disclosure Architecture - Basic/Advanced/Debug complexity layers
+4. **Story 8.3**: Visual Weight Controls - Intuitive randomization without numerical complexity
+5. **Story 8.5**: Real-Time Multi-Seed Preview - Sub-second generation with variance analysis
+6. **Story 8.6**: Structured Pipeline Export - VFX-ready JSON with ControlNet compatibility
+7. **Story 8.7**: Collaboration & Documentation Tools - Team workflow and template library
+8. **Story 8.8**: Historical Data Integration Foundation - UTDG integration for authentic settings
+
+**Advanced Prompting Methodologies Integration:**
+- ✅ **Zada's Natural Language Approach**: Screenplay-style templates for director accessibility
+- ✅ **Hollywood's MARS Framework**: Modular tags ([CAM], [SUBJ], [FX], !FOCAL) for VFX professionals
+- ✅ **Hybrid Strategy**: Basic view (conversational) + Advanced view (structured) for all user types
+
+**Implementation Assets Ready:**
+- ✅ Complete user stories in `docs/stories/8.1-8.8.*.md`
+- ✅ Epic 7 foundation: All 4 advanced nodes implemented with 90%+ test coverage
+- ✅ Testing infrastructure: Epic 18 comprehensive framework in place
+- ✅ Export system: GeneratorBundle format ready for VFX integration
+- ✅ UI foundation: Professional components and progressive disclosure patterns established
+
+**Estimated Impact**: Position Wild Construct as leader in AI-powered film production tools
+**Development Time**: 4-6 weeks with systematic story-by-story implementation
+
+---
+
+### **PRIORITY 2: Epic Integration - Expose Completed Features** ⚡ **MAINTAIN CURRENT WORK**
 **Business Value: Make months of completed development work visible to users**
 
 **Status**: ✅ **MAJOR PROGRESS** - Advanced nodes now visible, export integration added!
@@ -157,14 +195,23 @@ node src/grab-tasks.js <agent-id> --epic=6
 # STEP 1: Always check priorities first
 node src/show-priority-tasks.js
 
-# STEP 2: Grab priority tasks with improved filtering
-# Grab integration tasks (PRIORITY 1 - QUICK WINS):
+# STEP 2: Grab Epic 8 tasks (NEW TOP PRIORITY):
+# Grab Epic 8 Demo-Ready Proof of Concept tasks:
+node src/grab-tasks.js <your-dev-id> 3 --epic=8
+
+# Grab specific Epic 8 stories:
+node src/grab-tasks.js <your-dev-id> 2 --story=8.1  # Professional Interface Polish
+node src/grab-tasks.js <your-dev-id> 2 --story=8.2  # Director-Friendly Variables
+node src/grab-tasks.js <your-dev-id> 2 --story=8.3  # Visual Weight Controls
+node src/grab-tasks.js <your-dev-id> 2 --story=8.4  # Progressive Disclosure
+
+# STEP 2B: Fallback to integration tasks (PRIORITY 2):
 node src/grab-tasks.js <your-dev-id> 2 --priority-only
 
-# Grab authentication tasks (PRIORITY 2):
+# STEP 2C: Authentication tasks (PRIORITY 3):
 node src/grab-tasks.js <your-dev-id> 2 --story=20.1
 
-# Grab file browser tasks (PRIORITY 3):
+# STEP 2D: File browser tasks (PRIORITY 4):
 node src/grab-tasks.js <your-dev-id> 2 --story=20.2
 
 # STEP 3: Monitor team coordination

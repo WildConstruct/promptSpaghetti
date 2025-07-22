@@ -18,6 +18,7 @@ import {
   MFAEnrollmentResponse,
   MFA_CONSTANTS
 } from '../types/MFATypes';
+import { ErrorFactory } from '../errors/ErrorFactory';
 
 // ========================================
 // Configuration & Types
@@ -152,19 +153,34 @@ export class EmailMFAProvider {
     // Check if user already has email MFA configured
     const existingConfig = await this.storage.getConfiguration(userId);
     if (existingConfig && existingConfig.status !== MFAMethodStatus.REVOKED) {
-      throw new Error('Email MFA already configured for this user');
+      throw ErrorFactory.createMFAConfigurationError(
+        'already_configured',
+        undefined,
+        { userId,
+        operation: 'enroll_email_mfa' }
+      );
     }
 
     // Validate email address
     const emailValid = await this.emailService.validateEmailAddress(validated.emailAddress);
     if (!emailValid) {
-      throw new Error('Invalid email address');
+      throw ErrorFactory.createMFAConfigurationError(
+        'invalid_email',
+        validated.emailAddress,
+        { userId,
+        operation: 'enroll_email_mfa' }
+      );
     }
 
     // Check email reputation
     const reputation = await this.emailService.checkEmailReputation(validated.emailAddress);
     if (!reputation.valid || reputation.risk > 70) {
-      throw new Error('Email address not suitable for MFA');
+      throw ErrorFactory.createMFAConfigurationError(
+        'unsuitable_email',
+        validated.emailAddress,
+        { userId,
+        operation: 'enroll_email_mfa' }
+      );
     }
 
     // Create configuration
@@ -201,12 +217,12 @@ export class EmailMFAProvider {
     const verification = await this.storage.getVerification(verificationId);
     
     if (!verification || verification.userId !== userId) {
-      throw new Error('Invalid verification');
+      throw ErrorFactory.createMFAVerificationError('invalid_code', { userId, operation: 'verify_mfa_code' });
     }
 
     if (verification.expiresAt < new Date()) {
       await this.storage.deleteVerification(verificationId);
-      throw new Error('Verification expired');
+      throw ErrorFactory.createMFAVerificationError('expired', { userId, operation: 'verify_mfa_code' });
     }
 
     // Decrypt and verify code
@@ -217,10 +233,10 @@ export class EmailMFAProvider {
       
       if (verification.attempts >= 3) {
         await this.storage.deleteVerification(verificationId);
-        throw new Error('Too many failed attempts');
+        throw ErrorFactory.createMFAVerificationError('too_many_attempts', { userId, operation: 'verify_mfa_code' });
       }
       
-      throw new Error('Invalid verification code');
+      throw ErrorFactory.createMFAVerificationError('invalid_code', { userId, operation: 'verify_mfa_code' });
     }
 
     // Update configuration to active
@@ -244,11 +260,16 @@ export class EmailMFAProvider {
     // Get configuration
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
-      throw new Error('Invalid configuration');
+      throw ErrorFactory.createMFAConfigurationError(
+        'invalid_config',
+        undefined,
+        { userId,
+        operation: 'challenge_user' }
+      );
     }
 
     if (configuration.status !== MFAMethodStatus.ACTIVE) {
-      throw new Error('Method not active');
+      throw ErrorFactory.createMFAVerificationError('method_not_active', { userId, operation: 'challenge_user' });
     }
 
     // Check rate limits
@@ -571,7 +592,7 @@ export class EmailMFAProvider {
       const windowDuration = MFA_CONSTANTS.EMAIL.RATE_LIMIT_WINDOW * 1000;
       
       if (windowAge < windowDuration && state.count >= MFA_CONSTANTS.EMAIL.MAX_DAILY_SENDS) {
-        throw new Error('Rate limit exceeded. Too many emails sent.');
+        throw ErrorFactory.createMFAVerificationError('rate_limit', { userId, operation: 'send_verification_email' });
       }
     }
   }
@@ -649,13 +670,23 @@ export class EmailMFAProvider {
 
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
-      throw new Error('Invalid configuration');
+      throw ErrorFactory.createMFAConfigurationError(
+        'invalid_config',
+        undefined,
+        { userId,
+        operation: 'challenge_user' }
+      );
     }
 
     // Validate new email
     const emailValid = await this.emailService.validateEmailAddress(newEmailAddress);
     if (!emailValid) {
-      throw new Error('Invalid email address');
+      throw ErrorFactory.createMFAConfigurationError(
+        'invalid_email',
+        newEmailAddress,
+        { userId,
+        operation: 'update_email_address' }
+      );
     }
 
     // Update configuration
@@ -673,7 +704,12 @@ export class EmailMFAProvider {
   async disableMethod(userId: string, configurationId: string): Promise<void> {
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
-      throw new Error('Invalid configuration');
+      throw ErrorFactory.createMFAConfigurationError(
+        'invalid_config',
+        undefined,
+        { userId,
+        operation: 'challenge_user' }
+      );
     }
 
     configuration.status = MFAMethodStatus.DISABLED;
@@ -685,7 +721,12 @@ export class EmailMFAProvider {
   async revokeMethod(userId: string, configurationId: string): Promise<void> {
     const configuration = await this.storage.getConfigurationById(configurationId);
     if (!configuration || configuration.userId !== userId) {
-      throw new Error('Invalid configuration');
+      throw ErrorFactory.createMFAConfigurationError(
+        'invalid_config',
+        undefined,
+        { userId,
+        operation: 'challenge_user' }
+      );
     }
 
     configuration.status = MFAMethodStatus.REVOKED;

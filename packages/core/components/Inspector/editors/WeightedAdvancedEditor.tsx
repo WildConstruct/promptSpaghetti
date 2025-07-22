@@ -3,15 +3,14 @@ import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor } from '../SelectEditor';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { WeightSlider } from '../WeightSlider';
 import { WeightedChoice, WeightDistributionType } from '../../../runtime/nodes/WeightedAdvanced';
 
 export interface WeightedAdvancedEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // WeightedAdvanced specific props can be added here
 }
 
-export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
-  
+export   
   // WeightedAdvanced specific fields
   const choices = (nodeData.choices as WeightedChoice[]) || [];
   const distributionType = (nodeData.distributionType as WeightDistributionType) || 'linear';
@@ -229,7 +228,10 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = (pr
               {choices.map((choice, index) => {
                 const effectiveWeight = effectiveWeights[index] || 0;
                 const percentage = effectiveWeights.length > 0
-                  ? Math.round(effectiveWeight * (normalize ? 100 : effectiveWeights.reduce((sum, w) => sum + w, 0) > 0 ? 100 / effectiveWeights.reduce((sum, w) => sum + w, 0) : 0))
+                  ? Math.round(
+                    effectiveWeight * (normalize ? 100 : effectiveWeights.reduce((sum,
+                    w
+                  ) => sum + w, 0) > 0 ? 100 / effectiveWeights.reduce((sum, w) => sum + w, 0) : 0))
                   : Math.round(100 / choices.length);
 
                 return (
@@ -289,22 +291,14 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = (pr
                       <label style={{ fontSize: 10, color: '#a0aec0', minWidth: 80 }}>
                         Raw Weight:
                       </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="0.1"
+                      <WeightSlider
                         value={choice.weight}
-                        onChange={(e) => handleUpdateChoice(index, 'weight', parseFloat(e.target.value) || 0)}
-                        style={{
-                          width: 60,
-                          padding: 4,
-                          border: '1px solid #4a5568',
-                          borderRadius: 2,
-                          background: '#2d3748',
-                          color: '#e2e8f0',
-                          fontSize: 11,
-                          textAlign: 'center'
-                        }}
+                        onChange={(newWeight) => handleUpdateChoice(index, 'weight', newWeight)}
+                        min={0}
+                        max={Math.max(10, Math.max(...choices.map(c => c.weight)) * 1.5)}
+                        step={0.1}
+                        showNumeric={true}
+                        label="Raw Weight"
                       />
                       
                       <div style={{ fontSize: 10, color: '#90cdf4', minWidth: 100 }}>

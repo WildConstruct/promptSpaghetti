@@ -42,7 +42,7 @@ const server = http.createServer((req, res) => {
 // API handler for tasks
 function handleTasksAPI(req, res) {
   try {
-    const stateFile = path.join(__dirname, 'data/state.json');
+    const stateFile = path.join(__dirname, '../data/state.json');
     if (fs.existsSync(stateFile)) {
       const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -285,6 +285,206 @@ function handleDashboard(req, res) {
             color: #9ca3af;
         }
 
+        /* Task Management Styles */
+        .task-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .task-stat {
+            background: #252538;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #2d2d44;
+        }
+
+        .task-stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .task-stat-number.pending { color: #fbbf24; }
+        .task-stat-number.in-progress { color: #10b981; }
+        .task-stat-number.completed { color: #34d399; }
+
+        .task-stat-label {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .epic8-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .epic8-header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .epic8-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .story-card {
+            background: #252538;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #2d2d44;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .story-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .story-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #e1e5e9;
+            margin-bottom: 5px;
+        }
+
+        .story-subtitle {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .story-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .story-status.pending {
+            background: #451a03;
+            color: #fbbf24;
+            border: 1px solid #92400e;
+        }
+
+        .story-status.in-progress {
+            background: #064e3b;
+            color: #10b981;
+            border: 1px solid #059669;
+        }
+
+        .story-status.completed {
+            background: #14532d;
+            color: #34d399;
+            border: 1px solid #16a34a;
+        }
+
+        .story-status.assigned {
+            background: #0f172a;
+            color: #74c0fc;
+            border: 1px solid #1e40af;
+        }
+
+        .story-priority {
+            margin-bottom: 15px;
+        }
+
+        .priority-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-badge.high {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .priority-badge.medium {
+            background: #78350f;
+            color: #fbbf24;
+        }
+
+        .priority-badge.low {
+            background: #1e3a8a;
+            color: #93c5fd;
+        }
+
+        .story-description {
+            color: #d1d5db;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .story-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #9ca3af;
+            padding-top: 15px;
+            border-top: 1px solid #374151;
+        }
+
+        .agent-assignment {
+            font-weight: 500;
+        }
+
+        .task-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            background: #3730a3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .action-button:hover {
+            background: #4338ca;
+        }
+
+        .action-button.secondary {
+            background: #374151;
+        }
+
+        .action-button.secondary:hover {
+            background: #4b5563;
+        }
+
         /* Loading and Error States */
         .loading {
             text-align: center;
@@ -314,6 +514,29 @@ function handleDashboard(req, res) {
             
             .epic-overview {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .task-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .task-actions {
+                flex-direction: column;
+            }
+            
+            .story-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .story-meta {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
             }
         }
     </style>
@@ -348,20 +571,39 @@ function handleDashboard(req, res) {
 
         <!-- Tasks Tab -->
         <div id="tasks" class="tab-content">
-            <div class="loading" id="tasks-loading">Loading task data...</div>
+            <div class="loading" id="tasks-loading">Loading Epic 8 task data...</div>
             <div id="tasks-content" style="display: none;">
-                <p style="color: #9ca3af; text-align: center; margin: 50px 0;">
-                    Task management interface will be implemented here.
-                    <br><br>
-                    For now, use the CLI tools:
-                    <br>
-                    <code style="background: #252538; padding: 4px 8px; border-radius: 4px;">
-                        node src/monitor-available-tasks.js
-                    </code>
-                </p>
+                <!-- Epic 8 Header -->
+                <div class="epic8-header">
+                    <h2>🎬 Epic 8: Demo-Ready Proof of Concept</h2>
+                    <p>Wild Construct Film Industry Integration - Professional demo-ready interface and features</p>
+                </div>
+
+                <!-- Task Overview -->
+                <div class="task-overview" id="task-overview">
+                    <!-- Overview stats will be populated by JavaScript -->
+                </div>
+
+                <!-- Epic 8 Stories Grid -->
+                <div class="stories-grid" id="stories-grid">
+                    <!-- Story cards will be populated by JavaScript -->
+                </div>
+
+                <!-- Task Actions -->
+                <div class="task-actions">
+                    <button class="action-button" onclick="refreshTaskData()">
+                        🔄 Refresh Data
+                    </button>
+                    <button class="action-button secondary" onclick="showTaskDetails()">
+                        📋 View All Tasks
+                    </button>
+                    <button class="action-button secondary" onclick="exportTaskReport()">
+                        📊 Export Report
+                    </button>
+                </div>
             </div>
             <div id="tasks-error" class="error" style="display: none;">
-                Failed to load task data. Please check the server connection.
+                Failed to load Epic 8 task data. Please check the server connection.
             </div>
         </div>
     </div>
@@ -516,14 +758,261 @@ function handleDashboard(req, res) {
             }
         }
 
-        // Load task data (placeholder)
+        // Epic 8 story definitions
+        const epic8Stories = {
+            '8.1': {
+                title: 'Professional Interface Polish',
+                description: 'Cinema 4D/Substance Designer quality UI with professional animations and responsive interactions'
+            },
+            '8.2': {
+                title: 'Director-Friendly Variable System',
+                description: 'Natural language template system with {variable} syntax for creative professionals'
+            },
+            '8.3': {
+                title: 'Visual Weight Controls',
+                description: 'Intuitive weight adjustment through visual controls without numerical complexity'
+            },
+            '8.4': {
+                title: 'Progressive Disclosure Architecture',
+                description: 'Three-tier complexity system (Basic/Advanced/Debug) for different user expertise levels'
+            },
+            '8.5': {
+                title: 'Real-Time Multi-Seed Preview',
+                description: 'Sub-second preview generation with variance analysis for demo validation'
+            },
+            '8.6': {
+                title: 'Structured Pipeline Export',
+                description: 'VFX-ready JSON export with ControlNet compatibility for production workflows'
+            },
+            '8.7': {
+                title: 'Collaboration & Documentation Tools',
+                description: 'Team workflow features with sticky notes, region grouping, and template library'
+            },
+            '8.8': {
+                title: 'Historical Data Integration Foundation',
+                description: 'UTDG integration foundation for authentic historical settings and medieval demo'
+            }
+        };
+
+        let taskData = {};
+
+        // Load Epic 8 task data
         async function loadTaskData() {
-            document.getElementById('tasks-loading').style.display = 'none';
-            document.getElementById('tasks-content').style.display = 'block';
+            try {
+                document.getElementById('tasks-loading').style.display = 'block';
+                document.getElementById('tasks-content').style.display = 'none';
+                document.getElementById('tasks-error').style.display = 'none';
+
+                const response = await fetch('/api/tasks');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch task data');
+                }
+                
+                const data = await response.json();
+                taskData = data.tasks;
+                
+                // Filter Epic 8 tasks
+                const epic8Tasks = Object.values(taskData).filter(task => task.epic === 'Epic 8');
+                
+                renderTaskOverview(epic8Tasks);
+                renderStoriesGrid(epic8Tasks);
+                
+                document.getElementById('tasks-loading').style.display = 'none';
+                document.getElementById('tasks-content').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading task data:', error);
+                document.getElementById('tasks-loading').style.display = 'none';
+                document.getElementById('tasks-error').style.display = 'block';
+            }
+        }
+
+        // Render task overview statistics
+        function renderTaskOverview(epic8Tasks) {
+            const statusCounts = {
+                UNASSIGNED: 0,
+                IN_PROGRESS: 0,
+                REVIEW: 0,
+                COMPLETED: 0
+            };
+
+            const priorityCounts = {
+                high: 0,
+                medium: 0,
+                low: 0
+            };
+
+            epic8Tasks.forEach(task => {
+                // Use 'state' field (which is what Epic 8 tasks use) or fallback to 'status'
+                const status = task.state || task.status || 'UNASSIGNED';
+                const priority = task.priority || 'medium';
+                
+                statusCounts[status] = (statusCounts[status] || 0) + 1;
+                priorityCounts[priority] = (priorityCounts[priority] || 0) + 1;
+            });
+
+            const assignedTasks = epic8Tasks.filter(task => task.assignee && task.assignee !== 'null').length;
+            const totalTasks = epic8Tasks.length;
+            const totalEstimatedHours = epic8Tasks.reduce((sum, task) => sum + (task.est || 0), 0);
+
+            document.getElementById('task-overview').innerHTML = \`
+                <div class="task-stat">
+                    <div class="task-stat-number pending">\${statusCounts.UNASSIGNED || 0}</div>
+                    <div class="task-stat-label">Unassigned Tasks</div>
+                </div>
+                <div class="task-stat">
+                    <div class="task-stat-number in-progress">\${statusCounts.IN_PROGRESS || 0}</div>
+                    <div class="task-stat-label">In Progress</div>
+                </div>
+                <div class="task-stat">
+                    <div class="task-stat-number completed">\${statusCounts.COMPLETED || 0}</div>
+                    <div class="task-stat-label">Completed</div>
+                </div>
+                <div class="task-stat">
+                    <div class="task-stat-number" style="color: #74c0fc;">\${totalTasks}</div>
+                    <div class="task-stat-label">Total Epic 8 Tasks</div>
+                </div>
+                <div class="task-stat">
+                    <div class="task-stat-number" style="color: #10b981;">\${assignedTasks}</div>
+                    <div class="task-stat-label">Assigned to Agents</div>
+                </div>
+                <div class="task-stat">
+                    <div class="task-stat-number" style="color: #fbbf24;">\${totalEstimatedHours}h</div>
+                    <div class="task-stat-label">Total Effort</div>
+                </div>
+            \`;
+        }
+
+        // Render Epic 8 stories grid
+        function renderStoriesGrid(epic8Tasks) {
+            const storiesGrid = document.getElementById('stories-grid');
+            
+            storiesGrid.innerHTML = Object.entries(epic8Stories).map(([storyId, storyInfo]) => {
+                // Get all tasks for this story
+                const storyTasks = epic8Tasks.filter(t => t.story === storyId || t.story_id === storyId);
+                const taskCount = storyTasks.length;
+                
+                // Calculate story progress
+                const completedTasks = storyTasks.filter(t => (t.state || t.status) === 'COMPLETED').length;
+                const inProgressTasks = storyTasks.filter(t => (t.state || t.status) === 'IN_PROGRESS').length;
+                const assignedTasks = storyTasks.filter(t => t.assignee && t.assignee !== 'null').length;
+                
+                // Determine overall story status
+                let status = 'PENDING';
+                if (completedTasks === taskCount && taskCount > 0) {
+                    status = 'COMPLETED';
+                } else if (inProgressTasks > 0) {
+                    status = 'IN_PROGRESS';
+                } else if (assignedTasks > 0) {
+                    status = 'ASSIGNED';
+                }
+                
+                // Get highest priority from tasks
+                const priorities = storyTasks.map(t => t.priority || 'medium');
+                const priority = priorities.includes('high') ? 'high' : 
+                               priorities.includes('medium') ? 'medium' : 'low';
+                
+                // Get assigned agents
+                const agents = [...new Set(storyTasks
+                    .filter(t => t.assignee && t.assignee !== 'null')
+                    .map(t => t.assignee))];
+                const agentList = agents.length > 0 ? agents.join(', ') : 'Not assigned';
+                
+                // Calculate progress percentage
+                const progressPercent = taskCount > 0 ? Math.round((completedTasks / taskCount) * 100) : 0;
+
+                return \`
+                    <div class="story-card" data-story="\${storyId}">
+                        <div class="story-header">
+                            <div>
+                                <div class="story-title">\${storyId}: \${storyInfo.title}</div>
+                                <div class="story-subtitle">\${taskCount} tasks total</div>
+                            </div>
+                            <div class="story-status \${status.toLowerCase().replace('_', '-')}">\${status.replace('_', ' ')}</div>
+                        </div>
+                        
+                        <div class="story-priority">
+                            <span class="priority-badge \${priority}">\${priority} Priority</span>
+                        </div>
+                        
+                        <div class="story-description">
+                            \${storyInfo.description}
+                        </div>
+                        
+                        <div class="story-progress" style="margin: 15px 0;">
+                            <div class="epic-progress-label">
+                                <span>Progress</span>
+                                <span>\${progressPercent}%</span>
+                            </div>
+                            <div class="epic-progress-bar">
+                                <div class="epic-progress-fill" style="width: \${progressPercent}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="story-tasks" style="margin: 10px 0; font-size: 0.85rem; color: #9ca3af;">
+                            ✅ \${completedTasks} completed &nbsp; 
+                            🔄 \${inProgressTasks} in progress &nbsp; 
+                            📋 \${taskCount - completedTasks - inProgressTasks} pending
+                        </div>
+                        
+                        <div class="story-meta">
+                            <span class="agent-assignment">
+                                Agents: \${agentList}
+                            </span>
+                            <span class="task-count">
+                                \${taskCount} tasks
+                            </span>
+                        </div>
+                    </div>
+                \`;
+            }).join('');
+        }
+
+        // Refresh task data
+        function refreshTaskData() {
+            loadTaskData();
+        }
+
+        // Show task details (placeholder)
+        function showTaskDetails() {
+            alert('Task details view will open the CLI tool. Use: node src/monitor-available-tasks.js');
+        }
+
+        // Export task report (placeholder)
+        function exportTaskReport() {
+            const epic8Tasks = Object.values(taskData).filter(task => task.epic === 'Epic 8');
+            const report = {
+                timestamp: new Date().toISOString(),
+                epic: 'Epic 8: Demo-Ready Proof of Concept',
+                totalTasks: epic8Tasks.length,
+                stories: Object.entries(epic8Stories).map(([storyId, storyInfo]) => {
+                    const task = epic8Tasks.find(t => t.story === storyId);
+                    return {
+                        storyId,
+                        title: storyInfo.title,
+                        description: storyInfo.description,
+                        status: task ? (task.status || 'PENDING') : 'PENDING',
+                        priority: task ? (task.priority || 'medium') : 'medium',
+                        assignedAgent: task ? task.assignedAgent : null,
+                        taskId: task ? task.id : null
+                    };
+                })
+            };
+            
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = \`epic8-task-report-\${new Date().toISOString().split('T')[0]}.json\`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', () => {
+            // Load Epic Status tab by default
             loadEpicData();
         });
     </script>

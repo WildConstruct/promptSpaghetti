@@ -16,6 +16,7 @@ import {
 } from '../io-system';
 import { SafeExpressionEvaluator } from '../expression-evaluator';
 import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../security-audit-logger';
+import { ErrorFactory } from '../../errors/ErrorFactory';
 
 /**
  * A conditional branch with condition expression and output value
@@ -138,7 +139,13 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
           
           // In non-strict mode, treat evaluation errors as false
           if (this.conditionalConfig.strictMode) {
-            throw new Error(`Condition evaluation failed: ${branch.condition} - ${error}`);
+            throw ErrorFactory.createNodeExecutionError(
+              this.id || 'conditional',
+              'condition_evaluation',
+              `Condition evaluation failed: ${branch.condition}`,
+              error,
+              { operation: 'evaluate_condition' }
+            );
           }
           // Continue to next condition
         }
@@ -300,7 +307,12 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
       try {
         return new RegExp(pattern).test(String(str));
       } catch (e) {
-        throw new Error(`Invalid regex pattern: ${pattern}`);
+        throw ErrorFactory.createValidationError(
+          'pattern',
+          pattern,
+          'valid regex pattern',
+          { operation: 'regex_validation' }
+        );
       }
     };
 
@@ -318,7 +330,13 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
       // Use the safe AST-based evaluator instead of Function constructor
       return SafeExpressionEvaluator.evaluate(expression, context);
     } catch (error) {
-      throw new Error(`Expression evaluation failed: ${expression} - ${error}`);
+      throw ErrorFactory.createNodeExecutionError(
+        'expression-evaluator',
+        'expression_evaluation', 
+        `Expression evaluation failed: ${expression}`,
+        error,
+        { operation: 'evaluate_expression' }
+      );
     }
   }
 
@@ -357,7 +375,12 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
             }
           }
         );
-        throw new Error(`Dangerous pattern detected in expression: ${expression}`);
+        throw ErrorFactory.createValidationError(
+          'expression',
+          expression,
+          'safe expression without dangerous patterns',
+          { operation: 'security_validation' }
+        );
       }
     }
     return sanitized;
@@ -379,31 +402,7 @@ export function createConditionalNode(
 /**
  * Common condition patterns for easy setup
  */
-export const ConditionPresets = {
-  /** Simple variable comparison */
-  greaterThan: (variable: string, value: number) => `${variable} > ${value}`,
-  lessThan: (variable: string, value: number) => `${variable} < ${value}`,
-  equals: (variable: string, value: any) => `${variable} === ${JSON.stringify(value)}`,
-  
-  /** Variable existence checks */
-  hasVariable: (variable: string) => `hasVariable('${variable}')`,
-  isEmpty: (variable: string) => `isEmpty(${variable})`,
-  
-  /** String operations */
-  startsWith: (variable: string, prefix: string) => `startsWith(${variable}, '${prefix}')`,
-  contains: (variable: string, substring: string) => `${variable}.includes('${substring}')`,
-  matches: (variable: string, pattern: string) => `matches(${variable}, '${pattern}')`,
-  
-  /** Array operations */
-  arrayIncludes: (array: string, item: any) => `includes(${array}, ${JSON.stringify(item)})`,
-  arrayLength: (array: string, length: number) => `length(${array}) === ${length}`,
-  
-  /** Logical combinations */
-  and: (...conditions: string[]) => `(${conditions.join(') && (')})`,
-  or: (...conditions: string[]) => `(${conditions.join(') || (')})`,
-  not: (condition: string) => `!(${condition})`
-} as const;
-
+export 
 /**
  * Utility for building complex conditional branches
  */

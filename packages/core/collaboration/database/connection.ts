@@ -1,5 +1,7 @@
 import { Pool, PoolClient, QueryResult } from 'pg';
 import { WorkspaceId, ProjectId, UserId, ResourceId } from '../types/workspace';
+import { ErrorFactory } from '../../errors/ErrorFactory';
+import { DatabaseConnectionError } from '../../errors/index';
 
 export interface DatabaseConfig {
   host: string;
@@ -57,7 +59,11 @@ export class DatabaseConnection {
 
   async query<T = any>(text: string, params?: any[]): Promise<QueryResult<T>> {
     if (!this.isConnected) {
-      throw new Error('Database not connected');
+      throw ErrorFactory.createDatabaseConnectionError(
+        'Cannot execute query: Database not connected',
+        undefined,
+        { operation: 'query', metadata: { query: text.substring(0, 100) } }
+      );
     }
 
     const start = Date.now();
@@ -82,7 +88,11 @@ export class DatabaseConnection {
 
   async transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
     if (!this.isConnected) {
-      throw new Error('Database not connected');
+      throw ErrorFactory.createDatabaseConnectionError(
+        'Cannot start transaction: Database not connected',
+        undefined,
+        { operation: 'transaction' }
+      );
     }
 
     const client = await this.pool.connect();
@@ -151,22 +161,7 @@ export class DatabaseConnection {
 }
 
 // Utility functions for type-safe parameter binding
-export const bindParams = {
-  workspaceId: (id: WorkspaceId): string => id as string,
-  projectId: (id: ProjectId): string => id as string,
-  userId: (id: UserId): string => id as string,
-  resourceId: (id: ResourceId): string => id as string,
-  
-  // Helper for array parameters
-  array: <T>(items: T[]): T[] => items,
-  
-  // Helper for JSON parameters
-  json: (obj: any): string => JSON.stringify(obj),
-  
-  // Helper for UUID validation
-  validateUuid: (id: string): boolean => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(id);
+export     return uuidRegex.test(id);
   }
 };
 
@@ -332,12 +327,21 @@ export class MigrationRunner {
     );
 
     if (result.rows.length === 0) {
-      throw new Error(`Migration ${version} not found`);
+      throw ErrorFactory.createValidationError(
+        'version',
+        version,
+        'existing migration version',
+        { operation: 'rollback_migration' }
+      );
     }
 
     const rollbackSql = result.rows[0].rollback_sql;
     if (!rollbackSql) {
-      throw new Error(`No rollback SQL available for migration ${version}`);
+      throw ErrorFactory.createConfigurationError(
+        `No rollback SQL available for migration ${version}`,
+        'rollback_sql',
+        { operation: 'rollback_migration', metadata: { version } }
+      );
     }
 
     await this.db.transaction(async (client) => {

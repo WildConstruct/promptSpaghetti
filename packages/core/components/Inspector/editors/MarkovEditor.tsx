@@ -3,6 +3,7 @@ import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { WeightSlider } from '../WeightSlider';
 
 interface MarkovTransition {
   from: string;
@@ -14,9 +15,7 @@ export interface MarkovEditorProps extends Omit<BaseNodeEditorProps, 'children'>
   // Markov specific props can be added here
 }
 
-export const MarkovEditor: React.FC<MarkovEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
-  
+export   
   // Markov specific fields
   const states = (nodeData.states as string[]) || [];
   const transitions = (nodeData.transitions as Record<string, Record<string, number>>) || {};
@@ -486,24 +485,14 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = (props) => {
                     alignItems: 'center',
                     gap: 8
                   }}>
-                    <label style={{ fontSize: 10, color: '#a0aec0' }}>Probability:</label>
-                    <input
-                      type="number"
-                      min="0"
-                      max="1"
-                      step="0.01"
+                    <WeightSlider
                       value={transition.probability}
-                      onChange={(e) => handleUpdateTransition(index, 'probability', parseFloat(e.target.value) || 0)}
-                      style={{
-                        width: 80,
-                        padding: 4,
-                        border: '1px solid #4a5568',
-                        borderRadius: 2,
-                        background: '#2d3748',
-                        color: '#e2e8f0',
-                        fontSize: 11,
-                        textAlign: 'center'
-                      }}
+                      onChange={(newProb) => handleUpdateTransition(index, 'probability', newProb)}
+                      min={0}
+                      max={1}
+                      step={0.01}
+                      showNumeric={true}
+                      label="Probability"
                     />
                     
                     <button

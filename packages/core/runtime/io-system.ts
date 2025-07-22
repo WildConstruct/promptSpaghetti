@@ -3,6 +3,7 @@
 
 import { z } from 'zod';
 import { ValidationResult, ValidationHelpers } from './advanced';
+import { ErrorFactory } from '../errors/ErrorFactory';
 
 /**
  * Supported input/output data types for advanced nodes
@@ -394,7 +395,9 @@ export class AdvancedIOHandler {
       return String(value);
     case 'number':
       const num = Number(value);
-      if (isNaN(num)) throw new Error(`Cannot convert ${value} to number`);
+      if (isNaN(num)) throw ErrorFactory.createValidationError(
+        'value', value, 'convertible to number', { operation: 'type_coercion' }
+      );
       return num;
     case 'boolean':
       if (typeof value === 'string') {
@@ -410,11 +413,15 @@ export class AdvancedIOHandler {
       const numArr = Array.isArray(value) ? value : [value];
       return numArr.map(v => {
         const n = Number(v);
-        if (isNaN(n)) throw new Error(`Cannot convert ${v} to number`);
+        if (isNaN(n)) throw ErrorFactory.createValidationError(
+          'array_element', v, 'convertible to number', { operation: 'array_coercion' }
+        );
         return n;
       });
     default:
-      throw new Error(`Cannot coerce to type ${to}`);
+      throw ErrorFactory.createValidationError(
+        'target_type', to, 'supported coercion type', { operation: 'type_coercion' }
+      );
     }
   }
 }
