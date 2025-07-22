@@ -26,7 +26,7 @@ export default defineConfig({
       include: [/zod/, /node_modules/]
     },
     rollupOptions: {
-      external: ['uuid'],
+      external: ['uuid', '@juliuste/react-vimeo'],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
