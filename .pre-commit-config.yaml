@@ -35,6 +35,20 @@ repos:
           - '@typescript-eslint/eslint-plugin@7.0.0'
           - '@typescript-eslint/parser@7.0.0'
           
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: (package-lock\.json|pnpm-lock\.yaml|\.git)
+        
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 2.3.5
+    hooks:
+      - id: sqlfluff-lint
+        files: \.sql$
+        additional_dependencies: [sqlfluff-templater-jinja]
+        
   - repo: local
     hooks:
       - id: typescript
@@ -58,3 +72,38 @@ repos:
         language: system
         pass_filenames: false
         stages: [push]
+        
+      - id: epic17-naming-conventions
+        name: Epic 17 Naming Conventions Check
+        entry: bash -c 'node scripts/check-naming-conventions.js'
+        language: system
+        files: \.(js|jsx|ts|tsx)$
+        pass_filenames: true
+        
+      - id: epic17-security-check
+        name: Epic 17 Security Pattern Check
+        entry: bash -c 'node scripts/check-security-patterns.js'
+        language: system
+        files: \.(js|jsx|ts|tsx)$
+        pass_filenames: true
+        
+      - id: epic17-api-documentation
+        name: Epic 17 API Documentation Check
+        entry: bash -c 'node scripts/check-api-documentation.js'
+        language: system
+        files: server/src/routes/.*\.ts$
+        pass_filenames: true
+        
+      - id: no-console-logs
+        name: Remove Console Logs
+        entry: bash -c 'grep -rn "console\.\(log\|debug\|info\)" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" . && exit 1 || exit 0'
+        language: system
+        pass_filenames: false
+        stages: [commit]
+        
+      - id: database-migration-check
+        name: Database Migration Safety Check
+        entry: bash -c 'node scripts/check-migration-safety.js'
+        language: system
+        files: server/database/migrations/.*\.sql$
+        pass_filenames: true

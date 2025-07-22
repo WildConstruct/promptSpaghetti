@@ -89,6 +89,13 @@ const adminSections = [
     icon: ScrollText,
     description: 'View system audit trail and security logs',
     requiredRoles: ['admin', 'administrator', 'security-admin']
+  },
+  {
+    id: 'data-protection',
+    label: 'Data Protection',
+    icon: Shield,
+    description: 'Manage data retention, deletion workflows, and compliance',
+    requiredRoles: ['admin', 'administrator', 'privacy-officer', 'compliance-admin']
   }
 ];
 
@@ -248,7 +255,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                 'users': { critical: 0, high: 1, medium: 2, low: 0, info: 1 },
                 'content': { critical: 1, high: 1, medium: 1, low: 1, info: 0 },
                 'api-management': { critical: 0, high: 1, medium: 2, low: 1, info: 0 },
-                'system': { critical: 0, high: 0, medium: 0, low: 0, info: 0 }
+                'system': { critical: 0, high: 0, medium: 0, low: 0, info: 0 },
+                'data-protection': { critical: 1, high: 2, medium: 3, low: 1, info: 0 }
               };
               return mockSectionAlerts[sectionId] || createEmptyAlertCount();
             };

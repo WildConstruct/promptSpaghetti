@@ -36,6 +36,10 @@ import { enhancedSecurityRoutes } from './auth/routes/enhanced-security';
 import { buildAuthConfig, CORS_CONFIG } from './auth/config';
 import { marketplaceRoutes } from './marketplace/routes';
 import { featureToggleRoutes } from './routes/feature-toggles';
+import toggleStateRoutes from './routes/toggle-state';
+import toggleParametersRoutes from './routes/toggle-parameters';
+import { ToggleStateService } from './services/ToggleStateService';
+import { FeatureToggleDAO } from './database/feature-toggle-dao';
 import { securityHeadersMiddleware, defaultSecurityConfig } from './middleware/security-headers';
 import { SecurityAuditService, defaultAuditConfig } from './services/security-audit-service';
 import { securityAuditRoutes } from './routes/security-audit';
@@ -1416,6 +1420,31 @@ try {
   console.log('Feature toggle routes registered successfully');
 } catch (error) {
   console.error('Failed to register feature toggle routes:', error);
+}
+
+// Register toggle state routes (Epic 17 - Server Integration)
+try {
+  const db = getDatabase();
+  const featureToggleDAO = new FeatureToggleDAO(db);
+  
+  server.register(async (fastify) => {
+    await toggleStateRoutes(fastify, { dao: featureToggleDAO });
+  }, { prefix: '/api/toggle-state' });
+  console.log('Toggle state routes registered successfully');
+} catch (error) {
+  console.error('Failed to register toggle state routes:', error);
+}
+
+// Register toggle parameters routes (Epic 17 - Server Integration)
+try {
+  const db = getDatabase();
+  
+  server.register(async (fastify) => {
+    await toggleParametersRoutes(fastify, { db });
+  }, { prefix: '/api/toggle-parameters' });
+  console.log('Toggle parameters routes registered successfully');
+} catch (error) {
+  console.error('Failed to register toggle parameters routes:', error);
 }
 
 // Register security audit routes

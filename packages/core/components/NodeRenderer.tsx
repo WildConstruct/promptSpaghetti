@@ -1,6 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useRef, useEffect } from 'react';
 import { Node, Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
+import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations';
 
 interface NodeRendererProps {
   id: string;

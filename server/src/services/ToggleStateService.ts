@@ -353,7 +353,8 @@ export class ToggleStateService extends EventEmitter {
                 summary.skipped++;
                 continue;
               }
-              updatedToggle = await this.dao.updateToggle(toggle.id, {
+              updatedToggle = await this.dao.updateToggle({
+                id: toggle.id,
                 enabled: true,
                 reason
               }, operation.actorId || 'system');
@@ -364,14 +365,16 @@ export class ToggleStateService extends EventEmitter {
                 summary.skipped++;
                 continue;
               }
-              updatedToggle = await this.dao.updateToggle(toggle.id, {
+              updatedToggle = await this.dao.updateToggle({
+                id: toggle.id,
                 enabled: false,
                 reason
               }, operation.actorId || 'system');
               break;
 
             case 'toggle':
-              updatedToggle = await this.dao.updateToggle(toggle.id, {
+              updatedToggle = await this.dao.updateToggle({
+                id: toggle.id,
                 enabled: !toggle.enabled,
                 reason
               }, operation.actorId || 'system');
@@ -379,7 +382,8 @@ export class ToggleStateService extends EventEmitter {
 
             case 'update_values':
               if (typeof toggleSpec === 'object' && toggleSpec.value !== undefined) {
-                updatedToggle = await this.dao.updateToggle(toggle.id, {
+                updatedToggle = await this.dao.updateToggle({
+                  id: toggle.id,
                   value: toggleSpec.value,
                   reason
                 }, operation.actorId || 'system');
@@ -516,7 +520,7 @@ export class ToggleStateService extends EventEmitter {
           };
 
           const newToggle = existingToggle ?
-            await this.dao.updateToggle(existingToggle.id, toggleData, request.options?.actorId || 'system') :
+            await this.dao.updateToggle({ ...toggleData, id: existingToggle.id }, request.options?.actorId || 'system') :
             await this.dao.createToggle(toggleData, request.options?.actorId || 'system');
 
           cloneResults.copied.push({

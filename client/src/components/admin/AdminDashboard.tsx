@@ -7,6 +7,7 @@ import { ApiManagementDashboard } from './ApiManagementDashboard';
 import { ModerationAdminDashboard } from './ModerationAdminDashboard';
 import { LogVisualizationDashboard } from './logs/LogVisualizationDashboard';
 import { AuditLogViewer } from './audit/AuditLogViewer';
+import DataProtectionDashboard from './DataProtectionDashboard';
 import './AdminLayout.css';
 
 // Placeholder components for other sections
@@ -60,6 +61,8 @@ export const AdminDashboard: React.FC = () => {
       return <SystemConfigurationDashboard />;
     case 'audit-logs':
       return <AuditLogViewer />;
+    case 'data-protection':
+      return <DataProtectionDashboard />;
     default:
       return <FeatureToggleDashboard />;
     }

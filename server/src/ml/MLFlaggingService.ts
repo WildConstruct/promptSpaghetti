@@ -232,7 +232,7 @@ export class MLFlaggingService {
           
           // Fallback to rule-based detection
           if (this.config.fallbackToRuleBased) {
-            const fallbackResult = await this.ruleBased Flagging(request.content, category);
+            const fallbackResult = await this.ruleBasedFlagging(request.content, category);
             if (fallbackResult) {
               results.push(fallbackResult);
               fallbackUsed = true;
