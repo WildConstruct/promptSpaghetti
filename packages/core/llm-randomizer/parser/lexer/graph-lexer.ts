@@ -101,7 +101,6 @@ export class GraphLexer {
    * Scan and classify the next token
    */
   private scanToken(): void {
-    const start = this.position;
     const char = this.advance();
 
     // Skip whitespace (except newlines)
@@ -257,7 +256,6 @@ export class GraphLexer {
    * Scan quoted string
    */
   private scanQuotedString(quote: string): void {
-    const start = this.position - 1;
     let value = '';
     let escaped = false;
 
