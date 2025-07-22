@@ -1,0 +1,453 @@
+/**
+ * Review Dashboard Styles - Epic 17
+ * 
+ * Comprehensive styling for the unified review dashboard interface.
+ * Provides modern, responsive design with proper hierarchy and accessibility.
+ * 
+ * Task: E17-1753114397301-5C1461 - Develop review tools
+ * Epic: 17 - Backstage Admin Controls
+ */
+
+.review-dashboard {
+  @apply w-full h-full flex flex-col bg-gray-50;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* =============================================================================
+   Dashboard Header
+   ============================================================================= */
+
+.dashboard-header {
+  @apply bg-white border-b border-gray-200 shadow-sm;
+}
+
+.header-content {
+  @apply flex items-center justify-between px-6 py-4;
+}
+
+.dashboard-header h1 {
+  @apply text-2xl font-semibold text-gray-900 m-0;
+}
+
+.header-actions {
+  @apply flex items-center gap-3;
+}
+
+.refresh-button,
+.settings-button {
+  @apply flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.refresh-button:hover:not(:disabled) {
+  @apply bg-blue-50 border-blue-300 text-blue-700;
+}
+
+.settings-button:hover {
+  @apply bg-gray-100 border-gray-400;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  @apply flex border-b border-gray-200 px-6;
+}
+
+.tab {
+  @apply px-4 py-3 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-all duration-200;
+  @apply focus:outline-none focus:text-blue-600 focus:border-blue-600;
+}
+
+.tab.active {
+  @apply text-blue-600 border-blue-600 bg-blue-50;
+}
+
+/* =============================================================================
+   Dashboard Content
+   ============================================================================= */
+
+.dashboard-content {
+  @apply flex-1 overflow-auto p-6;
+}
+
+/* Loading State */
+.review-dashboard.loading {
+  @apply items-center justify-center;
+}
+
+.loading-spinner {
+  @apply flex flex-col items-center gap-3 text-gray-500;
+}
+
+.loading-spinner span {
+  @apply text-lg font-medium;
+}
+
+/* =============================================================================
+   Overview Tab
+   ============================================================================= */
+
+.overview-tab {
+  @apply space-y-6;
+}
+
+/* Summary Cards */
+.summary-cards {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4;
+}
+
+.summary-card {
+  @apply bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.card-header {
+  @apply flex items-center gap-3 mb-4;
+}
+
+.card-icon {
+  @apply w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center;
+}
+
+.card-title {
+  @apply text-sm font-medium text-gray-600;
+}
+
+.card-value {
+  @apply text-3xl font-bold text-gray-900 mb-2;
+}
+
+.card-trend {
+  @apply flex items-center gap-1 text-sm font-medium;
+}
+
+.card-trend.up {
+  @apply text-green-600;
+}
+
+.card-trend.down {
+  @apply text-red-600;
+}
+
+/* Summary Card Variants */
+.summary-card.active-reviews .card-icon {
+  @apply bg-blue-100 text-blue-600;
+}
+
+.summary-card.pending-assignments .card-icon {
+  @apply bg-purple-100 text-purple-600;
+}
+
+.summary-card.overdue-reviews.alert .card-icon {
+  @apply bg-red-100 text-red-600;
+}
+
+.summary-card.quality-score .card-icon {
+  @apply bg-green-100 text-green-600;
+}
+
+/* Key Metrics */
+.key-metrics {
+  @apply bg-white rounded-xl border border-gray-200 p-6 shadow-sm;
+}
+
+.metric-row {
+  @apply flex justify-between items-center gap-6;
+}
+
+.metric {
+  @apply flex flex-col items-center text-center;
+}
+
+.metric-label {
+  @apply text-sm font-medium text-gray-600 mb-1;
+}
+
+.metric-value {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+/* Priority Sections */
+.priority-sections {
+  @apply space-y-4;
+}
+
+.priority-section {
+  @apply bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden;
+}
+
+.section-header {
+  @apply flex items-center gap-3 px-6 py-4 bg-gray-50 border-b border-gray-200;
+}
+
+.section-header h3 {
+  @apply text-lg font-semibold text-gray-900 m-0;
+}
+
+.section-header .count {
+  @apply text-sm font-medium text-gray-500 bg-gray-200 px-2 py-1 rounded-full;
+}
+
+.section-content {
+  @apply p-4 space-y-3;
+}
+
+.escalated-section .section-header {
+  @apply bg-red-50 border-red-200;
+}
+
+.overdue-section .section-header {
+  @apply bg-orange-50 border-orange-200;
+}
+
+/* Review Summary Cards */
+.review-summary-card {
+  @apply bg-gray-50 rounded-lg p-4 border border-gray-200 hover:bg-gray-100 cursor-pointer transition-colors duration-200;
+}
+
+.review-summary-card:hover {
+  @apply shadow-md border-gray-300;
+}
+
+.review-header {
+  @apply flex items-center justify-between mb-2;
+}
+
+.review-id {
+  @apply text-sm font-mono text-gray-600 bg-gray-200 px-2 py-1 rounded;
+}
+
+.priority-badge {
+  @apply text-xs font-medium text-white px-2 py-1 rounded-full uppercase tracking-wide;
+}
+
+.review-title {
+  @apply text-base font-semibold text-gray-900 mb-1 m-0;
+}
+
+.review-description {
+  @apply text-sm text-gray-600 mb-3 line-clamp-2;
+}
+
+.review-meta {
+  @apply flex items-center gap-4 text-xs text-gray-500;
+}
+
+.review-type {
+  @apply bg-blue-100 text-blue-800 px-2 py-1 rounded font-medium;
+}
+
+.review-status {
+  @apply bg-gray-100 text-gray-800 px-2 py-1 rounded font-medium;
+}
+
+.assigned-to {
+  @apply font-medium;
+}
+
+/* =============================================================================
+   Queue Tab
+   ============================================================================= */
+
+.queue-tab {
+  @apply space-y-6;
+}
+
+/* Review Filters */
+.review-filters {
+  @apply bg-white rounded-xl border border-gray-200 p-4 shadow-sm;
+}
+
+.filter-row {
+  @apply flex items-center gap-4;
+}
+
+.search-box {
+  @apply flex-1 relative;
+}
+
+.search-box input {
+  @apply w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+.search-box svg {
+  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400;
+}
+
+.filter-button {
+  @apply flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200;
+}
+
+/* Review List */
+.review-list {
+  @apply bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden;
+}
+
+.review-list-item {
+  @apply border-b border-gray-200 p-6 hover:bg-gray-50 cursor-pointer transition-colors duration-200;
+  @apply last:border-b-0;
+}
+
+.review-list-item:hover {
+  @apply bg-blue-50;
+}
+
+.review-summary h4 {
+  @apply text-lg font-semibold text-gray-900 mb-2 m-0;
+}
+
+.review-summary p {
+  @apply text-gray-600 line-clamp-2;
+}
+
+/* =============================================================================
+   Assignments Tab
+   ============================================================================= */
+
+.assignments-tab {
+  @apply space-y-6;
+}
+
+.assignments-tab h2 {
+  @apply text-xl font-semibold text-gray-900 m-0;
+}
+
+/* =============================================================================
+   Analytics Tab
+   ============================================================================= */
+
+.analytics-tab {
+  @apply space-y-6;
+}
+
+.analytics-tab h2 {
+  @apply text-xl font-semibold text-gray-900 m-0;
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+@media (max-width: 768px) {
+  .dashboard-header .header-content {
+    @apply flex-col items-start gap-4;
+  }
+
+  .header-actions {
+    @apply w-full justify-end;
+  }
+
+  .tab-navigation {
+    @apply px-4 overflow-x-auto;
+  }
+
+  .dashboard-content {
+    @apply p-4;
+  }
+
+  .summary-cards {
+    @apply grid-cols-1;
+  }
+
+  .metric-row {
+    @apply flex-col gap-4;
+  }
+
+  .filter-row {
+    @apply flex-col items-stretch;
+  }
+
+  .search-box {
+    @apply mb-3;
+  }
+}
+
+@media (max-width: 640px) {
+  .review-header {
+    @apply flex-col items-start gap-2;
+  }
+
+  .review-meta {
+    @apply flex-col items-start gap-2;
+  }
+
+  .section-header {
+    @apply flex-col items-start gap-2;
+  }
+}
+
+/* =============================================================================
+   Utility Classes
+   ============================================================================= */
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Animation keyframes */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Focus states for accessibility */
+.review-summary-card:focus,
+.review-list-item:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+.tab:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  .review-dashboard {
+    @apply bg-gray-900;
+  }
+
+  .dashboard-header {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .dashboard-header h1 {
+    @apply text-gray-100;
+  }
+
+  .summary-card {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .card-title {
+    @apply text-gray-400;
+  }
+
+  .card-value {
+    @apply text-gray-100;
+  }
+
+  .review-summary-card {
+    @apply bg-gray-800 border-gray-700 text-gray-100;
+  }
+
+  .review-list {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .review-list-item {
+    @apply border-gray-700;
+  }
+
+  .review-list-item:hover {
+    @apply bg-gray-700;
+  }
+}
