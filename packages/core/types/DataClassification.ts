@@ -5,7 +5,13 @@
  * as part of Epic 19 - Data Protection & Privacy Controls
  */
 
-export type DataClassificationLevel = 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
+export enum DataClassificationLevel {
+  PUBLIC = 'PUBLIC',
+  INTERNAL = 'INTERNAL',
+  CONFIDENTIAL = 'CONFIDENTIAL',
+  RESTRICTED = 'RESTRICTED',
+  TOP_SECRET = 'TOP_SECRET'
+}
 
 export interface DataClassification {
   id: string;

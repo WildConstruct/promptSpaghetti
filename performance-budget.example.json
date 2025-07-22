@@ -1,0 +1,39 @@
+{
+  "bundles": {
+    "main": 200,
+    "vendor": 400,
+    "chunks": 80,
+    "total": 800
+  },
+  "runtime": {
+    "firstContentfulPaint": 1200,
+    "largestContentfulPaint": 2000,
+    "firstInputDelay": 80,
+    "cumulativeLayoutShift": 0.08,
+    "timeToInteractive": 2500
+  },
+  "api": {
+    "graphExecution": 800,
+    "preview": 400,
+    "validation": 80,
+    "authentication": 150
+  },
+  "memory": {
+    "initialHeap": 40,
+    "peakHeap": 120,
+    "steadyState": 60,
+    "leakThreshold": 3
+  },
+  "network": {
+    "totalRequests": 20,
+    "totalTransferSize": 1200,
+    "thirdPartyRequests": 3,
+    "criticalResourceCount": 8
+  },
+  "build": {
+    "buildTime": 45,
+    "typeCheckTime": 12,
+    "lintTime": 8,
+    "testTime": 25
+  }
+}
