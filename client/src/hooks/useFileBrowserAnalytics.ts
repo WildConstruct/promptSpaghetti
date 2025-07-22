@@ -274,7 +274,18 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
 /**
  * Enhanced hook that provides common file operation tracking patterns
  */
-export 
+export   trackUpload: (fileName: string, filePath: string, fileSize: number) => Promise<void>;
+  trackDirectoryLoad: (path: string, fileCount: number) => Promise<void>;
+  trackSearchWithResults: (searchTerm: string, results: any[], clickedResultIndex?: number) => Promise<void>;
+  trackBulkOperation: (
+    operationType: string,
+    fileCount: number,
+    success?: boolean,
+    metadata?: AnalyticsMetadata
+  ) => Promise<void>;
+} => {
+  const analytics = useFileBrowserAnalytics();
+
   // Track file download with automatic performance measurement
   const trackDownload = useCallback(async (fileName: string, filePath: string, fileSize?: number): Promise<void> => {
     const stopTimer = analytics.startTimer('download');

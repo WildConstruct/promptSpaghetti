@@ -1,6 +1,7 @@
 // server/src/engine.ts
 // Deterministic depth-first graph executor (Story 3.1)
 // Epic 13 - Enhanced with comprehensive analytics collection
+// PERFORMANCE OPTIMIZATION: Batched analytics to reduce overhead
 
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 import {
@@ -146,6 +147,29 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
   const currentSessionId = sessionId || uuidv4();
   const startTime = Date.now();
   
+  // PERFORMANCE OPTIMIZATION: Batched analytics collection
+  const analyticsBuffer: any[] = [];
+  const flushAnalytics = () => {
+    if (analyticsCollector && analyticsBuffer.length > 0) {
+      // Batch send all analytics events
+      analyticsBuffer.forEach(event => {
+        if (event.type === 'nodeExecution') {
+          analyticsCollector.recordNodeExecution(
+            event.nodeId,
+            event.nodeType,
+            event.graphId,
+            event.executionTimeMs,
+            event.success,
+            event.error
+          );
+        } else if (event.type === 'event') {
+          analyticsCollector.recordEvent(event.data);
+        }
+      });
+      analyticsBuffer.length = 0; // Clear buffer
+    }
+  };
+  
   // Epic 8.5: Initialize execution tracking
   const tracker = GraphExecutionTracker.getInstance();
   const trackingId = tracker.startTracking(graph.seed ?? Date.now());
@@ -255,17 +279,16 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         
         tracker.recordNodeExecution(trackingId, executionStep);
         
-        if (analyticsCollector) {
-          analyticsCollector.recordNodeExecution(
-            nodeId,
-            node.type,
-            graphId,
-            executionTimeMs,
-            true, // success
-            JSON.stringify(resolvedInputs).length,
-            JSON.stringify(result).length
-          );
-        }
+        // PERFORMANCE OPTIMIZATION: Buffer analytics instead of immediate recording
+        analyticsBuffer.push({
+          type: 'nodeExecution',
+          nodeId,
+          nodeType: node.type,
+          graphId,
+          executionTimeMs,
+          success: true,
+          error: undefined
+        });
 
         return result;
       } catch (error) {
@@ -334,6 +357,9 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
 
     // Epic 8.5: Finish execution tracking and get execution path
     const executionPath = tracker.finishTracking(trackingId, outputs.join('\n'));
+    
+    // PERFORMANCE OPTIMIZATION: Flush batched analytics before returning
+    flushAnalytics();
 
     return {
       outputs,

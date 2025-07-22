@@ -1,0 +1,163 @@
+{
+  "version": "1.0.0",
+  "description": "Epic 17 Health Check Performance Thresholds Configuration",
+  "lastUpdated": "2025-07-22",
+  "updatedBy": "Quinn - QA Architect",
+  
+  "environments": {
+    "development": {
+      "multiplier": 1.5,
+      "description": "Relaxed thresholds for development environment"
+    },
+    "staging": {
+      "multiplier": 1.2,
+      "description": "Slightly relaxed thresholds for staging validation"
+    },
+    "production": {
+      "multiplier": 1.0,
+      "description": "Standard production thresholds"
+    },
+    "demo": {
+      "multiplier": 0.8,
+      "description": "Tighter thresholds for film industry demo environment"
+    }
+  },
+  
+  "alerting": {
+    "channels": {
+      "critical": ["slack", "pagerduty", "email"],
+      "high": ["slack", "email"],
+      "medium": ["slack"],
+      "low": ["email"]
+    },
+    "escalation": {
+      "critical": {
+        "initial": 0,
+        "escalation1": 300,
+        "escalation2": 900
+      },
+      "high": {
+        "initial": 300,
+        "escalation1": 1800
+      },
+      "medium": {
+        "initial": 1800
+      },
+      "low": {
+        "initial": 3600
+      }
+    }
+  },
+  
+  "monitoring": {
+    "sampling": {
+      "adminOperations": 1.0,
+      "healthChecks": 1.0,
+      "dashboard": 0.1,
+      "systemAdmin": 1.0
+    },
+    "retention": {
+      "measurements": "7d",
+      "alerts": "30d",
+      "aggregations": "90d"
+    }
+  },
+  
+  "businessImpact": {
+    "adminOperations": {
+      "userProductivity": "High - Admin workflow efficiency directly impacts operational costs",
+      "securityRisk": "Critical - Slow permission checks can lead to timeout bypasses",
+      "customerExperience": "Medium - Indirect impact through admin-managed features"
+    },
+    "healthChecks": {
+      "systemReliability": "Critical - Health check performance affects automated recovery",
+      "monitoringEffectiveness": "Critical - Slow health checks reduce incident response time",
+      "businessContinuity": "Critical - System recovery depends on health check accuracy"
+    },
+    "dashboard": {
+      "operationalVisibility": "High - Admin dashboard performance affects incident response",
+      "decisionMaking": "Medium - Real-time data access for business decisions",
+      "systemInsight": "High - Performance monitoring and system health visibility"
+    },
+    "systemAdmin": {
+      "maintenanceEfficiency": "Medium - Automated maintenance operations",
+      "dataIntegrity": "High - Backup and verification operations",
+      "systemStability": "High - Configuration deployment and system recovery"
+    }
+  },
+  
+  "qualityGates": {
+    "preDeployment": {
+      "performanceRegression": {
+        "threshold": 0.15,
+        "description": "Block deployment if performance degrades by more than 15%"
+      },
+      "availabilityTarget": {
+        "threshold": 0.999,
+        "description": "99.9% availability requirement for health check endpoints"
+      }
+    },
+    "runtime": {
+      "errorBudget": {
+        "monthly": 0.001,
+        "description": "0.1% error budget per month for health check operations"
+      },
+      "performanceBudget": {
+        "degradation": 0.05,
+        "description": "5% performance degradation budget before alerts"
+      }
+    }
+  },
+  
+  "integrations": {
+    "existingSystems": {
+      "PerformanceMonitor": {
+        "enabled": true,
+        "integration": "extend",
+        "description": "Integrate Epic 17 thresholds with existing PerformanceMonitor"
+      },
+      "AlertingService": {
+        "enabled": true,
+        "integration": "extend",
+        "description": "Use existing AlertingService for Epic 17 notifications"
+      },
+      "DiagnosticService": {
+        "enabled": true,
+        "integration": "enhance",
+        "description": "Enhance DiagnosticService with Epic 17 health checks"
+      }
+    },
+    "dashboards": {
+      "grafana": {
+        "enabled": true,
+        "endpoint": "/metrics/epic17",
+        "refreshInterval": "5s"
+      },
+      "adminDashboard": {
+        "enabled": true,
+        "widget": "HealthMetrics",
+        "refreshInterval": "10s"
+      }
+    }
+  },
+  
+  "compliance": {
+    "requirements": {
+      "sla": {
+        "healthCheckAvailability": "99.9%",
+        "adminOperationSuccess": "99.5%",
+        "dashboardUptime": "99.0%"
+      },
+      "security": {
+        "auditLogging": true,
+        "performanceTracking": true,
+        "thresholdBreachLogging": true
+      },
+      "filmIndustryDemo": {
+        "responseTimeGuarantee": "Sub-second for all admin operations",
+        "demonstrationReliability": "Zero crashes during 2-hour demo",
+        "professionalGrade": "Enterprise-level performance monitoring"
+      }
+    }
+  }
+}
