@@ -11,7 +11,8 @@ import {
   Shield,
   Menu,
   X,
-  LogOut
+  LogOut,
+  Key
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -38,6 +39,12 @@ const adminSections = [
     label: 'Content Management',
     icon: FileText,
     description: 'Moderate and manage content'
+  },
+  {
+    id: 'api-management',
+    label: 'API Management',
+    icon: Key,
+    description: 'Manage API keys and access control'
   },
   {
     id: 'marketplace',

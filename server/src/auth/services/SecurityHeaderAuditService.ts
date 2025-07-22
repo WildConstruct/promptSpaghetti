@@ -271,7 +271,8 @@ export class SecurityHeaderAuditService extends EventEmitter {
       priority: 'high' | 'medium' | 'low';
     }>;
     score: number;
-  }> {\n    // Mock endpoint analysis - would make actual HTTP request
+  }> {
+    // Mock endpoint analysis - would make actual HTTP request
     const currentHeaders = await this.analyzeEndpointHeaders(endpoint);
     const recommendations = [];
     let score = 0;

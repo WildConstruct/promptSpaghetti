@@ -71,7 +71,7 @@ export interface RateLimitData {
   windowStart: number;
 }
 
-export enum RateLimitStrategy {
+export enum RateLimitStrategyType {
   FIXED_WINDOW = 'fixed_window',
   SLIDING_WINDOW = 'sliding_window',
   TOKEN_BUCKET = 'token_bucket',

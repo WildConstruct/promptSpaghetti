@@ -154,5 +154,3 @@ export interface ExecutionVisualizationConfig {
   colorByVariance: boolean;
   showDebugInfo: boolean;
 }
-
-export };

@@ -43,7 +43,6 @@ export interface ProjectExecutionStats {
   averageExecutionTime: number;
   lastExecution?: number;
 }
-}
 
 export interface GraphExecution {
   id: number;

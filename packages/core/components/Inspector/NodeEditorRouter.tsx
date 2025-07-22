@@ -18,12 +18,14 @@ interface NodeEditorRouterProps {
   node: Record<string, unknown>;
   schema: ZodSchema<Record<string, unknown>>;
   onChange: (partial: Record<string, unknown>) => void;
+  onGlobalPreviewRequest?: () => void;
 }
 
 export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({
   node,
   schema,
-  onChange
+  onChange,
+  onGlobalPreviewRequest
 }) => {
   if (!node || !schema) {
     return null;
@@ -45,7 +47,7 @@ export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({
   switch (nodeType) {
   // Basic Runtime Nodes
   case 'WeightedChoice':
-    return <WeightedChoiceEditor {...editorProps} />;
+    return <WeightedChoiceEditor {...editorProps} onGlobalPreviewRequest={onGlobalPreviewRequest} />;
     
   case 'Concat':
     return <ConcatEditor {...editorProps} />;

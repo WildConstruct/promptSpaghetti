@@ -72,6 +72,17 @@ function handleEpicAPI(req, res) {
 
 // Dashboard handler
 function handleDashboard(req, res) {
+  // Serve the restored standalone HTML dashboard file
+  const dashboardPath = path.join(__dirname, 'complete-dashboard.html');
+  try {
+    const html = fs.readFileSync(dashboardPath, 'utf8');
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(html);
+    return; // Skip legacy inline template below
+  } catch (err) {
+    console.error('❌ Failed to read complete-dashboard.html', err);
+    // Fallback to legacy template if file read fails
+  }
   const dashboardHTML = `
 <!DOCTYPE html>
 <html lang="en">

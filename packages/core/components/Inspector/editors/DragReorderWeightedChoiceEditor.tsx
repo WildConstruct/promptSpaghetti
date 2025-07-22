@@ -552,6 +552,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
           )}
         </div>
       )}
+      </ProgressiveDisclosureSection>
 
       {/* Professional Footer */}
       <div style={{

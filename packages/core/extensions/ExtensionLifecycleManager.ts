@@ -362,7 +362,17 @@ export class ExtensionLifecycleManager {
   public getExtensionStatistics(): ExtensionStatistics {
     const stats: ExtensionStatistics = {
       total: this.extensions.size,
-      byState: {},
+      byState: {
+        uninitialized: 0,
+        initializing: 0,
+        initialized: 0,
+        activating: 0,
+        active: 0,
+        deactivating: 0,
+        deactivated: 0,
+        error: 0,
+        disposed: 0
+      },
       byType: {},
       errors: 0,
       healthy: 0
@@ -399,11 +409,11 @@ export class ExtensionLifecycleManager {
    * Event handling
    */
   public on(event: string, listener: (data: any) => void): void {
-    this.eventEmitter.addEventListener(event, listener as EventListener);
+    this.eventEmitter.addEventListener(event, listener as any);
   }
 
   public off(event: string, listener: (data: any) => void): void {
-    this.eventEmitter.removeEventListener(event, listener as EventListener);
+    this.eventEmitter.removeEventListener(event, listener as any);
   }
 
   private emit(event: string, data?: any): void {

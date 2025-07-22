@@ -367,7 +367,7 @@ export class RandomizerWorkflow {
     const requiredTypes = parameters.nodeTypes.filter(nt => nt.required);
     
     for (const required of requiredTypes) {
-      if (!nodeTypes.has(required.nodeType)) {
+      if (!nodeTypes.has(required.nodeType as any)) {
         warnings.push({
           message: `Missing required node type: ${required.nodeType}`,
           suggestion: 'Regenerate with clearer requirements'

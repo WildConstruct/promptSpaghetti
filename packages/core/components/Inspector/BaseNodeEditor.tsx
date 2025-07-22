@@ -12,16 +12,25 @@ const getFilmmakerFriendlyError = (message: string): string => {
     'Expected string, received number': 'Please enter text, not a number',
     'Expected number, received string': 'Please enter a number',
     'Array must contain at least 1 element(s)': 'Please add at least one item',
-    'Invalid': 'Please check this value'
+    'Invalid': 'Please check this value',
+    'node': 'element',
+    'Node': 'Element',
+    'property': 'setting',
+    'Property': 'Setting',
+    'configuration': 'setup',
+    'Configuration': 'Setup',
+    'parameter': 'option',
+    'Parameter': 'Option',
+    'schema': 'format',
+    'Schema': 'Format'
   };
   
+  let friendlyMessage = message;
   for (const [technical, friendly] of Object.entries(errorMappings)) {
-    if (message.includes(technical)) {
-      return friendly;
-    }
+    friendlyMessage = friendlyMessage.replace(new RegExp(technical, 'g'), friendly);
   }
   
-  return message; // Return original if no mapping found
+  return friendlyMessage;
 };
 
 export interface BaseNodeEditorProps {

@@ -118,7 +118,19 @@ export class PythonExecutorClient {
         }
       });
 
-      const result: PythonExecutionResult = await response.json();
+      const responseData = await response.json();
+      const result: PythonExecutionResult = responseData || {
+        success: false,
+        execution_time: 0,
+        memory_used: 0,
+        peak_memory: 0,
+        output: '',
+        error: 'No response data',
+        request_id: requestId,
+        timestamp: new Date().toISOString(),
+        python_version: '',
+        exit_code: 1
+      };
 
       // Log metrics if enabled
       if (this.config.enableMetrics) {
@@ -154,7 +166,11 @@ export class PythonExecutorClient {
         }
       });
 
-      const result: PythonValidationResult = await response.json();
+      const result: PythonValidationResult = await response.json() as PythonValidationResult || {
+        valid: false,
+        errors: ['No response data'],
+        warnings: []
+      };
 
       // Log metrics if enabled
       if (this.config.enableMetrics) {
@@ -183,7 +199,12 @@ export class PythonExecutorClient {
         }
       });
 
-      return await response.json();
+      const healthData = await response.json();
+      return healthData || {
+        status: 'unknown',
+        version: '0.0.0',
+        uptime: 0
+      };
     } catch (error) {
       this.handleError(error instanceof Error ? error : new Error(String(error)), 'health', requestId);
       throw error;

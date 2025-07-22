@@ -695,11 +695,7 @@ export function validateVFXCompatibility(graph: Graph): {
   
   if (!compatible) {
     recommendations.push(
-      'Add VFX-related nodes (
-        camera variables,
-        sequential animations,
-        or depth/edge hints
-      ) for better ControlNet compatibility'
+      'Add VFX-related nodes (camera variables, sequential animations, or depth/edge hints) for better ControlNet compatibility'
     );
   }
   

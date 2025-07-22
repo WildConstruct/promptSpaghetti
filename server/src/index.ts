@@ -1,5 +1,7 @@
 import Fastify, { FastifyRequest } from 'fastify';
 import { z } from 'zod';
+// DEPLOYMENT BLOCKER FIX: Import Fastify type augmentations
+import './types/fastify';
 import { executeGraph, initializeAnalytics } from './engine';
 import { Graph, Node } from '../../packages/core/graphSchema';
 import { validateGraph } from './graphValidator';
@@ -184,7 +186,19 @@ export async function generatePreviewOutputs(
   seedStart: number,
   sessionId?: string,
   userId?: number
-): Promise<Array<{seed: number, output: string, executionTimeMs?: number}>> {
+): Promise<Array<{
+  seed: number, 
+  output: string, 
+  executionTimeMs?: number,
+  executionPath?: any,
+  weightChoices?: Array<{
+    nodeId: string,
+    selectedOption: any,
+    availableOptions: any[],
+    weights?: number[],
+    selectionProbability?: number
+  }>
+}>> {
   const startTime = Date.now();
   
   // Epic 8.5: Generate graph hash for caching
@@ -212,17 +226,29 @@ export async function generatePreviewOutputs(
     const graphWithSeed = { ...graph, seed };
     
     return executeGraph(graphWithSeed, sessionId, userId)
-      .then(outputs => ({
+      .then(result => ({
         seed,
-        output: outputs[0] || '',
-        executionTimeMs: Date.now() - executionStartTime
+        output: result.outputs[0] || '',
+        executionTimeMs: Date.now() - executionStartTime,
+        // Epic 8.5-5: Include weight impact information
+        executionPath: result.executionPath,
+        // Extract weight-specific information for easier frontend consumption
+        weightChoices: result.executionPath?.randomizationPoints?.map(point => ({
+          nodeId: point.nodeId,
+          selectedOption: point.selectedOption,
+          availableOptions: point.availableOptions,
+          weights: point.weights,
+          selectionProbability: point.selectionProbability
+        })) || []
       }))
       .catch(error => {
         console.error(`Error generating preview for seed ${seed}:`, error);
         return {
           seed,
           output: `Error: ${error instanceof Error ? error.message : String(error)}`,
-          executionTimeMs: Date.now() - executionStartTime
+          executionTimeMs: Date.now() - executionStartTime,
+          executionPath: undefined,
+          weightChoices: []
         };
       });
   });

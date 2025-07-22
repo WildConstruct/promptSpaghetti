@@ -617,6 +617,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
             </div>
           </div>
         </div>
+        </div>
       </ProgressiveDisclosureSection>
     </div>
   );

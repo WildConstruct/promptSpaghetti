@@ -359,7 +359,7 @@ export const ExtensionManifestSchema = z.object({
 export type ExtensionManifest = z.infer<typeof ExtensionManifestSchema>;
 
 // Re-export specific extension types
-export { NodeExtension, NodeDefinition, NodeCategory } from './NodeExtension';
+export { NodeExtension, NodeDefinition as NodeExtensionDefinition, NodeCategory } from './NodeExtension';
 export { UIExtension } from './UIExtension';
 export { TransformExtension } from './TransformExtension';
 export { StorageExtension } from './StorageExtension';

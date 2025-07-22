@@ -78,6 +78,9 @@ export interface SecurityEventContext {
   executionTime?: number;
   stackTrace?: string;
   additionalData?: Record<string, any>;
+  // DEPLOYMENT BLOCKER FIX: Add missing properties causing TypeScript errors
+  strictMode?: boolean;
+  error?: string;
 }
 
 /**

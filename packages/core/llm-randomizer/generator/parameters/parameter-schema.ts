@@ -317,4 +317,26 @@ export class ParameterValidator {
 /**
  * Default parameter presets
  */
-export ];
+export const defaultPresets = {
+  creative: {
+    id: 'creative',
+    name: 'Creative',
+    temperature: 0.9,
+    complexity: 'medium' as const,
+    style: 'creative'
+  },
+  balanced: {
+    id: 'balanced',
+    name: 'Balanced',
+    temperature: 0.7,
+    complexity: 'medium' as const,
+    style: 'balanced'
+  },
+  precise: {
+    id: 'precise',
+    name: 'Precise',
+    temperature: 0.3,
+    complexity: 'simple' as const,
+    style: 'technical'
+  }
+} as const;

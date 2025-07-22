@@ -523,32 +523,30 @@ export type ExportScheduleWithStats = ExportSchedule & {
 };
 
 // Validation helpers
-export   case 'yaml':
-    return YamlExportOptionsSchema.safeParse(options);
-  case 'xml':
-    return XmlExportOptionsSchema.safeParse(options);
-  case 'csv':
-    return CsvExportOptionsSchema.safeParse(options);
-  case 'markdown':
-    return MarkdownExportOptionsSchema.safeParse(options);
-  case 'pdf':
-    return PdfExportOptionsSchema.safeParse(options);
-  case 'html':
-    return HtmlExportOptionsSchema.safeParse(options);
-  case 'zip':
-    return ZipExportOptionsSchema.safeParse(options);
-  default:
-    return CommonExportOptionsSchema.safeParse(options);
+export function validateExportOptions(format: ExportFormat, options: any) {
+  switch (format) {
+    case 'yaml':
+      return YamlExportOptionsSchema.safeParse(options);
+    case 'xml':
+      return XmlExportOptionsSchema.safeParse(options);
+    case 'csv':
+      return CsvExportOptionsSchema.safeParse(options);
+    case 'markdown':
+      return MarkdownExportOptionsSchema.safeParse(options);
+    case 'pdf':
+      return PdfExportOptionsSchema.safeParse(options);
+    case 'html':
+      return HtmlExportOptionsSchema.safeParse(options);
+    case 'zip':
+      return ZipExportOptionsSchema.safeParse(options);
+    default:
+      return CommonExportOptionsSchema.safeParse(options);
   }
-};
+}
 
 // Constants
-export 
-export 
-export 
-export 
-export export const MAX_EXPORT_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-export 
+export const MAX_EXPORT_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+
 // TypeScript type exports
 export type ShareAccessLevel = z.infer<typeof ShareAccessLevelSchema>;
 export type ExportFormat = z.infer<typeof ExportFormatSchema>;

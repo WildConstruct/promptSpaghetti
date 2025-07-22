@@ -168,6 +168,41 @@ export
                         )}
                       </div>
                     )}
+                    
+                    {/* Epic 8.5-5: Weight Impact Visualization */}
+                    {hasPath && 'weightChoices' in res && res.weightChoices && res.weightChoices.length > 0 && (
+                      <div style={{
+                        marginTop: 8,
+                        padding: 8,
+                        background: 'rgba(77, 124, 255, 0.1)',
+                        border: '1px solid rgba(77, 124, 255, 0.2)',
+                        borderRadius: 4
+                      }}>
+                        <div style={{
+                          fontSize: 11,
+                          fontWeight: 500,
+                          color: '#4d7cff',
+                          marginBottom: 6
+                        }}>
+                          🎬 Weight Impact Analysis:
+                        </div>
+                        {res.weightChoices.map((choice, idx) => (
+                          <div key={idx} style={{
+                            fontSize: 10,
+                            color: '#4a5568',
+                            marginBottom: 2,
+                            lineHeight: 1.3
+                          }}>
+                            <strong>{choice.nodeId}:</strong> Selected "{choice.selectedOption}" 
+                            {choice.selectionProbability && (
+                              <span style={{ color: '#4d7cff' }}>
+                                {' '}({(choice.selectionProbability * 100).toFixed(1)}% chance)
+                              </span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </li>
                 );
               })}

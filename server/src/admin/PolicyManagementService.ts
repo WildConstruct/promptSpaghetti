@@ -165,17 +165,8 @@ export class PolicyManagementService {
 
     // Get total count
     const countResult = await this.db.query(
-      query.replace('SELECT template_id,
-      name,
-      description,
-      category,
-      severity,
-      default_config,
-      is_system_template,
-      created_at,
-      updated_at',
-      'SELECT COUNT(*
-    )'), params);
+      query.replace('SELECT template_id, name, description, category, severity, default_config, is_system_template, created_at, updated_at',
+      'SELECT COUNT(*)'), params);
     const total = parseInt(countResult.rows[0].count);
 
     // Get paginated results

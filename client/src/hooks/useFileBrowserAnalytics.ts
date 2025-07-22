@@ -274,7 +274,9 @@ export const useFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn => {
 /**
  * Enhanced hook that provides common file operation tracking patterns
  */
-export   trackUpload: (fileName: string, filePath: string, fileSize: number) => Promise<void>;
+export const useEnhancedFileBrowserAnalytics = (): UseFileBrowserAnalyticsReturn & {
+  trackDownload: (fileName: string, filePath: string, fileSize?: number) => Promise<void>;
+  trackUpload: (fileName: string, filePath: string, fileSize: number) => Promise<void>;
   trackDirectoryLoad: (path: string, fileCount: number) => Promise<void>;
   trackSearchWithResults: (searchTerm: string, results: any[], clickedResultIndex?: number) => Promise<void>;
   trackBulkOperation: (

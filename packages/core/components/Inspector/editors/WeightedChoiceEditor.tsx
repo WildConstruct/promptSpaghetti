@@ -8,12 +8,19 @@ import { WeightControlSlider, WeightControlOption, useWeightControlIntegration }
 import { WeightVisualizationPanel } from '../../WeightVisualization';
 import { useRealTimePreview } from '../../../hooks/useRealTimePreview';
 import { useUISettingsStore } from '../../../stores/uiSettingsStore';
+import { useGraphStore } from '../../../graphStore';
 
 export interface WeightedChoiceEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // WeightedChoice specific props can be added here
+  onGlobalPreviewRequest?: () => void;
 }
 
-export   
+export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({ 
+  nodeData, 
+  onChange, 
+  errors,
+  onGlobalPreviewRequest 
+}) => {
   // WeightedChoice specific fields
   const choices = (nodeData.choices as string[]) || [];
   const weights = (nodeData.weights as number[]) || [];
@@ -21,6 +28,9 @@ export
 
   // UI settings
   const { complexityLevel, shouldShowTechnicalFields } = useUISettingsStore();
+
+  // Global graph state for triggering full preview
+  const { nodes, edges } = useGraphStore();
 
   // Convert choices and weights to WeightControlOptions
   const weightOptions: WeightControlOption[] = choices.map((choice, index) => ({
@@ -50,22 +60,32 @@ export
     }
   );
 
+  // Weight control integration with global preview support
+  const handleGlobalPreviewRequest = useCallback((weightOptions: WeightControlOption[]) => {
+    console.log('[Epic 8.5-5] Weight change triggering global preview with', weightOptions.length, 'options');
+    
+    // Update the node data first
+    const newChoices = weightOptions.map(option => option.text);
+    const newWeights = weightOptions.map(option => option.weight);
+    
+    onChange({
+      choices: newChoices,
+      weights: newWeights
+    });
+    
+    // Trigger global preview with updated graph after a short delay
+    setTimeout(() => {
+      onGlobalPreviewRequest?.();
+    }, 50); // Short delay to ensure state updates
+    
+    // Keep local preview for immediate feedback
+    requestPreview(weightOptions);
+  }, [onChange, onGlobalPreviewRequest, requestPreview]);
+
   // Weight control integration
   const { handleOptionsChange } = useWeightControlIntegration(
     weightOptions,
-    useCallback((newOptions: WeightControlOption[]) => {
-      // Update choices and weights
-      const newChoices = newOptions.map(option => option.text);
-      const newWeights = newOptions.map(option => option.weight);
-      
-      onChange({
-        choices: newChoices,
-        weights: newWeights
-      });
-      
-      // Trigger real-time preview update
-      requestPreview(newOptions);
-    }, [onChange, requestPreview])
+    handleGlobalPreviewRequest
   );
 
   const handleChoicesChange = (newChoices: string[]) => {
@@ -163,10 +183,27 @@ export
           <WeightControlSlider
             options={weightOptions}
             onOptionsChange={handleOptionsChange}
-            onPreviewRequest={requestPreview}
+            onPreviewRequest={handleGlobalPreviewRequest}
             showPreview={true}
             previewDebounceMs={300}
+            showPresets={true}
+            allowCustomPresets={complexityLevel !== 'basic'}
           />
+          
+          {/* Epic 8.5-5: Real-time Weight Integration Status */}
+          {complexityLevel !== 'basic' && (
+            <div style={{
+              marginTop: 12,
+              padding: 8,
+              background: 'rgba(77, 124, 255, 0.1)',
+              border: '1px solid rgba(77, 124, 255, 0.2)',
+              borderRadius: 4,
+              fontSize: 11,
+              color: '#4d7cff'
+            }}>
+              🎬 <strong>Epic 8.5 Real-Time Integration:</strong> Weight changes automatically trigger 5-seed preview generation for film industry demo quality.
+            </div>
+          )}
         </ProgressiveDisclosureSection>
       )}
 

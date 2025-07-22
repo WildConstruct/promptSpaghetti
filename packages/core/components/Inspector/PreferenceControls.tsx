@@ -12,13 +12,13 @@ export interface PreferenceControlsProps {
 const DISCLOSURE_LEVELS: SelectOption[] = [
   { value: 'basic', label: 'Basic - Essential fields only' },
   { value: 'advanced', label: 'Advanced - Power user options' },
-  { value: 'debug', label: 'Debug - Technical details' }
+  { value: 'debug', label: 'Expert - Technical details' }
 ];
 
 const INHERITANCE_MODES: SelectOption[] = [
-  { value: 'global', label: 'Global - Use global preference for all nodes' },
-  { value: 'nodeType', label: 'Node Type - Different preferences per node type' },
-  { value: 'individual', label: 'Individual - Custom preference per node' }
+  { value: 'global', label: 'Global - Use same preference for all elements' },
+  { value: 'nodeType', label: 'Element Type - Different preferences per element type' },
+  { value: 'individual', label: 'Individual - Custom preference per element' }
 ];
 
 export 

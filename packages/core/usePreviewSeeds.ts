@@ -7,6 +7,15 @@ interface PreviewResult {
   usedNodeIds?: string[];
   usedEdgeIds?: string[];
   executionTimeMs?: number;
+  // Epic 8.5-5: Weight impact information
+  executionPath?: any;
+  weightChoices?: Array<{
+    nodeId: string;
+    selectedOption: any;
+    availableOptions: any[];
+    weights?: number[];
+    selectionProbability?: number;
+  }>;
 }
 
 export   const [error, setError] = useState<string | null>(null);

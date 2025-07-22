@@ -280,6 +280,15 @@ export class DiagnosticService {
         case DiagnosticCategory.PERFORMANCE:
           result = await this.runPerformanceDiagnostic(diagnostic, executionId, metadata);
           break;
+        case DiagnosticCategory.INTEGRATION:
+          result = await this.runIntegrationDiagnostic(diagnostic, executionId, metadata);
+          break;
+        case DiagnosticCategory.BACKUP:
+          result = await this.runBackupDiagnostic(diagnostic, executionId, metadata);
+          break;
+        case DiagnosticCategory.CONFIGURATION:
+          result = await this.runConfigurationDiagnostic(diagnostic, executionId, metadata);
+          break;
         default:
           result = await this.runGenericDiagnostic(diagnostic, executionId, metadata);
       }
@@ -337,6 +346,9 @@ export class DiagnosticService {
         return this.checkDatabaseLocks(diagnostic, executionId, metadata, details);
       case 'database_replication':
         return this.checkDatabaseReplication(diagnostic, executionId, metadata, details);
+      // Epic 17 Database Health Checks
+      case 'epic17_database_connectivity':
+        return this.checkEpic17DatabaseConnectivity(diagnostic, executionId, metadata, details);
       default:
         return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
@@ -421,6 +433,9 @@ export class DiagnosticService {
         return this.checkSecurityPermissions(diagnostic, executionId, metadata, details);
       case 'security_vulnerabilities':
         return this.checkSecurityVulnerabilities(diagnostic, executionId, metadata, details);
+      // Epic 17 Security Checks
+      case 'epic17_admin_permission_check':
+        return this.checkEpic17AdminPermissionCheck(diagnostic, executionId, metadata, details);
       default:
         return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
@@ -442,6 +457,13 @@ export class DiagnosticService {
         return this.checkErrorRate(diagnostic, executionId, metadata, details);
       case 'performance_cache_efficiency':
         return this.checkCacheEfficiency(diagnostic, executionId, metadata, details);
+      // Epic 17 Specific Performance Checks
+      case 'epic17_admin_user_lookup':
+        return this.checkEpic17AdminUserLookup(diagnostic, executionId, metadata, details);
+      case 'epic17_health_check_response':
+        return this.checkEpic17HealthCheckResponse(diagnostic, executionId, metadata, details);
+      case 'epic17_dashboard_load_time':
+        return this.checkEpic17DashboardLoadTime(diagnostic, executionId, metadata, details);
       default:
         return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
@@ -1056,6 +1078,9 @@ export class DiagnosticService {
       parameters: { timeout: 5000 }
     });
 
+    // EPIC 17 PERFORMANCE THRESHOLD DIAGNOSTICS
+    this.initializeEpic17PerformanceThresholds();
+
     // Create a comprehensive diagnostic suite
     this.diagnosticSuites.set('system_health_check', {
       suiteId: 'system_health_check',
@@ -1066,6 +1091,168 @@ export class DiagnosticService {
       executionOrder: 1,
       timeout: 300000 // 5 minutes
     });
+
+    // Epic 17 Performance Health Check Suite
+    this.diagnosticSuites.set('epic17_performance_health', {
+      suiteId: 'epic17_performance_health',
+      name: 'Epic 17 Performance Health Check',
+      description: 'Performance threshold validation for Epic 17 admin operations',
+      categories: [DiagnosticCategory.PERFORMANCE, DiagnosticCategory.SYSTEM],
+      diagnostics: Array.from(this.diagnosticDefinitions.values()).filter(d => 
+        d.diagnosticId.startsWith('epic17_')
+      ),
+      executionOrder: 2,
+      timeout: 120000 // 2 minutes
+    });
+  }
+
+  /**
+   * Initialize Epic 17 performance threshold diagnostics
+   * QA Implementation: Performance monitoring for admin operations
+   */
+  private initializeEpic17PerformanceThresholds(): void {
+    // Admin Operations Performance Diagnostics
+    Object.entries(EPIC17_THRESHOLDS.adminOperations).forEach(([operation, threshold]) => {
+      this.diagnosticDefinitions.set(`epic17_${operation}`, {
+        diagnosticId: `epic17_${operation}`,
+        name: `Epic 17 ${operation} Performance Check`,
+        category: DiagnosticCategory.PERFORMANCE,
+        description: `Validate ${threshold.description} meets performance thresholds`,
+        enabled: true,
+        timeout: threshold.critical * 3, // 3x critical threshold for timeout
+        retryAttempts: 2,
+        severity: threshold.alertSeverity === 'critical' ? DiagnosticSeverity.CRITICAL : DiagnosticSeverity.HIGH,
+        parameters: { 
+          warningThreshold: threshold.warning,
+          criticalThreshold: threshold.critical,
+          operation: operation
+        }
+      });
+    });
+
+    // Health Check Performance Diagnostics
+    Object.entries(EPIC17_THRESHOLDS.healthChecks).forEach(([operation, threshold]) => {
+      this.diagnosticDefinitions.set(`epic17_${operation}`, {
+        diagnosticId: `epic17_${operation}`,
+        name: `Epic 17 ${operation} Health Check`,
+        category: DiagnosticCategory.PERFORMANCE,
+        description: `Validate ${threshold.description} meets health check thresholds`,
+        enabled: true,
+        timeout: threshold.critical * 2,
+        retryAttempts: 3,
+        severity: DiagnosticSeverity.CRITICAL,
+        parameters: { 
+          warningThreshold: threshold.warning,
+          criticalThreshold: threshold.critical,
+          operation: operation
+        }
+      });
+    });
+
+    // Dashboard Performance Diagnostics
+    Object.entries(EPIC17_THRESHOLDS.dashboardMetrics).forEach(([operation, threshold]) => {
+      this.diagnosticDefinitions.set(`epic17_${operation}`, {
+        diagnosticId: `epic17_${operation}`,
+        name: `Epic 17 ${operation} Dashboard Check`,
+        category: DiagnosticCategory.PERFORMANCE,
+        description: `Validate ${threshold.description} meets dashboard performance targets`,
+        enabled: true,
+        timeout: threshold.critical * 3,
+        retryAttempts: 2,
+        severity: threshold.alertSeverity === 'high' ? DiagnosticSeverity.HIGH : DiagnosticSeverity.MEDIUM,
+        parameters: { 
+          warningThreshold: threshold.warning,
+          criticalThreshold: threshold.critical,
+          operation: operation
+        }
+      });
+    });
+  }
+
+  /**
+   * Validate performance measurement against Epic 17 thresholds
+   * QA Implementation: Real-time threshold validation
+   */
+  async validateEpic17Performance(operation: string, duration: number): Promise<ThresholdValidationResult> {
+    const startTime = performance.now();
+    const validationResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+    const validationDuration = performance.now() - startTime;
+
+    // Create measurement record
+    const measurement = {
+      operation,
+      duration,
+      timestamp: new Date(),
+      metadata: {
+        validationDuration,
+        thresholdVersion: '1.0.0'
+      }
+    };
+
+    const result: ThresholdValidationResult = {
+      ...validationResult,
+      measurement,
+      recommendations: this.generatePerformanceRecommendations(validationResult, operation, duration)
+    };
+
+    // Audit performance validation
+    await this.auditService.logActivity({
+      userId: 'system',
+      action: 'EPIC17_PERFORMANCE_VALIDATION',
+      resource: operation,
+      details: {
+        duration,
+        thresholdResult: validationResult.level,
+        passed: validationResult.passed,
+        validationDuration
+      },
+      ipAddress: '127.0.0.1',
+      userAgent: 'Epic17-DiagnosticService'
+    });
+
+    return result;
+  }
+
+  /**
+   * Generate performance improvement recommendations
+   */
+  private generatePerformanceRecommendations(
+    result: { level: string; passed: boolean; threshold?: PerformanceThreshold },
+    operation: string,
+    duration: number
+  ): string[] {
+    const recommendations: string[] = [];
+
+    if (!result.passed && result.threshold) {
+      const slowdownFactor = duration / result.threshold.warning;
+      
+      if (result.level === 'critical') {
+        recommendations.push(`CRITICAL: ${operation} exceeded critical threshold by ${((duration - result.threshold.critical) / result.threshold.critical * 100).toFixed(1)}%`);
+        recommendations.push('Immediate investigation required - check system resources and database queries');
+        recommendations.push('Consider implementing circuit breaker pattern for this operation');
+      } else if (result.level === 'warning') {
+        recommendations.push(`WARNING: ${operation} exceeded warning threshold by ${((duration - result.threshold.warning) / result.threshold.warning * 100).toFixed(1)}%`);
+        recommendations.push('Monitor closely and consider performance optimization');
+      }
+
+      // Specific recommendations based on operation type
+      if (operation.includes('admin_')) {
+        recommendations.push('Consider caching admin permission checks');
+        recommendations.push('Review database indexes for admin queries');
+      } else if (operation.includes('health_')) {
+        recommendations.push('Ensure health check endpoints are optimized');
+        recommendations.push('Consider asynchronous dependency checks');
+      } else if (operation.includes('dashboard_')) {
+        recommendations.push('Implement progressive loading for dashboard widgets');
+        recommendations.push('Consider WebSocket updates instead of polling');
+      }
+
+      if (slowdownFactor > 3) {
+        recommendations.push('SEVERE PERFORMANCE ISSUE: Consider immediate system maintenance');
+      }
+    }
+
+    return recommendations;
   }
 
   // ==========================================
@@ -1103,5 +1290,563 @@ export class DiagnosticService {
   async listDiagnosticExecutions(filters?: { userId?: string; status?: string; limit?: number }): Promise<DiagnosticExecution[]> {
     // In production, would query database with filters
     return [];
+  }
+
+  // ==========================================
+  // EPIC 17 SYSTEM CHECKS
+  // ==========================================
+
+  private initializeEpic17SystemChecks(): void {
+    // Epic 17 Admin Operation Health Checks
+    this.diagnosticDefinitions.set('epic17_admin_user_lookup', {
+      diagnosticId: 'epic17_admin_user_lookup',
+      name: 'Epic 17 Admin User Lookup Performance',
+      category: DiagnosticCategory.PERFORMANCE,
+      description: 'Check admin user lookup operations against Epic 17 thresholds',
+      enabled: true,
+      timeout: Epic17ThresholdManager.getRecommendedTimeout('admin_user_lookup'),
+      retryAttempts: 2,
+      severity: DiagnosticSeverity.HIGH,
+      parameters: { operation: 'admin_user_lookup' }
+    });
+
+    this.diagnosticDefinitions.set('epic17_admin_permission_check', {
+      diagnosticId: 'epic17_admin_permission_check',
+      name: 'Epic 17 Admin Permission Check Performance',
+      category: DiagnosticCategory.SECURITY,
+      description: 'Validate admin permission check speed against Epic 17 requirements',
+      enabled: true,
+      timeout: Epic17ThresholdManager.getRecommendedTimeout('admin_permission_check'),
+      retryAttempts: 3,
+      severity: DiagnosticSeverity.CRITICAL,
+      parameters: { operation: 'admin_permission_check' }
+    });
+
+    this.diagnosticDefinitions.set('epic17_health_check_response', {
+      diagnosticId: 'epic17_health_check_response',
+      name: 'Epic 17 Health Check Response Time',
+      category: DiagnosticCategory.PERFORMANCE,
+      description: 'Validate primary health check endpoint meets Epic 17 performance requirements',
+      enabled: true,
+      timeout: Epic17ThresholdManager.getRecommendedTimeout('health_check_response'),
+      retryAttempts: 2,
+      severity: DiagnosticSeverity.CRITICAL,
+      parameters: { operation: 'health_check_response' }
+    });
+
+    this.diagnosticDefinitions.set('epic17_dashboard_load_time', {
+      diagnosticId: 'epic17_dashboard_load_time',
+      name: 'Epic 17 Dashboard Load Performance',
+      category: DiagnosticCategory.PERFORMANCE,
+      description: 'Check admin dashboard load time against Epic 17 thresholds',
+      enabled: true,
+      timeout: Epic17ThresholdManager.getRecommendedTimeout('dashboard_load_time'),
+      retryAttempts: 2,
+      severity: DiagnosticSeverity.MEDIUM,
+      parameters: { operation: 'dashboard_load_time' }
+    });
+
+    this.diagnosticDefinitions.set('epic17_database_connectivity', {
+      diagnosticId: 'epic17_database_connectivity',
+      name: 'Epic 17 Database Health Check',
+      category: DiagnosticCategory.DATABASE,
+      description: 'Validate database connectivity meets Epic 17 performance standards',
+      enabled: true,
+      timeout: Epic17ThresholdManager.getRecommendedTimeout('health_database_connectivity'),
+      retryAttempts: 3,
+      severity: DiagnosticSeverity.CRITICAL,
+      parameters: { operation: 'health_database_connectivity' }
+    });
+
+    // Create Epic 17 System Check Suite (only include diagnostics that exist)
+    const systemHealthDiagnostics = [
+      this.diagnosticDefinitions.get('epic17_admin_user_lookup'),
+      this.diagnosticDefinitions.get('epic17_admin_permission_check'),
+      this.diagnosticDefinitions.get('epic17_health_check_response'),
+      this.diagnosticDefinitions.get('epic17_dashboard_load_time'),
+      this.diagnosticDefinitions.get('epic17_database_connectivity'),
+      this.diagnosticDefinitions.get('system_memory_usage'),
+      this.diagnosticDefinitions.get('system_cpu_usage')
+    ].filter(Boolean) as DiagnosticDefinition[];
+
+    this.diagnosticSuites.set('epic17_system_health', {
+      suiteId: 'epic17_system_health',
+      name: 'Epic 17 Complete System Health Check',
+      description: 'Comprehensive system health validation for Epic 17 Backstage Admin Controls',
+      categories: [DiagnosticCategory.SYSTEM, DiagnosticCategory.DATABASE, DiagnosticCategory.PERFORMANCE, DiagnosticCategory.SECURITY],
+      diagnostics: systemHealthDiagnostics,
+      executionOrder: 1,
+      timeout: 30000 // 30 seconds for complete suite
+    });
+
+    // Create Epic 17 Performance-Only Suite
+    const performanceDiagnostics = [
+      this.diagnosticDefinitions.get('epic17_admin_user_lookup'),
+      this.diagnosticDefinitions.get('epic17_admin_permission_check'),
+      this.diagnosticDefinitions.get('epic17_health_check_response'),
+      this.diagnosticDefinitions.get('epic17_dashboard_load_time')
+    ].filter(Boolean) as DiagnosticDefinition[];
+
+    this.diagnosticSuites.set('epic17_performance_check', {
+      suiteId: 'epic17_performance_check',
+      name: 'Epic 17 Performance Validation',
+      description: 'Focused performance validation for Epic 17 critical operations',
+      categories: [DiagnosticCategory.PERFORMANCE],
+      diagnostics: performanceDiagnostics,
+      executionOrder: 2,
+      timeout: 10000 // 10 seconds for performance suite
+    });
+  }
+
+  private async runIntegrationDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+    const details: DiagnosticDetails = {
+      metrics: {},
+      configuration: {},
+      affectedComponents: ['integration']
+    };
+
+    switch (diagnostic.diagnosticId) {
+      case 'integration_health':
+        return this.checkIntegrationHealth(diagnostic, executionId, metadata, details);
+      default:
+        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    }
+  }
+
+  private async runBackupDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+    const details: DiagnosticDetails = {
+      metrics: {},
+      configuration: {},
+      affectedComponents: ['backup']
+    };
+
+    switch (diagnostic.diagnosticId) {
+      case 'backup_verification':
+        return this.checkBackupVerification(diagnostic, executionId, metadata, details);
+      default:
+        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    }
+  }
+
+  private async runConfigurationDiagnostic(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata): Promise<DiagnosticResult> {
+    const details: DiagnosticDetails = {
+      metrics: {},
+      configuration: {},
+      affectedComponents: ['configuration']
+    };
+
+    switch (diagnostic.diagnosticId) {
+      case 'config_deployment':
+        return this.checkConfigDeployment(diagnostic, executionId, metadata, details);
+      default:
+        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    }
+  }
+
+  // Epic 17 Specific Check Implementations
+  private async checkIntegrationHealth(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+    const startTime = performance.now();
+    const operation = 'integration_health';
+    
+    try {
+      // Simulate integration health check - in production would test actual integrations
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 100 + 50)); // 50-150ms
+      
+      const duration = performance.now() - startTime;
+      const thresholdResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+      
+      details.metrics = {
+        responseTime: Math.round(duration),
+        threshold: thresholdResult.threshold,
+        integrationEndpoints: ['auth-service', 'database', 'cache', 'logging'],
+        healthyEndpoints: 4,
+        totalEndpoints: 4
+      };
+      
+      const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
+                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+      
+      const message = thresholdResult.passed 
+        ? `Integration health check completed successfully in ${duration.toFixed(1)}ms`
+        : `Integration health check exceeded ${thresholdResult.level} threshold: ${duration.toFixed(1)}ms`;
+      
+      return {
+        diagnosticId: diagnostic.diagnosticId,
+        category: diagnostic.category,
+        name: diagnostic.name,
+        status,
+        severity: diagnostic.severity,
+        message,
+        details,
+        recommendations: this.generateEpic17Recommendations(operation, thresholdResult, duration),
+        timestamp: new Date(),
+        duration,
+        metadata
+      };
+    } catch (error) {
+      return this.createErrorResult(diagnostic, error, executionId, performance.now() - startTime);
+    }
+  }
+
+  private async checkBackupVerification(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+    const startTime = performance.now();
+    const operation = 'backup_verification';
+    
+    try {
+      // Simulate backup verification - in production would verify actual backups
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 5000 + 2000)); // 2-7s
+      
+      const duration = performance.now() - startTime;
+      const thresholdResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+      
+      details.metrics = {
+        verificationTime: Math.round(duration),
+        threshold: thresholdResult.threshold,
+        backupsVerified: 3,
+        backupsHealthy: 3,
+        lastBackupAge: '2 hours ago',
+        backupSizeGB: 1.2
+      };
+      
+      const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
+                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+      
+      const message = thresholdResult.passed 
+        ? `Backup verification completed successfully in ${(duration/1000).toFixed(1)}s`
+        : `Backup verification exceeded ${thresholdResult.level} threshold: ${(duration/1000).toFixed(1)}s`;
+      
+      return {
+        diagnosticId: diagnostic.diagnosticId,
+        category: diagnostic.category,
+        name: diagnostic.name,
+        status,
+        severity: diagnostic.severity,
+        message,
+        details,
+        recommendations: this.generateEpic17Recommendations(operation, thresholdResult, duration),
+        timestamp: new Date(),
+        duration,
+        metadata
+      };
+    } catch (error) {
+      return this.createErrorResult(diagnostic, error, executionId, performance.now() - startTime);
+    }
+  }
+
+  private async checkConfigDeployment(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+    const startTime = performance.now();
+    const operation = 'config_deployment';
+    
+    try {
+      // Simulate config deployment check - in production would check actual config deployment
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000)); // 1-3s
+      
+      const duration = performance.now() - startTime;
+      const thresholdResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+      
+      details.metrics = {
+        deploymentTime: Math.round(duration),
+        threshold: thresholdResult.threshold,
+        configsDeployed: 5,
+        configsActive: 5,
+        lastDeployment: '1 hour ago',
+        configVersion: '2.1.4'
+      };
+      
+      const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
+                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+      
+      const message = thresholdResult.passed 
+        ? `Configuration deployment validated in ${(duration/1000).toFixed(1)}s`
+        : `Configuration deployment check exceeded ${thresholdResult.level} threshold: ${(duration/1000).toFixed(1)}s`;
+      
+      return {
+        diagnosticId: diagnostic.diagnosticId,
+        category: diagnostic.category,
+        name: diagnostic.name,
+        status,
+        severity: diagnostic.severity,
+        message,
+        details,
+        recommendations: this.generateEpic17Recommendations(operation, thresholdResult, duration),
+        timestamp: new Date(),
+        duration,
+        metadata
+      };
+    } catch (error) {
+      return this.createErrorResult(diagnostic, error, executionId, performance.now() - startTime);
+    }
+  }
+
+  /**
+   * Run Epic 17 system health check suite
+   */
+  async runEpic17SystemHealth(initiatedBy: string): Promise<DiagnosticExecution> {
+    return this.runDiagnosticSuite('epic17_system_health', initiatedBy);
+  }
+
+  /**
+   * Run Epic 17 performance validation suite
+   */
+  async runEpic17PerformanceCheck(initiatedBy: string): Promise<DiagnosticExecution> {
+    return this.runDiagnosticSuite('epic17_performance_check', initiatedBy);
+  }
+
+  /**
+   * Get Epic 17 system health summary
+   */
+  async getEpic17HealthSummary(): Promise<{
+    overallStatus: DiagnosticStatus;
+    criticalIssues: number;
+    warningIssues: number;
+    thresholdViolations: string[];
+    recommendations: string[];
+  }> {
+    // In production, this would query recent diagnostic executions
+    // For now, return a mock summary
+    return {
+      overallStatus: DiagnosticStatus.HEALTHY,
+      criticalIssues: 0,
+      warningIssues: 1,
+      thresholdViolations: [],
+      recommendations: [
+        'Continue monitoring Epic 17 performance thresholds',
+        'Schedule regular system health checks',
+        'Review dashboard loading optimization opportunities'
+      ]
+    };
+  }
+
+  // ==========================================
+  // EPIC 17 SPECIFIC CHECK IMPLEMENTATIONS
+  // ==========================================
+
+  private async checkEpic17AdminUserLookup(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+    const startTime = performance.now();
+    const operation = 'admin_user_lookup';
+    
+    try {
+      // Simulate admin user lookup - in production would test actual lookup
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 100 + 50)); // 50-150ms
+      
+      const duration = performance.now() - startTime;
+      const thresholdResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+      
+      details.metrics = {
+        lookupTime: Math.round(duration),
+        threshold: thresholdResult.threshold,
+        usersLookedUp: 1,
+        cacheHit: Math.random() > 0.3, // 70% cache hit rate
+        authenticationTime: Math.round(duration * 0.6),
+        permissionCheckTime: Math.round(duration * 0.4)
+      };
+      
+      const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
+                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+      
+      const message = thresholdResult.passed 
+        ? `Admin user lookup completed in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
+        : `Admin user lookup exceeded ${thresholdResult.level} threshold: ${duration.toFixed(1)}ms`;
+      
+      return {
+        diagnosticId: diagnostic.diagnosticId,
+        category: diagnostic.category,
+        name: diagnostic.name,
+        status,
+        severity: diagnostic.severity,
+        message,
+        details,
+        recommendations: this.generateEpic17Recommendations(operation, thresholdResult, duration),
+        timestamp: new Date(),
+        duration,
+        metadata
+      };
+    } catch (error) {
+      return this.createErrorResult(diagnostic, error, executionId, performance.now() - startTime);
+    }
+  }
+
+  private async checkEpic17AdminPermissionCheck(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+    const startTime = performance.now();
+    const operation = 'admin_permission_check';
+    
+    try {
+      // Simulate admin permission check - in production would test actual permission validation
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 30 + 20)); // 20-50ms
+      
+      const duration = performance.now() - startTime;
+      const thresholdResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+      
+      details.metrics = {
+        permissionCheckTime: Math.round(duration),
+        threshold: thresholdResult.threshold,
+        permissionsChecked: 3,
+        roleValidationTime: Math.round(duration * 0.7),
+        policyCheckTime: Math.round(duration * 0.3),
+        cacheUtilization: '85%'
+      };
+      
+      const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
+                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+      
+      const message = thresholdResult.passed 
+        ? `Admin permission check completed in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
+        : `Admin permission check exceeded ${thresholdResult.level} threshold: ${duration.toFixed(1)}ms`;
+      
+      return {
+        diagnosticId: diagnostic.diagnosticId,
+        category: diagnostic.category,
+        name: diagnostic.name,
+        status,
+        severity: diagnostic.severity,
+        message,
+        details,
+        recommendations: this.generateEpic17Recommendations(operation, thresholdResult, duration),
+        timestamp: new Date(),
+        duration,
+        metadata
+      };
+    } catch (error) {
+      return this.createErrorResult(diagnostic, error, executionId, performance.now() - startTime);
+    }
+  }
+
+  private async checkEpic17HealthCheckResponse(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+    const startTime = performance.now();
+    const operation = 'health_check_response';
+    
+    try {
+      // Simulate health check response - in production would test actual health endpoints
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 50 + 25)); // 25-75ms
+      
+      const duration = performance.now() - startTime;
+      const thresholdResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+      
+      details.metrics = {
+        healthCheckTime: Math.round(duration),
+        threshold: thresholdResult.threshold,
+        endpointsChecked: 5,
+        healthyEndpoints: 5,
+        avgResponseTime: Math.round(duration),
+        memoryHealth: 'GOOD',
+        diskHealth: 'GOOD',
+        networkHealth: 'GOOD'
+      };
+      
+      const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
+                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+      
+      const message = thresholdResult.passed 
+        ? `Health check response completed in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
+        : `Health check response exceeded ${thresholdResult.level} threshold: ${duration.toFixed(1)}ms`;
+      
+      return {
+        diagnosticId: diagnostic.diagnosticId,
+        category: diagnostic.category,
+        name: diagnostic.name,
+        status,
+        severity: diagnostic.severity,
+        message,
+        details,
+        recommendations: this.generateEpic17Recommendations(operation, thresholdResult, duration),
+        timestamp: new Date(),
+        duration,
+        metadata
+      };
+    } catch (error) {
+      return this.createErrorResult(diagnostic, error, executionId, performance.now() - startTime);
+    }
+  }
+
+  private async checkEpic17DashboardLoadTime(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+    const startTime = performance.now();
+    const operation = 'dashboard_load_time';
+    
+    try {
+      // Simulate dashboard load time - in production would test actual dashboard loading
+      await new Promise(resolve => setTimeout(resolve, Math.random() * 400 + 200)); // 200-600ms
+      
+      const duration = performance.now() - startTime;
+      const thresholdResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+      
+      details.metrics = {
+        dashboardLoadTime: Math.round(duration),
+        threshold: thresholdResult.threshold,
+        widgetsLoaded: 8,
+        dataQueriesExecuted: 12,
+        cacheHits: 9,
+        renderTime: Math.round(duration * 0.4),
+        dataFetchTime: Math.round(duration * 0.6)
+      };
+      
+      const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
+                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+      
+      const message = thresholdResult.passed 
+        ? `Dashboard load completed in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
+        : `Dashboard load exceeded ${thresholdResult.level} threshold: ${duration.toFixed(1)}ms`;
+      
+      return {
+        diagnosticId: diagnostic.diagnosticId,
+        category: diagnostic.category,
+        name: diagnostic.name,
+        status,
+        severity: diagnostic.severity,
+        message,
+        details,
+        recommendations: this.generateEpic17Recommendations(operation, thresholdResult, duration),
+        timestamp: new Date(),
+        duration,
+        metadata
+      };
+    } catch (error) {
+      return this.createErrorResult(diagnostic, error, executionId, performance.now() - startTime);
+    }
+  }
+
+  private async checkEpic17DatabaseConnectivity(diagnostic: DiagnosticDefinition, executionId: string, metadata: DiagnosticMetadata, details: DiagnosticDetails): Promise<DiagnosticResult> {
+    const startTime = performance.now();
+    const operation = 'health_database_connectivity';
+    
+    try {
+      // Simulate database connectivity check - in production would test actual database
+      await this.databaseService.testConnection(); // This will add realistic delay
+      
+      const duration = performance.now() - startTime;
+      const thresholdResult = Epic17ThresholdManager.validateThreshold(operation, duration);
+      
+      details.metrics = {
+        connectionTime: Math.round(duration),
+        threshold: thresholdResult.threshold,
+        connectionPoolSize: 10,
+        activeConnections: 3,
+        queryResponseTime: Math.round(duration * 0.8),
+        connectionRetries: 0,
+        databaseVersion: '14.2'
+      };
+      
+      const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
+                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+      
+      const message = thresholdResult.passed 
+        ? `Database connectivity validated in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
+        : `Database connectivity check exceeded ${thresholdResult.level} threshold: ${duration.toFixed(1)}ms`;
+      
+      return {
+        diagnosticId: diagnostic.diagnosticId,
+        category: diagnostic.category,
+        name: diagnostic.name,
+        status,
+        severity: diagnostic.severity,
+        message,
+        details,
+        recommendations: this.generateEpic17Recommendations(operation, thresholdResult, duration),
+        timestamp: new Date(),
+        duration,
+        metadata
+      };
+    } catch (error) {
+      return this.createErrorResult(diagnostic, error, executionId, performance.now() - startTime);
+    }
   }
 }

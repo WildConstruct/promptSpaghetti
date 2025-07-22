@@ -789,11 +789,7 @@ const HistoricalDataResults: React.FC<{ results: QueryResult[] }> = ({ results }
 
                 {expandedItems.has(`${item._source}-${index}`) && (
                   <div style={{ borderTop: '1px solid #4a5568', paddingTop: 12 }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(
-                      auto-fit,
-                      minmax(120,
-                      1fr
-                    ))', gap: 12 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
                       {Object.entries(item).filter(([key]) => !key.startsWith('_') && key !== 'description').map(([key, value]) => (
                         <div key={key}>
                           <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 2 }}>

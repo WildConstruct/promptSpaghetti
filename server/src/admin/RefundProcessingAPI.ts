@@ -416,8 +416,7 @@ export class RefundProcessingAPI {
       
       const db = await this.databaseService.getDatabase();
       const refundRow = await db.get(
-        'SELECT workflow_history,
-        notes FROM refund_requests WHERE refund_id = ?',
+        'SELECT workflow_history, notes FROM refund_requests WHERE refund_id = ?',
         [refundId]
       );
       

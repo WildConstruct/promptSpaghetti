@@ -2,7 +2,13 @@
 // Main exports for the complete LLM randomizer system
 
 // Story 12.1 - Serialization Format Design
-export * from './serialization';
+export { 
+  GraphSerializer,
+  SerializationOptions,
+  SerializationMetadata,
+  serializeGraph,
+  createDefaultMetadata
+} from './serialization/serializer';
 
 // Story 12.2 - LLM Agent Script Development  
 export * from './agents';
@@ -45,7 +51,7 @@ export interface LLMRandomizerWorkflow {
 export class LLMRandomizerSystem implements LLMRandomizerWorkflow {
   private workflow: any;
 
-  async generateWithLLM(request: any, provider = 'openai'): Promise<any> {
+  async generateWithLLM(request: any, provider: 'openai' | 'claude' | 'gemini' = 'openai'): Promise<any> {
     const { generateGraph } = await import('./agents');
     return generateGraph(request, provider);
   }

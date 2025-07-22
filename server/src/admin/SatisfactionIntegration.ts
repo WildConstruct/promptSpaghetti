@@ -733,4 +733,4 @@ export async function createSatisfactionIntegration(
 /**
  * Default configuration for satisfaction integration
  */
-export };
+export const defaultSatisfactionConfig = {};

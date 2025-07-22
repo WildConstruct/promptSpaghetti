@@ -6,12 +6,14 @@ export interface PropertiesSectionProps {
   node: any;
   schema: ZodSchema<any>;
   onChange: (partial: Record<string, unknown>) => void;
+  onGlobalPreviewRequest?: () => void;
 }
 
 export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
   node,
   schema,
-  onChange
+  onChange,
+  onGlobalPreviewRequest
 }) => {
   return (
     <div style={{ height: '100%' }}>
@@ -19,6 +21,7 @@ export const PropertiesSection: React.FC<PropertiesSectionProps> = ({
         node={node}
         schema={schema}
         onChange={onChange}
+        onGlobalPreviewRequest={onGlobalPreviewRequest}
       />
     </div>
   );

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { AdminLayout } from './AdminLayout';
 import { FeatureToggleDashboard } from './FeatureToggleDashboard';
+import { ApiManagementDashboard } from './ApiManagementDashboard';
 import './AdminLayout.css';
 
 // Placeholder components for other sections
@@ -52,6 +53,8 @@ export const AdminDashboard: React.FC = () => {
       return <UserManagementDashboard />;
     case 'content':
       return <ContentManagementDashboard />;
+    case 'api-management':
+      return <ApiManagementDashboard />;
     case 'marketplace':
       return <MarketplaceAdminDashboard />;
     case 'analytics':

@@ -1,0 +1,628 @@
+/**
+ * Admin Incident Dashboard Styles - Epic 17
+ * 
+ * Comprehensive styling for the Epic 17 admin incident dashboard interface.
+ * Provides modern, responsive design optimized for incident management workflows.
+ * 
+ * Task: E17-1753114397260-08F809 - Create incident playbooks
+ * Epic: 17 - Backstage Admin Controls
+ */
+
+.admin-incident-dashboard {
+  @apply w-full h-full flex flex-col bg-gray-50;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  min-height: 100vh;
+}
+
+/* =============================================================================
+   Dashboard Header
+   ============================================================================= */
+
+.dashboard-header {
+  @apply bg-white border-b border-gray-200 shadow-sm;
+}
+
+.header-content {
+  @apply flex items-center justify-between px-6 py-4;
+}
+
+.dashboard-header h1 {
+  @apply text-2xl font-semibold text-gray-900 m-0;
+}
+
+.header-stats {
+  @apply flex items-center gap-6;
+}
+
+.stat {
+  @apply flex items-center gap-2 text-sm font-medium;
+}
+
+.header-actions {
+  @apply flex items-center gap-3;
+}
+
+.refresh-button,
+.create-incident-button,
+.create-button,
+.execute-button {
+  @apply flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.refresh-button:hover:not(:disabled) {
+  @apply bg-blue-50 border-blue-300 text-blue-700;
+}
+
+.create-incident-button {
+  @apply bg-red-600 border-red-600 text-white hover:bg-red-700 hover:border-red-700;
+}
+
+.execute-button {
+  @apply bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:border-blue-700;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  @apply flex border-b border-gray-200 px-6;
+}
+
+.tab {
+  @apply flex items-center gap-2 px-4 py-3 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-all duration-200;
+  @apply focus:outline-none focus:text-blue-600 focus:border-blue-600;
+}
+
+.tab.active {
+  @apply text-blue-600 border-blue-600 bg-blue-50;
+}
+
+/* =============================================================================
+   Dashboard Content
+   ============================================================================= */
+
+.dashboard-content {
+  @apply flex-1 overflow-auto p-6;
+}
+
+/* Loading and Error States */
+.admin-incident-dashboard.loading,
+.admin-incident-dashboard.error {
+  @apply items-center justify-center;
+}
+
+.loading-spinner,
+.error-message {
+  @apply flex flex-col items-center gap-3 text-gray-500;
+}
+
+.loading-spinner span,
+.error-message span {
+  @apply text-lg font-medium;
+}
+
+.error-message button {
+  @apply mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700;
+}
+
+/* =============================================================================
+   Overview Tab
+   ============================================================================= */
+
+.overview-tab {
+  @apply space-y-8;
+}
+
+.overview-tab h2 {
+  @apply flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4;
+}
+
+/* Critical Section */
+.critical-section {
+  @apply space-y-4;
+}
+
+.critical-cards {
+  @apply grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4;
+}
+
+.incident-card {
+  @apply bg-white rounded-xl p-6 border-l-4 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.card-header {
+  @apply flex items-center justify-between mb-3;
+}
+
+.incident-id {
+  @apply text-xs font-mono text-gray-600 bg-gray-100 px-2 py-1 rounded;
+}
+
+.severity-badge {
+  @apply text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide;
+}
+
+.severity-badge.critical {
+  @apply bg-red-100 text-red-800;
+}
+
+.severity-badge.high {
+  @apply bg-orange-100 text-orange-800;
+}
+
+.severity-badge.medium {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.severity-badge.low {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.incident-title {
+  @apply text-base font-semibold text-gray-900 mb-3 m-0;
+}
+
+.incident-meta {
+  @apply flex items-center gap-4 text-sm text-gray-600 mb-3;
+}
+
+.meta-item {
+  @apply flex items-center gap-1;
+}
+
+.affected-systems {
+  @apply flex flex-wrap gap-2;
+}
+
+.system-tag {
+  @apply text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full;
+}
+
+/* Alert Cards */
+.alert-card {
+  @apply bg-white rounded-xl p-4 border-l-4 shadow-sm;
+}
+
+.alert-card.critical {
+  @apply border-red-500;
+}
+
+.alert-card.high {
+  @apply border-orange-500;
+}
+
+.alert-card.medium {
+  @apply border-yellow-500;
+}
+
+.alert-card.low {
+  @apply border-blue-500;
+}
+
+.alert-header {
+  @apply flex items-center justify-between mb-2;
+}
+
+.alert-time {
+  @apply text-xs text-gray-500;
+}
+
+.alert-title {
+  @apply text-sm font-medium text-gray-900 mb-1 m-0;
+}
+
+.alert-system {
+  @apply text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded inline-block mb-2;
+}
+
+.playbook-triggered {
+  @apply flex items-center gap-1 text-xs text-green-600;
+}
+
+/* System Health Overview */
+.system-health-overview {
+  @apply space-y-4;
+}
+
+.health-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+}
+
+.system-health-card {
+  @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.system-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.system-name {
+  @apply font-medium text-gray-900 capitalize;
+}
+
+.status-indicator {
+  @apply text-xs font-medium px-2 py-1 rounded-full;
+}
+
+.health-metrics {
+  @apply space-y-3 mb-4;
+}
+
+.metric {
+  @apply flex justify-between items-center;
+}
+
+.metric-label {
+  @apply text-sm text-gray-600;
+}
+
+.metric-value {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.health-score {
+  @apply text-center pt-3 border-t border-gray-200;
+}
+
+.score-label {
+  @apply text-xs text-gray-600 uppercase tracking-wide;
+}
+
+.score-value {
+  @apply text-lg font-bold text-gray-900;
+}
+
+/* Running Playbooks */
+.running-playbooks {
+  @apply space-y-4;
+}
+
+.playbook-executions {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.playbook-execution-card {
+  @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.execution-header {
+  @apply flex items-center gap-3 mb-4;
+}
+
+.playbook-name {
+  @apply font-medium text-gray-900;
+}
+
+.execution-progress {
+  @apply flex items-center gap-3 mb-3;
+}
+
+.progress-bar {
+  @apply flex-1 h-2 bg-gray-200 rounded-full overflow-hidden;
+}
+
+.progress-fill {
+  @apply h-full bg-blue-500 transition-all duration-300;
+}
+
+.progress-text {
+  @apply text-sm font-medium text-gray-700 min-w-[3rem];
+}
+
+.execution-meta {
+  @apply flex justify-between text-sm text-gray-600;
+}
+
+/* Performance Overview */
+.performance-overview {
+  @apply space-y-4;
+}
+
+.metrics-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.metric-card {
+  @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.metric-header {
+  @apply flex items-center justify-between mb-3;
+}
+
+.metric-card .metric-label {
+  @apply text-sm font-medium text-gray-600;
+}
+
+.metric-card .metric-value {
+  @apply text-2xl font-bold;
+}
+
+/* =============================================================================
+   Other Tabs
+   ============================================================================= */
+
+.incidents-tab,
+.playbooks-tab,
+.systems-tab,
+.analytics-tab {
+  @apply space-y-6;
+}
+
+.tab-header {
+  @apply flex items-center justify-between;
+}
+
+.tab-header h2 {
+  @apply text-xl font-semibold text-gray-900 m-0;
+}
+
+.health-summary {
+  @apply text-sm text-gray-600;
+}
+
+/* Lists */
+.incidents-list,
+.executions-list {
+  @apply bg-white rounded-xl shadow-sm overflow-hidden;
+}
+
+.incident-list-item,
+.playbook-execution-item {
+  @apply flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer;
+}
+
+.incident-list-item:last-child,
+.playbook-execution-item:last-child {
+  @apply border-b-0;
+}
+
+.incident-title,
+.playbook-name {
+  @apply font-medium text-gray-900;
+}
+
+.status-badge {
+  @apply text-xs font-medium px-2 py-1 rounded-full uppercase tracking-wide;
+}
+
+.status-badge.running {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-badge.completed {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-badge.failed {
+  @apply bg-red-100 text-red-800;
+}
+
+.status-badge.cancelled {
+  @apply bg-gray-100 text-gray-800;
+}
+
+/* Systems Grid */
+.systems-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+}
+
+/* Analytics Content */
+.analytics-content {
+  @apply space-y-6;
+}
+
+.metrics-overview {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+@media (max-width: 768px) {
+  .dashboard-header .header-content {
+    @apply flex-col items-start gap-4;
+  }
+
+  .header-stats {
+    @apply flex-wrap gap-3;
+  }
+
+  .header-actions {
+    @apply w-full justify-end;
+  }
+
+  .tab-navigation {
+    @apply px-4 overflow-x-auto;
+  }
+
+  .dashboard-content {
+    @apply p-4;
+  }
+
+  .critical-cards {
+    @apply grid-cols-1;
+  }
+
+  .health-grid {
+    @apply grid-cols-1 sm:grid-cols-2;
+  }
+
+  .playbook-executions {
+    @apply grid-cols-1;
+  }
+
+  .metrics-grid {
+    @apply grid-cols-1;
+  }
+
+  .systems-grid {
+    @apply grid-cols-1 sm:grid-cols-2;
+  }
+}
+
+@media (max-width: 640px) {
+  .tab {
+    @apply px-3 py-2 text-xs;
+  }
+
+  .card-header {
+    @apply flex-col items-start gap-2;
+  }
+
+  .incident-meta {
+    @apply flex-col items-start gap-2;
+  }
+
+  .system-header {
+    @apply flex-col items-start gap-2;
+  }
+
+  .execution-header {
+    @apply flex-col items-start gap-2;
+  }
+
+  .tab-header {
+    @apply flex-col items-start gap-3;
+  }
+}
+
+/* =============================================================================
+   Utility Classes and Animations
+   ============================================================================= */
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Focus states for accessibility */
+.tab:focus,
+.incident-card:focus,
+.alert-card:focus,
+.system-health-card:focus,
+.playbook-execution-card:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+.incident-list-item:focus,
+.playbook-execution-item:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Hover effects */
+.incident-card:hover,
+.alert-card:hover,
+.system-health-card:hover,
+.playbook-execution-card:hover,
+.metric-card:hover {
+  @apply transform scale-105;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Status colors */
+.text-status-healthy {
+  @apply text-green-600;
+}
+
+.text-status-degraded {
+  @apply text-yellow-600;
+}
+
+.text-status-unhealthy {
+  @apply text-red-600;
+}
+
+.text-status-unknown {
+  @apply text-gray-600;
+}
+
+.bg-status-healthy {
+  @apply bg-green-100;
+}
+
+.bg-status-degraded {
+  @apply bg-yellow-100;
+}
+
+.bg-status-unhealthy {
+  @apply bg-red-100;
+}
+
+.bg-status-unknown {
+  @apply bg-gray-100;
+}
+
+/* Progress bar animations */
+.progress-fill {
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  background-size: 200% 200%;
+  animation: progressGradient 2s ease infinite;
+}
+
+@keyframes progressGradient {
+  0% {
+    background-position: 200% 0%;
+  }
+  100% {
+    background-position: -200% 0%;
+  }
+}
+
+/* Severity indicator animations */
+.severity-badge.critical {
+  animation: criticalPulse 2s ease-in-out infinite;
+}
+
+@keyframes criticalPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .admin-incident-dashboard {
+    @apply bg-gray-900;
+  }
+
+  .dashboard-header {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .dashboard-header h1 {
+    @apply text-gray-100;
+  }
+
+  .incident-card,
+  .alert-card,
+  .system-health-card,
+  .playbook-execution-card,
+  .metric-card {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .incident-title,
+  .alert-title,
+  .system-name,
+  .playbook-name {
+    @apply text-gray-100;
+  }
+
+  .incident-meta,
+  .alert-time,
+  .metric-label {
+    @apply text-gray-400;
+  }
+}

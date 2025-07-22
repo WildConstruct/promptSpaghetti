@@ -48,12 +48,23 @@ export interface SmoothInspectorPanelProps {
   schema: ZodSchema<any> | null;
   onChange: (partial: Record<string, unknown>) => void;
   onClose?: () => void;
+  onGlobalPreviewRequest?: () => void;
   initialWidth?: number;
   minWidth?: number;
   maxWidth?: number;
 }
 
-export   const [isResizing, setIsResizing] = useState(false);
+export const SmoothInspectorPanel = ({ 
+  node, 
+  schema, 
+  onChange,
+  onClose,
+  onGlobalPreviewRequest,
+  initialWidth = 320,
+  minWidth = 280,
+  maxWidth = 600
+}) => {
+  const [isResizing, setIsResizing] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const resizeRef = useRef<HTMLDivElement>(null);

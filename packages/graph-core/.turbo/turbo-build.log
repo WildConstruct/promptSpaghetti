@@ -2,7 +2,3 @@
 > @prompt-spaghetti/graph-core@0.1.0 build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/graph-core
 > tsc
 
-error TS2688: Cannot find type definition file for '@testing-library/jest-dom'.
-  The file is in the program because:
-    Entry point of type library '@testing-library/jest-dom' specified in compilerOptions
- ELIFECYCLE  Command failed with exit code 2.

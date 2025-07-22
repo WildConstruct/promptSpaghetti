@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "strict": true,
     "isolatedModules": true,
-    "types": ["jest", "@testing-library/jest-dom", "seedrandom"],
+    "types": ["jest", "seedrandom"],
     "forceConsistentCasingInFileNames": true,
     "composite": true,
     "declaration": true,

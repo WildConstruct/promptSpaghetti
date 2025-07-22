@@ -392,6 +392,26 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     ? nodeSchemas[selectedNode.data.nodeType as keyof typeof nodeSchemas] ?? null
     : null;
 
+  // Epic 8.5-5: Global preview trigger for weight changes
+  const handleGlobalPreviewRequest = useCallback(() => {
+    console.log('[Epic 8.5-5] Triggering global preview from weight control change');
+    const now = Date.now();
+    const sinceChange = now - lastChangeRef.current;
+    
+    const run = () => {
+      runPreview({ nodes, edges });
+      setPreviewOpen(true);
+    };
+    
+    // Use same debouncing logic as DirectorPreviewToolbar
+    if (sinceChange < 500) {
+      if (previewTimeoutRef.current) clearTimeout(previewTimeoutRef.current);
+      previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
+    } else {
+      run();
+    }
+  }, [nodes, edges, runPreview]);
+
   const handleInspectorChange = (partial: Record<string, unknown>) => {
     if (!selectedNode) return;
     // Update the graph store
@@ -934,12 +954,14 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
                   node={selectedNode}
                   schema={selectedSchema}
                   onChange={handleInspectorChange}
+                  onGlobalPreviewRequest={handleGlobalPreviewRequest}
                 />
               ) : (
                 <InspectorPanel
                   node={selectedNode}
                   schema={selectedSchema}
                   onChange={handleInspectorChange}
+                  onGlobalPreviewRequest={handleGlobalPreviewRequest}
                 />
               )}
             </div>

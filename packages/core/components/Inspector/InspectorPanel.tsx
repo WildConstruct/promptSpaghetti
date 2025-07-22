@@ -34,12 +34,23 @@ export interface InspectorPanelProps {
   schema: ZodSchema<any> | null;
   onChange: (partial: Record<string, unknown>) => void;
   onClose?: () => void;
+  onGlobalPreviewRequest?: () => void;
   initialWidth?: number;
   minWidth?: number;
   maxWidth?: number;
 }
 
-export   const [isResizing, setIsResizing] = useState(false);
+export const InspectorPanel = ({ 
+  node, 
+  schema, 
+  onChange,
+  onClose,
+  onGlobalPreviewRequest,
+  initialWidth = 320,
+  minWidth = 280,
+  maxWidth = 600
+}) => {
+  const [isResizing, setIsResizing] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
   const resizeRef = useRef<HTMLDivElement>(null);
@@ -130,7 +141,7 @@ export   const [isResizing, setIsResizing] = useState(false);
         >
           {!collapsed && (
             <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
-              Inspector
+              Editor Panel
             </h3>
           )}
           <button
@@ -156,7 +167,7 @@ export   const [isResizing, setIsResizing] = useState(false);
             textAlign: 'center',
             marginTop: 40
           }}>
-            Select a node to edit its properties
+            Select an element to customize its options
           </div>
         )}
         <div
@@ -211,7 +222,7 @@ export   const [isResizing, setIsResizing] = useState(false);
       >
         {!collapsed && (
           <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
-            <span style={{ color: '#4CAF50' }}>🔍</span> {node.data?.label || getFilmmakerFriendlyName(node.data?.nodeType || node.type)} Properties
+            <span style={{ color: '#4CAF50' }}>🔍</span> {node.data?.label || getFilmmakerFriendlyName(node.data?.nodeType || node.type)} Settings
           </h3>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -233,7 +244,7 @@ export   const [isResizing, setIsResizing] = useState(false);
               >
                 <option value="basic">🎭 Basic</option>
                 <option value="advanced">⚡ Advanced</option>
-                <option value="expert">👨‍💻 Debug</option>
+                <option value="expert">👨‍💻 Expert</option>
               </select>
               <div
                 style={{
@@ -252,11 +263,11 @@ export   const [isResizing, setIsResizing] = useState(false);
                 title={
                   complexityLevel === 'basic' ? 'Basic: Essential fields only' :
                   complexityLevel === 'advanced' ? 'Advanced: Power user options' :
-                  'Debug: All technical details'
+                  'Expert: All technical details'
                 }
               >
                 {complexityLevel === 'basic' ? 'BASIC' : 
-                 complexityLevel === 'advanced' ? 'ADV' : 'DBG'}
+                 complexityLevel === 'advanced' ? 'ADV' : 'EXP'}
               </div>
               <button
                 onClick={() => setShowPreferences(!showPreferences)}
@@ -329,6 +340,7 @@ export   const [isResizing, setIsResizing] = useState(false);
             node={node}
             schema={schema}
             onChange={onChange}
+            onGlobalPreviewRequest={onGlobalPreviewRequest}
           />
           <PreviewSection
             node={node}

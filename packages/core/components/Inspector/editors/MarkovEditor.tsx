@@ -22,9 +22,9 @@ export interface MarkovEditorProps extends Omit<BaseNodeEditorProps, 'children'>
  * - Basic: Node name, initial state, and simple states list (for filmmakers)
  * - Advanced: Transition matrix and probability controls (power users)
  * - Debug: Technical settings, loop detection, termination states
- */"
+ */
 
-export   
+export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }) => {
   // Markov specific fields
   const states = (nodeData.states as string[]) || [];
   const transitions = (nodeData.transitions as Record<string, Record<string, number>>) || {};
@@ -465,13 +465,16 @@ export
             </div>
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
       {/* Transitions */}
-      <CollapsibleSection 
+      <ProgressiveDisclosureSection 
         title="Transition Matrix" 
-        collapsed={transitionsCollapsed}
-        onToggle={() => setTransitionsCollapsed(!transitionsCollapsed)}
+        level="advanced"
+        description="Define how states transition into each other"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="transitions"
       >
         <div style={{ marginBottom: 12 }}>
           <div style={{ 
@@ -670,13 +673,16 @@ export
             </div>
           </div>
         )}
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
       {/* Settings */}
-      <CollapsibleSection 
-        title="Settings" 
-        collapsed={settingsCollapsed}
-        onToggle={() => setSettingsCollapsed(!settingsCollapsed)}
+      <ProgressiveDisclosureSection 
+        title="Debug Settings" 
+        level="debug"
+        description="Advanced configuration and loop detection"
+        defaultExpanded={false}
+        priority="optional"
+        fieldName="settings"
       >
         <div style={{ marginBottom: 12 }}>
           <TextFieldEditor
@@ -740,13 +746,16 @@ export
             Comma-separated list of states that will stop the chain when reached
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
       {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+      <ProgressiveDisclosureSection 
+        title="Chain Preview" 
+        level="debug"
+        description="Visual representation of your Markov chain"
+        defaultExpanded={false}
+        priority="helpful"
+        fieldName="preview"
       >
         <div style={{
           background: '#1a202c',
@@ -805,7 +814,7 @@ export
             </div>
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

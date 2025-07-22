@@ -1,0 +1,680 @@
+/**
+ * Usage Quota Dashboard Styles - Epic 17
+ * 
+ * Comprehensive styling for the Epic 17 usage quota management dashboard.
+ * Provides modern, responsive design optimized for administrative workflows.
+ * 
+ * Task: E17-1753114397228-B591AA - Create usage quotas
+ * Epic: 17 - Backstage Admin Controls
+ */
+
+.usage-quota-dashboard {
+  @apply w-full h-full flex flex-col bg-gray-50;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  min-height: 100vh;
+}
+
+/* =============================================================================
+   Dashboard Header
+   ============================================================================= */
+
+.dashboard-header {
+  @apply bg-white border-b border-gray-200 shadow-sm;
+}
+
+.header-content {
+  @apply flex items-center justify-between px-6 py-4;
+}
+
+.dashboard-header h1 {
+  @apply text-2xl font-semibold text-gray-900 m-0;
+}
+
+.header-stats {
+  @apply flex items-center gap-6;
+}
+
+.stat {
+  @apply flex items-center gap-2 text-sm font-medium;
+}
+
+.header-actions {
+  @apply flex items-center gap-3;
+}
+
+.refresh-button,
+.create-quota-button,
+.template-button {
+  @apply flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.refresh-button:hover:not(:disabled) {
+  @apply bg-blue-50 border-blue-300 text-blue-700;
+}
+
+.create-quota-button {
+  @apply bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:border-blue-700;
+}
+
+.template-button:hover {
+  @apply bg-green-50 border-green-300 text-green-700;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  @apply flex border-b border-gray-200 px-6;
+}
+
+.tab {
+  @apply flex items-center gap-2 px-4 py-3 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-all duration-200;
+  @apply focus:outline-none focus:text-blue-600 focus:border-blue-600;
+}
+
+.tab.active {
+  @apply text-blue-600 border-blue-600 bg-blue-50;
+}
+
+/* =============================================================================
+   Dashboard Content
+   ============================================================================= */
+
+.dashboard-content {
+  @apply flex-1 overflow-auto p-6;
+}
+
+/* Loading and Error States */
+.usage-quota-dashboard.loading,
+.usage-quota-dashboard.error {
+  @apply items-center justify-center;
+}
+
+.loading-spinner,
+.error-message {
+  @apply flex flex-col items-center gap-3 text-gray-500;
+}
+
+.loading-spinner span,
+.error-message span {
+  @apply text-lg font-medium;
+}
+
+.error-message button {
+  @apply mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700;
+}
+
+/* =============================================================================
+   Overview Tab
+   ============================================================================= */
+
+.overview-tab {
+  @apply space-y-8;
+}
+
+/* Metrics Overview */
+.metrics-overview {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+}
+
+.metric-card {
+  @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.metric-header {
+  @apply flex items-center gap-3 mb-4;
+}
+
+.metric-header span {
+  @apply text-sm font-medium text-gray-600;
+}
+
+.metric-value {
+  @apply text-3xl font-bold text-gray-900 mb-2;
+}
+
+.metric-detail {
+  @apply text-sm text-gray-500;
+}
+
+/* Top Violations Section */
+.top-violations-section {
+  @apply space-y-4;
+}
+
+.top-violations-section h2 {
+  @apply flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4;
+}
+
+.violations-list {
+  @apply bg-white rounded-xl shadow-sm overflow-hidden;
+}
+
+.violation-item {
+  @apply flex items-center justify-between p-4 border-b border-gray-200 hover:bg-gray-50;
+}
+
+.violation-item:last-child {
+  @apply border-b-0;
+}
+
+.violation-info {
+  @apply flex items-center gap-3;
+}
+
+.quota-name {
+  @apply font-medium text-gray-900;
+}
+
+.severity-badge {
+  @apply text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide;
+}
+
+.severity-badge.critical {
+  @apply bg-red-100 text-red-800;
+}
+
+.severity-badge.high {
+  @apply bg-orange-100 text-orange-800;
+}
+
+.severity-badge.medium {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.severity-badge.low {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.violation-stats {
+  @apply flex flex-col items-end gap-1 text-sm text-gray-600;
+}
+
+.violation-count {
+  @apply font-medium;
+}
+
+.last-violation {
+  @apply text-xs text-gray-500;
+}
+
+/* Recent Activity Section */
+.recent-activity-section {
+  @apply space-y-4;
+}
+
+.recent-activity-section h2 {
+  @apply flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4;
+}
+
+.activity-list {
+  @apply bg-white rounded-xl shadow-sm divide-y divide-gray-200;
+}
+
+.activity-item {
+  @apply flex items-center gap-4 p-4 hover:bg-gray-50;
+}
+
+.activity-icon {
+  @apply flex items-center justify-center w-8 h-8 rounded-full bg-gray-100;
+}
+
+.activity-content {
+  @apply flex-1;
+}
+
+.activity-description {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.activity-time {
+  @apply text-xs text-gray-500 mt-1;
+}
+
+.activity-severity {
+  @apply text-xs font-medium px-2 py-1 rounded uppercase tracking-wide;
+}
+
+.activity-severity.critical {
+  @apply bg-red-100 text-red-800;
+}
+
+.activity-severity.high {
+  @apply bg-orange-100 text-orange-800;
+}
+
+.activity-severity.medium {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.activity-severity.low {
+  @apply bg-green-100 text-green-800;
+}
+
+/* =============================================================================
+   Quotas Tab
+   ============================================================================= */
+
+.quotas-tab {
+  @apply space-y-6;
+}
+
+.quotas-tab h2 {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.quota-card {
+  @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.quota-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.quota-name {
+  @apply font-medium text-gray-900;
+}
+
+.toggle-button {
+  @apply flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200;
+}
+
+.toggle-button.enabled {
+  @apply bg-green-100 text-green-800 hover:bg-green-200;
+}
+
+.toggle-button.disabled {
+  @apply bg-red-100 text-red-800 hover:bg-red-200;
+}
+
+.quota-details {
+  @apply flex flex-wrap gap-4 text-sm text-gray-600;
+}
+
+.quota-details span {
+  @apply bg-gray-100 px-3 py-1 rounded;
+}
+
+/* =============================================================================
+   Violations Tab
+   ============================================================================= */
+
+.violations-tab {
+  @apply space-y-6;
+}
+
+.violations-tab h2 {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.violation-card {
+  @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.violation-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.violation-id {
+  @apply font-mono text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded;
+}
+
+.violation-details {
+  @apply flex flex-wrap gap-4 text-sm text-gray-600;
+}
+
+.violation-details span {
+  @apply bg-gray-100 px-3 py-1 rounded;
+}
+
+/* =============================================================================
+   Analytics Tab
+   ============================================================================= */
+
+.analytics-tab {
+  @apply space-y-6;
+}
+
+.analytics-tab h2 {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.analytics-content {
+  @apply space-y-6;
+}
+
+.analytics-summary {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+}
+
+.summary-card {
+  @apply bg-white rounded-xl p-6 shadow-sm flex flex-col items-center text-center;
+}
+
+.summary-card span:first-child {
+  @apply text-sm font-medium text-gray-600 mb-2;
+}
+
+.summary-card .value {
+  @apply text-3xl font-bold text-blue-600;
+}
+
+/* =============================================================================
+   Templates Tab
+   ============================================================================= */
+
+.templates-tab {
+  @apply space-y-6;
+}
+
+.templates-tab h2 {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.template-card {
+  @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.template-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.template-name {
+  @apply font-medium text-gray-900;
+}
+
+.template-category {
+  @apply text-xs font-medium px-2 py-1 rounded-full bg-purple-100 text-purple-800 uppercase tracking-wide;
+}
+
+.template-details {
+  @apply flex flex-wrap gap-4 text-sm text-gray-600;
+}
+
+.template-details span {
+  @apply bg-gray-100 px-3 py-1 rounded;
+}
+
+/* =============================================================================
+   Operations Tab
+   ============================================================================= */
+
+.operations-tab {
+  @apply space-y-6;
+}
+
+.operations-tab h2 {
+  @apply text-xl font-semibold text-gray-900;
+}
+
+.operation-card {
+  @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+}
+
+.operation-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.operation-type {
+  @apply font-medium text-gray-900 capitalize;
+}
+
+.status-badge {
+  @apply text-xs font-medium px-2 py-1 rounded uppercase tracking-wide;
+}
+
+.status-badge.pending {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-badge.in_progress {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-badge.completed {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-badge.failed {
+  @apply bg-red-100 text-red-800;
+}
+
+.status-badge.cancelled {
+  @apply bg-gray-100 text-gray-800;
+}
+
+.operation-details {
+  @apply flex flex-wrap gap-4 text-sm text-gray-600;
+}
+
+.operation-details span {
+  @apply bg-gray-100 px-3 py-1 rounded;
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+@media (max-width: 768px) {
+  .dashboard-header .header-content {
+    @apply flex-col items-start gap-4;
+  }
+
+  .header-stats {
+    @apply flex-wrap gap-3;
+  }
+
+  .header-actions {
+    @apply w-full justify-end;
+  }
+
+  .tab-navigation {
+    @apply px-4 overflow-x-auto;
+  }
+
+  .dashboard-content {
+    @apply p-4;
+  }
+
+  .metrics-overview {
+    @apply grid-cols-1;
+  }
+
+  .analytics-summary {
+    @apply grid-cols-1;
+  }
+}
+
+@media (max-width: 640px) {
+  .tab {
+    @apply px-3 py-2 text-xs;
+  }
+
+  .violation-item {
+    @apply flex-col items-start gap-2;
+  }
+
+  .quota-header {
+    @apply flex-col items-start gap-2;
+  }
+
+  .violation-header {
+    @apply flex-col items-start gap-2;
+  }
+
+  .template-header {
+    @apply flex-col items-start gap-2;
+  }
+
+  .operation-header {
+    @apply flex-col items-start gap-2;
+  }
+}
+
+/* =============================================================================
+   Utility Classes and Animations
+   ============================================================================= */
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Focus states for accessibility */
+.tab:focus,
+.metric-card:focus,
+.quota-card:focus,
+.violation-card:focus,
+.template-card:focus,
+.operation-card:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+.violation-item:focus,
+.activity-item:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Hover effects */
+.metric-card:hover,
+.quota-card:hover,
+.violation-card:hover,
+.template-card:hover,
+.operation-card:hover {
+  @apply transform scale-105;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Status colors */
+.text-status-active {
+  @apply text-green-600;
+}
+
+.text-status-disabled {
+  @apply text-red-600;
+}
+
+.text-status-warning {
+  @apply text-yellow-600;
+}
+
+.text-status-error {
+  @apply text-red-600;
+}
+
+.bg-status-active {
+  @apply bg-green-100;
+}
+
+.bg-status-disabled {
+  @apply bg-red-100;
+}
+
+.bg-status-warning {
+  @apply bg-yellow-100;
+}
+
+.bg-status-error {
+  @apply bg-red-100;
+}
+
+/* Progress indicators */
+.utilization-bar {
+  @apply w-full h-2 bg-gray-200 rounded-full overflow-hidden;
+}
+
+.utilization-fill {
+  @apply h-full transition-all duration-300;
+}
+
+.utilization-fill.low {
+  @apply bg-green-500;
+}
+
+.utilization-fill.medium {
+  @apply bg-yellow-500;
+}
+
+.utilization-fill.high {
+  @apply bg-orange-500;
+}
+
+.utilization-fill.critical {
+  @apply bg-red-500;
+}
+
+/* Critical quota alerts */
+.critical-quota-alert {
+  @apply bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg mb-4;
+}
+
+.critical-quota-alert .alert-icon {
+  @apply text-red-500;
+}
+
+.critical-quota-alert .alert-title {
+  @apply font-medium text-red-800;
+}
+
+.critical-quota-alert .alert-message {
+  @apply text-red-700 text-sm mt-1;
+}
+
+/* Animation for new violations */
+.new-violation {
+  animation: alertPulse 2s ease-in-out infinite;
+}
+
+@keyframes alertPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .usage-quota-dashboard {
+    @apply bg-gray-900;
+  }
+
+  .dashboard-header {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .dashboard-header h1 {
+    @apply text-gray-100;
+  }
+
+  .metric-card,
+  .quota-card,
+  .violation-card,
+  .template-card,
+  .operation-card {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .quota-name,
+  .template-name,
+  .operation-type {
+    @apply text-gray-100;
+  }
+
+  .violation-stats,
+  .quota-details,
+  .violation-details,
+  .template-details,
+  .operation-details {
+    @apply text-gray-400;
+  }
+}

@@ -10,7 +10,8 @@ import {
   VFXPromptVariant,
   VFXGraphNode,
   VFXGraphConnection,
-  VFXExecutionIteration
+  VFXExecutionIteration,
+  VFXRenderingData
 } from '../types/VFXExport';
 import { Node, Edge } from 'reactflow';
 import { substituteVariables } from '../utils/templateParser';
@@ -482,7 +483,7 @@ export class WildConstructVFXExporter implements VFXExporter {
     return extensions;
   }
 
-  private buildRenderingData(variables?: Record<string, string>) {
+  private buildRenderingData(variables?: Record<string, string>): VFXRenderingData {
     // Extract rendering parameters from variables if present
     const width = this.extractNumberFromVariables(variables, ['width', 'resolution_x']) || 1920;
     const height = this.extractNumberFromVariables(variables, ['height', 'resolution_y']) || 1080;
@@ -1063,6 +1064,4 @@ This export is ready for integration into VFX pipelines and supports Wild Constr
 export const vfxExporter = WildConstructVFXExporter.getInstance();
 
 // Export utility functions
-export 
-export 
 export   vfxExporter.generateDocumentation(exportData);

@@ -322,4 +322,32 @@ export class AuditService implements IAuditService {
 
     return csvContent;
   }
+
+  /**
+   * Legacy compatibility method - alias for logEvent
+   * DEPLOYMENT BLOCKER FIX: Provides logAction method expected by calling code
+   */
+  async logAction(params: {
+    action: string;
+    userId?: string;
+    resourceType?: string;
+    resourceId?: string;
+    details?: Record<string, any>;
+    ipAddress?: string;
+    userAgent?: string;
+    sessionId?: string;
+    severity?: 'info' | 'warning' | 'error' | 'critical';
+  }): Promise<void> {
+    return this.logEvent({
+      userId: params.userId,
+      action: params.action,
+      resourceType: params.resourceType,
+      resourceId: params.resourceId,
+      details: params.details,
+      ipAddress: params.ipAddress,
+      userAgent: params.userAgent,
+      sessionId: params.sessionId,
+      severity: params.severity || 'info'
+    });
+  }
 }

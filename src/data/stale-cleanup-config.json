@@ -1,0 +1,32 @@
+{
+  "staleTimeouts": {
+    "IN_PROGRESS": 4,
+    "ASSIGNED": 4,
+    "REVIEW": 48,
+    "BLOCKED": 72
+  },
+  "gracePeriods": {
+    "high": 6,
+    "medium": 0,
+    "low": -6
+  },
+  "actions": {
+    "reassignToAvailable": true,
+    "notifyOriginalAssignee": true,
+    "logDetailed": true,
+    "dryRun": false
+  },
+  "exclusions": {
+    "skipPatterns": [
+      "URGENT",
+      "HOTFIX",
+      "CRITICAL",
+      "PRODUCTION"
+    ],
+    "skipAgents": [
+      "build-bot",
+      "deploy-agent",
+      "monitoring-service"
+    ]
+  }
+}

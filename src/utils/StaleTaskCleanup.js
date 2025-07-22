@@ -28,8 +28,8 @@ class StaleTaskCleanup {
     this.config = {
       // Stale timeouts by status (in hours)
       staleTimeouts: {
-        'IN_PROGRESS': 24,    // 24 hours for in-progress tasks
-        'ASSIGNED': 12,       // 12 hours for newly assigned tasks
+        'IN_PROGRESS': 4,     // 4 hours for in-progress tasks (autonomous agents work quickly)
+        'ASSIGNED': 4,        // 4 hours for newly assigned tasks (should start immediately)
         'REVIEW': 48,         // 48 hours for review tasks (longer grace period)
         'BLOCKED': 72         // 72 hours for blocked tasks (even longer)
       },

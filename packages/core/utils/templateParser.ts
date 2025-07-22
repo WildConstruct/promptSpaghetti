@@ -998,12 +998,15 @@ export const getPreviewWithSamples = (template: string) =>
   templateParser.getPreviewWithSamples(template);
 
 // Context management functions
-export 
+export const setVariableContext = (nodeType?: string, existingVariables: string[] = []): void =>
+  templateParser.setContext(nodeType, existingVariables);
+
 export const trackVariableUsage = (variableName: string): void =>
   templateParser.trackVariableUsage(variableName);
 
 // Clear cache utility
-export 
+export const clearTemplateCache = (): void => 
+  templateParser.clearCache();
 // Variable categories for UI filtering
 export const VARIABLE_CATEGORIES = [
   'character', 'setting', 'action', 'mood', 'object', 
@@ -1012,14 +1015,11 @@ export const VARIABLE_CATEGORIES = [
 
 export type VariableCategory = typeof VARIABLE_CATEGORIES[number];
 
-// Get suggestions by category
-export 
-// Get all common variables
-export 
 /**
  * Generate smart default values for a template based on its variables
  */
-export   const defaults: Record<string, string> = {};
+export const generateSmartDefaults = (parseResult: TemplateParseResult): Record<string, string> => {
+  const defaults: Record<string, string> = {};
   
   parseResult.variables
     .filter(v => v.isValid)
@@ -1039,7 +1039,7 @@ export   const defaults: Record<string, string> = {};
 /**
  * Get contextual default values based on node type and template content
  */
-export   
+export const getContextualDefault = (name: string, nodeType: string, template?: string): string => {
   // Node-type specific defaults
   if (nodeType === 'output') {
     if (name.includes('title') || name.includes('headline')) return 'Epic Adventure Begins';
@@ -1059,11 +1059,13 @@ export
   }
   
   // Template context analysis
-  const templateLower = template.toLowerCase();
-  if (templateLower.includes('cinematic') || templateLower.includes('camera')) {
-    if (name.includes('shot') || name.includes('angle')) return 'wide shot';
-    if (name.includes('lighting')) return 'golden hour';
-    if (name.includes('mood')) return 'dramatic';
+  if (template) {
+    const templateLower = template.toLowerCase();
+    if (templateLower.includes('cinematic') || templateLower.includes('camera')) {
+      if (name.includes('shot') || name.includes('angle')) return 'wide shot';
+      if (name.includes('lighting')) return 'golden hour';
+      if (name.includes('mood')) return 'dramatic';
+    }
   }
   
   // General creative defaults

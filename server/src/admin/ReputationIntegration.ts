@@ -826,4 +826,4 @@ export async function createReputationIntegration(
 /**
  * Default configuration for reputation integration
  */
-export };
+export const defaultReputationConfig = {};

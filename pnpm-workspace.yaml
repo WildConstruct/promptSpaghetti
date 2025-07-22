@@ -2,4 +2,5 @@ packages:
   - 'client'
   - 'server'
   - 'packages/*'
+  - '!packages/crdt-research'
   - 'docs/content-authoring-handbook'

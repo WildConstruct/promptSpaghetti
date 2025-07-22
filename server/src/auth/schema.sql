@@ -76,7 +76,26 @@ CREATE TABLE IF NOT EXISTS oauth_states (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- API tokens - long-lived tokens for API access
+-- API keys - comprehensive API key management for Epic 17
+CREATE TABLE IF NOT EXISTS api_keys (
+    key_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    key_hash VARCHAR(64) UNIQUE NOT NULL, -- SHA-256 hash of the actual key
+    key_prefix VARCHAR(8) NOT NULL, -- First 8 chars for identification
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    scopes JSONB NOT NULL DEFAULT '[]',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    expires_at TIMESTAMP WITH TIME ZONE,
+    last_used_at TIMESTAMP WITH TIME ZONE,
+    status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'revoked', 'expired', 'suspended')),
+    rate_limits JSONB NOT NULL DEFAULT '{"requestsPerMinute": 100, "requestsPerHour": 3000, "requestsPerDay": 50000}',
+    ip_whitelist JSONB, -- Array of allowed IP addresses
+    metadata JSONB NOT NULL DEFAULT '{}', -- Created by, environment, purpose, rotation count, etc.
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- API tokens - legacy table kept for backward compatibility (deprecated)
 CREATE TABLE IF NOT EXISTS api_tokens (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -258,6 +277,15 @@ CREATE INDEX IF NOT EXISTS idx_oauth_accounts_email ON oauth_accounts(email);
 CREATE INDEX IF NOT EXISTS idx_oauth_states_state ON oauth_states(state);
 CREATE INDEX IF NOT EXISTS idx_oauth_states_expires_at ON oauth_states(expires_at);
 
+CREATE INDEX IF NOT EXISTS idx_api_keys_user_id ON api_keys(user_id);
+CREATE INDEX IF NOT EXISTS idx_api_keys_hash ON api_keys(key_hash);
+CREATE INDEX IF NOT EXISTS idx_api_keys_prefix ON api_keys(key_prefix);
+CREATE INDEX IF NOT EXISTS idx_api_keys_status ON api_keys(status);
+CREATE INDEX IF NOT EXISTS idx_api_keys_expires_at ON api_keys(expires_at);
+CREATE INDEX IF NOT EXISTS idx_api_keys_created_at ON api_keys(created_at);
+CREATE INDEX IF NOT EXISTS idx_api_keys_last_used_at ON api_keys(last_used_at);
+
+-- Legacy api_tokens indexes
 CREATE INDEX IF NOT EXISTS idx_api_tokens_user_id ON api_tokens(user_id);
 CREATE INDEX IF NOT EXISTS idx_api_tokens_expires_at ON api_tokens(expires_at);
 CREATE INDEX IF NOT EXISTS idx_api_tokens_revoked ON api_tokens(revoked);
@@ -303,6 +331,8 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_severity ON audit_logs(severity);
 CREATE INDEX IF NOT EXISTS idx_user_preferences_settings_gin ON user_preferences USING GIN(settings);
 CREATE INDEX IF NOT EXISTS idx_organizations_branding_gin ON organizations USING GIN(branding);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_details_gin ON audit_logs USING GIN(details);
+CREATE INDEX IF NOT EXISTS idx_api_keys_scopes_gin ON api_keys USING GIN(scopes);
+CREATE INDEX IF NOT EXISTS idx_api_keys_metadata_gin ON api_keys USING GIN(metadata);
 
 -- Insert default system roles
 INSERT INTO roles (name, description, scope) VALUES

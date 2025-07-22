@@ -2,6 +2,15 @@
 // Story 12.4 - Randomizer Generator Implementation
 // Public API exports for generator system
 
+import { z } from 'zod';
+import { ParameterManager, ParameterManagerOptions } from './parameters/parameter-manager';
+import { RandomizerWorkflow, WorkflowResult } from './workflow/randomizer-workflow';
+import { ComplexityLevel, LLMProvider, RandomizerParameters } from './parameters/parameter-schema';
+
+// Type inference for Zod enums
+type ComplexityLevelType = z.infer<typeof ComplexityLevel>;
+type LLMProviderType = z.infer<typeof LLMProvider>;
+
 // Parameter System
 export {
   RandomizerParameters,
@@ -24,15 +33,15 @@ export {
   ParameterManagerOptions
 } from './parameters/parameter-manager';
 
-// UI Components
-export {
-  RandomizerPanel
-} from './ui/RandomizerPanel';
+// UI Components - Temporarily disabled for server build
+// export {
+//   RandomizerPanel
+// } from './ui/RandomizerPanel';
 
-// Preview System
-export {
-  GraphPreview
-} from './preview/GraphPreview';
+// Preview System - Temporarily disabled for server build
+// export {
+//   GraphPreview
+// } from './preview/GraphPreview';
 
 // Workflow System
 export {
@@ -74,8 +83,8 @@ export class RandomizerSystem {
    */
   async quickGenerate(
     purpose: string,
-    complexity: ComplexityLevel = 'moderate',
-    provider: LLMProvider = 'openai'
+    complexity: ComplexityLevelType = 'moderate',
+    provider: LLMProviderType = 'openai'
   ): Promise<WorkflowResult> {
     const parameters = this.parameterManager.createCompleteParameters({
       purpose,

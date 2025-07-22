@@ -120,6 +120,8 @@
     "test:automation": "jest tests/automation/ --verbose"
   },
   "dependencies": {
+    "@simplewebauthn/browser": "^13.1.2",
+    "@simplewebauthn/server": "^13.1.2",
     "commander": "^12.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -138,6 +140,7 @@
     "@faker-js/faker": "^9.9.0",
     "@heroicons/react": "^2.2.0",
     "@playwright/test": "^1.54.1",
+    "@simplewebauthn/types": "^12.0.0",
     "@tanstack/react-query": "^5.83.0",
     "@testcontainers/postgresql": "^11.3.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -158,6 +161,7 @@
     "eslint": "^8.0.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "fido2-lib": "^3.5.3",
     "glob": "^11.0.3",
     "gray-matter": "^4.0.3",
     "husky": "^8.0.3",

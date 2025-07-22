@@ -454,7 +454,7 @@ export   const [isValid, setIsValid] = useState(false);
 };
 
 // Hook for caching management and statistics
-export 
+export const useCacheStats = () => {
   const getCacheStats = useCallback(() => {
     const manager = dataSourceManager;
     const cache = (manager as any).cache;

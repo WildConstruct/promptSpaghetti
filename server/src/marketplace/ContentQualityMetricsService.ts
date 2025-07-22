@@ -159,7 +159,7 @@ export interface MaintainabilityMetrics {
   evolution: {
     adaptability: number; // adapts to changing requirements
     extensibility: number; // easy to extend functionality
-    backwards compatibility: number; // maintains compatibility
+    backwardsCompatibility: number; // maintains compatibility
     migrationSupport: number; // supports migration to new versions
   };
   support: {

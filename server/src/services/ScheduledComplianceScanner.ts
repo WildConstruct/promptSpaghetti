@@ -1650,4 +1650,4 @@ export interface SchedulingAlert {
 }
 
 // Export singleton instance (would be properly instantiated with dependencies)
-export );
+export const complianceScanner = new ScheduledComplianceScanner();

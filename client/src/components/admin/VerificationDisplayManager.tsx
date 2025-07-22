@@ -85,7 +85,9 @@ interface VerificationDisplayManagerProps {
   className?: string;
 }
 
-export   const [selectedDevice, setSelectedDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProps> = ({ className }) => {
+  const [previewData, setPreviewData] = useState<TrustDisplayPreview[]>([]);
+  const [selectedDevice, setSelectedDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [activeTab, setActiveTab] = useState('display-config');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

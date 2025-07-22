@@ -1067,8 +1067,6 @@ export class ComplianceMonitor {
   }
 }
 
-}
-
 // Enhanced Compliance Dashboard with Baseline Integration
 export interface EnhancedComplianceDashboard extends ComplianceDashboard {
   baselineTracking: {
