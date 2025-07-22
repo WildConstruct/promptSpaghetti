@@ -34,8 +34,8 @@
     "test:docs": "jest tests/documentation --testPathPattern=\"docs\"",
     "test:docs:watch": "jest tests/documentation --watch",
     "test:docs:coverage": "jest tests/documentation --coverage",
-    "test:comprehensive": "node scripts/run-comprehensive-tests.js",
-    "test:edge-cases": "node scripts/run-comprehensive-tests.js --edge-cases-only",
+    "test:comprehensive": "node scripts/run-comprehensive-test-framework.js --report",
+    "test:edge-cases": "jest tests/utils/AdvancedTestUtilities.test.ts --verbose",
     "test:reliability": "node scripts/run-comprehensive-tests.js --reliability-only",
     "test:performance-only": "node scripts/run-comprehensive-tests.js --performance-only",
     "test:unit-only": "node scripts/run-comprehensive-tests.js --unit-only",
@@ -117,8 +117,6 @@
     "test:framework:health": "node scripts/run-comprehensive-test-framework.js --health-check",
     "test:framework:automation": "node scripts/run-comprehensive-test-framework.js --automation-only",
     "test:framework:coverage": "node scripts/run-comprehensive-test-framework.js --coverage-only",
-    "test:comprehensive": "node scripts/run-comprehensive-test-framework.js --report",
-    "test:edge-cases": "jest tests/utils/AdvancedTestUtilities.test.ts --verbose",
     "test:automation": "jest tests/automation/ --verbose"
   },
   "dependencies": {
@@ -183,7 +181,7 @@
     "remark-parse": "^11.0.0",
     "rimraf": "^5.0.0",
     "semver": "^7.7.2",
-    "ts-jest": "^29.4.0",
+    "ts-jest": "29.4.0",
     "turbo": "^1.13.0",
     "typescript": "^5.0.0",
     "yjs": "^13.6.27"

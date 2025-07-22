@@ -282,8 +282,9 @@ describe('Core Validation - validateConnection', () => {
       
       const result = validateConnection(edges, nodes);
       
-      expect(result).toHaveLength(2);
-      expect(result.every(e => e.message === 'Edge is a self-loop')).toBe(true);
+      expect(result).toHaveLength(3);
+      expect(result.filter(e => e.message === 'Edge is a self-loop')).toHaveLength(2);
+      expect(result.filter(e => e.message === 'Duplicate edge')).toHaveLength(1);
       expect(result.map(e => e.edgeId)).toContain('e1');
       expect(result.map(e => e.edgeId)).toContain('e2');
     });
