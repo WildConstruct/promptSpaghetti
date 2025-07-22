@@ -799,8 +799,6 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             // Node interaction
-            nodesDraggable={true}
-            nodesConnectable={true}
             elementsSelectable={true}
             // Professional 3D-style mouse controls with performance optimization
             panOnScroll={false} // Disable scroll to pan
