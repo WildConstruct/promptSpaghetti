@@ -13,6 +13,7 @@ export default defineConfig({
       transformMixedEsModules: true // Help with mixed module formats
     },
     rollupOptions: {
+      external: ['uuid', '@juliuste/react-vimeo'],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],

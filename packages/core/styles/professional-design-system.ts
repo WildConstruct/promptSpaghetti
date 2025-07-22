@@ -310,10 +310,13 @@ export const professionalDesignSystem: ProfessionalDesignSystem = {
   borderRadius: professionalBorderRadius,
 };
 
-// Utility function to get design tokens
-export 
 // CSS Custom Properties Generator
-export   
+export const generateCSSCustomProperties = (
+  colors = professionalColors,
+  shadows = professionalShadows,
+  spacing = professionalSpacing,
+  borderRadius = professionalBorderRadius
+) => {
   return {
     // Background Colors
     '--bg-primary': colors.background.primary,
