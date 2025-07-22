@@ -13,6 +13,9 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { ErrorFactory } from '../../errors/ErrorFactory';
+import { VarianceAnalysis } from '../../hooks/useEnhancedPreview';
+import { CreativeVarianceAnalyzer } from '../VarianceAnalysis/CreativeVarianceAnalyzer';
+import { VarianceVisualization } from '../VarianceAnalysis/VarianceVisualization';
 
 // Enhanced result interface for film industry use
 export interface EnhancedPreviewResult {
@@ -47,6 +50,7 @@ interface EnhancedPreviewModalProps {
   loading: boolean;
   error: string | null;
   results: EnhancedPreviewResult[];
+  varianceAnalysis?: VarianceAnalysis | null;
   onClose: () => void;
   onCancel?: () => void;
   onResultHover?: (index: number) => void;
@@ -67,7 +71,30 @@ interface EnhancedPreviewModalProps {
   maxResults?: number;
 }
 
-export   const [expandedResult, setExpandedResult] = useState<string | null>(null);
+export const EnhancedPreviewModal: React.FC<EnhancedPreviewModalProps> = ({
+  open,
+  loading,
+  error,
+  results,
+  varianceAnalysis,
+  onClose,
+  onCancel,
+  onResultHover,
+  onResultSelect,
+  onResultSave,
+  onResultExport,
+  onResultRate,
+  onResultTag,
+  onResultNote,
+  enableSelection = true,
+  enableRating = true,
+  enableNotes = true,
+  enableExport = true,
+  maxResults = 50
+}) => {
+  const [selectedResults, setSelectedResults] = useState<Set<string>>(new Set());
+  const [activeTab, setActiveTab] = useState<'results' | 'analysis' | 'visualization'>('results');
+  const [expandedResult, setExpandedResult] = useState<string | null>(null);
   const [ratingInProgress, setRatingInProgress] = useState<string | null>(null);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [tempNote, setTempNote] = useState('');
@@ -245,6 +272,52 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
           </button>
         </div>
 
+        {/* Tab Navigation */}
+        <div style={{
+          display: 'flex',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          marginBottom: 20
+        }}>
+          {[
+            { id: 'results', label: '📋 Results', icon: '📋' },
+            { id: 'analysis', label: '📊 Creative Analysis', icon: '📊' },
+            { id: 'visualization', label: '📈 Visualization', icon: '📈' }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              style={{
+                flex: 1,
+                padding: '12px 16px',
+                border: 'none',
+                background: activeTab === tab.id 
+                  ? 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)'
+                  : 'transparent',
+                color: activeTab === tab.id ? '#ffffff' : '#b0b0b0',
+                fontSize: 14,
+                fontWeight: 500,
+                cursor: 'pointer',
+                borderRadius: '8px 8px 0 0',
+                transition: 'all 0.2s',
+                position: 'relative'
+              }}
+            >
+              {tab.label}
+              {activeTab === tab.id && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 2,
+                  background: 'linear-gradient(90deg, #4f46e5, #7c3aed)',
+                  borderRadius: '2px 2px 0 0'
+                }} />
+              )}
+            </button>
+          ))}
+        </div>
+
         {/* Toolbar */}
         {enableSelection && (
           <div style={{
@@ -311,49 +384,52 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
           </div>
         )}
 
-        {/* Loading/Error States */}
-        {loading && (
-          <div style={{ 
-            textAlign: 'center', 
-            padding: 40,
-            color: '#b0b0b0',
-            fontSize: 16
-          }}>
-            <div style={{ marginBottom: 12 }}>⚡ Generating professional results...</div>
-            <div style={{ 
-              width: 200, 
-              height: 4, 
-              background: '#333', 
-              borderRadius: 2, 
-              margin: '0 auto',
-              overflow: 'hidden'
-            }}>
-              <div style={{
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(90deg, #4f46e5, #7c3aed, #4f46e5)',
-                animation: 'loading 2s linear infinite',
-                backgroundSize: '200% 100%'
-              }} />
-            </div>
-          </div>
-        )}
+        {/* Tab Content */}
+        {activeTab === 'results' && (
+          <>
+            {/* Loading/Error States */}
+            {loading && (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: 40,
+                color: '#b0b0b0',
+                fontSize: 16
+              }}>
+                <div style={{ marginBottom: 12 }}>⚡ Generating professional results...</div>
+                <div style={{ 
+                  width: 200, 
+                  height: 4, 
+                  background: '#333', 
+                  borderRadius: 2, 
+                  margin: '0 auto',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(90deg, #4f46e5, #7c3aed, #4f46e5)',
+                    animation: 'loading 2s linear infinite',
+                    backgroundSize: '200% 100%'
+                  }} />
+                </div>
+              </div>
+            )}
 
-        {error && (
-          <div style={{ 
-            color: '#ef4444', 
-            background: 'rgba(239, 68, 68, 0.1)',
-            border: '1px solid rgba(239, 68, 68, 0.2)',
-            padding: 16,
-            borderRadius: 8,
-            marginBottom: 20
-          }}>
-            ⚠️ Error: {error}
-          </div>
-        )}
+            {error && (
+              <div style={{ 
+                color: '#ef4444', 
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.2)',
+                padding: 16,
+                borderRadius: 8,
+                marginBottom: 20
+              }}>
+                ⚠️ Error: {error}
+              </div>
+            )}
 
-        {/* Results List */}
-        {!loading && !error && (
+            {/* Results List */}
+            {!loading && !error && (
           <div style={{ 
             flex: 1, 
             overflowY: 'auto',
@@ -617,6 +693,38 @@ export   const [expandedResult, setExpandedResult] = useState<string | null>(nul
                 </div>
               ))}
             </div>
+          </div>
+        )}
+          </>
+        )}
+
+        {/* Creative Analysis Tab */}
+        {activeTab === 'analysis' && (
+          <div style={{ 
+            flex: 1, 
+            overflowY: 'auto',
+            paddingRight: 8
+          }}>
+            <CreativeVarianceAnalyzer
+              results={results}
+              varianceAnalysis={varianceAnalysis}
+              className=""
+            />
+          </div>
+        )}
+
+        {/* Visualization Tab */}
+        {activeTab === 'visualization' && (
+          <div style={{ 
+            flex: 1, 
+            overflowY: 'auto',
+            paddingRight: 8
+          }}>
+            <VarianceVisualization
+              results={results}
+              varianceAnalysis={varianceAnalysis}
+              className=""
+            />
           </div>
         )}
       </div>

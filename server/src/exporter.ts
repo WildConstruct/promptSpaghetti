@@ -5,6 +5,7 @@
 import { z } from 'zod';
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 import { HybridPromptExportService, HybridExportFormat } from '../../packages/core/services/HybridExportService.js';
+import { GraphSharingService, SharedGraphFormat } from '../../packages/core/services/GraphSharingService.js';
 
 /**
  * Epic 8.6: Enhanced VFX/ControlNet parameter structures
@@ -1147,6 +1148,21 @@ export async function exportResults(request: ExportRequest): Promise<ExportResul
     case 'creative-brief':
       return exportCreativeBrief(data, options);
     
+    case 'hybrid-prompting':
+      return exportHybridPrompting(data, options);
+    
+    case 'mars-framework':
+      return exportMARSFramework(data, options);
+    
+    case 'zada-natural':
+      return exportZadaNaturalLanguage(data, options);
+    
+    case 'shared-graph':
+      return exportSharedGraph(data, options);
+    
+    case 'collaboration':
+      return exportCollaborationFormat(data, options);
+    
     default:
       throw new Error(`Unsupported export format: ${format}`);
   }
@@ -1421,6 +1437,620 @@ function exportCreativeBrief(data: any, options: any): ExportResult {
     data: JSON.stringify(briefData),
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   };
+}
+
+// === EPIC 8.6 TASK 7: HYBRID PROMPTING EXPORT FUNCTIONS ===
+
+/**
+ * Epic 8.6 Task 7: Hybrid Prompting Export - Combines MARS, Zada, and VFX approaches
+ */
+async function exportHybridPrompting(data: any, options: any): Promise<ExportResult> {
+  const hybridService = new HybridPromptExportService();
+  
+  try {
+    // Convert data to graph format for hybrid export
+    const graph = {
+      nodes: data.graph?.nodes || [],
+      edges: data.graph?.edges || []
+    };
+    
+    const executionResults = {
+      finalPrompt: data.results?.[0]?.output || '',
+      variables: data.variables || {},
+      executionTime: data.performance?.totalTime || 0,
+      nodePerformance: data.performance?.byNode || {},
+      variants: data.results || []
+    };
+    
+    // Generate hybrid export
+    const hybridExport = await hybridService.exportHybridPrompt(
+      graph,
+      executionResults,
+      {
+        includeMARS: options?.includeMARS !== false,
+        includeZada: options?.includeZada !== false,
+        includeHollywoodProtocol: options?.includeHollywood !== false,
+        quality: options?.quality || 'production',
+        targetAudience: options?.targetAudience || 'mixed_crew'
+      }
+    );
+
+    return {
+      type: 'text',
+      data: JSON.stringify(hybridExport, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true
+    };
+  } catch (error) {
+    // Fallback to basic hybrid structure
+    const fallbackData = {
+      metadata: {
+        exportId: `hybrid_${Date.now()}`,
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        format: 'wild-construct-hybrid-v1'
+      },
+      hybridPrompting: {
+        mars: {
+          framework: 'MARS-v1.0',
+          tags: 'Basic MARS structure not available - analysis service error',
+          structured: 'Structured format generation failed'
+        },
+        zada: {
+          approach: 'screenplay-style',
+          variants: [
+            {
+              variant_id: 'fallback-v1',
+              style: 'director_note',
+              content: `Director's Note: ${data.results?.[0]?.output || 'Generated content'}`,
+              accessibility_level: 'director',
+              human_readable_score: 8
+            }
+          ]
+        },
+        hollywood: {
+          protocol: 'reproducibility-v1',
+          seeds: {
+            master_seed: Date.now(),
+            component_seeds: {},
+            iteration_seeds: [Date.now()],
+            reproducibility_checksum: 'fallback',
+            version_compatibility: {
+              generator_version: '1.0.0',
+              node_version_map: {},
+              schema_version: 'wild-construct-v1'
+            }
+          }
+        }
+      },
+      original_data: data
+    };
+
+    return {
+      type: 'text',
+      data: JSON.stringify(fallbackData, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true
+    };
+  }
+}
+
+/**
+ * Epic 8.6 Task 7: MARS Framework Export - VFX Professional Format
+ */
+async function exportMARSFramework(data: any, options: any): Promise<ExportResult> {
+  const hybridService = new HybridPromptExportService();
+  
+  try {
+    const graph = {
+      nodes: data.graph?.nodes || [],
+      edges: data.graph?.edges || []
+    };
+    
+    const executionResults = {
+      finalPrompt: data.results?.[0]?.output || '',
+      variables: data.variables || {},
+      executionTime: data.performance?.totalTime || 0
+    };
+    
+    // Generate hybrid export and extract MARS data
+    const hybridExport = await hybridService.exportHybridPrompt(graph, executionResults);
+    const marsData = hybridExport.hybridPrompting.mars;
+    
+    // Create MARS-focused export
+    const marsExport = {
+      format: 'MARS-VFX-Framework-v1.0',
+      timestamp: new Date().toISOString(),
+      
+      // MARS Tagged Prompt
+      mars_prompt: marsData.structured.raw_mars,
+      
+      // Structured MARS Sections
+      camera: {
+        tag: `[CAM:${marsData.tags.CAM.shot_type}:${marsData.tags.CAM.angle}:${marsData.tags.CAM.movement}:${marsData.tags.CAM.lens}]`,
+        breakdown: {
+          shot_type: marsData.tags.CAM.shot_type,
+          angle: marsData.tags.CAM.angle,
+          movement: marsData.tags.CAM.movement,
+          lens: marsData.tags.CAM.lens,
+          depth_of_field: marsData.tags.CAM.depth_of_field
+        }
+      },
+      
+      subject: {
+        tag: `[SUBJ:${marsData.tags.SUBJ.primary}:${marsData.tags.SUBJ.emotion}:${marsData.tags.SUBJ.blocking}]`,
+        breakdown: {
+          primary: marsData.tags.SUBJ.primary,
+          secondary: marsData.tags.SUBJ.secondary,
+          interaction: marsData.tags.SUBJ.interaction,
+          emotion: marsData.tags.SUBJ.emotion,
+          blocking: marsData.tags.SUBJ.blocking
+        }
+      },
+      
+      effects: {
+        tag: `[FX:${marsData.tags.FX.lighting}:${marsData.tags.FX.color_grade}:${marsData.tags.FX.atmosphere}]`,
+        breakdown: {
+          lighting: marsData.tags.FX.lighting,
+          color_grade: marsData.tags.FX.color_grade,
+          atmosphere: marsData.tags.FX.atmosphere,
+          special_fx: marsData.tags.FX.special_fx,
+          post_processing: marsData.tags.FX.post_processing
+        }
+      },
+      
+      focal: {
+        tag: `!FOCAL[${marsData.tags.FOCAL.primary_focus}]`,
+        breakdown: {
+          primary_focus: marsData.tags.FOCAL.primary_focus,
+          secondary_focus: marsData.tags.FOCAL.secondary_focus,
+          background_treatment: marsData.tags.FOCAL.background_treatment,
+          visual_hierarchy: marsData.tags.FOCAL.visual_hierarchy
+        }
+      },
+      
+      // ControlNet Integration
+      controlnet_mapping: marsData.structured.controlnet_mapping,
+      
+      // VFX Professional Notes
+      vfx_notes: {
+        pipeline_integration: 'Use MARS tags for automated VFX parameter extraction',
+        controlnet_workflow: 'Map pose_guidance for character animation, depth_hints for 3D integration',
+        recommended_tools: ['ControlNet', 'Stable Diffusion', 'Midjourney', 'DALL-E'],
+        technical_requirements: 'Ensure pose data matches character rig, depth maps align with scene geometry'
+      },
+      
+      // Original prompt for reference
+      original_prompt: data.results?.[0]?.output || '',
+      variables_used: data.variables || {}
+    };
+
+    return {
+      type: 'text',
+      data: JSON.stringify(marsExport, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true
+    };
+  } catch (error) {
+    // Fallback MARS format
+    const fallbackMARS = {
+      format: 'MARS-VFX-Framework-v1.0-fallback',
+      timestamp: new Date().toISOString(),
+      mars_prompt: `[CAM:MS:eye:static:50mm] [SUBJ:character:neutral:center] [FX:natural:neutral:clear] !FOCAL[character]`,
+      original_prompt: data.results?.[0]?.output || '',
+      error: 'MARS analysis service unavailable, using fallback structure',
+      vfx_notes: {
+        note: 'This is a fallback MARS structure. For full analysis, please retry when services are available.'
+      }
+    };
+
+    return {
+      type: 'text',
+      data: JSON.stringify(fallbackMARS, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true
+    };
+  }
+}
+
+/**
+ * Epic 8.6 Task 7: Zada Natural Language Export - Director-Friendly Format
+ */
+async function exportZadaNaturalLanguage(data: any, options: any): Promise<ExportResult> {
+  const hybridService = new HybridPromptExportService();
+  
+  try {
+    const graph = {
+      nodes: data.graph?.nodes || [],
+      edges: data.graph?.edges || []
+    };
+    
+    const executionResults = {
+      finalPrompt: data.results?.[0]?.output || '',
+      variables: data.variables || {},
+      executionTime: data.performance?.totalTime || 0
+    };
+    
+    // Generate hybrid export and extract Zada data
+    const hybridExport = await hybridService.exportHybridPrompt(graph, executionResults);
+    const zadaData = hybridExport.hybridPrompting.zada;
+    
+    // Create Zada-focused export
+    const zadaExport = {
+      format: 'Zada-Natural-Language-v1.0',
+      approach: 'Screenplay-Style Director Accessibility',
+      timestamp: new Date().toISOString(),
+      
+      // Director-Accessible Main Content
+      director_friendly: {
+        screenplay_style: zadaData.director_friendly.screenplay_style,
+        shot_description: zadaData.director_friendly.shot_description,
+        mood_direction: zadaData.director_friendly.mood_direction,
+        reference_notes: zadaData.director_friendly.reference_notes
+      },
+      
+      // Multiple Natural Language Variants
+      variants: zadaData.variants.map(variant => ({
+        id: variant.variant_id,
+        style: variant.style,
+        accessibility_level: variant.accessibility_level,
+        human_readable_score: variant.human_readable_score,
+        content: variant.content
+      })),
+      
+      // Crew-Specific Notes
+      crew_directions: zadaData.director_friendly.crew_notes,
+      
+      // Creative Context
+      creative_context: {
+        original_prompt: data.results?.[0]?.output || '',
+        variables_context: data.variables || {},
+        accessibility_focus: 'Converts technical prompts into natural, director-friendly language',
+        target_audience: options?.targetAudience || 'Creative team members without technical AI background'
+      },
+      
+      // Usage Guidelines
+      usage_notes: {
+        director_workflow: 'Use screenplay_style for storyboard discussions',
+        crew_communication: 'Share variants with different crew members based on accessibility_level',
+        iteration_process: 'Modify mood_direction and reference_notes for creative iterations',
+        technical_bridge: 'Use alongside MARS framework for complete VFX pipeline integration'
+      }
+    };
+
+    // Format as readable document
+    const readableContent = `# Director-Friendly Content Generation
+
+## Screenplay Format
+${zadaData.director_friendly.screenplay_style}
+
+## Shot Description
+${zadaData.director_friendly.shot_description}
+
+## Mood & Direction
+${zadaData.director_friendly.mood_direction}
+
+## Reference Notes
+${zadaData.director_friendly.reference_notes}
+
+## Crew Notes
+
+### Cinematographer
+${zadaData.director_friendly.crew_notes.cinematographer}
+
+### Lighting Director
+${zadaData.director_friendly.crew_notes.lighting_director}
+
+### VFX Supervisor
+${zadaData.director_friendly.crew_notes.vfx_supervisor}
+
+---
+
+Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
+`;
+
+    if (options?.format === 'markdown') {
+      return {
+        type: 'text',
+        data: readableContent,
+        mimeType: 'text/markdown',
+        shouldDownload: true
+      };
+    } else {
+      return {
+        type: 'text',
+        data: JSON.stringify(zadaExport, null, 2),
+        mimeType: 'application/json',
+        shouldDownload: true
+      };
+    }
+  } catch (error) {
+    // Fallback Zada format
+    const originalPrompt = data.results?.[0]?.output || '';
+    const fallbackZada = {
+      format: 'Zada-Natural-Language-v1.0-fallback',
+      timestamp: new Date().toISOString(),
+      
+      director_friendly: {
+        screenplay_style: `FADE IN:\n\nINT. SCENE - DAY\n\n${originalPrompt}\n\nThe shot captures the essence of the described scene with natural, cinematic quality.`,
+        shot_description: `Natural shot featuring the described elements with professional cinematic composition`,
+        mood_direction: 'Create an authentic, engaging atmosphere that serves the story',
+        reference_notes: 'Focus on natural lighting and authentic character moments'
+      },
+      
+      variants: [
+        {
+          id: 'fallback-screenplay',
+          style: 'screenplay',
+          accessibility_level: 'director',
+          human_readable_score: 8,
+          content: `A screenplay-style interpretation of: ${originalPrompt}`
+        }
+      ],
+      
+      error: 'Zada natural language generation service unavailable, using fallback structure',
+      original_prompt: originalPrompt
+    };
+
+    return {
+      type: 'text',
+      data: JSON.stringify(fallbackZada, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true
+    };
+  }
+}
+
+/**
+ * Epic 8.7 Task 5: Shared Graph Export Functions
+ */
+
+/**
+ * Export graph in sharing format with all annotations
+ */
+async function exportSharedGraph(data: any, options: any): Promise<ExportResult> {
+  const graphSharingService = new GraphSharingService();
+  
+  try {
+    // Extract graph data
+    const nodes = data.graph?.nodes || [];
+    const edges = data.graph?.edges || [];
+    const annotations = data.annotations || {};
+    
+    // Prepare sharing options
+    const sharingOptions = {
+      includeHistory: options?.includeHistory ?? true,
+      includeComments: options?.includeComments ?? true,
+      permissions: options?.permissions || 'read_only',
+      author: {
+        id: options?.authorId || 'anonymous',
+        name: options?.authorName || 'Anonymous User',
+        email: options?.authorEmail
+      }
+    };
+    
+    // Prepare metadata
+    const metadata = {
+      title: options?.title || 'Shared Graph',
+      description: options?.description || 'Graph shared via Wild Construct',
+      versionControl: {
+        tags: options?.tags || [],
+        branch: options?.branch || 'main'
+      }
+    };
+    
+    // Create shared graph
+    const sharedGraph = await graphSharingService.exportForSharing(
+      nodes,
+      edges,
+      annotations,
+      metadata,
+      sharingOptions
+    );
+    
+    return {
+      type: 'text',
+      data: JSON.stringify(sharedGraph, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true,
+      filename: `shared-graph-${sharedGraph.metadata.exportId}.json`
+    };
+    
+  } catch (error) {
+    // Fallback shared format
+    const fallbackSharedGraph = {
+      metadata: {
+        exportId: `fallback_${Date.now()}`,
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        title: options?.title || 'Shared Graph (Fallback)',
+        author: {
+          id: 'fallback',
+          name: 'Unknown'
+        },
+        versionControl: {
+          version: 1,
+          changes: ['Fallback export due to service error'],
+          tags: []
+        },
+        sharing: {
+          permissions: 'read_only',
+          collaborators: []
+        }
+      },
+      graph: {
+        nodes: data.graph?.nodes || [],
+        edges: data.graph?.edges || [],
+        settings: {
+          canvasPosition: { x: 0, y: 0, zoom: 1 },
+          readonly: true
+        }
+      },
+      annotations: {
+        connectionLabels: [],
+        stickyNotes: [],
+        nodeLabels: [],
+        regions: [],
+        comments: []
+      },
+      collaboration: {
+        changeHistory: [],
+        conflicts: [],
+        lastSync: new Date().toISOString(),
+        syncStatus: 'offline'
+      },
+      compatibility: {
+        minVersion: '1.0.0',
+        features: ['basic-sharing'],
+        warnings: ['Generated in fallback mode due to service error'],
+        errors: [error instanceof Error ? error.message : 'Unknown error']
+      },
+      error: 'Sharing service unavailable, using fallback format'
+    };
+    
+    return {
+      type: 'text',
+      data: JSON.stringify(fallbackSharedGraph, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true,
+      filename: 'shared-graph-fallback.json'
+    };
+  }
+}
+
+/**
+ * Export in collaboration format with version control
+ */
+async function exportCollaborationFormat(data: any, options: any): Promise<ExportResult> {
+  const graphSharingService = new GraphSharingService();
+  
+  try {
+    // Create full collaboration export
+    const nodes = data.graph?.nodes || [];
+    const edges = data.graph?.edges || [];
+    const annotations = {
+      stickyNotes: data.annotations?.stickyNotes || [],
+      connectionLabels: extractConnectionLabels(edges),
+      nodeLabels: extractNodeLabels(nodes),
+      regions: data.annotations?.regions || [],
+      comments: data.annotations?.comments || []
+    };
+    
+    const sharedGraph = await graphSharingService.exportForSharing(
+      nodes,
+      edges,
+      annotations,
+      {
+        title: options?.title || 'Collaboration Graph',
+        description: options?.description || 'Graph prepared for team collaboration',
+        versionControl: {
+          tags: ['collaboration', ...(options?.tags || [])],
+          branch: options?.branch || 'collaboration'
+        }
+      },
+      {
+        includeHistory: true,
+        includeComments: true,
+        permissions: options?.permissions || 'collaborative',
+        author: {
+          id: options?.authorId || 'collaborator',
+          name: options?.authorName || 'Team Member',
+          email: options?.authorEmail
+        }
+      }
+    );
+    
+    // Enhanced collaboration metadata
+    const collaborationExport = {
+      ...sharedGraph,
+      collaborationFeatures: {
+        realTimeSync: true,
+        conflictResolution: true,
+        versionControl: true,
+        commentSystem: true,
+        permissionManagement: true,
+        changeTracking: true
+      },
+      usage: {
+        importInstructions: 'Use Wild Construct import function or share URL',
+        supportedClients: ['Wild Construct Web', 'Wild Construct Desktop'],
+        apiVersion: '1.0.0'
+      }
+    };
+    
+    return {
+      type: 'text',
+      data: JSON.stringify(collaborationExport, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true,
+      filename: `collaboration-${sharedGraph.metadata.exportId}.json`
+    };
+    
+  } catch (error) {
+    // Fallback collaboration format
+    const fallbackFormat = {
+      metadata: {
+        exportId: `collab_fallback_${Date.now()}`,
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        title: options?.title || 'Collaboration Export (Fallback)',
+        format: 'collaboration-fallback'
+      },
+      graph: data.graph || { nodes: [], edges: [] },
+      collaborationFeatures: {
+        realTimeSync: false,
+        conflictResolution: false,
+        versionControl: false,
+        commentSystem: false,
+        permissionManagement: false,
+        changeTracking: false,
+        fallbackMode: true
+      },
+      error: error instanceof Error ? error.message : 'Collaboration service unavailable'
+    };
+    
+    return {
+      type: 'text',
+      data: JSON.stringify(fallbackFormat, null, 2),
+      mimeType: 'application/json',
+      shouldDownload: true,
+      filename: 'collaboration-fallback.json'
+    };
+  }
+}
+
+/**
+ * Extract connection labels from edges
+ */
+function extractConnectionLabels(edges: any[]): any[] {
+  return edges
+    .filter(edge => edge.label && edge.label.trim().length > 0)
+    .map(edge => ({
+      edgeId: edge.id,
+      label: edge.label,
+      style: edge.labelStyle,
+      position: {
+        type: edge.labelPosition,
+        offset: edge.labelOffset
+      },
+      visible: edge.showLabel ?? true
+    }));
+}
+
+/**
+ * Extract node labels and annotations
+ */
+function extractNodeLabels(nodes: any[]): any[] {
+  return nodes.map(node => ({
+    nodeId: node.id,
+    label: node.data?.label,
+    description: node.data?.description,
+    tags: Array.isArray(node.data?.tags) ? node.data.tags : [],
+    color: node.data?.color,
+    notes: node.data?.notes
+  })).filter(label => 
+    label.label || label.description || label.tags.length > 0 || label.notes
+  );
 }
 
 // Utility function to escape XML content

@@ -41,6 +41,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `node src/finish-task.js <task-id>` - **MUST be called when implementation is complete**
 - Failing to call finish-task.js leaves tasks stuck in IN_PROGRESS state
 
+### Git Workflow (IMPORTANT)
+**DO NOT commit individual files immediately during development.**
+
+**Correct workflow:**
+1. Work on task implementation
+2. Call `node src/finish-task.js <task-id>` when complete  
+3. **Only then** create PR for review and approval
+4. Commits happen during PR merge, not during individual file work
+
+**NEVER commit unless explicitly asked to create a PR or the user specifically requests it.**
+
+## CRITICAL DEVELOPMENT AGENT INSTRUCTIONS
+
+### When User Says "Check This In" or "Finish Task":
+1. ✅ **FIRST**: Call `node src/finish-task.js <task-id>` 
+2. ✅ **THEN**: Ask if they want you to create a PR
+3. ❌ **DO NOT**: Immediately commit files
+4. ❌ **DO NOT**: Use git commit during regular development
+
+### Git Commits Only Happen When:
+- User explicitly requests PR creation
+- User says "create a pull request" 
+- User says "commit this for review"
+- **NOT** when they say "check this in" or "finish the task"
+
+### The Correct Workflow Is:
+```
+Development Work → finish-task.js → PR Creation → Git Commits
+```
+
+**The issue**: Dev agents were committing immediately when told to "check in" work, but the proper workflow is to finish the task FIRST, then handle git workflow separately for PR creation.
+
+### Agent Coordination Commands
+- `node src/monitor-available-tasks.js` - See team coordination dashboard and available tasks
+- `node src/grab-tasks.js <agent-id> 2 --epic=8` - Grab Epic 8 tasks (PRIORITY 1)
+- `node src/grab-tasks.js <agent-id> 2 --priority-only` - Grab any high priority tasks
+
 ### Unified Automation System (NEW)
 The automation infrastructure has been completely unified and consolidated:
 - **System Health**: `node src/fix-system.js --health-check` - Comprehensive health monitoring (96/100 health score)

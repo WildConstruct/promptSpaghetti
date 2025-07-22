@@ -24,8 +24,12 @@ try {
   tasks.forEach(task => {
     stateCounts[task.state] = (stateCounts[task.state] || 0) + 1;
     
-    // Track priority distribution
-    const priority = task.priority || 'unset';
+    // Track priority distribution - normalize priority values
+    let priority = task.priority || 'unset';
+    // Handle numeric priorities and normalize
+    if (priority === 1 || priority === 'critical') priority = 'high';
+    if (priority === 2) priority = 'medium'; 
+    if (priority === 3) priority = 'low';
     priorityBreakdown[priority] = (priorityBreakdown[priority] || 0) + 1;
     
     // Track story distribution
@@ -61,8 +65,33 @@ try {
   console.log('\n📚 STORY BREAKDOWN:');
   Object.entries(storyBreakdown).forEach(([story, count]) => {
     if (count > 0 && story !== 'no-story') {
-      const emoji = story.includes('20.1') ? '🔐' : story.includes('20.2') ? '📁' : '📄';
-      const label = story.includes('20.1') ? 'Authentication' : story.includes('20.2') ? 'File Browser' : story;
+      let emoji = '📄';
+      let label = story;
+      
+      // Epic 8 stories
+      if (story && story.toString().startsWith('8.')) {
+        emoji = '🎬';
+        const storyTitles = {
+          '8.1': 'Professional Interface Polish',
+          '8.2': 'Director-Friendly Variable System',
+          '8.3': 'Visual Weight Controls', 
+          '8.4': 'Progressive Disclosure Architecture',
+          '8.5': 'Real-Time Multi-Seed Preview',
+          '8.6': 'Structured Pipeline Export',
+          '8.7': 'Collaboration & Documentation Tools',
+          '8.8': 'Historical Data Integration Foundation'
+        };
+        label = storyTitles[story] || `Epic 8 Story ${story}`;
+      }
+      // Priority stories
+      else if (story.includes('20.1')) {
+        emoji = '🔐';
+        label = 'Authentication';
+      } else if (story.includes('20.2')) {
+        emoji = '📁'; 
+        label = 'File Browser';
+      }
+      
       console.log(`  ${emoji} ${label}: ${count}`);
     }
   });
@@ -72,11 +101,13 @@ try {
   const unassignedTasks = tasks.filter(t => t.state === 'UNASSIGNED');
   
   if (unassignedTasks.length > 0) {
-    // Sort by business priority
+    // Sort by business priority (updated for Epic 8)
     const sortedTasks = unassignedTasks.sort((a, b) => {
       const getPriority = (task) => {
-        if (task.story?.includes('20.1')) return 1; // Auth highest
-        if (task.story?.includes('20.2')) return 2; // File browser second
+        // Epic 8 is now top priority
+        if (task.epic === 'Epic 8' || task.tags?.includes('epic-8')) return 0;
+        if (task.story?.includes('20.1')) return 1; // Auth second
+        if (task.story?.includes('20.2')) return 2; // File browser third
         if (task.metadata?.source === 'priority-automation') return 3;
         if (task.priority === 'high') return 4;
         return 5;
@@ -88,10 +119,12 @@ try {
     console.log('💡 TIP: Run "node src/grab-tasks.js <your-id> 2" to grab top tasks\n');
     
     sortedTasks.slice(0, 10).forEach((task, index) => {
-      const priorityEmoji = task.story?.includes('20.1') ? '🔐' : 
+      const priorityEmoji = task.epic === 'Epic 8' || task.tags?.includes('epic-8') ? '🎬' :
+                           task.story?.includes('20.1') ? '🔐' : 
                            task.story?.includes('20.2') ? '📁' : 
                            task.priority === 'high' ? '🔥' : '📝';
-      const storyLabel = task.story?.includes('20.1') ? '[AUTH]' :
+      const storyLabel = task.epic === 'Epic 8' ? '[EPIC 8]' :
+                        task.story?.includes('20.1') ? '[AUTH]' :
                         task.story?.includes('20.2') ? '[FILE]' : '';
       
       console.log(`  ${index + 1}. ${priorityEmoji} ${task.id}: ${task.title} ${storyLabel}`);

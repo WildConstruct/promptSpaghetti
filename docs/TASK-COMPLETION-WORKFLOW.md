@@ -50,6 +50,7 @@ node src/grab-tasks.js <your-dev-id> 2 --priority-only
 - Follow existing code conventions
 - Ensure tests pass
 - Document any important decisions
+- **DO NOT commit files yet - this happens later during PR process**
 
 ### **STEP 4: 🚨 CRITICAL - ALWAYS CALL FINISH-TASK**
 ```bash
@@ -72,6 +73,24 @@ node src/finish-task.js <task-id> BLOCKED    # If you're stuck
 # Check that your task moved to REVIEW status
 node src/monitor-available-tasks.js | grep REVIEW
 ```
+
+### **STEP 6: Git Workflow (When Ready for PR)**
+**ONLY after task is in REVIEW status and you're ready to submit for approval:**
+
+```bash
+# Create PR (this will handle commits)
+# PR creation handles: git add, git commit, git push
+```
+
+**🚨 CRITICAL: DO NOT use `git commit` during development work.**
+
+**Correct Git Workflow:**
+1. ✅ Work on files (edit, create, modify)
+2. ✅ Call `finish-task.js` to move task to REVIEW
+3. ✅ **ONLY THEN** create PR when asked or when submitting for approval
+4. ✅ Commits happen automatically during PR creation
+
+**❌ INCORRECT: Committing individual files during development**
 
 ---
 
