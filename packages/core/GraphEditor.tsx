@@ -58,9 +58,8 @@ import { useCanvasOptimization, CanvasOptimizer } from './utils/canvasOptimizati
 import { globalAnimationManager } from './utils/smoothAnimations';
 import './styles/smoothAnimations.css';
 
-// Add keyframes for node creation animation
-const style = document.createElement('style');
-style.textContent = `
+// SECURITY FIX: Safe CSS injection using controlled constants
+const ANIMATION_CSS = `
   @keyframes nodeCreatePulse {
     0% {
       opacity: 0;
@@ -80,7 +79,20 @@ style.textContent = `
     animation: nodeCreatePulse 0.6s ease-out;
   }
 `;
-document.head.appendChild(style);
+
+// Safe style injection with ID check to prevent duplicates
+const injectSafeStyles = () => {
+  const styleId = 'graph-editor-animations';
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = ANIMATION_CSS; // Use predefined constant
+    document.head.appendChild(style);
+  }
+};
+
+// Inject styles safely on module load
+injectSafeStyles();
 import {
   WeightedChoiceIcon,
   ConcatIcon,

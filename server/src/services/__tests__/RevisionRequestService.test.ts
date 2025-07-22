@@ -18,11 +18,12 @@ import {
   RevisionRequestReviewFormData,
   RevisionRequestSearchQuery,
   DEFAULT_REVISION_REQUEST_CONFIG
-} from '../../../packages/core/types/RevisionRequestTypes';
+} from '../../../../packages/core/types/RevisionRequestTypes';
 
 // Mock Database
-jest.mock('../../database/connection');
-const MockDatabase = Database as jest.MockedClass<typeof Database>;
+jest.mock('../../database/connection', () => ({
+  Database: jest.fn()
+}));
 
 describe('RevisionRequestService', () => {
   let service: RevisionRequestService;
@@ -83,9 +84,8 @@ describe('RevisionRequestService', () => {
 
   beforeEach(() => {
     mockDb = {
-      query: jest.fn<unknown[], unknown>(),
+      query: jest.fn(),
     } as any;
-    MockDatabase.mockImplementation(() => mockDb);
     service = new RevisionRequestService(mockDb);
   });
 

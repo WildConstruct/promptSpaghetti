@@ -23,7 +23,7 @@ import {
   RevisionRequestFormData,
   RevisionRequestReviewFormData,
   RevisionRequestExportRequest
-} from '../../packages/core/types/RevisionRequestTypes';
+} from '../../../packages/core/types/RevisionRequestTypes';
 
 // Request type definitions
 interface CreateRevisionRequestRequest {

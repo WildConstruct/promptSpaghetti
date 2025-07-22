@@ -177,7 +177,12 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
 
     const memo = new Map<string, any>();
 
-    async function dfs(nodeId: string): Promise<any> {
+    async function dfs(nodeId: string, depth: number = 0): Promise<any> {
+      // SECURITY FIX: Prevent stack overflow with depth protection
+      if (depth > 1000) {
+        throw new Error(`Maximum execution depth exceeded (${depth}). Possible infinite recursion in graph at node ${nodeId}`);
+      }
+      
       if (memo.has(nodeId)) return memo.get(nodeId);
       const node = nodeMap.get(nodeId);
       if (!node) throw new Error(`Node ${nodeId} not found`);
@@ -207,7 +212,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         if (node.inputs) {
           for (let i = 0; i < node.inputs.length; i++) {
             const inId = node.inputs[i];
-            const inputValue = await dfs(inId);
+            const inputValue = await dfs(inId, depth + 1);
             resolvedInputs.push(inputValue);
             
             // Epic 8.5: Track execution inputs
@@ -289,7 +294,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
     const outputs: string[] = [];
     for (const n of graph.nodes) {
       if (n.type === 'Output') {
-        const value = await dfs(n.id);
+        const value = await dfs(n.id, 0); // Start depth at 0 for output nodes
         outputs.push(value);
       }
     }
