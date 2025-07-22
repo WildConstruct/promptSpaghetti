@@ -106,7 +106,20 @@
     "load:k6:stress": "node scripts/run-k6-tests.js --scenario stress",
     "load:k6:spike": "node scripts/run-k6-tests.js --scenario spike",
     "load:k6:breakpoint": "node scripts/run-k6-tests.js --scenario breakpoint",
-    "load:k6:all": "node scripts/run-k6-tests.js --all"
+    "load:k6:all": "node scripts/run-k6-tests.js --all",
+    "test:performance-integration": "jest tests/performance/PerformanceTestIntegration.test.ts --verbose",
+    "test:performance-benchmarks": "jest tests/performance/graph-execution-benchmarks.test.ts --verbose",
+    "perf:integrated": "node -e \"const { PerformanceTestIntegration } = require('./tests/performance/PerformanceTestIntegration'); const integration = new PerformanceTestIntegration(); integration.executeComprehensivePerformanceTest().then(report => console.log('Performance Score:', report.overallScore, '/100')).catch(console.error);\"",
+    "perf:health-check": "node -e \"const { PerformanceTestIntegration } = require('./tests/performance/PerformanceTestIntegration'); const integration = new PerformanceTestIntegration(); integration.quickHealthCheck().then(health => console.log('Health Status:', health.status, 'Issues:', health.issues.length)).catch(console.error);\"",
+    "test:performance-full": "npm run test:performance-benchmarks && npm run test:performance-integration && npm run perf:integrated",
+    "test:framework": "node scripts/run-comprehensive-test-framework.js",
+    "test:framework:setup": "node scripts/run-comprehensive-test-framework.js --setup-only",
+    "test:framework:health": "node scripts/run-comprehensive-test-framework.js --health-check",
+    "test:framework:automation": "node scripts/run-comprehensive-test-framework.js --automation-only",
+    "test:framework:coverage": "node scripts/run-comprehensive-test-framework.js --coverage-only",
+    "test:comprehensive": "node scripts/run-comprehensive-test-framework.js --report",
+    "test:edge-cases": "jest tests/utils/AdvancedTestUtilities.test.ts --verbose",
+    "test:automation": "jest tests/automation/ --verbose"
   },
   "dependencies": {
     "commander": "^12.0.0",
