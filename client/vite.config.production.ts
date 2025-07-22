@@ -26,6 +26,7 @@ export default defineConfig({
       include: [/zod/, /node_modules/]
     },
     rollupOptions: {
+      external: ['uuid'],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
