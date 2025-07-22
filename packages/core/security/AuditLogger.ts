@@ -12,8 +12,41 @@
  * Epic 19 Task T-1752989143998-485: Implement audit logging for data access
  */
 
-import { EventEmitter } from 'events';
-import * as crypto from 'crypto';
+// Browser-compatible event emitter and crypto alternatives
+class BrowserEventEmitter {
+  private events: Map<string, Function[]> = new Map();
+  
+  on(event: string, listener: Function) {
+    if (!this.events.has(event)) {
+      this.events.set(event, []);
+    }
+    this.events.get(event)!.push(listener);
+  }
+  
+  emit(event: string, ...args: any[]) {
+    const listeners = this.events.get(event);
+    if (listeners) {
+      listeners.forEach(listener => listener(...args));
+    }
+  }
+}
+
+// Browser-compatible crypto utility
+const browserCrypto = {
+  randomBytes: (size: number): string => {
+    const array = new Uint8Array(size);
+    if (typeof window !== 'undefined' && window.crypto) {
+      window.crypto.getRandomValues(array);
+    } else {
+      // Fallback for non-browser environments
+      for (let i = 0; i < size; i++) {
+        array[i] = Math.floor(Math.random() * 256);
+      }
+    }
+    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  }
+};
+
 import { 
   DataClassificationLevel,
   type OperationContext
@@ -188,7 +221,7 @@ export enum AuditLogLevel {
 /**
  * Main audit logger implementation
  */
-export class AuditLogger extends EventEmitter {
+export class AuditLogger extends BrowserEventEmitter {
   private config: Required<AuditLoggerConfig>;
   private buffer: AuditLogEntry[] = [];
   private flushTimer?: ReturnType<typeof setTimeout>;
@@ -476,14 +509,14 @@ export class AuditLogger extends EventEmitter {
    * Generate unique audit ID
    */
   private generateAuditId(): string {
-    return `audit_${Date.now()}_${crypto.randomBytes(8).toString('hex')}`;
+    return `audit_${Date.now()}_${browserCrypto.randomBytes(8)}`;
   }
   
   /**
    * Generate correlation ID
    */
   private generateCorrelationId(): string {
-    return `corr_${crypto.randomBytes(16).toString('hex')}`;
+    return `corr_${browserCrypto.randomBytes(16)}`;
   }
   
   /**
