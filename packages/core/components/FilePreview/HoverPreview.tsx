@@ -1,161 +1,204 @@
 /**
  * HoverPreview - Component for displaying file previews on hover
  * 
- * Shows file preview modal positioned relative to the hovered element
+ * Shows file preview modal positioned relative to the hovered element with smart positioning
  */
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FilePreview, FilePreviewData } from './FilePreview';
+import { FilePreview } from './FilePreview';
+import { PSGFile } from '../../projectManager';
 
 interface HoverPreviewProps {
   /** File data to preview */
-  file: FilePreviewData;
+  file: PSGFile;
   
-  /** Whether the preview is visible */
-  visible: boolean;
-  
-  /** Mouse position for positioning */
-  mousePosition: { x: number; y: number };
+  /** Target element to position relative to */
+  targetElement?: Element;
   
   /** Delay before showing preview (ms) */
   delay?: number;
   
   /** Callback when preview is clicked */
-  onClick?: (file: FilePreviewData) => void;
+  onClick?: (file: PSGFile) => void;
   
-  /** Callback when preview should close */
-  onClose?: () => void;
+  /** Children to render as trigger */
+  children: React.ReactNode;
 }
 
 export const HoverPreview: React.FC<HoverPreviewProps> = ({
   file,
-  visible,
-  mousePosition,
-  delay = 500,
+  targetElement,
+  delay = 300,
   onClick,
-  onClose
+  children
 }) => {
-  const [isShowing, setIsShowing] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  // Calculate optimal position for the preview
-  const calculatePosition = useCallback((mouseX: number, mouseY: number) => {
-    const padding = 12;
-    const previewWidth = 400;
-    const previewHeight = 300;
+  // Calculate optimal position for the preview relative to trigger element
+  const calculatePosition = useCallback((element: Element) => {
+    const rect = element.getBoundingClientRect();
+    const previewWidth = 350;
+    const previewHeight = 200;
+    const gap = 8;
     
     // Get viewport dimensions
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    let x = mouseX + padding;
-    let y = mouseY + padding;
+    let x = rect.right + gap; // Default to right side
+    let y = rect.top;
     
-    // Adjust if preview would go off-screen horizontally
-    if (x + previewWidth > viewportWidth) {
-      x = mouseX - previewWidth - padding;
+    // Check if there's enough space on the right
+    if (x + previewWidth > viewportWidth - gap) {
+      // Position to the left instead
+      x = rect.left - previewWidth - gap;
     }
     
-    // Adjust if preview would go off-screen vertically
-    if (y + previewHeight > viewportHeight) {
-      y = mouseY - previewHeight - padding;
+    // Ensure we don't go off the left edge
+    if (x < gap) {
+      x = gap;
     }
     
-    // Ensure preview stays within bounds
-    x = Math.max(padding, Math.min(x, viewportWidth - previewWidth - padding));
-    y = Math.max(padding, Math.min(y, viewportHeight - previewHeight - padding));
+    // Check vertical positioning
+    if (y + previewHeight > viewportHeight - gap) {
+      y = viewportHeight - previewHeight - gap;
+    }
+    
+    // Ensure we don't go above the top
+    if (y < gap) {
+      y = gap;
+    }
     
     return { x, y };
   }, []);
 
-  // Handle visibility changes
-  useEffect(() => {
-    if (visible) {
-      // Clear any existing timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      
-      // Set position and show after delay
-      timeoutRef.current = setTimeout(() => {
-        const pos = calculatePosition(mousePosition.x, mousePosition.y);
-        setPosition(pos);
-        setIsShowing(true);
-      }, delay);
-    } else {
-      // Clear timeout and hide immediately
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      setIsShowing(false);
+  // Handle mouse enter
+  const handleMouseEnter = useCallback(() => {
+    // Clear any hide timeout
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
     }
-
-    // Cleanup on unmount
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+    
+    // Set show timeout
+    showTimeoutRef.current = setTimeout(() => {
+      const element = targetElement || triggerRef.current;
+      if (element) {
+        const pos = calculatePosition(element);
+        setPosition(pos);
+        setIsVisible(true);
       }
-    };
-  }, [visible, mousePosition, delay, calculatePosition]);
-
-  // Handle click
-  const handleClick = useCallback(() => {
-    onClick?.(file);
-    onClose?.();
-  }, [onClick, file, onClose]);
-
+    }, delay);
+  }, [calculatePosition, delay, targetElement]);
+  
   // Handle mouse leave
   const handleMouseLeave = useCallback(() => {
-    onClose?.();
-  }, [onClose]);
+    // Clear any show timeout
+    if (showTimeoutRef.current) {
+      clearTimeout(showTimeoutRef.current);
+      showTimeoutRef.current = null;
+    }
+    
+    // Set hide timeout with small delay to allow moving to preview
+    hideTimeoutRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 100);
+  }, []);
+  
+  // Handle focus (for keyboard accessibility)
+  const handleFocus = useCallback(() => {
+    handleMouseEnter();
+  }, [handleMouseEnter]);
+  
+  // Handle blur
+  const handleBlur = useCallback(() => {
+    handleMouseLeave();
+  }, [handleMouseLeave]);
 
-  // Handle escape key
+  // Handle preview click
+  const handlePreviewClick = useCallback(() => {
+    onClick?.(file);
+    setIsVisible(false);
+  }, [onClick, file]);
+  
+  // Handle preview mouse enter (prevent hiding)
+  const handlePreviewMouseEnter = useCallback(() => {
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
+    }
+  }, []);
+  
+  // Handle preview mouse leave
+  const handlePreviewMouseLeave = useCallback(() => {
+    setIsVisible(false);
+  }, []);
+
+  // Cleanup timeouts on unmount
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose?.();
+    return () => {
+      if (showTimeoutRef.current) {
+        clearTimeout(showTimeoutRef.current);
+      }
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
       }
     };
-
-    if (isShowing) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [isShowing, onClose]);
-
-  if (!isShowing) {
-    return null;
-  }
+  }, []);
 
   return (
-    <div
-      ref={previewRef}
-      style={{
-        position: 'fixed',
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        zIndex: 10000,
-        backgroundColor: 'white',
-        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-        borderRadius: '8px',
-        border: '1px solid #ddd',
-        maxWidth: '400px',
-        animation: 'fadeIn 0.2s ease-out',
-        cursor: onClick ? 'pointer' : 'default'
-      }}
-      onClick={handleClick}
-      onMouseLeave={handleMouseLeave}
-    >
-      <FilePreview
-        file={file}
-        mode="full"
-        isHover={true}
-      />
+    <>
+      {/* Trigger Element */}
+      <div
+        ref={triggerRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        style={{ display: 'inline-block' }}
+      >
+        {children}
+      </div>
       
-      <style jsx>{`
+      {/* Preview Portal */}
+      {isVisible && (
+        <div
+          ref={previewRef}
+          className="absolute"
+          style={{
+            position: 'fixed',
+            left: `${position.x}px`,
+            top: `${position.y}px`,
+            zIndex: 10000,
+            backgroundColor: 'white',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+            borderRadius: '8px',
+            border: '1px solid #e5e5e5',
+            maxWidth: '350px',
+            animation: 'fadeIn 0.15s ease-out'
+          }}
+          onMouseEnter={handlePreviewMouseEnter}
+          onMouseLeave={handlePreviewMouseLeave}
+          onClick={handlePreviewClick}
+          role="tooltip"
+          aria-label={`Preview of ${file.metadata.title || file.name}`}
+        >
+          <FilePreview
+            file={file}
+            mode="full"
+            isHover={true}
+            onClick={onClick ? handlePreviewClick : undefined}
+          />
+        </div>
+      )}
+      
+      <style jsx global>{`
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -167,46 +210,20 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
           }
         }
       `}</style>
-    </div>
+    </>
   );
 };
 
-/**
- * Hook for managing hover preview state
- */
-export const useHoverPreview = () => {
-  const [hoveredFile, setHoveredFile] = useState<FilePreviewData | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isVisible, setIsVisible] = useState(false);
+// Memoized component for performance
+const MemoizedHoverPreview = React.memo(HoverPreview, (prevProps, nextProps) => {
+  return (
+    prevProps.file.id === nextProps.file.id &&
+    prevProps.file.lastModified.getTime() === nextProps.file.lastModified.getTime() &&
+    prevProps.delay === nextProps.delay &&
+    prevProps.onClick === nextProps.onClick
+  );
+});
 
-  const showPreview = useCallback((file: FilePreviewData, event: React.MouseEvent) => {
-    setMousePosition({ x: event.clientX, y: event.clientY });
-    setHoveredFile(file);
-    setIsVisible(true);
-  }, []);
-
-  const hidePreview = useCallback(() => {
-    setIsVisible(false);
-    // Keep file data for a moment to allow for smooth transitions
-    setTimeout(() => {
-      if (!isVisible) {
-        setHoveredFile(null);
-      }
-    }, 200);
-  }, [isVisible]);
-
-  const updateMousePosition = useCallback((event: React.MouseEvent) => {
-    setMousePosition({ x: event.clientX, y: event.clientY });
-  }, []);
-
-  return {
-    hoveredFile,
-    mousePosition,
-    isVisible,
-    showPreview,
-    hidePreview,
-    updateMousePosition
-  };
-};
+MemoizedHoverPreview.displayName = 'HoverPreview';
 
 export default HoverPreview;

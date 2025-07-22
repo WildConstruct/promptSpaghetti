@@ -4,23 +4,12 @@
  * Shows graph thumbnails, node counts, metadata, and last modified information
  */
 
-import React, { useCallback, useMemo } from 'react';
-import { ProjectMetadata, PSGFile } from '../../projectManager';
-import { Graph } from '../../graphSchema';
-
-export interface FilePreviewData {
-  fileName: string;
-  filePath: string;
-  metadata: ProjectMetadata;
-  graph: Graph;
-  fileSize: number;
-  lastModified: Date;
-  isFavorite?: boolean;
-}
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { PSGFile, projectManager } from '../../projectManager';
 
 interface FilePreviewProps {
   /** File data for preview */
-  file: FilePreviewData;
+  file: PSGFile;
   
   /** Preview mode - compact for lists, full for modals */
   mode?: 'compact' | 'full';
@@ -29,10 +18,10 @@ interface FilePreviewProps {
   isHover?: boolean;
   
   /** Click handler for file selection */
-  onFileClick?: (file: FilePreviewData) => void;
+  onClick?: (file: PSGFile) => void;
   
   /** Handler for favoriting files */
-  onToggleFavorite?: (file: FilePreviewData) => void;
+  onToggleFavorite?: (file: PSGFile) => void;
   
   /** Custom styling */
   style?: React.CSSProperties;
@@ -45,30 +34,35 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
   file,
   mode = 'compact',
   isHover = false,
-  onFileClick,
+  onClick,
   onToggleFavorite,
   style,
   className
 }) => {
-  // Calculate graph statistics
-  const graphStats = useMemo(() => {
-    const nodes = file.graph.nodes || [];
-    const edges = file.graph.edges || [];
-    
-    // Count node types
-    const nodeTypes: Record<string, number> = {};
-    nodes.forEach(node => {
-      const type = node.type || 'unknown';
-      nodeTypes[type] = (nodeTypes[type] || 0) + 1;
-    });
+  const [thumbnail, setThumbnail] = useState<string | null>(file.metadata.thumbnail || null);
+  const [isLoadingThumbnail, setIsLoadingThumbnail] = useState(false);
 
+  // Generate thumbnail if not cached
+  useEffect(() => {
+    if (!thumbnail && !isLoadingThumbnail) {
+      setIsLoadingThumbnail(true);
+      projectManager.generateThumbnail(file)
+        .then(setThumbnail)
+        .catch((error) => {
+          console.warn('Failed to generate thumbnail:', error);
+        })
+        .finally(() => setIsLoadingThumbnail(false));
+    }
+  }, [file, thumbnail, isLoadingThumbnail]);
+
+  // Memoized stats calculation
+  const fileStats = useMemo(() => {
+    const nodeCount = file.nodeCount;
     return {
-      totalNodes: nodes.length,
-      totalEdges: edges.length,
-      nodeTypes,
-      hasContent: nodes.length > 0 || edges.length > 0
+      totalNodes: nodeCount,
+      hasContent: nodeCount > 0
     };
-  }, [file.graph]);
+  }, [file.nodeCount]);
 
   // Format file size
   const formatFileSize = useCallback((bytes: number): string => {
@@ -94,9 +88,43 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
     return date.toLocaleDateString();
   }, []);
 
-  // Generate simple thumbnail representation
-  const generateThumbnail = useCallback(() => {
-    const { hasContent, totalNodes, nodeTypes } = graphStats;
+  // Render thumbnail
+  const renderThumbnail = useCallback(() => {
+    if (thumbnail) {
+      return (
+        <img
+          src={thumbnail}
+          alt={`${file.name} preview`}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            borderRadius: '4px'
+          }}
+        />
+      );
+    }
+
+    if (isLoadingThumbnail) {
+      return (
+        <div style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#f8f9fa',
+          color: '#6c757d',
+          fontSize: '12px',
+          border: '1px solid #dee2e6',
+          borderRadius: '4px'
+        }}>
+          Loading...
+        </div>
+      );
+    }
+
+    const { hasContent, totalNodes } = fileStats;
     
     if (!hasContent) {
       return (
@@ -117,7 +145,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
       );
     }
 
-    // Create a simple visual representation
+    // Fallback visual representation
     return (
       <div style={{
         width: '100%',
@@ -125,50 +153,20 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
         backgroundColor: '#fff',
         border: '1px solid #dee2e6',
         borderRadius: '4px',
-        padding: '8px',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '12px',
+        color: '#6c757d'
       }}>
-        {/* Node type indicators */}
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '2px'
-        }}>
-          {Object.entries(nodeTypes).slice(0, 8).map(([type, count], index) => (
-            <div
-              key={type}
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '2px',
-                backgroundColor: `hsl(${(index * 137.5) % 360}, 70%, 60%)`,
-                opacity: Math.min(1, count / 5)
-              }}
-              title={`${type}: ${count}`}
-            />
-          ))}
-        </div>
-        
-        {/* Connection lines representation */}
-        <div style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '10px',
-          color: '#6c757d'
-        }}>
-          {totalNodes} nodes
-        </div>
+        📊 {totalNodes} nodes
       </div>
     );
-  }, [graphStats, mode]);
+  }, [thumbnail, isLoadingThumbnail, fileStats, file.name, mode]);
 
   const handleClick = useCallback(() => {
-    onFileClick?.(file);
-  }, [onFileClick, file]);
+    onClick?.(file);
+  }, [onClick, file]);
 
   const handleFavoriteClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -179,7 +177,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
     backgroundColor: '#fff',
     border: '1px solid #dee2e6',
     borderRadius: '8px',
-    cursor: onFileClick ? 'pointer' : 'default',
+    cursor: onClick ? 'pointer' : 'default',
     transition: 'all 0.2s ease',
     ...(isHover && {
       boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
@@ -201,10 +199,19 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
           minHeight: '80px'
         }}
         onClick={handleClick}
+        role={onClick ? 'button' : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        aria-label={onClick ? `Open ${file.metadata.title || file.name}` : undefined}
+        onKeyDown={onClick ? (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        } : undefined}
       >
         {/* Thumbnail */}
         <div style={{ width: '60px', height: '45px', flexShrink: 0 }}>
-          {generateThumbnail()}
+          {renderThumbnail()}
         </div>
 
         {/* File info */}
@@ -218,7 +225,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
           }}>
-            {file.metadata.name}
+            {file.metadata.title || file.name}
           </div>
           
           <div style={{
@@ -238,8 +245,8 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
             display: 'flex',
             gap: '12px'
           }}>
-            <span>{graphStats.totalNodes} nodes</span>
-            <span>{formatFileSize(file.fileSize)}</span>
+            <span>{fileStats.totalNodes} nodes</span>
+            <span>{formatFileSize(file.size)}</span>
             <span>{formatRelativeTime(file.lastModified)}</span>
           </div>
         </div>
@@ -295,7 +302,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap'
           }}>
-            {file.metadata.name}
+            {file.metadata.title || file.name}
           </h3>
           
           {file.metadata.description && (
@@ -335,26 +342,31 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
         height: '120px',
         marginBottom: '16px'
       }}>
-        {generateThumbnail()}
+        {renderThumbnail()}
       </div>
 
       {/* Metadata */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '12px' }}>
         <div>
-          <strong style={{ color: '#333' }}>Nodes:</strong> {graphStats.totalNodes}
+          <strong style={{ color: '#333' }}>Nodes:</strong> {fileStats.totalNodes}
         </div>
         <div>
-          <strong style={{ color: '#333' }}>Connections:</strong> {graphStats.totalEdges}
-        </div>
-        <div>
-          <strong style={{ color: '#333' }}>Size:</strong> {formatFileSize(file.fileSize)}
+          <strong style={{ color: '#333' }}>Size:</strong> {formatFileSize(file.size)}
         </div>
         <div>
           <strong style={{ color: '#333' }}>Modified:</strong> {formatRelativeTime(file.lastModified)}
         </div>
+        <div>
+          <strong style={{ color: '#333' }}>Created:</strong> {formatRelativeTime(file.metadata.created)}
+        </div>
         {file.metadata.author && (
           <div style={{ gridColumn: 'span 2' }}>
             <strong style={{ color: '#333' }}>Author:</strong> {file.metadata.author}
+          </div>
+        )}
+        {file.metadata.version && (
+          <div style={{ gridColumn: 'span 2' }}>
+            <strong style={{ color: '#333' }}>Version:</strong> {file.metadata.version}
           </div>
         )}
         {file.metadata.tags && file.metadata.tags.length > 0 && (
@@ -363,38 +375,22 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
           </div>
         )}
       </div>
-
-      {/* Node types breakdown */}
-      {Object.keys(graphStats.nodeTypes).length > 0 && (
-        <div style={{ marginTop: '16px' }}>
-          <strong style={{ color: '#333', fontSize: '12px', marginBottom: '8px', display: 'block' }}>
-            Node Types:
-          </strong>
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '6px'
-          }}>
-            {Object.entries(graphStats.nodeTypes).map(([type, count], index) => (
-              <span
-                key={type}
-                style={{
-                  fontSize: '11px',
-                  padding: '2px 6px',
-                  backgroundColor: `hsl(${(index * 137.5) % 360}, 70%, 95%)`,
-                  color: `hsl(${(index * 137.5) % 360}, 70%, 30%)`,
-                  borderRadius: '10px',
-                  border: `1px solid hsl(${(index * 137.5) % 360}, 70%, 80%)`
-                }}
-              >
-                {type} ({count})
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default FilePreview;
+// Memoized component for performance
+const MemoizedFilePreview = React.memo(FilePreview, (prevProps, nextProps) => {
+  // Only re-render if file properties change
+  return (
+    prevProps.file.id === nextProps.file.id &&
+    prevProps.file.lastModified.getTime() === nextProps.file.lastModified.getTime() &&
+    prevProps.file.isFavorite === nextProps.file.isFavorite &&
+    prevProps.mode === nextProps.mode &&
+    prevProps.isHover === nextProps.isHover
+  );
+});
+
+MemoizedFilePreview.displayName = 'FilePreview';
+
+export default MemoizedFilePreview;

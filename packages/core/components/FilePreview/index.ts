@@ -1,7 +1,9 @@
 /**
  * FilePreview components - File preview and recent files functionality
+ * 
+ * All components use PSGFile interface from projectManager for consistent file handling
  */
 
-export { FilePreview, type FilePreviewData } from './FilePreview';
-export { RecentFiles, recentFilesUtils, type RecentFileEntry } from './RecentFiles';
-export { HoverPreview, useHoverPreview } from './HoverPreview';
+export { FilePreview } from './FilePreview';
+export { RecentFiles } from './RecentFiles';
+export { HoverPreview } from './HoverPreview';

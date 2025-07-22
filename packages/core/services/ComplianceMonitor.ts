@@ -1422,4 +1422,5 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
 }
 
 // Export singleton instance
-export export const enhancedComplianceMonitor = new EnhancedComplianceMonitor();
+export const complianceMonitor = new ComplianceMonitor();
+export const enhancedComplianceMonitor = new EnhancedComplianceMonitor();

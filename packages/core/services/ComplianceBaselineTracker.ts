@@ -496,8 +496,7 @@ export class ComplianceBaselineTracker {
    * Create custom baseline
    */
   async createCustomBaseline(
-    baseline: Omit<ComplianceBaseline,
-    'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>
+    baseline: Omit<ComplianceBaseline, 'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>
   ): Promise<ComplianceBaseline> {
     const customBaseline: ComplianceBaseline = {
       ...baseline,
@@ -672,7 +671,8 @@ export class ComplianceBaselineTracker {
       .filter(trend => trend.trendDirection === 'declining' || trend.lastMeasurement.status === 'below_baseline')
       .map(trend => {
         const gap = Math.abs(trend.lastMeasurement.deviation);
-                const difficulty = trend.framework === 'GDPR' ? 'high' : 
+        const impact = gap > 20 ? 'high' : gap > 10 ? 'medium' : 'low';
+        const difficulty = trend.framework === 'GDPR' ? 'high' : 
                           trend.framework === 'SOC2' ? 'medium' : 'low';
         const timeframe = difficulty === 'high' ? '3-6 months' : 
                          difficulty === 'medium' ? '1-3 months' : '2-4 weeks';

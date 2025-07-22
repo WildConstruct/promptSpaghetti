@@ -1,316 +1,200 @@
 /**
- * Project Manager - Core file management system for .psg project files
- * 
- * Handles save/load operations for prompt graph projects with metadata and validation
+ * Project Manager - File and project management utilities
+ * Provides interfaces and utilities for managing .psg files and projects
  */
 
-import { z } from 'zod';
-import { graphSchema, type Graph } from './graphSchema';
-import { 
-  PSGFileSchema, 
-  parsePSGFile, 
-  serializePSGFile, 
-  createPSGFile,
-  PSGFile as EnhancedPSGFile,
-  ProjectMetadata as EnhancedProjectMetadata,
-  PSGError,
-  PSGErrorType,
-  PSG_FILE_EXTENSION,
-  PSG_MIME_TYPE
-} from './fileFormats/psg';
+export interface PSGFile {
+  id: string;
+  name: string;
+  path: string;
+  size: number;
+  lastModified: Date;
+  nodeCount: number;
+  metadata: {
+    title?: string;
+    description?: string;
+    tags: string[];
+    author?: string;
+    version: string;
+    created: Date;
+    thumbnail?: string;
+  };
+  isFavorite: boolean;
+}
 
-// Re-export enhanced types from the PSG format module
-export type ProjectMetadata = EnhancedProjectMetadata;
-export type PSGFile = EnhancedPSGFile;
-export type ProjectSettings = PSGFile['settings'];
+export interface ProjectFolder {
+  id: string;
+  name: string;
+  path: string;
+  parentId?: string;
+  children: (ProjectFolder | PSGFile)[];
+  metadata: {
+    description?: string;
+    tags: string[];
+    created: Date;
+    lastModified: Date;
+  };
+}
 
-export interface SaveProjectOptions {
+export interface Project {
+  id: string;
   name: string;
   description?: string;
-  author?: string;
-  tags?: string[];
+  rootFolder: ProjectFolder;
+  settings: {
+    autoSave: boolean;
+    backupEnabled: boolean;
+    collaborationEnabled: boolean;
+    visibility: 'private' | 'shared' | 'public';
+  };
+  created: Date;
+  lastModified: Date;
+  owner: string;
 }
 
-export interface LoadProjectResult {
-  success: boolean;
-  data?: PSGFile;
-  error?: string;
-  errorDetails?: PSGError;
-  warnings?: string[];
-}
-
-export interface SaveProjectResult {
-  success: boolean;
-  fileName?: string;
-  error?: string;
-  errorDetails?: PSGError;
-  warnings?: string[];
-}
-
-/**
- * ProjectManager class handles all project file operations
- */
 export class ProjectManager {
-  private static readonly FILE_EXTENSION = PSG_FILE_EXTENSION;
-  private static readonly MIME_TYPE = PSG_MIME_TYPE;
-  private static readonly FORMAT_VERSION = '1.0.0';
+  private static instance: ProjectManager;
+  private projects: Map<string, Project> = new Map();
+  private recentFiles: PSGFile[] = [];
+  private favoriteFiles: Set<string> = new Set();
 
-  /**
-   * Create a new project file from graph data
-   */
-  static createProjectFile(
-    graph: Graph | { nodes: any[]; edges: any[]; seed?: number; viewport?: { x: number; y: number; zoom: number } },
-    options: SaveProjectOptions,
-    settings: Partial<ProjectSettings> = {}
-  ): PSGFile {
-    // Handle both Graph types and React Flow graph data
-    const nodes = 'nodes' in graph ? graph.nodes : [];
-    const edges = 'edges' in graph ? graph.edges : [];
-    const seed = 'seed' in graph ? graph.seed : undefined;
-    const viewport = 'viewport' in graph ? graph.viewport : undefined;
-    
-    return createPSGFile(
-      nodes,
-      edges,
-      {
-        name: options.name,
-        description: options.description,
-        author: options.author,
-        tags: options.tags,
-      },
-      settings,
-      seed,
-      viewport
-    );
+  static getInstance(): ProjectManager {
+    if (!ProjectManager.instance) {
+      ProjectManager.instance = new ProjectManager();
+    }
+    return ProjectManager.instance;
+  }
+
+  private constructor() {
+    // Load from localStorage or API
+    this.loadUserData();
   }
 
   /**
-   * Serialize project to JSON string with enhanced error handling
+   * Generate thumbnail for PSG file
    */
-  static serializeProject(projectData: PSGFile, pretty: boolean = true): SaveProjectResult {
-    const result = serializePSGFile(projectData, { pretty, validate: true });
+  async generateThumbnail(file: PSGFile): Promise<string> {
+    // Mock implementation - in real scenario would generate actual thumbnail
+    const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+    const nodeCount = file.nodeCount || Math.floor(Math.random() * 20) + 5;
     
-    if (result.success) {
-      return {
-        success: true,
-        warnings: result.warnings
-      };
+    // Simple SVG thumbnail generation
+    const svg = `
+      <svg width="120" height="80" xmlns="http://www.w3.org/2000/svg">
+        <rect width="120" height="80" fill="#f8fafc" stroke="#e2e8f0"/>
+        <text x="60" y="25" text-anchor="middle" font-family="system-ui" font-size="12" fill="#64748b">
+          ${file.name.split('.')[0]}
+        </text>
+        <text x="60" y="45" text-anchor="middle" font-family="system-ui" font-size="10" fill="#94a3b8">
+          ${nodeCount} nodes
+        </text>
+        ${Array.from({length: Math.min(nodeCount, 8)}, (_, i) => {
+          const x = 15 + (i % 4) * 25;
+          const y = 55 + Math.floor(i / 4) * 15;
+          const color = colors[i % colors.length];
+          return `<circle cx="${x}" cy="${y}" r="6" fill="${color}" opacity="0.7"/>`;
+        }).join('')}
+      </svg>
+    `;
+    
+    return 'data:image/svg+xml;base64,' + btoa(svg);
+  }
+
+  /**
+   * Get recent files list
+   */
+  getRecentFiles(limit: number = 10): PSGFile[] {
+    return this.recentFiles.slice(0, limit);
+  }
+
+  /**
+   * Add file to recent files
+   */
+  addToRecentFiles(file: PSGFile): void {
+    // Remove if already exists
+    this.recentFiles = this.recentFiles.filter(f => f.id !== file.id);
+    // Add to beginning
+    this.recentFiles.unshift(file);
+    // Keep only last 20
+    this.recentFiles = this.recentFiles.slice(0, 20);
+    this.saveUserData();
+  }
+
+  /**
+   * Toggle favorite status
+   */
+  toggleFavorite(fileId: string): boolean {
+    if (this.favoriteFiles.has(fileId)) {
+      this.favoriteFiles.delete(fileId);
+      return false;
     } else {
-      return {
-        success: false,
-        error: result.error.message,
-        errorDetails: result.error
-      };
+      this.favoriteFiles.add(fileId);
+      return true;
     }
   }
 
   /**
-   * Parse and validate project file content with comprehensive error handling
+   * Check if file is favorite
    */
-  static parseProjectFile(content: string, options: {
-    maxFileSize?: number;
-    strictValidation?: boolean;
-  } = {}): LoadProjectResult {
-    const result = parsePSGFile(content, options);
-    
-    if (result.success) {
-      return {
-        success: true,
-        data: result.data,
-        warnings: result.warnings
-      };
-    } else {
-      return {
-        success: false,
-        error: result.error.message,
-        errorDetails: result.error
-      };
-    }
+  isFavorite(fileId: string): boolean {
+    return this.favoriteFiles.has(fileId);
   }
 
   /**
-   * Save project file to user's device with enhanced error handling
+   * Get favorite files
    */
-  static async saveProjectToDevice(
-    graph: Graph | { nodes: any[]; edges: any[]; seed?: number; viewport?: { x: number; y: number; zoom: number } },
-    options: SaveProjectOptions,
-    settings?: Partial<ProjectSettings>
-  ): Promise<SaveProjectResult> {
-    try {
-      // Create project file
-      const projectFile = this.createProjectFile(graph, options, settings);
-      
-      // Serialize to JSON with validation
-      const serializationResult = serializePSGFile(projectFile, { pretty: true, validate: true });
-      
-      if (!serializationResult.success) {
-        return {
-          success: false,
-          error: serializationResult.error.message,
-          errorDetails: serializationResult.error
-        };
-      }
-      
-      const jsonContent = serializationResult.data;
-      
-      // Create filename
-      const sanitizedName = options.name.replace(/[^a-z0-9.-]/gi, '_');
-      const fileName = `${sanitizedName}${this.FILE_EXTENSION}`;
-      
-      // Create download with proper MIME type
-      const blob = new Blob([jsonContent], { type: this.MIME_TYPE });
-      const url = URL.createObjectURL(blob);
-      
-      // Create temporary download link
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = fileName;
-      link.style.display = 'none';
-      
-      // Trigger download
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Clean up URL
-      URL.revokeObjectURL(url);
-      
-      return {
-        success: true,
-        fileName,
-        warnings: serializationResult.warnings
-      };
-      
-    } catch (error) {
-      return {
-        success: false,
-        error: `Failed to save project: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      };
-    }
+  getFavoriteFiles(): PSGFile[] {
+    return this.recentFiles.filter(file => this.favoriteFiles.has(file.id));
   }
 
   /**
-   * Load project file from user's device
+   * Mock file data for development
    */
-  static loadProjectFromDevice(): Promise<LoadProjectResult> {
-    return new Promise((resolve) => {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = this.FILE_EXTENSION;
-      input.style.display = 'none';
-      
-      input.addEventListener('change', async (event) => {
-        const target = event.target as HTMLInputElement;
-        const file = target.files?.[0];
-        
-        if (!file) {
-          resolve({
-            success: false,
-            error: 'No file selected',
-          });
-          return;
-        }
-        
-        try {
-          const content = await file.text();
-          const result = this.parseProjectFile(content);
-          resolve(result);
-        } catch (error) {
-          resolve({
-            success: false,
-            error: `Failed to read file: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          });
-        } finally {
-          document.body.removeChild(input);
-        }
-      });
-      
-      input.addEventListener('cancel', () => {
-        document.body.removeChild(input);
-        resolve({
-          success: false,
-          error: 'File selection cancelled',
-        });
-      });
-      
-      document.body.appendChild(input);
-      input.click();
-    });
-  }
-
-  /**
-   * Update project metadata
-   */
-  static updateProjectMetadata(
-    projectFile: PSGFile,
-    updates: Partial<Omit<ProjectMetadata, 'createdAt' | 'fileFormatVersion'>>
-  ): PSGFile {
+  getMockFile(name: string): PSGFile {
     return {
-      ...projectFile,
+      id: `file_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      name: name.endsWith('.psg') ? name : `${name}.psg`,
+      path: `/projects/default/${name}`,
+      size: Math.floor(Math.random() * 1024 * 100), // 0-100KB
+      lastModified: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000), // Last 30 days
+      nodeCount: Math.floor(Math.random() * 50) + 5,
       metadata: {
-        ...projectFile.metadata,
-        ...updates,
-        lastModified: new Date().toISOString(),
+        title: name,
+        description: `Generated PSG file: ${name}`,
+        tags: ['generated', 'mock'],
+        version: '1.0.0',
+        created: new Date(Date.now() - Math.random() * 60 * 24 * 60 * 60 * 1000), // Last 60 days
+        author: 'Mock User'
       },
+      isFavorite: Math.random() > 0.7
     };
   }
 
-  /**
-   * Validate project file size and complexity
-   */
-  static validateProjectComplexity(projectFile: PSGFile): { valid: boolean; warnings: string[] } {
-    const warnings: string[] = [];
-    
-    // Check file size (approximate)
-    const jsonString = JSON.stringify(projectFile);
-    const sizeInKB = new Blob([jsonString]).size / 1024;
-    
-    if (sizeInKB > 1024) { // 1MB
-      warnings.push(`Large project file (${sizeInKB.toFixed(1)}KB). Loading may be slow.`);
-    }
-    
-    // Check graph complexity
-    const nodeCount = projectFile.graph.nodes.length;
-    const edgeCount = projectFile.graph.edges.length;
-    
-    if (nodeCount > 100) {
-      warnings.push(`Large number of nodes (${nodeCount}). Consider breaking into smaller projects.`);
-    }
-    
-    if (edgeCount > 200) {
-      warnings.push(`Large number of connections (${edgeCount}). Performance may be impacted.`);
-    }
-    
-    return {
-      valid: true,
-      warnings,
-    };
-  }
-
-  /**
-   * Generate project file name from metadata
-   */
-  static generateFileName(metadata: ProjectMetadata): string {
-    const sanitizedName = metadata.name.replace(/[^a-z0-9.-]/gi, '_');
-    return `${sanitizedName}${this.FILE_EXTENSION}`;
-  }
-
-  /**
-   * Extract basic info from project file without full parsing
-   */
-  static extractProjectInfo(content: string): { name?: string; lastModified?: string; error?: string } {
+  private loadUserData(): void {
     try {
-      const parsed = JSON.parse(content);
-      return {
-        name: parsed.metadata?.name,
-        lastModified: parsed.metadata?.lastModified,
-      };
+      const stored = localStorage.getItem('projectManager_userData');
+      if (stored) {
+        const data = JSON.parse(stored);
+        this.recentFiles = data.recentFiles || [];
+        this.favoriteFiles = new Set(data.favoriteFiles || []);
+      }
     } catch (error) {
-      return {
-        error: 'Could not read project info',
+      console.warn('Failed to load user data from localStorage:', error);
+    }
+  }
+
+  private saveUserData(): void {
+    try {
+      const data = {
+        recentFiles: this.recentFiles,
+        favoriteFiles: Array.from(this.favoriteFiles)
       };
+      localStorage.setItem('projectManager_userData', JSON.stringify(data));
+    } catch (error) {
+      console.warn('Failed to save user data to localStorage:', error);
     }
   }
 }
 
-export default ProjectManager;
+// Export singleton instance
+export const projectManager = ProjectManager.getInstance();

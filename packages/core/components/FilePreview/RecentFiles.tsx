@@ -5,412 +5,256 @@
  */
 
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { FilePreview, FilePreviewData } from './FilePreview';
-
-export interface RecentFileEntry {
-  filePath: string;
-  fileName: string;
-  lastAccessed: Date;
-  projectName: string;
-  description?: string;
-  tags?: string[];
-  nodeCount: number;
-  edgeCount: number;
-  fileSize: number;
-  isFavorite?: boolean;
-}
+import { FilePreview } from './FilePreview';
+import { PSGFile, projectManager } from '../../projectManager';
 
 interface RecentFilesProps {
   /** Maximum number of recent files to display */
-  maxItems?: number;
+  limit?: number;
   
-  /** Whether to show favorites section */
-  showFavorites?: boolean;
-  
-  /** Callback when a file is selected */
-  onFileSelect?: (filePath: string, fileData: FilePreviewData) => void;
-  
-  /** Callback when a file is favorited/unfavorited */
-  onToggleFavorite?: (filePath: string) => void;
-  
-  /** Callback to clear all recent files */
-  onClearRecent?: () => void;
+  /** Callback when a file is clicked */
+  onClick?: (file: PSGFile) => void;
   
   /** Custom styling */
   style?: React.CSSProperties;
   
   /** CSS class name */
   className?: string;
-  
-  /** Compact view mode */
-  compact?: boolean;
 }
 
-// Local storage key for recent files
-const RECENT_FILES_KEY = 'prompt-spaghetti-recent-files';
-const FAVORITES_KEY = 'prompt-spaghetti-favorites';
-
 export const RecentFiles: React.FC<RecentFilesProps> = ({
-  maxItems = 10,
-  showFavorites = true,
-  onFileSelect,
-  onToggleFavorite,
-  onClearRecent,
+  limit = 10,
+  onClick,
   style,
-  className,
-  compact = false
+  className
 }) => {
-  const [recentFiles, setRecentFiles] = useState<RecentFileEntry[]>([]);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [currentView, setCurrentView] = useState<'recent' | 'favorites'>('recent');
+  const [recentFiles, setRecentFiles] = useState<PSGFile[]>([]);
+  const [favoriteFiles, setFavoriteFiles] = useState<PSGFile[]>([]);
 
-  // Load recent files and favorites from localStorage
+  // Load files from projectManager
+  const loadFiles = useCallback(() => {
+    try {
+      const recent = projectManager.getRecentFiles(limit);
+      const favorites = projectManager.getFavoriteFiles();
+      
+      setRecentFiles(recent);
+      setFavoriteFiles(favorites);
+    } catch (error) {
+      console.warn('Failed to load files from project manager:', error);
+      setRecentFiles([]);
+      setFavoriteFiles([]);
+    }
+  }, [limit]);
+
+  // Load files on mount and when limit changes
   useEffect(() => {
-    try {
-      const recentData = localStorage.getItem(RECENT_FILES_KEY);
-      if (recentData) {
-        const parsed = JSON.parse(recentData);
-        const recentEntries = parsed.map((entry: any) => ({
-          ...entry,
-          lastAccessed: new Date(entry.lastAccessed)
-        }));
-        setRecentFiles(recentEntries);
-      }
+    loadFiles();
+  }, [loadFiles]);
 
-      const favoritesData = localStorage.getItem(FAVORITES_KEY);
-      if (favoritesData) {
-        setFavorites(new Set(JSON.parse(favoritesData)));
-      }
-    } catch (error) {
-      console.warn('Failed to load recent files from localStorage:', error);
-    }
-  }, []);
-
-  // Save recent files to localStorage
-  const saveRecentFiles = useCallback((files: RecentFileEntry[]) => {
-    try {
-      localStorage.setItem(RECENT_FILES_KEY, JSON.stringify(files));
-    } catch (error) {
-      console.warn('Failed to save recent files to localStorage:', error);
-    }
-  }, []);
-
-  // Save favorites to localStorage
-  const saveFavorites = useCallback((favs: Set<string>) => {
-    try {
-      localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favs)));
-    } catch (error) {
-      console.warn('Failed to save favorites to localStorage:', error);
-    }
-  }, []);
-
-  // Add a file to recent files
-  const addRecentFile = useCallback((fileData: FilePreviewData) => {
-    setRecentFiles(prev => {
-      // Remove existing entry if present
-      const filtered = prev.filter(f => f.filePath !== fileData.filePath);
-      
-      // Add new entry at the beginning
-      const newEntry: RecentFileEntry = {
-        filePath: fileData.filePath,
-        fileName: fileData.fileName,
-        lastAccessed: new Date(),
-        projectName: fileData.metadata.name,
-        description: fileData.metadata.description,
-        tags: fileData.metadata.tags,
-        nodeCount: fileData.graph.nodes?.length || 0,
-        edgeCount: fileData.graph.edges?.length || 0,
-        fileSize: fileData.fileSize,
-        isFavorite: favorites.has(fileData.filePath)
-      };
-      
-      const updated = [newEntry, ...filtered].slice(0, maxItems);
-      saveRecentFiles(updated);
-      return updated;
-    });
-  }, [favorites, maxItems, saveRecentFiles]);
-
-  // Handle toggle favorite
-  const handleToggleFavorite = useCallback((filePath: string) => {
-    setFavorites(prev => {
-      const updated = new Set(prev);
-      if (updated.has(filePath)) {
-        updated.delete(filePath);
-      } else {
-        updated.add(filePath);
-      }
-      saveFavorites(updated);
-      
-      // Update recent files to reflect favorite status
-      setRecentFiles(prevRecent => {
-        const updatedRecent = prevRecent.map(file => 
-          file.filePath === filePath 
-            ? { ...file, isFavorite: updated.has(filePath) }
-            : file
-        );
-        saveRecentFiles(updatedRecent);
-        return updatedRecent;
-      });
-      
-      onToggleFavorite?.(filePath);
-      return updated;
-    });
-  }, [onToggleFavorite, saveFavorites, saveRecentFiles]);
-
-  // Handle clear all recent files
-  const handleClearRecent = useCallback(() => {
-    setRecentFiles([]);
-    localStorage.removeItem(RECENT_FILES_KEY);
-    onClearRecent?.();
-  }, [onClearRecent]);
-
-  // Convert RecentFileEntry to FilePreviewData
-  const convertToFilePreviewData = useCallback((entry: RecentFileEntry): FilePreviewData => {
-    return {
-      fileName: entry.fileName,
-      filePath: entry.filePath,
-      metadata: {
-        name: entry.projectName,
-        description: entry.description,
-        version: '1.0.0',
-        createdAt: entry.lastAccessed.toISOString(),
-        lastModified: entry.lastAccessed.toISOString(),
-        author: undefined,
-        tags: entry.tags || [],
-        fileFormatVersion: '1.0.0'
-      },
-      graph: {
-        nodes: new Array(entry.nodeCount).fill(null).map((_, i) => ({ id: `node-${i}`, data: {}, position: { x: 0, y: 0 } })),
-        edges: new Array(entry.edgeCount).fill(null).map((_, i) => ({ id: `edge-${i}`, source: `node-${i}`, target: `node-${i+1}` }))
-      },
-      fileSize: entry.fileSize,
-      lastModified: entry.lastAccessed,
-      isFavorite: entry.isFavorite
-    };
-  }, []);
-
-  // Handle file selection
-  const handleFileSelect = useCallback((filePath: string, entry: RecentFileEntry) => {
-    const filePreviewData = convertToFilePreviewData(entry);
+  // Handle file click
+  const handleFileClick = useCallback((file: PSGFile) => {
+    // Add to recent files
+    projectManager.addToRecentFiles(file);
     
-    // Update last accessed time
-    addRecentFile(filePreviewData);
+    // Reload files to update the list
+    loadFiles();
     
-    onFileSelect?.(filePath, filePreviewData);
-  }, [convertToFilePreviewData, addRecentFile, onFileSelect]);
+    // Call the onClick handler
+    onClick?.(file);
+  }, [onClick, loadFiles]);
 
-  // Get favorite files
-  const favoriteFiles = useMemo(() => {
-    return recentFiles.filter(file => favorites.has(file.filePath));
-  }, [recentFiles, favorites]);
+  // Handle favorite toggle
+  const handleToggleFavorite = useCallback((file: PSGFile) => {
+    const newStatus = projectManager.toggleFavorite(file.id);
+    
+    // Update the file's favorite status
+    file.isFavorite = newStatus;
+    
+    // Reload files to update the lists
+    loadFiles();
+  }, [loadFiles]);
 
-  // Get non-favorite recent files
-  const nonFavoriteRecent = useMemo(() => {
-    return recentFiles.filter(file => !favorites.has(file.filePath));
-  }, [recentFiles, favorites]);
-
-  // Format relative time
-  const formatRelativeTime = useCallback((date: Date): string => {
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins} min ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString();
+  // Format file size
+  const formatFileSize = useCallback((bytes: number): string => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }, []);
 
-  // Section component for rendering file lists
-  const FileSection: React.FC<{
-    title: string;
-    files: RecentFileEntry[];
-    emptyMessage: string;
-  }> = ({ title, files, emptyMessage }) => (
-    <div style={{ marginBottom: compact ? '16px' : '24px' }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '12px',
-        paddingBottom: '8px',
-        borderBottom: '1px solid #e5e5e5'
-      }}>
-        <h3 style={{
-          margin: 0,
-          fontSize: compact ? '14px' : '16px',
-          fontWeight: '600',
-          color: '#333'
-        }}>
-          {title}
-        </h3>
-        {files.length > 0 && title === 'Recent Files' && (
-          <button
-            onClick={handleClearRecent}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#666',
-              cursor: 'pointer',
-              fontSize: '12px',
-              textDecoration: 'underline'
-            }}
-            title="Clear all recent files"
-          >
-            Clear All
-          </button>
-        )}
-      </div>
+  // Format date
+  const formatDate = useCallback((date: Date): string => {
+    try {
+      return date.toLocaleDateString();
+    } catch (error) {
+      return 'Invalid date';
+    }
+  }, []);
 
-      {files.length === 0 ? (
-        <div style={{
-          textAlign: 'center',
-          padding: compact ? '16px' : '24px',
-          color: '#999',
-          fontSize: compact ? '12px' : '14px',
-          fontStyle: 'italic'
-        }}>
-          {emptyMessage}
-        </div>
-      ) : (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: compact ? '6px' : '8px'
-        }}>
-          {files.map(file => (
-            <div
-              key={file.filePath}
-              style={{
-                border: '1px solid #e5e5e5',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onClick={() => handleFileSelect(file.filePath, file)}
-            >
-              <FilePreview
-                file={convertToFilePreviewData(file)}
-                mode="compact"
-                onToggleFavorite={() => handleToggleFavorite(file.filePath)}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-
-  if (!showFavorites && recentFiles.length === 0) {
-    return (
-      <div
-        className={className}
-        style={{
-          padding: compact ? '16px' : '24px',
-          textAlign: 'center',
-          color: '#999',
-          fontSize: compact ? '12px' : '14px',
-          ...style
-        }}
-      >
-        No recent files yet. Open some projects to see them here!
-      </div>
-    );
-  }
+  // Get files to display based on current view
+  const filesToDisplay = useMemo(() => {
+    return currentView === 'recent' ? recentFiles : favoriteFiles;
+  }, [currentView, recentFiles, favoriteFiles]);
 
   return (
-    <div
-      className={className}
-      style={{
-        padding: compact ? '12px' : '16px',
-        maxHeight: compact ? '400px' : '600px',
-        overflowY: 'auto',
-        ...style
-      }}
-    >
-      {/* Favorites Section */}
-      {showFavorites && (
-        <FileSection
-          title="★ Favorites"
-          files={favoriteFiles}
-          emptyMessage="No favorite files yet. Click the ★ button to add favorites!"
-        />
-      )}
+    <div className={className} style={style}>
+      {/* View Toggle */}
+      <div style={{
+        display: 'flex',
+        marginBottom: '16px',
+        borderRadius: '6px',
+        overflow: 'hidden',
+        border: '1px solid #e5e5e5'
+      }}>
+        <button
+          onClick={() => setCurrentView('recent')}
+          style={{
+            flex: 1,
+            padding: '8px 16px',
+            border: 'none',
+            backgroundColor: currentView === 'recent' ? '#3B82F6' : '#f8f9fa',
+            color: currentView === 'recent' ? 'white' : '#666',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          Recent
+        </button>
+        <button
+          onClick={() => setCurrentView('favorites')}
+          style={{
+            flex: 1,
+            padding: '8px 16px',
+            border: 'none',
+            backgroundColor: currentView === 'favorites' ? '#3B82F6' : '#f8f9fa',
+            color: currentView === 'favorites' ? 'white' : '#666',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          Favorites
+        </button>
+      </div>
 
-      {/* Recent Files Section */}
-      <FileSection
-        title="Recent Files"
-        files={nonFavoriteRecent}
-        emptyMessage="No recent files yet. Open some projects to see them here!"
-      />
+      {/* Files List */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px'
+      }}>
+        {filesToDisplay.length === 0 ? (
+          <div style={{
+            textAlign: 'center',
+            padding: '32px 16px',
+            color: '#999',
+            fontSize: '14px'
+          }}>
+            {currentView === 'recent' ? 'No recent files' : 'No favorite files'}
+          </div>
+        ) : (
+          filesToDisplay.map((file) => (
+            <div
+              key={file.id}
+              style={{
+                border: '1px solid #e5e5e5',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                transition: 'border-color 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#3B82F6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#e5e5e5';
+              }}
+            >
+              <div
+                style={{
+                  padding: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  cursor: 'pointer'
+                }}
+                onClick={() => handleFileClick(file)}
+              >
+                {/* File Info */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    color: '#333',
+                    marginBottom: '4px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {file.name}
+                  </div>
+                  
+                  <div style={{
+                    fontSize: '12px',
+                    color: '#666',
+                    marginBottom: '4px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {file.metadata.description || 'No description'}
+                  </div>
+
+                  <div style={{
+                    fontSize: '11px',
+                    color: '#999',
+                    display: 'flex',
+                    gap: '12px'
+                  }}>
+                    <span>{file.nodeCount} nodes</span>
+                    <span>{formatFileSize(file.size)}</span>
+                    <span>{formatDate(file.lastModified)}</span>
+                  </div>
+                </div>
+
+                {/* Favorite Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleFavorite(file);
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '4px',
+                    color: projectManager.isFavorite(file.id) ? '#ffc107' : '#ccc',
+                    fontSize: '16px'
+                  }}
+                  title={projectManager.isFavorite(file.id) ? 'Remove from favorites' : 'Add to favorites'}
+                  aria-label={`${projectManager.isFavorite(file.id) ? 'Remove from' : 'Add to'} favorites`}
+                >
+                  {projectManager.isFavorite(file.id) ? '⭐' : '☆'}
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
 
-// Export utility functions for external use
-export const recentFilesUtils = {
-  /**
-   * Add a file to recent files from external components
-   */
-  addToRecent: (fileData: FilePreviewData) => {
-    try {
-      const recentData = localStorage.getItem(RECENT_FILES_KEY);
-      const existing = recentData ? JSON.parse(recentData) : [];
-      
-      // Remove existing entry if present
-      const filtered = existing.filter((f: RecentFileEntry) => f.filePath !== fileData.filePath);
-      
-      // Add new entry at the beginning
-      const newEntry: RecentFileEntry = {
-        filePath: fileData.filePath,
-        fileName: fileData.fileName,
-        lastAccessed: new Date(),
-        projectName: fileData.metadata.name,
-        description: fileData.metadata.description,
-        tags: fileData.metadata.tags,
-        nodeCount: fileData.graph.nodes?.length || 0,
-        edgeCount: fileData.graph.edges?.length || 0,
-        fileSize: fileData.fileSize
-      };
-      
-      const updated = [newEntry, ...filtered].slice(0, 10);
-      localStorage.setItem(RECENT_FILES_KEY, JSON.stringify(updated));
-    } catch (error) {
-      console.warn('Failed to add file to recent files:', error);
-    }
-  },
+// Memoized component for performance
+const MemoizedRecentFiles = React.memo(RecentFiles, (prevProps, nextProps) => {
+  return (
+    prevProps.limit === nextProps.limit &&
+    prevProps.onClick === nextProps.onClick
+  );
+});
 
-  /**
-   * Get recent files list
-   */
-  getRecentFiles: (): RecentFileEntry[] => {
-    try {
-      const recentData = localStorage.getItem(RECENT_FILES_KEY);
-      if (recentData) {
-        const parsed = JSON.parse(recentData);
-        return parsed.map((entry: any) => ({
-          ...entry,
-          lastAccessed: new Date(entry.lastAccessed)
-        }));
-      }
-    } catch (error) {
-      console.warn('Failed to get recent files:', error);
-    }
-    return [];
-  },
+MemoizedRecentFiles.displayName = 'RecentFiles';
 
-  /**
-   * Clear all recent files
-   */
-  clearRecentFiles: () => {
-    try {
-      localStorage.removeItem(RECENT_FILES_KEY);
-    } catch (error) {
-      console.warn('Failed to clear recent files:', error);
-    }
-  }
-};
-
-export default RecentFiles;
+export default MemoizedRecentFiles;
