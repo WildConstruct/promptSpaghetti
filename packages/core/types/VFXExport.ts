@@ -268,6 +268,15 @@ export interface VFXExtensions {
     lighting?: VFXLightingData;
     environment?: VFXEnvironmentData;
   };
+
+  // Wild Construct Ecosystem Integration
+  wildConstruct?: {
+    crowdControl?: WildConstructCrowdControl;
+    backdrop?: WildConstructBackdrop;
+    meteor?: WildConstructMeteor;
+    maestro?: WildConstructMaestro;
+    utdg?: WildConstructUTDG;
+  };
   
   // Custom Wild Construct modules
   custom?: {
@@ -443,4 +452,333 @@ export interface VFXExportOptions {
   includeVariantData?: boolean;
   formatVersion?: string;
   customExtensions?: string[];
+}
+
+// === WILD CONSTRUCT ECOSYSTEM INTEGRATION ===
+
+/**
+ * CrowdControl Integration for historically accurate crowd generation
+ */
+export interface WildConstructCrowdControl {
+  enabled: boolean;
+  version: string;
+  
+  // Historical crowd generation data
+  crowdData?: {
+    era: {
+      name: string;
+      period: [number, number]; // [startYear, endYear]
+      region: string[];
+    };
+    demographics: {
+      totalPopulation: number;
+      socialClasses: {
+        [className: string]: {
+          percentage: number;
+          occupations: string[];
+          clothingStyles: string[];
+        };
+      };
+      ageDistribution: {
+        children: number;  // 0-1 percentage
+        adults: number;
+        elderly: number;
+      };
+      genderRatio: {
+        male: number;
+        female: number;
+      };
+    };
+    behavior: {
+      activities: string[];
+      interactions: string[];
+      socialMixing: boolean;
+      culturalPatterns: string[];
+    };
+    validation: {
+      historicalAccuracy: number; // 0-1
+      constraintViolations: string[];
+      suggestions: string[];
+    };
+  };
+  
+  // VFX pipeline integration
+  pipeline: {
+    format: 'json' | 'xml' | 'csv' | 'maya' | 'blender';
+    memoryEstimate: number; // MB
+    renderComplexity: 'low' | 'medium' | 'high';
+    polyCount: number;
+    textureSize: number; // MB
+  };
+}
+
+/**
+ * Backdrop Integration for era-appropriate environments
+ */
+export interface WildConstructBackdrop {
+  enabled: boolean;
+  version: string;
+  
+  // Historical environment data
+  environment?: {
+    era: {
+      name: string;
+      architecturalStyle: string[];
+      materials: string[];
+      colors: string[];
+    };
+    location: {
+      type: 'urban' | 'rural' | 'interior' | 'natural';
+      description: string;
+      authenticity: number; // 0-1
+      socialContext: string; // e.g., "noble court", "peasant village"
+    };
+    atmosphere: {
+      timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
+      season: 'spring' | 'summer' | 'autumn' | 'winter';
+      weather: string;
+      mood: string;
+    };
+    assets: {
+      buildings: BackdropAsset[];
+      props: BackdropAsset[];
+      vegetation: BackdropAsset[];
+      terrain: BackdropAsset[];
+    };
+  };
+  
+  // 3D scene integration
+  scene3D: {
+    coordinate: [number, number, number]; // World coordinates
+    scale: [number, number, number];
+    lighting: {
+      ambientColor: [number, number, number];
+      directionalLights: Array<{
+        direction: [number, number, number];
+        color: [number, number, number];
+        intensity: number;
+      }>;
+    };
+  };
+}
+
+/**
+ * Meteor Integration for period-accurate atmospheric effects
+ */
+export interface WildConstructMeteor {
+  enabled: boolean;
+  version: string;
+  
+  // Atmospheric data
+  atmosphere?: {
+    era: {
+      name: string;
+      climateData: string[];
+      seasonalPatterns: string[];
+    };
+    weather: {
+      condition: string;
+      temperature: number; // Celsius
+      humidity: number; // 0-1
+      windSpeed: number; // m/s
+      precipitation: number; // 0-1
+      visibility: number; // meters
+    };
+    effects: {
+      particles: Array<{
+        type: 'rain' | 'snow' | 'fog' | 'dust' | 'smoke' | 'mist';
+        density: number; // 0-1
+        size: number;
+        velocity: [number, number, number];
+        color: [number, number, number, number]; // RGBA
+      }>;
+      volumetrics: {
+        enabled: boolean;
+        scattering: number;
+        absorption: number;
+      };
+    };
+    historicalAccuracy: {
+      score: number; // 0-1
+      factors: string[];
+      references: string[];
+    };
+  };
+}
+
+/**
+ * Maestro Integration for scene orchestration
+ */
+export interface WildConstructMaestro {
+  enabled: boolean;
+  version: string;
+  
+  // Scene orchestration data
+  orchestration?: {
+    sceneComposition: {
+      foreground: string[];
+      midground: string[];
+      background: string[];
+      depth: number; // Scene depth in meters
+    };
+    timing: {
+      duration: number; // seconds
+      keyMoments: Array<{
+        time: number; // seconds
+        event: string;
+        priority: 'high' | 'medium' | 'low';
+      }>;
+    };
+    coordination: {
+      crowdControl: boolean;
+      backdrop: boolean;
+      meteor: boolean;
+      dependencies: string[];
+    };
+    historicalContext: {
+      narrative: string;
+      culturalSignificance: string;
+      historicalEvents: string[];
+      accuracy: number; // 0-1
+    };
+  };
+  
+  // Rendering coordination
+  rendering: {
+    renderOrder: string[];
+    compositing: {
+      layers: string[];
+      blendModes: string[];
+      masks: string[];
+    };
+    postProcessing: {
+      colorGrading: boolean;
+      filmGrain: boolean;
+      vignette: boolean;
+      historicalFilmLook: string; // e.g., "1970s film stock"
+    };
+  };
+}
+
+/**
+ * UTDG (Universal Texture Description Graph) Integration
+ */
+export interface WildConstructUTDG {
+  enabled: boolean;
+  version: string;
+  
+  // UTDG graph data
+  graph?: {
+    nodes: UTDGNode[];
+    connections: UTDGConnection[];
+    metadata: UTDGMetadata;
+  };
+  
+  // Historical accuracy framework
+  historical: {
+    era: {
+      name: string;
+      period: [number, number];
+      regions: string[];
+      accuracy: 'high' | 'medium' | 'creative';
+    };
+    constraints: Array<{
+      type: 'temporal' | 'regional' | 'social' | 'technical';
+      rule: string;
+      enforcement: 'strict' | 'warning' | 'suggestion';
+      context: string;
+    }>;
+    validation: {
+      overallScore: number; // 0-1
+      violations: Array<{
+        severity: 'error' | 'warning' | 'info';
+        message: string;
+        suggestions: string[];
+      }>;
+    };
+  };
+  
+  // Data sources and provenance
+  dataSources: Array<{
+    id: string;
+    name: string;
+    type: 'museum' | 'academic' | 'archaeological' | 'specialist';
+    url?: string;
+    reliability: number; // 0-1
+    coverage: string[];
+  }>;
+  
+  // VFX pipeline metadata
+  vfxMetadata: {
+    textureCategories: string[];
+    materialProperties: Array<{
+      name: string;
+      values: Record<string, unknown>;
+      historicalBasis: string;
+    }>;
+    compatibilityFlags: {
+      maya: boolean;
+      blender: boolean;
+      houdini: boolean;
+      unreal: boolean;
+      unity: boolean;
+    };
+  };
+}
+
+// Supporting interfaces for Wild Construct integration
+export interface BackdropAsset {
+  id: string;
+  name: string;
+  type: string;
+  historicalPeriod: string;
+  authenticity: number; // 0-1
+  materials: string[];
+  dimensions?: [number, number, number];
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+}
+
+export interface UTDGNode {
+  id: string;
+  type: 'material' | 'texture' | 'pattern' | 'style' | 'composite';
+  content: string;
+  historicalData: {
+    era: string;
+    region: string[];
+    authenticity: number;
+    source: string;
+    tags: string[];
+  };
+  relationships: {
+    compatible: string[];
+    incompatible: string[];
+    variations: string[];
+  };
+  vfxProperties: {
+    roughness?: number;
+    metallic?: number;
+    normal?: string;
+    albedo?: [number, number, number];
+    emission?: [number, number, number];
+  };
+}
+
+export interface UTDGConnection {
+  id: string;
+  source: string;
+  target: string;
+  relationship: 'enhances' | 'conflicts' | 'requires' | 'modifies';
+  strength: number; // 0-1
+  historicalBasis: string;
+}
+
+export interface UTDGMetadata {
+  creationDate: string;
+  lastModified: string;
+  accuracy: number; // 0-1
+  complexity: 'simple' | 'moderate' | 'complex';
+  historicalPeriods: string[];
+  regions: string[];
+  dataProvenance: string[];
 }

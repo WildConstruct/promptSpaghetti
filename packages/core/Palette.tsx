@@ -97,15 +97,15 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
               return acc;
             }, {} as Record<string, typeof nodes>);
 
-            const categoryOrder = ['text', 'logic', 'output', 'variable', 'advanced', 'transform', 'other'];
+            const categoryOrder = ['content', 'flow', 'output', 'memory', 'smart', 'process', 'other'];
             const categoryLabels = {
-              text: 'Text Elements',
-              logic: 'Logic & Flow',
-              advanced: 'Advanced Nodes',
-              transform: 'Transformations',
-              output: 'Output',
-              variable: 'Variables',
-              other: 'Other'
+              content: 'Content Building Blocks',
+              flow: 'Content Flow Tools',
+              output: 'Final Output',
+              memory: 'Memory & Storage',
+              smart: 'Smart Tools',
+              process: 'Custom Processing',
+              other: 'Other Tools'
             };
 
             return categoryOrder.map(categoryKey => {

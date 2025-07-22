@@ -2,7 +2,9 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ZodSchema } from 'zod';
 import { PropertiesSection } from './PropertiesSection';
 import { PreviewSection } from './PreviewSection';
+import { PreferenceControls } from './PreferenceControls';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
+import { useNodeDisclosure } from '../../hooks/useNodeDisclosure';
 
 // Map technical node types to filmmaker-friendly names
 const getFilmmakerFriendlyName = (nodeType: string): string => {
@@ -39,6 +41,7 @@ export interface InspectorPanelProps {
 
 export   const [isResizing, setIsResizing] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [showPreferences, setShowPreferences] = useState(false);
   const resizeRef = useRef<HTMLDivElement>(null);
   const { 
     debugMode, 
@@ -46,8 +49,13 @@ export   const [isResizing, setIsResizing] = useState(false);
     shouldShowTechnicalFields,
     complexityLevel,
     setComplexityLevel,
-    shouldShowAdvancedFeatures
+    shouldShowAdvancedFeatures,
+    globalDisclosureLevel,
+    setGlobalDisclosureLevel
   } = useUISettingsStore();
+  
+  const nodeId = node?.id;
+  const nodeType = node?.data?.nodeType || node?.type;
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -250,6 +258,22 @@ export   const [isResizing, setIsResizing] = useState(false);
                 {complexityLevel === 'basic' ? 'BASIC' : 
                  complexityLevel === 'advanced' ? 'ADV' : 'DBG'}
               </div>
+              <button
+                onClick={() => setShowPreferences(!showPreferences)}
+                style={{
+                  background: showPreferences ? '#4299e1' : 'transparent',
+                  border: '1px solid #4a5568',
+                  borderRadius: 3,
+                  color: showPreferences ? 'white' : '#a0aec0',
+                  fontSize: 10,
+                  padding: '2px 6px',
+                  cursor: 'pointer',
+                  marginLeft: 4
+                }}
+                title="Configure disclosure preferences"
+              >
+                ⚙️
+              </button>
             </div>
           )}
           {!collapsed && onClose && (
@@ -287,6 +311,20 @@ export   const [isResizing, setIsResizing] = useState(false);
 
       {!collapsed && (
         <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+          {showPreferences && (
+            <div style={{ 
+              padding: '0 16px 16px 16px',
+              borderBottom: '1px solid #4a5568',
+              background: 'rgba(66, 153, 225, 0.05)'
+            }}>
+              <PreferenceControls
+                nodeId={nodeId}
+                nodeType={nodeType}
+                showNodeSpecificControls={true}
+                compact={false}
+              />
+            </div>
+          )}
           <PropertiesSection
             node={node}
             schema={schema}

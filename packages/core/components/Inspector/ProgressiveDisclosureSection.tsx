@@ -1,5 +1,14 @@
 import React, { ReactNode } from 'react';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
+import { 
+  HierarchyColors, 
+  TypographyScale, 
+  SpacingScale, 
+  ComponentSizes,
+  classifyFieldPriority,
+  AccessibilityUtils,
+  type FieldPriority
+} from '../VisualHierarchy/HierarchyDesignSystem';
 
 export interface ProgressiveDisclosureSectionProps {
   title: string;
@@ -9,6 +18,8 @@ export interface ProgressiveDisclosureSectionProps {
   defaultExpanded?: boolean;
   icon?: string;
   className?: string;
+  priority?: FieldPriority;
+  fieldName?: string; // For automatic priority classification
 }
 
 /**
@@ -20,6 +31,9 @@ export interface ProgressiveDisclosureSectionProps {
  * - Debug: All technical details visible
  */
 export   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
+  
+  // Determine field priority using hierarchy design system
+  const priority = explicitPriority || (fieldName ? classifyFieldPriority(fieldName) : 'standard');
 
   // Determine if this section should be visible based on current complexity level
   const shouldShow = React.useMemo(() => {
@@ -44,75 +58,62 @@ export   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
   const shouldAutoExpand = level === 'basic' || complexityLevel === 'expert';
   const effectivelyExpanded = shouldAutoExpand ? true : isExpanded;
 
-  // Style variations based on disclosure level
+  // Get visual hierarchy colors and styles
+  const colors = HierarchyColors[level];
+  const typography = priority === 'critical' ? TypographyScale.secondary : TypographyScale.tertiary;
+  
+  // Enhanced section styles using design system
   const getSectionStyles = () => {
     const baseStyles = {
-      marginBottom: 12,
+      marginBottom: SpacingScale.md,
       borderRadius: 6,
       overflow: 'hidden' as const,
+      transition: 'all 0.2s ease-in-out',
+      position: 'relative' as const,
     };
 
-    switch (level) {
-      case 'basic':
-        return {
-          ...baseStyles,
-          background: '#1e2a3a', // Slightly lighter for essential content
-          border: '1px solid #2d3748',
-        };
-      case 'advanced':
-        return {
-          ...baseStyles,
-          background: '#1a202c', // Standard background
-          border: '1px solid #4a5568',
-        };
-      case 'debug':
-        return {
-          ...baseStyles,
-          background: '#2d1b69', // Purple tint for debug content
-          border: '1px solid #553c9a',
-        };
-      default:
-        return baseStyles;
-    }
+    // Add priority-based visual indicators
+    const priorityIndicator = priority === 'critical' ? {
+      borderLeft: `4px solid ${colors.primary}`,
+      backgroundColor: `${colors.primary}15`, // 15% opacity
+    } : priority === 'important' ? {
+      borderLeft: `3px solid ${colors.secondary}`,
+      backgroundColor: `${colors.secondary}10`, // 10% opacity
+    } : {
+      borderLeft: `2px solid ${colors.border}`,
+      backgroundColor: colors.background,
+    };
+
+    return {
+      ...baseStyles,
+      ...priorityIndicator,
+      border: `1px solid ${colors.border}`,
+    };
   };
 
   const getHeaderStyles = () => {
-    const baseStyles = {
-      padding: '8px 12px',
+    return {
+      ...ComponentSizes.header,
       cursor: shouldAutoExpand ? 'default' : 'pointer',
       display: 'flex' as const,
       alignItems: 'center' as const,
       justifyContent: 'space-between' as const,
-      fontSize: 12,
-      fontWeight: 500,
       userSelect: 'none' as const,
+      backgroundColor: colors.background,
+      borderBottom: effectivelyExpanded ? `1px solid ${colors.border}` : 'none',
+      transition: 'all 0.2s ease-in-out',
+      ...typography,
+      // Enhanced focus styles for accessibility
+      ':focus': {
+        outline: `2px solid ${colors.primary}`,
+        outlineOffset: 2,
+      },
+      ':hover': shouldAutoExpand ? {} : {
+        backgroundColor: colors.accent,
+        transform: 'translateY(-1px)',
+        boxShadow: `0 4px 12px ${colors.primary}20`,
+      }
     };
-
-    switch (level) {
-      case 'basic':
-        return {
-          ...baseStyles,
-          background: '#2d3748',
-          color: '#e2e8f0',
-          borderBottom: effectivelyExpanded ? '1px solid #4a5568' : 'none',
-        };
-      case 'advanced':
-        return {
-          ...baseStyles,
-          background: '#2a4365',
-          color: '#90cdf4',
-          borderBottom: effectivelyExpanded ? '1px solid #4a5568' : 'none',
-        };
-      case 'debug':
-        return {
-          ...baseStyles,
-          background: '#553c9a',
-          color: '#c4b5fd',
-          borderBottom: effectivelyExpanded ? '1px solid #7c3aed' : 'none',
-        };
-      default:
-        return baseStyles;
-    }
   };
 
   const getLevelIndicator = () => {
@@ -129,50 +130,115 @@ export   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
   };
 
   return (
-    <div style={getSectionStyles()} className={className}>
+    <div 
+      style={getSectionStyles()} 
+      className={className}
+      role="region"
+      aria-labelledby={`section-header-${title.replace(/\s+/g, '-').toLowerCase()}`}
+    >
       <div
+        id={`section-header-${title.replace(/\s+/g, '-').toLowerCase()}`}
         style={getHeaderStyles()}
         onClick={shouldAutoExpand ? undefined : () => setIsExpanded(!isExpanded)}
+        role={shouldAutoExpand ? undefined : "button"}
+        tabIndex={shouldAutoExpand ? undefined : 0}
+        aria-expanded={shouldAutoExpand ? undefined : effectivelyExpanded}
+        aria-label={AccessibilityUtils.getAriaLabel(level, title)}
+        aria-describedby={description ? `section-desc-${title.replace(/\s+/g, '-').toLowerCase()}` : undefined}
+        onKeyDown={shouldAutoExpand ? undefined : (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsExpanded(!isExpanded);
+          }
+        }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span>{icon || getLevelIndicator()}</span>
-          <span>{title}</span>
-          {description && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: SpacingScale.sm }}>
+          <span style={{ fontSize: typography.fontSize, opacity: 0.9 }}>
+            {icon || getLevelIndicator()}
+          </span>
+          <span style={{ 
+            color: colors.text, 
+            fontWeight: typography.fontWeight,
+            fontSize: typography.fontSize 
+          }}>
+            {title}
+          </span>
+          {priority !== 'standard' && (
             <span 
-              style={{ 
-                fontSize: 10, 
-                opacity: 0.7, 
-                fontStyle: 'italic' 
+              style={{
+                ...TypographyScale.micro,
+                backgroundColor: priority === 'critical' ? colors.primary : colors.secondary,
+                color: colors.accent,
+                padding: '2px 6px',
+                borderRadius: 3,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                fontWeight: 600,
+              }}
+              title={AccessibilityUtils.getAriaDescription(priority)}
+            >
+              {priority === 'critical' ? 'Required' : priority === 'important' ? 'Key' : priority}
+            </span>
+          )}
+          {description && (
+            <span
+              id={`section-desc-${title.replace(/\s+/g, '-').toLowerCase()}`}
+              style={{
+                ...TypographyScale.caption,
+                color: colors.secondary,
+                fontStyle: 'italic',
+                marginLeft: SpacingScale.xs,
               }}
               title={description}
             >
-              {description.length > 20 ? `${description.substring(0, 20)}...` : description}
+              {description.length > 30 ? `${description.substring(0, 30)}...` : description}
             </span>
           )}
         </div>
-        {!shouldAutoExpand && (
-          <span 
-            style={{ 
-              fontSize: 10,
-              transform: effectivelyExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s ease',
-            }}
-          >
-            ▶
-          </span>
-        )}
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: SpacingScale.xs }}>
+          {!shouldAutoExpand && (
+            <span
+              style={{
+                fontSize: TypographyScale.caption.fontSize,
+                color: colors.secondary,
+                transform: effectivelyExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                transition: 'transform 0.2s ease-in-out',
+              }}
+              aria-hidden="true"
+            >
+              ▶
+            </span>
+          )}
+        </div>
       </div>
       
       {effectivelyExpanded && (
-        <div 
-          style={{ 
-            padding: '12px',
-            animation: 'fadeIn 0.2s ease',
+        <div
+          style={{
+            ...ComponentSizes.section,
+            animation: 'fadeIn 0.2s ease-in-out',
           }}
+          role="group"
+          aria-labelledby={`section-header-${title.replace(/\s+/g, '-').toLowerCase()}`}
         >
           {children}
         </div>
       )}
+      
+      {/* CSS Animation */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };

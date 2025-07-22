@@ -3,7 +3,8 @@ import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TemplateEditor } from '../TemplateEditor';
 
 export interface ConcatEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Concat specific props can be added here
@@ -26,11 +27,10 @@ const JOIN_MODES: SelectOption[] = [
   { value: 'last-n', label: 'Join Last N Inputs' }
 ];
 
-export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
-  
+export   
   // Concat specific fields
   const label = (nodeData.label as string) || '';
+  const template = (nodeData.template as string) || '';
   const separator = (nodeData.separator as string) ?? ' ';
   const customSeparator = (nodeData.customSeparator as string) || '';
   const joinMode = (nodeData.joinMode as string) || 'all';
@@ -40,11 +40,7 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
   const trimInputs = (nodeData.trimInputs as boolean) ?? true;
   const preserveOrder = (nodeData.preserveOrder as boolean) ?? true;
 
-  // State for collapsible sections
-  const [basicPropsCollapsed, setBasicPropsCollapsed] = useState(false);
-  const [concatSettingsCollapsed, setConcatSettingsCollapsed] = useState(false);
-  const [wrappingCollapsed, setWrappingCollapsed] = useState(true);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // Progressive disclosure - no manual collapse state needed
 
   const [separatorMode, setSeparatorMode] = React.useState(
     SEPARATOR_PRESETS.find(preset => preset.value === separator) ? separator : 'custom'
@@ -85,27 +81,64 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
 
   return (
     <div className="concat-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={basicPropsCollapsed}
-        onToggle={() => setBasicPropsCollapsed(!basicPropsCollapsed)}
+      {/* BASIC LEVEL: Essential concatenation settings */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core concatenation configuration"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="template"
       >
         <TextFieldEditor
-          label="Label"
+          label="Concatenation Name"
           value={label}
           fieldKey="label"
           zodType={null as any}
           onChange={(value) => handleFieldChange('label', value)}
-          placeholder="Enter concatenation label..."
+          placeholder="Enter a name for this concatenation..."
         />
-      </CollapsibleSection>
 
-      {/* Concatenation Settings */}
-      <CollapsibleSection 
-        title="Concatenation Settings" 
-        collapsed={concatSettingsCollapsed}
-        onToggle={() => setConcatSettingsCollapsed(!concatSettingsCollapsed)}
+        <div style={{ marginBottom: 16 }}>
+          <label style={{
+            display: 'block',
+            fontSize: 12,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 6
+          }}>
+            Output Template (Optional)
+          </label>
+          <TemplateEditor
+            value={template}
+            onChange={(value) => handleFieldChange('template', value)}
+            onVariablesChange={(variables) => {
+              handleFieldChange('extractedVariables', variables);
+            }}
+            placeholder="Use a template like 'Combining {input1} and {input2}' for more control..."
+            showPreview={true}
+            showRealTimePreview={true}
+            autoComplete={true}
+            nodeType="concat"
+          />
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4
+          }}>
+            If specified, uses template instead of simple concatenation. Variables become input ports.
+          </div>
+        </div>
+      </ProgressiveDisclosureSection>
+
+      {/* ADVANCED LEVEL: Concatenation behavior settings */}
+      <ProgressiveDisclosureSection
+        title="Concatenation Settings"
+        level="advanced"
+        description="Control how inputs are joined together"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="joinMode"
       >
         <SelectEditor
           label="Join Mode"
@@ -192,13 +225,16 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
             Preserve input order
           </label>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Prefix and Suffix */}
-      <CollapsibleSection 
-        title="Wrapping" 
-        collapsed={wrappingCollapsed}
-        onToggle={() => setWrappingCollapsed(!wrappingCollapsed)}
+      {/* ADVANCED LEVEL: Text wrapping options */}
+      <ProgressiveDisclosureSection
+        title="Text Wrapping"
+        level="advanced"
+        description="Add prefix and suffix text around the concatenated result"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="prefix"
       >
         <EnhancedTextAreaEditor
           label="Prefix"
@@ -223,13 +259,16 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
           enableInlineCorrections={true}
           showCorrectionHighlights={true}
         />
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+      {/* DEBUG LEVEL: Configuration preview and debugging */}
+      <ProgressiveDisclosureSection
+        title="Configuration Preview"
+        level="debug"
+        description="Preview concatenation configuration and debug information"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="preview"
       >
         <div style={{
           background: '#1a202c',
@@ -292,7 +331,7 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = (props) => {
             </div>
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

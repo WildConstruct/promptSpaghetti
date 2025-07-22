@@ -4,6 +4,8 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor } from '../SelectEditor';
 import { CollapsibleSection } from '../CollapsibleSection';
 import { WeightSlider } from '../WeightSlider';
+import { WeightVisualizationPanel } from '../../WeightVisualization';
+import { WeightControlOption } from '../WeightControlSlider';
 import { WeightedChoice, WeightDistributionType } from '../../../runtime/nodes/WeightedAdvanced';
 
 export interface WeightedAdvancedEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
@@ -27,7 +29,15 @@ export
   const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
   const [choicesCollapsed, setChoicesCollapsed] = useState(false);
   const [distributionCollapsed, setDistributionCollapsed] = useState(false);
+  const [visualizationCollapsed, setVisualizationCollapsed] = useState(false);
   const [previewCollapsed, setPreviewCollapsed] = useState(true);
+
+  // Convert WeightedChoice to WeightControlOptions for visualization
+  const weightOptions: WeightControlOption[] = choices.map((choice, index) => ({
+    id: `advanced_choice_${index}`,
+    text: choice.value,
+    weight: choice.weight
+  }));
 
   const handleChoicesChange = (newChoices: WeightedChoice[]) => {
     onChange({ choices: newChoices });
@@ -603,6 +613,26 @@ export
           )}
         </div>
       </CollapsibleSection>
+
+      {/* Weight Distribution Visualization */}
+      {choices.length > 0 && weightOptions.length > 0 && (
+        <WeightVisualizationPanel
+          options={weightOptions}
+          title="Advanced Weight Distribution"
+          defaultChartType="donut"
+          showChartControls={true}
+          showStatistics={true}
+          collapsed={visualizationCollapsed}
+          onCollapseChange={setVisualizationCollapsed}
+          onOptionHover={(option) => {
+            console.log('Advanced weight hovered:', option?.text);
+          }}
+          onOptionClick={(option) => {
+            console.log('Advanced weight clicked:', option.text);
+          }}
+          style={{ marginTop: 16 }}
+        />
+      )}
     </div>
   );
 };

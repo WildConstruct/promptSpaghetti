@@ -15,10 +15,12 @@ import {
   EdgeChange,
   NodeChange,
   ConnectionLineType,
-  useReactFlow
+  useReactFlow,
+  useViewport
 } from 'reactflow';
 import { InspectorPanel } from './components/Inspector';
 import { NodeRenderer } from './components/NodeRenderer';
+import { VariablePortNodeRenderer } from './components/VariablePortNodeRenderer';
 import { StatusBar } from './components/StatusBar';
 import { RestorePrompt } from './components/RestorePrompt';
 import { EncryptionState, EncryptionAlgorithm } from './components/EncryptionStatus';
@@ -34,16 +36,49 @@ import { useCorrectionsEnabled } from './correctionsStore';
 import SaveProjectDialog from './components/ProjectDialogs/SaveProjectDialog';
 import LoadProjectDialog from './components/ProjectDialogs/LoadProjectDialog';
 import ExportBundleDialog from './components/ProjectDialogs/ExportBundleDialog';
+import { SaveTemplateDialog } from './components/TemplateDialogs/SaveTemplateDialog';
+import { TemplateBrowser } from './components/TemplateDialogs/TemplateBrowser';
 import { 
   GraphAnalysisPanel, 
   PerformanceMonitor, 
   OptimizationControls, 
   OptimizationSettings 
 } from './components/GraphOptimization';
+import { StickyNotesManager } from './components/StickyNotes/StickyNotesManager';
 import { useValidation } from './hooks/useValidation';
 import { useAutosave } from './hooks/useAutosave';
 import { useNodeUtils } from './hooks/useNodeUtils';
 import { ValidationError } from './validation';
+import { SmoothInspectorPanel } from './components/Inspector/SmoothInspectorPanel';
+import { ProfessionalSpinner } from './components/LoadingStates/ProfessionalSpinner';
+import { SmoothNodeWrapper } from './components/Nodes/SmoothNodeWrapper';
+import { useCanvasOptimization, CanvasOptimizer } from './utils/canvasOptimization';
+import { globalAnimationManager } from './utils/smoothAnimations';
+import './styles/smoothAnimations.css';
+
+// Add keyframes for node creation animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes nodeCreatePulse {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+  
+  .animate-node-create-overlay {
+    animation: nodeCreatePulse 0.6s ease-out;
+  }
+`;
+document.head.appendChild(style);
 import {
   WeightedChoiceIcon,
   ConcatIcon,
@@ -61,113 +96,113 @@ interface GraphEditorProps {
 
 
 const NODE_TYPES: NodeMeta[] = [
-  // Text Node Types
+  // Content Building Blocks
   {
     id: 'Subject',
-    label: 'Subject',
+    label: 'Character',
     icon: '👤',
-    tooltip: 'Text subject with grammatical forms',
-    category: 'text'
+    tooltip: 'Define characters, people, or entities in your content',
+    category: 'content'
   },
   {
     id: 'Connector',
-    label: 'Connector',
+    label: 'Link Words',
     icon: '🔗',
-    tooltip: 'Grammar connector between elements',
-    category: 'text'
+    tooltip: 'Connect different parts of your content naturally',
+    category: 'content'
   },
   {
     id: 'Attribute',
-    label: 'Attribute',
+    label: 'Descriptors',
     icon: '🏷️',
-    tooltip: 'Descriptive attribute for nouns',
-    category: 'text'
+    tooltip: 'Add qualities, colors, styles, or characteristics',
+    category: 'content'
   },
   {
     id: 'Action',
-    label: 'Action',
+    label: 'Actions',
     icon: '⚡',
-    tooltip: 'Action verb with tense options',
-    category: 'text'
+    tooltip: 'Verbs and activities that bring scenes to life',
+    category: 'content'
   },
-  // Original Node Types
+  // Content Flow Tools
   {
     id: 'WeightedChoice',
-    label: 'WeightedChoice',
+    label: 'Random Selection',
     icon: WeightedChoiceIcon,
-    tooltip: 'Branch with weighted options',
-    category: 'logic'
+    tooltip: 'Choose randomly from multiple options with different likelihood',
+    category: 'flow'
   },
   {
     id: 'Concat',
-    label: 'Concat',
+    label: 'Combine',
     icon: ConcatIcon,
-    tooltip: 'Concatenate child prompts',
-    category: 'logic'
+    tooltip: 'Join multiple text elements together seamlessly',
+    category: 'flow'
   },
   {
     id: 'Output',
-    label: 'Output',
+    label: 'Result',
     icon: OutputIcon,
-    tooltip: 'Final output node',
+    tooltip: 'Final generated content ready for use',
     category: 'output'
   },
   {
     id: 'Include',
-    label: 'Include',
+    label: 'Reference',
     icon: IncludeIcon,
-    tooltip: 'Include another bundle',
-    category: 'logic'
+    tooltip: 'Include content from another template or package',
+    category: 'flow'
   },
   {
     id: 'SetVariable',
-    label: 'SetVariable',
+    label: 'Store Value',
     icon: SetVariableIcon,
-    tooltip: 'Set a variable',
-    category: 'variable'
+    tooltip: 'Save a value to use later in your workflow',
+    category: 'memory'
   },
   {
     id: 'GetVariable',
-    label: 'GetVariable',
+    label: 'Retrieve Value',
     icon: GetVariableIcon,
-    tooltip: 'Read a variable',
-    category: 'variable'
+    tooltip: 'Get a previously saved value from memory',
+    category: 'memory'
   },
-  // Epic 7 Advanced Node Types
+  // Smart Content Tools
   {
     id: 'WeightedAdvanced',
-    label: 'WeightedAdvanced',
+    label: 'Smart Random',
     icon: '🎲',
-    tooltip: 'Advanced weighted choice with distributions',
-    category: 'advanced'
+    tooltip: 'Advanced random selection with custom distribution patterns',
+    category: 'smart'
   },
   {
     id: 'Conditional',
-    label: 'Conditional',
+    label: 'If/Then',
     icon: '🔀',
-    tooltip: 'Expression-based conditional branching',
-    category: 'advanced'
+    tooltip: 'Choose different creative paths based on conditions',
+    category: 'smart'
   },
   {
     id: 'Sequential',
-    label: 'Sequential',
+    label: 'Step by Step',
     icon: '🔄',
-    tooltip: 'Sequential processing with patterns',
-    category: 'advanced'
+    tooltip: 'Process content in a specific creative sequence',
+    category: 'smart'
   },
   {
     id: 'Markov',
-    label: 'Markov',
+    label: 'Chain Process',
     icon: '🕸️',
-    tooltip: 'Markov chain state transitions',
-    category: 'advanced'
+    tooltip: 'Generate content based on probability patterns and transitions',
+    category: 'smart'
   },
   {
     id: 'PythonTransform',
-    label: 'PythonTransform',
+    label: 'Custom Script',
     icon: '🐍',
-    tooltip: 'Python script transformation',
-    category: 'transform'
+    tooltip: 'Apply custom processing logic to transform content',
+    category: 'process'
   }
 ];
 
@@ -188,10 +223,23 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   const [showControls, setShowControls] = useState(false);
   const [, setDragPreview] = useState<{node: Node, position: {x: number, y: number}} | null>(null);
   
+  // Canvas optimization and smooth animations
+  const [isCreatingNode, setIsCreatingNode] = useState(false);
+  const [nodeCreationAnimation, setNodeCreationAnimation] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const { optimizer, metrics, isPerformanceGood } = useCanvasOptimization({
+    maxVisibleNodes: 150,
+    animationFrameThrottle: 16
+  });
+  
   // Project dialog states
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [loadDialogOpen, setLoadDialogOpen] = useState(false);
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  
+  // Template dialog states
+  const [saveTemplateDialogOpen, setSaveTemplateDialogOpen] = useState(false);
+  const [templateBrowserOpen, setTemplateBrowserOpen] = useState(false);
   
   // Optimization panel states
   const [optimizationControlsOpen, setOptimizationControlsOpen] = useState(false);
@@ -214,7 +262,9 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     currentProject, 
     hasUnsavedChanges, 
     newProject,
-    markProjectModified 
+    markProjectModified,
+    saveAsTemplate,
+    applyTemplate
   } = useGraphStore();
   
   // Demo encryption state - in a real implementation, this would be managed by a security service
@@ -225,6 +275,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   
   const correctionsEnabled = useCorrectionsEnabled();
   const reactFlowInstance = useReactFlow();
+  const viewport = useViewport();
 
   // Custom hooks
   const { getNodeMeta, getCategoryColor } = useNodeUtils({ nodeTypes: NODE_TYPES });
@@ -242,21 +293,66 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     validateConnection
   });
 
-  // Memoized node render component using modular NodeRenderer
+  // Optimized node rendering with smooth animations
   const NodeRender = useMemo(() => {
-    const NodeRenderComponent = (props: { id: string; data: Record<string, unknown>; selected?: boolean }) => (
-      <NodeRenderer
-        id={props.id}
-        data={props.data}
-        selected={selectedNodeId === props.id}
-        onSelect={setSelectedNodeId}
-        getNodeMeta={getNodeMeta}
-        getCategoryColor={getCategoryColor}
-      />
-    );
+    const NodeRenderComponent = (props: { id: string; data: Record<string, unknown>; selected?: boolean }) => {
+      // Check if node has template fields that would benefit from variable ports
+      const hasTemplate = props.data?.template || props.data?.text || props.data?.content;
+      const shouldUseVariablePorts = typeof hasTemplate === 'string' && hasTemplate.length > 0;
+      
+      // Wrap with smooth animations if performance is good
+      if (isPerformanceGood) {
+        const InnerNode = shouldUseVariablePorts ? VariablePortNodeRenderer : NodeRenderer;
+        
+        return (
+          <SmoothNodeWrapper
+            id={props.id}
+            data={props.data}
+            selected={selectedNodeId === props.id}
+            nodeType={props.data?.nodeType as string || 'default'}
+            isSelected={selectedNodeId === props.id}
+            onNodeClick={setSelectedNodeId}
+          >
+            <InnerNode
+              id={props.id}
+              data={props.data}
+              selected={selectedNodeId === props.id}
+              onSelect={setSelectedNodeId}
+              getNodeMeta={getNodeMeta}
+              getCategoryColor={getCategoryColor}
+            />
+          </SmoothNodeWrapper>
+        );
+      }
+      
+      // Fallback to standard rendering for performance
+      if (shouldUseVariablePorts) {
+        return (
+          <VariablePortNodeRenderer
+            id={props.id}
+            data={props.data}
+            selected={selectedNodeId === props.id}
+            onSelect={setSelectedNodeId}
+            getNodeMeta={getNodeMeta}
+            getCategoryColor={getCategoryColor}
+          />
+        );
+      }
+      
+      return (
+        <NodeRenderer
+          id={props.id}
+          data={props.data}
+          selected={selectedNodeId === props.id}
+          onSelect={setSelectedNodeId}
+          getNodeMeta={getNodeMeta}
+          getCategoryColor={getCategoryColor}
+        />
+      );
+    };
     NodeRenderComponent.displayName = 'NodeRenderComponent';
     return NodeRenderComponent;
-  }, [selectedNodeId, getNodeMeta, getCategoryColor]);
+  }, [selectedNodeId, getNodeMeta, getCategoryColor, isPerformanceGood]);
 
   // Node types mapping - SIMPLIFIED to prevent infinite loops
   const nodeTypes = useMemo(() => {
@@ -307,7 +403,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     // No-op: drag data set in Palette, handled on drop
   };
 
-  // Handle drop on canvas: create node of given type at position
+  // Enhanced drop handler with smooth node creation animation
   const { addNode, updateNode } = useGraphStore();
 
   const handleDrop = useCallback(
@@ -322,18 +418,32 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         y: event.clientY
       });
       
+      // Smooth node creation animation
+      setIsCreatingNode(true);
+      const nodeId = `${nodeType}-${Date.now()}`;
+      setNodeCreationAnimation(nodeId);
+      
       // Use Zod schema to get default params
       const schema = nodeSchemas[nodeType];
       const params = schema.parse({});
       const newNode: Node = {
-        id: `${nodeType}-${Date.now()}`,
+        id: nodeId,
         type: 'default',
         position,
         data: { ...params, nodeType: nodeType },
         selected: false
       };
-      addNode(newNode);
-      setNodes((prev) => [...prev, newNode]);
+      
+      // Add with animation
+      globalAnimationManager.scheduleAnimation(() => {
+        addNode(newNode);
+        setNodes((prev) => [...prev, newNode]);
+        
+        setTimeout(() => {
+          setIsCreatingNode(false);
+          setNodeCreationAnimation(null);
+        }, 600);
+      });
     },
     [reactFlowInstance, addNode]
   );
@@ -351,11 +461,17 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
 
   // Autosave and restore logic handled by useAutosave hook
 
-  // Nodes/edges change handlers (validation handled by useValidation hook)
+  // Enhanced nodes change handler with canvas optimization
   const onNodesChange: OnNodesChange = useCallback(
     (changes: NodeChange[]) => {
+      // Get canvas size for optimization
+      const canvasSize = canvasRef.current ? {
+        width: canvasRef.current.offsetWidth,
+        height: canvasRef.current.offsetHeight
+      } : { width: 1920, height: 1080 };
+      
       setNodes((nds) => {
-        return nds.map((node) => {
+        let updatedNodes = nds.map((node) => {
           const change = changes.find((c) => 'id' in c && c.id === node.id);
           // Show drag preview for drag operations
           if (change && 'position' in change && change.dragging) {
@@ -365,21 +481,36 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
           }
           return change ? { ...node, ...change } : node;
         });
+        
+        // Apply canvas optimization for performance
+        if (updatedNodes.length > 100) {
+          updatedNodes = optimizer.optimizeNodeVisibility(updatedNodes, viewport, canvasSize);
+        }
+        
+        return updatedNodes;
       });
     },
-    []
+    [optimizer, viewport]
   );
 
+  // Enhanced edges change handler with optimization
   const onEdgesChange: OnEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       setEdges((eds) => {
-        return eds.map((edge) => {
+        let updatedEdges = eds.map((edge) => {
           const change = changes.find((c) => 'id' in c && c.id === edge.id);
           return change ? { ...edge, ...change } : edge;
         });
+        
+        // Apply edge optimization for performance
+        if (updatedEdges.length > 200) {
+          updatedEdges = optimizer.optimizeEdges(updatedEdges, nodes, viewport);
+        }
+        
+        return updatedEdges;
       });
     },
-    []
+    [optimizer, nodes, viewport]
   );
 
   // Demo encryption handlers - in a real implementation, these would call actual encryption services
@@ -496,6 +627,55 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     }
   }, []);
 
+  // Template handlers
+  const handleSaveTemplate = useCallback(() => {
+    setSaveTemplateDialogOpen(true);
+  }, []);
+
+  const handleBrowseTemplates = useCallback(() => {
+    setTemplateBrowserOpen(true);
+  }, []);
+
+  const handleTemplateSave = useCallback(async (templateData: any) => {
+    try {
+      const result = await saveAsTemplate(templateData, 'current-user');
+      if (result.success) {
+        setStatusMessage('Template saved successfully!');
+        setTimeout(() => setStatusMessage(''), 3000);
+      } else {
+        setStatusMessage(`Template save failed: ${result.error}`);
+        setTimeout(() => setStatusMessage(''), 5000);
+      }
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setStatusMessage(`Template save failed: ${errorMessage}`);
+      setTimeout(() => setStatusMessage(''), 5000);
+      return { success: false, error: errorMessage };
+    }
+  }, [saveAsTemplate]);
+
+  const handleTemplateApply = useCallback(async (templateId: string, options: any) => {
+    try {
+      const result = await applyTemplate(templateId, options);
+      if (result.success) {
+        // Update local React state to reflect the changes
+        const graphData = useGraphStore.getState().getGraphData();
+        setNodes(graphData.nodes);
+        setEdges(graphData.edges);
+        setStatusMessage('Template applied successfully!');
+        setTimeout(() => setStatusMessage(''), 3000);
+      } else {
+        setStatusMessage(`Template apply failed: ${result.error}`);
+        setTimeout(() => setStatusMessage(''), 5000);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setStatusMessage(`Template apply failed: ${errorMessage}`);
+      setTimeout(() => setStatusMessage(''), 5000);
+    }
+  }, [applyTemplate]);
+
   // Optimization handlers
   const handleOptimizationOpen = useCallback(() => {
     setOptimizationMenuOpen(prev => !prev);
@@ -506,8 +686,6 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     setStatusMessage('Optimization settings updated');
     setTimeout(() => setStatusMessage(''), 3000);
   }, []);
-
-    }, []);
 
   const handlePerformanceMonitorToggle = useCallback(() => {
     setPerformanceMonitorVisible(prev => !prev);
@@ -555,7 +733,11 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
           onToggle={() => setPaletteCollapsed((c) => !c)}
           onDragStart={handlePaletteDragStart}
         />
-        <div style={{ flex: 1, position: 'relative', overflow: 'visible' }} data-testid="react-flow-canvas-wrapper">
+        <div 
+          ref={canvasRef}
+          style={{ flex: 1, position: 'relative', overflow: 'visible' }} 
+          data-testid="react-flow-canvas-wrapper"
+        >
           <ReactFlow
             nodes={styledNodes}
             edges={styledEdges}
@@ -579,12 +761,17 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
             nodesDraggable={true}
             nodesConnectable={true}
             elementsSelectable={true}
-            // Standard 3D-style mouse controls
+            // Professional 3D-style mouse controls with performance optimization
             panOnScroll={false} // Disable scroll to pan
             zoomOnScroll={true} // Enable scroll to zoom (standard 3D behavior)
             panOnDrag={[1, 2]} // Pan with left or middle mouse button
-            selectionOnDrag={false} // Disable box selection on drag
+            selectionOnDrag={nodes.length < 100} // Disable box selection for large graphs
             zoomOnDoubleClick={false} // Disable double-click zoom
+            // Performance optimizations
+            nodesDraggable={nodes.length < 150}
+            nodesConnectable={nodes.length < 200}
+            snapToGrid={viewport.zoom > 0.6}
+            snapGrid={[16, 16]}
             // Keyboard shortcuts - completely disable all keyboard handling
             deleteKeyCode={null} // Disable delete key completely
             multiSelectionKeyCode={null} // Disable multi-selection
@@ -606,24 +793,69 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
               // Only handle keyboard events for canvas interaction
               e.stopPropagation();
             }}
-            // Connection line style - Clean 90-degree lines
-            connectionLineStyle={{ stroke: '#4a5568', strokeWidth: 2 }}
-            connectionLineType={ConnectionLineType.Step}
-            // Default edge options for clean 90-degree connections
-            defaultEdgeOptions={{
-              type: 'step',
-              style: { stroke: '#666', strokeWidth: 2 },
-              markerEnd: { type: 'arrow', color: '#666' }
+            // Professional connection styling with performance optimization
+            connectionLineStyle={{ 
+              stroke: isPerformanceGood ? '#ff7c00' : '#4a5568', 
+              strokeWidth: isPerformanceGood ? 3 : 2,
+              filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none'
             }}
-            // Default zoom/pan settings
-            minZoom={0.1}
-            maxZoom={4}
+            connectionLineType={viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight}
+            // Dynamic edge options based on performance
+            defaultEdgeOptions={{
+              type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
+              style: { 
+                stroke: isPerformanceGood ? '#ff7c00' : '#666', 
+                strokeWidth: isPerformanceGood ? 2.5 : 2,
+                filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none'
+              },
+              markerEnd: { 
+                type: 'arrow', 
+                color: isPerformanceGood ? '#ff7c00' : '#666',
+                width: isPerformanceGood ? 16 : 12,
+                height: isPerformanceGood ? 16 : 12
+              }
+            }}
+            // Professional zoom/pan settings with smooth transitions
+            minZoom={0.05}
+            maxZoom={6}
             defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+            // Smooth zoom and pan transitions
+            translateExtent={[[-2000, -2000], [4000, 4000]]}
+            nodeExtent={[[-1500, -1500], [3000, 3000]]}
+            // Performance-aware rendering
+            {...optimizer.getOptimizedRenderSettings(nodes.length, viewport.zoom)}
           >
-            <Background color="#2d3748" gap={16} />
-            <MiniMap nodeColor={() => '#363a45'} maskColor="#181b21BB" />
-            <Controls />
+            <Background 
+            color="#2d3748" 
+            gap={viewport.zoom > 0.8 ? 16 : viewport.zoom > 0.4 ? 24 : 32}
+            size={viewport.zoom > 0.8 ? 1 : viewport.zoom > 0.4 ? 1.5 : 2}
+          />
+          {nodes.length < 200 && (
+            <MiniMap 
+              nodeColor={() => isPerformanceGood ? '#ff7c00' : '#363a45'} 
+              maskColor="#181b21BB"
+              style={{
+                backgroundColor: 'rgba(31, 41, 55, 0.8)',
+                border: '1px solid rgba(55, 65, 81, 0.6)'
+              }}
+            />
+          )}
+          <Controls 
+            style={{
+              button: {
+                backgroundColor: 'rgba(31, 41, 55, 0.9)',
+                border: '1px solid rgba(55, 65, 81, 0.6)',
+                color: '#e5e7eb'
+              }
+            }}
+          />
           </ReactFlow>
+
+          {/* Epic 8.7: Sticky Notes Collaboration System */}
+          <StickyNotesManager
+            disabled={false}
+            readonly={false}
+          />
             
           {/* Mouse Controls Help Overlay */}
           <div style={{
@@ -657,12 +889,134 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
             )}
           </div>
         </div>
-        <InspectorPanel
-          node={selectedNode}
-          schema={selectedSchema}
-          onChange={handleInspectorChange}
-        />
+        
+        {/* Smooth Panel Transition Container */}
+        <div 
+          style={{
+            transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+            width: selectedNode ? 320 : 0,
+            opacity: selectedNode ? 1 : 0,
+            overflow: 'hidden',
+            borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none'
+          }}
+        >
+          {selectedNode && (
+            <div
+              style={{
+                transform: selectedNode ? 'translateX(0)' : 'translateX(100%)',
+                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                width: 320,
+                height: '100%'
+              }}
+            >
+              {isPerformanceGood ? (
+                <SmoothInspectorPanel
+                  node={selectedNode}
+                  schema={selectedSchema}
+                  onChange={handleInspectorChange}
+                />
+              ) : (
+                <InspectorPanel
+                  node={selectedNode}
+                  schema={selectedSchema}
+                  onChange={handleInspectorChange}
+                />
+              )}
+            </div>
+          )}
+        </div>
       </div>
+      
+      {/* Professional CSS Transitions and Animations */}
+      <style>{`
+        .react-flow__node {
+          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                     box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                     opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                     filter 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .react-flow__node:hover {
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+          filter: brightness(1.05);
+        }
+        
+        .react-flow__node.selected {
+          box-shadow: 0 8px 32px rgba(255, 124, 0, 0.3), 
+                     0 0 0 2px #ff7c00;
+        }
+        
+        .react-flow__edge path {
+          transition: stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                     stroke-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                     filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .react-flow__edge:hover path {
+          stroke: #ff7c00 !important;
+          stroke-width: 3 !important;
+          filter: drop-shadow(0 0 8px rgba(255, 124, 0, 0.4));
+        }
+        
+        .react-flow__handle {
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .react-flow__handle:hover {
+          transform: scale(1.4);
+          box-shadow: 0 0 16px rgba(255, 124, 0, 0.6);
+          background: #ff7c00 !important;
+          border-color: #ff7c00 !important;
+        }
+        
+        .react-flow__connection-line {
+          stroke: #ff7c00 !important;
+          stroke-width: 3 !important;
+          filter: drop-shadow(0 0 6px rgba(255, 124, 0, 0.3));
+        }
+        
+        .react-flow__controls button {
+          background: rgba(31, 41, 55, 0.95) !important;
+          border: 1px solid rgba(55, 65, 81, 0.6) !important;
+          color: #e5e7eb !important;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          backdrop-filter: blur(8px) !important;
+        }
+        
+        .react-flow__controls button:hover {
+          background: rgba(255, 124, 0, 0.1) !important;
+          border-color: #ff7c00 !important;
+          box-shadow: 0 0 12px rgba(255, 124, 0, 0.3) !important;
+          transform: scale(1.05) !important;
+        }
+        
+        .react-flow__minimap {
+          background: rgba(31, 41, 55, 0.95) !important;
+          border: 1px solid rgba(55, 65, 81, 0.6) !important;
+          backdrop-filter: blur(8px) !important;
+          border-radius: 8px !important;
+        }
+        
+        @keyframes glowPulse {
+          0%, 100% {
+            opacity: 0.6;
+          }
+          50% {
+            opacity: 1;
+          }
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
+      
       <StatusBar
         statusMessage={statusMessage}
         errors={errors}
@@ -714,7 +1068,58 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         onChangeAlgorithm={handleChangeAlgorithm}
         onOptimization={handleOptimizationOpen}
         optimizationEnabled={isOptimizationEnabled}
+        onSaveTemplate={handleSaveTemplate}
+        onBrowseTemplates={handleBrowseTemplates}
       />
+      
+      {/* Professional Loading State */}
+      {(previewLoading || isCreatingNode) && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.3)',
+            backdropFilter: 'blur(2px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999
+          }}
+        >
+          <ProfessionalSpinner 
+            type="dots" 
+            size={48} 
+            color="#ff7c00"
+            message={isCreatingNode ? "Creating node..." : "Generating previews..."}
+          />
+        </div>
+      )}
+      
+      {/* Performance Monitor (dev mode only) */}
+      {process.env.NODE_ENV === 'development' && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 10,
+            left: 10,
+            background: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            padding: 8,
+            borderRadius: 6,
+            fontFamily: 'monospace',
+            fontSize: 11,
+            zIndex: 10000
+          }}
+        >
+          <div>FPS: {metrics.fps}</div>
+          <div>Nodes: {metrics.visibleNodes}/{nodes.length}</div>
+          <div>Quality: {isPerformanceGood ? 'High' : 'Optimized'}</div>
+        </div>
+      )}
+      
       <PreviewModal
         open={previewOpen}
         loading={previewLoading}
@@ -774,6 +1179,20 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         nodes={nodes}
         edges={edges}
         onExport={handleExportSuccess}
+      />
+
+      {/* Template Dialogs */}
+      <SaveTemplateDialog
+        isOpen={saveTemplateDialogOpen}
+        onClose={() => setSaveTemplateDialogOpen(false)}
+        onSave={handleTemplateSave}
+      />
+      
+      <TemplateBrowser
+        isOpen={templateBrowserOpen}
+        onClose={() => setTemplateBrowserOpen(false)}
+        onApplyTemplate={handleTemplateApply}
+        currentAuthor="current-user"
       />
 
       {/* Graph Optimization Components */}
@@ -867,6 +1286,23 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
             📈 Monitor
           </button>
         </div>
+      )}
+      
+      {/* Node Creation Animation Overlay */}
+      {nodeCreationAnimation && (
+        <div
+          className="animate-node-create-overlay"
+          style={{
+            position: 'fixed',
+            pointerEvents: 'none',
+            zIndex: 1000,
+            width: 200,
+            height: 100,
+            background: 'radial-gradient(circle, rgba(255, 124, 0, 0.3), transparent)',
+            borderRadius: 12,
+            animation: 'nodeCreatePulse 0.6s ease-out'
+          }}
+        />
       )}
     </div>
   );

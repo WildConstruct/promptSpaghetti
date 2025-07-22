@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { VariationList } from '../VariationList';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TemplateEditor } from '../TemplateEditor';
 
 export interface SubjectEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Subject specific props can be added here
@@ -33,11 +34,10 @@ const SUBJECT_CATEGORIES: SelectOption[] = [
   { value: 'other', label: 'Other', group: 'Misc' }
 ];
 
-export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
-  
+export   
   // Subject specific fields
   const label = (nodeData.label as string) || '';
+  const template = (nodeData.template as string) || '';
   const variations = (nodeData.variations as string[]) || [];
   const grammaticalNumber = (nodeData.grammaticalNumber as string) || 'both';
   const grammaticalPerson = (nodeData.grammaticalPerson as string) || 'any';
@@ -46,13 +46,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
   const pronouns = (nodeData.pronouns as string[]) || [];
   const contextHints = (nodeData.contextHints as string[]) || [];
 
-  // State for collapsible sections
-  const [basicPropsCollapsed, setBasicPropsCollapsed] = useState(false);
-  const [variationsCollapsed, setVariationsCollapsed] = useState(false);
-  const [grammaticalCollapsed, setGrammaticalCollapsed] = useState(false);
-  const [pronounsCollapsed, setPronounsCollapsed] = useState(true);
-  const [contextHintsCollapsed, setContextHintsCollapsed] = useState(true);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // No state needed - ProgressiveDisclosureSection handles collapse state automatically
 
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
@@ -102,36 +96,87 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
 
   return (
     <div className="subject-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={basicPropsCollapsed}
-        onToggle={() => setBasicPropsCollapsed(!basicPropsCollapsed)}
+      {/* BASIC LEVEL: Essential subject configuration */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core subject configuration and categorization"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="label"
       >
         <TextFieldEditor
-          label="Label"
+          label="Subject Name"
           value={label}
           fieldKey="label"
           zodType={null as any}
           onChange={(value) => handleFieldChange('label', value)}
-          placeholder="Enter subject label..."
+          placeholder="Enter a name for this subject node..."
         />
 
         <SelectEditor
-          label="Category"
+          label="Subject Category"
           value={category}
           fieldKey="category"
           options={SUBJECT_CATEGORIES}
           zodType={null as any}
           onChange={(value) => handleFieldChange('category', value)}
         />
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Subject Variations */}
-      <CollapsibleSection 
-        title="Subject Variations" 
-        collapsed={variationsCollapsed}
-        onToggle={() => setVariationsCollapsed(!variationsCollapsed)}
+      {/* BASIC LEVEL: Template Input */}
+      <ProgressiveDisclosureSection
+        title="Subject Template"
+        level="basic"
+        description="Natural language template for dynamic subject generation"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="template"
+      >
+        <div style={{ marginBottom: 16 }}>
+          <label style={{
+            display: 'block',
+            fontSize: 12,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 6
+          }}>
+            Subject Template (optional)
+          </label>
+          <TemplateEditor
+            value={template}
+            onChange={(value) => handleFieldChange('template', value)}
+            onVariablesChange={(variables) => {
+              // Store extracted variables for potential use in graph execution
+              handleFieldChange('extractedVariables', variables);
+            }}
+            placeholder="Enter natural language template like 'A {creature} in the {setting}' or use the variations list below..."
+            showPreview={true}
+            showRealTimePreview={false}
+            autoComplete={true}
+            nodeType="subject"
+          />
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4,
+            lineHeight: 1.4
+          }}>
+            Use {'{variable}'} syntax for dynamic subjects. Variables will appear as connection ports.
+            <br />
+            Examples: "A {creature} in the {setting}", "The {character} who {description}", "{adjective} {noun}"
+          </div>
+        </div>
+      </ProgressiveDisclosureSection>
+
+      {/* BASIC LEVEL: Subject Variations */}
+      <ProgressiveDisclosureSection
+        title="Subject Variations"
+        level="basic"
+        description="Add different forms and variations of the subject"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="variations"
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
@@ -175,13 +220,16 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
             Include different forms: definite ("the cat"), indefinite ("a cat"), proper nouns ("Fluffy"), etc.
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Grammatical Properties */}
-      <CollapsibleSection 
-        title="Grammatical Properties" 
-        collapsed={grammaticalCollapsed}
-        onToggle={() => setGrammaticalCollapsed(!grammaticalCollapsed)}
+      {/* ADVANCED LEVEL: Grammatical Properties */}
+      <ProgressiveDisclosureSection
+        title="Grammatical Properties"
+        level="advanced"
+        description="Control grammatical number and person for subject-verb agreement"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="grammaticalNumber"
       >
         <SelectEditor
           label="Grammatical Number"
@@ -200,13 +248,16 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
           zodType={null as any}
           onChange={(value) => handleFieldChange('grammaticalPerson', value)}
         />
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Pronouns */}
-      <CollapsibleSection 
-        title="Pronouns" 
-        collapsed={pronounsCollapsed}
-        onToggle={() => setPronounsCollapsed(!pronounsCollapsed)}
+      {/* ADVANCED LEVEL: Pronouns */}
+      <ProgressiveDisclosureSection
+        title="Pronouns"
+        level="advanced"
+        description="Configure pronoun substitution and available pronoun forms"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="pronouns"
       >
         <div style={{ marginBottom: 16 }}>
           <div style={{
@@ -279,13 +330,16 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
             />
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Context Hints */}
-      <CollapsibleSection 
-        title="Context Hints" 
-        collapsed={contextHintsCollapsed}
-        onToggle={() => setContextHintsCollapsed(!contextHintsCollapsed)}
+      {/* ADVANCED LEVEL: Context Hints */}
+      <ProgressiveDisclosureSection
+        title="Context Hints"
+        level="advanced"
+        description="Semantic hints to help with grammatical agreement and context understanding"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="contextHints"
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
@@ -329,13 +383,16 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
             Hints help other nodes determine correct verb forms, adjective agreement, etc.
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+      {/* DEBUG LEVEL: Configuration Preview */}
+      <ProgressiveDisclosureSection
+        title="Configuration Preview"
+        level="debug"
+        description="Preview of subject configuration and debugging information"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="preview"
       >
         <div style={{
           background: '#1a202c',
@@ -403,7 +460,7 @@ export const SubjectEditor: React.FC<SubjectEditorProps> = (props) => {
             </div>
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

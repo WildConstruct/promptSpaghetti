@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { VariationList } from '../VariationList';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TemplateEditor } from '../TemplateEditor';
 
 export interface ActionEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Action specific props can be added here
@@ -39,11 +40,10 @@ const ACTION_TYPES: SelectOption[] = [
   { value: 'linking', label: 'Linking Verb (is, seems)', group: 'Grammar' }
 ];
 
-export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
-  
+export   
   // Action specific fields
   const label = (nodeData.label as string) || '';
+  const template = (nodeData.template as string) || '';
   const variations = (nodeData.variations as string[]) || [];
   const baseForm = (nodeData.baseForm as string) || '';
   const tense = (nodeData.tense as string) || 'present';
@@ -54,13 +54,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
   const adverbVariations = (nodeData.adverbVariations as string[]) || [];
   const contextHints = (nodeData.contextHints as string[]) || [];
 
-  // State for collapsible sections
-  const [basicPropsCollapsed, setBasicPropsCollapsed] = useState(false);
-  const [verbFormsCollapsed, setVerbFormsCollapsed] = useState(false);
-  const [grammaticalCollapsed, setGrammaticalCollapsed] = useState(false);
-  const [intensityCollapsed, setIntensityCollapsed] = useState(true);
-  const [contextHintsCollapsed, setContextHintsCollapsed] = useState(true);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // No state needed - ProgressiveDisclosureSection handles collapse state automatically
 
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
@@ -110,19 +104,22 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
 
   return (
     <div className="action-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={basicPropsCollapsed}
-        onToggle={() => setBasicPropsCollapsed(!basicPropsCollapsed)}
+      {/* BASIC LEVEL: Essential action configuration */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core action configuration and verb type"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="label"
       >
         <TextFieldEditor
-          label="Label"
+          label="Action Name"
           value={label}
           fieldKey="label"
           zodType={null as any}
           onChange={(value) => handleFieldChange('label', value)}
-          placeholder="Enter action label..."
+          placeholder="Enter a name for this action node..."
         />
 
         <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end' }}>
@@ -163,13 +160,61 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
           zodType={null as any}
           onChange={(value) => handleFieldChange('actionType', value)}
         />
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Verb Variations */}
-      <CollapsibleSection 
-        title="Verb Forms" 
-        collapsed={verbFormsCollapsed}
-        onToggle={() => setVerbFormsCollapsed(!verbFormsCollapsed)}
+      {/* BASIC LEVEL: Template Input */}
+      <ProgressiveDisclosureSection
+        title="Action Template"
+        level="basic"
+        description="Natural language template for dynamic action generation"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="template"
+      >
+        <div style={{ marginBottom: 16 }}>
+          <label style={{
+            display: 'block',
+            fontSize: 12,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 6
+          }}>
+            Action Template (optional)
+          </label>
+          <TemplateEditor
+            value={template}
+            onChange={(value) => handleFieldChange('template', value)}
+            onVariablesChange={(variables) => {
+              // Store extracted variables for potential use in graph execution
+              handleFieldChange('extractedVariables', variables);
+            }}
+            placeholder="Enter action template like '{verb} {adverb} through the {location}' or use the verb forms below..."
+            showPreview={true}
+            showRealTimePreview={false}
+            autoComplete={true}
+            nodeType="action"
+          />
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4,
+            lineHeight: 1.4
+          }}>
+            Use {'{variable}'} syntax for dynamic actions. Variables will appear as connection ports.
+            <br />
+            Examples: "{verb} {adverb}", "{character} {action} {object}", "suddenly {movement}"
+          </div>
+        </div>
+      </ProgressiveDisclosureSection>
+
+      {/* BASIC LEVEL: Verb Variations */}
+      <ProgressiveDisclosureSection
+        title="Verb Forms"
+        level="basic"
+        description="Different forms and conjugations of the verb"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="variations"
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
@@ -213,13 +258,16 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
             Include different tenses, persons, and numbers: walk, walks, walked, walking, etc.
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Grammatical Properties */}
-      <CollapsibleSection 
-        title="Grammatical Properties" 
-        collapsed={grammaticalCollapsed}
-        onToggle={() => setGrammaticalCollapsed(!grammaticalCollapsed)}
+      {/* ADVANCED LEVEL: Grammatical Properties */}
+      <ProgressiveDisclosureSection
+        title="Grammatical Properties"
+        level="advanced"
+        description="Control verb tense, mood, and grammatical properties"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="tense"
       >
         <SelectEditor
           label="Primary Tense"
@@ -269,13 +317,16 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
             E.g., "eat" requires an object ("eat food"), while "sleep" doesn't
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Intensity and Adverbs */}
-      <CollapsibleSection 
-        title="Intensity & Modifiers" 
-        collapsed={intensityCollapsed}
-        onToggle={() => setIntensityCollapsed(!intensityCollapsed)}
+      {/* ADVANCED LEVEL: Intensity and Adverbs */}
+      <ProgressiveDisclosureSection
+        title="Intensity & Modifiers"
+        level="advanced"
+        description="Control action intensity and adverb modifiers"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="intensity"
       >
         <div style={{ marginBottom: 16 }}>
           <label style={{ 
@@ -352,13 +403,16 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
             Adverbs that can be randomly selected to modify this action
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Context Hints */}
-      <CollapsibleSection 
-        title="Context Hints" 
-        collapsed={contextHintsCollapsed}
-        onToggle={() => setContextHintsCollapsed(!contextHintsCollapsed)}
+      {/* ADVANCED LEVEL: Context Hints */}
+      <ProgressiveDisclosureSection
+        title="Context Hints"
+        level="advanced"
+        description="Semantic hints for context understanding and action requirements"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="contextHints"
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
@@ -402,13 +456,16 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
             Hints help other nodes understand the context and requirements of this action
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+      {/* DEBUG LEVEL: Configuration Preview */}
+      <ProgressiveDisclosureSection
+        title="Configuration Preview"
+        level="debug"
+        description="Preview of action configuration and debugging information"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="preview"
       >
         <div style={{
           background: '#1a202c',
@@ -481,7 +538,7 @@ export const ActionEditor: React.FC<ActionEditorProps> = (props) => {
             </div>
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

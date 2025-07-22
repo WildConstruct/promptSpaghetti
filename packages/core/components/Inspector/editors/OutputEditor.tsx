@@ -3,7 +3,8 @@ import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+import { TemplateEditor } from '../TemplateEditor';
 
 export interface OutputEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   // Output specific props can be added here
@@ -22,9 +23,7 @@ const OUTPUT_DESTINATIONS: SelectOption[] = [
   { value: 'debug', label: 'Debug Output' }
 ];
 
-export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
-  const { nodeData, onChange } = props;
-  
+export   
   // Output specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';
@@ -33,11 +32,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
   const includeMetadata = !!(nodeData.includeMetadata as boolean);
   const transformations = (nodeData.transformations as string[]) || [];
 
-  // State for collapsible sections
-  const [basicPropsCollapsed, setBasicPropsCollapsed] = useState(false);
-  const [outputConfigCollapsed, setOutputConfigCollapsed] = useState(false);
-  const [postProcessingCollapsed, setPostProcessingCollapsed] = useState(true);
-  const [previewCollapsed, setPreviewCollapsed] = useState(true);
+  // No longer need collapse state - managed by ProgressiveDisclosureSection
 
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
@@ -62,44 +57,67 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
 
   return (
     <div className="output-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={basicPropsCollapsed}
-        onToggle={() => setBasicPropsCollapsed(!basicPropsCollapsed)}
+      {/* BASIC LEVEL: Essential output configuration */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core output configuration for prompt generation"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="template"
       >
         <TextFieldEditor
-          label="Label"
+          label="Output Name"
           value={label}
           fieldKey="label"
           zodType={null as any}
           onChange={(value) => handleFieldChange('label', value)}
-          placeholder="Enter output label..."
+          placeholder="Enter a name for this output..."
         />
 
-        <EnhancedTextAreaEditor
-          label="Output Template"
-          value={template}
-          fieldKey="template"
-          zodType={null as any}
-          onChange={(value) => handleFieldChange('template', value)}
-          placeholder="Enter output template... Use {input} to reference connected node output."
-          rows={4}
-          showWordCount
-          autoResize
-          enableInlineCorrections={true}
-          showCorrectionHighlights={true}
-        />
-      </CollapsibleSection>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{
+            display: 'block',
+            fontSize: 12,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 6
+          }}>
+            Output Template
+          </label>
+          <TemplateEditor
+            value={template}
+            onChange={(value) => handleFieldChange('template', value)}
+            onVariablesChange={(variables) => {
+              handleFieldChange('extractedVariables', variables);
+            }}
+            placeholder="Enter output template... Use {variable} syntax for dynamic content."
+            showPreview={true}
+            showRealTimePreview={true}
+            autoComplete={true}
+            nodeType="output"
+          />
+          <div style={{
+            fontSize: 10,
+            color: '#a0aec0',
+            marginTop: 4
+          }}>
+            Use {'{variable}'} syntax to create dynamic content. Variables will appear as connection ports.
+          </div>
+        </div>
+      </ProgressiveDisclosureSection>
 
-      {/* Output Configuration */}
-      <CollapsibleSection 
-        title="Output Configuration" 
-        collapsed={outputConfigCollapsed}
-        onToggle={() => setOutputConfigCollapsed(!outputConfigCollapsed)}
+      {/* ADVANCED LEVEL: Output format and metadata configuration */}
+      <ProgressiveDisclosureSection
+        title="Output Format & Metadata"
+        level="advanced"
+        description="Control output format, destination, and metadata inclusion"
+        defaultExpanded={false}
+        priority="important"
+        fieldName="format"
       >
         <SelectEditor
-          label="Format"
+          label="Output Format"
           value={format}
           fieldKey="format"
           options={OUTPUT_FORMATS}
@@ -135,7 +153,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
                 cursor: 'pointer'
               }}
             />
-            Include metadata in output
+            Include execution metadata
           </label>
           <div style={{
             fontSize: 10,
@@ -146,13 +164,16 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
             Adds execution metadata like timestamp, node path, and seed information
           </div>
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Transformations */}
-      <CollapsibleSection 
-        title="Post-Processing" 
-        collapsed={postProcessingCollapsed}
-        onToggle={() => setPostProcessingCollapsed(!postProcessingCollapsed)}
+      {/* ADVANCED LEVEL: Post-processing transformations */}
+      <ProgressiveDisclosureSection
+        title="Post-Processing Transformations"
+        level="advanced"
+        description="Text transformations applied to output"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="transformations"
       >
         <div style={{ marginBottom: 12 }}>
           <div style={{
@@ -257,13 +278,16 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
           • encode - URL encode output<br />
           • Custom JavaScript expressions supported
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Preview */}
-      <CollapsibleSection 
-        title="Preview" 
-        collapsed={previewCollapsed}
-        onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+      {/* DEBUG LEVEL: Technical details and preview */}
+      <ProgressiveDisclosureSection
+        title="Technical Details & Preview"
+        level="debug"
+        description="Node debugging information and configuration preview"
+        defaultExpanded={false}
+        priority="standard"
+        fieldName="preview"
       >
         <div style={{
           background: '#1a202c',
@@ -271,12 +295,16 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
           borderRadius: 4,
           padding: 12,
           fontSize: 12,
-          color: '#e2e8f0'
+          color: '#e2e8f0',
+          marginBottom: 16
         }}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
-            Output Configuration:
+            Output Configuration Summary:
           </div>
           
+          <div style={{ marginBottom: 4 }}>
+            <span style={{ color: '#a0aec0' }}>Node ID:</span> {nodeData.id || 'auto-generated'}
+          </div>
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Format:</span> {format}
           </div>
@@ -309,7 +337,31 @@ export const OutputEditor: React.FC<OutputEditorProps> = (props) => {
             </div>
           )}
         </div>
-      </CollapsibleSection>
+
+        {/* Raw Node Data (Debug only) */}
+        <div style={{
+          background: '#0d1117',
+          border: '1px solid #21262d',
+          borderRadius: 4,
+          padding: 12,
+          fontSize: 11,
+          color: '#8b949e'
+        }}>
+          <div style={{ marginBottom: 8, fontWeight: 500, color: '#f0f6fc' }}>
+            Raw Node Data:
+          </div>
+          <pre style={{
+            margin: 0,
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-all',
+            fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+            fontSize: 10,
+            lineHeight: 1.4
+          }}>
+            {JSON.stringify(nodeData, null, 2)}
+          </pre>
+        </div>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

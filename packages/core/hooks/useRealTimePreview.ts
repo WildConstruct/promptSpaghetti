@@ -27,8 +27,15 @@ export interface RealTimePreviewConfig {
   autoRefresh: boolean;
 }
 
+const DEFAULT_CONFIG: RealTimePreviewConfig = {
+  maxVariants: 3,
+  debounceMs: 300,
+  maxExecutionTime: 2000,
+  enablePerformanceTracking: true,
+  autoRefresh: true
+};
 
-export   
+export 
   // State
   const [variants, setVariants] = useState<PreviewVariant[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);

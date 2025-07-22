@@ -7,8 +7,12 @@ export { CollapsibleSection } from './CollapsibleSection';
 export { VariationList } from './VariationList';
 export { SimpleVariationList } from './SimpleVariationList';
 export { WeightSlider } from './WeightSlider';
+export { WeightControlSlider, useWeightControlIntegration } from './WeightControlSlider';
+export { TemplateEditor } from './TemplateEditor';
 
 export type { InspectorPanelProps } from './InspectorPanel';
+export type { WeightControlOption, WeightControlSliderProps } from './WeightControlSlider';
+export type { TemplateEditorProps } from './TemplateEditor';
 export type { PropertiesSectionProps } from './PropertiesSection';
 export type { PreviewSectionProps } from './PreviewSection';
 export type { CollapsibleSectionProps } from './CollapsibleSection';

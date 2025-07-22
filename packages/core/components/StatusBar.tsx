@@ -37,6 +37,9 @@ interface StatusBarProps {
   // Optimization props
   onOptimization?: () => void;
   optimizationEnabled?: boolean;
+  // Template props
+  onSaveTemplate?: () => void;
+  onBrowseTemplates?: () => void;
 }
 
 export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
@@ -180,13 +183,13 @@ export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false)
             cursor: 'pointer' 
           }}
         >
-          Save as JSON
+          Export File
         </button>
 
         {onExportBundle && (
           <button
             onClick={onExportBundle}
-            title="Export as GeneratorBundle format for use with randomizer engine"
+            title="Export as bundle format for use with execution engine"
             style={{ 
               marginRight: 16, 
               padding: '6px 16px', 
@@ -198,7 +201,46 @@ export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false)
               cursor: 'pointer' 
             }}
           >
-            📦 Export Bundle
+            📦 Export for Pipeline
+          </button>
+        )}
+
+        {/* Template Buttons */}
+        {onSaveTemplate && (
+          <button
+            onClick={onSaveTemplate}
+            title="Save current workflow as reusable template"
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: '#8b5cf6', 
+              color: 'white', 
+              border: '1px solid #7c3aed', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            💾 Save Template
+          </button>
+        )}
+
+        {onBrowseTemplates && (
+          <button
+            onClick={onBrowseTemplates}
+            title="Browse and apply workflow templates"
+            style={{ 
+              marginRight: 16, 
+              padding: '6px 16px', 
+              background: '#06b6d4', 
+              color: 'white', 
+              border: '1px solid #0891b2', 
+              borderRadius: 4, 
+              fontWeight: 500, 
+              cursor: 'pointer' 
+            }}
+          >
+            📚 Templates
           </button>
         )}
         
@@ -260,7 +302,7 @@ export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false)
           <button
             data-optimization-button
             onClick={onOptimization}
-            title="Open graph optimization and performance tools"
+            title="Open workflow optimization and performance tools"
             style={{ 
               marginRight: 16, 
               padding: '6px 16px', 
@@ -272,7 +314,7 @@ export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false)
               cursor: 'pointer' 
             }}
           >
-            📊 Optimize
+            ⚡ Optimize
           </button>
         )}
         

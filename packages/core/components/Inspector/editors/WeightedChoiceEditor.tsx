@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { VariationList } from '../VariationList';
-import { CollapsibleSection } from '../CollapsibleSection';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
 import { WeightControlSlider, WeightControlOption, useWeightControlIntegration } from '../WeightControlSlider';
+import { WeightVisualizationPanel } from '../../WeightVisualization';
 import { useRealTimePreview } from '../../../hooks/useRealTimePreview';
 import { useUISettingsStore } from '../../../stores/uiSettingsStore';
 
@@ -20,12 +21,6 @@ export
 
   // UI settings
   const { complexityLevel, shouldShowTechnicalFields } = useUISettingsStore();
-
-  // State for collapsible sections
-  const [commonPropsCollapsed, setCommonPropsCollapsed] = useState(false);
-  const [choicesCollapsed, setChoicesCollapsed] = useState(false);
-  const [weightsCollapsed, setWeightsCollapsed] = useState(false);
-  const [previewCollapsed, setPreviewCollapsed] = useState(complexityLevel === 'basic');
 
   // Convert choices and weights to WeightControlOptions
   const weightOptions: WeightControlOption[] = choices.map((choice, index) => ({
@@ -91,27 +86,33 @@ export
 
   return (
     <div className="weighted-choice-editor">
-      {/* Basic Properties */}
-      <CollapsibleSection 
-        title="Basic Properties" 
-        collapsed={commonPropsCollapsed}
-        onToggle={() => setCommonPropsCollapsed(!commonPropsCollapsed)}
+      {/* BASIC LEVEL: Essential node configuration */}
+      <ProgressiveDisclosureSection
+        title="Essential Settings"
+        level="basic"
+        description="Core node configuration for weighted choices"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="name"
       >
         <TextFieldEditor
-          label="Name"
+          label="Choice Name"
           value={name}
           fieldKey="name"
           zodType={null as any}
           onChange={handleNameChange}
-          placeholder="Enter node name..."
+          placeholder="Enter a name for this weighted choice node..."
         />
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
 
-      {/* Weighted Choices */}
-      <CollapsibleSection 
-        title="Weighted Choices" 
-        collapsed={choicesCollapsed}
-        onToggle={() => setChoicesCollapsed(!choicesCollapsed)}
+      {/* BASIC LEVEL: Choice options configuration */}
+      <ProgressiveDisclosureSection
+        title="Choice Options"
+        level="basic"
+        description="Add and manage the available choices for random selection"
+        defaultExpanded={true}
+        priority="critical"
+        fieldName="choices"
       >
         <div style={{ marginBottom: 12 }}>
           <label style={{ 
@@ -121,7 +122,7 @@ export
             color: '#e2e8f0',
             fontSize: 12
           }}>
-            Choice Options
+            Available Choices
           </label>
           <VariationList
             nodeId={nodeData.id as string}
@@ -147,15 +148,17 @@ export
             allowQuickEntry={true}
           />
         </div>
+      </ProgressiveDisclosureSection>
 
-      </CollapsibleSection>
-
-      {/* Real-Time Weight Controls */}
+      {/* ADVANCED LEVEL: Weight Controls */}
       {choices.length > 0 && (
-        <CollapsibleSection 
-          title="Weight Controls" 
-          collapsed={weightsCollapsed}
-          onToggle={() => setWeightsCollapsed(!weightsCollapsed)}
+        <ProgressiveDisclosureSection
+          title="Weight Controls"
+          level="advanced"
+          description="Fine-tune the probability of each choice being selected"
+          defaultExpanded={false}
+          priority="important"
+          fieldName="weights"
         >
           <WeightControlSlider
             options={weightOptions}
@@ -164,15 +167,49 @@ export
             showPreview={true}
             previewDebounceMs={300}
           />
-        </CollapsibleSection>
+        </ProgressiveDisclosureSection>
       )}
 
-      {/* Real-Time Preview Results */}
+      {/* ADVANCED LEVEL: Weight Distribution Visualization */}
+      {choices.length > 0 && weightOptions.length > 0 && (
+        <ProgressiveDisclosureSection
+          title="Weight Distribution Visualization"
+          level="advanced"
+          description="Visual representation of choice probabilities and statistics"
+          defaultExpanded={false}
+          priority="standard"
+          fieldName="visualization"
+        >
+          <WeightVisualizationPanel
+            options={weightOptions}
+            title="Weight Distribution"
+            defaultChartType="pie"
+            showChartControls={true}
+            showStatistics={true}
+            collapsed={false}
+            onCollapseChange={() => {}}
+            onOptionHover={(option) => {
+              // Optional: Could highlight the option in the weight controls
+              console.log('Hovered option:', option?.text);
+            }}
+            onOptionClick={(option) => {
+              // Optional: Could focus the weight slider for this option
+              console.log('Clicked option:', option.text);
+            }}
+            style={{ marginBottom: 16 }}
+          />
+        </ProgressiveDisclosureSection>
+      )}
+
+      {/* ADVANCED LEVEL: Real-Time Preview Results */}
       {variants.length > 0 && (
-        <CollapsibleSection 
-          title="Real-Time Preview" 
-          collapsed={previewCollapsed}
-          onToggle={() => setPreviewCollapsed(!previewCollapsed)}
+        <ProgressiveDisclosureSection
+          title="Real-Time Preview"
+          level="advanced"
+          description="Live preview of weighted choice results with performance metrics"
+          defaultExpanded={false}
+          priority="standard"
+          fieldName="preview"
         >
           <div style={{ marginBottom: 12 }}>
             <div style={{
@@ -307,16 +344,19 @@ export
               </div>
             )}
           </div>
-        </CollapsibleSection>
+        </ProgressiveDisclosureSection>
       )}
 
-      {/* Legacy Preview (Basic Mode Fallback) */}
+      {/* BASIC LEVEL: Simple Preview (Basic Mode Fallback) */}
       {complexityLevel === 'basic' && variants.length === 0 && (
-        <CollapsibleSection 
-          title="Preview" 
-          collapsed={previewCollapsed}
-          onToggle={() => setPreviewCollapsed(!previewCollapsed)}
-      >
+        <ProgressiveDisclosureSection
+          title="Choice Preview"
+          level="basic"
+          description="Preview of how weighted choices will behave"
+          defaultExpanded={false}
+          priority="standard"
+          fieldName="basicPreview"
+        >
         <div style={{
           background: '#1a202c',
           border: '1px solid #4a5568',
@@ -357,7 +397,7 @@ export
             </div>
           )}
         </div>
-      </CollapsibleSection>
+      </ProgressiveDisclosureSection>
     </div>
   );
 };

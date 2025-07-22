@@ -19,7 +19,7 @@ export interface Era {
   culturalContext?: string[];
 }
 
-// Predefined Historical Eras
+// Predefined Historical Eras  
 export 
 // Material and Content Variations
 export interface Variation {

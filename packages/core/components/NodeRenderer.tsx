@@ -47,18 +47,24 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         }}
         style={{
           cursor: 'pointer',
-          background: '#2d3748',
-          border: selected ? `2px solid ${categoryColor}` : '1px solid #4a5568',
-          borderRadius: 6,
-          minWidth: 160,
-          minHeight: 80,
+          // Professional gradient background inspired by Cinema 4D panels
+          background: `linear-gradient(
+            135deg,
+            var(--bg-tertiary
+          ) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%)`,
+          border: selected 
+            ? `2px solid var(--accent-orange)` 
+            : `1px solid var(--border)`,
+          borderRadius: 'var(--radius-md)',
+          minWidth: 180, // Slightly larger for professional appearance
+          minHeight: 90,
           boxShadow: selected 
-            ? `0 0 0 3px ${categoryColor}20, 0 4px 12px rgba(0,0,0,0.25)` 
-            : '0 2px 8px rgba(0,0,0,0.15)',
+            ? 'var(--shadow-node-selected)'
+            : 'var(--shadow-node)',
           position: 'relative',
           overflow: 'visible',
-          fontFamily: 'system-ui, -apple-system, sans-serif',
-          transition: 'all 0.2s ease',
+          fontFamily: 'var(--font-primary)',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', // Professional easing
           zIndex: 1,
           pointerEvents: 'auto',
           display: 'block',
@@ -69,16 +75,19 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         }}
         onMouseEnter={(e) => {
           if (!selected) {
-            e.currentTarget.style.WebkitTransform = 'translateY(-2px) translateZ(0)';
-            e.currentTarget.style.transform = 'translateY(-2px) translateZ(0)';
-            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+            e.currentTarget.style.WebkitTransform = 'translateY(-3px) translateZ(0)';
+            e.currentTarget.style.transform = 'translateY(-3px) translateZ(0)';
+            e.currentTarget.style.boxShadow = 'var(--shadow-node-hover)';
+            // Subtle brightness increase for professional feel
+            e.currentTarget.style.filter = 'brightness(1.05)';
           }
         }}
         onMouseLeave={(e) => {
           if (!selected) {
             e.currentTarget.style.WebkitTransform = 'translateY(0) translateZ(0)';
             e.currentTarget.style.transform = 'translateY(0) translateZ(0)';
-            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+            e.currentTarget.style.boxShadow = 'var(--shadow-node)';
+            e.currentTarget.style.filter = 'brightness(1)';
           }
         }}
         aria-label={(() => {
@@ -90,33 +99,44 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         {/* Header Section */}
         <div
           style={{
-            background: categoryColor,
-            color: '#fff',
-            padding: '8px 12px',
-            fontSize: 12,
+            // Cinema 4D inspired header gradient
+            background: `linear-gradient(135deg, ${categoryColor} 0%, ${categoryColor}dd 100%)`,
+            color: '#ffffff',
+            padding: 'var(--space-2) var(--space-3)',
+            fontSize: 'var(--font-size-xs)',
             fontWeight: 600,
             display: 'flex',
             alignItems: 'center',
-            gap: 6
+            gap: 'var(--space-2)',
+            borderRadius: 'var(--radius-md) var(--radius-md) 0 0',
+            // Subtle text shadow for better readability
+            textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+            // Inner highlight for professional appearance
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)'
           }}
         >
-          <span style={{ fontSize: 14 }}>
+          <span style={{ 
+            fontSize: 16, 
+            filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))' 
+          }}>
             {typeof nodeMeta.icon === 'string' ? nodeMeta.icon : '🔧'}
           </span>
-          <span>{nodeMeta.label}</span>
+          <span style={{ letterSpacing: '0.01em' }}>{nodeMeta.label}</span>
           {hasVariations && (
             <div
               style={{
                 marginLeft: 'auto',
-                width: 18,
-                height: 18,
-                backgroundColor: 'rgba(255,255,255,0.2)',
+                width: 20,
+                height: 20,
+                backgroundColor: 'rgba(255,255,255,0.25)',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 10,
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
+                transition: 'all 0.2s ease'
               }}
               title={`${data.variations.length} variations`}
             >
@@ -126,61 +146,96 @@ export const NodeRenderer = memo<NodeRendererProps>(({
         </div>
 
         {/* Content Section */}
-        <div style={{ padding: '10px 12px', color: '#e2e8f0', minHeight: '40px' }}>
+        <div style={{ 
+          padding: 'var(--space-3)',
+          color: 'var(--text-primary)', 
+          minHeight: '50px',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)'
+        }}>
           {/* Node Title */}
           <div style={{ 
             fontWeight: 600, 
-            fontSize: 14, 
-            marginBottom: properties.length > 0 ? 6 : 0,
-            color: '#f7fafc',
-            lineHeight: 1.2
+            fontSize: 'var(--font-size-base)', 
+            marginBottom: properties.length > 0 ? 'var(--space-2)' : 0,
+            color: 'var(--text-primary)',
+            lineHeight: 1.3,
+            // Subtle glow for selected state
+            ...(selected && {
+              textShadow: '0 0 8px var(--accent-orange)40',
+            })
           }}>
             {data?.label || nodeMeta.label || nodeType || id}
           </div>
           
           {/* Properties */}
           {properties.length > 0 && (
-            <div style={{ fontSize: 11, color: '#a0aec0', lineHeight: 1.4 }}>
+            <div style={{ 
+              fontSize: 'var(--font-size-xs)', 
+              color: 'var(--text-secondary)', 
+              lineHeight: 1.4,
+              fontFamily: 'var(--font-mono)' // Monospace for technical properties
+            }}>
               {properties.map(([k, v], idx) => (
-                <div key={k} style={{ marginBottom: idx < properties.length - 1 ? 2 : 0 }}>
-                  <span style={{ color: '#cbd5e0', fontWeight: 500 }}>{k}:</span>{' '}
-                  <span>{String(v).length > 20 ? String(v).slice(0, 20) + '...' : String(v)}</span>
+                <div key={k} style={{ 
+                  marginBottom: idx < properties.length - 1 ? '3px' : 0,
+                  opacity: 0.8
+                }}>
+                  <span style={{ 
+                    color: 'var(--text-tertiary)', 
+                    fontWeight: 500 
+                  }}>{k}:</span>{' '}
+                  <span style={{ color: 'var(--text-secondary)' }}>
+                    {String(v).length > 22 ? String(v).slice(0, 22) + '…' : String(v)}
+                  </span>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Input Handle - React Flow connection point */}
+        {/* Input Handle - Professional styling */}
         <Handle
           type="target"
           position={Position.Left}
           id="target"
           style={{
-            width: 12,
-            height: 12,
+            width: 14,
+            height: 14,
             borderRadius: '50%',
-            background: '#4a5568',
-            border: '2px solid #2d3748',
+            background: 'var(--border)',
+            border: '2px solid var(--bg-secondary)',
             cursor: 'crosshair',
-            zIndex: 10
+            zIndex: 10,
+            transition: 'all 0.2s ease',
+            boxShadow: 'var(--shadow-sm)',
+            '&:hover': {
+              background: 'var(--border-hover)',
+              transform: 'scale(1.1)',
+              boxShadow: 'var(--shadow-md)'
+            }
           }}
           isConnectable={true}
         />
 
-        {/* Output Handle - React Flow connection point */}
+        {/* Output Handle - Professional styling */}
         <Handle
           type="source"
           position={Position.Right}
           id="source"
           style={{
-            width: 12,
-            height: 12,
+            width: 14,
+            height: 14,
             borderRadius: '50%',
             background: categoryColor,
-            border: '2px solid #2d3748',
+            border: '2px solid var(--bg-secondary)',
             cursor: 'crosshair',
-            zIndex: 10
+            zIndex: 10,
+            transition: 'all 0.2s ease',
+            boxShadow: 'var(--shadow-sm)',
+            '&:hover': {
+              transform: 'scale(1.1)',
+              boxShadow: `var(--shadow-md), 0 0 12px ${categoryColor}40`
+            }
           }}
           isConnectable={true}
         />
@@ -188,24 +243,38 @@ export const NodeRenderer = memo<NodeRendererProps>(({
     );
   } catch (error) {
     console.error('NodeRenderer error:', error, 'Props:', { id, data });
-    // Fallback render for error cases
+    // Professional error state
     return (
       <div
         style={{
           cursor: 'pointer',
-          background: '#2d3748',
-          border: '1px solid #e53e3e',
-          borderRadius: 6,
-          minWidth: 160,
-          minHeight: 80,
-          padding: 12,
-          color: '#e2e8f0',
+          background: `linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%)`,
+          border: '1px solid var(--accent-red)',
+          borderRadius: 'var(--radius-md)',
+          minWidth: 180,
+          minHeight: 90,
+          padding: 'var(--space-3)',
+          color: 'var(--text-primary)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          fontFamily: 'var(--font-primary)',
+          boxShadow: 'var(--shadow-md)',
+          textAlign: 'center',
         }}
       >
-        Error: {data?.nodeType || data?.type || 'Unknown'}
+        <div>
+          <div style={{ 
+            fontSize: 'var(--font-size-lg)', 
+            marginBottom: 'var(--space-2)',
+            color: 'var(--accent-red)' 
+          }}>
+            ⚠️
+          </div>
+          <div style={{ fontSize: 'var(--font-size-sm)' }}>
+            Error: {data?.nodeType || data?.type || 'Unknown'}
+          </div>
+        </div>
       </div>
     );
   }

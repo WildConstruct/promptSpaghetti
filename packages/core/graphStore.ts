@@ -10,6 +10,13 @@ import {
 } from './utils/nodeDataUtils';
 import { ProjectManager, ProjectMetadata, ProjectSettings, SaveProjectOptions } from './projectManager';
 import { ServerProjectManager } from './serverProjectManager';
+import { 
+  Template, 
+  TemplateSaveData, 
+  TemplateInstantiationOptions, 
+  GraphData 
+} from './types/TemplateTypes';
+import { templateService } from './services/TemplateService';
 
 export interface GraphState {
   nodes: Node[];
@@ -58,6 +65,17 @@ export interface GraphState {
   // Graph state operations
   getGraphData: () => { nodes: Node[]; edges: Edge[] };
   loadGraphData: (nodes: Node[], edges: Edge[]) => void;
+  
+  // Template operations
+  saveAsTemplate: (
+    templateData: TemplateSaveData,
+    author: string
+  ) => Promise<{ success: boolean; error?: string; template?: Template }>;
+  applyTemplate: (
+    templateId: string,
+    options: TemplateInstantiationOptions
+  ) => Promise<{ success: boolean; error?: string }>;
+  getTemplateCompatibleData: () => GraphData;
 }
 
 export       if (!nodeToClone) return state;
@@ -320,5 +338,82 @@ export       if (!nodeToClone) return state;
         error: error instanceof Error ? error.message : 'Unknown error'
       };
     }
+  },
+
+  // Template operations implementation
+  saveAsTemplate: async (templateData: TemplateSaveData, author: string) => {
+    const state = get();
+    try {
+      const template = await templateService.createFromGraph(
+        state.nodes,
+        state.edges,
+        templateData,
+        author
+      );
+      
+      return {
+        success: true,
+        template
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to save template'
+      };
+    }
+  },
+
+  applyTemplate: async (templateId: string, options: TemplateInstantiationOptions) => {
+    try {
+      const graphData = await templateService.instantiateTemplate(templateId, options);
+      
+      if (options.mergeWithCurrent) {
+        // Merge with current graph
+        const state = get();
+        set({
+          nodes: [...state.nodes, ...graphData.nodes],
+          edges: [...state.edges, ...graphData.edges],
+          hasUnsavedChanges: true
+        });
+      } else {
+        // Replace current graph
+        set({
+          nodes: graphData.nodes,
+          edges: graphData.edges,
+          hasUnsavedChanges: true
+        });
+      }
+      
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to apply template'
+      };
+    }
+  },
+
+  getTemplateCompatibleData: () => {
+    const state = get();
+    return {
+      nodes: state.nodes,
+      edges: state.edges,
+      annotations: {
+        stickyNotes: [], // Will be populated when sticky notes system is implemented
+        nodeLabels: Object.fromEntries(
+          state.nodes.map(node => [node.id, node.data?.label || node.id])
+        ),
+        regionGroups: [], // Will be populated when region groups system is implemented
+        connectionLabels: Object.fromEntries(
+          state.edges.filter(edge => edge.label).map(edge => [edge.id, edge.label!])
+        ),
+        metadata: {
+          author: 'system',
+          created: new Date().toISOString(),
+          modified: new Date().toISOString(),
+          version: '1.0.0'
+        }
+      }
+    };
   },
 }));
