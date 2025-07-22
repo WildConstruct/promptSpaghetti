@@ -480,4 +480,39 @@ export class MedievalDemoDatabase {
 /**
  * Medieval historical constraints specific to the demo
  */
+export const MEDIEVAL_DEMO_CONSTRAINTS = [
+  {
+    id: 'medieval-clothing-accuracy',
+    rule: 'era_compatibility',
+    eras: [
+      { name: 'High Medieval', period: { start: 1000, end: 1300 }, region: ['Europe'], accuracy: 'high' as const },
+      { name: 'Late Medieval', period: { start: 1300, end: 1500 }, region: ['Europe'], accuracy: 'high' as const }
+    ],
+    enforcement: 'strict' as const,
+    message: 'Clothing items should match medieval period accuracy',
+    historical_basis: 'Medieval clothing was highly regulated by sumptuary laws and social class distinctions'
+  },
+  {
+    id: 'medieval-material-availability',
+    rule: 'material_availability',
+    eras: [
+      { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' as const }
+    ],
+    enforcement: 'warning' as const,
+    message: 'Some materials may have been rare or unavailable in medieval Europe',
+    historical_basis: 'Trade routes and material availability varied significantly in medieval times'
+  },
+  {
+    id: 'social-class-restrictions',
+    rule: 'social_class_appropriateness',
+    eras: [
+      { name: 'Medieval Period', period: { start: 1000, end: 1500 }, region: ['Europe'], accuracy: 'high' as const }
+    ],
+    social_classes: ['peasant', 'artisan', 'merchant', 'noble'] as const,
+    enforcement: 'suggestion' as const,
+    message: 'Consider social class appropriateness for clothing and accessories',
+    historical_basis: 'Medieval society had strict hierarchies reflected in clothing and possessions'
+  }
+];
+
 export default MedievalDemoDatabase;

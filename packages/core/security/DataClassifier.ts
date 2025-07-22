@@ -5,7 +5,24 @@
  * and security level assignment based on content, context, and compliance requirements.
  */
 
-import { EventEmitter } from 'events';
+// Browser-compatible event emitter
+class BrowserEventEmitter {
+  private events: Map<string, Function[]> = new Map();
+  
+  on(event: string, listener: Function) {
+    if (!this.events.has(event)) {
+      this.events.set(event, []);
+    }
+    this.events.get(event)!.push(listener);
+  }
+  
+  emit(event: string, ...args: any[]) {
+    const listeners = this.events.get(event);
+    if (listeners) {
+      listeners.forEach(listener => listener(...args));
+    }
+  }
+}
 
 // Classification Levels
 export enum ClassificationLevel {
@@ -86,7 +103,7 @@ export interface ClassificationMetadata {
 /**
  * Comprehensive data classification engine
  */
-export class DataClassifier extends EventEmitter {
+export class DataClassifier extends BrowserEventEmitter {
   private rules: Map<string, ClassificationRule> = new Map();
   private classifications: Map<string, ClassificationResult & ClassificationMetadata> = new Map();
   
