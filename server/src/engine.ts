@@ -54,14 +54,14 @@ let analyticsDAO: AnalyticsDAO | null = null;
  * Process template variables and substitute them with context values
  * Backward compatible - returns original template if processing fails
  */
-function processTemplate(template: string, ctx: ExecutionContext): string {
+function processTemplateVariables(template: string, executionContext: ExecutionContext): string {
   // Safety checks for backward compatibility
   if (!template || typeof template !== 'string' || !template.includes('{')) {
     return template;
   }
   
   // Ensure context is valid
-  if (!ctx || !ctx.variables) {
+  if (!executionContext || !executionContext.variables) {
     return template;
   }
   
@@ -80,7 +80,7 @@ function processTemplate(template: string, ctx: ExecutionContext): string {
     for (const variable of parseResult.variables) {
       if (variable.isValid && variable.name) {
         // Get value from execution context
-        const value = ctx.variables[variable.name];
+        const value = executionContext.variables[variable.name];
         if (value !== undefined && value !== null) {
           variableValues[variable.name] = String(value);
           hasReplacements = true;
@@ -189,7 +189,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
     const hasAdvancedNodes = graph.nodes.some(node => isAdvancedNodeType(node.type));
     
     // Create appropriate execution context
-    const ctx = hasAdvancedNodes 
+    const executionContext = hasAdvancedNodes 
       ? AdvancedExecutionUtils.enhanceContext({ 
         variables: {}, 
         seed: graph.seed ?? Date.now() 
@@ -249,8 +249,8 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         }
 
         // Instantiate runtime node per type
-        const runtime = createRuntime(node, resolvedInputs, ctx);
-        const result = await runtime.run(ctx as any); // Cast needed for context compatibility
+        const runtimeNode = createRuntimeNode(node, resolvedInputs, executionContext);
+        const result = await runtimeNode.run(executionContext as any); // Cast needed for context compatibility
         memo.set(nodeId, result);
 
         // Record successful node execution
@@ -454,7 +454,7 @@ function isAdvancedNodeType(nodeType: string): boolean {
   return false;
 }
 
-function createRuntime(node: Node, resolvedInputs: any[], ctx: ExecutionContext): RuntimeNode<any> {
+function createRuntimeNode(node: Node, resolvedInputs: any[], executionContext: ExecutionContext): RuntimeNode<any> {
   switch (node.type) {
   // Basic Epic 3 nodes
   case 'WeightedChoice':
@@ -465,7 +465,7 @@ function createRuntime(node: Node, resolvedInputs: any[], ctx: ExecutionContext)
     // Process template if available, otherwise use first input (backward compatibility)
     let output = resolvedInputs[0];
     if (node.template && node.template.trim()) {
-      const processedTemplate = processTemplate(node.template, ctx);
+      const processedTemplate = processTemplateVariables(node.template, executionContext);
       // Only use processed template if it's different and valid
       output = processedTemplate || output;
     }
@@ -477,7 +477,7 @@ function createRuntime(node: Node, resolvedInputs: any[], ctx: ExecutionContext)
     // Process template if available, otherwise use node.value (backward compatibility)
     let value = node.value;
     if (node.template && node.template.trim()) {
-      const processedTemplate = processTemplate(node.template, ctx);
+      const processedTemplate = processTemplateVariables(node.template, executionContext);
       // Only use processed template if it's different and valid
       value = processedTemplate || value;
     }
@@ -554,7 +554,7 @@ function createRuntime(node: Node, resolvedInputs: any[], ctx: ExecutionContext)
     
   default:
     // Epic 8.4 Extension System - Try to find extension nodes
-    const extensionNode = tryCreateExtensionNode(node, resolvedInputs, ctx);
+    const extensionNode = tryCreateExtensionNode(node, resolvedInputs, executionContext);
     if (extensionNode) {
       return extensionNode;
     }
@@ -658,7 +658,7 @@ function extractRandomChoiceInfo(node: Node, result: any, resolvedInputs: any[])
 /**
  * Try to create a runtime node from an extension
  */
-function tryCreateExtensionNode(node: Node, resolvedInputs: any[], ctx: ExecutionContext): RuntimeNode<any> | null {
+function tryCreateExtensionNode(node: Node, resolvedInputs: any[], executionContext: ExecutionContext): RuntimeNode<any> | null {
   try {
     // Get all active node extensions
     const extensions = ExtensionLifecycleManager.getActiveExtensions();

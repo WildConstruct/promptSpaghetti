@@ -237,15 +237,15 @@ export class GraphParser {
      * Generate detailed error report
      */
     generateErrorReport(result) {
-        let report = `# Parser Error Report\n\n`;
+        let report = '# Parser Error Report\n\n';
         if (result.success) {
-            report += `✅ **Parsing Successful**\n`;
+            report += '✅ **Parsing Successful**\n';
             report += `- Nodes: ${result.metadata.nodeCount}\n`;
             report += `- Edges: ${result.metadata.edgeCount}\n`;
             report += `- Parse Time: ${result.metadata.parseTime}ms\n\n`;
         }
         else {
-            report += `❌ **Parsing Failed**\n\n`;
+            report += '❌ **Parsing Failed**\n\n';
         }
         if (result.errors.length > 0) {
             report += `## Errors (${result.errors.length})\n\n`;

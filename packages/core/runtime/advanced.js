@@ -1,6 +1,6 @@
 // packages/core/runtime/advanced.ts
 // Advanced runtime node base classes and enhanced execution context for Epic 7
-import { RuntimeNode } from './index';
+import { RuntimeNode } from './types';
 import seedrandom from 'seedrandom';
 /**
  * Abstract base class for all advanced rule nodes in Epic 7

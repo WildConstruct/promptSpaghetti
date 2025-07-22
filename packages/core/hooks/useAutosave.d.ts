@@ -1,4 +1,4 @@
-import { Edge, Node } from "reactflow";
+import { Edge, Node } from 'reactflow';
 interface UseAutosaveProps {
     nodes: Node[];
     edges: Edge[];
@@ -17,6 +17,6 @@ interface UseAutosaveReturn {
         edges: Edge[];
     } | null) => void;
 }
-export declare const useAutosave: ({ nodes, edges, intervalMs, storageKey, }: UseAutosaveProps) => UseAutosaveReturn;
+export declare const useAutosave: ({ nodes, edges, intervalMs, storageKey }: UseAutosaveProps) => UseAutosaveReturn;
 export {};
 //# sourceMappingURL=useAutosave.d.ts.map

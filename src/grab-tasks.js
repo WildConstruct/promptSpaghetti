@@ -125,11 +125,11 @@ async function grabTasksSafely() {
     // Optional debug output (uncomment for troubleshooting)
     // if (unassignedTasks.length > 0) {
     //   console.log(`\n🔍 DEBUG: Found ${unassignedTasks.length} matching tasks:`);
-    //   unassignedTasks.slice(0, 3).forEach(task => {
+    //   unassignedTasks.slice(0, 5).forEach(task => {
     //     console.log(`  - ${task.id}: state=${task.state}, tags=${JSON.stringify(task.tags)}, story=${task.story}`);
     //   });
-    //   if (unassignedTasks.length > 3) {
-    //     console.log(`  ... and ${unassignedTasks.length - 3} more`);
+    //   if (unassignedTasks.length > 5) {
+    //     console.log(`  ... and ${unassignedTasks.length - 5} more`);
     //   }
     //   console.log('');
     // }

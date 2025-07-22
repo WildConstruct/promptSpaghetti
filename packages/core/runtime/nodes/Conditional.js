@@ -4,6 +4,7 @@ import { AdvancedRuntimeNode } from '../advanced';
 import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
 import { SafeExpressionEvaluator } from '../expression-evaluator';
 import { securityAudit, SecuritySeverity, SecurityEventCategory } from '../security-audit-logger';
+import { ErrorFactory } from '../../errors/ErrorFactory';
 /**
  * Advanced conditional node with expression-based branching logic
  * Supports multiple conditions, variable access, and custom functions
@@ -89,7 +90,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
                     }
                     // In non-strict mode, treat evaluation errors as false
                     if (this.conditionalConfig.strictMode) {
-                        throw new Error(`Condition evaluation failed: ${branch.condition} - ${error}`);
+                        throw ErrorFactory.createNodeExecutionError(this.id || 'conditional', 'condition_evaluation', `Condition evaluation failed: ${branch.condition}`, error, { operation: 'evaluate_condition' });
                     }
                     // Continue to next condition
                 }
@@ -169,7 +170,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
     evaluateCondition(expression, ctx) {
         try {
             // Log expression evaluation start
-            securityAudit.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, `Evaluating conditional expression`, {
+            securityAudit.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Evaluating conditional expression', {
                 nodeId: this.id,
                 expression,
                 strictMode: this.conditionalConfig.strictMode
@@ -191,7 +192,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
                 throw error;
             }
             // In non-strict mode, log the error for debugging but return false
-            securityAudit.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.EXPRESSION_VALIDATION, `Expression evaluation failed in non-strict mode`, {
+            securityAudit.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.EXPRESSION_VALIDATION, 'Expression evaluation failed in non-strict mode', {
                 nodeId: this.id,
                 expression,
                 error: errorMessage
@@ -218,7 +219,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
                 return new RegExp(pattern).test(String(str));
             }
             catch (e) {
-                throw new Error(`Invalid regex pattern: ${pattern}`);
+                throw ErrorFactory.createValidationError('pattern', pattern, 'valid regex pattern', { operation: 'regex_validation' });
             }
         };
         return evalContext;
@@ -234,7 +235,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
             return SafeExpressionEvaluator.evaluate(expression, context);
         }
         catch (error) {
-            throw new Error(`Expression evaluation failed: ${expression} - ${error}`);
+            throw ErrorFactory.createNodeExecutionError('expression-evaluator', 'expression_evaluation', `Expression evaluation failed: ${expression}`, error, { operation: 'evaluate_expression' });
         }
     }
     /**
@@ -255,7 +256,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
             /window\./gi,
             /document\./gi
         ];
-        let sanitized = expression;
+        const sanitized = expression;
         for (const pattern of dangerous) {
             if (pattern.test(sanitized)) {
                 // Log the dangerous pattern detection
@@ -267,7 +268,7 @@ export class ConditionalNode extends AdvancedRuntimeNode {
                         patternIndex: dangerous.indexOf(pattern)
                     }
                 });
-                throw new Error(`Dangerous pattern detected in expression: ${expression}`);
+                throw ErrorFactory.createValidationError('expression', expression, 'safe expression without dangerous patterns', { operation: 'security_validation' });
             }
         }
         return sanitized;
@@ -282,26 +283,7 @@ export function createConditionalNode(id, branches, defaultOutput, config) {
 /**
  * Common condition patterns for easy setup
  */
-export const ConditionPresets = {
-    /** Simple variable comparison */
-    greaterThan: (variable, value) => `${variable} > ${value}`,
-    lessThan: (variable, value) => `${variable} < ${value}`,
-    equals: (variable, value) => `${variable} === ${JSON.stringify(value)}`,
-    /** Variable existence checks */
-    hasVariable: (variable) => `hasVariable('${variable}')`,
-    isEmpty: (variable) => `isEmpty(${variable})`,
-    /** String operations */
-    startsWith: (variable, prefix) => `startsWith(${variable}, '${prefix}')`,
-    contains: (variable, substring) => `${variable}.includes('${substring}')`,
-    matches: (variable, pattern) => `matches(${variable}, '${pattern}')`,
-    /** Array operations */
-    arrayIncludes: (array, item) => `includes(${array}, ${JSON.stringify(item)})`,
-    arrayLength: (array, length) => `length(${array}) === ${length}`,
-    /** Logical combinations */
-    and: (...conditions) => `(${conditions.join(') && (')})`,
-    or: (...conditions) => `(${conditions.join(') || (')})`,
-    not: (condition) => `!(${condition})`
-};
+export 
 /**
  * Utility for building complex conditional branches
  */

@@ -1,7 +1,7 @@
 // Epic 12 - LLM Agent Randomizer System
 // Main exports for the complete LLM randomizer system
 // Story 12.1 - Serialization Format Design
-export * from './serialization';
+export { GraphSerializer, serializeGraph, createDefaultMetadata } from './serialization/serializer';
 // Story 12.2 - LLM Agent Script Development  
 export * from './agents';
 // Story 12.3 - Parser Implementation

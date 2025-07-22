@@ -97,7 +97,8 @@ export interface RefundProcessingDashboardProps {
   className?: string;
 }
 
-export   const [loading, setLoading] = useState(false);
+export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps> = ({ className }) => {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   // Data state

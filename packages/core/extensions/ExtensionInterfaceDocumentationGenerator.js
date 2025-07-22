@@ -41,40 +41,40 @@ export class ExtensionInterfaceDocumentationGenerator {
         documentation += `**Description**: ${extension.description}\n\n`;
         // Dependencies
         if (extension.dependencies && extension.dependencies.length > 0) {
-            documentation += `## Dependencies\n\n`;
+            documentation += '## Dependencies\n\n';
             for (const dep of extension.dependencies) {
                 documentation += `- ${dep}\n`;
             }
-            documentation += `\n`;
+            documentation += '\n';
         }
         // Permissions
         if (extension.permissions && extension.permissions.length > 0) {
-            documentation += `## Permissions\n\n`;
+            documentation += '## Permissions\n\n';
             for (const perm of extension.permissions) {
                 documentation += `- ${perm}\n`;
             }
-            documentation += `\n`;
+            documentation += '\n';
         }
         // Interface validation
-        documentation += `## Interface Validation\n\n`;
+        documentation += '## Interface Validation\n\n';
         const validation = extensionInterfaceValidator.generateValidationReport(extension);
         documentation += `**Overall Status**: ${validation.overallValid ? '✅ Valid' : '❌ Invalid'}\n\n`;
         for (const validationResult of validation.validations) {
             documentation += `### ${validationResult.name}\n\n`;
             documentation += `**Status**: ${validationResult.valid ? '✅ Valid' : '❌ Invalid'}\n\n`;
             if (validationResult.errors.length > 0) {
-                documentation += `**Errors**:\n`;
+                documentation += '**Errors**:\n';
                 for (const error of validationResult.errors) {
                     documentation += `- ${error}\n`;
                 }
-                documentation += `\n`;
+                documentation += '\n';
             }
             if (validationResult.warnings.length > 0) {
-                documentation += `**Warnings**:\n`;
+                documentation += '**Warnings**:\n';
                 for (const warning of validationResult.warnings) {
                     documentation += `- ${warning}\n`;
                 }
-                documentation += `\n`;
+                documentation += '\n';
             }
         }
         // Base interface
@@ -91,15 +91,15 @@ export class ExtensionInterfaceDocumentationGenerator {
      * Generate API reference documentation
      */
     generateAPIReference() {
-        let documentation = `# Extension Interface API Reference\n\n`;
-        documentation += `## Table of Contents\n\n`;
-        documentation += `1. [Base Extension Interface](#base-extension-interface)\n`;
-        documentation += `2. [Node Extension Interface](#node-extension-interface)\n`;
-        documentation += `3. [UI Extension Interface](#ui-extension-interface)\n`;
-        documentation += `4. [Transform Extension Interface](#transform-extension-interface)\n`;
-        documentation += `5. [Storage Extension Interface](#storage-extension-interface)\n`;
-        documentation += `6. [Extension Context](#extension-context)\n`;
-        documentation += `7. [Validation Results](#validation-results)\n\n`;
+        let documentation = '# Extension Interface API Reference\n\n';
+        documentation += '## Table of Contents\n\n';
+        documentation += '1. [Base Extension Interface](#base-extension-interface)\n';
+        documentation += '2. [Node Extension Interface](#node-extension-interface)\n';
+        documentation += '3. [UI Extension Interface](#ui-extension-interface)\n';
+        documentation += '4. [Transform Extension Interface](#transform-extension-interface)\n';
+        documentation += '5. [Storage Extension Interface](#storage-extension-interface)\n';
+        documentation += '6. [Extension Context](#extension-context)\n';
+        documentation += '7. [Validation Results](#validation-results)\n\n';
         // Base interface
         documentation += this.generateBaseInterfaceDocumentation();
         // Type-specific interfaces
@@ -116,58 +116,58 @@ export class ExtensionInterfaceDocumentationGenerator {
      * Generate developer guide
      */
     generateDeveloperGuide() {
-        let guide = `# Extension Interface Developer Guide\n\n`;
-        guide += `## Introduction\n\n`;
-        guide += `This guide covers the interface requirements for developing extensions for the Prompt Spaghetti system.\n\n`;
-        guide += `## Getting Started\n\n`;
-        guide += `### 1. Choose Your Extension Type\n\n`;
-        guide += `The system supports four types of extensions:\n\n`;
+        let guide = '# Extension Interface Developer Guide\n\n';
+        guide += '## Introduction\n\n';
+        guide += 'This guide covers the interface requirements for developing extensions for the Prompt Spaghetti system.\n\n';
+        guide += '## Getting Started\n\n';
+        guide += '### 1. Choose Your Extension Type\n\n';
+        guide += 'The system supports four types of extensions:\n\n';
         for (const [type, info] of Object.entries(ExtensionTypeInfo)) {
             guide += `#### ${info.name}\n\n`;
             guide += `${info.description}\n\n`;
             guide += `**Capabilities**: ${info.capabilities.join(', ')}\n\n`;
         }
-        guide += `### 2. Implement Base Interface\n\n`;
-        guide += `All extensions must implement the BaseExtension interface:\n\n`;
+        guide += '### 2. Implement Base Interface\n\n';
+        guide += 'All extensions must implement the BaseExtension interface:\n\n';
         guide += this.generateBaseInterfaceDocumentation();
-        guide += `### 3. Implement Type-Specific Interface\n\n`;
-        guide += `Based on your extension type, implement the appropriate interface:\n\n`;
+        guide += '### 3. Implement Type-Specific Interface\n\n';
+        guide += 'Based on your extension type, implement the appropriate interface:\n\n';
         for (const type of ['node', 'ui', 'transform', 'storage']) {
             guide += `#### ${type.charAt(0).toUpperCase() + type.slice(1)} Extension\n\n`;
             guide += this.generateTypeSpecificDocumentation(type);
         }
-        guide += `### 4. Validation and Testing\n\n`;
-        guide += `Use the provided validation tools to ensure your extension meets the interface requirements:\n\n`;
-        guide += `\`\`\`typescript\n`;
-        guide += `import { extensionInterfaceValidator } from '@prompt-spaghetti/core/extensions';\n\n`;
-        guide += `const result = await extensionInterfaceValidator.validateExtension(myExtension);\n`;
-        guide += `if (!result.valid) {\n`;
-        guide += `  console.error('Validation errors:', result.errors);\n`;
-        guide += `}\n`;
-        guide += `\`\`\`\n\n`;
-        guide += `### 5. Development Tools\n\n`;
-        guide += `The system provides development tools to help you create extensions:\n\n`;
-        guide += `\`\`\`typescript\n`;
-        guide += `import { extensionDevelopmentKit } from '@prompt-spaghetti/core/extensions';\n\n`;
-        guide += `// Create extension skeleton\n`;
-        guide += `const skeleton = extensionDevelopmentKit.createExtensionSkeleton({\n`;
-        guide += `  id: 'my-extension',\n`;
-        guide += `  name: 'My Extension',\n`;
-        guide += `  type: 'node',\n`;
-        guide += `  author: 'Your Name',\n`;
-        guide += `  description: 'Extension description'\n`;
-        guide += `});\n\n`;
-        guide += `// Test extension lifecycle\n`;
-        guide += `const testResult = await extensionDevelopmentKit.testExtensionLifecycle(myExtension);\n`;
-        guide += `\`\`\`\n\n`;
+        guide += '### 4. Validation and Testing\n\n';
+        guide += 'Use the provided validation tools to ensure your extension meets the interface requirements:\n\n';
+        guide += '```typescript\n';
+        guide += 'import { extensionInterfaceValidator } from \'@prompt-spaghetti/core/extensions\';\n\n';
+        guide += 'const result = await extensionInterfaceValidator.validateExtension(myExtension);\n';
+        guide += 'if (!result.valid) {\n';
+        guide += '  console.error(\'Validation errors:\', result.errors);\n';
+        guide += '}\n';
+        guide += '```\n\n';
+        guide += '### 5. Development Tools\n\n';
+        guide += 'The system provides development tools to help you create extensions:\n\n';
+        guide += '```typescript\n';
+        guide += 'import { extensionDevelopmentKit } from \'@prompt-spaghetti/core/extensions\';\n\n';
+        guide += '// Create extension skeleton\n';
+        guide += 'const skeleton = extensionDevelopmentKit.createExtensionSkeleton({\n';
+        guide += '  id: \'my-extension\',\n';
+        guide += '  name: \'My Extension\',\n';
+        guide += '  type: \'node\',\n';
+        guide += '  author: \'Your Name\',\n';
+        guide += '  description: \'Extension description\'\n';
+        guide += '});\n\n';
+        guide += '// Test extension lifecycle\n';
+        guide += 'const testResult = await extensionDevelopmentKit.testExtensionLifecycle(myExtension);\n';
+        guide += '```\n\n';
         return guide;
     }
     /**
      * Generate troubleshooting guide
      */
     generateTroubleshootingGuide() {
-        let guide = `# Extension Interface Troubleshooting Guide\n\n`;
-        guide += `## Common Issues\n\n`;
+        let guide = '# Extension Interface Troubleshooting Guide\n\n';
+        guide += '## Common Issues\n\n';
         const commonIssues = [
             {
                 issue: 'Extension validation fails',
@@ -215,50 +215,50 @@ export class ExtensionInterfaceDocumentationGenerator {
         ];
         for (const problem of commonIssues) {
             guide += `### ${problem.issue}\n\n`;
-            guide += `**Common Causes**:\n`;
+            guide += '**Common Causes**:\n';
             for (const cause of problem.causes) {
                 guide += `- ${cause}\n`;
             }
-            guide += `\n**Solutions**:\n`;
+            guide += '\n**Solutions**:\n';
             for (const solution of problem.solutions) {
                 guide += `- ${solution}\n`;
             }
-            guide += `\n`;
+            guide += '\n';
         }
-        guide += `## Debug Tools\n\n`;
-        guide += `### Extension Validation\n\n`;
-        guide += `\`\`\`typescript\n`;
-        guide += `import { extensionInterfaceValidator } from '@prompt-spaghetti/core/extensions';\n\n`;
-        guide += `const report = extensionInterfaceValidator.generateValidationReport(extension);\n`;
-        guide += `console.log('Validation Report:', report);\n`;
-        guide += `\`\`\`\n\n`;
-        guide += `### Interface Testing\n\n`;
-        guide += `\`\`\`typescript\n`;
-        guide += `import { extensionInterfaceTestSuite } from '@prompt-spaghetti/core/extensions';\n\n`;
-        guide += `const results = await extensionInterfaceTestSuite.runInterfaceTests(extension);\n`;
-        guide += `const report = extensionInterfaceTestSuite.generateTestReport(extension.id);\n`;
-        guide += `console.log(report);\n`;
-        guide += `\`\`\`\n\n`;
-        guide += `### Runtime Type Checking\n\n`;
-        guide += `\`\`\`typescript\n`;
-        guide += `import { extensionRuntimeTypeChecker } from '@prompt-spaghetti/core/extensions';\n\n`;
-        guide += `const typeInfo = extensionRuntimeTypeChecker.getTypeInfo(extension);\n`;
-        guide += `const implementsBase = extensionRuntimeTypeChecker.implementsInterface(extension, 'BaseExtension');\n`;
-        guide += `\`\`\`\n\n`;
+        guide += '## Debug Tools\n\n';
+        guide += '### Extension Validation\n\n';
+        guide += '```typescript\n';
+        guide += 'import { extensionInterfaceValidator } from \'@prompt-spaghetti/core/extensions\';\n\n';
+        guide += 'const report = extensionInterfaceValidator.generateValidationReport(extension);\n';
+        guide += 'console.log(\'Validation Report:\', report);\n';
+        guide += '```\n\n';
+        guide += '### Interface Testing\n\n';
+        guide += '```typescript\n';
+        guide += 'import { extensionInterfaceTestSuite } from \'@prompt-spaghetti/core/extensions\';\n\n';
+        guide += 'const results = await extensionInterfaceTestSuite.runInterfaceTests(extension);\n';
+        guide += 'const report = extensionInterfaceTestSuite.generateTestReport(extension.id);\n';
+        guide += 'console.log(report);\n';
+        guide += '```\n\n';
+        guide += '### Runtime Type Checking\n\n';
+        guide += '```typescript\n';
+        guide += 'import { extensionRuntimeTypeChecker } from \'@prompt-spaghetti/core/extensions\';\n\n';
+        guide += 'const typeInfo = extensionRuntimeTypeChecker.getTypeInfo(extension);\n';
+        guide += 'const implementsBase = extensionRuntimeTypeChecker.implementsInterface(extension, \'BaseExtension\');\n';
+        guide += '```\n\n';
         return guide;
     }
     /**
      * Private helper methods
      */
     generateHeaderSection() {
-        return `# Extension Interface Documentation\n\n` +
+        return '# Extension Interface Documentation\n\n' +
             `Generated on: ${new Date().toISOString()}\n\n` +
-            `This document provides comprehensive information about the extension interface system.\n\n`;
+            'This document provides comprehensive information about the extension interface system.\n\n';
     }
     generateFooterSection() {
-        return `\n---\n\n` +
-            `**Note**: This documentation is auto-generated. For the latest information, ` +
-            `please refer to the TypeScript interface definitions.\n\n`;
+        return '\n---\n\n' +
+            '**Note**: This documentation is auto-generated. For the latest information, ' +
+            'please refer to the TypeScript interface definitions.\n\n';
     }
     generateCompleteDocumentation() {
         let documentation = '';
@@ -271,17 +271,17 @@ export class ExtensionInterfaceDocumentationGenerator {
         return documentation;
     }
     generateBaseInterfaceDocumentation() {
-        let documentation = `## Base Extension Interface\n\n`;
-        documentation += `All extensions must implement the BaseExtension interface:\n\n`;
-        documentation += `### Properties\n\n`;
-        documentation += `- **id**: string - Unique extension identifier\n`;
-        documentation += `- **name**: string - Human-readable extension name\n`;
-        documentation += `- **version**: string - Semantic version (x.y.z)\n`;
-        documentation += `- **description**: string - Extension description\n`;
-        documentation += `- **author**: string - Extension author\n`;
-        documentation += `- **dependencies**: string[] - Required extension dependencies\n`;
-        documentation += `- **permissions**: string[] - Required permissions\n\n`;
-        documentation += `### Methods\n\n`;
+        let documentation = '## Base Extension Interface\n\n';
+        documentation += 'All extensions must implement the BaseExtension interface:\n\n';
+        documentation += '### Properties\n\n';
+        documentation += '- **id**: string - Unique extension identifier\n';
+        documentation += '- **name**: string - Human-readable extension name\n';
+        documentation += '- **version**: string - Semantic version (x.y.z)\n';
+        documentation += '- **description**: string - Extension description\n';
+        documentation += '- **author**: string - Extension author\n';
+        documentation += '- **dependencies**: string[] - Required extension dependencies\n';
+        documentation += '- **permissions**: string[] - Required permissions\n\n';
+        documentation += '### Methods\n\n';
         const methods = [
             {
                 name: 'initialize',
@@ -340,7 +340,7 @@ export class ExtensionInterfaceDocumentationGenerator {
         documentation += `${info.description}\n\n`;
         documentation += `**Capabilities**: ${info.capabilities.join(', ')}\n\n`;
         // Type-specific methods
-        documentation += `### Type-Specific Methods\n\n`;
+        documentation += '### Type-Specific Methods\n\n';
         switch (type) {
             case 'node':
                 documentation += this.generateNodeExtensionMethods();
@@ -492,45 +492,45 @@ export class ExtensionInterfaceDocumentationGenerator {
         return documentation;
     }
     generateExtensionContextDocumentation() {
-        let documentation = `## Extension Context\n\n`;
-        documentation += `The ExtensionContext provides access to system services and APIs:\n\n`;
-        documentation += `### Properties\n\n`;
-        documentation += `- **extensionId**: string - The ID of the extension\n`;
-        documentation += `- **systemVersion**: string - The system version\n`;
-        documentation += `- **logger**: Logger - Logging interface\n`;
-        documentation += `- **storage**: Storage - Storage interface\n`;
-        documentation += `- **events**: EventEmitter - Event system\n`;
-        documentation += `- **runtime**: Runtime - Runtime system access\n`;
-        documentation += `- **ui**: UI - User interface system\n`;
-        documentation += `- **api**: API - API access\n\n`;
+        let documentation = '## Extension Context\n\n';
+        documentation += 'The ExtensionContext provides access to system services and APIs:\n\n';
+        documentation += '### Properties\n\n';
+        documentation += '- **extensionId**: string - The ID of the extension\n';
+        documentation += '- **systemVersion**: string - The system version\n';
+        documentation += '- **logger**: Logger - Logging interface\n';
+        documentation += '- **storage**: Storage - Storage interface\n';
+        documentation += '- **events**: EventEmitter - Event system\n';
+        documentation += '- **runtime**: Runtime - Runtime system access\n';
+        documentation += '- **ui**: UI - User interface system\n';
+        documentation += '- **api**: API - API access\n\n';
         return documentation;
     }
     generateValidationResultsDocumentation() {
-        let documentation = `## Validation Results\n\n`;
-        documentation += `The ExtensionValidationResult interface provides validation feedback:\n\n`;
-        documentation += `### Properties\n\n`;
-        documentation += `- **valid**: boolean - Whether validation passed\n`;
-        documentation += `- **errors**: string[] - List of validation errors\n`;
-        documentation += `- **warnings**: string[] - List of validation warnings\n\n`;
+        let documentation = '## Validation Results\n\n';
+        documentation += 'The ExtensionValidationResult interface provides validation feedback:\n\n';
+        documentation += '### Properties\n\n';
+        documentation += '- **valid**: boolean - Whether validation passed\n';
+        documentation += '- **errors**: string[] - List of validation errors\n';
+        documentation += '- **warnings**: string[] - List of validation warnings\n\n';
         return documentation;
     }
     generateUsageExamples(extension) {
-        let documentation = `## Usage Examples\n\n`;
-        documentation += `### Basic Usage\n\n`;
-        documentation += `\`\`\`typescript\n`;
-        documentation += `// Initialize and activate the extension\n`;
-        documentation += `await extension.initialize();\n`;
-        documentation += `await extension.activate();\n\n`;
-        documentation += `// Check extension health\n`;
-        documentation += `const isHealthy = extension.isHealthy();\n`;
-        documentation += `const healthStatus = extension.getHealthStatus();\n\n`;
-        documentation += `// Get and set configuration\n`;
-        documentation += `const config = extension.getConfiguration();\n`;
-        documentation += `extension.setConfiguration({ ...config, newOption: true });\n\n`;
-        documentation += `// Deactivate and dispose\n`;
-        documentation += `await extension.deactivate();\n`;
-        documentation += `await extension.dispose();\n`;
-        documentation += `\`\`\`\n\n`;
+        let documentation = '## Usage Examples\n\n';
+        documentation += '### Basic Usage\n\n';
+        documentation += '```typescript\n';
+        documentation += '// Initialize and activate the extension\n';
+        documentation += 'await extension.initialize();\n';
+        documentation += 'await extension.activate();\n\n';
+        documentation += '// Check extension health\n';
+        documentation += 'const isHealthy = extension.isHealthy();\n';
+        documentation += 'const healthStatus = extension.getHealthStatus();\n\n';
+        documentation += '// Get and set configuration\n';
+        documentation += 'const config = extension.getConfiguration();\n';
+        documentation += 'extension.setConfiguration({ ...config, newOption: true });\n\n';
+        documentation += '// Deactivate and dispose\n';
+        documentation += 'await extension.deactivate();\n';
+        documentation += 'await extension.dispose();\n';
+        documentation += '```\n\n';
         return documentation;
     }
 }

@@ -9,12 +9,12 @@ import { CreateWorkspaceModal } from './CreateWorkspaceModal';
 import { InviteUserModal } from './InviteUserModal';
 import { WorkspaceSettings } from './WorkspaceSettings';
 import { useWorkspaces } from '../../hooks/useWorkspaces';
-export const WorkspaceManager = ({ userId, onWorkspaceSelect, }) => {
+export const WorkspaceManager = ({ userId, onWorkspaceSelect }) => {
     const [selectedWorkspace, setSelectedWorkspace] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
-    const { workspaces, loading, error, createWorkspace, updateWorkspace, archiveWorkspace, inviteUser, refreshWorkspaces, } = useWorkspaces(userId);
+    const { workspaces, loading, error, createWorkspace, updateWorkspace, archiveWorkspace, inviteUser, refreshWorkspaces } = useWorkspaces(userId);
     const handleWorkspaceSelect = (workspace) => {
         setSelectedWorkspace(workspace);
         onWorkspaceSelect?.(workspace);

@@ -43,7 +43,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 1001,
+            zIndex: 1001
         }, children: _jsxs("div", { style: {
                 background: '#23272f',
                 padding: '24px',
@@ -52,7 +52,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                 maxWidth: '800px',
                 maxHeight: '90vh',
                 overflow: 'auto',
-                color: '#fff',
+                color: '#fff'
             }, children: [_jsxs("div", { style: {
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -64,14 +64,14 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                         color: '#fff',
                                         border: '1px solid #444',
                                         borderRadius: '4px',
-                                        fontSize: '14px',
+                                        fontSize: '14px'
                                     }, children: [_jsx("option", { value: "7", children: "Last 7 days" }), _jsx("option", { value: "30", children: "Last 30 days" }), _jsx("option", { value: "90", children: "Last 90 days" })] }), _jsx("button", { onClick: onClose, style: {
                                         background: 'none',
                                         border: 'none',
                                         color: '#a0aec0',
                                         cursor: 'pointer',
                                         fontSize: '20px',
-                                        padding: '4px 8px',
+                                        padding: '4px 8px'
                                     }, children: "\u00D7" })] })] }), loading && (_jsx("div", { style: {
                         display: 'flex',
                         justifyContent: 'center',
@@ -92,22 +92,22 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                         background: '#2a2e37',
                                         padding: '16px',
                                         borderRadius: '8px',
-                                        border: '1px solid #444',
+                                        border: '1px solid #444'
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Total Rules" }), _jsx("div", { style: { fontSize: '24px', fontWeight: 600, color: '#63b3ed' }, children: metrics.total_rules }), _jsxs("div", { style: { fontSize: '12px', color: '#a0aec0', marginTop: '4px' }, children: [metrics.active_rules, " active"] })] }), _jsxs("div", { style: {
                                         background: '#2a2e37',
                                         padding: '16px',
                                         borderRadius: '8px',
-                                        border: '1px solid #444',
+                                        border: '1px solid #444'
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Total Executions" }), _jsx("div", { style: { fontSize: '24px', fontWeight: 600, color: '#68d391' }, children: metrics.total_executions.toLocaleString() }), _jsxs("div", { style: { fontSize: '12px', color: '#a0aec0', marginTop: '4px' }, children: ["Last ", selectedPeriod, " days"] })] }), _jsxs("div", { style: {
                                         background: '#2a2e37',
                                         padding: '16px',
                                         borderRadius: '8px',
-                                        border: '1px solid #444',
+                                        border: '1px solid #444'
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Avg Execution Time" }), _jsxs("div", { style: { fontSize: '24px', fontWeight: 600, color: '#9f7aea' }, children: [metrics.average_execution_time.toFixed(1), "ms"] }), _jsx("div", { style: { fontSize: '12px', color: '#a0aec0', marginTop: '4px' }, children: "Per rule application" })] }), _jsxs("div", { style: {
                                         background: '#2a2e37',
                                         padding: '16px',
                                         borderRadius: '8px',
-                                        border: '1px solid #444',
+                                        border: '1px solid #444'
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Error Rate" }), _jsxs("div", { style: {
                                                 fontSize: '24px',
                                                 fontWeight: 600,
@@ -116,7 +116,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                         background: '#2a2e37',
                                         padding: '16px',
                                         borderRadius: '8px',
-                                        border: '1px solid #444',
+                                        border: '1px solid #444'
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Quality Score" }), _jsxs("div", { style: {
                                                 fontSize: '24px',
                                                 fontWeight: 600,
@@ -126,7 +126,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                         background: '#2a2e37',
                                         padding: '16px',
                                         borderRadius: '8px',
-                                        border: '1px solid #444',
+                                        border: '1px solid #444'
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Impact Rating" }), _jsxs("div", { style: {
                                                 fontSize: '24px',
                                                 fontWeight: 600,
@@ -136,7 +136,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                         background: '#2a2e37',
                                         padding: '16px',
                                         borderRadius: '8px',
-                                        border: '1px solid #444',
+                                        border: '1px solid #444'
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Characters Saved" }), _jsx("div", { style: {
                                                 fontSize: '24px',
                                                 fontWeight: 600,
@@ -145,7 +145,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                         background: '#2a2e37',
                                         padding: '16px',
                                         borderRadius: '8px',
-                                        border: '1px solid #444',
+                                        border: '1px solid #444'
                                     }, children: [_jsx("h3", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "False Positive Rate" }), _jsxs("div", { style: {
                                                 fontSize: '24px',
                                                 fontWeight: 600,
@@ -172,7 +172,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                                 gap: '12px',
                                                 padding: '12px 16px',
                                                 borderBottom: '1px solid #444',
-                                                fontSize: '14px',
+                                                fontSize: '14px'
                                             }, children: [_jsx("div", { style: { fontWeight: 500 }, children: rule.rule_name }), _jsx("div", { children: rule.total_applications.toLocaleString() }), _jsx("div", { style: {
                                                         color: rule.quality_score >= 80 ? '#68d391' :
                                                             rule.quality_score >= 60 ? '#fbb040' : '#e53e3e'
@@ -201,7 +201,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                                 background: '#1e2228',
                                                 padding: '12px',
                                                 borderRadius: '6px',
-                                                textAlign: 'center',
+                                                textAlign: 'center'
                                             }, children: [_jsx("div", { style: { fontSize: '12px', color: '#a0aec0', marginBottom: '4px' }, children: new Date(trend.date).toLocaleDateString() }), _jsx("div", { style: { fontSize: '18px', fontWeight: 600, color: '#63b3ed' }, children: trend.executions }), _jsxs("div", { style: { fontSize: '11px', color: '#a0aec0' }, children: [trend.avg_time.toFixed(1), "ms avg"] }), _jsxs("div", { style: { fontSize: '11px', color: '#68d391' }, children: ["Q: ", trend.quality_score.toFixed(0)] }), _jsxs("div", { style: { fontSize: '11px', color: '#9f7aea' }, children: ["I: ", trend.impact_rating.toFixed(1)] }), trend.error_count > 0 && (_jsxs("div", { style: { fontSize: '11px', color: '#e53e3e' }, children: [trend.error_count, " errors"] }))] }, trend.date))) })) : (_jsx("div", { style: {
                                             color: '#a0aec0',
                                             textAlign: 'center',
@@ -215,22 +215,22 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                                 background: '#2a2e37',
                                                 padding: '16px',
                                                 borderRadius: '8px',
-                                                border: '1px solid #444',
+                                                border: '1px solid #444'
                                             }, children: [_jsx("h4", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Impact Distribution" }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#68d391' }, children: "High Impact" }), _jsx("span", { style: { fontSize: '12px', color: '#68d391' }, children: metrics.high_impact_rules })] }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#fbb040' }, children: "Medium Impact" }), _jsx("span", { style: { fontSize: '12px', color: '#fbb040' }, children: metrics.medium_impact_rules })] }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#e53e3e' }, children: "Low Impact" }), _jsx("span", { style: { fontSize: '12px', color: '#e53e3e' }, children: metrics.low_impact_rules })] })] }), _jsxs("div", { style: {
                                                 background: '#2a2e37',
                                                 padding: '16px',
                                                 borderRadius: '8px',
-                                                border: '1px solid #444',
+                                                border: '1px solid #444'
                                             }, children: [_jsx("h4", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Quality Distribution" }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#68d391' }, children: "Excellent (80+)" }), _jsx("span", { style: { fontSize: '12px', color: '#68d391' }, children: metrics.excellent_rules })] }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#fbb040' }, children: "Good (60-79)" }), _jsx("span", { style: { fontSize: '12px', color: '#fbb040' }, children: metrics.good_rules })] }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#e53e3e' }, children: "Poor (<60)" }), _jsx("span", { style: { fontSize: '12px', color: '#e53e3e' }, children: metrics.poor_rules })] })] }), _jsxs("div", { style: {
                                                 background: '#2a2e37',
                                                 padding: '16px',
                                                 borderRadius: '8px',
-                                                border: '1px solid #444',
+                                                border: '1px solid #444'
                                             }, children: [_jsx("h4", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "Performance Distribution" }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#68d391' }, children: "Fast (<10ms)" }), _jsx("span", { style: { fontSize: '12px', color: '#68d391' }, children: metrics.fast_rules })] }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#fbb040' }, children: "Normal (10-100ms)" }), _jsx("span", { style: { fontSize: '12px', color: '#fbb040' }, children: metrics.total_rules - metrics.fast_rules - metrics.slow_rules })] }), _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between' }, children: [_jsx("span", { style: { fontSize: '12px', color: '#e53e3e' }, children: "Slow (>100ms)" }), _jsx("span", { style: { fontSize: '12px', color: '#e53e3e' }, children: metrics.slow_rules })] })] }), metrics.user_satisfaction_score && (_jsxs("div", { style: {
                                                 background: '#2a2e37',
                                                 padding: '16px',
                                                 borderRadius: '8px',
-                                                border: '1px solid #444',
+                                                border: '1px solid #444'
                                             }, children: [_jsx("h4", { style: { fontSize: '14px', color: '#a0aec0', margin: '0 0 8px 0' }, children: "User Satisfaction" }), _jsxs("div", { style: {
                                                         fontSize: '24px',
                                                         fontWeight: 600,
@@ -244,7 +244,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                         borderRadius: '4px',
                                         cursor: 'pointer',
                                         fontSize: '14px',
-                                        fontWeight: 500,
+                                        fontWeight: 500
                                     }, children: "Refresh" }), _jsx("button", { onClick: onClose, style: {
                                         padding: '8px 16px',
                                         background: '#4a5568',
@@ -253,6 +253,6 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
                                         borderRadius: '4px',
                                         cursor: 'pointer',
                                         fontSize: '14px',
-                                        fontWeight: 500,
+                                        fontWeight: 500
                                     }, children: "Close" })] })] }))] }) }));
 };

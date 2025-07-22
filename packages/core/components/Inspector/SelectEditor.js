@@ -1,10 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React from "react";
-export const SelectEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, options = [], multiple = false, searchable = false, allowCustom = false, emptyLabel = "None", }) => {
+import React from 'react';
+export const SelectEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, options = [], multiple = false, searchable = false, allowCustom = false, emptyLabel = 'None' }) => {
     const [localValue, setLocalValue] = React.useState(value);
     const [isOpen, setIsOpen] = React.useState(false);
-    const [searchTerm, setSearchTerm] = React.useState("");
-    const [customValue, setCustomValue] = React.useState("");
+    const [searchTerm, setSearchTerm] = React.useState('');
+    const [customValue, setCustomValue] = React.useState('');
     const [showCustomInput, setShowCustomInput] = React.useState(false);
     const [isFocused, setIsFocused] = React.useState(false);
     const dropdownRef = React.useRef(null);
@@ -18,7 +18,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
                 setShowCustomInput(false);
-                setSearchTerm("");
+                setSearchTerm('');
             }
         };
         if (isOpen) {
@@ -46,7 +46,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
     const handleCustomSubmit = () => {
         if (customValue.trim()) {
             handleSelect(customValue.trim());
-            setCustomValue("");
+            setCustomValue('');
             setShowCustomInput(false);
         }
     };
@@ -80,49 +80,49 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
     const inputId = `field-${fieldKey}`;
     const containerStyle = {
         position: 'relative',
-        marginBottom: 16,
+        marginBottom: 16
     };
     const labelStyle = {
-        display: "block",
+        display: 'block',
         fontWeight: 500,
         marginBottom: 4,
-        color: "#e2e8f0",
+        color: '#e2e8f0',
         fontSize: 12,
-        letterSpacing: "0.025em",
+        letterSpacing: '0.025em'
     };
     const selectStyle = {
-        width: "100%",
+        width: '100%',
         padding: 8,
         border: error
-            ? "1px solid #f56565"
+            ? '1px solid #f56565'
             : isFocused
-                ? "1px solid #4299e1"
-                : "1px solid #4a5568",
+                ? '1px solid #4299e1'
+                : '1px solid #4a5568',
         borderRadius: 4,
-        background: "#2d3748",
-        color: "#e2e8f0",
+        background: '#2d3748',
+        color: '#e2e8f0',
         fontSize: 13,
-        fontFamily: "system-ui, -apple-system, sans-serif",
-        outline: "none",
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        outline: 'none',
         cursor: disabled ? 'not-allowed' : 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        minHeight: 36,
+        minHeight: 36
     };
     const dropdownStyle = {
         position: 'absolute',
         top: '100%',
         left: 0,
         right: 0,
-        background: "#2d3748",
-        border: "1px solid #4a5568",
+        background: '#2d3748',
+        border: '1px solid #4a5568',
         borderRadius: 4,
         borderTop: 'none',
         maxHeight: 200,
         overflowY: 'auto',
         zIndex: 1000,
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
     };
     const optionStyle = (selected, disabled) => ({
         padding: 8,
@@ -130,9 +130,9 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
         background: selected ? '#4299e1' : 'transparent',
         color: disabled ? '#718096' : '#e2e8f0',
         fontSize: 13,
-        borderBottom: '1px solid #4a5568',
+        borderBottom: '1px solid #4a5568'
     });
-    return (_jsxs("div", { style: containerStyle, ref: dropdownRef, children: [_jsxs("label", { htmlFor: inputId, style: labelStyle, children: [label, error && (_jsx("span", { style: { color: "#f56565", marginLeft: 4, fontSize: 10 }, children: "*" }))] }), _jsxs("div", { style: selectStyle, onClick: () => !disabled && setIsOpen(!isOpen), onFocus: () => setIsFocused(true), onBlur: () => setIsFocused(false), tabIndex: disabled ? -1 : 0, children: [_jsx("span", { style: { flex: 1 }, children: getDisplayValue() }), _jsx("span", { style: { color: '#a0aec0', fontSize: 12 }, children: isOpen ? '▲' : '▼' })] }), isOpen && (_jsxs("div", { style: dropdownStyle, children: [searchable && (_jsx("div", { style: { padding: 8, borderBottom: '1px solid #4a5568' }, children: _jsx("input", { type: "text", value: searchTerm, onChange: (e) => setSearchTerm(e.target.value), placeholder: "Search options...", style: {
+    return (_jsxs("div", { style: containerStyle, ref: dropdownRef, children: [_jsxs("label", { htmlFor: inputId, style: labelStyle, children: [label, error && (_jsx("span", { style: { color: '#f56565', marginLeft: 4, fontSize: 10 }, children: "*" }))] }), _jsxs("div", { style: selectStyle, onClick: () => !disabled && setIsOpen(!isOpen), onFocus: () => setIsFocused(true), onBlur: () => setIsFocused(false), tabIndex: disabled ? -1 : 0, children: [_jsx("span", { style: { flex: 1 }, children: getDisplayValue() }), _jsx("span", { style: { color: '#a0aec0', fontSize: 12 }, children: isOpen ? '▲' : '▼' })] }), isOpen && (_jsxs("div", { style: dropdownStyle, children: [searchable && (_jsx("div", { style: { padding: 8, borderBottom: '1px solid #4a5568' }, children: _jsx("input", { type: "text", value: searchTerm, onChange: (e) => setSearchTerm(e.target.value), placeholder: "Search options...", style: {
                                 width: '100%',
                                 padding: 4,
                                 border: '1px solid #4a5568',
@@ -140,7 +140,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
                                 background: '#1a202c',
                                 color: '#e2e8f0',
                                 fontSize: 12,
-                                outline: 'none',
+                                outline: 'none'
                             } }) })), Object.entries(groupedOptions).map(([groupName, groupOptions]) => (_jsxs("div", { children: [groupName !== 'default' && (_jsx("div", { style: {
                                     padding: '4px 8px',
                                     background: '#1a202c',
@@ -148,7 +148,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
                                     fontSize: 11,
                                     fontWeight: 600,
                                     textTransform: 'uppercase',
-                                    letterSpacing: '0.05em',
+                                    letterSpacing: '0.05em'
                                 }, children: groupName })), groupOptions.map((option) => {
                                 const selected = multiple
                                     ? Array.isArray(localValue) && localValue.includes(option.value)
@@ -162,7 +162,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
                                 borderRadius: 2,
                                 color: '#a0aec0',
                                 fontSize: 12,
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             }, children: "+ Add custom value" })) : (_jsxs("div", { style: { display: 'flex', gap: 4 }, children: [_jsx("input", { type: "text", value: customValue, onChange: (e) => setCustomValue(e.target.value), placeholder: "Enter custom value...", style: {
                                         flex: 1,
                                         padding: 4,
@@ -171,7 +171,7 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
                                         background: '#1a202c',
                                         color: '#e2e8f0',
                                         fontSize: 12,
-                                        outline: 'none',
+                                        outline: 'none'
                                     }, onKeyPress: (e) => e.key === 'Enter' && handleCustomSubmit() }), _jsx("button", { onClick: handleCustomSubmit, style: {
                                         padding: '4px 8px',
                                         background: '#4299e1',
@@ -179,17 +179,17 @@ export const SelectEditor = ({ label, value, fieldKey, error, onChange, placehol
                                         borderRadius: 2,
                                         color: 'white',
                                         fontSize: 12,
-                                        cursor: 'pointer',
+                                        cursor: 'pointer'
                                     }, children: "Add" })] })) })), filteredOptions.length === 0 && (_jsx("div", { style: {
                             padding: 16,
                             textAlign: 'center',
                             color: '#a0aec0',
                             fontSize: 12,
-                            fontStyle: 'italic',
+                            fontStyle: 'italic'
                         }, children: "No options found" }))] })), error && (_jsx("div", { style: {
-                    color: "#f56565",
+                    color: '#f56565',
                     fontSize: 11,
                     marginTop: 4,
-                    fontWeight: 400,
+                    fontWeight: 400
                 }, children: error }))] }));
 };

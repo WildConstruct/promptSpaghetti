@@ -54,7 +54,7 @@ function getUserColor(userId) {
         '#6366f1', // indigo-500
         '#14b8a6', // teal-500
         '#f97316', // orange-500
-        '#84cc16', // lime-500
+        '#84cc16' // lime-500
     ];
     let hash = 0;
     for (let i = 0; i < userId.length; i++) {

@@ -124,7 +124,7 @@ export class ProjectTemplateManager {
             throw new Error(`Template ${templateId} not found`);
         }
         // Generate preview without recording usage
-        let graphData = JSON.parse(JSON.stringify(template.graph_data));
+        const graphData = JSON.parse(JSON.stringify(template.graph_data));
         return this.applyCustomizations(graphData, template, customizations);
     }
     // Template Import/Export

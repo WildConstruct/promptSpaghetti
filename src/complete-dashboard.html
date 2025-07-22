@@ -353,6 +353,79 @@
             margin-bottom: 40px;
         }
 
+        .tickets-list {
+            background: #252538;
+            border-radius: 8px;
+            border: 1px solid #2d2d44;
+            overflow-x: auto;
+        }
+
+        .tickets-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tickets-table th,
+        .tickets-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #2d2d44;
+            color: #e1e5e9;
+        }
+
+        .tickets-table th {
+            background: #1a1a2e;
+            color: #74c0fc;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .tickets-table tr:hover {
+            background: rgba(116, 192, 252, 0.1);
+        }
+
+        .layout-btn {
+            background: #374151;
+            color: #e1e5e9;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .layout-btn.active {
+            background: #74c0fc;
+            color: #1a1a2e;
+        }
+
+        .layout-btn:hover:not(.active) {
+            background: #4b5563;
+        }
+
+        .pagination-controls button {
+            background: #374151;
+            color: #e1e5e9;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .pagination-controls button:hover:not(:disabled) {
+            background: #4b5563;
+        }
+
+        .pagination-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .ticket {
             background: #2d2d44;
             border-radius: 10px;
@@ -599,6 +672,95 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        /* Agent Broadcast Styles */
+        .template-btn {
+            padding: 12px 16px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: left;
+            transition: all 0.2s ease;
+            min-height: 45px;
+        }
+
+        .template-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .broadcast-message {
+            background: #252538;
+            border: 1px solid #2d2d44;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .broadcast-message:hover {
+            border-color: #3b82f6;
+            background: #2a2a3e;
+        }
+
+        .broadcast-message.urgent {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fecaca 0%, #ef4444 100%);
+            color: #991b1b;
+        }
+
+        .broadcast-message.high {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%);
+            color: #92400e;
+        }
+
+        .broadcast-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .broadcast-priority {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .broadcast-priority.normal {
+            background: #374151;
+            color: #d1d5db;
+        }
+
+        .broadcast-priority.high {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .broadcast-priority.urgent {
+            background: #ef4444;
+            color: white;
+        }
+
+        .broadcast-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .broadcast-meta {
+            font-size: 12px;
+            color: #9ca3af;
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
@@ -642,14 +804,16 @@
 
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="switchTab('epic-status')">Epic Status</button>
+            <button class="nav-tab" onclick="switchTab('approval-history')">Approval History</button>
             <button class="nav-tab" onclick="switchTab('tasks')">Task Management</button>
+            <button class="nav-tab" onclick="switchTab('agent-broadcast')">📢 Agent Broadcast</button>
         </div>
 
         <!-- Epic Status Tab -->
         <div id="epic-status" class="tab-content active">
             <!-- Epic Overview -->
             <div class="epic-overview">
-                <div class="epic-stat">
+                <div class="epic-stat clickable" onclick="showEpicBreakdown()">
                     <div class="epic-stat-number" id="avgCompletion">77%</div>
                     <div class="epic-stat-label">Average Epic Completion</div>
                 </div>
@@ -877,6 +1041,57 @@
             </div>
         </div>
 
+        <!-- Approval History Tab -->
+        <div id="approval-history" class="tab-content">
+            <div class="chart-section">
+                <h2 style="color: #e1e5e9; margin-bottom: 20px;">📈 Task Approval History</h2>
+                
+                <!-- Daily Approvals Chart -->
+                <div class="chart-card" style="margin-bottom: 30px;">
+                    <h3 style="color: #74c0fc; margin-bottom: 15px;">Daily Approvals (Last 30 Days)</h3>
+                    <div class="chart-container small">
+                        <canvas id="approvalChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Weekly Velocity Chart -->
+                <div class="chart-card" style="margin-bottom: 30px;">
+                    <h3 style="color: #10b981; margin-bottom: 15px;">Weekly Velocity Trend</h3>
+                    <div class="chart-container small">
+                        <canvas id="velocityChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Approval Stats -->
+                <div class="epic-overview" style="margin-bottom: 30px;">
+                    <div class="epic-stat">
+                        <div class="epic-stat-number" id="dailyApprovals">-</div>
+                        <div class="epic-stat-label">Approvals Today</div>
+                    </div>
+                    <div class="epic-stat">
+                        <div class="epic-stat-number" id="weeklyApprovals">-</div>
+                        <div class="epic-stat-label">This Week</div>
+                    </div>
+                    <div class="epic-stat">
+                        <div class="epic-stat-number" id="monthlyApprovals">-</div>
+                        <div class="epic-stat-label">This Month</div>
+                    </div>
+                    <div class="epic-stat">
+                        <div class="epic-stat-number" id="avgDailyApprovals">-</div>
+                        <div class="epic-stat-label">Daily Average</div>
+                    </div>
+                </div>
+                
+                <!-- Recent Approvals List -->
+                <div class="chart-card">
+                    <h3 style="color: #f59e0b; margin-bottom: 15px;">Recent Approvals</h3>
+                    <div id="recentApprovalsList" style="max-height: 300px; overflow-y: auto;">
+                        Loading recent approvals...
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Tasks Tab -->
         <div id="tasks" class="tab-content">
             <div class="controls">
@@ -935,12 +1150,129 @@
                 </div>
             </div>
 
+            <!-- Layout and Pagination Controls -->
+            <div class="view-controls" style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0; padding: 15px; background: #252538; border-radius: 8px;">
+                <div class="layout-switcher">
+                    <label style="color: #9ca3af; margin-right: 10px;">Layout:</label>
+                    <button id="gridViewBtn" class="layout-btn active" onclick="switchLayout('grid')" style="margin-right: 5px;">
+                        📱 Grid
+                    </button>
+                    <button id="listViewBtn" class="layout-btn" onclick="switchLayout('list')">
+                        📋 List
+                    </button>
+                </div>
+                
+                <div class="pagination-info" style="color: #9ca3af;">
+                    Showing <span id="taskRange">0-0</span> of <span id="totalTaskCount">0</span> tasks
+                </div>
+                
+                <div class="pagination-controls">
+                    <button id="prevPageBtn" onclick="changePage(-1)" style="margin-right: 5px;" disabled>← Previous</button>
+                    <span id="pageInfo" style="color: #74c0fc; margin: 0 10px;">Page 1 of 1</span>
+                    <button id="nextPageBtn" onclick="changePage(1)" disabled>Next →</button>
+                </div>
+            </div>
+
             <div class="loading" id="loading">Loading tickets...</div>
             <div id="ticketsGrid" class="ticket-grid" style="display: none;"></div>
+            <div id="ticketsList" class="tickets-list" style="display: none;"></div>
             <div id="noTickets" class="no-tickets" style="display: none;">
                 No tickets found matching your criteria.
             </div>
             <div id="error" class="error" style="display: none;"></div>
+        </div>
+
+        <!-- Agent Broadcast Tab -->
+        <div id="agent-broadcast" class="tab-content">
+            <h2 style="color: #e1e5e9; margin-bottom: 20px;">📢 Agent Broadcasting System</h2>
+            
+            <!-- Send Broadcast Section -->
+            <div class="chart-card" style="margin-bottom: 30px;">
+                <h3 style="color: #10b981; margin-bottom: 15px;">Send Broadcast to All Agents</h3>
+                <div style="display: flex; gap: 15px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <label for="broadcastMessage" style="display: block; color: #9ca3af; margin-bottom: 8px;">Message:</label>
+                        <input type="text" 
+                               id="broadcastMessage" 
+                               placeholder="e.g., All agents: Please run QA pipeline when current task is complete"
+                               style="width: 100%; padding: 10px; background: #252538; border: 1px solid #2d2d44; border-radius: 6px; color: #e1e5e9; font-size: 14px;"
+                               onkeypress="if(event.key==='Enter') sendBroadcast()" />
+                    </div>
+                    <div>
+                        <label for="broadcastPriority" style="display: block; color: #9ca3af; margin-bottom: 8px;">Priority:</label>
+                        <select id="broadcastPriority" style="padding: 10px; background: #252538; border: 1px solid #2d2d44; border-radius: 6px; color: #e1e5e9;">
+                            <option value="normal">Normal</option>
+                            <option value="high">High</option>
+                            <option value="urgent">🚨 Urgent</option>
+                        </select>
+                    </div>
+                    <button onclick="sendBroadcast()" 
+                            style="padding: 10px 20px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                        📢 Send Broadcast
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Broadcasts Section -->
+            <div class="chart-card" style="margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="color: #74c0fc; margin: 0;">Recent Broadcast Messages</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="loadBroadcasts()" 
+                                style="padding: 6px 12px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            🔄 Refresh
+                        </button>
+                        <button onclick="clearAllBroadcasts()" 
+                                style="padding: 6px 12px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            🗑️ Clear All
+                        </button>
+                    </div>
+                </div>
+                <div id="broadcastMessages" style="max-height: 400px; overflow-y: auto;">
+                    <div style="text-align: center; color: #6b7280; padding: 40px;">
+                        Loading broadcast messages...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Broadcasting Stats -->
+            <div class="epic-overview" style="margin-bottom: 30px;">
+                <div class="epic-stat">
+                    <div class="epic-stat-number" id="totalBroadcasts">0</div>
+                    <div class="epic-stat-label">Total Messages</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number" id="recentBroadcasts">0</div>
+                    <div class="epic-stat-label">Last 24 Hours</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number" id="activeBroadcasts">0</div>
+                    <div class="epic-stat-label">Active Messages</div>
+                </div>
+                <div class="epic-stat">
+                    <div class="epic-stat-number" id="broadcastHealth">100%</div>
+                    <div class="epic-stat-label">System Health</div>
+                </div>
+            </div>
+
+            <!-- Quick Broadcast Templates -->
+            <div class="chart-card">
+                <h3 style="color: #f59e0b; margin-bottom: 15px;">Quick Broadcast Templates</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px;">
+                    <button onclick="sendQuickBroadcast('All agents: Please run QA pipeline when current task is complete')" 
+                            class="template-btn">🔍 Request QA Pipeline</button>
+                    <button onclick="sendQuickBroadcast('PRIORITY SHIFT: All agents focus on Epic 8 tasks immediately')" 
+                            class="template-btn">🎯 Epic 8 Priority</button>
+                    <button onclick="sendQuickBroadcast('System maintenance in 30 minutes - please finish current tasks')" 
+                            class="template-btn">⚠️ Maintenance Warning</button>
+                    <button onclick="sendQuickBroadcast('Dashboard updated with new features - please refresh your views')" 
+                            class="template-btn">🔄 Dashboard Update</button>
+                    <button onclick="sendQuickBroadcast('All agents: Check coordination dashboard for task reassignments')" 
+                            class="template-btn">📋 Check Coordination</button>
+                    <button onclick="sendQuickBroadcast('Emergency: All agents stop current work and report status')" 
+                            class="template-btn" style="background: #ef4444;">🚨 Emergency Stop</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -950,6 +1282,13 @@
         let approvedTasksChart = null;
         let statusDistributionChart = null;
         let estimateActualChart = null;
+        let approvalChart = null;
+        let velocityChart = null;
+        
+        // Pagination and layout state
+        let currentPage = 1;
+        let tasksPerPage = 100;
+        let currentLayout = 'grid'; // 'grid' or 'list'
 
         // Tab switching functionality
         function switchTab(tabName) {
@@ -977,6 +1316,14 @@
                 setTimeout(() => {
                     createCharts();
                 }, 100);
+            } else if (tabName === 'approval-history' && allTasks.length > 0) {
+                // Refresh approval history charts when switching to that tab
+                setTimeout(() => {
+                    createApprovalHistoryCharts();
+                }, 100);
+            } else if (tabName === 'agent-broadcast') {
+                // Load broadcasts when switching to broadcast tab
+                loadBroadcasts();
             }
         }
 
@@ -990,7 +1337,7 @@
 
                 // In a real environment, you'd fetch from an API endpoint
                 // For now, we'll simulate loading from the state.json file
-                const response = await fetch('./data/state.json');
+                const response = await fetch('/api/tasks');
                 if (!response.ok) {
                     throw new Error(`Failed to load data: ${response.statusText}`);
                 }
@@ -1139,6 +1486,230 @@
             });
         }
 
+        // Create approval history charts for the approval history tab
+        function createApprovalHistoryCharts() {
+            if (document.getElementById('approvalChart')) {
+                createDailyApprovalChart();
+            }
+            if (document.getElementById('velocityChart')) {
+                createWeeklyVelocityChart();
+            }
+        }
+
+        function createDailyApprovalChart() {
+            const ctx = document.getElementById('approvalChart').getContext('2d');
+            
+            // Generate last 30 days data
+            const last30Days = [];
+            const approvalData = [];
+            const now = new Date();
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                const dateStr = date.toISOString().split('T')[0];
+                last30Days.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                
+                // Count approvals on this date (simulated from commit tracking data)
+                const approvedOnDate = allTasks.filter(task => {
+                    if (!task.lastUpdated) return false;
+                    const taskDate = new Date(task.lastUpdated).toISOString().split('T')[0];
+                    return taskDate === dateStr && 
+                           (task.state === 'REVIEW' || task.state === 'APPROVED' || task.state === 'COMPLETED');
+                }).length;
+                
+                approvalData.push(approvedOnDate);
+            }
+
+            if (approvalChart) {
+                approvalChart.destroy();
+            }
+
+            approvalChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: last30Days,
+                    datasets: [{
+                        label: 'Daily Approvals',
+                        data: approvalData,
+                        borderColor: '#74c0fc',
+                        backgroundColor: 'rgba(116, 192, 252, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e1e5e9'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(156, 163, 175, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(156, 163, 175, 0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Approvals',
+                                color: '#e1e5e9'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createWeeklyVelocityChart() {
+            const ctx = document.getElementById('velocityChart').getContext('2d');
+            
+            // Generate last 12 weeks data
+            const weeks = [];
+            const velocityData = [];
+            const now = new Date();
+            
+            for (let i = 11; i >= 0; i--) {
+                const weekStart = new Date(now.getTime() - i * 7 * 24 * 60 * 60 * 1000);
+                const weekEnd = new Date(weekStart.getTime() + 7 * 24 * 60 * 60 * 1000);
+                weeks.push(`Week ${12-i}`);
+                
+                // Count approvals in this week
+                const approvedInWeek = allTasks.filter(task => {
+                    if (!task.lastUpdated) return false;
+                    const taskDate = new Date(task.lastUpdated);
+                    return taskDate >= weekStart && taskDate < weekEnd &&
+                           (task.state === 'APPROVED' || task.state === 'COMPLETED');
+                }).length;
+                
+                velocityData.push(approvedInWeek);
+            }
+
+            if (velocityChart) {
+                velocityChart.destroy();
+            }
+
+            velocityChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: weeks,
+                    datasets: [{
+                        label: 'Weekly Velocity',
+                        data: velocityData,
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderColor: '#10b981',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e1e5e9'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(156, 163, 175, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(156, 163, 175, 0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Tasks Completed',
+                                color: '#e1e5e9'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateApprovalStats() {
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const weekStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+            
+            const dailyApprovals = allTasks.filter(task => {
+                if (!task.lastUpdated) return false;
+                const taskDate = new Date(task.lastUpdated).toISOString().split('T')[0];
+                return taskDate === today && (task.state === 'APPROVED' || task.state === 'COMPLETED');
+            }).length;
+            
+            const weeklyApprovals = allTasks.filter(task => {
+                if (!task.lastUpdated) return false;
+                const taskDate = new Date(task.lastUpdated);
+                return taskDate >= weekStart && (task.state === 'APPROVED' || task.state === 'COMPLETED');
+            }).length;
+            
+            const monthlyApprovals = allTasks.filter(task => {
+                if (!task.lastUpdated) return false;
+                const taskDate = new Date(task.lastUpdated);
+                return taskDate >= monthStart && (task.state === 'APPROVED' || task.state === 'COMPLETED');
+            }).length;
+            
+            const avgDailyApprovals = Math.round(monthlyApprovals / now.getDate());
+            
+            // Update DOM elements if they exist
+            const dailyEl = document.getElementById('dailyApprovals');
+            const weeklyEl = document.getElementById('weeklyApprovals');
+            const monthlyEl = document.getElementById('monthlyApprovals');
+            const avgEl = document.getElementById('avgDailyApprovals');
+            
+            if (dailyEl) dailyEl.textContent = dailyApprovals;
+            if (weeklyEl) weeklyEl.textContent = weeklyApprovals;
+            if (monthlyEl) monthlyEl.textContent = monthlyApprovals;
+            if (avgEl) avgEl.textContent = avgDailyApprovals;
+            
+            // Update recent approvals list
+            updateRecentApprovalsList();
+        }
+
+        function updateRecentApprovalsList() {
+            const recentApprovalsEl = document.getElementById('recentApprovalsList');
+            if (!recentApprovalsEl) return;
+            
+            const recentApprovals = allTasks
+                .filter(task => task.state === 'APPROVED' || task.state === 'COMPLETED')
+                .sort((a, b) => new Date(b.lastUpdated || b.created) - new Date(a.lastUpdated || a.created))
+                .slice(0, 10);
+            
+            if (recentApprovals.length === 0) {
+                recentApprovalsEl.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 20px;">No recent approvals found</p>';
+                return;
+            }
+            
+            recentApprovalsEl.innerHTML = recentApprovals.map(task => `
+                <div style="
+                    background: #2d2d44; border-radius: 8px; padding: 12px; margin-bottom: 8px;
+                    border-left: 4px solid ${task.state === 'COMPLETED' ? '#10b981' : '#74c0fc'};
+                    cursor: pointer;
+                " onclick="showTaskDetails('${task.id}')">
+                    <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 5px;">
+                        <span style="font-family: monospace; font-size: 0.8rem; color: #9ca3af;">${task.id}</span>
+                        <span class="ticket-state state-${task.state?.toLowerCase()}">${task.state}</span>
+                    </div>
+                    <div style="font-weight: 500; margin-bottom: 5px; color: #e1e5e9;">
+                        ${(task.title || 'Untitled Task').substring(0, 80)}${task.title?.length > 80 ? '...' : ''}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #9ca3af;">
+                        ${task.assignee || 'Unassigned'} • ${formatDate(task.lastUpdated || task.created)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
         // Update epic overview statistics
         function updateEpicStats() {
             // Calculate epic completion rates
@@ -1156,7 +1727,8 @@
 
             allTasks.forEach(task => {
                 totalTasks++;
-                if (task.state === 'COMPLETED') totalCompleted++;
+                const isCompleted = ['COMPLETED', 'APPROVED', 'REVIEW'].includes(task.state);
+                if (isCompleted) totalCompleted++;
 
                 // Extract epic number
                 let epicNum = null;
@@ -1173,14 +1745,14 @@
                         epicStats[epicNum] = { total: 0, completed: 0 };
                     }
                     epicStats[epicNum].total++;
-                    if (task.state === 'COMPLETED') {
+                    if (isCompleted) {
                         epicStats[epicNum].completed++;
                     }
 
                     // Critical systems (Epic 6, 7, 9, 11 - foundational)
                     if ([6, 7, 9, 11].includes(epicNum)) {
                         criticalSystemsTasks++;
-                        if (task.state === 'COMPLETED') criticalSystemsCompleted++;
+                        if (isCompleted) criticalSystemsCompleted++;
                     }
                 }
 
@@ -1204,7 +1776,7 @@
                 }
 
                 // Weekly velocity (completed in last 7 days)
-                if (task.state === 'COMPLETED' && task.lastUpdated) {
+                if (isCompleted && task.lastUpdated) {
                     const completedDate = new Date(task.lastUpdated);
                     const weekAgo = new Date();
                     weekAgo.setDate(weekAgo.getDate() - 7);
@@ -1246,6 +1818,115 @@
             if (avgActualTimeEl) avgActualTimeEl.textContent = tasksWithTiming > 0 ? `${avgActual.toFixed(1)}h` : '-';
             if (blockedTasksEl) blockedTasksEl.textContent = blockedTasks;
             if (weeklyVelocityEl) weeklyVelocityEl.textContent = `${weeklyCompleted} tasks`;
+            
+            // Update dynamic epic cards
+            updateEpicCards(epicStats);
+        }
+
+        // Create dynamic epic cards with real data
+        function updateEpicCards(epicStats) {
+            const epicStatusContent = document.getElementById('epic-status');
+            if (!epicStatusContent) return;
+
+            // Epic definitions with metadata
+            const epicDefinitions = {
+                17: { name: "Backstage Admin Controls", icon: "🔐", description: "User management, permissions, and admin interfaces", priority: "critical" },
+                18: { name: "Security Hardening", icon: "🛡️", description: "Authentication, authorization, and security improvements", priority: "critical" },
+                7: { name: "Advanced Node Capabilities", icon: "⚡", description: "Enhanced workflow nodes and advanced features", priority: "high" },
+                8: { name: "Visual Flow Enhancements", icon: "🎨", description: "UI/UX improvements and visual enhancements", priority: "high" },
+                3: { name: "Executor & Integration", icon: "🔧", description: "Core execution engine and system integration", priority: "medium" },
+                5: { name: "Inspector Panel System", icon: "🔍", description: "Node inspection and configuration interface", priority: "medium" },
+                1: { name: "Test Coverage & Quality", icon: "✅", description: "Comprehensive testing and quality assurance", priority: "medium" }
+            };
+
+            // Create overview stats
+            const totalEpics = Object.keys(epicStats).length;
+            const completedEpics = Object.values(epicStats).filter(epic => 
+                epic.total > 0 && (epic.completed / epic.total) >= 0.9
+            ).length;
+            const overallProgress = Object.values(epicStats).reduce((acc, epic) => {
+                return acc + (epic.total > 0 ? (epic.completed / epic.total) : 0);
+            }, 0) / Math.max(Object.keys(epicStats).length, 1);
+
+            let epicCardsHtml = `
+                <div class="epic-overview">
+                    <div class="epic-stat">
+                        <div class="epic-stat-number">${Math.round(overallProgress * 100)}%</div>
+                        <div class="epic-stat-label">Average Epic Completion</div>
+                    </div>
+                    <div class="epic-stat">
+                        <div class="epic-stat-number">${Math.round((completedEpics / Math.max(totalEpics, 1)) * 100)}%</div>
+                        <div class="epic-stat-label">Critical Systems</div>
+                    </div>
+                    <div class="epic-stat">
+                        <div class="epic-stat-number">${Object.values(epicStats).filter(e => e.completed > 5).length}</div>
+                        <div class="epic-stat-label">Quick Wins Available</div>
+                    </div>
+                    <div class="epic-stat">
+                        <div class="epic-stat-number">${totalEpics}+</div>
+                        <div class="epic-stat-label">Months Work Ready</div>
+                    </div>
+                </div>
+                <div class="epic-grid">
+            `;
+
+            // Generate epic cards dynamically
+            Object.entries(epicStats)
+                .sort(([a], [b]) => parseInt(b) - parseInt(a)) // Sort by epic number descending
+                .forEach(([epicNum, stats]) => {
+                    const epic = epicDefinitions[epicNum] || { 
+                        name: `Epic ${epicNum}`, 
+                        icon: "📋", 
+                        description: "Development epic", 
+                        priority: "medium" 
+                    };
+                    
+                    const completion = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+                    const priorityClass = epic.priority === 'critical' ? 'critical' : 
+                                        epic.priority === 'high' ? 'high' : 'medium';
+                    
+                    epicCardsHtml += `
+                        <div class="epic-card" onclick="showEpicDetails(${epicNum})">
+                            <div class="epic-title">
+                                <span>${epic.icon}</span>
+                                <span>${epic.name}</span>
+                            </div>
+                            <div class="epic-description">${epic.description}</div>
+                            <div class="epic-progress">
+                                <div class="epic-progress-label">
+                                    <span>Progress</span>
+                                    <span>${completion}%</span>
+                                </div>
+                                <div class="epic-progress-bar">
+                                    <div class="epic-progress-fill ${priorityClass}" style="width: ${completion}%"></div>
+                                </div>
+                            </div>
+                            <div class="epic-components">
+                                <div class="epic-component">
+                                    <span>${completion > 75 ? '✅' : completion > 25 ? '🔄' : '❌'}</span>
+                                    <span>Tasks: ${stats.completed}/${stats.total} (${completion}%)</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+            epicCardsHtml += '</div>';
+            epicStatusContent.innerHTML = epicCardsHtml;
+        }
+
+        // Show epic details when clicked
+        function showEpicDetails(epicNum) {
+            const epicTasks = allTasks.filter(task => {
+                if (task.id && task.id.includes('E')) {
+                    const match = task.id.match(/E(\d+)-/);
+                    return match && parseInt(match[1]) === epicNum;
+                }
+                return false;
+            });
+
+            alert(`Epic ${epicNum} Details:\n\nTotal Tasks: ${epicTasks.length}\nCompleted: ${epicTasks.filter(t => ['COMPLETED', 'APPROVED', 'REVIEW'].includes(t.state)).length}\n\nClick OK to see task list in console.`);
+            console.log(`Epic ${epicNum} Tasks:`, epicTasks);
         }
 
         // Create charts
@@ -1255,6 +1936,8 @@
                 createApprovedTasksChart();
                 createStatusDistributionChart();
                 createEstimateActualChart();
+                createApprovalHistoryCharts();
+                updateApprovalStats();
                 console.log('Charts created successfully');
             } catch (error) {
                 console.error('Error creating charts:', error);
@@ -1417,7 +2100,7 @@
                 inProgress: allTasks.filter(t => t.state === 'IN_PROGRESS').length,
                 auth: 0,
                 file: 0,
-                completed: allTasks.filter(t => t.state === 'COMPLETED').length
+                completed: allTasks.filter(t => t.state === 'COMPLETED' || t.state === 'APPROVED').length
             };
 
             // Count auth and file browser tasks
@@ -1552,6 +2235,9 @@
                 }
             });
 
+            // Reset to first page when filters change
+            currentPage = 1;
+            
             displayTasks();
         }
 
@@ -1583,23 +2269,46 @@
             return 5;
         }
 
-        // Display filtered tasks
+        // Display filtered tasks with pagination and layout switching
         function displayTasks() {
-            const container = document.getElementById('ticketsGrid');
+            const gridContainer = document.getElementById('ticketsGrid');
+            const listContainer = document.getElementById('ticketsList');
             const noTickets = document.getElementById('noTickets');
             
+            // Hide all containers initially
+            gridContainer.style.display = 'none';
+            listContainer.style.display = 'none';
+            noTickets.style.display = 'none';
+            
             if (filteredTasks.length === 0) {
-                container.style.display = 'none';
                 noTickets.style.display = 'block';
+                updatePaginationInfo(0, 0, 0, 1);
                 return;
             }
-
-            noTickets.style.display = 'none';
-            container.style.display = 'grid';
+            
+            // Calculate pagination
+            const totalTasks = filteredTasks.length;
+            const totalPages = Math.max(1, Math.ceil(totalTasks / tasksPerPage));
+            const startIndex = (currentPage - 1) * tasksPerPage;
+            const endIndex = Math.min(startIndex + tasksPerPage, totalTasks);
+            const paginatedTasks = filteredTasks.slice(startIndex, endIndex);
+            
+            updatePaginationInfo(startIndex + 1, endIndex, totalTasks, totalPages);
             
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             
-            container.innerHTML = filteredTasks.map(task => {
+            if (currentLayout === 'grid') {
+                displayGridLayout(paginatedTasks, searchTerm);
+            } else {
+                displayListLayout(paginatedTasks, searchTerm);
+            }
+        }
+
+        function displayGridLayout(tasks, searchTerm) {
+            const container = document.getElementById('ticketsGrid');
+            container.style.display = 'grid';
+            
+            container.innerHTML = tasks.map(task => {
                 const taskTags = (task.tags && Array.isArray(task.tags)) ? task.tags : [];
                 const taskState = String(task.state || 'unknown').toLowerCase();
                 const taskTitle = String(task.title || 'Untitled Task');
@@ -1657,6 +2366,218 @@
             }).join('');
         }
 
+        function displayListLayout(tasks, searchTerm) {
+            const container = document.getElementById('ticketsList');
+            container.style.display = 'block';
+            
+            container.innerHTML = `
+                <table class="tickets-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>State</th>
+                            <th>Assignee</th>
+                            <th>Priority</th>
+                            <th>Epic</th>
+                            <th>Story</th>
+                            <th>Est.</th>
+                            <th>Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tasks.map(task => {
+                            const taskState = String(task.state || 'unknown').toLowerCase();
+                            const taskTitle = String(task.title || 'Untitled Task');
+                            const taskId = String(task.id || 'Unknown-ID');
+                            
+                            // Highlight search terms
+                            let displayTitle = taskTitle.length > 60 ? taskTitle.substring(0, 60) + '...' : taskTitle;
+                            if (searchTerm) {
+                                try {
+                                    const regex = new RegExp(`(${searchTerm})`, 'gi');
+                                    displayTitle = displayTitle.replace(regex, '<span class="search-highlight">$1</span>');
+                                } catch (e) {
+                                    displayTitle = taskTitle;
+                                }
+                            }
+
+                            const storyLabel = getStoryLabel(task);
+                            const epicLabel = getEpicLabel(task);
+                            
+                            return `
+                                <tr onclick="showTaskDetails('${task.id}')" style="cursor: pointer;">
+                                    <td style="font-family: monospace; font-size: 0.85rem; color: #9ca3af;">${taskId.substring(0, 20)}...</td>
+                                    <td>${displayTitle}</td>
+                                    <td><span class="ticket-state state-${taskState}">${task.state || 'Unknown'}</span></td>
+                                    <td>${(task.assignee || 'Unassigned').substring(0, 20)}</td>
+                                    <td>${task.priority || 'Normal'}</td>
+                                    <td>${epicLabel}</td>
+                                    <td>${storyLabel}</td>
+                                    <td>${task.estimate || 'N/A'}h</td>
+                                    <td>${formatDate(task.updated)}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function updatePaginationInfo(start, end, total, totalPages) {
+            document.getElementById('taskRange').textContent = `${start}-${end}`;
+            document.getElementById('totalTaskCount').textContent = total;
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            // Update pagination buttons
+            document.getElementById('prevPageBtn').disabled = currentPage <= 1;
+            document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.max(1, Math.ceil(filteredTasks.length / tasksPerPage));
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentPage = newPage;
+                displayTasks();
+            }
+        }
+
+        function switchLayout(layout) {
+            if (layout === currentLayout) return;
+            
+            currentLayout = layout;
+            
+            // Update button states
+            document.getElementById('gridViewBtn').classList.toggle('active', layout === 'grid');
+            document.getElementById('listViewBtn').classList.toggle('active', layout === 'list');
+            
+            displayTasks();
+        }
+
+        function showTaskDetails(taskId) {
+            const task = allTasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            // Create modal showing full task details
+            const modalHTML = `
+                <div id="taskDetailsModal" style="
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000;
+                " onclick="this.remove()">
+                    <div style="
+                        background: #1e1e2e; border-radius: 15px; padding: 30px; max-width: 800px; width: 90%;
+                        border: 1px solid #2d2d44; color: #e1e5e9; max-height: 80vh; overflow-y: auto;
+                    " onclick="event.stopPropagation()">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h2 style="color: #74c0fc; margin: 0;">Task Details</h2>
+                            <button onclick="document.getElementById('taskDetailsModal').remove()" style="
+                                background: #ef4444; color: white; border: none; padding: 8px 12px;
+                                border-radius: 6px; cursor: pointer; font-size: 1.1rem;
+                            ">×</button>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div><strong>ID:</strong> ${task.id}</div>
+                            <div><strong>State:</strong> <span class="ticket-state state-${task.state?.toLowerCase()}">${task.state}</span></div>
+                            <div><strong>Assignee:</strong> ${task.assignee || 'Unassigned'}</div>
+                            <div><strong>Priority:</strong> ${task.priority || 'Normal'}</div>
+                            <div><strong>Epic:</strong> 
+                                <select id="taskEpicSelect" style="background: #252538; color: #e1e5e9; border: 1px solid #2d2d44; padding: 5px; border-radius: 4px; margin-left: 10px; min-width: 200px;">
+                                    ${generateEpicOptions(task.epic)}
+                                </select>
+                                <button onclick="updateTaskEpic('${task.id}')" style="margin-left: 10px; padding: 5px 10px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Save</button>
+                            </div>
+                            <div><strong>Story:</strong> ${getStoryLabel(task)}</div>
+                            <div><strong>Estimate:</strong> ${task.estimate || 'N/A'} hours</div>
+                            <div><strong>Actual:</strong> ${task.actualHours || 'N/A'} hours</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="color: #74c0fc; margin-bottom: 10px;">Title</h3>
+                            <p style="background: #252538; padding: 15px; border-radius: 8px; margin: 0;">${task.title || 'Untitled Task'}</p>
+                        </div>
+                        
+                        ${task.description ? `
+                            <div style="margin-bottom: 20px;">
+                                <h3 style="color: #74c0fc; margin-bottom: 10px;">Description</h3>
+                                <p style="background: #252538; padding: 15px; border-radius: 8px; margin: 0; white-space: pre-wrap;">${task.description}</p>
+                            </div>
+                        ` : ''}
+                        
+                        ${task.tags && task.tags.length > 0 ? `
+                            <div style="margin-bottom: 20px;">
+                                <h3 style="color: #74c0fc; margin-bottom: 10px;">Tags</h3>
+                                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                    ${task.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.9rem; color: #9ca3af;">
+                            <div><strong>Created:</strong> ${formatDate(task.created)}</div>
+                            <div><strong>Updated:</strong> ${formatDate(task.updated)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        // Generate epic options for dropdown
+        function generateEpicOptions(currentEpic) {
+            const availableEpics = [
+                "Prompt Targeting System",
+                "Backstage Admin Controls", 
+                "Technical Debt & Refactoring",
+                "Analytics Dashboard",
+                "A/B Testing Framework",
+                "Mobile & Cross-Platform Support",
+                "LLM Agent Randomizer System",
+                "Marketplace & Community Features",
+                "Authentication & User Management",
+                "Advanced Node Capabilities & User Experience",
+                "File Browser & Project Management System",
+                "Epic 7 - Advanced Node Capabilities",
+                "Epic 8 - Visual Flow Enhancements", 
+                "Epic 17 - Backstage Admin Controls",
+                "Epic 18 - Security Hardening",
+                "Other"
+            ];
+            
+            let options = '<option value="">No Epic</option>';
+            availableEpics.forEach(epic => {
+                const selected = epic === currentEpic ? 'selected' : '';
+                options += `<option value="${epic}" ${selected}>${epic}</option>`;
+            });
+            
+            return options;
+        }
+
+        // Update task epic assignment
+        function updateTaskEpic(taskId) {
+            const newEpic = document.getElementById('taskEpicSelect').value;
+            const task = allTasks.find(t => t.id === taskId);
+            
+            if (task) {
+                const oldEpic = task.epic || 'No Epic';
+                task.epic = newEpic || null;
+                
+                // Show confirmation
+                const epicDisplay = newEpic || 'No Epic';
+                alert(`Task ${taskId} epic updated successfully!\n\nOld Epic: ${oldEpic}\nNew Epic: ${epicDisplay}`);
+                
+                // Close modal and refresh display
+                document.getElementById('taskDetailsModal').remove();
+                applyFilters(); // Refresh the task display
+                
+                // Update any counters/stats that might be affected
+                updateStats();
+            }
+        }
+
         // Get epic label with link
         function getEpicLabel(task) {
             let epicNum = null;
@@ -1676,7 +2597,11 @@
             
             if (epicNum) {
                 const epicLink = `<a href="docs/epic${epicNum}plan.md" target="_blank" style="color: #74c0fc; text-decoration: none;">Epic ${epicNum}</a>`;
-                return storyNum ? `${epicLink} (Story ${storyNum})` : epicLink;
+                if (storyNum) {
+                    const storyLink = `<a href="#" onclick="showStoryMarkdown(${epicNum}, '${storyNum}')" style="color: #10b981; text-decoration: none; cursor: pointer;">Story ${storyNum}</a>`;
+                    return `${epicLink} (${storyLink})`;
+                }
+                return epicLink;
             }
             
             return 'No Epic';
@@ -1692,7 +2617,7 @@
                 title.includes('auth') || title.includes('login') ||
                 title.includes('register') || title.includes('password') ||
                 title.includes('jwt') || title.includes('token')) {
-                return '🔐 Authentication (20.1)';
+                return '🔐 <a href="#" onclick="showStoryMarkdown(20, \'1\')" style="color: #fca5a5; text-decoration: none; cursor: pointer;">Authentication (20.1)</a>';
             }
             
             if (story.includes('20.2') || tags.includes('file-browser') || 
@@ -1700,7 +2625,7 @@
                 title.includes('save') || title.includes('load') ||
                 (title.includes('export') && !story.includes('19')) ||
                 (title.includes('import') && !story.includes('19'))) {
-                return '📁 File Browser (20.2)';
+                return '📁 <a href="#" onclick="showStoryMarkdown(20, \'2\')" style="color: #86efac; text-decoration: none; cursor: pointer;">File Browser (20.2)</a>';
             }
             
             if (task.metadata?.source === 'priority-automation') {
@@ -1715,6 +2640,184 @@
             if (!dateString) return 'N/A';
             const date = new Date(dateString);
             return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
+        // Show story markdown in a modal
+        function showStoryMarkdown(epicNum, storyNum) {
+            const storyFile = `docs/stories/${epicNum}.${storyNum}.*`;
+            
+            // Try common story file patterns
+            const potentialFiles = [
+                `docs/stories/${epicNum}.${storyNum}.professional-interface-polish.md`,
+                `docs/stories/${epicNum}.${storyNum}.authentication.md`,
+                `docs/stories/${epicNum}.${storyNum}.file-browser.md`,
+                `docs/stories/${epicNum}.${storyNum}.md`
+            ];
+            
+            // For now, create a modal that shows the story information
+            const modalHTML = `
+                <div id="storyModal" style="
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000;
+                " onclick="this.remove()">
+                    <div style="
+                        background: #1e1e2e; border-radius: 15px; padding: 30px; max-width: 1000px; width: 95%;
+                        border: 1px solid #2d2d44; color: #e1e5e9; max-height: 90vh; overflow-y: auto;
+                    " onclick="event.stopPropagation()">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                            <h2 style="color: #74c0fc; margin: 0;">📖 Story ${epicNum}.${storyNum}</h2>
+                            <button onclick="document.getElementById('storyModal').remove()" style="
+                                background: #ef4444; color: white; border: none; padding: 8px 12px;
+                                border-radius: 6px; cursor: pointer; font-size: 1.1rem;
+                            ">×</button>
+                        </div>
+                        
+                        <div style="background: #252538; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                            <h3 style="color: #10b981; margin-bottom: 15px;">Story Information</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                <div><strong>Epic:</strong> ${epicNum}</div>
+                                <div><strong>Story:</strong> ${storyNum}</div>
+                                <div><strong>Type:</strong> ${getStoryType(epicNum, storyNum)}</div>
+                                <div><strong>Status:</strong> <span style="color: #74c0fc;">In Development</span></div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #252538; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                            <h3 style="color: #f59e0b; margin-bottom: 15px;">Story Description</h3>
+                            <p style="line-height: 1.6; margin: 0; color: #d1d5db;">
+                                ${getStoryDescription(epicNum, storyNum)}
+                            </p>
+                        </div>
+                        
+                        <div style="background: #252538; padding: 20px; border-radius: 12px;">
+                            <h3 style="color: #8b5cf6; margin-bottom: 15px;">Related Tasks</h3>
+                            <div id="storyTasks" style="max-height: 300px; overflow-y: auto;">
+                                Loading related tasks...
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; text-align: center;">
+                            <button onclick="openStoryFile(${epicNum}, '${storyNum}')" style="
+                                background: #059669; color: white; border: none; padding: 12px 24px;
+                                border-radius: 8px; cursor: pointer; font-size: 1rem; margin-right: 10px;
+                            ">📄 View Story File</button>
+                            <button onclick="filterTasksByStory(${epicNum}, '${storyNum}'); document.getElementById('storyModal').remove(); switchTab('tasks');" style="
+                                background: #3b82f6; color: white; border: none; padding: 12px 24px;
+                                border-radius: 8px; cursor: pointer; font-size: 1rem;
+                            ">🔍 Filter Tasks</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Load related tasks
+            setTimeout(() => {
+                loadStoryTasks(epicNum, storyNum);
+            }, 100);
+        }
+
+        function getStoryType(epicNum, storyNum) {
+            if (epicNum === 20 && storyNum === '1') return '🔐 Authentication System';
+            if (epicNum === 20 && storyNum === '2') return '📁 File Browser';
+            if (epicNum === 8) return '🎬 Film Industry Demo';
+            return '📝 Feature Story';
+        }
+
+        function getStoryDescription(epicNum, storyNum) {
+            if (epicNum === 20 && storyNum === '1') {
+                return 'Complete authentication system with user registration, login, JWT tokens, protected routes, and session management. Enables secure user accounts and personalized project access.';
+            }
+            if (epicNum === 20 && storyNum === '2') {
+                return 'File browser system for saving and loading project files with .psg format support, search functionality, recent files, and project management capabilities.';
+            }
+            if (epicNum === 8) {
+                return 'Professional-grade interface polish for film industry demonstration, including Cinema 4D quality UI, director-friendly workflows, and real-time collaboration features.';
+            }
+            return `Story ${epicNum}.${storyNum} - Details available in the story documentation file.`;
+        }
+
+        function loadStoryTasks(epicNum, storyNum) {
+            const storyTasksEl = document.getElementById('storyTasks');
+            if (!storyTasksEl) return;
+            
+            const relatedTasks = allTasks.filter(task => {
+                const taskId = task.id || '';
+                const taskStory = task.story || '';
+                const taskTitle = task.title || '';
+                
+                // Match tasks by story pattern
+                return taskId.includes(`${epicNum}.${storyNum}`) || 
+                       taskStory.includes(`${epicNum}.${storyNum}`) ||
+                       (epicNum === 20 && storyNum === '1' && (taskTitle.toLowerCase().includes('auth') || taskTitle.toLowerCase().includes('login'))) ||
+                       (epicNum === 20 && storyNum === '2' && (taskTitle.toLowerCase().includes('file') || taskTitle.toLowerCase().includes('browser')));
+            });
+            
+            if (relatedTasks.length === 0) {
+                storyTasksEl.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 20px;">No related tasks found for this story.</p>';
+                return;
+            }
+            
+            storyTasksEl.innerHTML = relatedTasks.map(task => `
+                <div style="
+                    background: #2d2d44; border-radius: 8px; padding: 15px; margin-bottom: 10px;
+                    border-left: 4px solid ${getStateColor(task.state)};
+                    cursor: pointer;
+                " onclick="showTaskDetails('${task.id}')">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-family: monospace; font-size: 0.85rem; color: #9ca3af;">${task.id}</span>
+                        <span class="ticket-state state-${task.state?.toLowerCase()}">${task.state}</span>
+                    </div>
+                    <div style="font-weight: 500; margin-bottom: 8px; color: #e1e5e9;">
+                        ${task.title || 'Untitled Task'}
+                    </div>
+                    <div style="font-size: 0.85rem; color: #9ca3af;">
+                        <span>${task.assignee || 'Unassigned'}</span>
+                        <span style="margin: 0 8px;">•</span>
+                        <span>${task.estimate || 'N/A'}h estimated</span>
+                        <span style="margin: 0 8px;">•</span>
+                        <span>${formatDate(task.updated)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStateColor(state) {
+            switch(state) {
+                case 'COMPLETED': return '#10b981';
+                case 'IN_PROGRESS': return '#3b82f6';
+                case 'REVIEW': return '#8b5cf6';
+                case 'BLOCKED': return '#ef4444';
+                case 'TODO': return '#f59e0b';
+                default: return '#6b7280';
+            }
+        }
+
+        function openStoryFile(epicNum, storyNum) {
+            // Try to open the story file directly
+            const possiblePaths = [
+                `docs/stories/${epicNum}.${storyNum}.professional-interface-polish.md`,
+                `docs/stories/${epicNum}.${storyNum}.authentication.md`, 
+                `docs/stories/${epicNum}.${storyNum}.file-browser.md`,
+                `docs/stories/${epicNum}.${storyNum}.md`
+            ];
+            
+            // Open the first likely file
+            if (epicNum === 8 && storyNum === '1') {
+                window.open('docs/stories/8.1.professional-interface-polish.md', '_blank');
+            } else {
+                window.open(`docs/stories/${epicNum}.${storyNum}.md`, '_blank');
+            }
+        }
+
+        function filterTasksByStory(epicNum, storyNum) {
+            // Set search filter to find story-related tasks
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = `${epicNum}.${storyNum}`;
+                applyFilters();
+            }
         }
 
         // Theme toggle functionality
@@ -1768,7 +2871,7 @@
         }, 30000);
 
         // Time unit toggle functionality
-        let currentTimeUnit = 'months'; // months, hours, minutes, femtoseconds
+        let currentTimeUnit = 'months'; // months, weeks, hours, femtoseconds
         function toggleTimeUnit() {
             const workReadyElement = document.getElementById('workReady');
             const workReadyLabel = document.getElementById('workReadyLabel');
@@ -1776,7 +2879,7 @@
             if (!allTasks.length) return;
             
             const totalTasks = allTasks.length;
-            const completedTasks = allTasks.filter(t => t.state === 'COMPLETED').length;
+            const completedTasks = allTasks.filter(t => t.state === 'COMPLETED' || t.state === 'APPROVED').length;
             const remainingTasks = totalTasks - completedTasks;
             
             // Estimate based on different units (assuming 150 tasks/month, 25 tasks/week, 5 tasks/day, 0.6 tasks/hour)
@@ -1788,12 +2891,12 @@
                     workReadyLabel.textContent = 'Hours of Work Ready';
                     break;
                 case 'hours':
-                    currentTimeUnit = 'minutes';
-                    const minutesOfWork = Math.ceil(remainingTasks * 100); // ~100 minutes avg per task
-                    workReadyElement.textContent = `${minutesOfWork.toLocaleString()}+`;
-                    workReadyLabel.textContent = 'Minutes of Work Ready';
+                    currentTimeUnit = 'weeks';
+                    const weeksOfWork = Math.ceil(remainingTasks / 35); // ~35 tasks per week
+                    workReadyElement.textContent = `${weeksOfWork}+`;
+                    workReadyLabel.textContent = 'Weeks of Work Ready';
                     break;
-                case 'minutes':
+                case 'weeks':
                     currentTimeUnit = 'femtoseconds';
                     // 1 femtosecond = 10^-15 seconds
                     // Average task = 100 minutes = 6000 seconds = 6 × 10^18 femtoseconds
@@ -2545,6 +3648,245 @@
             document.body.insertAdjacentHTML('beforeend', modalHTML);
         }
 
+        // Epic breakdown functionality
+        function showEpicBreakdown() {
+            if (!allTasks.length) {
+                alert('No task data loaded yet. Please wait for data to load.');
+                return;
+            }
+            
+            // Calculate epic progress breakdown
+            const epicStats = {};
+            
+            allTasks.forEach(task => {
+                let epicNum = null;
+                
+                // Extract epic number from task ID or metadata
+                if (task.id && task.id.includes('E')) {
+                    const match = task.id.match(/E(\d+)\./);
+                    if (match) epicNum = parseInt(match[1]);
+                } else if (task.metadata?.source) {
+                    const match = task.metadata.source.match(/epic(\d+)/);
+                    if (match) epicNum = parseInt(match[1]);
+                }
+                
+                // Fallback: categorize by story patterns
+                if (!epicNum) {
+                    const title = (task.title || '').toLowerCase();
+                    const story = (task.story || '').toLowerCase();
+                    
+                    if (story.includes('20.1') || title.includes('auth')) epicNum = 20;
+                    else if (story.includes('20.2') || title.includes('file')) epicNum = 20;
+                    else if (title.includes('python') || title.includes('transform')) epicNum = 8;
+                    else if (title.includes('export') || title.includes('generator')) epicNum = 3;
+                    else if (title.includes('advanced') || title.includes('markov')) epicNum = 7;
+                    else epicNum = 'Other';
+                }
+                
+                if (!epicStats[epicNum]) {
+                    epicStats[epicNum] = {
+                        total: 0,
+                        completed: 0,
+                        inProgress: 0,
+                        review: 0,
+                        blocked: 0,
+                        unassigned: 0,
+                        approved: 0
+                    };
+                }
+                
+                epicStats[epicNum].total++;
+                
+                switch(task.state) {
+                    case 'COMPLETED': epicStats[epicNum].completed++; break;
+                    case 'IN_PROGRESS': epicStats[epicNum].inProgress++; break;
+                    case 'REVIEW': epicStats[epicNum].review++; break;
+                    case 'BLOCKED': epicStats[epicNum].blocked++; break;
+                    case 'APPROVED': epicStats[epicNum].approved++; break;
+                    default: epicStats[epicNum].unassigned++;
+                }
+            });
+            
+            // Calculate completion percentages
+            Object.keys(epicStats).forEach(epicNum => {
+                const stats = epicStats[epicNum];
+                const completedTasks = stats.completed + stats.approved;
+                stats.completionPercent = Math.round((completedTasks / stats.total) * 100);
+            });
+            
+            // Sort epics by number (but keep 'Other' at the end)
+            const sortedEpics = Object.entries(epicStats).sort((a, b) => {
+                if (a[0] === 'Other') return 1;
+                if (b[0] === 'Other') return -1;
+                return parseInt(a[0]) - parseInt(b[0]);
+            });
+            
+            const modalHTML = `
+                <div id="epicBreakdownModal" style="
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000;
+                " onclick="this.remove()">
+                    <div style="
+                        background: #1e1e2e; border-radius: 15px; padding: 30px; max-width: 1100px; width: 95%;
+                        border: 1px solid #2d2d44; color: #e1e5e9; max-height: 90vh; overflow-y: auto;
+                    " onclick="event.stopPropagation()">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                            <h2 style="color: #74c0fc; margin: 0;">📊 Granular Epic Progress Breakdown</h2>
+                            <button onclick="document.getElementById('epicBreakdownModal').remove()" style="
+                                background: #ef4444; color: white; border: none; padding: 8px 12px;
+                                border-radius: 6px; cursor: pointer; font-size: 1.1rem;
+                            ">×</button>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+                            ${sortedEpics.map(([epicNum, stats]) => {
+                                const epicName = getEpicName(epicNum);
+                                const completionColor = stats.completionPercent >= 80 ? '#10b981' : 
+                                                      stats.completionPercent >= 60 ? '#f59e0b' : 
+                                                      stats.completionPercent >= 40 ? '#8b5cf6' : '#ef4444';
+                                
+                                return `
+                                    <div style="
+                                        background: #252538; border-radius: 12px; padding: 20px;
+                                        border: 1px solid #2d2d44; transition: transform 0.2s;
+                                    " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                            <h3 style="color: ${completionColor}; margin: 0; font-size: 1.1rem;">
+                                                ${getEpicIcon(epicNum)} Epic ${epicNum}
+                                            </h3>
+                                            <span style="
+                                                background: ${completionColor}; color: white; padding: 4px 8px;
+                                                border-radius: 12px; font-size: 0.8rem; font-weight: bold;
+                                            ">${stats.completionPercent}%</span>
+                                        </div>
+                                        
+                                        <div style="color: #d1d5db; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.4;">
+                                            ${epicName}
+                                        </div>
+                                        
+                                        <div style="margin-bottom: 15px;">
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; color: #9ca3af;">
+                                                <span>Progress</span>
+                                                <span>${stats.completed + stats.approved} / ${stats.total} tasks</span>
+                                            </div>
+                                            <div style="width: 100%; height: 8px; background: #374151; border-radius: 4px; overflow: hidden;">
+                                                <div style="
+                                                    height: 100%; background: linear-gradient(90deg, ${completionColor}, ${completionColor}aa);
+                                                    width: ${stats.completionPercent}%; transition: width 0.5s ease-in-out;
+                                                "></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <span style="color: #10b981;">✅</span>
+                                                <span style="color: #9ca3af;">Complete: ${stats.completed + stats.approved}</span>
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <span style="color: #3b82f6;">🔄</span>
+                                                <span style="color: #9ca3af;">In Progress: ${stats.inProgress}</span>
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <span style="color: #8b5cf6;">👁️</span>
+                                                <span style="color: #9ca3af;">Review: ${stats.review}</span>
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <span style="color: #6b7280;">⏳</span>
+                                                <span style="color: #9ca3af;">Available: ${stats.unassigned}</span>
+                                            </div>
+                                            ${stats.blocked > 0 ? `
+                                                <div style="display: flex; align-items: center; gap: 6px;">
+                                                    <span style="color: #ef4444;">🚫</span>
+                                                    <span style="color: #fca5a5;">Blocked: ${stats.blocked}</span>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                        
+                                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #374151; text-align: center;">
+                                            <button onclick="filterByEpic('${epicNum}')" style="
+                                                background: #3b82f6; color: white; border: none; padding: 8px 16px;
+                                                border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: background 0.2s;
+                                            " onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                                                🔍 View Epic ${epicNum} Tasks
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <div style="margin-top: 25px; padding: 20px; background: #252538; border-radius: 12px; border: 1px solid #2d2d44;">
+                            <h3 style="color: #74c0fc; margin-bottom: 15px;">📈 Epic Performance Summary</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                                <div style="text-align: center;">
+                                    <div style="color: #10b981; font-size: 1.5rem; font-weight: bold;">${sortedEpics.filter(([_, stats]) => stats.completionPercent >= 80).length}</div>
+                                    <div style="color: #9ca3af; font-size: 0.9rem;">High Progress Epics</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="color: #f59e0b; font-size: 1.5rem; font-weight: bold;">${sortedEpics.filter(([_, stats]) => stats.completionPercent >= 40 && stats.completionPercent < 80).length}</div>
+                                    <div style="color: #9ca3af; font-size: 0.9rem;">Medium Progress Epics</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="color: #ef4444; font-size: 1.5rem; font-weight: bold;">${sortedEpics.filter(([_, stats]) => stats.completionPercent < 40).length}</div>
+                                    <div style="color: #9ca3af; font-size: 0.9rem;">Low Progress Epics</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="color: #74c0fc; font-size: 1.5rem; font-weight: bold;">${Math.round(sortedEpics.reduce((acc, [_, stats]) => acc + stats.completionPercent, 0) / sortedEpics.length)}%</div>
+                                    <div style="color: #9ca3af; font-size: 0.9rem;">Overall Progress</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+        
+        function getEpicName(epicNum) {
+            const names = {
+                3: 'Export System - Professional export formats (PNG, PDF, YAML, XML, GeneratorBundle)',
+                7: 'Advanced Node Capabilities - WeightedAdvanced, Conditional, Sequential, Markov nodes', 
+                8: 'Film Industry Demo - Professional interface polish and Cinema 4D quality workflows',
+                20: 'Business Features - Authentication system (20.1) and File Browser (20.2)',
+                'Other': 'Miscellaneous Tasks - Infrastructure, documentation, and other development work'
+            };
+            return names[epicNum] || `Epic ${epicNum} - Development tasks and features`;
+        }
+        
+        function getEpicIcon(epicNum) {
+            const icons = {
+                3: '📤',
+                7: '🎲', 
+                8: '🎬',
+                20: '🔐',
+                'Other': '📝'
+            };
+            return icons[epicNum] || '⚙️';
+        }
+        
+        function filterByEpic(epicNum) {
+            // Close the modal
+            document.getElementById('epicBreakdownModal').remove();
+            
+            // Switch to the tasks tab
+            switchTab('tasks');
+            
+            // Set the search filter to find epic-related tasks
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                let searchTerm = '';
+                if (epicNum === '20') searchTerm = 'auth OR file OR 20.';
+                else if (epicNum === '8') searchTerm = 'python OR film OR cinema';
+                else if (epicNum === '7') searchTerm = 'advanced OR markov OR weighted';
+                else if (epicNum === '3') searchTerm = 'export OR generator';
+                else if (epicNum !== 'Other') searchTerm = `E${epicNum}`;
+                
+                searchInput.value = searchTerm;
+                applyFilters();
+            }
+        }
+
         // Enhanced Claude API Cost Calculator using ccusage integration
         let cachedCostData = null;
         let lastCostUpdate = null;
@@ -2814,6 +4156,196 @@
                 closeAgentPerformanceModal();
             }
         });
+
+        // Agent Broadcasting Functions
+        let broadcastData = { messages: [], lastUpdate: null };
+
+        // Load broadcasts from the server
+        async function loadBroadcasts() {
+            try {
+                // In a real implementation, this would fetch from an API
+                // For now, we'll simulate the broadcast file data
+                const response = await fetch('/api/broadcasts').catch(() => null);
+                
+                if (response && response.ok) {
+                    broadcastData = await response.json();
+                } else {
+                    // Fallback to localStorage for demo purposes
+                    const stored = localStorage.getItem('agent-broadcasts');
+                    if (stored) {
+                        broadcastData = JSON.parse(stored);
+                    } else {
+                        broadcastData = { messages: [], lastUpdate: new Date().toISOString() };
+                    }
+                }
+                
+                displayBroadcasts();
+                updateBroadcastStats();
+            } catch (error) {
+                console.error('Error loading broadcasts:', error);
+                broadcastData = { messages: [], lastUpdate: new Date().toISOString() };
+                displayBroadcasts();
+            }
+        }
+
+        // Display broadcast messages
+        function displayBroadcasts() {
+            const container = document.getElementById('broadcastMessages');
+            
+            if (!broadcastData.messages || broadcastData.messages.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: #6b7280; padding: 40px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">📭</div>
+                        <div>No broadcast messages</div>
+                        <div style="font-size: 12px; margin-top: 8px;">Messages will appear here when sent to all agents</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const messagesHtml = broadcastData.messages.map(msg => {
+                const timeAgo = getTimeAgo(new Date(msg.timestamp));
+                const priorityClass = msg.priority || 'normal';
+                const priorityIcon = msg.priority === 'urgent' ? '🚨' : msg.priority === 'high' ? '⚠️' : '💬';
+                
+                return `
+                    <div class="broadcast-message ${priorityClass}">
+                        <div class="broadcast-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 16px;">${priorityIcon}</span>
+                                <span style="font-weight: 600; font-size: 12px;">${msg.id}</span>
+                            </div>
+                            <span class="broadcast-priority ${priorityClass}">${msg.priority || 'normal'}</span>
+                        </div>
+                        <div class="broadcast-text">${msg.message}</div>
+                        <div class="broadcast-meta">
+                            <span>${timeAgo}</span>
+                            <span>${msg.acknowledged ? msg.acknowledged.length : 0} agents acknowledged</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = messagesHtml;
+        }
+
+        // Send broadcast message
+        async function sendBroadcast() {
+            const messageInput = document.getElementById('broadcastMessage');
+            const prioritySelect = document.getElementById('broadcastPriority');
+            
+            const message = messageInput.value.trim();
+            const priority = prioritySelect.value;
+            
+            if (!message) {
+                alert('Please enter a message to broadcast');
+                return;
+            }
+
+            // Send to API
+            try {
+                const apiResponse = await fetch('/api/broadcasts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        priority: priority
+                    })
+                });
+
+                if (!apiResponse.ok) {
+                    const error = await apiResponse.json();
+                    throw new Error(error.error || 'Failed to send broadcast');
+                }
+
+                // Clear form and refresh display
+                messageInput.value = '';
+                prioritySelect.value = 'normal';
+                
+                // Reload broadcasts from server
+                await loadBroadcasts();
+            } catch (error) {
+                console.error('Error sending broadcast:', error);
+                alert(`Error sending broadcast: ${error.message}`);
+                return;
+            }
+            
+            // Show confirmation
+            const priorityIcon = priority === 'urgent' ? '🚨' : priority === 'high' ? '⚠️' : '📢';
+            alert(`${priorityIcon} Broadcast sent successfully!\\n\\nMessage: ${message}\\nPriority: ${priority}\\n\\nAgents can check with: node src/broadcast-to-agents.js check`);
+        }
+
+        // Send quick broadcast
+        function sendQuickBroadcast(message) {
+            document.getElementById('broadcastMessage').value = message;
+            
+            // Set priority based on message content
+            const prioritySelect = document.getElementById('broadcastPriority');
+            if (message.includes('Emergency') || message.includes('🚨')) {
+                prioritySelect.value = 'urgent';
+            } else if (message.includes('PRIORITY') || message.includes('immediately')) {
+                prioritySelect.value = 'high';
+            } else {
+                prioritySelect.value = 'normal';
+            }
+            
+            sendBroadcast();
+        }
+
+        // Clear all broadcasts
+        function clearAllBroadcasts() {
+            if (confirm('Are you sure you want to clear all broadcast messages?')) {
+                broadcastData = { messages: [], lastUpdate: new Date().toISOString() };
+                localStorage.setItem('agent-broadcasts', JSON.stringify(broadcastData));
+                displayBroadcasts();
+                updateBroadcastStats();
+            }
+        }
+
+        // Update broadcast statistics
+        function updateBroadcastStats() {
+            const totalEl = document.getElementById('totalBroadcasts');
+            const recentEl = document.getElementById('recentBroadcasts');
+            const activeEl = document.getElementById('activeBroadcasts');
+            const healthEl = document.getElementById('broadcastHealth');
+
+            const total = broadcastData.messages.length;
+            
+            // Count messages from last 24 hours
+            const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+            const recent = broadcastData.messages.filter(msg => 
+                new Date(msg.timestamp) > dayAgo
+            ).length;
+            
+            // Count messages with no acknowledgments (active)
+            const active = broadcastData.messages.filter(msg => 
+                !msg.acknowledged || msg.acknowledged.length === 0
+            ).length;
+            
+            // Simple health calculation
+            const health = broadcastData.lastUpdate ? '100%' : '0%';
+
+            if (totalEl) totalEl.textContent = total;
+            if (recentEl) recentEl.textContent = recent;
+            if (activeEl) activeEl.textContent = active;
+            if (healthEl) healthEl.textContent = health;
+        }
+
+        // Helper function to get time ago
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / (1000 * 60));
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            return `${diffDays}d ago`;
+        }
 
     </script>
 </body>

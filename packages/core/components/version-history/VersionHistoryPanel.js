@@ -246,7 +246,7 @@ const ChangeEventsList = ({ events, formatTimeAgo }) => {
             case 'branch_switched':
                 return `Switched to branch: ${event_data.branch_name}`;
             case 'branch_merged':
-                return `Merged branches`;
+                return 'Merged branches';
             default:
                 return event_type.replace(/_/g, ' ');
         }

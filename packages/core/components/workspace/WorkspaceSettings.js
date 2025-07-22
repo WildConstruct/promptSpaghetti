@@ -4,11 +4,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Settings modal for workspace configuration
  */
 import { useState } from 'react';
-export const WorkspaceSettings = ({ workspace, onUpdate, onArchive, onCancel, canArchive, }) => {
+export const WorkspaceSettings = ({ workspace, onUpdate, onArchive, onCancel, canArchive }) => {
     const [activeTab, setActiveTab] = useState('general');
     const [formData, setFormData] = useState({
         name: workspace.name,
-        description: workspace.description || '',
+        description: workspace.description || ''
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,7 +46,7 @@ export const WorkspaceSettings = ({ workspace, onUpdate, onArchive, onCancel, ca
         try {
             await onUpdate({
                 name: formData.name.trim(),
-                description: formData.description.trim() || undefined,
+                description: formData.description.trim() || undefined
             });
         }
         catch (error) {

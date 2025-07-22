@@ -79,7 +79,7 @@ const server = http.createServer((req, res) => {
   // Serve the dashboard HTML file
   if (pathname === '/' || pathname === '/dashboard') {
     try {
-      const htmlPath = path.join(__dirname, 'visual-ticket-dashboard.html');
+      const htmlPath = path.join(__dirname, 'complete-dashboard.html');
       const html = fs.readFileSync(htmlPath, 'utf8');
       
       // Update the HTML to use our API endpoint instead of direct file access
@@ -109,7 +109,7 @@ const server = http.createServer((req, res) => {
           <body>
             <h1>Dashboard Error</h1>
             <p>Error loading dashboard: ${error.message}</p>
-            <p>Make sure src/visual-ticket-dashboard.html exists.</p>
+            <p>Make sure src/complete-dashboard.html exists.</p>
           </body>
         </html>
       `);
@@ -118,7 +118,7 @@ const server = http.createServer((req, res) => {
   }
 
   // Serve static files
-  let filePath = path.join(__dirname, pathname === '/' ? 'visual-ticket-dashboard.html' : pathname);
+  let filePath = path.join(__dirname, pathname === '/' ? 'complete-dashboard.html' : pathname);
   
   // Security check - prevent directory traversal
   if (!filePath.startsWith(__dirname)) {

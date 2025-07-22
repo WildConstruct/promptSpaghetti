@@ -20,7 +20,7 @@ export const OrganizationManager = () => {
         website: '',
         plan: 'free',
         settings: {},
-        branding: {},
+        branding: {}
     });
     useEffect(() => {
         loadOrganizations();
@@ -34,7 +34,7 @@ export const OrganizationManager = () => {
         try {
             setLoading(true);
             const response = await fetch('/api/auth/organizations/my', {
-                credentials: 'include',
+                credentials: 'include'
             });
             if (!response.ok) {
                 throw new Error('Failed to load organizations');
@@ -56,7 +56,7 @@ export const OrganizationManager = () => {
     const loadOrganizationStats = async (organizationId) => {
         try {
             const response = await fetch(`/api/auth/organizations/${organizationId}/stats`, {
-                credentials: 'include',
+                credentials: 'include'
             });
             if (!response.ok) {
                 throw new Error('Failed to load organization stats');
@@ -73,10 +73,10 @@ export const OrganizationManager = () => {
             const response = await fetch('/api/auth/organizations', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify(formData),
+                body: JSON.stringify(formData)
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -99,10 +99,10 @@ export const OrganizationManager = () => {
             const response = await fetch(`/api/auth/organizations/${editingOrg.id}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify(formData),
+                body: JSON.stringify(formData)
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -127,7 +127,7 @@ export const OrganizationManager = () => {
         try {
             const response = await fetch(`/api/auth/organizations/${organizationId}`, {
                 method: 'DELETE',
-                credentials: 'include',
+                credentials: 'include'
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -150,7 +150,7 @@ export const OrganizationManager = () => {
             website: '',
             plan: 'free',
             settings: {},
-            branding: {},
+            branding: {}
         });
     };
     const startEditing = (org) => {
@@ -162,7 +162,7 @@ export const OrganizationManager = () => {
             website: org.website || '',
             plan: org.plan,
             settings: org.settings,
-            branding: org.branding,
+            branding: org.branding
         });
     };
     const getPlanColor = (plan) => {
@@ -189,7 +189,7 @@ export const OrganizationManager = () => {
                                             { id: 'settings', label: 'Settings', icon: Settings },
                                             { id: 'branding', label: 'Branding', icon: Palette },
                                             { id: 'members', label: 'Members', icon: Users },
-                                            { id: 'teams', label: 'Teams', icon: Shield },
+                                            { id: 'teams', label: 'Teams', icon: Shield }
                                         ].map((tab) => (_jsxs("button", { onClick: () => setActiveTab(tab.id), className: `flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
                                                 ? 'border-blue-500 text-blue-600'
                                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`, children: [_jsx(tab.icon, { className: "w-4 h-4 mr-2" }), tab.label] }, tab.id))) }) }), _jsxs("div", { className: "p-6", children: [activeTab === 'overview' && stats && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", children: [_jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: stats.totalMembers }), _jsx("div", { className: "text-sm text-gray-600", children: "Total Members" }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [stats.usage.users, "/", stats.planLimits.maxUsers, " limit"] })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: stats.totalTeams }), _jsx("div", { className: "text-sm text-gray-600", children: "Teams" }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [stats.usage.teams, "/", stats.planLimits.maxTeams, " limit"] })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: stats.recentActivity }), _jsx("div", { className: "text-sm text-gray-600", children: "Recent Activity" }), _jsx("div", { className: "text-xs text-gray-500 mt-1", children: "Last 30 days" })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: `text-2xl font-bold ${getPlanColor(selectedOrg.plan)}`, children: selectedOrg.plan.charAt(0).toUpperCase() + selectedOrg.plan.slice(1) }), _jsx("div", { className: "text-sm text-gray-600", children: "Current Plan" }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [(stats.usage.storage / 1024).toFixed(1), "GB / ", (stats.planLimits.maxStorage / 1024).toFixed(0), "GB"] })] })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-3", children: "Organization Info" }), _jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "flex items-center", children: [_jsx(Globe, { className: "w-4 h-4 text-gray-400 mr-2" }), _jsx("span", { className: "text-sm text-gray-600", children: selectedOrg.website || 'No website set' })] }), _jsxs("div", { className: "flex items-center", children: [_jsx(Crown, { className: "w-4 h-4 text-gray-400 mr-2" }), _jsxs("span", { className: "text-sm text-gray-600", children: ["Created ", new Date(selectedOrg.createdAt).toLocaleDateString()] })] })] })] })] })), activeTab === 'settings' && (_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Organization Settings" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Organization Name" }), _jsx("div", { className: "text-sm text-gray-900", children: selectedOrg.name })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Slug" }), _jsxs("div", { className: "text-sm text-gray-900", children: ["@", selectedOrg.slug] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Plan" }), _jsx("span", { className: `inline-block px-3 py-1 text-sm font-medium rounded-full ${getPlanBadge(selectedOrg.plan)}`, children: selectedOrg.plan.charAt(0).toUpperCase() + selectedOrg.plan.slice(1) })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Max Users" }), _jsx("div", { className: "text-sm text-gray-900", children: selectedOrg.maxUsers })] })] })] })), activeTab === 'branding' && (_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Branding & Appearance" }), _jsx("div", { className: "text-sm text-gray-600", children: "Customize your organization's visual identity and branding." })] })), activeTab === 'members' && (_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Members" }), _jsx("div", { className: "text-sm text-gray-600", children: "Manage organization members and their roles." })] })), activeTab === 'teams' && (_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Teams" }), _jsx("div", { className: "text-sm text-gray-600", children: "Create and manage teams within your organization." })] }))] })] })) : (_jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-12 text-center", children: [_jsx(Building2, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "No Organization Selected" }), _jsx("p", { className: "text-gray-600", children: "Select an organization from the list to view details" })] })) })] }), (showCreateForm || editingOrg) && (_jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50", children: _jsxs("div", { className: "bg-white rounded-lg max-w-md w-full p-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-4", children: editingOrg ? 'Edit Organization' : 'Create Organization' }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Organization Name *" }), _jsx("input", { type: "text", value: formData.name, onChange: (e) => setFormData(prev => ({ ...prev, name: e.target.value })), className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "Enter organization name" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Slug" }), _jsx("input", { type: "text", value: formData.slug, onChange: (e) => setFormData(prev => ({ ...prev, slug: e.target.value })), className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "organization-slug" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Description" }), _jsx("textarea", { value: formData.description, onChange: (e) => setFormData(prev => ({ ...prev, description: e.target.value })), className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", rows: 3, placeholder: "Describe your organization" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Website" }), _jsx("input", { type: "url", value: formData.website, onChange: (e) => setFormData(prev => ({ ...prev, website: e.target.value })), className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "https://example.com" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Plan" }), _jsxs("select", { value: formData.plan, onChange: (e) => setFormData(prev => ({ ...prev, plan: e.target.value })), className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", children: [_jsx("option", { value: "free", children: "Free" }), _jsx("option", { value: "pro", children: "Pro" }), _jsx("option", { value: "enterprise", children: "Enterprise" })] })] })] }), _jsxs("div", { className: "flex space-x-3 mt-6", children: [_jsx("button", { onClick: () => {

@@ -32,7 +32,7 @@ const DEFAULT_CONFIG = {
     enableAuditLogs: true,
     // Development
     enableDebugLogs: process.env.NODE_ENV === 'development',
-    enableValidation: true,
+    enableValidation: true
 };
 /**
  * Configuration manager for Python executor
@@ -44,7 +44,7 @@ export class PythonExecutorConfigManager {
         this.config = {
             ...DEFAULT_CONFIG,
             ...this.loadFromEnvironment(),
-            ...initialConfig,
+            ...initialConfig
         };
     }
     /**
@@ -65,7 +65,7 @@ export class PythonExecutorConfigManager {
         this.notifyListeners();
         console.log('Python executor configuration updated:', {
             changed: this.getChangedFields(oldConfig, this.config),
-            config: this.config,
+            config: this.config
         });
     }
     /**
@@ -244,7 +244,7 @@ export class PythonExecutorConfigManager {
                     enableMetrics: true,
                     enableTracing: true,
                     strictMode: false,
-                    timeout: 60000, // Longer timeout for development
+                    timeout: 60000 // Longer timeout for development
                 };
             case 'staging':
                 return {
@@ -252,7 +252,7 @@ export class PythonExecutorConfigManager {
                     enableMetrics: true,
                     enableTracing: true,
                     strictMode: true,
-                    timeout: 45000,
+                    timeout: 45000
                 };
             case 'production':
                 return {
@@ -260,7 +260,7 @@ export class PythonExecutorConfigManager {
                     enableMetrics: false,
                     enableTracing: false,
                     strictMode: true,
-                    timeout: 30000,
+                    timeout: 30000
                 };
             default:
                 return {};

@@ -1,9 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Card, Alert, Typography, Space, Button, Divider, Row, Col, Statistic, Tag, List, Tooltip, } from 'antd';
-import { WarningOutlined, InfoCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, SafetyOutlined, ClockCircleOutlined, EditOutlined, } from '@ant-design/icons';
-import { CONFLICT_DESCRIPTIONS, } from '../../types/restoration';
+import { Card, Alert, Typography, Space, Button, Divider, Row, Col, Statistic, Tag, List, Tooltip } from 'antd';
+import { WarningOutlined, InfoCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, SafetyOutlined, ClockCircleOutlined, EditOutlined } from '@ant-design/icons';
+import { CONFLICT_DESCRIPTIONS } from '../../types/restoration';
 const { Title, Text } = Typography;
-export const RestorationConfirmation = ({ preview, config, onConfirm, onCancel, }) => {
+export const RestorationConfirmation = ({ preview, config, onConfirm, onCancel }) => {
     const hasConflicts = preview.summary.totalConflicts > 0;
     const isHighRisk = preview.summary.riskLevel === 'high';
     const totalChanges = preview.summary.totalChanges;
@@ -37,7 +37,7 @@ export const RestorationConfirmation = ({ preview, config, onConfirm, onCancel, 
         return Object.entries(conflictTypes).map(([type, count]) => ({
             type,
             count,
-            description: CONFLICT_DESCRIPTIONS[type],
+            description: CONFLICT_DESCRIPTIONS[type]
         }));
     };
     const getActionIcon = (type) => {
@@ -98,6 +98,6 @@ export const RestorationConfirmation = ({ preview, config, onConfirm, onCancel, 
                                             text: 'Notification will be sent on completion',
                                             enabled: config.notifyOnCompletion,
                                             icon: _jsx(InfoCircleOutlined, {})
-                                        },
+                                        }
                                     ], renderItem: (item) => (_jsx(List.Item, { children: _jsxs(Space, { children: [item.icon, _jsx(Text, { type: item.enabled ? 'default' : 'secondary', style: { textDecoration: item.enabled ? 'none' : 'line-through' }, children: item.text }), _jsx(Tag, { color: item.enabled ? 'success' : 'default', size: "small", children: item.enabled ? 'ENABLED' : 'DISABLED' })] }) })) }) })] })] }), _jsx(Divider, {}), _jsxs("div", { style: { textAlign: 'center', marginBottom: '24px' }, children: [_jsx(Title, { level: 4, children: "Are you sure you want to proceed with this restoration?" }), _jsxs(Text, { type: "secondary", children: ["This action cannot be undone. ", config.createBackup && 'A backup will be created before making changes.'] })] }), _jsxs("div", { style: { display: 'flex', justifyContent: 'center', gap: '16px' }, children: [_jsx(Button, { size: "large", onClick: onCancel, children: "Cancel" }), _jsx(Button, { type: "primary", size: "large", onClick: onConfirm, disabled: hasConflicts, danger: isHighRisk, children: isHighRisk ? 'Proceed with High Risk Operation' : 'Confirm Restoration' })] })] }));
 };

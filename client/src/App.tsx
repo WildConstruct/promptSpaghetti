@@ -10,7 +10,11 @@ import RegistrationPage from './pages/RegistrationPage';
 import PasswordResetPage from './pages/PasswordResetPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
+import ProfilePage from './components/pages/ProfilePage';
+import SettingsPage from './components/pages/SettingsPage';
+import UserManagementDashboard from './components/admin/UserManagementDashboard';
 import { OAuthCallback } from './components/auth/OAuthCallback';
+import { UserNavigation } from './components/navigation/UserNavigation';
 import 'reactflow/dist/style.css';
 import './randomizer.css';
 
@@ -22,14 +26,24 @@ function MainApp() {
   const location = useLocation();
   const navigate = useNavigate();
   const [generatedGraph, setGeneratedGraph] = useState<unknown>(null);
-  const { isAuthenticated, logout } = useAuthStore();
+  const { isAuthenticated, logout, user } = useAuthStore();
 
   // Determine active tab based on current route
   const activeTab = location.pathname === '/randomizer' ? 'randomizer' : 
-                   location.pathname === '/epic-status' ? 'epic-status' : 'editor';
+                   location.pathname === '/epic-status' ? 'epic-status' :
+                   location.pathname.startsWith('/admin') ? 'admin' : 'editor';
 
-  const handleTabChange = useCallback((tab: 'editor' | 'randomizer' | 'epic-status') => {
-    navigate(tab === 'editor' ? '/' : tab === 'randomizer' ? '/randomizer' : '/epic-status');
+  // Check if user has admin access
+  const isAdmin = user?.roles?.includes('admin') || user?.roles?.includes('administrator');
+
+  const handleTabChange = useCallback((tab: 'editor' | 'randomizer' | 'epic-status' | 'admin') => {
+    const paths = {
+      editor: '/',
+      randomizer: '/randomizer',
+      'epic-status': '/epic-status',
+      admin: '/admin'
+    };
+    navigate(paths[tab] || '/');
   }, [navigate]);
 
   const handleGraphGenerated = useCallback((graph: unknown) => {
@@ -101,11 +115,31 @@ function MainApp() {
             >
               Epic Status
             </button>
+            
+            {/* Admin Tab - Only show for admin users */}
+            {isAdmin && (
+              <button
+                onClick={() => handleTabChange('admin')}
+                style={{
+                  padding: '10px 20px',
+                  border: 'none',
+                  backgroundColor: activeTab === 'admin' ? '#fff' : 'transparent',
+                  borderBottom: activeTab === 'admin' ? '2px solid #f59e0b' : '2px solid transparent',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: activeTab === 'admin' ? 'bold' : 'normal',
+                  color: activeTab === 'admin' ? '#f59e0b' : '#374151'
+                }}
+              >
+                Admin
+              </button>
+            )}
           </div>
           
           {/* Authentication Controls */}
           {isAuthenticated && (
-            <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', gap: '12px' }}>
+              <UserNavigation />
               <button
                 onClick={handleLogout}
                 style={{
@@ -143,6 +177,19 @@ function MainApp() {
                 onError={handleRandomizerError}
                 className="randomizer-main"
               />
+            </div>
+          ) : activeTab === 'admin' && isAdmin ? (
+            <div style={{ 
+              height: '100%', 
+              backgroundColor: '#f8f9fa',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <div style={{ textAlign: 'center', color: '#6b7280' }}>
+                <h2>Admin Panel</h2>
+                <p>Admin functionality will be integrated here</p>
+              </div>
             </div>
           ) : (
             <EpicDashboard />
@@ -189,6 +236,30 @@ export default function App() {
         } />
         <Route path="/epic-status" element={
           <PrivateRoute>
+            <MainApp />
+          </PrivateRoute>
+        } />
+        
+        {/* User Profile and Settings Routes */}
+        <Route path="/profile" element={
+          <PrivateRoute>
+            <ProfilePage />
+          </PrivateRoute>
+        } />
+        <Route path="/settings" element={
+          <PrivateRoute>
+            <SettingsPage />
+          </PrivateRoute>
+        } />
+        
+        {/* Admin Routes - Protected for admin users only */}
+        <Route path="/admin/users" element={
+          <PrivateRoute requiredRoles={['admin', 'administrator']}>
+            <UserManagementDashboard />
+          </PrivateRoute>
+        } />
+        <Route path="/admin/*" element={
+          <PrivateRoute requiredRoles={['admin', 'administrator']}>
             <MainApp />
           </PrivateRoute>
         } />

@@ -672,7 +672,7 @@ export class ComplianceBaselineTracker {
       .map(trend => {
         const gap = Math.abs(trend.lastMeasurement.deviation);
         const impact = gap > 20 ? 'high' : gap > 10 ? 'medium' : 'low';
-        const difficulty = trend.framework === 'GDPR' ? 'high' : 
+        const difficulty: 'low' | 'medium' | 'high' = trend.framework === 'GDPR' ? 'high' : 
                           trend.framework === 'SOC2' ? 'medium' : 'low';
         const timeframe = difficulty === 'high' ? '3-6 months' : 
                          difficulty === 'medium' ? '1-3 months' : '2-4 weeks';

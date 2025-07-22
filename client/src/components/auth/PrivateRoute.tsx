@@ -1,7 +1,9 @@
 /**
  * PrivateRoute - Component for protecting authenticated routes
  * 
+ * AUTH-985114-AF38: Enhanced with role-based access control
  * Redirects unauthenticated users to login and preserves intended destination
+ * Also supports role-based protection for admin and other privileged routes
  */
 
 import React, { useEffect } from 'react';
@@ -11,13 +13,17 @@ import { useAuthStore } from '../../stores/authStore';
 interface PrivateRouteProps {
   children: React.ReactNode;
   redirectTo?: string;
+  requiredRoles?: string[];
+  unauthorizedRedirect?: string;
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({ 
   children, 
-  redirectTo = '/login' 
+  redirectTo = '/login',
+  requiredRoles = [],
+  unauthorizedRedirect = '/unauthorized'
 }) => {
-  const { isAuthenticated, isLoading, checkAuthStatus, setReturnUrl } = useAuthStore();
+  const { isAuthenticated, isLoading, checkAuthStatus, setReturnUrl, user } = useAuthStore();
   const location = useLocation();
 
   useEffect(() => {
@@ -55,7 +61,22 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
-  // User is authenticated, render protected content
+  // Check role-based permissions if required
+  if (requiredRoles.length > 0 && user) {
+    const hasRequiredRole = requiredRoles.some(role => 
+      user.roles?.includes(role)
+    );
+    
+    if (!hasRequiredRole) {
+      return <Navigate to={unauthorizedRedirect} state={{ 
+        from: location,
+        requiredRoles,
+        userRoles: user.roles || []
+      }} replace />;
+    }
+  }
+
+  // User is authenticated and authorized, render protected content
   return <>{children}</>;
 };
 

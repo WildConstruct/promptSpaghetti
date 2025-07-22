@@ -116,97 +116,97 @@ export const testCases = {
      * Simple test case
      */
     simpleGreeting: {
-        purpose: "Generate personalized greetings",
-        complexity: "simple",
+        purpose: 'Generate personalized greetings',
+        complexity: 'simple',
         nodeCount: 5,
-        nodeTypes: ["WeightedChoice", "GetVariable", "Concat", "Output"],
+        nodeTypes: ['WeightedChoice', 'GetVariable', 'Concat', 'Output'],
         specificRequirements: [
-            "Include user's name from variable",
-            "Multiple greeting options",
-            "Friendly and welcoming tone"
+            'Include user\'s name from variable',
+            'Multiple greeting options',
+            'Friendly and welcoming tone'
         ],
-        style: "creative",
-        domain: "social interaction"
+        style: 'creative',
+        domain: 'social interaction'
     },
     /**
      * Moderate complexity test case
      */
     contentGenerator: {
-        purpose: "Create adaptive content based on user preferences",
-        complexity: "moderate",
+        purpose: 'Create adaptive content based on user preferences',
+        complexity: 'moderate',
         nodeCount: 15,
-        nodeTypes: ["WeightedChoice", "Conditional", "Sequential", "Concat", "Output"],
+        nodeTypes: ['WeightedChoice', 'Conditional', 'Sequential', 'Concat', 'Output'],
         specificRequirements: [
-            "Adapt to user's experience level",
-            "Include conditional branching",
-            "Support multiple content types"
+            'Adapt to user\'s experience level',
+            'Include conditional branching',
+            'Support multiple content types'
         ],
-        focusAreas: ["personalization", "content quality", "user experience"],
-        style: "balanced",
-        domain: "educational content"
+        focusAreas: ['personalization', 'content quality', 'user experience'],
+        style: 'balanced',
+        domain: 'educational content'
     },
     /**
      * Complex test case with advanced features
      */
     intelligentTutor: {
-        purpose: "Build an adaptive tutoring system that adjusts to student responses",
-        complexity: "complex",
+        purpose: 'Build an adaptive tutoring system that adjusts to student responses',
+        complexity: 'complex',
         nodeCount: 30,
-        nodeTypes: ["WeightedAdvanced", "Conditional", "Sequential", "Markov", "PythonTransform", "Output"],
+        nodeTypes: ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov', 'PythonTransform', 'Output'],
         specificRequirements: [
-            "Track student progress dynamically",
-            "Provide personalized feedback",
-            "Adapt difficulty based on performance",
-            "Include assessment and remediation paths"
+            'Track student progress dynamically',
+            'Provide personalized feedback',
+            'Adapt difficulty based on performance',
+            'Include assessment and remediation paths'
         ],
-        focusAreas: ["adaptive learning", "feedback loops", "performance tracking"],
-        style: "logical",
-        domain: "education technology",
+        focusAreas: ['adaptive learning', 'feedback loops', 'performance tracking'],
+        style: 'logical',
+        domain: 'education technology',
         constraints: [
-            "No inappropriate content",
-            "Educational focus required",
-            "Clear learning objectives"
+            'No inappropriate content',
+            'Educational focus required',
+            'Clear learning objectives'
         ]
     },
     /**
      * Creative writing assistant
      */
     storyGenerator: {
-        purpose: "Generate interactive story scenarios with branching narratives",
-        complexity: "moderate",
+        purpose: 'Generate interactive story scenarios with branching narratives',
+        complexity: 'moderate',
         nodeCount: 20,
-        nodeTypes: ["WeightedChoice", "Conditional", "Sequential", "Markov", "Output"],
+        nodeTypes: ['WeightedChoice', 'Conditional', 'Sequential', 'Markov', 'Output'],
         specificRequirements: [
-            "Multiple story paths",
-            "Character development options",
-            "Genre-appropriate content"
+            'Multiple story paths',
+            'Character development options',
+            'Genre-appropriate content'
         ],
-        focusAreas: ["narrative structure", "character development", "plot progression"],
-        style: "creative",
-        domain: "creative writing",
+        focusAreas: ['narrative structure', 'character development', 'plot progression'],
+        style: 'creative',
+        domain: 'creative writing',
         examples: [
-            "Choose-your-own-adventure style",
-            "Character-driven narratives",
-            "Multiple endings possible"
+            'Choose-your-own-adventure style',
+            'Character-driven narratives',
+            'Multiple endings possible'
         ]
     },
     /**
      * Data processing pipeline
      */
     dataProcessor: {
-        purpose: "Create a data transformation and analysis pipeline",
-        complexity: "complex",
+        purpose: 'Create a data transformation and analysis pipeline',
+        complexity: 'complex',
         nodeCount: 25,
-        nodeTypes: ["PythonTransform", "Conditional", "Sequential", "WeightedChoice", "Output"],
+        nodeTypes: ['PythonTransform', 'Conditional', 'Sequential', 'WeightedChoice', 'Output'],
         specificRequirements: [
-            "Input validation and cleaning",
-            "Multiple analysis methods",
-            "Conditional processing based on data characteristics",
-            "Output formatting options"
+            'Input validation and cleaning',
+            'Multiple analysis methods',
+            'Conditional processing based on data characteristics',
+            'Output formatting options'
         ],
-        focusAreas: ["data quality", "analysis accuracy", "performance optimization"],
-        style: "logical",
-        domain: "data science"
+        focusAreas: ['data quality', 'analysis accuracy', 'performance optimization'],
+        style: 'logical',
+        domain: 'data science'
     }
 };
 /**
@@ -277,17 +277,17 @@ function calculateSummaryStats(testResults) {
  */
 export function generateTestReport(results) {
     const { testResults, summary } = results;
-    let report = `# Cross-Model LLM Agent Test Report\n\n`;
+    let report = '# Cross-Model LLM Agent Test Report\n\n';
     report += `**Generated**: ${new Date().toISOString()}\n\n`;
-    report += `## Summary\n`;
+    report += '## Summary\n';
     report += `- **Total Tests**: ${summary.totalTests}\n`;
     report += `- **Successful Tests**: ${summary.successfulTests} (${((summary.successfulTests / summary.totalTests) * 100).toFixed(1)}%)\n`;
     report += `- **Average Consistency**: ${(summary.averageConsistency * 100).toFixed(1)}%\n\n`;
-    report += `## Model Performance\n`;
+    report += '## Model Performance\n';
     Object.entries(summary.modelPerformance).forEach(([model, perf]) => {
         report += `- **${model.toUpperCase()}**: ${(perf.successRate * 100).toFixed(1)}% success, ${perf.avgTime.toFixed(0)}ms avg\n`;
     });
-    report += `\n## Detailed Results\n\n`;
+    report += '\n## Detailed Results\n\n';
     Object.entries(testResults).forEach(([testName, result]) => {
         report += `### ${testName}\n`;
         report += `- **Success Count**: ${result.comparison.successCount}/3\n`;

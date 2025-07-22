@@ -68,32 +68,32 @@ export class ExtensionDocumentationGenerator {
     generateIndex() {
         const registry = extensionPointRegistry;
         const stats = registry.getStatistics();
-        let markdown = `# Extension Point Index\n\n`;
+        let markdown = '# Extension Point Index\n\n';
         // Statistics
-        markdown += `## Statistics\n\n`;
+        markdown += '## Statistics\n\n';
         markdown += `- **Total Extension Points**: ${stats.total}\n`;
-        markdown += `- **By Category**:\n`;
+        markdown += '- **By Category**:\n';
         Object.entries(stats.byCategory).forEach(([category, count]) => {
             if (count > 0) {
                 markdown += `  - ${category}: ${count}\n`;
             }
         });
-        markdown += `- **By Priority**:\n`;
+        markdown += '- **By Priority**:\n';
         Object.entries(stats.byPriority).forEach(([priority, count]) => {
             if (count > 0) {
                 markdown += `  - ${priority}: ${count}\n`;
             }
         });
-        markdown += `- **By Lifecycle**:\n`;
+        markdown += '- **By Lifecycle**:\n';
         Object.entries(stats.byLifecycle).forEach(([lifecycle, count]) => {
             if (count > 0) {
                 markdown += `  - ${lifecycle}: ${count}\n`;
             }
         });
         // Quick Reference
-        markdown += `\n## Quick Reference\n\n`;
-        markdown += `| ID | Name | Category | Priority | Lifecycle |\n`;
-        markdown += `|---|---|---|---|---|\n`;
+        markdown += '\n## Quick Reference\n\n';
+        markdown += '| ID | Name | Category | Priority | Lifecycle |\n';
+        markdown += '|---|---|---|---|---|\n';
         registry.getAll().forEach(ep => {
             markdown += `| \`${ep.id}\` | ${ep.name} | ${ep.category} | ${ep.priority} | ${ep.lifecycle} |\n`;
         });
@@ -140,14 +140,14 @@ export class ExtensionDocumentationGenerator {
      * Generate markdown documentation
      */
     generateMarkdown(extensionPoints, options) {
-        let markdown = `# Extension Point Documentation\n\n`;
+        let markdown = '# Extension Point Documentation\n\n';
         markdown += `Generated: ${new Date().toISOString()}\n\n`;
         // Table of Contents
-        markdown += `## Table of Contents\n\n`;
+        markdown += '## Table of Contents\n\n';
         extensionPoints.forEach(ep => {
             markdown += `- [${ep.name}](#${ep.id.replace(/\./g, '-')})\n`;
         });
-        markdown += `\n`;
+        markdown += '\n';
         // Extension Points
         extensionPoints.forEach(ep => {
             markdown += this.generateMarkdownExtensionPoint(ep, options);
@@ -169,26 +169,26 @@ export class ExtensionDocumentationGenerator {
         if (ep.location.line) {
             markdown += `:${ep.location.line}`;
         }
-        markdown += `\n\n`;
+        markdown += '\n\n';
         // Description
         markdown += `${ep.description}\n\n`;
         // Interfaces
-        markdown += `### Interfaces\n\n`;
+        markdown += '### Interfaces\n\n';
         ep.interfaces.forEach(iface => {
             markdown += `#### ${iface.name}\n\n`;
             markdown += `${iface.description}\n\n`;
             if (iface.parameters.length > 0) {
-                markdown += `**Parameters**:\n\n`;
-                markdown += `| Name | Type | Required | Description | Default |\n`;
-                markdown += `|---|---|---|---|---|\n`;
+                markdown += '**Parameters**:\n\n';
+                markdown += '| Name | Type | Required | Description | Default |\n';
+                markdown += '|---|---|---|---|---|\n';
                 iface.parameters.forEach(param => {
                     markdown += `| \`${param.name}\` | \`${param.type}\` | ${param.required ? 'Yes' : 'No'} | ${param.description} | ${param.defaultValue !== undefined ? `\`${param.defaultValue}\`` : '-'} |\n`;
                 });
-                markdown += `\n`;
+                markdown += '\n';
             }
             markdown += `**Returns**: \`${iface.returnType}\`\n\n`;
             if (iface.examples && iface.examples.length > 0) {
-                markdown += `**Examples**:\n\n`;
+                markdown += '**Examples**:\n\n';
                 iface.examples.forEach(example => {
                     markdown += `\`\`\`typescript\n${example}\n\`\`\`\n\n`;
                 });
@@ -196,15 +196,15 @@ export class ExtensionDocumentationGenerator {
         });
         // Dependencies
         if (ep.dependencies && ep.dependencies.length > 0) {
-            markdown += `### Dependencies\n\n`;
+            markdown += '### Dependencies\n\n';
             ep.dependencies.forEach(dep => {
                 markdown += `- \`${dep}\`\n`;
             });
-            markdown += `\n`;
+            markdown += '\n';
         }
         // Examples
         if (options.includeExamples !== false && ep.examples && ep.examples.length > 0) {
-            markdown += `### Examples\n\n`;
+            markdown += '### Examples\n\n';
             ep.examples.forEach(example => {
                 markdown += `#### ${example.name}\n\n`;
                 markdown += `${example.description}\n\n`;
@@ -213,31 +213,31 @@ export class ExtensionDocumentationGenerator {
         }
         // Constraints
         if (options.includeConstraints !== false && ep.constraints) {
-            markdown += `### Constraints\n\n`;
+            markdown += '### Constraints\n\n';
             if (ep.constraints.performance) {
-                markdown += `#### Performance\n\n`;
+                markdown += '#### Performance\n\n';
                 if (ep.constraints.performance.maxExecutionTime) {
                     markdown += `- **Max Execution Time**: ${ep.constraints.performance.maxExecutionTime}ms\n`;
                 }
                 if (ep.constraints.performance.maxMemoryUsage) {
                     markdown += `- **Max Memory Usage**: ${Math.round(ep.constraints.performance.maxMemoryUsage / 1024 / 1024)}MB\n`;
                 }
-                markdown += `\n`;
+                markdown += '\n';
             }
             if (ep.constraints.security) {
-                markdown += `#### Security\n\n`;
+                markdown += '#### Security\n\n';
                 if (ep.constraints.security.permissions) {
                     markdown += `- **Required Permissions**: ${ep.constraints.security.permissions.join(', ')}\n`;
                 }
                 if (ep.constraints.security.sandboxed !== undefined) {
                     markdown += `- **Sandboxed**: ${ep.constraints.security.sandboxed ? 'Yes' : 'No'}\n`;
                 }
-                markdown += `\n`;
+                markdown += '\n';
             }
         }
         // Metadata
         if (options.includeMetadata !== false) {
-            markdown += `### Metadata\n\n`;
+            markdown += '### Metadata\n\n';
             markdown += `- **Added in**: ${ep.metadata.addedIn}\n`;
             if (ep.metadata.deprecatedIn) {
                 markdown += `- **Deprecated in**: ${ep.metadata.deprecatedIn}\n`;
@@ -248,9 +248,9 @@ export class ExtensionDocumentationGenerator {
             if (ep.metadata.replacedBy) {
                 markdown += `- **Replaced by**: ${ep.metadata.replacedBy}\n`;
             }
-            markdown += `\n`;
+            markdown += '\n';
         }
-        markdown += `---\n\n`;
+        markdown += '---\n\n';
         return markdown;
     }
     /**
@@ -360,14 +360,14 @@ export class ExtensionDocumentationGenerator {
         
         <p><strong>Returns:</strong> <code>${iface.returnType}</code></p>`;
             if (iface.examples && iface.examples.length > 0) {
-                html += `<h5>Examples</h5>`;
+                html += '<h5>Examples</h5>';
                 iface.examples.forEach(example => {
                     html += `<pre><code>${this.escapeHtml(example)}</code></pre>`;
                 });
             }
         });
         if (options.includeExamples !== false && ep.examples && ep.examples.length > 0) {
-            html += `<h3>Examples</h3>`;
+            html += '<h3>Examples</h3>';
             ep.examples.forEach(example => {
                 html += `
           <h4>${example.name}</h4>
@@ -376,7 +376,7 @@ export class ExtensionDocumentationGenerator {
         `;
             });
         }
-        html += `</div>`;
+        html += '</div>';
         return html;
     }
     /**

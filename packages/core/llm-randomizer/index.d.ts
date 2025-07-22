@@ -1,4 +1,4 @@
-export * from './serialization';
+export { GraphSerializer, SerializationOptions, SerializationMetadata, serializeGraph, createDefaultMetadata } from './serialization/serializer';
 export * from './agents';
 export * from './parser';
 export * from './generator';
@@ -25,7 +25,7 @@ export interface LLMRandomizerWorkflow {
  */
 export declare class LLMRandomizerSystem implements LLMRandomizerWorkflow {
     private workflow;
-    generateWithLLM(request: any, provider?: string): Promise<any>;
+    generateWithLLM(request: any, provider?: 'openai' | 'claude' | 'gemini'): Promise<any>;
     parseFromLLM(llmOutput: string): Promise<any>;
     validateAndSerialize(graph: any): Promise<string>;
     fullWorkflow(request: any, provider?: string): Promise<any>;

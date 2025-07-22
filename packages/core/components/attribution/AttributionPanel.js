@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { Card, Avatar, Typography, Tag, Tooltip, Space, Button, Drawer, List, Badge, Switch, Alert, Empty, } from 'antd';
-import { UserOutlined, SettingOutlined, TeamOutlined, ClockCircleOutlined, EditOutlined, DeleteOutlined, PlusOutlined, NodeIndexOutlined, ShareAltOutlined, } from '@ant-design/icons';
-import { CHANGE_TYPE_DESCRIPTIONS, RESOURCE_TYPE_DESCRIPTIONS, } from '../../types/attribution';
+import { Card, Avatar, Typography, Tag, Tooltip, Space, Button, Drawer, List, Badge, Switch, Alert, Empty } from 'antd';
+import { UserOutlined, SettingOutlined, TeamOutlined, ClockCircleOutlined, EditOutlined, DeleteOutlined, PlusOutlined, NodeIndexOutlined, ShareAltOutlined } from '@ant-design/icons';
+import { CHANGE_TYPE_DESCRIPTIONS, RESOURCE_TYPE_DESCRIPTIONS } from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
 import { ContributorVisualization } from './ContributorVisualization';
 const { Text, Title } = Typography;
@@ -66,7 +66,7 @@ const AuthorIndicator = ({ attribution, showDetails = true, onClick }) => {
     }
     return content;
 };
-export const AttributionPanel = ({ projectId, selectedResourceType, selectedResourceId, visible, onClose, onAttributionRecord, }) => {
+export const AttributionPanel = ({ projectId, selectedResourceType, selectedResourceId, visible, onClose, onAttributionRecord }) => {
     const [attributions, setAttributions] = useState([]);
     const [showContributors, setShowContributors] = useState(false);
     const [privacySettings, setPrivacySettings] = useState(null);
@@ -111,7 +111,7 @@ export const AttributionPanel = ({ projectId, selectedResourceType, selectedReso
                 limit: 50,
                 offset: 0,
                 sortBy: 'created_at',
-                sortOrder: 'desc',
+                sortOrder: 'desc'
             });
             setAttributions(recentAttributions);
         }
@@ -123,7 +123,7 @@ export const AttributionPanel = ({ projectId, selectedResourceType, selectedReso
         try {
             const updatedSettings = await updatePrivacySettings({
                 projectId,
-                settings: { ...privacySettings, ...settings },
+                settings: { ...privacySettings, ...settings }
             });
             setPrivacySettings(updatedSettings);
         }
@@ -155,7 +155,7 @@ export const AttributionPanel = ({ projectId, selectedResourceType, selectedReso
                         return (_jsxs(Card, { size: "small", style: { marginBottom: '8px' }, hoverable: true, children: [_jsx("div", { style: { marginBottom: '8px' }, children: _jsxs(Space, { children: [_jsx(Text, { strong: true, style: { fontSize: '12px' }, children: RESOURCE_TYPE_DESCRIPTIONS[resourceType] }), _jsx(Text, { code: true, style: { fontSize: '11px' }, children: resourceId }), _jsx(Badge, { count: resourceAttributions.length, size: "small" })] }) }), _jsxs("div", { style: { display: 'flex', gap: '4px', flexWrap: 'wrap' }, children: [resourceAttributions.slice(0, 3).map((attribution) => (_jsx(Tooltip, { title: _jsxs("div", { children: [_jsx("div", { children: attribution.authorName || 'Anonymous' }), _jsx("div", { children: CHANGE_TYPE_DESCRIPTIONS[attribution.changeType] }), _jsx("div", { children: attribution.createdAt.toLocaleString() })] }), children: _jsx(Avatar, { size: 20, style: {
                                                     backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
                                                     fontSize: '10px',
-                                                    cursor: 'pointer',
+                                                    cursor: 'pointer'
                                                 }, onClick: () => handleAttributionClick(attribution), children: attribution.authorName?.[0] || '?' }) }, attribution.id))), resourceAttributions.length > 3 && (_jsxs(Avatar, { size: 20, style: { backgroundColor: '#f0f0f0', fontSize: '10px' }, children: ["+", resourceAttributions.length - 3] }))] })] }, resourceKey));
                     })] }));
         }

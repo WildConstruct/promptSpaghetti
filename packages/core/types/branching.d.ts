@@ -41,8 +41,8 @@ export declare const ProjectBranchSchema: z.ZodObject<{
     name: string;
     status: "active" | "archived" | "merged" | "abandoned";
     metadata: Record<string, unknown>;
-    createdBy: string;
     projectId: string;
+    createdBy: string;
     baseSnapshotId: string;
     headSnapshotId: string;
     branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
@@ -66,16 +66,16 @@ export declare const ProjectBranchSchema: z.ZodObject<{
     updatedAt: Date;
     name: string;
     status: "active" | "archived" | "merged" | "abandoned";
-    createdBy: string;
     projectId: string;
+    createdBy: string;
     baseSnapshotId: string;
     headSnapshotId: string;
     branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
     protectionLevel: "none" | "locked" | "protected";
     lastActivityAt: Date;
     description?: string | undefined;
-    displayName?: string | undefined;
     metadata?: Record<string, unknown> | undefined;
+    displayName?: string | undefined;
     parentBranchId?: string | undefined;
     mergedAt?: Date | undefined;
     mergedBy?: string | undefined;
@@ -159,10 +159,10 @@ export declare const BranchMergeRequestSchema: z.ZodObject<{
     createdAt: Date;
     updatedAt: Date;
     status: "closed" | "open" | "draft" | "merged";
-    title: string;
     metadata: Record<string, unknown>;
-    createdBy: string;
     projectId: string;
+    title: string;
+    createdBy: string;
     additionsCount: number;
     deletionsCount: number;
     sourceBranchId: string;
@@ -186,9 +186,9 @@ export declare const BranchMergeRequestSchema: z.ZodObject<{
     createdAt: Date;
     updatedAt: Date;
     status: "closed" | "open" | "draft" | "merged";
+    projectId: string;
     title: string;
     createdBy: string;
-    projectId: string;
     sourceBranchId: string;
     targetBranchId: string;
     description?: string | undefined;
@@ -220,7 +220,7 @@ export declare const BranchMergeReviewSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     updatedAt: Date;
-    status: "pending" | "rejected" | "approved" | "commented";
+    status: "pending" | "approved" | "rejected" | "commented";
     mergeRequestId: string;
     reviewerId: string;
     submittedAt: Date;
@@ -228,7 +228,7 @@ export declare const BranchMergeReviewSchema: z.ZodObject<{
 }, {
     id: string;
     updatedAt: Date;
-    status: "pending" | "rejected" | "approved" | "commented";
+    status: "pending" | "approved" | "rejected" | "commented";
     mergeRequestId: string;
     reviewerId: string;
     submittedAt: Date;
@@ -287,22 +287,22 @@ export declare const BranchConflictSchema: z.ZodObject<{
     resolvedBy: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id: string;
+    detectedAt: Date;
     sourceBranchId: string;
     targetBranchId: string;
     conflictType: "merge" | "rebase" | "cherry_pick";
     conflictStatus: "resolved" | "unresolved" | "ignored";
     conflictedResources: Record<string, unknown>[];
-    detectedAt: Date;
     conflictResolution?: Record<string, unknown> | undefined;
     resolvedAt?: Date | undefined;
     resolvedBy?: string | undefined;
 }, {
     id: string;
+    detectedAt: Date;
     sourceBranchId: string;
     targetBranchId: string;
     conflictType: "merge" | "rebase" | "cherry_pick";
     conflictStatus: "resolved" | "unresolved" | "ignored";
-    detectedAt: Date;
     conflictedResources?: Record<string, unknown>[] | undefined;
     conflictResolution?: Record<string, unknown> | undefined;
     resolvedAt?: Date | undefined;
@@ -418,8 +418,8 @@ export declare const UpdateBranchRequestSchema: z.ZodObject<{
     metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
     description?: string | undefined;
-    displayName?: string | undefined;
     metadata?: Record<string, unknown> | undefined;
+    displayName?: string | undefined;
     protectionLevel?: "none" | "locked" | "protected" | undefined;
     autoMergeEnabled?: boolean | undefined;
     requiresReview?: boolean | undefined;
@@ -427,8 +427,8 @@ export declare const UpdateBranchRequestSchema: z.ZodObject<{
     deleteOnMerge?: boolean | undefined;
 }, {
     description?: string | undefined;
-    displayName?: string | undefined;
     metadata?: Record<string, unknown> | undefined;
+    displayName?: string | undefined;
     protectionLevel?: "none" | "locked" | "protected" | undefined;
     autoMergeEnabled?: boolean | undefined;
     requiresReview?: boolean | undefined;
@@ -467,8 +467,8 @@ export declare const CreateMergeRequestRequestSchema: z.ZodObject<{
     allowRebaseMerge: z.ZodDefault<z.ZodBoolean>;
     deleteSourceBranch: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    title: string;
     projectId: string;
+    title: string;
     sourceBranchId: string;
     targetBranchId: string;
     reviewers: string[];
@@ -479,8 +479,8 @@ export declare const CreateMergeRequestRequestSchema: z.ZodObject<{
     description?: string | undefined;
     assignedTo?: string | undefined;
 }, {
-    title: string;
     projectId: string;
+    title: string;
     sourceBranchId: string;
     targetBranchId: string;
     description?: string | undefined;
@@ -503,8 +503,8 @@ export declare const UpdateMergeRequestRequestSchema: z.ZodObject<{
     metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
     description?: string | undefined;
-    title?: string | undefined;
     metadata?: Record<string, unknown> | undefined;
+    title?: string | undefined;
     assignedTo?: string | undefined;
     reviewers?: string[] | undefined;
     allowSquashMerge?: boolean | undefined;
@@ -513,8 +513,8 @@ export declare const UpdateMergeRequestRequestSchema: z.ZodObject<{
     deleteSourceBranch?: boolean | undefined;
 }, {
     description?: string | undefined;
-    title?: string | undefined;
     metadata?: Record<string, unknown> | undefined;
+    title?: string | undefined;
     assignedTo?: string | undefined;
     reviewers?: string[] | undefined;
     allowSquashMerge?: boolean | undefined;
@@ -527,11 +527,11 @@ export declare const CreateReviewRequestSchema: z.ZodObject<{
     status: z.ZodEnum<["pending", "approved", "rejected", "commented"]>;
     reviewMessage: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    status: "pending" | "rejected" | "approved" | "commented";
+    status: "pending" | "approved" | "rejected" | "commented";
     mergeRequestId: string;
     reviewMessage?: string | undefined;
 }, {
-    status: "pending" | "rejected" | "approved" | "commented";
+    status: "pending" | "approved" | "rejected" | "commented";
     mergeRequestId: string;
     reviewMessage?: string | undefined;
 }>;
@@ -539,10 +539,10 @@ export declare const UpdateReviewRequestSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodEnum<["pending", "approved", "rejected", "commented"]>>;
     reviewMessage: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    status?: "pending" | "rejected" | "approved" | "commented" | undefined;
+    status?: "pending" | "approved" | "rejected" | "commented" | undefined;
     reviewMessage?: string | undefined;
 }, {
-    status?: "pending" | "rejected" | "approved" | "commented" | undefined;
+    status?: "pending" | "approved" | "rejected" | "commented" | undefined;
     reviewMessage?: string | undefined;
 }>;
 export declare const MergeBranchRequestSchema: z.ZodObject<{
@@ -592,13 +592,13 @@ export declare const BranchFilterSchema: z.ZodObject<{
     sortBy: z.ZodDefault<z.ZodEnum<["name", "created_at", "updated_at", "last_activity_at"]>>;
     sortOrder: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
 }, "strip", z.ZodTypeAny, {
+    limit: number;
     offset: number;
     sortBy: "name" | "created_at" | "updated_at" | "last_activity_at";
-    limit: number;
-    sortOrder: "desc" | "asc";
+    sortOrder: "asc" | "desc";
     status?: "active" | "archived" | "merged" | "abandoned" | undefined;
-    createdBy?: string | undefined;
     projectId?: string | undefined;
+    createdBy?: string | undefined;
     parentBranchId?: string | undefined;
     branchType?: "main" | "release" | "feature" | "hotfix" | "experiment" | undefined;
     protectionLevel?: "none" | "locked" | "protected" | undefined;
@@ -607,12 +607,12 @@ export declare const BranchFilterSchema: z.ZodObject<{
     createdBefore?: Date | undefined;
 }, {
     status?: "active" | "archived" | "merged" | "abandoned" | undefined;
+    limit?: number | undefined;
     offset?: number | undefined;
     sortBy?: "name" | "created_at" | "updated_at" | "last_activity_at" | undefined;
-    createdBy?: string | undefined;
-    limit?: number | undefined;
+    sortOrder?: "asc" | "desc" | undefined;
     projectId?: string | undefined;
-    sortOrder?: "desc" | "asc" | undefined;
+    createdBy?: string | undefined;
     parentBranchId?: string | undefined;
     branchType?: "main" | "release" | "feature" | "hotfix" | "experiment" | undefined;
     protectionLevel?: "none" | "locked" | "protected" | undefined;
@@ -635,13 +635,13 @@ export declare const MergeRequestFilterSchema: z.ZodObject<{
     sortBy: z.ZodDefault<z.ZodEnum<["created_at", "updated_at", "title"]>>;
     sortOrder: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
 }, "strip", z.ZodTypeAny, {
+    limit: number;
     offset: number;
     sortBy: "title" | "created_at" | "updated_at";
-    limit: number;
-    sortOrder: "desc" | "asc";
+    sortOrder: "asc" | "desc";
     status?: "closed" | "open" | "draft" | "merged" | undefined;
-    createdBy?: string | undefined;
     projectId?: string | undefined;
+    createdBy?: string | undefined;
     sourceBranchId?: string | undefined;
     targetBranchId?: string | undefined;
     assignedTo?: string | undefined;
@@ -650,12 +650,12 @@ export declare const MergeRequestFilterSchema: z.ZodObject<{
     createdBefore?: Date | undefined;
 }, {
     status?: "closed" | "open" | "draft" | "merged" | undefined;
+    limit?: number | undefined;
     offset?: number | undefined;
     sortBy?: "title" | "created_at" | "updated_at" | undefined;
-    createdBy?: string | undefined;
-    limit?: number | undefined;
+    sortOrder?: "asc" | "desc" | undefined;
     projectId?: string | undefined;
-    sortOrder?: "desc" | "asc" | undefined;
+    createdBy?: string | undefined;
     sourceBranchId?: string | undefined;
     targetBranchId?: string | undefined;
     assignedTo?: string | undefined;
@@ -704,11 +704,11 @@ export declare const BranchStatsResponseSchema: z.ZodObject<{
         activityDate: Date;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
-    byType: Record<string, number>;
     totalBranches: number;
     activeBranches: number;
     mergedBranches: number;
     abandonedBranches: number;
+    byType: Record<string, number>;
     byStatus: Record<string, number>;
     recentActivity: {
         userId: string;
@@ -719,11 +719,11 @@ export declare const BranchStatsResponseSchema: z.ZodObject<{
         activityDate: Date;
     }[];
 }, {
-    byType: Record<string, number>;
     totalBranches: number;
     activeBranches: number;
     mergedBranches: number;
     abandonedBranches: number;
+    byType: Record<string, number>;
     byStatus: Record<string, number>;
     recentActivity: {
         userId: string;
@@ -829,11 +829,11 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
             events: number;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        totalEvents: number;
         dateRange: {
             end: Date;
             start: Date;
         };
+        totalEvents: number;
         mostActiveBranch?: {
             events: number;
             branchId: string;
@@ -845,11 +845,11 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
             events: number;
         } | undefined;
     }, {
-        totalEvents: number;
         dateRange: {
             end: Date;
             start: Date;
         };
+        totalEvents: number;
         mostActiveBranch?: {
             events: number;
             branchId: string;
@@ -863,11 +863,11 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     summary: {
-        totalEvents: number;
         dateRange: {
             end: Date;
             start: Date;
         };
+        totalEvents: number;
         mostActiveBranch?: {
             events: number;
             branchId: string;
@@ -894,11 +894,11 @@ export declare const BranchTimelineResponseSchema: z.ZodObject<{
     }[];
 }, {
     summary: {
-        totalEvents: number;
         dateRange: {
             end: Date;
             start: Date;
         };
+        totalEvents: number;
         mostActiveBranch?: {
             events: number;
             branchId: string;
@@ -958,8 +958,8 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         name: string;
         status: "active" | "archived" | "merged" | "abandoned";
         metadata: Record<string, unknown>;
-        createdBy: string;
         projectId: string;
+        createdBy: string;
         baseSnapshotId: string;
         headSnapshotId: string;
         branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
@@ -983,16 +983,16 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         updatedAt: Date;
         name: string;
         status: "active" | "archived" | "merged" | "abandoned";
-        createdBy: string;
         projectId: string;
+        createdBy: string;
         baseSnapshotId: string;
         headSnapshotId: string;
         branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
         protectionLevel: "none" | "locked" | "protected";
         lastActivityAt: Date;
         description?: string | undefined;
-        displayName?: string | undefined;
         metadata?: Record<string, unknown> | undefined;
+        displayName?: string | undefined;
         parentBranchId?: string | undefined;
         mergedAt?: Date | undefined;
         mergedBy?: string | undefined;
@@ -1037,8 +1037,8 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         name: string;
         status: "active" | "archived" | "merged" | "abandoned";
         metadata: Record<string, unknown>;
-        createdBy: string;
         projectId: string;
+        createdBy: string;
         baseSnapshotId: string;
         headSnapshotId: string;
         branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
@@ -1062,16 +1062,16 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         updatedAt: Date;
         name: string;
         status: "active" | "archived" | "merged" | "abandoned";
-        createdBy: string;
         projectId: string;
+        createdBy: string;
         baseSnapshotId: string;
         headSnapshotId: string;
         branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
         protectionLevel: "none" | "locked" | "protected";
         lastActivityAt: Date;
         description?: string | undefined;
-        displayName?: string | undefined;
         metadata?: Record<string, unknown> | undefined;
+        displayName?: string | undefined;
         parentBranchId?: string | undefined;
         mergedAt?: Date | undefined;
         mergedBy?: string | undefined;
@@ -1138,22 +1138,22 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         resolvedBy: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         id: string;
+        detectedAt: Date;
         sourceBranchId: string;
         targetBranchId: string;
         conflictType: "merge" | "rebase" | "cherry_pick";
         conflictStatus: "resolved" | "unresolved" | "ignored";
         conflictedResources: Record<string, unknown>[];
-        detectedAt: Date;
         conflictResolution?: Record<string, unknown> | undefined;
         resolvedAt?: Date | undefined;
         resolvedBy?: string | undefined;
     }, {
         id: string;
+        detectedAt: Date;
         sourceBranchId: string;
         targetBranchId: string;
         conflictType: "merge" | "rebase" | "cherry_pick";
         conflictStatus: "resolved" | "unresolved" | "ignored";
-        detectedAt: Date;
         conflictedResources?: Record<string, unknown>[] | undefined;
         conflictResolution?: Record<string, unknown> | undefined;
         resolvedAt?: Date | undefined;
@@ -1166,12 +1166,12 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
     behind: number;
     conflicts: {
         id: string;
+        detectedAt: Date;
         sourceBranchId: string;
         targetBranchId: string;
         conflictType: "merge" | "rebase" | "cherry_pick";
         conflictStatus: "resolved" | "unresolved" | "ignored";
         conflictedResources: Record<string, unknown>[];
-        detectedAt: Date;
         conflictResolution?: Record<string, unknown> | undefined;
         resolvedAt?: Date | undefined;
         resolvedBy?: string | undefined;
@@ -1184,8 +1184,8 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         name: string;
         status: "active" | "archived" | "merged" | "abandoned";
         metadata: Record<string, unknown>;
-        createdBy: string;
         projectId: string;
+        createdBy: string;
         baseSnapshotId: string;
         headSnapshotId: string;
         branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
@@ -1211,8 +1211,8 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         name: string;
         status: "active" | "archived" | "merged" | "abandoned";
         metadata: Record<string, unknown>;
-        createdBy: string;
         projectId: string;
+        createdBy: string;
         baseSnapshotId: string;
         headSnapshotId: string;
         branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
@@ -1252,11 +1252,11 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
     behind: number;
     conflicts: {
         id: string;
+        detectedAt: Date;
         sourceBranchId: string;
         targetBranchId: string;
         conflictType: "merge" | "rebase" | "cherry_pick";
         conflictStatus: "resolved" | "unresolved" | "ignored";
-        detectedAt: Date;
         conflictedResources?: Record<string, unknown>[] | undefined;
         conflictResolution?: Record<string, unknown> | undefined;
         resolvedAt?: Date | undefined;
@@ -1269,16 +1269,16 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         updatedAt: Date;
         name: string;
         status: "active" | "archived" | "merged" | "abandoned";
-        createdBy: string;
         projectId: string;
+        createdBy: string;
         baseSnapshotId: string;
         headSnapshotId: string;
         branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
         protectionLevel: "none" | "locked" | "protected";
         lastActivityAt: Date;
         description?: string | undefined;
-        displayName?: string | undefined;
         metadata?: Record<string, unknown> | undefined;
+        displayName?: string | undefined;
         parentBranchId?: string | undefined;
         mergedAt?: Date | undefined;
         mergedBy?: string | undefined;
@@ -1296,16 +1296,16 @@ export declare const BranchComparisonResponseSchema: z.ZodObject<{
         updatedAt: Date;
         name: string;
         status: "active" | "archived" | "merged" | "abandoned";
-        createdBy: string;
         projectId: string;
+        createdBy: string;
         baseSnapshotId: string;
         headSnapshotId: string;
         branchType: "main" | "release" | "feature" | "hotfix" | "experiment";
         protectionLevel: "none" | "locked" | "protected";
         lastActivityAt: Date;
         description?: string | undefined;
-        displayName?: string | undefined;
         metadata?: Record<string, unknown> | undefined;
+        displayName?: string | undefined;
         parentBranchId?: string | undefined;
         mergedAt?: Date | undefined;
         mergedBy?: string | undefined;

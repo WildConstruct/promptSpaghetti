@@ -12,8 +12,8 @@ async function apiCall(endpoint, options = {}) {
         headers: {
             'Content-Type': 'application/json',
             'x-user-id': 'current-user-id', // TODO: Get from auth context
-            ...options.headers,
-        },
+            ...options.headers
+        }
     });
     if (!response.ok) {
         throw new Error(`API call failed: ${response.status} ${response.statusText}`);
@@ -47,7 +47,7 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
             set({ loading: true, error: null });
             const newState = await apiCall('/states', {
                 method: 'POST',
-                body: JSON.stringify(data),
+                body: JSON.stringify(data)
             });
             set(state => ({
                 states: [...state.states, newState].sort((a, b) => a.sort_order - b.sort_order),
@@ -65,7 +65,7 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
             set({ loading: true, error: null });
             const updatedState = await apiCall(`/states/${id}`, {
                 method: 'PUT',
-                body: JSON.stringify(updates),
+                body: JSON.stringify(updates)
             });
             set(state => ({
                 states: state.states.map(s => s.id === id ? updatedState : s),
@@ -109,7 +109,7 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
             set({ loading: true, error: null });
             const newTransition = await apiCall('/transitions', {
                 method: 'POST',
-                body: JSON.stringify(data),
+                body: JSON.stringify(data)
             });
             set(state => ({
                 transitions: [...state.transitions, newTransition],
@@ -144,8 +144,8 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
                 method: 'POST',
                 body: JSON.stringify({
                     to_state_id: toStateId,
-                    ...options,
-                }),
+                    ...options
+                })
             });
             set({ loading: false });
             return result;
@@ -172,7 +172,7 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
             set({ loading: true, error: null });
             const newApproval = await apiCall('/approvals', {
                 method: 'POST',
-                body: JSON.stringify(data),
+                body: JSON.stringify(data)
             });
             set(state => ({
                 approvals: [...state.approvals, newApproval],
@@ -190,7 +190,7 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
             set({ loading: true, error: null });
             const result = await apiCall(`/approvals/${approvalId}/approve`, {
                 method: 'POST',
-                body: JSON.stringify({ comment }),
+                body: JSON.stringify({ comment })
             });
             // Update approval status in local state
             set(state => ({
@@ -211,7 +211,7 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
             set({ loading: true, error: null });
             const result = await apiCall(`/approvals/${approvalId}/reject`, {
                 method: 'POST',
-                body: JSON.stringify({ reason }),
+                body: JSON.stringify({ reason })
             });
             // Update approval status in local state
             set(state => ({
@@ -247,8 +247,8 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
                 body: JSON.stringify({
                     resource_id: resourceId,
                     lock_type: lockType,
-                    ...options,
-                }),
+                    ...options
+                })
             });
             set(state => ({
                 locks: [...state.locks, newLock],
@@ -281,7 +281,7 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
             set({ loading: true, error: null });
             const queryParams = lockType ? `?lock_type=${lockType}` : '';
             const result = await apiCall(`/locks/resource/${resourceId}${queryParams}`, {
-                method: 'DELETE',
+                method: 'DELETE'
             });
             // Remove locks from local state
             set(state => ({
@@ -356,7 +356,7 @@ export const useWorkflowStore = create()(devtools((set, get) => ({
     // Internal actions
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
-    clearError: () => set({ error: null }),
+    clearError: () => set({ error: null })
 }), {
-    name: 'workflow-store',
+    name: 'workflow-store'
 }));

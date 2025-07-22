@@ -1,6 +1,5 @@
-import React from "react";
-import { BaseNodeEditorProps } from "../BaseNodeEditor";
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 export interface SubjectEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
 }
-export declare const SubjectEditor: React.FC<SubjectEditorProps>;
+export declare const label: string;
 //# sourceMappingURL=SubjectEditor.d.ts.map

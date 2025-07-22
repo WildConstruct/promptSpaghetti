@@ -2,6 +2,16 @@
 // Story 12.4 - Randomizer Generator Implementation
 // Parameter management system with presets and history
 import { ParameterValidator, defaultPresets, RandomizerParametersSchema } from './parameter-schema';
+const isBrowser = (function () {
+    try {
+        return typeof globalThis !== 'undefined' &&
+            typeof globalThis.window !== 'undefined' &&
+            typeof globalThis.localStorage !== 'undefined';
+    }
+    catch {
+        return false;
+    }
+})();
 /**
  * Manages randomizer parameters, presets, and history
  */
@@ -24,7 +34,7 @@ export class ParameterManager {
      * Load default presets
      */
     loadDefaultPresets() {
-        for (const preset of defaultPresets) {
+        for (const [key, preset] of Object.entries(defaultPresets)) {
             this.presets.set(preset.id, preset);
         }
     }
@@ -32,7 +42,7 @@ export class ParameterManager {
      * Load from localStorage if available
      */
     loadFromStorage() {
-        if (typeof localStorage === 'undefined')
+        if (!isBrowser)
             return;
         try {
             const stored = localStorage.getItem(this.options.storageKey);
@@ -60,11 +70,11 @@ export class ParameterManager {
      * Save to localStorage if available
      */
     saveToStorage() {
-        if (!this.options.autoSave || typeof localStorage === 'undefined')
+        if (!this.options.autoSave || !isBrowser)
             return;
         try {
             const customPresets = Array.from(this.presets.values())
-                .filter(preset => !defaultPresets.some(dp => dp.id === preset.id));
+                .filter(preset => !Object.values(defaultPresets).some(dp => dp.id === preset.id));
             const data = {
                 presets: customPresets,
                 history: this.history

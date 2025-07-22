@@ -1,5 +1,5 @@
-import React from "react";
-import { EditorFieldProps } from "./BaseNodeEditor";
+import React from 'react';
+import { EditorFieldProps } from './BaseNodeEditor';
 export interface SelectOption {
     value: string | number;
     label: string;

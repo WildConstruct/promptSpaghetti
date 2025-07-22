@@ -1,14 +1,18 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 // Import all node editors
-import { WeightedChoiceEditor } from "./editors/WeightedChoiceEditor";
-import { ConcatEditor } from "./editors/ConcatEditor";
-import { OutputEditor } from "./editors/OutputEditor";
-import { VariableEditor } from "./editors/VariableEditor";
-import { SubjectEditor } from "./editors/SubjectEditor";
-import { ActionEditor } from "./editors/ActionEditor";
-import { PythonTransformEditor } from "./editors/PythonTransformEditor";
-import { BaseNodeEditor } from "./BaseNodeEditor";
-export const NodeEditorRouter = ({ node, schema, onChange, }) => {
+import { WeightedChoiceEditor } from './editors/WeightedChoiceEditor';
+import { ConcatEditor } from './editors/ConcatEditor';
+import { OutputEditor } from './editors/OutputEditor';
+import { VariableEditor } from './editors/VariableEditor';
+import { SubjectEditor } from './editors/SubjectEditor';
+import { ActionEditor } from './editors/ActionEditor';
+import { PythonTransformEditor } from './editors/PythonTransformEditor';
+import { ConditionalEditor } from './editors/ConditionalEditor';
+import { SequentialEditor } from './editors/SequentialEditor';
+import { MarkovEditor } from './editors/MarkovEditor';
+import { WeightedAdvancedEditor } from './editors/WeightedAdvancedEditor';
+import { BaseNodeEditor } from './BaseNodeEditor';
+export const NodeEditorRouter = ({ node, schema, onChange, onGlobalPreviewRequest }) => {
     if (!node || !schema) {
         return null;
     }
@@ -20,13 +24,13 @@ export const NodeEditorRouter = ({ node, schema, onChange, }) => {
         nodeId,
         nodeData,
         schema,
-        onChange,
+        onChange
     };
     // Route to appropriate editor based on node type
     switch (nodeType) {
         // Basic Runtime Nodes
         case 'WeightedChoice':
-            return _jsx(WeightedChoiceEditor, { ...editorProps });
+            return _jsx(WeightedChoiceEditor, { ...editorProps, onGlobalPreviewRequest: onGlobalPreviewRequest });
         case 'Concat':
             return _jsx(ConcatEditor, { ...editorProps });
         case 'Output':
@@ -50,17 +54,13 @@ export const NodeEditorRouter = ({ node, schema, onChange, }) => {
             return _jsx(ActionEditor, { ...editorProps });
         // Advanced Nodes (Epic 7)
         case 'WeightedAdvanced':
-            // TODO: Create WeightedAdvancedEditor
-            return _jsx(BaseNodeEditor, { ...editorProps });
+            return _jsx(WeightedAdvancedEditor, { ...editorProps });
         case 'Conditional':
-            // TODO: Create ConditionalEditor
-            return _jsx(BaseNodeEditor, { ...editorProps });
+            return _jsx(ConditionalEditor, { ...editorProps });
         case 'Sequential':
-            // TODO: Create SequentialEditor
-            return _jsx(BaseNodeEditor, { ...editorProps });
+            return _jsx(SequentialEditor, { ...editorProps });
         case 'Markov':
-            // TODO: Create MarkovEditor
-            return _jsx(BaseNodeEditor, { ...editorProps });
+            return _jsx(MarkovEditor, { ...editorProps });
         // Python Node
         case 'PythonTransform':
             return _jsx(PythonTransformEditor, { ...editorProps });

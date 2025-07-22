@@ -23,6 +23,9 @@ import { CreateToggleModal } from './CreateToggleModal';
 import { ToggleDetailsModal } from './ToggleDetailsModal';
 import { EditToggleModal } from './EditToggleModal';
 import { BulkOperationsModal } from './BulkOperationsModal';
+import ToggleStatusOverridePanel from './ToggleStatusOverridePanel';
+import EnhancedToggleStatusControls from './EnhancedToggleStatusControls';
+import { ToggleParametersManager } from './ToggleParametersManager';
 import './FeatureToggleDashboard.css';
 import './CreateToggleModal.css';
 import './ToggleDetailsModal.css';
@@ -76,6 +79,10 @@ export const FeatureToggleDashboard: React.FC = () => {
   const [showBulkOperations, setShowBulkOperations] = useState(false);
   const [auditHistoryToggleId, setAuditHistoryToggleId] = useState<string | null>(null);
   const [archiveConfirmToggleId, setArchiveConfirmToggleId] = useState<string | null>(null);
+  const [showStatusOverridePanel, setShowStatusOverridePanel] = useState(false);
+  const [selectedToggleForOverride, setSelectedToggleForOverride] = useState<string | null>(null);
+  const [showParametersManager, setShowParametersManager] = useState(false);
+  const [parametersToggleId, setParametersToggleId] = useState<string | null>(null);
 
   // Fetch toggles data
   const fetchToggles = useCallback(async () => {
@@ -124,20 +131,19 @@ export const FeatureToggleDashboard: React.FC = () => {
     fetchToggles();
   }, [fetchToggles]);
 
-  // Toggle activation/deactivation
+  // Toggle activation/deactivation using symmetric endpoints
   const handleToggleStatus = async (toggle: FeatureToggle) => {
     try {
       const endpoint = toggle.enabled 
-        ? `/api/feature-toggles/toggles/${toggle.id}`
+        ? `/api/feature-toggles/toggles/${toggle.id}/deactivate`
         : `/api/feature-toggles/toggles/${toggle.id}/activate`;
       
-      const method = toggle.enabled ? 'PUT' : 'POST';
       const body = toggle.enabled 
-        ? { enabled: false, reason: 'Manual toggle from dashboard' }
+        ? { reason: 'Manual deactivation from dashboard' }
         : { reason: 'Manual activation from dashboard' };
 
       const response = await fetch(endpoint, {
-        method,
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
@@ -146,13 +152,132 @@ export const FeatureToggleDashboard: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to ${toggle.enabled ? 'disable' : 'enable'} toggle`);
+        throw new Error(`Failed to ${toggle.enabled ? 'deactivate' : 'activate'} toggle`);
       }
 
       // Refresh data
       fetchToggles();
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Operation failed');
+    }
+  };
+
+  // Handle percentage rollout changes
+  const handlePercentageChange = async (toggleId: string, percentage: number) => {
+    try {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          percentage,
+          reason: `Percentage updated to ${percentage}% from dashboard`
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update percentage');
+      }
+
+      fetchToggles();
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Operation failed');
+    }
+  };
+
+  // Handle override panel opening
+  const handleOverrideClick = (toggleId: string) => {
+    setSelectedToggleForOverride(toggleId);
+    setShowStatusOverridePanel(true);
+  };
+
+  // Handle emergency disable
+  const handleEmergencyDisable = async (toggleId: string, reason: string) => {
+    try {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}/deactivate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          reason: `EMERGENCY DISABLE: ${reason}`
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to emergency disable toggle');
+      }
+
+      fetchToggles();
+      alert('Toggle emergency disabled successfully');
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Emergency disable failed');
+    }
+  };
+
+  // Handle override creation
+  const handleOverrideCreated = () => {
+    fetchToggles(); // Refresh to show override status
+  };
+
+  // Handle parameters management
+  const handleParametersClick = (toggleId: string) => {
+    setParametersToggleId(toggleId);
+    setShowParametersManager(true);
+  };
+
+  const handleParametersChange = async (toggleId: string, parameters: Record<string, any>) => {
+    try {
+      const response = await fetch(`/api/toggle-parameters/toggles/${toggleId}/parameters`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          parameters,
+          reason: 'Parameters updated from dashboard'
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update toggle parameters');
+      }
+
+      fetchToggles(); // Refresh to show updated toggle
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Failed to update parameters');
+    }
+  };
+
+  const handleParametersSave = async () => {
+    // This will be called by the ToggleParametersManager when save is clicked
+    setShowParametersManager(false);
+    setParametersToggleId(null);
+    fetchToggles();
+  };
+
+  // Handle archive toggle
+  const handleArchiveToggle = async (toggleId: string) => {
+    try {
+      const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to archive toggle');
+      }
+
+      fetchToggles();
+      setArchiveConfirmToggleId(null);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Archive failed');
     }
   };
 
@@ -476,17 +601,20 @@ export const FeatureToggleDashboard: React.FC = () => {
                     </td>
                     
                     <td>
-                      <button
-                        className="toggle-status-btn"
-                        onClick={() => handleToggleStatus(toggle)}
-                        title={toggle.enabled ? 'Click to disable' : 'Click to enable'}
-                      >
-                        {toggle.enabled ? (
-                          <ToggleRight className="toggle-enabled" size={20} />
-                        ) : (
-                          <ToggleLeft className="toggle-disabled" size={20} />
-                        )}
-                      </button>
+                      <EnhancedToggleStatusControls
+                        toggle={{
+                          ...toggle,
+                          type: toggle.type.toUpperCase().replace('_', '_') as any,
+                          hasActiveOverride: false, // TODO: Add override detection logic
+                          percentage: toggle.type === 'percentage_rollout' ? 50 : undefined,
+                          rolloutStatus: toggle.type === 'percentage_rollout' ? 'ACTIVE' : undefined
+                        }}
+                        onToggleChange={handleToggleStatus}
+                        onPercentageChange={handlePercentageChange}
+                        onOverrideClick={handleOverrideClick}
+                        onEmergencyDisable={handleEmergencyDisable}
+                        compact={true}
+                      />
                     </td>
                     
                     <td>
@@ -545,6 +673,14 @@ export const FeatureToggleDashboard: React.FC = () => {
                           onClick={() => setEditToggleId(toggle.id)}
                         >
                           <Edit size={14} />
+                        </button>
+                        
+                        <button 
+                          className="btn-icon" 
+                          title="Manage Parameters"
+                          onClick={() => handleParametersClick(toggle.id)}
+                        >
+                          <Settings size={14} />
                         </button>
                         
                         <button 
@@ -693,6 +829,57 @@ export const FeatureToggleDashboard: React.FC = () => {
               >
                 Archive Toggle
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Status Override Panel */}
+      <ToggleStatusOverridePanel
+        toggleId={selectedToggleForOverride}
+        isOpen={showStatusOverridePanel}
+        onClose={() => {
+          setShowStatusOverridePanel(false);
+          setSelectedToggleForOverride(null);
+        }}
+        onOverrideCreated={handleOverrideCreated}
+      />
+
+      {/* Parameters Manager Modal */}
+      {showParametersManager && parametersToggleId && (
+        <div className="modal-overlay" onClick={() => {
+          setShowParametersManager(false);
+          setParametersToggleId(null);
+        }}>
+          <div className="modal parameters-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Manage Toggle Parameters</h2>
+              <button 
+                className="btn-icon" 
+                onClick={() => {
+                  setShowParametersManager(false);
+                  setParametersToggleId(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              {(() => {
+                const toggle = state.toggles.find(t => t.id === parametersToggleId);
+                if (!toggle) return <p>Toggle not found</p>;
+
+                return (
+                  <ToggleParametersManager
+                    toggleId={toggle.id}
+                    toggleType={toggle.type.toUpperCase() as any}
+                    currentValue={toggle.value || {}}
+                    onParametersChange={(parameters) => handleParametersChange(toggle.id, parameters)}
+                    onSave={handleParametersSave}
+                    readonly={false}
+                  />
+                );
+              })()}
             </div>
           </div>
         </div>

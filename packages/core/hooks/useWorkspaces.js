@@ -17,8 +17,8 @@ export function useWorkspaces(userId, options = {}) {
             const response = await fetch(`${API_BASE}/workspaces`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-User-Id': userId, // Mock auth header
-                },
+                    'X-User-Id': userId // Mock auth header
+                }
             });
             if (!response.ok) {
                 throw new Error(`Failed to fetch workspaces: ${response.statusText}`);
@@ -41,9 +41,9 @@ export function useWorkspaces(userId, options = {}) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-User-Id': userId,
+                'X-User-Id': userId
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(data)
         });
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -60,9 +60,9 @@ export function useWorkspaces(userId, options = {}) {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'X-User-Id': userId,
+                'X-User-Id': userId
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(data)
         });
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -78,8 +78,8 @@ export function useWorkspaces(userId, options = {}) {
         const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {
             method: 'DELETE',
             headers: {
-                'X-User-Id': userId,
-            },
+                'X-User-Id': userId
+            }
         });
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -94,12 +94,12 @@ export function useWorkspaces(userId, options = {}) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-User-Id': userId,
+                'X-User-Id': userId
             },
             body: JSON.stringify({
                 user_id: userIdToInvite,
-                role,
-            }),
+                role
+            })
         });
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -129,6 +129,6 @@ export function useWorkspaces(userId, options = {}) {
         updateWorkspace,
         archiveWorkspace,
         inviteUser,
-        refreshWorkspaces,
+        refreshWorkspaces
     };
 }

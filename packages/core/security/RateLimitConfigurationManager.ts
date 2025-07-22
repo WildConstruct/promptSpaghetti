@@ -59,6 +59,7 @@ export interface RateLimitCondition {
 
 export interface RateLimitAction {
   type: 'block' | 'delay' | 'throttle' | 'captcha' | 'redirect' | 'custom';
+  statusCode?: number;        // HTTP status code for block action
   delayMs?: number;           // For delay/throttle actions
   redirectUrl?: string;       // For redirect action
   customHandler?: string;     // For custom action

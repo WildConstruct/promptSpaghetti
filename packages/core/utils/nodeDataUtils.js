@@ -1,4 +1,4 @@
-import { createNodeData } from "../types/NodeTypes";
+import { createNodeData } from '../types/NodeTypes';
 // Legacy function - delegates to new factory system
 export const createDefaultNodeData = (type) => {
     const id = `${type}-${Date.now()}`;
@@ -9,14 +9,14 @@ export const addVariationToNode = (nodeData, variation) => {
     const currentVariations = nodeData.variations || [];
     return {
         ...nodeData,
-        variations: [...currentVariations, variation],
+        variations: [...currentVariations, variation]
     };
 };
 export const removeVariationFromNode = (nodeData, index) => {
     const currentVariations = nodeData.variations || [];
     return {
         ...nodeData,
-        variations: currentVariations.filter((_, i) => i !== index),
+        variations: currentVariations.filter((_, i) => i !== index)
     };
 };
 export const updateVariationInNode = (nodeData, index, newValue) => {
@@ -25,7 +25,7 @@ export const updateVariationInNode = (nodeData, index, newValue) => {
     updatedVariations[index] = newValue;
     return {
         ...nodeData,
-        variations: updatedVariations,
+        variations: updatedVariations
     };
 };
 export const reorderVariationsInNode = (nodeData, fromIndex, toIndex) => {
@@ -35,7 +35,7 @@ export const reorderVariationsInNode = (nodeData, fromIndex, toIndex) => {
     updatedVariations.splice(toIndex, 0, movedItem);
     return {
         ...nodeData,
-        variations: updatedVariations,
+        variations: updatedVariations
     };
 };
 export const getRandomVariation = (nodeData, seed) => {
@@ -57,55 +57,55 @@ export const getVariationCount = (nodeData) => {
 // Legacy validation function - uses new validation system
 export const validateNodeDataLegacyWrapper = (nodeData) => {
     // Import the new validation function to avoid conflicts
-    const { validateNodeData: newValidate } = require("../types/NodeTypes");
+    const { validateNodeData: newValidate } = require('../types/NodeTypes');
     const errors = newValidate(nodeData);
     return {
         valid: errors.length === 0,
-        errors,
+        errors
     };
 };
 // Legacy validation with old interface for backward compatibility
 export const validateNodeDataLegacy = (nodeData) => {
     const errors = [];
-    if (!nodeData.label || nodeData.label.trim() === "") {
-        errors.push("Node label is required");
+    if (!nodeData.label || nodeData.label.trim() === '') {
+        errors.push('Node label is required');
     }
-    if (!nodeData.id || nodeData.id.trim() === "") {
-        errors.push("Node ID is required");
+    if (!nodeData.id || nodeData.id.trim() === '') {
+        errors.push('Node ID is required');
     }
     // Type-specific validation with new field names
     switch (nodeData.type) {
-        case "WeightedChoice":
+        case 'WeightedChoice':
             const wcData = nodeData;
             if (wcData.choices && wcData.weights && wcData.choices.length !== wcData.weights.length) {
-                errors.push("Number of choices must match number of weights");
+                errors.push('Number of choices must match number of weights');
             }
             if (wcData.weights && wcData.weights.some(w => w <= 0)) {
-                errors.push("All weights must be positive numbers");
+                errors.push('All weights must be positive numbers');
             }
             break;
-        case "SetVariable":
+        case 'SetVariable':
             const setVarData = nodeData;
-            if (!setVarData.variableName || setVarData.variableName.trim() === "") {
-                errors.push("Variable name is required");
+            if (!setVarData.variableName || setVarData.variableName.trim() === '') {
+                errors.push('Variable name is required');
             }
             break;
-        case "GetVariable":
+        case 'GetVariable':
             const getVarData = nodeData;
-            if (!getVarData.variableName || getVarData.variableName.trim() === "") {
-                errors.push("Variable name is required");
+            if (!getVarData.variableName || getVarData.variableName.trim() === '') {
+                errors.push('Variable name is required');
             }
             break;
-        case "Include":
+        case 'Include':
             const includeData = nodeData;
-            if (!includeData.name || includeData.name.trim() === "") {
-                errors.push("Include name is required");
+            if (!includeData.name || includeData.name.trim() === '') {
+                errors.push('Include name is required');
             }
             break;
     }
     return {
         valid: errors.length === 0,
-        errors,
+        errors
     };
 };
 export const cloneNodeData = (nodeData) => {
@@ -114,7 +114,7 @@ export const cloneNodeData = (nodeData) => {
 export const mergeNodeData = (original, updates) => {
     return {
         ...original,
-        ...updates,
+        ...updates
     };
 };
 // Migration utilities for upgrading old node data
@@ -136,7 +136,7 @@ export const migrateNodeData = (oldNodeData) => {
         return newData;
     }
     catch (error) {
-        console.warn("Failed to migrate node data:", error);
+        console.warn('Failed to migrate node data:', error);
         return null;
     }
 };

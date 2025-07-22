@@ -29,12 +29,12 @@ export declare const ExtensionTypeSchemas: {
         id: string;
         name: string;
         description: string;
-        activate: (...args: unknown[]) => unknown;
-        deactivate: (...args: unknown[]) => unknown;
         version: string;
         author: string;
-        dependencies: string[];
         permissions: string[];
+        activate: (...args: unknown[]) => unknown;
+        deactivate: (...args: unknown[]) => unknown;
+        dependencies: string[];
         initialize: (...args: unknown[]) => unknown;
         dispose: (...args: unknown[]) => unknown;
         getConfiguration: (...args: unknown[]) => unknown;
@@ -45,18 +45,18 @@ export declare const ExtensionTypeSchemas: {
         id: string;
         name: string;
         description: string;
-        activate: (...args: unknown[]) => unknown;
-        deactivate: (...args: unknown[]) => unknown;
         version: string;
         author: string;
+        activate: (...args: unknown[]) => unknown;
+        deactivate: (...args: unknown[]) => unknown;
         initialize: (...args: unknown[]) => unknown;
         dispose: (...args: unknown[]) => unknown;
         getConfiguration: (...args: unknown[]) => unknown;
         setConfiguration: (...args: unknown[]) => unknown;
         isHealthy: (...args: unknown[]) => unknown;
         getHealthStatus: (...args: unknown[]) => unknown;
-        dependencies?: string[] | undefined;
         permissions?: string[] | undefined;
+        dependencies?: string[] | undefined;
     }>;
     NodeExtension: z.ZodObject<{
         extensionType: z.ZodLiteral<"node">;

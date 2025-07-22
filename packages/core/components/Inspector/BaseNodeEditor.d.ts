@@ -1,5 +1,5 @@
-import React from "react";
-import { ZodSchema, ZodTypeAny } from "zod";
+import React from 'react';
+import { ZodSchema, ZodTypeAny } from 'zod';
 export interface BaseNodeEditorProps {
     nodeId: string;
     nodeData: Record<string, unknown>;
@@ -18,5 +18,5 @@ export interface EditorFieldProps {
     placeholder?: string;
     disabled?: boolean;
 }
-export declare const BaseNodeEditor: React.FC<BaseNodeEditorProps>;
+export declare const fieldErrors: Record<string, string>, setFieldErrors: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 //# sourceMappingURL=BaseNodeEditor.d.ts.map

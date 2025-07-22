@@ -115,7 +115,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         
         tokenService.validateToken.mockResolvedValue({
           valid: true,
-          payload: { userId: 1, roles: ['user'], exp: Date.now( as unknown as unknown) + 3600000 }
+          payload: { userId: 1, roles: ['user'], exp: Date.now() + 3600000 }
         });
 
         fastify.get('/protected', async (request, reply) => {
@@ -331,8 +331,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         apiKeyService.checkRateLimit.mockResolvedValue(
           { allowed: true,
           remaining: 99,
-          resetTime: Date.now(
-         as unknown as unknown) + 3600000 });
+          resetTime: Date.now() + 3600000 });
 
         fastify.get('/api/tracked', async (request, reply) => {
           await apiKeyService.recordUsage('ak_test_123');
@@ -1096,7 +1095,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           exportUserData: jest.fn<unknown[], unknown>().mockResolvedValue({
             personalData: { email: 'test@example.com', name: 'Test User' },
             activityLog: [{ action: 'login', timestamp: '2023-01-01T00:00:00Z' }],
-            exportedAt: new Date( as unknown as unknown).toISOString()
+            exportedAt: new Date().toISOString()
           }),
           deleteUserData: jest.fn<unknown[], unknown>().mockResolvedValue({ deleted: true, retainedForLegal: ['audit_logs'] } as unknown as unknown)
         };

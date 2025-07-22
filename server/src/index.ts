@@ -98,6 +98,8 @@ import { PolicyAuthoringService } from './services/PolicyAuthoringService';
 import { complianceReportingRoutes } from './routes/compliance-reporting';
 import { ComplianceReportingService } from './services/ComplianceReportingService';
 import { policyNotificationRoutes } from './routes/policy-notification';
+import { roleCloneRoutes } from './routes/role-cloning';
+import expirationManagementRoutes from './routes/expiration-management';
 import { PolicyNotificationService } from './services/PolicyNotificationService';
 import { consentCollectionRoutes } from './routes/consent-collection';
 import { FinancialDataLifecycleService } from './services/FinancialDataLifecycleService';
@@ -314,6 +316,9 @@ try {
   
   // Make database available to fastify routes
   server.decorate('db', db);
+  // DEPLOYMENT BLOCKER FIX: Add database property as expected by type definitions
+  server.decorate('database', db);
+  server.decorate('databaseService', db);
   
   console.log('Database initialized successfully');
 } catch (error) {
@@ -1267,6 +1272,22 @@ server.register(authRoutes, { prefix: '/auth' });
 // Register enhanced security routes (Epic 19)
 server.register(enhancedSecurityRoutes, { prefix: '/auth' });
 
+// Register role cloning routes (Epic 17 RBAC)
+try {
+  server.register(roleCloneRoutes, { prefix: '/api/roles' });
+  console.log('Role cloning routes registered successfully');
+} catch (error) {
+  console.error('Failed to register role cloning routes:', error);
+}
+
+// Register expiration management routes (Epic 17 Authentication)
+try {
+  server.register(expirationManagementRoutes, { prefix: '/api/expiration' });
+  console.log('Expiration management routes registered successfully');
+} catch (error) {
+  console.error('Failed to register expiration management routes:', error);
+}
+
 // Register JWT authentication middleware
 server.register(jwtAuthMiddleware);
 
@@ -1668,6 +1689,8 @@ try {
   );
   
   // Make the services available to routes via Fastify's dependency injection
+  // DEPLOYMENT BLOCKER FIX: Add auditService property as expected by type definitions
+  server.decorate('auditService', auditService);
   server.decorate('dataAccessControlService', dataAccessControlService);
   server.decorate('auditWorkflowService', auditWorkflowService);
   server.decorate('accessRequestWorkflowService', accessRequestWorkflowService);

@@ -10,8 +10,8 @@ export const useAttribution = () => {
                 ...options,
                 headers: {
                     'Content-Type': 'application/json',
-                    ...options.headers,
-                },
+                    ...options.headers
+                }
             });
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
@@ -35,7 +35,7 @@ export const useAttribution = () => {
     const recordAttribution = useCallback(async (request) => {
         return apiCall('/api/attribution/record', {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const getAttributionStats = useCallback(async (request) => {
@@ -135,19 +135,19 @@ export const useAttribution = () => {
     const startSession = useCallback(async (projectId, sessionId) => {
         return apiCall('/api/attribution/session/start', {
             method: 'POST',
-            body: JSON.stringify({ projectId, sessionId }),
+            body: JSON.stringify({ projectId, sessionId })
         });
     }, [apiCall]);
     const endSession = useCallback(async (sessionId) => {
         return apiCall('/api/attribution/session/end', {
             method: 'POST',
-            body: JSON.stringify({ sessionId }),
+            body: JSON.stringify({ sessionId })
         });
     }, [apiCall]);
     const updatePrivacySettings = useCallback(async (request) => {
         return apiCall(`/api/attribution/privacy/${request.projectId}`, {
             method: 'PUT',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const getPrivacySettings = useCallback(async (projectId) => {
@@ -155,7 +155,7 @@ export const useAttribution = () => {
     }, [apiCall]);
     const cleanupOldData = useCallback(async (projectId) => {
         return apiCall(`/api/attribution/cleanup/${projectId}`, {
-            method: 'POST',
+            method: 'POST'
         });
     }, [apiCall]);
     const getResourceAttribution = useCallback(async (projectId, resourceType, resourceId) => {
@@ -172,7 +172,7 @@ export const useAttribution = () => {
     const recordBatchAttributions = useCallback(async (projectId, attributions, batchId) => {
         return apiCall('/api/attribution/batch', {
             method: 'POST',
-            body: JSON.stringify({ projectId, attributions, batchId }),
+            body: JSON.stringify({ projectId, attributions, batchId })
         });
     }, [apiCall]);
     const clearError = useCallback(() => {
@@ -194,6 +194,6 @@ export const useAttribution = () => {
         getResourceAttribution,
         getAuthorAttribution,
         recordBatchAttributions,
-        clearError,
+        clearError
     };
 };

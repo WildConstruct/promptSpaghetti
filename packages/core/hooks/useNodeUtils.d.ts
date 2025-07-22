@@ -1,4 +1,4 @@
-import { NodeMeta } from "../Palette";
+import { NodeMeta } from '../Palette';
 interface UseNodeUtilsProps {
     nodeTypes: NodeMeta[];
 }

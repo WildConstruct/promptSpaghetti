@@ -178,13 +178,13 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         function?: string | undefined;
         line?: number | undefined;
     };
+    category: ExtensionPointCategory;
     metadata: {
         addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
         replacedBy?: string | undefined;
     };
-    category: ExtensionPointCategory;
     version: string;
     lifecycle: ExtensionPointLifecycle;
     interfaces: {
@@ -200,7 +200,6 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         returnType: string;
         examples?: string[] | undefined;
     }[];
-    dependencies?: string[] | undefined;
     constraints?: {
         performance?: {
             maxExecutionTime?: number | undefined;
@@ -217,6 +216,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         code: string;
         language: string;
     }[] | undefined;
+    dependencies?: string[] | undefined;
 }, {
     id: string;
     name: string;
@@ -227,13 +227,13 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         function?: string | undefined;
         line?: number | undefined;
     };
+    category: ExtensionPointCategory;
     metadata: {
         addedIn: string;
         deprecatedIn?: string | undefined;
         removedIn?: string | undefined;
         replacedBy?: string | undefined;
     };
-    category: ExtensionPointCategory;
     version: string;
     lifecycle: ExtensionPointLifecycle;
     interfaces: {
@@ -249,7 +249,6 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         returnType: string;
         examples?: string[] | undefined;
     }[];
-    dependencies?: string[] | undefined;
     constraints?: {
         performance?: {
             maxExecutionTime?: number | undefined;
@@ -266,6 +265,7 @@ export declare const ExtensionPointSchema: z.ZodObject<{
         code: string;
         language: string;
     }[] | undefined;
+    dependencies?: string[] | undefined;
 }>;
 export type ExtensionPoint = z.infer<typeof ExtensionPointSchema>;
 /**

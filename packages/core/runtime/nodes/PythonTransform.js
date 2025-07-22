@@ -27,7 +27,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
             this.pythonClient = new PythonExecutorClient({
                 baseUrl: config.pythonConfig.executorUrl,
                 retryAttempts: config.pythonConfig.retryAttempts || 3,
-                defaultStrictMode: config.pythonConfig.strictMode ?? true,
+                defaultStrictMode: config.pythonConfig.strictMode ?? true
             });
         }
         else {
@@ -166,7 +166,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
             memory_limit: this.pythonConfig.memoryLimit || '128MB',
             allowed_modules: this.pythonConfig.allowedModules || [],
             context: this.extractContextForPython(context),
-            strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true,
+            strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true
         };
         try {
             // Execute Python code
@@ -208,7 +208,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
         return {
             variables: context.variables,
             nodeId: this.id,
-            seed: context.seed,
+            seed: context.seed
             // Don't expose sensitive internal state
         };
     }
@@ -251,7 +251,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
                     type: result.error_type,
                     code: result.error_code,
                     line: result.error_line,
-                    traceback: result.traceback,
+                    traceback: result.traceback
                 };
                 throw error;
         }
@@ -319,7 +319,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
             this.pythonClient = new PythonExecutorClient({
                 baseUrl: newConfig.pythonConfig.executorUrl,
                 retryAttempts: newConfig.pythonConfig.retryAttempts || 3,
-                defaultStrictMode: newConfig.pythonConfig.strictMode ?? true,
+                defaultStrictMode: newConfig.pythonConfig.strictMode ?? true
             });
         }
     }
@@ -331,25 +331,25 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
             return {
                 valid: false,
                 errors: ['Python code is required'],
-                warnings: [],
+                warnings: []
             };
         }
         try {
             const result = await this.pythonClient.validate({
                 code: this.pythonConfig.code,
-                strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true,
+                strict_mode: this.pythonConfig.pythonConfig?.strictMode ?? true
             });
             return {
                 valid: result.valid,
                 errors: result.errors,
-                warnings: result.warnings,
+                warnings: result.warnings
             };
         }
         catch (error) {
             return {
                 valid: false,
                 errors: [`Validation service error: ${error instanceof Error ? error.message : 'Unknown error'}`],
-                warnings: [],
+                warnings: []
             };
         }
     }
@@ -387,7 +387,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
                 executionsRun: 0,
                 successRate: 0,
                 averageExecutionTime: 0,
-                securityViolations: 0,
+                securityViolations: 0
             };
         }
         const successful = executions.filter((e) => e.success).length;
@@ -397,7 +397,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
             executionsRun: executions.length,
             successRate: successful / executions.length,
             averageExecutionTime: totalTime / executions.length,
-            securityViolations: totalViolations,
+            securityViolations: totalViolations
         };
     }
     /**
@@ -412,7 +412,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode {
             timestamp: Date.now(),
             success,
             executionTime,
-            securityViolations,
+            securityViolations
         });
         // Keep only last 100 executions
         if (state.executions.length > 100) {

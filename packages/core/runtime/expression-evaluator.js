@@ -63,7 +63,7 @@ class Tokenizer {
             return { type: TokenType.NUMBER, value, position: startPos };
         }
         // Strings
-        if (char === '"' || char === "'") {
+        if (char === '"' || char === '\'') {
             const quote = char;
             let value = '';
             this.position++; // Skip opening quote

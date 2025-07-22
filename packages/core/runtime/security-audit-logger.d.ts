@@ -62,6 +62,8 @@ export interface SecurityEventContext {
     executionTime?: number;
     stackTrace?: string;
     additionalData?: Record<string, any>;
+    strictMode?: boolean;
+    error?: string;
 }
 /**
  * Security audit event

@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCorrectionsStore } from '../../correctionsStore';
-export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, rows = 4, maxLength, minLength, autoResize = false, showWordCount = false, enableInlineCorrections = true, autoApplyCorrections = false, showCorrectionHighlights = true, }) => {
+export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, rows = 4, maxLength, minLength, autoResize = false, showWordCount = false, enableInlineCorrections = true, autoApplyCorrections = false, showCorrectionHighlights = true }) => {
     const [localValue, setLocalValue] = useState(String(value ?? ''));
     const [isFocused, setIsFocused] = useState(false);
     const [suggestions, setSuggestions] = useState([]);
@@ -45,7 +45,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
                                 suggested: correctedText,
                                 start: match.index,
                                 end: match.index + match[0].length,
-                                confidence: rule.effectivenessScore || 0.8,
+                                confidence: rule.effectivenessScore || 0.8
                             });
                         }
                     }
@@ -63,7 +63,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
                                 suggested: rule.replaceWith,
                                 start: match.index,
                                 end: match.index + match[0].length,
-                                confidence: rule.effectivenessScore || 0.8,
+                                confidence: rule.effectivenessScore || 0.8
                             });
                         }
                     }
@@ -101,7 +101,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
                 addNotification({
                     type: 'success',
                     title: 'Corrections Applied',
-                    message: 'Text has been automatically corrected.',
+                    message: 'Text has been automatically corrected.'
                 });
             }
         }
@@ -126,7 +126,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
         addNotification({
             type: 'success',
             title: 'Correction Applied',
-            message: `Applied "${suggestion.ruleName}" correction.`,
+            message: `Applied "${suggestion.ruleName}" correction.`
         });
     };
     const dismissSuggestion = (suggestionId) => {
@@ -144,7 +144,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
                 addNotification({
                     type: 'success',
                     title: 'All Corrections Applied',
-                    message: 'All available corrections have been applied.',
+                    message: 'All available corrections have been applied.'
                 });
             }
         }
@@ -180,7 +180,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
         transition: 'border-color 0.2s ease',
         resize: autoResize ? 'none' : 'vertical',
         minHeight: autoResize ? `${rows * 1.5}em` : undefined,
-        position: 'relative',
+        position: 'relative'
     };
     const labelStyle = {
         display: 'block',
@@ -188,7 +188,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
         marginBottom: 4,
         color: '#e2e8f0',
         fontSize: 12,
-        letterSpacing: '0.025em',
+        letterSpacing: '0.025em'
     };
     const suggestionStyle = {
         position: 'absolute',
@@ -202,7 +202,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
         zIndex: 1000,
         maxHeight: '200px',
         overflowY: 'auto',
-        marginTop: 2,
+        marginTop: 2
     };
     const wordCount = getWordCount(localValue);
     const charCount = localValue.length;
@@ -212,7 +212,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
-                                    fontSize: 12,
+                                    fontSize: 12
                                 }, children: [_jsxs("div", { style: { flex: 1 }, children: [_jsx("div", { style: { fontWeight: 500, color: '#e2e8f0', marginBottom: 2 }, children: suggestion.ruleName }), _jsxs("div", { style: { color: '#a0aec0' }, children: [_jsx("span", { style: { textDecoration: 'line-through', color: '#f56565' }, children: suggestion.original }), ' → ', _jsx("span", { style: { color: '#68d391' }, children: suggestion.suggested })] })] }), _jsxs("div", { style: { display: 'flex', gap: 4 }, children: [_jsx("button", { onClick: () => applySuggestion(suggestion), style: {
                                                     background: '#68d391',
                                                     color: '#1a202c',
@@ -220,7 +220,7 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
                                                     borderRadius: 2,
                                                     padding: '2px 6px',
                                                     fontSize: 10,
-                                                    cursor: 'pointer',
+                                                    cursor: 'pointer'
                                                 }, children: "Apply" }), _jsx("button", { onClick: () => dismissSuggestion(suggestion.id), style: {
                                                     background: '#4a5568',
                                                     color: '#e2e8f0',
@@ -228,30 +228,30 @@ export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange
                                                     borderRadius: 2,
                                                     padding: '2px 6px',
                                                     fontSize: 10,
-                                                    cursor: 'pointer',
+                                                    cursor: 'pointer'
                                                 }, children: "Dismiss" })] })] }, suggestion.id))), suggestions.length > 5 && (_jsxs("div", { style: {
                                     padding: '8px 12px',
                                     color: '#a0aec0',
                                     fontSize: 10,
-                                    textAlign: 'center',
+                                    textAlign: 'center'
                                 }, children: ["+", suggestions.length - 5, " more corrections available"] }))] }))] }), error && (_jsx("div", { style: {
                     color: '#f56565',
                     fontSize: 11,
                     marginTop: 4,
-                    fontWeight: 400,
+                    fontWeight: 400
                 }, children: error })), _jsxs("div", { style: {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     marginTop: 2,
                     fontSize: 10,
-                    color: '#a0aec0',
+                    color: '#a0aec0'
                 }, children: [_jsxs("div", { style: { display: 'flex', gap: 16 }, children: [showWordCount && (_jsxs("span", { children: [wordCount, " word", wordCount !== 1 ? 's' : ''] })), enableInlineCorrections && (_jsx("span", { children: _jsxs("button", { onClick: () => setShowSuggestions(!showSuggestions), style: {
                                         background: 'none',
                                         border: 'none',
                                         color: suggestions.length > 0 ? '#fbb040' : '#a0aec0',
                                         cursor: 'pointer',
                                         fontSize: 10,
-                                        padding: 0,
+                                        padding: 0
                                     }, children: [showSuggestions ? 'Hide' : 'Show', " corrections"] }) }))] }), _jsxs("div", { style: { display: 'flex', gap: 16 }, children: [enableInlineCorrections && (_jsx("span", { style: { color: '#a0aec0', fontSize: 9 }, children: "Ctrl+Enter: Apply all \u2022 Ctrl+Shift+C: Toggle" })), maxLength && (_jsxs("span", { style: { color: charCount > maxLength * 0.9 ? '#fbb040' : '#a0aec0' }, children: [charCount, " / ", maxLength] }))] })] })] }));
 };

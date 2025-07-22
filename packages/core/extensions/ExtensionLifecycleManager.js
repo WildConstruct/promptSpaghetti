@@ -256,7 +256,17 @@ export class ExtensionLifecycleManager {
     getExtensionStatistics() {
         const stats = {
             total: this.extensions.size,
-            byState: {},
+            byState: {
+                uninitialized: 0,
+                initializing: 0,
+                initialized: 0,
+                activating: 0,
+                active: 0,
+                deactivating: 0,
+                deactivated: 0,
+                error: 0,
+                disposed: 0
+            },
             byType: {},
             errors: 0,
             healthy: 0

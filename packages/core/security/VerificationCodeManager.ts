@@ -913,5 +913,4 @@ export class VerificationCodeManager extends EventEmitter {
 }
 
 // Export default instance
-export 
 export default VerificationCodeManager;

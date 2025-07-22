@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useMemo } from 'react';
 import { useCorrectionsStore } from '../correctionsStore';
 export const WorkflowManager = ({ isOpen, onClose }) => {
-    const { rules, getDraftRules, getPublishedRules, approveRule, deprecateRule, suggestRule, updateRule, deleteRule, } = useCorrectionsStore();
+    const { rules, getDraftRules, getPublishedRules, approveRule, deprecateRule, suggestRule, updateRule, deleteRule } = useCorrectionsStore();
     const [activeTab, setActiveTab] = useState('pending');
     const [selectedRules, setSelectedRules] = useState(new Set());
     const [showApprovalDialog, setShowApprovalDialog] = useState(false);
@@ -81,27 +81,27 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
             fontSize: '10px',
             fontWeight: 500,
             background: getStatusColor(rule.status),
-            color: '#1a202c',
+            color: '#1a202c'
         }, children: rule.status.toUpperCase() }));
     const renderRuleCard = (rule) => (_jsx("div", { style: {
             background: '#2a2e37',
             border: '1px solid #4a5568',
             borderRadius: '6px',
             padding: '12px',
-            marginBottom: '8px',
+            marginBottom: '8px'
         }, children: _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }, children: [_jsx("input", { type: "checkbox", checked: selectedRules.has(rule.id), onChange: () => toggleRuleSelection(rule.id), style: { cursor: 'pointer' } }), _jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }, children: [_jsx("span", { style: { fontWeight: 600, color: '#e2e8f0' }, children: rule.name }), getStatusBadge(rule), rule.suggestedBy && (_jsxs("span", { style: {
                                         fontSize: '10px',
                                         color: '#a0aec0',
-                                        fontStyle: 'italic',
+                                        fontStyle: 'italic'
                                     }, children: ["Suggested by ", rule.suggestedBy] }))] }), rule.description && (_jsx("div", { style: { fontSize: '12px', color: '#a0aec0', marginBottom: '4px' }, children: rule.description })), _jsxs("div", { style: { fontSize: '11px', color: '#a0aec0', display: 'flex', gap: '16px' }, children: [_jsxs("span", { children: ["Created: ", rule.createdAt.toLocaleDateString()] }), _jsxs("span", { children: ["Updated: ", rule.updatedAt.toLocaleDateString()] }), rule.usageCount !== undefined && (_jsxs("span", { children: ["Used: ", rule.usageCount, " times"] })), rule.lastUsedAt && (_jsxs("span", { children: ["Last used: ", rule.lastUsedAt.toLocaleDateString()] }))] }), rule.suggestionReason && (_jsxs("div", { style: {
                                 fontSize: '11px',
                                 color: '#fbb040',
                                 marginTop: '4px',
-                                fontStyle: 'italic',
+                                fontStyle: 'italic'
                             }, children: ["Suggestion: ", rule.suggestionReason] })), rule.deprecationReason && (_jsxs("div", { style: {
                                 fontSize: '11px',
                                 color: '#e53e3e',
-                                marginTop: '4px',
+                                marginTop: '4px'
                             }, children: ["Deprecated: ", rule.deprecationReason] }))] }), _jsxs("div", { style: { display: 'flex', gap: '4px' }, children: [rule.status === 'draft' && (_jsx("button", { onClick: () => handleApprove(rule.id), style: {
                                 background: '#68d391',
                                 color: '#1a202c',
@@ -109,7 +109,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                 borderRadius: '4px',
                                 padding: '4px 8px',
                                 fontSize: '11px',
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             }, children: "Approve" })), rule.status === 'published' && (_jsx("button", { onClick: () => {
                                 setCurrentRule(rule);
                                 setShowDeprecationDialog(true);
@@ -120,7 +120,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                 borderRadius: '4px',
                                 padding: '4px 8px',
                                 fontSize: '11px',
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             }, children: "Deprecate" })), _jsx("button", { onClick: () => deleteRule(rule.id), style: {
                                 background: '#4a5568',
                                 color: '#e2e8f0',
@@ -128,7 +128,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                 borderRadius: '4px',
                                 padding: '4px 8px',
                                 fontSize: '11px',
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             }, children: "Delete" })] })] }) }, rule.id));
     const renderTabContent = () => {
         const currentRules = rulesByStatus[activeTab];
@@ -136,7 +136,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
             return (_jsxs("div", { style: {
                     textAlign: 'center',
                     padding: '40px',
-                    color: '#a0aec0',
+                    color: '#a0aec0'
                 }, children: ["No ", activeTab, " rules found."] }));
         }
         return (_jsxs("div", { children: [_jsxs("div", { style: {
@@ -145,7 +145,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                         alignItems: 'center',
                         marginBottom: '16px',
                         padding: '8px 0',
-                        borderBottom: '1px solid #4a5568',
+                        borderBottom: '1px solid #4a5568'
                     }, children: [_jsxs("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: [_jsx("button", { onClick: () => selectAllRules(currentRules), style: {
                                         background: 'none',
                                         border: '1px solid #4a5568',
@@ -153,7 +153,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                         borderRadius: '4px',
                                         padding: '4px 8px',
                                         fontSize: '11px',
-                                        cursor: 'pointer',
+                                        cursor: 'pointer'
                                     }, children: "Select All" }), _jsx("button", { onClick: clearSelection, style: {
                                         background: 'none',
                                         border: '1px solid #4a5568',
@@ -161,7 +161,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                         borderRadius: '4px',
                                         padding: '4px 8px',
                                         fontSize: '11px',
-                                        cursor: 'pointer',
+                                        cursor: 'pointer'
                                     }, children: "Clear" }), selectedRules.size > 0 && (_jsxs("span", { style: { fontSize: '11px', color: '#a0aec0' }, children: [selectedRules.size, " selected"] }))] }), selectedRules.size > 0 && (_jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [activeTab === 'pending' && (_jsx("button", { onClick: handleBulkApprove, style: {
                                         background: '#68d391',
                                         color: '#1a202c',
@@ -169,7 +169,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                         borderRadius: '4px',
                                         padding: '4px 8px',
                                         fontSize: '11px',
-                                        cursor: 'pointer',
+                                        cursor: 'pointer'
                                     }, children: "Approve Selected" })), activeTab === 'published' && (_jsx("button", { onClick: handleBulkDeprecate, style: {
                                         background: '#e53e3e',
                                         color: '#fff',
@@ -177,7 +177,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                         borderRadius: '4px',
                                         padding: '4px 8px',
                                         fontSize: '11px',
-                                        cursor: 'pointer',
+                                        cursor: 'pointer'
                                     }, children: "Deprecate Selected" }))] }))] }), _jsx("div", { style: { maxHeight: '400px', overflowY: 'auto' }, children: currentRules.map(renderRuleCard) })] }));
     };
     if (!isOpen)
@@ -192,7 +192,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 1001,
+            zIndex: 1001
         }, children: _jsxs("div", { style: {
                 background: '#23272f',
                 padding: '24px',
@@ -201,7 +201,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                 maxWidth: '900px',
                 maxHeight: '90vh',
                 overflow: 'auto',
-                color: '#fff',
+                color: '#fff'
             }, children: [_jsxs("div", { style: {
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -213,11 +213,11 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                 color: '#a0aec0',
                                 cursor: 'pointer',
                                 fontSize: '20px',
-                                padding: '4px 8px',
+                                padding: '4px 8px'
                             }, children: "\u00D7" })] }), _jsx("div", { style: {
                         display: 'flex',
                         borderBottom: '1px solid #4a5568',
-                        marginBottom: '24px',
+                        marginBottom: '24px'
                     }, children: ['pending', 'published', 'deprecated', 'suggestions'].map(tab => (_jsxs("button", { onClick: () => setActiveTab(tab), style: {
                             background: 'none',
                             border: 'none',
@@ -226,7 +226,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                             fontSize: '14px',
                             cursor: 'pointer',
                             borderBottom: activeTab === tab ? '2px solid #63b3ed' : '2px solid transparent',
-                            textTransform: 'capitalize',
+                            textTransform: 'capitalize'
                         }, children: [tab, " (", rulesByStatus[tab].length, ")"] }, tab))) }), renderTabContent(), showDeprecationDialog && currentRule && (_jsx("div", { style: {
                         position: 'fixed',
                         top: 0,
@@ -237,13 +237,13 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        zIndex: 1002,
+                        zIndex: 1002
                     }, children: _jsxs("div", { style: {
                             background: '#2a2e37',
                             padding: '24px',
                             borderRadius: '8px',
                             width: '400px',
-                            maxWidth: '90vw',
+                            maxWidth: '90vw'
                         }, children: [_jsxs("h3", { style: { margin: '0 0 16px 0', fontSize: '16px' }, children: ["Deprecate Rule: ", currentRule.name] }), _jsx("textarea", { value: deprecationReason, onChange: (e) => setDeprecationReason(e.target.value), placeholder: "Enter reason for deprecation...", style: {
                                     width: '100%',
                                     height: '80px',
@@ -253,7 +253,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                     border: '1px solid #4a5568',
                                     borderRadius: '4px',
                                     fontSize: '14px',
-                                    resize: 'vertical',
+                                    resize: 'vertical'
                                 } }), _jsxs("div", { style: { display: 'flex', gap: '8px', marginTop: '16px', justifyContent: 'flex-end' }, children: [_jsx("button", { onClick: () => {
                                             setShowDeprecationDialog(false);
                                             setCurrentRule(null);
@@ -265,7 +265,7 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                             borderRadius: '4px',
                                             padding: '8px 16px',
                                             fontSize: '14px',
-                                            cursor: 'pointer',
+                                            cursor: 'pointer'
                                         }, children: "Cancel" }), _jsx("button", { onClick: () => handleDeprecate(currentRule.id, deprecationReason), disabled: !deprecationReason.trim(), style: {
                                             background: deprecationReason.trim() ? '#e53e3e' : '#4a5568',
                                             color: '#fff',
@@ -273,6 +273,6 @@ export const WorkflowManager = ({ isOpen, onClose }) => {
                                             borderRadius: '4px',
                                             padding: '8px 16px',
                                             fontSize: '14px',
-                                            cursor: deprecationReason.trim() ? 'pointer' : 'not-allowed',
+                                            cursor: deprecationReason.trim() ? 'pointer' : 'not-allowed'
                                         }, children: "Deprecate" })] })] }) }))] }) }));
 };

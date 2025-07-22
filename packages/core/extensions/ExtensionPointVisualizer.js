@@ -45,7 +45,7 @@ export class ExtensionPointVisualizer {
                         const nodeId = this.sanitizeId(ep.id);
                         mermaid += `        ${nodeId}["${ep.name}"]\n`;
                     });
-                    mermaid += `    end\n`;
+                    mermaid += '    end\n';
                 }
             });
         }
@@ -213,7 +213,7 @@ export class ExtensionPointVisualizer {
                         const nodeId = this.sanitizeId(node.id);
                         mermaid += `        ${nodeId}["${node.name}"]\n`;
                     });
-                    mermaid += `    end\n`;
+                    mermaid += '    end\n';
                 }
             });
         }
@@ -256,8 +256,8 @@ export class ExtensionPointVisualizer {
                 if (nodes.length > 0) {
                     dot += `    subgraph cluster_${category} {\n`;
                     dot += `        label="${category.toUpperCase()}";\n`;
-                    dot += `        style=filled;\n`;
-                    dot += `        color=lightgrey;\n`;
+                    dot += '        style=filled;\n';
+                    dot += '        color=lightgrey;\n';
                     nodes.forEach(node => {
                         const nodeId = this.sanitizeId(node.id).replace(/[.-]/g, '_');
                         dot += `        ${nodeId} [label="${node.name}"];\n`;

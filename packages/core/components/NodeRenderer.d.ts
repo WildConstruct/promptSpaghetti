@@ -1,5 +1,5 @@
-import React from "react";
-import { NodeMeta } from "../Palette";
+import React from 'react';
+import { NodeMeta } from '../Palette';
 interface NodeRendererProps {
     id: string;
     data: any;

@@ -1,5 +1,5 @@
-import React from "react";
-import { EditorFieldProps } from "./BaseNodeEditor";
+import React from 'react';
+import { EditorFieldProps } from './BaseNodeEditor';
 export interface TextAreaEditorProps extends EditorFieldProps {
     rows?: number;
     maxLength?: number;

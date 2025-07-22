@@ -263,7 +263,7 @@ export class WorkspaceDAO {
             .build();
         const result = await this.db.query(query, params);
         if (result.rowCount === 0) {
-            throw new Error(`Workspace member not found`);
+            throw new Error('Workspace member not found');
         }
     }
     async updateWorkspaceMemberRole(workspaceId, userId, role) {
@@ -275,7 +275,7 @@ export class WorkspaceDAO {
             .build();
         const result = await this.db.query(query, params);
         if (result.rows.length === 0) {
-            throw new Error(`Workspace member not found`);
+            throw new Error('Workspace member not found');
         }
         return result.rows[0];
     }
@@ -311,7 +311,7 @@ export class WorkspaceDAO {
             .build();
         const result = await this.db.query(query, params);
         if (result.rowCount === 0) {
-            throw new Error(`Project member not found`);
+            throw new Error('Project member not found');
         }
     }
     async updateProjectMemberRole(projectId, userId, role) {
@@ -323,7 +323,7 @@ export class WorkspaceDAO {
             .build();
         const result = await this.db.query(query, params);
         if (result.rows.length === 0) {
-            throw new Error(`Project member not found`);
+            throw new Error('Project member not found');
         }
         return result.rows[0];
     }

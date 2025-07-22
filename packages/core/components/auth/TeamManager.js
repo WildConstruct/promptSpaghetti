@@ -19,11 +19,11 @@ export const TeamManager = ({ organizationId }) => {
         name: '',
         description: '',
         parentTeamId: '',
-        settings: {},
+        settings: {}
     });
     const [memberFormData, setMemberFormData] = useState({
         userId: '',
-        role: 'member',
+        role: 'member'
     });
     useEffect(() => {
         loadTeams();
@@ -37,7 +37,7 @@ export const TeamManager = ({ organizationId }) => {
         try {
             setLoading(true);
             const response = await fetch(`/api/auth/organizations/${organizationId}/teams/hierarchy`, {
-                credentials: 'include',
+                credentials: 'include'
             });
             if (!response.ok) {
                 throw new Error('Failed to load teams');
@@ -59,7 +59,7 @@ export const TeamManager = ({ organizationId }) => {
     const loadTeamMembers = async (teamId) => {
         try {
             const response = await fetch(`/api/auth/teams/${teamId}/members`, {
-                credentials: 'include',
+                credentials: 'include'
             });
             if (!response.ok) {
                 throw new Error('Failed to load team members');
@@ -76,13 +76,13 @@ export const TeamManager = ({ organizationId }) => {
             const response = await fetch(`/api/auth/organizations/${organizationId}/teams`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 credentials: 'include',
                 body: JSON.stringify({
                     ...formData,
-                    parentTeamId: formData.parentTeamId || undefined,
-                }),
+                    parentTeamId: formData.parentTeamId || undefined
+                })
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -105,13 +105,13 @@ export const TeamManager = ({ organizationId }) => {
             const response = await fetch(`/api/auth/teams/${editingTeam.id}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 credentials: 'include',
                 body: JSON.stringify({
                     ...formData,
-                    parentTeamId: formData.parentTeamId || undefined,
-                }),
+                    parentTeamId: formData.parentTeamId || undefined
+                })
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -132,7 +132,7 @@ export const TeamManager = ({ organizationId }) => {
         try {
             const response = await fetch(`/api/auth/teams/${teamId}`, {
                 method: 'DELETE',
-                credentials: 'include',
+                credentials: 'include'
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -154,10 +154,10 @@ export const TeamManager = ({ organizationId }) => {
             const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify(memberFormData),
+                body: JSON.stringify(memberFormData)
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -177,7 +177,7 @@ export const TeamManager = ({ organizationId }) => {
         try {
             const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {
                 method: 'DELETE',
-                credentials: 'include',
+                credentials: 'include'
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -196,10 +196,10 @@ export const TeamManager = ({ organizationId }) => {
             const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ role: newRole }),
+                body: JSON.stringify({ role: newRole })
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -216,7 +216,7 @@ export const TeamManager = ({ organizationId }) => {
             name: '',
             description: '',
             parentTeamId: '',
-            settings: {},
+            settings: {}
         });
     };
     const startEditing = (team) => {
@@ -225,7 +225,7 @@ export const TeamManager = ({ organizationId }) => {
             name: team.name,
             description: team.description || '',
             parentTeamId: team.parentTeamId || '',
-            settings: team.settings,
+            settings: team.settings
         });
     };
     const toggleTeamExpansion = (teamId) => {
@@ -273,7 +273,7 @@ export const TeamManager = ({ organizationId }) => {
     return (_jsxs("div", { className: "max-w-7xl mx-auto p-6", children: [_jsxs("div", { className: "flex items-center justify-between mb-8", children: [_jsxs("div", { children: [_jsx("h1", { className: "text-3xl font-bold text-gray-900", children: "Teams" }), _jsx("p", { className: "text-gray-600 mt-2", children: "Manage teams and their members" })] }), _jsxs("button", { onClick: () => setShowCreateForm(true), className: "flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors", children: [_jsx(Plus, { className: "w-4 h-4 mr-2" }), "Create Team"] })] }), error && (_jsxs("div", { className: "mb-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg", children: [error, _jsx("button", { onClick: () => setError(null), className: "ml-2 text-red-500 hover:text-red-700", children: "\u00D7" })] })), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [_jsx("div", { className: "lg:col-span-1", children: _jsxs("div", { className: "bg-white rounded-lg border border-gray-200 overflow-hidden", children: [_jsx("div", { className: "p-4 border-b border-gray-200", children: _jsx("h2", { className: "text-lg font-semibold text-gray-900", children: "Teams" }) }), _jsx("div", { className: "divide-y divide-gray-200 max-h-96 overflow-y-auto", children: teams.length > 0 ? (renderTeamTree(teams)) : (_jsxs("div", { className: "p-8 text-center text-gray-500", children: [_jsx(Users, { className: "w-8 h-8 mx-auto mb-2" }), _jsx("p", { children: "No teams created yet" })] })) })] }) }), _jsx("div", { className: "lg:col-span-3", children: selectedTeam ? (_jsxs("div", { className: "bg-white rounded-lg border border-gray-200", children: [_jsx("div", { className: "p-6 border-b border-gray-200", children: _jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { children: [_jsx("h2", { className: "text-2xl font-bold text-gray-900", children: selectedTeam.name }), selectedTeam.description && (_jsx("p", { className: "text-gray-600 mt-2", children: selectedTeam.description })), _jsxs("div", { className: "text-sm text-gray-500 mt-2", children: ["Created ", new Date(selectedTeam.createdAt).toLocaleDateString()] })] }), _jsxs("div", { className: "flex space-x-2", children: [_jsx("button", { onClick: () => startEditing(selectedTeam), className: "p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors", children: _jsx(Edit2, { className: "w-4 h-4" }) }), _jsx("button", { onClick: () => deleteTeam(selectedTeam.id), className: "p-2 text-red-600 hover:text-red-900 hover:bg-red-100 rounded-lg transition-colors", children: _jsx(Trash2, { className: "w-4 h-4" }) })] })] }) }), _jsx("div", { className: "border-b border-gray-200", children: _jsx("nav", { className: "flex space-x-8 px-6", children: [
                                             { id: 'overview', label: 'Overview', icon: Activity },
                                             { id: 'members', label: 'Members', icon: Users },
-                                            { id: 'settings', label: 'Settings', icon: Settings },
+                                            { id: 'settings', label: 'Settings', icon: Settings }
                                         ].map((tab) => (_jsxs("button", { onClick: () => setActiveTab(tab.id), className: `flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
                                                 ? 'border-blue-500 text-blue-600'
                                                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`, children: [_jsx(tab.icon, { className: "w-4 h-4 mr-2" }), tab.label] }, tab.id))) }) }), _jsxs("div", { className: "p-6", children: [activeTab === 'overview' && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [_jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: teamMembers.length }), _jsx("div", { className: "text-sm text-gray-600", children: "Team Members" })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: teamMembers.filter(m => m.role === 'admin' || m.role === 'owner').length }), _jsx("div", { className: "text-sm text-gray-600", children: "Administrators" })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: teams.filter(t => t.parentTeamId === selectedTeam.id).length }), _jsx("div", { className: "text-sm text-gray-600", children: "Sub-teams" })] })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-3", children: "Team Information" }), _jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "text-sm", children: [_jsx("span", { className: "font-medium text-gray-700", children: "Created:" }), _jsx("span", { className: "ml-2 text-gray-600", children: new Date(selectedTeam.createdAt).toLocaleDateString() })] }), _jsxs("div", { className: "text-sm", children: [_jsx("span", { className: "font-medium text-gray-700", children: "Last Updated:" }), _jsx("span", { className: "ml-2 text-gray-600", children: new Date(selectedTeam.updatedAt).toLocaleDateString() })] }), selectedTeam.parentTeamId && (_jsxs("div", { className: "text-sm", children: [_jsx("span", { className: "font-medium text-gray-700", children: "Parent Team:" }), _jsx("span", { className: "ml-2 text-gray-600", children: teams.find(t => t.id === selectedTeam.parentTeamId)?.name || 'Unknown' })] }))] })] })] })), activeTab === 'members' && (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Team Members" }), _jsxs("button", { onClick: () => setShowAddMember(true), className: "flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors", children: [_jsx(UserPlus, { className: "w-4 h-4 mr-2" }), "Add Member"] })] }), _jsxs("div", { className: "space-y-4", children: [teamMembers.map((member) => (_jsxs("div", { className: "flex items-center justify-between p-4 bg-gray-50 rounded-lg", children: [_jsxs("div", { className: "flex items-center space-x-4", children: [_jsx("div", { className: "w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center", children: member.user.avatarUrl ? (_jsx("img", { src: member.user.avatarUrl, alt: member.user.displayName, className: "w-10 h-10 rounded-full object-cover" })) : (_jsx("span", { className: "text-sm font-medium text-gray-600", children: (member.user.displayName || member.user.email).charAt(0).toUpperCase() })) }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: member.user.displayName || `${member.user.firstName} ${member.user.lastName}`.trim() || member.user.email }), _jsx("div", { className: "text-sm text-gray-600", children: member.user.email }), _jsxs("div", { className: "text-xs text-gray-500", children: ["Joined ", new Date(member.joinedAt).toLocaleDateString()] })] })] }), _jsxs("div", { className: "flex items-center space-x-3", children: [_jsxs("select", { value: member.role, onChange: (e) => updateMemberRole(member.userId, e.target.value), className: "text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent", children: [_jsx("option", { value: "viewer", children: "Viewer" }), _jsx("option", { value: "member", children: "Member" }), _jsx("option", { value: "admin", children: "Admin" }), _jsx("option", { value: "owner", children: "Owner" })] }), _jsxs("span", { className: `inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getRoleBadge(member.role)}`, children: [getRoleIcon(member.role), _jsx("span", { className: "ml-1", children: member.role.charAt(0).toUpperCase() + member.role.slice(1) })] }), _jsx("button", { onClick: () => removeTeamMember(member.userId), className: "p-1 text-red-600 hover:text-red-900 hover:bg-red-100 rounded transition-colors", children: _jsx(Trash2, { className: "w-4 h-4" }) })] })] }, member.id))), teamMembers.length === 0 && (_jsxs("div", { className: "text-center py-8 text-gray-500", children: [_jsx(Users, { className: "w-8 h-8 mx-auto mb-2" }), _jsx("p", { children: "No team members yet" })] }))] })] })), activeTab === 'settings' && (_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Team Settings" }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Team Name" }), _jsx("div", { className: "text-sm text-gray-900", children: selectedTeam.name })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Description" }), _jsx("div", { className: "text-sm text-gray-900", children: selectedTeam.description || 'No description' })] })] })] }))] })] })) : (_jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-12 text-center", children: [_jsx(Users, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "No Team Selected" }), _jsx("p", { className: "text-gray-600", children: "Select a team from the list to view details" })] })) })] }), (showCreateForm || editingTeam) && (_jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50", children: _jsxs("div", { className: "bg-white rounded-lg max-w-md w-full p-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-4", children: editingTeam ? 'Edit Team' : 'Create Team' }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Team Name *" }), _jsx("input", { type: "text", value: formData.name, onChange: (e) => setFormData(prev => ({ ...prev, name: e.target.value })), className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder: "Enter team name" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Description" }), _jsx("textarea", { value: formData.description, onChange: (e) => setFormData(prev => ({ ...prev, description: e.target.value })), className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", rows: 3, placeholder: "Describe the team's purpose" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Parent Team (optional)" }), _jsxs("select", { value: formData.parentTeamId, onChange: (e) => setFormData(prev => ({ ...prev, parentTeamId: e.target.value })), className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", children: [_jsx("option", { value: "", children: "No parent team" }), teams

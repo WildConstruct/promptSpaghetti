@@ -19,7 +19,8 @@ interface AdvancedPromptingCollaborationDemoProps {
   className?: string;
 }
 
-export   const [showPanel, setShowPanel] = useState(false);
+export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingCollaborationDemoProps> = ({ className }) => {
+  const [showPanel, setShowPanel] = useState(false);
   const [demoStep, setDemoStep] = useState(0);
   const [exportData, setExportData] = useState<any>(null);
 

@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { AdminLayout } from './AdminLayout';
 import { FeatureToggleDashboard } from './FeatureToggleDashboard';
 import { ApiManagementDashboard } from './ApiManagementDashboard';
+import { ModerationAdminDashboard } from './ModerationAdminDashboard';
+import { LogVisualizationDashboard } from './logs/LogVisualizationDashboard';
+import { AuditLogViewer } from './audit/AuditLogViewer';
 import './AdminLayout.css';
 
 // Placeholder components for other sections
@@ -15,10 +18,7 @@ const UserManagementDashboard: React.FC = () => (
 );
 
 const ContentManagementDashboard: React.FC = () => (
-  <div style={{ padding: '24px', textAlign: 'center' }}>
-    <h2>Content Management</h2>
-    <p>Content management functionality will be implemented in Epic 17.2</p>
-  </div>
+  <ModerationAdminDashboard />
 );
 
 const MarketplaceAdminDashboard: React.FC = () => (
@@ -29,10 +29,7 @@ const MarketplaceAdminDashboard: React.FC = () => (
 );
 
 const AnalyticsMonitoringDashboard: React.FC = () => (
-  <div style={{ padding: '24px', textAlign: 'center' }}>
-    <h2>Analytics & Monitoring</h2>
-    <p>Analytics and monitoring functionality will be implemented in Epic 17.4</p>
-  </div>
+  <LogVisualizationDashboard />
 );
 
 const SystemConfigurationDashboard: React.FC = () => (
@@ -61,6 +58,8 @@ export const AdminDashboard: React.FC = () => {
       return <AnalyticsMonitoringDashboard />;
     case 'system':
       return <SystemConfigurationDashboard />;
+    case 'audit-logs':
+      return <AuditLogViewer />;
     default:
       return <FeatureToggleDashboard />;
     }

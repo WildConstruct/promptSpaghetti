@@ -498,7 +498,7 @@ export class ExtensionInterfaceTestSuite {
         if (!results) {
             return `No test results found for extension: ${extensionId}`;
         }
-        let report = `\n# Extension Interface Test Report\n\n`;
+        let report = '\n# Extension Interface Test Report\n\n';
         report += `**Extension**: ${results.extensionName} (${results.extensionId})\n`;
         report += `**Version**: ${results.version}\n`;
         report += `**Timestamp**: ${results.timestamp.toISOString()}\n`;
@@ -511,7 +511,7 @@ export class ExtensionInterfaceTestSuite {
                 if (test.error) {
                     report += `   Error: ${test.error}\n`;
                 }
-                report += `\n`;
+                report += '\n';
             }
         }
         return report;

@@ -40,7 +40,7 @@ export const ProjectBranchSchema = z.object({
     contributorCount: z.number().int().default(0),
     lastActivityAt: z.date(),
     // Branch metadata
-    metadata: z.record(z.unknown()).default({}),
+    metadata: z.record(z.unknown()).default({})
 });
 export const BranchCommitSchema = z.object({
     id: z.string().uuid(),
@@ -58,7 +58,7 @@ export const BranchCommitSchema = z.object({
     additionsCount: z.number().int().default(0),
     deletionsCount: z.number().int().default(0),
     // Commit metadata
-    commitMetadata: z.record(z.unknown()).default({}),
+    commitMetadata: z.record(z.unknown()).default({})
 });
 export const BranchMergeRequestSchema = z.object({
     id: z.string().uuid(),
@@ -93,7 +93,7 @@ export const BranchMergeRequestSchema = z.object({
     mergedAt: z.date().optional(),
     closedAt: z.date().optional(),
     // Merge request metadata
-    metadata: z.record(z.unknown()).default({}),
+    metadata: z.record(z.unknown()).default({})
 });
 export const BranchMergeReviewSchema = z.object({
     id: z.string().uuid(),
@@ -104,7 +104,7 @@ export const BranchMergeReviewSchema = z.object({
     reviewMessage: z.string().optional(),
     // Review metadata
     submittedAt: z.date(),
-    updatedAt: z.date(),
+    updatedAt: z.date()
 });
 export const BranchPermissionSchema = z.object({
     id: z.string().uuid(),
@@ -120,7 +120,7 @@ export const BranchPermissionSchema = z.object({
     // Permission metadata
     grantedBy: z.string().uuid(),
     grantedAt: z.date(),
-    expiresAt: z.date().optional(),
+    expiresAt: z.date().optional()
 });
 export const BranchConflictSchema = z.object({
     id: z.string().uuid(),
@@ -135,7 +135,7 @@ export const BranchConflictSchema = z.object({
     // Conflict metadata
     detectedAt: z.date(),
     resolvedAt: z.date().optional(),
-    resolvedBy: z.string().uuid().optional(),
+    resolvedBy: z.string().uuid().optional()
 });
 export const BranchSyncOperationSchema = z.object({
     id: z.string().uuid(),
@@ -155,7 +155,7 @@ export const BranchSyncOperationSchema = z.object({
     conflictsDetected: z.number().int().default(0),
     filesChanged: z.number().int().default(0),
     // Operation metadata
-    operationMetadata: z.record(z.unknown()).default({}),
+    operationMetadata: z.record(z.unknown()).default({})
 });
 // Request/response types
 export const CreateBranchRequestSchema = z.object({
@@ -169,7 +169,7 @@ export const CreateBranchRequestSchema = z.object({
     autoMergeEnabled: z.boolean().default(false),
     requiresReview: z.boolean().default(false),
     allowForcePush: z.boolean().default(false),
-    deleteOnMerge: z.boolean().default(false),
+    deleteOnMerge: z.boolean().default(false)
 });
 export const UpdateBranchRequestSchema = z.object({
     displayName: z.string().max(255).optional(),
@@ -179,14 +179,14 @@ export const UpdateBranchRequestSchema = z.object({
     requiresReview: z.boolean().optional(),
     allowForcePush: z.boolean().optional(),
     deleteOnMerge: z.boolean().optional(),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: z.record(z.unknown()).optional()
 });
 export const CreateCommitRequestSchema = z.object({
     branchId: z.string().uuid(),
     snapshotId: z.string().uuid(),
     commitMessage: z.string().optional(),
     parentCommitIds: z.array(z.string().uuid()).default([]),
-    commitMetadata: z.record(z.unknown()).default({}),
+    commitMetadata: z.record(z.unknown()).default({})
 });
 export const CreateMergeRequestRequestSchema = z.object({
     projectId: z.string().uuid(),
@@ -199,7 +199,7 @@ export const CreateMergeRequestRequestSchema = z.object({
     allowSquashMerge: z.boolean().default(true),
     allowMergeCommit: z.boolean().default(true),
     allowRebaseMerge: z.boolean().default(false),
-    deleteSourceBranch: z.boolean().default(false),
+    deleteSourceBranch: z.boolean().default(false)
 });
 export const UpdateMergeRequestRequestSchema = z.object({
     title: z.string().min(1).max(500).optional(),
@@ -210,28 +210,28 @@ export const UpdateMergeRequestRequestSchema = z.object({
     allowMergeCommit: z.boolean().optional(),
     allowRebaseMerge: z.boolean().optional(),
     deleteSourceBranch: z.boolean().optional(),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: z.record(z.unknown()).optional()
 });
 export const CreateReviewRequestSchema = z.object({
     mergeRequestId: z.string().uuid(),
     status: ReviewStatusSchema,
-    reviewMessage: z.string().optional(),
+    reviewMessage: z.string().optional()
 });
 export const UpdateReviewRequestSchema = z.object({
     status: ReviewStatusSchema.optional(),
-    reviewMessage: z.string().optional(),
+    reviewMessage: z.string().optional()
 });
 export const MergeBranchRequestSchema = z.object({
     mergeRequestId: z.string().uuid(),
     mergeStrategy: z.enum(['merge', 'squash', 'rebase']).default('merge'),
     commitMessage: z.string().optional(),
-    deleteSourceBranch: z.boolean().default(false),
+    deleteSourceBranch: z.boolean().default(false)
 });
 export const SyncBranchRequestSchema = z.object({
     branchId: z.string().uuid(),
     sourceBranchId: z.string().uuid(),
     operationType: SyncOperationTypeSchema,
-    conflictResolution: z.record(z.unknown()).optional(),
+    conflictResolution: z.record(z.unknown()).optional()
 });
 export const BranchFilterSchema = z.object({
     projectId: z.string().uuid().optional(),
@@ -246,7 +246,7 @@ export const BranchFilterSchema = z.object({
     limit: z.number().int().min(1).max(100).default(20),
     offset: z.number().int().min(0).default(0),
     sortBy: z.enum(['name', 'created_at', 'updated_at', 'last_activity_at']).default('updated_at'),
-    sortOrder: z.enum(['asc', 'desc']).default('desc'),
+    sortOrder: z.enum(['asc', 'desc']).default('desc')
 });
 export const MergeRequestFilterSchema = z.object({
     projectId: z.string().uuid().optional(),
@@ -261,7 +261,7 @@ export const MergeRequestFilterSchema = z.object({
     limit: z.number().int().min(1).max(100).default(20),
     offset: z.number().int().min(0).default(0),
     sortBy: z.enum(['created_at', 'updated_at', 'title']).default('updated_at'),
-    sortOrder: z.enum(['asc', 'desc']).default('desc'),
+    sortOrder: z.enum(['asc', 'desc']).default('desc')
 });
 // Response types
 export const BranchStatsResponseSchema = z.object({
@@ -277,8 +277,8 @@ export const BranchStatsResponseSchema = z.object({
         activityType: z.string(),
         activityDate: z.date(),
         userId: z.string().uuid(),
-        userName: z.string(),
-    })),
+        userName: z.string()
+    }))
 });
 export const BranchTimelineResponseSchema = z.object({
     timeline: z.array(z.object({
@@ -291,26 +291,26 @@ export const BranchTimelineResponseSchema = z.object({
             userId: z.string().uuid(),
             userName: z.string(),
             description: z.string(),
-            metadata: z.record(z.unknown()).optional(),
-        })),
+            metadata: z.record(z.unknown()).optional()
+        }))
     })),
     summary: z.object({
         totalEvents: z.number().int(),
         dateRange: z.object({
             start: z.date(),
-            end: z.date(),
+            end: z.date()
         }),
         mostActiveBranch: z.object({
             branchId: z.string().uuid(),
             branchName: z.string(),
-            events: z.number().int(),
+            events: z.number().int()
         }).optional(),
         mostActiveUser: z.object({
             userId: z.string().uuid(),
             userName: z.string(),
-            events: z.number().int(),
-        }).optional(),
-    }),
+            events: z.number().int()
+        }).optional()
+    })
 });
 export const BranchComparisonResponseSchema = z.object({
     sourceBranch: ProjectBranchSchema,
@@ -321,7 +321,7 @@ export const BranchComparisonResponseSchema = z.object({
     conflicts: z.array(BranchConflictSchema),
     canMerge: z.boolean(),
     mergeStrategy: z.enum(['merge', 'squash', 'rebase']).optional(),
-    estimatedMergeTime: z.number().int().optional(),
+    estimatedMergeTime: z.number().int().optional()
 });
 // Validation helpers
 export const validateCreateBranchRequest = (request) => {
@@ -354,28 +354,28 @@ export const BRANCHING_DEFAULTS = {
     REQUIRE_REVIEW_BY_DEFAULT: false,
     ALLOW_FORCE_PUSH_BY_DEFAULT: false,
     CONFLICT_RESOLUTION_TIMEOUT: 300000, // 5 minutes
-    MERGE_TIMEOUT: 600000, // 10 minutes
+    MERGE_TIMEOUT: 600000 // 10 minutes
 };
 export const BRANCH_TYPE_DESCRIPTIONS = {
     main: 'Main development branch',
     feature: 'Feature development branch',
     hotfix: 'Hotfix branch for urgent fixes',
     release: 'Release preparation branch',
-    experiment: 'Experimental branch for testing',
+    experiment: 'Experimental branch for testing'
 };
 export const BRANCH_STATUS_DESCRIPTIONS = {
     active: 'Active development branch',
     merged: 'Branch has been merged',
     abandoned: 'Branch has been abandoned',
-    archived: 'Branch has been archived',
+    archived: 'Branch has been archived'
 };
 export const PROTECTION_LEVEL_DESCRIPTIONS = {
     none: 'No protection - anyone can push',
     protected: 'Protected - requires review',
-    locked: 'Locked - only admins can push',
+    locked: 'Locked - only admins can push'
 };
 export const MERGE_STRATEGY_DESCRIPTIONS = {
     merge: 'Create a merge commit',
     squash: 'Squash commits into one',
-    rebase: 'Rebase and merge',
+    rebase: 'Rebase and merge'
 };

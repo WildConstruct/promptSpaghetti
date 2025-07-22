@@ -27,13 +27,13 @@ export function useComments(options) {
                 target_id: targetId,
                 page: pageNum.toString(),
                 limit: limit.toString(),
-                sort_order: sortOrder,
+                sort_order: sortOrder
             });
             const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/comments?${params}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-User-Id': userId,
-                },
+                    'X-User-Id': userId
+                }
             });
             if (!response.ok) {
                 throw new Error(`Failed to fetch comments: ${response.statusText}`);
@@ -64,9 +64,9 @@ export function useComments(options) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-User-Id': userId,
+                'X-User-Id': userId
             },
-            body: JSON.stringify(commentData),
+            body: JSON.stringify(commentData)
         });
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -90,9 +90,9 @@ export function useComments(options) {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'X-User-Id': userId,
+                'X-User-Id': userId
             },
-            body: JSON.stringify(updates),
+            body: JSON.stringify(updates)
         });
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -109,8 +109,8 @@ export function useComments(options) {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'X-User-Id': userId,
-            },
+                'X-User-Id': userId
+            }
         });
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -136,8 +136,8 @@ export function useComments(options) {
             const response = await fetch(`${API_BASE}/comments/${commentId}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-User-Id': userId,
-                },
+                    'X-User-Id': userId
+                }
             });
             if (!response.ok) {
                 if (response.status === 404)
@@ -182,6 +182,6 @@ export function useComments(options) {
         deleteComment,
         loadMore,
         refresh,
-        getComment,
+        getComment
     };
 }

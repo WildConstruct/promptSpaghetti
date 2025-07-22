@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback, useMemo } from 'react';
 import { useCorrectionsStore, DEFAULT_CORRECTION_RULES } from '../correctionsStore';
 export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
-    const { rules, addRule, updateRule, deleteRule, toggleRule, clearAllRules, applyCorrections, } = useCorrectionsStore();
+    const { rules, addRule, updateRule, deleteRule, toggleRule, clearAllRules, applyCorrections } = useCorrectionsStore();
     const [activeTab, setActiveTab] = useState('rules');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedRule, setSelectedRule] = useState(null);
@@ -14,7 +14,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
         replaceWith: '',
         isRegex: false,
         isActive: true,
-        priority: rules.length,
+        priority: rules.length
     });
     // Filter rules based on search
     const filteredRules = useMemo(() => {
@@ -36,7 +36,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                 replaceWith: '',
                 isRegex: false,
                 isActive: true,
-                priority: rules.length,
+                priority: rules.length
             });
             setActiveTab('rules');
         }
@@ -66,7 +66,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
             color: '#fff',
             zIndex: 1000,
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'column'
         }, children: [_jsxs("div", { style: {
                     padding: '16px',
                     borderBottom: '1px solid #444',
@@ -80,7 +80,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                             color: '#a0aec0',
                             cursor: 'pointer',
                             fontSize: '20px',
-                            padding: '4px 8px',
+                            padding: '4px 8px'
                         }, children: "\u00D7" })] }), _jsx("div", { style: {
                     display: 'flex',
                     borderBottom: '1px solid #444',
@@ -100,7 +100,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                         cursor: 'pointer',
                         fontSize: '14px',
                         fontWeight: 500,
-                        transition: 'all 0.2s ease',
+                        transition: 'all 0.2s ease'
                     }, children: [tab.label, tab.count !== undefined && (_jsx("span", { style: {
                                 marginLeft: '4px',
                                 padding: '2px 6px',
@@ -114,12 +114,12 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                         color: '#fff',
                                         border: '1px solid #444',
                                         borderRadius: '8px',
-                                        fontSize: '16px',
+                                        fontSize: '16px'
                                     } }) }), _jsx("div", { style: { display: 'flex', flexDirection: 'column', gap: '12px' }, children: filteredRules.map((rule) => (_jsxs("div", { style: {
                                         background: '#2a2e37',
                                         border: '1px solid #444',
                                         borderRadius: '8px',
-                                        padding: '16px',
+                                        padding: '16px'
                                     }, children: [_jsxs("div", { style: {
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -138,7 +138,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                                         padding: '6px 12px',
                                                         borderRadius: '4px',
                                                         cursor: 'pointer',
-                                                        fontSize: '12px',
+                                                        fontSize: '12px'
                                                     }, children: "Edit" })] }), rule.description && (_jsx("p", { style: {
                                                 fontSize: '14px',
                                                 color: '#a0aec0',
@@ -173,7 +173,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                             borderRadius: '6px',
                                             cursor: 'pointer',
                                             fontSize: '14px',
-                                            fontWeight: 500,
+                                            fontWeight: 500
                                         }, children: "Load Defaults" }), _jsx("button", { onClick: () => {
                                             if (window.confirm('Clear all rules?')) {
                                                 clearAllRules();
@@ -187,7 +187,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                             borderRadius: '6px',
                                             cursor: 'pointer',
                                             fontSize: '14px',
-                                            fontWeight: 500,
+                                            fontWeight: 500
                                         }, children: "Clear All" })] })] })), activeTab === 'test' && (_jsxs("div", { style: { padding: '16px' }, children: [_jsx("h3", { style: { fontSize: '18px', marginBottom: '16px' }, children: "Test Corrections" }), _jsx("textarea", { value: testText, onChange: (e) => setTestText(e.target.value), placeholder: "Enter text to test corrections...", style: {
                                     width: '100%',
                                     minHeight: '120px',
@@ -197,7 +197,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                     border: '1px solid #444',
                                     borderRadius: '8px',
                                     fontSize: '16px',
-                                    resize: 'vertical',
+                                    resize: 'vertical'
                                 } }), testText && (_jsxs("div", { style: { marginTop: '16px' }, children: [_jsx("strong", { style: { fontSize: '16px', color: '#a0aec0' }, children: "Result:" }), _jsx("div", { style: {
                                             padding: '12px',
                                             background: '#1e2228',
@@ -206,35 +206,35 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                             marginTop: '8px',
                                             fontSize: '16px',
                                             lineHeight: '1.5',
-                                            wordBreak: 'break-word',
+                                            wordBreak: 'break-word'
                                         }, children: handleTestCorrections() })] }))] })), activeTab === 'add' && (_jsxs("div", { style: { padding: '16px' }, children: [_jsx("h3", { style: { fontSize: '18px', marginBottom: '16px' }, children: "Add New Rule" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: '12px' }, children: [_jsx("input", { type: "text", value: newRule.name, onChange: (e) => setNewRule(prev => ({ ...prev, name: e.target.value })), placeholder: "Rule name", style: {
                                             padding: '12px',
                                             background: '#2a2e37',
                                             color: '#fff',
                                             border: '1px solid #444',
                                             borderRadius: '8px',
-                                            fontSize: '16px',
+                                            fontSize: '16px'
                                         } }), _jsx("input", { type: "text", value: newRule.description, onChange: (e) => setNewRule(prev => ({ ...prev, description: e.target.value })), placeholder: "Description (optional)", style: {
                                             padding: '12px',
                                             background: '#2a2e37',
                                             color: '#fff',
                                             border: '1px solid #444',
                                             borderRadius: '8px',
-                                            fontSize: '16px',
+                                            fontSize: '16px'
                                         } }), _jsx("input", { type: "text", value: newRule.findPattern, onChange: (e) => setNewRule(prev => ({ ...prev, findPattern: e.target.value })), placeholder: "Find pattern", style: {
                                             padding: '12px',
                                             background: '#2a2e37',
                                             color: '#fff',
                                             border: '1px solid #444',
                                             borderRadius: '8px',
-                                            fontSize: '16px',
+                                            fontSize: '16px'
                                         } }), _jsx("input", { type: "text", value: newRule.replaceWith, onChange: (e) => setNewRule(prev => ({ ...prev, replaceWith: e.target.value })), placeholder: "Replace with", style: {
                                             padding: '12px',
                                             background: '#2a2e37',
                                             color: '#fff',
                                             border: '1px solid #444',
                                             borderRadius: '8px',
-                                            fontSize: '16px',
+                                            fontSize: '16px'
                                         } }), _jsxs("div", { style: { display: 'flex', gap: '16px', padding: '8px 0' }, children: [_jsxs("label", { style: { display: 'flex', alignItems: 'center', fontSize: '16px' }, children: [_jsx("input", { type: "checkbox", checked: newRule.isRegex, onChange: (e) => setNewRule(prev => ({ ...prev, isRegex: e.target.checked })), style: { marginRight: '8px', transform: 'scale(1.2)' } }), "Use regex"] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', fontSize: '16px' }, children: [_jsx("input", { type: "checkbox", checked: newRule.isActive, onChange: (e) => setNewRule(prev => ({ ...prev, isActive: e.target.checked })), style: { marginRight: '8px', transform: 'scale(1.2)' } }), "Active"] })] }), _jsx("button", { onClick: handleAddRule, disabled: !newRule.name.trim() || !newRule.findPattern.trim(), style: {
                                             padding: '12px 16px',
                                             background: newRule.name.trim() && newRule.findPattern.trim() ? '#38a169' : '#4a5568',
@@ -244,17 +244,17 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                             cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
                                             fontSize: '16px',
                                             fontWeight: 500,
-                                            marginTop: '8px',
+                                            marginTop: '8px'
                                         }, children: "Add Rule" })] })] })), activeTab === 'settings' && (_jsxs("div", { style: { padding: '16px' }, children: [_jsx("h3", { style: { fontSize: '18px', marginBottom: '16px' }, children: "Settings" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: '16px' }, children: [_jsxs("div", { style: {
                                             background: '#2a2e37',
                                             padding: '16px',
                                             borderRadius: '8px',
-                                            border: '1px solid #444',
+                                            border: '1px solid #444'
                                         }, children: [_jsx("h4", { style: { fontSize: '16px', marginBottom: '8px' }, children: "Statistics" }), _jsxs("p", { style: { fontSize: '14px', color: '#a0aec0', marginBottom: '8px' }, children: ["Total rules: ", rules.length] }), _jsxs("p", { style: { fontSize: '14px', color: '#a0aec0', marginBottom: '8px' }, children: ["Active rules: ", rules.filter(r => r.isActive).length] }), _jsxs("p", { style: { fontSize: '14px', color: '#a0aec0' }, children: ["Regex rules: ", rules.filter(r => r.isRegex).length] })] }), _jsxs("div", { style: {
                                             background: '#2a2e37',
                                             padding: '16px',
                                             borderRadius: '8px',
-                                            border: '1px solid #444',
+                                            border: '1px solid #444'
                                         }, children: [_jsx("h4", { style: { fontSize: '16px', marginBottom: '8px' }, children: "Export/Import" }), _jsx("p", { style: { fontSize: '14px', color: '#a0aec0', marginBottom: '12px' }, children: "Back up your rules or import from another device." }), _jsxs("div", { style: { display: 'flex', gap: '8px' }, children: [_jsx("button", { onClick: () => {
                                                             // TODO: Implement export functionality
                                                             alert('Export functionality coming soon!');
@@ -266,7 +266,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                                             border: 'none',
                                                             borderRadius: '6px',
                                                             cursor: 'pointer',
-                                                            fontSize: '14px',
+                                                            fontSize: '14px'
                                                         }, children: "Export" }), _jsx("button", { onClick: () => {
                                                             // TODO: Implement import functionality
                                                             alert('Import functionality coming soon!');
@@ -278,7 +278,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                                             border: 'none',
                                                             borderRadius: '6px',
                                                             cursor: 'pointer',
-                                                            fontSize: '14px',
+                                                            fontSize: '14px'
                                                         }, children: "Import" })] })] })] })] }))] }), selectedRule && (_jsx("div", { style: {
                     position: 'fixed',
                     top: 0,
@@ -290,7 +290,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     zIndex: 1001,
-                    padding: '20px',
+                    padding: '20px'
                 }, children: _jsxs("div", { style: {
                         background: '#23272f',
                         padding: '20px',
@@ -298,7 +298,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                         width: '100%',
                         maxWidth: '400px',
                         maxHeight: '80vh',
-                        overflow: 'auto',
+                        overflow: 'auto'
                     }, children: [_jsxs("div", { style: {
                                 display: 'flex',
                                 justifyContent: 'space-between',
@@ -309,35 +309,35 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                         border: 'none',
                                         color: '#a0aec0',
                                         cursor: 'pointer',
-                                        fontSize: '20px',
+                                        fontSize: '20px'
                                     }, children: "\u00D7" })] }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: '12px' }, children: [_jsx("input", { type: "text", value: selectedRule.name, onChange: (e) => setSelectedRule(prev => prev ? ({ ...prev, name: e.target.value }) : null), placeholder: "Rule name", style: {
                                         padding: '12px',
                                         background: '#2a2e37',
                                         color: '#fff',
                                         border: '1px solid #444',
                                         borderRadius: '6px',
-                                        fontSize: '16px',
+                                        fontSize: '16px'
                                     } }), _jsx("input", { type: "text", value: selectedRule.description || '', onChange: (e) => setSelectedRule(prev => prev ? ({ ...prev, description: e.target.value }) : null), placeholder: "Description (optional)", style: {
                                         padding: '12px',
                                         background: '#2a2e37',
                                         color: '#fff',
                                         border: '1px solid #444',
                                         borderRadius: '6px',
-                                        fontSize: '16px',
+                                        fontSize: '16px'
                                     } }), _jsx("input", { type: "text", value: selectedRule.findPattern, onChange: (e) => setSelectedRule(prev => prev ? ({ ...prev, findPattern: e.target.value }) : null), placeholder: "Find pattern", style: {
                                         padding: '12px',
                                         background: '#2a2e37',
                                         color: '#fff',
                                         border: '1px solid #444',
                                         borderRadius: '6px',
-                                        fontSize: '16px',
+                                        fontSize: '16px'
                                     } }), _jsx("input", { type: "text", value: selectedRule.replaceWith, onChange: (e) => setSelectedRule(prev => prev ? ({ ...prev, replaceWith: e.target.value }) : null), placeholder: "Replace with", style: {
                                         padding: '12px',
                                         background: '#2a2e37',
                                         color: '#fff',
                                         border: '1px solid #444',
                                         borderRadius: '6px',
-                                        fontSize: '16px',
+                                        fontSize: '16px'
                                     } }), _jsxs("div", { style: { display: 'flex', gap: '16px', padding: '8px 0' }, children: [_jsxs("label", { style: { display: 'flex', alignItems: 'center', fontSize: '16px' }, children: [_jsx("input", { type: "checkbox", checked: selectedRule.isRegex, onChange: (e) => setSelectedRule(prev => prev ? ({ ...prev, isRegex: e.target.checked }) : null), style: { marginRight: '8px', transform: 'scale(1.2)' } }), "Use regex"] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', fontSize: '16px' }, children: [_jsx("input", { type: "checkbox", checked: selectedRule.isActive, onChange: (e) => setSelectedRule(prev => prev ? ({ ...prev, isActive: e.target.checked }) : null), style: { marginRight: '8px', transform: 'scale(1.2)' } }), "Active"] })] }), _jsxs("div", { style: { display: 'flex', gap: '8px', marginTop: '16px' }, children: [_jsx("button", { onClick: () => handleUpdateRule(selectedRule), style: {
                                                 flex: 1,
                                                 padding: '12px',
@@ -347,7 +347,7 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                                 borderRadius: '6px',
                                                 cursor: 'pointer',
                                                 fontSize: '16px',
-                                                fontWeight: 500,
+                                                fontWeight: 500
                                             }, children: "Save" }), _jsx("button", { onClick: () => handleDeleteRule(selectedRule.id), style: {
                                                 flex: 1,
                                                 padding: '12px',
@@ -357,6 +357,6 @@ export const MobileCorrectionsPanel = ({ isOpen, onClose }) => {
                                                 borderRadius: '6px',
                                                 cursor: 'pointer',
                                                 fontSize: '16px',
-                                                fontWeight: 500,
+                                                fontWeight: 500
                                             }, children: "Delete" })] })] })] }) }))] }));
 };

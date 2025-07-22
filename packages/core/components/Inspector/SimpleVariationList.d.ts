@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 export interface SimpleVariationListProps {
     variations: string[];
     onChange: (variations: string[]) => void;

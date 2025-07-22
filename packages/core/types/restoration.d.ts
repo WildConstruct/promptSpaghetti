@@ -75,30 +75,30 @@ export declare const RestorationConflictSchema: z.ZodObject<{
     createdAt: Date;
     resourceId: string;
     resourceType: "node" | "property" | "edge";
-    conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
+    conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     restorationAttemptId: string;
+    currentValue?: Record<string, unknown> | undefined;
+    resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
     resolvedAt?: Date | undefined;
     resolvedBy?: string | undefined;
     conflictDescription?: string | undefined;
     sourceValue?: Record<string, unknown> | undefined;
     targetValue?: Record<string, unknown> | undefined;
-    currentValue?: Record<string, unknown> | undefined;
-    resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
     resolvedValue?: Record<string, unknown> | undefined;
 }, {
     id: string;
     createdAt: Date;
     resourceId: string;
     resourceType: "node" | "property" | "edge";
-    conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
+    conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     restorationAttemptId: string;
+    currentValue?: Record<string, unknown> | undefined;
+    resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
     resolvedAt?: Date | undefined;
     resolvedBy?: string | undefined;
     conflictDescription?: string | undefined;
     sourceValue?: Record<string, unknown> | undefined;
     targetValue?: Record<string, unknown> | undefined;
-    currentValue?: Record<string, unknown> | undefined;
-    resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
     resolvedValue?: Record<string, unknown> | undefined;
 }>;
 export type ConflictType = z.infer<typeof ConflictTypeSchema>;
@@ -160,21 +160,21 @@ export declare const RestorationPreviewSessionSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     id: string;
     createdAt: Date;
-    createdBy: string;
-    expiresAt: Date;
     projectId: string;
-    sourceSnapshotId: string;
+    expiresAt: Date;
     previewData: Record<string, unknown>;
+    createdBy: string;
+    sourceSnapshotId: string;
     conflictSummary: Record<string, unknown>;
     targetSnapshotId?: string | undefined;
 }, {
     id: string;
     createdAt: Date;
-    createdBy: string;
-    expiresAt: Date;
     projectId: string;
-    sourceSnapshotId: string;
+    expiresAt: Date;
     previewData: Record<string, unknown>;
+    createdBy: string;
+    sourceSnapshotId: string;
     targetSnapshotId?: string | undefined;
     conflictSummary?: Record<string, unknown> | undefined;
 }>;
@@ -195,8 +195,8 @@ export declare const RestorationBookmarkSchema: z.ZodObject<{
     createdAt: Date;
     updatedAt: Date;
     name: string;
-    createdBy: string;
     projectId: string;
+    createdBy: string;
     sourceSnapshotId: string;
     restorationConfig: Record<string, unknown>;
     description?: string | undefined;
@@ -206,8 +206,8 @@ export declare const RestorationBookmarkSchema: z.ZodObject<{
     createdAt: Date;
     updatedAt: Date;
     name: string;
-    createdBy: string;
     projectId: string;
+    createdBy: string;
     sourceSnapshotId: string;
     restorationConfig: Record<string, unknown>;
     description?: string | undefined;
@@ -371,13 +371,13 @@ export declare const ConflictResolutionRequestSchema: z.ZodObject<{
     resolutionStrategy: z.ZodEnum<["keep_source", "keep_target", "keep_current", "merge", "skip", "manual"]>;
     resolvedValue: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
-    restorationAttemptId: string;
     resolutionStrategy: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current";
+    restorationAttemptId: string;
     conflictId: string;
     resolvedValue?: Record<string, unknown> | undefined;
 }, {
-    restorationAttemptId: string;
     resolutionStrategy: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current";
+    restorationAttemptId: string;
     conflictId: string;
     resolvedValue?: Record<string, unknown> | undefined;
 }>;
@@ -496,30 +496,30 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         createdAt: Date;
         resourceId: string;
         resourceType: "node" | "property" | "edge";
-        conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
+        conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
         restorationAttemptId: string;
+        currentValue?: Record<string, unknown> | undefined;
+        resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
         resolvedAt?: Date | undefined;
         resolvedBy?: string | undefined;
         conflictDescription?: string | undefined;
         sourceValue?: Record<string, unknown> | undefined;
         targetValue?: Record<string, unknown> | undefined;
-        currentValue?: Record<string, unknown> | undefined;
-        resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
         resolvedValue?: Record<string, unknown> | undefined;
     }, {
         id: string;
         createdAt: Date;
         resourceId: string;
         resourceType: "node" | "property" | "edge";
-        conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
+        conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
         restorationAttemptId: string;
+        currentValue?: Record<string, unknown> | undefined;
+        resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
         resolvedAt?: Date | undefined;
         resolvedBy?: string | undefined;
         conflictDescription?: string | undefined;
         sourceValue?: Record<string, unknown> | undefined;
         targetValue?: Record<string, unknown> | undefined;
-        currentValue?: Record<string, unknown> | undefined;
-        resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
         resolvedValue?: Record<string, unknown> | undefined;
     }>, "many">;
     summary: z.ZodObject<{
@@ -528,42 +528,25 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         estimatedDuration: z.ZodNumber;
         riskLevel: z.ZodEnum<["low", "medium", "high"]>;
     }, "strip", z.ZodTypeAny, {
+        riskLevel: "low" | "medium" | "high";
         totalChanges: number;
         totalConflicts: number;
         estimatedDuration: number;
-        riskLevel: "medium" | "low" | "high";
     }, {
+        riskLevel: "low" | "medium" | "high";
         totalChanges: number;
         totalConflicts: number;
         estimatedDuration: number;
-        riskLevel: "medium" | "low" | "high";
     }>;
     expiresAt: z.ZodDate;
 }, "strip", z.ZodTypeAny, {
     summary: {
+        riskLevel: "low" | "medium" | "high";
         totalChanges: number;
         totalConflicts: number;
         estimatedDuration: number;
-        riskLevel: "medium" | "low" | "high";
     };
     sessionId: string;
-    conflicts: {
-        id: string;
-        createdAt: Date;
-        resourceId: string;
-        resourceType: "node" | "property" | "edge";
-        conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
-        restorationAttemptId: string;
-        resolvedAt?: Date | undefined;
-        resolvedBy?: string | undefined;
-        conflictDescription?: string | undefined;
-        sourceValue?: Record<string, unknown> | undefined;
-        targetValue?: Record<string, unknown> | undefined;
-        currentValue?: Record<string, unknown> | undefined;
-        resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
-        resolvedValue?: Record<string, unknown> | undefined;
-    }[];
-    expiresAt: Date;
     preview: {
         nodesToAdd: Record<string, unknown>[];
         nodesToUpdate: Record<string, unknown>[];
@@ -572,31 +555,31 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         edgesToUpdate: Record<string, unknown>[];
         edgesToDelete: string[];
     };
+    expiresAt: Date;
+    conflicts: {
+        id: string;
+        createdAt: Date;
+        resourceId: string;
+        resourceType: "node" | "property" | "edge";
+        conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
+        restorationAttemptId: string;
+        currentValue?: Record<string, unknown> | undefined;
+        resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
+        resolvedAt?: Date | undefined;
+        resolvedBy?: string | undefined;
+        conflictDescription?: string | undefined;
+        sourceValue?: Record<string, unknown> | undefined;
+        targetValue?: Record<string, unknown> | undefined;
+        resolvedValue?: Record<string, unknown> | undefined;
+    }[];
 }, {
     summary: {
+        riskLevel: "low" | "medium" | "high";
         totalChanges: number;
         totalConflicts: number;
         estimatedDuration: number;
-        riskLevel: "medium" | "low" | "high";
     };
     sessionId: string;
-    conflicts: {
-        id: string;
-        createdAt: Date;
-        resourceId: string;
-        resourceType: "node" | "property" | "edge";
-        conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
-        restorationAttemptId: string;
-        resolvedAt?: Date | undefined;
-        resolvedBy?: string | undefined;
-        conflictDescription?: string | undefined;
-        sourceValue?: Record<string, unknown> | undefined;
-        targetValue?: Record<string, unknown> | undefined;
-        currentValue?: Record<string, unknown> | undefined;
-        resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
-        resolvedValue?: Record<string, unknown> | undefined;
-    }[];
-    expiresAt: Date;
     preview: {
         nodesToAdd: Record<string, unknown>[];
         nodesToUpdate: Record<string, unknown>[];
@@ -605,6 +588,23 @@ export declare const RestorationPreviewResponseSchema: z.ZodObject<{
         edgesToUpdate: Record<string, unknown>[];
         edgesToDelete: string[];
     };
+    expiresAt: Date;
+    conflicts: {
+        id: string;
+        createdAt: Date;
+        resourceId: string;
+        resourceType: "node" | "property" | "edge";
+        conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
+        restorationAttemptId: string;
+        currentValue?: Record<string, unknown> | undefined;
+        resolutionStrategy?: "skip" | "manual" | "merge" | "keep_source" | "keep_target" | "keep_current" | undefined;
+        resolvedAt?: Date | undefined;
+        resolvedBy?: string | undefined;
+        conflictDescription?: string | undefined;
+        sourceValue?: Record<string, unknown> | undefined;
+        targetValue?: Record<string, unknown> | undefined;
+        resolvedValue?: Record<string, unknown> | undefined;
+    }[];
 }>;
 export declare const RestorationProgressResponseSchema: z.ZodObject<{
     restorationAttemptId: z.ZodString;
@@ -650,10 +650,10 @@ export declare const RestorationStatsResponseSchema: z.ZodObject<{
         count: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
         count: number;
-        conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
+        conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     }, {
         count: number;
-        conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
+        conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     }>, "many">;
     recentAttempts: z.ZodArray<z.ZodObject<{
         id: z.ZodString;
@@ -702,13 +702,13 @@ export declare const RestorationStatsResponseSchema: z.ZodObject<{
         targetSnapshotId?: string | undefined;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
+    failedAttempts: number;
     totalAttempts: number;
     successfulAttempts: number;
-    failedAttempts: number;
     averageDuration: number;
     mostCommonConflicts: {
         count: number;
-        conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
+        conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     }[];
     recentAttempts: {
         id: string;
@@ -727,13 +727,13 @@ export declare const RestorationStatsResponseSchema: z.ZodObject<{
         targetSnapshotId?: string | undefined;
     }[];
 }, {
+    failedAttempts: number;
     totalAttempts: number;
     successfulAttempts: number;
-    failedAttempts: number;
     averageDuration: number;
     mostCommonConflicts: {
         count: number;
-        conflictType: "node_deleted" | "node_modified" | "edge_modified" | "edge_deleted" | "position_conflict" | "property_conflict";
+        conflictType: "node_modified" | "node_deleted" | "edge_deleted" | "edge_modified" | "position_conflict" | "property_conflict";
     }[];
     recentAttempts: {
         id: string;
@@ -802,8 +802,8 @@ export declare const RestorationFilterSchema: z.ZodObject<{
     limit: z.ZodDefault<z.ZodNumber>;
     offset: z.ZodDefault<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    offset: number;
     limit: number;
+    offset: number;
     status?: "pending" | "completed" | "failed" | "cancelled" | "in_progress" | undefined;
     projectId?: string | undefined;
     dateFrom?: Date | undefined;
@@ -812,8 +812,8 @@ export declare const RestorationFilterSchema: z.ZodObject<{
     restorationType?: "full" | "partial" | "selective" | undefined;
 }, {
     status?: "pending" | "completed" | "failed" | "cancelled" | "in_progress" | undefined;
-    offset?: number | undefined;
     limit?: number | undefined;
+    offset?: number | undefined;
     projectId?: string | undefined;
     dateFrom?: Date | undefined;
     dateTo?: Date | undefined;

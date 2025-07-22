@@ -71,29 +71,6 @@ export declare function createConditionalNode(id: string, branches: ConditionalB
 /**
  * Common condition patterns for easy setup
  */
-export declare const ConditionPresets: {
-    /** Simple variable comparison */
-    readonly greaterThan: (variable: string, value: number) => string;
-    readonly lessThan: (variable: string, value: number) => string;
-    readonly equals: (variable: string, value: any) => string;
-    /** Variable existence checks */
-    readonly hasVariable: (variable: string) => string;
-    readonly isEmpty: (variable: string) => string;
-    /** String operations */
-    readonly startsWith: (variable: string, prefix: string) => string;
-    readonly contains: (variable: string, substring: string) => string;
-    readonly matches: (variable: string, pattern: string) => string;
-    /** Array operations */
-    readonly arrayIncludes: (array: string, item: any) => string;
-    readonly arrayLength: (array: string, length: number) => string;
-    /** Logical combinations */
-    readonly and: (...conditions: string[]) => string;
-    readonly or: (...conditions: string[]) => string;
-    readonly not: (condition: string) => string;
-};
-/**
- * Utility for building complex conditional branches
- */
 export declare class ConditionalBuilder {
     private branches;
     private defaultOutput;

@@ -1,4 +1,4 @@
-import { NodeData, NodeType } from "../types/NodeTypes";
+import { NodeData, NodeType } from '../types/NodeTypes';
 export declare const createDefaultNodeData: (type: NodeType) => NodeData;
 export declare const addVariationToNode: (nodeData: NodeData, variation: string) => NodeData;
 export declare const removeVariationFromNode: (nodeData: NodeData, index: number) => NodeData;

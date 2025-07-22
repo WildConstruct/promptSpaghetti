@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from 'react';
 const InspectorContext = createContext(null);
-export const InspectorProvider = ({ children, onNodeUpdate, initialWidth = 320, initialCollapsed = false, initialVisible = true, }) => {
+export const InspectorProvider = ({ children, onNodeUpdate, initialWidth = 320, initialCollapsed = false, initialVisible = true }) => {
     const [selectedNode, setSelectedNode] = useState(null);
     const [selectedSchema, setSelectedSchema] = useState(null);
     const [panelWidth, setPanelWidth] = useState(initialWidth);
@@ -25,7 +25,7 @@ export const InspectorProvider = ({ children, onNodeUpdate, initialWidth = 320, 
         setPanelWidth,
         setPanelCollapsed,
         setPanelVisible,
-        updateNodeData,
+        updateNodeData
     };
     return (_jsx(InspectorContext.Provider, { value: contextValue, children: children }));
 };

@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
-import { validateConnection } from "../validation";
-export const useValidation = ({ edges, nodes, highlightNodeIds = new Set(), highlightEdgeIds = new Set(), validateConnection: customValidateConnection = validateConnection, }) => {
+import { useState, useCallback, useEffect } from 'react';
+import { validateConnection } from '../validation';
+export const useValidation = ({ edges, nodes, highlightNodeIds = new Set(), highlightEdgeIds = new Set(), validateConnection: customValidateConnection = validateConnection }) => {
     const [errors, setErrors] = useState([]);
     const runValidation = useCallback((edgesToValidate, nodesToValidate) => {
         const errs = customValidateConnection(edgesToValidate, nodesToValidate);
@@ -31,6 +31,6 @@ export const useValidation = ({ edges, nodes, highlightNodeIds = new Set(), high
         errors,
         styledEdges,
         styledNodes,
-        runValidation,
+        runValidation
     };
 };

@@ -8,7 +8,7 @@ const DEFAULT_CONFIG = {
     enableOfflineQueue: true
 };
 export function useWebSocket(options) {
-    const { url = `ws://localhost:8001`, documentId, userId = 'anonymous', authToken, enabled = true, reconnectInterval = DEFAULT_CONFIG.reconnectInterval, maxReconnectAttempts = DEFAULT_CONFIG.maxReconnectAttempts, onGraphUpdate, onPresenceUpdate, onUserJoin, onUserLeave, onError } = options;
+    const { url = 'ws://localhost:8001', documentId, userId = 'anonymous', authToken, enabled = true, reconnectInterval = DEFAULT_CONFIG.reconnectInterval, maxReconnectAttempts = DEFAULT_CONFIG.maxReconnectAttempts, onGraphUpdate, onPresenceUpdate, onUserJoin, onUserLeave, onError } = options;
     const [connectionState, setConnectionState] = useState({
         status: 'disconnected',
         reconnectAttempts: 0

@@ -5,6 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Alert, AlertDescription } from '../ui/Alert';
+import { conversionTracker } from '../../analytics/ConversionTracker';
+import { performanceMonitor } from '../../utils/PerformanceMonitor';
 import { MetricsOverview } from './MetricsOverview';
 import { PerformanceCharts } from './PerformanceCharts';
 import { CostAnalysis } from './CostAnalysis';
@@ -12,6 +14,9 @@ import { UsagePatterns } from './UsagePatterns';
 import { AlertsPanel } from './AlertsPanel';
 import { RecommendationsPanel } from './RecommendationsPanel';
 import { ExportOptions } from './ExportOptions';
+import { ConversionFunnelDashboard } from './ConversionFunnelDashboard';
+import { DirectorAnalyticsView } from './DirectorAnalyticsView';
+import { RealTimeMetrics } from './RealTimeMetrics';
 /**
  * Time range options
  */
@@ -35,8 +40,13 @@ export const AnalyticsDashboard = ({ analyticsClient, userId, organizationId, cl
         alerts: [],
         recommendations: [],
         timeRange: '24h',
-        lastUpdated: null
+        lastUpdated: null,
+        conversionData: null,
+        realTimeMetrics: null,
+        performanceData: null,
+        userRole: 'director'
     });
+    const [selectedView, setSelectedView] = useState('overview');
     /**
      * Calculate time range based on selected option
      */
@@ -65,6 +75,19 @@ export const AnalyticsDashboard = ({ analyticsClient, userId, organizationId, cl
                 analyticsClient.getAlerts(),
                 analyticsClient.getRecommendations(userId, organizationId)
             ]);
+            // Load conversion tracking data
+            const conversionData = conversionTracker.getDashboardData();
+            // Load performance monitoring data
+            const performanceData = performanceMonitor.getDashboardData();
+            // Combine real-time metrics
+            const realTimeMetrics = {
+                ...conversionData.realTimeMetrics,
+                performance: {
+                    healthScore: performanceData.overview.healthScore,
+                    activeAlerts: performanceData.overview.activeAlerts,
+                    keyMetrics: performanceData.keyMetrics
+                }
+            };
             if (!summaryResponse.success) {
                 throw new Error(summaryResponse.error || 'Failed to load summary');
             }
@@ -78,6 +101,9 @@ export const AnalyticsDashboard = ({ analyticsClient, userId, organizationId, cl
                 dashboardData: dashboardResponse.data,
                 alerts: alertsResponse.success ? alertsResponse.data : [],
                 recommendations: recommendationsResponse.success ? recommendationsResponse.data : [],
+                conversionData,
+                realTimeMetrics,
+                performanceData,
                 lastUpdated: new Date()
             }));
         }
@@ -146,7 +172,7 @@ export const AnalyticsDashboard = ({ analyticsClient, userId, organizationId, cl
     if (state.error) {
         return (_jsx("div", { className: `analytics-dashboard ${className}`, children: _jsx(Alert, { variant: "destructive", children: _jsxs(AlertDescription, { children: [state.error, _jsx(Button, { variant: "outline", size: "sm", onClick: handleRefresh, className: "ml-2", children: "Retry" })] }) }) }));
     }
-    return (_jsxs("div", { className: `analytics-dashboard ${className}`, children: [_jsxs("div", { className: "dashboard-header", children: [_jsxs("div", { className: "header-title", children: [_jsx("h1", { children: "Analytics Dashboard" }), state.lastUpdated && (_jsxs(Badge, { variant: "secondary", children: ["Last updated: ", state.lastUpdated.toLocaleTimeString()] }))] }), _jsxs("div", { className: "header-controls", children: [_jsxs(Select, { value: state.timeRange, onValueChange: handleTimeRangeChange, children: [_jsx(SelectTrigger, { className: "w-48", children: _jsx(SelectValue, { placeholder: "Select time range" }) }), _jsx(SelectContent, { children: TIME_RANGES.map(range => (_jsx(SelectItem, { value: range.value, children: range.label }, range.value))) })] }), _jsx(Button, { variant: "outline", onClick: handleRefresh, disabled: state.loading, children: state.loading ? 'Refreshing...' : 'Refresh' }), _jsx(ExportOptions, { analyticsClient: analyticsClient, timeRange: getTimeRange(state.timeRange) })] })] }), state.alerts.length > 0 && (_jsx("div", { className: "alerts-bar", children: _jsx(AlertsPanel, { alerts: state.alerts, onAcknowledge: handleAcknowledgeAlert }) })), _jsxs(Tabs, { defaultValue: "overview", className: "dashboard-tabs", children: [_jsxs(TabsList, { className: "grid grid-cols-5 w-full", children: [_jsx(TabsTrigger, { value: "overview", children: "Overview" }), _jsx(TabsTrigger, { value: "performance", children: "Performance" }), _jsx(TabsTrigger, { value: "costs", children: "Costs" }), _jsx(TabsTrigger, { value: "usage", children: "Usage" }), _jsx(TabsTrigger, { value: "insights", children: "Insights" })] }), _jsx(TabsContent, { value: "overview", className: "tab-content", children: _jsx("div", { className: "overview-grid", children: _jsx(MetricsOverview, { summary: state.summary, dashboardData: state.dashboardData, loading: state.loading }) }) }), _jsx(TabsContent, { value: "performance", className: "tab-content", children: _jsx(PerformanceCharts, { analyticsClient: analyticsClient, timeRange: getTimeRange(state.timeRange), userId: userId, organizationId: organizationId }) }), _jsx(TabsContent, { value: "costs", className: "tab-content", children: _jsx(CostAnalysis, { analyticsClient: analyticsClient, timeRange: getTimeRange(state.timeRange), userId: userId, organizationId: organizationId }) }), _jsx(TabsContent, { value: "usage", className: "tab-content", children: _jsx(UsagePatterns, { analyticsClient: analyticsClient, timeRange: getTimeRange(state.timeRange), userId: userId, organizationId: organizationId }) }), _jsx(TabsContent, { value: "insights", className: "tab-content", children: _jsx("div", { className: "insights-grid", children: _jsx(RecommendationsPanel, { recommendations: state.recommendations, analyticsClient: analyticsClient, userId: userId, organizationId: organizationId }) }) })] })] }));
+    return (_jsxs("div", { className: `analytics-dashboard ${className}`, children: [_jsxs("div", { className: "dashboard-header", children: [_jsxs("div", { className: "header-title", children: [_jsx("h1", { children: "Analytics Dashboard" }), state.lastUpdated && (_jsxs(Badge, { variant: "secondary", children: ["Last updated: ", state.lastUpdated.toLocaleTimeString()] }))] }), _jsxs("div", { className: "header-controls", children: [_jsxs(Select, { value: state.timeRange, onValueChange: handleTimeRangeChange, children: [_jsx(SelectTrigger, { className: "w-48", children: _jsx(SelectValue, { placeholder: "Select time range" }) }), _jsx(SelectContent, { children: TIME_RANGES.map(range => (_jsx(SelectItem, { value: range.value, children: range.label }, range.value))) })] }), _jsx(Button, { variant: "outline", onClick: handleRefresh, disabled: state.loading, children: state.loading ? 'Refreshing...' : 'Refresh' }), _jsx(ExportOptions, { analyticsClient: analyticsClient, timeRange: getTimeRange(state.timeRange) })] })] }), state.alerts.length > 0 && (_jsx("div", { className: "alerts-bar", children: _jsx(AlertsPanel, { alerts: state.alerts, onAcknowledge: handleAcknowledgeAlert }) })), _jsxs(Tabs, { defaultValue: "overview", className: "dashboard-tabs", children: [_jsxs(TabsList, { className: "grid grid-cols-7 w-full", children: [_jsx(TabsTrigger, { value: "overview", children: "Overview" }), _jsx(TabsTrigger, { value: "conversions", children: "Conversions" }), _jsx(TabsTrigger, { value: "director", children: "Director" }), _jsx(TabsTrigger, { value: "performance", children: "Performance" }), _jsx(TabsTrigger, { value: "costs", children: "Costs" }), _jsx(TabsTrigger, { value: "usage", children: "Usage" }), _jsx(TabsTrigger, { value: "insights", children: "Insights" })] }), _jsx(TabsContent, { value: "overview", className: "tab-content", children: _jsxs("div", { className: "overview-grid", children: [_jsx(RealTimeMetrics, { metrics: state.realTimeMetrics, loading: state.loading }), _jsx(MetricsOverview, { summary: state.summary, dashboardData: state.dashboardData, conversionData: state.conversionData, performanceData: state.performanceData, loading: state.loading })] }) }), _jsx(TabsContent, { value: "conversions", className: "tab-content", children: _jsx(ConversionFunnelDashboard, { conversionData: state.conversionData, timeRange: getTimeRange(state.timeRange), loading: state.loading }) }), _jsx(TabsContent, { value: "director", className: "tab-content", children: _jsx(DirectorAnalyticsView, { conversionData: state.conversionData, performanceData: state.performanceData, timeRange: getTimeRange(state.timeRange), userId: userId, loading: state.loading }) }), _jsx(TabsContent, { value: "performance", className: "tab-content", children: _jsx(PerformanceCharts, { analyticsClient: analyticsClient, timeRange: getTimeRange(state.timeRange), userId: userId, organizationId: organizationId }) }), _jsx(TabsContent, { value: "costs", className: "tab-content", children: _jsx(CostAnalysis, { analyticsClient: analyticsClient, timeRange: getTimeRange(state.timeRange), userId: userId, organizationId: organizationId }) }), _jsx(TabsContent, { value: "usage", className: "tab-content", children: _jsx(UsagePatterns, { analyticsClient: analyticsClient, timeRange: getTimeRange(state.timeRange), userId: userId, organizationId: organizationId }) }), _jsx(TabsContent, { value: "insights", className: "tab-content", children: _jsx("div", { className: "insights-grid", children: _jsx(RecommendationsPanel, { recommendations: state.recommendations, analyticsClient: analyticsClient, userId: userId, organizationId: organizationId }) }) })] })] }));
 };
 /**
  * Analytics dashboard styles

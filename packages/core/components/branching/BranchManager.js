@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { Button, Modal, Form, Input, Select, Switch, Tag, Tooltip, Space, Typography, Dropdown, Menu, Alert, Statistic, Row, Col, Drawer, Divider, } from 'antd';
-import { BranchesOutlined, PlusOutlined, EditOutlined, DeleteOutlined, MergeOutlined, MoreOutlined, LockOutlined, UnlockOutlined, EyeOutlined, ForkOutlined, CheckCircleOutlined, CloseCircleOutlined, } from '@ant-design/icons';
-import { BRANCH_TYPE_DESCRIPTIONS, PROTECTION_LEVEL_DESCRIPTIONS, } from '../../types/branching';
+import { Button, Modal, Form, Input, Select, Switch, Tag, Tooltip, Space, Typography, Dropdown, Menu, Alert, Statistic, Row, Col, Drawer, Divider } from 'antd';
+import { BranchesOutlined, PlusOutlined, EditOutlined, DeleteOutlined, MergeOutlined, MoreOutlined, LockOutlined, UnlockOutlined, EyeOutlined, ForkOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { BRANCH_TYPE_DESCRIPTIONS, PROTECTION_LEVEL_DESCRIPTIONS } from '../../types/branching';
 import { useBranching } from '../../hooks/useBranching';
 import { MergeRequestPanel } from './MergeRequestPanel';
 const { Title, Text } = Typography;
@@ -70,10 +70,10 @@ const BranchNode = ({ branch, onEdit, onDelete, onCreateChild, onSelect, isSelec
             backgroundColor: isSelected ? '#e6f7ff' : 'transparent',
             border: isSelected ? '1px solid #1890ff' : '1px solid transparent',
             marginBottom: '4px',
-            cursor: 'pointer',
+            cursor: 'pointer'
         }, onClick: () => onSelect(branch.id), children: _jsxs("div", { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }, children: [_jsx(BranchesOutlined, { style: { color: getBranchTypeColor(branch.branchType) } }), _jsxs("div", { children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '6px' }, children: [_jsx(Text, { strong: true, children: branch.displayName || branch.name }), _jsx(Tag, { color: getBranchTypeColor(branch.branchType), size: "small", children: branch.branchType }), _jsx(Tag, { color: getBranchStatusColor(branch.status), size: "small", children: branch.status }), _jsx(Tooltip, { title: PROTECTION_LEVEL_DESCRIPTIONS[branch.protectionLevel], children: getProtectionIcon(branch.protectionLevel) })] }), _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }, children: [_jsxs(Text, { type: "secondary", style: { fontSize: '11px' }, children: [branch.commitCount, " commits"] }), _jsxs(Text, { type: "secondary", style: { fontSize: '11px' }, children: [branch.contributorCount, " contributors"] }), _jsx(Text, { type: "secondary", style: { fontSize: '11px' }, children: formatLastActivity(branch.lastActivityAt) })] })] })] }), _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '4px' }, children: [branch.requiresReview && (_jsx(Tooltip, { title: "Requires review", children: _jsx(CheckCircleOutlined, { style: { color: '#fa8c16' } }) })), branch.autoMergeEnabled && (_jsx(Tooltip, { title: "Auto-merge enabled", children: _jsx(MergeOutlined, { style: { color: '#52c41a' } }) })), _jsx(Dropdown, { overlay: menu, trigger: ['click'], children: _jsx(Button, { type: "text", size: "small", icon: _jsx(MoreOutlined, {}) }) })] })] }) }));
 };
-export const BranchManager = ({ projectId, currentBranchId, onBranchSelect, onBranchCreate, onBranchUpdate, onBranchDelete, }) => {
+export const BranchManager = ({ projectId, currentBranchId, onBranchSelect, onBranchCreate, onBranchUpdate, onBranchDelete }) => {
     const [hierarchy, setHierarchy] = useState([]);
     const [stats, setStats] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -83,7 +83,7 @@ export const BranchManager = ({ projectId, currentBranchId, onBranchSelect, onBr
     const [editingBranch, setEditingBranch] = useState(null);
     const [parentBranchId, setParentBranchId] = useState(null);
     const [form] = Form.useForm();
-    const { createBranch, updateBranch, deleteBranch, getBranchHierarchy, getBranchStats, loading, error, } = useBranching();
+    const { createBranch, updateBranch, deleteBranch, getBranchHierarchy, getBranchStats, loading, error } = useBranching();
     useEffect(() => {
         loadBranchData();
     }, [projectId]);
@@ -91,7 +91,7 @@ export const BranchManager = ({ projectId, currentBranchId, onBranchSelect, onBr
         try {
             const [hierarchyData, statsData] = await Promise.all([
                 getBranchHierarchy(projectId),
-                getBranchStats(projectId),
+                getBranchStats(projectId)
             ]);
             setHierarchy(hierarchyData);
             setStats(statsData);
@@ -112,7 +112,7 @@ export const BranchManager = ({ projectId, currentBranchId, onBranchSelect, onBr
                 autoMergeEnabled: values.autoMergeEnabled || false,
                 requiresReview: values.requiresReview || false,
                 allowForcePush: values.allowForcePush || false,
-                deleteOnMerge: values.deleteOnMerge || false,
+                deleteOnMerge: values.deleteOnMerge || false
             };
             const branch = await createBranch(request);
             setShowCreateModal(false);
@@ -136,7 +136,7 @@ export const BranchManager = ({ projectId, currentBranchId, onBranchSelect, onBr
                 autoMergeEnabled: values.autoMergeEnabled,
                 requiresReview: values.requiresReview,
                 allowForcePush: values.allowForcePush,
-                deleteOnMerge: values.deleteOnMerge,
+                deleteOnMerge: values.deleteOnMerge
             };
             const branch = await updateBranch(editingBranch.id, request);
             setShowEditModal(false);
@@ -173,7 +173,7 @@ export const BranchManager = ({ projectId, currentBranchId, onBranchSelect, onBr
             autoMergeEnabled: branch.autoMergeEnabled,
             requiresReview: branch.requiresReview,
             allowForcePush: branch.allowForcePush,
-            deleteOnMerge: branch.deleteOnMerge,
+            deleteOnMerge: branch.deleteOnMerge
         });
         setShowEditModal(true);
     };
@@ -207,7 +207,7 @@ export const BranchManager = ({ projectId, currentBranchId, onBranchSelect, onBr
                         autoMergeEnabled: false,
                         requiresReview: false,
                         allowForcePush: false,
-                        deleteOnMerge: false,
+                        deleteOnMerge: false
                     }, children: [_jsx(Form.Item, { name: "name", label: "Branch Name", rules: [{ required: true, message: 'Please enter branch name' }], children: _jsx(Input, { placeholder: "e.g., feature/user-authentication" }) }), _jsx(Form.Item, { name: "displayName", label: "Display Name", children: _jsx(Input, { placeholder: "e.g., User Authentication Feature" }) }), _jsx(Form.Item, { name: "description", label: "Description", children: _jsx(TextArea, { rows: 3, placeholder: "Describe the purpose of this branch..." }) }), _jsx(Form.Item, { name: "branchType", label: "Branch Type", children: _jsx(Select, { children: Object.entries(BRANCH_TYPE_DESCRIPTIONS).map(([key, description]) => (_jsxs(Option, { value: key, children: [key.charAt(0).toUpperCase() + key.slice(1), " - ", description] }, key))) }) }), _jsx(Divider, {}), _jsxs(Form.Item, { name: "autoMergeEnabled", valuePropName: "checked", children: [_jsx(Switch, {}), " Auto-merge when approved"] }), _jsxs(Form.Item, { name: "requiresReview", valuePropName: "checked", children: [_jsx(Switch, {}), " Require review before merge"] }), _jsxs(Form.Item, { name: "allowForcePush", valuePropName: "checked", children: [_jsx(Switch, {}), " Allow force push"] }), _jsxs(Form.Item, { name: "deleteOnMerge", valuePropName: "checked", children: [_jsx(Switch, {}), " Delete branch after merge"] }), _jsx("div", { style: { textAlign: 'right', marginTop: '24px' }, children: _jsxs(Space, { children: [_jsx(Button, { onClick: () => setShowCreateModal(false), children: "Cancel" }), _jsx(Button, { type: "primary", htmlType: "submit", loading: loading, children: "Create Branch" })] }) })] }) }), _jsx(Modal, { title: "Edit Branch Settings", visible: showEditModal, onCancel: () => {
                     setShowEditModal(false);
                     setEditingBranch(null);

@@ -45,7 +45,7 @@ export const WorkflowStateManager = ({ workspaceId, resourceId, currentUserId, o
             if (result.success) {
                 if (result.approval_required) {
                     // Show approval request confirmation
-                    alert(`Approval request submitted for state transition.`);
+                    alert('Approval request submitted for state transition.');
                 }
                 else {
                     onStateChange?.(result.new_state_id);

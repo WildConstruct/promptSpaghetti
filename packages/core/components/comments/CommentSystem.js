@@ -7,15 +7,15 @@ import { useState } from 'react';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { useComments } from '../../hooks/useComments';
-export const CommentSystem = ({ workspaceId, targetType, targetId, userId, resourceId, projectId, className = '', compact = false, }) => {
+export const CommentSystem = ({ workspaceId, targetType, targetId, userId, resourceId, projectId, className = '', compact = false }) => {
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [sortOrder, setSortOrder] = useState('desc');
-    const { comments, loading, error, createComment, updateComment, deleteComment, loadMore, hasMore, refresh, } = useComments({
+    const { comments, loading, error, createComment, updateComment, deleteComment, loadMore, hasMore, refresh } = useComments({
         workspaceId,
         targetType,
         targetId,
         userId,
-        sortOrder,
+        sortOrder
     });
     const handleCreateComment = async (content, parentCommentId) => {
         const commentData = {
@@ -27,7 +27,7 @@ export const CommentSystem = ({ workspaceId, targetType, targetId, userId, resou
             parent_comment_id: parentCommentId,
             target_type: targetType,
             target_id: targetId,
-            metadata: {},
+            metadata: {}
         };
         try {
             await createComment(commentData);
@@ -68,8 +68,8 @@ export const CommentSystem = ({ workspaceId, targetType, targetId, userId, resou
                 ...comment.metadata,
                 resolved,
                 resolved_by: resolved ? userId : undefined,
-                resolved_at: resolved ? new Date().toISOString() : undefined,
-            },
+                resolved_at: resolved ? new Date().toISOString() : undefined
+            }
         };
         try {
             await updateComment(commentId, updates);

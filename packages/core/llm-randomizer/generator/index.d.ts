@@ -1,7 +1,11 @@
+import { z } from 'zod';
+import { ParameterManager, ParameterManagerOptions } from './parameters/parameter-manager';
+import { RandomizerWorkflow, WorkflowResult } from './workflow/randomizer-workflow';
+import { ComplexityLevel, LLMProvider, RandomizerParameters } from './parameters/parameter-schema';
+type ComplexityLevelType = z.infer<typeof ComplexityLevel>;
+type LLMProviderType = z.infer<typeof LLMProvider>;
 export { RandomizerParameters, ParameterPreset, ValidationResult, ComplexityLevel, StylePreference, LLMProvider, NodeTypePreference, RandomizerParametersSchema, ParameterPresetSchema, ValidationResultSchema, ParameterValidator, defaultPresets } from './parameters/parameter-schema';
 export { ParameterManager, ParameterHistory, ParameterManagerOptions } from './parameters/parameter-manager';
-export { RandomizerPanel } from './ui/RandomizerPanel';
-export { GraphPreview } from './preview/GraphPreview';
 export { RandomizerWorkflow, WorkflowOptions, WorkflowResult, WorkflowError, WorkflowWarning } from './workflow/randomizer-workflow';
 /**
  * Complete randomizer system factory
@@ -21,7 +25,7 @@ export declare class RandomizerSystem {
     /**
      * Quick generation with minimal setup
      */
-    quickGenerate(purpose: string, complexity?: ComplexityLevel, provider?: LLMProvider): Promise<WorkflowResult>;
+    quickGenerate(purpose: string, complexity?: ComplexityLevelType, provider?: LLMProviderType): Promise<WorkflowResult>;
     /**
      * Generate with preset
      */
@@ -34,16 +38,34 @@ export declare class RandomizerSystem {
      * Get generation history with statistics
      */
     getHistory(): {
-        entries: any;
-        stats: any;
+        entries: import("./parameters/parameter-manager").ParameterHistory[];
+        stats: {
+            totalGenerations: number;
+            successRate: number;
+            averageGenerationTime: number;
+            mostUsedComplexity: string;
+            mostUsedProvider: string;
+            popularNodeTypes: Array<{
+                nodeType: string;
+                count: number;
+            }>;
+        };
     };
     /**
      * Export all data
      */
-    exportData(): any;
+    exportData(): {
+        presets: import("./parameters/parameter-schema").ParameterPreset[];
+        history: import("./parameters/parameter-manager").ParameterHistory[];
+        exported: string;
+    };
     /**
      * Import data
      */
-    importData(data: any): any;
+    importData(data: any): {
+        presetsImported: number;
+        historyImported: number;
+        errors: string[];
+    };
 }
 //# sourceMappingURL=index.d.ts.map

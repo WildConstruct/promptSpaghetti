@@ -1,15 +1,5 @@
-export interface ExecutionContext {
-    variables: Record<string, any>;
-    seed: string | number;
-}
-export declare abstract class RuntimeNode<TOutput = unknown> {
-    id: string;
-    constructor(id: string);
-    /**
-     * Execute this node and return its output. May mutate context.
-     */
-    abstract run(ctx: ExecutionContext): Promise<TOutput> | TOutput;
-}
+import { ExecutionContext, RuntimeNode } from './types';
+export { ExecutionContext, RuntimeNode } from './types';
 export declare class WeightedChoiceNode extends RuntimeNode<string> {
     private choices;
     constructor(id: string, choices: Array<{

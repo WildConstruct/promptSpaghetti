@@ -10,13 +10,22 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
+export interface FileSearchOptions {
+  includeContents: boolean;
+  caseSensitive: boolean;
+  useRegex: boolean;
+  includeFolders: boolean;
+  fileTypes: string[];
+}
+
 export interface FileSearchBarProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   debounceMs?: number;
   showAdvanced?: boolean;
-  onAdvancedSearch?: (options: any) => void;
+  onAdvancedSearch?: (options: FileSearchOptions) => void;
+  onTagFilter?: (tag: string) => void;
   className?: string;
 }
 
@@ -27,11 +36,19 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
   debounceMs = 300,
   showAdvanced = false,
   onAdvancedSearch,
+  onTagFilter,
   className = ''
 }) => {
   const [localValue, setLocalValue] = useState(value);
   const [isFocused, setIsFocused] = useState(false);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+  const [searchOptions, setSearchOptions] = useState<FileSearchOptions>({
+    includeContents: false,
+    caseSensitive: false,
+    useRegex: false,
+    includeFolders: true,
+    fileTypes: ['.psg', '.txt', '.md', '.json']
+  });
 
   // Debounced search
   const debouncedOnChange = useCallback(
@@ -64,6 +81,26 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
       handleClear();
       (e.target as HTMLInputElement).blur();
     }
+  };
+
+  const handleAdvancedOptionChange = (option: keyof FileSearchOptions, value: boolean) => {
+    const newOptions = { ...searchOptions, [option]: value };
+    setSearchOptions(newOptions);
+    onAdvancedSearch?.(newOptions);
+  };
+
+  const handleFileTypeChange = (fileType: string, checked: boolean) => {
+    const newFileTypes = checked 
+      ? [...searchOptions.fileTypes, fileType]
+      : searchOptions.fileTypes.filter(type => type !== fileType);
+    
+    const newOptions = { ...searchOptions, fileTypes: newFileTypes };
+    setSearchOptions(newOptions);
+    onAdvancedSearch?.(newOptions);
+  };
+
+  const handleTagClick = (tag: string) => {
+    onTagFilter?.(tag);
   };
 
   return (
@@ -192,19 +229,39 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <label style={{ display: 'flex', alignItems: 'center', fontSize: '12px' }}>
-              <input type="checkbox" style={{ marginRight: '6px' }} />
+              <input 
+                type="checkbox" 
+                checked={searchOptions.includeContents}
+                onChange={(e) => handleAdvancedOptionChange('includeContents', e.target.checked)}
+                style={{ marginRight: '6px' }} 
+              />
               Include file contents
             </label>
             <label style={{ display: 'flex', alignItems: 'center', fontSize: '12px' }}>
-              <input type="checkbox" style={{ marginRight: '6px' }} />
+              <input 
+                type="checkbox" 
+                checked={searchOptions.caseSensitive}
+                onChange={(e) => handleAdvancedOptionChange('caseSensitive', e.target.checked)}
+                style={{ marginRight: '6px' }} 
+              />
               Case sensitive
             </label>
             <label style={{ display: 'flex', alignItems: 'center', fontSize: '12px' }}>
-              <input type="checkbox" style={{ marginRight: '6px' }} />
+              <input 
+                type="checkbox" 
+                checked={searchOptions.useRegex}
+                onChange={(e) => handleAdvancedOptionChange('useRegex', e.target.checked)}
+                style={{ marginRight: '6px' }} 
+              />
               Regular expressions
             </label>
             <label style={{ display: 'flex', alignItems: 'center', fontSize: '12px' }}>
-              <input type="checkbox" style={{ marginRight: '6px' }} />
+              <input 
+                type="checkbox" 
+                checked={searchOptions.includeFolders}
+                onChange={(e) => handleAdvancedOptionChange('includeFolders', e.target.checked)}
+                style={{ marginRight: '6px' }} 
+              />
               Include folders
             </label>
           </div>
@@ -216,7 +273,12 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {['.psg', '.txt', '.md', '.json'].map(ext => (
                 <label key={ext} style={{ display: 'flex', alignItems: 'center', fontSize: '11px' }}>
-                  <input type="checkbox" style={{ marginRight: '4px' }} defaultChecked />
+                  <input 
+                    type="checkbox" 
+                    checked={searchOptions.fileTypes.includes(ext)}
+                    onChange={(e) => handleFileTypeChange(ext, e.target.checked)}
+                    style={{ marginRight: '4px' }} 
+                  />
                   {ext}
                 </label>
               ))}

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-export const useAutosave = ({ nodes, edges, intervalMs = 5000, storageKey = 'graphDraft', }) => {
+import { useEffect, useState } from 'react';
+export const useAutosave = ({ nodes, edges, intervalMs = 5000, storageKey = 'graphDraft' }) => {
     const [showRestorePrompt, setShowRestorePrompt] = useState(false);
     const [restoreDraft, setRestoreDraft] = useState(null);
     // Check for existing draft on mount
@@ -43,6 +43,6 @@ export const useAutosave = ({ nodes, edges, intervalMs = 5000, storageKey = 'gra
         showRestorePrompt,
         restoreDraft,
         setShowRestorePrompt,
-        setRestoreDraft,
+        setRestoreDraft
     };
 };

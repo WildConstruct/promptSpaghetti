@@ -163,7 +163,7 @@ export class FormatValidator {
         }
         // Handle quoted strings
         if ((value.startsWith('"') && value.endsWith('"')) ||
-            (value.startsWith("'") && value.endsWith("'"))) {
+            (value.startsWith('\'') && value.endsWith('\''))) {
             return value.slice(1, -1);
         }
         // Handle numbers

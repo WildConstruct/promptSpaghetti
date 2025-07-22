@@ -3,10 +3,33 @@
  * Epic 8.3 Task 3 - Drag-to-Reorder Interface (E8.3-3-drag-reorder)
  * 
  * Intuitive weight management with drag-and-drop reordering for Wild Construct demo
+ * Migrated from react-beautiful-dnd to @dnd-kit for modern React 18+ support
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
+  defaultDropAnimationSideEffects
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable';
+import {
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 export interface WeightedOption {
   id: string;
@@ -48,15 +71,321 @@ export interface DragReorderProps {
 export interface WeightStatistics {
   totalWeight: number;
   averageWeight: number;
-  minWeight: number;
+  medianWeight: number;
   maxWeight: number;
-  weightDistribution: 'even' | 'skewed' | 'concentrated';
-  entropyScore: number; // Measure of randomness
+  minWeight: number;
+  standardDeviation: number;
+  entropyScore: number;
+  weightDistribution: 'uniform' | 'skewed' | 'bimodal' | 'concentrated';
 }
 
-/**
- * Professional drag-and-drop weight management component
- */
+// Sortable Item Component
+function SortableWeightItem({
+  option,
+  index,
+  percentage,
+  isDragging,
+  showWeights,
+  showPercentages,
+  allowWeightEditing,
+  allowLocking,
+  minWeight,
+  maxWeight,
+  themeStyles,
+  animationDuration,
+  onWeightChange,
+  onLockToggle,
+  onItemSelect,
+  isSelected,
+  draggedItemId
+}: {
+  option: WeightedOption;
+  index: number;
+  percentage: number;
+  isDragging: boolean;
+  showWeights: boolean;
+  showPercentages: boolean;
+  allowWeightEditing: boolean;
+  allowLocking: boolean;
+  minWeight: number;
+  maxWeight: number;
+  themeStyles: any;
+  animationDuration: number;
+  onWeightChange: (optionId: string, weight: number) => void;
+  onLockToggle: (optionId: string) => void;
+  onItemSelect: (optionId: string, selected: boolean) => void;
+  isSelected: boolean;
+  draggedItemId: string | null;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging: isSortableDragging,
+  } = useSortable({
+    id: option.id,
+    disabled: option.locked
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  const isCurrentlyDragging = isSortableDragging || draggedItemId === option.id;
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        ...style,
+        marginBottom: '12px',
+        background: isCurrentlyDragging ? themeStyles.accent + '20' : themeStyles.background,
+        border: `1px solid ${isCurrentlyDragging ? themeStyles.accent : themeStyles.border}`,
+        borderRadius: '8px',
+        padding: '16px',
+        boxShadow: isCurrentlyDragging
+          ? `0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px ${themeStyles.accent}`
+          : '0 2px 8px rgba(0, 0, 0, 0.1)',
+        transform: isCurrentlyDragging ? 'scale(1.02)' : 'scale(1)',
+        transition: `all ${animationDuration}ms ease`,
+        cursor: option.locked ? 'default' : 'grab',
+        opacity: isCurrentlyDragging ? 0.9 : 1,
+        userSelect: 'none'
+      }}
+      {...attributes}
+      {...listeners}
+    >
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '12px'
+      }}>
+        {/* Drag Handle and Content */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+          {/* Drag Handle */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px',
+            opacity: option.locked ? 0.3 : 0.6,
+            cursor: option.locked ? 'default' : 'grab'
+          }}>
+            <div style={{
+              width: '4px',
+              height: '4px',
+              backgroundColor: themeStyles.text,
+              borderRadius: '50%'
+            }} />
+            <div style={{
+              width: '4px',
+              height: '4px',
+              backgroundColor: themeStyles.text,
+              borderRadius: '50%'
+            }} />
+            <div style={{
+              width: '4px',
+              height: '4px',
+              backgroundColor: themeStyles.text,
+              borderRadius: '50%'
+            }} />
+          </div>
+          
+          {/* Selection Checkbox */}
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={(e) => onItemSelect(option.id, e.target.checked)}
+            style={{
+              accentColor: themeStyles.accent,
+              transform: 'scale(1.2)'
+            }}
+          />
+          
+          {/* Text Content */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{
+              fontSize: '14px',
+              fontWeight: 500,
+              color: themeStyles.text,
+              marginBottom: '4px',
+              wordBreak: 'break-word'
+            }}>
+              {option.text}
+            </div>
+            {option.category && (
+              <div style={{
+                fontSize: '12px',
+                opacity: 0.6,
+                color: themeStyles.accent,
+                fontWeight: 500
+              }}>
+                {option.category}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Weight Controls */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          minWidth: 'fit-content'
+        }}>
+          {/* Visual Weight Bar */}
+          <div style={{
+            width: '60px',
+            height: '8px',
+            backgroundColor: themeStyles.border,
+            borderRadius: '4px',
+            overflow: 'hidden',
+            position: 'relative'
+          }}>
+            <div style={{
+              width: `${Math.min(100, percentage)}%`,
+              height: '100%',
+              backgroundColor: option.color || themeStyles.accent,
+              borderRadius: '4px',
+              transition: `width ${animationDuration}ms ease`
+            }} />
+          </div>
+          
+          {/* Weight Input */}
+          {allowWeightEditing && (
+            <input
+              type="number"
+              min={minWeight}
+              max={maxWeight}
+              step={0.1}
+              value={option.weight.toFixed(1)}
+              onChange={(e) => onWeightChange(option.id, parseFloat(e.target.value) || minWeight)}
+              style={{
+                width: '60px',
+                padding: '4px 6px',
+                border: `1px solid ${themeStyles.border}`,
+                borderRadius: '4px',
+                backgroundColor: themeStyles.background,
+                color: themeStyles.text,
+                fontSize: '12px',
+                textAlign: 'center'
+              }}
+            />
+          )}
+          
+          {/* Weight Display */}
+          {showWeights && !allowWeightEditing && (
+            <span style={{
+              minWidth: '40px',
+              textAlign: 'right',
+              fontSize: '12px',
+              fontWeight: 600,
+              color: themeStyles.text
+            }}>
+              {option.weight.toFixed(1)}
+            </span>
+          )}
+          
+          {/* Percentage Display */}
+          {showPercentages && (
+            <span style={{
+              minWidth: '45px',
+              textAlign: 'right',
+              fontSize: '12px',
+              opacity: 0.7,
+              color: themeStyles.accent
+            }}>
+              {percentage.toFixed(1)}%
+            </span>
+          )}
+          
+          {/* Lock Toggle */}
+          {allowLocking && (
+            <button
+              onClick={() => onLockToggle(option.id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: option.locked ? themeStyles.accent : themeStyles.text,
+                cursor: 'pointer',
+                padding: '4px',
+                borderRadius: '4px',
+                opacity: option.locked ? 1 : 0.6,
+                fontSize: '14px'
+              }}
+              title={option.locked ? 'Unlock weight' : 'Lock weight'}
+            >
+              {option.locked ? '🔒' : '🔓'}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Utility function to calculate weight statistics
+function calculateWeightStatistics(options: WeightedOption[]): WeightStatistics {
+  if (options.length === 0) {
+    return {
+      totalWeight: 0,
+      averageWeight: 0,
+      medianWeight: 0,
+      maxWeight: 0,
+      minWeight: 0,
+      standardDeviation: 0,
+      entropyScore: 0,
+      weightDistribution: 'uniform'
+    };
+  }
+  
+  const weights = options.map(o => o.weight);
+  const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+  const averageWeight = totalWeight / weights.length;
+  
+  const sortedWeights = [...weights].sort((a, b) => a - b);
+  const medianWeight = sortedWeights.length % 2 === 0
+    ? (sortedWeights[sortedWeights.length / 2 - 1] + sortedWeights[sortedWeights.length / 2]) / 2
+    : sortedWeights[Math.floor(sortedWeights.length / 2)];
+    
+  const maxWeight = Math.max(...weights);
+  const minWeight = Math.min(...weights);
+  
+  const variance = weights.reduce((sum, w) => sum + Math.pow(w - averageWeight, 2), 0) / weights.length;
+  const standardDeviation = Math.sqrt(variance);
+  
+  // Calculate entropy (measure of randomness/distribution)
+  const probabilities = totalWeight > 0 ? weights.map(w => w / totalWeight) : weights.map(() => 1 / weights.length);
+  const entropyScore = -probabilities.reduce((sum, p) => p > 0 ? sum + p * Math.log2(p) : sum, 0);
+  
+  // Determine distribution type
+  const cv = averageWeight > 0 ? standardDeviation / averageWeight : 0;
+  let weightDistribution: 'uniform' | 'skewed' | 'bimodal' | 'concentrated';
+  if (cv < 0.2) {
+    weightDistribution = 'uniform';
+  } else if (cv < 0.5) {
+    weightDistribution = 'concentrated';
+  } else {
+    // Simple bimodal detection: check if there are distinct clusters
+    const isSkewed = Math.abs(averageWeight - medianWeight) / standardDeviation > 0.5;
+    weightDistribution = isSkewed ? 'skewed' : 'bimodal';
+  }
+  
+  return {
+    totalWeight,
+    averageWeight,
+    medianWeight,
+    maxWeight,
+    minWeight,
+    standardDeviation,
+    entropyScore,
+    weightDistribution
+  };
+}
+
 export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
   options,
   onChange,
@@ -65,13 +394,13 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
   showPercentages = true,
   allowWeightEditing = true,
   allowLocking = false,
-  minWeight = 0.1,
+  minWeight = 0,
   maxWeight = 100,
   totalWeight,
   onWeightChange,
   className = '',
   style,
-  theme = 'cinema',
+  theme = 'dark',
   showVisualWeights = true,
   animationDuration = 200,
   snapToGrid = false,
@@ -82,45 +411,52 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
-  const [editingWeight, setEditingWeight] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [showBulkActions, setShowBulkActions] = useState(false);
-  
-  // Refs for smooth animations
   const containerRef = useRef<HTMLDivElement>(null);
-    
+  
   // Calculate total weight and percentages
-  const calculatedTotalWeight = totalWeight || options.reduce((sum, opt) => sum + opt.weight, 0);
+  const actualTotalWeight = totalWeight || options.reduce((sum, option) => sum + option.weight, 0);
   const optionsWithPercentages = options.map(option => ({
     ...option,
-    percentage: calculatedTotalWeight > 0 ? (option.weight / calculatedTotalWeight) * 100 : 0
+    percentage: actualTotalWeight > 0 ? (option.weight / actualTotalWeight) * 100 : 0
   }));
 
   // Calculate statistics
   const statistics: WeightStatistics = calculateWeightStatistics(options);
 
+  // Configure sensors for better touch and keyboard support
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Handle drag start
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setIsDragging(true);
+    setDraggedItemId(event.active.id as string);
+  }, []);
+
   // Handle drag end
-  const handleDragEnd = useCallback((result: DropResult) => {
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
     setIsDragging(false);
     setDraggedItemId(null);
     
-    if (!result.destination) return;
+    const { active, over } = event;
     
-    const { source, destination } = result;
-    if (source.index === destination.index) return;
-    
-    const newOptions = Array.from(options);
-    const [reorderedItem] = newOptions.splice(source.index, 1);
-    newOptions.splice(destination.index, 0, reorderedItem);
-    
-    onChange(newOptions);
+    if (over && active.id !== over.id) {
+      const oldIndex = options.findIndex(option => option.id === active.id);
+      const newIndex = options.findIndex(option => option.id === over.id);
+      
+      onChange(arrayMove(options, oldIndex, newIndex));
+    }
   }, [options, onChange]);
-
-  // Handle drag start
-  const handleDragStart = useCallback((start: any) => {
-    setIsDragging(true);
-    setDraggedItemId(start.draggableId);
-  }, []);
 
   // Handle weight change
   const handleWeightChange = useCallback((optionId: string, newWeight: number) => {
@@ -240,6 +576,10 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
 
   const themeStyles = getThemeStyles();
 
+  // Find the dragged option for drag overlay
+  const draggedOption = draggedItemId ? options.find(opt => opt.id === draggedItemId) : null;
+  const draggedPercentage = draggedOption ? (actualTotalWeight > 0 ? (draggedOption.weight / actualTotalWeight) * 100 : 0) : 0;
+
   return (
     <div 
       ref={containerRef}
@@ -347,16 +687,16 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
           border: `1px solid ${themeStyles.border}`,
           borderRadius: '8px',
           padding: '16px',
-          marginBottom: '20px'
+          marginBottom: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          flexWrap: 'wrap'
         }}>
-          <div style={{ 
-            display: 'flex', 
-            gap: '8px', 
-            flexWrap: 'wrap',
-            alignItems: 'center' 
-          }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <span style={{ fontSize: '14px', fontWeight: 500 }}>
-              {selectedItems.size > 0 ? `${selectedItems.size} selected` : 'Bulk Operations'}:
+              Bulk Actions ({selectedItems.size} selected):
             </span>
             <button
               onClick={() => handleBulkWeightChange('equal')}
@@ -419,276 +759,88 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
       )}
 
       {/* Drag and Drop List */}
-      <DragDropContext
-        onDragEnd={handleDragEnd}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
         onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToVerticalAxis]}
       >
-        <Droppable droppableId="weight-list">
-          {(provided, snapshot) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={{
-                minHeight: '200px',
-                background: snapshot.isDraggingOver ? themeStyles.hover : 'transparent',
-                borderRadius: '8px',
-                transition: `background-color ${animationDuration}ms ease`,
-                padding: '8px'
-              }}
-            >
-              {optionsWithPercentages.map((option, index) => (
-                <Draggable
-                  key={option.id}
-                  draggableId={option.id}
-                  index={index}
-                  isDragDisabled={disabled || option.locked}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      style={{
-                        ...provided.draggableProps.style,
-                        marginBottom: '12px',
-                        background: snapshot.isDragging ? themeStyles.accent + '20' : themeStyles.background,
-                        border: `1px solid ${snapshot.isDragging ? themeStyles.accent : themeStyles.border}`,
-                        borderRadius: '8px',
-                        padding: '16px',
-                        boxShadow: snapshot.isDragging 
-                          ? `0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px ${themeStyles.accent}` 
-                          : '0 2px 8px rgba(0, 0, 0, 0.1)',
-                        transition: snapshot.isDragging ? 'none' : `all ${animationDuration}ms ease`,
-                        transform: snapshot.isDragging 
-                          ? `${provided.draggableProps.style?.transform} rotate(2deg)`
-                          : provided.draggableProps.style?.transform,
-                        userSelect: 'none'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        {/* Drag Handle */}
-                        <div
-                          {...provided.dragHandleProps}
-                          style={{
-                            cursor: disabled || option.locked ? 'not-allowed' : 'grab',
-                            color: themeStyles.accent,
-                            fontSize: '16px',
-                            opacity: disabled || option.locked ? 0.4 : 0.7
-                          }}
-                        >
-                          ⋮⋮
-                        </div>
-
-                        {/* Selection Checkbox (for bulk operations) */}
-                        {enableBulkOperations && (
-                          <input
-                            type="checkbox"
-                            checked={selectedItems.has(option.id)}
-                            onChange={(e) => handleItemSelect(option.id, e.target.checked)}
-                            style={{
-                              accentColor: themeStyles.accent,
-                              cursor: 'pointer'
-                            }}
-                          />
-                        )}
-
-                        {/* Visual Weight Bar */}
-                        {showVisualWeights && (
-                          <div style={{
-                            width: '60px',
-                            height: '8px',
-                            background: themeStyles.border,
-                            borderRadius: '4px',
-                            overflow: 'hidden'
-                          }}>
-                            <div
-                              style={{
-                                width: `${Math.max(5, option.percentage)}%`,
-                                height: '100%',
-                                background: `linear-gradient(90deg, ${themeStyles.accent}, ${themeStyles.accent}80)`,
-                                transition: `width ${animationDuration}ms ease`,
-                                borderRadius: '4px'
-                              }}
-                            />
-                          </div>
-                        )}
-
-                        {/* Option Text */}
-                        <div style={{ 
-                          flex: 1, 
-                          fontSize: '15px',
-                          fontWeight: 500,
-                          opacity: option.locked ? 0.6 : 1
-                        }}>
-                          {option.text}
-                          {option.category && (
-                            <div style={{ 
-                              fontSize: '12px', 
-                              opacity: 0.7,
-                              marginTop: '2px'
-                            }}>
-                              {option.category}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Weight Controls */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          {showWeights && (
-                            <div style={{ minWidth: '80px', textAlign: 'right' }}>
-                              {editingWeight === option.id ? (
-                                <input
-                                  type="number"
-                                  value={option.weight}
-                                  onChange={(e) => handleWeightChange(option.id, parseFloat(e.target.value) || minWeight)}
-                                  onBlur={() => setEditingWeight(null)}
-                                  onKeyPress={(e) => e.key === 'Enter' && setEditingWeight(null)}
-                                  min={minWeight}
-                                  max={maxWeight}
-                                  step={0.1}
-                                  autoFocus
-                                  style={{
-                                    width: '70px',
-                                    padding: '4px 8px',
-                                    border: `1px solid ${themeStyles.accent}`,
-                                    borderRadius: '4px',
-                                    background: themeStyles.background,
-                                    color: themeStyles.text,
-                                    fontSize: '14px',
-                                    textAlign: 'right'
-                                  }}
-                                />
-                              ) : (
-                                <span
-                                  onClick={() => allowWeightEditing && setEditingWeight(option.id)}
-                                  style={{
-                                    cursor: allowWeightEditing ? 'pointer' : 'default',
-                                    fontSize: '14px',
-                                    fontWeight: 600,
-                                    color: themeStyles.accent,
-                                    padding: '4px',
-                                    borderRadius: '4px',
-                                    transition: `background-color ${animationDuration}ms ease`
-                                  }}
-                                  onMouseOver={(e) => allowWeightEditing && (e.currentTarget.style.background = themeStyles.hover)}
-                                  onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
-                                >
-                                  {option.weight.toFixed(1)}
-                                </span>
-                              )}
-                            </div>
-                          )}
-
-                          {showPercentages && (
-                            <div style={{ 
-                              minWidth: '50px',
-                              textAlign: 'right',
-                              fontSize: '13px',
-                              opacity: 0.7,
-                              fontWeight: 500
-                            }}>
-                              {option.percentage.toFixed(1)}%
-                            </div>
-                          )}
-
-                          {allowLocking && (
-                            <button
-                              onClick={() => handleLockToggle(option.id)}
-                              style={{
-                                background: 'transparent',
-                                border: 'none',
-                                color: option.locked ? '#ef4444' : themeStyles.text,
-                                cursor: 'pointer',
-                                fontSize: '16px',
-                                opacity: option.locked ? 1 : 0.5,
-                                padding: '4px',
-                                borderRadius: '4px',
-                                transition: `all ${animationDuration}ms ease`
-                              }}
-                              title={option.locked ? 'Unlock weight' : 'Lock weight'}
-                            >
-                              {option.locked ? '🔒' : '🔓'}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
+        <SortableContext items={options.map(opt => opt.id)} strategy={verticalListSortingStrategy}>
+          <div style={{
+            minHeight: '200px',
+            borderRadius: '8px',
+            padding: '8px'
+          }}>
+            {optionsWithPercentages.map((option, index) => (
+              <SortableWeightItem
+                key={option.id}
+                option={option}
+                index={index}
+                percentage={option.percentage}
+                isDragging={isDragging}
+                showWeights={showWeights}
+                showPercentages={showPercentages}
+                allowWeightEditing={allowWeightEditing}
+                allowLocking={allowLocking}
+                minWeight={minWeight}
+                maxWeight={maxWeight}
+                themeStyles={themeStyles}
+                animationDuration={animationDuration}
+                onWeightChange={handleWeightChange}
+                onLockToggle={handleLockToggle}
+                onItemSelect={handleItemSelect}
+                isSelected={selectedItems.has(option.id)}
+                draggedItemId={draggedItemId}
+              />
+            ))}
+          </div>
+        </SortableContext>
+        
+        {/* Drag Overlay */}
+        <DragOverlay
+          dropAnimation={{
+            sideEffects: defaultDropAnimationSideEffects({
+              styles: {
+                active: {
+                  opacity: '0.5'
+                }
+              }
+            })
+          }}
+        >
+          {draggedOption ? (
+            <div style={{
+              background: themeStyles.accent + '20',
+              border: `1px solid ${themeStyles.accent}`,
+              borderRadius: '8px',
+              padding: '16px',
+              boxShadow: `0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px ${themeStyles.accent}`,
+              transform: 'scale(1.02)',
+              userSelect: 'none',
+              cursor: 'grabbing'
+            }}>
+              <div style={{
+                fontSize: '14px',
+                fontWeight: 500,
+                color: themeStyles.text,
+                marginBottom: '4px'
+              }}>
+                {draggedOption.text}
+              </div>
+              <div style={{
+                fontSize: '12px',
+                opacity: 0.7,
+                color: themeStyles.accent
+              }}>
+                {draggedPercentage.toFixed(1)}% - {draggedOption.weight.toFixed(1)}
+              </div>
             </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-
-      {/* Footer */}
-      <div style={{
-        marginTop: '20px',
-        paddingTop: '16px',
-        borderTop: `1px solid ${themeStyles.border}`,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontSize: '14px',
-        opacity: 0.7
-      }}>
-        <div>
-          {options.length} {options.length === 1 ? 'option' : 'options'}
-          {calculatedTotalWeight > 0 && ` • Total weight: ${calculatedTotalWeight.toFixed(1)}`}
-        </div>
-        <div>
-          {theme === 'cinema' && '🎬 Cinema Mode'}
-        </div>
-      </div>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
     </div>
   );
 };
-
-// Utility function to calculate weight statistics
-function calculateWeightStatistics(options: WeightedOption[]): WeightStatistics {
-  if (options.length === 0) {
-    return {
-      totalWeight: 0,
-      averageWeight: 0,
-      minWeight: 0,
-      maxWeight: 0,
-      weightDistribution: 'even',
-      entropyScore: 0
-    };
-  }
-
-  const weights = options.map(opt => opt.weight);
-  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-  const averageWeight = totalWeight / weights.length;
-  const minWeight = Math.min(...weights);
-  const maxWeight = Math.max(...weights);
-
-  // Calculate entropy (measure of randomness/evenness)
-  const probabilities = weights.map(weight => totalWeight > 0 ? weight / totalWeight : 0);
-  const entropyScore = -probabilities.reduce((sum, p) => p > 0 ? sum + p * Math.log2(p) : sum, 0);
-
-  // Determine distribution type
-  const variance = weights.reduce((sum, weight) => sum + Math.pow(weight - averageWeight, 2), 0) / weights.length;
-  const standardDeviation = Math.sqrt(variance);
-  const coefficientOfVariation = averageWeight > 0 ? standardDeviation / averageWeight : 0;
-
-  let weightDistribution: 'even' | 'skewed' | 'concentrated';
-  if (coefficientOfVariation < 0.3) {
-    weightDistribution = 'even';
-  } else if (coefficientOfVariation < 0.8) {
-    weightDistribution = 'skewed';
-  } else {
-    weightDistribution = 'concentrated';
-  }
-
-  return {
-    totalWeight,
-    averageWeight,
-    minWeight,
-    maxWeight,
-    weightDistribution,
-    entropyScore
-  };
-}
 
 export default DragReorderWeightManager;

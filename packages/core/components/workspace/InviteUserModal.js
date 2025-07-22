@@ -8,12 +8,12 @@ const ROLES = [
     { value: 'admin', label: 'Admin', description: 'Full workspace access and management' },
     { value: 'editor', label: 'Editor', description: 'Can create and edit projects and resources' },
     { value: 'commenter', label: 'Commenter', description: 'Can view content and add comments' },
-    { value: 'viewer', label: 'Viewer', description: 'Read-only access to content' },
+    { value: 'viewer', label: 'Viewer', description: 'Read-only access to content' }
 ];
-export const InviteUserModal = ({ workspaceId, workspaceName, onSubmit, onCancel, }) => {
+export const InviteUserModal = ({ workspaceId, workspaceName, onSubmit, onCancel }) => {
     const [formData, setFormData] = useState({
         userId: '',
-        role: 'editor',
+        role: 'editor'
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +40,7 @@ export const InviteUserModal = ({ workspaceId, workspaceName, onSubmit, onCancel
         try {
             await onSubmit({
                 userId: formData.userId.trim(),
-                role: formData.role,
+                role: formData.role
             });
         }
         catch (error) {

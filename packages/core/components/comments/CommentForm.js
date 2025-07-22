@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Form for creating and editing comments
  */
 import { useState, useRef, useEffect } from 'react';
-export const CommentForm = ({ onSubmit, onCancel, initialValue = '', placeholder = 'Write a comment...', submitText = 'Post Comment', userId, compact = false, autoFocus = true, }) => {
+export const CommentForm = ({ onSubmit, onCancel, initialValue = '', placeholder = 'Write a comment...', submitText = 'Post Comment', userId, compact = false, autoFocus = true }) => {
     const [content, setContent] = useState(initialValue);
     const [submitting, setSubmitting] = useState(false);
     const [focused, setFocused] = useState(false);

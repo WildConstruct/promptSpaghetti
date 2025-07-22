@@ -239,7 +239,7 @@ Generate structured, creative, and functional graphs.`;
             prompt += `\n**Preferred Node Types**: ${request.nodeTypes.join(', ')}`;
         }
         if (request.specificRequirements?.length) {
-            prompt += `\n\n**Specific Requirements**:`;
+            prompt += '\n\n**Specific Requirements**:';
             request.specificRequirements.forEach(req => {
                 prompt += `\n- ${req}`;
             });
@@ -248,13 +248,13 @@ Generate structured, creative, and functional graphs.`;
             prompt += `\n\n**Focus Areas**: ${request.focusAreas.join(', ')}`;
         }
         if (request.constraints?.length) {
-            prompt += `\n\n**Constraints**:`;
+            prompt += '\n\n**Constraints**:';
             request.constraints.forEach(constraint => {
                 prompt += `\n- ${constraint}`;
             });
         }
         if (request.examples?.length) {
-            prompt += `\n\n**Example Context**:`;
+            prompt += '\n\n**Example Context**:';
             request.examples.forEach(example => {
                 prompt += `\n- ${example}`;
             });

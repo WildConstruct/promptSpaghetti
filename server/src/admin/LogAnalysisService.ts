@@ -11,6 +11,7 @@
 
 import { Database } from '../database/connection';
 import { AuditService } from '../auth/services/AuditService';
+import { RetryUtils, RetryPatterns, retryableDatabase } from '../utils/RetryUtils';
 
 // ==========================================
 // LOG ANALYSIS TYPES
@@ -308,6 +309,7 @@ export class LogAnalysisService {
   // LOG INGESTION AND STORAGE
   // ==========================================
 
+  @retryableDatabase({ maxAttempts: 3, baseDelay: 500 })
   async ingestLog(
     level: LogLevel,
     source: LogSource,
@@ -360,6 +362,7 @@ export class LogAnalysisService {
     return log_id;
   }
 
+  @retryableDatabase({ maxAttempts: 3, baseDelay: 1000 })
   async batchIngestLogs(logs: Omit<LogEntry, 'log_id' | 'created_at' | 'processed'>[]): Promise<string[]> {
     const log_ids: string[] = [];
     const values: any[] = [];
@@ -588,6 +591,23 @@ export class LogAnalysisService {
       session.status = 'failed';
       session.execution_timeline.failed_at = new Date();
       console.error(`Analysis session failed: ${session_id}`, error);
+      
+      // Attempt to retry analysis for critical operations
+      if (session.analysis_type === 'real_time') {
+        try {
+          console.log(`Attempting to retry real-time analysis for session: ${session_id}`);
+          await RetryPatterns.logAnalysis(async () => {
+            const rules = await this.getApplicableRules(session);
+            await this.processRealTimeLogs(session, rules);
+          });
+          
+          session.status = 'completed';
+          session.execution_timeline.completed_at = new Date();
+          console.log(`Analysis session recovered after retry: ${session_id}`);
+        } catch (retryError) {
+          console.error(`Analysis session failed even after retries: ${session_id}`, retryError);
+        }
+      }
     }
 
     await this.updateAnalysisSession(session);
@@ -744,6 +764,7 @@ export class LogAnalysisService {
     return true; // Simplified for now
   }
 
+  @retryableDatabase({ maxAttempts: 2, baseDelay: 400 })
   private async createAlert(rule: LogAnalysisRule, log: LogEntry): Promise<void> {
     const alert_id = `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -769,8 +790,17 @@ export class LogAnalysisService {
   }
 
   private async sendNotification(rule: LogAnalysisRule, log: LogEntry): Promise<void> {
-    // Implementation for sending notifications
-    console.log(`Notification: ${rule.name} - ${log.message}`);
+    // Implementation for sending notifications with retry logic
+    await RetryPatterns.apiCall(async () => {
+      console.log(`Notification: ${rule.name} - ${log.message}`);
+      
+      // Example notification implementation (could be email, Slack, webhook, etc.)
+      if (rule.actions.escalate_to && rule.actions.escalate_to.length > 0) {
+        // Send notification to specified recipients
+        // This would integrate with actual notification service
+        console.log(`Escalating to: ${rule.actions.escalate_to.join(', ')}`);
+      }
+    }, 'notification_service');
   }
 
   private async triggerRecovery(rule: LogAnalysisRule, log: LogEntry): Promise<void> {
@@ -854,6 +884,7 @@ export class LogAnalysisService {
   // DATABASE OPERATIONS
   // ==========================================
 
+  @retryableDatabase({ maxAttempts: 3, baseDelay: 800 })
   private async storeAnalysisSession(session: LogAnalysisSession): Promise<void> {
     await this.db.query(`
       INSERT INTO log_analysis_sessions (
@@ -871,6 +902,7 @@ export class LogAnalysisService {
     ]);
   }
 
+  @retryableDatabase({ maxAttempts: 3, baseDelay: 600 })
   private async updateAnalysisSession(session: LogAnalysisSession): Promise<void> {
     session.updated_at = new Date();
     

@@ -1,4 +1,5 @@
 import { Pool } from 'pg';
+import { ErrorFactory } from '../../errors/ErrorFactory';
 export class DatabaseConnection {
     pool;
     isConnected = false;
@@ -7,7 +8,7 @@ export class DatabaseConnection {
             ...config,
             max: config.max || 20,
             idleTimeoutMillis: config.idleTimeoutMillis || 30000,
-            connectionTimeoutMillis: config.connectionTimeoutMillis || 5000,
+            connectionTimeoutMillis: config.connectionTimeoutMillis || 5000
         });
         this.pool.on('error', (err) => {
             console.error('Unexpected error on idle client', err);
@@ -40,7 +41,7 @@ export class DatabaseConnection {
     }
     async query(text, params) {
         if (!this.isConnected) {
-            throw new Error('Database not connected');
+            throw ErrorFactory.createDatabaseConnectionError('Cannot execute query: Database not connected', undefined, { operation: 'query', metadata: { query: text.substring(0, 100) } });
         }
         const start = Date.now();
         try {
@@ -62,7 +63,7 @@ export class DatabaseConnection {
     }
     async transaction(callback) {
         if (!this.isConnected) {
-            throw new Error('Database not connected');
+            throw ErrorFactory.createDatabaseConnectionError('Cannot start transaction: Database not connected', undefined, { operation: 'transaction' });
         }
         const client = await this.pool.connect();
         try {
@@ -118,17 +119,8 @@ export class DatabaseConnection {
     }
 }
 // Utility functions for type-safe parameter binding
-export const bindParams = {
-    workspaceId: (id) => id,
-    projectId: (id) => id,
-    userId: (id) => id,
-    resourceId: (id) => id,
-    // Helper for array parameters
-    array: (items) => items,
-    // Helper for JSON parameters
-    json: (obj) => JSON.stringify(obj),
-    // Helper for UUID validation
-    validateUuid: (id) => {
+export const ValidationHelpers = {
+    isValidUUID(id) {
         const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
         return uuidRegex.test(id);
     }
@@ -180,8 +172,8 @@ export class QueryBuilder {
     }
     build() {
         // Replace numbered placeholders with proper parameter indices
-        let finalQuery = this.query;
-        let finalParams = [...this.params];
+        const finalQuery = this.query;
+        const finalParams = [...this.params];
         // Reset for reuse
         this.query = '';
         this.params = [];
@@ -265,11 +257,11 @@ export class MigrationRunner {
     async rollbackMigration(version) {
         const result = await this.db.query('SELECT rollback_sql FROM schema_migrations WHERE version = $1', [version]);
         if (result.rows.length === 0) {
-            throw new Error(`Migration ${version} not found`);
+            throw ErrorFactory.createValidationError('version', version, 'existing migration version', { operation: 'rollback_migration' });
         }
         const rollbackSql = result.rows[0].rollback_sql;
         if (!rollbackSql) {
-            throw new Error(`No rollback SQL available for migration ${version}`);
+            throw ErrorFactory.createConfigurationError(`No rollback SQL available for migration ${version}`, 'rollback_sql', { operation: 'rollback_migration', metadata: { version } });
         }
         await this.db.transaction(async (client) => {
             await client.query(rollbackSql);

@@ -10,8 +10,8 @@ export const useRestoration = () => {
                 ...options,
                 headers: {
                     'Content-Type': 'application/json',
-                    ...options.headers,
-                },
+                    ...options.headers
+                }
             });
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
@@ -35,13 +35,13 @@ export const useRestoration = () => {
     const generatePreview = useCallback(async (request) => {
         return apiCall('/api/restoration/preview', {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const createRestoration = useCallback(async (request) => {
         return apiCall('/api/restoration/attempts', {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const getProgress = useCallback(async (restorationAttemptId) => {
@@ -50,12 +50,12 @@ export const useRestoration = () => {
     const resolveConflict = useCallback(async (request) => {
         return apiCall('/api/restoration/conflicts/resolve', {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const cancelRestoration = useCallback(async (restorationAttemptId) => {
         return apiCall(`/api/restoration/attempts/${restorationAttemptId}/cancel`, {
-            method: 'POST',
+            method: 'POST'
         });
     }, [apiCall]);
     const getStats = useCallback(async (projectId) => {
@@ -64,7 +64,7 @@ export const useRestoration = () => {
     const createBookmark = useCallback(async (request) => {
         return apiCall('/api/restoration/bookmarks', {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const getBookmarks = useCallback(async (projectId) => {
@@ -72,7 +72,7 @@ export const useRestoration = () => {
     }, [apiCall]);
     const deleteBookmark = useCallback(async (bookmarkId) => {
         return apiCall(`/api/restoration/bookmarks/${bookmarkId}`, {
-            method: 'DELETE',
+            method: 'DELETE'
         });
     }, [apiCall]);
     const listRestorations = useCallback(async (filter) => {
@@ -115,6 +115,6 @@ export const useRestoration = () => {
         deleteBookmark,
         listRestorations,
         getRestorationDetails,
-        clearError,
+        clearError
     };
 };

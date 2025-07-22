@@ -46,14 +46,14 @@ export const ExportTemplateSchema = z.object({
     is_system_template: z.boolean().default(false),
     // Usage statistics
     usage_count: z.number().int().min(0).default(0),
-    last_used_at: z.string().datetime().optional(),
+    last_used_at: z.string().datetime().optional()
 });
 export const CreateExportTemplateSchema = ExportTemplateSchema.omit({
     id: true,
     created_at: true,
     updated_at: true,
     usage_count: true,
-    last_used_at: true,
+    last_used_at: true
 });
 export const UpdateExportTemplateSchema = CreateExportTemplateSchema.partial();
 // Export Job Types
@@ -103,7 +103,7 @@ export const ExportJobSchema = z.object({
     // Performance metrics
     processing_duration: z.number().int().min(0).optional(),
     memory_usage: z.number().int().min(0).optional(),
-    cpu_usage: z.number().min(0).max(100).optional(),
+    cpu_usage: z.number().min(0).max(100).optional()
 });
 export const CreateExportJobSchema = ExportJobSchema.omit({
     id: true,
@@ -119,7 +119,7 @@ export const CreateExportJobSchema = ExportJobSchema.omit({
     processing_log: true,
     processing_duration: true,
     memory_usage: true,
-    cpu_usage: true,
+    cpu_usage: true
 });
 export const UpdateExportJobSchema = z.object({
     status: ExportJobStatusSchema.optional(),
@@ -134,7 +134,7 @@ export const UpdateExportJobSchema = z.object({
     processing_log: z.string().optional(),
     processing_duration: z.number().int().min(0).optional(),
     memory_usage: z.number().int().min(0).optional(),
-    cpu_usage: z.number().min(0).max(100).optional(),
+    cpu_usage: z.number().min(0).max(100).optional()
 });
 // Export Schedule Types
 export const ExportScheduleSchema = z.object({
@@ -160,7 +160,7 @@ export const ExportScheduleSchema = z.object({
     next_run_at: z.string().datetime().optional(),
     total_runs: z.number().int().min(0).default(0),
     successful_runs: z.number().int().min(0).default(0),
-    failed_runs: z.number().int().min(0).default(0),
+    failed_runs: z.number().int().min(0).default(0)
 });
 export const CreateExportScheduleSchema = ExportScheduleSchema.omit({
     id: true,
@@ -170,37 +170,50 @@ export const CreateExportScheduleSchema = ExportScheduleSchema.omit({
     next_run_at: true,
     total_runs: true,
     successful_runs: true,
-    failed_runs: true,
+    failed_runs: true
 });
 export const UpdateExportScheduleSchema = CreateExportScheduleSchema.partial();
 // Export Share Types
+export const ShareAccessLevelSchema = z.enum([
+    'public',
+    'password_protected',
+    'private'
+]);
 export const ExportShareSchema = z.object({
     id: z.string().uuid(),
     export_job_id: z.string().uuid(),
     // Share configuration
     share_token: z.string().min(1).max(255),
-    share_name: z.string().max(255).optional(),
-    password_protected: z.boolean().default(false),
-    password_hash: z.string().max(255).optional(),
+    access_level: ShareAccessLevelSchema.default('public'),
+    password: z.string().optional(),
+    description: z.string().optional(),
     // Access control
-    allowed_downloads: z.number().int().default(-1), // -1 for unlimited
+    max_downloads: z.number().int().min(1).optional(), // null for unlimited
     download_count: z.number().int().min(0).default(0),
     allowed_ips: z.array(z.string()).default([]),
+    // Share permissions  
+    allow_download: z.boolean().default(true),
+    allow_preview: z.boolean().default(true),
+    track_access: z.boolean().default(true),
+    notify_on_access: z.boolean().default(false),
     // Share metadata
     created_by: z.string().uuid(),
     created_at: z.string().datetime(),
     expires_at: z.string().datetime().optional(),
+    expires_in_days: z.number().int().min(1).optional(),
     is_active: z.boolean().default(true),
     // Share statistics
     last_accessed_at: z.string().datetime().optional(),
     access_count: z.number().int().min(0).default(0),
+    // Share URL
+    share_url: z.string().url().optional()
 });
 export const CreateExportShareSchema = ExportShareSchema.omit({
     id: true,
     created_at: true,
     download_count: true,
     last_accessed_at: true,
-    access_count: true,
+    access_count: true
 });
 export const UpdateExportShareSchema = z.object({
     share_name: z.string().max(255).optional(),
@@ -209,7 +222,7 @@ export const UpdateExportShareSchema = z.object({
     allowed_downloads: z.number().int().optional(),
     allowed_ips: z.array(z.string()).optional(),
     expires_at: z.string().datetime().optional(),
-    is_active: z.boolean().optional(),
+    is_active: z.boolean().optional()
 });
 // Export Analytics Types
 export const ExportAnalyticsSchema = z.object({
@@ -229,13 +242,13 @@ export const ExportAnalyticsSchema = z.object({
     // Temporal data
     exported_at: z.string().datetime(),
     date_bucket: z.string().date(),
-    hour_bucket: z.string().datetime(),
+    hour_bucket: z.string().datetime()
 });
 export const CreateExportAnalyticsSchema = ExportAnalyticsSchema.omit({
     id: true,
     exported_at: true,
     date_bucket: true,
-    hour_bucket: true,
+    hour_bucket: true
 });
 // Export Format Definition Types
 export const ExportFormatDefinitionSchema = z.object({
@@ -259,12 +272,12 @@ export const ExportFormatDefinitionSchema = z.object({
     is_enabled: z.boolean().default(true),
     is_system_format: z.boolean().default(true),
     created_at: z.string().datetime(),
-    updated_at: z.string().datetime(),
+    updated_at: z.string().datetime()
 });
 export const CreateExportFormatDefinitionSchema = ExportFormatDefinitionSchema.omit({
     id: true,
     created_at: true,
-    updated_at: true,
+    updated_at: true
 });
 export const UpdateExportFormatDefinitionSchema = CreateExportFormatDefinitionSchema.partial();
 // Export Options Types
@@ -279,41 +292,41 @@ export const CommonExportOptionsSchema = z.object({
     // Filtering options
     date_range: z.object({
         start: z.string().datetime().optional(),
-        end: z.string().datetime().optional(),
+        end: z.string().datetime().optional()
     }).optional(),
     user_filters: z.array(z.string().uuid()).optional(),
     // Output options
     compress_output: z.boolean().default(false),
     encrypt_output: z.boolean().default(false),
-    encryption_key: z.string().optional(),
+    encryption_key: z.string().optional()
 });
 export const JsonExportOptionsSchema = CommonExportOptionsSchema.extend({
     pretty: z.boolean().default(true),
     include_schema: z.boolean().default(false),
-    array_format: z.boolean().default(false),
+    array_format: z.boolean().default(false)
 });
 export const YamlExportOptionsSchema = CommonExportOptionsSchema.extend({
     include_comments: z.boolean().default(true),
     flow_style: z.boolean().default(false),
-    explicit_start: z.boolean().default(false),
+    explicit_start: z.boolean().default(false)
 });
 export const XmlExportOptionsSchema = CommonExportOptionsSchema.extend({
     pretty: z.boolean().default(true),
     include_schema: z.boolean().default(true),
     namespace: z.string().optional(),
-    root_element: z.string().default('export'),
+    root_element: z.string().default('export')
 });
 export const CsvExportOptionsSchema = CommonExportOptionsSchema.extend({
     delimiter: z.string().default(','),
     include_headers: z.boolean().default(true),
     quote_all: z.boolean().default(false),
-    flatten_objects: z.boolean().default(true),
+    flatten_objects: z.boolean().default(true)
 });
 export const MarkdownExportOptionsSchema = CommonExportOptionsSchema.extend({
     include_toc: z.boolean().default(true),
     format: z.enum(['github', 'commonmark']).default('github'),
     heading_level: z.number().int().min(1).max(6).default(1),
-    code_blocks: z.boolean().default(true),
+    code_blocks: z.boolean().default(true)
 });
 export const PdfExportOptionsSchema = CommonExportOptionsSchema.extend({
     page_size: z.enum(['A4', 'A3', 'Letter', 'Legal']).default('A4'),
@@ -324,25 +337,25 @@ export const PdfExportOptionsSchema = CommonExportOptionsSchema.extend({
         top: z.number().min(0).default(20),
         right: z.number().min(0).default(20),
         bottom: z.number().min(0).default(20),
-        left: z.number().min(0).default(20),
+        left: z.number().min(0).default(20)
     }).default({
         top: 20,
         right: 20,
         bottom: 20,
-        left: 20,
-    }),
+        left: 20
+    })
 });
 export const HtmlExportOptionsSchema = CommonExportOptionsSchema.extend({
     include_css: z.boolean().default(true),
     standalone: z.boolean().default(true),
     theme: z.enum(['default', 'dark', 'light']).default('default'),
-    minify: z.boolean().default(false),
+    minify: z.boolean().default(false)
 });
 export const ZipExportOptionsSchema = CommonExportOptionsSchema.extend({
     compression_level: z.number().int().min(0).max(9).default(6),
     include_metadata: z.boolean().default(true),
     separate_files: z.boolean().default(false),
-    folder_structure: z.boolean().default(true),
+    folder_structure: z.boolean().default(true)
 });
 // Export Result Types
 export const ExportResultSchema = z.object({
@@ -352,7 +365,7 @@ export const ExportResultSchema = z.object({
     file_size: z.number().int().min(0).optional(),
     expires_at: z.string().datetime().optional(),
     share_token: z.string().optional(),
-    error_message: z.string().optional(),
+    error_message: z.string().optional()
 });
 export const ExportProgressSchema = z.object({
     job_id: z.string().uuid(),
@@ -360,7 +373,7 @@ export const ExportProgressSchema = z.object({
     progress_percentage: z.number().int().min(0).max(100),
     current_step: z.string().optional(),
     estimated_completion: z.string().datetime().optional(),
-    processing_log: z.string().optional(),
+    processing_log: z.string().optional()
 });
 // Export Statistics Types
 export const ExportStatisticsSchema = z.object({
@@ -373,16 +386,14 @@ export const ExportStatisticsSchema = z.object({
     most_used_templates: z.array(z.object({
         template_id: z.string().uuid(),
         template_name: z.string(),
-        usage_count: z.number().int().min(0),
+        usage_count: z.number().int().min(0)
     })),
     success_rate: z.number().min(0).max(100),
-    last_export_at: z.string().datetime().optional(),
+    last_export_at: z.string().datetime().optional()
 });
 // Validation helpers
-export const validateExportOptions = (format, options) => {
+export function validateExportOptions(format, options) {
     switch (format) {
-        case 'json':
-            return JsonExportOptionsSchema.safeParse(options);
         case 'yaml':
             return YamlExportOptionsSchema.safeParse(options);
         case 'xml':
@@ -400,37 +411,6 @@ export const validateExportOptions = (format, options) => {
         default:
             return CommonExportOptionsSchema.safeParse(options);
     }
-};
+}
 // Constants
-export const EXPORT_FORMATS = [
-    'json',
-    'yaml',
-    'xml',
-    'csv',
-    'markdown',
-    'pdf',
-    'html',
-    'zip'
-];
-export const TEMPLATE_TYPES = [
-    'full',
-    'summary',
-    'diff',
-    'custom'
-];
-export const EXPORT_TYPES = [
-    'version',
-    'branch',
-    'comparison',
-    'full_project'
-];
-export const EXPORT_JOB_STATUSES = [
-    'pending',
-    'processing',
-    'completed',
-    'failed',
-    'cancelled'
-];
-export const DEFAULT_EXPORT_EXPIRATION_HOURS = 24;
 export const MAX_EXPORT_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-export const MAX_CONCURRENT_EXPORTS = 3;

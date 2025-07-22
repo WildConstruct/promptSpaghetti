@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Statistics dashboard for workspace activity
  */
 import { useState } from 'react';
-export const ActivityStats = ({ stats, workspaceId, className = '', }) => {
+export const ActivityStats = ({ stats, workspaceId, className = '' }) => {
     const [activeTab, setActiveTab] = useState('overview');
     const topEventTypes = Object.entries(stats.events_by_type)
         .sort(([, a], [, b]) => b - a)

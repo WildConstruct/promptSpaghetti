@@ -26,7 +26,14 @@ interface AdvancedPromptingCollaborationPanelProps {
   className?: string;
 }
 
-export   const [currentSession, setCurrentSession] = useState<PromptingMethodologySession | null>(null);
+export const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps> = ({ 
+  currentUser,
+  onMARSRegionCreate, 
+  onZadaPatternCreate,
+  onVFXExport, 
+  className 
+}) => {
+  const [currentSession, setCurrentSession] = useState<PromptingMethodologySession | null>(null);
   const [sessions, setSessions] = useState<PromptingMethodologySession[]>([]);
   const [marsTemplates, setMarsTemplates] = useState<MARSRegionTemplate[]>([]);
   const [zadaPatterns, setZadaPatterns] = useState<ZadaPromptPattern[]>([]);

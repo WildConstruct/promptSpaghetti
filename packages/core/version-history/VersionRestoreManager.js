@@ -277,7 +277,7 @@ export class VersionRestoreManager {
                 type: 'workflow_conflict',
                 element_id: 'approval_status',
                 element_type: 'metadata',
-                description: `Approval status has changed since snapshot`,
+                description: 'Approval status has changed since snapshot',
                 current_value: currentData.approval_status,
                 restore_value: snapshotData.approval_status,
                 suggested_resolution: 'keep_current',

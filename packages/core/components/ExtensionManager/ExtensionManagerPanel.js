@@ -33,7 +33,7 @@ export const ExtensionManagerPanel = ({ className = '', onClose, initialView = '
     // Filter and search extensions
     const filteredExtensions = useMemo(() => {
         const extensions = currentView === 'marketplace' ? availableExtensions : installedExtensions;
-        let filtered = extensions.filter(ext => {
+        const filtered = extensions.filter(ext => {
             // Search query filter
             if (searchQuery) {
                 const query = searchQuery.toLowerCase();

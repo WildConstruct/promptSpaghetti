@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export const RestorePrompt = ({ show, draft, onRestore, onDismiss, }) => {
+export const RestorePrompt = ({ show, draft, onRestore, onDismiss }) => {
     if (!show || !draft) {
         return null;
     }
@@ -14,7 +14,7 @@ export const RestorePrompt = ({ show, draft, onRestore, onDismiss, }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'center'
         }, "data-testid": "restore-draft-modal", children: _jsxs("div", { style: {
                 background: '#23262b',
                 padding: 32,

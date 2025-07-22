@@ -4,10 +4,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Modal for creating new workspaces
  */
 import { useState } from 'react';
-export const CreateWorkspaceModal = ({ onSubmit, onCancel, }) => {
+export const CreateWorkspaceModal = ({ onSubmit, onCancel }) => {
     const [formData, setFormData] = useState({
         name: '',
-        description: '',
+        description: ''
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,7 +37,7 @@ export const CreateWorkspaceModal = ({ onSubmit, onCancel, }) => {
         try {
             await onSubmit({
                 name: formData.name.trim(),
-                description: formData.description.trim() || undefined,
+                description: formData.description.trim() || undefined
             });
         }
         catch (error) {

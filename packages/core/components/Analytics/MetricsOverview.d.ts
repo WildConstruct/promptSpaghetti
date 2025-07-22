@@ -5,6 +5,8 @@ import React from 'react';
 export interface MetricsOverviewProps {
     summary: any;
     dashboardData: any;
+    conversionData?: any;
+    performanceData?: any;
     loading: boolean;
 }
 /**

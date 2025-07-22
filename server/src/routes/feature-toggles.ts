@@ -282,6 +282,70 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
     }
   });
 
+  // POST /toggles/:id/deactivate - Deactivate toggle (with dry-run option)
+  fastify.post('/toggles/:id/deactivate', {
+    preHandler: [fastify.authenticate, requireAdmin],
+    schema: {
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: { id: { type: 'string', format: 'uuid' } }
+      },
+      querystring: {
+        type: 'object',
+        properties: {
+          dryRun: { type: 'boolean', default: false }
+        }
+      },
+      body: {
+        type: 'object',
+        properties: {
+          reason: { type: 'string', maxLength: 200 }
+        }
+      }
+    }
+  }, async (request, reply) => {
+    try {
+      const { id } = request.params as { id: string };
+      const { dryRun } = request.query as { dryRun?: boolean };
+      const { reason } = request.body as { reason?: string };
+      const user = (request as any).user;
+      
+      if (dryRun) {
+        // Simulate impact analysis for deactivation
+        const toggle = await dao.getToggleById(id);
+        if (!toggle) {
+          return reply.code(404).send({ error: 'Toggle not found' });
+        }
+        
+        const dependencies = await dao.getDependencyAnalysis(id);
+        
+        return reply.send({
+          impact: {
+            togglesAffected: dependencies.impactRadius,
+            dependencies: dependencies.dependencies,
+            dependents: dependencies.dependents,
+            estimatedUserImpact: 'TBD', // TODO: Integrate with Epic 13 analytics
+            claudeImpact: toggle.claudeImpact,
+            deactivationRisk: toggle.enabled ? 'MEDIUM' : 'LOW'
+          },
+          wouldDeactivate: true
+        });
+      }
+      
+      const toggle = await service.updateToggle({
+        id,
+        enabled: false,
+        reason
+      }, user.id);
+      
+      return reply.send(toggle);
+    } catch (error) {
+      request.log.error('Error deactivating toggle:', error);
+      return reply.code(400).send({ error: error.message });
+    }
+  });
+
   // POST /toggles/:id/rollback - Rollback toggle to previous version
   fastify.post('/toggles/:id/rollback', {
     preHandler: [fastify.authenticate, requireAdmin],

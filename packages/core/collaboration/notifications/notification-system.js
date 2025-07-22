@@ -48,7 +48,7 @@ The Team`,
             channels: {
                 in_app: {
                     subject: 'Invited to {{project_name}}',
-                    body: '{{actor_name}} invited you to collaborate on {{project_name}}.',
+                    body: '{{actor_name}} invited you to collaborate on {{project_name}}.'
                 },
                 email: {
                     subject: 'Invitation to collaborate on {{project_name}}',
@@ -74,7 +74,7 @@ The Team`
             channels: {
                 in_app: {
                     subject: '{{actor_name}} mentioned you',
-                    body: '{{actor_name}} mentioned you in a comment on {{resource_name}}.',
+                    body: '{{actor_name}} mentioned you in a comment on {{resource_name}}.'
                 },
                 email: {
                     subject: 'You were mentioned in {{resource_name}}',
@@ -97,7 +97,7 @@ The Team`
             channels: {
                 in_app: {
                     subject: 'Reply to your comment',
-                    body: '{{actor_name}} replied to your comment on {{resource_name}}.',
+                    body: '{{actor_name}} replied to your comment on {{resource_name}}.'
                 },
                 email: {
                     subject: 'New reply to your comment on {{resource_name}}',
@@ -120,7 +120,7 @@ The Team`
             channels: {
                 in_app: {
                     subject: '{{resource_name}} shared with you',
-                    body: '{{actor_name}} shared {{resource_name}} with you.',
+                    body: '{{actor_name}} shared {{resource_name}} with you.'
                 },
                 email: {
                     subject: '{{actor_name}} shared {{resource_name}} with you',
@@ -146,7 +146,7 @@ The Team`
             channels: {
                 in_app: {
                     subject: 'Your role has been updated',
-                    body: 'Your role in {{workspace_name}} has been changed to {{new_role}}.',
+                    body: 'Your role in {{workspace_name}} has been changed to {{new_role}}.'
                 },
                 email: {
                     subject: 'Role update in {{workspace_name}}',
@@ -172,7 +172,7 @@ The Team`
             channels: {
                 in_app: {
                     subject: 'Activity digest for {{workspace_name}}',
-                    body: 'Here\'s what happened in {{workspace_name}} since your last visit.',
+                    body: 'Here\'s what happened in {{workspace_name}} since your last visit.'
                 },
                 email: {
                     subject: 'Activity digest for {{workspace_name}}',

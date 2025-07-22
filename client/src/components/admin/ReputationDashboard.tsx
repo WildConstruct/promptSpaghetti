@@ -119,7 +119,11 @@ interface ReputationDashboardProps {
   refreshInterval?: number;
 }
 
-export   const [loading, setLoading] = useState(true);
+export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({ 
+  className, 
+  refreshInterval = 300000 
+}) => {
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   

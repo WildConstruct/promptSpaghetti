@@ -1,4 +1,4 @@
-import { RuntimeNode, ExecutionContext } from './index';
+import { RuntimeNode, ExecutionContext } from './types';
 export interface ValidationResult {
     valid: boolean;
     errors: string[];

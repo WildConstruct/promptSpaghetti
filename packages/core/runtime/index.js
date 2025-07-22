@@ -4,12 +4,9 @@
 // and returns output plus possibly mutated context.
 // These are thin stubs for now; they will be fully implemented in later tasks.
 import { SecurityValidation } from '../validation/security';
-export class RuntimeNode {
-    id;
-    constructor(id) {
-        this.id = id;
-    }
-}
+import { RuntimeNode } from './types';
+// Re-export types
+export { RuntimeNode } from './types';
 /* ------------------------- Core node runtimes ------------------------- */
 export class WeightedChoiceNode extends RuntimeNode {
     choices;

@@ -807,5 +807,3 @@ export const VerificationDashboard: React.FC<VerificationDashboardProps> = ({
     </div>
   );
 };
-
-export default VerificationDashboard;

@@ -46,6 +46,12 @@
   color: #1f2937;
 }
 
+.mobile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* Sidebar */
 .admin-sidebar {
   width: 280px;
@@ -73,6 +79,10 @@
 
 .sidebar-logo svg {
   color: #3b82f6;
+}
+
+.sidebar-alert-status {
+  margin-left: auto;
 }
 
 /* Navigation */
@@ -115,11 +125,18 @@
   min-width: 0;
 }
 
+.nav-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
 .nav-item-label {
-  display: block;
   font-weight: 500;
   color: #1f2937;
-  margin-bottom: 2px;
+  flex: 1;
 }
 
 .nav-item.active .nav-item-label {

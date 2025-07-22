@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 export const useNodeUtils = ({ nodeTypes }) => {
     const getNodeMeta = useMemo(() => {
         return (nodeType) => {
@@ -7,16 +7,16 @@ export const useNodeUtils = ({ nodeTypes }) => {
                 return {
                     id: 'default',
                     label: 'Unknown',
-                    icon: "🔧",
-                    category: "unknown",
-                    tooltip: "Unknown node type"
+                    icon: '🔧',
+                    category: 'unknown',
+                    tooltip: 'Unknown node type'
                 };
             }
             return nodeTypes.find(n => n.id === nodeType) || {
                 id: nodeType,
                 label: nodeType.charAt(0).toUpperCase() + nodeType.slice(1),
-                icon: "🔧",
-                category: "unknown",
+                icon: '🔧',
+                category: 'unknown',
                 tooltip: `${nodeType} node`
             };
         };
@@ -34,6 +34,6 @@ export const useNodeUtils = ({ nodeTypes }) => {
     }, []);
     return {
         getNodeMeta,
-        getCategoryColor,
+        getCategoryColor
     };
 };

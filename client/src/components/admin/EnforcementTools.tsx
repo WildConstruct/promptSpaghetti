@@ -159,7 +159,8 @@ export interface EnforcementToolsProps {
   className?: string;
 }
 
-export   const [loading, setLoading] = useState(false);
+export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className }) => {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   // Data state

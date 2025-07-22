@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export const ActivityItem = ({ activity, onClick, compact = false, showProject = true, isLast = false, }) => {
+export const ActivityItem = ({ activity, onClick, compact = false, showProject = true, isLast = false }) => {
     const getActivityIcon = (eventType) => {
         if (eventType.includes('created'))
             return '✨';

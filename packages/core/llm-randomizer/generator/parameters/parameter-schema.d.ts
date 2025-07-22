@@ -7,12 +7,12 @@ export declare const NodeTypePreference: z.ZodObject<{
     weight: z.ZodNumber;
     required: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    nodeType: string;
     weight: number;
     required: boolean;
-}, {
     nodeType: string;
+}, {
     weight: number;
+    nodeType: string;
     required?: boolean | undefined;
 }>;
 export declare const RandomizerParametersSchema: z.ZodObject<{
@@ -27,12 +27,12 @@ export declare const RandomizerParametersSchema: z.ZodObject<{
         weight: z.ZodNumber;
         required: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        nodeType: string;
         weight: number;
         required: boolean;
-    }, {
         nodeType: string;
+    }, {
         weight: number;
+        nodeType: string;
         required?: boolean | undefined;
     }>, "many">>;
     specificRequirements: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -51,56 +51,56 @@ export declare const RandomizerParametersSchema: z.ZodObject<{
     outputFormat: z.ZodDefault<z.ZodEnum<["graph", "serialized", "both"]>>;
     includeExplanation: z.ZodDefault<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    style: "creative" | "balanced" | "logical";
+    includeMetadata: boolean;
+    complexity: "simple" | "complex" | "moderate";
+    style: "creative" | "logical" | "balanced";
     nodeTypes: {
-        nodeType: string;
         weight: number;
         required: boolean;
+        nodeType: string;
     }[];
-    includeMetadata: boolean;
-    nodeCount: number;
     constraints: string[];
-    complexity: "simple" | "moderate" | "complex";
+    nodeCount: number;
+    temperature: number;
+    maxRetries: number;
     purpose: string;
     specificRequirements: string[];
     focusAreas: string[];
     provider: "openai" | "claude" | "gemini";
-    temperature: number;
-    maxRetries: number;
     validateOutput: boolean;
     enablePreview: boolean;
     preferredPatterns: string[];
     avoidPatterns: string[];
-    qualityLevel: "draft" | "high" | "standard";
+    qualityLevel: "high" | "standard" | "draft";
     diversityScore: number;
     outputFormat: "both" | "graph" | "serialized";
     includeExplanation: boolean;
     domain?: string | undefined;
     userContext?: string | undefined;
 }, {
-    style: "creative" | "balanced" | "logical";
+    complexity: "simple" | "complex" | "moderate";
+    style: "creative" | "logical" | "balanced";
     nodeCount: number;
-    complexity: "simple" | "moderate" | "complex";
     purpose: string;
+    includeMetadata?: boolean | undefined;
     nodeTypes?: {
-        nodeType: string;
         weight: number;
+        nodeType: string;
         required?: boolean | undefined;
     }[] | undefined;
-    includeMetadata?: boolean | undefined;
     constraints?: string[] | undefined;
+    temperature?: number | undefined;
+    maxRetries?: number | undefined;
     domain?: string | undefined;
     userContext?: string | undefined;
     specificRequirements?: string[] | undefined;
     focusAreas?: string[] | undefined;
     provider?: "openai" | "claude" | "gemini" | undefined;
-    temperature?: number | undefined;
-    maxRetries?: number | undefined;
     validateOutput?: boolean | undefined;
     enablePreview?: boolean | undefined;
     preferredPatterns?: string[] | undefined;
     avoidPatterns?: string[] | undefined;
-    qualityLevel?: "draft" | "high" | "standard" | undefined;
+    qualityLevel?: "high" | "standard" | "draft" | undefined;
     diversityScore?: number | undefined;
     outputFormat?: "both" | "graph" | "serialized" | undefined;
     includeExplanation?: boolean | undefined;
@@ -123,12 +123,12 @@ export declare const ParameterPresetSchema: z.ZodObject<{
             weight: z.ZodNumber;
             required: z.ZodDefault<z.ZodBoolean>;
         }, "strip", z.ZodTypeAny, {
-            nodeType: string;
             weight: number;
             required: boolean;
-        }, {
             nodeType: string;
+        }, {
             weight: number;
+            nodeType: string;
             required?: boolean | undefined;
         }>, "many">>;
         specificRequirements: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -147,56 +147,56 @@ export declare const ParameterPresetSchema: z.ZodObject<{
         outputFormat: z.ZodDefault<z.ZodEnum<["graph", "serialized", "both"]>>;
         includeExplanation: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        style: "creative" | "balanced" | "logical";
+        includeMetadata: boolean;
+        complexity: "simple" | "complex" | "moderate";
+        style: "creative" | "logical" | "balanced";
         nodeTypes: {
-            nodeType: string;
             weight: number;
             required: boolean;
+            nodeType: string;
         }[];
-        includeMetadata: boolean;
-        nodeCount: number;
         constraints: string[];
-        complexity: "simple" | "moderate" | "complex";
+        nodeCount: number;
+        temperature: number;
+        maxRetries: number;
         purpose: string;
         specificRequirements: string[];
         focusAreas: string[];
         provider: "openai" | "claude" | "gemini";
-        temperature: number;
-        maxRetries: number;
         validateOutput: boolean;
         enablePreview: boolean;
         preferredPatterns: string[];
         avoidPatterns: string[];
-        qualityLevel: "draft" | "high" | "standard";
+        qualityLevel: "high" | "standard" | "draft";
         diversityScore: number;
         outputFormat: "both" | "graph" | "serialized";
         includeExplanation: boolean;
         domain?: string | undefined;
         userContext?: string | undefined;
     }, {
-        style: "creative" | "balanced" | "logical";
+        complexity: "simple" | "complex" | "moderate";
+        style: "creative" | "logical" | "balanced";
         nodeCount: number;
-        complexity: "simple" | "moderate" | "complex";
         purpose: string;
+        includeMetadata?: boolean | undefined;
         nodeTypes?: {
-            nodeType: string;
             weight: number;
+            nodeType: string;
             required?: boolean | undefined;
         }[] | undefined;
-        includeMetadata?: boolean | undefined;
         constraints?: string[] | undefined;
+        temperature?: number | undefined;
+        maxRetries?: number | undefined;
         domain?: string | undefined;
         userContext?: string | undefined;
         specificRequirements?: string[] | undefined;
         focusAreas?: string[] | undefined;
         provider?: "openai" | "claude" | "gemini" | undefined;
-        temperature?: number | undefined;
-        maxRetries?: number | undefined;
         validateOutput?: boolean | undefined;
         enablePreview?: boolean | undefined;
         preferredPatterns?: string[] | undefined;
         avoidPatterns?: string[] | undefined;
-        qualityLevel?: "draft" | "high" | "standard" | undefined;
+        qualityLevel?: "high" | "standard" | "draft" | undefined;
         diversityScore?: number | undefined;
         outputFormat?: "both" | "graph" | "serialized" | undefined;
         includeExplanation?: boolean | undefined;
@@ -211,36 +211,36 @@ export declare const ParameterPresetSchema: z.ZodObject<{
     updatedAt: string;
     name: string;
     description: string;
-    category: string;
-    tags: string[];
     parameters: {
-        style: "creative" | "balanced" | "logical";
+        includeMetadata: boolean;
+        complexity: "simple" | "complex" | "moderate";
+        style: "creative" | "logical" | "balanced";
         nodeTypes: {
-            nodeType: string;
             weight: number;
             required: boolean;
+            nodeType: string;
         }[];
-        includeMetadata: boolean;
-        nodeCount: number;
         constraints: string[];
-        complexity: "simple" | "moderate" | "complex";
+        nodeCount: number;
+        temperature: number;
+        maxRetries: number;
         purpose: string;
         specificRequirements: string[];
         focusAreas: string[];
         provider: "openai" | "claude" | "gemini";
-        temperature: number;
-        maxRetries: number;
         validateOutput: boolean;
         enablePreview: boolean;
         preferredPatterns: string[];
         avoidPatterns: string[];
-        qualityLevel: "draft" | "high" | "standard";
+        qualityLevel: "high" | "standard" | "draft";
         diversityScore: number;
         outputFormat: "both" | "graph" | "serialized";
         includeExplanation: boolean;
         domain?: string | undefined;
         userContext?: string | undefined;
     };
+    category: string;
+    tags: string[];
     isDefault: boolean;
 }, {
     id: string;
@@ -248,35 +248,35 @@ export declare const ParameterPresetSchema: z.ZodObject<{
     updatedAt: string;
     name: string;
     description: string;
-    category: string;
     parameters: {
-        style: "creative" | "balanced" | "logical";
+        complexity: "simple" | "complex" | "moderate";
+        style: "creative" | "logical" | "balanced";
         nodeCount: number;
-        complexity: "simple" | "moderate" | "complex";
         purpose: string;
+        includeMetadata?: boolean | undefined;
         nodeTypes?: {
-            nodeType: string;
             weight: number;
+            nodeType: string;
             required?: boolean | undefined;
         }[] | undefined;
-        includeMetadata?: boolean | undefined;
         constraints?: string[] | undefined;
+        temperature?: number | undefined;
+        maxRetries?: number | undefined;
         domain?: string | undefined;
         userContext?: string | undefined;
         specificRequirements?: string[] | undefined;
         focusAreas?: string[] | undefined;
         provider?: "openai" | "claude" | "gemini" | undefined;
-        temperature?: number | undefined;
-        maxRetries?: number | undefined;
         validateOutput?: boolean | undefined;
         enablePreview?: boolean | undefined;
         preferredPatterns?: string[] | undefined;
         avoidPatterns?: string[] | undefined;
-        qualityLevel?: "draft" | "high" | "standard" | undefined;
+        qualityLevel?: "high" | "standard" | "draft" | undefined;
         diversityScore?: number | undefined;
         outputFormat?: "both" | "graph" | "serialized" | undefined;
         includeExplanation?: boolean | undefined;
     };
+    category: string;
     tags?: string[] | undefined;
     isDefault?: boolean | undefined;
 }>;
@@ -310,6 +310,7 @@ export declare const ValidationResultSchema: z.ZodObject<{
         suggestion?: string | undefined;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
+    isValid: boolean;
     errors: {
         code: string;
         message: string;
@@ -320,8 +321,8 @@ export declare const ValidationResultSchema: z.ZodObject<{
         field: string;
         suggestion?: string | undefined;
     }[];
-    isValid: boolean;
 }, {
+    isValid: boolean;
     errors: {
         code: string;
         message: string;
@@ -332,7 +333,6 @@ export declare const ValidationResultSchema: z.ZodObject<{
         field: string;
         suggestion?: string | undefined;
     }[];
-    isValid: boolean;
 }>;
 export type ValidationResult = z.infer<typeof ValidationResultSchema>;
 /**
@@ -368,5 +368,27 @@ export declare class ParameterValidator {
 /**
  * Default parameter presets
  */
-export declare const defaultPresets: ParameterPreset[];
+export declare const defaultPresets: {
+    readonly creative: {
+        readonly id: "creative";
+        readonly name: "Creative";
+        readonly temperature: 0.9;
+        readonly complexity: "medium";
+        readonly style: "creative";
+    };
+    readonly balanced: {
+        readonly id: "balanced";
+        readonly name: "Balanced";
+        readonly temperature: 0.7;
+        readonly complexity: "medium";
+        readonly style: "balanced";
+    };
+    readonly precise: {
+        readonly id: "precise";
+        readonly name: "Precise";
+        readonly temperature: 0.3;
+        readonly complexity: "simple";
+        readonly style: "technical";
+    };
+};
 //# sourceMappingURL=parameter-schema.d.ts.map

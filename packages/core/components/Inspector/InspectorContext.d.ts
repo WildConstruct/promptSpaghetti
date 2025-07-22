@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
-import { Node } from "reactflow";
-import { ZodSchema } from "zod";
+import React, { ReactNode } from 'react';
+import { Node } from 'reactflow';
+import { ZodSchema } from 'zod';
 interface InspectorState {
     selectedNode: Node | null;
     selectedSchema: ZodSchema<any> | null;

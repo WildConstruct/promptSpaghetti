@@ -205,7 +205,7 @@ export class VersionHistoryManager {
     }
     async switchBranch(branchName) {
         try {
-            const response = await this.apiClient.post(`/api/branches/switch`, {
+            const response = await this.apiClient.post('/api/branches/switch', {
                 project_id: this.projectId,
                 branch_name: branchName
             });

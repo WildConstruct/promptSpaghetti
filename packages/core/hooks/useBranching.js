@@ -10,8 +10,8 @@ export const useBranching = () => {
                 ...options,
                 headers: {
                     'Content-Type': 'application/json',
-                    ...options.headers,
-                },
+                    ...options.headers
+                }
             });
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
@@ -36,18 +36,18 @@ export const useBranching = () => {
     const createBranch = useCallback(async (request) => {
         return apiCall('/api/branches', {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const updateBranch = useCallback(async (branchId, request) => {
         return apiCall(`/api/branches/${branchId}`, {
             method: 'PUT',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const deleteBranch = useCallback(async (branchId) => {
         return apiCall(`/api/branches/${branchId}`, {
-            method: 'DELETE',
+            method: 'DELETE'
         });
     }, [apiCall]);
     const getBranchById = useCallback(async (branchId) => {
@@ -91,8 +91,8 @@ export const useBranching = () => {
                 snapshotId: request.snapshotId,
                 commitMessage: request.commitMessage,
                 parentCommitIds: request.parentCommitIds,
-                commitMetadata: request.commitMetadata,
-            }),
+                commitMetadata: request.commitMetadata
+            })
         });
     }, [apiCall]);
     const getBranchCommits = useCallback(async (branchId, limit = 20, offset = 0) => {
@@ -105,13 +105,13 @@ export const useBranching = () => {
     const createMergeRequest = useCallback(async (request) => {
         return apiCall('/api/merge-requests', {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const updateMergeRequest = useCallback(async (mergeRequestId, request) => {
         return apiCall(`/api/merge-requests/${mergeRequestId}`, {
             method: 'PUT',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const getMergeRequestById = useCallback(async (mergeRequestId) => {
@@ -149,7 +149,7 @@ export const useBranching = () => {
     }, [apiCall]);
     const closeMergeRequest = useCallback(async (mergeRequestId) => {
         return apiCall(`/api/merge-requests/${mergeRequestId}/close`, {
-            method: 'POST',
+            method: 'POST'
         });
     }, [apiCall]);
     const mergeBranch = useCallback(async (request) => {
@@ -158,8 +158,8 @@ export const useBranching = () => {
             body: JSON.stringify({
                 mergeStrategy: request.mergeStrategy,
                 commitMessage: request.commitMessage,
-                deleteSourceBranch: request.deleteSourceBranch,
-            }),
+                deleteSourceBranch: request.deleteSourceBranch
+            })
         });
     }, [apiCall]);
     // Review operations
@@ -168,8 +168,8 @@ export const useBranching = () => {
             method: 'POST',
             body: JSON.stringify({
                 status: request.status,
-                reviewMessage: request.reviewMessage,
-            }),
+                reviewMessage: request.reviewMessage
+            })
         });
     }, [apiCall]);
     const updateReview = useCallback(async (reviewId, request) => {
@@ -201,7 +201,7 @@ export const useBranching = () => {
     const syncBranch = useCallback(async (request) => {
         return apiCall(`/api/branches/${request.branchId}/sync`, {
             method: 'POST',
-            body: JSON.stringify(request),
+            body: JSON.stringify(request)
         });
     }, [apiCall]);
     const clearError = useCallback(() => {
@@ -231,6 +231,6 @@ export const useBranching = () => {
         getBranchHierarchy,
         compareBranches,
         syncBranch,
-        clearError,
+        clearError
     };
 };

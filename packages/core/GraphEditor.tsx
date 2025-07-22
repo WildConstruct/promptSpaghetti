@@ -182,34 +182,35 @@ const NODE_TYPES: NodeMeta[] = [
     tooltip: 'Get a previously saved value from memory',
     category: 'memory'
   },
-  // Smart Content Tools
+  // Advanced Nodes
   {
     id: 'WeightedAdvanced',
     label: 'Smart Random',
     icon: '🎲',
     tooltip: 'Advanced random selection with custom distribution patterns',
-    category: 'smart'
+    category: 'advanced'
   },
   {
     id: 'Conditional',
     label: 'If/Then',
     icon: '🔀',
     tooltip: 'Choose different creative paths based on conditions',
-    category: 'smart'
+    category: 'advanced'
   },
+  // Transform & Logic
   {
     id: 'Sequential',
     label: 'Step by Step',
     icon: '🔄',
     tooltip: 'Process content in a specific creative sequence',
-    category: 'smart'
+    category: 'transform'
   },
   {
     id: 'Markov',
     label: 'Chain Process',
     icon: '🕸️',
     tooltip: 'Generate content based on probability patterns and transitions',
-    category: 'smart'
+    category: 'transform'
   },
   {
     id: 'PythonTransform',

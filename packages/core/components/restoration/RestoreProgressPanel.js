@@ -1,10 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
-import { Card, Progress, Typography, Space, Button, Statistic, Row, Col, Alert, Tag, List, Collapse, Modal, } from 'antd';
-import { LoadingOutlined, CheckCircleOutlined, CloseCircleOutlined, WarningOutlined, StopOutlined, InfoCircleOutlined, ClockCircleOutlined, EditOutlined, ExclamationCircleOutlined, } from '@ant-design/icons';
+import { Card, Progress, Typography, Space, Button, Statistic, Row, Col, Alert, Tag, List, Collapse, Modal } from 'antd';
+import { LoadingOutlined, CheckCircleOutlined, CloseCircleOutlined, WarningOutlined, StopOutlined, InfoCircleOutlined, ClockCircleOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
-export const RestoreProgressPanel = ({ progress, onCancel, showDetails = false, }) => {
+export const RestoreProgressPanel = ({ progress, onCancel, showDetails = false }) => {
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [detailsVisible, setDetailsVisible] = useState(showDetails);
     const getStatusIcon = (status) => {
@@ -76,16 +76,16 @@ export const RestoreProgressPanel = ({ progress, onCancel, showDetails = false, 
                                     { label: 'Total Operations', value: progress.totalOperations },
                                     { label: 'Completed Operations', value: progress.operationsCompleted },
                                     { label: 'Remaining Operations', value: progress.totalOperations - progress.operationsCompleted },
-                                    { label: 'Success Rate', value: `${Math.round((progress.operationsCompleted / progress.totalOperations) * 100)}%` },
+                                    { label: 'Success Rate', value: `${Math.round((progress.operationsCompleted / progress.totalOperations) * 100)}%` }
                                 ], renderItem: (item) => (_jsx(List.Item, { children: _jsxs(Space, { children: [_jsxs(Text, { type: "secondary", children: [item.label, ":"] }), _jsx(Text, { strong: true, children: item.value })] }) })) }) }, "operations"), _jsx(Panel, { header: "Conflict Resolution", children: _jsx(List, { size: "small", dataSource: [
                                     { label: 'Total Conflicts', value: progress.totalConflicts },
                                     { label: 'Resolved Conflicts', value: progress.conflictsResolved },
                                     { label: 'Remaining Conflicts', value: progress.totalConflicts - progress.conflictsResolved },
-                                    { label: 'Resolution Rate', value: progress.totalConflicts > 0 ? `${Math.round((progress.conflictsResolved / progress.totalConflicts) * 100)}%` : 'N/A' },
+                                    { label: 'Resolution Rate', value: progress.totalConflicts > 0 ? `${Math.round((progress.conflictsResolved / progress.totalConflicts) * 100)}%` : 'N/A' }
                                 ], renderItem: (item) => (_jsx(List.Item, { children: _jsxs(Space, { children: [_jsxs(Text, { type: "secondary", children: [item.label, ":"] }), _jsx(Text, { strong: true, children: item.value })] }) })) }) }, "conflicts"), _jsx(Panel, { header: "System Information", children: _jsx(List, { size: "small", dataSource: [
                                     { label: 'Restoration ID', value: progress.restorationAttemptId },
                                     { label: 'Status', value: progress.status },
                                     { label: 'Current Operation', value: progress.currentOperation || 'N/A' },
-                                    { label: 'Estimated Time Remaining', value: progress.estimatedTimeRemaining ? formatTime(progress.estimatedTimeRemaining) : 'N/A' },
+                                    { label: 'Estimated Time Remaining', value: progress.estimatedTimeRemaining ? formatTime(progress.estimatedTimeRemaining) : 'N/A' }
                                 ], renderItem: (item) => (_jsx(List.Item, { children: _jsxs(Space, { children: [_jsxs(Text, { type: "secondary", children: [item.label, ":"] }), _jsx(Text, { code: true, style: { fontSize: '12px' }, children: item.value })] }) })) }) }, "system")] }) })), _jsx(Modal, { title: "Cancel Restoration", visible: showCancelModal, onOk: handleCancelConfirm, onCancel: () => setShowCancelModal(false), okText: "Yes, Cancel", cancelText: "No, Continue", okButtonProps: { danger: true }, children: _jsxs(Space, { direction: "vertical", size: "middle", style: { width: '100%' }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px' }, children: [_jsx(ExclamationCircleOutlined, { style: { color: '#fa8c16', fontSize: '20px' } }), _jsx(Text, { strong: true, children: "Are you sure you want to cancel this restoration?" })] }), _jsx(Text, { type: "secondary", children: "Cancelling the restoration will stop the process and leave your project in its current state. Any changes that have already been applied will remain." }), _jsx("div", { style: { background: '#f5f5f5', padding: '12px', borderRadius: '4px' }, children: _jsxs(Text, { type: "secondary", children: ["Progress: ", progress.progressPercentage, "% complete (", progress.operationsCompleted, "/", progress.totalOperations, " operations)"] }) })] }) })] }));
 };

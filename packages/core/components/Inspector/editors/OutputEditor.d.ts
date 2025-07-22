@@ -1,6 +1,5 @@
-import React from "react";
-import { BaseNodeEditorProps } from "../BaseNodeEditor";
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 export interface OutputEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
 }
-export declare const OutputEditor: React.FC<OutputEditorProps>;
+export declare const label: string;
 //# sourceMappingURL=OutputEditor.d.ts.map

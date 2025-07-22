@@ -294,23 +294,10 @@ export interface VFXRenderingData {
   };
   
   // Camera parameters (for 3D-aware generation)
-  camera: {
-    fov?: number;                     // Field of view in degrees
-    focal?: number;                   // Focal length in mm
-    aperture?: number;                // f-stop
-    position?: [number, number, number]; // X, Y, Z coordinates
-    rotation?: [number, number, number]; // Pitch, yaw, roll
-    target?: [number, number, number];   // Look-at target
-  };
+  camera: VFXCameraParams;
   
   // Lighting conditions
-  lighting: {
-    timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night";
-    weather?: "clear" | "cloudy" | "overcast" | "stormy" | "foggy" | "snowy";
-    mood?: "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
-    temperature?: number;             // Color temperature in Kelvin
-    exposure?: number;                // EV adjustment
-  };
+  lighting: VFXLightingParams;
   
   // Style and post-processing
   style: {
@@ -363,13 +350,31 @@ export interface VFXControlNetOpenpose {
 }
 
 // === ANIMATION AND 3D TYPES ===
+// Define camera and lighting parameter types
+export interface VFXCameraParams {
+  fov?: number;                     // Field of view in degrees
+  focal?: number;                   // Focal length in mm
+  aperture?: number;                // f-stop
+  position?: [number, number, number]; // X, Y, Z coordinates
+  rotation?: [number, number, number]; // Pitch, yaw, roll
+  target?: [number, number, number];   // Look-at target
+}
+
+export interface VFXLightingParams {
+  timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night";
+  weather?: "clear" | "cloudy" | "overcast" | "stormy" | "foggy" | "snowy";
+  mood?: "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
+  temperature?: number;             // Color temperature in Kelvin
+  exposure?: number;                // EV adjustment
+}
+
 export interface VFXKeyframe {
   frame: number;
   timestamp: number;                  // Time in seconds
   prompt?: string;                    // Prompt for this keyframe
   variables?: { [key: string]: string }; // Variable values at this keyframe
-  camera?: Partial<VFXRenderingData['camera']>; // Camera state
-  lighting?: Partial<VFXRenderingData['lighting']>; // Lighting state
+  camera?: Partial<VFXCameraParams>; // Camera state
+  lighting?: Partial<VFXLightingParams>; // Lighting state
 }
 
 export interface VFXCameraData {

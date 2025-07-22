@@ -8,14 +8,14 @@ import { ActivityItem } from './ActivityItem';
 import { ActivityFilters } from './ActivityFilters';
 import { ActivityStats } from './ActivityStats';
 import { useActivityFeed } from '../../hooks/useActivityFeed';
-export const ActivityFeed = ({ workspaceId, userId, projectId, showStats = true, showFilters = true, maxItems, compact = false, }) => {
+export const ActivityFeed = ({ workspaceId, userId, projectId, showStats = true, showFilters = true, maxItems, compact = false }) => {
     const [filters, setFilters] = useState({
-        project_id: projectId,
+        project_id: projectId
     });
     const [selectedEvent, setSelectedEvent] = useState(null);
-    const { activities, loading, error, hasMore, stats, eventTypes, loadMore, refresh, } = useActivityFeed(workspaceId, userId, filters, {
+    const { activities, loading, error, hasMore, stats, eventTypes, loadMore, refresh } = useActivityFeed(workspaceId, userId, filters, {
         limit: maxItems || 20,
-        autoRefresh: true,
+        autoRefresh: true
     });
     const handleFilterChange = (newFilters) => {
         setFilters(prev => ({ ...prev, ...newFilters }));

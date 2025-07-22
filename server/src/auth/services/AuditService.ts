@@ -3,6 +3,7 @@
 
 import { IAuditService, AuditLog, AuthConfig, SecurityEvent } from '../types';
 import { DatabaseService } from '../database/DatabaseService';
+import { RetryUtils, retryableDatabase } from '../../utils/RetryUtils';
 
 export class AuditService implements IAuditService {
   private db: DatabaseService;
@@ -13,6 +14,7 @@ export class AuditService implements IAuditService {
     this.db = db;
   }
 
+  @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
   async logEvent(event: Omit<AuditLog, 'id' | 'createdAt'>): Promise<void> {
     try {
       await this.db.query(`

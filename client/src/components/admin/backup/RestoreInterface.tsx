@@ -1368,5 +1368,3 @@ const RestoreInterface: React.FC = () => {
     </div>
   );
 };
-
-export default RestoreInterface;

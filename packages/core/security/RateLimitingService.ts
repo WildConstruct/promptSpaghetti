@@ -843,5 +843,4 @@ export class RateLimitingService extends EventEmitter {
 }
 
 // Export default instance
-export 
 export default RateLimitingService;

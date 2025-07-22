@@ -7,13 +7,13 @@ import { useState } from 'react';
 import { CommentItem } from './CommentItem';
 import { CommentForm } from './CommentForm';
 import { useCommentReplies } from '../../hooks/useCommentReplies';
-export const CommentThread = ({ comment, workspaceId, userId, onReply, onUpdate, onDelete, onResolve, compact = false, isLast = false, }) => {
+export const CommentThread = ({ comment, workspaceId, userId, onReply, onUpdate, onDelete, onResolve, compact = false, isLast = false }) => {
     const [showReplyForm, setShowReplyForm] = useState(false);
     const [showReplies, setShowReplies] = useState(false);
-    const { replies, loading: repliesLoading, error: repliesError, loadMore: loadMoreReplies, hasMore: hasMoreReplies, refresh: refreshReplies, } = useCommentReplies({
+    const { replies, loading: repliesLoading, error: repliesError, loadMore: loadMoreReplies, hasMore: hasMoreReplies, refresh: refreshReplies } = useCommentReplies({
         commentId: comment.id,
         userId,
-        enabled: showReplies,
+        enabled: showReplies
     });
     const handleReply = async (content) => {
         try {

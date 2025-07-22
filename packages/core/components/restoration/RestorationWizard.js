@@ -13,25 +13,25 @@ const wizardSteps = [
     {
         title: 'Configure',
         description: 'Set restoration options',
-        icon: _jsx(RestoreOutlined, {}),
+        icon: _jsx(RestoreOutlined, {})
     },
     {
         title: 'Preview',
         description: 'Review changes',
-        icon: _jsx(ExclamationCircleOutlined, {}),
+        icon: _jsx(ExclamationCircleOutlined, {})
     },
     {
         title: 'Confirm',
         description: 'Confirm restoration',
-        icon: _jsx(CheckCircleOutlined, {}),
+        icon: _jsx(CheckCircleOutlined, {})
     },
     {
         title: 'Progress',
         description: 'Monitor progress',
-        icon: _jsx(LoadingOutlined, {}),
-    },
+        icon: _jsx(LoadingOutlined, {})
+    }
 ];
-export const RestorationWizard = ({ visible, onClose, projectId, sourceSnapshotId, targetSnapshotId, onSuccess, onError, }) => {
+export const RestorationWizard = ({ visible, onClose, projectId, sourceSnapshotId, targetSnapshotId, onSuccess, onError }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [form] = Form.useForm();
     const [config, setConfig] = useState({
@@ -39,7 +39,7 @@ export const RestorationWizard = ({ visible, onClose, projectId, sourceSnapshotI
         restorationStrategy: 'replace',
         preserveCurrentChanges: false,
         createBackup: true,
-        notifyOnCompletion: true,
+        notifyOnCompletion: true
     });
     const [preview, setPreview] = useState(null);
     const [restorationAttempt, setRestorationAttempt] = useState(null);
@@ -56,7 +56,7 @@ export const RestorationWizard = ({ visible, onClose, projectId, sourceSnapshotI
                 restorationStrategy: 'replace',
                 preserveCurrentChanges: false,
                 createBackup: true,
-                notifyOnCompletion: true,
+                notifyOnCompletion: true
             });
             setPreview(null);
             setRestorationAttempt(null);
@@ -105,7 +105,7 @@ export const RestorationWizard = ({ visible, onClose, projectId, sourceSnapshotI
                     projectId,
                     sourceSnapshotId,
                     targetSnapshotId,
-                    config: updatedConfig,
+                    config: updatedConfig
                 });
                 setPreview(previewData);
                 setCurrentStep(1);
@@ -130,7 +130,7 @@ export const RestorationWizard = ({ visible, onClose, projectId, sourceSnapshotI
                     projectId,
                     sourceSnapshotId,
                     targetSnapshotId,
-                    config,
+                    config
                 });
                 setRestorationAttempt(attempt);
                 setCurrentStep(3);
@@ -195,7 +195,7 @@ export const RestorationWizard = ({ visible, onClose, projectId, sourceSnapshotI
             'Configure Restoration',
             'Preview Changes',
             'Confirm Restoration',
-            'Restoration in Progress',
+            'Restoration in Progress'
         ];
         return stepTitles[currentStep] || 'Version Restoration';
     };

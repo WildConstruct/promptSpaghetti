@@ -32,7 +32,7 @@ const CanvasHeatMap = ({ data, width = 600, height = 400 }) => {
             // Create radial gradient for each point
             const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, 20);
             gradient.addColorStop(0, `rgba(59, 130, 246, ${alpha})`);
-            gradient.addColorStop(1, `rgba(59, 130, 246, 0)`);
+            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
             ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.arc(point.x, point.y, 20, 0, 2 * Math.PI);

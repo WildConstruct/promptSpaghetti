@@ -12,25 +12,25 @@ export const darkTheme = {
             secondary: '#2a2e37',
             tertiary: '#1e2228',
             elevated: '#2d3748',
-            overlay: 'rgba(0, 0, 0, 0.8)',
+            overlay: 'rgba(0, 0, 0, 0.8)'
         },
         text: {
             primary: '#ffffff',
             secondary: '#a0aec0',
             disabled: '#718096',
-            inverse: '#000000',
+            inverse: '#000000'
         },
         border: {
             primary: '#444444',
             secondary: '#2d3748',
-            active: '#63b3ed',
+            active: '#63b3ed'
         },
         status: {
             active: '#68d391',
             inactive: '#718096',
             regex: '#9f7aea',
-            priority: '#fbb040',
-        },
+            priority: '#fbb040'
+        }
     },
     spacing: {
         xs: '4px',
@@ -38,7 +38,7 @@ export const darkTheme = {
         md: '12px',
         lg: '16px',
         xl: '20px',
-        xxl: '24px',
+        xxl: '24px'
     },
     typography: {
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
@@ -48,25 +48,25 @@ export const darkTheme = {
             md: '14px',
             lg: '16px',
             xl: '18px',
-            xxl: '20px',
+            xxl: '20px'
         },
         fontWeight: {
             normal: 400,
             medium: 500,
             semibold: 600,
-            bold: 700,
+            bold: 700
         },
         lineHeight: {
             tight: 1.25,
             normal: 1.5,
-            loose: 1.75,
-        },
+            loose: 1.75
+        }
     },
     shadows: {
         sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
         md: '0 4px 6px rgba(0, 0, 0, 0.1)',
         lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
-        xl: '0 20px 25px rgba(0, 0, 0, 0.15)',
+        xl: '0 20px 25px rgba(0, 0, 0, 0.15)'
     },
     radius: {
         none: '0',
@@ -75,18 +75,18 @@ export const darkTheme = {
         md: '6px',
         lg: '8px',
         xl: '12px',
-        full: '9999px',
+        full: '9999px'
     },
     transitions: {
         fast: 'all 0.1s ease',
         normal: 'all 0.2s ease',
-        slow: 'all 0.3s ease',
+        slow: 'all 0.3s ease'
     },
     breakpoints: {
         mobile: '768px',
         tablet: '1024px',
-        desktop: '1280px',
-    },
+        desktop: '1280px'
+    }
 };
 export const lightTheme = {
     ...darkTheme,
@@ -97,20 +97,20 @@ export const lightTheme = {
             secondary: '#f7fafc',
             tertiary: '#edf2f7',
             elevated: '#e2e8f0',
-            overlay: 'rgba(0, 0, 0, 0.6)',
+            overlay: 'rgba(0, 0, 0, 0.6)'
         },
         text: {
             primary: '#1a202c',
             secondary: '#4a5568',
             disabled: '#a0aec0',
-            inverse: '#ffffff',
+            inverse: '#ffffff'
         },
         border: {
             primary: '#e2e8f0',
             secondary: '#cbd5e0',
-            active: '#63b3ed',
-        },
-    },
+            active: '#63b3ed'
+        }
+    }
 };
 // Theme context and provider
 import React, { createContext, useContext } from 'react';
@@ -143,7 +143,7 @@ export const createStyles = (theme) => ({
             fontSize: theme.typography.fontSize.md,
             fontWeight: theme.typography.fontWeight.medium,
             cursor: 'pointer',
-            transition: theme.transitions.normal,
+            transition: theme.transitions.normal
         },
         secondary: {
             backgroundColor: theme.colors.background.secondary,
@@ -154,7 +154,7 @@ export const createStyles = (theme) => ({
             fontSize: theme.typography.fontSize.md,
             fontWeight: theme.typography.fontWeight.medium,
             cursor: 'pointer',
-            transition: theme.transitions.normal,
+            transition: theme.transitions.normal
         },
         danger: {
             backgroundColor: theme.colors.error,
@@ -165,8 +165,8 @@ export const createStyles = (theme) => ({
             fontSize: theme.typography.fontSize.md,
             fontWeight: theme.typography.fontWeight.medium,
             cursor: 'pointer',
-            transition: theme.transitions.normal,
-        },
+            transition: theme.transitions.normal
+        }
     },
     // Input styles
     input: {
@@ -180,8 +180,8 @@ export const createStyles = (theme) => ({
             transition: theme.transitions.normal,
             '&:focus': {
                 borderColor: theme.colors.border.active,
-                outline: 'none',
-            },
+                outline: 'none'
+            }
         },
         search: {
             backgroundColor: theme.colors.background.secondary,
@@ -194,9 +194,9 @@ export const createStyles = (theme) => ({
             transition: theme.transitions.normal,
             '&:focus': {
                 borderColor: theme.colors.border.active,
-                outline: 'none',
-            },
-        },
+                outline: 'none'
+            }
+        }
     },
     // Card styles
     card: {
@@ -206,7 +206,7 @@ export const createStyles = (theme) => ({
             borderRadius: theme.radius.lg,
             padding: theme.spacing.lg,
             boxShadow: theme.shadows.sm,
-            transition: theme.transitions.normal,
+            transition: theme.transitions.normal
         },
         elevated: {
             backgroundColor: theme.colors.background.elevated,
@@ -214,8 +214,8 @@ export const createStyles = (theme) => ({
             borderRadius: theme.radius.lg,
             padding: theme.spacing.lg,
             boxShadow: theme.shadows.md,
-            transition: theme.transitions.normal,
-        },
+            transition: theme.transitions.normal
+        }
     },
     // Layout styles
     panel: {
@@ -227,7 +227,7 @@ export const createStyles = (theme) => ({
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
-            transition: theme.transitions.normal,
+            transition: theme.transitions.normal
         },
         mobile: {
             backgroundColor: theme.colors.background.primary,
@@ -236,16 +236,16 @@ export const createStyles = (theme) => ({
             width: '100vw',
             overflow: 'hidden',
             display: 'flex',
-            flexDirection: 'column',
-        },
+            flexDirection: 'column'
+        }
     },
     // Status styles
     status: {
         active: {
-            color: theme.colors.status.active,
+            color: theme.colors.status.active
         },
         inactive: {
-            color: theme.colors.status.inactive,
+            color: theme.colors.status.inactive
         },
         regex: {
             backgroundColor: theme.colors.status.regex,
@@ -253,8 +253,8 @@ export const createStyles = (theme) => ({
             padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
             borderRadius: theme.radius.sm,
             fontSize: theme.typography.fontSize.xs,
-            fontWeight: theme.typography.fontWeight.medium,
-        },
+            fontWeight: theme.typography.fontWeight.medium
+        }
     },
     // Typography styles
     text: {
@@ -262,46 +262,46 @@ export const createStyles = (theme) => ({
             fontSize: theme.typography.fontSize.xl,
             fontWeight: theme.typography.fontWeight.semibold,
             color: theme.colors.text.primary,
-            lineHeight: theme.typography.lineHeight.tight,
+            lineHeight: theme.typography.lineHeight.tight
         },
         subheading: {
             fontSize: theme.typography.fontSize.lg,
             fontWeight: theme.typography.fontWeight.medium,
             color: theme.colors.text.primary,
-            lineHeight: theme.typography.lineHeight.normal,
+            lineHeight: theme.typography.lineHeight.normal
         },
         body: {
             fontSize: theme.typography.fontSize.md,
             fontWeight: theme.typography.fontWeight.normal,
             color: theme.colors.text.primary,
-            lineHeight: theme.typography.lineHeight.normal,
+            lineHeight: theme.typography.lineHeight.normal
         },
         caption: {
             fontSize: theme.typography.fontSize.sm,
             fontWeight: theme.typography.fontWeight.normal,
             color: theme.colors.text.secondary,
-            lineHeight: theme.typography.lineHeight.normal,
-        },
-    },
+            lineHeight: theme.typography.lineHeight.normal
+        }
+    }
 });
 // Media query helpers
 export const mediaQueries = {
     mobile: `@media (max-width: ${darkTheme.breakpoints.mobile})`,
     tablet: `@media (max-width: ${darkTheme.breakpoints.tablet})`,
-    desktop: `@media (min-width: ${darkTheme.breakpoints.desktop})`,
+    desktop: `@media (min-width: ${darkTheme.breakpoints.desktop})`
 };
 // Animation presets
 export const animations = {
     fadeIn: {
         from: { opacity: 0 },
-        to: { opacity: 1 },
+        to: { opacity: 1 }
     },
     slideIn: {
         from: { transform: 'translateX(100%)' },
-        to: { transform: 'translateX(0)' },
+        to: { transform: 'translateX(0)' }
     },
     scaleIn: {
         from: { transform: 'scale(0.95)', opacity: 0 },
-        to: { transform: 'scale(1)', opacity: 1 },
-    },
+        to: { transform: 'scale(1)', opacity: 1 }
+    }
 };

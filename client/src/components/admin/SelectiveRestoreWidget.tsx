@@ -366,7 +366,7 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
           <Form.Item name={['table_filters', 'where_conditions']} label="WHERE Conditions (JSON)">
             <TextArea 
               rows={3} 
-              placeholder='{"users": "created_at > \'2024-01-01\'", "orders": "status = \'active\'"}'
+              placeholder='{"users": "created_at > \\"2024-01-01\\"", "orders": "status = \\"active\\""}'
             />
           </Form.Item>
         </Card>

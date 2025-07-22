@@ -1,5 +1,4 @@
 import { PoolClient, QueryResult } from 'pg';
-import { WorkspaceId, ProjectId, UserId, ResourceId } from '../types/workspace';
 export interface DatabaseConfig {
     host: string;
     port: number;
@@ -35,14 +34,8 @@ export declare class DatabaseConnection {
         waitingCount: any;
     };
 }
-export declare const bindParams: {
-    workspaceId: (id: WorkspaceId) => string;
-    projectId: (id: ProjectId) => string;
-    userId: (id: UserId) => string;
-    resourceId: (id: ResourceId) => string;
-    array: <T>(items: T[]) => T[];
-    json: (obj: any) => string;
-    validateUuid: (id: string) => boolean;
+export declare const ValidationHelpers: {
+    isValidUUID(id: string): boolean;
 };
 export declare class QueryBuilder {
     private query;

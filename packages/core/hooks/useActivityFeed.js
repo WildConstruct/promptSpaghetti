@@ -18,7 +18,7 @@ export function useActivityFeed(workspaceId, userId, filters = {}, options = {})
     const buildQueryString = useCallback((filters, page) => {
         const params = new URLSearchParams({
             page: page.toString(),
-            limit: limit.toString(),
+            limit: limit.toString()
         });
         if (filters.project_id)
             params.append('project_id', filters.project_id);
@@ -46,8 +46,8 @@ export function useActivityFeed(workspaceId, userId, filters = {}, options = {})
             const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity?${queryString}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-User-Id': userId,
-                },
+                    'X-User-Id': userId
+                }
             });
             if (!response.ok) {
                 throw new Error(`Failed to fetch activity: ${response.statusText}`);
@@ -78,8 +78,8 @@ export function useActivityFeed(workspaceId, userId, filters = {}, options = {})
             const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity/stats`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-User-Id': userId,
-                },
+                    'X-User-Id': userId
+                }
             });
             if (!response.ok) {
                 throw new Error(`Failed to fetch stats: ${response.statusText}`);
@@ -97,8 +97,8 @@ export function useActivityFeed(workspaceId, userId, filters = {}, options = {})
             const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity/types`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-User-Id': userId,
-                },
+                    'X-User-Id': userId
+                }
             });
             if (!response.ok) {
                 throw new Error(`Failed to fetch event types: ${response.statusText}`);
@@ -127,8 +127,8 @@ export function useActivityFeed(workspaceId, userId, filters = {}, options = {})
             const response = await fetch(`${API_BASE}/activity/${eventId}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-User-Id': userId,
-                },
+                    'X-User-Id': userId
+                }
             });
             if (!response.ok) {
                 if (response.status === 404)
@@ -180,7 +180,7 @@ export function useActivityFeed(workspaceId, userId, filters = {}, options = {})
         eventTypes,
         loadMore,
         refresh,
-        fetchActivityEvent,
+        fetchActivityEvent
     };
 }
 // Hook for project-specific activity feed
@@ -203,13 +203,13 @@ export function useProjectActivityFeed(projectId, userId, options = {}) {
             setError(null);
             const params = new URLSearchParams({
                 page: page.toString(),
-                limit: limit.toString(),
+                limit: limit.toString()
             });
             const response = await fetch(`${API_BASE}/projects/${projectId}/activity?${params}`, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-User-Id': userId,
-                },
+                    'X-User-Id': userId
+                }
             });
             if (!response.ok) {
                 throw new Error(`Failed to fetch project activity: ${response.statusText}`);
@@ -262,6 +262,6 @@ export function useProjectActivityFeed(projectId, userId, options = {}) {
         hasMore,
         page,
         loadMore,
-        refresh,
+        refresh
     };
 }
