@@ -78,7 +78,22 @@ export interface GraphState {
   getTemplateCompatibleData: () => GraphData;
 }
 
-export       if (!nodeToClone) return state;
+export const useGraphStore = create<GraphState>((set, get) => ({
+  nodes: [],
+  edges: [],
+  currentProject: null,
+  projectSettings: {
+    autoSave: true,
+    backupInterval: 5,
+    maxBackups: 10
+  },
+  hasUnsavedChanges: false,
+  isAutoSaveEnabled: true,
+  
+  cloneNode: (nodeId) =>
+    set((state) => {
+      const nodeToClone = state.nodes.find(n => n.id === nodeId);
+      if (!nodeToClone) return state;
       
       const newNode = {
         ...nodeToClone,
