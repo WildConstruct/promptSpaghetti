@@ -21,7 +21,7 @@
   # Disable framework detection
   NETLIFY_USE_YARN = "false"
   # Cache bust to force fresh build
-  NETLIFY_CACHE_BUST = "v4-weighted-choice-fix"
+  NETLIFY_CACHE_BUST = "v5-template-editor-fix"
 
 [dev]
   command = "pnpm --filter client dev"
