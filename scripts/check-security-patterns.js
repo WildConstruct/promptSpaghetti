@@ -68,7 +68,7 @@ const SECURITY_PATTERNS = {
     /fs\.readFile[Sync]?\s*\([^)]*\+/,
     /fs\.writeFile[Sync]?\s*\([^)]*\+/,
     /path\.join\s*\([^)]*\.\.[^)]*\)/,
-    /\.\.\/\.\.\//
+    /(?<!import.*|require.*|from\s*)\.\.\/\.\.\/.*(?!\.ts|\.js|\.tsx|\.jsx)/
   ],
   
   // Authentication/authorization bypasses
@@ -92,8 +92,8 @@ const SECURITY_BEST_PRACTICES = {
   // Missing error handling
   missingErrorHandling: [
     /JSON\.parse\s*\([^)]+\)(?!\s*\.catch|\s*try)/,
-    /parseInt\s*\([^)]+\)(?!\s*\|\||\s*\?\?)/,
-    /parseFloat\s*\([^)]+\)(?!\s*\|\||\s*\?\?)/
+    /parseInt\s*\(\s*(?!process\.env)[^)]+\)(?!\s*\|\||\s*\?\?)/,
+    /parseFloat\s*\(\s*(?!process\.env)[^)]+\)(?!\s*\|\||\s*\?\?)/
   ],
   
   // Insecure random

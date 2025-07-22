@@ -42,10 +42,44 @@ interface StatusBarProps {
   onBrowseTemplates?: () => void;
 }
 
-export   const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
+export const StatusBar: React.FC<StatusBarProps> = ({
+  statusMessage,
+  errors,
+  onPreview,
+  onSaveJson,
+  onExportBundle,
+  onSaveProject,
+  onLoadProject,
+  onNewProject,
+  hasUnsavedChanges,
+  currentProjectName,
+  onCorrections,
+  correctionsEnabled,
+  correctionsOpen,
+  onStats,
+  statsOpen,
+  onExtensions,
+  extensionsOpen,
+  connectionState,
+  queuedMessages,
+  onClearQueue,
+  onReconnect,
+  onDisconnect,
+  encryptionState,
+  onEncrypt,
+  onDecrypt,
+  onChangeAlgorithm,
+  onOptimization,
+  optimizationEnabled,
+  onSaveTemplate,
+  onBrowseTemplates
+}) => {
+  const [showWebSocketDetails, setShowWebSocketDetails] = useState(false);
   const [showEncryptionDetails, setShowEncryptionDetails] = useState(false);
   const wsDetailsRef = useRef<HTMLDivElement>(null);
   const encryptionDetailsRef = useRef<HTMLDivElement>(null);
+  
+  const errorCount = errors.length;
 
   // Close details when clicking outside
   useEffect(() => {

@@ -83,14 +83,23 @@ function checkNamingConventions(filePath) {
     PATTERNS.variableDeclaration.lastIndex = 0;
     while ((match = PATTERNS.variableDeclaration.exec(content)) !== null) {
       const name = match[1];
+      
+      // Allow PascalCase for React components (variables ending with Component, or starting with uppercase in .tsx/.jsx files)
+      const isReactComponent = (fileName.endsWith('.tsx') || fileName.endsWith('.jsx')) &&
+                               (NAMING_RULES.pascalCase.test(name) && 
+                                (name.endsWith('Component') || name.endsWith('Editor') || name.endsWith('Provider') || 
+                                 name.endsWith('Context') || name.endsWith('Hook') || name.endsWith('Render') ||
+                                 name.includes('Inner') || name.includes('Wrapper')));
+      
       if (!EXCEPTIONS.has(name) && 
           !NAMING_RULES.camelCase.test(name) && 
-          !NAMING_RULES.constantCase.test(name)) {
+          !NAMING_RULES.constantCase.test(name) &&
+          !isReactComponent) {
         violations.push({
           type: 'variable',
           name,
           line: getLineNumber(content, match.index),
-          message: `Variable '${name}' should be camelCase or CONSTANT_CASE`
+          message: `Variable '${name}' should be camelCase or CONSTANT_CASE (React components should be PascalCase)`
         });
       }
     }

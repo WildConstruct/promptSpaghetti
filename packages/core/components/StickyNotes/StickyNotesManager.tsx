@@ -11,10 +11,10 @@
  */
 
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useStickyNotesStore } from '../../stores/stickyNotesStore.js';
-import { StickyNote } from './StickyNote.js';
-import { StickyNoteToolbar } from './StickyNoteToolbar.js';
-import { StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes.js';
+import { useStickyNotesStore } from 'from '../../stores/stickyNotesStore';';
+import { StickyNote } from './StickyNote';
+import { StickyNoteToolbar } from './StickyNoteToolbar';
+import { StickyNoteColor, StickyNoteCategory } from 'from '../../types/StickyNotes';';
 
 interface StickyNotesManagerProps {
   canvasRef?: React.RefObject<HTMLElement>;

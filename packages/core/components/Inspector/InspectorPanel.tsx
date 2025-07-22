@@ -5,6 +5,7 @@ import { PreviewSection } from './PreviewSection';
 import { PreferenceControls } from './PreferenceControls';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
 import { useNodeDisclosure } from '../../hooks/useNodeDisclosure';
+import { useAnimation, animationDurations, easingFunctions } from '../../utils/smoothAnimations';
 
 // Map technical node types to filmmaker-friendly names
 const getFilmmakerFriendlyName = (nodeType: string): string => {
@@ -53,7 +54,9 @@ export const InspectorPanel = ({
   const [isResizing, setIsResizing] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
+  const [width, setWidth] = useState(initialWidth);
   const resizeRef = useRef<HTMLDivElement>(null);
+  const { isAnimating: isCollapseAnimating, startAnimation: startCollapseAnimation } = useAnimation();
   const { 
     debugMode, 
     setDebugMode, 
@@ -109,6 +112,7 @@ export const InspectorPanel = ({
   if (!node || !schema) {
     return (
       <aside
+        className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
         style={{
           width: collapsed ? 40 : width,
           minWidth: collapsed ? 40 : minWidth,
@@ -117,7 +121,12 @@ export const InspectorPanel = ({
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          transition: collapsed ? 'width 0.2s ease' : 'none'
+          // 60fps optimized transition
+          transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+          willChange: 'width',
+          overflow: 'hidden', // Prevent content spillover during animation
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden'
         }}
         onKeyDown={(e) => {
           e.stopPropagation();
@@ -145,28 +154,62 @@ export const InspectorPanel = ({
             </h3>
           )}
           <button
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() => {
+              startCollapseAnimation(animationDurations.panel);
+              setCollapsed(!collapsed);
+            }}
+            className="btn-animated"
             style={{
               background: 'none',
               border: 'none',
               cursor: 'pointer',
               fontSize: 16,
               color: '#a0aec0',
-              padding: 4
+              padding: '8px',
+              borderRadius: '4px',
+              transition: `all ${animationDurations.micro}ms ${easingFunctions.cinema4d.professional}`,
+              willChange: 'background-color, transform',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.transform = 'scale(1)';
             }}
             title={collapsed ? 'Expand Inspector' : 'Collapse Inspector'}
           >
-            {collapsed ? '◀' : '▶'}
+            <span
+              style={{
+                transform: collapsed ? 'rotate(0deg)' : 'rotate(180deg)',
+                transition: `transform ${animationDurations.normal}ms ${easingFunctions.cinema4d.professional}`,
+                display: 'inline-block',
+                willChange: 'transform'
+              }}
+            >
+              ◀
+            </span>
           </button>
         </div>
         {!collapsed && (
-          <div style={{ 
-            padding: 16, 
-            color: '#a0aec0', 
-            fontStyle: 'italic',
-            textAlign: 'center',
-            marginTop: 40
-          }}>
+          <div 
+            className="animate-inspector-toggle"
+            style={{ 
+              padding: 16, 
+              color: '#a0aec0', 
+              fontStyle: 'italic',
+              textAlign: 'center',
+              marginTop: 40,
+              // Smooth fade in/out
+              opacity: collapsed ? 0 : 1,
+              transform: collapsed ? 'translateY(-10px)' : 'translateY(0)',
+              transition: `all ${animationDurations.fast}ms ${easingFunctions.cinema4d.professional}`,
+              willChange: 'opacity, transform'
+            }}
+          >
             Select an element to customize its options
           </div>
         )}
@@ -190,6 +233,7 @@ export const InspectorPanel = ({
 
   return (
     <aside
+      className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
       style={{
         width: collapsed ? 40 : width,
         minWidth: collapsed ? 40 : minWidth,
@@ -198,7 +242,12 @@ export const InspectorPanel = ({
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        transition: collapsed ? 'width 0.2s ease' : 'none'
+        // 60fps optimized transition
+        transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+        willChange: 'width',
+        overflow: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        backfaceVisibility: 'hidden'
       }}
       onKeyDown={(e) => {
         e.stopPropagation();

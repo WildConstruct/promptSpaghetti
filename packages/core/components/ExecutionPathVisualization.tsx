@@ -12,7 +12,7 @@ import {
   EXECUTION_PATH_COLORS,
   ExecutionVisualizationConfig,
   DEFAULT_VISUALIZATION_CONFIG 
-} from '../types/ExecutionPath.js';
+} from '../types/ExecutionPath';
 
 interface ExecutionPathVisualizationProps {
   results: PreviewResultWithPath[];

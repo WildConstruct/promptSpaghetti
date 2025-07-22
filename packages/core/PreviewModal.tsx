@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { PreviewResultWithPath } from './types/ExecutionPath.js';
-import { ExecutionPathVisualization } from './components/ExecutionPathVisualization.js';
+import { PreviewResultWithPath } from './types/ExecutionPath';
+import { ExecutionPathVisualization } from './components/ExecutionPathVisualization';
 import { professionalColors } from './styles/professional-design-system';
 
 // Legacy interface for backward compatibility

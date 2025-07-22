@@ -258,7 +258,16 @@ export interface LoadingOverlayProps {
   onCancel?: () => void;
 }
 
-export 
+export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
+  visible,
+  message,
+  progress,
+  variant = 'primary',
+  backdrop = 'blur',
+  onCancel
+}) => {
+  if (!visible) return null;
+
   const getBackdropStyle = (): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
@@ -361,7 +370,15 @@ export interface InlineLoaderProps {
   children: React.ReactNode;
 }
 
-export   }
+export const InlineLoader: React.FC<InlineLoaderProps> = ({
+  loading,
+  size = 'medium',
+  text,
+  children
+}) => {
+  if (!loading) {
+    return <>{children}</>;
+  }
 
   return (
     <div

@@ -50,7 +50,16 @@ export const animationDurations = {
 };
 
 // CSS animation classes
-export 
+export const cssAnimationClasses = {
+  nodeCreate: 'animate-node-create',
+  nodeDelete: 'animate-node-delete',
+  nodeHover: 'animate-node-hover',
+  panelExpand: 'animate-panel-expand',
+  panelCollapse: 'animate-panel-collapse',
+  loadingSpinner: 'animate-loading-spinner',
+  hoverLift: 'animate-hover-lift'
+};
+
 /**
  * Creates smooth animation styles for React components
  */
@@ -211,7 +220,8 @@ export class AnimationManager {
 }
 
 // Global animation manager instance
-export 
+export const globalAnimationManager = new AnimationManager();
+
 /**
  * Hook for managing element hover states with smooth transitions
  */
@@ -248,7 +258,16 @@ export function useSmoothHover(
 /**
  * Loading animation utilities
  */
-export   },
+export const loadingAnimations = {
+  /**
+   * Creates a spinning animation for loading spinners
+   */
+  createSpinner(): React.CSSProperties {
+    return {
+      animation: `spin 1s linear infinite`,
+      willChange: 'transform'
+    };
+  },
 
   /**
    * Creates a pulsing animation for loading states
@@ -274,7 +293,17 @@ interface AnimatedProps {
   isVisible?: boolean;
 }
 
-export 
+export const AnimatedContainer: React.FC<AnimatedProps> = ({
+  children,
+  className,
+  style,
+  animationType = 'fade',
+  duration = animationDurations.normal,
+  delay = 0,
+  isVisible = true
+}) => {
+  const [mounted, setMounted] = React.useState(false);
+
   React.useEffect(() => {
     const timer = setTimeout(() => setMounted(true), delay);
     return () => clearTimeout(timer);

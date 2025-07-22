@@ -105,7 +105,7 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({
         },
         permissions: ['data-processing'],
         runtime: {
-          entry_point: 'dist/index.js',
+          entry_point: 'dist/index',
           node_types: ['TestNode']
         },
         development: {

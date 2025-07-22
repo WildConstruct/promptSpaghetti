@@ -11,6 +11,11 @@ export type { MarketplaceTemplate } from './MarketplaceCard';
 
 export { TemplatePreviewModal } from './TemplatePreviewModal';
 
+// Business calculation components for Case Study Showcase (Story 16.4.4)
+export { ROICalculator } from './ROICalculator';
+export { SavingsEstimation } from './SavingsEstimation';
+export { BusinessValueDemo } from './BusinessValueDemo';
+
 export { MarketplaceSearch } from './MarketplaceSearch';
 export type { SearchFilters } from './MarketplaceSearch';
 

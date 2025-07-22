@@ -11,7 +11,7 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { StickyNote as StickyNoteType, StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes.js';
+import { StickyNote as StickyNoteType, StickyNoteColor, StickyNoteCategory } from 'from '../../types/StickyNotes';';
 
 interface StickyNoteProps {
   note: StickyNoteType;
