@@ -56,6 +56,8 @@ import { ProfessionalSpinner } from './components/LoadingStates/ProfessionalSpin
 import { SmoothNodeWrapper } from './components/Nodes/SmoothNodeWrapper';
 import { useCanvasOptimization, CanvasOptimizer } from './utils/canvasOptimization';
 import { globalAnimationManager } from './utils/smoothAnimations';
+import { DemoModeManager } from './components/Demo/DemoModeManager';
+import { DemoPerformanceTester } from './components/Demo/DemoPerformanceTester';
 import './styles/smoothAnimations.css';
 
 // SECURITY FIX: Safe CSS injection using controlled constants
@@ -751,7 +753,16 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
   }, [optimizationMenuOpen]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <DemoModeManager
+      initialConfig={{
+        brandingVisible: true,
+        debugElementsHidden: false
+      }}
+      onModeChange={(config) => {
+        console.log('Demo mode changed:', config);
+      }}
+    >
+      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <RestorePrompt
         show={showRestorePrompt}
         draft={restoreDraft}
@@ -1197,6 +1208,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
       {/* Performance Monitor (dev mode only) */}
       {process.env.NODE_ENV === 'development' && (
         <div
+          className="development-only"
           style={{
             position: 'fixed',
             top: 10,
@@ -1400,7 +1412,28 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
           }}
         />
       )}
+      
+      {/* Demo Performance Tester (development only) */}
+      {process.env.NODE_ENV === 'development' && (
+        <DemoPerformanceTester
+          onTestComplete={(result) => {
+            console.log('Performance test completed:', result);
+            if (!result.passedThreshold) {
+              setStatusMessage(`Performance warning: ${result.recommendations[0]}`);
+              setTimeout(() => setStatusMessage(''), 5000);
+            }
+          }}
+          onGraphGenerated={(testNodes, testEdges) => {
+            // Replace current graph with test graph
+            setNodes(testNodes);
+            setEdges(testEdges);
+          }}
+          targetFPS={30}
+          maxRenderTime={16}
+        />
+      )}
     </div>
+    </DemoModeManager>
   );
 };
 

@@ -23,6 +23,54 @@ export type { SearchFilters } from './MarketplaceSearch';
 export { CommunityForumCard } from './CommunityForumCard';
 export type { ForumPost, ForumUser } from './CommunityForumCard';
 
+// User engagement and onboarding components
+export { ProgressTracker } from './ProgressTracker';
+export type { 
+  UserProgress, 
+  EngagementMetrics, 
+  Milestone, 
+  ProgressTrackerProps 
+} from './ProgressTracker';
+
+export { TutorialPlayer, TutorialBrowser } from './TutorialPlayer';
+export type { 
+  Tutorial, 
+  TutorialStep, 
+  TutorialAction, 
+  TutorialProgress, 
+  TutorialPlayerProps, 
+  TutorialBrowserProps 
+} from './TutorialPlayer';
+
+export { UserEngagementDemo } from './UserEngagementDemo';
+export type { UserEngagementDemoProps } from './UserEngagementDemo';
+
+// Tutorial System (Task: E16-1753114247090-BB71B5)
+export { MarketplaceTutorialSystemService } from '../../community/MarketplaceTutorialSystem';
+export type { 
+  MarketplaceTutorial,
+  MarketplaceTutorialStep,
+  TutorialSession,
+  LearningPath
+} from '../../community/MarketplaceTutorialSystem';
+
+// Usage Analytics (Task: E16-1753114247088-3E0D09)
+export { LearningAnalyticsServiceImpl } from '../../analytics/LearningAnalyticsService';
+export type {
+  LearningAnalyticsEvent,
+  LearningEffectivenessMetrics,
+  UserLearningAnalytics,
+  CommunityKnowledgeMetrics
+} from '../../analytics/LearningAnalyticsExtension';
+
+// Unified Integration
+export { Epic16IntegratedService } from '../../community/Epic16Integration';
+export type {
+  Epic16UnifiedService,
+  LearningContext,
+  PersonalizedLearningInsights
+} from '../../community/Epic16Integration';
+
 // Re-export ticket integration components for convenience
 export { Epic16TicketIntegration } from '../Tickets/Epic16TicketIntegration';
 
