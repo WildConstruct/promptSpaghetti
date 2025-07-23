@@ -366,33 +366,33 @@ export class ValidationRulesEngine extends EventEmitter {
    * Initialize built-in validation rules
    */
   private initializeBuiltInRules(): void {
-    // Import additional rules
-    import('./AdditionalValidationRules').then(module => {
-      // Register additional comprehensive rules
-      this.registerRule(new module.MissingRequiredPropertiesRule());
-      this.registerRule(new module.DuplicateContentRule());
-      this.registerRule(new module.LanguageConsistencyRule());
-      this.registerRule(new module.SensitiveContentRule());
-      this.registerRule(new module.ProcessingTimeRule());
-      this.registerRule(new module.MemoryUsageRule());
-    }).catch(() => {
+    // Import additional rules synchronously for reliable testing
+    try {
+      const module = require('./AdditionalValidationRules');
+      // Register additional comprehensive rules (these override the built-in stubs)
+      this.rules.set('missing-required-properties', new module.MissingRequiredPropertiesRule());
+      this.rules.set('duplicate-content', new module.DuplicateContentRule());
+      this.rules.set('language-consistency', new module.LanguageConsistencyRule());
+      this.rules.set('sensitive-content', new module.SensitiveContentRule());
+      this.rules.set('processing-time', new module.ProcessingTimeRule());
+      this.rules.set('memory-usage', new module.MemoryUsageRule());
+    } catch (error) {
       // Fallback to basic rules if additional rules fail to load
       console.warn('Failed to load additional validation rules, using basic rules only');
-    });
+    }
 
-    // Structure validation rules
+    // Structure validation rules (avoiding duplicates with the comprehensive rules loaded above)
     this.registerRule(new EmptyGraphRule());
     this.registerRule(new CyclicGraphRule());
     this.registerRule(new DisconnectedNodesRule());
     this.registerRule(new InvalidNodeTypeRule());
-    this.registerRule(new MissingRequiredPropertiesRule());
+    // MissingRequiredPropertiesRule loaded from AdditionalValidationRules
 
     // Content validation rules
     this.registerRule(new EmptyContentRule());
     this.registerRule(new ContentLengthRule());
     this.registerRule(new ContentQualityRule());
-    this.registerRule(new DuplicateContentRule());
-    this.registerRule(new LanguageConsistencyRule());
+    // DuplicateContentRule and LanguageConsistencyRule loaded from AdditionalValidationRules
 
     // Platform-specific rules
     this.registerRule(new PlatformCompatibilityRule());
@@ -402,12 +402,11 @@ export class ValidationRulesEngine extends EventEmitter {
 
     // Performance rules
     this.registerRule(new ComplexityRule());
-    this.registerRule(new ProcessingTimeRule());
-    this.registerRule(new MemoryUsageRule());
+    // ProcessingTimeRule and MemoryUsageRule loaded from AdditionalValidationRules
 
     // Security rules
     this.registerRule(new InjectionDetectionRule());
-    this.registerRule(new SensitiveContentRule());
+    // SensitiveContentRule loaded from AdditionalValidationRules
     this.registerRule(new MaliciousPatternRule());
 
     // Quality rules
@@ -496,7 +495,10 @@ export class ValidationRulesEngine extends EventEmitter {
   /**
    * Execute rule with timeout
    */
-  private async executeRuleWithTimeout(rule: ValidationRule, context: ValidationContext): Promise<ValidationRuleResult> {
+  private async executeRuleWithTimeout(
+    rule: ValidationRule,
+    context: ValidationContext
+  ): Promise<ValidationRuleResult> {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error(`Rule ${rule.id} execution timeout`));

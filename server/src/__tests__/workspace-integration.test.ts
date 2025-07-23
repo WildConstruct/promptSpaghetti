@@ -18,17 +18,17 @@ import {
 
 // Mock database setup
 const mockDb = {
-  prepare: jest.fn().mockReturnValue({
-    run: jest.fn(),
-    get: jest.fn(),
-    all: jest.fn()
+  prepare: jest.fn<unknown[], unknown>().mockReturnValue({
+    run: jest.fn<unknown[], unknown>( as unknown),
+    get: jest.fn<unknown[], unknown>(),
+    all: jest.fn<unknown[], unknown>()
   }),
-  exec: jest.fn(),
-  close: jest.fn()
+  exec: jest.fn<unknown[], unknown>(),
+  close: jest.fn<unknown[], unknown>()
 } as unknown as Database;
 
 // Mock request/reply objects
-const createMockRequest = (user?: any, params?: any, body?: any, query?: any) => ({
+const createMockRequest = (user?: unknown, params?: unknown, body?: unknown, query?: unknown) => ({
   user,
   params: params || {},
   body: body || {},
@@ -40,9 +40,9 @@ const createMockRequest = (user?: any, params?: any, body?: any, query?: any) =>
 
 const createMockReply = () => {
   const reply = {
-    status: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis(),
-    code: jest.fn().mockReturnThis()
+    status: jest.fn<unknown[], unknown>().mockReturnThis(),
+    send: jest.fn<unknown[], unknown>().mockReturnThis(),
+    code: jest.fn<unknown[], unknown>().mockReturnThis()
   };
   return reply as any;
 };
@@ -80,13 +80,13 @@ describe('Workspace Integration Tests', () => {
 
     beforeEach(() => {
       // Mock database responses
-      jest.spyOn(workspaceDAO, 'findUserByEmail').mockResolvedValue(mockUser);
-      jest.spyOn(workspaceDAO, 'findUserById').mockResolvedValue(mockUser);
+      jest.spyOn(workspaceDAO, 'findUserByEmail').mockResolvedValue(mockUser as unknown);
+      jest.spyOn(workspaceDAO, 'findUserById').mockResolvedValue(mockUser as unknown);
       jest.spyOn(workspaceDAO, 'createUserSession').mockResolvedValue({
         id: 'session-123',
         user_id: mockUser.id,
         session_token: 'mock-token',
-        expires_at: new Date(Date.now() + 86400000),
+        expires_at: new Date(Date.now( as unknown) + 86400000),
         created_at: new Date(),
         last_active_at: new Date()
       });
@@ -94,7 +94,7 @@ describe('Workspace Integration Tests', () => {
         userId: mockUser.id,
         email: mockUser.email,
         sessionId: 'session-123'
-      });
+      } as unknown);
     });
 
     it('should authenticate user with valid JWT token', async () => {
@@ -119,7 +119,7 @@ describe('Workspace Integration Tests', () => {
       const reply = createMockReply();
       
       request.headers.authorization = 'Bearer invalid-token';
-      jest.spyOn(authService, 'verifyJWT').mockResolvedValue(null);
+      jest.spyOn(authService, 'verifyJWT').mockResolvedValue(null as unknown);
 
       await authMiddleware.authenticate(request, reply);
 
@@ -156,7 +156,7 @@ describe('Workspace Integration Tests', () => {
           description: 'Viewer role',
           permissions: ROLE_PERMISSIONS.VIEWER,
           is_system_role: true,
-          created_at: new Date(),
+          created_at: new Date( as unknown),
           updated_at: new Date()
         }]
       });
@@ -192,7 +192,7 @@ describe('Workspace Integration Tests', () => {
       const request = createMockRequest(mockUser, { workspaceId }, {}, {});
       const reply = createMockReply();
 
-      jest.spyOn(workspaceDAO, 'getUserPermissions').mockResolvedValue(null);
+      jest.spyOn(workspaceDAO, 'getUserPermissions').mockResolvedValue(null as unknown);
 
       await authMiddleware.authorizeWorkspace()(request, reply);
 
@@ -217,17 +217,17 @@ describe('Workspace Integration Tests', () => {
     };
 
     beforeEach(() => {
-      jest.spyOn(workspaceDAO, 'createWorkspace').mockResolvedValue(mockWorkspace);
-      jest.spyOn(workspaceDAO, 'getWorkspace').mockResolvedValue(mockWorkspace);
-      jest.spyOn(workspaceDAO, 'updateWorkspace').mockResolvedValue(mockWorkspace);
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true);
+      jest.spyOn(workspaceDAO, 'createWorkspace').mockResolvedValue(mockWorkspace as unknown);
+      jest.spyOn(workspaceDAO, 'getWorkspace').mockResolvedValue(mockWorkspace as unknown);
+      jest.spyOn(workspaceDAO, 'updateWorkspace').mockResolvedValue(mockWorkspace as unknown);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true as unknown);
       jest.spyOn(workspaceDAO, 'createActivityEvent').mockResolvedValue({
         id: 'activity-123',
         workspace_id: mockWorkspace.id,
         actor_id: mockUser,
         event_type: 'workspace.created',
         event_data: {},
-        created_at: new Date()
+        created_at: new Date( as unknown)
       });
     });
 
@@ -256,7 +256,7 @@ describe('Workspace Integration Tests', () => {
     });
 
     it('should reject workspace access without permission', async () => {
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false as unknown);
 
       await expect(
         workspaceService.getWorkspace(mockWorkspace.id, mockUser)
@@ -282,7 +282,7 @@ describe('Workspace Integration Tests', () => {
     });
 
     it('should reject workspace update without permission', async () => {
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false as unknown);
 
       await expect(
         workspaceService.updateWorkspace(mockWorkspace.id, { name: 'Updated' }, mockUser)
@@ -306,10 +306,10 @@ describe('Workspace Integration Tests', () => {
     };
 
     beforeEach(() => {
-      jest.spyOn(workspaceDAO, 'createProject').mockResolvedValue(mockProject);
-      jest.spyOn(workspaceDAO, 'getProject').mockResolvedValue(mockProject);
-      jest.spyOn(workspaceDAO, 'updateProject').mockResolvedValue(mockProject);
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true);
+      jest.spyOn(workspaceDAO, 'createProject').mockResolvedValue(mockProject as unknown);
+      jest.spyOn(workspaceDAO, 'getProject').mockResolvedValue(mockProject as unknown);
+      jest.spyOn(workspaceDAO, 'updateProject').mockResolvedValue(mockProject as unknown);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true as unknown);
     });
 
     it('should create project with proper permissions', async () => {
@@ -343,7 +343,7 @@ describe('Workspace Integration Tests', () => {
     });
 
     it('should reject project creation without permission', async () => {
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false as unknown);
 
       const projectData: CreateProject = {
         workspace_id: workspaceId,
@@ -373,17 +373,17 @@ describe('Workspace Integration Tests', () => {
     };
 
     beforeEach(() => {
-      jest.spyOn(workspaceDAO, 'createComment').mockResolvedValue(mockComment);
-      jest.spyOn(workspaceDAO, 'getComment').mockResolvedValue(mockComment);
-      jest.spyOn(workspaceDAO, 'updateComment').mockResolvedValue(mockComment);
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true);
+      jest.spyOn(workspaceDAO, 'createComment').mockResolvedValue(mockComment as unknown);
+      jest.spyOn(workspaceDAO, 'getComment').mockResolvedValue(mockComment as unknown);
+      jest.spyOn(workspaceDAO, 'updateComment').mockResolvedValue(mockComment as unknown);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true as unknown);
     });
 
     it('should create comment with proper permissions', async () => {
       const commentData = {
         resource_id: resourceId,
         author_id: mockUser,
-        content_markdown: 'Test comment',
+        content: 'Test comment',
         workspace_id: workspaceId
       };
 
@@ -431,7 +431,7 @@ describe('Workspace Integration Tests', () => {
 
     it('should reject comment update by non-author without admin permission', async () => {
       const differentUser = 'user-456';
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false as unknown);
 
       await expect(
         workspaceService.updateComment(
@@ -448,7 +448,7 @@ describe('Workspace Integration Tests', () => {
     const workspaceId = 'workspace-456';
 
     beforeEach(() => {
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true as unknown);
       jest.spyOn(workspaceDAO, 'getActivityFeed').mockResolvedValue({
         data: [{
           id: 'activity-123',
@@ -456,7 +456,7 @@ describe('Workspace Integration Tests', () => {
           actor_id: mockUser,
           event_type: 'workspace.updated',
           event_data: {},
-          created_at: new Date(),
+          created_at: new Date( as unknown),
           actor_name: 'Test User',
           actor_avatar: undefined
         }],
@@ -488,7 +488,7 @@ describe('Workspace Integration Tests', () => {
     });
 
     it('should reject activity feed access without permission', async () => {
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false as unknown);
 
       await expect(
         workspaceService.getActivityFeed(workspaceId, mockUser)
@@ -502,7 +502,7 @@ describe('Workspace Integration Tests', () => {
     const inviteeId = 'user-789';
 
     beforeEach(() => {
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(true as unknown);
       jest.spyOn(workspaceDAO, 'getRole').mockResolvedValue({
         id: 'role-123',
         workspace_id: workspaceId,
@@ -510,7 +510,7 @@ describe('Workspace Integration Tests', () => {
         description: 'Editor role',
         permissions: ROLE_PERMISSIONS.EDITOR,
         is_system_role: true,
-        created_at: new Date(),
+        created_at: new Date( as unknown),
         updated_at: new Date()
       });
       jest.spyOn(workspaceDAO, 'createUserMembership').mockResolvedValue({
@@ -519,7 +519,7 @@ describe('Workspace Integration Tests', () => {
         workspace_id: workspaceId,
         status: 'active',
         invited_by: mockUser,
-        joined_at: new Date(),
+        joined_at: new Date( as unknown),
         last_active_at: new Date()
       });
       jest.spyOn(workspaceDAO, 'createACLAssignment').mockResolvedValue({
@@ -529,7 +529,7 @@ describe('Workspace Integration Tests', () => {
         scope_type: 'workspace',
         scope_id: workspaceId,
         granted_by: mockUser,
-        granted_at: new Date()
+        granted_at: new Date( as unknown)
       });
       jest.spyOn(workspaceDAO, 'createActivityEvent').mockResolvedValue({
         id: 'activity-123',
@@ -537,7 +537,7 @@ describe('Workspace Integration Tests', () => {
         actor_id: mockUser,
         event_type: 'user.invited',
         event_data: { invited_user: inviteeId, role: 'editor' },
-        created_at: new Date()
+        created_at: new Date( as unknown)
       });
     });
 
@@ -560,7 +560,7 @@ describe('Workspace Integration Tests', () => {
     });
 
     it('should reject invitation without permission', async () => {
-      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false);
+      jest.spyOn(workspaceDAO, 'hasPermissions').mockResolvedValue(false as unknown);
 
       await expect(
         workspaceService.inviteUserToWorkspace(
@@ -573,7 +573,7 @@ describe('Workspace Integration Tests', () => {
     });
 
     it('should reject invitation with invalid role', async () => {
-      jest.spyOn(workspaceDAO, 'getRole').mockResolvedValue(null);
+      jest.spyOn(workspaceDAO, 'getRole').mockResolvedValue(null as unknown);
 
       await expect(
         workspaceService.inviteUserToWorkspace(
@@ -588,25 +588,6 @@ describe('Workspace Integration Tests', () => {
 });
 
 // Test helper functions
-export const createTestUser = (overrides: Partial<CreateUser> = {}): CreateUser => ({
-  email: 'test@example.com',
-  name: 'Test User',
-  auth_provider: 'local',
-  ...overrides
-});
-
-export const createTestWorkspace = (overrides: Partial<CreateWorkspace> = {}): CreateWorkspace => ({
-  name: 'Test Workspace',
-  description: 'A test workspace',
-  ...overrides
-});
-
-export const createTestProject = (
-  workspaceId: string, 
-  overrides: Partial<CreateProject> = {}
-): CreateProject => ({
-  workspace_id: workspaceId,
-  name: 'Test Project',
-  description: 'A test project',
-  ...overrides
-});
+export 
+export 
+export });

@@ -34,7 +34,7 @@ export interface ImportValidationResult {
  */
 export class TypeScriptValidator {
   private options: TypeScriptValidationOptions;
-  private packageJsonCache = new Map<string, any>();
+  private packageJsonCache = new Map<string, Record<string, unknown>>();
   private nodeModulesCache = new Map<string, boolean>();
   
   constructor(options: TypeScriptValidationOptions) {
@@ -391,7 +391,7 @@ export class TypeScriptValidator {
       this.nodeModulesCache.set(cleanPackageName, false);
       return false;
       
-    } catch (_error) {
+    } catch {
       this.nodeModulesCache.set(cleanPackageName, false);
       return false;
     }
@@ -425,7 +425,7 @@ export class TypeScriptValidator {
       
       return false;
       
-    } catch (error) {
+    } catch {
       return false;
     }
   }

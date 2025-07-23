@@ -143,8 +143,9 @@ export class APIMockService {
   }
 
   // Authentication Handlers
-  private async handleLogin(req: any, res: any, ctx: any) {
-    const { email, password, mfa } = await req.json();
+  private async handleLogin(req: unknown, res: unknown, ctx: unknown) {
+    const reqBody = await (req as { json: () => Promise<{ email: string; password: string; mfa?: string }> }).json();
+    const { email, password } = reqBody;
     
     // Simulate authentication logic
     if (email === 'test@example.com' && password === 'password123') {
@@ -190,7 +191,7 @@ export class APIMockService {
     }
   }
 
-  private async handleLogout(req: any, res: any, ctx: any) {
+  private async handleLogout(req: unknown, res: unknown, ctx: unknown) {
     const authHeader = req.headers.get('authorization');
     if (authHeader) {
       const sessionId = this.extractSessionFromToken(authHeader);
@@ -208,7 +209,7 @@ export class APIMockService {
     );
   }
 
-  private async handleRefreshToken(req: any, res: any, ctx: any) {
+  private async handleRefreshToken(req: unknown, res: unknown, ctx: unknown) {
     const { refreshToken } = await req.json();
     
     // Simple refresh token validation
@@ -245,7 +246,7 @@ export class APIMockService {
     );
   }
 
-  private async handleGetCurrentUser(req: any, res: any, ctx: any) {
+  private async handleGetCurrentUser(req: unknown, res: unknown, ctx: unknown) {
     const authHeader = req.headers.get('authorization');
     if (!authHeader) {
       return res(
@@ -279,12 +280,18 @@ export class APIMockService {
     );
   }
 
-  private async handleRegister(req: any, res: any, ctx: any) {
-    const { email, password, username } = await req.json();
+  private async handleRegister(req: unknown, res: unknown, ctx: unknown) {
+    const reqBody = await (
+      req as { json: () => Promise<{ email: string; password: string; username: string }> }
+    ).json();
+    const { email, username } = reqBody;
     
     // Check if user already exists
     const existingUser = Array.from(this.mockData.values()).find(
-      (value: any) => value.user && value.user.email === email
+      (value: unknown) => {
+        const typedValue = value as { user?: { email: string } };
+        return typedValue.user && typedValue.user.email === email;
+      }
     );
 
     if (existingUser) {
@@ -332,7 +339,7 @@ export class APIMockService {
   }
 
   // Graph Operation Handlers
-  private async handleGraphExecution(req: any, res: any, ctx: any) {
+  private async handleGraphExecution(req: unknown, res: unknown, ctx: unknown) {
     const request: GraphExecutionRequest = await req.json();
     
     // Simulate graph execution
@@ -350,7 +357,9 @@ export class APIMockService {
       data: {
         results,
         totalExecutionTime: results.reduce((sum, r) => sum + r.executionTime, 0),
-        averageExecutionTime: results.length > 0 ? results.reduce((sum, r) => sum + r.executionTime, 0) / results.length : 0
+        averageExecutionTime: results.length > 0 
+          ? results.reduce((sum, r) => sum + r.executionTime, 0) / results.length 
+          : 0
       }
     };
 
@@ -360,7 +369,7 @@ export class APIMockService {
     );
   }
 
-  private async handleCreateGraph(req: any, res: any, ctx: any) {
+  private async handleCreateGraph(req: unknown, res: unknown, ctx: unknown) {
     const graphData = await req.json();
     
     const graph = {
@@ -381,7 +390,7 @@ export class APIMockService {
     );
   }
 
-  private async handleGetGraph(req: any, res: any, ctx: any) {
+  private async handleGetGraph(req: unknown, res: unknown, ctx: unknown) {
     const { id } = req.params;
     const graph = this.mockData.get(`graph_${id}`);
 
@@ -404,7 +413,7 @@ export class APIMockService {
     );
   }
 
-  private async handleUpdateGraph(req: any, res: any, ctx: any) {
+  private async handleUpdateGraph(req: unknown, res: unknown, ctx: unknown) {
     const { id } = req.params;
     const updates = await req.json();
     const graph = this.mockData.get(`graph_${id}`);
@@ -436,7 +445,7 @@ export class APIMockService {
     );
   }
 
-  private async handleDeleteGraph(req: any, res: any, ctx: any) {
+  private async handleDeleteGraph(req: unknown, res: unknown, ctx: unknown) {
     const { id } = req.params;
     const existed = this.mockData.delete(`graph_${id}`);
 
@@ -449,7 +458,7 @@ export class APIMockService {
     );
   }
 
-  private async handleExportGraph(req: any, res: any, ctx: any) {
+  private async handleExportGraph(req: unknown, res: unknown, ctx: unknown) {
     const { id } = req.params;
     const { format = 'json' } = await req.json();
     const graph = this.mockData.get(`graph_${id}`);
@@ -489,7 +498,7 @@ export class APIMockService {
     );
   }
 
-  private async handlePreview(req: any, res: any, ctx: any) {
+  private async handlePreview(req: unknown, res: unknown, ctx: unknown) {
     const request = await req.json();
     
     // Simulate preview generation
@@ -508,7 +517,7 @@ export class APIMockService {
   }
 
   // Database Operation Handlers
-  private async handleDatabaseQuery(req: any, res: any, ctx: any) {
+  private async handleDatabaseQuery(req: unknown, res: unknown, ctx: unknown) {
     const request: DatabaseOperationRequest = await req.json();
     
     // Simulate database operations
@@ -550,7 +559,7 @@ export class APIMockService {
     );
   }
 
-  private async handleDatabaseHealth(req: any, res: any, ctx: any) {
+  private async handleDatabaseHealth(req: unknown, res: unknown, ctx: unknown) {
     return res(
       ctx.status(200),
       ctx.json({
@@ -573,7 +582,7 @@ export class APIMockService {
   }
 
   // Analytics Handlers
-  private async handleAnalyticsTrack(req: any, res: any, ctx: any) {
+  private async handleAnalyticsTrack(req: unknown, res: unknown, ctx: unknown) {
     const { event, properties, userId } = await req.json();
     
     const eventData = {
@@ -602,7 +611,7 @@ export class APIMockService {
     );
   }
 
-  private async handleAnalyticsDashboard(req: any, res: any, ctx: any) {
+  private async handleAnalyticsDashboard(req: unknown, res: unknown, ctx: unknown) {
     const events = this.mockData.get('analytics_events') || [];
     
     return res(
@@ -624,7 +633,7 @@ export class APIMockService {
   }
 
   // File Operation Handlers
-  private async handleFileUpload(req: any, res: any, ctx: any) {
+  private async handleFileUpload(req: unknown, res: unknown, ctx: unknown) {
     // Simulate file upload
     const file = {
       id: this.generateId(),
@@ -645,7 +654,7 @@ export class APIMockService {
     );
   }
 
-  private async handleFileDownload(req: any, res: any, ctx: any) {
+  private async handleFileDownload(req: unknown, res: unknown, ctx: unknown) {
     const { id } = req.params;
     const file = this.mockData.get(`file_${id}`);
 
@@ -667,7 +676,7 @@ export class APIMockService {
     );
   }
 
-  private async handleWebSocketConnection(req: any, res: any, ctx: any) {
+  private async handleWebSocketConnection(req: unknown, res: unknown, ctx: unknown) {
     // Simulate WebSocket connection response
     return res(
       ctx.status(200),
@@ -694,7 +703,10 @@ export class APIMockService {
     return `mock_${Date.now()}_${Math.floor(this.rng() * 10000)}`;
   }
 
-  private generateJWT(user: any, sessionId: string): string {
+  private generateJWT(
+    user: { id: string; email: string; role: string; permissions: string[] }, 
+    sessionId: string
+  ): string {
     const payload = {
       userId: user.id,
       email: user.email,
@@ -721,7 +733,7 @@ export class APIMockService {
     return null;
   }
 
-  private simulateGraphExecution(graph: any, seed: number): string {
+  private simulateGraphExecution(graph: unknown, seed: number): string {
     const rng = seedrandom(seed.toString());
     const outputs = [
       'Generated creative content A',
@@ -733,7 +745,7 @@ export class APIMockService {
     return outputs[Math.floor(rng() * outputs.length)];
   }
 
-  private generateMockTableData(count: number): any[] {
+  private generateMockTableData(count: number): unknown[] {
     const data = [];
     for (let i = 0; i < count; i++) {
       data.push({
@@ -746,7 +758,7 @@ export class APIMockService {
     return data;
   }
 
-  private aggregateEvents(events: any[]): any[] {
+  private aggregateEvents(events: unknown[]): unknown[] {
     const eventCounts: Record<string, number> = {};
     events.forEach(event => {
       eventCounts[event.event] = (eventCounts[event.event] || 0) + 1;
@@ -761,7 +773,7 @@ export class APIMockService {
   /**
    * Get mock server instance for direct manipulation
    */
-  getServer(): any {
+  getServer(): unknown {
     return this.server;
   }
 
@@ -775,7 +787,7 @@ export class APIMockService {
   /**
    * Get current mock data
    */
-  getMockData(): Map<string, any> {
+  getMockData(): Map<string, unknown> {
     return this.mockData;
   }
 }

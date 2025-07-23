@@ -9,11 +9,7 @@ import { rest } from 'msw';
 import { templateDb } from './data/template-db';
 import { validateTemplateData } from './validators/template-validator';
 
-export const templateHandlers = [
-  // GET /api/templates - Search and list templates
-  rest.get('/api/templates', (req, res, ctx) => {
-    const url = new URL(req.url);
-    const query = url.searchParams.get('query') || '';
+export     const query = url.searchParams.get('query') || '';
     const categoryId = url.searchParams.get('category_id');
     const tags = url.searchParams.getAll('tags');
     const authorId = url.searchParams.get('author_id');
@@ -44,7 +40,7 @@ export const templateHandlers = [
           totalPages: Math.ceil(results.total / limit)
         })
       );
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -123,7 +119,7 @@ export const templateHandlers = [
         ctx.status(201),
         ctx.json(template)
       );
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -191,7 +187,7 @@ export const templateHandlers = [
         ctx.status(200),
         ctx.json(template)
       );
-    } catch (error) {
+    } catch {
       if (error.message.includes('Permission denied')) {
         return res(
           ctx.status(403),
@@ -252,7 +248,7 @@ export const templateHandlers = [
       }
 
       return res(ctx.status(204));
-    } catch (error) {
+    } catch {
       if (error.message.includes('Permission denied')) {
         return res(
           ctx.status(403),
@@ -306,7 +302,7 @@ export const templateHandlers = [
         ctx.status(200),
         ctx.json(customizedTemplate)
       );
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(400),
         ctx.json({ 
@@ -357,7 +353,7 @@ export const templateHandlers = [
         ctx.status(201),
         ctx.json(usage)
       );
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -400,7 +396,7 @@ export const templateHandlers = [
         ctx.status(200),
         ctx.json(analytics)
       );
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -451,7 +447,7 @@ export const templateHandlers = [
         ctx.set(headers),
         ctx.text(exportData.content)
       );
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -496,7 +492,7 @@ export const templateHandlers = [
         ctx.status(201),
         ctx.json(review)
       );
-    } catch (error) {
+    } catch {
       if (error.message.includes('duplicate')) {
         return res(
           ctx.status(409),
@@ -539,7 +535,7 @@ export const templateHandlers = [
         ctx.status(200),
         ctx.json(reviews)
       );
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({ 
@@ -574,7 +570,7 @@ export const templateHandlers = [
           message: isValid ? 'Template name is available' : 'Template name already exists'
         })
       );
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({ 

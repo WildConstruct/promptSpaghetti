@@ -7,7 +7,7 @@
  * Task: E18-1753114562158-DAD671
  */
 
-import MockFactory, { MockConfig, MockBehavior } from './MockFactory';
+import MockFactory, { MockConfig } from './MockFactory';
 import seedrandom from 'seedrandom';
 import { EventEmitter } from 'events';
 
@@ -17,7 +17,7 @@ export interface ServiceConfig {
   endpoint?: string;
   authentication?: {
     type: 'bearer' | 'basic' | 'api_key' | 'oauth';
-    credentials?: any;
+    credentials?: unknown;
   };
   timeout?: number;
   retries?: number;
@@ -29,7 +29,7 @@ export interface ServiceConfig {
 
 export interface MockResponse {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
   statusCode?: number;
   headers?: Record<string, string>;
@@ -40,7 +40,7 @@ export interface ServiceCall {
   id: string;
   service: string;
   method: string;
-  args: any[];
+  args: unknown[];
   timestamp: Date;
   response?: MockResponse;
   duration?: number;
@@ -48,7 +48,7 @@ export interface ServiceCall {
 
 export class ServiceMockManager extends EventEmitter {
   private factory: MockFactory;
-  private services: Map<string, any> = new Map();
+  private services: Map<string, unknown> = new Map();
   private callHistory: ServiceCall[] = [];
   private circuitBreakers: Map<string, CircuitBreaker> = new Map();
   private rng: seedrandom.PRNG;
@@ -63,7 +63,7 @@ export class ServiceMockManager extends EventEmitter {
   /**
    * Register a new mock service
    */
-  registerService(name: string, serviceConfig: ServiceConfig): any {
+  registerService(name: string, serviceConfig: ServiceConfig): unknown {
     const service = this.createMockService(name, serviceConfig);
     this.services.set(name, service);
     
@@ -79,14 +79,14 @@ export class ServiceMockManager extends EventEmitter {
   /**
    * Get a registered service
    */
-  getService(name: string): any {
+  getService(name: string): unknown {
     return this.services.get(name);
   }
 
   /**
    * Create authentication service mock
    */
-  createAuthenticationService(name: string = 'auth'): any {
+  createAuthenticationService(name: string = 'auth'): unknown {
     const users = new Map();
     const sessions = new Map();
     const tokens = new Map();
@@ -96,7 +96,7 @@ export class ServiceMockManager extends EventEmitter {
       type: 'authentication',
 
       // User management
-      createUser: async (userData: any) => {
+      createUser: async (userData: unknown) => {
         const user = {
           id: this.generateId(),
           ...userData,
@@ -112,7 +112,7 @@ export class ServiceMockManager extends EventEmitter {
         await this.simulateLatency(name);
         
         // Find user by email
-        const user = Array.from(users.values()).find((u: any) => u.email === credentials.email);
+        const user = Array.from(users.values()).find((u: unknown) => u.email === credentials.email);
         
         if (user && user.password === credentials.password) {
           const sessionId = this.generateId();
@@ -171,7 +171,7 @@ export class ServiceMockManager extends EventEmitter {
       },
 
       refreshToken: async (refreshToken: string) => {
-        const session = Array.from(sessions.values()).find((s: any) => s.refreshToken === refreshToken);
+        const session = Array.from(sessions.values()).find((s: unknown) => s.refreshToken === refreshToken);
         if (session && new Date() < session.expiresAt) {
           const newAccessToken = this.generateJWT(users.get(session.userId), session.id);
           const newRefreshToken = this.generateId();
@@ -229,7 +229,7 @@ export class ServiceMockManager extends EventEmitter {
       // Password reset
       resetPassword: {
         request: async (email: string) => {
-          const user = Array.from(users.values()).find((u: any) => u.email === email);
+          const user = Array.from(users.values()).find((u: unknown) => u.email === email);
           if (user) {
             const resetToken = this.generateId();
             user.resetToken = resetToken;
@@ -239,11 +239,15 @@ export class ServiceMockManager extends EventEmitter {
               resetToken // In real app, would send via email
             });
           }
-          return this.createServiceResponse(name, 'resetPassword.request', { success: true }); // Don't reveal if email exists
+          return this.createServiceResponse(
+            name,
+            'resetPassword.request',
+            { success: true }
+          ); // Don't reveal if email exists
         },
 
         confirm: async (token: string, newPassword: string) => {
-          const user = Array.from(users.values()).find((u: any) => u.resetToken === token);
+          const user = Array.from(users.values()).find((u: unknown) => u.resetToken === token);
           if (user && user.resetTokenExpires > new Date()) {
             user.password = newPassword;
             delete user.resetToken;
@@ -275,7 +279,7 @@ export class ServiceMockManager extends EventEmitter {
   /**
    * Create file storage service mock
    */
-  createFileStorageService(name: string = 'storage'): any {
+  createFileStorageService(name: string = 'storage'): unknown {
     const files = new Map();
     const metadata = new Map();
 
@@ -283,7 +287,7 @@ export class ServiceMockManager extends EventEmitter {
       name,
       type: 'storage',
 
-      upload: async (file: { name: string; content: any; mimeType?: string; size?: number }) => {
+      upload: async (file: { name: string; _content: unknown; mimeType?: string; size?: number }) => {
         await this.simulateLatency(name, 500); // File upload takes longer
         
         const fileId = this.generateId();
@@ -334,10 +338,10 @@ export class ServiceMockManager extends EventEmitter {
         
         if (filter) {
           if (filter.mimeType) {
-            fileList = fileList.filter((f: any) => f.mimeType === filter.mimeType);
+            fileList = fileList.filter((f: unknown) => f.mimeType === filter.mimeType);
           }
           if (filter.uploadedAfter) {
-            fileList = fileList.filter((f: any) => f.uploadedAt >= filter.uploadedAfter);
+            fileList = fileList.filter((f: unknown) => f.uploadedAt >= filter.uploadedAfter);
           }
         }
 
@@ -359,8 +363,8 @@ export class ServiceMockManager extends EventEmitter {
   /**
    * Create email service mock
    */
-  createEmailService(name: string = 'email'): any {
-    const sentEmails: any[] = [];
+  createEmailService(name: string = 'email'): unknown {
+    const sentEmails: unknown[] = [];
 
     const emailService = {
       name,
@@ -372,9 +376,9 @@ export class ServiceMockManager extends EventEmitter {
         body: string;
         from?: string;
         replyTo?: string;
-        attachments?: any[];
+        attachments?: unknown[];
         template?: string;
-        templateData?: any;
+        templateData?: unknown;
       }) => {
         await this.simulateLatency(name, 300);
         
@@ -394,7 +398,7 @@ export class ServiceMockManager extends EventEmitter {
         });
       },
 
-      sendBulk: async (emails: any[]) => {
+      sendBulk: async (emails: unknown[]) => {
         await this.simulateLatency(name, emails.length * 50); // Scale with email count
         
         const results = emails.map(emailData => {
@@ -415,7 +419,9 @@ export class ServiceMockManager extends EventEmitter {
         const email = sentEmails.find(e => e.id === messageId);
         if (email) {
           const statuses = ['sent', 'delivered', 'opened', 'clicked'];
-          const status = statuses[Math.min(Math.floor(this.rng() * statuses.length), statuses.indexOf(email.status) + 1)];
+          const randomIndex = Math.floor(this.rng() * statuses.length);
+          const maxIndex = statuses.indexOf((email as { status: string }).status) + 1;
+          const status = statuses[Math.min(randomIndex, maxIndex)];
           return this.createServiceResponse(name, 'getDeliveryStatus', { 
             messageId,
             status,
@@ -439,15 +445,15 @@ export class ServiceMockManager extends EventEmitter {
   /**
    * Create analytics service mock
    */
-  createAnalyticsService(name: string = 'analytics'): any {
-    const events: any[] = [];
-    const users: Map<string, any> = new Map();
+  createAnalyticsService(name: string = 'analytics'): unknown {
+    const events: unknown[] = [];
+    const users: Map<string, unknown> = new Map();
 
     const analyticsService = {
       name,
       type: 'analytics',
 
-      track: async (userId: string, event: string, properties?: any) => {
+      track: async (userId: string, event: string, properties?: unknown) => {
         const eventData = {
           id: this.generateId(),
           userId,
@@ -461,7 +467,7 @@ export class ServiceMockManager extends EventEmitter {
         return this.createServiceResponse(name, 'track', { eventId: eventData.id });
       },
 
-      identify: async (userId: string, traits: any) => {
+      identify: async (userId: string, _traits: unknown) => {
         users.set(userId, {
           id: userId,
           traits,
@@ -471,14 +477,14 @@ export class ServiceMockManager extends EventEmitter {
         return this.createServiceResponse(name, 'identify', { success: true });
       },
 
-      page: async (userId: string, pageName: string, properties?: any) => {
+      page: async (userId: string, pageName: string, properties?: unknown) => {
         return this.track(userId, 'page_view', { 
           page: pageName,
           ...properties 
         });
       },
 
-      group: async (userId: string, groupId: string, traits?: any) => {
+      group: async (userId: string, groupId: string, _traits?: unknown) => {
         return this.createServiceResponse(name, 'group', { 
           userId,
           groupId,
@@ -556,7 +562,7 @@ export class ServiceMockManager extends EventEmitter {
   /**
    * Create WebSocket service mock
    */
-  createWebSocketService(name: string = 'websocket'): any {
+  createWebSocketService(name: string = 'websocket'): unknown {
     const connections = new Map();
     const channels = new Map();
 
@@ -605,7 +611,7 @@ export class ServiceMockManager extends EventEmitter {
         return this.createServiceResponse(name, 'disconnect', { error: 'Connection not found' }, 404);
       },
 
-      send: async (connectionId: string, message: any) => {
+      send: async (connectionId: string, message: unknown) => {
         const connection = connections.get(connectionId);
         if (connection) {
           wsService.emit('message', { connectionId, message, timestamp: new Date() });
@@ -614,7 +620,7 @@ export class ServiceMockManager extends EventEmitter {
         return this.createServiceResponse(name, 'send', { error: 'Connection not found' }, 404);
       },
 
-      broadcast: async (channel: string, message: any, excludeConnection?: string) => {
+      broadcast: async (channel: string, message: unknown, excludeConnection?: string) => {
         const channelConnections = channels.get(channel) || new Set();
         let delivered = 0;
 
@@ -677,9 +683,9 @@ export class ServiceMockManager extends EventEmitter {
   /**
    * Create notification service mock
    */
-  createNotificationService(name: string = 'notifications'): any {
-    const notifications: any[] = [];
-    const subscriptions: Map<string, any[]> = new Map();
+  createNotificationService(name: string = 'notifications'): unknown {
+    const notifications: unknown[] = [];
+    const subscriptions: Map<string, unknown[]> = new Map();
 
     const notificationService = {
       name,
@@ -690,7 +696,7 @@ export class ServiceMockManager extends EventEmitter {
         type: 'email' | 'push' | 'sms' | 'in_app';
         title: string;
         message: string;
-        data?: any;
+        data?: unknown;
         scheduledFor?: Date;
       }) => {
         const notif = {
@@ -708,7 +714,7 @@ export class ServiceMockManager extends EventEmitter {
         });
       },
 
-      subscribe: async (userId: string, channels: string[], preferences?: any) => {
+      subscribe: async (userId: string, channels: string[], preferences?: unknown) => {
         const subscription = {
           userId,
           channels,
@@ -770,13 +776,13 @@ export class ServiceMockManager extends EventEmitter {
   }
 
   // Helper methods
-  private createMockService(name: string, config: ServiceConfig): any {
+  private createMockService(name: string, config: ServiceConfig): unknown {
     const baseService = {
       name,
       config,
       isHealthy: () => this.rng() > 0.05, // 95% uptime
       getLatency: () => Math.floor(this.rng() * 200) + 10, // 10-210ms
-      call: async (method: string, ...args: any[]) => {
+      call: async (method: string, ...args: unknown[]) => {
         return this.recordServiceCall(name, method, args);
       }
     };
@@ -795,9 +801,9 @@ export class ServiceMockManager extends EventEmitter {
 
   private createHTTPMethods(serviceName: string) {
     return {
-      get: async (path: string, params?: any) => this.recordServiceCall(serviceName, 'GET', [path, params]),
-      post: async (path: string, data?: any) => this.recordServiceCall(serviceName, 'POST', [path, data]),
-      put: async (path: string, data?: any) => this.recordServiceCall(serviceName, 'PUT', [path, data]),
+      get: async (path: string, params?: unknown) => this.recordServiceCall(serviceName, 'GET', [path, params]),
+      post: async (path: string, data?: unknown) => this.recordServiceCall(serviceName, 'POST', [path, data]),
+      put: async (path: string, data?: unknown) => this.recordServiceCall(serviceName, 'PUT', [path, data]),
       delete: async (path: string) => this.recordServiceCall(serviceName, 'DELETE', [path])
     };
   }
@@ -810,7 +816,7 @@ export class ServiceMockManager extends EventEmitter {
         const value = cache.get(key);
         return this.createServiceResponse(serviceName, 'get', { key, value });
       },
-      set: async (key: string, value: any, ttl?: number) => {
+      set: async (key: string, value: unknown, ttl?: number) => {
         cache.set(key, value);
         if (ttl) {
           setTimeout(() => cache.delete(key), ttl * 1000);
@@ -828,14 +834,14 @@ export class ServiceMockManager extends EventEmitter {
     const queues = new Map();
     
     return {
-      publish: async (topic: string, message: any) => {
+      publish: async (_topic: string, message: unknown) => {
         if (!queues.has(topic)) {
           queues.set(topic, []);
         }
         queues.get(topic).push({ message, timestamp: new Date() });
         return this.createServiceResponse(serviceName, 'publish', { messageId: this.generateId() });
       },
-      subscribe: async (topic: string, handler: Function) => {
+      subscribe: async (_topic: string, _handler: () => void) => {
         // Mock subscription
         return this.createServiceResponse(serviceName, 'subscribe', { subscribed: true });
       }
@@ -852,7 +858,7 @@ export class ServiceMockManager extends EventEmitter {
     this.createNotificationService();
   }
 
-  private async recordServiceCall(serviceName: string, method: string, args: any[]): Promise<MockResponse> {
+  private async recordServiceCall(serviceName: string, method: string, args: unknown[]): Promise<MockResponse> {
     const callId = this.generateId();
     const startTime = Date.now();
 
@@ -918,7 +924,12 @@ export class ServiceMockManager extends EventEmitter {
     }
   }
 
-  private createServiceResponse(serviceName: string, method: string, data: any, statusCode: number = 200): MockResponse {
+  private createServiceResponse(
+    serviceName: string, 
+    method: string, 
+    data: unknown, 
+    statusCode: number = 200
+  ): MockResponse {
     return {
       success: statusCode < 400,
       data: statusCode < 400 ? data : undefined,
@@ -953,7 +964,7 @@ export class ServiceMockManager extends EventEmitter {
     });
   }
 
-  private generateEmailEvents(email: any): any[] {
+  private generateEmailEvents(email: unknown): unknown[] {
     const events = [{ type: 'sent', timestamp: email.sentAt }];
     
     if (this.rng() > 0.2) { // 80% delivery rate
@@ -981,7 +992,7 @@ export class ServiceMockManager extends EventEmitter {
     return devices[Math.floor(this.rng() * devices.length)];
   }
 
-  private generateJWT(user: any, sessionId: string): string {
+  private generateJWT(user: unknown, sessionId: string): string {
     const payload = {
       sub: user.id,
       email: user.email,
@@ -997,7 +1008,7 @@ export class ServiceMockManager extends EventEmitter {
     return `sess_${Date.now()}_${Math.floor(this.rng() * 10000)}`;
   }
 
-  private generateChecksum(content: any): string {
+  private generateChecksum(_content: unknown): string {
     return `md5_${Math.floor(this.rng() * 1000000)}`;
   }
 

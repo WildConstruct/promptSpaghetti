@@ -10,10 +10,10 @@ import { faker } from '@faker-js/faker';
 
 // Mock analytics data storage
 const mockAnalytics = {
-  dailyStats: new Map<string, any>(),
-  userActivity: new Map<number, any[]>(),
-  templateMetrics: new Map<number, any>(),
-  systemMetrics: new Map<string, any>()
+  dailyStats: new Map<string, unknown>(),
+  userActivity: new Map<number, unknown[]>(),
+  templateMetrics: new Map<number, unknown>(),
+  systemMetrics: new Map<string, unknown>()
 };
 
 // Generate sample analytics data
@@ -109,11 +109,7 @@ function generateSampleData() {
 // Initialize sample data
 generateSampleData();
 
-export const analyticsHandlers = [
-  // GET /api/analytics/dashboard - Get dashboard overview
-  rest.get('/api/analytics/dashboard', (req, res, ctx) => {
-    const url = new URL(req.url);
-    const timeRange = url.searchParams.get('range') || '7d';
+export     const timeRange = url.searchParams.get('range') || '7d';
     
     let days;
     switch (timeRange) {
@@ -176,7 +172,7 @@ export const analyticsHandlers = [
   rest.get('/api/analytics/users', (req, res, ctx) => {
     const url = new URL(req.url);
     const timeRange = url.searchParams.get('range') || '30d';
-    const segment = url.searchParams.get('segment'); // new, returning, active
+    // const segment = url.searchParams.get('segment'); // new, returning, active - unused for now
 
     const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 1;
     const recentStats = Array.from(mockAnalytics.dailyStats.values()).slice(0, days);
@@ -258,7 +254,8 @@ export const analyticsHandlers = [
       totalTemplates: mockAnalytics.templateMetrics.size,
       totalViews: Array.from(mockAnalytics.templateMetrics.values()).reduce((sum, t) => sum + t.views, 0),
       totalDownloads: Array.from(mockAnalytics.templateMetrics.values()).reduce((sum, t) => sum + t.downloads, 0),
-      avgRating: Array.from(mockAnalytics.templateMetrics.values()).reduce((sum, t) => sum + t.rating, 0) / mockAnalytics.templateMetrics.size,
+      avgRating: Array.from(mockAnalytics.templateMetrics.values())
+        .reduce((sum, t) => sum + (t as { rating: number }).rating, 0) / mockAnalytics.templateMetrics.size,
       topPerformer: templates[0]
     };
 
@@ -438,7 +435,7 @@ export const analyticsHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({

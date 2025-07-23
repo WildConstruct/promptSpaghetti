@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect } from 'react';
 import './DataAccessDashboard.css';
-import { useDataAccess } from '../../hooks/useDataAccess';
 
 // Types
 interface DataAccessGrant {
@@ -117,7 +116,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
       const response = await apiRequest(`/data-access/grants/${userId}`);
       setGrants(response.grants || []);
     } catch (err) {
-      setError(`Failed to load access grants: ${err.message}`);
+      setError(`Failed to load access grants: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -138,7 +137,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
       const response = await apiRequest(`/data-access/audit/${userId}?${queryParams}`);
       setHistory(response.data || []);
     } catch (err) {
-      setError(`Failed to load access history: ${err.message}`);
+      setError(`Failed to load access history: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -166,7 +165,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
       
       alert('Access request submitted successfully!');
     } catch (err) {
-      setError(`Failed to submit access request: ${err.message}`);
+      setError(`Failed to submit access request: ${err instanceof Error ? err.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }

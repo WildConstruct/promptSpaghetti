@@ -9,8 +9,8 @@ import { rest } from 'msw';
 import { faker } from '@faker-js/faker';
 
 // Mock user database
-const mockUsers = new Map<number, any>();
-const mockPreferences = new Map<number, any>();
+const mockUsers = new Map<number, unknown>();
+const mockPreferences = new Map<number, unknown>();
 
 // Initialize with sample users
 const sampleUsers = [
@@ -81,11 +81,7 @@ sampleUsers.forEach(user => {
   });
 });
 
-export const userHandlers = [
-  // GET /api/users - Get users list with filtering and pagination
-  rest.get('/api/users', (req, res, ctx) => {
-    const url = new URL(req.url);
-    const page = parseInt(url.searchParams.get('page') || '1');
+export     const page = parseInt(url.searchParams.get('page') || '1');
     const limit = parseInt(url.searchParams.get('limit') || '20');
     const role = url.searchParams.get('role');
     const search = url.searchParams.get('search');
@@ -281,7 +277,7 @@ export const userHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -375,7 +371,7 @@ export const userHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -408,7 +404,9 @@ export const userHandlers = [
     // Generate mock activity data
     const activities = Array.from({ length: limit }, (_, index) => ({
       id: index + 1,
-      type: faker.helpers.arrayElement(['template_created', 'template_updated', 'template_deleted', 'login', 'profile_updated']),
+      type: faker.helpers.arrayElement([
+        'template_created', 'template_updated', 'template_deleted', 'login', 'profile_updated'
+      ]),
       description: faker.lorem.sentence(),
       metadata: {
         templateId: faker.number.int({ min: 1, max: 100 }),

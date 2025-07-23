@@ -128,13 +128,13 @@ export class ComprehensiveMockSystem {
    * Get comprehensive mock system statistics
    */
   getStatistics(): {
-    factory: any;
-    database: any;
-    services: any;
+    factory: unknown;
+    database: unknown;
+    services: unknown;
     system: {
       initialized: boolean;
       uptime: number;
-      memoryUsage: any;
+      memoryUsage: unknown;
     };
     } {
     return {
@@ -150,7 +150,7 @@ export class ComprehensiveMockSystem {
       },
       system: {
         initialized: this.isInitialized,
-        uptime: Date.now() - (this.factory as any).createdAt || 0,
+        uptime: Date.now() - (this.factory as { createdAt?: number }).createdAt || 0,
         memoryUsage: process.memoryUsage()
       }
     };
@@ -220,7 +220,7 @@ export class ComprehensiveMockSystem {
       
       authenticationFlow: () => {
         // Configure authentication mocks
-        const authService = this.serviceMocks.createAuthenticationService('test-auth');
+        this.serviceMocks.createAuthenticationService('test-auth');
         // Auth service is automatically configured with mock users and sessions
       }
     };
@@ -282,35 +282,4 @@ export function createMockSystem(config: MockConfig = {}): ComprehensiveMockSyst
 /**
  * Utility function to create mock system presets
  */
-export const MockSystemPresets = {
-  /**
-   * Testing preset - deterministic, fast, no logging
-   */
-  testing: () => createMockSystem({
-    seed: 12345,
-    deterministic: true,
-    enableLogging: false,
-    environment: 'test'
-  }),
-
-  /**
-   * Development preset - non-deterministic, logging enabled
-   */
-  development: () => createMockSystem({
-    seed: Date.now(),
-    deterministic: false,
-    enableLogging: true,
-    environment: 'development'
-  }),
-
-  /**
-   * Performance testing preset - optimized for speed
-   */
-  performance: () => createMockSystem({
-    seed: 12345,
-    deterministic: true,
-    enableLogging: false,
-    persistence: false,
-    environment: 'test'
-  })
-};
+export };

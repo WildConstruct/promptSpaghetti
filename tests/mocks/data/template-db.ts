@@ -16,9 +16,9 @@ export interface Template {
   author_id: number;
   version: string;
   is_public: boolean;
-  graph_data: any;
-  variables: any[];
-  customization_points: any[];
+  graph_data: unknown;
+  variables: unknown[];
+  customization_points: unknown[];
   usage_count: number;
   average_rating: number;
   download_count: number;
@@ -32,7 +32,7 @@ export interface TemplateUsage {
   template_id: number;
   user_id: number;
   project_id?: number;
-  customizations_applied: any;
+  customizations_applied: unknown;
   used_at: Date;
   success: boolean;
 }
@@ -306,7 +306,7 @@ class TemplateDatabase {
   }
 
   // Template customization
-  customizeTemplate(id: number, customizations: any): Template | null {
+  customizeTemplate(id: number, customizations: unknown): Template | null {
     const template = this.getTemplate(id);
     if (!template) return null;
 
@@ -315,7 +315,7 @@ class TemplateDatabase {
 
     // Apply variable customizations
     if (customizations.variables) {
-      customized.variables = customized.variables.map((variable: any) => {
+      customized.variables = customized.variables.map((variable: unknown) => {
         if (customizations.variables[variable.name]) {
           return {
             ...variable,
@@ -339,12 +339,12 @@ class TemplateDatabase {
     return customized;
   }
 
-  private applyCustomizationPoints(graphData: any, points: any[], customizations: any): any {
+  private applyCustomizationPoints(graphData: unknown, points: unknown[], customizations: unknown): unknown {
     const customizedGraph = JSON.parse(JSON.stringify(graphData));
     
     points.forEach(point => {
       if (customizations[point.id]) {
-        const node = customizedGraph.nodes.find((n: any) => n.id === point.node_id);
+        const node = customizedGraph.nodes.find((n: unknown) => n.id === point.node_id);
         if (node) {
           node.data[point.property] = customizations[point.id];
         }
@@ -355,7 +355,13 @@ class TemplateDatabase {
   }
 
   // Usage tracking
-  recordUsage(templateId: number, userId: number, projectId: number | undefined, customizations: any, success: boolean): TemplateUsage {
+  recordUsage(
+    templateId: number, 
+    userId: number, 
+    projectId: number | undefined, 
+    customizations: unknown, 
+    success: boolean
+  ): TemplateUsage {
     const usage: TemplateUsage = {
       id: this.nextUsageId++,
       template_id: templateId,

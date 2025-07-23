@@ -7,7 +7,6 @@
  * Task: E18-1753114562748-32EEBC - Implement doc testing
  */
 
-import { CodeBlock } from './DocTestFramework';
 
 export interface ApiValidationOptions {
   baseUrl: string;
@@ -23,8 +22,8 @@ export interface ApiValidationOptions {
 export interface ApiExample {
   method: string;
   endpoint: string;
-  requestBody?: any;
-  responseBody?: any;
+  requestBody?: unknown;
+  responseBody?: unknown;
   headers?: Record<string, string>;
   statusCode?: number;
   description?: string;
@@ -34,12 +33,12 @@ export interface ApiExample {
 export interface ApiTestResult {
   endpoint: string;
   method: string;
-  example: any;
+  example: unknown;
   passed: boolean;
   errors: string[];
   responseTime?: number;
   statusCode?: number;
-  actualResponse?: any;
+actualResponse?: unknown;
   validationType: 'schema' | 'network' | 'format';
 }
 
@@ -128,7 +127,7 @@ export class ApiValidator {
     const errors: string[] = [];
     let responseTime: number | undefined;
     let statusCode: number | undefined;
-    let actualResponse: any;
+    let actualResponse: unknown;
     let validationType: ApiTestResult['validationType'] = 'format';
     
     try {
@@ -250,7 +249,12 @@ export class ApiValidator {
   /**
    * Parse curl command example
    */
-  private parseCurlExample(lines: string[], startIndex: number, method: string, endpointPart: string): ApiExample | null {
+  private parseCurlExample(
+    lines: string[], 
+    startIndex: number, 
+    method: string, 
+    _endpointPart: string
+  ): ApiExample | null {
     const fullCommand = this.extractFullCurlCommand(lines, startIndex);
     if (!fullCommand) {
       return null;
@@ -299,7 +303,9 @@ export class ApiValidator {
     }
     
     // Match axios calls
-    const axiosMatches = content.matchAll(/axios\.(get|post|put|patch|delete|head|options)\s*\(\s*['"`]([^'"`]+)['"`](?:\s*,\s*(\{[^}]*\}))?\s*\)/g);
+    const axiosMatches = content.matchAll(
+      /axios\.(get|post|put|patch|delete|head|options)\s*\(\s*['"`]([^'"`]+)['"`](?:\s*,\s*(\{[^}]*\}))?\s*\)/g
+    );
     for (const match of axiosMatches) {
       const [, method, url, dataStr] = match;
       
@@ -459,7 +465,7 @@ export class ApiValidator {
   /**
    * Validate against OpenAPI schema (placeholder implementation)
    */
-  private async validateAgainstSchema(example: ApiExample): Promise<string[]> {
+  private async validateAgainstSchema(_example: ApiExample): Promise<string[]> {
     // In a real implementation, this would validate against OpenAPI specs
     // For now, return empty array (no schema validation)
     return [];
@@ -471,7 +477,7 @@ export class ApiValidator {
   private async performNetworkRequest(example: ApiExample): Promise<{
     responseTime: number;
     statusCode: number;
-    response: any;
+    response: unknown;
     errors: string[];
   }> {
     const errors: string[] = [];
@@ -551,7 +557,7 @@ export class ApiValidator {
   /**
    * Compare expected and actual response bodies
    */
-  private compareResponseBodies(expected: any, actual: any): string[] {
+  private compareResponseBodies(expected: unknown, actual: unknown): string[] {
     const errors: string[] = [];
     
     try {
@@ -569,7 +575,6 @@ export class ApiValidator {
       // Check for required fields in object responses
       if (typeof expected === 'object' && expected !== null && actual !== null) {
         const expectedKeys = Object.keys(expected);
-        const actualKeys = Object.keys(actual);
         
         for (const key of expectedKeys) {
           if (!(key in actual)) {
@@ -588,7 +593,7 @@ export class ApiValidator {
   /**
    * Parse JSON safely
    */
-  private parseJsonSafely(content: string): any {
+  private parseJsonSafely(content: string): unknown {
     try {
       return JSON.parse(content);
     } catch {
@@ -638,7 +643,8 @@ export class ApiValidator {
       }
       
       // Check if we have complete JSON
-      if (braceCount === 0 && bracketCount === 0 && (jsonLines[0].trim().startsWith('{') || jsonLines[0].trim().startsWith('['))) {
+      if (braceCount === 0 && bracketCount === 0 && 
+          (jsonLines[0].trim().startsWith('{') || jsonLines[0].trim().startsWith('['))) {
         const jsonContent = jsonLines.join('\n');
         try {
           JSON.parse(jsonContent);
@@ -705,7 +711,7 @@ export class ApiValidator {
   /**
    * Extract request body from curl command
    */
-  private extractRequestBodyFromCurl(curlCommand: string): any {
+  private extractRequestBodyFromCurl(curlCommand: string): unknown {
     const dataMatch = curlCommand.match(/-d\s+(['"`])([^'"`]+)\1/);
     if (dataMatch) {
       try {

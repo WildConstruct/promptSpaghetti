@@ -26,6 +26,7 @@ import {
 } from '../types/TrendingCommentsTypes';
 
 import { v4 as uuidv4 } from 'uuid';
+import CommentAnalyticsService from './CommentAnalyticsService';
 
 export class TrendingCommentsService {
   private baseUrl: string;
@@ -218,20 +219,55 @@ export class TrendingCommentsService {
     resourceId: string,
     timeRange: { start: Date; end: Date }
   ): Promise<CommentAnalytics> {
-    // TODO: Implement actual analytics aggregation from database
+    const analyticsService = new CommentAnalyticsService(this.baseUrl);
     
-    const mockAnalytics: CommentAnalytics = {
+    // Map timeRange to CommentableResourceType for analytics service
+    const resourceType = this.inferResourceType(resourceId);
+    
+    try {
+      const analytics = await analyticsService.getCommentAnalytics(
+        resourceId, 
+        resourceType,
+        { 
+          startDate: timeRange.start,
+          endDate: timeRange.end
+        }
+      );
+      
+      return analytics;
+    } catch (error) {
+      console.error('Failed to get comment analytics:', error);
+      
+      // Fallback to basic mock data if analytics service fails
+      return this.getFallbackAnalytics(resourceId, timeRange);
+    }
+  }
+
+  /**
+   * Infer resource type from resource ID context
+   */
+  private inferResourceType(resourceId: string): CommentableResourceType {
+    // In a real implementation, this would query the database or use context
+    // For now, default to 'template' as the most common case
+    return 'template';
+  }
+
+  /**
+   * Fallback analytics data when service fails
+   */
+  private getFallbackAnalytics(resourceId: string, timeRange: { start: Date; end: Date }): CommentAnalytics {
+    return {
       resourceId,
       timeRange,
       metrics: {
-        totalComments: 342,
-        totalEngagements: 1876,
-        uniqueCommenters: 127,
-        averageCommentsPerUser: 2.7,
-        commentsGrowthRate: 15.3,
-        engagementRate: 0.548,
-        responseRate: 0.423,
-        moderationRate: 0.018
+        totalComments: 0,
+        totalEngagements: 0,
+        uniqueCommenters: 0,
+        averageCommentsPerUser: 0,
+        commentsGrowthRate: 0,
+        engagementRate: 0,
+        responseRate: 0,
+        moderationRate: 0
       },
       trends: {
         commentVelocity: [],
@@ -240,50 +276,25 @@ export class TrendingCommentsService {
         topicEvolution: []
       },
       breakdowns: {
-        byEngagementType: {
-          'like': 756,
-          'reply': 445,
-          'share': 234,
-          'helpful': 189,
-          'dislike': 67,
-          'report': 12
-        },
-        byUserType: {
-          'verified': 89,
-          'regular': 198,
-          'new': 55
-        },
-        byTimeOfDay: Array(24).fill(0).map((_, i) => Math.floor(Math.random() * 50)),
-        byDayOfWeek: Array(7).fill(0).map((_, i) => Math.floor(Math.random() * 100)),
-        byLanguage: {
-          'en': 298,
-          'es': 24,
-          'fr': 13,
-          'de': 7
-        },
+        byEngagementType: {},
+        byUserType: {},
+        byTimeOfDay: Array(24).fill(0),
+        byDayOfWeek: Array(7).fill(0),
+        byLanguage: {},
         bySentiment: {
-          positive: 234,
-          neutral: 89,
-          negative: 19
+          positive: 0,
+          neutral: 0,
+          negative: 0
         }
       },
       insights: {
-        mostEngagedTopics: ['performance', 'user experience', 'customization', 'integration'],
-        influentialCommenters: ['user-123', 'user-456', 'user-789'],
-        emergingTrends: ['mobile optimization', 'AI integration', 'accessibility'],
-        contentRecommendations: ['Add mobile examples', 'Include accessibility guide'],
-        moderationAlerts: [
-          {
-            type: 'spam_detection',
-            severity: 'medium',
-            message: '3 comments flagged as potential spam',
-            commentIds: ['comment-1', 'comment-2', 'comment-3']
-          }
-        ]
+        mostEngagedTopics: [],
+        influentialCommenters: [],
+        emergingTrends: [],
+        contentRecommendations: [],
+        moderationAlerts: []
       }
     };
-
-    return mockAnalytics;
   }
 
   /**

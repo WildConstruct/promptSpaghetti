@@ -22,18 +22,18 @@ export interface MockConfig {
 export interface MockInstance {
   id: string;
   type: string;
-  config: MockConfig;
+  _config: MockConfig;
   active: boolean;
   createdAt: Date;
   lastUsed?: Date;
   callCount: number;
-  data?: any;
+  data?: unknown;
 }
 
 export interface MockBehavior {
   name: string;
-  condition?: (request: any) => boolean;
-  response: any | ((request: any) => any);
+  condition?: (request: unknown) => boolean;
+  response: unknown | ((request: unknown) => unknown);
   delay?: number;
   errorRate?: number;
   statusCode?: number;
@@ -55,7 +55,7 @@ export class MockFactory extends EventEmitter {
   private globalConfig: MockConfig;
   private rng: seedrandom.PRNG;
 
-  constructor(config: MockConfig = {}) {
+  constructor(_config: MockConfig = {}) {
     super();
     this.globalConfig = {
       seed: 12345,
@@ -165,7 +165,7 @@ export class MockFactory extends EventEmitter {
   /**
    * Execute mock behavior based on request
    */
-  async executeBehavior(mockId: string, request: any): Promise<any> {
+  async executeBehavior(mockId: string, request: unknown): Promise<unknown> {
     const behaviors = this.getBehaviors(mockId);
     const instance = this.mocks.get(mockId);
     
@@ -283,7 +283,7 @@ export class MockFactory extends EventEmitter {
   /**
    * Create specific mock based on type
    */
-  private createSpecificMock<T>(type: MockType, id: string, config: MockConfig): T {
+  private createSpecificMock<T>(type: MockType, id: string, _config: MockConfig): T {
     switch (type) {
     case 'api':
       return this.createAPIMock(id, config) as T;
@@ -306,27 +306,27 @@ export class MockFactory extends EventEmitter {
     }
   }
 
-  private createAPIMock(id: string, config: MockConfig): any {
+  private createAPIMock(id: string, __config: MockConfig): unknown {
     return {
       id,
       type: 'api',
-      get: async (path: string, params?: any) => this.executeBehavior(id, { method: 'GET', path, params }),
-      post: async (path: string, data?: any) => this.executeBehavior(id, { method: 'POST', path, data }),
-      put: async (path: string, data?: any) => this.executeBehavior(id, { method: 'PUT', path, data }),
+      get: async (path: string, params?: unknown) => this.executeBehavior(id, { method: 'GET', path, params }),
+      post: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'POST', path, data }),
+      put: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'PUT', path, data }),
       delete: async (path: string) => this.executeBehavior(id, { method: 'DELETE', path }),
-      patch: async (path: string, data?: any) => this.executeBehavior(id, { method: 'PATCH', path, data })
+      patch: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'PATCH', path, data })
     };
   }
 
-  private createDatabaseMock(id: string, config: MockConfig): any {
+  private createDatabaseMock(id: string, _config: MockConfig): unknown {
     const mockData = new Map();
     
     return {
       id,
       type: 'database',
-      query: async (sql: string, params?: any[]) => this.executeBehavior(id, { type: 'query', sql, params }),
-      find: async (table: string, conditions: any) => this.executeBehavior(id, { type: 'find', table, conditions }),
-      insert: async (table: string, data: any) => {
+      query: async (sql: string, params?: unknown[]) => this.executeBehavior(id, { type: 'query', sql, params }),
+      find: async (table: string, conditions: unknown) => this.executeBehavior(id, { type: 'find', table, conditions }),
+      insert: async (table: string, data: unknown) => {
         if (config.deterministic) {
           const key = `${table}_${JSON.stringify(data)}`;
           const result = { id: this.generateId(), ...data };
@@ -335,39 +335,39 @@ export class MockFactory extends EventEmitter {
         }
         return this.executeBehavior(id, { type: 'insert', table, data });
       },
-      update: async (table: string, conditions: any, data: any) => 
+      update: async (table: string, conditions: unknown, data: unknown) => 
         this.executeBehavior(id, { type: 'update', table, conditions, data }),
-      delete: async (table: string, conditions: any) => 
+      delete: async (table: string, conditions: unknown) => 
         this.executeBehavior(id, { type: 'delete', table, conditions })
     };
   }
 
-  private createServiceMock(id: string, config: MockConfig): any {
+  private createServiceMock(id: string, _config: MockConfig): unknown {
     return {
       id,
       type: 'service',
-      call: async (method: string, args?: any[]) => this.executeBehavior(id, { method, args }),
+      call: async (method: string, args?: unknown[]) => this.executeBehavior(id, { method, args }),
       isAvailable: () => true,
       getStatus: () => ({ status: 'active', uptime: Date.now() - this.mocks.get(id)!.createdAt.getTime() })
     };
   }
 
-  private createComponentMock(id: string, config: MockConfig): any {
-    const mockProps: any = {};
-    const mockMethods: any = {};
+  private createComponentMock(id: string, _config: MockConfig): unknown {
+    const mockProps: unknown = {};
+    const mockMethods: unknown = {};
     
     return {
       id,
       type: 'component',
       props: mockProps,
       methods: mockMethods,
-      trigger: async (event: string, data?: any) => this.executeBehavior(id, { event, data }),
-      setState: (state: any) => { mockProps.state = { ...mockProps.state, ...state }; },
+      trigger: async (event: string, data?: unknown) => this.executeBehavior(id, { event, data }),
+      setState: (state: unknown) => { mockProps.state = { ...mockProps.state, ...state }; },
       getState: () => mockProps.state || {}
     };
   }
 
-  private createFilesystemMock(id: string, config: MockConfig): any {
+  private createFilesystemMock(id: string, _config: MockConfig): unknown {
     const mockFiles = new Map();
     
     return {
@@ -379,7 +379,7 @@ export class MockFactory extends EventEmitter {
         }
         return this.executeBehavior(id, { operation: 'readFile', path });
       },
-      writeFile: async (path: string, content: any) => {
+      writeFile: async (path: string, content: unknown) => {
         if (config.deterministic) {
           mockFiles.set(path, content);
           return { success: true, path, size: JSON.stringify(content).length };
@@ -403,7 +403,7 @@ export class MockFactory extends EventEmitter {
     };
   }
 
-  private createNetworkMock(id: string, config: MockConfig): any {
+  private createNetworkMock(id: string, _config: MockConfig): unknown {
     return {
       id,
       type: 'network',
@@ -411,13 +411,13 @@ export class MockFactory extends EventEmitter {
         this.executeBehavior(id, { type: 'fetch', url, options }),
       websocket: {
         connect: async (url: string) => this.executeBehavior(id, { type: 'websocket_connect', url }),
-        send: async (data: any) => this.executeBehavior(id, { type: 'websocket_send', data }),
+        send: async (data: unknown) => this.executeBehavior(id, { type: 'websocket_send', data }),
         close: async () => this.executeBehavior(id, { type: 'websocket_close' })
       }
     };
   }
 
-  private createAuthMock(id: string, config: MockConfig): any {
+  private createAuthMock(id: string, _config: MockConfig): unknown {
     const sessions = new Map();
     
     return {
@@ -451,22 +451,22 @@ export class MockFactory extends EventEmitter {
     };
   }
 
-  private createAnalyticsMock(id: string, config: MockConfig): any {
-    const events: any[] = [];
+  private createAnalyticsMock(id: string, _config: MockConfig): unknown {
+    const events: unknown[] = [];
     
     return {
       id,
       type: 'analytics',
-      track: async (event: string, properties?: any) => {
+      track: async (event: string, properties?: unknown) => {
         if (config.deterministic) {
           events.push({ event, properties, timestamp: new Date() });
           return { success: true, eventId: this.generateId() };
         }
         return this.executeBehavior(id, { type: 'track', event, properties });
       },
-      identify: async (userId: string, traits?: any) => 
+      identify: async (userId: string, traits?: unknown) => 
         this.executeBehavior(id, { type: 'identify', userId, traits }),
-      page: async (name: string, properties?: any) => 
+      page: async (name: string, properties?: unknown) => 
         this.executeBehavior(id, { type: 'page', name, properties }),
       getEvents: () => config.deterministic ? events : []
     };

@@ -17,7 +17,7 @@ import { CliValidator } from './CliValidator';
 // Mock dependencies for testing
 jest.mock('fs/promises');
 jest.mock('glob', () => ({
-  glob: jest.fn()
+  glob: jest.fn<unknown[], unknown>()
 }));
 
 const mockFs = fs as jest.Mocked<typeof fs>;
@@ -61,7 +61,7 @@ describe('DocTestFramework', () => {
         timeout: -1000
       };
       
-      expect(() => new DocTestFramework(invalidConfig as any)).not.toThrow();
+      expect(() => new DocTestFramework(invalidConfig as unknown as DocTestConfig)).not.toThrow();
     });
   });
   
@@ -74,25 +74,23 @@ describe('DocTestFramework', () => {
       ];
       
       // Mock glob to return test files
-      const glob = require('glob') as { mockResolvedValue: (value: unknown) => void };
-      glob.mockResolvedValue(mockFiles);
+      const { glob } = await import('glob') as { glob: { mockResolvedValue: (value: unknown) => void } };
+      glob.mockResolvedValue(mockFiles as unknown);
       
-      const files = await (docTest as unknown as { findDocumentationFiles: () => Promise<string[]> }).findDocumentationFiles();
+      const files = await (
+        docTest as unknown as { findDocumentationFiles: () => Promise<string[]> }
+      ).findDocumentationFiles();
       
       expect(files).toEqual(mockFiles.sort());
     });
     
     it('should exclude files matching exclude patterns', async () => {
-      const _mockFiles = [
-        '/project/README.md',
-        '/project/node_modules/package/README.md',
-        '/project/dist/docs.md'
-      ];
+      const { glob } = await import('glob') as { glob: { mockResolvedValue: (value: unknown) => void } };
+      glob.mockResolvedValue(['/project/README.md'] as unknown); // Excluded files filtered by glob
       
-      const glob = require('glob') as { mockResolvedValue: (value: unknown) => void };
-      glob.mockResolvedValue(['/project/README.md']); // Excluded files filtered by glob
-      
-      const files = await (docTest as unknown as { findDocumentationFiles: () => Promise<string[]> }).findDocumentationFiles();
+      const files = await (
+        docTest as unknown as { findDocumentationFiles: () => Promise<string[]> }
+      ).findDocumentationFiles();
       
       expect(files).toEqual(['/project/README.md']);
     });
@@ -116,8 +114,8 @@ describe('DocTestFramework', () => {
       \`\`\`
       `;
       
-      mockFs.stat.mockResolvedValue({ size: 1000 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
+      mockFs.stat.mockResolvedValue({ size: 1000 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
       
       const result = await docTest.testDocumentationFile(testFilePath);
       
@@ -145,7 +143,7 @@ describe('DocTestFramework', () => {
     it('should handle file size limits', async () => {
       const testFilePath = '/project/large.md';
       
-      mockFs.stat.mockResolvedValue({ size: 10 * 1024 * 1024 } as any); // 10MB
+      mockFs.stat.mockResolvedValue({ size: 10 * 1024 * 1024 } as unknown as import('fs' as unknown).Stats); // 10MB
       
       const result = await docTest.testDocumentationFile(testFilePath);
       
@@ -166,8 +164,8 @@ describe('DocTestFramework', () => {
       # Test
       `;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
       
       const result = await docTest.testDocumentationFile(testFilePath);
       
@@ -198,9 +196,9 @@ describe('DocTestFramework', () => {
 
 See [other doc](./other.md) for more info.`;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
-      mockFs.access.mockResolvedValue(undefined); // File exists
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
+      mockFs.access.mockResolvedValue(undefined as unknown); // File exists
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -218,8 +216,8 @@ See [other doc](./other.md) for more info.`;
 
 See [broken link](./nonexistent.md) for more info.`;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
       mockFs.access.mockRejectedValue(new Error('File not found'));
       
       const result = await docTest.testDocumentationFile('/project/test.md');
@@ -246,8 +244,8 @@ Visit [GitHub](https://github.com) for more info.`;
       
       const networkDocTest = new DocTestFramework(configWithNetwork);
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
       
       const result = await networkDocTest.testDocumentationFile('/project/test.md');
       
@@ -267,8 +265,8 @@ Jump to [section](#example) below.
 
 ## Example`;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -325,7 +323,9 @@ Jump to [section](#example) below.
         }
       ];
       
-      const summary = (docTest as any).generateSummary(mockResults, 250);
+      const summary = (
+        docTest as unknown as { generateSummary: (results: unknown[], time: number) => unknown }
+      ).generateSummary(mockResults, 250);
       
       expect(summary).toMatchObject({
         totalFiles: 2,
@@ -358,7 +358,7 @@ Jump to [section](#example) below.
       const timeoutConfig = { ...testConfig, timeout: 1 }; // 1ms timeout
       const timeoutDocTest = new DocTestFramework(timeoutConfig);
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
       mockFs.readFile.mockImplementation(() => 
         new Promise(resolve => setTimeout(() => resolve('# Test'), 100))
       );
@@ -385,8 +385,8 @@ const message: string = "Hello";
 console.log(message);
 \`\`\``;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -406,8 +406,8 @@ npm install
 npm test
 \`\`\``;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -435,8 +435,8 @@ npm test
       \`\`\`
       `;
       
-      mockFs.stat.mockResolvedValue({ size: 100 } as any);
-      mockFs.readFile.mockResolvedValue(testContent);
+      mockFs.stat.mockResolvedValue({ size: 100 } as unknown as import('fs' as unknown).Stats);
+      mockFs.readFile.mockResolvedValue(testContent as unknown);
       
       const result = await docTest.testDocumentationFile('/project/test.md');
       
@@ -541,8 +541,7 @@ const example = true;
     \`\`\`
     
     \`\`\`javascript
-    const js = "code";
-    \`\`\`
+        \`\`\`
     
     \`\`\`typescript
     const more = "typescript";
@@ -568,7 +567,7 @@ describe('Integration Tests', () => {
   it('should validate TypeScript code examples', async () => {
     const validator = new TypeScriptValidator({
       compilerOptions: {
-        target: 99 as any, // ts.ScriptTarget.Latest
+        target: 99 as unknown as import('typescript').ScriptTarget, // ts.ScriptTarget.Latest
         noEmit: true,
         skipLibCheck: true
       },

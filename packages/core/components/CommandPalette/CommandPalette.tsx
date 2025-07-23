@@ -1116,6 +1116,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             theme={theme}
           />
         )}
+      </div>
     </>
   );
 };

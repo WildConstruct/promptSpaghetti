@@ -9,8 +9,8 @@ import { rest } from 'msw';
 import { faker } from '@faker-js/faker';
 
 // Mock user database
-const mockUsers = new Map<string, any>();
-const mockSessions = new Map<string, any>();
+const mockUsers = new Map<string, unknown>();
+const mockSessions = new Map<string, unknown>();
 
 // Initialize with sample users
 mockUsers.set('test@example.com', {
@@ -39,12 +39,7 @@ mockUsers.set('admin@example.com', {
   updatedAt: new Date()
 });
 
-export const authHandlers = [
-  // POST /api/auth/login - User login
-  rest.post('/api/auth/login', async (req, res, ctx) => {
-    try {
-      const { email, password } = await req.json();
-
+export 
       if (!email || !password) {
         return res(
           ctx.status(400),
@@ -121,7 +116,7 @@ export const authHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -209,7 +204,7 @@ export const authHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -273,7 +268,7 @@ export const authHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(401),
         ctx.json({
@@ -412,7 +407,7 @@ export const authHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -500,7 +495,7 @@ export const authHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -534,7 +529,7 @@ export const authHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -569,7 +564,7 @@ export const authHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -582,7 +577,7 @@ export const authHandlers = [
 
   // GET /api/auth/verify-email/:token - Verify email address
   rest.get('/api/auth/verify-email/:token', (req, res, ctx) => {
-    const { token } = req.params;
+    // const { token } = req.params; // Token would be used for verification in real implementation
 
     // In real implementation, validate verification token
     // For testing, always succeed

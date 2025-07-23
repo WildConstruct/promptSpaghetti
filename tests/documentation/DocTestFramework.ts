@@ -111,7 +111,7 @@ export interface CodeBlockTestResult {
 export interface ApiTestResult {
   endpoint: string;
   method: string;
-  example: any;
+  example: unknown;
   passed: boolean;
   errors: string[];
   responseTime?: number;
@@ -134,7 +134,7 @@ export interface DocTestError {
     column: number;
     file: string;
   };
-  details?: any;
+  details?: unknown;
 }
 
 export interface DocTestWarning {
@@ -284,7 +284,9 @@ export class DocTestFramework {
         results.push(...batchResults);
         
         if (this.config.verbose && batch.length > 1) {
-          console.log(`Completed batch ${Math.floor(i / this.config.maxConcurrentFiles) + 1}/${Math.ceil(files.length / this.config.maxConcurrentFiles)}`);
+          const batchNum = Math.floor(i / this.config.maxConcurrentFiles) + 1;
+          const totalBatches = Math.ceil(files.length / this.config.maxConcurrentFiles);
+          console.log(`Completed batch ${batchNum}/${totalBatches}`);
         }
       }
       
@@ -507,7 +509,9 @@ export class DocTestFramework {
   /**
    * Extract links from markdown content
    */
-  private extractLinks(markdown: string): Array<{ url: string; text: string; type: 'internal' | 'external' | 'anchor' }> {
+  private extractLinks(
+    markdown: string
+  ): Array<{ url: string; text: string; type: 'internal' | 'external' | 'anchor' }> {
     const links: Array<{ url: string; text: string; type: 'internal' | 'external' | 'anchor' }> = [];
     
     // Match markdown links: [text](url)
@@ -535,7 +539,10 @@ export class DocTestFramework {
   /**
    * Validate a link
    */
-  private async validateLink(link: { url: string; text: string; type: 'internal' | 'external' | 'anchor' }, filePath: string): Promise<LinkTestResult> {
+  private async validateLink(
+    link: { url: string; text: string; type: 'internal' | 'external' | 'anchor' }, 
+    filePath: string
+  ): Promise<LinkTestResult> {
     try {
       if (link.type === 'external') {
         // For external links, we might want to skip actual network requests in tests
@@ -744,9 +751,21 @@ export class DocTestFramework {
     report += '### Test Breakdown\n\n';
     report += '| Test Type | Total | Passed | Failed | Success Rate |\n';
     report += '|-----------|-------|--------|---------|--------------|\n';
-    report += `| Code Blocks | ${summary.breakdown.codeBlocks.total} | ${summary.breakdown.codeBlocks.passed} | ${summary.breakdown.codeBlocks.failed} | ${summary.breakdown.codeBlocks.total > 0 ? ((summary.breakdown.codeBlocks.passed / summary.breakdown.codeBlocks.total) * 100).toFixed(1) : 0}% |\n`;
-    report += `| API Examples | ${summary.breakdown.apiExamples.total} | ${summary.breakdown.apiExamples.passed} | ${summary.breakdown.apiExamples.failed} | ${summary.breakdown.apiExamples.total > 0 ? ((summary.breakdown.apiExamples.passed / summary.breakdown.apiExamples.total) * 100).toFixed(1) : 0}% |\n`;
-    report += `| Links | ${summary.breakdown.links.total} | ${summary.breakdown.links.passed} | ${summary.breakdown.links.failed} | ${summary.breakdown.links.total > 0 ? ((summary.breakdown.links.passed / summary.breakdown.links.total) * 100).toFixed(1) : 0}% |\n\n`;
+    const codeBlocksRate = summary.breakdown.codeBlocks.total > 0 
+      ? ((summary.breakdown.codeBlocks.passed / summary.breakdown.codeBlocks.total) * 100).toFixed(1) 
+      : 0;
+    report += `| Code Blocks | ${summary.breakdown.codeBlocks.total} | ` +
+      `${summary.breakdown.codeBlocks.passed} | ${summary.breakdown.codeBlocks.failed} | ${codeBlocksRate}% |\n`;
+    const apiExamplesRate = summary.breakdown.apiExamples.total > 0 
+      ? ((summary.breakdown.apiExamples.passed / summary.breakdown.apiExamples.total) * 100).toFixed(1) 
+      : 0;
+    report += `| API Examples | ${summary.breakdown.apiExamples.total} | ` +
+      `${summary.breakdown.apiExamples.passed} | ${summary.breakdown.apiExamples.failed} | ${apiExamplesRate}% |\n`;
+    const linksRate = summary.breakdown.links.total > 0 
+      ? ((summary.breakdown.links.passed / summary.breakdown.links.total) * 100).toFixed(1) 
+      : 0;
+    report += `| Links | ${summary.breakdown.links.total} | ` +
+      `${summary.breakdown.links.passed} | ${summary.breakdown.links.failed} | ${linksRate}% |\n\n`;
     
     // Common errors
     if (summary.commonErrors.length > 0) {
@@ -792,73 +811,5 @@ export class DocTestFramework {
 /**
  * Default configuration for documentation testing
  */
-export const DEFAULT_DOC_TEST_CONFIG: DocTestConfig = {
-  enabled: true,
-  verbose: false,
-  
-  documentationPaths: [
-    'README.md',
-    'docs/**/*.md',
-    'packages/**/README.md'
-  ],
-  excludePatterns: [
-    'node_modules/**',
-    'dist/**',
-    'build/**',
-    '.git/**',
-    'coverage/**'
-  ],
-  
-  validateCodeBlocks: true,
-  validateApiExamples: true,
-  validateTypeScript: true,
-  validateCliCommands: true,
-  validateLinks: true,
-  
-  typescript: {
-    compilerOptions: {
-      target: ts.ScriptTarget.ES2020,
-      module: ts.ModuleKind.ESNext,
-      moduleResolution: ts.ModuleResolutionKind.Node16,
-      allowJs: true,
-      jsx: ts.JsxEmit.ReactJSX,
-      strict: false,
-      noEmit: true,
-      skipLibCheck: true,
-      allowSyntheticDefaultImports: true,
-      esModuleInterop: true
-    },
-    allowUndeclaredImports: true,
-    validateSyntax: true,
-    validateTypes: false
-  },
-  
-  api: {
-    baseUrl: 'http://localhost:8000',
-    timeout: 5000,
-    validateRequests: true,
-    validateResponses: true,
-    skipNetworkRequests: true
-  },
-  
-  cli: {
-    validateSyntax: true,
-    validateCommands: true,
-    allowedCommands: [
-      'npm', 'pnpm', 'node', 'npx',
-      'git', 'curl', 'ls', 'cd', 'mkdir',
-      'jest', 'tsc', 'eslint'
-    ],
-    skipExecution: true
-  },
-  
-  maxConcurrentFiles: 5,
-  maxFileSize: 1024 * 1024, // 1MB
-  timeout: 30000,
-  
-  generateReport: true,
-  reportPath: './test-results/documentation-test-report',
-  reportFormat: 'json'
-};
-
+export 
 export default DocTestFramework;

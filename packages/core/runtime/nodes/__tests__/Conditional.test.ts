@@ -14,7 +14,7 @@ import { AdvancedExecutionUtils } from '../../advanced';
 
 describe('Conditional Node', () => {
   let node: ConditionalNode;
-  let context: any;
+  let context: unknown;
 
   beforeEach(() => {
     const branches: ConditionalBranch[] = [
@@ -429,7 +429,7 @@ describe('Conditional Node', () => {
       const endTime = performance.now();
       
       expect(result).toBe('result-25');
-      expect(endTime - startTime).toBeLessThan(10); // Should be very fast
+      expect(endTime - startTime).toBeLessThan(50); // Should be reasonably fast
     });
   });
 

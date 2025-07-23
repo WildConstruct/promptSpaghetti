@@ -9,8 +9,8 @@ import { rest } from 'msw';
 import { faker } from '@faker-js/faker';
 
 // Mock category database
-const mockCategories = new Map<number, any>();
-const mockCategoryStats = new Map<number, any>();
+const mockCategories = new Map<number, unknown>();
+const mockCategoryStats = new Map<number, unknown>();
 
 // Initialize with sample categories
 const sampleCategories = [
@@ -134,11 +134,7 @@ sampleCategories.forEach(category => {
   });
 });
 
-export const categoryHandlers = [
-  // GET /api/categories - Get categories list with hierarchy
-  rest.get('/api/categories', (req, res, ctx) => {
-    const url = new URL(req.url);
-    const includeHierarchy = url.searchParams.get('hierarchy') === 'true';
+export     const includeHierarchy = url.searchParams.get('hierarchy') === 'true';
     const includeStats = url.searchParams.get('stats') === 'true';
     const parentId = url.searchParams.get('parentId');
     const isActive = url.searchParams.get('isActive');
@@ -359,7 +355,7 @@ export const categoryHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -462,7 +458,7 @@ export const categoryHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({
@@ -582,7 +578,7 @@ export const categoryHandlers = [
         })
       );
 
-    } catch (error) {
+    } catch {
       return res(
         ctx.status(500),
         ctx.json({

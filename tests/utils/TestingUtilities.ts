@@ -40,24 +40,24 @@ export class TestEnvironmentManager {
     if (config.mockReactFlow) {
       environment.mocks.set('reactFlow', {
         useReactFlow: jest.fn(() => ({
-          getNode: jest.fn(),
+          getNode: jest.fn<unknown[], unknown>(),
           getNodes: jest.fn(() => []),
           getEdges: jest.fn(() => []),
-          setNodes: jest.fn(),
-          setEdges: jest.fn()
+          setNodes: jest.fn<unknown[], unknown>(),
+          setEdges: jest.fn<unknown[], unknown>()
         })),
-        useNodesState: jest.fn(() => [[], jest.fn()]),
-        useEdgesState: jest.fn(() => [[], jest.fn()])
+        useNodesState: jest.fn(() => [[], jest.fn<unknown[], unknown>()]),
+        useEdgesState: jest.fn(() => [[], jest.fn<unknown[], unknown>()])
       });
     }
 
     // Setup WebSocket mocks if configured
     if (config.mockWebSocket) {
-      const WebSocketMock = jest.fn().mockImplementation(() => ({
-        send: jest.fn(),
-        close: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn()
+      const WebSocketMock = jest.fn<unknown[], unknown>().mockImplementation(() => ({
+        send: jest.fn<unknown[], unknown>(),
+        close: jest.fn<unknown[], unknown>(),
+        addEventListener: jest.fn<unknown[], unknown>(),
+        removeEventListener: jest.fn<unknown[], unknown>()
       }));
       
       environment.mocks.set('WebSocket', WebSocketMock);
@@ -67,10 +67,10 @@ export class TestEnvironmentManager {
     // Setup localStorage mocks if configured
     if (config.mockLocalStorage) {
       const localStorageMock = {
-        getItem: jest.fn(),
-        setItem: jest.fn(),
-        removeItem: jest.fn(),
-        clear: jest.fn()
+        getItem: jest.fn<unknown[], unknown>(),
+        setItem: jest.fn<unknown[], unknown>(),
+        removeItem: jest.fn<unknown[], unknown>(),
+        clear: jest.fn<unknown[], unknown>()
       };
       environment.mocks.set('localStorage', localStorageMock);
       Object.defineProperty(global, 'localStorage', { value: localStorageMock });
@@ -404,6 +404,9 @@ export const testUtils = {
   measureExecution: PerformanceTestUtils.measureExecution,
   generateLoadTest: PerformanceTestUtils.generateLoadTest
 };
+
+// Export AsyncTestingUtils as an alias for TestAssertionHelpers to maintain compatibility
+export const AsyncTestingUtils = TestAssertionHelpers;
 
 // Make utilities available globally
 declare global {

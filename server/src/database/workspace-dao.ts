@@ -50,6 +50,143 @@ import {
 export class WorkspaceDAO {
   constructor(private db: Database) {}
 
+  async initialize(): Promise<void> {
+    // Create database schema for testing
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS workspaces (
+        id TEXT PRIMARY KEY,
+        owner_id TEXT NOT NULL,
+        name TEXT NOT NULL,
+        description TEXT,
+        settings TEXT DEFAULT '{}',
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        archived_at TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS projects (
+        id TEXT PRIMARY KEY,
+        workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+        name TEXT NOT NULL,
+        description TEXT,
+        status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'active', 'archived', 'deleted')),
+        metadata TEXT DEFAULT '{}',
+        created_by TEXT NOT NULL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS resources (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        name TEXT NOT NULL,
+        type TEXT NOT NULL CHECK (type IN ('graph', 'template', 'file', 'export')),
+        content_type TEXT,
+        json_meta TEXT DEFAULT '{}',
+        storage_path TEXT,
+        content_data TEXT,
+        size_bytes INTEGER DEFAULT 0,
+        checksum TEXT,
+        version INTEGER DEFAULT 1,
+        created_by TEXT NOT NULL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS acl_roles (
+        id TEXT PRIMARY KEY,
+        workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+        name TEXT NOT NULL,
+        display_name TEXT,
+        description TEXT,
+        permissions TEXT DEFAULT '{}',
+        is_system_role INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS acl_assignments (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        role_id TEXT NOT NULL REFERENCES acl_roles(id) ON DELETE CASCADE,
+        scope_type TEXT NOT NULL CHECK (scope_type IN ('workspace', 'project', 'resource')),
+        scope_id TEXT NOT NULL,
+        granted_by TEXT,
+        granted_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        expires_at TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS user_memberships (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+        invited_by TEXT,
+        joined_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        last_active_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        status TEXT DEFAULT 'active' CHECK (status IN ('invited', 'active', 'suspended', 'removed'))
+      );
+
+      CREATE TABLE IF NOT EXISTS activity_events (
+        id TEXT PRIMARY KEY,
+        workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+        project_id TEXT REFERENCES projects(id) ON DELETE CASCADE,
+        resource_id TEXT REFERENCES resources(id) ON DELETE CASCADE,
+        actor_id TEXT NOT NULL,
+        event_type TEXT NOT NULL,
+        event_data TEXT DEFAULT '{}',
+        aggregation_key TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS comments (
+        id TEXT PRIMARY KEY,
+        resource_id TEXT NOT NULL REFERENCES resources(id) ON DELETE CASCADE,
+        author_id TEXT NOT NULL,
+        workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        content_markdown TEXT,
+        parent_comment_id TEXT REFERENCES comments(id) ON DELETE CASCADE,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS notifications (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+        type TEXT NOT NULL,
+        title TEXT NOT NULL,
+        message TEXT,
+        metadata TEXT DEFAULT '{}',
+        read_at TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS user_sessions (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+        session_token TEXT NOT NULL,
+        metadata TEXT DEFAULT '{}',
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        last_active_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        expires_at TEXT
+      );
+
+      -- Create indexes for performance
+      CREATE INDEX IF NOT EXISTS idx_workspaces_owner ON workspaces(owner_id);
+      CREATE INDEX IF NOT EXISTS idx_projects_workspace ON projects(workspace_id);
+      CREATE INDEX IF NOT EXISTS idx_resources_project ON resources(project_id);
+      CREATE INDEX IF NOT EXISTS idx_acl_assignments_user ON acl_assignments(user_id);
+      CREATE INDEX IF NOT EXISTS idx_acl_assignments_scope ON acl_assignments(scope_type, scope_id);
+      CREATE INDEX IF NOT EXISTS idx_user_memberships_workspace ON user_memberships(workspace_id);
+      CREATE INDEX IF NOT EXISTS idx_activity_events_workspace ON activity_events(workspace_id);
+      CREATE INDEX IF NOT EXISTS idx_comments_resource ON comments(resource_id);
+      CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
+    `);
+  }
+
   // ====== WORKSPACE OPERATIONS ======
 
   async createWorkspace(data: CreateWorkspace, userId: string): Promise<Workspace> {
@@ -1532,7 +1669,12 @@ export class WorkspaceDAO {
 
   // ====== OAUTH STATE OPERATIONS ======
 
-  async createOAuthState(state: string, provider: string, redirectUri: string, workspaceId?: string): Promise<OAuthState> {
+  async createOAuthState(
+    state: string,
+    provider: string,
+    redirectUri: string,
+    workspaceId?: string
+  ): Promise<OAuthState> {
     const id = uuidv4();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
     const now = new Date().toISOString();

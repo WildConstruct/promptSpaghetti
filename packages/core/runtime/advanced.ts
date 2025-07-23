@@ -176,6 +176,42 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
 }
 
 /**
+ * Concrete implementation of AdvancedExecutionContext for tests and direct instantiation
+ */
+export class AdvancedExecutionContextImpl implements AdvancedExecutionContext {
+  variables: Record<string, any>;
+  seed: string | number;
+  nodeStates: Map<string, any>;
+  evaluationDepth: number;
+  cache: Map<string, any>;
+  executionMeta: {
+    startTime: number;
+    nodeExecutionOrder: string[];
+    performanceMetrics: Map<string, number>;
+  };
+  inputs?: Record<string, any>;
+  outputs?: Record<string, any>;
+
+  constructor(seed: string | number, variables: Record<string, any> = {}) {
+    this.variables = { ...variables };
+    this.seed = seed;
+    this.nodeStates = new Map();
+    this.evaluationDepth = 0;
+    this.cache = new Map();
+    this.executionMeta = {
+      startTime: performance.now(),
+      nodeExecutionOrder: [],
+      performanceMetrics: new Map()
+    };
+    this.inputs = {};
+    this.outputs = {};
+  }
+}
+
+// Export as both named and default for backward compatibility
+export { AdvancedExecutionContextImpl as AdvancedExecutionContext };
+
+/**
  * Utility functions for working with advanced execution contexts
  */
 export class AdvancedExecutionUtils {

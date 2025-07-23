@@ -17,11 +17,11 @@ export interface DatabaseConnection {
   database?: string;
   username?: string;
   password?: string;
-  options?: Record<string, any>;
+  options?: Record<string, unknown>;
 }
 
 export interface QueryResult {
-  rows: any[];
+  rows: unknown[];
   rowCount: number;
   fields?: string[];
   executionTime: number;
@@ -42,12 +42,12 @@ export interface MockTable {
   schema: Record<string, {
     type: string;
     nullable: boolean;
-    default?: any;
+    default?: unknown;
     primaryKey?: boolean;
     unique?: boolean;
     references?: { table: string; column: string };
   }>;
-  data: Map<string | number, any>;
+  data: Map<string | number, unknown>;
   indexes: Map<string, Set<string | number>>;
 }
 
@@ -57,7 +57,7 @@ export class DatabaseMockService {
   private tables: Map<string, MockTable> = new Map();
   private connections: Map<string, DatabaseConnection> = new Map();
   private transactions: Map<string, TransactionContext> = new Map();
-  private queryLog: Array<{ sql: string; params?: any[]; timestamp: Date; duration: number }> = [];
+  private queryLog: Array<{ _sql: string; params?: unknown[]; timestamp: Date; duration: number }> = [];
 
   constructor(config: MockConfig = {}) {
     this.factory = new MockFactory(config);
@@ -68,7 +68,7 @@ export class DatabaseMockService {
   /**
    * Create a mock database connection
    */
-  createConnection(connectionId: string, config: DatabaseConnection): any {
+  createConnection(_connectionId: string, config: DatabaseConnection): unknown {
     this.connections.set(connectionId, config);
     
     const connection = {
@@ -77,7 +77,7 @@ export class DatabaseMockService {
       connected: true,
       
       // Query methods
-      query: async (sql: string, params?: any[]) => this.executeQuery(connectionId, sql, params),
+      query: async (_sql: string, params?: unknown[]) => this.executeQuery(connectionId, sql, params),
       
       // Transaction methods
       beginTransaction: async (isolation?: string) => this.beginTransaction(connectionId, isolation),
@@ -92,21 +92,21 @@ export class DatabaseMockService {
       getStats: () => this.getConnectionStats(connectionId),
       
       // Table operations
-      createTable: async (name: string, schema: any) => this.createTable(name, schema),
+      createTable: async (name: string, schema: unknown) => this.createTable(name, schema),
       dropTable: async (name: string) => this.dropTable(name),
       truncateTable: async (name: string) => this.truncateTable(name),
       
       // Specialized query methods
-      select: async (table: string, conditions?: any, options?: any) => 
+      select: async (table: string, conditions?: unknown, options?: unknown) => 
         this.selectRecords(table, conditions, options),
-      insert: async (table: string, data: any) => this.insertRecord(table, data),
-      update: async (table: string, data: any, conditions?: any) => 
+      insert: async (table: string, data: unknown) => this.insertRecord(table, data),
+      update: async (table: string, data: unknown, conditions?: unknown) => 
         this.updateRecords(table, data, conditions),
-      delete: async (table: string, conditions?: any) => this.deleteRecords(table, conditions),
+      delete: async (table: string, conditions?: unknown) => this.deleteRecords(table, conditions),
       
       // Batch operations
-      bulkInsert: async (table: string, records: any[]) => this.bulkInsert(table, records),
-      bulkUpdate: async (table: string, updates: Array<{ data: any; conditions: any }>) => 
+      bulkInsert: async (table: string, records: unknown[]) => this.bulkInsert(table, records),
+      bulkUpdate: async (table: string, updates: Array<{ data: unknown; conditions: unknown }>) => 
         this.bulkUpdate(table, updates),
       
       // Schema operations
@@ -129,7 +129,7 @@ export class DatabaseMockService {
   /**
    * Execute a raw SQL query
    */
-  private async executeQuery(connectionId: string, sql: string, params: any[] = []): Promise<QueryResult> {
+  private async executeQuery(_connectionId: string, _sql: string, _params: unknown[] = []): Promise<QueryResult> {
     const startTime = Date.now();
     
     // Simulate query execution time
@@ -157,12 +157,12 @@ export class DatabaseMockService {
   /**
    * Begin a database transaction
    */
-  private async beginTransaction(connectionId: string, isolation?: string): Promise<string> {
+  private async beginTransaction(_connectionId: string, isolation?: string): Promise<string> {
     const transactionId = this.generateId();
     const transaction: TransactionContext = {
       id: transactionId,
       startTime: new Date(),
-      isolation: isolation as any || 'READ_COMMITTED',
+      isolation: (isolation as string) || 'READ_COMMITTED',
       savepoints: [],
       status: 'active'
     };
@@ -233,7 +233,11 @@ export class DatabaseMockService {
   /**
    * Select records from a table
    */
-  private async selectRecords(tableName: string, conditions: any = {}, options: any = {}): Promise<QueryResult> {
+  private async selectRecords(
+    tableName: string, 
+    conditions: unknown = {}, 
+    options: unknown = {}
+  ): Promise<QueryResult> {
     const table = this.tables.get(tableName);
     if (!table) {
       throw new Error(`Table '${tableName}' not found`);
@@ -280,7 +284,7 @@ export class DatabaseMockService {
     }
 
     // Apply pagination
-    const totalCount = records.length;
+    // const totalCount = records.length; // Could be used for pagination metadata
     if (limit) {
       records = records.slice(offset, offset + limit);
     } else if (offset > 0) {
@@ -290,9 +294,9 @@ export class DatabaseMockService {
     // Apply field selection
     if (fields && Array.isArray(fields)) {
       records = records.map(record => {
-        const selectedFields: any = {};
+        const selectedFields: unknown = {};
         fields.forEach(field => {
-          if (record.hasOwnProperty(field)) {
+          if (Object.prototype.hasOwnProperty.call(record, field)) {
             selectedFields[field] = record[field];
           }
         });
@@ -311,7 +315,7 @@ export class DatabaseMockService {
   /**
    * Insert a record into a table
    */
-  private async insertRecord(tableName: string, data: any): Promise<QueryResult> {
+  private async insertRecord(tableName: string, data: unknown): Promise<QueryResult> {
     const table = this.tables.get(tableName);
     if (!table) {
       throw new Error(`Table '${tableName}' not found`);
@@ -353,7 +357,7 @@ export class DatabaseMockService {
   /**
    * Update records in a table
    */
-  private async updateRecords(tableName: string, data: any, conditions: any = {}): Promise<QueryResult> {
+  private async updateRecords(tableName: string, data: unknown, conditions: unknown = {}): Promise<QueryResult> {
     const table = this.tables.get(tableName);
     if (!table) {
       throw new Error(`Table '${tableName}' not found`);
@@ -390,7 +394,7 @@ export class DatabaseMockService {
   /**
    * Delete records from a table
    */
-  private async deleteRecords(tableName: string, conditions: any = {}): Promise<QueryResult> {
+  private async deleteRecords(tableName: string, conditions: unknown = {}): Promise<QueryResult> {
     const table = this.tables.get(tableName);
     if (!table) {
       throw new Error(`Table '${tableName}' not found`);
@@ -427,7 +431,7 @@ export class DatabaseMockService {
   /**
    * Create a new table
    */
-  private async createTable(name: string, schema: any): Promise<void> {
+  private async createTable(name: string, schema: unknown): Promise<void> {
     if (this.tables.has(name)) {
       throw new Error(`Table '${name}' already exists`);
     }
@@ -471,7 +475,7 @@ export class DatabaseMockService {
   /**
    * Bulk insert records
    */
-  private async bulkInsert(tableName: string, records: any[]): Promise<QueryResult> {
+  private async bulkInsert(tableName: string, records: unknown[]): Promise<QueryResult> {
     const results = [];
     let totalAffected = 0;
 
@@ -492,7 +496,10 @@ export class DatabaseMockService {
   /**
    * Bulk update records
    */
-  private async bulkUpdate(tableName: string, updates: Array<{ data: any; conditions: any }>): Promise<QueryResult> {
+  private async bulkUpdate(
+    tableName: string, 
+    updates: Array<{ data: unknown; conditions: unknown }>
+  ): Promise<QueryResult> {
     const results = [];
     let totalAffected = 0;
 
@@ -513,12 +520,12 @@ export class DatabaseMockService {
   /**
    * Create Redis-specific operations
    */
-  private createRedisOperations(connectionId: string) {
+  private createRedisOperations(_connectionId: string) {
     const redisData = new Map();
 
     return {
       // String operations
-      set: async (key: string, value: any, ttl?: number) => {
+      set: async (key: string, value: unknown, ttl?: number) => {
         redisData.set(key, { value, expires: ttl ? Date.now() + ttl * 1000 : null });
         return 'OK';
       },
@@ -543,7 +550,7 @@ export class DatabaseMockService {
       },
 
       // Hash operations
-      hset: async (key: string, field: string, value: any) => {
+      hset: async (key: string, field: string, value: unknown) => {
         if (!redisData.has(key)) {
           redisData.set(key, { type: 'hash', data: new Map() });
         }
@@ -562,7 +569,7 @@ export class DatabaseMockService {
       },
 
       // List operations
-      lpush: async (key: string, ...values: any[]) => {
+      lpush: async (key: string, ...values: unknown[]) => {
         if (!redisData.has(key)) {
           redisData.set(key, { type: 'list', data: [] });
         }
@@ -571,7 +578,7 @@ export class DatabaseMockService {
         list.data.unshift(...values.reverse());
         return list.data.length;
       },
-      rpush: async (key: string, ...values: any[]) => {
+      rpush: async (key: string, ...values: unknown[]) => {
         if (!redisData.has(key)) {
           redisData.set(key, { type: 'list', data: [] });
         }
@@ -582,7 +589,7 @@ export class DatabaseMockService {
       },
 
       // Set operations
-      sadd: async (key: string, ...members: any[]) => {
+      sadd: async (key: string, ...members: unknown[]) => {
         if (!redisData.has(key)) {
           redisData.set(key, { type: 'set', data: new Set() });
         }
@@ -607,7 +614,7 @@ export class DatabaseMockService {
         redisData.clear();
         return 'OK';
       },
-      info: async (section?: string) => {
+      info: async (_section?: string) => {
         return `# Redis Mock\nredis_version:6.0.0\nuptime_in_seconds:${Math.floor(this.rng() * 86400)}`;
       }
     };
@@ -616,17 +623,17 @@ export class DatabaseMockService {
   /**
    * Create PostgreSQL-specific operations
    */
-  private createPostgresOperations(connectionId: string) {
+  private createPostgresOperations(_connectionId: string) {
     return {
       // Array operations
-      arrayAppend: async (table: string, field: string, value: any, conditions: any) => {
+      arrayAppend: async (table: string, field: string, value: unknown, conditions: unknown) => {
         const updateData = {};
         updateData[field] = { $push: value };
         return this.updateRecords(table, updateData, conditions);
       },
 
       // JSON operations
-      jsonExtract: async (table: string, field: string, path: string, conditions: any) => {
+      jsonExtract: async (table: string, field: string, path: string, conditions: unknown) => {
         const records = await this.selectRecords(table, conditions);
         return {
           ...records,
@@ -691,7 +698,7 @@ export class DatabaseMockService {
     console.log('📊 Initialized default database tables');
   }
 
-  private parseSQLAndExecute(sql: string, params: any[] = []): QueryResult {
+  private parseSQLAndExecute(_sql: string, _params: unknown[] = []): QueryResult {
     // Simplified SQL parser for common operations
     sql = sql.trim().toLowerCase();
     
@@ -713,7 +720,7 @@ export class DatabaseMockService {
     }
   }
 
-  private mockSelectQuery(sql: string, params: any[]): QueryResult {
+  private mockSelectQuery(_sql: string, _params: unknown[]): QueryResult {
     // Extract table name (very simplified)
     const tableMatch = sql.match(/from\s+(\w+)/);
     const tableName = tableMatch ? tableMatch[1] : 'users';
@@ -731,7 +738,7 @@ export class DatabaseMockService {
     };
   }
 
-  private mockInsertQuery(sql: string, params: any[]): QueryResult {
+  private mockInsertQuery(_sql: string, _params: unknown[]): QueryResult {
     const tableMatch = sql.match(/into\s+(\w+)/);
     const tableName = tableMatch ? tableMatch[1] : 'users';
     
@@ -746,7 +753,7 @@ export class DatabaseMockService {
     };
   }
 
-  private mockUpdateQuery(sql: string, params: any[]): QueryResult {
+  private mockUpdateQuery(_sql: string, _params: unknown[]): QueryResult {
     const affectedRows = Math.floor(this.rng() * 5) + 1;
     return {
       rows: [],
@@ -756,7 +763,7 @@ export class DatabaseMockService {
     };
   }
 
-  private mockDeleteQuery(sql: string, params: any[]): QueryResult {
+  private mockDeleteQuery(_sql: string, _params: unknown[]): QueryResult {
     const affectedRows = Math.floor(this.rng() * 3) + 1;
     return {
       rows: [],
@@ -766,7 +773,7 @@ export class DatabaseMockService {
     };
   }
 
-  private generateMockRecord(tableName: string): any {
+  private generateMockRecord(tableName: string): unknown {
     switch (tableName) {
     case 'users':
       return {
@@ -790,7 +797,7 @@ export class DatabaseMockService {
     }
   }
 
-  private updateIndexes(tableName: string, record: any, operation: 'insert' | 'update' | 'delete'): void {
+  private updateIndexes(tableName: string, record: unknown, operation: 'insert' | 'update' | 'delete'): void {
     const table = this.tables.get(tableName);
     if (!table) return;
 
@@ -836,7 +843,7 @@ export class DatabaseMockService {
     console.log(`📇 Created index ${indexName} on ${tableName}(${columns.join(', ')})`);
   }
 
-  private describeTable(name: string): any {
+  private describeTable(name: string): unknown {
     const table = this.tables.get(name);
     if (!table) {
       throw new Error(`Table '${name}' not found`);
@@ -850,11 +857,11 @@ export class DatabaseMockService {
     };
   }
 
-  private closeConnection(connectionId: string): boolean {
+  private closeConnection(_connectionId: string): boolean {
     return this.connections.delete(connectionId);
   }
 
-  private getConnectionStats(connectionId: string): any {
+  private getConnectionStats(_connectionId: string): unknown {
     const connection = this.connections.get(connectionId);
     if (!connection) return null;
 

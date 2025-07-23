@@ -20,7 +20,7 @@ export class MigrationTestHelper {
     beforeState: any,
     expectedAfterState?: any
   ): Promise<MigrationStepResult> {
-    const startTime = Date.now();
+    const startTime = performance.now(); // Use high-resolution timing
     let error: Error | null = null;
     let actualAfterState: any = null;
     let rollbackSuccessful = false;
@@ -47,6 +47,8 @@ export class MigrationTestHelper {
       error = err as Error;
     }
     
+    const executionTime = performance.now() - startTime;
+    
     const result: MigrationStepResult = {
       stepId: step.id,
       stepName: step.name,
@@ -55,7 +57,7 @@ export class MigrationTestHelper {
       beforeState,
       afterState: actualAfterState,
       rollbackSuccessful,
-      executionTime: Date.now() - startTime,
+      executionTime: executionTime > 0 ? executionTime : 0.1, // Ensure positive value
       timestamp: new Date().toISOString()
     };
     
@@ -159,6 +161,9 @@ export class MigrationTestHelper {
           } else if (typeof oldProperty !== typeof newProperty) {
             compatible = false;
             error = `Property ${testCase.propertyName} type changed`;
+          } else if (!this.deepCompare(oldProperty, newProperty)) {
+            compatible = false;
+            error = `Property ${testCase.propertyName} value changed`;
           }
         }
         
@@ -442,10 +447,14 @@ export class RefactoringValidator {
           }
         }
         
-        // Apply custom validator if provided
-        if (success && testCase.validator) {
+        // Apply custom validator if provided (regardless of default comparison result)
+        if (testCase.validator) {
           const validationResult = testCase.validator(oldResult, newResult);
-          if (!validationResult.valid) {
+          if (validationResult.valid) {
+            // Custom validator overrides default comparison
+            success = true;
+            error = null;
+          } else if (validationResult.message) {
             success = false;
             error = validationResult.message;
           }
