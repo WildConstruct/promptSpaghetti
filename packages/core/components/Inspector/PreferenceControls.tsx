@@ -35,9 +35,6 @@ export
     }
   };
 
-      }
-  };
-
   const handleUseGlobalToggle = (useGlobal: boolean) => {
     if (nodeId) {
       setNodeUseGlobalDefault(nodeId, useGlobal);
