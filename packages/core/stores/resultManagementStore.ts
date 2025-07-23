@@ -144,7 +144,36 @@ interface ResultManagementState {
   getTopRatedResults: (limit?: number) => SavedResult[];
 }
 
-export         const now = new Date();
+export const useResultManagementStore = create<ResultManagementState>()(
+  persist(
+    (set, get) => ({
+      // Initial state
+      savedResults: {},
+      collections: {},
+      filters: {
+        searchQuery: '',
+        dateRange: { start: null, end: null },
+        ratingRange: { min: 1, max: 5 },
+        tags: [],
+        collections: [],
+        sortBy: 'lastModified',
+        sortOrder: 'desc'
+      },
+      stats: {
+        totalResults: 0,
+        averageRating: 0,
+        totalStorage: 0,
+        averageWordCount: 0,
+        totalExecutionTime: 0,
+        topTags: [],
+        contentTypeDistribution: {},
+        recentActivity: []
+      },
+
+      // Actions
+      saveResult: (result: EnhancedPreviewResult, metadata?: Partial<SavedResult>) => {
+        const id = metadata?.id || `result-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        const now = new Date();
         
         const savedResult: SavedResult = {
           ...result,

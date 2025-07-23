@@ -85,13 +85,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'linear-gradient(
-          180deg,
-          rgba(255,
-          255,
-          255,
-          0.05
-        ) 0%, rgba(255,255,255,0.01) 50%, rgba(0,0,0,0.05) 100%)',
+        background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 50%, rgba(0, 0, 0, 0.05) 100%)',
         borderRadius: 'inherit',
         pointerEvents: 'none',
       }
