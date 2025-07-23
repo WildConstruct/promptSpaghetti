@@ -391,7 +391,7 @@ export class TypeScriptValidator {
       this.nodeModulesCache.set(cleanPackageName, false);
       return false;
       
-    } catch (error) {
+    } catch (_error) {
       this.nodeModulesCache.set(cleanPackageName, false);
       return false;
     }

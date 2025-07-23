@@ -7,8 +7,7 @@
  * Task: E18-1753114562748-32EEBC - Implement doc testing
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
+// Removed unused imports
 import { spawn } from 'child_process';
 import { CodeBlock, CodeBlockTestResult } from './DocTestFramework';
 
@@ -285,7 +284,9 @@ export class CliValidator {
   /**
    * Validate command syntax
    */
-  private async validateCommandSyntax(commandInfo: { command: string; args: string[]; line: number; fullLine: string }): Promise<string[]> {
+  private async validateCommandSyntax(
+    commandInfo: { command: string; args: string[]; line: number; fullLine: string }
+  ): Promise<string[]> {
     const errors: string[] = [];
     
     // Check for common syntax errors
@@ -321,7 +322,9 @@ export class CliValidator {
   /**
    * Validate command availability
    */
-  private async validateCommandAvailability(commandInfo: { command: string; args: string[]; line: number }): Promise<string[]> {
+  private async validateCommandAvailability(
+    commandInfo: { command: string; args: string[]; line: number }
+  ): Promise<string[]> {
     const errors: string[] = [];
     const command = commandInfo.command;
     
@@ -350,7 +353,9 @@ export class CliValidator {
   /**
    * Validate command safety
    */
-  private validateCommandSafety(commandInfo: { command: string; args: string[]; line: number; fullLine: string }): string[] {
+  private validateCommandSafety(
+    commandInfo: { command: string; args: string[]; line: number; fullLine: string }
+  ): string[] {
     const errors: string[] = [];
     const command = commandInfo.command;
     const args = commandInfo.args;
@@ -414,7 +419,10 @@ export class CliValidator {
   /**
    * Execute a command (used for validation, not from documentation)
    */
-  private executeCommand(command: string, args: string[]): Promise<{ exitCode: number; stdout: string; stderr: string }> {
+  private executeCommand(
+    command: string, 
+    args: string[]
+  ): Promise<{ exitCode: number; stdout: string; stderr: string }> {
     return new Promise((resolve, reject) => {
       const child = spawn(command, args, {
         timeout: this.options.timeout,
@@ -631,7 +639,9 @@ export class CliAnalyzer {
           skipExecution: true
         });
         
-        const parsedCommands = (validator as any).parseCommands(block.content);
+        const parsedCommands = (
+          validator as unknown as { parseCommands: (content: string) => unknown[] }
+        ).parseCommands(block.content);
         
         for (const cmd of parsedCommands) {
           commands.push({

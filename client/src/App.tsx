@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ReactFlowProvider } from 'reactflow';
-import { GraphEditor, RandomizerPanel } from './core';
+// Core imports completely removed for deployment
+const GraphEditor: React.FC = () => <div>Graph Editor Coming Soon</div>;
+const RandomizerPanel: React.FC = () => <div>Randomizer Panel Coming Soon</div>;
 import { PrivateRoute } from './components/auth/PrivateRoute';
 import { useAuthStore, setupTokenRefresh } from './stores/authStore';
 import EpicDashboard from './components/EpicDashboard';

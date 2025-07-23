@@ -234,7 +234,14 @@ const PolicyPreviewDashboard: React.FC = () => {
     }
   };
 
-  
+  const handleDeployToStaging = async (previewId: string, environmentId: string) => {
+    try {
+      const response = await fetch(`/api/policy-preview/previews/${previewId}/deploy`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ environmentId })
+      });
+
       if (response.ok) {
         fetchDeployments();
         fetchPreviews();
@@ -260,7 +267,13 @@ const PolicyPreviewDashboard: React.FC = () => {
     }
   };
 
-  
+  const handlePromoteToProduction = async (previewId: string) => {
+    try {
+      const response = await fetch(`/api/policy-preview/previews/${previewId}/promote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
       if (response.ok) {
         fetchPreviews();
       }
@@ -362,7 +375,7 @@ const PolicyPreviewDashboard: React.FC = () => {
                             View
                           </Button>
                           {preview.status === PreviewStatus.STAGED && (
-                            <Select>
+                            <Select onValueChange={(value) => handleDeployToStaging(preview.previewId, value)}>
                               <SelectTrigger className="w-32">
                                 <SelectValue placeholder="Deploy" />
                               </SelectTrigger>
@@ -373,7 +386,11 @@ const PolicyPreviewDashboard: React.FC = () => {
                             </Select>
                           )}
                           {preview.status === PreviewStatus.APPROVED && (
-                            <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                            <Button 
+                              size="sm" 
+                              className="bg-green-600 hover:bg-green-700"
+                              onClick={() => handlePromoteToProduction(preview.previewId)}
+                            >
                               <ArrowUp className="h-4 w-4 mr-1" />
                               Promote
                             </Button>

@@ -429,7 +429,7 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
 
   describe('RetentionPolicyAdminService', () => {
     beforeEach(() => {
-      (mockRetentionFramework.createPolicy as jest.Mock).mockResolvedValue({
+      const mockPolicyData = {
         policyId: 'policy-123',
         name: 'Test Policy',
         description: 'Test Description',
@@ -439,7 +439,10 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         rules: []
-      });
+      };
+      
+      (mockRetentionFramework.createPolicy as jest.Mock).mockResolvedValue(mockPolicyData);
+      (mockRetentionFramework.getPolicy as jest.Mock).mockResolvedValue(mockPolicyData);
     });
 
     describe('Admin Policy Management', () => {

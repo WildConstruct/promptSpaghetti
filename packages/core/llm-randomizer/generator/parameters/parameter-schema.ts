@@ -216,7 +216,6 @@ export class ParameterValidator {
     temperature?: number;
     focusAreas?: string[];
   } {
-    console.log('getSuggestions called with parameters:', parameters);
     const suggestions: any = {};
 
     // Suggest node count based on complexity
@@ -231,11 +230,7 @@ export class ParameterValidator {
 
     // Suggest node types based on purpose
     if (parameters.purpose && (!parameters.nodeTypes || parameters.nodeTypes.length === 0)) {
-      console.log('About to call suggestNodeTypes with purpose:', parameters.purpose);
       suggestions.nodeTypes = this.suggestNodeTypes(parameters.purpose);
-      console.log('suggestNodeTypes returned:', suggestions.nodeTypes);
-    } else {
-      console.log('Skipping nodeTypes suggestion. purpose:', parameters.purpose, 'nodeTypes:', parameters.nodeTypes);
     }
 
     // Suggest temperature based on style
@@ -253,7 +248,6 @@ export class ParameterValidator {
       suggestions.focusAreas = this.suggestFocusAreas(parameters.domain);
     }
 
-    console.log('Final suggestions:', suggestions);
     return suggestions;
   }
 

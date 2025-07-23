@@ -12,7 +12,7 @@ import { setupServer } from 'msw/node';
 import MockFactory, { MockConfig, MockBehavior } from './MockFactory';
 import seedrandom from 'seedrandom';
 
-export interface APIResponse<T = any> {
+export interface APIResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -31,7 +31,7 @@ export interface AuthTokenPayload {
 }
 
 export interface GraphExecutionRequest {
-  graph: any;
+  graph: unknown;
   seeds?: number[];
   options?: {
     timeout?: number;
@@ -43,18 +43,18 @@ export interface GraphExecutionRequest {
 export interface DatabaseOperationRequest {
   operation: 'query' | 'insert' | 'update' | 'delete';
   table?: string;
-  data?: any;
-  conditions?: any;
+  data?: unknown;
+  conditions?: unknown;
   sql?: string;
-  params?: any[];
+  params?: unknown[];
 }
 
 export class APIMockService {
   private factory: MockFactory;
-  private server: any; // MSW server
+  private server: unknown; // MSW server
   private baseUrl: string;
   private rng: seedrandom.PRNG;
-  private mockData: Map<string, any> = new Map();
+  private mockData: Map<string, unknown> = new Map();
 
   constructor(config: MockConfig = {}) {
     this.factory = new MockFactory(config);

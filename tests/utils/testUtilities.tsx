@@ -216,7 +216,7 @@ export const AsyncTestUtils = {
   /**
    * Retry operation with backoff
    */
-  retryWithBackoff: async <T>(
+  retryWithBackoff: async <T,>(
     operation: () => Promise<T>,
     maxRetries = 3,
     baseDelay = 100
@@ -246,7 +246,7 @@ export const PerformanceTestUtils = {
   /**
    * Measure execution time
    */
-  measureTime: async <T>(operation: () => Promise<T>): Promise<{ result: T; duration: number }> => {
+  measureTime: async <T,>(operation: () => Promise<T>): Promise<{ result: T; duration: number }> => {
     const start = performance.now();
     const result = await operation();
     const end = performance.now();
@@ -260,7 +260,7 @@ export const PerformanceTestUtils = {
   /**
    * Run performance benchmark
    */
-  benchmark: async <T>(
+  benchmark: async <T,>(
     operation: () => Promise<T>,
     iterations = 10
   ): Promise<{

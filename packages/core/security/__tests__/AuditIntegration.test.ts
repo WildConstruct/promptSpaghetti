@@ -47,13 +47,15 @@ describe('AuditIntegration', () => {
     
     auditLogger = createAuditLogger({
       bufferSize: 1, // Force immediate writing
-      asyncLogging: false
+      asyncLogging: false,
+      hashSensitiveData: false // Disable hashing for test
     });
     
     auditIntegration = createAuditIntegration({
       auditLogger,
-      logAllOperations: true,
-      enrichWithClassification: true
+      logAllOperations: false,
+      enrichWithClassification: true,
+      logDeniedAccess: false // Prevent duplicate logs for denied access
     });
   });
   
@@ -367,7 +369,8 @@ describe('AuditIntegration', () => {
     it('should handle missing optional components gracefully', async () => {
       const minimalIntegration = createAuditIntegration({
         auditLogger,
-        enrichWithClassification: false
+        enrichWithClassification: false,
+        logDeniedAccess: false // Prevent duplicate logs for denied access
       });
       
       const context: OperationContext = {

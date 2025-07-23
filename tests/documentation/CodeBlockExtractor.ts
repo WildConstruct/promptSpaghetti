@@ -474,7 +474,9 @@ export class CodeBlockAnalyzer {
   /**
    * Extract import/require statements from code blocks
    */
-  static extractImports(codeBlocks: CodeBlock[]): Array<{ module: string; type: 'import' | 'require'; language: string; lineNumber: number }> {
+  static extractImports(
+    codeBlocks: CodeBlock[]
+  ): Array<{ module: string; type: 'import' | 'require'; language: string; lineNumber: number }> {
     const imports: Array<{ module: string; type: 'import' | 'require'; language: string; lineNumber: number }> = [];
     
     codeBlocks.forEach(block => {

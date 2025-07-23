@@ -8,7 +8,6 @@
  */
 
 import * as fs from 'fs/promises';
-import * as path from 'path';
 import { DocTestFramework, DEFAULT_DOC_TEST_CONFIG, DocTestConfig } from './DocTestFramework';
 import { CodeBlockExtractor } from './CodeBlockExtractor';
 import { TypeScriptValidator } from './TypeScriptValidator';
@@ -75,25 +74,25 @@ describe('DocTestFramework', () => {
       ];
       
       // Mock glob to return test files
-      const { glob } = require('glob');
+      const glob = require('glob') as { mockResolvedValue: (value: unknown) => void };
       glob.mockResolvedValue(mockFiles);
       
-      const files = await (docTest as any).findDocumentationFiles();
+      const files = await (docTest as unknown as { findDocumentationFiles: () => Promise<string[]> }).findDocumentationFiles();
       
       expect(files).toEqual(mockFiles.sort());
     });
     
     it('should exclude files matching exclude patterns', async () => {
-      const mockFiles = [
+      const _mockFiles = [
         '/project/README.md',
         '/project/node_modules/package/README.md',
         '/project/dist/docs.md'
       ];
       
-      const { glob } = require('glob');
+      const glob = require('glob') as { mockResolvedValue: (value: unknown) => void };
       glob.mockResolvedValue(['/project/README.md']); // Excluded files filtered by glob
       
-      const files = await (docTest as any).findDocumentationFiles();
+      const files = await (docTest as unknown as { findDocumentationFiles: () => Promise<string[]> }).findDocumentationFiles();
       
       expect(files).toEqual(['/project/README.md']);
     });

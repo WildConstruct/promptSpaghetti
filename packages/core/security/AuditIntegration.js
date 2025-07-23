@@ -63,13 +63,13 @@ export class AuditIntegration {
             } : undefined
         });
         // Log denied access separately if configured
-        if (!enforcementResult?.allowed && this.config.logDeniedAccess) {
+        if (enforcementResult && !enforcementResult.allowed && this.config.logDeniedAccess) {
             await this.logSecurityEvent('ACCESS_DENIED', context, {
                 resourceType,
                 resourceId,
                 classification,
-                reason: enforcementResult?.reason,
-                missingControls: enforcementResult?.missingControls
+                reason: enforcementResult.reason,
+                missingControls: enforcementResult.missingControls
             });
         }
     }
