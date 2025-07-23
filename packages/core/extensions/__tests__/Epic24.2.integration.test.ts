@@ -644,7 +644,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       const stableExtensions = ['stable-1', 'stable-2'];
       const faultyExtensions = ['faulty-1', 'faulty-2'];
       
-      let systemHealth = { status: 'healthy', activeExtensions: 0, errors: 0 };
+      const systemHealth = { status: 'healthy', activeExtensions: 0, errors: 0 };
 
       extensionSystem.getSystemHealth.mockReturnValue(systemHealth as unknown as unknown);
 

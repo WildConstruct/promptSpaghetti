@@ -342,7 +342,7 @@ class LoadTestRunner extends EventEmitter {
 
   async runLoadTest(testScenario, testName = 'Load Test') {
     console.log(`🚀 Starting ${testName}`);
-    console.log(`📊 Configuration:`);
+    console.log('📊 Configuration:');
     console.log(`   - Concurrency: ${this.config.concurrency} users`);
     console.log(`   - Duration: ${this.config.duration / 1000}s`);
     console.log(`   - Ramp-up: ${this.config.rampUpTime / 1000}s`);
@@ -478,7 +478,7 @@ class LoadTestRunner extends EventEmitter {
     console.log(`✅ Successful: ${global.successfulRequests} (${global.successRate.toFixed(1)}%)`);
     console.log(`❌ Failed: ${global.failedRequests} (${global.errorRate.toFixed(1)}%)`);
     console.log(`⚡ Requests/sec: ${global.requestsPerSecond.toFixed(2)}`);
-    console.log(`⏱️  Response Times:`);
+    console.log('⏱️  Response Times:');
     console.log(`   - Average: ${global.averageResponseTime.toFixed(0)}ms`);
     console.log(`   - Min: ${global.minResponseTime}ms`);
     console.log(`   - Max: ${global.maxResponseTime}ms`);
@@ -488,7 +488,7 @@ class LoadTestRunner extends EventEmitter {
     console.log(`   - P99: ${global.p99}ms`);
     
     if (global.errors.length > 0) {
-      console.log(`\n🚨 Top Errors:`);
+      console.log('\n🚨 Top Errors:');
       const errorCounts = {};
       global.errors.forEach(error => {
         const key = error.errorMessage || `HTTP ${error.statusCode}`;

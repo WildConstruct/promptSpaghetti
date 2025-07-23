@@ -260,7 +260,7 @@ export class AuditCalendarSystem {
     const validatedQuery = SchedulingQuerySchema.parse(query);
     
     // Apply filters
-    let filteredSchedules = this.applyScheduleFilters(Array.from(this.schedules.values()), validatedQuery);
+    const filteredSchedules = this.applyScheduleFilters(Array.from(this.schedules.values()), validatedQuery);
     
     // Calculate metrics
     const upcomingDeadlines = this.getUpcomingDeadlines(7); // Next 7 days
@@ -513,7 +513,7 @@ export class AuditCalendarSystem {
     }>;
     notifications_sent: number;
     schedules_updated: number;
-  } {
+    } {
     const alerts: any[] = [];
     let notificationsSent = 0;
     let schedulesUpdated = 0;
@@ -598,8 +598,8 @@ export class AuditCalendarSystem {
     const avgDuration = completedWithDuration.length > 0 
       ? completedWithDuration.reduce(
         (sum,
-        s
-      ) => sum + (s.actual_end!.getTime() - s.actual_start!.getTime()), 0) / completedWithDuration.length / (1000 * 60 * 60) // hours
+          s
+        ) => sum + (s.actual_end!.getTime() - s.actual_start!.getTime()), 0) / completedWithDuration.length / (1000 * 60 * 60) // hours
       : 0;
 
     // Activity breakdown
@@ -772,24 +772,24 @@ export class AuditCalendarSystem {
     const nextDate = new Date(currentDate);
     
     switch (pattern) {
-      case RecurrencePattern.DAILY:
-        nextDate.setDate(nextDate.getDate() + (config?.interval || 1));
-        break;
-      case RecurrencePattern.WEEKLY:
-        nextDate.setDate(nextDate.getDate() + 7 * (config?.interval || 1));
-        break;
-      case RecurrencePattern.MONTHLY:
-        nextDate.setMonth(nextDate.getMonth() + (config?.interval || 1));
-        break;
-      case RecurrencePattern.QUARTERLY:
-        nextDate.setMonth(nextDate.getMonth() + 3);
-        break;
-      case RecurrencePattern.SEMI_ANNUAL:
-        nextDate.setMonth(nextDate.getMonth() + 6);
-        break;
-      case RecurrencePattern.ANNUAL:
-        nextDate.setFullYear(nextDate.getFullYear() + (config?.interval || 1));
-        break;
+    case RecurrencePattern.DAILY:
+      nextDate.setDate(nextDate.getDate() + (config?.interval || 1));
+      break;
+    case RecurrencePattern.WEEKLY:
+      nextDate.setDate(nextDate.getDate() + 7 * (config?.interval || 1));
+      break;
+    case RecurrencePattern.MONTHLY:
+      nextDate.setMonth(nextDate.getMonth() + (config?.interval || 1));
+      break;
+    case RecurrencePattern.QUARTERLY:
+      nextDate.setMonth(nextDate.getMonth() + 3);
+      break;
+    case RecurrencePattern.SEMI_ANNUAL:
+      nextDate.setMonth(nextDate.getMonth() + 6);
+      break;
+    case RecurrencePattern.ANNUAL:
+      nextDate.setFullYear(nextDate.getFullYear() + (config?.interval || 1));
+      break;
     }
     
     return nextDate;
@@ -799,20 +799,20 @@ export class AuditCalendarSystem {
     const notificationDate = new Date(scheduleDate);
     
     switch (timing) {
-      case NotificationTiming.IMMEDIATE:
-        return notificationDate;
-      case NotificationTiming.ONE_HOUR:
-        notificationDate.setHours(notificationDate.getHours() - 1);
-        break;
-      case NotificationTiming.ONE_DAY:
-        notificationDate.setDate(notificationDate.getDate() - 1);
-        break;
-      case NotificationTiming.ONE_WEEK:
-        notificationDate.setDate(notificationDate.getDate() - 7);
-        break;
-      case NotificationTiming.TWO_WEEKS:
-        notificationDate.setDate(notificationDate.getDate() - 14);
-        break;
+    case NotificationTiming.IMMEDIATE:
+      return notificationDate;
+    case NotificationTiming.ONE_HOUR:
+      notificationDate.setHours(notificationDate.getHours() - 1);
+      break;
+    case NotificationTiming.ONE_DAY:
+      notificationDate.setDate(notificationDate.getDate() - 1);
+      break;
+    case NotificationTiming.ONE_WEEK:
+      notificationDate.setDate(notificationDate.getDate() - 7);
+      break;
+    case NotificationTiming.TWO_WEEKS:
+      notificationDate.setDate(notificationDate.getDate() - 14);
+      break;
     }
     
     return notificationDate;
@@ -950,7 +950,7 @@ export const auditCalendarSystem = new AuditCalendarSystem();
 // Utility functions
 export 
 export 
-export const generateCalendarView = (config: CalendarViewConfig) =>
-  auditCalendarSystem.generateCalendarView(config);
+  export const generateCalendarView = (config: CalendarViewConfig) =>
+    auditCalendarSystem.generateCalendarView(config);
 
 export default AuditCalendarSystem;

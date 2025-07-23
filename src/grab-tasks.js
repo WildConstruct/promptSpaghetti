@@ -95,7 +95,7 @@ async function grabTasksSafely() {
         task.tags?.includes('auth') ||
         task.tags?.includes('file-browser')
       );
-      console.log(`🎯 Filtering to priority tasks only`);
+      console.log('🎯 Filtering to priority tasks only');
     }
     
     // Sort by business priority (Epic 8 > authentication > file-browser > other)

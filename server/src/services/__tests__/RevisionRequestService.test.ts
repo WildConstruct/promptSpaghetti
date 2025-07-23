@@ -84,7 +84,7 @@ describe('RevisionRequestService', () => {
 
   beforeEach(() => {
     mockDb = {
-      query: jest.fn(),
+      query: jest.fn()
     } as any;
     service = new RevisionRequestService(mockDb);
   });
@@ -168,7 +168,7 @@ describe('RevisionRequestService', () => {
         rows: [{
           id: 'rev_test_critical',
           urgency_score: 100,
-          complexity_score: 90,
+          complexity_score: 90
           // ... other fields
         }]
       };
@@ -405,7 +405,7 @@ describe('RevisionRequestService', () => {
     it('should handle pagination correctly', async () => {
       const query: RevisionRequestSearchQuery = {
         page: 3,
-        pageSize: 25,
+        pageSize: 25
       };
 
       await service.searchRevisionRequests(query);
@@ -441,7 +441,7 @@ describe('RevisionRequestService', () => {
           title: 'Updated Title',
           status: 'under_review',
           reviewer_id: 'reviewer_456',
-          updated_at: '2024-01-15T10:00:00Z',
+          updated_at: '2024-01-15T10:00:00Z'
           // ... other fields
         }]
       };
@@ -979,7 +979,7 @@ describe('RevisionRequestService', () => {
     it('should handle malformed data gracefully', async () => {
       const malformedResult = {
         rows: [{
-          id: 'rev_malformed',
+          id: 'rev_malformed'
           // Missing required fields
         }]
       };
@@ -1068,7 +1068,7 @@ describe('RevisionRequestService Integration', () => {
 
   beforeEach(() => {
     mockDb = {
-      query: jest.fn<unknown[], unknown>(),
+      query: jest.fn<unknown[], unknown>()
     } as any;
     service = new RevisionRequestService(mockDb);
   });

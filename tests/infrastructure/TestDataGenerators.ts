@@ -188,67 +188,67 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
     };
 
     switch (nodeType) {
-      case 'output':
-        return {
-          ...baseData,
-          text: `Output: ${this.randomString(20)}`,
-          variables: this.generateVariables(complexity === 'simple' ? 1 : 3)
-        };
+    case 'output':
+      return {
+        ...baseData,
+        text: `Output: ${this.randomString(20)}`,
+        variables: this.generateVariables(complexity === 'simple' ? 1 : 3)
+      };
 
-      case 'concat':
-        return {
-          ...baseData,
-          parts: Array.from({ length: this.randomNumber(2, 5) }, () => this.randomString(10)),
-          separator: this.randomChoice([' ', ', ', '\n', ''])
-        };
+    case 'concat':
+      return {
+        ...baseData,
+        parts: Array.from({ length: this.randomNumber(2, 5) }, () => this.randomString(10)),
+        separator: this.randomChoice([' ', ', ', '\n', ''])
+      };
 
-      case 'weightedChoice':
-        return {
-          ...baseData,
-          choices: Array.from({ length: this.randomNumber(2, 6) }, (_, i) => ({
-            text: `Choice ${i + 1}: ${this.randomString(15)}`,
-            weight: this.randomNumber(1, 10)
-          }))
-        };
+    case 'weightedChoice':
+      return {
+        ...baseData,
+        choices: Array.from({ length: this.randomNumber(2, 6) }, (_, i) => ({
+          text: `Choice ${i + 1}: ${this.randomString(15)}`,
+          weight: this.randomNumber(1, 10)
+        }))
+      };
 
-      case 'conditional':
-        return {
-          ...baseData,
-          condition: `variable_${this.randomString(5)} === "${this.randomString(8)}"`,
-          trueBranch: `True: ${this.randomString(15)}`,
-          falseBranch: `False: ${this.randomString(15)}`
-        };
+    case 'conditional':
+      return {
+        ...baseData,
+        condition: `variable_${this.randomString(5)} === "${this.randomString(8)}"`,
+        trueBranch: `True: ${this.randomString(15)}`,
+        falseBranch: `False: ${this.randomString(15)}`
+      };
 
-      case 'sequential':
-        return {
-          ...baseData,
-          items: Array.from({ length: this.randomNumber(3, 8) }, () => this.randomString(12)),
-          pattern: this.randomChoice(['linear', 'cyclical', 'random', 'weighted'])
-        };
+    case 'sequential':
+      return {
+        ...baseData,
+        items: Array.from({ length: this.randomNumber(3, 8) }, () => this.randomString(12)),
+        pattern: this.randomChoice(['linear', 'cyclical', 'random', 'weighted'])
+      };
 
-      case 'markov':
-        return {
-          ...baseData,
-          states: this.generateMarkovStates(),
-          initialState: 'start'
-        };
+    case 'markov':
+      return {
+        ...baseData,
+        states: this.generateMarkovStates(),
+        initialState: 'start'
+      };
 
-      case 'setVariable':
-        return {
-          ...baseData,
-          variableName: `var_${this.randomString(6)}`,
-          value: this.randomString(15)
-        };
+    case 'setVariable':
+      return {
+        ...baseData,
+        variableName: `var_${this.randomString(6)}`,
+        value: this.randomString(15)
+      };
 
-      case 'getVariable':
-        return {
-          ...baseData,
-          variableName: `var_${this.randomString(6)}`,
-          defaultValue: this.randomString(10)
-        };
+    case 'getVariable':
+      return {
+        ...baseData,
+        variableName: `var_${this.randomString(6)}`,
+        defaultValue: this.randomString(10)
+      };
 
-      default:
-        return baseData;
+    default:
+      return baseData;
     }
   }
 

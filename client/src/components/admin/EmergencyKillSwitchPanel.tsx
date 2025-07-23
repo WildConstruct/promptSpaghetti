@@ -235,29 +235,29 @@ export const EmergencyKillSwitchPanel: React.FC = () => {
 
   const getScopeDisplay = (scope: string) => {
     switch (scope) {
-      case 'ALL':
-        return { text: 'All Toggles', color: 'red', icon: <Power size={14} /> };
-      case 'CLAUDE_IMPACT':
-        return { text: 'Claude Impact', color: 'orange', icon: <Zap size={14} /> };
-      case 'CRITICAL_FEATURES':
-        return { text: 'Critical Features', color: 'yellow', icon: <Shield size={14} /> };
-      case 'CUSTOM':
-        return { text: 'Custom', color: 'blue', icon: <Settings size={14} /> };
-      default:
-        return { text: scope, color: 'gray', icon: null };
+    case 'ALL':
+      return { text: 'All Toggles', color: 'red', icon: <Power size={14} /> };
+    case 'CLAUDE_IMPACT':
+      return { text: 'Claude Impact', color: 'orange', icon: <Zap size={14} /> };
+    case 'CRITICAL_FEATURES':
+      return { text: 'Critical Features', color: 'yellow', icon: <Shield size={14} /> };
+    case 'CUSTOM':
+      return { text: 'Custom', color: 'blue', icon: <Settings size={14} /> };
+    default:
+      return { text: scope, color: 'gray', icon: null };
     }
   };
 
   const getActivationStatusDisplay = (status: string) => {
     switch (status) {
-      case 'ACTIVE':
-        return { text: 'Active', color: 'red', icon: <AlertCircle size={14} /> };
-      case 'ROLLED_BACK':
-        return { text: 'Rolled Back', color: 'green', icon: <CheckCircle size={14} /> };
-      case 'EXPIRED':
-        return { text: 'Expired', color: 'gray', icon: <XCircle size={14} /> };
-      default:
-        return { text: status, color: 'gray', icon: null };
+    case 'ACTIVE':
+      return { text: 'Active', color: 'red', icon: <AlertCircle size={14} /> };
+    case 'ROLLED_BACK':
+      return { text: 'Rolled Back', color: 'green', icon: <CheckCircle size={14} /> };
+    case 'EXPIRED':
+      return { text: 'Expired', color: 'gray', icon: <XCircle size={14} /> };
+    default:
+      return { text: status, color: 'gray', icon: null };
     }
   };
 

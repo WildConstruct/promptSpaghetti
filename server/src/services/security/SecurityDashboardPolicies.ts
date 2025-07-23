@@ -681,26 +681,26 @@ export class SecurityDashboardPolicies extends EventEmitter {
     let contextValue: any;
     
     switch (condition.type) {
-      case 'USER_ATTRIBUTE':
-        contextValue = context.userAttributes[condition.field];
-        break;
-      case 'TIME':
-        contextValue = context.sessionContext.timestamp;
-        break;
-      case 'LOCATION':
-        contextValue = context.sessionContext.ipAddress;
-        break;
-      case 'DEVICE':
-        contextValue = context.sessionContext.userAgent;
-        break;
-      case 'CONTEXT':
-        contextValue = (context as any)[condition.field];
-        break;
-      case 'RISK_SCORE':
-        contextValue = context.riskScore || 0;
-        break;
-      default:
-        return false;
+    case 'USER_ATTRIBUTE':
+      contextValue = context.userAttributes[condition.field];
+      break;
+    case 'TIME':
+      contextValue = context.sessionContext.timestamp;
+      break;
+    case 'LOCATION':
+      contextValue = context.sessionContext.ipAddress;
+      break;
+    case 'DEVICE':
+      contextValue = context.sessionContext.userAgent;
+      break;
+    case 'CONTEXT':
+      contextValue = (context as any)[condition.field];
+      break;
+    case 'RISK_SCORE':
+      contextValue = context.riskScore || 0;
+      break;
+    default:
+      return false;
     }
     
     return this.compareValues(contextValue, condition.operator, condition.value);
@@ -708,24 +708,24 @@ export class SecurityDashboardPolicies extends EventEmitter {
   
   private compareValues(actual: any, operator: string, expected: any): boolean {
     switch (operator) {
-      case 'EQUALS':
-        return actual === expected;
-      case 'NOT_EQUALS':
-        return actual !== expected;
-      case 'IN':
-        return Array.isArray(expected) && expected.includes(actual);
-      case 'NOT_IN':
-        return Array.isArray(expected) && !expected.includes(actual);
-      case 'GREATER_THAN':
-        return Number(actual) > Number(expected);
-      case 'LESS_THAN':
-        return Number(actual) < Number(expected);
-      case 'BETWEEN':
-        return Array.isArray(expected) && expected.length === 2 &&
+    case 'EQUALS':
+      return actual === expected;
+    case 'NOT_EQUALS':
+      return actual !== expected;
+    case 'IN':
+      return Array.isArray(expected) && expected.includes(actual);
+    case 'NOT_IN':
+      return Array.isArray(expected) && !expected.includes(actual);
+    case 'GREATER_THAN':
+      return Number(actual) > Number(expected);
+    case 'LESS_THAN':
+      return Number(actual) < Number(expected);
+    case 'BETWEEN':
+      return Array.isArray(expected) && expected.length === 2 &&
                Number(actual) >= Number(expected[0]) &&
                Number(actual) <= Number(expected[1]);
-      default:
-        return false;
+    default:
+      return false;
     }
   }
   
@@ -741,7 +741,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     
     let auditRequired = false;
     let minSessionTimeout: number | undefined;
-    let primaryPolicy = results[0].policy;
+    const primaryPolicy = results[0].policy;
     
     for (const result of results) {
       result.permissions.forEach(p => mergedPermissions.add(p));
@@ -876,16 +876,16 @@ export class SecurityDashboardPolicies extends EventEmitter {
     if (!data || typeof data !== 'object') return data;
     
     switch (filter.type) {
-      case 'FIELD':
-        return this.applyFieldFilter(data, filter);
-      case 'VALUE':
-        return this.applyValueFilter(data, filter);
-      case 'CLASSIFICATION':
-        return this.applyClassificationFilter(data, filter, context);
-      case 'KEYWORD':
-        return this.applyKeywordFilter(data, filter);
-      default:
-        return data;
+    case 'FIELD':
+      return this.applyFieldFilter(data, filter);
+    case 'VALUE':
+      return this.applyValueFilter(data, filter);
+    case 'CLASSIFICATION':
+      return this.applyClassificationFilter(data, filter, context);
+    case 'KEYWORD':
+      return this.applyKeywordFilter(data, filter);
+    default:
+      return data;
     }
   }
   
@@ -895,19 +895,19 @@ export class SecurityDashboardPolicies extends EventEmitter {
     const result = { ...data };
     
     switch (filter.action) {
-      case 'HIDE':
-        delete result[filter.field];
-        break;
-      case 'MASK':
-        if (result[filter.field]) {
-          result[filter.field] = filter.maskingPattern || '***';
-        }
-        break;
-      case 'REDACT':
-        if (result[filter.field]) {
-          result[filter.field] = '[REDACTED]';
-        }
-        break;
+    case 'HIDE':
+      delete result[filter.field];
+      break;
+    case 'MASK':
+      if (result[filter.field]) {
+        result[filter.field] = filter.maskingPattern || '***';
+      }
+      break;
+    case 'REDACT':
+      if (result[filter.field]) {
+        result[filter.field] = '[REDACTED]';
+      }
+      break;
     }
     
     return result;
@@ -940,15 +940,15 @@ export class SecurityDashboardPolicies extends EventEmitter {
     
     // Framework-specific compliance checks
     switch (framework) {
-      case 'GDPR':
-        findings.push(...this.analyzeGDPRCompliance(policy));
-        break;
-      case 'SOX':
-        findings.push(...this.analyzeSOXCompliance(policy));
-        break;
-      case 'HIPAA':
-        findings.push(...this.analyzeHIPAACompliance(policy));
-        break;
+    case 'GDPR':
+      findings.push(...this.analyzeGDPRCompliance(policy));
+      break;
+    case 'SOX':
+      findings.push(...this.analyzeSOXCompliance(policy));
+      break;
+    case 'HIPAA':
+      findings.push(...this.analyzeHIPAACompliance(policy));
+      break;
     }
     
     return findings;
@@ -1190,14 +1190,14 @@ export class SecurityDashboardPolicies extends EventEmitter {
   private calculateRefreshInterval(policy: DashboardPolicy): number {
     // Base refresh interval on sensitivity level
     switch (policy.maxSensitivityLevel) {
-      case DataSensitivityLevel.TOP_SECRET:
-        return 5000; // 5 seconds
-      case DataSensitivityLevel.RESTRICTED:
-        return 10000; // 10 seconds
-      case DataSensitivityLevel.CONFIDENTIAL:
-        return 30000; // 30 seconds
-      default:
-        return 60000; // 1 minute
+    case DataSensitivityLevel.TOP_SECRET:
+      return 5000; // 5 seconds
+    case DataSensitivityLevel.RESTRICTED:
+      return 10000; // 10 seconds
+    case DataSensitivityLevel.CONFIDENTIAL:
+      return 30000; // 30 seconds
+    default:
+      return 60000; // 1 minute
     }
   }
   

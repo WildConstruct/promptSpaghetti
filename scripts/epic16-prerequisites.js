@@ -39,105 +39,105 @@ function parseArguments() {
     const nextArg = args[i + 1];
 
     switch (arg) {
-      case '--help':
-      case '-h':
-        options.help = true;
-        break;
+    case '--help':
+    case '-h':
+      options.help = true;
+      break;
 
-      case '--health':
-      case '--health-check':
-        options.healthCheck = true;
-        break;
+    case '--health':
+    case '--health-check':
+      options.healthCheck = true;
+      break;
 
-      case '--categories':
-      case '-c':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.categories = nextArg.split(',').map(c => c.trim());
-          i++;
-        }
-        break;
+    case '--categories':
+    case '-c':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.categories = nextArg.split(',').map(c => c.trim());
+        i++;
+      }
+      break;
 
-      case '--skip':
-      case '-s':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.skipChecks = nextArg.split(',').map(c => c.trim());
-          i++;
-        }
-        break;
+    case '--skip':
+    case '-s':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.skipChecks = nextArg.split(',').map(c => c.trim());
+        i++;
+      }
+      break;
 
-      case '--only':
-      case '-o':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.onlyChecks = nextArg.split(',').map(c => c.trim());
-          i++;
-        }
-        break;
+    case '--only':
+    case '-o':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.onlyChecks = nextArg.split(',').map(c => c.trim());
+        i++;
+      }
+      break;
 
-      case '--auto-fix':
-      case '--fix':
-        options.autoFix = true;
-        break;
+    case '--auto-fix':
+    case '--fix':
+      options.autoFix = true;
+      break;
 
-      case '--timeout':
-      case '-t':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.timeout = parseInt(nextArg, 10) * 1000; // Convert to milliseconds
-          i++;
-        }
-        break;
+    case '--timeout':
+    case '-t':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.timeout = parseInt(nextArg, 10) * 1000; // Convert to milliseconds
+        i++;
+      }
+      break;
 
-      case '--concurrency':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.concurrency = parseInt(nextArg, 10);
-          i++;
-        }
-        break;
+    case '--concurrency':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.concurrency = parseInt(nextArg, 10);
+        i++;
+      }
+      break;
 
-      case '--format':
-      case '-f':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.format = nextArg;
-          i++;
-        }
-        break;
+    case '--format':
+    case '-f':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.format = nextArg;
+        i++;
+      }
+      break;
 
-      case '--output':
-      case '--out':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.outputFile = nextArg;
-          i++;
-        }
-        break;
+    case '--output':
+    case '--out':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.outputFile = nextArg;
+        i++;
+      }
+      break;
 
-      case '--verbose':
-      case '-v':
-        options.verbose = true;
-        break;
+    case '--verbose':
+    case '-v':
+      options.verbose = true;
+      break;
 
-      case '--no-colors':
-        options.colors = false;
-        break;
+    case '--no-colors':
+      options.colors = false;
+      break;
 
-      case '--config':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.configFile = nextArg;
-          i++;
-        }
-        break;
+    case '--config':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.configFile = nextArg;
+        i++;
+      }
+      break;
 
-      case '--env':
-      case '--environment':
-        if (nextArg && !nextArg.startsWith('--')) {
-          options.environment = nextArg;
-          i++;
-        }
-        break;
+    case '--env':
+    case '--environment':
+      if (nextArg && !nextArg.startsWith('--')) {
+        options.environment = nextArg;
+        i++;
+      }
+      break;
 
-      default:
-        if (arg.startsWith('--')) {
-          console.warn(`⚠️  Unknown option: ${arg}`);
-        }
-        break;
+    default:
+      if (arg.startsWith('--')) {
+        console.warn(`⚠️  Unknown option: ${arg}`);
+      }
+      break;
     }
   }
 
@@ -324,7 +324,7 @@ async function main() {
     console.log(`📋 Environment: ${options.environment}`);
     
     if (options.verbose) {
-      console.log(`⚙️  Configuration:`);
+      console.log('⚙️  Configuration:');
       console.log(`   Format: ${options.format}`);
       console.log(`   Timeout: ${options.timeout / 1000}s`);
       console.log(`   Concurrency: ${options.concurrency}`);
@@ -356,7 +356,7 @@ async function main() {
         console.log(`\n❌ ${criticalFailures} critical prerequisite(s) failed. Epic 16 deployment is blocked.`);
         process.exit(2);
       } else {
-        console.log(`\n⚠️  Some prerequisites failed, but no critical issues detected.`);
+        console.log('\n⚠️  Some prerequisites failed, but no critical issues detected.');
         process.exit(1);
       }
     }

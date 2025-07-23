@@ -28,7 +28,7 @@ const mockOs = {
   cpus: jest.fn<unknown[], unknown>(),
   totalmem: jest.fn<unknown[], unknown>(),
   freemem: jest.fn<unknown[], unknown>(),
-  networkInterfaces: jest.fn<unknown[], unknown>(),
+  networkInterfaces: jest.fn<unknown[], unknown>()
 };
 
 // Replace os module with mock

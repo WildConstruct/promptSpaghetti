@@ -793,11 +793,11 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
     
     const params: any[] = [];
     if (resourceType) {
-      query += ` WHERE resource_type = $1`;
+      query += ' WHERE resource_type = $1';
       params.push(resourceType);
     }
     
-    query += ` GROUP BY tag ORDER BY usage_count DESC`;
+    query += ' GROUP BY tag ORDER BY usage_count DESC';
     
     const tags = await this.dbService.query(query, params);
     

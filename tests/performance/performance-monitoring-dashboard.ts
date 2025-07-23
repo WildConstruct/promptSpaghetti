@@ -297,13 +297,13 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    */
   private evaluateThreshold(value: number, threshold: PerformanceThreshold): boolean {
     switch (threshold.operator) {
-      case 'gt': return value > threshold.value;
-      case 'lt': return value < threshold.value;
-      case 'gte': return value >= threshold.value;
-      case 'lte': return value <= threshold.value;
-      case 'eq': return value === threshold.value;
-      case 'neq': return value !== threshold.value;
-      default: return false;
+    case 'gt': return value > threshold.value;
+    case 'lt': return value < threshold.value;
+    case 'gte': return value >= threshold.value;
+    case 'lte': return value <= threshold.value;
+    case 'eq': return value === threshold.value;
+    case 'neq': return value !== threshold.value;
+    default: return false;
     }
   }
 
@@ -656,7 +656,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
                 Score: ${report.overallHealth.score}/100 (${report.overallHealth.status.toUpperCase()})
             </h3>
             ${report.overallHealth.factors.length > 0 ? 
-                '<p><strong>Contributing Factors:</strong></p><ul>' + 
+    '<p><strong>Contributing Factors:</strong></p><ul>' + 
                 report.overallHealth.factors.map(f => `<li>${f}</li>`).join('') + 
                 '</ul>' : ''}
         </div>
@@ -664,11 +664,11 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         <div class="section">
             <h2>Active Alerts (${report.activeAlerts.total})</h2>
             ${report.activeAlerts.alerts.map(alert => 
-                `<div class="alert-${alert.severity}">
+    `<div class="alert-${alert.severity}">
                     <strong>${alert.severity.toUpperCase()}:</strong> ${alert.message}
                     <br><small>Test Suite: ${alert.testSuite} | ${new Date(alert.timestamp).toLocaleString()}</small>
                 </div>`
-            ).join('')}
+  ).join('')}
         </div>
 
         <div class="section">
@@ -676,14 +676,14 @@ class PerformanceMonitoringDashboard extends EventEmitter {
             <table>
                 <tr><th>Metric</th><th>Trend</th><th>Change</th><th>Confidence</th><th>Recommendation</th></tr>
                 ${report.trends.map(trend => 
-                    `<tr>
+    `<tr>
                         <td><span class="metric">${trend.metric}</span></td>
                         <td class="trend-${trend.trend}">${trend.trend.toUpperCase()}</td>
                         <td>${trend.changePercent.toFixed(1)}%</td>
                         <td>${trend.confidence.toFixed(0)}%</td>
                         <td>${trend.recommendation || 'No action needed'}</td>
                     </tr>`
-                ).join('')}
+  ).join('')}
             </table>
         </div>
 
@@ -692,14 +692,14 @@ class PerformanceMonitoringDashboard extends EventEmitter {
             <table>
                 <tr><th>Test Suite</th><th>Avg Execution Time</th><th>Avg Memory Usage</th><th>Avg Success Rate</th><th>Metrics</th></tr>
                 ${report.testSuiteSummary.map(suite => 
-                    `<tr>
+    `<tr>
                         <td><strong>${suite.testSuite}</strong></td>
                         <td>${suite.avgExecutionTime.toFixed(0)}ms</td>
                         <td>${suite.avgMemoryUsage.toFixed(1)}MB</td>
                         <td>${suite.avgSuccessRate.toFixed(1)}%</td>
                         <td>${suite.metricCount}</td>
                     </tr>`
-                ).join('')}
+  ).join('')}
             </table>
         </div>
 
@@ -743,7 +743,7 @@ ${report.activeAlerts.alerts.map(alert =>
 |--------|-------|--------|------------|----------------|
 ${report.trends.map(trend => 
     `| \`${trend.metric}\` | ${trend.trend.toUpperCase()} | ${trend.changePercent.toFixed(1)}% | ${trend.confidence.toFixed(0)}% | ${trend.recommendation || 'No action needed'} |`
-).join('\n')}
+  ).join('\n')}
 
 ## Test Suite Summary
 
@@ -751,7 +751,7 @@ ${report.trends.map(trend =>
 |------------|-------------------|------------------|------------------|---------|
 ${report.testSuiteSummary.map(suite => 
     `| **${suite.testSuite}** | ${suite.avgExecutionTime.toFixed(0)}ms | ${suite.avgMemoryUsage.toFixed(1)}MB | ${suite.avgSuccessRate.toFixed(1)}% | ${suite.metricCount} |`
-).join('\n')}
+  ).join('\n')}
 
 ## Recommendations
 

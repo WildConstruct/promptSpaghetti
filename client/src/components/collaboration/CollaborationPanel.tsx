@@ -53,17 +53,17 @@ export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({
 
   const getStatusIcon = (status: CollaborationUser['status']) => {
     switch (status) {
-      case 'online': return '🟢';
-      case 'away': return '🟡';
-      case 'offline': return '⚫';
+    case 'online': return '🟢';
+    case 'away': return '🟡';
+    case 'offline': return '⚫';
     }
   };
 
   const getRoleColor = (role: CollaborationUser['role']) => {
     switch (role) {
-      case 'owner': return '#dc3545';
-      case 'editor': return '#007bff';
-      case 'viewer': return '#6c757d';
+    case 'owner': return '#dc3545';
+    case 'editor': return '#007bff';
+    case 'viewer': return '#6c757d';
     }
   };
 

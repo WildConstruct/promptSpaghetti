@@ -117,10 +117,10 @@ export const analyticsHandlers = [
     
     let days;
     switch (timeRange) {
-      case '1d': days = 1; break;
-      case '7d': days = 7; break;
-      case '30d': days = 30; break;
-      default: days = 7;
+    case '1d': days = 1; break;
+    case '7d': days = 7; break;
+    case '30d': days = 30; break;
+    default: days = 7;
     }
 
     // Calculate totals from daily stats
@@ -243,11 +243,11 @@ export const analyticsHandlers = [
     // Sort templates
     templates.sort((a, b) => {
       switch (sortBy) {
-        case 'downloads': return b.downloads - a.downloads;
-        case 'likes': return b.likes - a.likes;
-        case 'rating': return b.rating - a.rating;
-        case 'popularity': return b.popularityScore - a.popularityScore;
-        default: return b.views - a.views;
+      case 'downloads': return b.downloads - a.downloads;
+      case 'likes': return b.likes - a.likes;
+      case 'rating': return b.rating - a.rating;
+      case 'popularity': return b.popularityScore - a.popularityScore;
+      default: return b.views - a.views;
       }
     });
 

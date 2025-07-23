@@ -426,10 +426,10 @@ export class ApiKeyManagementService {
       `;
       
       if (!options.includeInactive) {
-        query += ` AND status = 'active'`;
+        query += ' AND status = \'active\'';
       }
       
-      query += ` ORDER BY created_at DESC`;
+      query += ' ORDER BY created_at DESC';
       
       const result = await this.databaseService.query(query, [userId]);
       
@@ -851,8 +851,8 @@ export class ApiKeyManagementService {
 
     // Main query with joins for user information
     const sortColumn = options.sortBy === 'createdAt' ? 'ak.created_at' : 
-                      options.sortBy === 'lastUsedAt' ? 'ak.last_used_at' : 
-                      'ak.created_at';
+      options.sortBy === 'lastUsedAt' ? 'ak.last_used_at' : 
+        'ak.created_at';
     
     const query = `
       SELECT 
@@ -911,10 +911,10 @@ export class ApiKeyManagementService {
    */
   async getUsageMetrics(timeRange: '1h' | '24h' | '7d' | '30d'): Promise<Record<string, any>> {
     const intervals = {
-      '1h': "NOW() - INTERVAL '1 hour'",
-      '24h': "NOW() - INTERVAL '1 day'",
-      '7d': "NOW() - INTERVAL '7 days'",
-      '30d': "NOW() - INTERVAL '30 days'"
+      '1h': 'NOW() - INTERVAL \'1 hour\'',
+      '24h': 'NOW() - INTERVAL \'1 day\'',
+      '7d': 'NOW() - INTERVAL \'7 days\'',
+      '30d': 'NOW() - INTERVAL \'30 days\''
     };
 
     const since = intervals[timeRange];
@@ -1291,17 +1291,17 @@ export class ApiKeyManagementService {
         let success = false;
 
         switch (operation) {
-          case 'revoke':
-            success = await this.adminRevokeApiKey(keyId, performedBy, parameters.reason || 'Bulk revocation');
-            break;
-          case 'suspend':
-            success = await this.suspendApiKey(keyId, performedBy, parameters.reason || 'Bulk suspension', parameters.duration);
-            break;
-          case 'rate_limit':
-            success = await this.updateRateLimits(keyId, parameters.rateLimits, performedBy);
-            break;
-          default:
-            throw new Error(`Unsupported operation: ${operation}`);
+        case 'revoke':
+          success = await this.adminRevokeApiKey(keyId, performedBy, parameters.reason || 'Bulk revocation');
+          break;
+        case 'suspend':
+          success = await this.suspendApiKey(keyId, performedBy, parameters.reason || 'Bulk suspension', parameters.duration);
+          break;
+        case 'rate_limit':
+          success = await this.updateRateLimits(keyId, parameters.rateLimits, performedBy);
+          break;
+        default:
+          throw new Error(`Unsupported operation: ${operation}`);
         }
 
         if (success) {

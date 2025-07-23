@@ -163,7 +163,7 @@ export const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps> = ({
     const baseStyle: React.CSSProperties = {
       position: 'relative',
       borderRadius: 12,
-      background: `linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(17, 24, 39, 0.98) 100%)`,
+      background: 'linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(17, 24, 39, 0.98) 100%)',
       border: `2px solid ${selected || isSelected ? colors.primary : 'rgba(55, 65, 81, 0.8)'}`,
       backdropFilter: 'blur(8px)',
       boxShadow: selected || isSelected 
@@ -350,7 +350,18 @@ export interface NodeCreationAnimatorProps {
   onAnimationComplete?: () => void;
 }
 
-export       return () => clearTimeout(timer);
+export const NodeCreationAnimator: React.FC<NodeCreationAnimatorProps> = ({
+  children,
+  isCreating,
+  onAnimationComplete
+}) => {
+  useEffect(() => {
+    if (isCreating && onAnimationComplete) {
+      const timer = setTimeout(() => {
+        onAnimationComplete();
+      }, animationDurations.complex);
+      
+      return () => clearTimeout(timer);
     }
   }, [isCreating, onAnimationComplete]);
 

@@ -301,12 +301,12 @@ export class LegacySystemMock {
    */
   supportsFeature(feature: string): boolean {
     switch (feature) {
-      case 'variables':
-        return this.behavior.hasVariableSupport || false;
-      case 'async':
-        return this.behavior.supportsAsync || false;
-      default:
-        return false;
+    case 'variables':
+      return this.behavior.hasVariableSupport || false;
+    case 'async':
+      return this.behavior.supportsAsync || false;
+    default:
+      return false;
     }
   }
   
@@ -337,20 +337,20 @@ export class LegacySystemMock {
     if (graph.nodes) {
       for (const node of graph.nodes) {
         switch (node.type) {
-          case 'SetVariable':
-            variables[node.variableName] = node.value;
-            break;
-          case 'GetVariable':
-            result += variables[node.variableName] || '';
-            break;
-          case 'WeightedChoice':
-            if (node.choices && node.choices.length > 0) {
-              // Simple selection for testing
-              result += node.choices[0].value;
-            }
-            break;
-          default:
-            result += node.data?.text || node.data?.value || '';
+        case 'SetVariable':
+          variables[node.variableName] = node.value;
+          break;
+        case 'GetVariable':
+          result += variables[node.variableName] || '';
+          break;
+        case 'WeightedChoice':
+          if (node.choices && node.choices.length > 0) {
+            // Simple selection for testing
+            result += node.choices[0].value;
+          }
+          break;
+        default:
+          result += node.data?.text || node.data?.value || '';
         }
       }
     }
@@ -543,7 +543,7 @@ export class RefactoringValidator {
     if (a === null || a === undefined || b === null || b === undefined) return false;
     if (a.prototype !== b.prototype) return false;
     
-    let keys = Object.keys(a);
+    const keys = Object.keys(a);
     if (keys.length !== Object.keys(b).length) return false;
     
     return keys.every(k => this.deepEqual(a[k], b[k]));

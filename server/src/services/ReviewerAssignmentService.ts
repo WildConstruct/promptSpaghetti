@@ -633,7 +633,7 @@ export class ReviewerAssignmentService {
 
       const params = [];
       if (reviewType) {
-        query += ` WHERE ra.review_type = $1 OR ra.review_type IS NULL`;
+        query += ' WHERE ra.review_type = $1 OR ra.review_type IS NULL';
         params.push(reviewType);
       }
 
@@ -715,32 +715,32 @@ export class ReviewerAssignmentService {
 
     // Apply strategy-specific ordering
     switch (strategy) {
-      case AssignmentStrategy.WORKLOAD_BASED:
-        query += ` ORDER BY current_active_assignments ASC, rp.current_workload ASC`;
-        break;
-      case AssignmentStrategy.SKILL_BASED:
-        // Calculate skill match score
-        if (request.required_skills?.length) {
-          query += ` ORDER BY (
+    case AssignmentStrategy.WORKLOAD_BASED:
+      query += ' ORDER BY current_active_assignments ASC, rp.current_workload ASC';
+      break;
+    case AssignmentStrategy.SKILL_BASED:
+      // Calculate skill match score
+      if (request.required_skills?.length) {
+        query += ` ORDER BY (
             SELECT AVG(COALESCE((skill_ratings->>skill)::int, 0))
             FROM unnest($${params.length + 1}::text[]) as skill
           ) DESC, current_active_assignments ASC`;
-          params.push(request.required_skills);
-        } else {
-          query += ` ORDER BY current_active_assignments ASC`;
-        }
-        break;
-      case AssignmentStrategy.ROUND_ROBIN:
-        query += ` ORDER BY (rp.performance_metrics->>'last_review_date')::timestamp ASC NULLS FIRST`;
-        break;
-      case AssignmentStrategy.RANDOM:
-        query += ` ORDER BY RANDOM()`;
-        break;
-      default:
-        query += ` ORDER BY current_active_assignments ASC`;
+        params.push(request.required_skills);
+      } else {
+        query += ' ORDER BY current_active_assignments ASC';
+      }
+      break;
+    case AssignmentStrategy.ROUND_ROBIN:
+      query += ' ORDER BY (rp.performance_metrics->>\'last_review_date\')::timestamp ASC NULLS FIRST';
+      break;
+    case AssignmentStrategy.RANDOM:
+      query += ' ORDER BY RANDOM()';
+      break;
+    default:
+      query += ' ORDER BY current_active_assignments ASC';
     }
 
-    query += ` LIMIT 1`;
+    query += ' LIMIT 1';
 
     const result = await client.query(query, params);
     return result.rows.length > 0 ? this.mapToReviewerProfile(result.rows[0]) : null;
@@ -778,28 +778,28 @@ export class ReviewerAssignmentService {
     let hoursToAdd = 24; // Default 24 hours
 
     switch (request.priority) {
-      case 'urgent':
-        hoursToAdd = 2;
-        break;
-      case 'high':
-        hoursToAdd = 8;
-        break;
-      case 'medium':
-        hoursToAdd = 24;
-        break;
-      case 'low':
-        hoursToAdd = 72;
-        break;
+    case 'urgent':
+      hoursToAdd = 2;
+      break;
+    case 'high':
+      hoursToAdd = 8;
+      break;
+    case 'medium':
+      hoursToAdd = 24;
+      break;
+    case 'low':
+      hoursToAdd = 72;
+      break;
     }
 
     // Adjust based on review type
     switch (request.review_type) {
-      case ReviewType.POLICY_VIOLATION:
-        hoursToAdd = Math.min(hoursToAdd, 12); // Policy violations need faster turnaround
-        break;
-      case ReviewType.VERIFICATION_REQUEST:
-        hoursToAdd *= 2; // Verification can take longer
-        break;
+    case ReviewType.POLICY_VIOLATION:
+      hoursToAdd = Math.min(hoursToAdd, 12); // Policy violations need faster turnaround
+      break;
+    case ReviewType.VERIFICATION_REQUEST:
+      hoursToAdd *= 2; // Verification can take longer
+      break;
     }
 
     return new Date(now.getTime() + (hoursToAdd * 60 * 60 * 1000));
@@ -820,12 +820,12 @@ export class ReviewerAssignmentService {
 
     // Adjust based on priority (higher priority items may need more careful review)
     switch (request.priority) {
-      case 'urgent':
-        duration *= 1.2;
-        break;
-      case 'high':
-        duration *= 1.1;
-        break;
+    case 'urgent':
+      duration *= 1.2;
+      break;
+    case 'high':
+      duration *= 1.1;
+      break;
     }
 
     return duration;

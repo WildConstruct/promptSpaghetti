@@ -327,7 +327,7 @@ export const MarkovEditor: React.FC<MarkovEditorProps> = ({ nodeData, onChange }
                       color: '#e2e8f0',
                       fontSize: 11
                     }}
-                    placeholder={`e.g., "Joyful", "Mysterious", "Tense"`}
+                    placeholder={'e.g., "Joyful", "Mysterious", "Tense"'}
                   />
                   
                   <button

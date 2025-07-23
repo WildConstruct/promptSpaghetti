@@ -470,18 +470,18 @@ export class SystemDiagnostics {
 
   private calculateDiagnosticScore(result: DiagnosticResult): number {
     switch (result.status) {
-      case DiagnosticStatus.HEALTHY:
-        return 100;
-      case DiagnosticStatus.WARNING:
-      case DiagnosticStatus.DEGRADED:
-        return 75;
-      case DiagnosticStatus.CRITICAL:
-        return 25;
-      case DiagnosticStatus.ERROR:
-      case DiagnosticStatus.UNKNOWN:
-        return 0;
-      default:
-        return 50;
+    case DiagnosticStatus.HEALTHY:
+      return 100;
+    case DiagnosticStatus.WARNING:
+    case DiagnosticStatus.DEGRADED:
+      return 75;
+    case DiagnosticStatus.CRITICAL:
+      return 25;
+    case DiagnosticStatus.ERROR:
+    case DiagnosticStatus.UNKNOWN:
+      return 0;
+    default:
+      return 50;
     }
   }
 
@@ -588,88 +588,88 @@ export class SystemDiagnostics {
     const recommendations: SystemRecommendation[] = [];
 
     switch (category) {
-      case DiagnosticCategory.SYSTEM:
-        if (systemInfo.cpuInfo.utilization > 80) {
-          recommendations.push({
-            recommendationId: `rec_cpu_${Date.now()}`,
-            priority: 'high',
-            category,
-            title: 'Optimize CPU Usage',
-            description: 'CPU utilization is consistently high and may impact performance',
-            actionItems: [
-              'Identify and optimize CPU-intensive processes',
-              'Consider scaling horizontally or upgrading hardware',
-              'Implement CPU usage monitoring and alerting',
-              'Review and optimize application algorithms'
-            ],
-            estimatedEffort: 8,
-            expectedBenefit: 'Improved system responsiveness and stability',
-            dependencies: []
-          });
-        }
-        if (systemInfo.memoryInfo.utilization > 85) {
-          recommendations.push({
-            recommendationId: `rec_memory_${Date.now()}`,
-            priority: 'high',
-            category,
-            title: 'Address Memory Pressure',
-            description: 'Memory utilization is approaching critical levels',
-            actionItems: [
-              'Investigate potential memory leaks',
-              'Optimize memory allocation patterns',
-              'Consider increasing available memory',
-              'Implement memory monitoring and garbage collection tuning'
-            ],
-            estimatedEffort: 6,
-            expectedBenefit: 'Reduced risk of out-of-memory errors and improved stability',
-            dependencies: []
-          });
-        }
-        break;
-
-      case DiagnosticCategory.DATABASE:
+    case DiagnosticCategory.SYSTEM:
+      if (systemInfo.cpuInfo.utilization > 80) {
         recommendations.push({
-          recommendationId: `rec_db_${Date.now()}`,
-          priority: 'medium',
+          recommendationId: `rec_cpu_${Date.now()}`,
+          priority: 'high',
           category,
-          title: 'Optimize Database Performance',
-          description: 'Database performance issues detected',
+          title: 'Optimize CPU Usage',
+          description: 'CPU utilization is consistently high and may impact performance',
           actionItems: [
-            'Review and optimize slow queries',
-            'Update database statistics and rebuild indexes',
-            'Consider connection pooling optimization',
-            'Monitor database locks and deadlocks'
+            'Identify and optimize CPU-intensive processes',
+            'Consider scaling horizontally or upgrading hardware',
+            'Implement CPU usage monitoring and alerting',
+            'Review and optimize application algorithms'
           ],
-          estimatedEffort: 12,
-          expectedBenefit: 'Improved application response times and database stability',
-          dependencies: ['Database maintenance window']
+          estimatedEffort: 8,
+          expectedBenefit: 'Improved system responsiveness and stability',
+          dependencies: []
         });
-        break;
+      }
+      if (systemInfo.memoryInfo.utilization > 85) {
+        recommendations.push({
+          recommendationId: `rec_memory_${Date.now()}`,
+          priority: 'high',
+          category,
+          title: 'Address Memory Pressure',
+          description: 'Memory utilization is approaching critical levels',
+          actionItems: [
+            'Investigate potential memory leaks',
+            'Optimize memory allocation patterns',
+            'Consider increasing available memory',
+            'Implement memory monitoring and garbage collection tuning'
+          ],
+          estimatedEffort: 6,
+          expectedBenefit: 'Reduced risk of out-of-memory errors and improved stability',
+          dependencies: []
+        });
+      }
+      break;
 
-      case DiagnosticCategory.STORAGE:
-        if (systemInfo.storageInfo.utilization > 80) {
-          recommendations.push({
-            recommendationId: `rec_storage_${Date.now()}`,
-            priority: 'high',
-            category,
-            title: 'Address Storage Capacity',
-            description: 'Storage utilization is approaching critical levels',
-            actionItems: [
-              'Clean up temporary files and logs',
-              'Implement log rotation policies',
-              'Archive old data and backups',
-              'Plan for storage expansion'
-            ],
-            estimatedEffort: 4,
-            expectedBenefit: 'Prevented storage-related outages and improved system stability',
-            dependencies: []
-          });
-        }
-        break;
+    case DiagnosticCategory.DATABASE:
+      recommendations.push({
+        recommendationId: `rec_db_${Date.now()}`,
+        priority: 'medium',
+        category,
+        title: 'Optimize Database Performance',
+        description: 'Database performance issues detected',
+        actionItems: [
+          'Review and optimize slow queries',
+          'Update database statistics and rebuild indexes',
+          'Consider connection pooling optimization',
+          'Monitor database locks and deadlocks'
+        ],
+        estimatedEffort: 12,
+        expectedBenefit: 'Improved application response times and database stability',
+        dependencies: ['Database maintenance window']
+      });
+      break;
 
-      default:
-        // Generic recommendations for other categories
-        break;
+    case DiagnosticCategory.STORAGE:
+      if (systemInfo.storageInfo.utilization > 80) {
+        recommendations.push({
+          recommendationId: `rec_storage_${Date.now()}`,
+          priority: 'high',
+          category,
+          title: 'Address Storage Capacity',
+          description: 'Storage utilization is approaching critical levels',
+          actionItems: [
+            'Clean up temporary files and logs',
+            'Implement log rotation policies',
+            'Archive old data and backups',
+            'Plan for storage expansion'
+          ],
+          estimatedEffort: 4,
+          expectedBenefit: 'Prevented storage-related outages and improved system stability',
+          dependencies: []
+        });
+      }
+      break;
+
+    default:
+      // Generic recommendations for other categories
+      break;
     }
 
     return recommendations;

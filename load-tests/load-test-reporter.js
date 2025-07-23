@@ -453,8 +453,8 @@ class LoadTestReporter {
                             <td>${(test.metrics.duration / 1000).toFixed(1)}</td>
                             <td>
                                 ${test.metrics.successRate >= 95 
-                                  ? '<span style="color: #28a745;">✅ Passed</span>' 
-                                  : '<span style="color: #dc3545;">❌ Failed</span>'}
+    ? '<span style="color: #28a745;">✅ Passed</span>' 
+    : '<span style="color: #dc3545;">❌ Failed</span>'}
                             </td>
                         </tr>
                         `).join('')}
@@ -543,7 +543,7 @@ ${data.summary.requestsPerSecond >= this.options.thresholds.requestsPerSecond ? 
 TEST BREAKDOWN
 ==============
 ${data.testBreakdown.map(test => 
-`${test.testName}:
+    `${test.testName}:
   - Requests: ${test.metrics.totalRequests}
   - Success Rate: ${test.metrics.successRate.toFixed(1)}%
   - Avg Response: ${test.metrics.averageResponseTime.toFixed(0)}ms

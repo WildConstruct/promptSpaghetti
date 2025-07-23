@@ -461,7 +461,7 @@ describe('NodeRegistry', () => {
 
       expect(() => {
         registry.registerNode(definition);
-      }).toThrow("Node type 'DuplicateTest' is already registered");
+      }).toThrow('Node type \'DuplicateTest\' is already registered');
     });
 
     it('should unregister node types', () => {

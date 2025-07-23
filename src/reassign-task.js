@@ -22,7 +22,7 @@ async function reassignTaskSafely() {
   
   try {
     // Acquire exclusive lock with timeout
-    console.log(`🔒 Acquiring lock for task reassignment...`);
+    console.log('🔒 Acquiring lock for task reassignment...');
     release = await lockfile.lock(statePath, {
       retries: {
         retries: 10,
@@ -32,7 +32,7 @@ async function reassignTaskSafely() {
       stale: 30000 // Lock expires after 30 seconds
     });
     
-    console.log(`✅ Lock acquired`);
+    console.log('✅ Lock acquired');
     
     // Read state file
     const stateData = fs.readFileSync(statePath, 'utf8');
@@ -129,7 +129,7 @@ async function reassignTaskSafely() {
     if (release) {
       try {
         await release();
-        console.log(`\n🔓 Lock released`);
+        console.log('\n🔓 Lock released');
       } catch (releaseError) {
         console.error('⚠️ Error releasing lock:', releaseError.message);
       }

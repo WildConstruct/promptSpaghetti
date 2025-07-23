@@ -374,18 +374,18 @@ export class DataSourceManager extends EventEmitter {
     let data: any[] = [];
     
     switch (source.type) {
-      case 'api':
-        data = await this.queryAPI(source, query);
-        break;
-      case 'database':
-        data = await this.queryDatabase(source, query);
-        break;
-      case 'file':
-        data = await this.queryFile(source, query);
-        break;
-      case 'static':
-        data = await this.queryStaticData(source, query);
-        break;
+    case 'api':
+      data = await this.queryAPI(source, query);
+      break;
+    case 'database':
+      data = await this.queryDatabase(source, query);
+      break;
+    case 'file':
+      data = await this.queryFile(source, query);
+      break;
+    case 'static':
+      data = await this.queryStaticData(source, query);
+      break;
     }
 
     // Apply transforms
@@ -436,16 +436,16 @@ export class DataSourceManager extends EventEmitter {
     // Add authentication
     if (source.authentication) {
       switch (source.authentication.type) {
-        case 'api_key':
-          headers['X-API-Key'] = source.authentication.credentials.api_key;
-          break;
-        case 'bearer':
-          headers['Authorization'] = `Bearer ${source.authentication.credentials.token}`;
-          break;
-        case 'basic':
-          const auth = btoa(`${source.authentication.credentials.username}:${source.authentication.credentials.password}`);
-          headers['Authorization'] = `Basic ${auth}`;
-          break;
+      case 'api_key':
+        headers['X-API-Key'] = source.authentication.credentials.api_key;
+        break;
+      case 'bearer':
+        headers['Authorization'] = `Bearer ${source.authentication.credentials.token}`;
+        break;
+      case 'basic':
+        const auth = btoa(`${source.authentication.credentials.username}:${source.authentication.credentials.password}`);
+        headers['Authorization'] = `Basic ${auth}`;
+        break;
       }
     }
 
@@ -566,18 +566,18 @@ export class DataSourceManager extends EventEmitter {
     
     for (const transform of transforms.filter(t => t.enabled)) {
       switch (transform.type) {
-        case 'map':
-          result = this.applyMappingTransform(result, transform.config);
-          break;
-        case 'filter':
-          result = this.applyFilterTransform(result, transform.config);
-          break;
-        case 'normalize':
-          result = this.applyNormalizationTransform(result, transform.config);
-          break;
-        case 'validate':
-          result = this.applyValidationTransform(result, transform.config);
-          break;
+      case 'map':
+        result = this.applyMappingTransform(result, transform.config);
+        break;
+      case 'filter':
+        result = this.applyFilterTransform(result, transform.config);
+        break;
+      case 'normalize':
+        result = this.applyNormalizationTransform(result, transform.config);
+        break;
+      case 'validate':
+        result = this.applyValidationTransform(result, transform.config);
+        break;
       }
     }
     
@@ -699,14 +699,14 @@ export class DataSourceManager extends EventEmitter {
       const fileExtension = source.endpoint.split('.').pop()?.toLowerCase();
       
       switch (fileExtension) {
-        case 'json':
-          return await this.queryJSONFile(source, query);
-        case 'csv':
-          return await this.queryCSVFile(source, query);
-        case 'xml':
-          return await this.queryXMLFile(source, query);
-        default:
-          throw new Error(`Unsupported file type: ${fileExtension}`);
+      case 'json':
+        return await this.queryJSONFile(source, query);
+      case 'csv':
+        return await this.queryCSVFile(source, query);
+      case 'xml':
+        return await this.queryXMLFile(source, query);
+      default:
+        throw new Error(`Unsupported file type: ${fileExtension}`);
       }
     } catch (error) {
       throw new Error(`Failed to read file from ${source.endpoint}: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -884,7 +884,7 @@ export class DataSourceManager extends EventEmitter {
    * Utility methods for mock data generation
    */
   private generateMockItemName(category: string, era: string | string[]): string {
-        const prefixes = {
+    const prefixes = {
       'clothing': ['Noble', 'Peasant', 'Royal', 'Merchant', 'Ceremonial'],
       'architecture': ['Gothic', 'Romanesque', 'Stone', 'Wooden', 'Fortified'],
       'art': ['Illuminated', 'Religious', 'Secular', 'Decorative', 'Symbolic'],

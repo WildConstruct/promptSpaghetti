@@ -314,10 +314,10 @@ describe('PricingOptimizer', () => {
 
     test('should apply seasonal adjustments', async () => {
       // Mock current date to be in awards season (Jan-Mar)
-            jest.spyOn(
-              Date.prototype,
-              'getMonth'
-            ).mockReturnValue(1 as unknown as unknown as unknown as unknown); // February (0-indexed)
+      jest.spyOn(
+        Date.prototype,
+        'getMonth'
+      ).mockReturnValue(1 as unknown as unknown as unknown as unknown); // February (0-indexed)
 
       const request: PricingCalculationRequest = {
         modelId: 'film-industry-model',

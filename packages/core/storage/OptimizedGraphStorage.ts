@@ -214,7 +214,7 @@ export class OptimizedGraphStorage {
       estimatedBytes: number;
       cacheHitRatio?: number;
     };
-  } {
+    } {
     const nodeTypes: Record<string, number> = {};
     for (const [type, nodeSet] of this.indexes.nodesByType) {
       nodeTypes[type] = nodeSet.size;

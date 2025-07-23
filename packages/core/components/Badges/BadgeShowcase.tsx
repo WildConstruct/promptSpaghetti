@@ -95,23 +95,23 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
 
   const getTierColor = (tier: string) => {
     switch (tier) {
-      case 'diamond': return 'tier-diamond';
-      case 'platinum': return 'tier-platinum';
-      case 'gold': return 'tier-gold';
-      case 'silver': return 'tier-silver';
-      case 'bronze': return 'tier-bronze';
-      default: return 'tier-bronze';
+    case 'diamond': return 'tier-diamond';
+    case 'platinum': return 'tier-platinum';
+    case 'gold': return 'tier-gold';
+    case 'silver': return 'tier-silver';
+    case 'bronze': return 'tier-bronze';
+    default: return 'tier-bronze';
     }
   };
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case 'legendary': return 'rarity-legendary';
-      case 'epic': return 'rarity-epic';
-      case 'rare': return 'rarity-rare';
-      case 'uncommon': return 'rarity-uncommon';
-      case 'common': return 'rarity-common';
-      default: return 'rarity-common';
+    case 'legendary': return 'rarity-legendary';
+    case 'epic': return 'rarity-epic';
+    case 'rare': return 'rarity-rare';
+    case 'uncommon': return 'rarity-uncommon';
+    case 'common': return 'rarity-common';
+    default: return 'rarity-common';
     }
   };
 
@@ -381,29 +381,29 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
 
     // Sort badges
     switch (sortBy) {
-      case 'date':
-        filtered = [...filtered].sort((a, b) => {
-          const aUnlocked = userBadges.find(ub => ub.badgeId === a.id);
-          const bUnlocked = userBadges.find(ub => ub.badgeId === b.id);
+    case 'date':
+      filtered = [...filtered].sort((a, b) => {
+        const aUnlocked = userBadges.find(ub => ub.badgeId === a.id);
+        const bUnlocked = userBadges.find(ub => ub.badgeId === b.id);
           
-          if (aUnlocked && bUnlocked) {
-            return bUnlocked.unlockedAt - aUnlocked.unlockedAt;
-          }
-          if (aUnlocked) return -1;
-          if (bUnlocked) return 1;
-          return 0;
-        });
-        break;
-      case 'points':
-        filtered = [...filtered].sort((a, b) => b.points - a.points);
-        break;
-      case 'rarity':
-        const rarityOrder = { legendary: 5, epic: 4, rare: 3, uncommon: 2, common: 1 };
-        filtered = [...filtered].sort((a, b) => 
-          (rarityOrder[b.rarity as keyof typeof rarityOrder] || 0) - 
+        if (aUnlocked && bUnlocked) {
+          return bUnlocked.unlockedAt - aUnlocked.unlockedAt;
+        }
+        if (aUnlocked) return -1;
+        if (bUnlocked) return 1;
+        return 0;
+      });
+      break;
+    case 'points':
+      filtered = [...filtered].sort((a, b) => b.points - a.points);
+      break;
+    case 'rarity':
+      const rarityOrder = { legendary: 5, epic: 4, rare: 3, uncommon: 2, common: 1 };
+      filtered = [...filtered].sort((a, b) => 
+        (rarityOrder[b.rarity as keyof typeof rarityOrder] || 0) - 
           (rarityOrder[a.rarity as keyof typeof rarityOrder] || 0)
-        );
-        break;
+      );
+      break;
     }
 
     return filtered;

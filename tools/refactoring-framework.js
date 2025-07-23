@@ -158,7 +158,7 @@ class RefactoringFramework {
     // Find test files that need updates
     results.testFiles = await this.findOutdatedTestFiles();
 
-    console.log(`📊 Analysis complete:`);
+    console.log('📊 Analysis complete:');
     console.log(`   - ${results.jsFiles.length} JS files to convert`);
     console.log(`   - ${results.duplicates.length} potential duplicates found`);
     console.log(`   - ${results.securityIssues.length} security issues detected`);

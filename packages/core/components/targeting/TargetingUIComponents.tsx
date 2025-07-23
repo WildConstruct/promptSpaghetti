@@ -126,18 +126,18 @@ export const AudienceSelector: React.FC<AudienceSelectorProps> = ({
   const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name');
 
   const filteredAudiences = useMemo(() => {
-    let filtered = audiences.filter(audience =>
+    const filtered = audiences.filter(audience =>
       audience.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return filtered.sort((a, b) => {
       switch (sortBy) {
-        case 'reach':
-          return b.estimatedReach - a.estimatedReach;
-        case 'updated':
-          return new Date(b.lastUpdated || 0).getTime() - new Date(a.lastUpdated || 0).getTime();
-        default:
-          return a.name.localeCompare(b.name);
+      case 'reach':
+        return b.estimatedReach - a.estimatedReach;
+      case 'updated':
+        return new Date(b.lastUpdated || 0).getTime() - new Date(a.lastUpdated || 0).getTime();
+      default:
+        return a.name.localeCompare(b.name);
       }
     });
   }, [audiences, searchTerm, sortBy]);

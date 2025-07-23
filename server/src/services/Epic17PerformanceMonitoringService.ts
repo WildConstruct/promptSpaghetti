@@ -410,7 +410,7 @@ export class Epic17PerformanceMonitoringService {
     initialized: boolean;
     monitoring: boolean;
     timestamp: Date;
-  } {
+    } {
     return {
       status: this.isInitialized ? 'healthy' : 'not_initialized',
       initialized: this.isInitialized,

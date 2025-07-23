@@ -1021,38 +1021,38 @@ export class ClassificationDistributionReportingService {
       let fileExtension: string;
 
       switch (format) {
-        case 'JSON':
-          exportData = JSON.stringify(report, null, 2);
-          mimeType = 'application/json';
-          fileExtension = 'json';
-          break;
+      case 'JSON':
+        exportData = JSON.stringify(report, null, 2);
+        mimeType = 'application/json';
+        fileExtension = 'json';
+        break;
           
-        case 'CSV':
-          exportData = this.convertToCSV(report);
-          mimeType = 'text/csv';
-          fileExtension = 'csv';
-          break;
+      case 'CSV':
+        exportData = this.convertToCSV(report);
+        mimeType = 'text/csv';
+        fileExtension = 'csv';
+        break;
           
-        case 'EXCEL':
-          exportData = await this.convertToExcel(report);
-          mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-          fileExtension = 'xlsx';
-          break;
+      case 'EXCEL':
+        exportData = await this.convertToExcel(report);
+        mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        fileExtension = 'xlsx';
+        break;
           
-        case 'PDF':
-          exportData = await this.convertToPDF(report);
-          mimeType = 'application/pdf';
-          fileExtension = 'pdf';
-          break;
+      case 'PDF':
+        exportData = await this.convertToPDF(report);
+        mimeType = 'application/pdf';
+        fileExtension = 'pdf';
+        break;
           
-        case 'HTML':
-          exportData = this.convertToHTML(report);
-          mimeType = 'text/html';
-          fileExtension = 'html';
-          break;
+      case 'HTML':
+        exportData = this.convertToHTML(report);
+        mimeType = 'text/html';
+        fileExtension = 'html';
+        break;
           
-        default:
-          throw new Error(`Unsupported export format: ${format}`);
+      default:
+        throw new Error(`Unsupported export format: ${format}`);
       }
 
       // Store export data

@@ -423,11 +423,11 @@ export class RotationManagementService {
         tags: [`type:${policy.rotationType}`, 'auto-created'],
         compliance: policy.requirements.expirationDays 
           ? [{ 
-              standard: 'Epic17', 
-              requirement: 'Credential rotation', 
-              mandatoryRotationPeriod: policy.rotationInterval,
-              auditFrequency: policy.rotationInterval / 4
-            }] 
+            standard: 'Epic17', 
+            requirement: 'Credential rotation', 
+            mandatoryRotationPeriod: policy.rotationInterval,
+            auditFrequency: policy.rotationInterval / 4
+          }] 
           : [],
         auditTrail: [`Created: ${new Date().toISOString()}`]
       }
@@ -866,18 +866,18 @@ export class RotationManagementService {
 
   private async generateCredential(type: RotationType, requirements: RotationRequirements): Promise<string> {
     switch (type) {
-      case RotationType.API_KEY:
-        return this.generateApiKey(requirements);
-      case RotationType.JWT_SECRET:
-        return this.generateJWTSecret(requirements);
-      case RotationType.DATABASE_PASSWORD:
-        return this.generatePassword(requirements);
-      case RotationType.ENCRYPTION_KEY:
-        return this.generateEncryptionKey(requirements);
-      case RotationType.SERVICE_TOKEN:
-        return this.generateServiceToken(requirements);
-      default:
-        return this.generateGenericCredential(requirements);
+    case RotationType.API_KEY:
+      return this.generateApiKey(requirements);
+    case RotationType.JWT_SECRET:
+      return this.generateJWTSecret(requirements);
+    case RotationType.DATABASE_PASSWORD:
+      return this.generatePassword(requirements);
+    case RotationType.ENCRYPTION_KEY:
+      return this.generateEncryptionKey(requirements);
+    case RotationType.SERVICE_TOKEN:
+      return this.generateServiceToken(requirements);
+    default:
+      return this.generateGenericCredential(requirements);
     }
   }
 
@@ -1162,7 +1162,7 @@ export class RotationManagementService {
       [RotationType.SSL_CERTIFICATE]: 300000, // 5 minutes
       [RotationType.ENCRYPTION_KEY]: 45000, // 45 seconds
       [RotationType.SERVICE_TOKEN]: 30000, // 30 seconds
-      [RotationType.ADMIN_PASSWORD]: 90000, // 1.5 minutes
+      [RotationType.ADMIN_PASSWORD]: 90000 // 1.5 minutes
     };
     
     return estimates[type] || 60000; // Default 1 minute

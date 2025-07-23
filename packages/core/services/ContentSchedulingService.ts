@@ -777,27 +777,27 @@ export class ContentSchedulingService {
 
     return content.scheduling.conditions.every(condition => {
       switch (condition.type) {
-        case 'content_published':
-          const requiredContentId = condition.parameters.contentId;
-          const requiredContent = this.content.get(requiredContentId);
-          return requiredContent?.status === 'published';
+      case 'content_published':
+        const requiredContentId = condition.parameters.contentId;
+        const requiredContent = this.content.get(requiredContentId);
+        return requiredContent?.status === 'published';
         
-        case 'date_range':
-          const now = new Date();
-          const start = new Date(condition.parameters.start);
-          const end = new Date(condition.parameters.end);
-          return now >= start && now <= end;
+      case 'date_range':
+        const now = new Date();
+        const start = new Date(condition.parameters.start);
+        const end = new Date(condition.parameters.end);
+        return now >= start && now <= end;
         
-        case 'performance_threshold':
-          const threshold = condition.parameters.threshold;
-          const metric = condition.parameters.metric;
-          return content.performance[metric as keyof ContentPerformance] >= threshold;
+      case 'performance_threshold':
+        const threshold = condition.parameters.threshold;
+        const metric = condition.parameters.metric;
+        return content.performance[metric as keyof ContentPerformance] >= threshold;
         
-        case 'approval_received':
-          return content.metadata.workflow?.stage === 'approved';
+      case 'approval_received':
+        return content.metadata.workflow?.stage === 'approved';
         
-        default:
-          return true;
+      default:
+        return true;
       }
     });
   }
@@ -808,30 +808,30 @@ export class ContentSchedulingService {
     operatorId: string
   ): Promise<void> {
     switch (operation.type) {
-      case 'publish':
-        await this.publishContent(contentId, operatorId);
-        break;
-      case 'unpublish':
-        await this.unpublishContent(contentId, operatorId);
-        break;
-      case 'archive':
-        await this.updateContent(contentId, { status: 'archived' }, operatorId);
-        break;
-      case 'delete':
-        await this.deleteContent(contentId, operatorId);
-        break;
-      case 'update_metadata':
-        if (operation.parameters) {
-          const content = this.content.get(contentId);
-          if (content) {
-            await this.updateContent(contentId, {
-              metadata: { ...content.metadata, ...operation.parameters.metadata }
-            }, operatorId);
-          }
+    case 'publish':
+      await this.publishContent(contentId, operatorId);
+      break;
+    case 'unpublish':
+      await this.unpublishContent(contentId, operatorId);
+      break;
+    case 'archive':
+      await this.updateContent(contentId, { status: 'archived' }, operatorId);
+      break;
+    case 'delete':
+      await this.deleteContent(contentId, operatorId);
+      break;
+    case 'update_metadata':
+      if (operation.parameters) {
+        const content = this.content.get(contentId);
+        if (content) {
+          await this.updateContent(contentId, {
+            metadata: { ...content.metadata, ...operation.parameters.metadata }
+          }, operatorId);
         }
-        break;
-      default:
-        throw new Error(`Unknown batch operation: ${operation.type}`);
+      }
+      break;
+    default:
+      throw new Error(`Unknown batch operation: ${operation.type}`);
     }
   }
 

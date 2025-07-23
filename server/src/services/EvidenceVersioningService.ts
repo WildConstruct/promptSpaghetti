@@ -466,8 +466,8 @@ export class EvidenceVersioningService {
   async getLatestVersion(evidenceId: string, branchName?: string): Promise<EvidenceVersion | null> {
     try {
       const query = branchName 
-        ? `SELECT * FROM evidence_versions WHERE evidence_id = ? AND (branch_name = ? OR branch_name IS NULL) ORDER BY version DESC LIMIT 1`
-        : `SELECT * FROM evidence_versions WHERE evidence_id = ? AND branch_name IS NULL ORDER BY version DESC LIMIT 1`;
+        ? 'SELECT * FROM evidence_versions WHERE evidence_id = ? AND (branch_name = ? OR branch_name IS NULL) ORDER BY version DESC LIMIT 1'
+        : 'SELECT * FROM evidence_versions WHERE evidence_id = ? AND branch_name IS NULL ORDER BY version DESC LIMIT 1';
       
       const params = branchName ? [evidenceId, branchName] : [evidenceId];
       const result = await this.databaseService.query(query, params);
@@ -499,21 +499,21 @@ export class EvidenceVersioningService {
     offset?: number;
   }): Promise<EvidenceVersion[]> {
     try {
-      let query = `SELECT * FROM evidence_versions WHERE evidence_id = ?`;
+      let query = 'SELECT * FROM evidence_versions WHERE evidence_id = ?';
       const params = [evidenceId];
 
       if (!options?.includeBranches) {
-        query += ` AND branch_name IS NULL`;
+        query += ' AND branch_name IS NULL';
       }
 
-      query += ` ORDER BY version DESC`;
+      query += ' ORDER BY version DESC';
 
       if (options?.limit) {
-        query += ` LIMIT ?`;
+        query += ' LIMIT ?';
         params.push(options.limit);
         
         if (options?.offset) {
-          query += ` OFFSET ?`;
+          query += ' OFFSET ?';
           params.push(options.offset);
         }
       }

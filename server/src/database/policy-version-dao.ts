@@ -232,7 +232,7 @@ export class PolicyVersionDAO {
     }
 
     // Always update the updated_at timestamp
-    updateFields.push(`updated_at = NOW()`);
+    updateFields.push('updated_at = NOW()');
 
     if (updateFields.length === 1) { // Only timestamp update
       throw new Error('No fields to update');
@@ -403,7 +403,7 @@ export class PolicyVersionDAO {
 
     // Set specific timestamps based on status
     if (status === 'published') {
-      updates.push(`published_at = NOW()`, `published_by = $${paramIndex++}`);
+      updates.push('published_at = NOW()', `published_by = $${paramIndex++}`);
       params.push(updatedBy);
     }
 
@@ -442,7 +442,7 @@ export class PolicyVersionDAO {
   // ============================================================================
 
   async generateNextVersion(policyId: string, changeType: ChangeType = 'update'): Promise<string> {
-    const query = `SELECT generate_next_version($1, $2) as next_version`;
+    const query = 'SELECT generate_next_version($1, $2) as next_version';
     const result = await this.db.query(query, [policyId, changeType]);
     return result.rows[0].next_version;
   }

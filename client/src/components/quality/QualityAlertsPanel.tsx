@@ -54,46 +54,46 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
   // Helper function to get severity icon
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return <XCircle className="w-4 h-4 text-red-600" />;
-      case 'error':
-        return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case 'warning':
-        return <AlertCircle className="w-4 h-4 text-yellow-500" />;
-      case 'info':
-        return <Info className="w-4 h-4 text-blue-500" />;
-      default:
-        return <AlertTriangle className="w-4 h-4 text-gray-500" />;
+    case 'critical':
+      return <XCircle className="w-4 h-4 text-red-600" />;
+    case 'error':
+      return <AlertTriangle className="w-4 h-4 text-red-500" />;
+    case 'warning':
+      return <AlertCircle className="w-4 h-4 text-yellow-500" />;
+    case 'info':
+      return <Info className="w-4 h-4 text-blue-500" />;
+    default:
+      return <AlertTriangle className="w-4 h-4 text-gray-500" />;
     }
   };
 
   // Helper function to get severity color
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return 'destructive';
-      case 'error':
-        return 'destructive';
-      case 'warning':
-        return 'secondary';
-      case 'info':
-        return 'outline';
-      default:
-        return 'outline';
+    case 'critical':
+      return 'destructive';
+    case 'error':
+      return 'destructive';
+    case 'warning':
+      return 'secondary';
+    case 'info':
+      return 'outline';
+    default:
+      return 'outline';
     }
   };
 
   // Helper function to get status icon
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active':
-        return <Clock className="w-3 h-3" />;
-      case 'acknowledged':
-        return <CheckCircle className="w-3 h-3" />;
-      case 'resolved':
-        return <CheckCircle className="w-3 h-3 text-green-500" />;
-      default:
-        return <Clock className="w-3 h-3" />;
+    case 'active':
+      return <Clock className="w-3 h-3" />;
+    case 'acknowledged':
+      return <CheckCircle className="w-3 h-3" />;
+    case 'resolved':
+      return <CheckCircle className="w-3 h-3 text-green-500" />;
+    default:
+      return <Clock className="w-3 h-3" />;
     }
   };
 
@@ -109,19 +109,19 @@ export const QualityAlertsPanel: React.FC<QualityAlertsPanelProps> = ({
     let comparison = 0;
     
     switch (sortBy) {
-      case 'timestamp':
-        comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
-        break;
-      case 'severity':
-        const severityOrder = { critical: 4, error: 3, warning: 2, info: 1 };
-        comparison = (severityOrder[a.severity as keyof typeof severityOrder] || 0) - 
+    case 'timestamp':
+      comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+      break;
+    case 'severity':
+      const severityOrder = { critical: 4, error: 3, warning: 2, info: 1 };
+      comparison = (severityOrder[a.severity as keyof typeof severityOrder] || 0) - 
                     (severityOrder[b.severity as keyof typeof severityOrder] || 0);
-        break;
-      case 'metric':
-        comparison = a.metric.localeCompare(b.metric);
-        break;
-      default:
-        comparison = 0;
+      break;
+    case 'metric':
+      comparison = a.metric.localeCompare(b.metric);
+      break;
+    default:
+      comparison = 0;
     }
     
     return sortOrder === 'asc' ? comparison : -comparison;

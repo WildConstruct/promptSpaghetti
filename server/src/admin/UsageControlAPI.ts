@@ -765,20 +765,20 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
       for (const limitId of request.body.limitIds) {
         try {
           switch (request.body.action) {
-            case 'enable':
-              await usageControlService.activateUsageLimit(limitId);
-              break;
-            case 'disable':
-              await usageControlService.deactivateUsageLimit(limitId);
-              break;
-            case 'delete':
-              await usageControlService.deleteUsageLimit(limitId);
-              break;
-            case 'reset':
-              // Reset would clear usage counters - not implemented in service yet
-              throw new Error('Reset action not yet implemented');
-            default:
-              throw new Error(`Unknown action: ${request.body.action}`);
+          case 'enable':
+            await usageControlService.activateUsageLimit(limitId);
+            break;
+          case 'disable':
+            await usageControlService.deactivateUsageLimit(limitId);
+            break;
+          case 'delete':
+            await usageControlService.deleteUsageLimit(limitId);
+            break;
+          case 'reset':
+            // Reset would clear usage counters - not implemented in service yet
+            throw new Error('Reset action not yet implemented');
+          default:
+            throw new Error(`Unknown action: ${request.body.action}`);
           }
           results.push({ limitId, success: true });
         } catch (error) {
@@ -867,19 +867,19 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
       let filename: string;
 
       switch (request.query.format) {
-        case 'csv':
-          exportData = this.convertToCSV(analytics);
-          contentType = 'text/csv';
-          filename = `usage_export_${Date.now()}.csv`;
-          break;
-        case 'xlsx':
-          // Would implement Excel export here
-          throw new Error('Excel export not yet implemented');
-        case 'json':
-        default:
-          exportData = JSON.stringify(analytics, null, 2);
-          contentType = 'application/json';
-          filename = `usage_export_${Date.now()}.json`;
+      case 'csv':
+        exportData = this.convertToCSV(analytics);
+        contentType = 'text/csv';
+        filename = `usage_export_${Date.now()}.csv`;
+        break;
+      case 'xlsx':
+        // Would implement Excel export here
+        throw new Error('Excel export not yet implemented');
+      case 'json':
+      default:
+        exportData = JSON.stringify(analytics, null, 2);
+        contentType = 'application/json';
+        filename = `usage_export_${Date.now()}.json`;
       }
 
       // Audit export

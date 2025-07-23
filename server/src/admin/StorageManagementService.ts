@@ -394,7 +394,7 @@ export class StorageManagementService {
       paramIndex++;
     }
 
-    query += ` ORDER BY created_at DESC`;
+    query += ' ORDER BY created_at DESC';
 
     const result = await this.db.query(query, params);
     return result.rows.map(row => this.hydrateStoragePool(row));

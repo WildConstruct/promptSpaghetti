@@ -376,11 +376,11 @@ export const OAuthConfigurationInterface: React.FC = () => {
   // Get security level color
   const getSecurityLevelColor = (level: string): string => {
     switch (level) {
-      case 'low': return 'text-red-600';
-      case 'medium': return 'text-yellow-600';
-      case 'high': return 'text-blue-600';
-      case 'maximum': return 'text-green-600';
-      default: return 'text-gray-600';
+    case 'low': return 'text-red-600';
+    case 'medium': return 'text-yellow-600';
+    case 'high': return 'text-blue-600';
+    case 'maximum': return 'text-green-600';
+    default: return 'text-gray-600';
     }
   };
 
@@ -681,9 +681,9 @@ export const OAuthConfigurationInterface: React.FC = () => {
                         {securityAssessment.findings.map((finding, index) => (
                           <div key={index} className={`p-2 rounded text-sm ${
                             finding.severity === 'critical' ? 'bg-red-100 text-red-800' :
-                            finding.severity === 'error' ? 'bg-orange-100 text-orange-800' :
-                            finding.severity === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-blue-100 text-blue-800'
+                              finding.severity === 'error' ? 'bg-orange-100 text-orange-800' :
+                                finding.severity === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-blue-100 text-blue-800'
                           }`}>
                             <div className="font-medium">{finding.category}: {finding.message}</div>
                             <div className="text-xs mt-1">{finding.recommendation}</div>
@@ -818,8 +818,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
                         {securityAssessment.complianceStatus.issues.map((issue, index) => (
                           <div key={index} className={`p-2 rounded text-sm ${
                             issue.severity === 'high' ? 'bg-red-100 text-red-800' :
-                            issue.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-blue-100 text-blue-800'
+                              issue.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-blue-100 text-blue-800'
                           }`}>
                             <div className="font-medium">{issue.framework}: {issue.issue}</div>
                             <div className="text-xs mt-1">{issue.remediation}</div>
@@ -956,9 +956,9 @@ export const OAuthConfigurationInterface: React.FC = () => {
               {configuration.status && (
                 <span className={`px-2 py-1 rounded text-xs font-medium ${
                   configuration.status === 'active' ? 'bg-green-100 text-green-800' :
-                  configuration.status === 'testing' ? 'bg-blue-100 text-blue-800' :
-                  configuration.status === 'inactive' ? 'bg-red-100 text-red-800' :
-                  'bg-gray-100 text-gray-800'
+                    configuration.status === 'testing' ? 'bg-blue-100 text-blue-800' :
+                      configuration.status === 'inactive' ? 'bg-red-100 text-red-800' :
+                        'bg-gray-100 text-gray-800'
                 }`}>
                   {configuration.status.toUpperCase()}
                 </span>

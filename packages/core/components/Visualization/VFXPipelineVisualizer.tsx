@@ -209,7 +209,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({
                   );
                   
                   const color = asset.accuracy > 90 ? '#10b981' :
-                               asset.accuracy > 70 ? '#f59e0b' : '#ef4444';
+                    asset.accuracy > 70 ? '#f59e0b' : '#ef4444';
                   
                   return (
                     <g key={asset.id} transform={`translate(${pos.x}, ${pos.y})`}>
@@ -263,7 +263,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({
                   );
                   
                   const color = character.type === 'hero' ? '#3b82f6' :
-                               character.type === 'crowd' ? '#8b5cf6' : '#6b7280';
+                    character.type === 'crowd' ? '#8b5cf6' : '#6b7280';
                   
                   return (
                     <g key={character.id} transform={`translate(${pos.x}, ${pos.y})`}>
@@ -353,11 +353,11 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({
 
     const getSeverityColor = (severity: string) => {
       switch (severity) {
-        case 'critical': return 'bg-red-100 text-red-800';
-        case 'high': return 'bg-orange-100 text-orange-800';
-        case 'medium': return 'bg-yellow-100 text-yellow-800';
-        case 'low': return 'bg-blue-100 text-blue-800';
-        default: return 'bg-gray-100 text-gray-800';
+      case 'critical': return 'bg-red-100 text-red-800';
+      case 'high': return 'bg-orange-100 text-orange-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-gray-100 text-gray-800';
       }
     };
 
@@ -557,7 +557,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({
                 <div 
                   className={`h-2 rounded-full transition-all duration-500 ${
                     metrics.memoryUsage > 80 ? 'bg-red-600' : 
-                    metrics.memoryUsage > 60 ? 'bg-orange-600' : 'bg-green-600'
+                      metrics.memoryUsage > 60 ? 'bg-orange-600' : 'bg-green-600'
                   }`}
                   style={{ width: `${metrics.memoryUsage}%` }}
                 />
@@ -587,10 +587,10 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({
               <div className="text-lg font-bold text-green-900">{metrics.frameRate.toFixed(1)} FPS</div>
               <div className={`text-xs mt-1 ${
                 metrics.frameRate >= 30 ? 'text-green-700' :
-                metrics.frameRate >= 24 ? 'text-yellow-700' : 'text-red-700'
+                  metrics.frameRate >= 24 ? 'text-yellow-700' : 'text-red-700'
               }`}>
                 {metrics.frameRate >= 30 ? 'Excellent' : 
-                 metrics.frameRate >= 24 ? 'Good' : 'Poor'}
+                  metrics.frameRate >= 24 ? 'Good' : 'Poor'}
               </div>
             </div>
 
@@ -659,7 +659,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({
                 {Object.entries(crowdStats.types).map(([type, count]) => {
                   const percentage = (count / crowdStats.total) * 100;
                   const color = type === 'hero' ? 'bg-blue-500' : 
-                              type === 'crowd' ? 'bg-purple-500' : 'bg-gray-500';
+                    type === 'crowd' ? 'bg-purple-500' : 'bg-gray-500';
                   
                   return (
                     <div key={type} className="flex items-center gap-3">

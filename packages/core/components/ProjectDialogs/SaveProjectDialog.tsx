@@ -14,14 +14,14 @@ interface SaveProjectDialogProps {
 export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
   isOpen,
   onClose,
-  onSave,
+  onSave
 }) => {
   const { saveProject, currentProject } = useGraphStore();
   const [formData, setFormData] = useState({
     name: currentProject?.name || '',
     description: currentProject?.description || '',
     author: currentProject?.author || '',
-    tags: currentProject?.tags?.join(', ') || '',
+    tags: currentProject?.tags?.join(', ') || ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +49,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
         author: formData.author.trim() || undefined,
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
       });
 
       onSave?.(result);
@@ -79,7 +79,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000,
+      zIndex: 1000
     }}>
       <div style={{
         backgroundColor: 'white',
@@ -87,19 +87,19 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
         padding: '24px',
         width: '90%',
         maxWidth: '500px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
       }}>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '24px',
+          marginBottom: '24px'
         }}>
           <h2 style={{
             margin: 0,
             fontSize: '20px',
             fontWeight: '600',
-            color: '#333',
+            color: '#333'
           }}>
             Save Project
           </h2>
@@ -116,7 +116,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
               height: '32px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'center'
             }}
             disabled={isLoading}
           >
@@ -132,7 +132,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
               marginBottom: '6px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333',
+              color: '#333'
             }}>
               Project Name *
             </label>
@@ -149,7 +149,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
                 border: '1px solid #ddd',
                 borderRadius: '4px',
                 fontSize: '14px',
-                boxSizing: 'border-box',
+                boxSizing: 'border-box'
               }}
             />
           </div>
@@ -161,7 +161,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
               marginBottom: '6px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333',
+              color: '#333'
             }}>
               Description
             </label>
@@ -178,7 +178,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
                 borderRadius: '4px',
                 fontSize: '14px',
                 resize: 'vertical',
-                boxSizing: 'border-box',
+                boxSizing: 'border-box'
               }}
             />
           </div>
@@ -190,7 +190,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
               marginBottom: '6px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333',
+              color: '#333'
             }}>
               Author
             </label>
@@ -206,7 +206,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
                 border: '1px solid #ddd',
                 borderRadius: '4px',
                 fontSize: '14px',
-                boxSizing: 'border-box',
+                boxSizing: 'border-box'
               }}
             />
           </div>
@@ -218,7 +218,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
               marginBottom: '6px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333',
+              color: '#333'
             }}>
               Tags
             </label>
@@ -234,13 +234,13 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
                 border: '1px solid #ddd',
                 borderRadius: '4px',
                 fontSize: '14px',
-                boxSizing: 'border-box',
+                boxSizing: 'border-box'
               }}
             />
             <div style={{
               fontSize: '12px',
               color: '#666',
-              marginTop: '4px',
+              marginTop: '4px'
             }}>
               Example: prompt-engineering, workflow, automation
             </div>
@@ -255,7 +255,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
               padding: '10px',
               borderRadius: '4px',
               marginBottom: '16px',
-              fontSize: '14px',
+              fontSize: '14px'
             }}>
               {error}
             </div>
@@ -265,7 +265,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
           <div style={{
             display: 'flex',
             gap: '12px',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-end'
           }}>
             <button
               type="button"
@@ -278,7 +278,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
                 color: '#666',
                 borderRadius: '4px',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                fontSize: '14px',
+                fontSize: '14px'
               }}
             >
               Cancel
@@ -293,7 +293,7 @@ export const SaveProjectDialog: React.FC<SaveProjectDialogProps> = ({
                 color: 'white',
                 borderRadius: '4px',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                fontSize: '14px',
+                fontSize: '14px'
               }}
             >
               {isLoading ? 'Saving...' : 'Save Project'}

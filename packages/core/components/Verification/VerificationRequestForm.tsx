@@ -395,58 +395,58 @@ const VerificationStepContent: React.FC<VerificationStepContentProps> = ({
   }, []);
 
   switch (step.verificationType) {
-    case 'email_verification':
-      return (
-        <EmailVerificationStep
-          data={stepData}
-          onUpdate={updateStepData}
-          onSubmit={handleSubmit}
-          isSubmitting={isSubmitting}
-        />
-      );
+  case 'email_verification':
+    return (
+      <EmailVerificationStep
+        data={stepData}
+        onUpdate={updateStepData}
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+      />
+    );
     
-    case 'phone_verification':
-      return (
-        <PhoneVerificationStep
-          data={stepData}
-          onUpdate={updateStepData}
-          onSubmit={handleSubmit}
-          isSubmitting={isSubmitting}
-        />
-      );
+  case 'phone_verification':
+    return (
+      <PhoneVerificationStep
+        data={stepData}
+        onUpdate={updateStepData}
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+      />
+    );
     
-    case 'government_id':
-      return (
-        <GovernmentIdStep
-          data={stepData}
-          onUpdate={updateStepData}
-          onSubmit={handleSubmit}
-          isSubmitting={isSubmitting}
-        />
-      );
+  case 'government_id':
+    return (
+      <GovernmentIdStep
+        data={stepData}
+        onUpdate={updateStepData}
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+      />
+    );
     
-    case 'professional_credentials':
-      return (
-        <ProfessionalCredentialsStep
-          data={stepData}
-          onUpdate={updateStepData}
-          onSubmit={handleSubmit}
-          isSubmitting={isSubmitting}
-        />
-      );
+  case 'professional_credentials':
+    return (
+      <ProfessionalCredentialsStep
+        data={stepData}
+        onUpdate={updateStepData}
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+      />
+    );
     
-    case 'social_media_verification':
-      return (
-        <SocialMediaStep
-          data={stepData}
-          onUpdate={updateStepData}
-          onSubmit={handleSubmit}
-          isSubmitting={isSubmitting}
-        />
-      );
+  case 'social_media_verification':
+    return (
+      <SocialMediaStep
+        data={stepData}
+        onUpdate={updateStepData}
+        onSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+      />
+    );
     
-    default:
-      return <div>Unknown verification type</div>;
+  default:
+    return <div>Unknown verification type</div>;
   }
 };
 

@@ -200,18 +200,18 @@ export class ToggleParametersService {
 
     // Type-specific validations
     switch (toggleType) {
-      case ToggleType.PERCENTAGE_ROLLOUT:
-        this.validatePercentageRolloutParameters(parameters, errors, warnings);
-        break;
-      case ToggleType.MULTIVARIATE:
-        this.validateMultivariateParameters(parameters, errors, warnings);
-        break;
-      case ToggleType.SCHEDULED:
-        this.validateScheduledParameters(parameters, errors, warnings);
-        break;
-      case ToggleType.SEGMENTATION:
-        this.validateSegmentationParameters(parameters, errors, warnings);
-        break;
+    case ToggleType.PERCENTAGE_ROLLOUT:
+      this.validatePercentageRolloutParameters(parameters, errors, warnings);
+      break;
+    case ToggleType.MULTIVARIATE:
+      this.validateMultivariateParameters(parameters, errors, warnings);
+      break;
+    case ToggleType.SCHEDULED:
+      this.validateScheduledParameters(parameters, errors, warnings);
+      break;
+    case ToggleType.SEGMENTATION:
+      this.validateSegmentationParameters(parameters, errors, warnings);
+      break;
     }
 
     return {
@@ -409,23 +409,23 @@ export class ToggleParametersService {
   ): Promise<ToggleEvaluationResult> {
     try {
       switch (toggle.type) {
-        case ToggleType.BOOLEAN:
-          return this.evaluateBooleanToggle(toggle, context);
+      case ToggleType.BOOLEAN:
+        return this.evaluateBooleanToggle(toggle, context);
         
-        case ToggleType.PERCENTAGE_ROLLOUT:
-          return this.evaluatePercentageRollout(toggle, context);
+      case ToggleType.PERCENTAGE_ROLLOUT:
+        return this.evaluatePercentageRollout(toggle, context);
         
-        case ToggleType.MULTIVARIATE:
-          return this.evaluateMultivariate(toggle, context);
+      case ToggleType.MULTIVARIATE:
+        return this.evaluateMultivariate(toggle, context);
         
-        case ToggleType.SCHEDULED:
-          return this.evaluateScheduled(toggle, context);
+      case ToggleType.SCHEDULED:
+        return this.evaluateScheduled(toggle, context);
         
-        case ToggleType.SEGMENTATION:
-          return this.evaluateSegmentation(toggle, context);
+      case ToggleType.SEGMENTATION:
+        return this.evaluateSegmentation(toggle, context);
         
-        default:
-          throw new Error(`Unsupported toggle type: ${toggle.type}`);
+      default:
+        throw new Error(`Unsupported toggle type: ${toggle.type}`);
       }
     } catch (error) {
       // Return disabled state on evaluation error
@@ -760,29 +760,29 @@ export class ToggleParametersService {
     const [ruleType, ...ruleParams] = rule.split(':');
 
     switch (ruleType) {
-      case 'boolean':
-        return typeof value === 'boolean';
-      case 'range':
-        const [min, max] = ruleParams[0].split(',').map(Number);
-        return typeof value === 'number' && value >= min && value <= max;
-      case 'min':
-        return typeof value === 'number' && value >= Number(ruleParams[0]);
-      case 'required':
-        return value !== undefined && value !== null && value !== '';
-      case 'array':
-        const minItems = ruleParams[0]?.split(':')[1];
-        return Array.isArray(value) && (!minItems || value.length >= Number(minItems));
-      case 'enum':
-        return ruleParams[0].split(',').includes(value);
-      case 'timezone':
-        try {
-          Intl.DateTimeFormat(undefined, { timeZone: value });
-          return true;
-        } catch {
-          return false;
-        }
-      default:
+    case 'boolean':
+      return typeof value === 'boolean';
+    case 'range':
+      const [min, max] = ruleParams[0].split(',').map(Number);
+      return typeof value === 'number' && value >= min && value <= max;
+    case 'min':
+      return typeof value === 'number' && value >= Number(ruleParams[0]);
+    case 'required':
+      return value !== undefined && value !== null && value !== '';
+    case 'array':
+      const minItems = ruleParams[0]?.split(':')[1];
+      return Array.isArray(value) && (!minItems || value.length >= Number(minItems));
+    case 'enum':
+      return ruleParams[0].split(',').includes(value);
+    case 'timezone':
+      try {
+        Intl.DateTimeFormat(undefined, { timeZone: value });
         return true;
+      } catch {
+        return false;
+      }
+    default:
+      return true;
     }
   }
 
@@ -806,26 +806,26 @@ export class ToggleParametersService {
     const ruleValue = rule.value;
 
     switch (rule.operator) {
-      case 'equals':
-        return contextValue === ruleValue;
-      case 'not_equals':
-        return contextValue !== ruleValue;
-      case 'in':
-        return Array.isArray(ruleValue) && ruleValue.includes(contextValue);
-      case 'not_in':
-        return Array.isArray(ruleValue) && !ruleValue.includes(contextValue);
-      case 'greater_than':
-        return Number(contextValue) > Number(ruleValue);
-      case 'less_than':
-        return Number(contextValue) < Number(ruleValue);
-      case 'contains':
-        return String(contextValue).includes(String(ruleValue));
-      case 'starts_with':
-        return String(contextValue).startsWith(String(ruleValue));
-      case 'ends_with':
-        return String(contextValue).endsWith(String(ruleValue));
-      default:
-        return false;
+    case 'equals':
+      return contextValue === ruleValue;
+    case 'not_equals':
+      return contextValue !== ruleValue;
+    case 'in':
+      return Array.isArray(ruleValue) && ruleValue.includes(contextValue);
+    case 'not_in':
+      return Array.isArray(ruleValue) && !ruleValue.includes(contextValue);
+    case 'greater_than':
+      return Number(contextValue) > Number(ruleValue);
+    case 'less_than':
+      return Number(contextValue) < Number(ruleValue);
+    case 'contains':
+      return String(contextValue).includes(String(ruleValue));
+    case 'starts_with':
+      return String(contextValue).startsWith(String(ruleValue));
+    case 'ends_with':
+      return String(contextValue).endsWith(String(ruleValue));
+    default:
+      return false;
     }
   }
 

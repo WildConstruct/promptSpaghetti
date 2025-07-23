@@ -46,52 +46,52 @@ class PerformanceTestRunner {
       const arg = args[i];
       
       switch (arg) {
-        case '--suite':
-        case '-s':
-          options.suite = args[++i];
-          break;
-        case '--base-url':
-        case '--url':
-          options.baseUrl = args[++i];
-          break;
-        case '--concurrency':
-        case '-c':
-          options.concurrency = parseInt(args[++i]);
-          break;
-        case '--duration':
-        case '-d':
-          options.duration = parseInt(args[++i]);
-          break;
-        case '--output':
-        case '-o':
-          options.output = args[++i];
-          break;
-        case '--verbose':
-        case '-v':
-          options.verbose = true;
-          break;
-        case '--quick':
-        case '-q':
-          options.quick = true;
-          options.duration = 30;
-          options.concurrency = 5;
-          break;
-        case '--stress':
-          options.stress = true;
-          options.duration = 300;
-          options.concurrency = 50;
-          break;
-        case '--no-reports':
-          options.reports = false;
-          break;
-        case '--help':
-        case '-h':
-          options.help = true;
-          break;
-        default:
-          if (arg.startsWith('--')) {
-            console.warn(`Unknown option: ${arg}`);
-          }
+      case '--suite':
+      case '-s':
+        options.suite = args[++i];
+        break;
+      case '--base-url':
+      case '--url':
+        options.baseUrl = args[++i];
+        break;
+      case '--concurrency':
+      case '-c':
+        options.concurrency = parseInt(args[++i]);
+        break;
+      case '--duration':
+      case '-d':
+        options.duration = parseInt(args[++i]);
+        break;
+      case '--output':
+      case '-o':
+        options.output = args[++i];
+        break;
+      case '--verbose':
+      case '-v':
+        options.verbose = true;
+        break;
+      case '--quick':
+      case '-q':
+        options.quick = true;
+        options.duration = 30;
+        options.concurrency = 5;
+        break;
+      case '--stress':
+        options.stress = true;
+        options.duration = 300;
+        options.concurrency = 50;
+        break;
+      case '--no-reports':
+        options.reports = false;
+        break;
+      case '--help':
+      case '-h':
+        options.help = true;
+        break;
+      default:
+        if (arg.startsWith('--')) {
+          console.warn(`Unknown option: ${arg}`);
+        }
       }
     }
 
@@ -375,41 +375,41 @@ Environment Variables:
     
     try {
       switch (options.suite) {
-        case 'comprehensive':
-          // Run all test types
-          console.log('🎯 Running Comprehensive Performance Test Suite\n');
+      case 'comprehensive':
+        // Run all test types
+        console.log('🎯 Running Comprehensive Performance Test Suite\n');
           
-          results.integrated = await this.runIntegratedSuite(options);
-          if (!results.integrated.success) overallSuccess = false;
+        results.integrated = await this.runIntegratedSuite(options);
+        if (!results.integrated.success) overallSuccess = false;
           
-          results.loadTests = await this.runLoadTests(options);
-          if (results.loadTests.some(r => !r.success)) overallSuccess = false;
+        results.loadTests = await this.runLoadTests(options);
+        if (results.loadTests.some(r => !r.success)) overallSuccess = false;
           
-          results.mainRunner = await this.runMainPerformanceRunner(options);
-          if (!results.mainRunner.success) overallSuccess = false;
+        results.mainRunner = await this.runMainPerformanceRunner(options);
+        if (!results.mainRunner.success) overallSuccess = false;
           
-          break;
+        break;
           
-        case 'quick':
-          console.log('⚡ Running Quick Performance Check\n');
-          results.mainRunner = await this.runMainPerformanceRunner(options);
-          overallSuccess = results.mainRunner.success;
-          break;
+      case 'quick':
+        console.log('⚡ Running Quick Performance Check\n');
+        results.mainRunner = await this.runMainPerformanceRunner(options);
+        overallSuccess = results.mainRunner.success;
+        break;
           
-        case 'load-only':
-          console.log('📊 Running Load Tests Only\n');
-          results.loadTests = await this.runLoadTests(options);
-          overallSuccess = !results.loadTests.some(r => !r.success);
-          break;
+      case 'load-only':
+        console.log('📊 Running Load Tests Only\n');
+        results.loadTests = await this.runLoadTests(options);
+        overallSuccess = !results.loadTests.some(r => !r.success);
+        break;
           
-        case 'scenarios-only':
-          console.log('🎭 Running Scenarios Only\n');
-          results.integrated = await this.runIntegratedSuite(options);
-          overallSuccess = results.integrated.success;
-          break;
+      case 'scenarios-only':
+        console.log('🎭 Running Scenarios Only\n');
+        results.integrated = await this.runIntegratedSuite(options);
+        overallSuccess = results.integrated.success;
+        break;
           
-        default:
-          throw new Error(`Unknown test suite: ${options.suite}`);
+      default:
+        throw new Error(`Unknown test suite: ${options.suite}`);
       }
       
       await this.generateSummaryReport(results, options);

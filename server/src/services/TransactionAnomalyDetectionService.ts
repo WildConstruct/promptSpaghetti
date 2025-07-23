@@ -135,18 +135,18 @@ export class TransactionAnomalyDetectionService {
     pattern: TransactionAnomalyPattern
   ): Promise<TransactionAnomaly | null> {
     switch (pattern.patternType) {
-      case 'velocity':
-        return await this.checkVelocityAnomaly(transaction, pattern);
-      case 'amount':
-        return await this.checkAmountAnomaly(transaction, pattern);
-      case 'behavior':
-        return await this.checkBehaviorAnomaly(transaction, pattern);
-      case 'payment_method':
-        return await this.checkPaymentMethodAnomaly(transaction, pattern);
-      case 'time':
-        return await this.checkTimeAnomaly(transaction, pattern);
-      default:
-        return null;
+    case 'velocity':
+      return await this.checkVelocityAnomaly(transaction, pattern);
+    case 'amount':
+      return await this.checkAmountAnomaly(transaction, pattern);
+    case 'behavior':
+      return await this.checkBehaviorAnomaly(transaction, pattern);
+    case 'payment_method':
+      return await this.checkPaymentMethodAnomaly(transaction, pattern);
+    case 'time':
+      return await this.checkTimeAnomaly(transaction, pattern);
+    default:
+      return null;
     }
   }
 
@@ -670,10 +670,10 @@ export class TransactionAnomalyDetectionService {
     const unit = match[2];
 
     switch (unit) {
-      case 'm': return value * 60 * 1000;
-      case 'h': return value * 60 * 60 * 1000;
-      case 'd': return value * 24 * 60 * 60 * 1000;
-      default: return value * 1000;
+    case 'm': return value * 60 * 1000;
+    case 'h': return value * 60 * 60 * 1000;
+    case 'd': return value * 24 * 60 * 60 * 1000;
+    default: return value * 1000;
     }
   }
 

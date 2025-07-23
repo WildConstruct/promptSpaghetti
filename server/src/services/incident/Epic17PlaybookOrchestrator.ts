@@ -284,7 +284,7 @@ export class Epic17PlaybookOrchestrator {
     let stepsExecuted = 0;
     let stepsSuccessful = 0;
     let stepsFailed = 0;
-    let stepsSkipped = 0;
+    const stepsSkipped = 0;
     let escalated = false;
     let rollbackPerformed = false;
     const recoveryActions: string[] = [];
@@ -349,7 +349,7 @@ export class Epic17PlaybookOrchestrator {
 
       // Execute recovery procedures if needed
       if (stepsFailed > 0 && playbook.recoveryProcedures.length > 0) {
-        console.log(`🔧 Executing recovery procedures...`);
+        console.log('🔧 Executing recovery procedures...');
         for (const procedure of playbook.recoveryProcedures) {
           const recoveryResult = await this.executeRecoveryProcedure(procedure, context, dryRun);
           if (recoveryResult.success) {
@@ -494,72 +494,72 @@ export class Epic17PlaybookOrchestrator {
     console.log(`⚡ Executing action: ${action.actionType} on ${action.targetSystem}`);
 
     switch (action.actionType) {
-      // Feature Toggle Actions
-      case 'toggle_feature_flag':
-        return await this.executeFeatureToggleAction(action, context);
+    // Feature Toggle Actions
+    case 'toggle_feature_flag':
+      return await this.executeFeatureToggleAction(action, context);
       
-      case 'rollback_feature_toggle':
-        return await this.executeFeatureRollbackAction(action, context);
+    case 'rollback_feature_toggle':
+      return await this.executeFeatureRollbackAction(action, context);
       
-      case 'emergency_kill_switch':
-        return await this.executeEmergencyKillSwitchAction(action, context);
+    case 'emergency_kill_switch':
+      return await this.executeEmergencyKillSwitchAction(action, context);
 
       // System Control Actions
-      case 'restart_service':
-        return await this.executeServiceRestartAction(action, context);
+    case 'restart_service':
+      return await this.executeServiceRestartAction(action, context);
       
-      case 'scale_resources':
-        return await this.executeResourceScalingAction(action, context);
+    case 'scale_resources':
+      return await this.executeResourceScalingAction(action, context);
       
-      case 'drain_traffic':
-        return await this.executeTrafficDrainAction(action, context);
+    case 'drain_traffic':
+      return await this.executeTrafficDrainAction(action, context);
 
       // Security Actions
-      case 'block_ip_address':
-        return await this.executeIPBlockAction(action, context);
+    case 'block_ip_address':
+      return await this.executeIPBlockAction(action, context);
       
-      case 'suspend_user_account':
-        return await this.executeUserSuspensionAction(action, context);
+    case 'suspend_user_account':
+      return await this.executeUserSuspensionAction(action, context);
       
-      case 'revoke_permissions':
-        return await this.executePermissionRevocationAction(action, context);
+    case 'revoke_permissions':
+      return await this.executePermissionRevocationAction(action, context);
 
       // Data Actions
-      case 'backup_data':
-        return await this.executeDataBackupAction(action, context);
+    case 'backup_data':
+      return await this.executeDataBackupAction(action, context);
       
-      case 'restore_from_backup':
-        return await this.executeDataRestoreAction(action, context);
+    case 'restore_from_backup':
+      return await this.executeDataRestoreAction(action, context);
       
-      case 'quarantine_content':
-        return await this.executeContentQuarantineAction(action, context);
+    case 'quarantine_content':
+      return await this.executeContentQuarantineAction(action, context);
 
       // Communication Actions
-      case 'send_notification':
-        return await this.executeNotificationAction(action, context);
+    case 'send_notification':
+      return await this.executeNotificationAction(action, context);
       
-      case 'update_status_page':
-        return await this.executeStatusPageUpdateAction(action, context);
+    case 'update_status_page':
+      return await this.executeStatusPageUpdateAction(action, context);
       
-      case 'alert_stakeholders':
-        return await this.executeStakeholderAlertAction(action, context);
+    case 'alert_stakeholders':
+      return await this.executeStakeholderAlertAction(action, context);
 
       // Configuration Actions
-      case 'update_configuration':
-        return await this.executeConfigurationUpdateAction(action, context);
+    case 'update_configuration':
+      return await this.executeConfigurationUpdateAction(action, context);
       
-      case 'reset_to_defaults':
-        return await this.executeConfigurationResetAction(action, context);
+    case 'reset_to_defaults':
+      return await this.executeConfigurationResetAction(action, context);
 
       // Monitoring Actions
-      case 'increase_monitoring':
-        return await this.executeMonitoringIncreaseAction(action, context);
+    case 'increase_monitoring':
+      return await this.executeMonitoringIncreaseAction(action, context);
       
-      case 'collect_diagnostics':
-        return await this.executeDiagnosticsCollectionAction(action, context);
+    case 'collect_diagnostics':
+      return await this.executeDiagnosticsCollectionAction(action, context);
 
-      default:
-        throw new Error(`Unknown action type: ${action.actionType}`);
+    default:
+      throw new Error(`Unknown action type: ${action.actionType}`);
     }
   }
 
@@ -718,7 +718,7 @@ export class Epic17PlaybookOrchestrator {
         {
           type: 'automated_detection',
           source: 'epic17_playbook',
-          description: `Automated suspension via playbook execution`,
+          description: 'Automated suspension via playbook execution',
           data: {
             executionId: context.executionId,
             playbookId: context.playbookId,

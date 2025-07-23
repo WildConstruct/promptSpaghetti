@@ -313,32 +313,32 @@ export class ConflictResolutionEngine extends EventEmitter {
 
     try {
       switch (strategy) {
-        case ResolutionStrategy.LAST_WRITER_WINS:
-          result = await this.resolveWithLastWriterWins(context);
-          break;
+      case ResolutionStrategy.LAST_WRITER_WINS:
+        result = await this.resolveWithLastWriterWins(context);
+        break;
           
-        case ResolutionStrategy.OPERATIONAL_TRANSFORM:
-          result = await this.resolveWithOperationalTransform(context);
-          break;
+      case ResolutionStrategy.OPERATIONAL_TRANSFORM:
+        result = await this.resolveWithOperationalTransform(context);
+        break;
           
-        case ResolutionStrategy.THREE_WAY_MERGE:
-          result = await this.resolveWithThreeWayMerge(context);
-          break;
+      case ResolutionStrategy.THREE_WAY_MERGE:
+        result = await this.resolveWithThreeWayMerge(context);
+        break;
           
-        case ResolutionStrategy.AUTO_MERGE:
-          result = await this.resolveWithAutoMerge(context);
-          break;
+      case ResolutionStrategy.AUTO_MERGE:
+        result = await this.resolveWithAutoMerge(context);
+        break;
           
-        case ResolutionStrategy.MANUAL_RESOLUTION:
-          result = await this.resolveWithManualInput(context, manualResolution);
-          break;
+      case ResolutionStrategy.MANUAL_RESOLUTION:
+        result = await this.resolveWithManualInput(context, manualResolution);
+        break;
           
-        case ResolutionStrategy.ROLLBACK:
-          result = await this.resolveWithRollback(context);
-          break;
+      case ResolutionStrategy.ROLLBACK:
+        result = await this.resolveWithRollback(context);
+        break;
           
-        default:
-          throw new Error(`Unsupported resolution strategy: ${strategy}`);
+      default:
+        throw new Error(`Unsupported resolution strategy: ${strategy}`);
       }
 
       // Update timing and metadata
@@ -722,17 +722,17 @@ export class ConflictResolutionEngine extends EventEmitter {
     
     if (typeof content === 'string' && typeof operation.position === 'number') {
       switch (operation.type) {
-        case 'insert':
-          return content.slice(0, operation.position) + 
+      case 'insert':
+        return content.slice(0, operation.position) + 
                  operation.content + 
                  content.slice(operation.position);
                  
-        case 'delete':
-          return content.slice(0, operation.position) + 
+      case 'delete':
+        return content.slice(0, operation.position) + 
                  content.slice(operation.position + (operation.length || 0));
                  
-        case 'replace':
-          return content.slice(0, operation.position) + 
+      case 'replace':
+        return content.slice(0, operation.position) + 
                  operation.content + 
                  content.slice(operation.position + (operation.length || 0));
       }

@@ -425,10 +425,10 @@ export const activitySelectors = {
 
     const grouped = activities.reduce((groups, activity) => {
       const key = state.groupBy === 'type' ? activity.type :
-                  state.groupBy === 'severity' ? activity.severity :
-                  state.groupBy === 'user' ? (activity.userId || 'System') :
-                  state.groupBy === 'source' ? activity.source :
-                  'Other';
+        state.groupBy === 'severity' ? activity.severity :
+          state.groupBy === 'user' ? (activity.userId || 'System') :
+            state.groupBy === 'source' ? activity.source :
+              'Other';
       
       if (!groups[key]) groups[key] = [];
       groups[key].push(activity);

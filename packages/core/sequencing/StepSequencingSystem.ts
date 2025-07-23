@@ -1024,22 +1024,22 @@ export class StepSequencingSystem extends EventEmitter {
     let result = false;
 
     switch (condition.type) {
-      case 'boolean':
-        result = !!execution.context.variables[condition.field!];
-        break;
-      case 'value':
-        const value = execution.context.variables[condition.field!];
-        result = this.compareValues(value, condition.operator!, condition.value);
-        break;
-      case 'expression':
-        result = this.evaluateExpression(condition.expression!, execution.context);
-        break;
-      case 'function':
-        const validator = this.validators.get(condition.function!);
-        if (validator) {
-          result = await validator(execution.context);
-        }
-        break;
+    case 'boolean':
+      result = !!execution.context.variables[condition.field!];
+      break;
+    case 'value':
+      const value = execution.context.variables[condition.field!];
+      result = this.compareValues(value, condition.operator!, condition.value);
+      break;
+    case 'expression':
+      result = this.evaluateExpression(condition.expression!, execution.context);
+      break;
+    case 'function':
+      const validator = this.validators.get(condition.function!);
+      if (validator) {
+        result = await validator(execution.context);
+      }
+      break;
     }
 
     return condition.negated ? !result : result;
@@ -1047,13 +1047,13 @@ export class StepSequencingSystem extends EventEmitter {
 
   private compareValues(actual: any, operator: string, expected: any): boolean {
     switch (operator) {
-      case 'equals': return actual === expected;
-      case 'not_equals': return actual !== expected;
-      case 'greater': return actual > expected;
-      case 'less': return actual < expected;
-      case 'contains': return String(actual).includes(String(expected));
-      case 'exists': return actual !== undefined && actual !== null;
-      default: return false;
+    case 'equals': return actual === expected;
+    case 'not_equals': return actual !== expected;
+    case 'greater': return actual > expected;
+    case 'less': return actual < expected;
+    case 'contains': return String(actual).includes(String(expected));
+    case 'exists': return actual !== undefined && actual !== null;
+    default: return false;
     }
   }
 
@@ -1126,15 +1126,15 @@ export class StepSequencingSystem extends EventEmitter {
 
   private calculateRetryDelay(retryPolicy: RetryPolicy, attempt: number): number {
     switch (retryPolicy.backoffStrategy) {
-      case 'linear':
-        return Math.min(retryPolicy.baseDelay * attempt, retryPolicy.maxDelay);
-      case 'exponential':
-        return Math.min(retryPolicy.baseDelay * Math.pow(2, attempt - 1), retryPolicy.maxDelay);
-      case 'custom':
-        // Implement custom backoff logic
-        return retryPolicy.baseDelay;
-      default:
-        return retryPolicy.baseDelay;
+    case 'linear':
+      return Math.min(retryPolicy.baseDelay * attempt, retryPolicy.maxDelay);
+    case 'exponential':
+      return Math.min(retryPolicy.baseDelay * Math.pow(2, attempt - 1), retryPolicy.maxDelay);
+    case 'custom':
+      // Implement custom backoff logic
+      return retryPolicy.baseDelay;
+    default:
+      return retryPolicy.baseDelay;
     }
   }
 
@@ -1204,14 +1204,14 @@ export class StepSequencingSystem extends EventEmitter {
 
     // Check action-specific next steps
     switch (status) {
-      case 'completed':
-        return currentStep.action.onSuccess || null;
-      case 'failed':
-        return currentStep.action.onFailure || null;
-      case 'skipped':
-        return currentStep.action.onSkip || null;
-      default:
-        return null;
+    case 'completed':
+      return currentStep.action.onSuccess || null;
+    case 'failed':
+      return currentStep.action.onFailure || null;
+    case 'skipped':
+      return currentStep.action.onSkip || null;
+    default:
+      return null;
     }
   }
 

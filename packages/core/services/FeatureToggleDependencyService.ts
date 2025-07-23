@@ -333,7 +333,7 @@ export class FeatureToggleDependencyService extends EventEmitter {
     // Start periodic analysis
     if (this.config.analysis.analyzeInterval > 0) {
       setInterval(() => this.performPeriodicAnalysis(), 
-                  this.config.analysis.analyzeInterval * 60 * 1000);
+        this.config.analysis.analyzeInterval * 60 * 1000);
     }
   }
 
@@ -400,32 +400,32 @@ export class FeatureToggleDependencyService extends EventEmitter {
         const sourceActive = await this.isToggleActive(dependency.sourceToggleId);
         
         switch (dependency.dependencyType) {
-          case DependencyType.REQUIRES:
-            if (!sourceActive) {
-              if (dependency.relationship === DependencyRelationship.HARD) {
-                blockers.push(`Requires ${dependency.sourceToggleId} to be active`);
-              } else {
-                warnings.push(`Recommends ${dependency.sourceToggleId} to be active`);
-              }
-              requirements.push(dependency.sourceToggleId);
+        case DependencyType.REQUIRES:
+          if (!sourceActive) {
+            if (dependency.relationship === DependencyRelationship.HARD) {
+              blockers.push(`Requires ${dependency.sourceToggleId} to be active`);
+            } else {
+              warnings.push(`Recommends ${dependency.sourceToggleId} to be active`);
             }
-            break;
+            requirements.push(dependency.sourceToggleId);
+          }
+          break;
             
-          case DependencyType.BLOCKS:
-            if (sourceActive) {
-              if (dependency.relationship === DependencyRelationship.HARD) {
-                blockers.push(`Blocked by active ${dependency.sourceToggleId}`);
-              } else {
-                warnings.push(`Conflicts with active ${dependency.sourceToggleId}`);
-              }
+        case DependencyType.BLOCKS:
+          if (sourceActive) {
+            if (dependency.relationship === DependencyRelationship.HARD) {
+              blockers.push(`Blocked by active ${dependency.sourceToggleId}`);
+            } else {
+              warnings.push(`Conflicts with active ${dependency.sourceToggleId}`);
             }
-            break;
+          }
+          break;
             
-          case DependencyType.CONFLICTS:
-            if (sourceActive) {
-              blockers.push(`Conflicts with ${dependency.sourceToggleId}`);
-            }
-            break;
+        case DependencyType.CONFLICTS:
+          if (sourceActive) {
+            blockers.push(`Conflicts with ${dependency.sourceToggleId}`);
+          }
+          break;
         }
       }
     }

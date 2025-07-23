@@ -182,14 +182,14 @@ export class ViolationDetectionEngine {
     });
 
     switch (entityType) {
-      case 'user':
-        return await this.scanUserViolations(applicableRules, { entityIds: [entityId] });
-      case 'template':
-        return await this.scanTemplateViolations(applicableRules, { entityIds: [entityId] });
-      case 'transaction':
-        return await this.scanTransactionViolations(applicableRules, { entityIds: [entityId] });
-      default:
-        throw new Error(`Unknown entity type: ${entityType}`);
+    case 'user':
+      return await this.scanUserViolations(applicableRules, { entityIds: [entityId] });
+    case 'template':
+      return await this.scanTemplateViolations(applicableRules, { entityIds: [entityId] });
+    case 'transaction':
+      return await this.scanTransactionViolations(applicableRules, { entityIds: [entityId] });
+    default:
+      throw new Error(`Unknown entity type: ${entityType}`);
     }
   }
 
@@ -343,7 +343,7 @@ export class ViolationDetectionEngine {
           policyId: rule.ruleId,
           entityType: 'user',
           entityId: userId,
-          violationType: `risk_factors_threshold_exceeded`,
+          violationType: 'risk_factors_threshold_exceeded',
           severity: rule.severity,
           evidence: {
             riskFactorCount: matchingRisks.length,
@@ -365,7 +365,7 @@ export class ViolationDetectionEngine {
           policyId: rule.ruleId,
           entityType: 'user',
           entityId: userId,
-          violationType: `suspicious_behavior_pattern`,
+          violationType: 'suspicious_behavior_pattern',
           severity: rule.severity,
           evidence: behaviorViolation,
           detectedAt: new Date(),
@@ -420,7 +420,7 @@ export class ViolationDetectionEngine {
           policyId: rule.ruleId,
           entityType: 'template',
           entityId: templateId,
-          violationType: `content_quality_violation`,
+          violationType: 'content_quality_violation',
           severity: rule.severity,
           evidence: qualityViolation,
           detectedAt: new Date(),
@@ -453,7 +453,7 @@ export class ViolationDetectionEngine {
           policyId: rule.ruleId,
           entityType: 'transaction',
           entityId: transactionId,
-          violationType: `fraud_indicators_detected`,
+          violationType: 'fraud_indicators_detected',
           severity: rule.severity,
           evidence: {
             fraudScore: transactionTrustScore.fraudScore,
@@ -475,7 +475,7 @@ export class ViolationDetectionEngine {
           policyId: rule.ruleId,
           entityType: 'transaction',
           entityId: transactionId,
-          violationType: `transaction_threshold_exceeded`,
+          violationType: 'transaction_threshold_exceeded',
           severity: rule.severity,
           evidence: transactionViolation,
           detectedAt: new Date(),
@@ -493,12 +493,12 @@ export class ViolationDetectionEngine {
 
   private evaluateTrustScoreCondition(score: number, condition: { operator: string; value: number }): boolean {
     switch (condition.operator) {
-      case 'lt': return score < condition.value;
-      case 'lte': return score <= condition.value;
-      case 'gt': return score > condition.value;
-      case 'gte': return score >= condition.value;
-      case 'eq': return score === condition.value;
-      default: return false;
+    case 'lt': return score < condition.value;
+    case 'lte': return score <= condition.value;
+    case 'gt': return score > condition.value;
+    case 'gte': return score >= condition.value;
+    case 'eq': return score === condition.value;
+    default: return false;
     }
   }
 

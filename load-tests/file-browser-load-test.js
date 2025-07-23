@@ -424,53 +424,53 @@ class FileBrowserTests {
       const testPattern = user.id % 6;
 
       switch (testPattern) {
-        case 0:
-          // Navigation + Analytics flow
-          flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
-          await user.thinkTime();
-          flowResults.analytics = await FileBrowserTests.analyticsDashboardTest(user);
-          break;
+      case 0:
+        // Navigation + Analytics flow
+        flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
+        await user.thinkTime();
+        flowResults.analytics = await FileBrowserTests.analyticsDashboardTest(user);
+        break;
           
-        case 1:
-          // Upload + Download flow
-          flowResults.upload = await FileBrowserTests.fileUploadTest(user);
-          await user.thinkTime();
-          flowResults.download = await FileBrowserTests.fileDownloadTest(user);
-          break;
+      case 1:
+        // Upload + Download flow
+        flowResults.upload = await FileBrowserTests.fileUploadTest(user);
+        await user.thinkTime();
+        flowResults.download = await FileBrowserTests.fileDownloadTest(user);
+        break;
           
-        case 2:
-          // Search + Navigation flow
-          flowResults.search = await FileBrowserTests.fileSearchTest(user);
-          await user.thinkTime();
-          flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
-          break;
+      case 2:
+        // Search + Navigation flow
+        flowResults.search = await FileBrowserTests.fileSearchTest(user);
+        await user.thinkTime();
+        flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
+        break;
           
-        case 3:
-          // Management operations flow
-          flowResults.management = await FileBrowserTests.fileManagementTest(user);
-          await user.thinkTime();
-          flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
-          break;
+      case 3:
+        // Management operations flow
+        flowResults.management = await FileBrowserTests.fileManagementTest(user);
+        await user.thinkTime();
+        flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
+        break;
           
-        case 4:
-          // Full upload workflow
-          flowResults.upload = await FileBrowserTests.fileUploadTest(user);
-          await user.thinkTime();
-          flowResults.search = await FileBrowserTests.fileSearchTest(user);
-          await user.thinkTime();
-          flowResults.download = await FileBrowserTests.fileDownloadTest(user);
-          break;
+      case 4:
+        // Full upload workflow
+        flowResults.upload = await FileBrowserTests.fileUploadTest(user);
+        await user.thinkTime();
+        flowResults.search = await FileBrowserTests.fileSearchTest(user);
+        await user.thinkTime();
+        flowResults.download = await FileBrowserTests.fileDownloadTest(user);
+        break;
           
-        case 5:
-          // Complete flow test
-          flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
-          await user.thinkTime();
-          flowResults.upload = await FileBrowserTests.fileUploadTest(user);
-          await user.thinkTime();
-          flowResults.search = await FileBrowserTests.fileSearchTest(user);
-          await user.thinkTime();
-          flowResults.analytics = await FileBrowserTests.analyticsDashboardTest(user);
-          break;
+      case 5:
+        // Complete flow test
+        flowResults.navigation = await FileBrowserTests.fileNavigationTest(user);
+        await user.thinkTime();
+        flowResults.upload = await FileBrowserTests.fileUploadTest(user);
+        await user.thinkTime();
+        flowResults.search = await FileBrowserTests.fileSearchTest(user);
+        await user.thinkTime();
+        flowResults.analytics = await FileBrowserTests.analyticsDashboardTest(user);
+        break;
       }
 
       // Store results for reporting

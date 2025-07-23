@@ -889,12 +889,12 @@ export class PricingOptimizer extends EventEmitter {
 
   private async applyOptimization(model: PricingModel, recommendation: OptimizationRecommendation): Promise<void> {
     switch (recommendation.type) {
-      case 'price_increase':
-        model.basePrice *= (1 + recommendation.suggestedChange);
-        break;
-      case 'dynamic_pricing':
-        model.aiOptimization.strategy = 'maximize_revenue';
-        break;
+    case 'price_increase':
+      model.basePrice *= (1 + recommendation.suggestedChange);
+      break;
+    case 'dynamic_pricing':
+      model.aiOptimization.strategy = 'maximize_revenue';
+      break;
     }
     
     model.updatedAt = Date.now();

@@ -90,18 +90,18 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
 
   const generateCitation = (data: CitationFormData): { shortForm: string; longForm: string } => {
     switch (data.type) {
-      case 'bluebook':
-        return generateBluebookCitation(data);
-      case 'alwd':
-        return generateALWDCitation(data);
-      case 'chicago':
-        return generateChicagoCitation(data);
-      case 'mla':
-        return generateMLACitation(data);
-      case 'apa':
-        return generateAPACitation(data);
-      default:
-        return generateBluebookCitation(data);
+    case 'bluebook':
+      return generateBluebookCitation(data);
+    case 'alwd':
+      return generateALWDCitation(data);
+    case 'chicago':
+      return generateChicagoCitation(data);
+    case 'mla':
+      return generateMLACitation(data);
+    case 'apa':
+      return generateAPACitation(data);
+    default:
+      return generateBluebookCitation(data);
     }
   };
 
@@ -283,13 +283,13 @@ export const CitationManager: React.FC<CitationManagerProps> = ({
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case 'title':
-          return a.longForm.localeCompare(b.longForm);
-        case 'type':
-          return a.type.localeCompare(b.type);
-        case 'date':
-        default:
-          return (b.date || '').localeCompare(a.date || '');
+      case 'title':
+        return a.longForm.localeCompare(b.longForm);
+      case 'type':
+        return a.type.localeCompare(b.type);
+      case 'date':
+      default:
+        return (b.date || '').localeCompare(a.date || '');
       }
     });
 

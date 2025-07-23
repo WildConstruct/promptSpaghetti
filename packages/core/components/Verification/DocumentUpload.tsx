@@ -43,7 +43,7 @@ export const DocumentUpload: React.FC<DocumentUploadProps> = ({
   onFilesChange,
   existingFiles = [],
   disabled = false,
-  placeholder = "Upload your documents here"
+  placeholder = 'Upload your documents here'
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [dragActive, setDragActive] = useState(false);

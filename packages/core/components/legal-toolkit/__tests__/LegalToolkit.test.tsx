@@ -750,7 +750,7 @@ describe('LegalToolkit Component', () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
-        value: 500,
+        value: 500
       });
       
       render(<LegalToolkit />);

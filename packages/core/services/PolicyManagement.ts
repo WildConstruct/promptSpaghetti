@@ -782,7 +782,7 @@ export class PolicyManagement extends EventEmitter {
     const { logic } = rule;
     
     // Extract field value from context
-    let fieldValue = this.extractFieldValue(logic.field, context);
+    const fieldValue = this.extractFieldValue(logic.field, context);
     
     // Apply context-specific rules if present
     if (rule.context) {
@@ -802,58 +802,58 @@ export class PolicyManagement extends EventEmitter {
     let details: any = {};
     
     switch (logic.operator) {
-      case 'EQUALS':
-        passed = fieldValue === logic.value;
+    case 'EQUALS':
+      passed = fieldValue === logic.value;
+      score = passed ? 1.0 : 0.0;
+      break;
+        
+    case 'NOT_EQUALS':
+      passed = fieldValue !== logic.value;
+      score = passed ? 1.0 : 0.0;
+      break;
+        
+    case 'CONTAINS':
+      passed = String(fieldValue).includes(String(logic.value));
+      score = passed ? 1.0 : 0.0;
+      break;
+        
+    case 'NOT_CONTAINS':
+      passed = !String(fieldValue).includes(String(logic.value));
+      score = passed ? 1.0 : 0.0;
+      break;
+        
+    case 'GREATER_THAN':
+      passed = Number(fieldValue) > Number(logic.value);
+      score = passed ? 1.0 : Math.max(0, Number(fieldValue) / Number(logic.value));
+      break;
+        
+    case 'LESS_THAN':
+      passed = Number(fieldValue) < Number(logic.value);
+      score = passed ? 1.0 : Math.max(0, 1 - (Number(fieldValue) / Number(logic.value)));
+      break;
+        
+    case 'BETWEEN':
+      if (Array.isArray(logic.value) && logic.value.length === 2) {
+        const [min, max] = logic.value;
+        passed = Number(fieldValue) >= min && Number(fieldValue) <= max;
         score = passed ? 1.0 : 0.0;
-        break;
+      }
+      break;
         
-      case 'NOT_EQUALS':
-        passed = fieldValue !== logic.value;
-        score = passed ? 1.0 : 0.0;
-        break;
+    case 'REGEX':
+      const regex = new RegExp(String(logic.value));
+      passed = regex.test(String(fieldValue));
+      score = passed ? 1.0 : 0.0;
+      break;
         
-      case 'CONTAINS':
-        passed = String(fieldValue).includes(String(logic.value));
-        score = passed ? 1.0 : 0.0;
-        break;
-        
-      case 'NOT_CONTAINS':
-        passed = !String(fieldValue).includes(String(logic.value));
-        score = passed ? 1.0 : 0.0;
-        break;
-        
-      case 'GREATER_THAN':
-        passed = Number(fieldValue) > Number(logic.value);
-        score = passed ? 1.0 : Math.max(0, Number(fieldValue) / Number(logic.value));
-        break;
-        
-      case 'LESS_THAN':
-        passed = Number(fieldValue) < Number(logic.value);
-        score = passed ? 1.0 : Math.max(0, 1 - (Number(fieldValue) / Number(logic.value)));
-        break;
-        
-      case 'BETWEEN':
-        if (Array.isArray(logic.value) && logic.value.length === 2) {
-          const [min, max] = logic.value;
-          passed = Number(fieldValue) >= min && Number(fieldValue) <= max;
-          score = passed ? 1.0 : 0.0;
-        }
-        break;
-        
-      case 'REGEX':
-        const regex = new RegExp(String(logic.value));
-        passed = regex.test(String(fieldValue));
-        score = passed ? 1.0 : 0.0;
-        break;
-        
-      case 'CUSTOM':
-        if (logic.customFunction) {
-          const customResult = await this.evaluateCustomFunction(logic.customFunction, fieldValue, context);
-          passed = customResult.passed;
-          score = customResult.score;
-          details = { ...details, ...customResult.details };
-        }
-        break;
+    case 'CUSTOM':
+      if (logic.customFunction) {
+        const customResult = await this.evaluateCustomFunction(logic.customFunction, fieldValue, context);
+        passed = customResult.passed;
+        score = customResult.score;
+        details = { ...details, ...customResult.details };
+      }
+      break;
     }
     
     details = {

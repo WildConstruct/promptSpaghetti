@@ -213,11 +213,11 @@ export class DocTestFramework {
           noEmit: true,
           skipLibCheck: true,
           allowSyntheticDefaultImports: true,
-          esModuleInterop: true,
+          esModuleInterop: true
         },
         allowUndeclaredImports: true,
         validateSyntax: true,
-        validateTypes: false,
+        validateTypes: false
       },
       
       api: {
@@ -225,7 +225,7 @@ export class DocTestFramework {
         timeout: 5000,
         validateRequests: true,
         validateResponses: true,
-        skipNetworkRequests: true,
+        skipNetworkRequests: true
       },
       
       cli: {
@@ -236,7 +236,7 @@ export class DocTestFramework {
           'git', 'curl', 'ls', 'cd', 'mkdir',
           'jest', 'tsc', 'eslint'
         ],
-        skipExecution: true,
+        skipExecution: true
       },
       
       maxConcurrentFiles: 5,
@@ -730,27 +730,27 @@ export class DocTestFramework {
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
     
-    let report = `# Documentation Test Report\n\n`;
+    let report = '# Documentation Test Report\n\n';
     report += `**Generated:** ${date} at ${time}\n`;
     report += `**Execution Time:** ${summary.executionTime}ms\n\n`;
     
     // Summary section
-    report += `## Summary\n\n`;
+    report += '## Summary\n\n';
     report += `- **Files Tested:** ${summary.totalFiles}\n`;
     report += `- **Files Passed:** ${summary.passedFiles}\n`;
     report += `- **Files Failed:** ${summary.failedFiles}\n`;
     report += `- **Success Rate:** ${((summary.passedFiles / summary.totalFiles) * 100).toFixed(1)}%\n\n`;
     
-    report += `### Test Breakdown\n\n`;
-    report += `| Test Type | Total | Passed | Failed | Success Rate |\n`;
-    report += `|-----------|-------|--------|---------|--------------|\n`;
+    report += '### Test Breakdown\n\n';
+    report += '| Test Type | Total | Passed | Failed | Success Rate |\n';
+    report += '|-----------|-------|--------|---------|--------------|\n';
     report += `| Code Blocks | ${summary.breakdown.codeBlocks.total} | ${summary.breakdown.codeBlocks.passed} | ${summary.breakdown.codeBlocks.failed} | ${summary.breakdown.codeBlocks.total > 0 ? ((summary.breakdown.codeBlocks.passed / summary.breakdown.codeBlocks.total) * 100).toFixed(1) : 0}% |\n`;
     report += `| API Examples | ${summary.breakdown.apiExamples.total} | ${summary.breakdown.apiExamples.passed} | ${summary.breakdown.apiExamples.failed} | ${summary.breakdown.apiExamples.total > 0 ? ((summary.breakdown.apiExamples.passed / summary.breakdown.apiExamples.total) * 100).toFixed(1) : 0}% |\n`;
     report += `| Links | ${summary.breakdown.links.total} | ${summary.breakdown.links.passed} | ${summary.breakdown.links.failed} | ${summary.breakdown.links.total > 0 ? ((summary.breakdown.links.passed / summary.breakdown.links.total) * 100).toFixed(1) : 0}% |\n\n`;
     
     // Common errors
     if (summary.commonErrors.length > 0) {
-      report += `## Common Errors\n\n`;
+      report += '## Common Errors\n\n';
       summary.commonErrors.forEach((error, index) => {
         report += `${index + 1}. **${error.error}**\n`;
         report += `   - Occurrences: ${error.count}\n`;
@@ -761,26 +761,26 @@ export class DocTestFramework {
     // Failed files detail
     const failedFiles = results.filter(r => !r.passed);
     if (failedFiles.length > 0) {
-      report += `## Failed Files\n\n`;
+      report += '## Failed Files\n\n';
       failedFiles.forEach(result => {
         report += `### ${result.fileName}\n\n`;
         report += `**Path:** \`${result.filePath}\`\n`;
         report += `**Execution Time:** ${result.executionTime}ms\n\n`;
         
         if (result.errors.length > 0) {
-          report += `**Errors:**\n`;
+          report += '**Errors:**\n';
           result.errors.forEach(error => {
             report += `- ${error.message}\n`;
           });
-          report += `\n`;
+          report += '\n';
         }
         
         if (result.codeBlockResults.some(cb => !cb.passed)) {
-          report += `**Failed Code Blocks:**\n`;
+          report += '**Failed Code Blocks:**\n';
           result.codeBlockResults.filter(cb => !cb.passed).forEach(cb => {
             report += `- Line ${cb.lineNumber} (${cb.language}): ${cb.errors.join(', ')}\n`;
           });
-          report += `\n`;
+          report += '\n';
         }
       });
     }
@@ -826,11 +826,11 @@ export const DEFAULT_DOC_TEST_CONFIG: DocTestConfig = {
       noEmit: true,
       skipLibCheck: true,
       allowSyntheticDefaultImports: true,
-      esModuleInterop: true,
+      esModuleInterop: true
     },
     allowUndeclaredImports: true,
     validateSyntax: true,
-    validateTypes: false,
+    validateTypes: false
   },
   
   api: {
@@ -838,7 +838,7 @@ export const DEFAULT_DOC_TEST_CONFIG: DocTestConfig = {
     timeout: 5000,
     validateRequests: true,
     validateResponses: true,
-    skipNetworkRequests: true,
+    skipNetworkRequests: true
   },
   
   cli: {
@@ -849,7 +849,7 @@ export const DEFAULT_DOC_TEST_CONFIG: DocTestConfig = {
       'git', 'curl', 'ls', 'cd', 'mkdir',
       'jest', 'tsc', 'eslint'
     ],
-    skipExecution: true,
+    skipExecution: true
   },
   
   maxConcurrentFiles: 5,
@@ -858,7 +858,7 @@ export const DEFAULT_DOC_TEST_CONFIG: DocTestConfig = {
   
   generateReport: true,
   reportPath: './test-results/documentation-test-report',
-  reportFormat: 'json',
+  reportFormat: 'json'
 };
 
 export default DocTestFramework;

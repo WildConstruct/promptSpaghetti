@@ -63,6 +63,26 @@ export type {
   CommunityKnowledgeMetrics
 } from '../../analytics/LearningAnalyticsExtension';
 
+// Content Filtering System (Task: E16-1753114247062-9DDA29)
+export { MarketplaceContentFilteringServiceImpl } from '../../community/MarketplaceContentFilteringSystem';
+export type {
+  MarketplaceContentFilteringService,
+  ContentFilteringRequest,
+  ContentFilteringResult,
+  MarketplaceContentType,
+  FilteringCategory
+} from '../../community/MarketplaceContentFilteringSystem';
+
+// Enhanced Automated Moderation (Task: E16-1753114247061-797978)
+export { EnhancedModerationServiceImpl } from '../../community/EnhancedAutomatedModerationSystem';
+export type {
+  EnhancedModerationService,
+  EnhancedModerationRequest,
+  EnhancedModerationResult,
+  EnhancedModerationContext,
+  ModerationWorkflowType
+} from '../../community/EnhancedAutomatedModerationSystem';
+
 // Unified Integration
 export { Epic16IntegratedService } from '../../community/Epic16Integration';
 export type {
@@ -73,6 +93,54 @@ export type {
 
 // Re-export ticket integration components for convenience
 export { Epic16TicketIntegration } from '../Tickets/Epic16TicketIntegration';
+
+// Article Management System (Task: E16-1753114247073-332A94)
+export { 
+  ArticleManagement, 
+  ArticleList, 
+  ArticleEditor,
+  default as ArticleManagementDefault 
+} from './ArticleManagement';
+export type {
+  Article,
+  ArticleCategory,
+  ArticleAuthor,
+  ArticleAttachment,
+  ArticleFilter,
+  ArticleSort,
+  ArticleManagementProps
+} from './ArticleManagement';
+
+// Knowledge Base UI Layouts (Task: E16-1753114247069-7900C5)
+export {
+  KnowledgeBaseLayout,
+  KnowledgeBaseHero,
+  ArticleCard,
+  CategoryBrowser,
+  LearningPathCard,
+  default as KnowledgeBaseLayoutDefault
+} from './KnowledgeBaseLayouts';
+export type {
+  KnowledgeBaseSection,
+  LearningPath,
+  LearningPathStep,
+  SearchResult,
+  KnowledgeBaseStats,
+  KnowledgeBaseHeroProps,
+  ArticleCardProps,
+  CategoryBrowserProps,
+  LearningPathCardProps,
+  KnowledgeBaseLayoutProps
+} from './KnowledgeBaseLayouts';
+
+// Knowledge Base Demo Integration (Shows both systems working together)
+export {
+  KnowledgeBaseDemo,
+  default as KnowledgeBaseDemoDefault
+} from './KnowledgeBaseDemo';
+export type {
+  KnowledgeBaseDemoProps
+} from './KnowledgeBaseDemo';
 
 // Component types for external usage
 export interface Epic16ComponentTheme {
@@ -108,18 +176,18 @@ export const defaultEpic16Theme: Epic16ComponentTheme = {
   text: {
     primary: '#1e293b', // slate-800
     secondary: '#64748b', // slate-500
-    disabled: '#94a3b8', // slate-400
+    disabled: '#94a3b8' // slate-400
   },
   border: {
     light: '#e2e8f0', // slate-200
     medium: '#cbd5e1', // slate-300
-    dark: '#94a3b8', // slate-400
+    dark: '#94a3b8' // slate-400
   },
   state: {
     success: '#10b981', // emerald-500
     warning: '#f59e0b', // amber-500
     error: '#ef4444', // red-500
-    info: '#3b82f6', // blue-500
+    info: '#3b82f6' // blue-500
   }
 };
 
@@ -131,13 +199,13 @@ export const Epic16DesignTokens = {
     md: '1rem',    // 16px
     lg: '1.5rem',  // 24px
     xl: '2rem',    // 32px
-    '2xl': '3rem', // 48px
+    '2xl': '3rem' // 48px
   },
   borderRadius: {
     sm: '0.25rem', // 4px
     md: '0.375rem', // 6px
     lg: '0.5rem',   // 8px
-    xl: '0.75rem',  // 12px
+    xl: '0.75rem'  // 12px
   },
   fontSize: {
     xs: '0.75rem',   // 12px
@@ -145,18 +213,18 @@ export const Epic16DesignTokens = {
     base: '1rem',    // 16px
     lg: '1.125rem',  // 18px
     xl: '1.25rem',   // 20px
-    '2xl': '1.5rem', // 24px
+    '2xl': '1.5rem' // 24px
   },
   fontWeight: {
     normal: '400',
     medium: '500',
     semibold: '600',
-    bold: '700',
+    bold: '700'
   },
   boxShadow: {
     sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
     md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
     lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-    xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+    xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)'
   }
 } as const;

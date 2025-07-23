@@ -822,18 +822,18 @@ export class Epic17RuleVersioningService extends EventEmitter {
     currentVersion?: string
   ): Promise<string> {
     switch (this.config.versioningStrategy) {
-      case 'semantic':
-        return this.generateSemanticVersion(currentVersion, versionType);
+    case 'semantic':
+      return this.generateSemanticVersion(currentVersion, versionType);
         
-      case 'sequential':
-        const nextSequence = await this.getNextSequentialNumber(ruleId);
-        return `v${nextSequence}`;
+    case 'sequential':
+      const nextSequence = await this.getNextSequentialNumber(ruleId);
+      return `v${nextSequence}`;
         
-      case 'timestamp':
-        return new Date().toISOString().replace(/[:.]/g, '-');
+    case 'timestamp':
+      return new Date().toISOString().replace(/[:.]/g, '-');
         
-      default:
-        return this.generateSemanticVersion(currentVersion, versionType);
+    default:
+      return this.generateSemanticVersion(currentVersion, versionType);
     }
   }
 
@@ -851,21 +851,21 @@ export class Epic17RuleVersioningService extends EventEmitter {
     let [, major, minor, patch] = versionMatch.map(Number);
 
     switch (versionType) {
-      case VersionType.MAJOR:
-        major += 1;
-        minor = 0;
-        patch = 0;
-        break;
-      case VersionType.MINOR:
-        minor += 1;
-        patch = 0;
-        break;
-      case VersionType.PATCH:
-        patch += 1;
-        break;
-      default:
-        minor += 1;
-        patch = 0;
+    case VersionType.MAJOR:
+      major += 1;
+      minor = 0;
+      patch = 0;
+      break;
+    case VersionType.MINOR:
+      minor += 1;
+      patch = 0;
+      break;
+    case VersionType.PATCH:
+      patch += 1;
+      break;
+    default:
+      minor += 1;
+      patch = 0;
     }
 
     return `${major}.${minor}.${patch}`;
@@ -899,11 +899,11 @@ export class Epic17RuleVersioningService extends EventEmitter {
 
   private mapDiffKindToChangeType(kind: string): 'added' | 'modified' | 'deleted' | 'moved' | 'renamed' {
     switch (kind) {
-      case 'N': return 'added';
-      case 'D': return 'deleted';
-      case 'E': return 'modified';
-      case 'A': return 'modified'; // Array changes
-      default: return 'modified';
+    case 'N': return 'added';
+    case 'D': return 'deleted';
+    case 'E': return 'modified';
+    case 'A': return 'modified'; // Array changes
+    default: return 'modified';
     }
   }
 
@@ -911,16 +911,16 @@ export class Epic17RuleVersioningService extends EventEmitter {
     const path = change.path ? change.path.join('.') : 'root';
     
     switch (change.kind) {
-      case 'N':
-        return `Added field '${path}' with value: ${JSON.stringify(change.rhs)}`;
-      case 'D':
-        return `Removed field '${path}' (was: ${JSON.stringify(change.lhs)})`;
-      case 'E':
-        return `Modified field '${path}' from ${JSON.stringify(change.lhs)} to ${JSON.stringify(change.rhs)}`;
-      case 'A':
-        return `Array change in '${path}' at index ${change.index}`;
-      default:
-        return `Change detected in '${path}'`;
+    case 'N':
+      return `Added field '${path}' with value: ${JSON.stringify(change.rhs)}`;
+    case 'D':
+      return `Removed field '${path}' (was: ${JSON.stringify(change.lhs)})`;
+    case 'E':
+      return `Modified field '${path}' from ${JSON.stringify(change.lhs)} to ${JSON.stringify(change.rhs)}`;
+    case 'A':
+      return `Array change in '${path}' at index ${change.index}`;
+    default:
+      return `Change detected in '${path}'`;
     }
   }
 
@@ -961,10 +961,10 @@ export class Epic17RuleVersioningService extends EventEmitter {
 
   private inferVersionType(changeSignificance: 'minor' | 'major' | 'breaking'): VersionType {
     switch (changeSignificance) {
-      case 'breaking': return VersionType.MAJOR;
-      case 'major': return VersionType.MINOR;
-      case 'minor': return VersionType.PATCH;
-      default: return VersionType.PATCH;
+    case 'breaking': return VersionType.MAJOR;
+    case 'major': return VersionType.MINOR;
+    case 'minor': return VersionType.PATCH;
+    default: return VersionType.PATCH;
     }
   }
 

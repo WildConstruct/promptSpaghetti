@@ -199,7 +199,7 @@ export class PlacementManagementService {
       paramIndex++;
     }
 
-    query += ` GROUP BY ps.slot_id ORDER BY ps.priority DESC, ps.created_at DESC`;
+    query += ' GROUP BY ps.slot_id ORDER BY ps.priority DESC, ps.created_at DESC';
 
     // Get total count
     const countQuery = query.replace(/SELECT.*GROUP BY ps\.slot_id/, 'SELECT COUNT(DISTINCT ps.slot_id)');
@@ -294,7 +294,7 @@ export class PlacementManagementService {
       throw new Error(`Cannot delete slot with ${activePlacements} active placements`);
     }
 
-    await this.db.query(`DELETE FROM placement_slots WHERE slot_id = $1`, [slotId]);
+    await this.db.query('DELETE FROM placement_slots WHERE slot_id = $1', [slotId]);
 
     await this.auditService.logEvent({
       userId: deletedBy,
@@ -556,7 +556,7 @@ export class PlacementManagementService {
       throw new Error(`Content placement not found: ${placementId}`);
     }
 
-    await this.db.query(`DELETE FROM content_placements WHERE placement_id = $1`, [placementId]);
+    await this.db.query('DELETE FROM content_placements WHERE placement_id = $1', [placementId]);
 
     // Rebalance remaining priorities
     await this.rebalanceSlotPriorities(placement.slotId);
@@ -831,16 +831,16 @@ export class PlacementManagementService {
     let idColumn: string;
 
     switch (contentType) {
-      case ContentType.TEMPLATE:
-        tableName = 'marketplace_templates';
-        idColumn = 'id';
-        break;
-      case ContentType.COLLECTION:
-        tableName = 'template_collections';
-        idColumn = 'id';
-        break;
-      default:
-        return; // Skip validation for other types
+    case ContentType.TEMPLATE:
+      tableName = 'marketplace_templates';
+      idColumn = 'id';
+      break;
+    case ContentType.COLLECTION:
+      tableName = 'template_collections';
+      idColumn = 'id';
+      break;
+    default:
+      return; // Skip validation for other types
     }
 
     const result = await this.db.query(`

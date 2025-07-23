@@ -259,38 +259,38 @@ export class DiagnosticService {
       let result: DiagnosticResult;
 
       switch (diagnostic.category) {
-        case DiagnosticCategory.SYSTEM:
-          result = await this.runSystemDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.DATABASE:
-          result = await this.runDatabaseDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.NETWORK:
-          result = await this.runNetworkDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.STORAGE:
-          result = await this.runStorageDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.MEMORY:
-          result = await this.runMemoryDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.SECURITY:
-          result = await this.runSecurityDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.PERFORMANCE:
-          result = await this.runPerformanceDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.INTEGRATION:
-          result = await this.runIntegrationDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.BACKUP:
-          result = await this.runBackupDiagnostic(diagnostic, executionId, metadata);
-          break;
-        case DiagnosticCategory.CONFIGURATION:
-          result = await this.runConfigurationDiagnostic(diagnostic, executionId, metadata);
-          break;
-        default:
-          result = await this.runGenericDiagnostic(diagnostic, executionId, metadata);
+      case DiagnosticCategory.SYSTEM:
+        result = await this.runSystemDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.DATABASE:
+        result = await this.runDatabaseDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.NETWORK:
+        result = await this.runNetworkDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.STORAGE:
+        result = await this.runStorageDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.MEMORY:
+        result = await this.runMemoryDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.SECURITY:
+        result = await this.runSecurityDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.PERFORMANCE:
+        result = await this.runPerformanceDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.INTEGRATION:
+        result = await this.runIntegrationDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.BACKUP:
+        result = await this.runBackupDiagnostic(diagnostic, executionId, metadata);
+        break;
+      case DiagnosticCategory.CONFIGURATION:
+        result = await this.runConfigurationDiagnostic(diagnostic, executionId, metadata);
+        break;
+      default:
+        result = await this.runGenericDiagnostic(diagnostic, executionId, metadata);
       }
 
       result.duration = performance.now() - startTime;
@@ -313,18 +313,18 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'system_cpu_usage':
-        return this.checkCPUUsage(diagnostic, executionId, metadata, details);
-      case 'system_memory_usage':
-        return this.checkMemoryUsage(diagnostic, executionId, metadata, details);
-      case 'system_disk_space':
-        return this.checkDiskSpace(diagnostic, executionId, metadata, details);
-      case 'system_load_average':
-        return this.checkLoadAverage(diagnostic, executionId, metadata, details);
-      case 'system_uptime':
-        return this.checkSystemUptime(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'system_cpu_usage':
+      return this.checkCPUUsage(diagnostic, executionId, metadata, details);
+    case 'system_memory_usage':
+      return this.checkMemoryUsage(diagnostic, executionId, metadata, details);
+    case 'system_disk_space':
+      return this.checkDiskSpace(diagnostic, executionId, metadata, details);
+    case 'system_load_average':
+      return this.checkLoadAverage(diagnostic, executionId, metadata, details);
+    case 'system_uptime':
+      return this.checkSystemUptime(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -336,21 +336,21 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'database_connection':
-        return this.checkDatabaseConnection(diagnostic, executionId, metadata, details);
-      case 'database_performance':
-        return this.checkDatabasePerformance(diagnostic, executionId, metadata, details);
-      case 'database_storage':
-        return this.checkDatabaseStorage(diagnostic, executionId, metadata, details);
-      case 'database_locks':
-        return this.checkDatabaseLocks(diagnostic, executionId, metadata, details);
-      case 'database_replication':
-        return this.checkDatabaseReplication(diagnostic, executionId, metadata, details);
+    case 'database_connection':
+      return this.checkDatabaseConnection(diagnostic, executionId, metadata, details);
+    case 'database_performance':
+      return this.checkDatabasePerformance(diagnostic, executionId, metadata, details);
+    case 'database_storage':
+      return this.checkDatabaseStorage(diagnostic, executionId, metadata, details);
+    case 'database_locks':
+      return this.checkDatabaseLocks(diagnostic, executionId, metadata, details);
+    case 'database_replication':
+      return this.checkDatabaseReplication(diagnostic, executionId, metadata, details);
       // Epic 17 Database Health Checks
-      case 'epic17_database_connectivity':
-        return this.checkEpic17DatabaseConnectivity(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'epic17_database_connectivity':
+      return this.checkEpic17DatabaseConnectivity(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -362,16 +362,16 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'network_connectivity':
-        return this.checkNetworkConnectivity(diagnostic, executionId, metadata, details);
-      case 'network_latency':
-        return this.checkNetworkLatency(diagnostic, executionId, metadata, details);
-      case 'network_bandwidth':
-        return this.checkNetworkBandwidth(diagnostic, executionId, metadata, details);
-      case 'network_dns':
-        return this.checkDNSResolution(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'network_connectivity':
+      return this.checkNetworkConnectivity(diagnostic, executionId, metadata, details);
+    case 'network_latency':
+      return this.checkNetworkLatency(diagnostic, executionId, metadata, details);
+    case 'network_bandwidth':
+      return this.checkNetworkBandwidth(diagnostic, executionId, metadata, details);
+    case 'network_dns':
+      return this.checkDNSResolution(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -383,16 +383,16 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'storage_disk_usage':
-        return this.checkStorageDiskUsage(diagnostic, executionId, metadata, details);
-      case 'storage_io_performance':
-        return this.checkStorageIOPerformance(diagnostic, executionId, metadata, details);
-      case 'storage_backup_status':
-        return this.checkStorageBackupStatus(diagnostic, executionId, metadata, details);
-      case 'storage_permissions':
-        return this.checkStoragePermissions(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'storage_disk_usage':
+      return this.checkStorageDiskUsage(diagnostic, executionId, metadata, details);
+    case 'storage_io_performance':
+      return this.checkStorageIOPerformance(diagnostic, executionId, metadata, details);
+    case 'storage_backup_status':
+      return this.checkStorageBackupStatus(diagnostic, executionId, metadata, details);
+    case 'storage_permissions':
+      return this.checkStoragePermissions(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -404,16 +404,16 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'memory_heap_usage':
-        return this.checkHeapUsage(diagnostic, executionId, metadata, details);
-      case 'memory_leaks':
-        return this.checkMemoryLeaks(diagnostic, executionId, metadata, details);
-      case 'memory_garbage_collection':
-        return this.checkGarbageCollection(diagnostic, executionId, metadata, details);
-      case 'memory_buffer_usage':
-        return this.checkBufferUsage(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'memory_heap_usage':
+      return this.checkHeapUsage(diagnostic, executionId, metadata, details);
+    case 'memory_leaks':
+      return this.checkMemoryLeaks(diagnostic, executionId, metadata, details);
+    case 'memory_garbage_collection':
+      return this.checkGarbageCollection(diagnostic, executionId, metadata, details);
+    case 'memory_buffer_usage':
+      return this.checkBufferUsage(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -425,19 +425,19 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'security_ssl_certificates':
-        return this.checkSSLCertificates(diagnostic, executionId, metadata, details);
-      case 'security_authentication':
-        return this.checkAuthenticationSecurity(diagnostic, executionId, metadata, details);
-      case 'security_permissions':
-        return this.checkSecurityPermissions(diagnostic, executionId, metadata, details);
-      case 'security_vulnerabilities':
-        return this.checkSecurityVulnerabilities(diagnostic, executionId, metadata, details);
+    case 'security_ssl_certificates':
+      return this.checkSSLCertificates(diagnostic, executionId, metadata, details);
+    case 'security_authentication':
+      return this.checkAuthenticationSecurity(diagnostic, executionId, metadata, details);
+    case 'security_permissions':
+      return this.checkSecurityPermissions(diagnostic, executionId, metadata, details);
+    case 'security_vulnerabilities':
+      return this.checkSecurityVulnerabilities(diagnostic, executionId, metadata, details);
       // Epic 17 Security Checks
-      case 'epic17_admin_permission_check':
-        return this.checkEpic17AdminPermissionCheck(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'epic17_admin_permission_check':
+      return this.checkEpic17AdminPermissionCheck(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -449,23 +449,23 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'performance_response_time':
-        return this.checkResponseTime(diagnostic, executionId, metadata, details);
-      case 'performance_throughput':
-        return this.checkThroughput(diagnostic, executionId, metadata, details);
-      case 'performance_error_rate':
-        return this.checkErrorRate(diagnostic, executionId, metadata, details);
-      case 'performance_cache_efficiency':
-        return this.checkCacheEfficiency(diagnostic, executionId, metadata, details);
+    case 'performance_response_time':
+      return this.checkResponseTime(diagnostic, executionId, metadata, details);
+    case 'performance_throughput':
+      return this.checkThroughput(diagnostic, executionId, metadata, details);
+    case 'performance_error_rate':
+      return this.checkErrorRate(diagnostic, executionId, metadata, details);
+    case 'performance_cache_efficiency':
+      return this.checkCacheEfficiency(diagnostic, executionId, metadata, details);
       // Epic 17 Specific Performance Checks
-      case 'epic17_admin_user_lookup':
-        return this.checkEpic17AdminUserLookup(diagnostic, executionId, metadata, details);
-      case 'epic17_health_check_response':
-        return this.checkEpic17HealthCheckResponse(diagnostic, executionId, metadata, details);
-      case 'epic17_dashboard_load_time':
-        return this.checkEpic17DashboardLoadTime(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'epic17_admin_user_lookup':
+      return this.checkEpic17AdminUserLookup(diagnostic, executionId, metadata, details);
+    case 'epic17_health_check_response':
+      return this.checkEpic17HealthCheckResponse(diagnostic, executionId, metadata, details);
+    case 'epic17_dashboard_load_time':
+      return this.checkEpic17DashboardLoadTime(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -794,21 +794,21 @@ export class DiagnosticService {
 
   private updateExecutionSummary(execution: DiagnosticExecution, result: DiagnosticResult): void {
     switch (result.status) {
-      case DiagnosticStatus.HEALTHY:
-        execution.summary.healthyCount++;
-        break;
-      case DiagnosticStatus.WARNING:
-      case DiagnosticStatus.DEGRADED:
-        execution.summary.warningCount++;
-        break;
-      case DiagnosticStatus.CRITICAL:
-        execution.summary.criticalCount++;
-        execution.summary.criticalIssues.push(`${result.name}: ${result.message}`);
-        break;
-      case DiagnosticStatus.ERROR:
-      case DiagnosticStatus.UNKNOWN:
-        execution.summary.errorCount++;
-        break;
+    case DiagnosticStatus.HEALTHY:
+      execution.summary.healthyCount++;
+      break;
+    case DiagnosticStatus.WARNING:
+    case DiagnosticStatus.DEGRADED:
+      execution.summary.warningCount++;
+      break;
+    case DiagnosticStatus.CRITICAL:
+      execution.summary.criticalCount++;
+      execution.summary.criticalIssues.push(`${result.name}: ${result.message}`);
+      break;
+    case DiagnosticStatus.ERROR:
+    case DiagnosticStatus.UNKNOWN:
+      execution.summary.errorCount++;
+      break;
     }
   }
 
@@ -1406,10 +1406,10 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'integration_health':
-        return this.checkIntegrationHealth(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'integration_health':
+      return this.checkIntegrationHealth(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -1421,10 +1421,10 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'backup_verification':
-        return this.checkBackupVerification(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'backup_verification':
+      return this.checkBackupVerification(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -1436,10 +1436,10 @@ export class DiagnosticService {
     };
 
     switch (diagnostic.diagnosticId) {
-      case 'config_deployment':
-        return this.checkConfigDeployment(diagnostic, executionId, metadata, details);
-      default:
-        return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
+    case 'config_deployment':
+      return this.checkConfigDeployment(diagnostic, executionId, metadata, details);
+    default:
+      return this.createUnknownDiagnosticResult(diagnostic, executionId, metadata);
     }
   }
 
@@ -1464,7 +1464,7 @@ export class DiagnosticService {
       };
       
       const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
-                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+        thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
       
       const message = thresholdResult.passed 
         ? `Integration health check completed successfully in ${duration.toFixed(1)}ms`
@@ -1509,7 +1509,7 @@ export class DiagnosticService {
       };
       
       const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
-                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+        thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
       
       const message = thresholdResult.passed 
         ? `Backup verification completed successfully in ${(duration/1000).toFixed(1)}s`
@@ -1554,7 +1554,7 @@ export class DiagnosticService {
       };
       
       const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
-                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+        thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
       
       const message = thresholdResult.passed 
         ? `Configuration deployment validated in ${(duration/1000).toFixed(1)}s`
@@ -1642,7 +1642,7 @@ export class DiagnosticService {
       };
       
       const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
-                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+        thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
       
       const message = thresholdResult.passed 
         ? `Admin user lookup completed in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
@@ -1687,7 +1687,7 @@ export class DiagnosticService {
       };
       
       const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
-                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+        thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
       
       const message = thresholdResult.passed 
         ? `Admin permission check completed in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
@@ -1734,7 +1734,7 @@ export class DiagnosticService {
       };
       
       const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
-                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+        thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
       
       const message = thresholdResult.passed 
         ? `Health check response completed in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
@@ -1780,7 +1780,7 @@ export class DiagnosticService {
       };
       
       const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
-                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+        thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
       
       const message = thresholdResult.passed 
         ? `Dashboard load completed in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`
@@ -1826,7 +1826,7 @@ export class DiagnosticService {
       };
       
       const status = thresholdResult.passed ? DiagnosticStatus.HEALTHY : 
-                   thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
+        thresholdResult.level === 'critical' ? DiagnosticStatus.CRITICAL : DiagnosticStatus.WARNING;
       
       const message = thresholdResult.passed 
         ? `Database connectivity validated in ${duration.toFixed(1)}ms (threshold: ${thresholdResult.threshold?.warning}ms)`

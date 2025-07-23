@@ -50,18 +50,18 @@ export class AdvancedGraphGenerator {
     const { complexity } = options;
 
     switch (complexity) {
-      case 'simple':
-        return this.generateSimpleScenario(options);
-      case 'validation':
-        return this.generateValidationScenario(options);
-      case 'performance':
-        return this.generatePerformanceScenario(options);
-      case 'security':
-        return this.generateSecurityScenario(options);
-      case 'edge-case':
-        return this.generateEdgeCaseScenario(options);
-      default:
-        throw new Error(`Unknown complexity type: ${complexity}`);
+    case 'simple':
+      return this.generateSimpleScenario(options);
+    case 'validation':
+      return this.generateValidationScenario(options);
+    case 'performance':
+      return this.generatePerformanceScenario(options);
+    case 'security':
+      return this.generateSecurityScenario(options);
+    case 'edge-case':
+      return this.generateEdgeCaseScenario(options);
+    default:
+      throw new Error(`Unknown complexity type: ${complexity}`);
     }
   }
 
@@ -300,71 +300,71 @@ export class AdvancedGraphGenerator {
     const type = advancedTypes[Math.floor(this.rng() * advancedTypes.length)];
 
     switch (type) {
-      case 'WeightedAdvanced':
-        return {
-          id: nodeId,
-          type: 'WeightedAdvanced',
-          choices: Array.from({ length: 20 }, (_, i) => ({
-            text: `Advanced ${nodeId}_${i}`,
-            weight: this.rng() * 10
-          })),
-          distributionConfig: {
-            type: 'exponential',
-            normalize: true,
-            temperature: 1.0 + this.rng() * 2.0
-          }
-        };
-
-      case 'Sequential':
-        return {
-          id: nodeId,
-          type: 'Sequential',
-          sequence: Array.from({ length: 30 }, (_, i) => `Item ${nodeId}_${i}`),
-          pattern: {
-            type: 'weighted',
-            config: {
-              weights: Array.from({ length: 30 }, () => this.rng())
-            }
-          }
-        };
-
-      case 'Markov':
-        const states = ['alpha', 'beta', 'gamma', 'delta'];
-        const transitions: Record<string, Record<string, number>> = {};
-        
-        for (const state of states) {
-          transitions[state] = {};
-          let remaining = 1.0;
-          
-          for (let i = 0; i < states.length - 1; i++) {
-            const prob = this.rng() * remaining;
-            transitions[state][states[i]] = prob;
-            remaining -= prob;
-          }
-          transitions[state][states[states.length - 1]] = remaining;
+    case 'WeightedAdvanced':
+      return {
+        id: nodeId,
+        type: 'WeightedAdvanced',
+        choices: Array.from({ length: 20 }, (_, i) => ({
+          text: `Advanced ${nodeId}_${i}`,
+          weight: this.rng() * 10
+        })),
+        distributionConfig: {
+          type: 'exponential',
+          normalize: true,
+          temperature: 1.0 + this.rng() * 2.0
         }
+      };
 
-        return {
-          id: nodeId,
-          type: 'Markov',
-          states,
-          transitions,
-          initialState: states[0],
-          markovConfig: {
-            maxSteps: 10,
-            terminationConditions: [states[states.length - 1]]
+    case 'Sequential':
+      return {
+        id: nodeId,
+        type: 'Sequential',
+        sequence: Array.from({ length: 30 }, (_, i) => `Item ${nodeId}_${i}`),
+        pattern: {
+          type: 'weighted',
+          config: {
+            weights: Array.from({ length: 30 }, () => this.rng())
           }
-        };
+        }
+      };
 
-      default:
-        return {
-          id: nodeId,
-          type: 'Conditional',
-          branches: [
-            { condition: 'true', output: `Conditional ${nodeId} met` }
-          ],
-          defaultOutput: `Conditional ${nodeId} default`
-        };
+    case 'Markov':
+      const states = ['alpha', 'beta', 'gamma', 'delta'];
+      const transitions: Record<string, Record<string, number>> = {};
+        
+      for (const state of states) {
+        transitions[state] = {};
+        let remaining = 1.0;
+          
+        for (let i = 0; i < states.length - 1; i++) {
+          const prob = this.rng() * remaining;
+          transitions[state][states[i]] = prob;
+          remaining -= prob;
+        }
+        transitions[state][states[states.length - 1]] = remaining;
+      }
+
+      return {
+        id: nodeId,
+        type: 'Markov',
+        states,
+        transitions,
+        initialState: states[0],
+        markovConfig: {
+          maxSteps: 10,
+          terminationConditions: [states[states.length - 1]]
+        }
+      };
+
+    default:
+      return {
+        id: nodeId,
+        type: 'Conditional',
+        branches: [
+          { condition: 'true', output: `Conditional ${nodeId} met` }
+        ],
+        defaultOutput: `Conditional ${nodeId} default`
+      };
     }
   }
 

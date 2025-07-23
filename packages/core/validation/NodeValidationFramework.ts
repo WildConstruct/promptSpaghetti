@@ -245,12 +245,12 @@ export class NodeValidationFramework {
    */
   private validateNodeTypeSpecificSecurity(nodeData: AdvancedNodeData, threats: SecurityThreat[]): void {
     switch (nodeData.type) {
-      case 'Conditional':
-        this.validateConditionalSecurity(nodeData, threats);
-        break;
-      case 'PythonTransform':
-        this.validatePythonTransformSecurity(nodeData, threats);
-        break;
+    case 'Conditional':
+      this.validateConditionalSecurity(nodeData, threats);
+      break;
+    case 'PythonTransform':
+      this.validatePythonTransformSecurity(nodeData, threats);
+      break;
       // Add more node type-specific validations as needed
     }
   }
@@ -392,7 +392,7 @@ export class NodeValidationFramework {
     result.typeSafety.typeErrors = typeErrors;
     result.typeSafety.passed = typeErrors.length === 0;
     result.typeSafety.compatibility = typeErrors.length === 0 ? 'full' : 
-                                     typeErrors.some(e => e.field.includes('required')) ? 'incompatible' : 'partial';
+      typeErrors.some(e => e.field.includes('required')) ? 'incompatible' : 'partial';
 
     if (!result.typeSafety.passed) {
       result.errors.push(`Type safety validation failed: ${typeErrors.length} type error(s)`);

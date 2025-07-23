@@ -267,11 +267,11 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
 
   const getRestoreStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'green';
-      case 'failed': return 'red';
-      case 'in_progress': return 'blue';
-      case 'cancelled': return 'orange';
-      default: return 'default';
+    case 'completed': return 'green';
+    case 'failed': return 'red';
+    case 'in_progress': return 'blue';
+    case 'cancelled': return 'orange';
+    default: return 'default';
     }
   };
 

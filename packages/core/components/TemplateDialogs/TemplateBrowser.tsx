@@ -139,7 +139,7 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000,
+      zIndex: 1000
     }}>
       <div style={{
         backgroundColor: 'white',
@@ -150,7 +150,7 @@ export const TemplateBrowser: React.FC<TemplateBrowserProps> = ({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
       }}>
         {/* Header */}
         <div style={{
@@ -743,7 +743,7 @@ const TemplatePreview: React.FC<{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1001,
+      zIndex: 1001
     }}>
       <div style={{
         backgroundColor: 'white',

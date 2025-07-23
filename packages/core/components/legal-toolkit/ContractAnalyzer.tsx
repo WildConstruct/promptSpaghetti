@@ -254,20 +254,20 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'low': return '#48bb78';
-      case 'medium': return '#ed8936';
-      case 'high': return '#f56565';
-      case 'critical': return '#e53e3e';
-      default: return '#718096';
+    case 'low': return '#48bb78';
+    case 'medium': return '#ed8936';
+    case 'high': return '#f56565';
+    case 'critical': return '#e53e3e';
+    default: return '#718096';
     }
   };
 
   const getComplianceColor = (status: string) => {
     switch (status) {
-      case 'compliant': return '#48bb78';
-      case 'partial': return '#ed8936';
-      case 'non_compliant': return '#f56565';
-      default: return '#718096';
+    case 'compliant': return '#48bb78';
+    case 'partial': return '#ed8936';
+    case 'non_compliant': return '#f56565';
+    default: return '#718096';
     }
   };
 

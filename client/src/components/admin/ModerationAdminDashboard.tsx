@@ -146,12 +146,12 @@ export const ModerationAdminDashboard: React.FC = () => {
       prev.map(item => 
         item.id === itemId 
           ? { 
-              ...item, 
-              status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'flagged',
-              reviewedBy: 'current-moderator',
-              reviewedAt: new Date(),
-              reason
-            }
+            ...item, 
+            status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'flagged',
+            reviewedBy: 'current-moderator',
+            reviewedAt: new Date(),
+            reason
+          }
           : item
       )
     );
@@ -162,14 +162,14 @@ export const ModerationAdminDashboard: React.FC = () => {
       prev.map(request =>
         request.id === requestId
           ? {
-              ...request,
-              status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'escalated',
-              approvedBy: action === 'approve' ? 'current-moderator' : undefined,
-              approvedAt: action === 'approve' ? new Date() : undefined,
-              rejectedBy: action === 'reject' ? 'current-moderator' : undefined,
-              rejectedAt: action === 'reject' ? new Date() : undefined,
-              reason
-            }
+            ...request,
+            status: action === 'approve' ? 'approved' : action === 'reject' ? 'rejected' : 'escalated',
+            approvedBy: action === 'approve' ? 'current-moderator' : undefined,
+            approvedAt: action === 'approve' ? new Date() : undefined,
+            rejectedBy: action === 'reject' ? 'current-moderator' : undefined,
+            rejectedAt: action === 'reject' ? new Date() : undefined,
+            reason
+          }
           : request
       )
     );

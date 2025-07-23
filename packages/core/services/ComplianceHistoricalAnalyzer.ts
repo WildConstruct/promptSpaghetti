@@ -409,7 +409,7 @@ export class ComplianceHistoricalAnalyzer {
     };
     data: HistoricalDataPoint[];
   } {
-    let allData: HistoricalDataPoint[] = [];
+    const allData: HistoricalDataPoint[] = [];
     
     for (const [key, dataPoints] of this.historicalData.entries()) {
       if (!framework || key.startsWith(framework)) {
@@ -529,7 +529,7 @@ export class ComplianceHistoricalAnalyzer {
     }
     
     if (trend === 'down' && complianceRate < 80) {
-      recommendations.push(`Declining trend detected - implement corrective measures immediately`);
+      recommendations.push('Declining trend detected - implement corrective measures immediately');
     }
     
     if (complianceRate < 95) {
@@ -537,7 +537,7 @@ export class ComplianceHistoricalAnalyzer {
     }
     
     if (trend === 'up') {
-      recommendations.push(`Positive trend detected - document and replicate successful practices`);
+      recommendations.push('Positive trend detected - document and replicate successful practices');
     }
     
     return recommendations.slice(0, 3);

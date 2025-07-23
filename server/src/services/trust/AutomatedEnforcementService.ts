@@ -590,7 +590,7 @@ export class AutomatedEnforcementService {
         appliedActions.push(action);
 
       } catch (error) {
-        console.error(`❌ Failed to apply enforcement action:`, error);
+        console.error('❌ Failed to apply enforcement action:', error);
         // Log the error but continue with other actions
         await this.auditService.logEvent({
           userId: 'system',
@@ -614,26 +614,26 @@ export class AutomatedEnforcementService {
       await client.query('BEGIN');
 
       switch (action.actionType) {
-        case 'suspend':
-          await this.applySuspension(client, action);
-          break;
-        case 'restrict':
-          await this.applyRestriction(client, action);
-          break;
-        case 'flag':
-          await this.applyFlagging(client, action);
-          break;
-        case 'require_verification':
-          await this.applyVerificationRequirement(client, action);
-          break;
-        case 'block_transaction':
-          await this.applyTransactionBlock(client, action);
-          break;
-        case 'quarantine_template':
-          await this.applyTemplateQuarantine(client, action);
-          break;
-        default:
-          throw new Error(`Unknown action type: ${action.actionType}`);
+      case 'suspend':
+        await this.applySuspension(client, action);
+        break;
+      case 'restrict':
+        await this.applyRestriction(client, action);
+        break;
+      case 'flag':
+        await this.applyFlagging(client, action);
+        break;
+      case 'require_verification':
+        await this.applyVerificationRequirement(client, action);
+        break;
+      case 'block_transaction':
+        await this.applyTransactionBlock(client, action);
+        break;
+      case 'quarantine_template':
+        await this.applyTemplateQuarantine(client, action);
+        break;
+      default:
+        throw new Error(`Unknown action type: ${action.actionType}`);
       }
 
       await client.query('COMMIT');
@@ -790,14 +790,14 @@ export class AutomatedEnforcementService {
     entityType: 'user' | 'template' | 'transaction'
   ): string {
     switch (entityType) {
-      case 'user':
-        return (trustScore as UserTrustScore).userId;
-      case 'template':
-        return (trustScore as TemplateTrustScore).templateId;
-      case 'transaction':
-        return (trustScore as TransactionTrustScore).transactionId;
-      default:
-        throw new Error(`Unknown entity type: ${entityType}`);
+    case 'user':
+      return (trustScore as UserTrustScore).userId;
+    case 'template':
+      return (trustScore as TemplateTrustScore).templateId;
+    case 'transaction':
+      return (trustScore as TransactionTrustScore).transactionId;
+    default:
+      throw new Error(`Unknown entity type: ${entityType}`);
     }
   }
 
@@ -823,16 +823,16 @@ export class AutomatedEnforcementService {
     const now = new Date();
     
     switch (actionType) {
-      case 'suspend':
-        return severity === 'critical' ? 
-          new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) : // 30 days
-          new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);   // 7 days
-      case 'restrict':
-        return new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 14 days
-      case 'flag':
-        return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);  // 7 days
-      default:
-        return undefined;
+    case 'suspend':
+      return severity === 'critical' ? 
+        new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000) : // 30 days
+        new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);   // 7 days
+    case 'restrict':
+      return new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 14 days
+    case 'flag':
+      return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);  // 7 days
+    default:
+      return undefined;
     }
   }
 
@@ -963,7 +963,7 @@ export class AutomatedEnforcementService {
     const params = [entityType, entityId];
 
     if (!includeExpired) {
-      query += ` AND (expires_at IS NULL OR expires_at > NOW())`;
+      query += ' AND (expires_at IS NULL OR expires_at > NOW())';
     }
 
     query += ` ORDER BY created_at DESC LIMIT $${params.length + 1}`;
@@ -999,16 +999,16 @@ export class AutomatedEnforcementService {
     console.log(`🔄 Manual enforcement evaluation triggered for ${entityType}: ${entityId}`);
     
     switch (entityType) {
-      case 'user':
-        const userTrust = await this.trustScoreService.calculateUserTrustScore(entityId, true);
-        return await this.enforceUserTrustPolicies(userTrust, 'manual_evaluation');
+    case 'user':
+      const userTrust = await this.trustScoreService.calculateUserTrustScore(entityId, true);
+      return await this.enforceUserTrustPolicies(userTrust, 'manual_evaluation');
         
-      case 'template':
-        const templateTrust = await this.trustScoreService.calculateTemplateTrustScore(entityId, true);
-        return await this.enforceTemplateTrustPolicies(templateTrust, 'manual_evaluation');
+    case 'template':
+      const templateTrust = await this.trustScoreService.calculateTemplateTrustScore(entityId, true);
+      return await this.enforceTemplateTrustPolicies(templateTrust, 'manual_evaluation');
         
-      default:
-        throw new Error(`Manual evaluation not supported for entity type: ${entityType}`);
+    default:
+      throw new Error(`Manual evaluation not supported for entity type: ${entityType}`);
     }
   }
 }

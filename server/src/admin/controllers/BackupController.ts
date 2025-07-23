@@ -699,24 +699,24 @@ export class BackupController {
     const next = new Date(fromDate);
     
     switch (schedule.frequency) {
-      case 'hourly':
-        next.setHours(next.getHours() + 1);
-        break;
-      case 'daily':
-        next.setDate(next.getDate() + 1);
-        const [hours, minutes] = schedule.time_of_day.split(':').map(Number);
-        next.setHours(hours, minutes, 0, 0);
-        break;
-      case 'weekly':
-        // Calculate next occurrence of specified days
-        next.setDate(next.getDate() + 7);
-        break;
-      case 'monthly':
-        next.setMonth(next.getMonth() + 1);
-        if (schedule.day_of_month) {
-          next.setDate(schedule.day_of_month);
-        }
-        break;
+    case 'hourly':
+      next.setHours(next.getHours() + 1);
+      break;
+    case 'daily':
+      next.setDate(next.getDate() + 1);
+      const [hours, minutes] = schedule.time_of_day.split(':').map(Number);
+      next.setHours(hours, minutes, 0, 0);
+      break;
+    case 'weekly':
+      // Calculate next occurrence of specified days
+      next.setDate(next.getDate() + 7);
+      break;
+    case 'monthly':
+      next.setMonth(next.getMonth() + 1);
+      if (schedule.day_of_month) {
+        next.setDate(schedule.day_of_month);
+      }
+      break;
     }
 
     return next;

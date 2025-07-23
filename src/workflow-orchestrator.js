@@ -708,13 +708,13 @@ class WorkflowOrchestrator {
         const expectedValue = isNaN(value) ? value : Number(value);
         
         switch (operator) {
-          case '>': return actualValue > expectedValue;
-          case '<': return actualValue < expectedValue;
-          case '>=': return actualValue >= expectedValue;
-          case '<=': return actualValue <= expectedValue;
-          case '==': return actualValue == expectedValue;
-          case '!=': return actualValue != expectedValue;
-          default: return false;
+        case '>': return actualValue > expectedValue;
+        case '<': return actualValue < expectedValue;
+        case '>=': return actualValue >= expectedValue;
+        case '<=': return actualValue <= expectedValue;
+        case '==': return actualValue == expectedValue;
+        case '!=': return actualValue != expectedValue;
+        default: return false;
         }
         
       } catch (error) {
@@ -915,7 +915,7 @@ async function main() {
       
       const result = await orchestrator.executeWorkflow('custom', customWorkflow);
       
-      console.log(`\n🎉 Custom workflow completed successfully!`);
+      console.log('\n🎉 Custom workflow completed successfully!');
       process.exit(result.errors.length > 0 ? 1 : 0);
     }
     

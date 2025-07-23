@@ -60,7 +60,7 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({
 }) => {
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
   const { returnUrl } = useAuthStore();
-    const location = useLocation();
+  const location = useLocation();
 
   const handleOAuthLogin = async (provider: OAuthProvider) => {
     try {
@@ -74,8 +74,8 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({
       const response = await fetch(`${API_BASE_URL}/auth/oauth/authorize?provider=${provider.id}&returnUrl=${encodeURIComponent(currentReturnUrl)}`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {
@@ -102,12 +102,12 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({
 
   const getButtonText = (provider: OAuthProvider) => {
     switch (mode) {
-      case 'register':
-        return `Sign up with ${provider.name}`;
-      case 'link':
-        return `Link ${provider.name} account`;
-      default:
-        return `Continue with ${provider.name}`;
+    case 'register':
+      return `Sign up with ${provider.name}`;
+    case 'link':
+      return `Link ${provider.name} account`;
+    default:
+      return `Continue with ${provider.name}`;
     }
   };
 
@@ -199,7 +199,7 @@ export const OAuthProviderButtons: React.FC<OAuthProviderButtonsProps> = ({
                   height: '18px',
                   borderRadius: '3px',
                   backgroundColor: provider.id === 'google' ? '#4285F4' : 
-                                   provider.id === 'github' ? '#333' : '#0078d4',
+                    provider.id === 'github' ? '#333' : '#0078d4',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

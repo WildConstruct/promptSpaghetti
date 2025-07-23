@@ -23,7 +23,7 @@ const TEST_CONFIG = {
   server: {
     baseUrl: process.env.API_BASE_URL || 'http://localhost:8000',
     profileDuration: 120000, // 2 minutes for demo
-    sampleInterval: 2000,    // 2 seconds for demo
+    sampleInterval: 2000    // 2 seconds for demo
   },
   loadTest: {
     concurrency: 8,
@@ -534,7 +534,7 @@ tester.runTest().catch(console.error);
         console.log(`   ✅ ${endpoint.method} ${endpoint.path}: ${response.status} - ${endpoint.description}`);
         
         if (response.ok && data.success) {
-          console.log(`      📊 Response data available`);
+          console.log('      📊 Response data available');
         }
         
       } catch (error) {

@@ -288,7 +288,7 @@ describe('VerificationRequestForm', () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
-        value: 375,
+        value: 375
       });
       
       render(<VerificationRequestForm {...defaultProps} />);

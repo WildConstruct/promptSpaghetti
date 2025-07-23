@@ -256,25 +256,25 @@ export class ApiKeyExpirationService {
 
     for (const check of checks) {
       switch (check.recommendedAction) {
-        case 'cleanup':
-          if (this.expirationPolicy.autoCleanup) {
-            await this.cleanupExpiredKey(check);
-            processedCount++;
-          }
-          break;
-          
-        case 'warn_user':
-          if (this.expirationPolicy.notifyUsers) {
-            await this.notifyUserOfExpiration(check);
-            processedCount++;
-          }
-          break;
-          
-        case 'rotate':
-          // Mark as expired but don't auto-rotate (user decision)
-          await this.markAsExpired(check);
+      case 'cleanup':
+        if (this.expirationPolicy.autoCleanup) {
+          await this.cleanupExpiredKey(check);
           processedCount++;
-          break;
+        }
+        break;
+          
+      case 'warn_user':
+        if (this.expirationPolicy.notifyUsers) {
+          await this.notifyUserOfExpiration(check);
+          processedCount++;
+        }
+        break;
+          
+      case 'rotate':
+        // Mark as expired but don't auto-rotate (user decision)
+        await this.markAsExpired(check);
+        processedCount++;
+        break;
       }
     }
 

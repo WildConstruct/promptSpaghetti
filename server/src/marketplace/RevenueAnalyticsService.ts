@@ -1081,23 +1081,23 @@ export class RevenueAnalyticsService {
     let start: Date;
 
     switch (timeRange) {
-      case TimeRange.LAST_24H:
-        start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_7D:
-        start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_30D:
-        start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_90D:
-        start = new Date(end.getTime() - 90 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_YEAR:
-        start = new Date(end.getTime() - 365 * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+    case TimeRange.LAST_24H:
+      start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_7D:
+      start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_30D:
+      start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_90D:
+      start = new Date(end.getTime() - 90 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_YEAR:
+      start = new Date(end.getTime() - 365 * 24 * 60 * 60 * 1000);
+      break;
+    default:
+      start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
     }
 
     return { startDate: start, endDate: end, timeRange };
@@ -1268,7 +1268,7 @@ export class RevenueAnalyticsService {
   async getMarketplaceOptimizationInsights(
     options: { type: string; timeframe: string }
   ): Promise<any> {
-    console.log(`⚡ Generating marketplace optimization insights`);
+    console.log('⚡ Generating marketplace optimization insights');
     
     const insights = await this.analyzeMarketplaceOptimization(options);
     const recommendations = await this.generateMarketplaceRecommendations(insights);
@@ -1330,7 +1330,7 @@ export class RevenueAnalyticsService {
     timeRange: TimeRange,
     metrics?: string[]
   ): Promise<any> {
-    console.log(`📊 Comparing category revenues`);
+    console.log('📊 Comparing category revenues');
     
     const categories = await this.getCategoryRevenueData(timeRange);
     
@@ -1394,10 +1394,10 @@ export class RevenueAnalyticsService {
 
   private parseTimeWindow(window: string): number {
     switch (window) {
-      case '1h': return 1;
-      case '6h': return 6;
-      case '24h': return 24;
-      default: return 24;
+    case '1h': return 1;
+    case '6h': return 6;
+    case '24h': return 24;
+    default: return 24;
     }
   }
 

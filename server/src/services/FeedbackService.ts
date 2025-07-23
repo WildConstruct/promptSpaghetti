@@ -196,7 +196,7 @@ export class FeedbackService {
     }
 
     if (validatedFilter.verifiedOnly) {
-      conditions.push(`u.verified = true`);
+      conditions.push('u.verified = true');
     }
 
     if (validatedFilter.minRating) {
@@ -211,9 +211,9 @@ export class FeedbackService {
 
     if (validatedFilter.hasAttachments !== undefined) {
       if (validatedFilter.hasAttachments) {
-        conditions.push(`EXISTS (SELECT 1 FROM feedback_attachments WHERE feedback_id = f.id)`);
+        conditions.push('EXISTS (SELECT 1 FROM feedback_attachments WHERE feedback_id = f.id)');
       } else {
-        conditions.push(`NOT EXISTS (SELECT 1 FROM feedback_attachments WHERE feedback_id = f.id)`);
+        conditions.push('NOT EXISTS (SELECT 1 FROM feedback_attachments WHERE feedback_id = f.id)');
       }
     }
 
@@ -239,7 +239,7 @@ export class FeedbackService {
 
     // Ensure only visible feedback is shown (unless specifically filtering by status)
     if (!validatedFilter.status) {
-      conditions.push(`f.status IN ('approved', 'pending') AND f.visibility = 'public'`);
+      conditions.push('f.status IN (\'approved\', \'pending\') AND f.visibility = \'public\'');
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -536,18 +536,18 @@ export class FeedbackService {
       let newStatus: FeedbackStatus;
 
       switch (validatedRequest.action) {
-        case 'approve':
-          newStatus = 'approved';
-          break;
-        case 'reject':
-          newStatus = 'rejected';
-          break;
-        case 'flag':
-          newStatus = 'flagged';
-          break;
-        case 'archive':
-          newStatus = 'archived';
-          break;
+      case 'approve':
+        newStatus = 'approved';
+        break;
+      case 'reject':
+        newStatus = 'rejected';
+        break;
+      case 'flag':
+        newStatus = 'flagged';
+        break;
+      case 'archive':
+        newStatus = 'archived';
+        break;
       }
 
       await client.query(`

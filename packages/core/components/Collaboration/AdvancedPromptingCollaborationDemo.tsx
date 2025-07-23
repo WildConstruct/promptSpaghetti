@@ -274,9 +274,9 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
                     fontSize: 20
                   }}>
                     {user.role === 'director' ? '🎬' :
-                     user.role === 'vfx_supervisor' ? '✨' :
-                     user.role === 'pipeline_td' ? '⚙️' :
-                     user.role === 'cinematographer' ? '📹' : '👤'}
+                      user.role === 'vfx_supervisor' ? '✨' :
+                        user.role === 'pipeline_td' ? '⚙️' :
+                          user.role === 'cinematographer' ? '📹' : '👤'}
                   </div>
                   
                   <div>

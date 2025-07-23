@@ -1271,28 +1271,28 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     const message = this.formatNotificationMessage(config.template, execution, schedule, recipient);
 
     switch (channel.type) {
-      case 'email':
-        // Would integrate with actual email service
-        console.log(`📧 Email notification sent to ${recipient.email}: ${message.subject}`);
-        break;
+    case 'email':
+      // Would integrate with actual email service
+      console.log(`📧 Email notification sent to ${recipient.email}: ${message.subject}`);
+      break;
         
-      case 'slack':
-        // Would integrate with Slack API
-        console.log(`💬 Slack notification sent to ${channel.configuration.channel}: ${message.summary}`);
-        break;
+    case 'slack':
+      // Would integrate with Slack API
+      console.log(`💬 Slack notification sent to ${channel.configuration.channel}: ${message.summary}`);
+      break;
         
-      case 'webhook':
-        // Would call webhook URL
-        console.log(`🔗 Webhook notification sent to ${channel.configuration.url}`);
-        break;
+    case 'webhook':
+      // Would call webhook URL
+      console.log(`🔗 Webhook notification sent to ${channel.configuration.url}`);
+      break;
         
-      case 'dashboard':
-        // Would update dashboard
-        console.log(`📊 Dashboard notification: ${message.summary}`);
-        break;
+    case 'dashboard':
+      // Would update dashboard
+      console.log(`📊 Dashboard notification: ${message.summary}`);
+      break;
         
-      default:
-        console.log(`📱 ${channel.type} notification: ${message.summary}`);
+    default:
+      console.log(`📱 ${channel.type} notification: ${message.summary}`);
     }
   }
 
@@ -1329,19 +1329,19 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
    */
   private getMetricValue(metric: string, execution: ScanExecution): number {
     switch (metric) {
-      case 'compliance_score':
-        return execution.results.overallScore;
-      case 'critical_violations':
-        return execution.results.violations.filter(v => v.severity === 'critical').length;
-      case 'high_violations':
-        return execution.results.violations.filter(v => v.severity === 'high').length;
-      case 'scan_duration':
-        return execution.performance.duration;
-      case 'failure_rate':
-        return execution.progress.totalChecks > 0 ? 
-          (execution.progress.failedChecks / execution.progress.totalChecks) * 100 : 0;
-      default:
-        return 0;
+    case 'compliance_score':
+      return execution.results.overallScore;
+    case 'critical_violations':
+      return execution.results.violations.filter(v => v.severity === 'critical').length;
+    case 'high_violations':
+      return execution.results.violations.filter(v => v.severity === 'high').length;
+    case 'scan_duration':
+      return execution.performance.duration;
+    case 'failure_rate':
+      return execution.progress.totalChecks > 0 ? 
+        (execution.progress.failedChecks / execution.progress.totalChecks) * 100 : 0;
+    default:
+      return 0;
     }
   }
 
@@ -1350,13 +1350,13 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
    */
   private evaluateThreshold(value: number, operator: string, threshold: number): boolean {
     switch (operator) {
-      case 'lt': return value < threshold;
-      case 'lte': return value <= threshold;
-      case 'gt': return value > threshold;
-      case 'gte': return value >= threshold;
-      case 'eq': return value === threshold;
-      case 'ne': return value !== threshold;
-      default: return false;
+    case 'lt': return value < threshold;
+    case 'lte': return value <= threshold;
+    case 'gt': return value > threshold;
+    case 'gte': return value >= threshold;
+    case 'eq': return value === threshold;
+    case 'ne': return value !== threshold;
+    default: return false;
     }
   }
 

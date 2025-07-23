@@ -141,21 +141,21 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'text-green-600 bg-green-100';
-      case 'good': return 'text-blue-600 bg-blue-100';
-      case 'fair': return 'text-yellow-600 bg-yellow-100';
-      case 'warning': return 'text-orange-600 bg-orange-100';
-      case 'critical': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'excellent': return 'text-green-600 bg-green-100';
+    case 'good': return 'text-blue-600 bg-blue-100';
+    case 'fair': return 'text-yellow-600 bg-yellow-100';
+    case 'warning': return 'text-orange-600 bg-orange-100';
+    case 'critical': return 'text-red-600 bg-red-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getAccountStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'suspended': return 'text-red-600 bg-red-100';
-      case 'under_review': return 'text-yellow-600 bg-yellow-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'active': return 'text-green-600 bg-green-100';
+    case 'suspended': return 'text-red-600 bg-red-100';
+    case 'under_review': return 'text-yellow-600 bg-yellow-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -495,8 +495,8 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({
                     New score: {Math.max(
                       0,
                       Math.min(100,
-                      selectedUser.trustScore.score + (adjustmentData.scoreChange || 0
-                    )))}
+                        selectedUser.trustScore.score + (adjustmentData.scoreChange || 0
+                        )))}
                   </span>
                 </div>
                 
@@ -526,15 +526,15 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({
                     <span>New Score:</span>
                     <span className={getTrustScoreColor(
                       Math.max(0,
-                      Math.min(100,
-                      selectedUser.trustScore.score + (adjustmentData.scoreChange || 0
-                    ))))}>
+                        Math.min(100,
+                          selectedUser.trustScore.score + (adjustmentData.scoreChange || 0
+                          ))))}>
                       {Math.max(0, Math.min(100, selectedUser.trustScore.score + (adjustmentData.scoreChange || 0)))} 
                       ({getGradeFromScore(
                         Math.max(0,
-                        Math.min(100,
-                        selectedUser.trustScore.score + (adjustmentData.scoreChange || 0
-                      ))))})
+                          Math.min(100,
+                            selectedUser.trustScore.score + (adjustmentData.scoreChange || 0
+                            ))))})
                     </span>
                   </div>
                 </div>

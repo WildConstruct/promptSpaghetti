@@ -418,7 +418,7 @@ export class AuthenticationDataGenerator {
           accessToken: 'expired-token',
           refreshToken: 'refresh-token',
           expiresAt: new Date(Date.now() - 3600000), // Expired 1 hour ago
-          createdAt: new Date(Date.now() - 86400000), // Created 24 hours ago
+          createdAt: new Date(Date.now() - 86400000) // Created 24 hours ago
         },
         expectedBehavior: 'failure',
         permissions,
@@ -437,7 +437,7 @@ export class AuthenticationDataGenerator {
           accessToken: 'malformed.token.invalid',
           refreshToken: 'malformed.refresh.invalid',
           expiresAt: new Date(Date.now() + 3600000),
-          createdAt: new Date(),
+          createdAt: new Date()
         },
         expectedBehavior: 'failure',
         permissions,
@@ -471,7 +471,7 @@ export class AuthenticationDataGenerator {
     permissions: Permission[];
     scenarios: AuthenticationScenario[];
     edgeCases: AuthenticationScenario[];
-  } {
+    } {
     const users = this.generateTestUsers(50);
     const sessions = this.generateSessions(users);
     const roles = this.generateStandardRoles();

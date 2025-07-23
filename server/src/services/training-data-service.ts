@@ -568,9 +568,9 @@ export class TrainingDataService {
           runningJobs: Array.from(this.importJobs.values())
             .filter(job => job.status === 'processing').length +
                       Array.from(this.augmentationJobs.values())
-            .filter(job => job.status === 'processing').length +
+                        .filter(job => job.status === 'processing').length +
                       Array.from(this.exportJobs.values())
-            .filter(job => job.status === 'processing').length
+                        .filter(job => job.status === 'processing').length
         }
       };
     } catch (error) {
@@ -757,42 +757,42 @@ export class TrainingDataService {
     let score = 85; // Base score
 
     switch (request.assessment_type) {
-      case 'completeness':
-        assessmentResults.missingFields = Math.floor(Math.random() * 5);
-        assessmentResults.emptyValues = Math.floor(Math.random() * 10);
-        if (assessmentResults.missingFields > 0) {
-          recommendations.push('Fill in missing required fields');
-          score -= assessmentResults.missingFields * 5;
-        }
-        break;
+    case 'completeness':
+      assessmentResults.missingFields = Math.floor(Math.random() * 5);
+      assessmentResults.emptyValues = Math.floor(Math.random() * 10);
+      if (assessmentResults.missingFields > 0) {
+        recommendations.push('Fill in missing required fields');
+        score -= assessmentResults.missingFields * 5;
+      }
+      break;
 
-      case 'consistency':
-        assessmentResults.inconsistentLabels = Math.floor(Math.random() * 3);
-        assessmentResults.formatInconsistencies = Math.floor(Math.random() * 2);
-        if (assessmentResults.inconsistentLabels > 0) {
-          recommendations.push('Review and standardize label consistency');
-          score -= assessmentResults.inconsistentLabels * 8;
-        }
-        break;
+    case 'consistency':
+      assessmentResults.inconsistentLabels = Math.floor(Math.random() * 3);
+      assessmentResults.formatInconsistencies = Math.floor(Math.random() * 2);
+      if (assessmentResults.inconsistentLabels > 0) {
+        recommendations.push('Review and standardize label consistency');
+        score -= assessmentResults.inconsistentLabels * 8;
+      }
+      break;
 
-      case 'bias_detection':
-        assessmentResults.genderBias = Math.random() * 0.3;
-        assessmentResults.racialBias = Math.random() * 0.2;
-        assessmentResults.ageBias = Math.random() * 0.25;
-        if (assessmentResults.genderBias > 0.15) {
-          recommendations.push('Address potential gender bias in dataset');
-          score -= 15;
-        }
-        break;
+    case 'bias_detection':
+      assessmentResults.genderBias = Math.random() * 0.3;
+      assessmentResults.racialBias = Math.random() * 0.2;
+      assessmentResults.ageBias = Math.random() * 0.25;
+      if (assessmentResults.genderBias > 0.15) {
+        recommendations.push('Address potential gender bias in dataset');
+        score -= 15;
+      }
+      break;
 
-      case 'duplication_check':
-        assessmentResults.exactDuplicates = Math.floor(Math.random() * 20);
-        assessmentResults.nearDuplicates = Math.floor(Math.random() * 50);
-        if (assessmentResults.exactDuplicates > 0) {
-          recommendations.push('Remove exact duplicate entries');
-          score -= assessmentResults.exactDuplicates;
-        }
-        break;
+    case 'duplication_check':
+      assessmentResults.exactDuplicates = Math.floor(Math.random() * 20);
+      assessmentResults.nearDuplicates = Math.floor(Math.random() * 50);
+      if (assessmentResults.exactDuplicates > 0) {
+        recommendations.push('Remove exact duplicate entries');
+        score -= assessmentResults.exactDuplicates;
+      }
+      break;
     }
 
     return {
@@ -810,8 +810,8 @@ export class TrainingDataService {
   private estimateExportSize(dataset: Dataset, options: ExportRequest): string {
     const baseSize = dataset.size * 1024; // Approximate bytes per sample
     const formatMultiplier = options.format === 'json' ? 1.5 : 
-                           options.format === 'csv' ? 0.8 : 
-                           options.format === 'parquet' ? 0.6 : 1.0;
+      options.format === 'csv' ? 0.8 : 
+        options.format === 'parquet' ? 0.6 : 1.0;
     
     const estimatedBytes = baseSize * formatMultiplier;
     

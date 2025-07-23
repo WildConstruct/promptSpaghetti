@@ -153,45 +153,45 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
 
   const getEnvironmentIcon = (env: string) => {
     switch (env) {
-      case 'production': return <ServerStackIcon className="h-4 w-4 text-red-500" />;
-      case 'staging': return <ComputerDesktopIcon className="h-4 w-4 text-yellow-500" />;
-      case 'preview': return <EyeIcon className="h-4 w-4 text-blue-500" />;
-      case 'development': return <CodeBracketIcon className="h-4 w-4 text-green-500" />;
-      default: return <GlobeAltIcon className="h-4 w-4 text-gray-500" />;
+    case 'production': return <ServerStackIcon className="h-4 w-4 text-red-500" />;
+    case 'staging': return <ComputerDesktopIcon className="h-4 w-4 text-yellow-500" />;
+    case 'preview': return <EyeIcon className="h-4 w-4 text-blue-500" />;
+    case 'development': return <CodeBracketIcon className="h-4 w-4 text-green-500" />;
+    default: return <GlobeAltIcon className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getEnvironmentBadgeColor = (env: string) => {
     switch (env) {
-      case 'production': return 'bg-red-100 text-red-800 border-red-200';
-      case 'staging': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'preview': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'development': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'production': return 'bg-red-100 text-red-800 border-red-200';
+    case 'staging': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'preview': return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'development': return 'bg-green-100 text-green-800 border-green-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved': 
-      case 'auto_approved': 
-        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
-      case 'rejected': 
-        return <XCircleIcon className="h-5 w-5 text-red-500" />;
-      case 'pending':
-      case 'in_review': 
-        return <ClockIcon className="h-5 w-5 text-yellow-500" />;
-      default: 
-        return <ExclamationTriangleIcon className="h-5 w-5 text-gray-500" />;
+    case 'approved': 
+    case 'auto_approved': 
+      return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+    case 'rejected': 
+      return <XCircleIcon className="h-5 w-5 text-red-500" />;
+    case 'pending':
+    case 'in_review': 
+      return <ClockIcon className="h-5 w-5 text-yellow-500" />;
+    default: 
+      return <ExclamationTriangleIcon className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getCriterionIcon = (type: string) => {
     switch (type) {
-      case 'security-review': return <ShieldCheckIcon className="h-4 w-4 text-blue-500" />;
-      case 'performance-impact': return <BoltIcon className="h-4 w-4 text-yellow-500" />;
-      case 'business-approval': return <BuildingOfficeIcon className="h-4 w-4 text-purple-500" />;
-      default: return <CheckCircleIcon className="h-4 w-4 text-gray-500" />;
+    case 'security-review': return <ShieldCheckIcon className="h-4 w-4 text-blue-500" />;
+    case 'performance-impact': return <BoltIcon className="h-4 w-4 text-yellow-500" />;
+    case 'business-approval': return <BuildingOfficeIcon className="h-4 w-4 text-purple-500" />;
+    default: return <CheckCircleIcon className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -403,45 +403,45 @@ const DeploymentRequestCard: React.FC<{
 }> = ({ request, onSelect, currentUserId }) => {
   const getEnvironmentIcon = (env: string) => {
     switch (env) {
-      case 'production': return <ServerStackIcon className="h-4 w-4 text-red-500" />;
-      case 'staging': return <ComputerDesktopIcon className="h-4 w-4 text-yellow-500" />;
-      case 'preview': return <EyeIcon className="h-4 w-4 text-blue-500" />;
-      case 'development': return <CodeBracketIcon className="h-4 w-4 text-green-500" />;
-      default: return <GlobeAltIcon className="h-4 w-4 text-gray-500" />;
+    case 'production': return <ServerStackIcon className="h-4 w-4 text-red-500" />;
+    case 'staging': return <ComputerDesktopIcon className="h-4 w-4 text-yellow-500" />;
+    case 'preview': return <EyeIcon className="h-4 w-4 text-blue-500" />;
+    case 'development': return <CodeBracketIcon className="h-4 w-4 text-green-500" />;
+    default: return <GlobeAltIcon className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getEnvironmentBadgeColor = (env: string) => {
     switch (env) {
-      case 'production': return 'bg-red-100 text-red-800 border-red-200';
-      case 'staging': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'preview': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'development': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'production': return 'bg-red-100 text-red-800 border-red-200';
+    case 'staging': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'preview': return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'development': return 'bg-green-100 text-green-800 border-green-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved': 
-      case 'auto_approved': 
-        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
-      case 'rejected': 
-        return <XCircleIcon className="h-5 w-5 text-red-500" />;
-      case 'pending':
-      case 'in_review': 
-        return <ClockIcon className="h-5 w-5 text-yellow-500" />;
-      default: 
-        return <ExclamationTriangleIcon className="h-5 w-5 text-gray-500" />;
+    case 'approved': 
+    case 'auto_approved': 
+      return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+    case 'rejected': 
+      return <XCircleIcon className="h-5 w-5 text-red-500" />;
+    case 'pending':
+    case 'in_review': 
+      return <ClockIcon className="h-5 w-5 text-yellow-500" />;
+    default: 
+      return <ExclamationTriangleIcon className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getCriterionIcon = (type: string) => {
     switch (type) {
-      case 'security-review': return <ShieldCheckIcon className="h-4 w-4 text-blue-500" />;
-      case 'performance-impact': return <BoltIcon className="h-4 w-4 text-yellow-500" />;
-      case 'business-approval': return <BuildingOfficeIcon className="h-4 w-4 text-purple-500" />;
-      default: return <CheckCircleIcon className="h-4 w-4 text-gray-500" />;
+    case 'security-review': return <ShieldCheckIcon className="h-4 w-4 text-blue-500" />;
+    case 'performance-impact': return <BoltIcon className="h-4 w-4 text-yellow-500" />;
+    case 'business-approval': return <BuildingOfficeIcon className="h-4 w-4 text-purple-500" />;
+    default: return <CheckCircleIcon className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -527,8 +527,8 @@ const DeploymentRequestCard: React.FC<{
                 criterion.status === 'approved'
                   ? 'bg-green-100 text-green-800 border border-green-200'
                   : criterion.status === 'rejected'
-                  ? 'bg-red-100 text-red-800 border border-red-200'
-                  : 'bg-gray-100 text-gray-800 border border-gray-200'
+                    ? 'bg-red-100 text-red-800 border border-red-200'
+                    : 'bg-gray-100 text-gray-800 border border-gray-200'
               }`}
             >
               {getCriterionIcon(criterion.type)}

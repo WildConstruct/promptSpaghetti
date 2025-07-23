@@ -349,37 +349,37 @@ export class SecurityDashboardDataService {
    */
   private handleWebSocketMessage(data: any): void {
     switch (data.type) {
-      case 'security_metrics_update':
-        this.invalidateCache(`security-metrics-${this.workspaceId}`);
-        this.emit('security_metrics', data.payload);
-        break;
+    case 'security_metrics_update':
+      this.invalidateCache(`security-metrics-${this.workspaceId}`);
+      this.emit('security_metrics', data.payload);
+      break;
 
-      case 'new_security_alert':
-        this.invalidateCache(`security-alerts-${this.workspaceId}`);
-        this.emit('security_alert', {
-          ...data.payload,
-          timestamp: new Date(data.payload.timestamp)
-        });
-        break;
+    case 'new_security_alert':
+      this.invalidateCache(`security-alerts-${this.workspaceId}`);
+      this.emit('security_alert', {
+        ...data.payload,
+        timestamp: new Date(data.payload.timestamp)
+      });
+      break;
 
-      case 'alert_status_change':
-        this.invalidateCache(`security-alerts-${this.workspaceId}`);
-        this.emit('alert_update', {
-          ...data.payload,
-          timestamp: new Date(data.payload.timestamp)
-        });
-        break;
+    case 'alert_status_change':
+      this.invalidateCache(`security-alerts-${this.workspaceId}`);
+      this.emit('alert_update', {
+        ...data.payload,
+        timestamp: new Date(data.payload.timestamp)
+      });
+      break;
 
-      case 'compliance_status_update':
-        this.invalidateCache(`compliance-status-${this.workspaceId}`);
-        this.emit('compliance_update', {
-          ...data.payload,
-          lastAssessment: new Date(data.payload.lastAssessment)
-        });
-        break;
+    case 'compliance_status_update':
+      this.invalidateCache(`compliance-status-${this.workspaceId}`);
+      this.emit('compliance_update', {
+        ...data.payload,
+        lastAssessment: new Date(data.payload.lastAssessment)
+      });
+      break;
 
-      default:
-        console.log('Unknown WebSocket message type:', data.type);
+    default:
+      console.log('Unknown WebSocket message type:', data.type);
     }
   }
 

@@ -292,87 +292,87 @@ export class IdentityValidationService {
     let confidence = 0;
 
     switch (request.type) {
-      case 'email_verification':
-        const emailResult = await this.emailVerificationService.verify(request.data.email!);
-        evidence.push({
-          type: 'api_verification',
-          source: 'email_service',
-          confidence: emailResult.confidence,
-          timestamp: Date.now(),
-          data: emailResult
-        });
-        score = emailResult.valid ? 95 : 10;
-        confidence = emailResult.confidence;
-        break;
+    case 'email_verification':
+      const emailResult = await this.emailVerificationService.verify(request.data.email!);
+      evidence.push({
+        type: 'api_verification',
+        source: 'email_service',
+        confidence: emailResult.confidence,
+        timestamp: Date.now(),
+        data: emailResult
+      });
+      score = emailResult.valid ? 95 : 10;
+      confidence = emailResult.confidence;
+      break;
 
-      case 'phone_verification':
-        const phoneResult = await this.phoneVerificationService.verify(request.data.phoneNumber!);
-        evidence.push({
-          type: 'api_verification',
-          source: 'phone_service',
-          confidence: phoneResult.confidence,
-          timestamp: Date.now(),
-          data: phoneResult
-        });
-        score = phoneResult.valid ? 90 : 10;
-        confidence = phoneResult.confidence;
-        break;
+    case 'phone_verification':
+      const phoneResult = await this.phoneVerificationService.verify(request.data.phoneNumber!);
+      evidence.push({
+        type: 'api_verification',
+        source: 'phone_service',
+        confidence: phoneResult.confidence,
+        timestamp: Date.now(),
+        data: phoneResult
+      });
+      score = phoneResult.valid ? 90 : 10;
+      confidence = phoneResult.confidence;
+      break;
 
-      case 'government_id':
-        const docResult = await this.documentVerificationService.verify(request.data.governmentId!);
-        evidence.push({
-          type: 'document_scan',
-          source: 'document_service',
-          confidence: docResult.confidence,
-          timestamp: Date.now(),
-          data: docResult
-        });
-        score = docResult.valid ? 98 : 5;
-        confidence = docResult.confidence;
+    case 'government_id':
+      const docResult = await this.documentVerificationService.verify(request.data.governmentId!);
+      evidence.push({
+        type: 'document_scan',
+        source: 'document_service',
+        confidence: docResult.confidence,
+        timestamp: Date.now(),
+        data: docResult
+      });
+      score = docResult.valid ? 98 : 5;
+      confidence = docResult.confidence;
         
-        if (docResult.expired) {
-          flags.push({
-            type: 'warning',
-            code: 'DOCUMENT_EXPIRED',
-            message: 'Government ID has expired',
-            severity: 'high',
-            requiresAction: true
-          });
-          score = Math.max(score - 30, 20);
-        }
-        break;
+      if (docResult.expired) {
+        flags.push({
+          type: 'warning',
+          code: 'DOCUMENT_EXPIRED',
+          message: 'Government ID has expired',
+          severity: 'high',
+          requiresAction: true
+        });
+        score = Math.max(score - 30, 20);
+      }
+      break;
 
-      case 'professional_credentials':
-        score = await this.validateProfessionalCredentials(request.data.professionalCredentials!, evidence);
-        confidence = 85;
-        break;
+    case 'professional_credentials':
+      score = await this.validateProfessionalCredentials(request.data.professionalCredentials!, evidence);
+      confidence = 85;
+      break;
 
-      case 'social_media_verification':
-        const socialResult = await this.socialMediaVerificationService.verify(
+    case 'social_media_verification':
+      const socialResult = await this.socialMediaVerificationService.verify(
           request.data.socialMediaProfiles!
-        );
-        evidence.push({
-          type: 'api_verification',
-          source: 'social_media_service',
-          confidence: socialResult.confidence,
-          timestamp: Date.now(),
-          data: socialResult
-        });
-        score = socialResult.averageScore;
-        confidence = socialResult.confidence;
-        break;
+      );
+      evidence.push({
+        type: 'api_verification',
+        source: 'social_media_service',
+        confidence: socialResult.confidence,
+        timestamp: Date.now(),
+        data: socialResult
+      });
+      score = socialResult.averageScore;
+      confidence = socialResult.confidence;
+      break;
 
-      default:
-        // Basic validation for other types
-        score = 70;
-        confidence = 80;
-        evidence.push({
-          type: 'manual_review',
-          source: 'basic_validation',
-          confidence: 80,
-          timestamp: Date.now(),
-          data: { type: request.type }
-        });
+    default:
+      // Basic validation for other types
+      score = 70;
+      confidence = 80;
+      evidence.push({
+        type: 'manual_review',
+        source: 'basic_validation',
+        confidence: 80,
+        timestamp: Date.now(),
+        data: { type: request.type }
+      });
     }
 
     // Determine status based on score and flags
@@ -466,18 +466,18 @@ export class IdentityValidationService {
 
     // Different credential types have different base values
     switch (credential.type) {
-      case 'degree':
-        score += 25;
-        break;
-      case 'certificate':
-        score += 15;
-        break;
-      case 'award':
-        score += 20;
-        break;
-      case 'credit':
-        score += 10;
-        break;
+    case 'degree':
+      score += 25;
+      break;
+    case 'certificate':
+      score += 15;
+      break;
+    case 'award':
+      score += 20;
+      break;
+    case 'credit':
+      score += 10;
+      break;
     }
 
     return Math.min(score, 100);
@@ -512,15 +512,15 @@ export class IdentityValidationService {
     const oneYear = 365 * 24 * 60 * 60 * 1000;
     
     switch (type) {
-      case 'email_verification':
-      case 'phone_verification':
-        return now + oneYear;
-      case 'government_id':
-        return now + (2 * oneYear); // 2 years
-      case 'professional_credentials':
-        return now + (3 * oneYear); // 3 years
-      default:
-        return now + oneYear;
+    case 'email_verification':
+    case 'phone_verification':
+      return now + oneYear;
+    case 'government_id':
+      return now + (2 * oneYear); // 2 years
+    case 'professional_credentials':
+      return now + (3 * oneYear); // 3 years
+    default:
+      return now + oneYear;
     }
   }
 
@@ -548,20 +548,20 @@ export class IdentityValidationService {
     const steps = [];
 
     switch (status) {
-      case 'approved':
-        steps.push('Verification completed successfully.');
-        steps.push('Your trust score has been updated.');
-        break;
-      case 'requires_update':
-        steps.push('Please address the identified issues.');
-        flags.filter(f => f.requiresAction).forEach(flag => {
-          steps.push(`• ${flag.message}`);
-        });
-        break;
-      case 'rejected':
-        steps.push('Verification was not successful.');
-        steps.push('Please review and resubmit with corrected information.');
-        break;
+    case 'approved':
+      steps.push('Verification completed successfully.');
+      steps.push('Your trust score has been updated.');
+      break;
+    case 'requires_update':
+      steps.push('Please address the identified issues.');
+      flags.filter(f => f.requiresAction).forEach(flag => {
+        steps.push(`• ${flag.message}`);
+      });
+      break;
+    case 'rejected':
+      steps.push('Verification was not successful.');
+      steps.push('Please review and resubmit with corrected information.');
+      break;
     }
 
     return steps;
@@ -590,25 +590,25 @@ export class IdentityValidationService {
 
     validations.forEach(validation => {
       switch (validation.type) {
-        case 'email_verification':
-        case 'phone_verification':
-        case 'government_id':
-        case 'address_verification':
-          identityScore = Math.max(identityScore, validation.score);
-          if (validation.score > 90) badges.push('verified_identity');
-          break;
+      case 'email_verification':
+      case 'phone_verification':
+      case 'government_id':
+      case 'address_verification':
+        identityScore = Math.max(identityScore, validation.score);
+        if (validation.score > 90) badges.push('verified_identity');
+        break;
           
-        case 'professional_credentials':
-        case 'industry_affiliation':
-        case 'portfolio_verification':
-          professionalScore = Math.max(professionalScore, validation.score);
-          if (validation.score > 85) badges.push('verified_professional');
-          break;
+      case 'professional_credentials':
+      case 'industry_affiliation':
+      case 'portfolio_verification':
+        professionalScore = Math.max(professionalScore, validation.score);
+        if (validation.score > 85) badges.push('verified_professional');
+        break;
           
-        case 'social_media_verification':
-          communityScore = Math.max(communityScore, validation.score);
-          if (validation.score > 80) badges.push('social_verified');
-          break;
+      case 'social_media_verification':
+        communityScore = Math.max(communityScore, validation.score);
+        if (validation.score > 80) badges.push('social_verified');
+        break;
       }
     });
 

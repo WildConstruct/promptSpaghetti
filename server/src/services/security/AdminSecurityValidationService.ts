@@ -785,9 +785,9 @@ export class AdminSecurityValidationService {
           const penaltyDuration = rateLimit.penaltyDuration * 60 * 1000;
           
           switch (rateLimit.penalty) {
-            case 'block':
-              rateLimitState.blocked = true;
-              rateLimitState.blockedUntil = now + penaltyDuration;
+          case 'block':
+            rateLimitState.blocked = true;
+            rateLimitState.blockedUntil = now + penaltyDuration;
               result.violations!.push({
                 violationType: 'rate_limit_exceeded',
                 severity: 'medium',
@@ -809,20 +809,20 @@ export class AdminSecurityValidationService {
                   penaltyDuration: rateLimit.penaltyDuration
                 }
               });
-              break;
+            break;
 
-            case 'warn':
+          case 'warn':
               result.warnings!.push({
                 warningType: 'rate_limit_warning',
                 message: `High request rate for operation '${rateLimit.operation}'`,
                 severity: 'medium',
                 recommendations: ['Monitor user activity for suspicious behavior']
               });
-              break;
+            break;
 
-            case 'delay':
+          case 'delay':
               result.recommendations!.push(`Implement ${rateLimit.penaltyDuration}s delay for operation '${rateLimit.operation}'`);
-              break;
+            break;
           }
         }
 
@@ -899,23 +899,23 @@ export class AdminSecurityValidationService {
 
     // Type validation
     switch (rule.type) {
-      case 'email':
-        if (!validator.isEmail(stringValue)) {
-          return 'Invalid email format';
-        }
-        break;
-      case 'url':
-        if (!validator.isURL(stringValue)) {
-          return 'Invalid URL format';
-        }
-        break;
-      case 'json':
-        try {
-          JSON.parse(stringValue);
-        } catch {
-          return 'Invalid JSON format';
-        }
-        break;
+    case 'email':
+      if (!validator.isEmail(stringValue)) {
+        return 'Invalid email format';
+      }
+      break;
+    case 'url':
+      if (!validator.isURL(stringValue)) {
+        return 'Invalid URL format';
+      }
+      break;
+    case 'json':
+      try {
+        JSON.parse(stringValue);
+      } catch {
+        return 'Invalid JSON format';
+      }
+      break;
     }
 
     // Length validation

@@ -118,142 +118,142 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         {/* Email Field */}
-      <div style={{ marginBottom: '20px' }}>
-        <label style={{
-          display: 'block',
-          marginBottom: '8px',
-          fontSize: '14px',
-          fontWeight: '500',
-          color: '#333'
-        }}>
-          Email Address
-        </label>
-        <input
-          type="email"
-          value={formData.email}
-          onChange={(e) => handleInputChange('email', e.target.value)}
-          onBlur={() => handleInputBlur('email')}
-          style={{
-            width: '100%',
-            padding: '12px',
-            border: `1px solid ${errors.email ? '#dc3545' : '#ddd'}`,
-            borderRadius: '6px',
-            fontSize: '16px',
-            boxSizing: 'border-box'
-          }}
-          placeholder="Enter your email"
-          disabled={isLoading}
-          required
-        />
-        {errors.email && (
-          <div style={{
-            color: '#dc3545',
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '8px',
             fontSize: '14px',
-            marginTop: '4px'
+            fontWeight: '500',
+            color: '#333'
           }}>
-            {errors.email}
-          </div>
-        )}
-      </div>
-
-      {/* Password Field */}
-      <div style={{ marginBottom: '20px' }}>
-        <label style={{
-          display: 'block',
-          marginBottom: '8px',
-          fontSize: '14px',
-          fontWeight: '500',
-          color: '#333'
-        }}>
-          Password
-        </label>
-        <div style={{ position: 'relative' }}>
+          Email Address
+          </label>
           <input
-            type={showPassword ? 'text' : 'password'}
-            value={formData.password}
-            onChange={(e) => handleInputChange('password', e.target.value)}
-            onBlur={() => handleInputBlur('password')}
+            type="email"
+            value={formData.email}
+            onChange={(e) => handleInputChange('email', e.target.value)}
+            onBlur={() => handleInputBlur('email')}
             style={{
               width: '100%',
               padding: '12px',
-              paddingRight: '45px',
-              border: `1px solid ${errors.password ? '#dc3545' : '#ddd'}`,
+              border: `1px solid ${errors.email ? '#dc3545' : '#ddd'}`,
               borderRadius: '6px',
               fontSize: '16px',
               boxSizing: 'border-box'
             }}
-            placeholder="Enter your password"
+            placeholder="Enter your email"
             disabled={isLoading}
             required
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            style={{
-              position: 'absolute',
-              right: '12px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              background: 'none',
-              border: 'none',
-              color: '#666',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
-            disabled={isLoading}
-          >
-            {showPassword ? 'Hide' : 'Show'}
-          </button>
+          {errors.email && (
+            <div style={{
+              color: '#dc3545',
+              fontSize: '14px',
+              marginTop: '4px'
+            }}>
+              {errors.email}
+            </div>
+          )}
         </div>
-        {errors.password && (
-          <div style={{
-            color: '#dc3545',
+
+        {/* Password Field */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '8px',
             fontSize: '14px',
-            marginTop: '4px'
+            fontWeight: '500',
+            color: '#333'
           }}>
-            {errors.password}
+          Password
+          </label>
+          <div style={{ position: 'relative' }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={formData.password}
+              onChange={(e) => handleInputChange('password', e.target.value)}
+              onBlur={() => handleInputBlur('password')}
+              style={{
+                width: '100%',
+                padding: '12px',
+                paddingRight: '45px',
+                border: `1px solid ${errors.password ? '#dc3545' : '#ddd'}`,
+                borderRadius: '6px',
+                fontSize: '16px',
+                boxSizing: 'border-box'
+              }}
+              placeholder="Enter your password"
+              disabled={isLoading}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                color: '#666',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+              disabled={isLoading}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
           </div>
-        )}
-      </div>
+          {errors.password && (
+            <div style={{
+              color: '#dc3545',
+              fontSize: '14px',
+              marginTop: '4px'
+            }}>
+              {errors.password}
+            </div>
+          )}
+        </div>
 
-      {/* Remember Me Checkbox */}
-      <div style={{ marginBottom: '20px' }}>
-        <label style={{
-          display: 'flex',
-          alignItems: 'center',
-          fontSize: '14px',
-          cursor: 'pointer'
-        }}>
-          <input
-            type="checkbox"
-            checked={formData.rememberMe}
-            onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
-            style={{ marginRight: '8px' }}
-            disabled={isLoading}
-          />
+        {/* Remember Me Checkbox */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '14px',
+            cursor: 'pointer'
+          }}>
+            <input
+              type="checkbox"
+              checked={formData.rememberMe}
+              onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
+              style={{ marginRight: '8px' }}
+              disabled={isLoading}
+            />
           Remember me
-        </label>
-      </div>
+          </label>
+        </div>
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={isLoading}
-        style={{
-          width: '100%',
-          padding: '14px',
-          backgroundColor: isLoading ? '#6c757d' : '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          fontSize: '16px',
-          fontWeight: '500',
-          cursor: isLoading ? 'not-allowed' : 'pointer',
-          transition: 'background-color 0.2s'
-        }}
-      >
-        {isLoading ? 'Signing in...' : 'Sign In'}
-      </button>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={isLoading}
+          style={{
+            width: '100%',
+            padding: '14px',
+            backgroundColor: isLoading ? '#6c757d' : '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '16px',
+            fontWeight: '500',
+            cursor: isLoading ? 'not-allowed' : 'pointer',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          {isLoading ? 'Signing in...' : 'Sign In'}
+        </button>
       </form>
     </div>
   );

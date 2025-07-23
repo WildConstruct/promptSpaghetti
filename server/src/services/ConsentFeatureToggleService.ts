@@ -357,61 +357,61 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
     consentResult: { hasConsent: boolean; details: ConsentEvaluationDetails }
   ): ToggleEvaluationResult {
     switch (mapping.fallbackBehavior) {
-      case 'disable':
-        return {
-          enabled: false,
-          value: false,
-          reason: 'Feature disabled due to insufficient consent',
-          metadata: {
-            ...baseResult.metadata,
-            consentChecked: true,
-            consentRequired: true,
-            consentGranted: false,
-            consentDetails: consentResult.details,
-            fallbackBehavior: 'disable'
-          }
-        };
+    case 'disable':
+      return {
+        enabled: false,
+        value: false,
+        reason: 'Feature disabled due to insufficient consent',
+        metadata: {
+          ...baseResult.metadata,
+          consentChecked: true,
+          consentRequired: true,
+          consentGranted: false,
+          consentDetails: consentResult.details,
+          fallbackBehavior: 'disable'
+        }
+      };
         
-      case 'minimal':
-        return {
-          enabled: true,
-          value: 'minimal', // Provide minimal functionality
-          reason: 'Feature running in minimal mode due to insufficient consent',
-          metadata: {
-            ...baseResult.metadata,
-            consentChecked: true,
-            consentRequired: true,
-            consentGranted: false,
-            consentDetails: consentResult.details,
-            fallbackBehavior: 'minimal'
-          }
-        };
+    case 'minimal':
+      return {
+        enabled: true,
+        value: 'minimal', // Provide minimal functionality
+        reason: 'Feature running in minimal mode due to insufficient consent',
+        metadata: {
+          ...baseResult.metadata,
+          consentChecked: true,
+          consentRequired: true,
+          consentGranted: false,
+          consentDetails: consentResult.details,
+          fallbackBehavior: 'minimal'
+        }
+      };
         
-      case 'default':
-        return {
-          ...baseResult,
-          reason: 'Feature using default behavior due to insufficient consent',
-          metadata: {
-            ...baseResult.metadata,
-            consentChecked: true,
-            consentRequired: true,
-            consentGranted: false,
-            consentDetails: consentResult.details,
-            fallbackBehavior: 'default'
-          }
-        };
+    case 'default':
+      return {
+        ...baseResult,
+        reason: 'Feature using default behavior due to insufficient consent',
+        metadata: {
+          ...baseResult.metadata,
+          consentChecked: true,
+          consentRequired: true,
+          consentGranted: false,
+          consentDetails: consentResult.details,
+          fallbackBehavior: 'default'
+        }
+      };
         
-      default:
-        return {
-          enabled: false,
-          value: false,
-          reason: 'Unknown fallback behavior',
-          metadata: {
-            ...baseResult.metadata,
-            consentChecked: true,
-            consentError: true
-          }
-        };
+    default:
+      return {
+        enabled: false,
+        value: false,
+        reason: 'Unknown fallback behavior',
+        metadata: {
+          ...baseResult.metadata,
+          consentChecked: true,
+          consentError: true
+        }
+      };
     }
   }
 }

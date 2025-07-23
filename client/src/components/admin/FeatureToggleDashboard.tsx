@@ -266,7 +266,7 @@ export const FeatureToggleDashboard: React.FC = () => {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
 

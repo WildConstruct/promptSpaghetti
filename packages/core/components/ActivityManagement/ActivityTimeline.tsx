@@ -153,22 +153,22 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
       let startDate: Date;
       
       switch (dateRange) {
-        case 'today':
-          startDate = new Date();
-          startDate.setHours(0, 0, 0, 0);
-          break;
-        case 'week':
-          startDate = new Date();
-          startDate.setDate(now.getDate() - 7);
-          break;
-        case 'month':
-          startDate = new Date();
-          startDate.setMonth(now.getMonth() - 1);
-          break;
-        case 'all':
-        default:
-          startDate = new Date(0);
-          break;
+      case 'today':
+        startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+        break;
+      case 'week':
+        startDate = new Date();
+        startDate.setDate(now.getDate() - 7);
+        break;
+      case 'month':
+        startDate = new Date();
+        startDate.setMonth(now.getMonth() - 1);
+        break;
+      case 'all':
+      default:
+        startDate = new Date(0);
+        break;
       }
 
       const updatedFilter = {
@@ -374,7 +374,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
 
               <div className="flex items-center space-x-2">
                 <Button
-                  variant={filter.successOnly ? "default" : "outline"}
+                  variant={filter.successOnly ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => updateFilter({ 
                     successOnly: filter.successOnly ? undefined : true,
@@ -385,7 +385,7 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({
                   Success
                 </Button>
                 <Button
-                  variant={filter.errorsOnly ? "default" : "outline"}
+                  variant={filter.errorsOnly ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => updateFilter({ 
                     errorsOnly: filter.errorsOnly ? undefined : true,

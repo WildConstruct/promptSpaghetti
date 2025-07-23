@@ -304,32 +304,32 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
     result: ToggleResolutionResult
   ): Promise<Record<string, ToggleEvaluationResult>> {
     switch (request.strategy || ResolutionStrategy.DEPENDENCY_AWARE) {
-      case ResolutionStrategy.SEQUENTIAL:
-        return this.sequentialResolution(request, result);
+    case ResolutionStrategy.SEQUENTIAL:
+      return this.sequentialResolution(request, result);
 
-      case ResolutionStrategy.PARALLEL:
-        return this.parallelResolution(request, result);
+    case ResolutionStrategy.PARALLEL:
+      return this.parallelResolution(request, result);
 
-      case ResolutionStrategy.DEPENDENCY_AWARE:
-        return this.dependencyAwareResolution(request, dependencyGraph, result);
+    case ResolutionStrategy.DEPENDENCY_AWARE:
+      return this.dependencyAwareResolution(request, dependencyGraph, result);
 
-      case ResolutionStrategy.PERFORMANCE_OPTIMIZED:
-        return this.performanceOptimizedResolution(request, result);
+    case ResolutionStrategy.PERFORMANCE_OPTIMIZED:
+      return this.performanceOptimizedResolution(request, result);
 
-      case ResolutionStrategy.CONFLICT_MINIMIZED:
-        return this.conflictMinimizedResolution(request, conflicts, result);
+    case ResolutionStrategy.CONFLICT_MINIMIZED:
+      return this.conflictMinimizedResolution(request, conflicts, result);
 
-      case ResolutionStrategy.CACHE_FIRST:
-        return this.cacheFirstResolution(request, result);
+    case ResolutionStrategy.CACHE_FIRST:
+      return this.cacheFirstResolution(request, result);
 
-      case ResolutionStrategy.FAILFAST:
-        return this.failfastResolution(request, result);
+    case ResolutionStrategy.FAILFAST:
+      return this.failfastResolution(request, result);
 
-      case ResolutionStrategy.EVENTUAL_CONSISTENCY:
-        return this.eventualConsistencyResolution(request, result);
+    case ResolutionStrategy.EVENTUAL_CONSISTENCY:
+      return this.eventualConsistencyResolution(request, result);
 
-      default:
-        return this.dependencyAwareResolution(request, dependencyGraph, result);
+    default:
+      return this.dependencyAwareResolution(request, dependencyGraph, result);
     }
   }
 
@@ -908,30 +908,30 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
     const resolutions: Record<string, ToggleEvaluationResult> = {};
 
     switch (conflict.type) {
-      case 'mutual_exclusion':
-        // Resolve based on priority or first-wins strategy
-        for (let i = 0; i < conflict.toggleKeys.length; i++) {
-          const toggleKey = conflict.toggleKeys[i];
-          if (i === 0) {
-            // First toggle wins
-            resolutions[toggleKey] = await this.toggleService.evaluateToggle(toggleKey, context);
-          } else {
-            // Others are disabled
-            resolutions[toggleKey] = {
-              enabled: false,
-              value: false,
-              reason: `Disabled due to mutual exclusion with ${conflict.toggleKeys[0]}`,
-              metadata: { conflictResolution: true }
-            };
-          }
-        }
-        break;
-
-      default:
-        // Default: evaluate all and let the first one win
-        for (const toggleKey of conflict.toggleKeys) {
+    case 'mutual_exclusion':
+      // Resolve based on priority or first-wins strategy
+      for (let i = 0; i < conflict.toggleKeys.length; i++) {
+        const toggleKey = conflict.toggleKeys[i];
+        if (i === 0) {
+          // First toggle wins
           resolutions[toggleKey] = await this.toggleService.evaluateToggle(toggleKey, context);
+        } else {
+          // Others are disabled
+          resolutions[toggleKey] = {
+            enabled: false,
+            value: false,
+            reason: `Disabled due to mutual exclusion with ${conflict.toggleKeys[0]}`,
+            metadata: { conflictResolution: true }
+          };
         }
+      }
+      break;
+
+    default:
+      // Default: evaluate all and let the first one win
+      for (const toggleKey of conflict.toggleKeys) {
+        resolutions[toggleKey] = await this.toggleService.evaluateToggle(toggleKey, context);
+      }
     }
 
     return resolutions;

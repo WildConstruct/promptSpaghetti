@@ -473,7 +473,7 @@ export class MedievalDemoDatabase {
     const era = criteria.era.name;
 
     return `A ${era} ${gender} ${socialClass} wearing ${garmentNames.join(', ')}. ` +
-           `This outfit reflects the social status, practical needs, and fashion conventions of the period.`;
+           'This outfit reflects the social status, practical needs, and fashion conventions of the period.';
   }
 }
 

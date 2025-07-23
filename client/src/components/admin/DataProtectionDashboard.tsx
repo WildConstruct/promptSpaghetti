@@ -235,30 +235,30 @@ const DataProtectionDashboard: React.FC = () => {
 
   const getSeverityBadgeClass = (severity: string): string => {
     switch (severity) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusBadgeClass = (status: string): string => {
     switch (status) {
-      case 'active':
-      case 'running':
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'failed':
-      case 'expired':
-        return 'bg-red-100 text-red-800';
-      case 'scheduled':
-      case 'inactive':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'paused':
-        return 'bg-orange-100 text-orange-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+    case 'active':
+    case 'running':
+    case 'completed':
+      return 'bg-green-100 text-green-800';
+    case 'failed':
+    case 'expired':
+      return 'bg-red-100 text-red-800';
+    case 'scheduled':
+    case 'inactive':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'paused':
+      return 'bg-orange-100 text-orange-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
     }
   };
 

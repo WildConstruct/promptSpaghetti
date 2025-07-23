@@ -105,54 +105,54 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
 
       // Operation-specific validation
       switch (operation) {
-        case 'activate':
-          if (user.status === 'active') {
-            return { valid: false, error: 'User is already active' };
-          }
-          break;
+      case 'activate':
+        if (user.status === 'active') {
+          return { valid: false, error: 'User is already active' };
+        }
+        break;
 
-        case 'deactivate':
-        case 'suspend':
-          if (user.status === 'deactivated' || user.status === 'suspended') {
-            return { valid: false, error: `User is already ${user.status}` };
-          }
-          break;
+      case 'deactivate':
+      case 'suspend':
+        if (user.status === 'deactivated' || user.status === 'suspended') {
+          return { valid: false, error: `User is already ${user.status}` };
+        }
+        break;
 
-        case 'grant_role':
-        case 'revoke_role':
-          if (!parameters.roleId) {
-            return { valid: false, error: 'roleId parameter is required' };
-          }
+      case 'grant_role':
+      case 'revoke_role':
+        if (!parameters.roleId) {
+          return { valid: false, error: 'roleId parameter is required' };
+        }
           
-          // Check if role exists
-          const roleResult = await this.dbService.query(
-            'SELECT id FROM roles WHERE id = $1',
-            [parameters.roleId]
-          );
+        // Check if role exists
+        const roleResult = await this.dbService.query(
+          'SELECT id FROM roles WHERE id = $1',
+          [parameters.roleId]
+        );
           
-          if (roleResult.rows.length === 0) {
-            return { valid: false, error: 'Role not found' };
-          }
-          break;
+        if (roleResult.rows.length === 0) {
+          return { valid: false, error: 'Role not found' };
+        }
+        break;
 
-        case 'grant_roles':
-        case 'revoke_roles':
-          if (!parameters.roleIds || parameters.roleIds.length === 0) {
-            return { valid: false, error: 'roleIds parameter is required' };
-          }
-          break;
+      case 'grant_roles':
+      case 'revoke_roles':
+        if (!parameters.roleIds || parameters.roleIds.length === 0) {
+          return { valid: false, error: 'roleIds parameter is required' };
+        }
+        break;
 
-        case 'send_notification':
-          if (!parameters.notificationMessage && !parameters.notificationTemplate) {
-            return { valid: false, error: 'notificationMessage or notificationTemplate is required' };
-          }
-          break;
+      case 'send_notification':
+        if (!parameters.notificationMessage && !parameters.notificationTemplate) {
+          return { valid: false, error: 'notificationMessage or notificationTemplate is required' };
+        }
+        break;
 
-        case 'import_data':
-          if (!parameters.csvData) {
-            return { valid: false, error: 'csvData parameter is required for import operation' };
-          }
-          break;
+      case 'import_data':
+        if (!parameters.csvData) {
+          return { valid: false, error: 'csvData parameter is required for import operation' };
+        }
+        break;
       }
 
       return { valid: true };
@@ -175,76 +175,76 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
 
     try {
       switch (operation) {
-        case 'activate':
-          await this.activateUser(targetId, result, context);
-          break;
+      case 'activate':
+        await this.activateUser(targetId, result, context);
+        break;
 
-        case 'deactivate':
-          await this.deactivateUser(targetId, result, context);
-          break;
+      case 'deactivate':
+        await this.deactivateUser(targetId, result, context);
+        break;
 
-        case 'suspend':
-          await this.suspendUser(targetId, parameters, result, context);
-          break;
+      case 'suspend':
+        await this.suspendUser(targetId, parameters, result, context);
+        break;
 
-        case 'lock':
-          await this.lockUser(targetId, parameters, result, context);
-          break;
+      case 'lock':
+        await this.lockUser(targetId, parameters, result, context);
+        break;
 
-        case 'unlock':
-          await this.unlockUser(targetId, result, context);
-          break;
+      case 'unlock':
+        await this.unlockUser(targetId, result, context);
+        break;
 
-        case 'grant_role':
-          await this.grantRole(targetId, parameters, result, context);
-          break;
+      case 'grant_role':
+        await this.grantRole(targetId, parameters, result, context);
+        break;
 
-        case 'revoke_role':
-          await this.revokeRole(targetId, parameters, result, context);
-          break;
+      case 'revoke_role':
+        await this.revokeRole(targetId, parameters, result, context);
+        break;
 
-        case 'grant_roles':
-          await this.grantRoles(targetId, parameters, result, context);
-          break;
+      case 'grant_roles':
+        await this.grantRoles(targetId, parameters, result, context);
+        break;
 
-        case 'revoke_roles':
-          await this.revokeRoles(targetId, parameters, result, context);
-          break;
+      case 'revoke_roles':
+        await this.revokeRoles(targetId, parameters, result, context);
+        break;
 
-        case 'reset_password':
-          await this.resetPassword(targetId, parameters, result, context);
-          break;
+      case 'reset_password':
+        await this.resetPassword(targetId, parameters, result, context);
+        break;
 
-        case 'expire_password':
-          await this.expirePassword(targetId, parameters, result, context);
-          break;
+      case 'expire_password':
+        await this.expirePassword(targetId, parameters, result, context);
+        break;
 
-        case 'terminate_sessions':
-          await this.terminateSessions(targetId, result, context);
-          break;
+      case 'terminate_sessions':
+        await this.terminateSessions(targetId, result, context);
+        break;
 
-        case 'send_notification':
-          await this.sendNotification(targetId, parameters, result, context);
-          break;
+      case 'send_notification':
+        await this.sendNotification(targetId, parameters, result, context);
+        break;
 
-        case 'grant_permissions':
-          await this.grantPermissions(targetId, parameters, result, context);
-          break;
+      case 'grant_permissions':
+        await this.grantPermissions(targetId, parameters, result, context);
+        break;
 
-        case 'revoke_permissions':
-          await this.revokePermissions(targetId, parameters, result, context);
-          break;
+      case 'revoke_permissions':
+        await this.revokePermissions(targetId, parameters, result, context);
+        break;
 
-        case 'update_metadata':
-          await this.updateMetadata(targetId, parameters, result, context);
-          break;
+      case 'update_metadata':
+        await this.updateMetadata(targetId, parameters, result, context);
+        break;
 
-        case 'export_data':
-          await this.exportUserData(targetId, parameters, result, context);
-          break;
+      case 'export_data':
+        await this.exportUserData(targetId, parameters, result, context);
+        break;
 
-        default:
-          throw new Error(`Unsupported operation: ${operation}`);
+      default:
+        throw new Error(`Unsupported operation: ${operation}`);
       }
 
       return result;
@@ -274,41 +274,41 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
   ): Promise<void> {
     try {
       switch (operation) {
-        case 'activate':
-          if (result.previousStatus) {
-            await this.dbService.query(
-              'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
-              [result.previousStatus, targetId]
-            );
-          }
-          break;
+      case 'activate':
+        if (result.previousStatus) {
+          await this.dbService.query(
+            'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
+            [result.previousStatus, targetId]
+          );
+        }
+        break;
 
-        case 'deactivate':
-        case 'suspend':
-        case 'lock':
-          if (result.previousStatus) {
-            await this.dbService.query(
-              'UPDATE users SET status = $1, locked_until = NULL, updated_at = NOW() WHERE id = $2',
-              [result.previousStatus, targetId]
-            );
-          }
-          break;
+      case 'deactivate':
+      case 'suspend':
+      case 'lock':
+        if (result.previousStatus) {
+          await this.dbService.query(
+            'UPDATE users SET status = $1, locked_until = NULL, updated_at = NOW() WHERE id = $2',
+            [result.previousStatus, targetId]
+          );
+        }
+        break;
 
-        case 'grant_role':
-          if (parameters.roleId) {
-            await this.rbacService.revokeRole(targetId, parameters.roleId, 'system', 'Rollback operation');
-          }
-          break;
+      case 'grant_role':
+        if (parameters.roleId) {
+          await this.rbacService.revokeRole(targetId, parameters.roleId, 'system', 'Rollback operation');
+        }
+        break;
 
-        case 'revoke_role':
-          if (parameters.roleId) {
-            await this.rbacService.assignRole({
-              userId: targetId,
-              roleId: parameters.roleId,
-              grantedBy: 'system'
-            });
-          }
-          break;
+      case 'revoke_role':
+        if (parameters.roleId) {
+          await this.rbacService.assignRole({
+            userId: targetId,
+            roleId: parameters.roleId,
+            grantedBy: 'system'
+          });
+        }
+        break;
 
         // Add more rollback operations as needed
       }

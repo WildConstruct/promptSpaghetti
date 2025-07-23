@@ -17,7 +17,7 @@ export const ProjectMetadataSchema = z.object({
   created: z.string().datetime('Invalid created date format').optional(),
   modified: z.string().datetime('Invalid modified date format').optional(),
   version: z.string().default('1.0.0'),
-  fileFormatVersion: z.string().default('1.0.0'),
+  fileFormatVersion: z.string().default('1.0.0')
 });
 
 // Graph content schema - the actual node/edge data
@@ -28,8 +28,8 @@ export const GraphContentSchema = z.object({
   viewport: z.object({
     x: z.number(),
     y: z.number(),
-    zoom: z.number(),
-  }).optional(),
+    zoom: z.number()
+  }).optional()
 });
 
 // Editor settings schema - UI and editor preferences
@@ -41,7 +41,7 @@ export const EditorSettingsSchema = z.object({
   snapToGrid: z.boolean().default(false),
   miniMapVisible: z.boolean().default(true),
   showNodeIcons: z.boolean().default(true),
-  showConnectionLabels: z.boolean().default(true),
+  showConnectionLabels: z.boolean().default(true)
 });
 
 // Export metadata schema - information about how/when the file was exported
@@ -52,8 +52,8 @@ export const ExportMetadataSchema = z.object({
   format: z.literal('psg'),
   compatibility: z.object({
     minVersion: z.string().default('1.0.0'),
-    maxVersion: z.string().optional(),
-  }).optional(),
+    maxVersion: z.string().optional()
+  }).optional()
 });
 
 // Complete .psg file format schema
@@ -61,7 +61,7 @@ export const PSGFileSchema = z.object({
   metadata: ProjectMetadataSchema,
   graph: GraphContentSchema,
   settings: EditorSettingsSchema.default({}),
-  exportMetadata: ExportMetadataSchema,
+  exportMetadata: ExportMetadataSchema
 });
 
 // Type definitions
@@ -95,13 +95,13 @@ export function createPSGFile(
       created: metadata.created || now,
       modified: now,
       version: metadata.version || '1.0.0',
-      fileFormatVersion: '1.0.0',
+      fileFormatVersion: '1.0.0'
     },
     graph: {
       nodes,
       edges,
       seed,
-      viewport,
+      viewport
     },
     settings: {
       autoSave: true,
@@ -112,7 +112,7 @@ export function createPSGFile(
       miniMapVisible: true,
       showNodeIcons: true,
       showConnectionLabels: true,
-      ...settings,
+      ...settings
     },
     exportMetadata: {
       exportedBy: 'PromptScape GraphEditor',
@@ -120,9 +120,9 @@ export function createPSGFile(
       exportVersion: '1.0.0',
       format: 'psg' as const,
       compatibility: {
-        minVersion: '1.0.0',
-      },
-    },
+        minVersion: '1.0.0'
+      }
+    }
   };
 }
 
@@ -355,8 +355,8 @@ export function updatePSGFileMetadata(
     metadata: {
       ...psgFile.metadata,
       ...changes,
-      modified: now,
-    },
+      modified: now
+    }
   };
 }
 
@@ -387,7 +387,7 @@ export function extractPSGFileSummary(psgFile: PSGFile): {
     modified: psgFile.metadata.modified || psgFile.exportMetadata.exportDate,
     nodeCount: psgFile.graph.nodes.length,
     edgeCount: psgFile.graph.edges.length,
-    fileSize: content.length,
+    fileSize: content.length
   };
 }
 
@@ -443,7 +443,7 @@ export function checkPSGCompatibility(psgFile: PSGFile, currentVersion: string =
   return {
     compatible,
     warnings,
-    requiresUpgrade,
+    requiresUpgrade
   };
 }
 
@@ -645,8 +645,8 @@ export function serializePSGFile(psgFile: PSGFile, options: {
       ...psgFile,
       exportMetadata: {
         ...psgFile.exportMetadata,
-        exportDate: new Date().toISOString(),
-      },
+        exportDate: new Date().toISOString()
+      }
     };
     
     const jsonString = JSON.stringify(updatedFile, null, pretty ? 2 : 0);

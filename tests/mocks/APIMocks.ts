@@ -457,14 +457,14 @@ export class APIMockService {
     if (graph) {
       let exportData;
       switch (format) {
-        case 'json':
-          exportData = JSON.stringify(graph, null, 2);
-          break;
-        case 'yaml':
-          exportData = `# Graph Export\nid: ${graph.id}\nname: ${graph.name || 'Untitled'}\n`;
-          break;
-        default:
-          exportData = JSON.stringify(graph);
+      case 'json':
+        exportData = JSON.stringify(graph, null, 2);
+        break;
+      case 'yaml':
+        exportData = `# Graph Export\nid: ${graph.id}\nname: ${graph.name || 'Untitled'}\n`;
+        break;
+      default:
+        exportData = JSON.stringify(graph);
       }
 
       return res(
@@ -514,31 +514,31 @@ export class APIMockService {
     // Simulate database operations
     let result;
     switch (request.operation) {
-      case 'query':
-        result = {
-          rows: this.generateMockTableData(5),
-          count: 5,
-          executionTime: Math.floor(this.rng() * 100) + 10
-        };
-        break;
-      case 'insert':
-        result = {
-          id: this.generateId(),
-          ...request.data,
-          created_at: new Date().toISOString()
-        };
-        break;
-      case 'update':
-        result = {
-          affected: Math.floor(this.rng() * 5) + 1,
-          updated_at: new Date().toISOString()
-        };
-        break;
-      case 'delete':
-        result = {
-          affected: Math.floor(this.rng() * 3) + 1
-        };
-        break;
+    case 'query':
+      result = {
+        rows: this.generateMockTableData(5),
+        count: 5,
+        executionTime: Math.floor(this.rng() * 100) + 10
+      };
+      break;
+    case 'insert':
+      result = {
+        id: this.generateId(),
+        ...request.data,
+        created_at: new Date().toISOString()
+      };
+      break;
+    case 'update':
+      result = {
+        affected: Math.floor(this.rng() * 5) + 1,
+        updated_at: new Date().toISOString()
+      };
+      break;
+    case 'delete':
+      result = {
+        affected: Math.floor(this.rng() * 3) + 1
+      };
+      break;
     }
 
     return res(

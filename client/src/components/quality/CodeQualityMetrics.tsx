@@ -115,16 +115,16 @@ export const CodeQualityMetrics: React.FC<CodeQualityMetricsProps> = ({
   // Get technical debt priority color
   const getTechnicalDebtColor = (priority: string) => {
     switch (priority) {
-      case 'critical':
-        return 'destructive';
-      case 'high':
-        return 'default';
-      case 'medium':
-        return 'secondary';
-      case 'low':
-        return 'outline';
-      default:
-        return 'outline';
+    case 'critical':
+      return 'destructive';
+    case 'high':
+      return 'default';
+    case 'medium':
+      return 'secondary';
+    case 'low':
+      return 'outline';
+    default:
+      return 'outline';
     }
   };
 

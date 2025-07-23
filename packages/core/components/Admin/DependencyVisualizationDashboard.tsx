@@ -525,9 +525,9 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analysis }) => {
                     </div>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       violation.severity === 'critical' ? 'bg-red-500 text-white' :
-                      violation.severity === 'high' ? 'bg-red-400 text-white' :
-                      violation.severity === 'medium' ? 'bg-yellow-400 text-gray-800' :
-                      'bg-gray-400 text-white'
+                        violation.severity === 'high' ? 'bg-red-400 text-white' :
+                          violation.severity === 'medium' ? 'bg-yellow-400 text-gray-800' :
+                            'bg-gray-400 text-white'
                     }`}>
                       {violation.severity.toUpperCase()}
                     </span>
@@ -558,9 +558,9 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analysis }) => {
                     </div>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       rec.priority === 'urgent' ? 'bg-red-500 text-white' :
-                      rec.priority === 'high' ? 'bg-yellow-500 text-white' :
-                      rec.priority === 'medium' ? 'bg-blue-500 text-white' :
-                      'bg-gray-500 text-white'
+                        rec.priority === 'high' ? 'bg-yellow-500 text-white' :
+                          rec.priority === 'medium' ? 'bg-blue-500 text-white' :
+                            'bg-gray-500 text-white'
                     }`}>
                       {rec.priority.toUpperCase()}
                     </span>

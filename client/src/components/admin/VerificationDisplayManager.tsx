@@ -165,23 +165,23 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   const TrustIndicatorPreview: React.FC<{ user: TrustDisplayPreview; size: string }> = ({ user, size }) => {
     const getTrustIcon = (level: string) => {
       switch (level) {
-        case 'diamond': return <Crown className="w-4 h-4 text-purple-600" />;
-        case 'platinum': return <Award className="w-4 h-4 text-blue-600" />;
-        case 'gold': return <Award className="w-4 h-4 text-yellow-600" />;
-        case 'silver': return <Shield className="w-4 h-4 text-gray-600" />;
-        case 'bronze': return <Shield className="w-4 h-4 text-orange-600" />;
-        default: return <CheckCircle className="w-4 h-4 text-gray-400" />;
+      case 'diamond': return <Crown className="w-4 h-4 text-purple-600" />;
+      case 'platinum': return <Award className="w-4 h-4 text-blue-600" />;
+      case 'gold': return <Award className="w-4 h-4 text-yellow-600" />;
+      case 'silver': return <Shield className="w-4 h-4 text-gray-600" />;
+      case 'bronze': return <Shield className="w-4 h-4 text-orange-600" />;
+      default: return <CheckCircle className="w-4 h-4 text-gray-400" />;
       }
     };
 
     const getTrustColor = (level: string) => {
       switch (level) {
-        case 'diamond': return 'border-purple-300 bg-purple-50';
-        case 'platinum': return 'border-blue-300 bg-blue-50';
-        case 'gold': return 'border-yellow-300 bg-yellow-50';
-        case 'silver': return 'border-gray-300 bg-gray-50';
-        case 'bronze': return 'border-orange-300 bg-orange-50';
-        default: return 'border-gray-200 bg-gray-50';
+      case 'diamond': return 'border-purple-300 bg-purple-50';
+      case 'platinum': return 'border-blue-300 bg-blue-50';
+      case 'gold': return 'border-yellow-300 bg-yellow-50';
+      case 'silver': return 'border-gray-300 bg-gray-50';
+      case 'bronze': return 'border-orange-300 bg-orange-50';
+      default: return 'border-gray-200 bg-gray-50';
       }
     };
 
@@ -552,8 +552,8 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                 ) : (
                   <div className={`grid gap-3 ${
                     selectedDevice === 'mobile' ? 'grid-cols-1' :
-                    selectedDevice === 'tablet' ? 'grid-cols-2' :
-                    'grid-cols-3'
+                      selectedDevice === 'tablet' ? 'grid-cols-2' :
+                        'grid-cols-3'
                   }`}>
                     {previewData.map((user) => (
                       <TrustIndicatorPreview 

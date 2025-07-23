@@ -427,9 +427,9 @@ Examples:
       console.log(`\n📋 Phase ${index + 1}: ${phase.name}`);
       console.log(`   Priority: ${phase.priority}`);
       console.log(`   Estimated: ${phase.estimatedDays} days`);
-      console.log(`   Tasks:`);
+      console.log('   Tasks:');
       phase.tasks.forEach(task => console.log(`     • ${task}`));
-      console.log(`   Validation:`);
+      console.log('   Validation:');
       phase.validation.forEach(validation => console.log(`     ✓ ${validation}`));
     });
     

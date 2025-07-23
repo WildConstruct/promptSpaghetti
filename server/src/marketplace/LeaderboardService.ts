@@ -159,30 +159,30 @@ export class MarketplaceLeaderboardService extends EventEmitter {
 
       // Set ordering based on metric
       switch (metric) {
-        case 'revenue':
-          orderBy = 'total_revenue DESC, total_purchases DESC';
-          break;
-        case 'purchases':
-          orderBy = 'total_purchases DESC, total_revenue DESC';
-          break;
-        case 'rating':
-          orderBy = 'avg_rating DESC, total_reviews DESC';
-          whereClause += ' AND total_reviews >= 5'; // Minimum reviews for rating leaderboard
-          break;
-        case 'trending':
-          // Trending based on recent purchase velocity
-          const trendingTimeFilter = this.getTimeFilter('7d');
-          whereClause += ` AND EXISTS (
+      case 'revenue':
+        orderBy = 'total_revenue DESC, total_purchases DESC';
+        break;
+      case 'purchases':
+        orderBy = 'total_purchases DESC, total_revenue DESC';
+        break;
+      case 'rating':
+        orderBy = 'avg_rating DESC, total_reviews DESC';
+        whereClause += ' AND total_reviews >= 5'; // Minimum reviews for rating leaderboard
+        break;
+      case 'trending':
+        // Trending based on recent purchase velocity
+        const trendingTimeFilter = this.getTimeFilter('7d');
+        whereClause += ` AND EXISTS (
             SELECT 1 FROM marketplace_purchases mp 
             WHERE mp.template_id = mt.id 
             AND mp.created_at >= $${queryParams.length + 1}
             AND mp.status = 'succeeded'
           )`;
-          queryParams.push(trendingTimeFilter);
-          orderBy = 'total_purchases DESC, total_revenue DESC';
-          break;
-        default:
-          orderBy = 'total_revenue DESC';
+        queryParams.push(trendingTimeFilter);
+        orderBy = 'total_purchases DESC, total_revenue DESC';
+        break;
+      default:
+        orderBy = 'total_revenue DESC';
       }
 
       const query = `
@@ -268,7 +268,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
 
       let orderBy: string;
       let selectFields = '';
-      let joinClause = '';
+      const joinClause = '';
       let whereClause = 'WHERE mt.status = \'listed\'';
       const queryParams: any[] = [];
 
@@ -281,52 +281,52 @@ export class MarketplaceLeaderboardService extends EventEmitter {
 
       // Set fields and ordering based on metric
       switch (metric) {
-        case 'revenue':
-          selectFields = `
+      case 'revenue':
+        selectFields = `
             SUM(stats.total_revenue) as total_revenue,
             COUNT(mt.id) as template_count,
             AVG(stats.avg_rating) as avg_rating,
             SUM(stats.total_reviews) as total_reviews
           `;
-          orderBy = 'total_revenue DESC, template_count DESC';
-          break;
-        case 'templates':
-          selectFields = `
+        orderBy = 'total_revenue DESC, template_count DESC';
+        break;
+      case 'templates':
+        selectFields = `
             COUNT(mt.id) as template_count,
             SUM(stats.total_revenue) as total_revenue,
             AVG(stats.avg_rating) as avg_rating,
             SUM(stats.total_reviews) as total_reviews
           `;
-          orderBy = 'template_count DESC, total_revenue DESC';
-          break;
-        case 'rating':
-          selectFields = `
+        orderBy = 'template_count DESC, total_revenue DESC';
+        break;
+      case 'rating':
+        selectFields = `
             AVG(stats.avg_rating) as avg_rating,
             SUM(stats.total_reviews) as total_reviews,
             COUNT(mt.id) as template_count,
             SUM(stats.total_revenue) as total_revenue
           `;
-          whereClause += ' AND stats.total_reviews >= 10'; // Minimum reviews threshold
-          orderBy = 'avg_rating DESC, total_reviews DESC';
-          break;
-        case 'badges':
-          // Would integrate with badge system
-          selectFields = `
+        whereClause += ' AND stats.total_reviews >= 10'; // Minimum reviews threshold
+        orderBy = 'avg_rating DESC, total_reviews DESC';
+        break;
+      case 'badges':
+        // Would integrate with badge system
+        selectFields = `
             COUNT(mt.id) as template_count,
             SUM(stats.total_revenue) as total_revenue,
             AVG(stats.avg_rating) as avg_rating,
             SUM(stats.total_reviews) as total_reviews
           `;
-          orderBy = 'template_count DESC'; // Simplified for now
-          break;
-        default:
-          selectFields = `
+        orderBy = 'template_count DESC'; // Simplified for now
+        break;
+      default:
+        selectFields = `
             SUM(stats.total_revenue) as total_revenue,
             COUNT(mt.id) as template_count,
             AVG(stats.avg_rating) as avg_rating,
             SUM(stats.total_reviews) as total_reviews
           `;
-          orderBy = 'total_revenue DESC';
+        orderBy = 'total_revenue DESC';
       }
 
       const query = `
@@ -418,17 +418,17 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       }
 
       switch (metric) {
-        case 'revenue':
-          orderBy = 'total_revenue DESC, template_count DESC';
-          break;
-        case 'templates':
-          orderBy = 'template_count DESC, total_revenue DESC';
-          break;
-        case 'growth':
-          orderBy = 'growth_rate DESC, total_revenue DESC';
-          break;
-        default:
-          orderBy = 'total_revenue DESC';
+      case 'revenue':
+        orderBy = 'total_revenue DESC, template_count DESC';
+        break;
+      case 'templates':
+        orderBy = 'template_count DESC, total_revenue DESC';
+        break;
+      case 'growth':
+        orderBy = 'growth_rate DESC, total_revenue DESC';
+        break;
+      default:
+        orderBy = 'total_revenue DESC';
       }
 
       const query = `
@@ -602,40 +602,40 @@ export class MarketplaceLeaderboardService extends EventEmitter {
       let leaderboard: LeaderboardEntry[];
 
       switch (query.type) {
-        case 'templates':
-          leaderboard = await this.getTemplateLeaderboard(
+      case 'templates':
+        leaderboard = await this.getTemplateLeaderboard(
             query.metric as any,
             query.timeframe,
             query.category,
             query.limit,
             query.offset
-          );
-          break;
-        case 'creators':
-          leaderboard = await this.getCreatorLeaderboard(
+        );
+        break;
+      case 'creators':
+        leaderboard = await this.getCreatorLeaderboard(
             query.metric as any,
             query.timeframe,
             query.limit,
             query.offset
-          );
-          break;
-        case 'categories':
-          leaderboard = await this.getCategoryLeaderboard(
+        );
+        break;
+      case 'categories':
+        leaderboard = await this.getCategoryLeaderboard(
             query.metric as any,
             query.timeframe,
             query.limit,
             query.offset
-          );
-          break;
-        case 'engagement':
-          leaderboard = await this.getUserEngagementLeaderboard(
+        );
+        break;
+      case 'engagement':
+        leaderboard = await this.getUserEngagementLeaderboard(
             query.metric as any,
             query.limit,
             query.offset
-          );
-          break;
-        default:
-          throw new Error(`Unknown leaderboard type: ${query.type}`);
+        );
+        break;
+      default:
+        throw new Error(`Unknown leaderboard type: ${query.type}`);
       }
 
       // Calculate metadata
@@ -680,77 +680,77 @@ export class MarketplaceLeaderboardService extends EventEmitter {
   private getTimeFilter(timeframe: string): Date {
     const now = new Date();
     switch (timeframe) {
-      case '24h':
-        return new Date(now.getTime() - 24 * 60 * 60 * 1000);
-      case '7d':
-        return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      case '30d':
-        return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      case '90d':
-        return new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-      default:
-        return new Date(0); // Beginning of time
+    case '24h':
+      return new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    case '7d':
+      return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    case '30d':
+      return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    case '90d':
+      return new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+    default:
+      return new Date(0); // Beginning of time
     }
   }
 
   private calculateTemplateScore(row: any, metric: string): number {
     switch (metric) {
-      case 'revenue':
-        return parseInt(row.total_revenue) || 0;
-      case 'purchases':
-        return parseInt(row.total_purchases) || 0;
-      case 'rating':
-        return parseFloat(row.avg_rating) || 0;
-      case 'trending':
-        // Combine purchases and recency for trending score
-        const purchases = parseInt(row.total_purchases) || 0;
-        const rating = parseFloat(row.avg_rating) || 0;
-        return purchases * (rating / 5) * 100;
-      default:
-        return parseInt(row.total_revenue) || 0;
+    case 'revenue':
+      return parseInt(row.total_revenue) || 0;
+    case 'purchases':
+      return parseInt(row.total_purchases) || 0;
+    case 'rating':
+      return parseFloat(row.avg_rating) || 0;
+    case 'trending':
+      // Combine purchases and recency for trending score
+      const purchases = parseInt(row.total_purchases) || 0;
+      const rating = parseFloat(row.avg_rating) || 0;
+      return purchases * (rating / 5) * 100;
+    default:
+      return parseInt(row.total_revenue) || 0;
     }
   }
 
   private calculateCreatorScore(row: any, metric: string): number {
     switch (metric) {
-      case 'revenue':
-        return parseInt(row.total_revenue) || 0;
-      case 'templates':
-        return parseInt(row.template_count) || 0;
-      case 'rating':
-        return parseFloat(row.avg_rating) || 0;
-      case 'badges':
-        return parseInt(row.template_count) || 0; // Simplified
-      default:
-        return parseInt(row.total_revenue) || 0;
+    case 'revenue':
+      return parseInt(row.total_revenue) || 0;
+    case 'templates':
+      return parseInt(row.template_count) || 0;
+    case 'rating':
+      return parseFloat(row.avg_rating) || 0;
+    case 'badges':
+      return parseInt(row.template_count) || 0; // Simplified
+    default:
+      return parseInt(row.total_revenue) || 0;
     }
   }
 
   private calculateCategoryScore(row: any, metric: string): number {
     switch (metric) {
-      case 'revenue':
-        return parseInt(row.total_revenue) || 0;
-      case 'templates':
-        return parseInt(row.template_count) || 0;
-      case 'growth':
-        return parseFloat(row.growth_rate) || 0;
-      default:
-        return parseInt(row.total_revenue) || 0;
+    case 'revenue':
+      return parseInt(row.total_revenue) || 0;
+    case 'templates':
+      return parseInt(row.template_count) || 0;
+    case 'growth':
+      return parseFloat(row.growth_rate) || 0;
+    default:
+      return parseInt(row.total_revenue) || 0;
     }
   }
 
   private calculateEngagementScore(entry: any, metric: string): number {
     switch (metric) {
-      case 'points':
-        return entry.totalPoints || 0;
-      case 'badges':
-        return entry.badgeCount || 0;
-      case 'reviews':
-        return entry.reviewsWritten || 0;
-      case 'contributions':
-        return (entry.reviewsWritten || 0) + (entry.helpfulVotes || 0);
-      default:
-        return entry.totalPoints || 0;
+    case 'points':
+      return entry.totalPoints || 0;
+    case 'badges':
+      return entry.badgeCount || 0;
+    case 'reviews':
+      return entry.reviewsWritten || 0;
+    case 'contributions':
+      return (entry.reviewsWritten || 0) + (entry.helpfulVotes || 0);
+    default:
+      return entry.totalPoints || 0;
     }
   }
 

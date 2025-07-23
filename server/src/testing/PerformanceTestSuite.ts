@@ -860,20 +860,20 @@ export class PerformanceTestSuite extends EventEmitter {
    */
   private createTestFunction(testId: string): (context: TestContext) => Promise<TestResult> {
     switch (testId) {
-      case 'api_response_time':
-        return this.createApiResponseTimeTest();
+    case 'api_response_time':
+      return this.createApiResponseTimeTest();
         
-      case 'graph_execution_performance':
-        return this.createGraphExecutionTest();
+    case 'graph_execution_performance':
+      return this.createGraphExecutionTest();
         
-      case 'database_query_performance':
-        return this.createDatabaseQueryTest();
+    case 'database_query_performance':
+      return this.createDatabaseQueryTest();
         
-      case 'ui_render_performance':
-        return this.createUiRenderTest();
+    case 'ui_render_performance':
+      return this.createUiRenderTest();
         
-      default:
-        return this.createGenericTest();
+    default:
+      return this.createGenericTest();
     }
   }
 
@@ -1301,7 +1301,7 @@ export class PerformanceTestSuite extends EventEmitter {
     testCount: number;
     currentExecution?: string;
     lastExecution?: Date;
-  } {
+    } {
     return {
       running: this.isRunning,
       testCount: this.tests.size,

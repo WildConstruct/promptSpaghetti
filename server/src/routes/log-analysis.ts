@@ -181,7 +181,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           source: { 
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
-                   'security', 'audit', 'performance', 'user_activity']
+              'security', 'audit', 'performance', 'user_activity']
           },
           component: { type: 'string', maxLength: 200 },
           message: { type: 'string' },
@@ -244,7 +244,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
                 source: { 
                   type: 'string', 
                   enum: ['application', 'database', 'web_server', 'system', 
-                         'security', 'audit', 'performance', 'user_activity']
+                    'security', 'audit', 'performance', 'user_activity']
                 },
                 component: { type: 'string' },
                 message: { type: 'string' },
@@ -314,7 +314,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           source: { 
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
-                   'security', 'audit', 'performance', 'user_activity']
+              'security', 'audit', 'performance', 'user_activity']
           },
           level: { 
             type: 'string', 
@@ -401,7 +401,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             items: { 
               type: 'string', 
               enum: ['application', 'database', 'web_server', 'system', 
-                     'security', 'audit', 'performance', 'user_activity']
+                'security', 'audit', 'performance', 'user_activity']
             }
           },
           log_levels: { 
@@ -419,8 +419,8 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           anomaly_type: { 
             type: 'string', 
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
-                   'security_threat', 'system_failure', 'data_anomaly',
-                   'access_anomaly', 'volume_anomaly']
+              'security_threat', 'system_failure', 'data_anomaly',
+              'access_anomaly', 'volume_anomaly']
           },
           severity: { 
             type: 'string', 
@@ -472,8 +472,8 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           anomaly_type: { 
             type: 'string', 
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
-                   'security_threat', 'system_failure', 'data_anomaly',
-                   'access_anomaly', 'volume_anomaly']
+              'security_threat', 'system_failure', 'data_anomaly',
+              'access_anomaly', 'volume_anomaly']
           },
           severity: { 
             type: 'string', 
@@ -560,7 +560,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             items: { 
               type: 'string', 
               enum: ['application', 'database', 'web_server', 'system', 
-                     'security', 'audit', 'performance', 'user_activity']
+                'security', 'audit', 'performance', 'user_activity']
             }
           },
           log_levels: { 
@@ -691,8 +691,8 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           anomaly_type: { 
             type: 'string', 
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
-                   'security_threat', 'system_failure', 'data_anomaly',
-                   'access_anomaly', 'volume_anomaly']
+              'security_threat', 'system_failure', 'data_anomaly',
+              'access_anomaly', 'volume_anomaly']
           },
           assigned_to: { type: 'string' },
           start_date: { type: 'string', format: 'date' },
@@ -820,7 +820,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           source: { 
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
-                   'security', 'audit', 'performance', 'user_activity']
+              'security', 'audit', 'performance', 'user_activity']
           },
           include_patterns: { type: 'boolean', default: false }
         }

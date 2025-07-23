@@ -567,7 +567,7 @@ export class PolicyDataService {
         if (setClause.length > 0) {
           params.push(updatedBy);
           setClause.push(`updated_by = $${params.length}`);
-          setClause.push(`updated_at = NOW()`);
+          setClause.push('updated_at = NOW()');
           params.push(policyId);
           
           await client.query(`
@@ -858,20 +858,20 @@ export class PolicyDataService {
     const conditionValue = condition.value;
 
     switch (condition.operator) {
-      case 'eq': return fieldValue === conditionValue;
-      case 'ne': return fieldValue !== conditionValue;
-      case 'gt': return fieldValue > conditionValue;
-      case 'gte': return fieldValue >= conditionValue;
-      case 'lt': return fieldValue < conditionValue;
-      case 'lte': return fieldValue <= conditionValue;
-      case 'in': return Array.isArray(conditionValue) && conditionValue.includes(fieldValue);
-      case 'not_in': return Array.isArray(conditionValue) && !conditionValue.includes(fieldValue);
-      case 'contains': return String(fieldValue).includes(String(conditionValue));
-      case 'regex': return new RegExp(conditionValue).test(String(fieldValue));
-      case 'between': 
-        return Array.isArray(conditionValue) && conditionValue.length === 2 
+    case 'eq': return fieldValue === conditionValue;
+    case 'ne': return fieldValue !== conditionValue;
+    case 'gt': return fieldValue > conditionValue;
+    case 'gte': return fieldValue >= conditionValue;
+    case 'lt': return fieldValue < conditionValue;
+    case 'lte': return fieldValue <= conditionValue;
+    case 'in': return Array.isArray(conditionValue) && conditionValue.includes(fieldValue);
+    case 'not_in': return Array.isArray(conditionValue) && !conditionValue.includes(fieldValue);
+    case 'contains': return String(fieldValue).includes(String(conditionValue));
+    case 'regex': return new RegExp(conditionValue).test(String(fieldValue));
+    case 'between': 
+      return Array.isArray(conditionValue) && conditionValue.length === 2 
           && fieldValue >= conditionValue[0] && fieldValue <= conditionValue[1];
-      default: return false;
+    default: return false;
     }
   }
 

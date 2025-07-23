@@ -148,8 +148,8 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
 
       // Calculate overall status
       const overallStatus = results.some(r => r.status === HealthStatus.UNHEALTHY) ? HealthStatus.UNHEALTHY :
-                           results.some(r => r.status === HealthStatus.DEGRADED) ? HealthStatus.DEGRADED :
-                           HealthStatus.HEALTHY;
+        results.some(r => r.status === HealthStatus.DEGRADED) ? HealthStatus.DEGRADED :
+          HealthStatus.HEALTHY;
 
       const response: HealthMonitoringResponse<{
         overallStatus: HealthStatus;
@@ -586,7 +586,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
       // Calculate time range
       const now = new Date();
       const timeRangeMs = request.query.timeRange === 'last_hour' ? 3600000 :
-                          request.query.timeRange === 'last_day' ? 86400000 : 3600000;
+        request.query.timeRange === 'last_day' ? 86400000 : 3600000;
       const timeRange = {
         start: new Date(now.getTime() - timeRangeMs),
         end: now

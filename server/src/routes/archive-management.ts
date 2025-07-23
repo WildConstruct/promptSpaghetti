@@ -865,18 +865,18 @@ export async function archiveManagementRoutes(
   // Helper method for calculating estimated restore time
   function calculateEstimatedRestoreTime(restoreType: RestoreType): string {
     switch (restoreType) {
-      case 'metadata_only':
-        return '1-2 minutes';
-      case 'preview_restore':
-        return '2-5 minutes';
-      case 'partial_restore':
-        return '5-15 minutes';
-      case 'full_restore':
-        return '10-60 minutes';
-      case 'validation_restore':
-        return '5-30 minutes';
-      default:
-        return '5-15 minutes';
+    case 'metadata_only':
+      return '1-2 minutes';
+    case 'preview_restore':
+      return '2-5 minutes';
+    case 'partial_restore':
+      return '5-15 minutes';
+    case 'full_restore':
+      return '10-60 minutes';
+    case 'validation_restore':
+      return '5-30 minutes';
+    default:
+      return '5-15 minutes';
     }
   }
 }

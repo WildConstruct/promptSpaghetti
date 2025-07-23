@@ -853,14 +853,14 @@ export class ExecutionEngine extends EventEmitter {
   private getExecutionType(operationType: ExecutionOperationType): ExecutionType {
     // Map operation type to execution type
     switch (operationType) {
-      case ExecutionOperationType.SYSTEM_MAINTENANCE:
-        return ExecutionType.SYSTEM_MAINTENANCE;
-      case ExecutionOperationType.DATA_IMPORT:
-        return ExecutionType.DATA_IMPORT;
-      case ExecutionOperationType.BULK_USER_UPDATE:
-        return ExecutionType.BULK_OPERATION;
-      default:
-        return ExecutionType.ADMIN_OPERATION;
+    case ExecutionOperationType.SYSTEM_MAINTENANCE:
+      return ExecutionType.SYSTEM_MAINTENANCE;
+    case ExecutionOperationType.DATA_IMPORT:
+      return ExecutionType.DATA_IMPORT;
+    case ExecutionOperationType.BULK_USER_UPDATE:
+      return ExecutionType.BULK_OPERATION;
+    default:
+      return ExecutionType.ADMIN_OPERATION;
     }
   }
   

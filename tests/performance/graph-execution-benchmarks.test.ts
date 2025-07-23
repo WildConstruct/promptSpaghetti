@@ -210,9 +210,9 @@ class GraphExecutionBenchmarker {
     const context = new ExecutionContext(seed);
     const startTime = process.hrtime.bigint();
     
-    let outputs: string[] = [];
+    const outputs: string[] = [];
     let nodeExecutions = 0;
-    let errors: string[] = [];
+    const errors: string[] = [];
     
     try {
       // Simulate graph execution by processing nodes
@@ -223,35 +223,35 @@ class GraphExecutionBenchmarker {
         // Mock execution based on node type
         let result = '';
         switch (node.type) {
-          case 'WeightedChoice':
-            const choices = node.data.choices || ['default'];
-            const weights = node.data.weights || [1];
-            let sum = 0;
-            const random = context.random();
-            for (let i = 0; i < weights.length; i++) {
-              sum += weights[i];
-              if (random <= sum) {
-                result = choices[i] || 'default';
-                break;
-              }
+        case 'WeightedChoice':
+          const choices = node.data.choices || ['default'];
+          const weights = node.data.weights || [1];
+          let sum = 0;
+          const random = context.random();
+          for (let i = 0; i < weights.length; i++) {
+            sum += weights[i];
+            if (random <= sum) {
+              result = choices[i] || 'default';
+              break;
             }
-            break;
-          case 'Concat':
-            result = `concat-${seed}`;
-            break;
-          case 'SetVariable':
-            context.setVariable(node.data.variableName || 'var', node.data.value || 'value');
-            result = node.data.value || 'set';
-            break;
-          case 'GetVariable':
-            result = context.getVariable(node.data.variableName || 'var') as string || 'undefined';
-            break;
-          case 'Output':
-            const template = node.data.template || '{{value}}';
-            result = template.replace('{{value}}', `output-${seed}`);
-            break;
-          default:
-            result = `unknown-${node.type}`;
+          }
+          break;
+        case 'Concat':
+          result = `concat-${seed}`;
+          break;
+        case 'SetVariable':
+          context.setVariable(node.data.variableName || 'var', node.data.value || 'value');
+          result = node.data.value || 'set';
+          break;
+        case 'GetVariable':
+          result = context.getVariable(node.data.variableName || 'var') as string || 'undefined';
+          break;
+        case 'Output':
+          const template = node.data.template || '{{value}}';
+          result = template.replace('{{value}}', `output-${seed}`);
+          break;
+        default:
+          result = `unknown-${node.type}`;
         }
         
         outputs.push(result);

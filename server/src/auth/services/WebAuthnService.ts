@@ -155,7 +155,7 @@ export class WebAuthnService {
       },
       pubKeyCredParams: [
         { alg: -7, type: 'public-key' }, // ES256
-        { alg: -257, type: 'public-key' }, // RS256
+        { alg: -257, type: 'public-key' } // RS256
       ],
       timeout: this.config.timeout,
       excludeCredentials: excludeCredentialsList,

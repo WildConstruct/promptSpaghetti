@@ -59,14 +59,14 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
     
     const getDataForRange = (trendData: any) => {
       switch (selectedTimeRange) {
-        case 'daily':
-          return trendData.daily || [];
-        case 'weekly':
-          return trendData.weekly || [];
-        case 'monthly':
-          return trendData.monthly || [];
-        default:
-          return trendData.daily || [];
+      case 'daily':
+        return trendData.daily || [];
+      case 'weekly':
+        return trendData.weekly || [];
+      case 'monthly':
+        return trendData.monthly || [];
+      default:
+        return trendData.daily || [];
       }
     };
     
@@ -91,20 +91,20 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       const getDateLabel = (idx: number) => {
         const now = new Date();
         switch (selectedTimeRange) {
-          case 'daily':
-            const daysAgo = maxLength - idx - 1;
-            const date = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          case 'weekly':
-            const weeksAgo = maxLength - idx - 1;
-            const weekDate = new Date(now.getTime() - weeksAgo * 7 * 24 * 60 * 60 * 1000);
-            return `Week of ${weekDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
-          case 'monthly':
-            const monthsAgo = maxLength - idx - 1;
-            const monthDate = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
-            return monthDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-          default:
-            return `Point ${idx + 1}`;
+        case 'daily':
+          const daysAgo = maxLength - idx - 1;
+          const date = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+          return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        case 'weekly':
+          const weeksAgo = maxLength - idx - 1;
+          const weekDate = new Date(now.getTime() - weeksAgo * 7 * 24 * 60 * 60 * 1000);
+          return `Week of ${weekDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+        case 'monthly':
+          const monthsAgo = maxLength - idx - 1;
+          const monthDate = new Date(now.getFullYear(), now.getMonth() - monthsAgo, 1);
+          return monthDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+        default:
+          return `Point ${idx + 1}`;
         }
       };
       

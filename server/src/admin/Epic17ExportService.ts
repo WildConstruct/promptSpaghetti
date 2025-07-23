@@ -678,28 +678,28 @@ export class Epic17ExportService extends EventEmitter {
       let outputFile: OutputFile;
       
       switch (request.format) {
-        case ExportFormat.JSON:
-          outputFile = await this.exportToJSON(request, query, redactionRules);
-          break;
+      case ExportFormat.JSON:
+        outputFile = await this.exportToJSON(request, query, redactionRules);
+        break;
           
-        case ExportFormat.CSV:
-          outputFile = await this.exportToCSV(request, query, redactionRules);
-          break;
+      case ExportFormat.CSV:
+        outputFile = await this.exportToCSV(request, query, redactionRules);
+        break;
           
-        case ExportFormat.EXCEL:
-          outputFile = await this.exportToExcel(request, query, redactionRules);
-          break;
+      case ExportFormat.EXCEL:
+        outputFile = await this.exportToExcel(request, query, redactionRules);
+        break;
           
-        case ExportFormat.PDF:
-          outputFile = await this.exportToPDF(request, query, redactionRules);
-          break;
+      case ExportFormat.PDF:
+        outputFile = await this.exportToPDF(request, query, redactionRules);
+        break;
           
-        case ExportFormat.XML:
-          outputFile = await this.exportToXML(request, query, redactionRules);
-          break;
+      case ExportFormat.XML:
+        outputFile = await this.exportToXML(request, query, redactionRules);
+        break;
           
-        default:
-          throw new Error(`Unsupported export format: ${request.format}`);
+      default:
+        throw new Error(`Unsupported export format: ${request.format}`);
       }
 
       // Post-processing

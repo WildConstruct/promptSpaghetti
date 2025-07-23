@@ -299,7 +299,7 @@ class PerformanceAnalysisExecutor {
     // Display recommendations
     recommendations.forEach((rec, index) => {
       const priorityColor = rec.priority === 'HIGH' ? 'error' : 
-                           rec.priority === 'MEDIUM' ? 'warning' : 'info';
+        rec.priority === 'MEDIUM' ? 'warning' : 'info';
       
       this.log(priorityColor, `\n${index + 1}. [${rec.priority}] ${rec.category}`);
       this.log('info', `   Issue: ${rec.issue}`);
@@ -408,14 +408,14 @@ class PerformanceAnalysisExecutor {
 | Test Suite | Status | Duration | Type |
 |------------|--------|----------|------|
 ${this.results.testSuites.map(suite => 
-  `| ${suite.description} | ${suite.success ? '✅' : '❌'} | ${suite.duration}ms | ${suite.critical ? 'Critical' : 'Standard'} |`
-).join('\n')}
+    `| ${suite.description} | ${suite.success ? '✅' : '❌'} | ${suite.duration}ms | ${suite.critical ? 'Critical' : 'Standard'} |`
+  ).join('\n')}
 
 ## Performance Budget Analysis
 
 ${budgetCompliance.success ? 
-  '✅ All performance budgets are within acceptable limits.' : 
-  '⚠️ Performance budget checks require attention.'}
+    '✅ All performance budgets are within acceptable limits.' : 
+    '⚠️ Performance budget checks require attention.'}
 
 ## Recommendations
 

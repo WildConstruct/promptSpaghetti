@@ -418,7 +418,7 @@ export class ComplianceQualityAssurance {
   ): Promise<QualityMetrics> {
     const periodKey = `${period.startDate.toISOString()}-${period.endDate.toISOString()}`;
     
-    let metrics = this.qualityMetrics.get(periodKey) || {
+    const metrics = this.qualityMetrics.get(periodKey) || {
       reportingPeriod: period,
       totalReportsAssessed: 0,
       averageQualityScore: 0,

@@ -583,70 +583,70 @@ function isRandomizationNode(nodeType: string): boolean {
 function extractRandomChoiceInfo(node: Node, result: any, resolvedInputs: any[]): RandomChoiceInfo | null {
   try {
     switch (node.type) {
-      case 'WeightedChoice': {
-        const choices = node.choices as string[] || [];
-        const weights = node.weights as number[] || [];
-        const selectedIndex = choices.indexOf(result);
+    case 'WeightedChoice': {
+      const choices = node.choices as string[] || [];
+      const weights = node.weights as number[] || [];
+      const selectedIndex = choices.indexOf(result);
         
-        if (selectedIndex >= 0) {
-          const weight = weights[selectedIndex] || 1;
-          const totalWeight = weights.reduce((sum, w) => sum + w, 0);
-          const probability = totalWeight > 0 ? weight / totalWeight : 1 / choices.length;
+      if (selectedIndex >= 0) {
+        const weight = weights[selectedIndex] || 1;
+        const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+        const probability = totalWeight > 0 ? weight / totalWeight : 1 / choices.length;
           
-          return {
-            choiceType: 'weighted',
-            availableOptions: choices,
-            selectedOption: result,
-            selectionReason: `Selected "${result}" with weight ${weight}`,
-            probability,
-            weight
-          };
-        }
-        break;
-      }
-      
-      case 'WeightedAdvanced': {
-        const choices = node.choices as string[] || [];
-        if (choices.includes(result)) {
-          return {
-            choiceType: 'weighted',
-            availableOptions: choices,
-            selectedOption: result,
-            selectionReason: `Advanced weighted selection of "${result}"`
-          };
-        }
-        break;
-      }
-      
-      case 'Conditional': {
-        const branches = node.branches as any[] || [];
         return {
-          choiceType: 'conditional',
-          availableOptions: branches.map((b, i) => `Branch ${i + 1}: ${b.condition || 'default'}`),
+          choiceType: 'weighted',
+          availableOptions: choices,
           selectedOption: result,
-          selectionReason: `Conditional evaluation resulted in "${result}"`
+          selectionReason: `Selected "${result}" with weight ${weight}`,
+          probability,
+          weight
         };
       }
+      break;
+    }
       
-      case 'Sequential': {
-        const sequence = node.sequence as string[] || [];
+    case 'WeightedAdvanced': {
+      const choices = node.choices as string[] || [];
+      if (choices.includes(result)) {
         return {
-          choiceType: 'sequential',
-          availableOptions: sequence,
+          choiceType: 'weighted',
+          availableOptions: choices,
           selectedOption: result,
-          selectionReason: `Sequential selection of "${result}"`
+          selectionReason: `Advanced weighted selection of "${result}"`
         };
       }
+      break;
+    }
       
-      case 'Markov': {
-        const states = node.states as string[] || [];
-        return {
-          choiceType: 'markov',
-          availableOptions: states,
-          selectedOption: result,
-          selectionReason: `Markov state transition to "${result}"`
-        };
-      }
+    case 'Conditional': {
+      const branches = node.branches as any[] || [];
+      return {
+        choiceType: 'conditional',
+        availableOptions: branches.map((b, i) => `Branch ${i + 1}: ${b.condition || 'default'}`),
+        selectedOption: result,
+        selectionReason: `Conditional evaluation resulted in "${result}"`
+      };
+    }
+      
+    case 'Sequential': {
+      const sequence = node.sequence as string[] || [];
+      return {
+        choiceType: 'sequential',
+        availableOptions: sequence,
+        selectedOption: result,
+        selectionReason: `Sequential selection of "${result}"`
+      };
+    }
+      
+    case 'Markov': {
+      const states = node.states as string[] || [];
+      return {
+        choiceType: 'markov',
+        availableOptions: states,
+        selectedOption: result,
+        selectionReason: `Markov state transition to "${result}"`
+      };
+    }
     }
   } catch (error) {
     console.warn(`Failed to extract random choice info for ${node.type}:`, error);

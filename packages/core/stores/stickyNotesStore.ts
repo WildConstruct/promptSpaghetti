@@ -383,34 +383,34 @@ export const useStickyNotesStore = create<StickyNotesStore>()(
       const state = get();
       
       switch (format) {
-        case 'json':
-          return JSON.stringify({
-            notes: state.notes,
-            groups: state.groups,
-            exportedAt: new Date().toISOString(),
-            version: '1.0.0'
-          }, null, 2);
+      case 'json':
+        return JSON.stringify({
+          notes: state.notes,
+          groups: state.groups,
+          exportedAt: new Date().toISOString(),
+          version: '1.0.0'
+        }, null, 2);
           
-        case 'markdown':
-          const notes = Object.values(state.notes);
-          const markdown = notes.map(note => 
-            `## ${note.appearance.category || 'Note'}\n\n${note.content.text}\n\n*Created: ${new Date(note.metadata.createdAt).toLocaleDateString()}*\n\n---\n`
-          ).join('\n');
-          return `# Sticky Notes Export\n\n${markdown}`;
+      case 'markdown':
+        const notes = Object.values(state.notes);
+        const markdown = notes.map(note => 
+          `## ${note.appearance.category || 'Note'}\n\n${note.content.text}\n\n*Created: ${new Date(note.metadata.createdAt).toLocaleDateString()}*\n\n---\n`
+        ).join('\n');
+        return `# Sticky Notes Export\n\n${markdown}`;
           
-        case 'html':
-          const htmlNotes = Object.values(state.notes);
-          const html = htmlNotes.map(note =>
-            `<div class="sticky-note" style="background: ${COLOR_THEMES[note.appearance.color]?.background}">
+      case 'html':
+        const htmlNotes = Object.values(state.notes);
+        const html = htmlNotes.map(note =>
+          `<div class="sticky-note" style="background: ${COLOR_THEMES[note.appearance.color]?.background}">
               <h3>${note.appearance.category || 'Note'}</h3>
               <p>${note.content.text.replace(/\n/g, '<br>')}</p>
               <small>Created: ${new Date(note.metadata.createdAt).toLocaleDateString()}</small>
             </div>`
-          ).join('\n');
-          return `<!DOCTYPE html><html><head><title>Sticky Notes</title></head><body>${html}</body></html>`;
+        ).join('\n');
+        return `<!DOCTYPE html><html><head><title>Sticky Notes</title></head><body>${html}</body></html>`;
           
-        default:
-          return JSON.stringify(state.notes);
+      default:
+        return JSON.stringify(state.notes);
       }
     },
 

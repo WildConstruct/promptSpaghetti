@@ -231,7 +231,7 @@ export async function registerAccountMergingRoutes(
       const summary = await mergingService.processMergeRequest(id);
 
       const statusCode = summary.status === 'success' ? 200 : 
-                        summary.status === 'partial' ? 207 : 500;
+        summary.status === 'partial' ? 207 : 500;
 
       return reply.code(statusCode).send({
         success: summary.status !== 'failed',
@@ -239,8 +239,8 @@ export async function registerAccountMergingRoutes(
         message: summary.status === 'success' 
           ? 'Account merge completed successfully'
           : summary.status === 'partial'
-          ? 'Account merge completed with some issues'
-          : 'Account merge failed'
+            ? 'Account merge completed with some issues'
+            : 'Account merge failed'
       });
 
     } catch (error) {

@@ -44,7 +44,7 @@ const DANGEROUS_PATTERNS = {
   
   // Missing transaction management
   transactionIssues: [
-    /^(?!.*BEGIN|.*START\s+TRANSACTION).*(?:ALTER|DROP|CREATE|INSERT|UPDATE|DELETE)/mi,
+    /^(?!.*BEGIN|.*START\s+TRANSACTION).*(?:ALTER|DROP|CREATE|INSERT|UPDATE|DELETE)/mi
   ],
   
   // Unsafe data operations

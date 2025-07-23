@@ -328,12 +328,12 @@ afterAll(async () => {
   
   // Generate error analytics
   const analytics = errorReporter.generateAnalytics();
-  console.log(`\nError Analytics:`);
+  console.log('\nError Analytics:');
   console.log(`- Total Errors: ${analytics.totalErrors}`);
   console.log(`- Error Rate: ${((analytics.totalErrors / global.__testMetrics.totalTests) * 100).toFixed(2)}%`);
   
   if (analytics.totalErrors > 0) {
-    console.log(`- Top Error Types:`, Object.entries(analytics.errorsByType)
+    console.log('- Top Error Types:', Object.entries(analytics.errorsByType)
       .sort(([,a], [,b]) => b - a)
       .slice(0, 3)
       .map(([type, count]) => `${type}(${count})`)

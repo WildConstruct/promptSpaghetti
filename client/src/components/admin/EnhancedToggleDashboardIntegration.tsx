@@ -411,18 +411,18 @@ export const ClaudeImpactDisplay: React.FC<{
 
   const getCostColor = () => {
     switch (claudeMetadata.costImpact) {
-      case 'high': return 'text-red-600';
-      case 'medium': return 'text-orange-600';
-      case 'low': return 'text-yellow-600';
-      default: return 'text-gray-600';
+    case 'high': return 'text-red-600';
+    case 'medium': return 'text-orange-600';
+    case 'low': return 'text-yellow-600';
+    default: return 'text-gray-600';
     }
   };
 
   const getQualityIcon = () => {
     switch (claudeMetadata.qualityImpact) {
-      case 'positive': return <TrendingUp size={12} className="text-green-600" />;
-      case 'negative': return <AlertTriangle size={12} className="text-red-600" />;
-      default: return <Activity size={12} className="text-gray-600" />;
+    case 'positive': return <TrendingUp size={12} className="text-green-600" />;
+    case 'negative': return <AlertTriangle size={12} className="text-red-600" />;
+    default: return <Activity size={12} className="text-gray-600" />;
     }
   };
 
@@ -650,8 +650,8 @@ export const ImpactPreviewModal: React.FC<{
                   <RiskAssessmentBadge riskAssessment={{
                     riskScore: preview.overallRiskScore,
                     recommendation: preview.overallRiskScore >= 0.8 ? 'block' : 
-                                  preview.overallRiskScore >= 0.6 ? 'review' : 
-                                  preview.overallRiskScore >= 0.3 ? 'caution' : 'proceed'
+                      preview.overallRiskScore >= 0.6 ? 'review' : 
+                        preview.overallRiskScore >= 0.3 ? 'caution' : 'proceed'
                   }} />
                   <div className="text-sm text-gray-600">
                     {preview.estimatedAffectedUsers.toLocaleString()} users affected
@@ -736,10 +736,10 @@ export const ImpactPreviewModal: React.FC<{
                   enforcement && !enforcement.allowed
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     : preview.overallRiskScore >= 0.8
-                    ? 'bg-red-600 text-white hover:bg-red-700'
-                    : preview.overallRiskScore >= 0.6
-                    ? 'bg-orange-600 text-white hover:bg-orange-700'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                      ? 'bg-red-600 text-white hover:bg-red-700'
+                      : preview.overallRiskScore >= 0.6
+                        ? 'bg-orange-600 text-white hover:bg-orange-700'
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
               >
                 {enforcementLoading ? (

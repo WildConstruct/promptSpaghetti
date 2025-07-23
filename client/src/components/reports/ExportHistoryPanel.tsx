@@ -21,13 +21,13 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '../ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '../ui/dropdown-menu';
 import {
   History,
@@ -210,9 +210,9 @@ export const ExportHistoryPanel: React.FC = () => {
   // Get delivery icon
   const getDeliveryIcon = (delivery: string) => {
     switch (delivery) {
-      case 'email': return <Mail className="w-4 h-4" />;
-      case 'webhook': return <Webhook className="w-4 h-4" />;
-      default: return <Download className="w-4 h-4" />;
+    case 'email': return <Mail className="w-4 h-4" />;
+    case 'webhook': return <Webhook className="w-4 h-4" />;
+    default: return <Download className="w-4 h-4" />;
     }
   };
 
@@ -473,7 +473,7 @@ export const ExportHistoryPanel: React.FC = () => {
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge variant={schedule.enabled ? "default" : "secondary"}>
+                        <Badge variant={schedule.enabled ? 'default' : 'secondary'}>
                           {schedule.enabled ? 'Active' : 'Inactive'}
                         </Badge>
                         <DropdownMenu>

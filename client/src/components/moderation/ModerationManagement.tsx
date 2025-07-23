@@ -68,18 +68,18 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
     const reason = actionReason.trim();
 
     switch (action) {
-      case 'approve':
-        onApprove?.(itemId, reason);
-        break;
-      case 'reject':
-        onReject?.(itemId, reason);
-        break;
-      case 'flag':
-        onFlag?.(itemId, reason);
-        break;
-      case 'delete':
-        onDelete?.(itemId, reason);
-        break;
+    case 'approve':
+      onApprove?.(itemId, reason);
+      break;
+    case 'reject':
+      onReject?.(itemId, reason);
+      break;
+    case 'flag':
+      onFlag?.(itemId, reason);
+      break;
+    case 'delete':
+      onDelete?.(itemId, reason);
+      break;
     }
 
     setActionReason('');
@@ -101,19 +101,19 @@ export const ModerationManagement: React.FC<ModerationManagementProps> = ({
 
   const getPriorityColor = (priority: ModerationItem['priority']) => {
     switch (priority) {
-      case 'critical': return '#dc3545';
-      case 'high': return '#fd7e14';
-      case 'medium': return '#ffc107';
-      case 'low': return '#28a745';
+    case 'critical': return '#dc3545';
+    case 'high': return '#fd7e14';
+    case 'medium': return '#ffc107';
+    case 'low': return '#28a745';
     }
   };
 
   const getStatusColor = (status: ModerationItem['status']) => {
     switch (status) {
-      case 'pending': return '#ffc107';
-      case 'approved': return '#28a745';
-      case 'rejected': return '#dc3545';
-      case 'flagged': return '#fd7e14';
+    case 'pending': return '#ffc107';
+    case 'approved': return '#28a745';
+    case 'rejected': return '#dc3545';
+    case 'flagged': return '#fd7e14';
     }
   };
 

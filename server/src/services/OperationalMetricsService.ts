@@ -74,7 +74,7 @@ class OperationalMetricsService extends EventEmitter {
     successful: 0,
     failed: 0,
     lastMinute: 0,
-    lastMinuteTimestamp: 0,
+    lastMinuteTimestamp: 0
   };
   private alertRules: Map<string, AlertRule> = new Map();
   private activeAlerts: Map<string, Alert> = new Map();
@@ -104,7 +104,7 @@ class OperationalMetricsService extends EventEmitter {
       severity: 'high',
       description: 'Error rate exceeds 50 errors per minute',
       enabled: true,
-      cooldownMs: 5 * 60 * 1000, // 5 minutes
+      cooldownMs: 5 * 60 * 1000 // 5 minutes
     });
 
     // Critical error alert
@@ -115,7 +115,7 @@ class OperationalMetricsService extends EventEmitter {
       severity: 'critical',
       description: 'Critical severity errors detected',
       enabled: true,
-      cooldownMs: 1 * 60 * 1000, // 1 minute
+      cooldownMs: 1 * 60 * 1000 // 1 minute
     });
 
     // Low health score alert
@@ -126,7 +126,7 @@ class OperationalMetricsService extends EventEmitter {
       severity: 'medium',
       description: 'System health score is below 70%',
       enabled: true,
-      cooldownMs: 10 * 60 * 1000, // 10 minutes
+      cooldownMs: 10 * 60 * 1000 // 10 minutes
     });
 
     // High response time alert
@@ -137,7 +137,7 @@ class OperationalMetricsService extends EventEmitter {
       severity: 'medium',
       description: 'P95 response time exceeds 5 seconds',
       enabled: true,
-      cooldownMs: 5 * 60 * 1000, // 5 minutes
+      cooldownMs: 5 * 60 * 1000 // 5 minutes
     });
 
     // Circuit breaker alert
@@ -152,7 +152,7 @@ class OperationalMetricsService extends EventEmitter {
       severity: 'high',
       description: 'One or more circuit breakers are open',
       enabled: true,
-      cooldownMs: 2 * 60 * 1000, // 2 minutes
+      cooldownMs: 2 * 60 * 1000 // 2 minutes
     });
 
     // Memory usage alert
@@ -166,7 +166,7 @@ class OperationalMetricsService extends EventEmitter {
       severity: 'medium',
       description: 'Memory usage exceeds 512MB',
       enabled: true,
-      cooldownMs: 15 * 60 * 1000, // 15 minutes
+      cooldownMs: 15 * 60 * 1000 // 15 minutes
     });
   }
 
@@ -272,7 +272,7 @@ class OperationalMetricsService extends EventEmitter {
         state: metrics.state,
         failures: metrics.failures,
         requests: metrics.requests,
-        failureRate: metrics.failureRate,
+        failureRate: metrics.failureRate
       };
     });
 
@@ -287,14 +287,14 @@ class OperationalMetricsService extends EventEmitter {
       Object.entries(healthSummary.dependencies).forEach(([name, dep]) => {
         dependencyHealth[name] = {
           status: dep.status,
-          responseTime: dep.responseTimeMs,
+          responseTime: dep.responseTimeMs
         };
       });
     } catch (error) {
       logger.error(
         'Error collecting health metrics',
         { error: error instanceof Error ? error.message : String(error
-      ) });
+        ) });
     }
 
     const metrics: SystemMetrics = {
@@ -306,7 +306,7 @@ class OperationalMetricsService extends EventEmitter {
         total: this.requestCounts.failed,
         perMinute: totalErrorsThisMinute,
         byCategory: errorsByCategory,
-        bySeverity: errorsBySeverity,
+        bySeverity: errorsBySeverity
       },
       requestMetrics: {
         total: this.requestCounts.total,
@@ -315,11 +315,11 @@ class OperationalMetricsService extends EventEmitter {
         averageResponseTime: Math.round(averageResponseTime * 100) / 100,
         p95ResponseTime: Math.round(p95ResponseTime * 100) / 100,
         p99ResponseTime: Math.round(p99ResponseTime * 100) / 100,
-        requestsPerSecond: Math.round(requestsPerSecond * 100) / 100,
+        requestsPerSecond: Math.round(requestsPerSecond * 100) / 100
       },
       circuitBreakerMetrics,
       healthScore,
-      dependencyHealth,
+      dependencyHealth
     };
 
     // Store in history
@@ -379,7 +379,7 @@ class OperationalMetricsService extends EventEmitter {
             message: rule.description,
             timestamp: Date.now(),
             metrics: { ...metrics },
-            resolved: false,
+            resolved: false
           };
 
           this.activeAlerts.set(rule.id, alert);
@@ -392,8 +392,8 @@ class OperationalMetricsService extends EventEmitter {
             metrics: {
               errorRate: metrics.errorRate.perMinute,
               healthScore: metrics.healthScore,
-              responseTime: metrics.requestMetrics.p95ResponseTime,
-            },
+              responseTime: metrics.requestMetrics.p95ResponseTime
+            }
           });
 
           this.emit('alertTriggered', alert);
@@ -404,14 +404,14 @@ class OperationalMetricsService extends EventEmitter {
 
           logger.info(`ALERT RESOLVED: ${rule.name}`, {
             alertId: existingAlert.id,
-            duration: existingAlert.resolvedAt - existingAlert.timestamp,
+            duration: existingAlert.resolvedAt - existingAlert.timestamp
           });
 
           this.emit('alertResolved', existingAlert);
         }
       } catch (error) {
         logger.error(`Error checking alert rule '${rule.name}'`, {
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : String(error)
         });
       }
     });
@@ -438,7 +438,7 @@ class OperationalMetricsService extends EventEmitter {
         totalErrors: 0,
         averageResponseTime: 0,
         peakMemoryUsage: 0,
-        alertCount: 0,
+        alertCount: 0
       };
     }
 
@@ -446,8 +446,8 @@ class OperationalMetricsService extends EventEmitter {
     const totalErrors = recentMetrics.reduce((sum, m) => sum + m.errorRate.perMinute, 0);
     const averageResponseTime = recentMetrics.reduce(
       (sum,
-      m
-    ) => sum + m.requestMetrics.averageResponseTime, 0) / recentMetrics.length;
+        m
+      ) => sum + m.requestMetrics.averageResponseTime, 0) / recentMetrics.length;
     const peakMemoryUsage = Math.max(...recentMetrics.map(m => m.memoryUsage.heapUsed));
     const alertCount = this.getActiveAlerts().filter(a => a.timestamp >= cutoff).length;
 
@@ -456,7 +456,7 @@ class OperationalMetricsService extends EventEmitter {
       totalErrors,
       averageResponseTime: Math.round(averageResponseTime * 100) / 100,
       peakMemoryUsage,
-      alertCount,
+      alertCount
     };
   }
 
@@ -467,7 +467,7 @@ class OperationalMetricsService extends EventEmitter {
         await this.collectMetrics();
       } catch (error) {
         logger.error('Error collecting operational metrics', {
-          error: error instanceof Error ? error.message : String(error),
+          error: error instanceof Error ? error.message : String(error)
         });
       }
     }, 30000);

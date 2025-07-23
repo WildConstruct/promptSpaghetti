@@ -421,7 +421,7 @@ export class AppealReviewService {
       params.push(updates.internal_comments);
     }
 
-    updateFields.push(`updated_at = NOW()`);
+    updateFields.push('updated_at = NOW()');
     params.push(reviewId);
 
     await this.db.query(`
@@ -792,11 +792,11 @@ export class AppealReviewService {
   private async determinePriority(appeal: Appeal): Promise<'routine' | 'expedited' | 'urgent' | 'critical'> {
     // Map appeal priority to review priority
     switch (appeal.priority) {
-      case 'urgent': return 'critical';
-      case 'high': return 'urgent';
-      case 'medium': return 'expedited';
-      case 'low': return 'routine';
-      default: return 'routine';
+    case 'urgent': return 'critical';
+    case 'high': return 'urgent';
+    case 'medium': return 'expedited';
+    case 'low': return 'routine';
+    default: return 'routine';
     }
   }
 

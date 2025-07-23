@@ -578,20 +578,20 @@ export class ReviewOrchestrationService {
   private async determinePriority(reviewType: ReviewType, data: any): Promise<ReviewPriority> {
     // Priority determination logic based on review type and content
     switch (reviewType) {
-      case 'fraud_case':
-        return data.fraudScore > 90 ? 'emergency' : 
-               data.fraudScore > 75 ? 'urgent' : 
-               data.fraudScore > 50 ? 'high' : 'medium';
+    case 'fraud_case':
+      return data.fraudScore > 90 ? 'emergency' : 
+        data.fraudScore > 75 ? 'urgent' : 
+          data.fraudScore > 50 ? 'high' : 'medium';
       
-      case 'security_alert':
-        return data.severity === 'critical' ? 'emergency' : 
-               data.severity === 'high' ? 'urgent' : 'high';
+    case 'security_alert':
+      return data.severity === 'critical' ? 'emergency' : 
+        data.severity === 'high' ? 'urgent' : 'high';
       
-      case 'enforcement_appeal':
-        return data.appealType === 'account_suspension' ? 'high' : 'medium';
+    case 'enforcement_appeal':
+      return data.appealType === 'account_suspension' ? 'high' : 'medium';
       
-      default:
-        return 'medium';
+    default:
+      return 'medium';
     }
   }
 

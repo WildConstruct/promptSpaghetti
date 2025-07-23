@@ -461,7 +461,7 @@ export class PolicyManagementController {
     await this.auditService.logEvent({
       userId,
       action: 'POLICIES_BULK_ARCHIVED',
-      resource: `policies:bulk`,
+      resource: 'policies:bulk',
       metadata: { policy_ids: policyIds, reason }
     });
 
@@ -489,7 +489,7 @@ export class PolicyManagementController {
     await this.auditService.logEvent({
       userId,
       action: 'VIOLATIONS_BULK_RESOLVED',
-      resource: `violations:bulk`,
+      resource: 'violations:bulk',
       metadata: { 
         violation_ids: violationIds, 
         resolution_type: resolutionType,

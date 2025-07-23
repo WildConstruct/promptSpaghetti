@@ -22,8 +22,8 @@ function determineEpicAssignment(task) {
   
   // Authentication (Story 20.1) detection
   const authKeywords = ['auth', 'login', 'register', 'password', 'jwt', 'token', 'session', 
-                       'signin', 'signup', 'oauth', 'totp', 'mfa', 'authentication', 
-                       'user management', 'account', 'credential'];
+    'signin', 'signup', 'oauth', 'totp', 'mfa', 'authentication', 
+    'user management', 'account', 'credential'];
   
   if (authKeywords.some(keyword => content.includes(keyword))) {
     return {
@@ -38,8 +38,8 @@ function determineEpicAssignment(task) {
   
   // File Browser (Story 20.2) detection  
   const fileKeywords = ['file browser', 'project', 'save', 'load', 'import', 'export',
-                       'file management', 'project management', 'recent files', 
-                       'file preview', 'drag drop', 'upload', 'download'];
+    'file management', 'project management', 'recent files', 
+    'file preview', 'drag drop', 'upload', 'download'];
   
   if (fileKeywords.some(keyword => content.includes(keyword)) && 
       !content.includes('privacy') && !content.includes('policy')) {
@@ -55,8 +55,8 @@ function determineEpicAssignment(task) {
   
   // Epic 19 (Privacy/Compliance) detection
   const privacyKeywords = ['privacy', 'compliance', 'gdpr', 'policy', 'audit', 
-                          'iso 27001', 'security policy', 'data protection',
-                          'privacy policy', 'compliance framework', 'regulatory'];
+    'iso 27001', 'security policy', 'data protection',
+    'privacy policy', 'compliance framework', 'regulatory'];
   
   if (privacyKeywords.some(keyword => content.includes(keyword))) {
     return {
@@ -71,7 +71,7 @@ function determineEpicAssignment(task) {
   
   // Epic 7 (Advanced Nodes) detection
   const advancedKeywords = ['weighted', 'conditional', 'sequential', 'markov', 
-                           'advanced node', 'runtime node', 'node type'];
+    'advanced node', 'runtime node', 'node type'];
   
   if (advancedKeywords.some(keyword => content.includes(keyword))) {
     return {

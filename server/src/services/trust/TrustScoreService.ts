@@ -1147,8 +1147,8 @@ export class TrustScoreService {
     const profileSkills = userProfile.skills?.length || 0;
     const templateComplexity = userTemplates.reduce(
       (sum,
-      t
-    ) => sum + (t.complexityScore || 50), 0) / Math.max(1, userTemplates.length);
+        t
+      ) => sum + (t.complexityScore || 50), 0) / Math.max(1, userTemplates.length);
     
     return Math.round((profileSkills * 5) + (templateComplexity * 0.5));
   }
@@ -1578,17 +1578,17 @@ export class TrustScoreService {
     let start: Date;
 
     switch (timeRange) {
-      case TimeRange.LAST_7D:
-        start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_30D:
-        start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_90D:
-        start = new Date(end.getTime() - 90 * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+    case TimeRange.LAST_7D:
+      start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_30D:
+      start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_90D:
+      start = new Date(end.getTime() - 90 * 24 * 60 * 60 * 1000);
+      break;
+    default:
+      start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
     }
 
     return { startDate: start, endDate: end, timeRange };
@@ -1893,8 +1893,8 @@ export class TrustScoreService {
   private async calculateReviewQualityMetrics(userId: string, userReviews: any[]): Promise<any> {
     const avgLength = userReviews.length > 0 ? userReviews.reduce(
       (sum,
-      r
-    ) => sum + (r.content?.length || 0), 0) / userReviews.length : 0;
+        r
+      ) => sum + (r.content?.length || 0), 0) / userReviews.length : 0;
     
     return {
       reviewCount: userReviews.length,
@@ -2427,17 +2427,17 @@ export class TrustScoreService {
   private async captureEntitySnapshot(entityType: string, entityId: string): Promise<any> {
     try {
       switch (entityType) {
-        case 'user':
-          const user = await this.db.query('SELECT id, email, created_at, status FROM users WHERE id = $1', [entityId]);
-          return user.rows[0] || null;
-        case 'template':
-          const template = await this.db.query('SELECT * FROM templates WHERE id = $1', [entityId]);
-          return template.rows[0] || null;
-        case 'transaction':
-          const transaction = await this.db.query('SELECT * FROM transactions WHERE id = $1', [entityId]);
-          return transaction.rows[0] || null;
-        default:
-          return null;
+      case 'user':
+        const user = await this.db.query('SELECT id, email, created_at, status FROM users WHERE id = $1', [entityId]);
+        return user.rows[0] || null;
+      case 'template':
+        const template = await this.db.query('SELECT * FROM templates WHERE id = $1', [entityId]);
+        return template.rows[0] || null;
+      case 'transaction':
+        const transaction = await this.db.query('SELECT * FROM transactions WHERE id = $1', [entityId]);
+        return transaction.rows[0] || null;
+      default:
+        return null;
       }
     } catch (error) {
       console.error('Failed to capture entity snapshot:', error);

@@ -200,7 +200,7 @@ export class SecurityDashboardFactory {
       widgetCount: number;
       categoriesByType: Record<DashboardType, number>;
     };
-  } {
+    } {
     return {
       framework: {
         dashboardCount: this.framework['dashboards'].size,

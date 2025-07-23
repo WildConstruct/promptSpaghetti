@@ -384,7 +384,7 @@ export async function revisionRequestRoutes(fastify: FastifyInstance) {
           evidence,
           timeline,
           comments,
-          message: `Revision request retrieved successfully`
+          message: 'Revision request retrieved successfully'
         });
 
       } catch (error) {
@@ -471,7 +471,7 @@ export async function revisionRequestRoutes(fastify: FastifyInstance) {
         reply.code(200).send({
           success: true,
           revisionRequest,
-          message: `Revision request updated successfully`
+          message: 'Revision request updated successfully'
         });
 
       } catch (error) {
@@ -550,7 +550,7 @@ export async function revisionRequestRoutes(fastify: FastifyInstance) {
       try {
         const queryParams = request.query;
 
-        console.log(`🔍 Searching revision requests with filters:`, Object.keys(queryParams));
+        console.log('🔍 Searching revision requests with filters:', Object.keys(queryParams));
         const startTime = Date.now();
 
         // Build search query
@@ -774,7 +774,7 @@ export async function revisionRequestRoutes(fastify: FastifyInstance) {
         reply.code(200).send({
           success: true,
           revisionRequest,
-          message: `Revision request submitted for review successfully`
+          message: 'Revision request submitted for review successfully'
         });
 
       } catch (error) {
@@ -1050,7 +1050,7 @@ export async function revisionRequestRoutes(fastify: FastifyInstance) {
         reply.code(201).send({
           success: true,
           annotation,
-          message: `Annotation added successfully`
+          message: 'Annotation added successfully'
         });
 
       } catch (error) {
@@ -1141,7 +1141,7 @@ export async function revisionRequestRoutes(fastify: FastifyInstance) {
         reply.code(201).send({
           success: true,
           comment,
-          message: `Comment added successfully`
+          message: 'Comment added successfully'
         });
 
       } catch (error) {
@@ -1345,7 +1345,7 @@ export async function revisionRequestRoutes(fastify: FastifyInstance) {
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
-        console.log(`⏳ Getting pending revision requests`);
+        console.log('⏳ Getting pending revision requests');
 
         const pendingRequests = await revisionRequestService.getPendingRevisionRequests();
 

@@ -16,14 +16,14 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
     type: z.literal('Subject').default('Subject'),
     subjects: z.array(z.string()).default(['subject']),
     singularForm: z.string().default('subject'),
-    pluralForm: z.string().default('subjects'),
+    pluralForm: z.string().default('subjects')
   }),
 
   Action: baseNodeSchema.extend({
     type: z.literal('Action').default('Action'),
     actions: z.array(z.string()).default(['action']),
     singularForm: z.string().default('action'),
-    pluralForm: z.string().default('actions'),
+    pluralForm: z.string().default('actions')
   }),
 
   WeightedChoice: baseNodeSchema.extend({
@@ -31,35 +31,35 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
     choices: z.array(z.object({
       text: z.string(),
       weight: z.number().min(0).default(1)
-    })).default([{ text: 'choice', weight: 1 }]),
+    })).default([{ text: 'choice', weight: 1 }])
   }),
 
   Concat: baseNodeSchema.extend({
     type: z.literal('Concat').default('Concat'),
     separator: z.string().default(' '),
-    inputs: z.array(z.string()).default([]),
+    inputs: z.array(z.string()).default([])
   }),
 
   Output: baseNodeSchema.extend({
     type: z.literal('Output').default('Output'),
-    outputName: z.string().default('output'),
+    outputName: z.string().default('output')
   }),
 
   Include: baseNodeSchema.extend({
     type: z.literal('Include').default('Include'),
-    graphPath: z.string().default(''),
+    graphPath: z.string().default('')
   }),
 
   SetVariable: baseNodeSchema.extend({
     type: z.literal('SetVariable').default('SetVariable'),
     variableName: z.string().default('variable'),
-    value: z.string().default(''),
+    value: z.string().default('')
   }),
 
   GetVariable: baseNodeSchema.extend({
     type: z.literal('GetVariable').default('GetVariable'),
     variableName: z.string().default('variable'),
-    fallback: z.string().default(''),
+    fallback: z.string().default('')
   }),
 
   // Epic 7 Advanced Node Types
@@ -71,7 +71,7 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
       metadata: z.record(z.any()).optional()
     })).default([{ text: 'advanced choice', weight: 1 }]),
     distribution: z.enum(['uniform', 'exponential', 'gaussian', 'custom']).default('uniform'),
-    parameters: z.record(z.any()).optional(),
+    parameters: z.record(z.any()).optional()
   }),
 
   Conditional: baseNodeSchema.extend({
@@ -79,7 +79,7 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
     condition: z.string().default('true'),
     trueOutput: z.string().default('true result'),
     falseOutput: z.string().default('false result'),
-    variables: z.record(z.any()).optional(),
+    variables: z.record(z.any()).optional()
   }),
 
   Sequential: baseNodeSchema.extend({
@@ -87,7 +87,7 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
     items: z.array(z.string()).default(['item1', 'item2']),
     pattern: z.enum(['linear', 'cyclical', 'random', 'weighted']).default('linear'),
     currentIndex: z.number().default(0),
-    history: z.array(z.number()).optional(),
+    history: z.array(z.number()).optional()
   }),
 
   Markov: baseNodeSchema.extend({
@@ -96,8 +96,8 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
     transitions: z.record(z.record(z.number())).default({}),
     currentState: z.string().default(''),
     maxIterations: z.number().default(100),
-    terminationConditions: z.array(z.string()).optional(),
-  }),
+    terminationConditions: z.array(z.string()).optional()
+  })
 };
 
 export default nodeSchemas;

@@ -592,18 +592,18 @@ export class CollaborationTelemetryService {
 
   private mapPresenceStatus(status: string): 'active' | 'idle' | 'away' | 'offline' {
     switch (status) {
-      case 'online':
-      case 'editing':
-        return 'active';
-      case 'idle':
-        return 'idle';
-      case 'away':
-        return 'away';
-      case 'offline':
-      case 'disconnected':
-        return 'offline';
-      default:
-        return 'active';
+    case 'online':
+    case 'editing':
+      return 'active';
+    case 'idle':
+      return 'idle';
+    case 'away':
+      return 'away';
+    case 'offline':
+    case 'disconnected':
+      return 'offline';
+    default:
+      return 'active';
     }
   }
 

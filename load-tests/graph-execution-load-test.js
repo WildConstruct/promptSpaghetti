@@ -565,58 +565,58 @@ class GraphExecutionTests {
       const testPattern = user.id % 7;
 
       switch (testPattern) {
-        case 0:
-          // Simple + Preview flow
-          flowResults.simple = await GraphExecutionTests.simpleGraphExecutionTest(user);
-          await user.thinkTime();
-          flowResults.preview = await GraphExecutionTests.graphPreviewTest(user);
-          break;
+      case 0:
+        // Simple + Preview flow
+        flowResults.simple = await GraphExecutionTests.simpleGraphExecutionTest(user);
+        await user.thinkTime();
+        flowResults.preview = await GraphExecutionTests.graphPreviewTest(user);
+        break;
           
-        case 1:
-          // Complex + Performance flow
-          flowResults.complex = await GraphExecutionTests.complexGraphExecutionTest(user);
-          await user.thinkTime();
-          flowResults.performance = await GraphExecutionTests.graphPerformanceTest(user);
-          break;
+      case 1:
+        // Complex + Performance flow
+        flowResults.complex = await GraphExecutionTests.complexGraphExecutionTest(user);
+        await user.thinkTime();
+        flowResults.performance = await GraphExecutionTests.graphPerformanceTest(user);
+        break;
           
-        case 2:
-          // Advanced + Export flow
-          flowResults.advanced = await GraphExecutionTests.advancedGraphExecutionTest(user);
-          await user.thinkTime();
-          flowResults.export = await GraphExecutionTests.graphExportTest(user);
-          break;
+      case 2:
+        // Advanced + Export flow
+        flowResults.advanced = await GraphExecutionTests.advancedGraphExecutionTest(user);
+        await user.thinkTime();
+        flowResults.export = await GraphExecutionTests.graphExportTest(user);
+        break;
           
-        case 3:
-          // Batch execution flow
-          flowResults.batch = await GraphExecutionTests.batchGraphExecutionTest(user);
-          await user.thinkTime();
-          flowResults.simple = await GraphExecutionTests.simpleGraphExecutionTest(user);
-          break;
+      case 3:
+        // Batch execution flow
+        flowResults.batch = await GraphExecutionTests.batchGraphExecutionTest(user);
+        await user.thinkTime();
+        flowResults.simple = await GraphExecutionTests.simpleGraphExecutionTest(user);
+        break;
           
-        case 4:
-          // Preview + Export flow
-          flowResults.preview = await GraphExecutionTests.graphPreviewTest(user);
-          await user.thinkTime();
-          flowResults.export = await GraphExecutionTests.graphExportTest(user);
-          break;
+      case 4:
+        // Preview + Export flow
+        flowResults.preview = await GraphExecutionTests.graphPreviewTest(user);
+        await user.thinkTime();
+        flowResults.export = await GraphExecutionTests.graphExportTest(user);
+        break;
           
-        case 5:
-          // Performance + Advanced flow
-          flowResults.performance = await GraphExecutionTests.graphPerformanceTest(user);
-          await user.thinkTime();
-          flowResults.advanced = await GraphExecutionTests.advancedGraphExecutionTest(user);
-          break;
+      case 5:
+        // Performance + Advanced flow
+        flowResults.performance = await GraphExecutionTests.graphPerformanceTest(user);
+        await user.thinkTime();
+        flowResults.advanced = await GraphExecutionTests.advancedGraphExecutionTest(user);
+        break;
           
-        case 6:
-          // Full flow test
-          flowResults.simple = await GraphExecutionTests.simpleGraphExecutionTest(user);
-          await user.thinkTime();
-          flowResults.complex = await GraphExecutionTests.complexGraphExecutionTest(user);
-          await user.thinkTime();
-          flowResults.preview = await GraphExecutionTests.graphPreviewTest(user);
-          await user.thinkTime();
-          flowResults.export = await GraphExecutionTests.graphExportTest(user);
-          break;
+      case 6:
+        // Full flow test
+        flowResults.simple = await GraphExecutionTests.simpleGraphExecutionTest(user);
+        await user.thinkTime();
+        flowResults.complex = await GraphExecutionTests.complexGraphExecutionTest(user);
+        await user.thinkTime();
+        flowResults.preview = await GraphExecutionTests.graphPreviewTest(user);
+        await user.thinkTime();
+        flowResults.export = await GraphExecutionTests.graphExportTest(user);
+        break;
       }
 
       // Store results for reporting

@@ -237,16 +237,16 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
     let files: RecentFileEntry[] = [];
     
     switch (filter) {
-      case 'recent':
-        files = recentFiles;
-        break;
-      case 'favorites':
-        files = favoriteFiles as RecentFileEntry[];
-        break;
-      case 'all':
-      default:
-        files = recentFiles;
-        break;
+    case 'recent':
+      files = recentFiles;
+      break;
+    case 'favorites':
+      files = favoriteFiles as RecentFileEntry[];
+      break;
+    case 'all':
+    default:
+      files = recentFiles;
+      break;
     }
 
     if (searchTerm.trim()) {

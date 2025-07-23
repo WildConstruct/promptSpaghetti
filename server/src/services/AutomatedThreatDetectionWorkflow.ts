@@ -342,23 +342,23 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
     const startTime = Date.now();
     
     switch (step.type) {
-      case 'analysis':
-        await this.executeAnalysisStep(step, alert);
-        break;
-      case 'containment':
-        await this.executeContainmentStep(step, alert);
-        break;
-      case 'investigation':
-        await this.executeInvestigationStep(step, alert);
-        break;
-      case 'notification':
-        await this.executeNotificationStep(step, alert);
-        break;
-      case 'recovery':
-        await this.executeRecoveryStep(step, alert);
-        break;
-      default:
-        throw new Error(`Unknown playbook step type: ${step.type}`);
+    case 'analysis':
+      await this.executeAnalysisStep(step, alert);
+      break;
+    case 'containment':
+      await this.executeContainmentStep(step, alert);
+      break;
+    case 'investigation':
+      await this.executeInvestigationStep(step, alert);
+      break;
+    case 'notification':
+      await this.executeNotificationStep(step, alert);
+      break;
+    case 'recovery':
+      await this.executeRecoveryStep(step, alert);
+      break;
+    default:
+      throw new Error(`Unknown playbook step type: ${step.type}`);
     }
 
     const executionTime = Date.now() - startTime;
@@ -411,26 +411,26 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
    */
   private async executeAutomatedResponse(response: AutomatedResponse): Promise<void> {
     switch (response.type) {
-      case 'block_ip':
-        await this.blockIPAddress(response.target);
-        break;
-      case 'suspend_user':
-        await this.suspendUser(response.target);
-        break;
-      case 'require_mfa':
-        await this.requireAdditionalMFA(response.target);
-        break;
-      case 'force_logout':
-        await this.forceLogoutSessions(response.target);
-        break;
-      case 'rate_limit':
-        await this.applyRateLimit(response.target);
-        break;
-      case 'quarantine':
-        await this.quarantineResource(response.target);
-        break;
-      default:
-        throw new Error(`Unknown response type: ${response.type}`);
+    case 'block_ip':
+      await this.blockIPAddress(response.target);
+      break;
+    case 'suspend_user':
+      await this.suspendUser(response.target);
+      break;
+    case 'require_mfa':
+      await this.requireAdditionalMFA(response.target);
+      break;
+    case 'force_logout':
+      await this.forceLogoutSessions(response.target);
+      break;
+    case 'rate_limit':
+      await this.applyRateLimit(response.target);
+      break;
+    case 'quarantine':
+      await this.quarantineResource(response.target);
+      break;
+    default:
+      throw new Error(`Unknown response type: ${response.type}`);
     }
   }
 

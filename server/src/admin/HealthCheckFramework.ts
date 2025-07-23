@@ -589,11 +589,11 @@ export class HealthCheckFramework {
     }
     if (status === HealthStatus.UNHEALTHY) {
       switch (priority) {
-        case HealthCheckPriority.CRITICAL: return 'critical';
-        case HealthCheckPriority.HIGH: return 'high';
-        case HealthCheckPriority.MEDIUM: return 'medium';
-        case HealthCheckPriority.LOW: return 'low';
-        default: return 'medium';
+      case HealthCheckPriority.CRITICAL: return 'critical';
+      case HealthCheckPriority.HIGH: return 'high';
+      case HealthCheckPriority.MEDIUM: return 'medium';
+      case HealthCheckPriority.LOW: return 'low';
+      default: return 'medium';
       }
     }
     return 'medium';
@@ -667,18 +667,18 @@ export class HealthCheckFramework {
 
     try {
       switch (channel.type) {
-        case 'email':
-          await this.sendEmailAlert(channel.target, alertPayload);
-          break;
-        case 'slack':
-          await this.sendSlackAlert(channel.target, alertPayload);
-          break;
-        case 'webhook':
-          await this.sendWebhookAlert(channel.target, alertPayload);
-          break;
-        case 'sms':
-          await this.sendSMSAlert(channel.target, alertPayload);
-          break;
+      case 'email':
+        await this.sendEmailAlert(channel.target, alertPayload);
+        break;
+      case 'slack':
+        await this.sendSlackAlert(channel.target, alertPayload);
+        break;
+      case 'webhook':
+        await this.sendWebhookAlert(channel.target, alertPayload);
+        break;
+      case 'sms':
+        await this.sendSMSAlert(channel.target, alertPayload);
+        break;
       }
 
       // Audit alert sent

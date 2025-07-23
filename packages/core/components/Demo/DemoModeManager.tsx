@@ -109,31 +109,31 @@ export const DemoModeManager: React.FC<DemoModeManagerProps> = ({
       if (!e.altKey || !e.shiftKey) return;
       
       switch (e.key) {
-        case 'S':
-          // Alt+Shift+S: Toggle screenshot mode
-          e.preventDefault();
-          updateConfig({ screenshotMode: !config.screenshotMode });
-          break;
-        case 'F':
-          // Alt+Shift+F: Toggle presentation focus
-          e.preventDefault();
-          updateConfig({ presentationFocus: !config.presentationFocus });
-          break;
-        case 'P':
-          // Alt+Shift+P: Toggle performance mode
-          e.preventDefault();
-          updateConfig({ performanceMode: !config.performanceMode });
-          break;
-        case 'A':
-          // Alt+Shift+A: Toggle accessibility mode
-          e.preventDefault();
-          updateConfig({ accessibilityMode: !config.accessibilityMode });
-          break;
-        case 'D':
-          // Alt+Shift+D: Toggle debug elements
-          e.preventDefault();
-          updateConfig({ debugElementsHidden: !config.debugElementsHidden });
-          break;
+      case 'S':
+        // Alt+Shift+S: Toggle screenshot mode
+        e.preventDefault();
+        updateConfig({ screenshotMode: !config.screenshotMode });
+        break;
+      case 'F':
+        // Alt+Shift+F: Toggle presentation focus
+        e.preventDefault();
+        updateConfig({ presentationFocus: !config.presentationFocus });
+        break;
+      case 'P':
+        // Alt+Shift+P: Toggle performance mode
+        e.preventDefault();
+        updateConfig({ performanceMode: !config.performanceMode });
+        break;
+      case 'A':
+        // Alt+Shift+A: Toggle accessibility mode
+        e.preventDefault();
+        updateConfig({ accessibilityMode: !config.accessibilityMode });
+        break;
+      case 'D':
+        // Alt+Shift+D: Toggle debug elements
+        e.preventDefault();
+        updateConfig({ debugElementsHidden: !config.debugElementsHidden });
+        break;
       }
     };
 

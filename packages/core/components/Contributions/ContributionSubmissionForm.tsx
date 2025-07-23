@@ -119,39 +119,39 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
     const newErrors: Record<string, string> = {};
 
     switch (step) {
-      case 0: // Type selection
-        if (!formData.type) {
-          newErrors.type = 'Please select a contribution type';
-        }
-        break;
+    case 0: // Type selection
+      if (!formData.type) {
+        newErrors.type = 'Please select a contribution type';
+      }
+      break;
 
-      case 1: // Basic information
-        if (!formData.title?.trim()) {
-          newErrors.title = 'Title is required';
-        } else if (formData.title.length < 5) {
-          newErrors.title = 'Title must be at least 5 characters';
-        } else if (formData.title.length > 200) {
-          newErrors.title = 'Title must be less than 200 characters';
-        }
+    case 1: // Basic information
+      if (!formData.title?.trim()) {
+        newErrors.title = 'Title is required';
+      } else if (formData.title.length < 5) {
+        newErrors.title = 'Title must be at least 5 characters';
+      } else if (formData.title.length > 200) {
+        newErrors.title = 'Title must be less than 200 characters';
+      }
 
-        if (!formData.description?.trim()) {
-          newErrors.description = 'Description is required';
-        } else if (formData.description.length < 20) {
-          newErrors.description = 'Description must be at least 20 characters';
-        } else if (formData.description.length > 2000) {
-          newErrors.description = 'Description must be less than 2000 characters';
-        }
+      if (!formData.description?.trim()) {
+        newErrors.description = 'Description is required';
+      } else if (formData.description.length < 20) {
+        newErrors.description = 'Description must be at least 20 characters';
+      } else if (formData.description.length > 2000) {
+        newErrors.description = 'Description must be less than 2000 characters';
+      }
 
-        if (!formData.category?.trim()) {
-          newErrors.category = 'Category is required';
-        }
-        break;
+      if (!formData.category?.trim()) {
+        newErrors.category = 'Category is required';
+      }
+      break;
 
-      case 2: // Content details
-        if (!formData.content || Object.keys(formData.content).length === 0) {
-          newErrors.content = 'Content details are required';
-        }
-        break;
+    case 2: // Content details
+      if (!formData.content || Object.keys(formData.content).length === 0) {
+        newErrors.content = 'Content details are required';
+      }
+      break;
     }
 
     setErrors(newErrors);
@@ -197,157 +197,157 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
   // Render step content
   const renderStepContent = () => {
     switch (currentStep) {
-      case 0:
-        return (
-          <div className="step-content">
-            <h3>What type of contribution are you creating?</h3>
-            <div className="type-grid">
-              {Object.entries(CONTRIBUTION_TYPE_DESCRIPTIONS).map(([type, description]) => (
-                <div
-                  key={type}
-                  className={`type-option ${formData.type === type ? 'selected' : ''}`}
-                  onClick={() => updateFormData({ type: type as ContributionType })}
-                >
-                  <div className="type-header">
-                    <h4>{description}</h4>
-                  </div>
-                  <p className="type-description">
-                    {getTypeDescription(type as ContributionType)}
-                  </p>
-                </div>
-              ))}
-            </div>
-            {errors.type && <div className="error-message">{errors.type}</div>}
-          </div>
-        );
-
-      case 1:
-        return (
-          <div className="step-content">
-            <h3>Basic Information</h3>
-            
-            <div className="form-group">
-              <label htmlFor="title">Title *</label>
-              <input
-                id="title"
-                type="text"
-                value={formData.title || ''}
-                onChange={(e) => updateFormData({ title: e.target.value })}
-                placeholder="Enter a descriptive title..."
-                className={errors.title ? 'error' : ''}
-              />
-              {errors.title && <div className="error-message">{errors.title}</div>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="description">Description *</label>
-              <textarea
-                id="description"
-                value={formData.description || ''}
-                onChange={(e) => updateFormData({ description: e.target.value })}
-                placeholder="Provide a detailed description of your contribution..."
-                rows={4}
-                className={errors.description ? 'error' : ''}
-              />
-              <div className="char-count">
-                {formData.description?.length || 0} / 2000 characters
-              </div>
-              {errors.description && <div className="error-message">{errors.description}</div>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="category">Category *</label>
-              <select
-                id="category"
-                value={formData.category || ''}
-                onChange={(e) => updateFormData({ category: e.target.value })}
-                className={errors.category ? 'error' : ''}
+    case 0:
+      return (
+        <div className="step-content">
+          <h3>What type of contribution are you creating?</h3>
+          <div className="type-grid">
+            {Object.entries(CONTRIBUTION_TYPE_DESCRIPTIONS).map(([type, description]) => (
+              <div
+                key={type}
+                className={`type-option ${formData.type === type ? 'selected' : ''}`}
+                onClick={() => updateFormData({ type: type as ContributionType })}
               >
-                <option value="">Select a category...</option>
-                {getCategoriesByType(formData.type as ContributionType).map((category) => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-              {errors.category && <div className="error-message">{errors.category}</div>}
-            </div>
+                <div className="type-header">
+                  <h4>{description}</h4>
+                </div>
+                <p className="type-description">
+                  {getTypeDescription(type as ContributionType)}
+                </p>
+              </div>
+            ))}
+          </div>
+          {errors.type && <div className="error-message">{errors.type}</div>}
+        </div>
+      );
 
-            <div className="form-group">
-              <label>Tags (optional)</label>
-              <div className="tags-input">
-                <input
-                  type="text"
-                  placeholder="Add tags..."
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addTag(e.currentTarget.value);
-                      e.currentTarget.value = '';
-                    }
-                  }}
-                />
-                <div className="tags-list">
-                  {formData.tags?.map((tag, index) => (
-                    <span key={index} className="tag">
-                      {tag}
-                      <button
-                        type="button"
-                        onClick={() => removeTag(index)}
-                        className="tag-remove"
-                      >
+    case 1:
+      return (
+        <div className="step-content">
+          <h3>Basic Information</h3>
+            
+          <div className="form-group">
+            <label htmlFor="title">Title *</label>
+            <input
+              id="title"
+              type="text"
+              value={formData.title || ''}
+              onChange={(e) => updateFormData({ title: e.target.value })}
+              placeholder="Enter a descriptive title..."
+              className={errors.title ? 'error' : ''}
+            />
+            {errors.title && <div className="error-message">{errors.title}</div>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Description *</label>
+            <textarea
+              id="description"
+              value={formData.description || ''}
+              onChange={(e) => updateFormData({ description: e.target.value })}
+              placeholder="Provide a detailed description of your contribution..."
+              rows={4}
+              className={errors.description ? 'error' : ''}
+            />
+            <div className="char-count">
+              {formData.description?.length || 0} / 2000 characters
+            </div>
+            {errors.description && <div className="error-message">{errors.description}</div>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="category">Category *</label>
+            <select
+              id="category"
+              value={formData.category || ''}
+              onChange={(e) => updateFormData({ category: e.target.value })}
+              className={errors.category ? 'error' : ''}
+            >
+              <option value="">Select a category...</option>
+              {getCategoriesByType(formData.type as ContributionType).map((category) => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+            {errors.category && <div className="error-message">{errors.category}</div>}
+          </div>
+
+          <div className="form-group">
+            <label>Tags (optional)</label>
+            <div className="tags-input">
+              <input
+                type="text"
+                placeholder="Add tags..."
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTag(e.currentTarget.value);
+                    e.currentTarget.value = '';
+                  }
+                }}
+              />
+              <div className="tags-list">
+                {formData.tags?.map((tag, index) => (
+                  <span key={index} className="tag">
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(index)}
+                      className="tag-remove"
+                    >
                         ×
-                      </button>
-                    </span>
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    case 2:
+      return (
+        <div className="step-content">
+          <h3>Content Details</h3>
+          {renderContentFields()}
+          {errors.content && <div className="error-message">{errors.content}</div>}
+        </div>
+      );
+
+    case 3:
+      return (
+        <div className="step-content">
+          <h3>Review Your Submission</h3>
+          <div className="review-section">
+            <div className="review-item">
+              <strong>Type:</strong> {CONTRIBUTION_TYPE_DESCRIPTIONS[formData.type as ContributionType]}
+            </div>
+            <div className="review-item">
+              <strong>Title:</strong> {formData.title}
+            </div>
+            <div className="review-item">
+              <strong>Category:</strong> {formData.category}
+            </div>
+            <div className="review-item">
+              <strong>Description:</strong>
+              <div className="description-preview">{formData.description}</div>
+            </div>
+            {formData.tags && formData.tags.length > 0 && (
+              <div className="review-item">
+                <strong>Tags:</strong>
+                <div className="tags-preview">
+                  {formData.tags.map((tag, index) => (
+                    <span key={index} className="tag">{tag}</span>
                   ))}
                 </div>
               </div>
-            </div>
+            )}
           </div>
-        );
+          {errors.submit && <div className="error-message">{errors.submit}</div>}
+        </div>
+      );
 
-      case 2:
-        return (
-          <div className="step-content">
-            <h3>Content Details</h3>
-            {renderContentFields()}
-            {errors.content && <div className="error-message">{errors.content}</div>}
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="step-content">
-            <h3>Review Your Submission</h3>
-            <div className="review-section">
-              <div className="review-item">
-                <strong>Type:</strong> {CONTRIBUTION_TYPE_DESCRIPTIONS[formData.type as ContributionType]}
-              </div>
-              <div className="review-item">
-                <strong>Title:</strong> {formData.title}
-              </div>
-              <div className="review-item">
-                <strong>Category:</strong> {formData.category}
-              </div>
-              <div className="review-item">
-                <strong>Description:</strong>
-                <div className="description-preview">{formData.description}</div>
-              </div>
-              {formData.tags && formData.tags.length > 0 && (
-                <div className="review-item">
-                  <strong>Tags:</strong>
-                  <div className="tags-preview">
-                    {formData.tags.map((tag, index) => (
-                      <span key={index} className="tag">{tag}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            {errors.submit && <div className="error-message">{errors.submit}</div>}
-          </div>
-        );
-
-      default:
-        return null;
+    default:
+      return null;
     }
   };
 
@@ -369,134 +369,134 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
   // Render content fields based on type
   const renderContentFields = () => {
     switch (formData.type) {
-      case 'template':
-        return (
-          <div className="content-fields">
-            <div className="form-group">
-              <label>Graph JSON *</label>
-              <textarea
-                value={formData.content?.graphJson ? JSON.stringify(formData.content.graphJson, null, 2) : ''}
-                onChange={(e) => {
-                  try {
-                    const graphJson = JSON.parse(e.target.value);
-                    updateFormData({ 
-                      content: { ...formData.content, graphJson } 
-                    });
-                  } catch (err) {
-                    // Invalid JSON, but still update to show error
-                    updateFormData({ 
-                      content: { ...formData.content, graphJson: e.target.value } 
-                    });
-                  }
-                }}
-                placeholder="Paste your graph JSON here..."
-                rows={8}
-              />
-            </div>
+    case 'template':
+      return (
+        <div className="content-fields">
+          <div className="form-group">
+            <label>Graph JSON *</label>
+            <textarea
+              value={formData.content?.graphJson ? JSON.stringify(formData.content.graphJson, null, 2) : ''}
+              onChange={(e) => {
+                try {
+                  const graphJson = JSON.parse(e.target.value);
+                  updateFormData({ 
+                    content: { ...formData.content, graphJson } 
+                  });
+                } catch (err) {
+                  // Invalid JSON, but still update to show error
+                  updateFormData({ 
+                    content: { ...formData.content, graphJson: e.target.value } 
+                  });
+                }
+              }}
+              placeholder="Paste your graph JSON here..."
+              rows={8}
+            />
+          </div>
             
-            <div className="form-group">
-              <label>Claude Model</label>
+          <div className="form-group">
+            <label>Claude Model</label>
+            <select
+              value={formData.content?.claudeModel || 'claude-3-sonnet'}
+              onChange={(e) => updateFormData({ 
+                content: { ...formData.content, claudeModel: e.target.value } 
+              })}
+            >
+              <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+              <option value="claude-3-opus">Claude 3 Opus</option>
+              <option value="claude-3-haiku">Claude 3 Haiku</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Pricing</label>
+            <div className="pricing-group">
               <select
-                value={formData.content?.claudeModel || 'claude-3-sonnet'}
+                value={formData.content?.pricing?.type || 'free'}
                 onChange={(e) => updateFormData({ 
-                  content: { ...formData.content, claudeModel: e.target.value } 
+                  content: { 
+                    ...formData.content, 
+                    pricing: { 
+                      ...formData.content?.pricing, 
+                      type: e.target.value as 'free' | 'paid' 
+                    } 
+                  } 
                 })}
               >
-                <option value="claude-3-sonnet">Claude 3 Sonnet</option>
-                <option value="claude-3-opus">Claude 3 Opus</option>
-                <option value="claude-3-haiku">Claude 3 Haiku</option>
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
               </select>
-            </div>
-
-            <div className="form-group">
-              <label>Pricing</label>
-              <div className="pricing-group">
-                <select
-                  value={formData.content?.pricing?.type || 'free'}
+                
+              {formData.content?.pricing?.type === 'paid' && (
+                <input
+                  type="number"
+                  placeholder="Price in cents"
+                  value={formData.content?.pricing?.priceInCents || ''}
                   onChange={(e) => updateFormData({ 
                     content: { 
                       ...formData.content, 
                       pricing: { 
                         ...formData.content?.pricing, 
-                        type: e.target.value as 'free' | 'paid' 
+                        priceInCents: parseInt(e.target.value) || 0 
                       } 
                     } 
                   })}
-                >
-                  <option value="free">Free</option>
-                  <option value="paid">Paid</option>
-                </select>
-                
-                {formData.content?.pricing?.type === 'paid' && (
-                  <input
-                    type="number"
-                    placeholder="Price in cents"
-                    value={formData.content?.pricing?.priceInCents || ''}
-                    onChange={(e) => updateFormData({ 
-                      content: { 
-                        ...formData.content, 
-                        pricing: { 
-                          ...formData.content?.pricing, 
-                          priceInCents: parseInt(e.target.value) || 0 
-                        } 
-                      } 
-                    })}
-                  />
-                )}
-              </div>
+                />
+              )}
             </div>
           </div>
-        );
+        </div>
+      );
 
-      case 'knowledge_article':
-      case 'tutorial':
-        return (
-          <div className="content-fields">
-            <div className="form-group">
-              <label>Article/Tutorial Content *</label>
-              <textarea
-                value={formData.content?.body || ''}
-                onChange={(e) => updateFormData({ 
-                  content: { ...formData.content, body: e.target.value } 
-                })}
-                placeholder="Write your content here..."
-                rows={10}
-              />
-            </div>
+    case 'knowledge_article':
+    case 'tutorial':
+      return (
+        <div className="content-fields">
+          <div className="form-group">
+            <label>Article/Tutorial Content *</label>
+            <textarea
+              value={formData.content?.body || ''}
+              onChange={(e) => updateFormData({ 
+                content: { ...formData.content, body: e.target.value } 
+              })}
+              placeholder="Write your content here..."
+              rows={10}
+            />
+          </div>
             
-            <div className="form-group">
-              <label>Difficulty Level</label>
-              <select
-                value={formData.content?.difficulty || 'beginner'}
-                onChange={(e) => updateFormData({ 
-                  content: { ...formData.content, difficulty: e.target.value } 
-                })}
-              >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-                <option value="expert">Expert</option>
-              </select>
-            </div>
+          <div className="form-group">
+            <label>Difficulty Level</label>
+            <select
+              value={formData.content?.difficulty || 'beginner'}
+              onChange={(e) => updateFormData({ 
+                content: { ...formData.content, difficulty: e.target.value } 
+              })}
+            >
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+              <option value="expert">Expert</option>
+            </select>
           </div>
-        );
+        </div>
+      );
 
-      default:
-        return (
-          <div className="content-fields">
-            <div className="form-group">
-              <label>Content *</label>
-              <textarea
-                value={formData.content?.body || ''}
-                onChange={(e) => updateFormData({ 
-                  content: { ...formData.content, body: e.target.value } 
-                })}
-                placeholder="Enter your content here..."
-                rows={8}
-              />
-            </div>
+    default:
+      return (
+        <div className="content-fields">
+          <div className="form-group">
+            <label>Content *</label>
+            <textarea
+              value={formData.content?.body || ''}
+              onChange={(e) => updateFormData({ 
+                content: { ...formData.content, body: e.target.value } 
+              })}
+              placeholder="Enter your content here..."
+              rows={8}
+            />
           </div>
-        );
+        </div>
+      );
     }
   };
 

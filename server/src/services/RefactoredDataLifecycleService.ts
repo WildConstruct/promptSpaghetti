@@ -557,17 +557,17 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     for (const record of records) {
       try {
         switch (operation) {
-          case 'CLASSIFY':
-            await this.classifyRecord(record);
-            break;
-          case 'COMPLIANCE_CHECK':
-            await this.checkCompliance(record);
-            break;
-          case 'TRANSITION':
-            await this.processRecordTransition(record);
-            break;
-          default:
-            throw new Error(`Unknown operation: ${operation}`);
+        case 'CLASSIFY':
+          await this.classifyRecord(record);
+          break;
+        case 'COMPLIANCE_CHECK':
+          await this.checkCompliance(record);
+          break;
+        case 'TRANSITION':
+          await this.processRecordTransition(record);
+          break;
+        default:
+          throw new Error(`Unknown operation: ${operation}`);
         }
         
         result.successCount++;
@@ -711,18 +711,18 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     const fieldValue = this.getFieldValue(record, condition.field);
     
     switch (condition.operator) {
-      case 'EQUALS':
-        return fieldValue === condition.value;
-      case 'GREATER_THAN':
-        return fieldValue > condition.value;
-      case 'LESS_THAN':
-        return fieldValue < condition.value;
-      case 'CONTAINS':
-        return String(fieldValue).includes(String(condition.value));
-      case 'EXISTS':
-        return fieldValue !== undefined && fieldValue !== null;
-      default:
-        return false;
+    case 'EQUALS':
+      return fieldValue === condition.value;
+    case 'GREATER_THAN':
+      return fieldValue > condition.value;
+    case 'LESS_THAN':
+      return fieldValue < condition.value;
+    case 'CONTAINS':
+      return String(fieldValue).includes(String(condition.value));
+    case 'EXISTS':
+      return fieldValue !== undefined && fieldValue !== null;
+    default:
+      return false;
     }
   }
 
@@ -745,20 +745,20 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     const now = new Date();
     
     switch (framework) {
-      case 'GDPR':
-        return this.evaluateGDPRCompliance(record, now);
-      case 'CCPA':
-        return this.evaluateCCPACompliance(record, now);
-      case 'HIPAA':
-        return this.evaluateHIPAACompliance(record, now);
-      default:
-        return {
-          framework,
-          requirement: 'unknown',
-          status: 'UNKNOWN',
-          lastChecked: now,
-          details: { error: `Unknown framework: ${framework}` }
-        };
+    case 'GDPR':
+      return this.evaluateGDPRCompliance(record, now);
+    case 'CCPA':
+      return this.evaluateCCPACompliance(record, now);
+    case 'HIPAA':
+      return this.evaluateHIPAACompliance(record, now);
+    default:
+      return {
+        framework,
+        requirement: 'unknown',
+        status: 'UNKNOWN',
+        lastChecked: now,
+        details: { error: `Unknown framework: ${framework}` }
+      };
     }
   }
 

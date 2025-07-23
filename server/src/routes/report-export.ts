@@ -475,20 +475,20 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
       const mockExportService = new ReportExportService('./temp-preview');
       
       switch (format) {
-        case ExportFormat.HTML:
-          preview = (mockExportService as any).exportToHTML(reportData, { format, delivery: DeliveryMethod.FILE });
-          break;
-        case ExportFormat.CSV:
-          preview = (mockExportService as any).exportToCSV(reportData, { format, delivery: DeliveryMethod.FILE });
-          break;
-        case ExportFormat.JSON:
-          preview = (mockExportService as any).exportToJSON(reportData, { format, delivery: DeliveryMethod.FILE });
-          break;
-        case ExportFormat.XML:
-          preview = (mockExportService as any).exportToXML(reportData, { format, delivery: DeliveryMethod.FILE });
-          break;
-        default:
-          preview = 'Preview not available for this format';
+      case ExportFormat.HTML:
+        preview = (mockExportService as any).exportToHTML(reportData, { format, delivery: DeliveryMethod.FILE });
+        break;
+      case ExportFormat.CSV:
+        preview = (mockExportService as any).exportToCSV(reportData, { format, delivery: DeliveryMethod.FILE });
+        break;
+      case ExportFormat.JSON:
+        preview = (mockExportService as any).exportToJSON(reportData, { format, delivery: DeliveryMethod.FILE });
+        break;
+      case ExportFormat.XML:
+        preview = (mockExportService as any).exportToXML(reportData, { format, delivery: DeliveryMethod.FILE });
+        break;
+      default:
+        preview = 'Preview not available for this format';
       }
       
       return reply.code(200).send({

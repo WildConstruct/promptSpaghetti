@@ -63,15 +63,15 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
     const reason = actionReason.trim();
     
     switch (pendingAction) {
-      case 'approve':
-        onApprove?.(selectedRequest.id, reason);
-        break;
-      case 'reject':
-        onReject?.(selectedRequest.id, reason);
-        break;
-      case 'escalate':
-        onEscalate?.(selectedRequest.id, reason);
-        break;
+    case 'approve':
+      onApprove?.(selectedRequest.id, reason);
+      break;
+    case 'reject':
+      onReject?.(selectedRequest.id, reason);
+      break;
+    case 'escalate':
+      onEscalate?.(selectedRequest.id, reason);
+      break;
     }
 
     setActionReason('');
@@ -82,19 +82,19 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
 
   const getPriorityColor = (priority: ApprovalRequest['priority']) => {
     switch (priority) {
-      case 'critical': return '#dc3545';
-      case 'high': return '#fd7e14';
-      case 'medium': return '#ffc107';
-      case 'low': return '#28a745';
+    case 'critical': return '#dc3545';
+    case 'high': return '#fd7e14';
+    case 'medium': return '#ffc107';
+    case 'low': return '#28a745';
     }
   };
 
   const getStatusColor = (status: ApprovalRequest['status']) => {
     switch (status) {
-      case 'pending': return '#ffc107';
-      case 'approved': return '#28a745';
-      case 'rejected': return '#dc3545';
-      case 'escalated': return '#fd7e14';
+    case 'pending': return '#ffc107';
+    case 'approved': return '#28a745';
+    case 'rejected': return '#dc3545';
+    case 'escalated': return '#fd7e14';
     }
   };
 

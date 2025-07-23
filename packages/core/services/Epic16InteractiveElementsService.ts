@@ -857,43 +857,43 @@ export class Epic16InteractiveElementsService extends EventEmitter {
     }
 
     switch (operator) {
-      case ComparisonOperator.EQUALS:
-        return fieldValue === targetValue;
-      case ComparisonOperator.NOT_EQUALS:
-        return fieldValue !== targetValue;
-      case ComparisonOperator.CONTAINS:
-        return String(fieldValue).includes(String(targetValue));
-      case ComparisonOperator.NOT_CONTAINS:
-        return !String(fieldValue).includes(String(targetValue));
-      case ComparisonOperator.STARTS_WITH:
-        return String(fieldValue).startsWith(String(targetValue));
-      case ComparisonOperator.ENDS_WITH:
-        return String(fieldValue).endsWith(String(targetValue));
-      case ComparisonOperator.GREATER_THAN:
-        return Number(fieldValue) > Number(targetValue);
-      case ComparisonOperator.LESS_THAN:
-        return Number(fieldValue) < Number(targetValue);
-      case ComparisonOperator.GREATER_EQUAL:
-        return Number(fieldValue) >= Number(targetValue);
-      case ComparisonOperator.LESS_EQUAL:
-        return Number(fieldValue) <= Number(targetValue);
-      case ComparisonOperator.IN:
-        return Array.isArray(targetValue) && targetValue.includes(fieldValue);
-      case ComparisonOperator.NOT_IN:
-        return Array.isArray(targetValue) && !targetValue.includes(fieldValue);
-      case ComparisonOperator.EXISTS:
-        return fieldValue !== undefined && fieldValue !== null;
-      case ComparisonOperator.NOT_EXISTS:
-        return fieldValue === undefined || fieldValue === null;
-      case ComparisonOperator.REGEX:
-        try {
-          const regex = new RegExp(String(targetValue), caseSensitive ? 'g' : 'gi');
-          return regex.test(String(fieldValue));
-        } catch {
-          return false;
-        }
-      default:
+    case ComparisonOperator.EQUALS:
+      return fieldValue === targetValue;
+    case ComparisonOperator.NOT_EQUALS:
+      return fieldValue !== targetValue;
+    case ComparisonOperator.CONTAINS:
+      return String(fieldValue).includes(String(targetValue));
+    case ComparisonOperator.NOT_CONTAINS:
+      return !String(fieldValue).includes(String(targetValue));
+    case ComparisonOperator.STARTS_WITH:
+      return String(fieldValue).startsWith(String(targetValue));
+    case ComparisonOperator.ENDS_WITH:
+      return String(fieldValue).endsWith(String(targetValue));
+    case ComparisonOperator.GREATER_THAN:
+      return Number(fieldValue) > Number(targetValue);
+    case ComparisonOperator.LESS_THAN:
+      return Number(fieldValue) < Number(targetValue);
+    case ComparisonOperator.GREATER_EQUAL:
+      return Number(fieldValue) >= Number(targetValue);
+    case ComparisonOperator.LESS_EQUAL:
+      return Number(fieldValue) <= Number(targetValue);
+    case ComparisonOperator.IN:
+      return Array.isArray(targetValue) && targetValue.includes(fieldValue);
+    case ComparisonOperator.NOT_IN:
+      return Array.isArray(targetValue) && !targetValue.includes(fieldValue);
+    case ComparisonOperator.EXISTS:
+      return fieldValue !== undefined && fieldValue !== null;
+    case ComparisonOperator.NOT_EXISTS:
+      return fieldValue === undefined || fieldValue === null;
+    case ComparisonOperator.REGEX:
+      try {
+        const regex = new RegExp(String(targetValue), caseSensitive ? 'g' : 'gi');
+        return regex.test(String(fieldValue));
+      } catch {
         return false;
+      }
+    default:
+      return false;
     }
   }
 

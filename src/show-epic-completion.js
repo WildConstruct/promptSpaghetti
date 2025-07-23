@@ -136,14 +136,14 @@ function getProgressBar(percentage, width = 20) {
 
 function getStatusIcon(status) {
   switch (status) {
-    case 'complete': return '✅';
-    case 'in_progress': return '🔄';
-    case 'partial': return '⚡';
-    case 'missing': return '❌';
-    case 'exists': return '📁';
-    case 'backend_ready': return '🔧';
-    case 'unknown': return '❓';
-    default: return '📋';
+  case 'complete': return '✅';
+  case 'in_progress': return '🔄';
+  case 'partial': return '⚡';
+  case 'missing': return '❌';
+  case 'exists': return '📁';
+  case 'backend_ready': return '🔧';
+  case 'unknown': return '❓';
+  default: return '📋';
   }
 }
 
@@ -283,9 +283,9 @@ async function showIntegratedDashboard() {
       
       Object.entries(taskStatus.byStatus).forEach(([status, count]) => {
         const icon = status === 'TODO' ? '⏳' : 
-                    status === 'IN_PROGRESS' ? '🔄' :
-                    status === 'REVIEW' ? '👁️' : 
-                    status === 'COMPLETED' ? '✅' : '📋';
+          status === 'IN_PROGRESS' ? '🔄' :
+            status === 'REVIEW' ? '👁️' : 
+              status === 'COMPLETED' ? '✅' : '📋';
         console.log(`${colors.bright}├─ ${icon} ${status}: ${count}${colors.reset}`);
       });
     } catch (error) {

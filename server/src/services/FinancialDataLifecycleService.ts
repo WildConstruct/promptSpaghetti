@@ -425,7 +425,7 @@ export class FinancialDataLifecycleService {
     }
     
     if (limit) {
-      query += ` LIMIT ?`;
+      query += ' LIMIT ?';
       params.push(limit);
     }
 
@@ -575,30 +575,30 @@ export class FinancialDataLifecycleService {
       let details = '';
 
       switch (check.type) {
-        case 'legal_hold_check':
-          passed = !record.legalHold || (record.legalHoldExpiresAt && record.legalHoldExpiresAt < new Date());
-          if (!passed) details = 'Record is under legal hold';
-          break;
+      case 'legal_hold_check':
+        passed = !record.legalHold || (record.legalHoldExpiresAt && record.legalHoldExpiresAt < new Date());
+        if (!passed) details = 'Record is under legal hold';
+        break;
           
-        case 'active_transaction_check':
-          // In a real implementation, this would check for active transactions
-          // For now, assume transactions older than 30 days are safe to delete
-          passed = !record.lastAccessedAt || (Date.now() - record.lastAccessedAt.getTime()) > 30 * 24 * 60 * 60 * 1000;
-          if (!passed) details = 'Record was recently accessed';
-          break;
+      case 'active_transaction_check':
+        // In a real implementation, this would check for active transactions
+        // For now, assume transactions older than 30 days are safe to delete
+        passed = !record.lastAccessedAt || (Date.now() - record.lastAccessedAt.getTime()) > 30 * 24 * 60 * 60 * 1000;
+        if (!passed) details = 'Record was recently accessed';
+        break;
           
-        case 'audit_period_check':
-          // Check if record is within audit period (typically last 3 years)
-          const auditPeriodYears = (check.config.auditPeriodYears as number) || 3;
-          const auditCutoff = new Date();
-          auditCutoff.setFullYear(auditCutoff.getFullYear() - auditPeriodYears);
-          passed = record.createdAt < auditCutoff;
-          if (!passed) details = 'Record is within audit period';
-          break;
+      case 'audit_period_check':
+        // Check if record is within audit period (typically last 3 years)
+        const auditPeriodYears = (check.config.auditPeriodYears as number) || 3;
+        const auditCutoff = new Date();
+        auditCutoff.setFullYear(auditCutoff.getFullYear() - auditPeriodYears);
+        passed = record.createdAt < auditCutoff;
+        if (!passed) details = 'Record is within audit period';
+        break;
           
-        default:
-          // Custom safety checks would be implemented here
-          passed = true;
+      default:
+        // Custom safety checks would be implemented here
+        passed = true;
       }
 
       results.push({
@@ -630,20 +630,20 @@ export class FinancialDataLifecycleService {
       let details = '';
 
       switch (step.type) {
-        case 'hash_verification':
-          // Verify record integrity before deletion
-          const currentHash = this.generateVerificationHash(record);
-          passed = currentHash.length === 64; // Basic hash validation
-          if (!passed) details = 'Hash verification failed';
-          break;
+      case 'hash_verification':
+        // Verify record integrity before deletion
+        const currentHash = this.generateVerificationHash(record);
+        passed = currentHash.length === 64; // Basic hash validation
+        if (!passed) details = 'Hash verification failed';
+        break;
           
-        case 'approval_required':
-          // This would check for existing approvals
-          passed = true; // Assume approved for this example
-          break;
+      case 'approval_required':
+        // This would check for existing approvals
+        passed = true; // Assume approved for this example
+        break;
           
-        default:
-          passed = true;
+      default:
+        passed = true;
       }
 
       results.push({

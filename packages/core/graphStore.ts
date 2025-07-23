@@ -139,7 +139,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
             lastModified: new Date().toISOString(),
             author: options.author,
             tags: options.tags || [],
-            fileFormatVersion: '1.0.0',
+            fileFormatVersion: '1.0.0'
           } : state.currentProject
         });
       }
@@ -237,7 +237,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
             lastModified: new Date().toISOString(),
             author: options.author,
             tags: options.tags || [],
-            fileFormatVersion: '1.0.0',
+            fileFormatVersion: '1.0.0'
           }
         });
       }
@@ -245,7 +245,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       return {
         success: result.success,
         error: result.error,
-        projectId: result.projectId,
+        projectId: result.projectId
       };
     } catch (error) {
       return {
@@ -300,7 +300,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
             description: options.description,
             author: options.author,
             tags: options.tags || [],
-            lastModified: new Date().toISOString(),
+            lastModified: new Date().toISOString()
           }
         });
       }
@@ -319,7 +319,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       const result = await ServerProjectManager.deleteProjectFromServer(projectId, userId);
       return {
         success: result.success,
-        error: result.error,
+        error: result.error
       };
     } catch (error) {
       return {
@@ -333,19 +333,19 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     try {
       const result = await ServerProjectManager.getUserProjects({
         userId,
-        ...query,
+        ...query
       });
       
       if ('error' in result) {
         return {
           success: false,
-          error: result.error,
+          error: result.error
         };
       }
       
       return {
         success: true,
-        projects: result.projects,
+        projects: result.projects
       };
     } catch (error) {
       return {
@@ -430,5 +430,5 @@ export const useGraphStore = create<GraphState>((set, get) => ({
         }
       }
     };
-  },
+  }
 }));

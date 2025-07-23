@@ -501,59 +501,59 @@ export function generateKPIRecommendations(kpiId: string, value: number, status:
   
   if (status === 'critical' || status === 'warning') {
     switch (kpiId) {
-      case 'runtime_fcp':
-      case 'runtime_lcp':
-        recommendations.push(
-          'Optimize critical rendering path',
-          'Minimize render-blocking resources',
-          'Enable resource preloading for critical assets',
-          'Consider server-side rendering or static generation'
-        );
-        break;
+    case 'runtime_fcp':
+    case 'runtime_lcp':
+      recommendations.push(
+        'Optimize critical rendering path',
+        'Minimize render-blocking resources',
+        'Enable resource preloading for critical assets',
+        'Consider server-side rendering or static generation'
+      );
+      break;
         
-      case 'runtime_fid':
-        recommendations.push(
-          'Reduce JavaScript execution time during initial load',
-          'Break up long-running tasks with setTimeout or scheduler',
-          'Use web workers for heavy computations',
-          'Implement code splitting to reduce main thread work'
-        );
-        break;
+    case 'runtime_fid':
+      recommendations.push(
+        'Reduce JavaScript execution time during initial load',
+        'Break up long-running tasks with setTimeout or scheduler',
+        'Use web workers for heavy computations',
+        'Implement code splitting to reduce main thread work'
+      );
+      break;
         
-      case 'api_graph_execution':
-        recommendations.push(
-          'Implement caching for repeated graph operations',
-          'Optimize graph traversal algorithms',
-          'Consider parallel processing for independent nodes',
-          'Add graph complexity limits and validation'
-        );
-        break;
+    case 'api_graph_execution':
+      recommendations.push(
+        'Implement caching for repeated graph operations',
+        'Optimize graph traversal algorithms',
+        'Consider parallel processing for independent nodes',
+        'Add graph complexity limits and validation'
+      );
+      break;
         
-      case 'memory_peak_usage':
-        recommendations.push(
-          'Implement object pooling for frequently created objects',
-          'Add proper cleanup in component unmounting',
-          'Use virtualization for large lists',
-          'Profile memory usage to identify leaks'
-        );
-        break;
+    case 'memory_peak_usage':
+      recommendations.push(
+        'Implement object pooling for frequently created objects',
+        'Add proper cleanup in component unmounting',
+        'Use virtualization for large lists',
+        'Profile memory usage to identify leaks'
+      );
+      break;
         
-      case 'bundle_main_size':
-      case 'bundle_total_size':
-        recommendations.push(
-          'Enable code splitting for route-based loading',
-          'Remove unused dependencies and dead code',
-          'Use dynamic imports for non-critical features',
-          'Optimize third-party library usage'
-        );
-        break;
+    case 'bundle_main_size':
+    case 'bundle_total_size':
+      recommendations.push(
+        'Enable code splitting for route-based loading',
+        'Remove unused dependencies and dead code',
+        'Use dynamic imports for non-critical features',
+        'Optimize third-party library usage'
+      );
+      break;
         
-      default:
-        recommendations.push(
-          'Monitor this metric closely for trends',
-          'Consider performance optimization strategies',
-          'Review related system components'
-        );
+    default:
+      recommendations.push(
+        'Monitor this metric closely for trends',
+        'Consider performance optimization strategies',
+        'Review related system components'
+      );
     }
   }
   

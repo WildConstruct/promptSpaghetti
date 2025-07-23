@@ -97,20 +97,20 @@ export class ConflictResolver extends EventEmitter {
     }
     
     switch (this.config.strategy) {
-      case ConflictResolutionStrategy.LAST_WRITER_WINS:
-        return this.resolveLastWriterWins(operation, conflictResult);
+    case ConflictResolutionStrategy.LAST_WRITER_WINS:
+      return this.resolveLastWriterWins(operation, conflictResult);
         
-      case ConflictResolutionStrategy.FIRST_WRITER_WINS:
-        throw new Error('First writer wins - operation rejected');
+    case ConflictResolutionStrategy.FIRST_WRITER_WINS:
+      throw new Error('First writer wins - operation rejected');
         
-      case ConflictResolutionStrategy.OPERATIONAL_TRANSFORM:
-        return await this.resolveOperationalTransform(operation, conflictResult);
+    case ConflictResolutionStrategy.OPERATIONAL_TRANSFORM:
+      return await this.resolveOperationalTransform(operation, conflictResult);
         
-      case ConflictResolutionStrategy.MERGE:
-        return await this.resolveMerge(operation, conflictResult);
+    case ConflictResolutionStrategy.MERGE:
+      return await this.resolveMerge(operation, conflictResult);
         
-      default:
-        throw new Error('Manual conflict resolution required');
+    default:
+      throw new Error('Manual conflict resolution required');
     }
   }
   
@@ -241,25 +241,25 @@ export class ConflictResolver extends EventEmitter {
   
   private getAffectedNodeId(operation: GraphOperation): string | null {
     switch (operation.type) {
-      case OperationType.NODE_ADD:
-        return (operation as NodeAddOperation).payload.node.id;
-      case OperationType.NODE_DELETE:
-        return (operation as NodeDeleteOperation).payload.nodeId;
-      case OperationType.NODE_UPDATE:
-        return (operation as NodeUpdateOperation).payload.nodeId;
-      default:
-        return null;
+    case OperationType.NODE_ADD:
+      return (operation as NodeAddOperation).payload.node.id;
+    case OperationType.NODE_DELETE:
+      return (operation as NodeDeleteOperation).payload.nodeId;
+    case OperationType.NODE_UPDATE:
+      return (operation as NodeUpdateOperation).payload.nodeId;
+    default:
+      return null;
     }
   }
   
   private getAffectedEdgeId(operation: GraphOperation): string | null {
     switch (operation.type) {
-      case OperationType.EDGE_ADD:
-        return (operation as EdgeAddOperation).payload.edge.id;
-      case OperationType.EDGE_DELETE:
-        return (operation as EdgeDeleteOperation).payload.edgeId;
-      default:
-        return null;
+    case OperationType.EDGE_ADD:
+      return (operation as EdgeAddOperation).payload.edge.id;
+    case OperationType.EDGE_DELETE:
+      return (operation as EdgeDeleteOperation).payload.edgeId;
+    default:
+      return null;
     }
   }
   
@@ -315,16 +315,16 @@ export class ConflictResolver extends EventEmitter {
     conflictType: ConflictType
   ): 'low' | 'medium' | 'high' | 'critical' {
     switch (conflictType) {
-      case ConflictType.DELETE_MODIFY:
-        return 'critical';
-      case ConflictType.STRUCTURAL_CONFLICT:
-        return 'high';
-      case ConflictType.CONCURRENT_EDIT:
-        return 'medium';
-      case ConflictType.MOVE_MODIFY:
-        return 'low';
-      default:
-        return 'medium';
+    case ConflictType.DELETE_MODIFY:
+      return 'critical';
+    case ConflictType.STRUCTURAL_CONFLICT:
+      return 'high';
+    case ConflictType.CONCURRENT_EDIT:
+      return 'medium';
+    case ConflictType.MOVE_MODIFY:
+      return 'low';
+    default:
+      return 'medium';
     }
   }
   
@@ -336,32 +336,32 @@ export class ConflictResolver extends EventEmitter {
     const options: ConflictResolutionOption[] = [];
     
     switch (conflictType) {
-      case ConflictType.CONCURRENT_EDIT:
-        options.push({
-          strategy: ConflictResolutionStrategy.MERGE,
-          description: 'Merge both sets of changes',
-          automated: true,
-          confidence: 0.8
-        });
-        break;
+    case ConflictType.CONCURRENT_EDIT:
+      options.push({
+        strategy: ConflictResolutionStrategy.MERGE,
+        description: 'Merge both sets of changes',
+        automated: true,
+        confidence: 0.8
+      });
+      break;
         
-      case ConflictType.DELETE_MODIFY:
-        options.push({
-          strategy: ConflictResolutionStrategy.LAST_WRITER_WINS,
-          description: 'Keep the most recent change',
-          automated: true,
-          confidence: 0.6
-        });
-        break;
+    case ConflictType.DELETE_MODIFY:
+      options.push({
+        strategy: ConflictResolutionStrategy.LAST_WRITER_WINS,
+        description: 'Keep the most recent change',
+        automated: true,
+        confidence: 0.6
+      });
+      break;
         
-      case ConflictType.MOVE_MODIFY:
-        options.push({
-          strategy: ConflictResolutionStrategy.OPERATIONAL_TRANSFORM,
-          description: 'Apply both changes using transformation',
-          automated: true,
-          confidence: 0.9
-        });
-        break;
+    case ConflictType.MOVE_MODIFY:
+      options.push({
+        strategy: ConflictResolutionStrategy.OPERATIONAL_TRANSFORM,
+        description: 'Apply both changes using transformation',
+        automated: true,
+        confidence: 0.9
+      });
+      break;
     }
     
     return options;

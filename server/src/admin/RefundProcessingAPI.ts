@@ -632,11 +632,11 @@ export class RefundProcessingAPI {
         this.getPendingRefunds(
           { query: { limit: 10 } },
           { send: (
-        ) => {}, code: () => ({ send: (data: any) => data.data }) }),
+          ) => {}, code: () => ({ send: (data: any) => data.data }) }),
         this.getOverdueRefunds(
           { query: { limit: 5 } },
           { send: (
-        ) => {}, code: () => ({ send: (data: any) => data.data }) })
+          ) => {}, code: () => ({ send: (data: any) => data.data }) })
       ]);
 
       return reply.code(200).send({

@@ -509,36 +509,36 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
         try {
           // Handle different bulk actions
           switch (action) {
-            case 'update_status':
-              const statusResult = await chargebackService.updateChargebackStatus(chargebackId, parameters);
-              if (statusResult.success) {
-                bulkResult.successful++;
-                bulkResult.results.push({ chargeback_id: chargebackId, success: true });
-              } else {
-                bulkResult.failed++;
-                bulkResult.results.push({ 
-                  chargeback_id: chargebackId, 
-                  success: false, 
-                  error: statusResult.error?.message 
-                });
-              }
-              break;
-              
-            case 'add_tags':
-            case 'add_notes':
-            case 'assign_reviewer':
-              // Implementation for other bulk actions
+          case 'update_status':
+            const statusResult = await chargebackService.updateChargebackStatus(chargebackId, parameters);
+            if (statusResult.success) {
               bulkResult.successful++;
               bulkResult.results.push({ chargeback_id: chargebackId, success: true });
-              break;
-              
-            default:
+            } else {
               bulkResult.failed++;
               bulkResult.results.push({ 
                 chargeback_id: chargebackId, 
                 success: false, 
-                error: `Unsupported action: ${action}` 
+                error: statusResult.error?.message 
               });
+            }
+            break;
+              
+          case 'add_tags':
+          case 'add_notes':
+          case 'assign_reviewer':
+            // Implementation for other bulk actions
+            bulkResult.successful++;
+            bulkResult.results.push({ chargeback_id: chargebackId, success: true });
+            break;
+              
+          default:
+            bulkResult.failed++;
+            bulkResult.results.push({ 
+              chargeback_id: chargebackId, 
+              success: false, 
+              error: `Unsupported action: ${action}` 
+            });
           }
         } catch (error) {
           bulkResult.failed++;
@@ -613,23 +613,23 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
 
       // Handle different event types
       switch (event.type) {
-        case 'charge.dispute.created':
-          // Create chargeback record from Stripe dispute
-          await handleStripeDisputeCreated(event.data.object);
-          break;
+      case 'charge.dispute.created':
+        // Create chargeback record from Stripe dispute
+        await handleStripeDisputeCreated(event.data.object);
+        break;
           
-        case 'charge.dispute.updated':
-          // Update existing chargeback status
-          await handleStripeDisputeUpdated(event.data.object);
-          break;
+      case 'charge.dispute.updated':
+        // Update existing chargeback status
+        await handleStripeDisputeUpdated(event.data.object);
+        break;
           
-        case 'charge.dispute.closed':
-          // Mark chargeback as closed with outcome
-          await handleStripeDisputeClosed(event.data.object);
-          break;
+      case 'charge.dispute.closed':
+        // Mark chargeback as closed with outcome
+        await handleStripeDisputeClosed(event.data.object);
+        break;
           
-        default:
-          fastify.log.info('Unhandled Stripe event type:', event.type);
+      default:
+        fastify.log.info('Unhandled Stripe event type:', event.type);
       }
 
       return reply.code(200).send({ received: true });

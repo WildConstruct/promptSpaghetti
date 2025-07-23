@@ -156,28 +156,28 @@ export class LocalTemplateStorage implements TemplateStorage {
       let aValue: any, bValue: any;
       
       switch (sortBy) {
-        case 'name':
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-          break;
-        case 'created':
-          aValue = new Date(a.metadata.created).getTime();
-          bValue = new Date(b.metadata.created).getTime();
-          break;
-        case 'modified':
-          aValue = new Date(a.metadata.lastModified).getTime();
-          bValue = new Date(b.metadata.lastModified).getTime();
-          break;
-        case 'rating':
-          aValue = a.rating;
-          bValue = b.rating;
-          break;
-        case 'usage':
-          aValue = a.metadata.usageCount;
-          bValue = b.metadata.usageCount;
-          break;
-        default:
-          return 0;
+      case 'name':
+        aValue = a.name.toLowerCase();
+        bValue = b.name.toLowerCase();
+        break;
+      case 'created':
+        aValue = new Date(a.metadata.created).getTime();
+        bValue = new Date(b.metadata.created).getTime();
+        break;
+      case 'modified':
+        aValue = new Date(a.metadata.lastModified).getTime();
+        bValue = new Date(b.metadata.lastModified).getTime();
+        break;
+      case 'rating':
+        aValue = a.rating;
+        bValue = b.rating;
+        break;
+      case 'usage':
+        aValue = a.metadata.usageCount;
+        bValue = b.metadata.usageCount;
+        break;
+      default:
+        return 0;
       }
       
       if (sortOrder === 'asc') {
@@ -548,17 +548,17 @@ export class TemplateService {
     
     nodes.forEach(node => {
       switch (node.type) {
-        case 'WeightedChoice':
-          estimate += (node.data?.choices?.length || 1) * 10;
-          break;
-        case 'Concat':
-          estimate += 20;
-          break;
-        case 'Output':
-          estimate += 50;
-          break;
-        default:
-          estimate += 15;
+      case 'WeightedChoice':
+        estimate += (node.data?.choices?.length || 1) * 10;
+        break;
+      case 'Concat':
+        estimate += 20;
+        break;
+      case 'Output':
+        estimate += 50;
+        break;
+      default:
+        estimate += 15;
       }
     });
 

@@ -30,7 +30,7 @@ export interface VFXExportMetadata {
   
   // Wild Construct system info
   generator: {
-    name: "Wild Construct Prompt Generator";
+    name: 'Wild Construct Prompt Generator';
     version: string;
     build: string;
   };
@@ -45,8 +45,8 @@ export interface VFXExportMetadata {
   
   // Export settings
   export: {
-    format: "vfx-pipeline-v1";
-    quality: "production" | "preview" | "debug";
+    format: 'vfx-pipeline-v1';
+    quality: 'production' | 'preview' | 'debug';
     includeDebugInfo: boolean;
     includeHistoricalData: boolean;
   };
@@ -79,7 +79,7 @@ export interface VFXPromptData {
   variables: {
     [variableName: string]: {
       value: string;                  // Final substituted value
-      source: "user" | "generated" | "scene_data" | "default";
+      source: 'user' | 'generated' | 'scene_data' | 'default';
       alternatives?: string[];        // Other possible values that were rejected
       confidence?: number;            // 0-1 confidence if generated
     };
@@ -124,7 +124,7 @@ export interface VFXGraphStructure {
   
   // Graph analysis
   analysis: {
-    complexity: "simple" | "moderate" | "complex";
+    complexity: 'simple' | 'moderate' | 'complex';
     variabilityScore: number;         // 0-1 how much output varies
     determinismScore: number;         // 0-1 how predictable output is
     performanceScore: number;         // 0-1 execution efficiency
@@ -137,7 +137,7 @@ export interface VFXGraphNode {
   label: string;
   
   // VFX-friendly type categorization
-  category: "input" | "logic" | "transformation" | "output" | "variable";
+  category: 'input' | 'logic' | 'transformation' | 'output' | 'variable';
   purpose: string;                    // Human-readable purpose
   
   // Configuration
@@ -172,7 +172,7 @@ export interface VFXGraphConnection {
     nodeId: string;
     port?: string;
   };
-  dataType: "text" | "number" | "boolean" | "array" | "object";
+  dataType: 'text' | 'number' | 'boolean' | 'array' | 'object';
   label?: string;
 }
 
@@ -229,7 +229,7 @@ export interface VFXExecutionData {
 export interface VFXExecutionIteration {
   iterationId: string;
   timestamp: string;
-  trigger: "user_request" | "auto_refresh" | "variable_change" | "node_change";
+  trigger: 'user_request' | 'auto_refresh' | 'variable_change' | 'node_change';
   seed: number;
   result: string;
   executionTime: number;
@@ -237,7 +237,7 @@ export interface VFXExecutionIteration {
 
 export interface VFXModification {
   timestamp: string;
-  type: "node_added" | "node_removed" | "node_modified" | "connection_added" | "connection_removed" | "variable_changed";
+  type: 'node_added' | 'node_removed' | 'node_modified' | 'connection_added' | 'connection_removed' | 'variable_changed';
   nodeId?: string;
   before?: unknown;
   after?: unknown;
@@ -259,7 +259,7 @@ export interface VFXExtensions {
     frameCount?: number;
     fps?: number;
     keyframes?: VFXKeyframe[];
-    interpolation?: "linear" | "ease" | "ease-in-out" | "bezier";
+    interpolation?: 'linear' | 'ease' | 'ease-in-out' | 'bezier';
   };
   
   // 3D scene integration
@@ -301,8 +301,8 @@ export interface VFXRenderingData {
   
   // Style and post-processing
   style: {
-    filmstock?: "digital" | "35mm" | "16mm" | "super8" | "polaroid";
-    colorGrading?: "natural" | "cinematic" | "desaturated" | "vibrant" | "monochrome";
+    filmstock?: 'digital' | '35mm' | '16mm' | 'super8' | 'polaroid';
+    colorGrading?: 'natural' | 'cinematic' | 'desaturated' | 'vibrant' | 'monochrome';
     lensProfile?: string;             // Lens characteristics
     dof?: {                           // Depth of field
       enabled: boolean;
@@ -361,9 +361,9 @@ export interface VFXCameraParams {
 }
 
 export interface VFXLightingParams {
-  timeOfDay?: "dawn" | "morning" | "noon" | "afternoon" | "dusk" | "night";
-  weather?: "clear" | "cloudy" | "overcast" | "stormy" | "foggy" | "snowy";
-  mood?: "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
+  timeOfDay?: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'dusk' | 'night';
+  weather?: 'clear' | 'cloudy' | 'overcast' | 'stormy' | 'foggy' | 'snowy';
+  mood?: 'bright' | 'dramatic' | 'soft' | 'harsh' | 'moody' | 'ethereal';
   temperature?: number;             // Color temperature in Kelvin
   exposure?: number;                // EV adjustment
 }
@@ -378,18 +378,18 @@ export interface VFXKeyframe {
 }
 
 export interface VFXCameraData {
-  type: "static" | "dolly" | "pan" | "tilt" | "crane" | "handheld" | "steadicam";
+  type: 'static' | 'dolly' | 'pan' | 'tilt' | 'crane' | 'handheld' | 'steadicam';
   movement?: {
     path: [number, number, number][]; // Camera movement path
     duration: number;                 // Movement duration in seconds
-    easing: "linear" | "ease-in" | "ease-out" | "ease-in-out";
+    easing: 'linear' | 'ease-in' | 'ease-out' | 'ease-in-out';
   };
 }
 
 export interface VFXLightingData {
-  setup: "key" | "three-point" | "natural" | "practical" | "studio" | "location";
+  setup: 'key' | 'three-point' | 'natural' | 'practical' | 'studio' | 'location';
   sources: {
-    type: "key" | "fill" | "rim" | "background" | "practical";
+    type: 'key' | 'fill' | 'rim' | 'background' | 'practical';
     position: [number, number, number];
     intensity: number;
     color: [number, number, number];  // RGB values
@@ -398,22 +398,22 @@ export interface VFXLightingData {
 }
 
 export interface VFXEnvironmentData {
-  type: "indoor" | "outdoor" | "studio" | "location" | "greenscreen";
+  type: 'indoor' | 'outdoor' | 'studio' | 'location' | 'greenscreen';
   conditions: {
     weather?: string;
     timeOfDay?: string;
-    season?: "spring" | "summer" | "fall" | "winter";
+    season?: 'spring' | 'summer' | 'fall' | 'winter';
     atmosphere?: string;
   };
   background?: {
-    type: "practical" | "matte_painting" | "3d_environment" | "greenscreen";
+    type: 'practical' | 'matte_painting' | '3d_environment' | 'greenscreen';
     description: string;
     sourceFile?: string;
   };
 }
 
 // === UTILITY TYPES ===
-export type VFXExportQuality = "production" | "preview" | "debug";
+export type VFXExportQuality = 'production' | 'preview' | 'debug';
 
 export interface VFXValidationResult {
   isValid: boolean;

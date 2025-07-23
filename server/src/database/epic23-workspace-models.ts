@@ -31,7 +31,7 @@ export const COLLABORATIVE_PERMISSIONS = {
   MERGE_APPROVE: 1 << 30,            // Can approve merge requests
   
   // Computed meta-permissions
-  ALL_COLLABORATIVE: ((1 << 30) - (1 << 21)) + (1 << 30), // All collaborative permissions
+  ALL_COLLABORATIVE: ((1 << 30) - (1 << 21)) + (1 << 30) // All collaborative permissions
 } as const;
 
 export type CollaborativePermission = keyof typeof COLLABORATIVE_PERMISSIONS;

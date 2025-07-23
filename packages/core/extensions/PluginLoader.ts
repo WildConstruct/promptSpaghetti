@@ -391,23 +391,23 @@ export class PluginLoader {
 
   private async resolvePluginSource(source: PluginSource): Promise<string> {
     switch (source.type) {
-      case 'filesystem':
-        return resolve(source.location);
+    case 'filesystem':
+      return resolve(source.location);
         
-      case 'npm':
-        return this.downloadFromNpm(source);
+    case 'npm':
+      return this.downloadFromNpm(source);
         
-      case 'git':
-        return this.downloadFromGit(source);
+    case 'git':
+      return this.downloadFromGit(source);
         
-      case 'url':
-        return this.downloadFromUrl(source);
+    case 'url':
+      return this.downloadFromUrl(source);
         
-      case 'registry':
-        return this.downloadFromRegistry(source);
+    case 'registry':
+      return this.downloadFromRegistry(source);
         
-      default:
-        throw new Error(`Unsupported plugin source type: ${(source as any).type}`);
+    default:
+      throw new Error(`Unsupported plugin source type: ${(source as any).type}`);
     }
   }
 

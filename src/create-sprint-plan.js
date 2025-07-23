@@ -323,14 +323,14 @@ async function createSprintPlan() {
       console.log(`🎯 Focus: ${sprint.focus}`);
       console.log(`📊 Capacity: ${sprint.totalStoryPoints} story points | ${sprint.totalTasks} tasks | ${sprint.totalHours} hours`);
       
-      console.log(`\n📋 EPICS IN THIS SPRINT:`);
+      console.log('\n📋 EPICS IN THIS SPRINT:');
       sprint.epics.forEach(epic => {
         const status = epic.isPartial ? '(PARTIAL)' : '(COMPLETE)';
         console.log(`   • Epic ${epic.epic}: ${epic.name} ${status}`);
         console.log(`     └─ ${epic.portionTasks} tasks, ${epic.portionStoryPoints} story points`);
       });
       
-      console.log(`\n🎯 KEY DELIVERABLES:`);
+      console.log('\n🎯 KEY DELIVERABLES:');
       sprint.keyDeliverables.forEach(deliverable => {
         console.log(`   ✅ ${deliverable}`);
       });

@@ -233,7 +233,7 @@ export class PerformanceBaselineManager {
     }
 
     let status: 'ok' | 'warning' | 'critical' = 'ok';
-    let message = `Performance within acceptable range`;
+    let message = 'Performance within acceptable range';
 
     // Determine if higher values are better or worse
     const isLowerBetter = this.isLowerBetter(baseline.category, baseline.type);
@@ -281,17 +281,17 @@ export class PerformanceBaselineManager {
 
     // Default based on category
     switch (category) {
-      case BaselineCategory.CORE_ENGINE:
-      case BaselineCategory.API_PERFORMANCE:
-      case BaselineCategory.UI_RENDERING:
-      case BaselineCategory.BUILD_PERFORMANCE:
-        return type === MeasurementType.DURATION; // Lower duration is better
-      case BaselineCategory.MEMORY_USAGE:
-        return true; // Lower memory usage is better
-      case BaselineCategory.LOAD_TESTING:
-        return type !== MeasurementType.THROUGHPUT; // Higher throughput is better
-      default:
-        return true; // Default: lower is better
+    case BaselineCategory.CORE_ENGINE:
+    case BaselineCategory.API_PERFORMANCE:
+    case BaselineCategory.UI_RENDERING:
+    case BaselineCategory.BUILD_PERFORMANCE:
+      return type === MeasurementType.DURATION; // Lower duration is better
+    case BaselineCategory.MEMORY_USAGE:
+      return true; // Lower memory usage is better
+    case BaselineCategory.LOAD_TESTING:
+      return type !== MeasurementType.THROUGHPUT; // Higher throughput is better
+    default:
+      return true; // Default: lower is better
     }
   }
 
@@ -361,7 +361,7 @@ export class PerformanceBaselineManager {
       trend: 'improving' | 'stable' | 'degrading';
       lastMeasurement?: PerformanceMeasurement;
     }>;
-  } {
+    } {
     const baselines = Array.from(this.baselines.values());
     const categories = {} as Record<BaselineCategory, number>;
     let alerts = 0;

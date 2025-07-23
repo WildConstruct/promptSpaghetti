@@ -533,7 +533,7 @@ export class PromotionController {
       id,
       title: `Template ${id.slice(-4)}`,
       category: 'Video Editing',
-      thumbnail: `/api/placeholder/200/150`,
+      thumbnail: '/api/placeholder/200/150',
       rating: 4.2 + Math.random() * 0.8,
       downloads: Math.floor(Math.random() * 1000) + 100,
       performance_score: Math.floor(Math.random() * 30) + 70

@@ -803,23 +803,23 @@ export class CategoryPerformanceManager extends EventEmitter {
   private async executeOptimizationAction(action: OptimizationAction): Promise<boolean> {
     try {
       switch (action.action) {
-        case 'scale_up':
-          return this.executeScaleUp(action);
+      case 'scale_up':
+        return this.executeScaleUp(action);
         
-        case 'scale_down':
-          return this.executeScaleDown(action);
+      case 'scale_down':
+        return this.executeScaleDown(action);
         
-        case 'cache_optimize':
-          return this.executeCacheOptimization(action);
+      case 'cache_optimize':
+        return this.executeCacheOptimization(action);
         
-        case 'throttle':
-          return this.executeThrottling(action);
+      case 'throttle':
+        return this.executeThrottling(action);
         
-        case 'priority_boost':
-          return this.executePriorityBoost(action);
+      case 'priority_boost':
+        return this.executePriorityBoost(action);
         
-        default:
-          return false;
+      default:
+        return false;
       }
     } catch (error) {
       console.error('Failed to execute optimization action:', error);

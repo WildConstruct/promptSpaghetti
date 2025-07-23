@@ -140,49 +140,49 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
   
   const getStatusIcon = useCallback((status: ValidationStatus | 'not_started'): string => {
     switch (status) {
-      case 'approved': return '✅';
-      case 'pending': return '⏳';
-      case 'in_review': return '👁️';
-      case 'rejected': return '❌';
-      case 'expired': return '⚠️';
-      case 'requires_update': return '🔄';
-      case 'not_started': return '⚪';
-      default: return '❓';
+    case 'approved': return '✅';
+    case 'pending': return '⏳';
+    case 'in_review': return '👁️';
+    case 'rejected': return '❌';
+    case 'expired': return '⚠️';
+    case 'requires_update': return '🔄';
+    case 'not_started': return '⚪';
+    default: return '❓';
     }
   }, []);
   
   const getStatusColor = useCallback((status: ValidationStatus | 'not_started'): string => {
     switch (status) {
-      case 'approved': return '#10b981';
-      case 'pending': return '#f59e0b';
-      case 'in_review': return '#3b82f6';
-      case 'rejected': return '#ef4444';
-      case 'expired': return '#f97316';
-      case 'requires_update': return '#8b5cf6';
-      case 'not_started': return '#6b7280';
-      default: return '#6b7280';
+    case 'approved': return '#10b981';
+    case 'pending': return '#f59e0b';
+    case 'in_review': return '#3b82f6';
+    case 'rejected': return '#ef4444';
+    case 'expired': return '#f97316';
+    case 'requires_update': return '#8b5cf6';
+    case 'not_started': return '#6b7280';
+    default: return '#6b7280';
     }
   }, []);
   
   const getStatusText = useCallback((status: ValidationStatus | 'not_started'): string => {
     switch (status) {
-      case 'approved': return 'Verified';
-      case 'pending': return 'Pending Review';
-      case 'in_review': return 'Under Review';
-      case 'rejected': return 'Rejected';
-      case 'expired': return 'Expired';
-      case 'requires_update': return 'Needs Update';
-      case 'not_started': return 'Not Started';
-      default: return 'Unknown';
+    case 'approved': return 'Verified';
+    case 'pending': return 'Pending Review';
+    case 'in_review': return 'Under Review';
+    case 'rejected': return 'Rejected';
+    case 'expired': return 'Expired';
+    case 'requires_update': return 'Needs Update';
+    case 'not_started': return 'Not Started';
+    default: return 'Unknown';
     }
   }, []);
   
   const getPriorityColor = useCallback((priority: 'high' | 'medium' | 'low'): string => {
     switch (priority) {
-      case 'high': return '#ef4444';
-      case 'medium': return '#f59e0b';
-      case 'low': return '#6b7280';
-      default: return '#6b7280';
+    case 'high': return '#ef4444';
+    case 'medium': return '#f59e0b';
+    case 'low': return '#6b7280';
+    default: return '#6b7280';
     }
   }, []);
   
@@ -600,29 +600,29 @@ export const VerificationStatusTracker: React.FC<VerificationStatusTrackerProps>
 // Helper functions
 function generateNextSteps(status: ValidationStatus | 'not_started', type: IdentityValidationType): string[] {
   switch (status) {
-    case 'not_started':
-      return [`Click "Start Verification" to begin ${type.replace('_', ' ')}`];
+  case 'not_started':
+    return [`Click "Start Verification" to begin ${type.replace('_', ' ')}`];
     
-    case 'pending':
-      return ['Your submission is being processed', 'You will receive an email when review is complete'];
+  case 'pending':
+    return ['Your submission is being processed', 'You will receive an email when review is complete'];
     
-    case 'in_review':
-      return ['Our team is reviewing your submission', 'This typically takes 1-3 business days'];
+  case 'in_review':
+    return ['Our team is reviewing your submission', 'This typically takes 1-3 business days'];
     
-    case 'requires_update':
-      return ['Review the feedback provided', 'Update your information and resubmit'];
+  case 'requires_update':
+    return ['Review the feedback provided', 'Update your information and resubmit'];
     
-    case 'rejected':
-      return ['Review the rejection reason', 'Prepare new documentation', 'Resubmit when ready'];
+  case 'rejected':
+    return ['Review the rejection reason', 'Prepare new documentation', 'Resubmit when ready'];
     
-    case 'expired':
-      return ['Your verification has expired', 'Submit new documentation to renew'];
+  case 'expired':
+    return ['Your verification has expired', 'Submit new documentation to renew'];
     
-    case 'approved':
-      return ['Verification complete!', 'Your trust score has been updated'];
+  case 'approved':
+    return ['Verification complete!', 'Your trust score has been updated'];
     
-    default:
-      return [];
+  default:
+    return [];
   }
 }
 

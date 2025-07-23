@@ -319,7 +319,7 @@ export class ApiAccessControlEngine extends EventEmitter {
       decisionBuilder.addUsageControlResult(usageResult);
       
       if (!usageResult.allowed) {
-        return decisionBuilder.buildDenyDecision(`Usage quota exceeded`);
+        return decisionBuilder.buildDenyDecision('Usage quota exceeded');
       }
     }
     
@@ -634,14 +634,14 @@ export class ApiAccessControlEngine extends EventEmitter {
   private async evaluateCondition(condition: ApiPolicyCondition, request: ApiAccessRequest): Promise<boolean> {
     // Placeholder condition evaluation - would be expanded for each condition type
     switch (condition.type) {
-      case 'user':
-        return request.userId === condition.value;
-      case 'time':
-        return this.evaluateTimeCondition(condition);
-      case 'custom':
-        return this.evaluateCustomCondition(condition, request);
-      default:
-        return true;
+    case 'user':
+      return request.userId === condition.value;
+    case 'time':
+      return this.evaluateTimeCondition(condition);
+    case 'custom':
+      return this.evaluateCustomCondition(condition, request);
+    default:
+      return true;
     }
   }
 

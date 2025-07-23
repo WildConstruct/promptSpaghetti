@@ -193,7 +193,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             category: { 
               type: 'string',
               enum: ['enforcement_action', 'trust_score', 'policy_violation', 'verification_status', 
-                     'content_moderation', 'account_restriction', 'transaction_block', 'marketplace_decision', 'other']
+                'content_moderation', 'account_restriction', 'transaction_block', 'marketplace_decision', 'other']
             },
             subject: { type: 'string', maxLength: 500 },
             description: { type: 'string', maxLength: 5000 },
@@ -363,8 +363,8 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
         // Filter timeline events if public_only requested or limited access
         if (
           request.query.public_only || (!['admin',
-          'reviewer'].includes(user.role
-        ) && appeal.appellant_id !== user.id)) {
+            'reviewer'].includes(user.role
+          ) && appeal.appellant_id !== user.id)) {
           appeal.timeline = appeal.timeline?.filter(event => event.public_visible) || [];
         }
 

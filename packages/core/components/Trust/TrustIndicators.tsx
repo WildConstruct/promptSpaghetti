@@ -80,36 +80,36 @@ export const TrustIndicator: React.FC<TrustIndicatorProps> = ({
 
   const getTrustIcon = (tier: string) => {
     switch (tier) {
-      case 'expert':
-        return <Crown className="trust-icon expert-icon" />;
-      case 'professional':
-        return <Award className="trust-icon professional-icon" />;
-      case 'verified':
-        return <CheckCircle className="trust-icon verified-icon" />;
-      case 'basic':
-        return <Shield className="trust-icon basic-icon" />;
-      default:
-        return <Shield className="trust-icon unverified-icon" />;
+    case 'expert':
+      return <Crown className="trust-icon expert-icon" />;
+    case 'professional':
+      return <Award className="trust-icon professional-icon" />;
+    case 'verified':
+      return <CheckCircle className="trust-icon verified-icon" />;
+    case 'basic':
+      return <Shield className="trust-icon basic-icon" />;
+    default:
+      return <Shield className="trust-icon unverified-icon" />;
     }
   };
 
   const getTrustColor = (tier: string) => {
     switch (tier) {
-      case 'expert': return 'trust-expert';
-      case 'professional': return 'trust-professional';
-      case 'verified': return 'trust-verified';
-      case 'basic': return 'trust-basic';
-      default: return 'trust-unverified';
+    case 'expert': return 'trust-expert';
+    case 'professional': return 'trust-professional';
+    case 'verified': return 'trust-verified';
+    case 'basic': return 'trust-basic';
+    default: return 'trust-unverified';
     }
   };
 
   const getTrustLabel = (tier: string) => {
     switch (tier) {
-      case 'expert': return 'Expert';
-      case 'professional': return 'Professional';
-      case 'verified': return 'Verified';
-      case 'basic': return 'Basic';
-      default: return 'Unverified';
+    case 'expert': return 'Expert';
+    case 'professional': return 'Professional';
+    case 'verified': return 'Verified';
+    case 'basic': return 'Basic';
+    default: return 'Unverified';
     }
   };
 

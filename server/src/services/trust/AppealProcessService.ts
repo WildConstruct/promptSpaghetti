@@ -468,10 +468,10 @@ export class AppealProcessService {
     // Determine final status based on decision
     let finalStatus: AppealStatus;
     switch (decision) {
-      case 'approve': finalStatus = 'approved'; break;
-      case 'partially_approve': finalStatus = 'partially_approved'; break;
-      case 'deny': finalStatus = 'denied'; break;
-      case 'dismiss': finalStatus = 'dismissed'; break;
+    case 'approve': finalStatus = 'approved'; break;
+    case 'partially_approve': finalStatus = 'partially_approved'; break;
+    case 'deny': finalStatus = 'denied'; break;
+    case 'dismiss': finalStatus = 'dismissed'; break;
     }
 
     // Update appeal with decision

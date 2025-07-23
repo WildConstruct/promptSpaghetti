@@ -914,14 +914,14 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
 
   private normalizeFilterValue(value: any, operator: string): any {
     switch (operator) {
-      case 'contains':
-      case 'starts_with':
-      case 'ends_with':
-        return String(value).toLowerCase();
-      case 'between':
-        return Array.isArray(value) ? value : [value, value];
-      default:
-        return value;
+    case 'contains':
+    case 'starts_with':
+    case 'ends_with':
+      return String(value).toLowerCase();
+    case 'between':
+      return Array.isArray(value) ? value : [value, value];
+    default:
+      return value;
     }
   }
 
@@ -1069,28 +1069,28 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
     const fieldValue = doc.fields[filter.field];
     
     switch (filter.operator) {
-      case 'equals':
-        return fieldValue === filter.normalizedValue;
-      case 'not_equals':
-        return fieldValue !== filter.normalizedValue;
-      case 'contains':
-        return String(fieldValue).toLowerCase().includes(filter.normalizedValue);
-      case 'starts_with':
-        return String(fieldValue).toLowerCase().startsWith(filter.normalizedValue);
-      case 'ends_with':
-        return String(fieldValue).toLowerCase().endsWith(filter.normalizedValue);
-      case 'greater':
-        return fieldValue > filter.normalizedValue;
-      case 'less':
-        return fieldValue < filter.normalizedValue;
-      case 'between':
-        return fieldValue >= filter.normalizedValue[0] && fieldValue <= filter.normalizedValue[1];
-      case 'in':
-        return Array.isArray(filter.values) && filter.values.includes(fieldValue);
-      case 'not_in':
-        return Array.isArray(filter.values) && !filter.values.includes(fieldValue);
-      default:
-        return true;
+    case 'equals':
+      return fieldValue === filter.normalizedValue;
+    case 'not_equals':
+      return fieldValue !== filter.normalizedValue;
+    case 'contains':
+      return String(fieldValue).toLowerCase().includes(filter.normalizedValue);
+    case 'starts_with':
+      return String(fieldValue).toLowerCase().startsWith(filter.normalizedValue);
+    case 'ends_with':
+      return String(fieldValue).toLowerCase().endsWith(filter.normalizedValue);
+    case 'greater':
+      return fieldValue > filter.normalizedValue;
+    case 'less':
+      return fieldValue < filter.normalizedValue;
+    case 'between':
+      return fieldValue >= filter.normalizedValue[0] && fieldValue <= filter.normalizedValue[1];
+    case 'in':
+      return Array.isArray(filter.values) && filter.values.includes(fieldValue);
+    case 'not_in':
+      return Array.isArray(filter.values) && !filter.values.includes(fieldValue);
+    default:
+      return true;
     }
   }
 
@@ -1126,7 +1126,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
         const snippet = text.substring(start, end);
         const highlightedSnippet = snippet.replace(
           new RegExp(token, 'gi'),
-          `<mark>$&</mark>`
+          '<mark>$&</mark>'
         );
         highlights.push(highlightedSnippet);
       }
@@ -1156,7 +1156,7 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
   private generateScoreExplanation(score: number, doc: IndexedDocument<T>, query: any): ScoreExplanation {
     return {
       value: score,
-      description: `Document score based on text match and field boosts`,
+      description: 'Document score based on text match and field boosts',
       details: [
         {
           field: 'text_match',
@@ -1395,18 +1395,18 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
 
   private processFieldValue(value: any, field: IndexField): any {
     switch (field.type) {
-      case 'text':
-        return String(value);
-      case 'keyword':
-        return String(value);
-      case 'number':
-        return Number(value);
-      case 'date':
-        return new Date(value);
-      case 'boolean':
-        return Boolean(value);
-      default:
-        return value;
+    case 'text':
+      return String(value);
+    case 'keyword':
+      return String(value);
+    case 'number':
+      return Number(value);
+    case 'date':
+      return new Date(value);
+    case 'boolean':
+      return Boolean(value);
+    default:
+      return value;
     }
   }
 
@@ -1423,19 +1423,19 @@ export class FacetedSearchSystem<T = any> extends EventEmitter {
 
   private async initializeFacet(index: SearchIndex<T>, facet: SearchFacet): Promise<void> {
     switch (facet.type) {
-      case 'text':
-      case 'enum':
-        await this.initializeTermsFacet(index, facet);
-        break;
-      case 'number':
-        await this.initializeRangeFacet(index, facet);
-        break;
-      case 'date':
-        await this.initializeDateFacet(index, facet);
-        break;
-      case 'hierarchical':
-        await this.initializeHierarchicalFacet(index, facet);
-        break;
+    case 'text':
+    case 'enum':
+      await this.initializeTermsFacet(index, facet);
+      break;
+    case 'number':
+      await this.initializeRangeFacet(index, facet);
+      break;
+    case 'date':
+      await this.initializeDateFacet(index, facet);
+      break;
+    case 'hierarchical':
+      await this.initializeHierarchicalFacet(index, facet);
+      break;
     }
   }
 

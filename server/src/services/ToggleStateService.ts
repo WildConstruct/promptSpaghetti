@@ -161,25 +161,25 @@ export class ToggleStateService extends EventEmitter {
       // Format results based on requested format
       let formattedStates;
       switch (format) {
-        case 'minimal':
-          formattedStates = result.toggles.map(t => ({
-            key: t.key,
-            enabled: t.enabled,
-            type: t.type
-          }));
-          break;
-        case 'keys_only':
-          formattedStates = result.toggles.map(t => t.key);
-          break;
-        case 'summary':
-          formattedStates = {
-            total: result.total,
-            enabled: result.toggles.filter(t => t.enabled).length,
-            types: [...new Set(result.toggles.map(t => t.type))]
-          };
-          break;
-        default: // 'full'
-          formattedStates = result.toggles;
+      case 'minimal':
+        formattedStates = result.toggles.map(t => ({
+          key: t.key,
+          enabled: t.enabled,
+          type: t.type
+        }));
+        break;
+      case 'keys_only':
+        formattedStates = result.toggles.map(t => t.key);
+        break;
+      case 'summary':
+        formattedStates = {
+          total: result.total,
+          enabled: result.toggles.filter(t => t.enabled).length,
+          types: [...new Set(result.toggles.map(t => t.type))]
+        };
+        break;
+      default: // 'full'
+        formattedStates = result.toggles;
       }
 
       const queryResult = {
@@ -219,18 +219,18 @@ export class ToggleStateService extends EventEmitter {
       // Calculate time range filter
       let sinceDate: Date | undefined;
       switch (options.timeRange) {
-        case '1h':
-          sinceDate = new Date(now.getTime() - 60 * 60 * 1000);
-          break;
-        case '24h':
-          sinceDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-          break;
-        case '7d':
-          sinceDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          break;
-        case '30d':
-          sinceDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-          break;
+      case '1h':
+        sinceDate = new Date(now.getTime() - 60 * 60 * 1000);
+        break;
+      case '24h':
+        sinceDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        break;
+      case '7d':
+        sinceDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case '30d':
+        sinceDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
       }
 
       const recentlyModified = sinceDate 
@@ -348,62 +348,62 @@ export class ToggleStateService extends EventEmitter {
             operation.reason;
 
           switch (operation.operation) {
-            case 'enable':
-              if (toggle.enabled) {
-                summary.skipped++;
-                continue;
-              }
+          case 'enable':
+            if (toggle.enabled) {
+              summary.skipped++;
+              continue;
+            }
+            updatedToggle = await this.dao.updateToggle({
+              id: toggle.id,
+              enabled: true,
+              reason
+            }, operation.actorId || 'system');
+            break;
+
+          case 'disable':
+            if (!toggle.enabled) {
+              summary.skipped++;
+              continue;
+            }
+            updatedToggle = await this.dao.updateToggle({
+              id: toggle.id,
+              enabled: false,
+              reason
+            }, operation.actorId || 'system');
+            break;
+
+          case 'toggle':
+            updatedToggle = await this.dao.updateToggle({
+              id: toggle.id,
+              enabled: !toggle.enabled,
+              reason
+            }, operation.actorId || 'system');
+            break;
+
+          case 'update_values':
+            if (typeof toggleSpec === 'object' && toggleSpec.value !== undefined) {
               updatedToggle = await this.dao.updateToggle({
                 id: toggle.id,
-                enabled: true,
+                value: toggleSpec.value,
                 reason
               }, operation.actorId || 'system');
-              break;
-
-            case 'disable':
-              if (!toggle.enabled) {
-                summary.skipped++;
-                continue;
-              }
-              updatedToggle = await this.dao.updateToggle({
-                id: toggle.id,
-                enabled: false,
-                reason
-              }, operation.actorId || 'system');
-              break;
-
-            case 'toggle':
-              updatedToggle = await this.dao.updateToggle({
-                id: toggle.id,
-                enabled: !toggle.enabled,
-                reason
-              }, operation.actorId || 'system');
-              break;
-
-            case 'update_values':
-              if (typeof toggleSpec === 'object' && toggleSpec.value !== undefined) {
-                updatedToggle = await this.dao.updateToggle({
-                  id: toggle.id,
-                  value: toggleSpec.value,
-                  reason
-                }, operation.actorId || 'system');
-              } else {
-                results.failed.push({
-                  key: toggleKey,
-                  error: 'No value provided for update_values operation'
-                });
-                summary.failed++;
-                continue;
-              }
-              break;
-
-            default:
+            } else {
               results.failed.push({
                 key: toggleKey,
-                error: `Unsupported operation: ${operation.operation}`
+                error: 'No value provided for update_values operation'
               });
               summary.failed++;
               continue;
+            }
+            break;
+
+          default:
+            results.failed.push({
+              key: toggleKey,
+              error: `Unsupported operation: ${operation.operation}`
+            });
+            summary.failed++;
+            continue;
           }
 
           results.successful.push({
@@ -721,7 +721,7 @@ export class ToggleStateService extends EventEmitter {
       }
 
       health.status = health.score >= 80 ? 'healthy' : 
-                     health.score >= 60 ? 'warning' : 'critical';
+        health.score >= 60 ? 'warning' : 'critical';
 
       if (options.includeDetails) {
         return {
@@ -822,23 +822,23 @@ export class ToggleStateService extends EventEmitter {
       for (const toggle of toggles) {
         let groupValue: any;
         switch (groupField) {
-          case 'type':
-            groupValue = toggle.type;
-            break;
-          case 'enabled':
-            groupValue = toggle.enabled ? 'enabled' : 'disabled';
-            break;
-          case 'claudeImpact':
-            groupValue = toggle.claudeImpact;
-            break;
-          case 'created_by':
-            groupValue = toggle.createdBy;
-            break;
-          case 'updated_by':
-            groupValue = toggle.updatedBy;
-            break;
-          default:
-            groupValue = 'unknown';
+        case 'type':
+          groupValue = toggle.type;
+          break;
+        case 'enabled':
+          groupValue = toggle.enabled ? 'enabled' : 'disabled';
+          break;
+        case 'claudeImpact':
+          groupValue = toggle.claudeImpact;
+          break;
+        case 'created_by':
+          groupValue = toggle.createdBy;
+          break;
+        case 'updated_by':
+          groupValue = toggle.updatedBy;
+          break;
+        default:
+          groupValue = 'unknown';
         }
 
         grouped[groupField][groupValue] = (grouped[groupField][groupValue] || 0) + 1;

@@ -582,7 +582,7 @@ describe('Workspace Integration Tests', () => {
           'invalid-role', 
           mockUser
         )
-      ).rejects.toThrow("Role 'invalid-role' not found");
+      ).rejects.toThrow('Role \'invalid-role\' not found');
     });
   });
 });

@@ -229,7 +229,7 @@ export class ContextValidationFramework extends EventEmitter {
       timestamp: number;
       valid: boolean;
     }>;
-  } {
+    } {
     const total = this.validationHistory.length;
     
     if (total === 0) {
@@ -593,19 +593,19 @@ export class ContextValidationFramework extends EventEmitter {
   ): void {
     // Map rule results to health metrics
     switch (ruleName) {
-      case 'variable_count':
-      case 'variable_types':
-        health.variableIntegrity = Math.max(health.variableIntegrity, result.score);
-        break;
-      case 'state_consistency':
-        health.stateConsistency = result.score;
-        break;
-      case 'cache_efficiency':
-        health.cacheEfficiency = result.score;
-        break;
-      case 'execution_metadata':
-        health.memoryUsage = result.score; // Proxy metric
-        break;
+    case 'variable_count':
+    case 'variable_types':
+      health.variableIntegrity = Math.max(health.variableIntegrity, result.score);
+      break;
+    case 'state_consistency':
+      health.stateConsistency = result.score;
+      break;
+    case 'cache_efficiency':
+      health.cacheEfficiency = result.score;
+      break;
+    case 'execution_metadata':
+      health.memoryUsage = result.score; // Proxy metric
+      break;
     }
   }
 

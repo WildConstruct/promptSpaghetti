@@ -369,7 +369,7 @@ class StateTransitionTestRunner {
     const htmlReportPath = path.join(this.reportDir, 'state-transition-report.html');
     await fs.writeFile(htmlReportPath, htmlReport);
 
-    this.log(`📊 Reports generated:`, 'info');
+    this.log('📊 Reports generated:', 'info');
     this.log(`   JSON: ${jsonReportPath}`, 'info');
     this.log(`   HTML: ${htmlReportPath}`, 'info');
 

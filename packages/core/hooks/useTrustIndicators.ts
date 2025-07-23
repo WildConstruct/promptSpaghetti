@@ -146,11 +146,11 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
 
   const getTrustLevelColor = useCallback((level: string): string => {
     switch (level) {
-      case 'expert': return '#7c3aed';
-      case 'professional': return '#2563eb';
-      case 'verified': return '#059669';
-      case 'basic': return '#d97706';
-      default: return '#6b7280';
+    case 'expert': return '#7c3aed';
+    case 'professional': return '#2563eb';
+    case 'verified': return '#059669';
+    case 'basic': return '#d97706';
+    default: return '#6b7280';
     }
   }, []);
 
@@ -232,28 +232,28 @@ export const useTrustIndicators = (config: TrustIndicatorConfig = {}) => {
   // Community standing helpers
   const getCommunityStandingColor = useCallback((standing: string): string => {
     switch (standing) {
-      case 'excellent': return '#059669';
-      case 'good': return '#2563eb';
-      case 'fair': return '#d97706';
-      case 'poor': return '#ef4444';
-      default: return '#6b7280';
+    case 'excellent': return '#059669';
+    case 'good': return '#2563eb';
+    case 'fair': return '#d97706';
+    case 'poor': return '#ef4444';
+    default: return '#6b7280';
     }
   }, []);
 
   // Trust trend helpers
   const getTrustTrendIcon = useCallback((trend: string): string => {
     switch (trend) {
-      case 'improving': return '↗️';
-      case 'declining': return '↘️';
-      default: return '→';
+    case 'improving': return '↗️';
+    case 'declining': return '↘️';
+    default: return '→';
     }
   }, []);
 
   const getTrustTrendColor = useCallback((trend: string): string => {
     switch (trend) {
-      case 'improving': return '#059669';
-      case 'declining': return '#ef4444';
-      default: return '#6b7280';
+    case 'improving': return '#059669';
+    case 'declining': return '#ef4444';
+    default: return '#6b7280';
     }
   }, []);
 

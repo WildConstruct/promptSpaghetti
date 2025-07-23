@@ -20,64 +20,64 @@ class MockZodSchema {
     
     // Simulate validation overhead based on schema complexity
     switch (this.type) {
-      case 'string':
-        if (typeof data !== 'string') throw new Error('Expected string');
-        if (this.constraints.minLength && data.length < this.constraints.minLength) {
-          throw new Error('String too short');
-        }
-        if (this.constraints.maxLength && data.length > this.constraints.maxLength) {
-          throw new Error('String too long');
-        }
-        if (this.constraints.pattern && !this.constraints.pattern.test(data)) {
-          throw new Error('Pattern mismatch');
-        }
-        break;
+    case 'string':
+      if (typeof data !== 'string') throw new Error('Expected string');
+      if (this.constraints.minLength && data.length < this.constraints.minLength) {
+        throw new Error('String too short');
+      }
+      if (this.constraints.maxLength && data.length > this.constraints.maxLength) {
+        throw new Error('String too long');
+      }
+      if (this.constraints.pattern && !this.constraints.pattern.test(data)) {
+        throw new Error('Pattern mismatch');
+      }
+      break;
         
-      case 'number':
-        if (typeof data !== 'number') throw new Error('Expected number');
-        if (this.constraints.min !== undefined && data < this.constraints.min) {
-          throw new Error('Number too small');
-        }
-        if (this.constraints.max !== undefined && data > this.constraints.max) {
-          throw new Error('Number too large');
-        }
-        break;
+    case 'number':
+      if (typeof data !== 'number') throw new Error('Expected number');
+      if (this.constraints.min !== undefined && data < this.constraints.min) {
+        throw new Error('Number too small');
+      }
+      if (this.constraints.max !== undefined && data > this.constraints.max) {
+        throw new Error('Number too large');
+      }
+      break;
         
-      case 'array':
-        if (!Array.isArray(data)) throw new Error('Expected array');
-        if (this.constraints.minItems && data.length < this.constraints.minItems) {
-          throw new Error('Array too short');
-        }
-        if (this.constraints.itemSchema) {
-          // Recursive validation for array items
-          data.forEach(item => this.constraints.itemSchema.parse(item));
-        }
-        break;
+    case 'array':
+      if (!Array.isArray(data)) throw new Error('Expected array');
+      if (this.constraints.minItems && data.length < this.constraints.minItems) {
+        throw new Error('Array too short');
+      }
+      if (this.constraints.itemSchema) {
+        // Recursive validation for array items
+        data.forEach(item => this.constraints.itemSchema.parse(item));
+      }
+      break;
         
-      case 'object':
-        if (typeof data !== 'object' || data === null) throw new Error('Expected object');
-        if (this.constraints.properties) {
-          for (const [key, schema] of Object.entries(this.constraints.properties)) {
-            if (data[key] !== undefined) {
-              schema.parse(data[key]);
-            }
+    case 'object':
+      if (typeof data !== 'object' || data === null) throw new Error('Expected object');
+      if (this.constraints.properties) {
+        for (const [key, schema] of Object.entries(this.constraints.properties)) {
+          if (data[key] !== undefined) {
+            schema.parse(data[key]);
           }
         }
-        break;
+      }
+      break;
         
-      case 'union':
-        let matched = false;
-        for (const option of this.constraints.options) {
-          try {
-            option.parse(data);
-            matched = true;
-            break;
-          } catch (e) {
-            // Continue to next option
-          }
+    case 'union':
+      let matched = false;
+      for (const option of this.constraints.options) {
+        try {
+          option.parse(data);
+          matched = true;
+          break;
+        } catch (e) {
+          // Continue to next option
         }
-        if (!matched) throw new Error('No union option matched');
-        break;
+      }
+      if (!matched) throw new Error('No union option matched');
+      break;
     }
     
     return data;
@@ -378,18 +378,18 @@ async function analyzeSchemaValidationPerformance() {
       if (!data || typeof data !== 'object') return false;
       
       switch (nodeType) {
-        case 'WeightedChoice':
-          return Array.isArray(data.choices) && data.choices.length > 0;
-        case 'Conditional':
-          return Array.isArray(data.branches);
-        case 'Sequential':
-          return Array.isArray(data.sequence) && data.sequence.length > 0;
-        case 'SetVariable':
-          return typeof data.key === 'string' && data.key.length > 0;
-        case 'Markov':
-          return Array.isArray(data.states) && data.states.length > 0;
-        default:
-          return true;
+      case 'WeightedChoice':
+        return Array.isArray(data.choices) && data.choices.length > 0;
+      case 'Conditional':
+        return Array.isArray(data.branches);
+      case 'Sequential':
+        return Array.isArray(data.sequence) && data.sequence.length > 0;
+      case 'SetVariable':
+        return typeof data.key === 'string' && data.key.length > 0;
+      case 'Markov':
+        return Array.isArray(data.states) && data.states.length > 0;
+      default:
+        return true;
       }
     };
   }
@@ -496,11 +496,11 @@ async function analyzeSchemaValidationPerformance() {
   console.log(`  - Total overhead per validation cycle: ${totalValidationOverhead.toFixed(3)}ms`);
   
   console.log('\\n  Optimization Strategies:');
-  console.log(`  1. Compiled Validation: 60-80% reduction in validation time`);
-  console.log(`  2. Validation Caching: 70-90% reduction for repeated validations`);
-  console.log(`  3. Schema Simplification: 20-40% reduction in complex schemas`);
-  console.log(`  4. Lazy Validation: Skip validation for trusted/cached data`);
-  console.log(`  5. Batch Validation: Validate multiple nodes together`);
+  console.log('  1. Compiled Validation: 60-80% reduction in validation time');
+  console.log('  2. Validation Caching: 70-90% reduction for repeated validations');
+  console.log('  3. Schema Simplification: 20-40% reduction in complex schemas');
+  console.log('  4. Lazy Validation: Skip validation for trusted/cached data');
+  console.log('  5. Batch Validation: Validate multiple nodes together');
   
   console.log('\\n  Expected Improvements:');
   const potentialSavings = totalValidationOverhead * 0.75; // 75% reduction
@@ -535,7 +535,7 @@ if (require.main === module) {
       console.log(`  - Average validation time: ${avgValidTime.toFixed(3)}ms`);
       console.log(`  - Average execution overhead: ${avgOverhead.toFixed(1)}%`);
       console.log(`  - Optimization potential: ${(results.optimizationPotential.totalPotentialReduction * 1000).toFixed(1)} microseconds savings`);
-      console.log(`  - Recommended approach: Compiled validation + caching`);
+      console.log('  - Recommended approach: Compiled validation + caching');
     })
     .catch(console.error);
 }

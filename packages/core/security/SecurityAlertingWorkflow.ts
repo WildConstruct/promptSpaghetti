@@ -446,22 +446,22 @@ export class SecurityAlertingWorkflow extends EventEmitter {
       let aValue: any, bValue: any;
       
       switch (sortBy) {
-        case 'timestamp':
-          aValue = a.timestamp.getTime();
-          bValue = b.timestamp.getTime();
-          break;
-        case 'severity':
-          const severityOrder = { critical: 4, high: 3, medium: 2, low: 1, info: 0 };
-          aValue = severityOrder[a.severity as keyof typeof severityOrder];
-          bValue = severityOrder[b.severity as keyof typeof severityOrder];
-          break;
-        case 'risk':
-          aValue = a.risk.score;
-          bValue = b.risk.score;
-          break;
-        default:
-          aValue = a.timestamp.getTime();
-          bValue = b.timestamp.getTime();
+      case 'timestamp':
+        aValue = a.timestamp.getTime();
+        bValue = b.timestamp.getTime();
+        break;
+      case 'severity':
+        const severityOrder = { critical: 4, high: 3, medium: 2, low: 1, info: 0 };
+        aValue = severityOrder[a.severity as keyof typeof severityOrder];
+        bValue = severityOrder[b.severity as keyof typeof severityOrder];
+        break;
+      case 'risk':
+        aValue = a.risk.score;
+        bValue = b.risk.score;
+        break;
+      default:
+        aValue = a.timestamp.getTime();
+        bValue = b.timestamp.getTime();
       }
       
       return sortOrder === 'desc' ? bValue - aValue : aValue - bValue;
@@ -747,17 +747,17 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     
     // In real implementation, integrate with actual notification services
     switch (channel) {
-      case AlertChannel.EMAIL:
-        await this.sendEmailNotification(notification);
-        break;
-      case AlertChannel.SLACK:
-        await this.sendSlackNotification(notification);
-        break;
-      case AlertChannel.PAGERDUTY:
-        await this.sendPagerDutyNotification(notification);
-        break;
-      default:
-        console.log(`Notification sent via ${channel} to ${address}:`, notification.content);
+    case AlertChannel.EMAIL:
+      await this.sendEmailNotification(notification);
+      break;
+    case AlertChannel.SLACK:
+      await this.sendSlackNotification(notification);
+      break;
+    case AlertChannel.PAGERDUTY:
+      await this.sendPagerDutyNotification(notification);
+      break;
+    default:
+      console.log(`Notification sent via ${channel} to ${address}:`, notification.content);
     }
   }
   
@@ -772,11 +772,11 @@ export class SecurityAlertingWorkflow extends EventEmitter {
   
   private mapRiskLevelToAlertSeverity(riskLevel: RiskLevel): AlertSeverity {
     switch (riskLevel) {
-      case RiskLevel.CRITICAL: return AlertSeverity.CRITICAL;
-      case RiskLevel.HIGH: return AlertSeverity.HIGH;
-      case RiskLevel.MEDIUM: return AlertSeverity.MEDIUM;
-      case RiskLevel.LOW: return AlertSeverity.LOW;
-      default: return AlertSeverity.INFO;
+    case RiskLevel.CRITICAL: return AlertSeverity.CRITICAL;
+    case RiskLevel.HIGH: return AlertSeverity.HIGH;
+    case RiskLevel.MEDIUM: return AlertSeverity.MEDIUM;
+    case RiskLevel.LOW: return AlertSeverity.LOW;
+    default: return AlertSeverity.INFO;
     }
   }
   
@@ -894,11 +894,11 @@ export class SecurityAlertingWorkflow extends EventEmitter {
   
   private getMaxEscalationLevel(severity: AlertSeverity): number {
     switch (severity) {
-      case AlertSeverity.CRITICAL: return 4;
-      case AlertSeverity.HIGH: return 3;
-      case AlertSeverity.MEDIUM: return 2;
-      case AlertSeverity.LOW: return 1;
-      default: return 0;
+    case AlertSeverity.CRITICAL: return 4;
+    case AlertSeverity.HIGH: return 3;
+    case AlertSeverity.MEDIUM: return 2;
+    case AlertSeverity.LOW: return 1;
+    default: return 0;
     }
   }
   
@@ -972,17 +972,17 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     const fieldValue = this.getFieldValue(alert, condition.field);
     
     switch (condition.operator) {
-      case 'eq': return fieldValue === condition.value;
-      case 'ne': return fieldValue !== condition.value;
-      case 'gt': return fieldValue > condition.value;
-      case 'lt': return fieldValue < condition.value;
-      case 'gte': return fieldValue >= condition.value;
-      case 'lte': return fieldValue <= condition.value;
-      case 'in': return Array.isArray(condition.value) && condition.value.includes(fieldValue);
-      case 'nin': return Array.isArray(condition.value) && !condition.value.includes(fieldValue);
-      case 'contains': return String(fieldValue).includes(String(condition.value));
-      case 'matches': return new RegExp(String(condition.value)).test(String(fieldValue));
-      default: return false;
+    case 'eq': return fieldValue === condition.value;
+    case 'ne': return fieldValue !== condition.value;
+    case 'gt': return fieldValue > condition.value;
+    case 'lt': return fieldValue < condition.value;
+    case 'gte': return fieldValue >= condition.value;
+    case 'lte': return fieldValue <= condition.value;
+    case 'in': return Array.isArray(condition.value) && condition.value.includes(fieldValue);
+    case 'nin': return Array.isArray(condition.value) && !condition.value.includes(fieldValue);
+    case 'contains': return String(fieldValue).includes(String(condition.value));
+    case 'matches': return new RegExp(String(condition.value)).test(String(fieldValue));
+    default: return false;
     }
   }
   
@@ -1060,23 +1060,23 @@ export class SecurityAlertingWorkflow extends EventEmitter {
     
     // Execute based on action type
     switch (action.type) {
-      case 'system':
-        await this.executeSystemAction(alert, action);
-        break;
-      case 'network':
-        await this.executeNetworkAction(alert, action);
-        break;
-      case 'user':
-        await this.executeUserAction(alert, action);
-        break;
-      case 'data':
-        await this.executeDataAction(alert, action);
-        break;
-      case 'notification':
-        await this.executeNotificationAction(alert, action);
-        break;
-      default:
-        throw new Error(`Unknown action type: ${action.type}`);
+    case 'system':
+      await this.executeSystemAction(alert, action);
+      break;
+    case 'network':
+      await this.executeNetworkAction(alert, action);
+      break;
+    case 'user':
+      await this.executeUserAction(alert, action);
+      break;
+    case 'data':
+      await this.executeDataAction(alert, action);
+      break;
+    case 'notification':
+      await this.executeNotificationAction(alert, action);
+      break;
+    default:
+      throw new Error(`Unknown action type: ${action.type}`);
     }
   }
   
@@ -1108,17 +1108,17 @@ export class SecurityAlertingWorkflow extends EventEmitter {
   private async executeStepAction(alert: SecurityAlert, actionId: string): Promise<void> {
     // Execute predefined escalation actions
     switch (actionId) {
-      case 'create_incident_ticket':
-        await this.createIncidentTicket(alert);
-        break;
-      case 'notify_management':
-        await this.notifyManagement(alert);
-        break;
-      case 'activate_incident_response':
-        await this.activateIncidentResponse(alert);
-        break;
-      default:
-        console.log(`Unknown step action: ${actionId}`);
+    case 'create_incident_ticket':
+      await this.createIncidentTicket(alert);
+      break;
+    case 'notify_management':
+      await this.notifyManagement(alert);
+      break;
+    case 'activate_incident_response':
+      await this.activateIncidentResponse(alert);
+      break;
+    default:
+      console.log(`Unknown step action: ${actionId}`);
     }
   }
   
@@ -1140,12 +1140,12 @@ Source IPs: ${alert.context.ipAddresses.join(', ') || 'None'}`;
     
     // Format based on channel
     switch (channel) {
-      case AlertChannel.SLACK:
-        return this.formatSlackMessage(baseContent, alert);
-      case AlertChannel.EMAIL:
-        return this.formatEmailMessage(baseContent, alert);
-      default:
-        return baseContent;
+    case AlertChannel.SLACK:
+      return this.formatSlackMessage(baseContent, alert);
+    case AlertChannel.EMAIL:
+      return this.formatEmailMessage(baseContent, alert);
+    default:
+      return baseContent;
     }
   }
   

@@ -373,12 +373,12 @@ export class IntegrationAnalyticsServiceWrapper {
    */
   private mapHttpMethodToIntegrationOperation(method: string): IntegrationOperation {
     switch (method.toLowerCase()) {
-      case 'get': return IntegrationOperation.READ;
-      case 'post': return IntegrationOperation.WRITE;
-      case 'put': return IntegrationOperation.UPDATE;
-      case 'patch': return IntegrationOperation.UPDATE;
-      case 'delete': return IntegrationOperation.DELETE;
-      default: return IntegrationOperation.QUERY;
+    case 'get': return IntegrationOperation.READ;
+    case 'post': return IntegrationOperation.WRITE;
+    case 'put': return IntegrationOperation.UPDATE;
+    case 'patch': return IntegrationOperation.UPDATE;
+    case 'delete': return IntegrationOperation.DELETE;
+    default: return IntegrationOperation.QUERY;
     }
   }
 
@@ -484,7 +484,7 @@ export class IntegrationAnalyticsServiceWrapper {
     initialized: boolean;
     collecting: boolean;
     timestamp: Date;
-  } {
+    } {
     return {
       status: this.isInitialized ? 'healthy' : 'not_initialized',
       initialized: this.isInitialized,

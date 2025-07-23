@@ -102,21 +102,21 @@ class APILoadTester {
    */
   private getNodeData(nodeType: string, index: number): any {
     switch (nodeType) {
-      case 'WeightedChoice':
-        return {
-          choices: [`Option ${index}A`, `Option ${index}B`, `Option ${index}C`],
-          weights: [0.4, 0.4, 0.2]
-        };
-      case 'Concat':
-        return { separator: ' | ' };
-      case 'Output':
-        return { template: `Output ${index}: {{value}}` };
-      case 'SetVariable':
-        return { variableName: `var${index}`, value: `value${index}` };
-      case 'GetVariable':
-        return { variableName: `var${Math.max(0, index - 1)}` };
-      default:
-        return {};
+    case 'WeightedChoice':
+      return {
+        choices: [`Option ${index}A`, `Option ${index}B`, `Option ${index}C`],
+        weights: [0.4, 0.4, 0.2]
+      };
+    case 'Concat':
+      return { separator: ' | ' };
+    case 'Output':
+      return { template: `Output ${index}: {{value}}` };
+    case 'SetVariable':
+      return { variableName: `var${index}`, value: `value${index}` };
+    case 'GetVariable':
+      return { variableName: `var${Math.max(0, index - 1)}` };
+    default:
+      return {};
     }
   }
 
@@ -510,7 +510,7 @@ class APILoadTester {
       report += `   Total Requests: ${result.totalRequests}\\n`;
       
       if (result.errors.length > 0) {
-        report += `   Top Errors:\\n`;
+        report += '   Top Errors:\\n';
         result.errors.slice(0, 3).forEach(error => {
           report += `     - ${error.message}: ${error.count} occurrences\\n`;
         });

@@ -727,30 +727,30 @@ export class MarketplacePolicyEnforcementService {
     const fieldValue = this.extractFieldValue(contentData, condition.field);
     
     switch (condition.operator) {
-      case 'contains':
-        const contains = String(fieldValue).toLowerCase().includes(String(condition.value).toLowerCase());
-        return { met: contains, result: fieldValue, confidence: contains ? 0.9 : 0.1 };
+    case 'contains':
+      const contains = String(fieldValue).toLowerCase().includes(String(condition.value).toLowerCase());
+      return { met: contains, result: fieldValue, confidence: contains ? 0.9 : 0.1 };
       
-      case 'equals':
-        const equals = fieldValue === condition.value;
-        return { met: equals, result: fieldValue, confidence: equals ? 1.0 : 0.0 };
+    case 'equals':
+      const equals = fieldValue === condition.value;
+      return { met: equals, result: fieldValue, confidence: equals ? 1.0 : 0.0 };
       
-      case 'greater_than':
-        const gt = Number(fieldValue) > Number(condition.value);
-        return { met: gt, result: fieldValue, confidence: gt ? 0.9 : 0.1 };
+    case 'greater_than':
+      const gt = Number(fieldValue) > Number(condition.value);
+      return { met: gt, result: fieldValue, confidence: gt ? 0.9 : 0.1 };
       
-      case 'regex':
-        const regex = new RegExp(condition.value);
-        const matches = regex.test(String(fieldValue));
-        return { met: matches, result: fieldValue, confidence: matches ? 0.8 : 0.2 };
+    case 'regex':
+      const regex = new RegExp(condition.value);
+      const matches = regex.test(String(fieldValue));
+      return { met: matches, result: fieldValue, confidence: matches ? 0.8 : 0.2 };
       
-      case 'ai_classify':
-        const aiResult = await this.classifyContentViolation(contentId, String(fieldValue), 'text');
-        const hasViolation = aiResult.violations.includes(condition.value);
-        return { met: hasViolation, result: aiResult, confidence: aiResult.confidence };
+    case 'ai_classify':
+      const aiResult = await this.classifyContentViolation(contentId, String(fieldValue), 'text');
+      const hasViolation = aiResult.violations.includes(condition.value);
+      return { met: hasViolation, result: aiResult, confidence: aiResult.confidence };
       
-      default:
-        return { met: false, result: fieldValue, confidence: 0.0 };
+    default:
+      return { met: false, result: fieldValue, confidence: 0.0 };
     }
   }
 

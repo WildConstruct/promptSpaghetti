@@ -54,7 +54,7 @@ export class VerificationService {
     this.s3 = new AWS.S3({
       region: config.s3.region,
       accessKeyId: config.s3.accessKeyId,
-      secretAccessKey: config.s3.secretAccessKey,
+      secretAccessKey: config.s3.secretAccessKey
     });
   }
 
@@ -99,7 +99,7 @@ export class VerificationService {
           requested_level: requestData.requested_level,
           has_personal_info: !!requestData.information.personal_info,
           has_professional_info: !!requestData.information.professional_info,
-          has_business_info: !!requestData.information.business_info,
+          has_business_info: !!requestData.information.business_info
         },
         ipAddress: clientIp,
         userAgent,
@@ -317,7 +317,7 @@ export class VerificationService {
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
       `, [requestId, documentData.document_type, documentData.file_name, 
-          documentData.file_size, documentData.file_type, s3Key, 'pending_upload']);
+        documentData.file_size, documentData.file_type, s3Key, 'pending_upload']);
 
       const document = documentResult.rows[0];
 

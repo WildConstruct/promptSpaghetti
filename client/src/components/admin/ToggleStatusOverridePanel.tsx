@@ -221,32 +221,32 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
 
   const getOverrideTypeIcon = (type: string) => {
     switch (type) {
-      case 'EMERGENCY_DISABLE': return <Zap className="text-red-500" />;
-      case 'FORCE_ENABLE': return <Unlock className="text-green-500" />;
-      case 'FORCE_DISABLE': return <Lock className="text-red-500" />;
-      case 'PERCENTAGE_OVERRIDE': return <Percent className="text-blue-500" />;
-      case 'TARGETING_OVERRIDE': return <Target className="text-purple-500" />;
-      default: return <Settings className="text-gray-500" />;
+    case 'EMERGENCY_DISABLE': return <Zap className="text-red-500" />;
+    case 'FORCE_ENABLE': return <Unlock className="text-green-500" />;
+    case 'FORCE_DISABLE': return <Lock className="text-red-500" />;
+    case 'PERCENTAGE_OVERRIDE': return <Percent className="text-blue-500" />;
+    case 'TARGETING_OVERRIDE': return <Target className="text-purple-500" />;
+    default: return <Settings className="text-gray-500" />;
     }
   };
 
   const getPriorityColor = (priority: string): string => {
     switch (priority) {
-      case 'EMERGENCY': return 'text-red-600 bg-red-50 border-red-200';
-      case 'HIGH': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'NORMAL': return 'text-blue-600 bg-blue-50 border-blue-200';
-      case 'LOW': return 'text-gray-600 bg-gray-50 border-gray-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+    case 'EMERGENCY': return 'text-red-600 bg-red-50 border-red-200';
+    case 'HIGH': return 'text-orange-600 bg-orange-50 border-orange-200';
+    case 'NORMAL': return 'text-blue-600 bg-blue-50 border-blue-200';
+    case 'LOW': return 'text-gray-600 bg-gray-50 border-gray-200';
+    default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 
   const getStatusColor = (status: string): string => {
     switch (status) {
-      case 'ACTIVE': return 'text-green-600 bg-green-50 border-green-200';
-      case 'EXPIRED': return 'text-gray-600 bg-gray-50 border-gray-200';
-      case 'CANCELLED': return 'text-red-600 bg-red-50 border-red-200';
-      case 'SCHEDULED': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+    case 'ACTIVE': return 'text-green-600 bg-green-50 border-green-200';
+    case 'EXPIRED': return 'text-gray-600 bg-gray-50 border-gray-200';
+    case 'CANCELLED': return 'text-red-600 bg-red-50 border-red-200';
+    case 'SCHEDULED': return 'text-blue-600 bg-blue-50 border-blue-200';
+    default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 

@@ -421,27 +421,27 @@ export class DependencyResolver {
     let selectedVersion: string | null = null;
 
     switch (this.options.resolutionStrategy) {
-      case 'latest':
-        selectedVersion = availableVersions
-          .filter(v => ranges.every(r => semver.satisfies(v, r)))
-          .sort(semver.rcompare)[0] || null;
-        break;
+    case 'latest':
+      selectedVersion = availableVersions
+        .filter(v => ranges.every(r => semver.satisfies(v, r)))
+        .sort(semver.rcompare)[0] || null;
+      break;
         
-      case 'maxSatisfying':
-        for (const range of ranges) {
-          const maxSat = semver.maxSatisfying(availableVersions, range);
-          if (maxSat && ranges.every(r => semver.satisfies(maxSat, r))) {
-            selectedVersion = maxSat;
-            break;
-          }
+    case 'maxSatisfying':
+      for (const range of ranges) {
+        const maxSat = semver.maxSatisfying(availableVersions, range);
+        if (maxSat && ranges.every(r => semver.satisfies(maxSat, r))) {
+          selectedVersion = maxSat;
+          break;
         }
-        break;
+      }
+      break;
         
-      case 'conservative':
-        selectedVersion = availableVersions
-          .filter(v => ranges.every(r => semver.satisfies(v, r)))
-          .sort(semver.compare)[0] || null;
-        break;
+    case 'conservative':
+      selectedVersion = availableVersions
+        .filter(v => ranges.every(r => semver.satisfies(v, r)))
+        .sort(semver.compare)[0] || null;
+      break;
     }
 
     if (selectedVersion) {
@@ -485,8 +485,8 @@ export class DependencyResolver {
     const suggestions: string[] = [];
     
     suggestions.push(`Consider making one of the dependencies optional: ${cycle.join(' -> ')}`);
-    suggestions.push(`Use dependency injection or event-based communication to break the cycle`);
-    suggestions.push(`Refactor shared functionality into a separate module`);
+    suggestions.push('Use dependency injection or event-based communication to break the cycle');
+    suggestions.push('Refactor shared functionality into a separate module');
     
     return suggestions;
   }

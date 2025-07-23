@@ -680,7 +680,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
       return impact.directImpact.map(directImpact => ({
         targetToggle: directImpact.toggleId,
         effect: directImpact.impactType === 'activation' ? 'activate' : 
-               directImpact.impactType === 'deactivation' ? 'deactivate' : 'modify',
+          directImpact.impactType === 'deactivation' ? 'deactivate' : 'modify',
         reason: directImpact.description,
         confidence: this.calculateConfidenceScore(directImpact.severity)
       }));
@@ -691,11 +691,11 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
 
   private calculateConfidenceScore(severity: string): number {
     switch (severity) {
-      case 'critical': return 0.95;
-      case 'significant': return 0.85;
-      case 'moderate': return 0.70;
-      case 'minimal': return 0.50;
-      default: return 0.60;
+    case 'critical': return 0.95;
+    case 'significant': return 0.85;
+    case 'moderate': return 0.70;
+    case 'minimal': return 0.50;
+    default: return 0.60;
     }
   }
 
@@ -763,18 +763,18 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     
     if (claudeContext.costImpact) {
       switch (claudeContext.costImpact) {
-        case 'high': risk += 0.3; break;
-        case 'medium': risk += 0.2; break;
-        case 'low': risk += 0.1; break;
+      case 'high': risk += 0.3; break;
+      case 'medium': risk += 0.2; break;
+      case 'low': risk += 0.1; break;
       }
     }
 
     if (claudeContext.riskLevel) {
       switch (claudeContext.riskLevel) {
-        case 'critical': risk += 0.4; break;
-        case 'high': risk += 0.3; break;
-        case 'medium': risk += 0.2; break;
-        case 'low': risk += 0.1; break;
+      case 'critical': risk += 0.4; break;
+      case 'high': risk += 0.3; break;
+      case 'medium': risk += 0.2; break;
+      case 'low': risk += 0.1; break;
       }
     }
 
@@ -800,18 +800,18 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     
     for (const factor of factors) {
       switch (factor.category) {
-        case 'technical':
-          strategies.push('Review technical dependencies and configurations');
-          break;
-        case 'cost':
-          strategies.push('Monitor cost impact and usage patterns');
-          break;
-        case 'performance':
-          strategies.push('Optimize evaluation logic and caching strategies');
-          break;
-        case 'business':
-          strategies.push('Assess business impact and user experience effects');
-          break;
+      case 'technical':
+        strategies.push('Review technical dependencies and configurations');
+        break;
+      case 'cost':
+        strategies.push('Monitor cost impact and usage patterns');
+        break;
+      case 'performance':
+        strategies.push('Optimize evaluation logic and caching strategies');
+        break;
+      case 'business':
+        strategies.push('Assess business impact and user experience effects');
+        break;
       }
     }
     
@@ -835,8 +835,8 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
       qualityImpact: claudeContext.qualityImpact || 'none',
       riskLevel: riskAssessment ? 
         (riskAssessment.riskScore >= 0.8 ? 'critical' :
-         riskAssessment.riskScore >= 0.6 ? 'high' :
-         riskAssessment.riskScore >= 0.3 ? 'medium' : 'low') : 'low',
+          riskAssessment.riskScore >= 0.6 ? 'high' :
+            riskAssessment.riskScore >= 0.3 ? 'medium' : 'low') : 'low',
       modelRecommendation: this.generateModelRecommendation(result, claudeContext, riskAssessment)
     };
   }

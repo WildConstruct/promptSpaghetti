@@ -172,7 +172,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
       normalizedWeight: number;
       percentage: number;
     }>;
-  } {
+    } {
     const choiceDistribution = this.data.choices.map((choice, index) => {
       const weight = this.data.weights[index] || 1;
       const normalizedWeight = this.normalizedWeights[index];

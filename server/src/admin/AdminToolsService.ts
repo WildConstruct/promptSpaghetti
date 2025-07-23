@@ -224,54 +224,54 @@ export class AdminToolsService {
       for (const userId of operation.userIds) {
         try {
           switch (operation.operation) {
-            case 'activate':
-              await this.dbService.query(
-                'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
-                ['active', userId]
+          case 'activate':
+            await this.dbService.query(
+              'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
+              ['active', userId]
+            );
+            break;
+              
+          case 'deactivate':
+            await this.dbService.query(
+              'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
+              ['suspended', userId]
+            );
+            break;
+              
+          case 'suspend':
+            const suspendUntil = operation.parameters?.duration ? 
+              new Date(Date.now() + operation.parameters.duration * 60 * 60 * 1000) : 
+              null;
+            await this.dbService.query(
+              'UPDATE users SET status = $1, locked_until = $2, updated_at = NOW() WHERE id = $3',
+              ['suspended', suspendUntil, userId]
+            );
+            break;
+              
+          case 'grant_role':
+            if (operation.parameters?.roleId) {
+              await this.rbacService.assignRole({
+                userId,
+                roleId: operation.parameters.roleId,
+                grantedBy: adminId
+              }, context);
+            }
+            break;
+              
+          case 'revoke_role':
+            if (operation.parameters?.roleId) {
+              await this.rbacService.revokeRole(
+                userId,
+                operation.parameters.roleId,
+                adminId,
+                operation.reason,
+                context
               );
-              break;
+            }
+            break;
               
-            case 'deactivate':
-              await this.dbService.query(
-                'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
-                ['suspended', userId]
-              );
-              break;
-              
-            case 'suspend':
-              const suspendUntil = operation.parameters?.duration ? 
-                new Date(Date.now() + operation.parameters.duration * 60 * 60 * 1000) : 
-                null;
-              await this.dbService.query(
-                'UPDATE users SET status = $1, locked_until = $2, updated_at = NOW() WHERE id = $3',
-                ['suspended', suspendUntil, userId]
-              );
-              break;
-              
-            case 'grant_role':
-              if (operation.parameters?.roleId) {
-                await this.rbacService.assignRole({
-                  userId,
-                  roleId: operation.parameters.roleId,
-                  grantedBy: adminId
-                }, context);
-              }
-              break;
-              
-            case 'revoke_role':
-              if (operation.parameters?.roleId) {
-                await this.rbacService.revokeRole(
-                  userId,
-                  operation.parameters.roleId,
-                  adminId,
-                  operation.reason,
-                  context
-                );
-              }
-              break;
-              
-            default:
-              throw new Error(`Unsupported operation: ${operation.operation}`);
+          default:
+            throw new Error(`Unsupported operation: ${operation.operation}`);
           }
 
           results.push({ userId, success: true });
@@ -334,63 +334,63 @@ export class AdminToolsService {
   ): Promise<void> {
     try {
       switch (action.action) {
-        case 'activate':
-          await this.dbService.query(
-            'UPDATE users SET status = $1, account_locked = false, locked_until = NULL, updated_at = NOW() WHERE id = $2',
-            ['active', action.userId]
-          );
-          break;
+      case 'activate':
+        await this.dbService.query(
+          'UPDATE users SET status = $1, account_locked = false, locked_until = NULL, updated_at = NOW() WHERE id = $2',
+          ['active', action.userId]
+        );
+        break;
           
-        case 'deactivate':
-          await this.dbService.query(
-            'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
-            ['suspended', action.userId]
-          );
-          break;
+      case 'deactivate':
+        await this.dbService.query(
+          'UPDATE users SET status = $1, updated_at = NOW() WHERE id = $2',
+          ['suspended', action.userId]
+        );
+        break;
           
-        case 'suspend':
-          const suspendUntil = action.duration ? 
-            new Date(Date.now() + action.duration * 60 * 60 * 1000) : 
-            null;
-          await this.dbService.query(
-            'UPDATE users SET status = $1, account_locked = true, locked_until = $2, updated_at = NOW() WHERE id = $3',
-            ['suspended', suspendUntil, action.userId]
-          );
-          break;
+      case 'suspend':
+        const suspendUntil = action.duration ? 
+          new Date(Date.now() + action.duration * 60 * 60 * 1000) : 
+          null;
+        await this.dbService.query(
+          'UPDATE users SET status = $1, account_locked = true, locked_until = $2, updated_at = NOW() WHERE id = $3',
+          ['suspended', suspendUntil, action.userId]
+        );
+        break;
           
-        case 'delete':
-          await this.dbService.query(
-            'UPDATE users SET status = $1, deleted_at = NOW(), updated_at = NOW() WHERE id = $2',
-            ['deleted', action.userId]
-          );
-          break;
+      case 'delete':
+        await this.dbService.query(
+          'UPDATE users SET status = $1, deleted_at = NOW(), updated_at = NOW() WHERE id = $2',
+          ['deleted', action.userId]
+        );
+        break;
           
-        case 'verify':
-          await this.dbService.query(
-            'UPDATE users SET email_verified = true, email_verification_token = NULL, updated_at = NOW() WHERE id = $1',
-            [action.userId]
-          );
-          break;
+      case 'verify':
+        await this.dbService.query(
+          'UPDATE users SET email_verified = true, email_verification_token = NULL, updated_at = NOW() WHERE id = $1',
+          [action.userId]
+        );
+        break;
           
-        case 'reset_password':
-          const resetToken = require('crypto').randomBytes(32).toString('hex');
-          const resetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-          await this.dbService.query(
-            'UPDATE users SET password_reset_token = $1, password_reset_expires = $2, updated_at = NOW() WHERE id = $3',
-            [resetToken, resetExpires, action.userId]
-          );
-          break;
+      case 'reset_password':
+        const resetToken = require('crypto').randomBytes(32).toString('hex');
+        const resetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+        await this.dbService.query(
+          'UPDATE users SET password_reset_token = $1, password_reset_expires = $2, updated_at = NOW() WHERE id = $3',
+          [resetToken, resetExpires, action.userId]
+        );
+        break;
           
-        case 'force_logout':
-          // Revoke all sessions
-          await this.dbService.query(
-            'UPDATE user_sessions SET revoked = true, revoked_at = NOW() WHERE user_id = $1 AND revoked = false',
-            [action.userId]
-          );
-          break;
+      case 'force_logout':
+        // Revoke all sessions
+        await this.dbService.query(
+          'UPDATE user_sessions SET revoked = true, revoked_at = NOW() WHERE user_id = $1 AND revoked = false',
+          [action.userId]
+        );
+        break;
           
-        default:
-          throw new Error(`Unsupported action: ${action.action}`);
+      default:
+        throw new Error(`Unsupported action: ${action.action}`);
       }
 
       // Log user action

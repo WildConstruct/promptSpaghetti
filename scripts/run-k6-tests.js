@@ -68,7 +68,7 @@ const k6Config = {
       stages: [
         { duration: '30s', target: 10 },     // Normal load
         { duration: '1m', target: 200 },     // Spike
-        { duration: '30s', target: 10 },     // Back to normal
+        { duration: '30s', target: 10 }     // Back to normal
       ],
       description: 'Spike test for sudden traffic increases'
     },
@@ -442,29 +442,29 @@ async function main() {
   // Parse command line arguments
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--scenario':
-        scenario = args[++i];
-        break;
-      case '--test':
-        testFile = args[++i];
-        break;
-      case '--server':
-        options.serverUrl = args[++i];
-        break;
-      case '--all':
-        runAll = true;
-        break;
-      case '--json':
-        options.outputFormat = 'json';
-        break;
-      case '--no-report':
-        options.generateReport = false;
-        break;
-      case '--no-exit':
-        options.exitOnFailure = false;
-        break;
-      case '--help':
-        console.log(`
+    case '--scenario':
+      scenario = args[++i];
+      break;
+    case '--test':
+      testFile = args[++i];
+      break;
+    case '--server':
+      options.serverUrl = args[++i];
+      break;
+    case '--all':
+      runAll = true;
+      break;
+    case '--json':
+      options.outputFormat = 'json';
+      break;
+    case '--no-report':
+      options.generateReport = false;
+      break;
+    case '--no-exit':
+      options.exitOnFailure = false;
+      break;
+    case '--help':
+      console.log(`
 K6 Load Testing Runner for Epic 18
 
 Usage: node run-k6-tests.js [options]
@@ -484,8 +484,8 @@ Examples:
   node run-k6-tests.js --test api-test.js --scenario stress
   node run-k6-tests.js --all --server http://localhost:3000
         `);
-        process.exit(0);
-        break;
+      process.exit(0);
+      break;
     }
   }
 

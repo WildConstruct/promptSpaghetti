@@ -22,13 +22,13 @@ const TokenAnalysisRequestSchema = z.object({
     // Saliency options
     gradientMethod: z.enum(['vanilla', 'integrated', 'smoothgrad']).optional(),
     baselineStrategy: z.enum(['zero', 'random', 'mask']).optional(),
-    numSteps: z.number().int().min(10).max(200).optional(),
+    numSteps: z.number().int().min(10).max(200).optional()
   }).optional(),
   modelConfig: z.object({
     modelId: z.string().optional(),
     endpoint: z.string().url().optional(),
-    apiKey: z.string().optional(),
-  }).optional(),
+    apiKey: z.string().optional()
+  }).optional()
 });
 
 const PromptAnalysisRequestSchema = z.object({
@@ -39,8 +39,8 @@ const PromptAnalysisRequestSchema = z.object({
   modelConfig: z.object({
     modelId: z.string().optional(),
     endpoint: z.string().url().optional(),
-    apiKey: z.string().optional(),
-  }).optional(),
+    apiKey: z.string().optional()
+  }).optional()
 });
 
 const ComparisonRequestSchema = z.object({
@@ -49,8 +49,8 @@ const ComparisonRequestSchema = z.object({
   modelConfig: z.object({
     modelId: z.string().optional(),
     endpoint: z.string().url().optional(),
-    apiKey: z.string().optional(),
-  }).optional(),
+    apiKey: z.string().optional()
+  }).optional()
 });
 
 type TokenAnalysisRequest = z.infer<typeof TokenAnalysisRequestSchema>;
@@ -81,11 +81,11 @@ export async function modelInterpretationRoutes(
             properties: {
               success: { type: 'boolean' },
               data: { type: 'object' },
-              metadata: { type: 'object' },
-            },
-          },
-        },
-      },
+              metadata: { type: 'object' }
+            }
+          }
+        }
+      }
     },
     async (request: FastifyRequest<{ Body: TokenAnalysisRequest }>, reply: FastifyReply) => {
       const { prompt, method, options = {}, modelConfig } = request.body;
@@ -93,7 +93,7 @@ export async function modelInterpretationRoutes(
       logger.info('Token influence analysis requested', {
         promptLength: prompt.length,
         method,
-        modelId: modelConfig?.modelId,
+        modelId: modelConfig?.modelId
       });
 
       try {
@@ -103,28 +103,28 @@ export async function modelInterpretationRoutes(
         let result: any;
 
         switch (method) {
-          case 'LIME':
-            result = await tokenAnalyzer.analyzeLIME(prompt, predictionFunction, options);
-            break;
+        case 'LIME':
+          result = await tokenAnalyzer.analyzeLIME(prompt, predictionFunction, options);
+          break;
             
-          case 'SALIENCY':
-            // For saliency, we need a gradient function - mock implementation
-            const gradientFunction = createGradientFunction(modelConfig);
-            result = await tokenAnalyzer.analyzeSaliency(prompt, gradientFunction, options);
-            break;
+        case 'SALIENCY':
+          // For saliency, we need a gradient function - mock implementation
+          const gradientFunction = createGradientFunction(modelConfig);
+          result = await tokenAnalyzer.analyzeSaliency(prompt, gradientFunction, options);
+          break;
             
-          case 'BOTH':
-            const gradientFn = createGradientFunction(modelConfig);
-            const comparison = await tokenAnalyzer.compareAnalysisMethods(
-              prompt,
-              predictionFunction,
-              gradientFn
-            );
-            result = comparison;
-            break;
+        case 'BOTH':
+          const gradientFn = createGradientFunction(modelConfig);
+          const comparison = await tokenAnalyzer.compareAnalysisMethods(
+            prompt,
+            predictionFunction,
+            gradientFn
+          );
+          result = comparison;
+          break;
             
-          default:
-            throw ErrorFactory.validation('Invalid analysis method');
+        default:
+          throw ErrorFactory.validation('Invalid analysis method');
         }
 
         // Track usage analytics
@@ -135,8 +135,8 @@ export async function modelInterpretationRoutes(
             method,
             promptLength: prompt.length,
             tokenCount: result.tokens?.length || 0,
-            analysisTime: result.metadata?.analysisTime || 0,
-          },
+            analysisTime: result.metadata?.analysisTime || 0
+          }
         });
 
         reply.send({
@@ -145,21 +145,21 @@ export async function modelInterpretationRoutes(
           metadata: {
             timestamp: Date.now(),
             method,
-            analysisVersion: '1.0.0',
-          },
+            analysisVersion: '1.0.0'
+          }
         });
       } catch (error) {
         logger.error('Token influence analysis failed', {
           error: error instanceof Error ? error.message : String(error),
           promptLength: prompt.length,
-          method,
+          method
         });
 
         if (error instanceof z.ZodError) {
           throw ErrorFactory.validation('Invalid request parameters', error.errors.map(e => ({
             field: e.path.join('.'),
             code: e.code,
-            message: e.message,
+            message: e.message
           })));
         }
 
@@ -180,11 +180,11 @@ export async function modelInterpretationRoutes(
             properties: {
               success: { type: 'boolean' },
               data: { type: 'object' },
-              metadata: { type: 'object' },
-            },
-          },
-        },
-      },
+              metadata: { type: 'object' }
+            }
+          }
+        }
+      }
     },
     async (request: FastifyRequest<{ Body: PromptAnalysisRequest }>, reply: FastifyReply) => {
       const { prompt, analysisDepth, includeInfluence, includeOptimizations, modelConfig } = request.body;
@@ -193,7 +193,7 @@ export async function modelInterpretationRoutes(
         promptLength: prompt.length,
         analysisDepth,
         includeInfluence,
-        includeOptimizations,
+        includeOptimizations
       });
 
       try {
@@ -202,7 +202,7 @@ export async function modelInterpretationRoutes(
         const result = await promptAnalyzer.analyzePrompt(prompt, predictionFunction, {
           includeInfluence,
           includeOptimizations,
-          analysisDepth,
+          analysisDepth
         });
 
         // Track usage analytics
@@ -215,8 +215,8 @@ export async function modelInterpretationRoutes(
             overallScore: result.summary.overallScore,
             analysisTime: result.metadata.analysisTime,
             strengthsCount: result.summary.strengths.length,
-            weaknessesCount: result.summary.weaknesses.length,
-          },
+            weaknessesCount: result.summary.weaknesses.length
+          }
         });
 
         reply.send({
@@ -225,14 +225,14 @@ export async function modelInterpretationRoutes(
           metadata: {
             timestamp: Date.now(),
             analysisDepth,
-            version: result.metadata.version,
-          },
+            version: result.metadata.version
+          }
         });
       } catch (error) {
         logger.error('Prompt analysis failed', {
           error: error instanceof Error ? error.message : String(error),
           promptLength: prompt.length,
-          analysisDepth,
+          analysisDepth
         });
 
         throw error;
@@ -252,18 +252,18 @@ export async function modelInterpretationRoutes(
             properties: {
               success: { type: 'boolean' },
               data: { type: 'object' },
-              metadata: { type: 'object' },
-            },
-          },
-        },
-      },
+              metadata: { type: 'object' }
+            }
+          }
+        }
+      }
     },
     async (request: FastifyRequest<{ Body: ComparisonRequest }>, reply: FastifyReply) => {
       const { prompt, methods, modelConfig } = request.body;
 
       logger.info('Method comparison requested', {
         promptLength: prompt.length,
-        methods: methods.join(', '),
+        methods: methods.join(', ')
       });
 
       try {
@@ -285,8 +285,8 @@ export async function modelInterpretationRoutes(
             methods: methods.join(','),
             correlation: comparison.comparison.correlation,
             agreement: comparison.comparison.agreement,
-            divergentTokens: comparison.comparison.divergentTokens.length,
-          },
+            divergentTokens: comparison.comparison.divergentTokens.length
+          }
         });
 
         reply.send({
@@ -295,13 +295,13 @@ export async function modelInterpretationRoutes(
           metadata: {
             timestamp: Date.now(),
             methods,
-            comparisonVersion: '1.0.0',
-          },
+            comparisonVersion: '1.0.0'
+          }
         });
       } catch (error) {
         logger.error('Method comparison failed', {
           error: error instanceof Error ? error.message : String(error),
-          promptLength: prompt.length,
+          promptLength: prompt.length
         });
 
         throw error;
@@ -321,22 +321,22 @@ export async function modelInterpretationRoutes(
               type: 'array',
               items: { type: 'string' },
               minItems: 1,
-              maxItems: 10,
+              maxItems: 10
             },
             method: { type: 'string', enum: ['LIME', 'SALIENCY'] },
             options: { type: 'object' },
-            modelConfig: { type: 'object' },
+            modelConfig: { type: 'object' }
           },
-          required: ['prompts', 'method'],
-        },
-      },
+          required: ['prompts', 'method']
+        }
+      }
     },
     async (request, reply) => {
       const { prompts, method, options = {}, modelConfig } = request.body as any;
 
       logger.info('Batch analysis requested', {
         promptCount: prompts.length,
-        method,
+        method
       });
 
       try {
@@ -355,7 +355,7 @@ export async function modelInterpretationRoutes(
               return { index, success: true, result };
             } catch (error) {
               logger.warn(`Batch analysis failed for prompt ${index}`, {
-                error: error instanceof Error ? error.message : String(error),
+                error: error instanceof Error ? error.message : String(error)
               });
               return { 
                 index, 
@@ -376,8 +376,8 @@ export async function modelInterpretationRoutes(
             totalPrompts: prompts.length,
             successfulAnalyses: successfulResults.length,
             method,
-            averagePromptLength: prompts.reduce((sum, p) => sum + p.length, 0) / prompts.length,
-          },
+            averagePromptLength: prompts.reduce((sum, p) => sum + p.length, 0) / prompts.length
+          }
         });
 
         reply.send({
@@ -387,19 +387,19 @@ export async function modelInterpretationRoutes(
             summary: {
               total: prompts.length,
               successful: successfulResults.length,
-              failed: prompts.length - successfulResults.length,
-            },
+              failed: prompts.length - successfulResults.length
+            }
           },
           metadata: {
             timestamp: Date.now(),
             method,
-            batchSize: prompts.length,
-          },
+            batchSize: prompts.length
+          }
         });
       } catch (error) {
         logger.error('Batch analysis failed', {
           error: error instanceof Error ? error.message : String(error),
-          promptCount: prompts.length,
+          promptCount: prompts.length
         });
 
         throw error;
@@ -416,17 +416,17 @@ export async function modelInterpretationRoutes(
       methodUsage: {
         LIME: 0,
         SALIENCY: 0,
-        BOTH: 0,
+        BOTH: 0
       },
-      averageAnalysisTime: 0,
+      averageAnalysisTime: 0
     };
 
     reply.send({
       success: true,
       data: mockHistory,
       metadata: {
-        timestamp: Date.now(),
-      },
+        timestamp: Date.now()
+      }
     });
   });
 
@@ -437,16 +437,16 @@ export async function modelInterpretationRoutes(
       services: {
         tokenAnalyzer: 'operational',
         promptAnalyzer: 'operational',
-        analytics: 'operational',
+        analytics: 'operational'
       },
       capabilities: {
         lime: true,
         saliency: true,
         promptAnalysis: true,
         batchProcessing: true,
-        methodComparison: true,
+        methodComparison: true
       },
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
 
     reply.send(health);
@@ -468,7 +468,7 @@ function createPredictionFunction(modelConfig?: any) {
       confidence,
       prediction: score > 0.5 ? 'positive' : 'negative',
       modelId: modelConfig?.modelId || 'mock-model-v1',
-      processingTime: 100 + Math.random() * 200,
+      processingTime: 100 + Math.random() * 200
     };
   };
 }

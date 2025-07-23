@@ -731,24 +731,24 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
         const isAscending = state.sortOrder === 'asc';
 
         switch (state.sortBy) {
-          case 'name':
-            comparison = a.name.localeCompare(b.name);
-            break;
-          case 'lastModified':
-            comparison = a.lastModified.getTime() - b.lastModified.getTime();
-            break;
-          case 'size':
-            const sizeA = a.type === 'file' ? a.size || 0 : 0;
-            const sizeB = b.type === 'file' ? b.size || 0 : 0;
-            comparison = sizeA - sizeB;
-            break;
-          case 'type':
-            const extA = a.type === 'file' ? a.extension || '' : '';
-            const extB = b.type === 'file' ? b.extension || '' : '';
-            comparison = extA.localeCompare(extB);
-            break;
-          default:
-            comparison = a.name.localeCompare(b.name);
+        case 'name':
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case 'lastModified':
+          comparison = a.lastModified.getTime() - b.lastModified.getTime();
+          break;
+        case 'size':
+          const sizeA = a.type === 'file' ? a.size || 0 : 0;
+          const sizeB = b.type === 'file' ? b.size || 0 : 0;
+          comparison = sizeA - sizeB;
+          break;
+        case 'type':
+          const extA = a.type === 'file' ? a.extension || '' : '';
+          const extB = b.type === 'file' ? b.extension || '' : '';
+          comparison = extA.localeCompare(extB);
+          break;
+        default:
+          comparison = a.name.localeCompare(b.name);
         }
 
         return isAscending ? comparison : -comparison;

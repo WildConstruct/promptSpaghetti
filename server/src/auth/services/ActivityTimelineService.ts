@@ -339,17 +339,17 @@ export class ActivityTimelineService {
       let exportData: Buffer;
 
       switch (format) {
-        case 'json':
-          exportData = Buffer.from(JSON.stringify(timeline, null, 2));
-          break;
-        case 'csv':
-          exportData = await this.convertTimelineToCSV(timeline.events);
-          break;
-        case 'pdf':
-          exportData = await this.convertTimelineToPDF(timeline);
-          break;
-        default:
-          throw new Error(`Unsupported export format: ${format}`);
+      case 'json':
+        exportData = Buffer.from(JSON.stringify(timeline, null, 2));
+        break;
+      case 'csv':
+        exportData = await this.convertTimelineToCSV(timeline.events);
+        break;
+      case 'pdf':
+        exportData = await this.convertTimelineToPDF(timeline);
+        break;
+      default:
+        throw new Error(`Unsupported export format: ${format}`);
       }
 
       // Log export
@@ -425,14 +425,14 @@ export class ActivityTimelineService {
     const events: TimelineEvent[] = [];
     
     switch (filter.groupingMode) {
-      case 'by_session':
-        return this.groupActivitiesBySession(activities);
-      case 'by_category':
-        return this.groupActivitiesByCategory(activities);
-      case 'by_day':
-        return this.groupActivitiesByDay(activities);
-      default:
-        return this.groupActivitiesChronologically(activities);
+    case 'by_session':
+      return this.groupActivitiesBySession(activities);
+    case 'by_category':
+      return this.groupActivitiesByCategory(activities);
+    case 'by_day':
+      return this.groupActivitiesByDay(activities);
+    default:
+      return this.groupActivitiesChronologically(activities);
     }
   }
 
@@ -667,7 +667,7 @@ export class ActivityTimelineService {
       [ActivityType.LOGOUT]: 'logout',
       [ActivityType.GRAPH_CREATED]: 'create',
       [ActivityType.GRAPH_EXECUTED]: 'play',
-      [ActivityType.GRAPH_SHARED]: 'share',
+      [ActivityType.GRAPH_SHARED]: 'share'
       // Add more mappings
     } as any;
     

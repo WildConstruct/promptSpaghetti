@@ -96,29 +96,29 @@ export class ConstraintSuggestionEngine {
     const affectedNodes = nodes.filter(n => violation.node_ids.includes(n.id));
 
     switch (constraint.rule) {
-      case 'era_compatibility':
-        suggestions.push(...this.generateEraCompatibilitySuggestions(violation, affectedNodes, context));
-        break;
+    case 'era_compatibility':
+      suggestions.push(...this.generateEraCompatibilitySuggestions(violation, affectedNodes, context));
+      break;
       
-      case 'social_class_appropriateness':
-        suggestions.push(...this.generateSocialClassSuggestions(violation, affectedNodes, context));
-        break;
+    case 'social_class_appropriateness':
+      suggestions.push(...this.generateSocialClassSuggestions(violation, affectedNodes, context));
+      break;
       
-      case 'material_availability':
-        suggestions.push(...this.generateMaterialAvailabilitySuggestions(violation, affectedNodes, context));
-        break;
+    case 'material_availability':
+      suggestions.push(...this.generateMaterialAvailabilitySuggestions(violation, affectedNodes, context));
+      break;
       
-      case 'cultural_appropriateness':
-        suggestions.push(...this.generateCulturalSuggestions(violation, affectedNodes, context));
-        break;
+    case 'cultural_appropriateness':
+      suggestions.push(...this.generateCulturalSuggestions(violation, affectedNodes, context));
+      break;
       
-      case 'temporal_consistency':
-        suggestions.push(...this.generateTemporalSuggestions(violation, affectedNodes, context));
-        break;
+    case 'temporal_consistency':
+      suggestions.push(...this.generateTemporalSuggestions(violation, affectedNodes, context));
+      break;
       
-      case 'regional_authenticity':
-        suggestions.push(...this.generateRegionalSuggestions(violation, affectedNodes, context));
-        break;
+    case 'regional_authenticity':
+      suggestions.push(...this.generateRegionalSuggestions(violation, affectedNodes, context));
+      break;
     }
 
     return suggestions;
@@ -240,7 +240,7 @@ export class ConstraintSuggestionEngine {
           constraint_id: violation.constraint_id,
           type: 'fix',
           priority: 'high',
-          title: `Use locally available materials`,
+          title: 'Use locally available materials',
           description: `Replace ${node.content} with materials available in ${context.era.name}`,
           specific_actions: [{
             action_type: 'replace_node',
@@ -368,7 +368,7 @@ export class ConstraintSuggestionEngine {
         description: `Replace with items authentic to ${context.region}`,
         specific_actions: [{
           action_type: 'replace_node',
-          description: `Use regionally appropriate alternatives`,
+          description: 'Use regionally appropriate alternatives',
           target_node_ids: affectedNodes.map(n => n.id),
           suggested_values: regionalItems,
           rationale: 'Regional variations were significant due to local materials, climate, and culture'

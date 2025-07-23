@@ -185,7 +185,7 @@ export class CheckpointSystem extends EventEmitter {
       };
 
       // Prepare checkpoint data
-      let checkpointData: CheckpointData = {
+      const checkpointData: CheckpointData = {
         metadata: fullMetadata,
         state: {
           graphState: this.deepClone(state.graphState || {}),
@@ -692,15 +692,15 @@ export class CheckpointSystem extends EventEmitter {
     let score = 0;
     for (const change of changes) {
       switch (change.type) {
-        case 'added':
-          score += 1;
-          break;
-        case 'modified':
-          score += 2;
-          break;
-        case 'deleted':
-          score += 3;
-          break;
+      case 'added':
+        score += 1;
+        break;
+      case 'modified':
+        score += 2;
+        break;
+      case 'deleted':
+        score += 3;
+        break;
       }
     }
     return score;

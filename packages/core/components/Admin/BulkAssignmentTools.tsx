@@ -211,12 +211,12 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({
 
   const canProceedToNextStep = useMemo(() => {
     switch (currentStep) {
-      case 1: return operation.targets.length > 0;
-      case 2: return operation.resources.length > 0;
-      case 3: return true; // Parameters have defaults
-      case 4: return operation.conflicts?.every(c => c.resolution) ?? true;
-      case 5: return operation.status === 'draft';
-      default: return false;
+    case 1: return operation.targets.length > 0;
+    case 2: return operation.resources.length > 0;
+    case 3: return true; // Parameters have defaults
+    case 4: return operation.conflicts?.every(c => c.resolution) ?? true;
+    case 5: return operation.status === 'draft';
+    default: return false;
     }
   }, [currentStep, operation]);
 

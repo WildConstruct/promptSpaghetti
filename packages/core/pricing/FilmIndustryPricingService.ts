@@ -373,7 +373,7 @@ export class FilmIndustryPricingService extends EventEmitter {
     seasonalPatterns: Array<{ period: string; multiplier: number }>;
     emergingServices: string[];
     competitiveLandscape: Array<{ category: string; competitorCount: number; priceRange: { min: number; max: number } }>;
-  } {
+    } {
     return {
       averagePricing: {
         'script_analysis': 2500,

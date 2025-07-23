@@ -147,36 +147,36 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
 
       // Add filters
       if (environment) {
-        query += ` AND JSON_EXTRACT(ar.metadata, '$.environment') = ?`;
+        query += ' AND JSON_EXTRACT(ar.metadata, \'$.environment\') = ?';
         params.push(environment);
       }
 
       if (status) {
-        query += ` AND ar.status = ?`;
+        query += ' AND ar.status = ?';
         params.push(status);
       }
 
       if (urgency) {
-        query += ` AND ar.urgency = ?`;
+        query += ' AND ar.urgency = ?';
         params.push(urgency);
       }
 
       if (auto_approved === 'true') {
-        query += ` AND JSON_EXTRACT(ar.metadata, '$.auto_approved') = 1`;
+        query += ' AND JSON_EXTRACT(ar.metadata, \'$.auto_approved\') = 1';
       }
 
       if (deployment_type) {
-        query += ` AND JSON_EXTRACT(ar.metadata, '$.deployment_type') = ?`;
+        query += ' AND JSON_EXTRACT(ar.metadata, \'$.deployment_type\') = ?';
         params.push(deployment_type);
       }
 
       if (requester_id) {
-        query += ` AND ar.requested_by = ?`;
+        query += ' AND ar.requested_by = ?';
         params.push(requester_id);
       }
 
       if (search) {
-        query += ` AND (ar.title LIKE ? OR ar.resource_id LIKE ?)`;
+        query += ' AND (ar.title LIKE ? OR ar.resource_id LIKE ?)';
         params.push(`%${search}%`, `%${search}%`);
       }
 
@@ -200,36 +200,36 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
 
       // Apply same filters to count query
       if (environment) {
-        countQuery += ` AND JSON_EXTRACT(ar.metadata, '$.environment') = ?`;
+        countQuery += ' AND JSON_EXTRACT(ar.metadata, \'$.environment\') = ?';
         countParams.push(environment);
       }
 
       if (status) {
-        countQuery += ` AND ar.status = ?`;
+        countQuery += ' AND ar.status = ?';
         countParams.push(status);
       }
 
       if (urgency) {
-        countQuery += ` AND ar.urgency = ?`;
+        countQuery += ' AND ar.urgency = ?';
         countParams.push(urgency);
       }
 
       if (auto_approved === 'true') {
-        countQuery += ` AND JSON_EXTRACT(ar.metadata, '$.auto_approved') = 1`;
+        countQuery += ' AND JSON_EXTRACT(ar.metadata, \'$.auto_approved\') = 1';
       }
 
       if (deployment_type) {
-        countQuery += ` AND JSON_EXTRACT(ar.metadata, '$.deployment_type') = ?`;
+        countQuery += ' AND JSON_EXTRACT(ar.metadata, \'$.deployment_type\') = ?';
         countParams.push(deployment_type);
       }
 
       if (requester_id) {
-        countQuery += ` AND ar.requested_by = ?`;
+        countQuery += ' AND ar.requested_by = ?';
         countParams.push(requester_id);
       }
 
       if (search) {
-        countQuery += ` AND (ar.title LIKE ? OR ar.resource_id LIKE ?)`;
+        countQuery += ' AND (ar.title LIKE ? OR ar.resource_id LIKE ?)';
         countParams.push(`%${search}%`, `%${search}%`);
       }
 
@@ -569,7 +569,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
       let statusCode = 500;
       let errorType = 'internal_server_error';
       let userMessage = 'Failed to create deployment approval request';
-      let additionalInfo = {};
+      const additionalInfo = {};
       
       if (error.message?.includes('database') || error.code?.startsWith('SQLITE_')) {
         statusCode = 503;
@@ -880,7 +880,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
       let statusCode = 500;
       let errorType = 'internal_server_error';
       let userMessage = 'Failed to submit review';
-      let additionalInfo = {};
+      const additionalInfo = {};
       
       if (error.message?.includes('database') || error.code?.startsWith('SQLITE_')) {
         if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {

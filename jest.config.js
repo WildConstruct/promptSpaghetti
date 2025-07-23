@@ -8,7 +8,7 @@ module.exports = {
     '**/?(*.)+(spec|test).[tj]s?(x)',
     '**/tests/documentation/**/*.(spec|test).[tj]s?(x)',
     '**/tests/infrastructure/**/*.(spec|test).[tj]s?(x)',
-    '**/tests/**/*.(spec|test).[tj]s?(x)',
+    '**/tests/**/*.(spec|test).[tj]s?(x)'
   ],
   testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*\\.spec\\.jsx$'],
   coverageDirectory: 'coverage',
@@ -21,7 +21,7 @@ module.exports = {
     'tests/utils/**/*.{ts,tsx}',
     '!**/node_modules/**',
     '!tests/documentation/**/*.test.ts',
-    '!tests/infrastructure/**/*.test.ts',
+    '!tests/infrastructure/**/*.test.ts'
   ],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -30,22 +30,22 @@ module.exports = {
     '^@tests/(.*)$': '<rootDir>/tests/$1',
     '^@packages/(.*)$': '<rootDir>/packages/$1',
     '^@client/(.*)$': '<rootDir>/client/$1',
-    '^@server/(.*)$': '<rootDir>/server/$1',
+    '^@server/(.*)$': '<rootDir>/server/$1'
   },
   setupFilesAfterEnv: [
     '<rootDir>/jest.setup.js',
     '<rootDir>/tests/utils/globalTestSetup.ts',
     // '<rootDir>/tests/utils/mswSetup.ts', // Temporarily disabled
     '<rootDir>/tests/utils/axeSetup.ts',
-    '@testing-library/jest-dom',
+    '@testing-library/jest-dom'
   ],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
-        useESM: true,
-      },
+        useESM: true
+      }
     ],
     '^.+\\.(js|jsx)$': [
       'babel-jest',
@@ -55,41 +55,41 @@ module.exports = {
             '@babel/preset-env',
             {
               targets: { node: 'current' },
-              modules: 'commonjs',
-            },
+              modules: 'commonjs'
+            }
           ],
           [
             '@babel/preset-react',
             {
-              runtime: 'automatic',
-            },
+              runtime: 'automatic'
+            }
           ],
           [
             '@babel/preset-typescript',
             {
               isTSX: true,
-              allExtensions: true,
-            },
-          ],
-        ],
-      },
-    ],
+              allExtensions: true
+            }
+          ]
+        ]
+      }
+    ]
   },
   coverageThreshold: {
     global: {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80,
+      statements: 80
     },
     './tests/infrastructure/': {
       branches: 85,
       functions: 85,
       lines: 85,
-      statements: 85,
-    },
+      statements: 85
+    }
   },
   testTimeout: 15000,
   verbose: true,
-  collectCoverage: true,
+  collectCoverage: true
 };

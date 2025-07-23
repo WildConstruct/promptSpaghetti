@@ -424,17 +424,17 @@ export class SatisfactionDashboardAPI {
       let contentType: string;
       
       switch (format) {
-        case 'csv':
-          responseData = this.formatAsCSV(exportData);
-          contentType = 'text/csv';
-          break;
-        case 'excel':
-          responseData = await this.formatAsExcel(exportData);
-          contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-          break;
-        default:
-          responseData = exportData;
-          contentType = 'application/json';
+      case 'csv':
+        responseData = this.formatAsCSV(exportData);
+        contentType = 'text/csv';
+        break;
+      case 'excel':
+        responseData = await this.formatAsExcel(exportData);
+        contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        break;
+      default:
+        responseData = exportData;
+        contentType = 'application/json';
       }
       
       // Audit export
@@ -715,34 +715,34 @@ export class SatisfactionDashboardAPI {
     const metrics = await this.satisfactionTracker.getSatisfactionMetrics();
     
     switch (reportType) {
-      case 'summary':
-        return {
-          reportType: 'summary',
-          generatedAt: new Date(),
-          summary: {
-            overallSatisfaction: metrics.overallSatisfaction.score,
-            npsScore: metrics.nps.score,
-            trendDirection: metrics.overallSatisfaction.trend,
-            keyInsights: [
-              `Overall satisfaction is ${metrics.overallSatisfaction.score}/100`,
-              `NPS score is ${metrics.nps.score}`,
-              `Satisfaction trend is ${metrics.overallSatisfaction.trend}`
-            ]
-          },
-          categories: metrics.categoryScores,
-          segments: metrics.segmentSatisfaction
-        };
+    case 'summary':
+      return {
+        reportType: 'summary',
+        generatedAt: new Date(),
+        summary: {
+          overallSatisfaction: metrics.overallSatisfaction.score,
+          npsScore: metrics.nps.score,
+          trendDirection: metrics.overallSatisfaction.trend,
+          keyInsights: [
+            `Overall satisfaction is ${metrics.overallSatisfaction.score}/100`,
+            `NPS score is ${metrics.nps.score}`,
+            `Satisfaction trend is ${metrics.overallSatisfaction.trend}`
+          ]
+        },
+        categories: metrics.categoryScores,
+        segments: metrics.segmentSatisfaction
+      };
         
-      case 'detailed':
-        return {
-          reportType: 'detailed',
-          generatedAt: new Date(),
-          fullMetrics: metrics,
-          recommendations: await this.generateRecommendations(metrics)
-        };
+    case 'detailed':
+      return {
+        reportType: 'detailed',
+        generatedAt: new Date(),
+        fullMetrics: metrics,
+        recommendations: await this.generateRecommendations(metrics)
+      };
         
-      default:
-        throw new Error(`Unknown report type: ${reportType}`);
+    default:
+      throw new Error(`Unknown report type: ${reportType}`);
     }
   }
 

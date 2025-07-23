@@ -111,9 +111,9 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
       const response = await fetch('/api/export/shares', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(sharePayload),
+        body: JSON.stringify(sharePayload)
       });
 
       if (!response.ok) {

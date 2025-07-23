@@ -167,7 +167,7 @@ export async function transactionTrackingRoutes(fastify: FastifyInstance) {
         reply.code(200).send({
           success: true,
           transaction,
-          message: `Transaction details retrieved successfully`
+          message: 'Transaction details retrieved successfully'
         });
 
       } catch (error) {
@@ -294,7 +294,7 @@ export async function transactionTrackingRoutes(fastify: FastifyInstance) {
       try {
         const queryParams = request.query;
 
-        console.log(`🔍 Searching transactions with filters:`, Object.keys(queryParams));
+        console.log('🔍 Searching transactions with filters:', Object.keys(queryParams));
         const startTime = Date.now();
 
         // Build search query
@@ -847,7 +847,7 @@ export async function transactionTrackingRoutes(fastify: FastifyInstance) {
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
-        console.log(`🚀 Starting real-time transaction monitoring`);
+        console.log('🚀 Starting real-time transaction monitoring');
 
         await transactionTrackingService.startRealTimeMonitoring();
 
@@ -869,7 +869,7 @@ export async function transactionTrackingRoutes(fastify: FastifyInstance) {
         reply.code(200).send({
           success: true,
           monitoringStatus,
-          message: `Real-time transaction monitoring started successfully`
+          message: 'Real-time transaction monitoring started successfully'
         });
 
       } catch (error) {

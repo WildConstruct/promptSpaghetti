@@ -823,10 +823,10 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
 
     // Risk from impact assessment
     switch (impactAssessment.businessImpactLevel) {
-      case 'critical': riskScore += 0.4; break;
-      case 'high': riskScore += 0.3; break;
-      case 'medium': riskScore += 0.2; break;
-      case 'low': riskScore += 0.1; break;
+    case 'critical': riskScore += 0.4; break;
+    case 'high': riskScore += 0.3; break;
+    case 'medium': riskScore += 0.2; break;
+    case 'low': riskScore += 0.1; break;
     }
 
     // Risk from cascade complexity
@@ -951,11 +951,11 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
 
   private getInverseOperation(operation: OperationType): OperationType {
     switch (operation) {
-      case OperationType.ACTIVATE: return OperationType.DEACTIVATE;
-      case OperationType.DEACTIVATE: return OperationType.ACTIVATE;
-      case OperationType.ARCHIVE: return OperationType.RESTORE;
-      case OperationType.RESTORE: return OperationType.ARCHIVE;
-      default: return operation;
+    case OperationType.ACTIVATE: return OperationType.DEACTIVATE;
+    case OperationType.DEACTIVATE: return OperationType.ACTIVATE;
+    case OperationType.ARCHIVE: return OperationType.RESTORE;
+    case OperationType.RESTORE: return OperationType.ARCHIVE;
+    default: return operation;
     }
   }
 

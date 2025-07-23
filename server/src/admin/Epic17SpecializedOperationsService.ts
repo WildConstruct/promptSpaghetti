@@ -1044,28 +1044,28 @@ export class Epic17SpecializedOperationsService extends EventEmitter {
     try {
       // Route to specific phase executor based on operation type and phase name
       switch (operation.operationType) {
-        case SpecializedOperationType.KEY_ROTATION:
-          await this.executeKeyRotationPhase(operation, phase);
-          break;
+      case SpecializedOperationType.KEY_ROTATION:
+        await this.executeKeyRotationPhase(operation, phase);
+        break;
           
-        case SpecializedOperationType.CERTIFICATE_RENEWAL:
-          await this.executeCertificateRenewalPhase(operation, phase);
-          break;
+      case SpecializedOperationType.CERTIFICATE_RENEWAL:
+        await this.executeCertificateRenewalPhase(operation, phase);
+        break;
           
-        case SpecializedOperationType.DATA_MIGRATION:
-          await this.executeDataMigrationPhase(operation, phase);
-          break;
+      case SpecializedOperationType.DATA_MIGRATION:
+        await this.executeDataMigrationPhase(operation, phase);
+        break;
           
-        case SpecializedOperationType.DISASTER_RECOVERY:
-          await this.executeDisasterRecoveryPhase(operation, phase);
-          break;
+      case SpecializedOperationType.DISASTER_RECOVERY:
+        await this.executeDisasterRecoveryPhase(operation, phase);
+        break;
           
-        case SpecializedOperationType.COMPLIANCE_SCAN:
-          await this.executeCompliancePhase(operation, phase);
-          break;
+      case SpecializedOperationType.COMPLIANCE_SCAN:
+        await this.executeCompliancePhase(operation, phase);
+        break;
           
-        default:
-          await this.executeGenericPhase(operation, phase);
+      default:
+        await this.executeGenericPhase(operation, phase);
       }
       
     } catch (error) {
@@ -1082,55 +1082,55 @@ export class Epic17SpecializedOperationsService extends EventEmitter {
     const { keyIds, batchSize, gracePeriodHours } = operation.parameters;
     
     switch (phase.name) {
-      case 'preparation':
-        // Validate keys and prepare rotation
-        for (const keyId of keyIds) {
-          const keyStatus = await this.validateKeyForRotation(keyId);
-          if (!keyStatus.valid) {
-            throw new Error(`Key ${keyId} cannot be rotated: ${keyStatus.reason}`);
-          }
+    case 'preparation':
+      // Validate keys and prepare rotation
+      for (const keyId of keyIds) {
+        const keyStatus = await this.validateKeyForRotation(keyId);
+        if (!keyStatus.valid) {
+          throw new Error(`Key ${keyId} cannot be rotated: ${keyStatus.reason}`);
         }
-        break;
+      }
+      break;
         
-      case 'backup':
-        // Backup current keys
-        await this.backupApiKeys(keyIds);
-        break;
+    case 'backup':
+      // Backup current keys
+      await this.backupApiKeys(keyIds);
+      break;
         
-      case 'rotation':
-        // Perform actual key rotation in batches
-        const batches = this.createBatches(keyIds, batchSize);
-        for (const batch of batches) {
-          for (const keyId of batch) {
-            const result = await this.passwordService.rotateApiKeySecret(keyId, 'specialized_operation', 'Scheduled rotation');
-            phase.outputs[keyId] = {
-              rotated: true,
-              newSecretId: result.secretId,
-              rotatedAt: new Date()
-            };
-          }
+    case 'rotation':
+      // Perform actual key rotation in batches
+      const batches = this.createBatches(keyIds, batchSize);
+      for (const batch of batches) {
+        for (const keyId of batch) {
+          const result = await this.passwordService.rotateApiKeySecret(keyId, 'specialized_operation', 'Scheduled rotation');
+          phase.outputs[keyId] = {
+            rotated: true,
+            newSecretId: result.secretId,
+            rotatedAt: new Date()
+          };
         }
-        break;
+      }
+      break;
         
-      case 'grace_period':
-        // Maintain grace period for old keys
-        await this.delay(gracePeriodHours * 60 * 60 * 1000);
-        break;
+    case 'grace_period':
+      // Maintain grace period for old keys
+      await this.delay(gracePeriodHours * 60 * 60 * 1000);
+      break;
         
-      case 'cleanup':
-        // Clean up old key versions
-        await this.cleanupOldKeyVersions(keyIds);
-        break;
+    case 'cleanup':
+      // Clean up old key versions
+      await this.cleanupOldKeyVersions(keyIds);
+      break;
         
-      case 'verification':
-        // Verify rotation success
-        for (const keyId of keyIds) {
-          const verified = await this.verifyKeyRotation(keyId);
-          if (!verified) {
-            throw new Error(`Key rotation verification failed for ${keyId}`);
-          }
+    case 'verification':
+      // Verify rotation success
+      for (const keyId of keyIds) {
+        const verified = await this.verifyKeyRotation(keyId);
+        if (!verified) {
+          throw new Error(`Key rotation verification failed for ${keyId}`);
         }
-        break;
+      }
+      break;
     }
   }
 
@@ -1138,40 +1138,40 @@ export class Epic17SpecializedOperationsService extends EventEmitter {
     const { certificates } = operation.parameters;
     
     switch (phase.name) {
-      case 'validation':
-        // Validate current certificates
-        for (const cert of certificates) {
-          const validation = await this.validateCertificate(cert.certificateId);
-          if (!validation.valid) {
-            throw new Error(`Certificate validation failed: ${validation.reason}`);
-          }
+    case 'validation':
+      // Validate current certificates
+      for (const cert of certificates) {
+        const validation = await this.validateCertificate(cert.certificateId);
+        if (!validation.valid) {
+          throw new Error(`Certificate validation failed: ${validation.reason}`);
         }
-        break;
+      }
+      break;
         
-      case 'renewal':
-        // Renew certificates
-        for (const cert of certificates) {
-          const renewed = await this.renewCertificate(cert.certificateId);
-          phase.outputs[cert.certificateId] = renewed;
-        }
-        break;
+    case 'renewal':
+      // Renew certificates
+      for (const cert of certificates) {
+        const renewed = await this.renewCertificate(cert.certificateId);
+        phase.outputs[cert.certificateId] = renewed;
+      }
+      break;
         
-      case 'deployment':
-        // Deploy renewed certificates
-        for (const cert of certificates) {
-          await this.deployCertificate(cert.certificateId, cert.serviceName);
-        }
-        break;
+    case 'deployment':
+      // Deploy renewed certificates
+      for (const cert of certificates) {
+        await this.deployCertificate(cert.certificateId, cert.serviceName);
+      }
+      break;
         
-      case 'verification':
-        // Verify certificate deployment
-        for (const cert of certificates) {
-          const verified = await this.verifyCertificateDeployment(cert.certificateId);
-          if (!verified) {
-            throw new Error(`Certificate deployment verification failed for ${cert.certificateId}`);
-          }
+    case 'verification':
+      // Verify certificate deployment
+      for (const cert of certificates) {
+        const verified = await this.verifyCertificateDeployment(cert.certificateId);
+        if (!verified) {
+          throw new Error(`Certificate deployment verification failed for ${cert.certificateId}`);
         }
-        break;
+      }
+      break;
     }
   }
 
@@ -1179,29 +1179,29 @@ export class Epic17SpecializedOperationsService extends EventEmitter {
     const { sourceSystem, targetSystem, dataTypes, batchSize, validationRules } = operation.parameters;
     
     switch (phase.name) {
-      case 'assessment':
-        // Assess data to be migrated
-        const assessment = await this.assessMigrationData(sourceSystem, dataTypes);
-        phase.outputs.assessment = assessment;
-        break;
+    case 'assessment':
+      // Assess data to be migrated
+      const assessment = await this.assessMigrationData(sourceSystem, dataTypes);
+      phase.outputs.assessment = assessment;
+      break;
         
-      case 'migration':
-        // Perform data migration
-        for (const dataType of dataTypes) {
-          const migrated = await this.migrateData(sourceSystem, targetSystem, dataType, batchSize);
-          phase.outputs[dataType] = migrated;
-        }
-        break;
+    case 'migration':
+      // Perform data migration
+      for (const dataType of dataTypes) {
+        const migrated = await this.migrateData(sourceSystem, targetSystem, dataType, batchSize);
+        phase.outputs[dataType] = migrated;
+      }
+      break;
         
-      case 'validation':
-        // Validate migrated data
-        for (const rule of validationRules) {
-          const validation = await this.validateMigratedData(targetSystem, rule);
-          if (!validation.passed) {
-            throw new Error(`Data validation failed: ${validation.reason}`);
-          }
+    case 'validation':
+      // Validate migrated data
+      for (const rule of validationRules) {
+        const validation = await this.validateMigratedData(targetSystem, rule);
+        if (!validation.passed) {
+          throw new Error(`Data validation failed: ${validation.reason}`);
         }
-        break;
+      }
+      break;
     }
   }
 
@@ -1209,30 +1209,30 @@ export class Epic17SpecializedOperationsService extends EventEmitter {
     const { recoveryType, targetServices, recoveryPoint } = operation.parameters;
     
     switch (phase.name) {
-      case 'assessment':
-        // Assess current system state
-        const systemState = await this.assessSystemState();
-        phase.outputs.systemState = systemState;
-        break;
+    case 'assessment':
+      // Assess current system state
+      const systemState = await this.assessSystemState();
+      phase.outputs.systemState = systemState;
+      break;
         
-      case 'recovery':
-        // Perform system recovery
-        if (recoveryType === 'full') {
-          await this.performFullRecovery(recoveryPoint);
-        } else if (recoveryType === 'service_specific' && targetServices) {
-          for (const service of targetServices) {
-            await this.recoverService(service, recoveryPoint);
-          }
+    case 'recovery':
+      // Perform system recovery
+      if (recoveryType === 'full') {
+        await this.performFullRecovery(recoveryPoint);
+      } else if (recoveryType === 'service_specific' && targetServices) {
+        for (const service of targetServices) {
+          await this.recoverService(service, recoveryPoint);
         }
-        break;
+      }
+      break;
         
-      case 'verification':
-        // Verify recovery success
-        const verified = await this.verifyRecovery(recoveryType, targetServices);
-        if (!verified) {
-          throw new Error('Disaster recovery verification failed');
-        }
-        break;
+    case 'verification':
+      // Verify recovery success
+      const verified = await this.verifyRecovery(recoveryType, targetServices);
+      if (!verified) {
+        throw new Error('Disaster recovery verification failed');
+      }
+      break;
     }
   }
 
@@ -1240,33 +1240,33 @@ export class Epic17SpecializedOperationsService extends EventEmitter {
     const { complianceType, scope } = operation.parameters;
     
     switch (phase.name) {
-      case 'scanning':
-        // Perform compliance scan
-        const scanResults = await this.performComplianceScan(complianceType, scope);
-        phase.outputs.scanResults = scanResults;
-        break;
+    case 'scanning':
+      // Perform compliance scan
+      const scanResults = await this.performComplianceScan(complianceType, scope);
+      phase.outputs.scanResults = scanResults;
+      break;
         
-      case 'analysis':
-        // Analyze compliance results
-        const analysis = await this.analyzeComplianceResults(scanResults);
-        phase.outputs.analysis = analysis;
-        break;
+    case 'analysis':
+      // Analyze compliance results
+      const analysis = await this.analyzeComplianceResults(scanResults);
+      phase.outputs.analysis = analysis;
+      break;
         
-      case 'remediation':
-        // Perform auto-remediation if enabled
-        if (operation.parameters.includeRemediation) {
-          const remediation = await this.performAutoRemediation(analysis);
-          phase.outputs.remediation = remediation;
-        }
-        break;
+    case 'remediation':
+      // Perform auto-remediation if enabled
+      if (operation.parameters.includeRemediation) {
+        const remediation = await this.performAutoRemediation(analysis);
+        phase.outputs.remediation = remediation;
+      }
+      break;
         
-      case 'reporting':
-        // Generate compliance report
-        if (operation.parameters.generateReport) {
-          const report = await this.generateComplianceReport(complianceType, scanResults, analysis);
-          phase.outputs.report = report;
-        }
-        break;
+    case 'reporting':
+      // Generate compliance report
+      if (operation.parameters.generateReport) {
+        const report = await this.generateComplianceReport(complianceType, scanResults, analysis);
+        phase.outputs.report = report;
+      }
+      break;
     }
   }
 
@@ -1316,30 +1316,30 @@ export class Epic17SpecializedOperationsService extends EventEmitter {
   private async buildOperationPhases(type: SpecializedOperationType, parameters: Record<string, any>): Promise<OperationPhase[]> {
     // Build phases based on operation type
     switch (type) {
-      case SpecializedOperationType.KEY_ROTATION:
-        return [
-          { phaseId: '1', name: 'preparation', description: 'Prepare for key rotation', order: 1, status: PhaseStatus.PENDING, estimatedDuration: 5, dependsOn: [], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '2', name: 'backup', description: 'Backup current keys', order: 2, status: PhaseStatus.PENDING, estimatedDuration: 10, dependsOn: ['1'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '3', name: 'rotation', description: 'Rotate API keys', order: 3, status: PhaseStatus.PENDING, estimatedDuration: 30, dependsOn: ['2'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '4', name: 'grace_period', description: 'Grace period for old keys', order: 4, status: PhaseStatus.PENDING, estimatedDuration: parameters.gracePeriodHours * 60 || 1440, dependsOn: ['3'], blocking: false, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '5', name: 'cleanup', description: 'Clean up old key versions', order: 5, status: PhaseStatus.PENDING, estimatedDuration: 15, dependsOn: ['4'], blocking: false, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '6', name: 'verification', description: 'Verify rotation success', order: 6, status: PhaseStatus.PENDING, estimatedDuration: 10, dependsOn: ['3'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} }
-        ];
+    case SpecializedOperationType.KEY_ROTATION:
+      return [
+        { phaseId: '1', name: 'preparation', description: 'Prepare for key rotation', order: 1, status: PhaseStatus.PENDING, estimatedDuration: 5, dependsOn: [], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '2', name: 'backup', description: 'Backup current keys', order: 2, status: PhaseStatus.PENDING, estimatedDuration: 10, dependsOn: ['1'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '3', name: 'rotation', description: 'Rotate API keys', order: 3, status: PhaseStatus.PENDING, estimatedDuration: 30, dependsOn: ['2'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '4', name: 'grace_period', description: 'Grace period for old keys', order: 4, status: PhaseStatus.PENDING, estimatedDuration: parameters.gracePeriodHours * 60 || 1440, dependsOn: ['3'], blocking: false, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '5', name: 'cleanup', description: 'Clean up old key versions', order: 5, status: PhaseStatus.PENDING, estimatedDuration: 15, dependsOn: ['4'], blocking: false, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '6', name: 'verification', description: 'Verify rotation success', order: 6, status: PhaseStatus.PENDING, estimatedDuration: 10, dependsOn: ['3'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} }
+      ];
         
-      case SpecializedOperationType.CERTIFICATE_RENEWAL:
-        return [
-          { phaseId: '1', name: 'validation', description: 'Validate current certificates', order: 1, status: PhaseStatus.PENDING, estimatedDuration: 5, dependsOn: [], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '2', name: 'renewal', description: 'Renew certificates', order: 2, status: PhaseStatus.PENDING, estimatedDuration: 20, dependsOn: ['1'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '3', name: 'deployment', description: 'Deploy renewed certificates', order: 3, status: PhaseStatus.PENDING, estimatedDuration: 15, dependsOn: ['2'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '4', name: 'verification', description: 'Verify certificate deployment', order: 4, status: PhaseStatus.PENDING, estimatedDuration: 10, dependsOn: ['3'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} }
-        ];
+    case SpecializedOperationType.CERTIFICATE_RENEWAL:
+      return [
+        { phaseId: '1', name: 'validation', description: 'Validate current certificates', order: 1, status: PhaseStatus.PENDING, estimatedDuration: 5, dependsOn: [], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '2', name: 'renewal', description: 'Renew certificates', order: 2, status: PhaseStatus.PENDING, estimatedDuration: 20, dependsOn: ['1'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '3', name: 'deployment', description: 'Deploy renewed certificates', order: 3, status: PhaseStatus.PENDING, estimatedDuration: 15, dependsOn: ['2'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '4', name: 'verification', description: 'Verify certificate deployment', order: 4, status: PhaseStatus.PENDING, estimatedDuration: 10, dependsOn: ['3'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} }
+      ];
         
-      default:
-        return [
-          { phaseId: '1', name: 'preparation', description: 'Prepare operation', order: 1, status: PhaseStatus.PENDING, estimatedDuration: 10, dependsOn: [], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '2', name: 'execution', description: 'Execute operation', order: 2, status: PhaseStatus.PENDING, estimatedDuration: 30, dependsOn: ['1'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
-          { phaseId: '3', name: 'verification', description: 'Verify operation success', order: 3, status: PhaseStatus.PENDING, estimatedDuration: 5, dependsOn: ['2'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} }
-        ];
+    default:
+      return [
+        { phaseId: '1', name: 'preparation', description: 'Prepare operation', order: 1, status: PhaseStatus.PENDING, estimatedDuration: 10, dependsOn: [], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '2', name: 'execution', description: 'Execute operation', order: 2, status: PhaseStatus.PENDING, estimatedDuration: 30, dependsOn: ['1'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} },
+        { phaseId: '3', name: 'verification', description: 'Verify operation success', order: 3, status: PhaseStatus.PENDING, estimatedDuration: 5, dependsOn: ['2'], blocking: true, tasks: [], progressPercentage: 0, successful: false, outputs: {} }
+      ];
     }
   }
 

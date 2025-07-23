@@ -595,22 +595,22 @@ export async function policyRoutes(fastify: FastifyInstance) {
       const policies = policyManager.getPolicies({ domain, status });
 
       switch (format) {
-        case 'json':
-          reply.type('application/json');
-          return { policies };
+      case 'json':
+        reply.type('application/json');
+        return { policies };
           
-        case 'yaml':
-          // Would implement YAML conversion
-          reply.type('text/yaml');
-          return 'policies: []'; // Placeholder
+      case 'yaml':
+        // Would implement YAML conversion
+        reply.type('text/yaml');
+        return 'policies: []'; // Placeholder
           
-        case 'csv':
-          // Would implement CSV conversion
-          reply.type('text/csv');
-          return 'id,name,domain,status\n'; // Placeholder
+      case 'csv':
+        // Would implement CSV conversion
+        reply.type('text/csv');
+        return 'id,name,domain,status\n'; // Placeholder
           
-        default:
-          return reply.code(400).send({ error: 'Invalid format specified' });
+      default:
+        return reply.code(400).send({ error: 'Invalid format specified' });
       }
     } catch (error) {
       fastify.log.error('Failed to export policies:', error);

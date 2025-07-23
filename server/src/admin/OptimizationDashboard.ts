@@ -285,17 +285,17 @@ export class OptimizationDashboard {
       let response: OptimizationResponse;
       
       switch (optimizationRequest.type) {
-        case 'recommendation':
-          response = await this.executeRecommendationOptimization(optimizationRequest, userId);
-          break;
-        case 'policy':
-          response = await this.executePolicyOptimization(optimizationRequest, userId);
-          break;
-        case 'manual':
-          response = await this.executeManualOptimization(optimizationRequest, userId);
-          break;
-        default:
-          throw new Error(`Unknown optimization type: ${optimizationRequest.type}`);
+      case 'recommendation':
+        response = await this.executeRecommendationOptimization(optimizationRequest, userId);
+        break;
+      case 'policy':
+        response = await this.executePolicyOptimization(optimizationRequest, userId);
+        break;
+      case 'manual':
+        response = await this.executeManualOptimization(optimizationRequest, userId);
+        break;
+      default:
+        throw new Error(`Unknown optimization type: ${optimizationRequest.type}`);
       }
       
       // Send notifications if configured
@@ -407,16 +407,16 @@ export class OptimizationDashboard {
     }
     
     if (filters.search) {
-      query += ` AND (title LIKE ? OR description LIKE ?)`;
+      query += ' AND (title LIKE ? OR description LIKE ?)';
       params.push(`%${filters.search}%`, `%${filters.search}%`);
     }
     
     if (filters.dateRange) {
-      query += ` AND created_at BETWEEN ? AND ?`;
+      query += ' AND created_at BETWEEN ? AND ?';
       params.push(filters.dateRange.start.toISOString(), filters.dateRange.end.toISOString());
     }
     
-    query += ` ORDER BY created_at DESC LIMIT ? OFFSET ?`;
+    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
     params.push(filters.limit || 50, filters.offset || 0);
     
     const rows = await this.databaseService.query(query, params);

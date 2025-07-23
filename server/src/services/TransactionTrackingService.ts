@@ -264,8 +264,8 @@ export class TransactionTrackingService {
         averageProcessingTime: providerRows.length > 0 
           ? providerRows.reduce(
             (sum,
-            row
-          ) => sum + (parseFloat(row.avg_processing_time) || 0), 0) / providerRows.length 
+              row
+            ) => sum + (parseFloat(row.avg_processing_time) || 0), 0) / providerRows.length 
           : 0,
         averageFee: providerRows.length > 0 
           ? providerRows.reduce((sum, row) => sum + (parseFloat(row.avg_fee) || 0), 0) / providerRows.length 
@@ -505,14 +505,14 @@ export class TransactionTrackingService {
     });
 
     switch (request.format) {
-      case 'csv':
-        return this.generateCSV(searchResults.transactions, request.fields);
-      case 'json':
-        return this.generateJSON(searchResults.transactions, request);
-      case 'excel':
-        return this.generateExcel(searchResults.transactions, request.fields);
-      default:
-        throw new Error(`Unsupported export format: ${request.format}`);
+    case 'csv':
+      return this.generateCSV(searchResults.transactions, request.fields);
+    case 'json':
+      return this.generateJSON(searchResults.transactions, request);
+    case 'excel':
+      return this.generateExcel(searchResults.transactions, request.fields);
+    default:
+      throw new Error(`Unsupported export format: ${request.format}`);
     }
   }
 
@@ -762,13 +762,13 @@ export class TransactionTrackingService {
     for (const tx of transactions) {
       const row = headers.map(field => {
         switch (field) {
-          case 'id': return tx.id;
-          case 'created_at': return tx.timestamps.initiated.toISOString();
-          case 'status': return tx.status;
-          case 'amount': return tx.amount.gross;
-          case 'buyer_name': return tx.buyer.displayName;
-          case 'seller_name': return tx.seller.displayName;
-          default: return '';
+        case 'id': return tx.id;
+        case 'created_at': return tx.timestamps.initiated.toISOString();
+        case 'status': return tx.status;
+        case 'amount': return tx.amount.gross;
+        case 'buyer_name': return tx.buyer.displayName;
+        case 'seller_name': return tx.seller.displayName;
+        default: return '';
         }
       });
       csvRows.push(row.join(','));

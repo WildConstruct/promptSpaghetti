@@ -526,12 +526,12 @@ export class ConsentChangeHistoryService {
 
       // Add filters
       if (options?.startDate) {
-        query += ` AND timestamp >= ?`;
+        query += ' AND timestamp >= ?';
         params.push(options.startDate.toISOString());
       }
 
       if (options?.endDate) {
-        query += ` AND timestamp <= ?`;
+        query += ' AND timestamp <= ?';
         params.push(options.endDate.toISOString());
       }
 
@@ -540,14 +540,14 @@ export class ConsentChangeHistoryService {
         params.push(...options.changeTypes);
       }
 
-      query += ` ORDER BY timestamp DESC`;
+      query += ' ORDER BY timestamp DESC';
 
       if (options?.limit) {
-        query += ` LIMIT ?`;
+        query += ' LIMIT ?';
         params.push(options.limit);
         
         if (options?.offset) {
-          query += ` OFFSET ?`;
+          query += ' OFFSET ?';
           params.push(options.offset);
         }
       }
@@ -741,32 +741,32 @@ export class ConsentChangeHistoryService {
       let fileExtension: string;
 
       switch (format) {
-        case 'json':
-          exportData = JSON.stringify(report, null, 2);
-          mimeType = 'application/json';
-          fileExtension = 'json';
-          break;
+      case 'json':
+        exportData = JSON.stringify(report, null, 2);
+        mimeType = 'application/json';
+        fileExtension = 'json';
+        break;
           
-        case 'xml':
-          exportData = this.convertToXML(report);
-          mimeType = 'application/xml';
-          fileExtension = 'xml';
-          break;
+      case 'xml':
+        exportData = this.convertToXML(report);
+        mimeType = 'application/xml';
+        fileExtension = 'xml';
+        break;
           
-        case 'csv':
-          exportData = this.convertToCSV(report);
-          mimeType = 'text/csv';
-          fileExtension = 'csv';
-          break;
+      case 'csv':
+        exportData = this.convertToCSV(report);
+        mimeType = 'text/csv';
+        fileExtension = 'csv';
+        break;
           
-        case 'pdf':
-          exportData = await this.convertToPDF(report);
-          mimeType = 'application/pdf';
-          fileExtension = 'pdf';
-          break;
+      case 'pdf':
+        exportData = await this.convertToPDF(report);
+        mimeType = 'application/pdf';
+        fileExtension = 'pdf';
+        break;
           
-        default:
-          throw new Error(`Unsupported export format: ${format}`);
+      default:
+        throw new Error(`Unsupported export format: ${format}`);
       }
 
       // Store export data temporarily
@@ -1166,11 +1166,11 @@ export class ConsentChangeHistoryService {
 
   private mapImpactToRiskLevel(impactLevel: ConsentImpactLevel): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
     switch (impactLevel) {
-      case 'none': case 'low': return 'LOW';
-      case 'medium': return 'MEDIUM';
-      case 'high': return 'HIGH';
-      case 'critical': return 'CRITICAL';
-      default: return 'LOW';
+    case 'none': case 'low': return 'LOW';
+    case 'medium': return 'MEDIUM';
+    case 'high': return 'HIGH';
+    case 'critical': return 'CRITICAL';
+    default: return 'LOW';
     }
   }
 
@@ -1249,30 +1249,30 @@ export class ConsentChangeHistoryService {
 
   private mapChangeTypeToEventType(changeType: ConsentChangeType): ConsentEventType {
     switch (changeType) {
-      case 'initial_grant': return 'grant';
-      case 'preference_update': return 'modify';
-      case 'withdrawal': return 'withdraw';
-      case 'expiration': return 'expire';
-      case 'renewal': return 'renew';
-      case 'migration': return 'migrate';
-      default: return 'modify';
+    case 'initial_grant': return 'grant';
+    case 'preference_update': return 'modify';
+    case 'withdrawal': return 'withdraw';
+    case 'expiration': return 'expire';
+    case 'renewal': return 'renew';
+    case 'migration': return 'migrate';
+    default: return 'modify';
     }
   }
 
   private generateEventSummary(change: ConsentChangeEvent): string {
     switch (change.changeType) {
-      case 'initial_grant':
-        return `Consent granted for ${change.newState.purposes.length} purposes`;
-      case 'withdrawal':
-        return 'Consent withdrawn';
-      case 'preference_update':
-        return `Preferences updated (${change.changeSummary.totalChanges} changes)`;
-      case 'expiration':
-        return 'Consent expired';
-      case 'renewal':
-        return 'Consent renewed';
-      default:
-        return `Consent ${change.changeType}`;
+    case 'initial_grant':
+      return `Consent granted for ${change.newState.purposes.length} purposes`;
+    case 'withdrawal':
+      return 'Consent withdrawn';
+    case 'preference_update':
+      return `Preferences updated (${change.changeSummary.totalChanges} changes)`;
+    case 'expiration':
+      return 'Consent expired';
+    case 'renewal':
+      return 'Consent renewed';
+    default:
+      return `Consent ${change.changeType}`;
     }
   }
 

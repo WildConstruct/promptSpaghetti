@@ -262,8 +262,8 @@ class CoverageReportGenerator {
     </thead>
     <tbody>
       ${Object.entries(this.coverageData.byDirectory)
-        .sort(([,a], [,b]) => a.coverage - b.coverage)
-        .map(([dir, stats]) => `
+    .sort(([,a], [,b]) => a.coverage - b.coverage)
+    .map(([dir, stats]) => `
           <tr>
             <td>${dir}</td>
             <td>
@@ -321,16 +321,16 @@ class CoverageReportGenerator {
 | Directory | Coverage | Files (Tested/Total) | Critical Gaps |
 |-----------|----------|---------------------|---------------|
 ${Object.entries(this.coverageData.byDirectory)
-  .sort(([,a], [,b]) => a.coverage - b.coverage)
-  .map(([dir, stats]) => 
-    `| ${dir} | ${stats.coverage.toFixed(1)}% | ${stats.testedFiles}/${stats.totalFiles} | ${stats.criticalFiles.length} |`
-  ).join('\n')}
+    .sort(([,a], [,b]) => a.coverage - b.coverage)
+    .map(([dir, stats]) => 
+      `| ${dir} | ${stats.coverage.toFixed(1)}% | ${stats.testedFiles}/${stats.totalFiles} | ${stats.criticalFiles.length} |`
+    ).join('\n')}
 
 ## Critical Coverage Gaps
 
 ${this.coverageData.criticalGaps.length > 0 ? 
-  this.coverageData.criticalGaps.map(file => `- \`${file}\``).join('\n') : 
-  'No critical gaps identified.'}
+    this.coverageData.criticalGaps.map(file => `- \`${file}\``).join('\n') : 
+    'No critical gaps identified.'}
 
 ## Top Priority Recommendations
 

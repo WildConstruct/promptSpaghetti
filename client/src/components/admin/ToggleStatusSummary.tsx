@@ -182,9 +182,9 @@ export const ToggleStatusSummary: React.FC = () => {
       title: 'System Health',
       value: `${metrics.healthScore}%`,
       icon: metrics.healthScore >= 90 ? <CheckCircle /> : 
-            metrics.healthScore >= 70 ? <AlertCircle /> : <AlertTriangle />,
+        metrics.healthScore >= 70 ? <AlertCircle /> : <AlertTriangle />,
       variant: metrics.healthScore >= 90 ? 'success' : 
-               metrics.healthScore >= 70 ? 'warning' : 'danger',
+        metrics.healthScore >= 70 ? 'warning' : 'danger',
       description: 'Overall system health score',
       details: [
         { label: 'Active Alerts', value: metrics.alertsActive },

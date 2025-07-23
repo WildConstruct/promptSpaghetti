@@ -1339,8 +1339,8 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     const goalAchievementScore = metrics.goalAchievement.primaryObjectives.length > 0
       ? metrics.goalAchievement.primaryObjectives.reduce(
         (sum,
-        obj
-      ) => sum + obj.achievementRate, 0) / metrics.goalAchievement.primaryObjectives.length
+          obj
+        ) => sum + obj.achievementRate, 0) / metrics.goalAchievement.primaryObjectives.length
       : 0;
 
     const weights = {

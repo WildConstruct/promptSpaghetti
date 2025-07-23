@@ -97,28 +97,28 @@ export const OAuthAccountManager: React.FC<OAuthAccountManagerProps> = ({
 
   const getProviderDisplayName = (provider: string) => {
     switch (provider) {
-      case 'google': return 'Google';
-      case 'github': return 'GitHub';
-      case 'microsoft': return 'Microsoft';
-      default: return provider;
+    case 'google': return 'Google';
+    case 'github': return 'GitHub';
+    case 'microsoft': return 'Microsoft';
+    default: return provider;
     }
   };
 
   const getProviderIcon = (provider: string) => {
     switch (provider) {
-      case 'google': return 'G';
-      case 'github': return 'GH';
-      case 'microsoft': return 'M';
-      default: return '?';
+    case 'google': return 'G';
+    case 'github': return 'GH';
+    case 'microsoft': return 'M';
+    default: return '?';
     }
   };
 
   const getProviderColor = (provider: string) => {
     switch (provider) {
-      case 'google': return '#4285F4';
-      case 'github': return '#333';
-      case 'microsoft': return '#0078d4';
-      default: return '#666';
+    case 'google': return '#4285F4';
+    case 'github': return '#333';
+    case 'microsoft': return '#0078d4';
+    default: return '#666';
     }
   };
 

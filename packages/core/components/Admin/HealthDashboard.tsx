@@ -152,32 +152,32 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
   // Helper functions
   const getStatusColor = (status: string): string => {
     switch (status.toUpperCase()) {
-      case 'HEALTHY': return 'text-green-600 bg-green-100';
-      case 'DEGRADED': return 'text-yellow-600 bg-yellow-100';
-      case 'UNHEALTHY': return 'text-orange-600 bg-orange-100';
-      case 'CRITICAL': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'HEALTHY': return 'text-green-600 bg-green-100';
+    case 'DEGRADED': return 'text-yellow-600 bg-yellow-100';
+    case 'UNHEALTHY': return 'text-orange-600 bg-orange-100';
+    case 'CRITICAL': return 'text-red-600 bg-red-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status.toUpperCase()) {
-      case 'HEALTHY': return <CheckCircle className="w-5 h-5 text-green-600" />;
-      case 'DEGRADED': return <AlertTriangle className="w-5 h-5 text-yellow-600" />;
-      case 'UNHEALTHY': return <AlertCircle className="w-5 h-5 text-orange-600" />;
-      case 'CRITICAL': return <XCircle className="w-5 h-5 text-red-600" />;
-      default: return <AlertCircle className="w-5 h-5 text-gray-600" />;
+    case 'HEALTHY': return <CheckCircle className="w-5 h-5 text-green-600" />;
+    case 'DEGRADED': return <AlertTriangle className="w-5 h-5 text-yellow-600" />;
+    case 'UNHEALTHY': return <AlertCircle className="w-5 h-5 text-orange-600" />;
+    case 'CRITICAL': return <XCircle className="w-5 h-5 text-red-600" />;
+    default: return <AlertCircle className="w-5 h-5 text-gray-600" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'database': return <Database className="w-5 h-5" />;
-      case 'system': return <Activity className="w-5 h-5" />;
-      case 'cache': return <Zap className="w-5 h-5" />;
-      case 'external': return <Wifi className="w-5 h-5" />;
-      case 'filesystem': return <HardDrive className="w-5 h-5" />;
-      default: return <Activity className="w-5 h-5" />;
+    case 'database': return <Database className="w-5 h-5" />;
+    case 'system': return <Activity className="w-5 h-5" />;
+    case 'cache': return <Zap className="w-5 h-5" />;
+    case 'external': return <Wifi className="w-5 h-5" />;
+    case 'filesystem': return <HardDrive className="w-5 h-5" />;
+    default: return <Activity className="w-5 h-5" />;
     }
   };
 
@@ -300,8 +300,8 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
               <div
                 className={`h-3 rounded-full transition-all duration-300 ${
                   healthStatus.overall.score >= 90 ? 'bg-green-600' :
-                  healthStatus.overall.score >= 70 ? 'bg-yellow-500' :
-                  healthStatus.overall.score >= 50 ? 'bg-orange-500' : 'bg-red-600'
+                    healthStatus.overall.score >= 70 ? 'bg-yellow-500' :
+                      healthStatus.overall.score >= 50 ? 'bg-orange-500' : 'bg-red-600'
                 }`}
                 style={{ width: `${healthStatus.overall.score}%` }}
               ></div>
@@ -392,7 +392,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   <div
                     className={`h-2 rounded-full ${
                       healthStatus.metrics.cpu.usage > 90 ? 'bg-red-600' :
-                      healthStatus.metrics.cpu.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
+                        healthStatus.metrics.cpu.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
                     }`}
                     style={{ width: `${healthStatus.metrics.cpu.usage}%` }}
                   ></div>
@@ -409,7 +409,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   <div
                     className={`h-2 rounded-full ${
                       healthStatus.metrics.memory.usage > 90 ? 'bg-red-600' :
-                      healthStatus.metrics.memory.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
+                        healthStatus.metrics.memory.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
                     }`}
                     style={{ width: `${healthStatus.metrics.memory.usage}%` }}
                   ></div>
@@ -426,7 +426,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   <div
                     className={`h-2 rounded-full ${
                       healthStatus.metrics.disk.usage > 90 ? 'bg-red-600' :
-                      healthStatus.metrics.disk.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
+                        healthStatus.metrics.disk.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
                     }`}
                     style={{ width: `${healthStatus.metrics.disk.usage}%` }}
                   ></div>
@@ -520,8 +520,8 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                 key={alert.id}
                 className={`bg-white rounded-lg shadow-md p-6 border-l-4 ${
                   alert.severity === 'critical' ? 'border-red-500' :
-                  alert.severity === 'high' ? 'border-orange-500' :
-                  alert.severity === 'medium' ? 'border-yellow-500' : 'border-blue-500'
+                    alert.severity === 'high' ? 'border-orange-500' :
+                      alert.severity === 'medium' ? 'border-yellow-500' : 'border-blue-500'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -529,8 +529,8 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                     <div className="flex items-center space-x-2 mb-2">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                         alert.severity === 'critical' ? 'bg-red-100 text-red-800' :
-                        alert.severity === 'high' ? 'bg-orange-100 text-orange-800' :
-                        alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'
+                          alert.severity === 'high' ? 'bg-orange-100 text-orange-800' :
+                            alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'
                       }`}>
                         {alert.severity.toUpperCase()}
                       </span>
@@ -598,7 +598,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   <div
                     className={`h-2 rounded-full transition-all duration-300 ${
                       healthStatus.metrics.cpu.usage > 90 ? 'bg-red-600' :
-                      healthStatus.metrics.cpu.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
+                        healthStatus.metrics.cpu.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
                     }`}
                     style={{ width: `${healthStatus.metrics.cpu.usage}%` }}
                   ></div>
@@ -621,7 +621,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   <div
                     className={`h-2 rounded-full transition-all duration-300 ${
                       healthStatus.metrics.memory.usage > 90 ? 'bg-red-600' :
-                      healthStatus.metrics.memory.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
+                        healthStatus.metrics.memory.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
                     }`}
                     style={{ width: `${healthStatus.metrics.memory.usage}%` }}
                   ></div>
@@ -644,7 +644,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
                   <div
                     className={`h-2 rounded-full transition-all duration-300 ${
                       healthStatus.metrics.disk.usage > 90 ? 'bg-red-600' :
-                      healthStatus.metrics.disk.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
+                        healthStatus.metrics.disk.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
                     }`}
                     style={{ width: `${healthStatus.metrics.disk.usage}%` }}
                   ></div>

@@ -189,11 +189,11 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
     if (Math.random() > 0.7) {
       setTimeout(() => {
         const responses = [
-          "That's a great question! Let me help you with that.",
-          "Thanks for sharing! The community really appreciates your input.",
-          "I see what you mean. Have you tried checking the documentation?",
-          "Welcome to our marketplace! Feel free to browse our templates.",
-          "That's an interesting perspective. What do you think about...?"
+          'That\'s a great question! Let me help you with that.',
+          'Thanks for sharing! The community really appreciates your input.',
+          'I see what you mean. Have you tried checking the documentation?',
+          'Welcome to our marketplace! Feel free to browse our templates.',
+          'That\'s an interesting perspective. What do you think about...?'
         ];
         
         const responseMessage: ChatMessage = {

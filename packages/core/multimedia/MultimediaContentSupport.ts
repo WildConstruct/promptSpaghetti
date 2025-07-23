@@ -364,21 +364,21 @@ export class MultimediaContentSupport extends EventEmitter {
 
       // Process based on media type
       switch (asset.type) {
-        case 'image':
-          await this.processImage(asset, options.image);
-          break;
-        case 'video':
-          await this.processVideo(asset, options.video);
-          break;
-        case 'audio':
-          await this.processAudio(asset, options.audio);
-          break;
-        case 'document':
-          await this.processDocument(asset, options.document);
-          break;
-        case 'interactive':
-          await this.processInteractive(asset, options);
-          break;
+      case 'image':
+        await this.processImage(asset, options.image);
+        break;
+      case 'video':
+        await this.processVideo(asset, options.video);
+        break;
+      case 'audio':
+        await this.processAudio(asset, options.audio);
+        break;
+      case 'document':
+        await this.processDocument(asset, options.document);
+        break;
+      case 'interactive':
+        await this.processInteractive(asset, options);
+        break;
       }
 
       // Generate accessibility features
@@ -553,17 +553,17 @@ export class MultimediaContentSupport extends EventEmitter {
       let thumbnailUrl: string;
 
       switch (asset.type) {
-        case 'image':
-          thumbnailUrl = await this.generateImageThumbnail(asset, options?.size);
-          break;
-        case 'video':
-          thumbnailUrl = await this.generateVideoThumbnail(asset, options?.timestamp, options?.size);
-          break;
-        case 'document':
-          thumbnailUrl = await this.generateDocumentThumbnail(asset, options?.size);
-          break;
-        default:
-          throw new Error(`Thumbnails not supported for ${asset.type} assets`);
+      case 'image':
+        thumbnailUrl = await this.generateImageThumbnail(asset, options?.size);
+        break;
+      case 'video':
+        thumbnailUrl = await this.generateVideoThumbnail(asset, options?.timestamp, options?.size);
+        break;
+      case 'document':
+        thumbnailUrl = await this.generateDocumentThumbnail(asset, options?.size);
+        break;
+      default:
+        throw new Error(`Thumbnails not supported for ${asset.type} assets`);
       }
 
       asset.thumbnailUrl = thumbnailUrl;
@@ -608,7 +608,7 @@ export class MultimediaContentSupport extends EventEmitter {
       available: number;
       efficiency: number;
     };
-  } {
+    } {
     const assets = Array.from(this.assets.values());
     const totalSize = assets.reduce((sum, asset) => sum + asset.size, 0);
     
@@ -681,12 +681,12 @@ export class MultimediaContentSupport extends EventEmitter {
     };
 
     switch (type) {
-      case 'video':
-        return { ...base, captions: [], audioDescription: '' };
-      case 'audio':
-        return { ...base, transcription: '' };
-      default:
-        return base;
+    case 'video':
+      return { ...base, captions: [], audioDescription: '' };
+    case 'audio':
+      return { ...base, transcription: '' };
+    default:
+      return base;
     }
   }
 
@@ -697,25 +697,25 @@ export class MultimediaContentSupport extends EventEmitter {
     ];
 
     switch (type) {
-      case 'image':
-        if (options.image?.optimize) stages.push({ name: 'Optimization', status: 'pending', progress: 0 });
-        if (options.image?.resize) stages.push({ name: 'Resize', status: 'pending', progress: 0 });
-        if (options.image?.watermark) stages.push({ name: 'Watermark', status: 'pending', progress: 0 });
-        break;
-      case 'video':
-        if (options.video?.transcode) stages.push({ name: 'Transcoding', status: 'pending', progress: 0 });
-        if (options.video?.thumbnail) stages.push({ name: 'Thumbnail Generation', status: 'pending', progress: 0 });
-        if (options.video?.captions) stages.push({ name: 'Caption Processing', status: 'pending', progress: 0 });
-        break;
-      case 'audio':
-        if (options.audio?.transcode) stages.push({ name: 'Audio Transcoding', status: 'pending', progress: 0 });
-        if (options.audio?.transcription) stages.push({ name: 'Transcription', status: 'pending', progress: 0 });
-        if (options.audio?.normalize) stages.push({ name: 'Normalization', status: 'pending', progress: 0 });
-        break;
-      case 'document':
-        if (options.document?.convert) stages.push({ name: 'Conversion', status: 'pending', progress: 0 });
-        if (options.document?.preview) stages.push({ name: 'Preview Generation', status: 'pending', progress: 0 });
-        break;
+    case 'image':
+      if (options.image?.optimize) stages.push({ name: 'Optimization', status: 'pending', progress: 0 });
+      if (options.image?.resize) stages.push({ name: 'Resize', status: 'pending', progress: 0 });
+      if (options.image?.watermark) stages.push({ name: 'Watermark', status: 'pending', progress: 0 });
+      break;
+    case 'video':
+      if (options.video?.transcode) stages.push({ name: 'Transcoding', status: 'pending', progress: 0 });
+      if (options.video?.thumbnail) stages.push({ name: 'Thumbnail Generation', status: 'pending', progress: 0 });
+      if (options.video?.captions) stages.push({ name: 'Caption Processing', status: 'pending', progress: 0 });
+      break;
+    case 'audio':
+      if (options.audio?.transcode) stages.push({ name: 'Audio Transcoding', status: 'pending', progress: 0 });
+      if (options.audio?.transcription) stages.push({ name: 'Transcription', status: 'pending', progress: 0 });
+      if (options.audio?.normalize) stages.push({ name: 'Normalization', status: 'pending', progress: 0 });
+      break;
+    case 'document':
+      if (options.document?.convert) stages.push({ name: 'Conversion', status: 'pending', progress: 0 });
+      if (options.document?.preview) stages.push({ name: 'Preview Generation', status: 'pending', progress: 0 });
+      break;
     }
 
     stages.push({ name: 'Finalization', status: 'pending', progress: 0 });
@@ -935,10 +935,10 @@ export class MultimediaContentSupport extends EventEmitter {
 
   private getQualityValue(quality: 'low' | 'medium' | 'high'): number {
     switch (quality) {
-      case 'low': return 60;
-      case 'medium': return 80;
-      case 'high': return 95;
-      default: return 80;
+    case 'low': return 60;
+    case 'medium': return 80;
+    case 'high': return 95;
+    default: return 80;
     }
   }
 

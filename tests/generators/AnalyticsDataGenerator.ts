@@ -213,29 +213,29 @@ export class AnalyticsDataGenerator {
     };
 
     switch (eventType.category) {
-      case 'rule':
-        properties.rule_type = ['WeightedChoice', 'Conditional', 'Sequential', 'Markov'][Math.floor(this.rng() * 4)];
-        properties.complexity = ['simple', 'moderate', 'complex'][Math.floor(this.rng() * 3)];
-        if (eventType.action === 'execute') {
-          properties.execution_time = Math.floor(this.rng() * 1000) + 10;
-          properties.success = this.rng() > 0.05; // 95% success rate
-        }
-        break;
+    case 'rule':
+      properties.rule_type = ['WeightedChoice', 'Conditional', 'Sequential', 'Markov'][Math.floor(this.rng() * 4)];
+      properties.complexity = ['simple', 'moderate', 'complex'][Math.floor(this.rng() * 3)];
+      if (eventType.action === 'execute') {
+        properties.execution_time = Math.floor(this.rng() * 1000) + 10;
+        properties.success = this.rng() > 0.05; // 95% success rate
+      }
+      break;
         
-      case 'project':
-        properties.project_size = ['small', 'medium', 'large'][Math.floor(this.rng() * 3)];
-        properties.collaboration = this.rng() > 0.6;
-        break;
+    case 'project':
+      properties.project_size = ['small', 'medium', 'large'][Math.floor(this.rng() * 3)];
+      properties.collaboration = this.rng() > 0.6;
+      break;
         
-      case 'export':
-        properties.format = ['json', 'yaml', 'csv'][Math.floor(this.rng() * 3)];
-        properties.file_size = Math.floor(this.rng() * 10000) + 1000; // 1KB to 10MB
-        break;
+    case 'export':
+      properties.format = ['json', 'yaml', 'csv'][Math.floor(this.rng() * 3)];
+      properties.file_size = Math.floor(this.rng() * 10000) + 1000; // 1KB to 10MB
+      break;
         
-      case 'user':
-        properties.device_type = ['desktop', 'mobile', 'tablet'][Math.floor(this.rng() * 3)];
-        properties.browser = ['chrome', 'firefox', 'safari', 'edge'][Math.floor(this.rng() * 4)];
-        break;
+    case 'user':
+      properties.device_type = ['desktop', 'mobile', 'tablet'][Math.floor(this.rng() * 3)];
+      properties.browser = ['chrome', 'firefox', 'safari', 'edge'][Math.floor(this.rng() * 4)];
+      break;
     }
 
     return properties;
@@ -268,26 +268,26 @@ export class AnalyticsDataGenerator {
               let unit: string;
               
               switch (metricType) {
-                case 'execution_time':
-                  value = Math.floor(this.rng() * 1000) + 10; // 10-1010ms
-                  unit = 'ms';
-                  break;
-                case 'memory_usage':
-                  value = Math.floor(this.rng() * 500) + 50; // 50-550MB
-                  unit = 'mb';
-                  break;
-                case 'throughput':
-                  value = Math.floor(this.rng() * 1000) + 100; // 100-1100 ops/sec
-                  unit = 'ops_per_second';
-                  break;
-                case 'error_rate':
-                  value = this.rng() * 5; // 0-5%
-                  unit = 'percent';
-                  break;
-                case 'latency':
-                  value = Math.floor(this.rng() * 200) + 5; // 5-205ms
-                  unit = 'ms';
-                  break;
+              case 'execution_time':
+                value = Math.floor(this.rng() * 1000) + 10; // 10-1010ms
+                unit = 'ms';
+                break;
+              case 'memory_usage':
+                value = Math.floor(this.rng() * 500) + 50; // 50-550MB
+                unit = 'mb';
+                break;
+              case 'throughput':
+                value = Math.floor(this.rng() * 1000) + 100; // 100-1100 ops/sec
+                unit = 'ops_per_second';
+                break;
+              case 'error_rate':
+                value = this.rng() * 5; // 0-5%
+                unit = 'percent';
+                break;
+              case 'latency':
+                value = Math.floor(this.rng() * 200) + 5; // 5-205ms
+                unit = 'ms';
+                break;
               }
 
               metrics.push({
@@ -413,30 +413,30 @@ export class AnalyticsDataGenerator {
     let pointCount: number;
     
     switch (interval) {
-      case 'minute':
-        intervalMs = 60 * 1000;
-        pointCount = Math.min(days * 24 * 60, 1440); // Max 24 hours of minute data
-        break;
-      case 'hour':
-        intervalMs = 60 * 60 * 1000;
-        pointCount = days * 24;
-        break;
-      case 'day':
-        intervalMs = 24 * 60 * 60 * 1000;
-        pointCount = days;
-        break;
-      case 'week':
-        intervalMs = 7 * 24 * 60 * 60 * 1000;
-        pointCount = Math.ceil(days / 7);
-        break;
-      case 'month':
-        intervalMs = 30 * 24 * 60 * 60 * 1000;
-        pointCount = Math.ceil(days / 30);
-        break;
+    case 'minute':
+      intervalMs = 60 * 1000;
+      pointCount = Math.min(days * 24 * 60, 1440); // Max 24 hours of minute data
+      break;
+    case 'hour':
+      intervalMs = 60 * 60 * 1000;
+      pointCount = days * 24;
+      break;
+    case 'day':
+      intervalMs = 24 * 60 * 60 * 1000;
+      pointCount = days;
+      break;
+    case 'week':
+      intervalMs = 7 * 24 * 60 * 60 * 1000;
+      pointCount = Math.ceil(days / 7);
+      break;
+    case 'month':
+      intervalMs = 30 * 24 * 60 * 60 * 1000;
+      pointCount = Math.ceil(days / 30);
+      break;
     }
 
     const baseValue = this.rng() * 1000 + 100;
-    let trend = (this.rng() - 0.5) * 0.1; // -5% to +5% trend
+    const trend = (this.rng() - 0.5) * 0.1; // -5% to +5% trend
     
     for (let i = 0; i < pointCount; i++) {
       const timestamp = new Date(Date.now() - ((pointCount - i - 1) * intervalMs));

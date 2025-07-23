@@ -446,15 +446,15 @@ PASSWORD SECURITY TIPS:
   }
 
   private generateInAppMessage(notification: BreachNotification): string {
-    return `Security Alert: A password associated with your account was found in a data breach. Please change your password immediately.`;
+    return 'Security Alert: A password associated with your account was found in a data breach. Please change your password immediately.';
   }
 
   private generateSMSMessage(notification: BreachNotification): string {
-    return `Security Alert: Your password was found in a data breach. Change it immediately at [app]. Reply STOP to opt out.`;
+    return 'Security Alert: Your password was found in a data breach. Change it immediately at [app]. Reply STOP to opt out.';
   }
 
   private generatePushMessage(notification: BreachNotification): string {
-    return `Security Alert: Password breach detected. Tap to secure your account.`;
+    return 'Security Alert: Password breach detected. Tap to secure your account.';
   }
 
   private getBatchNotificationTemplate(notifications: BreachNotification[]): NotificationTemplate {
@@ -565,7 +565,7 @@ ${this.getSecurityGuidanceText()}
     pendingNotifications: number;
     sentNotifications: number;
     failedNotifications: number;
-  } {
+    } {
     const notifications = Array.from(this.notifications.values());
     
     return {

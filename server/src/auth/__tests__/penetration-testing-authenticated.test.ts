@@ -397,7 +397,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         method: 'GET',
         url: '/api/protected/admin',
         headers: {
-          authorization: `Bearer expired-token`
+          authorization: 'Bearer expired-token'
         }
       });
 
@@ -411,7 +411,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
         'Basic admin-token', // Wrong auth type
         'Bearer', // Missing token
         'bearer valid-token', // Wrong case
-        'Bearer valid-token extra-data', // Extra data
+        'Bearer valid-token extra-data' // Extra data
       ];
 
       for (const header of malformedHeaders) {

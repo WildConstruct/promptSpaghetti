@@ -457,77 +457,77 @@ export class ToggleConditionsService {
 
     try {
       switch (condition.conditionType) {
-        case ConditionType.USER_ATTRIBUTE:
-          result = this.evaluateUserAttribute(condition, context);
-          reason = result ? 'User attributes match condition' : 'User attributes do not match';
-          break;
+      case ConditionType.USER_ATTRIBUTE:
+        result = this.evaluateUserAttribute(condition, context);
+        reason = result ? 'User attributes match condition' : 'User attributes do not match';
+        break;
 
-        case ConditionType.USER_SEGMENT:
-          result = this.evaluateUserSegment(condition, context);
-          reason = result ? 'User in target segment' : 'User not in target segment';
-          break;
+      case ConditionType.USER_SEGMENT:
+        result = this.evaluateUserSegment(condition, context);
+        reason = result ? 'User in target segment' : 'User not in target segment';
+        break;
 
-        case ConditionType.PERCENTAGE:
-          const percentageResult = this.evaluatePercentage(condition, context);
-          result = percentageResult.included;
-          intermediateValues.hash = percentageResult.hash;
-          intermediateValues.threshold = percentageResult.threshold;
-          reason = result ? `Included in ${condition.parameters.percentage}% rollout` : `Excluded from rollout`;
-          break;
+      case ConditionType.PERCENTAGE:
+        const percentageResult = this.evaluatePercentage(condition, context);
+        result = percentageResult.included;
+        intermediateValues.hash = percentageResult.hash;
+        intermediateValues.threshold = percentageResult.threshold;
+        reason = result ? `Included in ${condition.parameters.percentage}% rollout` : 'Excluded from rollout';
+        break;
 
-        case ConditionType.TIME_WINDOW:
-          result = this.evaluateTimeWindow(condition, context);
-          reason = result ? 'Within time window' : 'Outside time window';
-          break;
+      case ConditionType.TIME_WINDOW:
+        result = this.evaluateTimeWindow(condition, context);
+        reason = result ? 'Within time window' : 'Outside time window';
+        break;
 
-        case ConditionType.AB_TEST:
-          const abResult = this.evaluateABTest(condition, context);
-          result = abResult.included;
-          intermediateValues.variant = abResult.variant;
-          reason = result ? `Assigned to variant: ${abResult.variant}` : 'Not included in A/B test';
-          break;
+      case ConditionType.AB_TEST:
+        const abResult = this.evaluateABTest(condition, context);
+        result = abResult.included;
+        intermediateValues.variant = abResult.variant;
+        reason = result ? `Assigned to variant: ${abResult.variant}` : 'Not included in A/B test';
+        break;
 
-        case ConditionType.MULTIVARIATE:
-          const mvResult = this.evaluateMultivariate(condition, context);
-          result = mvResult.included;
-          intermediateValues.variant = mvResult.variant;
-          reason = result ? `Assigned to variant: ${mvResult.variant}` : 'Not included in multivariate test';
-          break;
+      case ConditionType.MULTIVARIATE:
+        const mvResult = this.evaluateMultivariate(condition, context);
+        result = mvResult.included;
+        intermediateValues.variant = mvResult.variant;
+        reason = result ? `Assigned to variant: ${mvResult.variant}` : 'Not included in multivariate test';
+        break;
 
-        case ConditionType.CUSTOM_EXPRESSION:
-          result = await this.evaluateCustomExpression(condition, context);
-          reason = result ? 'Custom expression evaluated to true' : 'Custom expression evaluated to false';
-          break;
+      case ConditionType.CUSTOM_EXPRESSION:
+        result = await this.evaluateCustomExpression(condition, context);
+        reason = result ? 'Custom expression evaluated to true' : 'Custom expression evaluated to false';
+        break;
 
-        case ConditionType.DEPENDENCY:
-          result = this.evaluateDependency(condition, context);
-          reason = result ? 'Dependencies satisfied' : 'Dependencies not met';
-          break;
+      case ConditionType.DEPENDENCY:
+        result = this.evaluateDependency(condition, context);
+        reason = result ? 'Dependencies satisfied' : 'Dependencies not met';
+        break;
 
-        case ConditionType.GEOGRAPHIC:
-          result = this.evaluateGeographic(condition, context);
-          reason = result ? 'Geographic criteria met' : 'Outside target geographic area';
-          break;
+      case ConditionType.GEOGRAPHIC:
+        result = this.evaluateGeographic(condition, context);
+        reason = result ? 'Geographic criteria met' : 'Outside target geographic area';
+        break;
 
-        case ConditionType.DEVICE_TYPE:
-          result = this.evaluateDeviceType(condition, context);
-          reason = result ? 'Device type matches' : 'Device type does not match';
-          break;
+      case ConditionType.DEVICE_TYPE:
+        result = this.evaluateDeviceType(condition, context);
+        reason = result ? 'Device type matches' : 'Device type does not match';
+        break;
 
-        case ConditionType.TRAFFIC_SPLIT:
-          const trafficResult = this.evaluateTrafficSplit(condition, context);
-          result = trafficResult.included;
-          intermediateValues.bucket = trafficResult.bucket;
-          reason = result ? `Traffic split: bucket ${trafficResult.bucket}` : 'Not in target traffic bucket';
-          break;
+      case ConditionType.TRAFFIC_SPLIT:
+        const trafficResult = this.evaluateTrafficSplit(condition, context);
+        result = trafficResult.included;
+        intermediateValues.bucket = trafficResult.bucket;
+        reason = result ? `Traffic split: bucket ${trafficResult.bucket}` : 'Not in target traffic bucket';
+        break;
 
-        case ConditionType.FEATURE_FLAG:
-          result = this.evaluateFeatureFlag(condition, context);
-          reason = result ? 'Required feature flags active' : 'Required feature flags not active';
-          break;
+      case ConditionType.FEATURE_FLAG:
+        result = this.evaluateFeatureFlag(condition, context);
+        reason = result ? 'Required feature flags active' : 'Required feature flags not active';
+        break;
 
-        default:
-          throw new Error(`Unknown condition type: ${condition.conditionType}`);
+      default:
+        throw new Error(`Unknown condition type: ${condition.conditionType}`);
       }
     } catch (error) {
       result = false;
@@ -803,38 +803,38 @@ export class ToggleConditionsService {
 
   private compareValues(userValue: any, operator: ComparisonOperator, targetValue: any): boolean {
     switch (operator) {
-      case ComparisonOperator.EQUALS:
-        return userValue === targetValue;
-      case ComparisonOperator.NOT_EQUALS:
-        return userValue !== targetValue;
-      case ComparisonOperator.GREATER_THAN:
-        return Number(userValue) > Number(targetValue);
-      case ComparisonOperator.LESS_THAN:
-        return Number(userValue) < Number(targetValue);
-      case ComparisonOperator.GREATER_EQUAL:
-        return Number(userValue) >= Number(targetValue);
-      case ComparisonOperator.LESS_EQUAL:
-        return Number(userValue) <= Number(targetValue);
-      case ComparisonOperator.CONTAINS:
-        return String(userValue).includes(String(targetValue));
-      case ComparisonOperator.NOT_CONTAINS:
-        return !String(userValue).includes(String(targetValue));
-      case ComparisonOperator.STARTS_WITH:
-        return String(userValue).startsWith(String(targetValue));
-      case ComparisonOperator.ENDS_WITH:
-        return String(userValue).endsWith(String(targetValue));
-      case ComparisonOperator.MATCHES_REGEX:
-        try {
-          return new RegExp(String(targetValue)).test(String(userValue));
-        } catch {
-          return false;
-        }
-      case ComparisonOperator.IN_LIST:
-        return Array.isArray(targetValue) && targetValue.includes(userValue);
-      case ComparisonOperator.NOT_IN_LIST:
-        return Array.isArray(targetValue) && !targetValue.includes(userValue);
-      default:
+    case ComparisonOperator.EQUALS:
+      return userValue === targetValue;
+    case ComparisonOperator.NOT_EQUALS:
+      return userValue !== targetValue;
+    case ComparisonOperator.GREATER_THAN:
+      return Number(userValue) > Number(targetValue);
+    case ComparisonOperator.LESS_THAN:
+      return Number(userValue) < Number(targetValue);
+    case ComparisonOperator.GREATER_EQUAL:
+      return Number(userValue) >= Number(targetValue);
+    case ComparisonOperator.LESS_EQUAL:
+      return Number(userValue) <= Number(targetValue);
+    case ComparisonOperator.CONTAINS:
+      return String(userValue).includes(String(targetValue));
+    case ComparisonOperator.NOT_CONTAINS:
+      return !String(userValue).includes(String(targetValue));
+    case ComparisonOperator.STARTS_WITH:
+      return String(userValue).startsWith(String(targetValue));
+    case ComparisonOperator.ENDS_WITH:
+      return String(userValue).endsWith(String(targetValue));
+    case ComparisonOperator.MATCHES_REGEX:
+      try {
+        return new RegExp(String(targetValue)).test(String(userValue));
+      } catch {
         return false;
+      }
+    case ComparisonOperator.IN_LIST:
+      return Array.isArray(targetValue) && targetValue.includes(userValue);
+    case ComparisonOperator.NOT_IN_LIST:
+      return Array.isArray(targetValue) && !targetValue.includes(userValue);
+    default:
+      return false;
     }
   }
 

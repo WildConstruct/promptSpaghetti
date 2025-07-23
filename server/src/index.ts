@@ -1785,7 +1785,7 @@ try {
       await modelInterpretationRoutes(fastify, {
         tokenAnalyzer: tokenInfluenceAnalyzer,
         promptAnalyzer,
-        analyticsCollector,
+        analyticsCollector
       });
     }, { prefix: '/api' });
     

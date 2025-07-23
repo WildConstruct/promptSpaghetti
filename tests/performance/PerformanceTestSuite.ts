@@ -452,7 +452,7 @@ export class PerformanceTestSuite {
     const textReport = path.join(this.outputDir, `performance-suite-summary-${timestamp}.txt`);
     await fs.writeFile(textReport, this.generateTextSummary(result));
     
-    console.log(`📄 Reports generated:`);
+    console.log('📄 Reports generated:');
     console.log(`  - JSON: ${jsonReport}`);
     console.log(`  - HTML: ${htmlReport}`);
     console.log(`  - Summary: ${textReport}`);
@@ -508,8 +508,8 @@ export class PerformanceTestSuite {
    * Generate text summary
    */
   private generateTextSummary(result: PerformanceTestResult): string {
-    let summary = `PERFORMANCE TEST SUITE SUMMARY\n`;
-    summary += `================================\n\n`;
+    let summary = 'PERFORMANCE TEST SUITE SUMMARY\n';
+    summary += '================================\n\n';
     summary += `Test Suite: ${result.testSuite}\n`;
     summary += `Timestamp: ${result.timestamp}\n`;
     summary += `Duration: ${Math.ceil(result.duration / 1000)}s\n`;
@@ -521,11 +521,11 @@ export class PerformanceTestSuite {
       result.thresholdViolations.forEach(violation => {
         summary += `- ${violation}\n`;
       });
-      summary += `\n`;
+      summary += '\n';
     }
     
-    summary += `RECOMMENDATIONS\n`;
-    summary += `===============\n`;
+    summary += 'RECOMMENDATIONS\n';
+    summary += '===============\n';
     result.recommendations.forEach(rec => {
       summary += `- ${rec}\n`;
     });
@@ -563,12 +563,12 @@ export class PerformanceTestSuite {
       });
     }
     
-    console.log(`\n💡 Recommendations:`);
+    console.log('\n💡 Recommendations:');
     result.recommendations.forEach(rec => {
       console.log(`  - ${rec}`);
     });
     
-    console.log(`\n📊 Test Components:`);
+    console.log('\n📊 Test Components:');
     if (result.results.loadTests) console.log('  ✓ Load Testing Scenarios');
     if (result.results.infrastructureScenarios) console.log('  ✓ Infrastructure Performance Scenarios');
     if (result.results.userWorkflows) console.log('  ✓ User Workflow Performance Testing');

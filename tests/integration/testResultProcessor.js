@@ -332,9 +332,9 @@ function generateSummaryReport(results, reportDir) {
 
 ### Error Distribution
 ${Object.entries(results.errorAnalysis.errorsByType)
-  .sort(([,a], [,b]) => b - a)
-  .map(([type, count]) => `- **${type}**: ${count}`)
-  .join('\n')}
+    .sort(([,a], [,b]) => b - a)
+    .map(([type, count]) => `- **${type}**: ${count}`)
+    .join('\n')}
 
 ## Recommendations
 ${results.recommendations.map(rec => `

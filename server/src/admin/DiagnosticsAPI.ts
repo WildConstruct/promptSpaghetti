@@ -445,7 +445,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
         errorChecks: execution.summary.errorCount
       };
 
-      let response: any = {
+      const response: any = {
         success: true,
         data: healthStatus
       };

@@ -396,27 +396,27 @@ export class MarketplaceMetrics {
       const template = this.templateMetrics.get(event.entityId);
       if (template) {
         switch (event.type) {
-          case 'template_viewed':
-            template.metrics.views++;
-            break;
-          case 'template_previewed':
-            template.metrics.previews++;
-            break;
-          case 'template_downloaded':
-            template.metrics.downloads++;
-            break;
-          case 'template_purchased':
-            template.metrics.purchases++;
-            if (event.value) {
-              template.metrics.revenue.total += event.value;
-            }
-            break;
-          case 'template_favorited':
-            template.metrics.favorites++;
-            break;
-          case 'template_shared':
-            template.metrics.shares++;
-            break;
+        case 'template_viewed':
+          template.metrics.views++;
+          break;
+        case 'template_previewed':
+          template.metrics.previews++;
+          break;
+        case 'template_downloaded':
+          template.metrics.downloads++;
+          break;
+        case 'template_purchased':
+          template.metrics.purchases++;
+          if (event.value) {
+            template.metrics.revenue.total += event.value;
+          }
+          break;
+        case 'template_favorited':
+          template.metrics.favorites++;
+          break;
+        case 'template_shared':
+          template.metrics.shares++;
+          break;
         }
         
         // Recalculate conversion rates
@@ -561,14 +561,14 @@ export class MarketplaceMetrics {
     return templates
       .sort((a, b) => {
         switch (metric) {
-          case 'revenue':
-            return b.metrics.revenue.total - a.metrics.revenue.total;
-          case 'downloads':
-            return b.metrics.downloads - a.metrics.downloads;
-          case 'rating':
-            return b.metrics.ratings.average - a.metrics.ratings.average;
-          default:
-            return 0;
+        case 'revenue':
+          return b.metrics.revenue.total - a.metrics.revenue.total;
+        case 'downloads':
+          return b.metrics.downloads - a.metrics.downloads;
+        case 'rating':
+          return b.metrics.ratings.average - a.metrics.ratings.average;
+        default:
+          return 0;
         }
       })
       .slice(0, limit);
@@ -581,7 +581,7 @@ export class MarketplaceMetrics {
     topQueries: Array<{ query: string; count: number; ctr: number }>;
     zeroResultQueries: Array<{ query: string; count: number }>;
     averageCTR: number;
-  } {
+    } {
     const queries = Array.from(this.searchQueries.entries());
     const topQueries = queries
       .map(([query, data]) => ({

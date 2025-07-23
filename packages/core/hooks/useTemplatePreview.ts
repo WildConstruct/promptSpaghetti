@@ -72,7 +72,7 @@ export const useTemplatePreview = (
   const parseResult = useMemo(() => parseTemplate(template), [template]);
   const extractedVariables = useMemo(() => 
     parseResult.variables.filter(v => v.isValid), 
-    [parseResult.variables]
+  [parseResult.variables]
   );
   
   // Refs for async operations

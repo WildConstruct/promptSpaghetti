@@ -479,7 +479,7 @@ export class ContentQualityMetricsService {
   async getMarketplaceQualityInsights(
     timeRange: TimeRange = TimeRange.LAST_30D
   ): Promise<MarketplaceQualityInsights> {
-    console.log(`🌐 Generating marketplace quality insights`);
+    console.log('🌐 Generating marketplace quality insights');
 
     const [
       overallMetrics,
@@ -722,7 +722,7 @@ export class ContentQualityMetricsService {
     const evolution = {
       adaptability: await this.assessAdaptability(templateId),
       extensibility: await this.assessExtensibility(templateId),
-      "backwards compatibility": await this.assessBackwardsCompatibility(templateId),
+      'backwards compatibility': await this.assessBackwardsCompatibility(templateId),
       migrationSupport: await this.assessMigrationSupport(templateId)
     };
 

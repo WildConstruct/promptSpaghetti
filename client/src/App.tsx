@@ -30,8 +30,8 @@ function MainApp() {
 
   // Determine active tab based on current route
   const activeTab = location.pathname === '/randomizer' ? 'randomizer' : 
-                   location.pathname === '/epic-status' ? 'epic-status' :
-                   location.pathname.startsWith('/admin') ? 'admin' : 'editor';
+    location.pathname === '/epic-status' ? 'epic-status' :
+      location.pathname.startsWith('/admin') ? 'admin' : 'editor';
 
   // Check if user has admin access
   const isAdmin = user?.roles?.includes('admin') || user?.roles?.includes('administrator');

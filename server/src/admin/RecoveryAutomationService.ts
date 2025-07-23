@@ -687,41 +687,41 @@ export class RecoveryAutomationService {
 
     // Strategy-specific steps
     switch (execution.recovery_strategy) {
-      case 'immediate_rollback':
-        steps.push({
-          step_id: `${execution.execution_id}_immediate_rollback`,
-          step_name: 'Immediate Rollback',
-          step_type: 'restore',
-          description: 'Rollback to last known good state',
-          status: 'pending',
-          retry_count: 0,
-          max_retries: 2
-        });
-        break;
+    case 'immediate_rollback':
+      steps.push({
+        step_id: `${execution.execution_id}_immediate_rollback`,
+        step_name: 'Immediate Rollback',
+        step_type: 'restore',
+        description: 'Rollback to last known good state',
+        status: 'pending',
+        retry_count: 0,
+        max_retries: 2
+      });
+      break;
 
-      case 'selective_recovery':
-        steps.push({
-          step_id: `${execution.execution_id}_selective_recovery`,
-          step_name: 'Selective Recovery',
-          step_type: 'restore',
-          description: 'Recover only affected components',
-          status: 'pending',
-          retry_count: 0,
-          max_retries: 3
-        });
-        break;
+    case 'selective_recovery':
+      steps.push({
+        step_id: `${execution.execution_id}_selective_recovery`,
+        step_name: 'Selective Recovery',
+        step_type: 'restore',
+        description: 'Recover only affected components',
+        status: 'pending',
+        retry_count: 0,
+        max_retries: 3
+      });
+      break;
 
-      case 'full_system_recovery':
-        steps.push({
-          step_id: `${execution.execution_id}_full_recovery`,
-          step_name: 'Full System Recovery',
-          step_type: 'restore',
-          description: 'Complete system recovery',
-          status: 'pending',
-          retry_count: 0,
-          max_retries: 1
-        });
-        break;
+    case 'full_system_recovery':
+      steps.push({
+        step_id: `${execution.execution_id}_full_recovery`,
+        step_name: 'Full System Recovery',
+        step_type: 'restore',
+        description: 'Complete system recovery',
+        status: 'pending',
+        retry_count: 0,
+        max_retries: 1
+      });
+      break;
     }
 
     // Post-recovery validation
@@ -757,21 +757,21 @@ export class RecoveryAutomationService {
 
     try {
       switch (step.step_type) {
-        case 'validation':
-          await this.executeValidationStep(execution_id, step);
-          break;
-        case 'backup':
-          await this.executeBackupStep(execution_id, step);
-          break;
-        case 'restore':
-          await this.executeRestoreStep(execution_id, step);
-          break;
-        case 'verification':
-          await this.executeVerificationStep(execution_id, step);
-          break;
-        case 'notification':
-          await this.executeNotificationStep(execution_id, step);
-          break;
+      case 'validation':
+        await this.executeValidationStep(execution_id, step);
+        break;
+      case 'backup':
+        await this.executeBackupStep(execution_id, step);
+        break;
+      case 'restore':
+        await this.executeRestoreStep(execution_id, step);
+        break;
+      case 'verification':
+        await this.executeVerificationStep(execution_id, step);
+        break;
+      case 'notification':
+        await this.executeNotificationStep(execution_id, step);
+        break;
       }
 
       step.status = 'completed';

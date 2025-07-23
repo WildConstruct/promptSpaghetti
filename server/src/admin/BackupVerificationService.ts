@@ -612,53 +612,53 @@ export class BackupVerificationService {
     backupData: BackupData
   ): Promise<any> {
     switch (step.stepId) {
-      case 'checksum_validation':
-        return this.validateChecksum(backupData);
+    case 'checksum_validation':
+      return this.validateChecksum(backupData);
         
-      case 'file_completeness':
-        return this.checkFileCompleteness(backupData);
+    case 'file_completeness':
+      return this.checkFileCompleteness(backupData);
         
-      case 'data_consistency':
-        return this.validateDataConsistency(backupData);
+    case 'data_consistency':
+      return this.validateDataConsistency(backupData);
         
-      case 'file_accessibility':
-        return this.testFileAccessibility(backupData);
+    case 'file_accessibility':
+      return this.testFileAccessibility(backupData);
         
-      case 'metadata_validation':
-        return this.validateMetadata(backupData);
+    case 'metadata_validation':
+      return this.validateMetadata(backupData);
         
-      case 'encryption_status':
-        return this.checkEncryptionStatus(backupData);
+    case 'encryption_status':
+      return this.checkEncryptionStatus(backupData);
         
-      case 'key_accessibility':
-        return this.testKeyAccessibility(backupData);
+    case 'key_accessibility':
+      return this.testKeyAccessibility(backupData);
         
-      case 'decryption_test':
-        return this.testDecryption(backupData);
+    case 'decryption_test':
+      return this.testDecryption(backupData);
         
-      case 'sample_restoration':
-        return this.testSampleRestoration(backupData);
+    case 'sample_restoration':
+      return this.testSampleRestoration(backupData);
         
-      case 'selective_restore':
-        return this.testSelectiveRestore(backupData);
+    case 'selective_restore':
+      return this.testSelectiveRestore(backupData);
         
-      case 'retention_compliance':
-        return this.checkRetentionCompliance(backupData);
+    case 'retention_compliance':
+      return this.checkRetentionCompliance(backupData);
         
-      case 'privacy_compliance':
-        return this.checkPrivacyCompliance(backupData);
+    case 'privacy_compliance':
+      return this.checkPrivacyCompliance(backupData);
         
-      case 'audit_trail':
-        return this.verifyAuditTrail(backupData);
+    case 'audit_trail':
+      return this.verifyAuditTrail(backupData);
         
-      case 'compression_efficiency':
-        return this.checkCompressionEfficiency(backupData);
+    case 'compression_efficiency':
+      return this.checkCompressionEfficiency(backupData);
         
-      case 'storage_optimization':
-        return this.analyzeStorageOptimization(backupData);
+    case 'storage_optimization':
+      return this.analyzeStorageOptimization(backupData);
         
-      default:
-        throw new Error(`Step implementation not found: ${step.stepId}`);
+    default:
+      throw new Error(`Step implementation not found: ${step.stepId}`);
     }
   }
 
@@ -1096,18 +1096,18 @@ export class BackupVerificationService {
     
     for (const step of session.steps) {
       switch (step.status) {
-        case VerificationStatus.PASSED:
-          summary.passedSteps++;
-          break;
-        case VerificationStatus.FAILED:
-          summary.failedSteps++;
-          break;
-        case VerificationStatus.WARNING:
-          summary.warningSteps++;
-          break;
-        case VerificationStatus.SKIPPED:
-          summary.skippedSteps++;
-          break;
+      case VerificationStatus.PASSED:
+        summary.passedSteps++;
+        break;
+      case VerificationStatus.FAILED:
+        summary.failedSteps++;
+        break;
+      case VerificationStatus.WARNING:
+        summary.warningSteps++;
+        break;
+      case VerificationStatus.SKIPPED:
+        summary.skippedSteps++;
+        break;
       }
     }
     

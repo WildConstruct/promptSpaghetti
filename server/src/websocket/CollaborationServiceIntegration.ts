@@ -466,7 +466,7 @@ export class CollaborationServiceIntegration {
     totalParticipants: number;
     totalLocks: number;
     totalSnapshots: number;
-  } {
+    } {
     const sessions = Array.from((this.collaborationService as any).sessions.values());
     const activeSessions = sessions.filter((s: any) => s.status === 'active');
     

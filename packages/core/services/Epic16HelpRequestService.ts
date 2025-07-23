@@ -536,23 +536,23 @@ export class Epic16HelpRequestService extends EventEmitter {
     const { strategy, recommendedAgent } = request.routingDecision;
 
     switch (strategy) {
-      case 'support_agent':
-        request.assignedTo = recommendedAgent || await this.assignToAvailableAgent(request);
-        request.status = HelpRequestStatus.IN_PROGRESS;
-        break;
+    case 'support_agent':
+      request.assignedTo = recommendedAgent || await this.assignToAvailableAgent(request);
+      request.status = HelpRequestStatus.IN_PROGRESS;
+      break;
         
-      case 'specialist':
-        request.assignedTo = await this.assignToSpecialist(request);
-        request.status = HelpRequestStatus.IN_PROGRESS;
-        break;
+    case 'specialist':
+      request.assignedTo = await this.assignToSpecialist(request);
+      request.status = HelpRequestStatus.IN_PROGRESS;
+      break;
         
-      case 'community':
-        await this.routeToCommunity(request);
-        break;
+    case 'community':
+      await this.routeToCommunity(request);
+      break;
         
-      case 'auto_resolve':
-        // Already handled in auto-resolution step
-        break;
+    case 'auto_resolve':
+      // Already handled in auto-resolution step
+      break;
     }
 
     request.updatedAt = new Date();
@@ -975,20 +975,20 @@ export class Epic16HelpRequestService extends EventEmitter {
     const fieldValue = this.getFieldValue(condition.field, request);
     
     switch (condition.operator) {
-      case 'equals':
-        return fieldValue === condition.value;
-      case 'contains':
-        return String(fieldValue).toLowerCase().includes(String(condition.value).toLowerCase());
-      case 'in':
-        return Array.isArray(condition.value) && condition.value.includes(fieldValue);
-      case 'not_in':
-        return Array.isArray(condition.value) && !condition.value.includes(fieldValue);
-      case 'greater_than':
-        return Number(fieldValue) > Number(condition.value);
-      case 'less_than':
-        return Number(fieldValue) < Number(condition.value);
-      default:
-        return false;
+    case 'equals':
+      return fieldValue === condition.value;
+    case 'contains':
+      return String(fieldValue).toLowerCase().includes(String(condition.value).toLowerCase());
+    case 'in':
+      return Array.isArray(condition.value) && condition.value.includes(fieldValue);
+    case 'not_in':
+      return Array.isArray(condition.value) && !condition.value.includes(fieldValue);
+    case 'greater_than':
+      return Number(fieldValue) > Number(condition.value);
+    case 'less_than':
+      return Number(fieldValue) < Number(condition.value);
+    default:
+      return false;
     }
   }
 

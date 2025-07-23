@@ -201,45 +201,45 @@ export class SecurityAlertingFrameworkFactory {
   
   private static getEnvironmentDefaults(environment: string) {
     switch (environment) {
-      case 'production':
-        return {
-          criticalThreshold: 3,
-          highThreshold: 10,
-          correlationWindow: 300000, // 5 minutes
-          escalationTimeout: 1800000, // 30 minutes
-          alertRetentionDays: 365,
-          logRetentionDays: 90,
-          archivedRetentionDays: 2555, // 7 years
-          maxConcurrent: 50,
-          processingTimeout: 30000,
-          batchSize: 100
-        };
-      case 'staging':
-        return {
-          criticalThreshold: 5,
-          highThreshold: 15,
-          correlationWindow: 600000, // 10 minutes
-          escalationTimeout: 3600000, // 1 hour
-          alertRetentionDays: 90,
-          logRetentionDays: 30,
-          archivedRetentionDays: 365,
-          maxConcurrent: 20,
-          processingTimeout: 15000,
-          batchSize: 50
-        };
-      default: // development
-        return {
-          criticalThreshold: 10,
-          highThreshold: 25,
-          correlationWindow: 1800000, // 30 minutes
-          escalationTimeout: 7200000, // 2 hours
-          alertRetentionDays: 30,
-          logRetentionDays: 7,
-          archivedRetentionDays: 90,
-          maxConcurrent: 10,
-          processingTimeout: 10000,
-          batchSize: 20
-        };
+    case 'production':
+      return {
+        criticalThreshold: 3,
+        highThreshold: 10,
+        correlationWindow: 300000, // 5 minutes
+        escalationTimeout: 1800000, // 30 minutes
+        alertRetentionDays: 365,
+        logRetentionDays: 90,
+        archivedRetentionDays: 2555, // 7 years
+        maxConcurrent: 50,
+        processingTimeout: 30000,
+        batchSize: 100
+      };
+    case 'staging':
+      return {
+        criticalThreshold: 5,
+        highThreshold: 15,
+        correlationWindow: 600000, // 10 minutes
+        escalationTimeout: 3600000, // 1 hour
+        alertRetentionDays: 90,
+        logRetentionDays: 30,
+        archivedRetentionDays: 365,
+        maxConcurrent: 20,
+        processingTimeout: 15000,
+        batchSize: 50
+      };
+    default: // development
+      return {
+        criticalThreshold: 10,
+        highThreshold: 25,
+        correlationWindow: 1800000, // 30 minutes
+        escalationTimeout: 7200000, // 2 hours
+        alertRetentionDays: 30,
+        logRetentionDays: 7,
+        archivedRetentionDays: 90,
+        maxConcurrent: 10,
+        processingTimeout: 10000,
+        batchSize: 20
+      };
     }
   }
   

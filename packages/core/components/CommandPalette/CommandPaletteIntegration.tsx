@@ -88,20 +88,20 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     const centerY = -viewport.y + 300;
 
     switch (flow.id) {
-      case 'character-development':
-        await generateCharacterDevelopmentChain(params, { x: centerX, y: centerY });
-        break;
+    case 'character-development':
+      await generateCharacterDevelopmentChain(params, { x: centerX, y: centerY });
+      break;
         
-      case 'story-structure':
-        await generateStoryStructure(params, { x: centerX, y: centerY });
-        break;
+    case 'story-structure':
+      await generateStoryStructure(params, { x: centerX, y: centerY });
+      break;
         
-      case 'dialogue-generator':
-        await generateDialogueNode(params, { x: centerX, y: centerY });
-        break;
+    case 'dialogue-generator':
+      await generateDialogueNode(params, { x: centerX, y: centerY });
+      break;
         
-      default:
-        console.warn('Unknown generation flow:', flow.id);
+    default:
+      console.warn('Unknown generation flow:', flow.id);
     }
   };
 
@@ -121,7 +121,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     } = params;
 
     const spacing = 200;
-    let currentPosition = { ...startPosition };
+    const currentPosition = { ...startPosition };
 
     // 1. Character Name Generator
     const nameNode = createCharacterNode('Character Name', {
@@ -200,7 +200,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
       { title: 'Act III - Resolution', elements: ['Climax', 'Falling Action', 'Resolution'] }
     ];
 
-    let currentPosition = { ...startPosition };
+    const currentPosition = { ...startPosition };
     const spacing = 250;
 
     for (const act of acts) {

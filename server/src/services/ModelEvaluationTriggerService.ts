@@ -391,9 +391,9 @@ export class ModelEvaluationTriggerService {
       byPriority: this.groupBy(jobs, 'priority'),
       averageDuration: completedJobs.length > 0 
         ? completedJobs.reduce((sum, job) => {
-            const duration = job.completedAt!.getTime() - (job.startedAt?.getTime() || job.triggeredAt.getTime());
-            return sum + duration;
-          }, 0) / completedJobs.length
+          const duration = job.completedAt!.getTime() - (job.startedAt?.getTime() || job.triggeredAt.getTime());
+          return sum + duration;
+        }, 0) / completedJobs.length
         : 0,
       successRate: completedJobs.length > 0 
         ? jobs.filter(job => job.status === 'completed').length / completedJobs.length 

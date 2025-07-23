@@ -329,7 +329,7 @@ export class EmergencyKillSwitchService {
   // ==========================================
 
   async emergencyDisableAllToggles(activatedBy: string, reason: string): Promise<KillSwitchActivation> {
-    console.warn(`🚨 EMERGENCY: Disabling ALL feature toggles!`);
+    console.warn('🚨 EMERGENCY: Disabling ALL feature toggles!');
     
     // Use or create the "ALL" kill switch
     let allKillSwitch = await this.getKillSwitchByScope('ALL');
@@ -348,7 +348,7 @@ export class EmergencyKillSwitchService {
   }
 
   async emergencyDisableClaudeImpactToggles(activatedBy: string, reason: string): Promise<KillSwitchActivation> {
-    console.warn(`🚨 EMERGENCY: Disabling Claude-impacting feature toggles!`);
+    console.warn('🚨 EMERGENCY: Disabling Claude-impacting feature toggles!');
     
     // Use or create the Claude impact kill switch
     let claudeKillSwitch = await this.getKillSwitchByScope('CLAUDE_IMPACT');
@@ -368,7 +368,7 @@ export class EmergencyKillSwitchService {
   }
 
   async emergencyDisableCriticalFeatures(activatedBy: string, reason: string): Promise<KillSwitchActivation> {
-    console.warn(`🚨 EMERGENCY: Disabling critical feature toggles!`);
+    console.warn('🚨 EMERGENCY: Disabling critical feature toggles!');
     
     // Use or create the critical features kill switch
     let criticalKillSwitch = await this.getKillSwitchByScope('CRITICAL_FEATURES');
@@ -532,28 +532,28 @@ export class EmergencyKillSwitchService {
     const queryParams: any[] = [];
 
     switch (killSwitch.scope) {
-      case 'ALL':
-        // No additional filtering
-        break;
+    case 'ALL':
+      // No additional filtering
+      break;
 
-      case 'CLAUDE_IMPACT':
-        if (killSwitch.claudeImpactLevels && killSwitch.claudeImpactLevels.length > 0) {
-          query += ` AND claude_impact = ANY($1)`;
-          queryParams.push(killSwitch.claudeImpactLevels);
-        }
-        break;
+    case 'CLAUDE_IMPACT':
+      if (killSwitch.claudeImpactLevels && killSwitch.claudeImpactLevels.length > 0) {
+        query += ' AND claude_impact = ANY($1)';
+        queryParams.push(killSwitch.claudeImpactLevels);
+      }
+      break;
 
-      case 'CRITICAL_FEATURES':
-        query += ` AND type = ANY($1)`;
-        queryParams.push(EmergencyKillSwitchService.CRITICAL_TOGGLE_TYPES);
-        break;
+    case 'CRITICAL_FEATURES':
+      query += ' AND type = ANY($1)';
+      queryParams.push(EmergencyKillSwitchService.CRITICAL_TOGGLE_TYPES);
+      break;
 
-      case 'CUSTOM':
-        if (killSwitch.targetToggles && killSwitch.targetToggles.length > 0) {
-          query += ` AND key = ANY($1)`;
-          queryParams.push(killSwitch.targetToggles);
-        }
-        break;
+    case 'CUSTOM':
+      if (killSwitch.targetToggles && killSwitch.targetToggles.length > 0) {
+        query += ' AND key = ANY($1)';
+        queryParams.push(killSwitch.targetToggles);
+      }
+      break;
     }
 
     const result = await this.db.query(query, queryParams);

@@ -242,7 +242,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
         reply.code(200).send({
           success: true,
           dashboard,
-          message: `Creator quality dashboard generated successfully`
+          message: 'Creator quality dashboard generated successfully'
         });
 
       } catch (error) {
@@ -301,12 +301,12 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
       try {
         const { timeRange = TimeRange.LAST_30D, category, minQualityScore } = request.query;
 
-        console.log(`🌐 Generating marketplace quality insights`);
+        console.log('🌐 Generating marketplace quality insights');
 
         const insights = await contentQualityService.getMarketplaceQualityInsights(timeRange);
 
         // Apply filters if provided
-        let filteredInsights = insights;
+        const filteredInsights = insights;
         if (category) {
           filteredInsights.categoryBreakdown = insights.categoryBreakdown.filter(
             cb => cb.category === category
@@ -464,7 +464,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
         const currentMetrics = await contentQualityService.assessContentQuality(templateId);
 
         // Enhance benchmarks with custom comparisons if provided
-        let enhancedBenchmarks = currentMetrics.benchmarks;
+        const enhancedBenchmarks = currentMetrics.benchmarks;
         if (compareWith && compareWith.length > 0) {
           // Would implement custom comparison logic here
           console.log(`Comparing with ${compareWith.length} specific templates`);
@@ -724,7 +724,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
   }
 
   function calculateTimeframe(recommendations: any[]): string {
-        // Would implement proper timeframe calculation logic
+    // Would implement proper timeframe calculation logic
     return '2-6 months';
   }
 

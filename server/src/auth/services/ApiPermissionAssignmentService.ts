@@ -383,10 +383,10 @@ export class ApiPermissionAssignmentService {
     // Log activity
     await this.logPermissionActivity('revoked', assignment.userId, assignment.permissionId, 
       permission?.resource || 'unknown', {
-      assignmentId,
-      revokedBy,
-      reason
-    });
+        assignmentId,
+        revokedBy,
+        reason
+      });
 
     // Audit log
     await this.auditService.logAction({

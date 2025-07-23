@@ -326,23 +326,23 @@ export const EnforcementTools: React.FC<EnforcementToolsProps> = ({ className })
 
   const getActionIcon = (actionType: string) => {
     switch (actionType) {
-      case 'suspend': return <Ban className="w-4 h-4" />;
-      case 'restrict': return <Shield className="w-4 h-4" />;
-      case 'flag': return <Flag className="w-4 h-4" />;
-      case 'require_verification': return <CheckCircle className="w-4 h-4" />;
-      case 'block_transaction': return <XCircle className="w-4 h-4" />;
-      case 'quarantine_template': return <AlertTriangle className="w-4 h-4" />;
-      default: return <Info className="w-4 h-4" />;
+    case 'suspend': return <Ban className="w-4 h-4" />;
+    case 'restrict': return <Shield className="w-4 h-4" />;
+    case 'flag': return <Flag className="w-4 h-4" />;
+    case 'require_verification': return <CheckCircle className="w-4 h-4" />;
+    case 'block_transaction': return <XCircle className="w-4 h-4" />;
+    case 'quarantine_template': return <AlertTriangle className="w-4 h-4" />;
+    default: return <Info className="w-4 h-4" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'low': return 'text-blue-600 bg-blue-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'critical': return 'text-red-600 bg-red-100';
+    case 'high': return 'text-orange-600 bg-orange-100';
+    case 'medium': return 'text-yellow-600 bg-yellow-100';
+    case 'low': return 'text-blue-600 bg-blue-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 

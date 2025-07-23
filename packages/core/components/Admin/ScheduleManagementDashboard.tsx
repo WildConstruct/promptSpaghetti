@@ -502,8 +502,8 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
                               {schedule.nextExecution ? 
                                 `Next: ${formatDate(schedule.nextExecution)}` :
                                 schedule.lastExecution ?
-                                `Last: ${formatDate(schedule.lastExecution)}` :
-                                'No execution'
+                                  `Last: ${formatDate(schedule.lastExecution)}` :
+                                  'No execution'
                               }
                             </p>
                             <div className="flex items-center space-x-2 mt-1">

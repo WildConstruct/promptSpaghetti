@@ -888,20 +888,20 @@ export class ChangeRecordingService extends EventEmitter {
       let aVal: any, bVal: any;
       
       switch (sortBy) {
-        case 'timestamp':
-          aVal = a.timestamp.getTime();
-          bVal = b.timestamp.getTime();
-          break;
-        case 'riskLevel':
-          aVal = this.getRiskLevelScore(a.changeMetadata.riskLevel);
-          bVal = this.getRiskLevelScore(b.changeMetadata.riskLevel);
-          break;
-        case 'complexity':
-          aVal = this.getComplexityScore(a.changeAnalysis.complexity);
-          bVal = this.getComplexityScore(b.changeAnalysis.complexity);
-          break;
-        default:
-          aVal = bVal = 0;
+      case 'timestamp':
+        aVal = a.timestamp.getTime();
+        bVal = b.timestamp.getTime();
+        break;
+      case 'riskLevel':
+        aVal = this.getRiskLevelScore(a.changeMetadata.riskLevel);
+        bVal = this.getRiskLevelScore(b.changeMetadata.riskLevel);
+        break;
+      case 'complexity':
+        aVal = this.getComplexityScore(a.changeAnalysis.complexity);
+        bVal = this.getComplexityScore(b.changeAnalysis.complexity);
+        break;
+      default:
+        aVal = bVal = 0;
       }
       
       if (sortOrder === 'asc') {

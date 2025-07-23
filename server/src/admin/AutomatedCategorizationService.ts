@@ -637,29 +637,29 @@ export class AutomatedCategorizationService extends EventEmitter {
       if (flaggingResult.flags.length > 0) {
         for (const flag of flaggingResult.flags) {
           switch (flag.type) {
-            case 'content_moderation':
-              categories.push('content_moderation');
-              riskLevel = 'high';
-              break;
-            case 'security_threat':
-              categories.push('security_threat');
-              securityFlags.push('threat_detected');
-              riskLevel = 'critical';
-              break;
-            case 'compliance_violation':
-              categories.push('compliance_violation');
-              riskLevel = 'high';
-              break;
-            case 'prompt_injection':
-              categories.push('prompt_injection');
-              securityFlags.push('injection_detected');
-              riskLevel = 'critical';
-              break;
-            case 'data_leak':
-              categories.push('data_leak');
-              securityFlags.push('data_leak_detected');
-              riskLevel = 'critical';
-              break;
+          case 'content_moderation':
+            categories.push('content_moderation');
+            riskLevel = 'high';
+            break;
+          case 'security_threat':
+            categories.push('security_threat');
+            securityFlags.push('threat_detected');
+            riskLevel = 'critical';
+            break;
+          case 'compliance_violation':
+            categories.push('compliance_violation');
+            riskLevel = 'high';
+            break;
+          case 'prompt_injection':
+            categories.push('prompt_injection');
+            securityFlags.push('injection_detected');
+            riskLevel = 'critical';
+            break;
+          case 'data_leak':
+            categories.push('data_leak');
+            securityFlags.push('data_leak_detected');
+            riskLevel = 'critical';
+            break;
           }
         }
         confidence = Math.max(80, flaggingResult.confidence * 100);
@@ -715,7 +715,7 @@ export class AutomatedCategorizationService extends EventEmitter {
     
     const categories: string[] = [];
     const suggestedAssignments: AutoAssignment[] = [];
-    let confidence = 70;
+    const confidence = 70;
 
     // Categorize by role
     if (userData.role) {
@@ -774,7 +774,7 @@ export class AutomatedCategorizationService extends EventEmitter {
     
     const categories: string[] = [];
     const suggestedAssignments: AutoAssignment[] = [];
-    let confidence = 75;
+    const confidence = 75;
     let riskLevel: 'low' | 'medium' | 'high' | 'critical' = 'medium';
 
     // Categorize by intended use
@@ -856,7 +856,7 @@ export class AutomatedCategorizationService extends EventEmitter {
     
     const categories: string[] = [];
     const suggestedAssignments: AutoAssignment[] = [];
-    let confidence = 80;
+    const confidence = 80;
 
     // Categorize by task type or title
     if (taskData.title || taskData.type) {
@@ -1020,16 +1020,16 @@ export class AutomatedCategorizationService extends EventEmitter {
 
   private evaluateCondition(fieldValue: any, operator: string, conditionValue: any): boolean {
     switch (operator) {
-      case 'eq': return fieldValue === conditionValue;
-      case 'ne': return fieldValue !== conditionValue;
-      case 'gt': return fieldValue > conditionValue;
-      case 'gte': return fieldValue >= conditionValue;
-      case 'lt': return fieldValue < conditionValue;
-      case 'lte': return fieldValue <= conditionValue;
-      case 'in': return Array.isArray(conditionValue) && conditionValue.includes(fieldValue);
-      case 'contains': return String(fieldValue).toLowerCase().includes(String(conditionValue).toLowerCase());
-      case 'matches': return new RegExp(conditionValue, 'i').test(String(fieldValue));
-      default: return false;
+    case 'eq': return fieldValue === conditionValue;
+    case 'ne': return fieldValue !== conditionValue;
+    case 'gt': return fieldValue > conditionValue;
+    case 'gte': return fieldValue >= conditionValue;
+    case 'lt': return fieldValue < conditionValue;
+    case 'lte': return fieldValue <= conditionValue;
+    case 'in': return Array.isArray(conditionValue) && conditionValue.includes(fieldValue);
+    case 'contains': return String(fieldValue).toLowerCase().includes(String(conditionValue).toLowerCase());
+    case 'matches': return new RegExp(conditionValue, 'i').test(String(fieldValue));
+    default: return false;
     }
   }
 

@@ -123,7 +123,7 @@ function SortableWeightItem({
     setNodeRef,
     transform,
     transition,
-    isDragging: isSortableDragging,
+    isDragging: isSortableDragging
   } = useSortable({
     id: option.id,
     disabled: option.locked
@@ -131,7 +131,7 @@ function SortableWeightItem({
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition
   };
 
   const isCurrentlyDragging = isSortableDragging || draggedItemId === option.id;
@@ -429,11 +429,11 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
-      },
+        distance: 8
+      }
     }),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
+      coordinateGetter: sortableKeyboardCoordinates
     })
   );
 
@@ -489,44 +489,44 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
     let newOptions = [...options];
     
     switch (operation) {
-      case 'normalize':
-        // Normalize weights to sum to 100
-        const currentTotal = options.reduce((sum, opt) => sum + opt.weight, 0);
-        if (currentTotal > 0) {
-          newOptions = options.map(option => ({
-            ...option,
-            weight: (option.weight / currentTotal) * 100
-          }));
-        }
-        break;
-        
-      case 'equal':
-        // Set all weights equal
-        const equalWeight = 100 / options.length;
+    case 'normalize':
+      // Normalize weights to sum to 100
+      const currentTotal = options.reduce((sum, opt) => sum + opt.weight, 0);
+      if (currentTotal > 0) {
         newOptions = options.map(option => ({
           ...option,
-          weight: option.locked ? option.weight : equalWeight
+          weight: (option.weight / currentTotal) * 100
         }));
-        break;
+      }
+      break;
         
-      case 'random':
-        // Generate random weights
-        newOptions = options.map(option => {
-          if (option.locked) return option;
-          return {
-            ...option,
-            weight: Math.random() * 50 + 10 // Random between 10-60
-          };
-        });
-        break;
+    case 'equal':
+      // Set all weights equal
+      const equalWeight = 100 / options.length;
+      newOptions = options.map(option => ({
+        ...option,
+        weight: option.locked ? option.weight : equalWeight
+      }));
+      break;
         
-      case 'clear':
-        // Reset all unlocked weights to minimum
-        newOptions = options.map(option => ({
+    case 'random':
+      // Generate random weights
+      newOptions = options.map(option => {
+        if (option.locked) return option;
+        return {
           ...option,
-          weight: option.locked ? option.weight : minWeight
-        }));
-        break;
+          weight: Math.random() * 50 + 10 // Random between 10-60
+        };
+      });
+      break;
+        
+    case 'clear':
+      // Reset all unlocked weights to minimum
+      newOptions = options.map(option => ({
+        ...option,
+        weight: option.locked ? option.weight : minWeight
+      }));
+      break;
     }
     
     onChange(newOptions);
@@ -744,7 +744,7 @@ export const DragReorderWeightManager: React.FC<DragReorderProps> = ({
               onClick={() => handleBulkWeightChange('clear')}
               style={{
                 background: 'transparent',
-                border: `1px solid #ef4444`,
+                border: '1px solid #ef4444',
                 color: '#ef4444',
                 borderRadius: '4px',
                 padding: '4px 8px',

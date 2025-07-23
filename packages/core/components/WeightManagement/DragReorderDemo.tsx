@@ -379,10 +379,10 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
                     <span style={{ opacity: 0.7 }}>Distribution:</span>
                     <strong style={{ 
                       color: statistics.evenness > 0.7 ? styles.success : 
-                            statistics.evenness > 0.4 ? styles.warning : styles.accent
+                        statistics.evenness > 0.4 ? styles.warning : styles.accent
                     }}>
                       {statistics.evenness > 0.7 ? 'Even' : 
-                       statistics.evenness > 0.4 ? 'Skewed' : 'Concentrated'}
+                        statistics.evenness > 0.4 ? 'Skewed' : 'Concentrated'}
                     </strong>
                   </div>
                   {statistics.mostLikely && (
@@ -531,7 +531,7 @@ export const DragReorderDemo: React.FC<DragReorderDemoProps> = ({
               fontFamily: 'Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
             }}>
               <code style={{ color: styles.text }}>
-{`import { DragReorderWeightManager } from './WeightManagement/DragReorderWeightManager';
+                {`import { DragReorderWeightManager } from './WeightManagement/DragReorderWeightManager';
 
 const filmOptions = [
   { id: '1', text: 'Mysterious protagonist', weight: 25 },

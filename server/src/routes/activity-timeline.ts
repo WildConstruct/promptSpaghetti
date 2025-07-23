@@ -442,8 +442,8 @@ export async function activityTimelineRoutes(
       
       reply.header('Content-Type', 
         exportRequest.format === 'csv' ? 'text/csv' : 
-        exportRequest.format === 'pdf' ? 'application/pdf' : 
-        'application/json'
+          exportRequest.format === 'pdf' ? 'application/pdf' : 
+            'application/json'
       );
       reply.header('Content-Disposition', `attachment; filename="${filename}"`);
       

@@ -107,28 +107,28 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
 
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
     switch (trend) {
-      case 'up': return TrendingUp;
-      case 'down': return TrendingDown;
-      default: return Activity;
+    case 'up': return TrendingUp;
+    case 'down': return TrendingDown;
+    default: return Activity;
     }
   };
 
   const getTrendColor = (trend: 'up' | 'down' | 'stable') => {
     switch (trend) {
-      case 'up': return 'text-red-500';
-      case 'down': return 'text-green-500';
-      default: return 'text-gray-500';
+    case 'up': return 'text-red-500';
+    case 'down': return 'text-green-500';
+    default: return 'text-gray-500';
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
-      case 'trust score': return 'bg-blue-500';
-      case 'content quality': return 'bg-purple-500';
-      case 'transaction': return 'bg-orange-500';
-      case 'user behavior': return 'bg-green-500';
-      case 'fraud detection': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case 'trust score': return 'bg-blue-500';
+    case 'content quality': return 'bg-purple-500';
+    case 'transaction': return 'bg-orange-500';
+    case 'user behavior': return 'bg-green-500';
+    case 'fraud detection': return 'bg-red-500';
+    default: return 'bg-gray-500';
     }
   };
 
@@ -267,7 +267,7 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
                       style={{ 
                         width: `${action.successRate}%`,
                         backgroundColor: action.successRate >= 90 ? '#10b981' : 
-                                        action.successRate >= 75 ? '#f59e0b' : '#ef4444'
+                          action.successRate >= 75 ? '#f59e0b' : '#ef4444'
                       }}
                     ></div>
                   </div>

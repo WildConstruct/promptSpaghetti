@@ -33,10 +33,10 @@ const HealthcareDataValidationSchema = z.object({
 const ClinicalWorkflowSchema = z.object({
   workflowType: z.enum(
     ['clinical_note',
-    'patient_summary',
-    'discharge_summary',
-    'care_plan',
-    'medication_reconciliation']
+      'patient_summary',
+      'discharge_summary',
+      'care_plan',
+      'medication_reconciliation']
   ),
   patientData: z.record(z.unknown()),
   templateId: z.string().uuid().optional(),

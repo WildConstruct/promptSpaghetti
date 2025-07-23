@@ -431,7 +431,7 @@ export class PromotionSchedulingService {
     const [dataResult, countResult] = await Promise.all([
       this.pool.query(query, params),
       this.pool.query(`SELECT COUNT(*) FROM promotion_schedules ps WHERE 1=1 ${this.buildWhereClause(filters)}`, 
-                     params.slice(0, -2)) // Exclude LIMIT/OFFSET params for count
+        params.slice(0, -2)) // Exclude LIMIT/OFFSET params for count
     ]);
 
     return {

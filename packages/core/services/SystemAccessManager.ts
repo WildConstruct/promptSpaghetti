@@ -811,18 +811,18 @@ export class SystemAccessManager {
 
   private async executeAccessRequest(request: AccessRequest): Promise<void> {
     switch (request.type) {
-      case 'role_assignment':
-        if (request.targetUserId && request.roleId) {
-          await this.assignRole(request.targetUserId, request.roleId, 'system', {
-            expiresAt: request.expiresAt
-          });
-        }
-        break;
-      case 'permission_grant':
-        // Handle permission grants
-        break;
-      default:
-        console.warn('Unknown access request type:', request.type);
+    case 'role_assignment':
+      if (request.targetUserId && request.roleId) {
+        await this.assignRole(request.targetUserId, request.roleId, 'system', {
+          expiresAt: request.expiresAt
+        });
+      }
+      break;
+    case 'permission_grant':
+      // Handle permission grants
+      break;
+    default:
+      console.warn('Unknown access request type:', request.type);
     }
   }
 

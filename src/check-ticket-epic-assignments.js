@@ -46,13 +46,13 @@ tasks.forEach(task => {
   }
 });
 
-console.log(`📊 EPIC ASSIGNMENT STATUS:`);
+console.log('📊 EPIC ASSIGNMENT STATUS:');
 console.log(`   📖 Tasks with story field: ${withStoryField} (${Math.round(withStoryField/tasks.length*100)}%)`);
 console.log(`   🏷️  Tasks with tags field: ${withTagsField} (${Math.round(withTagsField/tasks.length*100)}%)`);
 console.log(`   📋 Tasks with source field: ${withSourceField} (${Math.round(withSourceField/tasks.length*100)}%)`);
 console.log(`   ❌ Completely untagged: ${completelyUntagged} (${Math.round(completelyUntagged/tasks.length*100)}%)`);
 
-console.log(`\n🔍 EXAMPLES OF EACH CATEGORY:\n`);
+console.log('\n🔍 EXAMPLES OF EACH CATEGORY:\n');
 
 if (examples.story.length > 0) {
   console.log(`📖 TASKS WITH STORY FIELD (${examples.story.length} shown):`);
@@ -86,15 +86,15 @@ examples.untagged.forEach(task => {
   console.log(`   • ${task.id}: ${(task.title || 'No title').substring(0, 60)}...`);
 });
 
-console.log(`\n🎯 DIAGNOSIS:`);
+console.log('\n🎯 DIAGNOSIS:');
 if (completelyUntagged > tasks.length * 0.8) {
   console.log(`❌ MAJOR PROBLEM: ${Math.round(completelyUntagged/tasks.length*100)}% of tickets have no epic assignments!`);
-  console.log(`   The tickets themselves are not properly tagged with their source epic.`);
-  console.log(`   This means agents can't filter by epic and the dashboard can't show proper categories.`);
+  console.log('   The tickets themselves are not properly tagged with their source epic.');
+  console.log('   This means agents can\'t filter by epic and the dashboard can\'t show proper categories.');
 } else if (completelyUntagged > tasks.length * 0.5) {
   console.log(`⚠️  MODERATE PROBLEM: ${Math.round(completelyUntagged/tasks.length*100)}% of tickets lack epic assignments.`);
 } else {
-  console.log(`✅ GOOD: Most tickets have proper epic assignments.`);
+  console.log('✅ GOOD: Most tickets have proper epic assignments.');
 }
 
 // Check if auth/file browser tasks exist with proper assignments
@@ -108,7 +108,7 @@ const fileTasks = tasks.filter(task => {
   return title.includes('file') || title.includes('project') || title.includes('save');
 });
 
-console.log(`\n🔍 CONTENT ANALYSIS:`);
+console.log('\n🔍 CONTENT ANALYSIS:');
 console.log(`   🔐 Auth-related titles: ${authTasks.length} tasks`);
 console.log(`   📁 File-related titles: ${fileTasks.length} tasks`);
 

@@ -212,17 +212,17 @@ for (const ticket of integrationTickets) {
   }
 }
 
-console.log(`📊 Summary:`);
+console.log('📊 Summary:');
 console.log(`   Created: ${created} integration tickets`);
-console.log(`   Expected impact: 6+ months of hidden work made visible to users`);
+console.log('   Expected impact: 6+ months of hidden work made visible to users');
 
-console.log(`\n🚀 Next steps:`);
-console.log(`   1. node src/grab-tasks.js <your-dev-id> 2 --priority-only`);
-console.log(`   2. Start with highest priority: Advanced Nodes integration`);
-console.log(`   3. Check progress: node src/monitor-available-tasks.js`);
-console.log(`\n📋 Priority order:`);
-console.log(`   1. Expose Advanced Nodes - Makes Epic 7 visible (2-3h)`);
-console.log(`   2. Advanced Node Editors - Complete Epic 7 UI (4-5h)`);
-console.log(`   3. Export Integration - Professional export formats (2-3h)`);
-console.log(`   4. Project API - Enable save/load functionality (3-4h)`);
-console.log(`   5. Python Integration - Complete Epic 8 (1-2h)`);
+console.log('\n🚀 Next steps:');
+console.log('   1. node src/grab-tasks.js <your-dev-id> 2 --priority-only');
+console.log('   2. Start with highest priority: Advanced Nodes integration');
+console.log('   3. Check progress: node src/monitor-available-tasks.js');
+console.log('\n📋 Priority order:');
+console.log('   1. Expose Advanced Nodes - Makes Epic 7 visible (2-3h)');
+console.log('   2. Advanced Node Editors - Complete Epic 7 UI (4-5h)');
+console.log('   3. Export Integration - Professional export formats (2-3h)');
+console.log('   4. Project API - Enable save/load functionality (3-4h)');
+console.log('   5. Python Integration - Complete Epic 8 (1-2h)');

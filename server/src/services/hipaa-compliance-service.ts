@@ -158,20 +158,20 @@ export class HIPAAComplianceService {
 
       // Apply de-identification method
       switch (method) {
-        case 'safe_harbor':
-          ({ content: deidentifiedContent, removedElements: removedElements } = 
+      case 'safe_harbor':
+        ({ content: deidentifiedContent, removedElements: removedElements } = 
             await this.applySafeHarborMethod(content, phiElements, preserveStructure));
-          break;
+        break;
 
-        case 'expert_determination':
-          ({ content: deidentifiedContent, removedElements: removedElements } = 
+      case 'expert_determination':
+        ({ content: deidentifiedContent, removedElements: removedElements } = 
             await this.applyExpertDeterminationMethod(content, phiElements, preserveStructure));
-          break;
+        break;
 
-        case 'synthetic':
-          ({ content: deidentifiedContent, removedElements: removedElements } = 
+      case 'synthetic':
+        ({ content: deidentifiedContent, removedElements: removedElements } = 
             await this.applySyntheticDataMethod(content, phiElements, preserveStructure));
-          break;
+        break;
       }
 
       // Apply custom rules if provided
@@ -533,24 +533,24 @@ export class HIPAAComplianceService {
 
   private generateStructuralReplacement(element: PHIElement): string {
     switch (element.type) {
-      case 'name': return '[NAME]';
-      case 'date': return '[DATE]';
-      case 'phone': return '[PHONE]';
-      case 'email': return '[EMAIL]';
-      case 'ssn': return '[SSN]';
-      case 'address': return '[ADDRESS]';
-      default: return '[REDACTED]';
+    case 'name': return '[NAME]';
+    case 'date': return '[DATE]';
+    case 'phone': return '[PHONE]';
+    case 'email': return '[EMAIL]';
+    case 'ssn': return '[SSN]';
+    case 'address': return '[ADDRESS]';
+    default: return '[REDACTED]';
     }
   }
 
   private generateSyntheticReplacement(element: PHIElement): string {
     switch (element.type) {
-      case 'name': return 'John Doe';
-      case 'phone': return '555-0123';
-      case 'email': return 'patient@example.com';
-      case 'date': return '01/01/2023';
-      case 'ssn': return '123-45-6789';
-      default: return '[SYNTHETIC]';
+    case 'name': return 'John Doe';
+    case 'phone': return '555-0123';
+    case 'email': return 'patient@example.com';
+    case 'date': return '01/01/2023';
+    case 'ssn': return '123-45-6789';
+    default: return '[SYNTHETIC]';
     }
   }
 

@@ -30,7 +30,7 @@ const AUTH_ROUTE_CONFIG = {
     { path: '/unauthorized', component: UnauthorizedPage, title: 'Access Denied' },
     { path: '/auth/callback/google', component: OAuthCallback, title: 'Google Authentication' },
     { path: '/auth/callback/github', component: OAuthCallback, title: 'GitHub Authentication' },
-    { path: '/auth/callback', component: OAuthCallback, title: 'OAuth Authentication' },
+    { path: '/auth/callback', component: OAuthCallback, title: 'OAuth Authentication' }
   ],
   
   // Protected authentication routes (auth required)
@@ -254,7 +254,7 @@ export const AuthenticationRouter: React.FC = () => {
             path="/auth" 
             element={
               <Navigate 
-                to={isAuthenticated ? "/" : "/login"} 
+                to={isAuthenticated ? '/' : '/login'} 
                 replace 
               />
             } 
@@ -302,16 +302,16 @@ export const AuthRouteUtils = {
     if (isAuthenticated) return '/';
     
     switch (currentPath) {
-      case '/register':
-        return '/verify-email';
-      case '/verify-email':
-        return '/login';
-      case '/login':
-        return '/';
-      case '/reset-password':
-        return '/login';
-      default:
-        return '/login';
+    case '/register':
+      return '/verify-email';
+    case '/verify-email':
+      return '/login';
+    case '/login':
+      return '/';
+    case '/reset-password':
+      return '/login';
+    default:
+      return '/login';
     }
   },
 

@@ -466,23 +466,23 @@ export class DependencyVerificationService {
       let result: DependencyCheckResult;
 
       switch (dependency.type) {
-        case 'database':
-          result = await this.checkDatabase(dependency, context, startTime);
-          break;
-        case 'cache':
-          result = await this.checkCache(dependency, context, startTime);
-          break;
-        case 'external_api':
-          result = await this.checkExternalAPI(dependency, context, startTime);
-          break;
-        case 'file_system':
-          result = await this.checkFileSystem(dependency, context, startTime);
-          break;
-        case 'security_service':
-          result = await this.checkSecurityService(dependency, context, startTime);
-          break;
-        default:
-          result = await this.checkGenericService(dependency, context, startTime);
+      case 'database':
+        result = await this.checkDatabase(dependency, context, startTime);
+        break;
+      case 'cache':
+        result = await this.checkCache(dependency, context, startTime);
+        break;
+      case 'external_api':
+        result = await this.checkExternalAPI(dependency, context, startTime);
+        break;
+      case 'file_system':
+        result = await this.checkFileSystem(dependency, context, startTime);
+        break;
+      case 'security_service':
+        result = await this.checkSecurityService(dependency, context, startTime);
+        break;
+      default:
+        result = await this.checkGenericService(dependency, context, startTime);
       }
 
       // Cache result

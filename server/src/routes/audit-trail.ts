@@ -421,7 +421,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
       }
 
       let recorded = 0;
-      let failed = 0;
+      const failed = 0;
       const errors: string[] = [];
 
       await auditService.auditBatchEvidenceAccess(
@@ -482,18 +482,18 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
       const now = new Date();
       const dateFrom = new Date();
       switch (timeRange) {
-        case '24h':
-          dateFrom.setHours(now.getHours() - 24);
-          break;
-        case '7d':
-          dateFrom.setDate(now.getDate() - 7);
-          break;
-        case '30d':
-          dateFrom.setDate(now.getDate() - 30);
-          break;
-        case '90d':
-          dateFrom.setDate(now.getDate() - 90);
-          break;
+      case '24h':
+        dateFrom.setHours(now.getHours() - 24);
+        break;
+      case '7d':
+        dateFrom.setDate(now.getDate() - 7);
+        break;
+      case '30d':
+        dateFrom.setDate(now.getDate() - 30);
+        break;
+      case '90d':
+        dateFrom.setDate(now.getDate() - 90);
+        break;
       }
 
       const analytics = await generateAuditAnalytics(auditService, {
@@ -583,19 +583,19 @@ async function generateAuditAnalytics(
     const date = new Date(entry.timestamp);
     
     switch (options.groupBy) {
-      case 'hour':
-        key = date.toISOString().substring(0, 13) + ':00:00.000Z';
-        break;
-      case 'day':
-        key = date.toISOString().substring(0, 10) + 'T00:00:00.000Z';
-        break;
-      case 'week':
-        const week = new Date(date);
-        week.setDate(date.getDate() - date.getDay());
-        key = week.toISOString().substring(0, 10) + 'T00:00:00.000Z';
-        break;
-      default:
-        key = date.toISOString();
+    case 'hour':
+      key = date.toISOString().substring(0, 13) + ':00:00.000Z';
+      break;
+    case 'day':
+      key = date.toISOString().substring(0, 10) + 'T00:00:00.000Z';
+      break;
+    case 'week':
+      const week = new Date(date);
+      week.setDate(date.getDate() - date.getDay());
+      key = week.toISOString().substring(0, 10) + 'T00:00:00.000Z';
+      break;
+    default:
+      key = date.toISOString();
     }
 
     if (!acc[key]) {

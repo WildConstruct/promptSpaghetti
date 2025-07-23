@@ -367,18 +367,18 @@ const expensiveValue = useMemo(() =>
     
     try {
       switch (suggestionId) {
-        case 'bundle-splitting':
-          await this.applyBundleSplitting();
-          break;
-        case 'memory-optimization':
-          await this.applyMemoryOptimization();
-          break;
-        case 'api-optimization':
-          await this.applyApiOptimization();
-          break;
-        default:
-          console.warn(`Unknown optimization: ${suggestionId}`);
-          return false;
+      case 'bundle-splitting':
+        await this.applyBundleSplitting();
+        break;
+      case 'memory-optimization':
+        await this.applyMemoryOptimization();
+        break;
+      case 'api-optimization':
+        await this.applyApiOptimization();
+        break;
+      default:
+        console.warn(`Unknown optimization: ${suggestionId}`);
+        return false;
       }
       
       this.emit('optimization-applied', suggestionId);

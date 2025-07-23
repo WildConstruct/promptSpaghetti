@@ -12,8 +12,8 @@ const task = state.tasks[taskId];
 console.log('=== DEBUGGING TASK:', taskId, '===\n');
 
 if (!task) {
-    console.log('❌ Task not found!');
-    process.exit(1);
+  console.log('❌ Task not found!');
+  process.exit(1);
 }
 
 console.log('Raw Task Data:');
@@ -45,21 +45,21 @@ console.log('stateClass:', stateClass);
 console.log('\n=== CSS CLASSES GENERATED ===');
 
 if (taskTags.length > 0) {
-    console.log('Tag classes:');
-    taskTags.forEach(tag => {
-        const sanitizedTag = String(tag || '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
-        const displayTag = String(tag || '').substring(0, 20);
-        console.log(`  - tag-${sanitizedTag} (display: "${displayTag}")`);
-    });
+  console.log('Tag classes:');
+  taskTags.forEach(tag => {
+    const sanitizedTag = String(tag || '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    const displayTag = String(tag || '').substring(0, 20);
+    console.log(`  - tag-${sanitizedTag} (display: "${displayTag}")`);
+  });
 } else {
-    console.log('No tags to process');
+  console.log('No tags to process');
 }
 
 console.log('\n=== SIMULATED HTML OUTPUT ===');
 
 // Simulate the HTML generation
 try {
-    const html = `
+  const html = `
     <div class="ticket ${priorityClass} ${stateClass}">
         <div class="priority-indicator">📝</div>
         <div class="ticket-header">
@@ -76,10 +76,10 @@ try {
         ${(taskTags.length > 0) ? `
             <div class="ticket-tags">
                 ${taskTags.map(tag => {
-                    const sanitizedTag = String(tag || '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
-                    const displayTag = String(tag || '').substring(0, 20);
-                    return `<span class="tag tag-${sanitizedTag}">${displayTag}</span>`;
-                }).join('')}
+    const sanitizedTag = String(tag || '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    const displayTag = String(tag || '').substring(0, 20);
+    return `<span class="tag tag-${sanitizedTag}">${displayTag}</span>`;
+  }).join('')}
             </div>
         ` : ''}
         <div class="ticket-footer">
@@ -88,27 +88,27 @@ try {
         </div>
     </div>`;
     
-    console.log('✅ HTML generated successfully');
-    console.log('Length:', html.length, 'characters');
-    console.log('\nFirst 200 characters:');
-    console.log(html.substring(0, 200) + '...');
+  console.log('✅ HTML generated successfully');
+  console.log('Length:', html.length, 'characters');
+  console.log('\nFirst 200 characters:');
+  console.log(html.substring(0, 200) + '...');
     
 } catch (error) {
-    console.log('❌ Error generating HTML:', error.message);
+  console.log('❌ Error generating HTML:', error.message);
 }
 
 console.log('\n=== RECOMMENDATIONS ===');
 
 if (!task.tags) {
-    console.log('⚠️  Task has undefined tags - this should be handled by the dashboard now');
+  console.log('⚠️  Task has undefined tags - this should be handled by the dashboard now');
 }
 
 if (!task.story) {
-    console.log('⚠️  Task has no story field - this is normal for some tasks');
+  console.log('⚠️  Task has no story field - this is normal for some tasks');
 }
 
 if (!task.priority) {
-    console.log('⚠️  Task has no priority field - will show as "Normal"');
+  console.log('⚠️  Task has no priority field - will show as "Normal"');
 }
 
 console.log('\n=== STATUS ===');

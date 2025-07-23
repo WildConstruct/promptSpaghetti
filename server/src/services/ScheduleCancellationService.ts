@@ -252,18 +252,18 @@ export class ScheduleCancellationService {
     try {
       // Handle different cancellation modes
       switch (request.mode) {
-        case 'immediate':
-          await this.performImmediateCancellation(schedule, actionsTaken);
-          break;
-        case 'graceful':
-          await this.performGracefulCancellation(schedule, actionsTaken);
-          break;
-        case 'after_completion':
-          await this.performAfterCompletionCancellation(schedule, actionsTaken);
-          break;
-        case 'scheduled':
-          await this.scheduleDelayCancellation(schedule, request.scheduledTime!, actionsTaken);
-          break;
+      case 'immediate':
+        await this.performImmediateCancellation(schedule, actionsTaken);
+        break;
+      case 'graceful':
+        await this.performGracefulCancellation(schedule, actionsTaken);
+        break;
+      case 'after_completion':
+        await this.performAfterCompletionCancellation(schedule, actionsTaken);
+        break;
+      case 'scheduled':
+        await this.scheduleDelayCancellation(schedule, request.scheduledTime!, actionsTaken);
+        break;
       }
 
       // Count affected executions

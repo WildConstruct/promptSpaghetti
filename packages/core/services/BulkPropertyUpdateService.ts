@@ -372,15 +372,15 @@ export class BulkPropertyUpdateService {
 
     try {
       switch (operation.execution.mode) {
-        case 'sequential':
-          await this.executeSequentially(operation);
-          break;
-        case 'parallel':
-          await this.executeInParallel(operation);
-          break;
-        case 'batched':
-          await this.executeInBatches(operation);
-          break;
+      case 'sequential':
+        await this.executeSequentially(operation);
+        break;
+      case 'parallel':
+        await this.executeInParallel(operation);
+        break;
+      case 'batched':
+        await this.executeInBatches(operation);
+        break;
       }
 
       operation.status = operation.progress.failed > 0 ? 'failed' : 'completed';
@@ -873,48 +873,48 @@ export class BulkPropertyUpdateService {
 
       // Apply the update operation
       switch (update.operation) {
-        case 'set':
-          entity[update.property] = value;
-          break;
-        case 'unset':
-          delete entity[update.property];
-          break;
-        case 'append':
-          entity[update.property] = (entity[update.property] || '') + value;
-          break;
-        case 'prepend':
-          entity[update.property] = value + (entity[update.property] || '');
-          break;
-        case 'increment':
-          entity[update.property] = (entity[update.property] || 0) + (value || 1);
-          break;
-        case 'decrement':
-          entity[update.property] = (entity[update.property] || 0) - (value || 1);
-          break;
-        case 'multiply':
-          entity[update.property] = (entity[update.property] || 0) * (value || 1);
-          break;
-        case 'push':
-          if (!Array.isArray(entity[update.property])) {
-            entity[update.property] = [];
-          }
-          entity[update.property].push(value);
-          break;
-        case 'pull':
-          if (Array.isArray(entity[update.property])) {
-            entity[update.property] = entity[update.property].filter((item: any) => item !== value);
-          }
-          break;
-        case 'toggle':
-          entity[update.property] = !entity[update.property];
-          break;
-        case 'merge':
-          if (typeof entity[update.property] === 'object' && typeof value === 'object') {
-            entity[update.property] = { ...entity[update.property], ...value };
-          }
-          break;
-        default:
-          throw new Error(`Unknown update operation: ${update.operation}`);
+      case 'set':
+        entity[update.property] = value;
+        break;
+      case 'unset':
+        delete entity[update.property];
+        break;
+      case 'append':
+        entity[update.property] = (entity[update.property] || '') + value;
+        break;
+      case 'prepend':
+        entity[update.property] = value + (entity[update.property] || '');
+        break;
+      case 'increment':
+        entity[update.property] = (entity[update.property] || 0) + (value || 1);
+        break;
+      case 'decrement':
+        entity[update.property] = (entity[update.property] || 0) - (value || 1);
+        break;
+      case 'multiply':
+        entity[update.property] = (entity[update.property] || 0) * (value || 1);
+        break;
+      case 'push':
+        if (!Array.isArray(entity[update.property])) {
+          entity[update.property] = [];
+        }
+        entity[update.property].push(value);
+        break;
+      case 'pull':
+        if (Array.isArray(entity[update.property])) {
+          entity[update.property] = entity[update.property].filter((item: any) => item !== value);
+        }
+        break;
+      case 'toggle':
+        entity[update.property] = !entity[update.property];
+        break;
+      case 'merge':
+        if (typeof entity[update.property] === 'object' && typeof value === 'object') {
+          entity[update.property] = { ...entity[update.property], ...value };
+        }
+        break;
+      default:
+        throw new Error(`Unknown update operation: ${update.operation}`);
       }
 
       change.newValue = entity[update.property];
@@ -932,26 +932,26 @@ export class BulkPropertyUpdateService {
       const fieldValue = entity[condition.field];
       
       switch (condition.type) {
-        case 'equals':
-          return fieldValue === condition.value;
-        case 'not_equals':
-          return fieldValue !== condition.value;
-        case 'contains':
-          return String(fieldValue).includes(String(condition.value));
-        case 'not_contains':
-          return !String(fieldValue).includes(String(condition.value));
-        case 'greater_than':
-          return Number(fieldValue) > Number(condition.value);
-        case 'less_than':
-          return Number(fieldValue) < Number(condition.value);
-        case 'exists':
-          return fieldValue !== undefined && fieldValue !== null;
-        case 'not_exists':
-          return fieldValue === undefined || fieldValue === null;
-        case 'matches_regex':
-          return new RegExp(condition.value).test(String(fieldValue));
-        default:
-          return true;
+      case 'equals':
+        return fieldValue === condition.value;
+      case 'not_equals':
+        return fieldValue !== condition.value;
+      case 'contains':
+        return String(fieldValue).includes(String(condition.value));
+      case 'not_contains':
+        return !String(fieldValue).includes(String(condition.value));
+      case 'greater_than':
+        return Number(fieldValue) > Number(condition.value);
+      case 'less_than':
+        return Number(fieldValue) < Number(condition.value);
+      case 'exists':
+        return fieldValue !== undefined && fieldValue !== null;
+      case 'not_exists':
+        return fieldValue === undefined || fieldValue === null;
+      case 'matches_regex':
+        return new RegExp(condition.value).test(String(fieldValue));
+      default:
+        return true;
       }
     });
   }
@@ -962,31 +962,31 @@ export class BulkPropertyUpdateService {
     entity: Record<string, any>
   ): any {
     switch (transformation.type) {
-      case 'case_convert':
-        const caseType = transformation.parameters.case;
-        if (caseType === 'upper') return String(value).toUpperCase();
-        if (caseType === 'lower') return String(value).toLowerCase();
-        if (caseType === 'title') return String(value).replace(/\w\S*/g, (txt) => 
-          txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
-        return value;
+    case 'case_convert':
+      const caseType = transformation.parameters.case;
+      if (caseType === 'upper') return String(value).toUpperCase();
+      if (caseType === 'lower') return String(value).toLowerCase();
+      if (caseType === 'title') return String(value).replace(/\w\S*/g, (txt) => 
+        txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+      return value;
       
-      case 'trim':
-        return String(value).trim();
+    case 'trim':
+      return String(value).trim();
       
-      case 'replace':
-        return String(value).replace(
-          new RegExp(transformation.parameters.search, transformation.parameters.flags || 'g'),
-          transformation.parameters.replace
-        );
+    case 'replace':
+      return String(value).replace(
+        new RegExp(transformation.parameters.search, transformation.parameters.flags || 'g'),
+        transformation.parameters.replace
+      );
       
-      case 'append':
-        return String(value) + String(transformation.parameters.suffix || '');
+    case 'append':
+      return String(value) + String(transformation.parameters.suffix || '');
       
-      case 'prepend':
-        return String(transformation.parameters.prefix || '') + String(value);
+    case 'prepend':
+      return String(transformation.parameters.prefix || '') + String(value);
       
-      default:
-        return value;
+    default:
+      return value;
     }
   }
 
@@ -1070,60 +1070,60 @@ export class BulkPropertyUpdateService {
     const value = entity[constraint.property];
 
     switch (constraint.type) {
-      case 'type':
-        const expectedType = constraint.parameters.type;
-        const actualType = typeof value;
-        if (actualType !== expectedType) {
-          return {
-            valid: false,
-            message: `Expected ${expectedType}, got ${actualType}`
-          };
-        }
-        break;
+    case 'type':
+      const expectedType = constraint.parameters.type;
+      const actualType = typeof value;
+      if (actualType !== expectedType) {
+        return {
+          valid: false,
+          message: `Expected ${expectedType}, got ${actualType}`
+        };
+      }
+      break;
       
-      case 'length':
-        const length = String(value).length;
-        const min = constraint.parameters.min;
-        const max = constraint.parameters.max;
-        if ((min !== undefined && length < min) || (max !== undefined && length > max)) {
-          return {
-            valid: false,
-            message: `Length must be between ${min || 0} and ${max || 'unlimited'}`
-          };
-        }
-        break;
+    case 'length':
+      const length = String(value).length;
+      const min = constraint.parameters.min;
+      const max = constraint.parameters.max;
+      if ((min !== undefined && length < min) || (max !== undefined && length > max)) {
+        return {
+          valid: false,
+          message: `Length must be between ${min || 0} and ${max || 'unlimited'}`
+        };
+      }
+      break;
       
-      case 'range':
-        const num = Number(value);
-        const minVal = constraint.parameters.min;
-        const maxVal = constraint.parameters.max;
-        if ((minVal !== undefined && num < minVal) || (maxVal !== undefined && num > maxVal)) {
-          return {
-            valid: false,
-            message: `Value must be between ${minVal || '-∞'} and ${maxVal || '∞'}`
-          };
-        }
-        break;
+    case 'range':
+      const num = Number(value);
+      const minVal = constraint.parameters.min;
+      const maxVal = constraint.parameters.max;
+      if ((minVal !== undefined && num < minVal) || (maxVal !== undefined && num > maxVal)) {
+        return {
+          valid: false,
+          message: `Value must be between ${minVal || '-∞'} and ${maxVal || '∞'}`
+        };
+      }
+      break;
       
-      case 'pattern':
-        const pattern = new RegExp(constraint.parameters.pattern);
-        if (!pattern.test(String(value))) {
-          return {
-            valid: false,
-            message: constraint.message || 'Value does not match required pattern'
-          };
-        }
-        break;
+    case 'pattern':
+      const pattern = new RegExp(constraint.parameters.pattern);
+      if (!pattern.test(String(value))) {
+        return {
+          valid: false,
+          message: constraint.message || 'Value does not match required pattern'
+        };
+      }
+      break;
       
-      case 'enum':
-        const allowedValues = constraint.parameters.values;
-        if (!allowedValues.includes(value)) {
-          return {
-            valid: false,
-            message: `Value must be one of: ${allowedValues.join(', ')}`
-          };
-        }
-        break;
+    case 'enum':
+      const allowedValues = constraint.parameters.values;
+      if (!allowedValues.includes(value)) {
+        return {
+          valid: false,
+          message: `Value must be one of: ${allowedValues.join(', ')}`
+        };
+      }
+      break;
     }
 
     return { valid: true, message: '' };

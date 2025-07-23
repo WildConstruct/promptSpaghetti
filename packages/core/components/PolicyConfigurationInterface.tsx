@@ -99,16 +99,16 @@ interface NotificationConfig {
 const PolicyFormSchema = z.object({
   policyType: z.enum(
     ['PRIVACY_POLICY',
-    'TERMS_OF_SERVICE',
-    'COOKIE_POLICY',
-    'DATA_PROCESSING_AGREEMENT',
-    'CONSENT_POLICY',
-    'RETENTION_POLICY',
-    'SECURITY_POLICY',
-    'ACCEPTABLE_USE_POLICY',
-    'GDPR_POLICY',
-    'CCPA_POLICY',
-    'CUSTOM']
+      'TERMS_OF_SERVICE',
+      'COOKIE_POLICY',
+      'DATA_PROCESSING_AGREEMENT',
+      'CONSENT_POLICY',
+      'RETENTION_POLICY',
+      'SECURITY_POLICY',
+      'ACCEPTABLE_USE_POLICY',
+      'GDPR_POLICY',
+      'CCPA_POLICY',
+      'CUSTOM']
   ),
   title: z.string().min(5, 'Title must be at least 5 characters').max(200, 'Title must be less than 200 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters').max(1000, 'Description must be less than 1000 characters'),
@@ -722,7 +722,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                           updateFormField(
                             'complianceFrameworks',
                             formData.complianceFrameworks.filter(f => f !== framework
-                          ));
+                            ));
                         }
                       }}
                       disabled={mode === 'view'}

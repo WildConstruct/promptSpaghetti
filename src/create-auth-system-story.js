@@ -391,8 +391,8 @@ async function createAuthSystemStory() {
     console.log('🔄 IMPLEMENTATION SEQUENCE:\n');
     implementationTasks.forEach((task, index) => {
       const timelinePhase = index === 0 ? 'AUDIT PHASE' : 
-                           index <= 3 ? 'CORE COMPLETION PHASE' : 
-                           'POLISH & PRODUCTION PHASE';
+        index <= 3 ? 'CORE COMPLETION PHASE' : 
+          'POLISH & PRODUCTION PHASE';
       console.log(`${index + 1}. ${task.title} (${task.estimate}) - ${timelinePhase}`);
       console.log(`   🎯 ${task.acceptanceCriteria[0]}`);
     });

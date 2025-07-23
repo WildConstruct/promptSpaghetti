@@ -298,12 +298,12 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
       setServices(prev => prev.map(service => 
         service.id === serviceId 
           ? { 
-              ...service, 
-              status: action === 'start' ? 'starting' : 
-                     action === 'stop' ? 'stopping' : 
-                     action === 'restart' ? 'starting' : 
-                     service.status 
-            }
+            ...service, 
+            status: action === 'start' ? 'starting' : 
+              action === 'stop' ? 'stopping' : 
+                action === 'restart' ? 'starting' : 
+                  service.status 
+          }
           : service
       ));
 
@@ -312,11 +312,11 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
         setServices(prev => prev.map(service => 
           service.id === serviceId 
             ? { 
-                ...service, 
-                status: action === 'stop' ? 'stopped' : 'running',
-                lastRestart: action === 'restart' ? new Date() : service.lastRestart,
-                uptime: action === 'restart' ? 0 : service.uptime
-              }
+              ...service, 
+              status: action === 'stop' ? 'stopped' : 'running',
+              lastRestart: action === 'restart' ? new Date() : service.lastRestart,
+              uptime: action === 'restart' ? 0 : service.uptime
+            }
             : service
         ));
       }, 2000);

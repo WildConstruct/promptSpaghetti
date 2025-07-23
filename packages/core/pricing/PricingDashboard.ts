@@ -246,7 +246,7 @@ export class PricingDashboard extends EventEmitter {
     productionTrends: Array<{ type: string; volume: number; avgPrice: number }>;
     seasonalPerformance: Array<{ season: string; multiplier: number; revenue: number }>;
     contentTypeAnalysis: Array<{ type: string; demand: number; pricing: number }>;
-  } {
+    } {
     return {
       studioSegments: Object.entries(this.metrics.studioTierBreakdown).map(([segment, revenue]) => ({
         segment,
@@ -364,7 +364,7 @@ export class PricingDashboard extends EventEmitter {
       const models = this.getAllModels();
       let totalRevenue = 0;
       let totalCalculations = 0;
-      let revenuePerModel: Record<string, number> = {};
+      const revenuePerModel: Record<string, number> = {};
       
       for (const model of models) {
         const analytics = this.optimizer.getAnalytics(model.id);

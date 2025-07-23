@@ -64,15 +64,15 @@ export class ConstraintValidator {
       
       if (result) {
         switch (constraint.enforcement) {
-          case 'strict':
-            violations.push(result as ConstraintViolation);
-            break;
-          case 'warning':
-            warnings.push(result as ConstraintWarning);
-            break;
-          case 'suggestion':
-            suggestions.push(result as ConstraintSuggestion);
-            break;
+        case 'strict':
+          violations.push(result as ConstraintViolation);
+          break;
+        case 'warning':
+          warnings.push(result as ConstraintWarning);
+          break;
+        case 'suggestion':
+          suggestions.push(result as ConstraintSuggestion);
+          break;
         }
       }
     }
@@ -142,33 +142,33 @@ export class ConstraintValidator {
     
     // Apply constraint-specific logic based on rule type
     switch (constraint.rule) {
-      case 'era_compatibility':
-        violatingNodes.push(...this.checkEraCompatibility(constraint, nodes));
-        break;
+    case 'era_compatibility':
+      violatingNodes.push(...this.checkEraCompatibility(constraint, nodes));
+      break;
       
-      case 'social_class_appropriateness':
-        violatingNodes.push(...this.checkSocialClassAppropriateness(constraint, nodes));
-        break;
+    case 'social_class_appropriateness':
+      violatingNodes.push(...this.checkSocialClassAppropriateness(constraint, nodes));
+      break;
       
-      case 'material_availability':
-        violatingNodes.push(...this.checkMaterialAvailability(constraint, nodes));
-        break;
+    case 'material_availability':
+      violatingNodes.push(...this.checkMaterialAvailability(constraint, nodes));
+      break;
       
-      case 'cultural_appropriateness':
-        violatingNodes.push(...this.checkCulturalAppropriateness(constraint, nodes));
-        break;
+    case 'cultural_appropriateness':
+      violatingNodes.push(...this.checkCulturalAppropriateness(constraint, nodes));
+      break;
       
-      case 'temporal_consistency':
-        violatingNodes.push(...this.checkTemporalConsistency(constraint, nodes));
-        break;
+    case 'temporal_consistency':
+      violatingNodes.push(...this.checkTemporalConsistency(constraint, nodes));
+      break;
       
-      case 'regional_authenticity':
-        violatingNodes.push(...this.checkRegionalAuthenticity(constraint, nodes));
-        break;
+    case 'regional_authenticity':
+      violatingNodes.push(...this.checkRegionalAuthenticity(constraint, nodes));
+      break;
 
-      default:
-        // Generic constraint evaluation
-        violatingNodes.push(...this.evaluateGenericConstraint(constraint, nodes));
+    default:
+      // Generic constraint evaluation
+      violatingNodes.push(...this.evaluateGenericConstraint(constraint, nodes));
     }
 
     if (violatingNodes.length === 0) {
@@ -182,23 +182,23 @@ export class ConstraintValidator {
     };
 
     switch (constraint.enforcement) {
-      case 'strict':
-        return {
-          ...baseResult,
-          severity: 'major' as const
-        };
+    case 'strict':
+      return {
+        ...baseResult,
+        severity: 'major' as const
+      };
       
-      case 'warning':
-        return {
-          ...baseResult,
-          historical_context: constraint.historical_basis
-        };
+    case 'warning':
+      return {
+        ...baseResult,
+        historical_context: constraint.historical_basis
+      };
       
-      case 'suggestion':
-        return {
-          ...baseResult,
-          suggested_alternatives: this.generateAlternatives(constraint, nodes)
-        };
+    case 'suggestion':
+      return {
+        ...baseResult,
+        suggested_alternatives: this.generateAlternatives(constraint, nodes)
+      };
     }
 
     return null;
@@ -337,7 +337,7 @@ export class ConstraintValidator {
     if (nodes.length < 2) return violatingNodes;
 
     // Find the most restrictive era overlap
-    let commonPeriod = { start: -Infinity, end: Infinity };
+    const commonPeriod = { start: -Infinity, end: Infinity };
     
     for (const node of nodes) {
       for (const era of node.metadata.era) {
@@ -406,21 +406,21 @@ export class ConstraintValidator {
     const alternatives: string[] = [];
 
     switch (constraint.rule) {
-      case 'era_compatibility':
-        alternatives.push('Use items from a single historical period');
-        alternatives.push('Choose transitional periods for era mixing');
-        break;
+    case 'era_compatibility':
+      alternatives.push('Use items from a single historical period');
+      alternatives.push('Choose transitional periods for era mixing');
+      break;
       
-      case 'social_class_appropriateness':
-        alternatives.push('Select items appropriate for the target social class');
-        alternatives.push('Use simpler materials for lower classes');
-        alternatives.push('Add luxury items for higher social classes');
-        break;
+    case 'social_class_appropriateness':
+      alternatives.push('Select items appropriate for the target social class');
+      alternatives.push('Use simpler materials for lower classes');
+      alternatives.push('Add luxury items for higher social classes');
+      break;
       
-      case 'material_availability':
-        alternatives.push('Use locally available materials');
-        alternatives.push('Consider trade route materials for the period');
-        break;
+    case 'material_availability':
+      alternatives.push('Use locally available materials');
+      alternatives.push('Consider trade route materials for the period');
+      break;
     }
 
     return alternatives;

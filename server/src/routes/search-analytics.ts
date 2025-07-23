@@ -211,7 +211,7 @@ router.get('/health',
       const currentMetrics = await performanceMonitor.getCurrentMetrics();
 
       const overallHealth = healthChecks.every(check => check.status === 'healthy') ? 'healthy' :
-                           healthChecks.some(check => check.status === 'unhealthy') ? 'unhealthy' : 'degraded';
+        healthChecks.some(check => check.status === 'unhealthy') ? 'unhealthy' : 'degraded';
 
       res.json({
         success: true,
@@ -528,7 +528,7 @@ router.get('/dashboard',
       ]);
 
       const overallHealth = healthStatus.every(check => check.status === 'healthy') ? 'healthy' :
-                           healthStatus.some(check => check.status === 'unhealthy') ? 'unhealthy' : 'degraded';
+        healthStatus.some(check => check.status === 'unhealthy') ? 'unhealthy' : 'degraded';
 
       res.json({
         success: true,

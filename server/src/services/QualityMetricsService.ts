@@ -780,15 +780,15 @@ export class QualityMetricsService extends EventEmitter {
       const startDate = new Date();
       
       switch (timeframe) {
-        case 'week':
-          startDate.setDate(endDate.getDate() - 7);
-          break;
-        case 'month':
-          startDate.setMonth(endDate.getMonth() - 1);
-          break;
-        case 'quarter':
-          startDate.setMonth(endDate.getMonth() - 3);
-          break;
+      case 'week':
+        startDate.setDate(endDate.getDate() - 7);
+        break;
+      case 'month':
+        startDate.setMonth(endDate.getMonth() - 1);
+        break;
+      case 'quarter':
+        startDate.setMonth(endDate.getMonth() - 3);
+        break;
       }
       
       const historicalMetrics = await this.getHistoricalMetrics(startDate, endDate, 'day');
@@ -1373,9 +1373,9 @@ export class QualityMetricsService extends EventEmitter {
         resolved_at TIMESTAMP
       )`,
       
-      `CREATE INDEX IF NOT EXISTS idx_quality_metrics_timestamp ON quality_metrics(timestamp)`,
-      `CREATE INDEX IF NOT EXISTS idx_quality_recommendations_category ON quality_recommendations(category)`,
-      `CREATE INDEX IF NOT EXISTS idx_quality_alerts_status ON quality_alerts(status)`
+      'CREATE INDEX IF NOT EXISTS idx_quality_metrics_timestamp ON quality_metrics(timestamp)',
+      'CREATE INDEX IF NOT EXISTS idx_quality_recommendations_category ON quality_recommendations(category)',
+      'CREATE INDEX IF NOT EXISTS idx_quality_alerts_status ON quality_alerts(status)'
     ];
     
     for (const query of queries) {

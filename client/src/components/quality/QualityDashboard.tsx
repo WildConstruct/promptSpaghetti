@@ -79,12 +79,12 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({
   // Get overall status styling
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'text-green-600 bg-green-50';
-      case 'good': return 'text-blue-600 bg-blue-50';
-      case 'fair': return 'text-yellow-600 bg-yellow-50';
-      case 'poor': return 'text-orange-600 bg-orange-50';
-      case 'critical': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
+    case 'excellent': return 'text-green-600 bg-green-50';
+    case 'good': return 'text-blue-600 bg-blue-50';
+    case 'fair': return 'text-yellow-600 bg-yellow-50';
+    case 'poor': return 'text-orange-600 bg-orange-50';
+    case 'critical': return 'text-red-600 bg-red-50';
+    default: return 'text-gray-600 bg-gray-50';
     }
   };
   
@@ -98,9 +98,9 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({
   
   const getTrendIcon = (direction: 'improving' | 'stable' | 'degrading') => {
     switch (direction) {
-      case 'improving': return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'degrading': return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default: return <TrendingUp className="w-4 h-4 text-gray-500" />;
+    case 'improving': return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case 'degrading': return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default: return <TrendingUp className="w-4 h-4 text-gray-500" />;
     }
   };
   

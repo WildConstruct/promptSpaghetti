@@ -619,7 +619,7 @@ describe('Performance Test Suite - E18', () => {
       const avgResponseTime = results.reduce((sum, r) => sum + r.duration, 0) / results.length;
       const maxResponseTime = Math.max(...results.map(r => r.duration));
       
-      console.log(`Concurrent Load Test Results:`);
+      console.log('Concurrent Load Test Results:');
       console.log(`- Total time: ${totalTime.toFixed(2)}ms`);
       console.log(`- Average response: ${avgResponseTime.toFixed(2)}ms`);
       console.log(`- Max response: ${maxResponseTime.toFixed(2)}ms`);

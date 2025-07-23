@@ -641,8 +641,8 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = ({
                       <span style={{
                         padding: '2px 6px',
                         backgroundColor: permission.scope === 'global' ? '#ffc107' : 
-                                       permission.scope === 'organization' ? '#28a745' :
-                                       permission.scope === 'team' ? '#17a2b8' : '#6c757d',
+                          permission.scope === 'organization' ? '#28a745' :
+                            permission.scope === 'team' ? '#17a2b8' : '#6c757d',
                         color: 'white',
                         borderRadius: '10px',
                         fontSize: '10px'

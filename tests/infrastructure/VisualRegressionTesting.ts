@@ -326,29 +326,29 @@ export class VisualRegressionTester {
 
     for (const action of actions) {
       switch (action.type) {
-        case 'click':
-          if (action.selector) {
-            await page.click(action.selector);
-          }
-          break;
-        case 'hover':
-          if (action.selector) {
-            await page.hover(action.selector);
-          }
-          break;
-        case 'scroll':
-          if (action.selector) {
-            await page.locator(action.selector).scrollIntoViewIfNeeded();
-          }
-          break;
-        case 'type':
-          if (action.selector && action.text) {
-            await page.fill(action.selector, action.text);
-          }
-          break;
-        case 'wait':
-          await page.waitForTimeout(action.delay || 1000);
-          break;
+      case 'click':
+        if (action.selector) {
+          await page.click(action.selector);
+        }
+        break;
+      case 'hover':
+        if (action.selector) {
+          await page.hover(action.selector);
+        }
+        break;
+      case 'scroll':
+        if (action.selector) {
+          await page.locator(action.selector).scrollIntoViewIfNeeded();
+        }
+        break;
+      case 'type':
+        if (action.selector && action.text) {
+          await page.fill(action.selector, action.text);
+        }
+        break;
+      case 'wait':
+        await page.waitForTimeout(action.delay || 1000);
+        break;
       }
 
       // Small delay between actions

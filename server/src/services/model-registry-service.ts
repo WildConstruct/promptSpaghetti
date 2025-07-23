@@ -19,11 +19,11 @@ const ModelMetadataSchema = z.object({
   description: z.string().optional(),
   modelType: z.enum(
     ['language_model',
-    'vision_model',
-    'multimodal',
-    'embedding_model',
-    'classification',
-    'regression']
+      'vision_model',
+      'multimodal',
+      'embedding_model',
+      'classification',
+      'regression']
   ),
   framework: z.enum(['pytorch', 'tensorflow', 'jax', 'onnx', 'huggingface', 'custom']),
   version: z.string(),
@@ -434,28 +434,28 @@ export class ModelRegistryService {
         let aValue: any, bValue: any;
 
         switch (options.sortBy) {
-          case 'name':
-            aValue = a.name;
-            bValue = b.name;
-            break;
-          case 'createdAt':
-            aValue = new Date(a.createdAt);
-            bValue = new Date(b.createdAt);
-            break;
-          case 'updatedAt':
-            aValue = new Date(a.updatedAt);
-            bValue = new Date(b.updatedAt);
-            break;
-          case 'accuracy':
-            aValue = a.performanceMetrics?.accuracy || 0;
-            bValue = b.performanceMetrics?.accuracy || 0;
-            break;
-          case 'size':
-            aValue = a.size || 0;
-            bValue = b.size || 0;
-            break;
-          default:
-            return 0;
+        case 'name':
+          aValue = a.name;
+          bValue = b.name;
+          break;
+        case 'createdAt':
+          aValue = new Date(a.createdAt);
+          bValue = new Date(b.createdAt);
+          break;
+        case 'updatedAt':
+          aValue = new Date(a.updatedAt);
+          bValue = new Date(b.updatedAt);
+          break;
+        case 'accuracy':
+          aValue = a.performanceMetrics?.accuracy || 0;
+          bValue = b.performanceMetrics?.accuracy || 0;
+          break;
+        case 'size':
+          aValue = a.size || 0;
+          bValue = b.size || 0;
+          break;
+        default:
+          return 0;
         }
 
         const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;

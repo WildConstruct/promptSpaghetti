@@ -100,7 +100,7 @@ describe('TransactionTrackingService', () => {
 
   beforeEach(() => {
     mockDb = {
-      query: jest.fn<unknown[], unknown>(),
+      query: jest.fn<unknown[], unknown>()
     } as any;
     MockDatabase.mockImplementation(() => mockDb);
     service = new TransactionTrackingService(mockDb);
@@ -195,14 +195,14 @@ describe('TransactionTrackingService', () => {
           id: 'tx_1',
           status: 'succeeded',
           amount_cents: 5000,
-          total_count: '2',
+          total_count: '2'
           // ... other required fields
         },
         {
           id: 'tx_2',
           status: 'failed',
           amount_cents: 7500,
-          total_count: '2',
+          total_count: '2'
           // ... other required fields
         }
       ]
@@ -302,7 +302,7 @@ describe('TransactionTrackingService', () => {
     it('should handle pagination correctly', async () => {
       const query: TransactionSearchQuery = {
         page: 3,
-        pageSize: 25,
+        pageSize: 25
       };
 
       await service.searchTransactions(query);
@@ -492,10 +492,10 @@ describe('TransactionTrackingService', () => {
         expect.stringContaining('INSERT INTO transaction_admin_flags'),
         expect.arrayContaining(
           ['tx_test_123',
-          'high_risk',
-          'high',
-          'Unusual transaction pattern detected',
-          'admin_456']
+            'high_risk',
+            'high',
+            'Unusual transaction pattern detected',
+            'admin_456']
         )
       );
     });
@@ -622,7 +622,7 @@ describe('TransactionTrackingService', () => {
           buyer_name: `User ${i}`,
           seller_name: `Creator ${i}`,
           template_title: `Template ${i}`,
-          created_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
           // ... other required fields with default values
         }))
       };
@@ -662,7 +662,7 @@ describe('TransactionTrackingService', () => {
     it('should handle malformed data gracefully', async () => {
       const malformedResult = {
         rows: [{
-          id: 'tx_malformed',
+          id: 'tx_malformed'
           // Missing required fields
         }]
       };
@@ -682,7 +682,7 @@ describe('TransactionTrackingService', () => {
       const largeResult = {
         rows: Array.from({ length: 1000 }, (_, i) => ({
           id: `tx_${i}`,
-          total_count: '1000',
+          total_count: '1000'
           // ... minimal required fields
         }))
       };
@@ -705,7 +705,7 @@ describe('TransactionTrackingService Integration', () => {
 
   beforeEach(() => {
     mockDb = {
-      query: jest.fn<unknown[], unknown>(),
+      query: jest.fn<unknown[], unknown>()
     } as any;
     service = new TransactionTrackingService(mockDb);
   });

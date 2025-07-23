@@ -281,24 +281,24 @@ export class CollaborativeSync extends EventEmitter {
   private async handleRemoteMessage(message: CollaborativeMessage): Promise<void> {
     try {
       switch (message.type) {
-        case 'GRAPH_MUTATION':
-          await this.handleRemoteMutation(message);
-          break;
+      case 'GRAPH_MUTATION':
+        await this.handleRemoteMutation(message);
+        break;
           
-        case 'CURSOR_UPDATE':
-          await this.handleCursorUpdate(message);
-          break;
+      case 'CURSOR_UPDATE':
+        await this.handleCursorUpdate(message);
+        break;
           
-        case 'SELECTION_CHANGE':
-          await this.handleSelectionChange(message);
-          break;
+      case 'SELECTION_CHANGE':
+        await this.handleSelectionChange(message);
+        break;
           
-        case 'PRESENCE_UPDATE':
-          await this.handlePresenceUpdate(message);
-          break;
+      case 'PRESENCE_UPDATE':
+        await this.handlePresenceUpdate(message);
+        break;
           
-        default:
-          console.warn('Unknown collaborative message type:', message.type);
+      default:
+        console.warn('Unknown collaborative message type:', message.type);
       }
     } catch (error) {
       this.emit('message_handling_error', { message, error });

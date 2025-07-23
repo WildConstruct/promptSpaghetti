@@ -233,7 +233,7 @@ export class CliValidator {
         continue;
       }
       
-      if (char === "'" && !inDoubleQuote) {
+      if (char === '\'' && !inDoubleQuote) {
         inSingleQuote = !inSingleQuote;
         continue;
       }
@@ -507,7 +507,7 @@ export class CliValidator {
         continue;
       }
       
-      if (char === "'") singleQuotes++;
+      if (char === '\'') singleQuotes++;
       if (char === '"') doubleQuotes++;
     }
     
@@ -523,7 +523,7 @@ export class CliValidator {
     let quoteChar = '';
     
     for (const char of line) {
-      if (!inQuotes && (char === '"' || char === "'")) {
+      if (!inQuotes && (char === '"' || char === '\'')) {
         inQuotes = true;
         quoteChar = char;
         continue;

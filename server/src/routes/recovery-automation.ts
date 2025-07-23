@@ -133,14 +133,14 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           trigger_type: { 
             type: 'string', 
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
-                   'security_incident', 'compliance_violation', 'scheduled_maintenance', 
-                   'manual_trigger', 'cascade_failure']
+              'security_incident', 'compliance_violation', 'scheduled_maintenance', 
+              'manual_trigger', 'cascade_failure']
           },
           trigger_conditions: { type: 'object' },
           recovery_strategy: { 
             type: 'string', 
             enum: ['immediate_rollback', 'selective_recovery', 'phased_recovery',
-                   'full_system_recovery', 'failover_recovery', 'hybrid_recovery']
+              'full_system_recovery', 'failover_recovery', 'hybrid_recovery']
           },
           urgency: { 
             type: 'string', 
@@ -302,8 +302,8 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           trigger_type: { 
             type: 'string', 
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
-                   'security_incident', 'compliance_violation', 'scheduled_maintenance', 
-                   'manual_trigger', 'cascade_failure']
+              'security_incident', 'compliance_violation', 'scheduled_maintenance', 
+              'manual_trigger', 'cascade_failure']
           },
           urgency: { 
             type: 'string', 
@@ -382,8 +382,8 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           trigger_type: { 
             type: 'string', 
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
-                   'security_incident', 'compliance_violation', 'scheduled_maintenance', 
-                   'manual_trigger', 'cascade_failure']
+              'security_incident', 'compliance_violation', 'scheduled_maintenance', 
+              'manual_trigger', 'cascade_failure']
           },
           trigger_details: {
             type: 'object',
@@ -502,13 +502,13 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           status: { 
             type: 'string', 
             enum: ['monitoring', 'analyzing', 'preparing', 'executing', 'validating',
-                   'completed', 'failed', 'requires_intervention', 'cancelled']
+              'completed', 'failed', 'requires_intervention', 'cancelled']
           },
           trigger_type: { 
             type: 'string', 
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
-                   'security_incident', 'compliance_violation', 'scheduled_maintenance', 
-                   'manual_trigger', 'cascade_failure']
+              'security_incident', 'compliance_violation', 'scheduled_maintenance', 
+              'manual_trigger', 'cascade_failure']
           },
           urgency: { 
             type: 'string', 

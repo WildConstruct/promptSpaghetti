@@ -87,7 +87,7 @@ export class UTDGManager {
       },
       limit: 20,
       min_authenticity: config.historical_accuracy === 'strict' ? 0.8 : 
-                        config.historical_accuracy === 'moderate' ? 0.6 : 0.4
+        config.historical_accuracy === 'moderate' ? 0.6 : 0.4
     };
 
     // Query for relevant content
@@ -128,66 +128,66 @@ export class UTDGManager {
     let config: ContentGenerationConfig;
 
     switch (scenario) {
-      case 'court_scene':
-        config = {
-          era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-          region: 'France',
-          social_class: 'noble',
-          scenario: 'ceremonial',
-          gender: 'mixed',
-          age_groups: ['adult'],
-          variation_level: 'high',
-          historical_accuracy: 'strict',
-          creativity_factor: 0.7,
-          prefer_common_items: false
-        };
-        break;
+    case 'court_scene':
+      config = {
+        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+        region: 'France',
+        social_class: 'noble',
+        scenario: 'ceremonial',
+        gender: 'mixed',
+        age_groups: ['adult'],
+        variation_level: 'high',
+        historical_accuracy: 'strict',
+        creativity_factor: 0.7,
+        prefer_common_items: false
+      };
+      break;
 
-      case 'village_life':
-        config = {
-          era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-          region: 'England',
-          social_class: 'peasant',
-          scenario: 'daily_life',
-          gender: 'mixed',
-          age_groups: ['adult', 'child'],
-          variation_level: 'medium',
-          historical_accuracy: 'moderate',
-          creativity_factor: 0.5,
-          prefer_common_items: true
-        };
-        break;
+    case 'village_life':
+      config = {
+        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+        region: 'England',
+        social_class: 'peasant',
+        scenario: 'daily_life',
+        gender: 'mixed',
+        age_groups: ['adult', 'child'],
+        variation_level: 'medium',
+        historical_accuracy: 'moderate',
+        creativity_factor: 0.5,
+        prefer_common_items: true
+      };
+      break;
 
-      case 'monastery':
-        config = {
-          era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-          social_class: 'clergy',
-          scenario: 'religious',
-          gender: 'male',
-          age_groups: ['adult'],
-          variation_level: 'low',
-          historical_accuracy: 'strict',
-          creativity_factor: 0.3,
-          prefer_common_items: true
-        };
-        break;
+    case 'monastery':
+      config = {
+        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+        social_class: 'clergy',
+        scenario: 'religious',
+        gender: 'male',
+        age_groups: ['adult'],
+        variation_level: 'low',
+        historical_accuracy: 'strict',
+        creativity_factor: 0.3,
+        prefer_common_items: true
+      };
+      break;
 
-      case 'market_day':
-        config = {
-          era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-          social_class: 'artisan',
-          scenario: 'daily_life',
-          gender: 'mixed',
-          age_groups: ['adult'],
-          variation_level: 'high',
-          historical_accuracy: 'moderate',
-          creativity_factor: 0.6,
-          prefer_common_items: true
-        };
-        break;
+    case 'market_day':
+      config = {
+        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+        social_class: 'artisan',
+        scenario: 'daily_life',
+        gender: 'mixed',
+        age_groups: ['adult'],
+        variation_level: 'high',
+        historical_accuracy: 'moderate',
+        creativity_factor: 0.6,
+        prefer_common_items: true
+      };
+      break;
 
-      default:
-        throw new Error(`Unknown medieval scenario: ${scenario}`);
+    default:
+      throw new Error(`Unknown medieval scenario: ${scenario}`);
     }
 
     return this.generateHistoricalContentSync(config);
@@ -447,12 +447,12 @@ export class UTDGManager {
   // Helper methods for content generation and validation
   private getRelevantNodeTypes(scenario: string): any {
     switch (scenario) {
-      case 'daily_life': return ['garment', 'accessory', 'tool'];
-      case 'ceremonial': return ['garment', 'decoration', 'accessory'];
-      case 'military': return ['garment', 'accessory', 'tool'];
-      case 'religious': return ['garment', 'decoration'];
-      case 'artistic': return ['decoration', 'pattern', 'texture'];
-      default: return ['garment', 'material', 'accessory'];
+    case 'daily_life': return ['garment', 'accessory', 'tool'];
+    case 'ceremonial': return ['garment', 'decoration', 'accessory'];
+    case 'military': return ['garment', 'accessory', 'tool'];
+    case 'religious': return ['garment', 'decoration'];
+    case 'artistic': return ['decoration', 'pattern', 'texture'];
+    default: return ['garment', 'material', 'accessory'];
     }
   }
 

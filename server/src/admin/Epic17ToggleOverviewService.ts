@@ -627,11 +627,11 @@ export class Epic17ToggleOverviewService extends EventEmitter {
       const params: any[] = [userId];
       
       if (dashboardId) {
-        query += ` AND dashboard_id = $2`;
+        query += ' AND dashboard_id = $2';
         params.push(dashboardId);
       }
       
-      query += ` ORDER BY position->>'x', position->>'y'`;
+      query += ' ORDER BY position->>\'x\', position->>\'y\'';
       
       const result = await this.database.query(query, params);
       
@@ -872,18 +872,18 @@ export class Epic17ToggleOverviewService extends EventEmitter {
     // Calculate health score based on issues
     for (const issue of issues) {
       switch (issue.severity) {
-        case 'critical':
-          healthScore -= 20;
-          break;
-        case 'high':
-          healthScore -= 10;
-          break;
-        case 'medium':
-          healthScore -= 5;
-          break;
-        case 'low':
-          healthScore -= 2;
-          break;
+      case 'critical':
+        healthScore -= 20;
+        break;
+      case 'high':
+        healthScore -= 10;
+        break;
+      case 'medium':
+        healthScore -= 5;
+        break;
+      case 'low':
+        healthScore -= 2;
+        break;
       }
     }
     
@@ -1001,8 +1001,8 @@ export class Epic17ToggleOverviewService extends EventEmitter {
     }
     
     const significance = Math.abs(changePercentage) > 20 ? 'high' : 
-                       Math.abs(changePercentage) > 10 ? 'medium' :
-                       Math.abs(changePercentage) > 5 ? 'low' : 'none';
+      Math.abs(changePercentage) > 10 ? 'medium' :
+        Math.abs(changePercentage) > 5 ? 'low' : 'none';
     
     return {
       metric,
@@ -1041,26 +1041,26 @@ export class Epic17ToggleOverviewService extends EventEmitter {
     }
     
     switch (timeRange) {
-      case TimeRange.LAST_HOUR:
-        startTime = new Date(endTime.getTime() - 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_4_HOURS:
-        startTime = new Date(endTime.getTime() - 4 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_24_HOURS:
-        startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_7_DAYS:
-        startTime = new Date(endTime.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_30_DAYS:
-        startTime = new Date(endTime.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case TimeRange.LAST_90_DAYS:
-        startTime = new Date(endTime.getTime() - 90 * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000);
+    case TimeRange.LAST_HOUR:
+      startTime = new Date(endTime.getTime() - 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_4_HOURS:
+      startTime = new Date(endTime.getTime() - 4 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_24_HOURS:
+      startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_7_DAYS:
+      startTime = new Date(endTime.getTime() - 7 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_30_DAYS:
+      startTime = new Date(endTime.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
+    case TimeRange.LAST_90_DAYS:
+      startTime = new Date(endTime.getTime() - 90 * 24 * 60 * 60 * 1000);
+      break;
+    default:
+      startTime = new Date(endTime.getTime() - 24 * 60 * 60 * 1000);
     }
     
     return { startTime, endTime };
@@ -1259,25 +1259,25 @@ export class Epic17ToggleOverviewService extends EventEmitter {
     const causes: string[] = [];
     
     switch (metric) {
-      case MetricType.RESPONSE_TIME:
-        if (actualValue > expectedValue) {
-          causes.push('High system load', 'Database performance issues', 'Network latency');
-        } else {
-          causes.push('Caching effectiveness', 'System optimization');
-        }
-        break;
-      case MetricType.ERROR_RATE:
-        if (actualValue > expectedValue) {
-          causes.push('System errors', 'Configuration issues', 'Dependency failures');
-        }
-        break;
-      case MetricType.USAGE_COUNT:
-        if (actualValue > expectedValue) {
-          causes.push('Traffic spike', 'Marketing campaign', 'System issue causing retries');
-        } else {
-          causes.push('System downtime', 'User behavior change', 'Feature deprecation');
-        }
-        break;
+    case MetricType.RESPONSE_TIME:
+      if (actualValue > expectedValue) {
+        causes.push('High system load', 'Database performance issues', 'Network latency');
+      } else {
+        causes.push('Caching effectiveness', 'System optimization');
+      }
+      break;
+    case MetricType.ERROR_RATE:
+      if (actualValue > expectedValue) {
+        causes.push('System errors', 'Configuration issues', 'Dependency failures');
+      }
+      break;
+    case MetricType.USAGE_COUNT:
+      if (actualValue > expectedValue) {
+        causes.push('Traffic spike', 'Marketing campaign', 'System issue causing retries');
+      } else {
+        causes.push('System downtime', 'User behavior change', 'Feature deprecation');
+      }
+      break;
     }
     
     return causes;
@@ -1428,16 +1428,16 @@ export class Epic17ToggleOverviewService extends EventEmitter {
 
   private getMetricColumn(metric: MetricType): string {
     switch (metric) {
-      case MetricType.USAGE_COUNT:
-        return 'access_count';
-      case MetricType.RESPONSE_TIME:
-        return 'average_response_time';
-      case MetricType.ERROR_RATE:
-        return 'error_rate';
-      case MetricType.SUCCESS_RATE:
-        return '(100 - error_rate)';
-      default:
-        return 'total_requests';
+    case MetricType.USAGE_COUNT:
+      return 'access_count';
+    case MetricType.RESPONSE_TIME:
+      return 'average_response_time';
+    case MetricType.ERROR_RATE:
+      return 'error_rate';
+    case MetricType.SUCCESS_RATE:
+      return '(100 - error_rate)';
+    default:
+      return 'total_requests';
     }
   }
 

@@ -256,12 +256,12 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
   // Get status color
   const getStatusColor = useCallback((status: ComplianceStatus) => {
     switch (status) {
-      case ComplianceStatus.COMPLIANT: return themeStyles.success;
-      case ComplianceStatus.PARTIALLY_COMPLIANT: return themeStyles.warning;
-      case ComplianceStatus.NON_COMPLIANT: return themeStyles.error;
-      case ComplianceStatus.IN_REMEDIATION: return themeStyles.primary;
-      case ComplianceStatus.NOT_ASSESSED: return themeStyles.textSecondary;
-      default: return themeStyles.textSecondary;
+    case ComplianceStatus.COMPLIANT: return themeStyles.success;
+    case ComplianceStatus.PARTIALLY_COMPLIANT: return themeStyles.warning;
+    case ComplianceStatus.NON_COMPLIANT: return themeStyles.error;
+    case ComplianceStatus.IN_REMEDIATION: return themeStyles.primary;
+    case ComplianceStatus.NOT_ASSESSED: return themeStyles.textSecondary;
+    default: return themeStyles.textSecondary;
     }
   }, [themeStyles]);
 
@@ -575,7 +575,7 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
             fontSize: '48px',
             fontWeight: 800,
             color: metrics.overallScore >= 90 ? themeStyles.success :
-                   metrics.overallScore >= 75 ? themeStyles.warning : themeStyles.error,
+              metrics.overallScore >= 75 ? themeStyles.warning : themeStyles.error,
             marginBottom: '8px'
           }}>
             {metrics.overallScore}%
@@ -907,8 +907,8 @@ export const ComplianceSecurityDashboard: React.FC<ComplianceSecurityDashboardPr
                       padding: '12px',
                       background: themeStyles.surface,
                       borderLeft: `4px solid ${finding.severity === 'critical' ? themeStyles.critical : 
-                                                finding.severity === 'high' ? themeStyles.error :
-                                                finding.severity === 'medium' ? themeStyles.warning : themeStyles.success}`,
+                        finding.severity === 'high' ? themeStyles.error :
+                          finding.severity === 'medium' ? themeStyles.warning : themeStyles.success}`,
                       borderRadius: '4px',
                       marginBottom: '8px',
                       fontSize: '12px'

@@ -267,7 +267,7 @@ export class ChargebackService {
       // Set closed_at if status is final
       if (this.isFinalStatus(validated.status)) {
         await this.db.query(
-          `UPDATE chargebacks SET closed_at = datetime('now') WHERE id = ?`,
+          'UPDATE chargebacks SET closed_at = datetime(\'now\') WHERE id = ?',
           [chargebackId]
         );
       }

@@ -16,103 +16,103 @@ const command = process.argv[3] || 'check';
 
 // Initialize broadcast file if it doesn't exist
 function initializeBroadcastFile() {
-    if (!fs.existsSync(BROADCAST_FILE)) {
-        const initialData = {
-            messages: [],
-            lastUpdate: new Date().toISOString()
-        };
-        fs.writeFileSync(BROADCAST_FILE, JSON.stringify(initialData, null, 2));
-    }
+  if (!fs.existsSync(BROADCAST_FILE)) {
+    const initialData = {
+      messages: [],
+      lastUpdate: new Date().toISOString()
+    };
+    fs.writeFileSync(BROADCAST_FILE, JSON.stringify(initialData, null, 2));
+  }
 }
 
 // Post a broadcast message
 function postBroadcast(message) {
-    initializeBroadcastFile();
+  initializeBroadcastFile();
     
-    const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
+  const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
     
-    const newMessage = {
-        id: `broadcast-${Date.now()}`,
-        message: message,
-        timestamp: new Date().toISOString(),
-        priority: 'normal',
-        acknowledged: []
-    };
+  const newMessage = {
+    id: `broadcast-${Date.now()}`,
+    message: message,
+    timestamp: new Date().toISOString(),
+    priority: 'normal',
+    acknowledged: []
+  };
     
-    data.messages.unshift(newMessage);
-    data.lastUpdate = new Date().toISOString();
+  data.messages.unshift(newMessage);
+  data.lastUpdate = new Date().toISOString();
     
-    // Keep only last 10 messages
-    data.messages = data.messages.slice(0, 10);
+  // Keep only last 10 messages
+  data.messages = data.messages.slice(0, 10);
     
-    fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
+  fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
     
-    console.log(`📢 Broadcast sent to all agents:`);
-    console.log(`   Message: ${message}`);
-    console.log(`   Time: ${newMessage.timestamp}`);
-    console.log(`   ID: ${newMessage.id}`);
-    console.log(`\nAgents can check with: node src/broadcast-to-agents.js check`);
+  console.log('📢 Broadcast sent to all agents:');
+  console.log(`   Message: ${message}`);
+  console.log(`   Time: ${newMessage.timestamp}`);
+  console.log(`   ID: ${newMessage.id}`);
+  console.log('\nAgents can check with: node src/broadcast-to-agents.js check');
 }
 
 // Check for broadcast messages
 function checkBroadcasts() {
-    initializeBroadcastFile();
+  initializeBroadcastFile();
     
-    const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
+  const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
     
-    if (data.messages.length === 0) {
-        console.log('📭 No broadcast messages');
-        return;
-    }
+  if (data.messages.length === 0) {
+    console.log('📭 No broadcast messages');
+    return;
+  }
     
-    console.log(`📢 Agent Broadcast Messages (${data.messages.length}):`);
-    console.log('=' .repeat(50));
+  console.log(`📢 Agent Broadcast Messages (${data.messages.length}):`);
+  console.log('=' .repeat(50));
     
-    data.messages.forEach((msg, index) => {
-        const age = Math.round((new Date() - new Date(msg.timestamp)) / (1000 * 60));
-        console.log(`${index + 1}. [${msg.id}] (${age}m ago)`);
-        console.log(`   📝 ${msg.message}`);
-        console.log(`   🕐 ${msg.timestamp}`);
-        console.log('');
-    });
+  data.messages.forEach((msg, index) => {
+    const age = Math.round((new Date() - new Date(msg.timestamp)) / (1000 * 60));
+    console.log(`${index + 1}. [${msg.id}] (${age}m ago)`);
+    console.log(`   📝 ${msg.message}`);
+    console.log(`   🕐 ${msg.timestamp}`);
+    console.log('');
+  });
 }
 
 // Acknowledge a message
 function acknowledgeBroadcast(messageId, agentId = 'claude-agent') {
-    initializeBroadcastFile();
+  initializeBroadcastFile();
     
-    const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
-    const message = data.messages.find(m => m.id === messageId);
+  const data = JSON.parse(fs.readFileSync(BROADCAST_FILE, 'utf8'));
+  const message = data.messages.find(m => m.id === messageId);
     
-    if (message && !message.acknowledged.includes(agentId)) {
-        message.acknowledged.push(agentId);
-        fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
-        console.log(`✅ Message ${messageId} acknowledged by ${agentId}`);
-    }
+  if (message && !message.acknowledged.includes(agentId)) {
+    message.acknowledged.push(agentId);
+    fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
+    console.log(`✅ Message ${messageId} acknowledged by ${agentId}`);
+  }
 }
 
 // Clear old messages
 function clearBroadcasts() {
-    const data = {
-        messages: [],
-        lastUpdate: new Date().toISOString()
-    };
-    fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
-    console.log('🗑️  All broadcast messages cleared');
+  const data = {
+    messages: [],
+    lastUpdate: new Date().toISOString()
+  };
+  fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
+  console.log('🗑️  All broadcast messages cleared');
 }
 
 // Main execution
 if (command === 'check') {
-    checkBroadcasts();
+  checkBroadcasts();
 } else if (command === 'clear') {
-    clearBroadcasts();
+  clearBroadcasts();
 } else if (command === 'ack' && message) {
-    const agentId = process.argv[4] || 'claude-agent';
-    acknowledgeBroadcast(message, agentId);
+  const agentId = process.argv[4] || 'claude-agent';
+  acknowledgeBroadcast(message, agentId);
 } else if (message) {
-    postBroadcast(message);
+  postBroadcast(message);
 } else {
-    console.log(`📢 Agent Broadcasting System
+  console.log(`📢 Agent Broadcasting System
 
 Usage:
   node src/broadcast-to-agents.js "message"     # Send broadcast to all agents

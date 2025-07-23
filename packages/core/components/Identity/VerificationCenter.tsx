@@ -63,11 +63,11 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
 
   const getTrustTierColor = (tier?: string) => {
     switch (tier) {
-      case 'expert': return 'text-purple-600 bg-purple-100';
-      case 'professional': return 'text-blue-600 bg-blue-100';
-      case 'verified': return 'text-green-600 bg-green-100';
-      case 'basic': return 'text-yellow-600 bg-yellow-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'expert': return 'text-purple-600 bg-purple-100';
+    case 'professional': return 'text-blue-600 bg-blue-100';
+    case 'verified': return 'text-green-600 bg-green-100';
+    case 'basic': return 'text-yellow-600 bg-yellow-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -98,24 +98,24 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
     let result;
 
     switch (type) {
-      case 'email_verification':
-        result = await submitEmailVerification(data.email);
-        break;
-      case 'phone_verification':
-        result = await submitPhoneVerification(data.phone);
-        break;
-      case 'government_id':
-        result = await submitGovernmentIdVerification(data);
-        break;
-      case 'professional_credentials':
-        result = await submitProfessionalCredentials(data);
-        break;
-      case 'social_media_verification':
-        result = await submitSocialMediaVerification(data);
-        break;
-      case 'portfolio_verification':
-        result = await submitPortfolioVerification(data);
-        break;
+    case 'email_verification':
+      result = await submitEmailVerification(data.email);
+      break;
+    case 'phone_verification':
+      result = await submitPhoneVerification(data.phone);
+      break;
+    case 'government_id':
+      result = await submitGovernmentIdVerification(data);
+      break;
+    case 'professional_credentials':
+      result = await submitProfessionalCredentials(data);
+      break;
+    case 'social_media_verification':
+      result = await submitSocialMediaVerification(data);
+      break;
+    case 'portfolio_verification':
+      result = await submitPortfolioVerification(data);
+      break;
     }
 
     if (result?.success) {
@@ -217,7 +217,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
                 </div>
                 <div className="step-actions">
                   <Badge variant={step.priority === 'high' ? 'destructive' : 
-                                step.priority === 'medium' ? 'default' : 'secondary'}>
+                    step.priority === 'medium' ? 'default' : 'secondary'}>
                     {step.priority} priority
                   </Badge>
                   <Button 
@@ -244,196 +244,196 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
 
   const renderVerificationForm = (type: string) => {
     switch (type) {
-      case 'email_verification':
-        return (
-          <div className="verification-form">
-            <div className="form-group">
-              <label>Email Address</label>
-              <input
-                type="email"
-                value={formData.email || ''}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                placeholder="Enter your email address"
-                className="form-input"
-              />
-            </div>
-            <div className="form-actions">
-              <Button onClick={() => handleVerificationSubmit(type, formData)}>
+    case 'email_verification':
+      return (
+        <div className="verification-form">
+          <div className="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              value={formData.email || ''}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              placeholder="Enter your email address"
+              className="form-input"
+            />
+          </div>
+          <div className="form-actions">
+            <Button onClick={() => handleVerificationSubmit(type, formData)}>
                 Send Verification Email
-              </Button>
-              <Button variant="outline" onClick={() => setActiveStep(null)}>
-                Cancel
-              </Button>
-            </div>
-          </div>
-        );
-
-      case 'phone_verification':
-        return (
-          <div className="verification-form">
-            <div className="form-group">
-              <label>Phone Number</label>
-              <input
-                type="tel"
-                value={formData.phone || ''}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                placeholder="+1 (555) 123-4567"
-                className="form-input"
-              />
-            </div>
-            <div className="form-actions">
-              <Button onClick={() => handleVerificationSubmit(type, formData)}>
-                Send Verification Code
-              </Button>
-              <Button variant="outline" onClick={() => setActiveStep(null)}>
-                Cancel
-              </Button>
-            </div>
-          </div>
-        );
-
-      case 'professional_credentials':
-        return (
-          <div className="verification-form">
-            <div className="form-group">
-              <label>Professional Role</label>
-              <select 
-                value={formData.role || ''} 
-                onChange={(e) => setFormData({...formData, role: e.target.value})}
-                className="form-select"
-              >
-                <option value="">Select your primary role</option>
-                <option value="director">Director</option>
-                <option value="producer">Producer</option>
-                <option value="screenwriter">Screenwriter</option>
-                <option value="cinematographer">Cinematographer</option>
-                <option value="editor">Editor</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            
-            <div className="form-group">
-              <label>Experience Level</label>
-              <select 
-                value={formData.experience || ''} 
-                onChange={(e) => setFormData({...formData, experience: e.target.value})}
-                className="form-select"
-              >
-                <option value="">Select experience level</option>
-                <option value="student">Student</option>
-                <option value="emerging">Emerging Professional</option>
-                <option value="professional">Professional</option>
-                <option value="veteran">Veteran</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Education/Training</label>
-              <textarea
-                value={formData.education || ''}
-                onChange={(e) => setFormData({...formData, education: e.target.value})}
-                placeholder="Describe your film education, training, or relevant experience..."
-                className="form-textarea"
-                rows={4}
-              />
-            </div>
-
-            <div className="form-actions">
-              <Button onClick={() => handleVerificationSubmit(type, {
-                professionalCredentials: {
-                  role: formData.role,
-                  experience: formData.experience,
-                  credentials: [{
-                    type: 'degree',
-                    title: formData.education,
-                    institution: 'User Provided',
-                    year: new Date().getFullYear(),
-                    verificationStatus: 'pending'
-                  }],
-                  portfolio: []
-                }
-              })}>
-                Submit Credentials
-              </Button>
-              <Button variant="outline" onClick={() => setActiveStep(null)}>
-                Cancel
-              </Button>
-            </div>
-          </div>
-        );
-
-      case 'social_media_verification':
-        return (
-          <div className="verification-form">
-            <div className="form-group">
-              <label>LinkedIn Profile</label>
-              <input
-                type="url"
-                value={formData.linkedin || ''}
-                onChange={(e) => setFormData({...formData, linkedin: e.target.value})}
-                placeholder="https://linkedin.com/in/yourprofile"
-                className="form-input"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>IMDb Profile (if available)</label>
-              <input
-                type="url"
-                value={formData.imdb || ''}
-                onChange={(e) => setFormData({...formData, imdb: e.target.value})}
-                placeholder="https://imdb.com/name/nm..."
-                className="form-input"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Professional Website</label>
-              <input
-                type="url"
-                value={formData.website || ''}
-                onChange={(e) => setFormData({...formData, website: e.target.value})}
-                placeholder="https://yourwebsite.com"
-                className="form-input"
-              />
-            </div>
-
-            <div className="form-actions">
-              <Button onClick={() => handleVerificationSubmit(type, [
-                ...(formData.linkedin ? [{
-                  platform: 'linkedin',
-                  url: formData.linkedin,
-                  verified: false
-                }] : []),
-                ...(formData.imdb ? [{
-                  platform: 'imdb',
-                  url: formData.imdb,
-                  verified: false
-                }] : []),
-                ...(formData.website ? [{
-                  platform: 'website',
-                  url: formData.website,
-                  verified: false
-                }] : [])
-              ])}>
-                Verify Profiles
-              </Button>
-              <Button variant="outline" onClick={() => setActiveStep(null)}>
-                Cancel
-              </Button>
-            </div>
-          </div>
-        );
-
-      default:
-        return (
-          <div className="verification-form">
-            <p>Verification form for {type} is coming soon.</p>
+            </Button>
             <Button variant="outline" onClick={() => setActiveStep(null)}>
-              Close
+                Cancel
             </Button>
           </div>
-        );
+        </div>
+      );
+
+    case 'phone_verification':
+      return (
+        <div className="verification-form">
+          <div className="form-group">
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              value={formData.phone || ''}
+              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              placeholder="+1 (555) 123-4567"
+              className="form-input"
+            />
+          </div>
+          <div className="form-actions">
+            <Button onClick={() => handleVerificationSubmit(type, formData)}>
+                Send Verification Code
+            </Button>
+            <Button variant="outline" onClick={() => setActiveStep(null)}>
+                Cancel
+            </Button>
+          </div>
+        </div>
+      );
+
+    case 'professional_credentials':
+      return (
+        <div className="verification-form">
+          <div className="form-group">
+            <label>Professional Role</label>
+            <select 
+              value={formData.role || ''} 
+              onChange={(e) => setFormData({...formData, role: e.target.value})}
+              className="form-select"
+            >
+              <option value="">Select your primary role</option>
+              <option value="director">Director</option>
+              <option value="producer">Producer</option>
+              <option value="screenwriter">Screenwriter</option>
+              <option value="cinematographer">Cinematographer</option>
+              <option value="editor">Editor</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+            
+          <div className="form-group">
+            <label>Experience Level</label>
+            <select 
+              value={formData.experience || ''} 
+              onChange={(e) => setFormData({...formData, experience: e.target.value})}
+              className="form-select"
+            >
+              <option value="">Select experience level</option>
+              <option value="student">Student</option>
+              <option value="emerging">Emerging Professional</option>
+              <option value="professional">Professional</option>
+              <option value="veteran">Veteran</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Education/Training</label>
+            <textarea
+              value={formData.education || ''}
+              onChange={(e) => setFormData({...formData, education: e.target.value})}
+              placeholder="Describe your film education, training, or relevant experience..."
+              className="form-textarea"
+              rows={4}
+            />
+          </div>
+
+          <div className="form-actions">
+            <Button onClick={() => handleVerificationSubmit(type, {
+              professionalCredentials: {
+                role: formData.role,
+                experience: formData.experience,
+                credentials: [{
+                  type: 'degree',
+                  title: formData.education,
+                  institution: 'User Provided',
+                  year: new Date().getFullYear(),
+                  verificationStatus: 'pending'
+                }],
+                portfolio: []
+              }
+            })}>
+                Submit Credentials
+            </Button>
+            <Button variant="outline" onClick={() => setActiveStep(null)}>
+                Cancel
+            </Button>
+          </div>
+        </div>
+      );
+
+    case 'social_media_verification':
+      return (
+        <div className="verification-form">
+          <div className="form-group">
+            <label>LinkedIn Profile</label>
+            <input
+              type="url"
+              value={formData.linkedin || ''}
+              onChange={(e) => setFormData({...formData, linkedin: e.target.value})}
+              placeholder="https://linkedin.com/in/yourprofile"
+              className="form-input"
+            />
+          </div>
+            
+          <div className="form-group">
+            <label>IMDb Profile (if available)</label>
+            <input
+              type="url"
+              value={formData.imdb || ''}
+              onChange={(e) => setFormData({...formData, imdb: e.target.value})}
+              placeholder="https://imdb.com/name/nm..."
+              className="form-input"
+            />
+          </div>
+            
+          <div className="form-group">
+            <label>Professional Website</label>
+            <input
+              type="url"
+              value={formData.website || ''}
+              onChange={(e) => setFormData({...formData, website: e.target.value})}
+              placeholder="https://yourwebsite.com"
+              className="form-input"
+            />
+          </div>
+
+          <div className="form-actions">
+            <Button onClick={() => handleVerificationSubmit(type, [
+              ...(formData.linkedin ? [{
+                platform: 'linkedin',
+                url: formData.linkedin,
+                verified: false
+              }] : []),
+              ...(formData.imdb ? [{
+                platform: 'imdb',
+                url: formData.imdb,
+                verified: false
+              }] : []),
+              ...(formData.website ? [{
+                platform: 'website',
+                url: formData.website,
+                verified: false
+              }] : [])
+            ])}>
+                Verify Profiles
+            </Button>
+            <Button variant="outline" onClick={() => setActiveStep(null)}>
+                Cancel
+            </Button>
+          </div>
+        </div>
+      );
+
+    default:
+      return (
+        <div className="verification-form">
+          <p>Verification form for {type} is coming soon.</p>
+          <Button variant="outline" onClick={() => setActiveStep(null)}>
+              Close
+          </Button>
+        </div>
+      );
     }
   };
 

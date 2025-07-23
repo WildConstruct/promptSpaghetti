@@ -584,11 +584,11 @@ export class KPIDashboard extends EventEmitter {
    */
   private statusToScore(status: string): number {
     switch (status) {
-      case 'excellent': return 100;
-      case 'good': return 80;
-      case 'warning': return 60;
-      case 'critical': return 30;
-      default: return 70;
+    case 'excellent': return 100;
+    case 'good': return 80;
+    case 'warning': return 60;
+    case 'critical': return 30;
+    default: return 70;
     }
   }
 
@@ -655,20 +655,20 @@ export class KPIDashboard extends EventEmitter {
    */
   private generateWidgetData(widget: DashboardWidget): any {
     switch (widget.type) {
-      case 'gauge':
-        return this.generateGaugeData(widget);
-      case 'metric':
-        return this.generateMetricData(widget);
-      case 'chart':
-        return this.generateChartData(widget);
-      case 'table':
-        return this.generateTableData(widget);
-      case 'alert':
-        return this.generateAlertData(widget);
-      case 'trend':
-        return this.generateTrendData(widget);
-      default:
-        return null;
+    case 'gauge':
+      return this.generateGaugeData(widget);
+    case 'metric':
+      return this.generateMetricData(widget);
+    case 'chart':
+      return this.generateChartData(widget);
+    case 'table':
+      return this.generateTableData(widget);
+    case 'alert':
+      return this.generateAlertData(widget);
+    case 'trend':
+      return this.generateTrendData(widget);
+    default:
+      return null;
     }
   }
 
@@ -676,26 +676,26 @@ export class KPIDashboard extends EventEmitter {
     const metrics = this.getDashboardMetrics();
     
     switch (widget.id) {
-      case 'performance-score':
-        return {
-          value: metrics.overview.averageScore,
-          min: 0,
-          max: 100,
-          thresholds: [50, 70, 90],
-          status: metrics.overview.averageScore >= 90 ? 'excellent' : 
-                  metrics.overview.averageScore >= 70 ? 'good' :
-                  metrics.overview.averageScore >= 50 ? 'warning' : 'critical'
-        };
-      case 'system-health':
-        const healthScore = (metrics.overview.healthyKPIs / metrics.overview.monitoredKPIs) * 100;
-        return {
-          value: Math.round(healthScore),
-          min: 0,
-          max: 100,
-          thresholds: [70, 85, 95]
-        };
-      default:
-        return { value: 0, min: 0, max: 100 };
+    case 'performance-score':
+      return {
+        value: metrics.overview.averageScore,
+        min: 0,
+        max: 100,
+        thresholds: [50, 70, 90],
+        status: metrics.overview.averageScore >= 90 ? 'excellent' : 
+          metrics.overview.averageScore >= 70 ? 'good' :
+            metrics.overview.averageScore >= 50 ? 'warning' : 'critical'
+      };
+    case 'system-health':
+      const healthScore = (metrics.overview.healthyKPIs / metrics.overview.monitoredKPIs) * 100;
+      return {
+        value: Math.round(healthScore),
+        min: 0,
+        max: 100,
+        thresholds: [70, 85, 95]
+      };
+    default:
+      return { value: 0, min: 0, max: 100 };
     }
   }
 
@@ -703,15 +703,15 @@ export class KPIDashboard extends EventEmitter {
     const metrics = this.getDashboardMetrics();
     
     switch (widget.id) {
-      case 'critical-alerts':
-        return {
-          value: metrics.alerts.critical,
-          format: 'number',
-          color: metrics.alerts.critical > 0 ? 'red' : 'green',
-          change: 0 // Would calculate from historical data
-        };
-      default:
-        return { value: 0 };
+    case 'critical-alerts':
+      return {
+        value: metrics.alerts.critical,
+        format: 'number',
+        color: metrics.alerts.critical > 0 ? 'red' : 'green',
+        change: 0 // Would calculate from historical data
+      };
+    default:
+      return { value: 0 };
     }
   }
 
@@ -726,40 +726,40 @@ export class KPIDashboard extends EventEmitter {
 
   private generateTableData(widget: DashboardWidget): any {
     switch (widget.id) {
-      case 'all-kpis-table':
-        const kpiStatus = this.monitoringService.getCurrentKPIStatus();
-        return {
-          headers: ['KPI', 'Category', 'Status', 'Value', 'Trend'],
-          rows: kpiStatus.map(k => {
-            const kpi = corePerformanceKPIs.find(kpi => kpi.id === k.kpiId);
-            return [
-              kpi?.name || k.kpiId,
-              kpi?.category || 'unknown',
-              k.status,
-              `${k.value}${kpi?.unit || ''}`,
-              k.trend
-            ];
-          })
-        };
-      case 'top-issues':
-        const alerts = this.monitoringService.getActiveAlerts()
-          .sort((a, b) => {
-            const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
-            return severityOrder[b.severity] - severityOrder[a.severity];
-          })
-          .slice(0, 5);
-        return {
-          headers: ['Issue', 'Severity', 'KPI', 'Value', 'Target'],
-          rows: alerts.map(alert => [
-            alert.message,
-            alert.severity,
-            alert.kpiName,
-            `${alert.value}`,
-            `${alert.target}`
-          ])
-        };
-      default:
-        return { headers: [], rows: [] };
+    case 'all-kpis-table':
+      const kpiStatus = this.monitoringService.getCurrentKPIStatus();
+      return {
+        headers: ['KPI', 'Category', 'Status', 'Value', 'Trend'],
+        rows: kpiStatus.map(k => {
+          const kpi = corePerformanceKPIs.find(kpi => kpi.id === k.kpiId);
+          return [
+            kpi?.name || k.kpiId,
+            kpi?.category || 'unknown',
+            k.status,
+            `${k.value}${kpi?.unit || ''}`,
+            k.trend
+          ];
+        })
+      };
+    case 'top-issues':
+      const alerts = this.monitoringService.getActiveAlerts()
+        .sort((a, b) => {
+          const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+          return severityOrder[b.severity] - severityOrder[a.severity];
+        })
+        .slice(0, 5);
+      return {
+        headers: ['Issue', 'Severity', 'KPI', 'Value', 'Target'],
+        rows: alerts.map(alert => [
+          alert.message,
+          alert.severity,
+          alert.kpiName,
+          `${alert.value}`,
+          `${alert.target}`
+        ])
+      };
+    default:
+      return { headers: [], rows: [] };
     }
   }
 

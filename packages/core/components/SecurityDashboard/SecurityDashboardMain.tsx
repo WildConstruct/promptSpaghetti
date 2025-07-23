@@ -254,30 +254,30 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({
   // Handle real-time updates
   const handleRealTimeUpdate = useCallback((data: any) => {
     switch (data.type) {
-      case 'security_metrics':
-        setSecurityMetrics(data.payload);
-        break;
-      case 'security_alert':
-        setSecurityAlerts(prev => [data.payload, ...prev.slice(0, 99)]);
-        break;
-      case 'alert_update':
-        setSecurityAlerts(prev => 
-          prev.map(alert => 
-            alert.id === data.payload.id ? { ...alert, ...data.payload } : alert
-          )
-        );
-        break;
-      case 'compliance_update':
-        setComplianceStatus(prev => 
-          prev.map(status => 
-            status.framework === data.payload.framework 
-              ? { ...status, ...data.payload } 
-              : status
-          )
-        );
-        break;
-      default:
-        console.log('Unknown real-time update type:', data.type);
+    case 'security_metrics':
+      setSecurityMetrics(data.payload);
+      break;
+    case 'security_alert':
+      setSecurityAlerts(prev => [data.payload, ...prev.slice(0, 99)]);
+      break;
+    case 'alert_update':
+      setSecurityAlerts(prev => 
+        prev.map(alert => 
+          alert.id === data.payload.id ? { ...alert, ...data.payload } : alert
+        )
+      );
+      break;
+    case 'compliance_update':
+      setComplianceStatus(prev => 
+        prev.map(status => 
+          status.framework === data.payload.framework 
+            ? { ...status, ...data.payload } 
+            : status
+        )
+      );
+      break;
+    default:
+      console.log('Unknown real-time update type:', data.type);
     }
   }, []);
 
@@ -345,125 +345,125 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({
     };
 
     switch (currentDashboardType) {
-      case DashboardType.OPERATIONAL:
-        return (
-          <OperationalSecurityDashboard
-            alerts={securityAlerts}
-            metrics={{
-              alerts: {
-                total: securityAlerts.length,
-                newLast24h: securityAlerts.filter(a => 
-                  Date.now() - a.timestamp.getTime() < 24 * 60 * 60 * 1000
-                ).length,
-                byCategory: securityAlerts.reduce((acc, alert) => {
-                  acc[alert.category] = (acc[alert.category] || 0) + 1;
-                  return acc;
-                }, {} as Record<string, number>),
-                bySeverity: securityAlerts.reduce((acc, alert) => {
-                  acc[alert.severity] = (acc[alert.severity] || 0) + 1;
-                  return acc;
-                }, {} as Record<string, number>),
-                avgResponseTime: 45,
-                slaCompliance: 96
-              },
-              incidents: {
-                active: securityAlerts.filter(a => a.status === 'investigating').length,
-                resolved24h: 12,
-                avgResolutionTime: 180,
-                escalated: securityAlerts.filter(a => a.status === 'escalated').length
-              },
-              system: {
-                overallHealth: 98,
-                componentsOperational: 47,
-                totalComponents: 50,
-                criticalIssues: 2
-              },
-              team: {
-                onlineAnalysts: 8,
-                totalAnalysts: 12,
-                workload: 'normal' as const,
-                avgCaseload: 5.2
-              }
-            }}
-            systemStatus={[
-              { component: 'SIEM', status: 'operational', lastCheck: new Date(), uptime: 99.9, criticalIssues: 0, responseTime: 250 },
-              { component: 'EDR', status: 'operational', lastCheck: new Date(), uptime: 99.8, criticalIssues: 0, responseTime: 180 },
-              { component: 'Firewall', status: 'operational', lastCheck: new Date(), uptime: 100, criticalIssues: 0, responseTime: 45 },
-              { component: 'IDS/IPS', status: 'degraded', lastCheck: new Date(), uptime: 97.5, criticalIssues: 1, responseTime: 450 },
-              { component: 'Email Security', status: 'operational', lastCheck: new Date(), uptime: 99.5, criticalIssues: 0, responseTime: 320 },
-              { component: 'Web Proxy', status: 'operational', lastCheck: new Date(), uptime: 99.7, criticalIssues: 0, responseTime: 120 }
-            ]}
-            threatIntel={[
-              { 
-                feed: 'Threat Intelligence Platform', 
-                lastUpdate: new Date(), 
-                newIndicators: 45, 
-                activeThreats: 12, 
-                confidence: 'high',
-                categories: ['malware', 'phishing', 'c2']
-              },
-              { 
-                feed: 'Commercial Feed', 
-                lastUpdate: new Date(), 
-                newIndicators: 23, 
-                activeThreats: 7, 
-                confidence: 'medium',
-                categories: ['apt', 'ransomware']
-              },
-              { 
-                feed: 'Open Source Intel', 
-                lastUpdate: new Date(), 
-                newIndicators: 67, 
-                activeThreats: 19, 
-                confidence: 'medium',
-                categories: ['indicators', 'campaigns']
-              }
-            ]}
-            {...commonProps}
-          />
-        );
+    case DashboardType.OPERATIONAL:
+      return (
+        <OperationalSecurityDashboard
+          alerts={securityAlerts}
+          metrics={{
+            alerts: {
+              total: securityAlerts.length,
+              newLast24h: securityAlerts.filter(a => 
+                Date.now() - a.timestamp.getTime() < 24 * 60 * 60 * 1000
+              ).length,
+              byCategory: securityAlerts.reduce((acc, alert) => {
+                acc[alert.category] = (acc[alert.category] || 0) + 1;
+                return acc;
+              }, {} as Record<string, number>),
+              bySeverity: securityAlerts.reduce((acc, alert) => {
+                acc[alert.severity] = (acc[alert.severity] || 0) + 1;
+                return acc;
+              }, {} as Record<string, number>),
+              avgResponseTime: 45,
+              slaCompliance: 96
+            },
+            incidents: {
+              active: securityAlerts.filter(a => a.status === 'investigating').length,
+              resolved24h: 12,
+              avgResolutionTime: 180,
+              escalated: securityAlerts.filter(a => a.status === 'escalated').length
+            },
+            system: {
+              overallHealth: 98,
+              componentsOperational: 47,
+              totalComponents: 50,
+              criticalIssues: 2
+            },
+            team: {
+              onlineAnalysts: 8,
+              totalAnalysts: 12,
+              workload: 'normal' as const,
+              avgCaseload: 5.2
+            }
+          }}
+          systemStatus={[
+            { component: 'SIEM', status: 'operational', lastCheck: new Date(), uptime: 99.9, criticalIssues: 0, responseTime: 250 },
+            { component: 'EDR', status: 'operational', lastCheck: new Date(), uptime: 99.8, criticalIssues: 0, responseTime: 180 },
+            { component: 'Firewall', status: 'operational', lastCheck: new Date(), uptime: 100, criticalIssues: 0, responseTime: 45 },
+            { component: 'IDS/IPS', status: 'degraded', lastCheck: new Date(), uptime: 97.5, criticalIssues: 1, responseTime: 450 },
+            { component: 'Email Security', status: 'operational', lastCheck: new Date(), uptime: 99.5, criticalIssues: 0, responseTime: 320 },
+            { component: 'Web Proxy', status: 'operational', lastCheck: new Date(), uptime: 99.7, criticalIssues: 0, responseTime: 120 }
+          ]}
+          threatIntel={[
+            { 
+              feed: 'Threat Intelligence Platform', 
+              lastUpdate: new Date(), 
+              newIndicators: 45, 
+              activeThreats: 12, 
+              confidence: 'high',
+              categories: ['malware', 'phishing', 'c2']
+            },
+            { 
+              feed: 'Commercial Feed', 
+              lastUpdate: new Date(), 
+              newIndicators: 23, 
+              activeThreats: 7, 
+              confidence: 'medium',
+              categories: ['apt', 'ransomware']
+            },
+            { 
+              feed: 'Open Source Intel', 
+              lastUpdate: new Date(), 
+              newIndicators: 67, 
+              activeThreats: 19, 
+              confidence: 'medium',
+              categories: ['indicators', 'campaigns']
+            }
+          ]}
+          {...commonProps}
+        />
+      );
 
-      case DashboardType.EXECUTIVE:
-        return (
-          <ExecutiveSecurityDashboard
-            securityMetrics={securityMetrics}
-            alerts={securityAlerts}
-            complianceStatus={complianceStatus}
-            {...commonProps}
-          />
-        );
+    case DashboardType.EXECUTIVE:
+      return (
+        <ExecutiveSecurityDashboard
+          securityMetrics={securityMetrics}
+          alerts={securityAlerts}
+          complianceStatus={complianceStatus}
+          {...commonProps}
+        />
+      );
 
-      case DashboardType.COMPLIANCE:
-        return (
-          <ComplianceSecurityDashboard
-            complianceStatus={complianceStatus}
-            alerts={securityAlerts.filter(a => a.category === 'policy_violation')}
-            {...commonProps}
-          />
-        );
+    case DashboardType.COMPLIANCE:
+      return (
+        <ComplianceSecurityDashboard
+          complianceStatus={complianceStatus}
+          alerts={securityAlerts.filter(a => a.category === 'policy_violation')}
+          {...commonProps}
+        />
+      );
 
-      case DashboardType.ANALYTICS:
-        return (
-          <SecurityDashboardWorkflow
-            workspaceId={workspaceId}
-            userId={userId}
-            userRole={userRole}
-            dashboardType={currentDashboardType}
-          />
-        );
+    case DashboardType.ANALYTICS:
+      return (
+        <SecurityDashboardWorkflow
+          workspaceId={workspaceId}
+          userId={userId}
+          userRole={userRole}
+          dashboardType={currentDashboardType}
+        />
+      );
 
-      default:
-        return (
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            height: '400px',
-            color: themeStyles.textSecondary 
-          }}>
+    default:
+      return (
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          height: '400px',
+          color: themeStyles.textSecondary 
+        }}>
             Dashboard type not implemented: {currentDashboardType}
-          </div>
-        );
+        </div>
+      );
     }
   };
 
@@ -638,13 +638,13 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({
               <div style={{
                 padding: '6px 12px',
                 background: securityMetrics.riskLevel === 'critical' ? `${themeStyles.critical}20` :
-                           securityMetrics.riskLevel === 'high' ? `${themeStyles.error}20` :
-                           securityMetrics.riskLevel === 'medium' ? `${themeStyles.warning}20` :
-                           `${themeStyles.success}20`,
+                  securityMetrics.riskLevel === 'high' ? `${themeStyles.error}20` :
+                    securityMetrics.riskLevel === 'medium' ? `${themeStyles.warning}20` :
+                      `${themeStyles.success}20`,
                 color: securityMetrics.riskLevel === 'critical' ? themeStyles.critical :
-                       securityMetrics.riskLevel === 'high' ? themeStyles.error :
-                       securityMetrics.riskLevel === 'medium' ? themeStyles.warning :
-                       themeStyles.success,
+                  securityMetrics.riskLevel === 'high' ? themeStyles.error :
+                    securityMetrics.riskLevel === 'medium' ? themeStyles.warning :
+                      themeStyles.success,
                 borderRadius: '6px',
                 fontSize: '12px',
                 fontWeight: 600,

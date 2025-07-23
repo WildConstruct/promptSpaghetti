@@ -404,20 +404,20 @@ export class DatabaseTestManager {
   private async connect(): Promise<void> {
     // Database-specific connection logic
     switch (this.config.type) {
-      case 'sqlite':
-        await this.connectSQLite();
-        break;
-      case 'postgres':
-        await this.connectPostgres();
-        break;
-      case 'mysql':
-        await this.connectMySQL();
-        break;
-      case 'redis':
-        await this.connectRedis();
-        break;
-      default:
-        throw new Error(`Unsupported database type: ${this.config.type}`);
+    case 'sqlite':
+      await this.connectSQLite();
+      break;
+    case 'postgres':
+      await this.connectPostgres();
+      break;
+    case 'mysql':
+      await this.connectMySQL();
+      break;
+    case 'redis':
+      await this.connectRedis();
+      break;
+    default:
+      throw new Error(`Unsupported database type: ${this.config.type}`);
     }
   }
 
@@ -569,18 +569,18 @@ export class DatabaseTestManager {
 
   private generateColumnValue(column: any, index: number): any {
     switch (column.type.toLowerCase()) {
-      case 'integer':
-        return index + 1;
-      case 'varchar':
-      case 'text':
-        return `test_${column.name}_${index}`;
-      case 'timestamp':
-      case 'datetime':
-        return new Date();
-      case 'boolean':
-        return index % 2 === 0;
-      default:
-        return null;
+    case 'integer':
+      return index + 1;
+    case 'varchar':
+    case 'text':
+      return `test_${column.name}_${index}`;
+    case 'timestamp':
+    case 'datetime':
+      return new Date();
+    case 'boolean':
+      return index % 2 === 0;
+    default:
+      return null;
     }
   }
 

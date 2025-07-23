@@ -446,20 +446,20 @@ export class SMSRateLimitingService extends EventEmitter {
 
   private isConfigApplicable(config: RateLimitConfig, message: SMSMessage): boolean {
     switch (config.scope) {
-      case RateLimitScope.GLOBAL:
-        return true;
-      case RateLimitScope.PER_USER:
-        return !!message.userId;
-      case RateLimitScope.PER_PHONE:
-        return !!message.to;
-      case RateLimitScope.PER_TENANT:
-        return !!message.tenantId;
-      case RateLimitScope.PER_IP:
-        return !!message.ipAddress;
-      case RateLimitScope.PER_MESSAGE_TYPE:
-        return true; // All messages have a type
-      default:
-        return false;
+    case RateLimitScope.GLOBAL:
+      return true;
+    case RateLimitScope.PER_USER:
+      return !!message.userId;
+    case RateLimitScope.PER_PHONE:
+      return !!message.to;
+    case RateLimitScope.PER_TENANT:
+      return !!message.tenantId;
+    case RateLimitScope.PER_IP:
+      return !!message.ipAddress;
+    case RateLimitScope.PER_MESSAGE_TYPE:
+      return true; // All messages have a type
+    default:
+      return false;
     }
   }
 
@@ -467,20 +467,20 @@ export class SMSRateLimitingService extends EventEmitter {
     const prefix = `sms_rate_limit:${config.scope}`;
     
     switch (config.scope) {
-      case RateLimitScope.GLOBAL:
-        return `${prefix}:global`;
-      case RateLimitScope.PER_USER:
-        return `${prefix}:user:${message.userId}`;
-      case RateLimitScope.PER_PHONE:
-        return `${prefix}:phone:${message.to}`;
-      case RateLimitScope.PER_TENANT:
-        return `${prefix}:tenant:${message.tenantId}`;
-      case RateLimitScope.PER_IP:
-        return `${prefix}:ip:${message.ipAddress}`;
-      case RateLimitScope.PER_MESSAGE_TYPE:
-        return `${prefix}:type:${message.type}`;
-      default:
-        return `${prefix}:unknown`;
+    case RateLimitScope.GLOBAL:
+      return `${prefix}:global`;
+    case RateLimitScope.PER_USER:
+      return `${prefix}:user:${message.userId}`;
+    case RateLimitScope.PER_PHONE:
+      return `${prefix}:phone:${message.to}`;
+    case RateLimitScope.PER_TENANT:
+      return `${prefix}:tenant:${message.tenantId}`;
+    case RateLimitScope.PER_IP:
+      return `${prefix}:ip:${message.ipAddress}`;
+    case RateLimitScope.PER_MESSAGE_TYPE:
+      return `${prefix}:type:${message.type}`;
+    default:
+      return `${prefix}:unknown`;
     }
   }
 
@@ -490,18 +490,18 @@ export class SMSRateLimitingService extends EventEmitter {
     message: SMSMessage
   ): Promise<RateLimitResult> {
     switch (config.algorithm) {
-      case RateLimitAlgorithm.TOKEN_BUCKET:
-        return await this.evaluateTokenBucket(config, key);
-      case RateLimitAlgorithm.SLIDING_WINDOW:
-        return await this.evaluateSlidingWindow(config, key);
-      case RateLimitAlgorithm.FIXED_WINDOW:
-        return await this.evaluateFixedWindow(config, key);
-      case RateLimitAlgorithm.LEAKY_BUCKET:
-        return await this.evaluateLeakyBucket(config, key);
-      case RateLimitAlgorithm.ADAPTIVE:
-        return await this.evaluateAdaptive(config, key, message);
-      default:
-        throw new Error(`Unsupported rate limit algorithm: ${config.algorithm}`);
+    case RateLimitAlgorithm.TOKEN_BUCKET:
+      return await this.evaluateTokenBucket(config, key);
+    case RateLimitAlgorithm.SLIDING_WINDOW:
+      return await this.evaluateSlidingWindow(config, key);
+    case RateLimitAlgorithm.FIXED_WINDOW:
+      return await this.evaluateFixedWindow(config, key);
+    case RateLimitAlgorithm.LEAKY_BUCKET:
+      return await this.evaluateLeakyBucket(config, key);
+    case RateLimitAlgorithm.ADAPTIVE:
+      return await this.evaluateAdaptive(config, key, message);
+    default:
+      throw new Error(`Unsupported rate limit algorithm: ${config.algorithm}`);
     }
   }
 
@@ -855,14 +855,14 @@ export class SMSRateLimitingService extends EventEmitter {
     if (!data) return 0;
     
     switch (config.algorithm) {
-      case RateLimitAlgorithm.TOKEN_BUCKET:
-        return (config.maxRequests || 0) - (data || 0);
-      case RateLimitAlgorithm.SLIDING_WINDOW:
-        return Array.isArray(data) ? data.length : 0;
-      case RateLimitAlgorithm.FIXED_WINDOW:
-        return data.count || 0;
-      default:
-        return 0;
+    case RateLimitAlgorithm.TOKEN_BUCKET:
+      return (config.maxRequests || 0) - (data || 0);
+    case RateLimitAlgorithm.SLIDING_WINDOW:
+      return Array.isArray(data) ? data.length : 0;
+    case RateLimitAlgorithm.FIXED_WINDOW:
+      return data.count || 0;
+    default:
+      return 0;
     }
   }
 

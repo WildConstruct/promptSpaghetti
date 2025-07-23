@@ -406,8 +406,8 @@ class TestNeedsPrioritizer {
     console.log(`• Total components analyzed: ${prioritizedTasks.length}`);
     console.log(`• Critical security items: ${prioritizedTasks.filter(t => t.riskLevel === 'CRITICAL').length}`);
     console.log(`• High-priority items: ${prioritizedTasks.filter(t => t.riskLevel === 'HIGH').length}`);
-    console.log(`• Estimated timeline: 8 weeks`);
-    console.log(`• Estimated effort: 350 hours`);
+    console.log('• Estimated timeline: 8 weeks');
+    console.log('• Estimated effort: 350 hours');
     
     return {
       prioritizedTasks,
@@ -424,7 +424,7 @@ if (require.main === module) {
   const prioritizer = new TestNeedsPrioritizer();
   prioritizer.run()
     .then(results => {
-      console.log(`\n🎯 Prioritization completed successfully!`);
+      console.log('\n🎯 Prioritization completed successfully!');
       process.exit(0);
     })
     .catch(error => {

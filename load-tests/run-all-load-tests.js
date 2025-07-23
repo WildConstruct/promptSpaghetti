@@ -233,7 +233,7 @@ class LoadTestOrchestrator {
         console.error(`❌ ${suite.name} failed (attempt ${attempts}):`, error.message);
         
         if (attempts < this.options.maxRetries) {
-          console.log(`🔄 Retrying in 10 seconds...`);
+          console.log('🔄 Retrying in 10 seconds...');
           await this.delay(10000);
         }
       }

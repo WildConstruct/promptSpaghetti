@@ -272,24 +272,24 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
 
   const getTierColor = (tier: string) => {
     switch (tier) {
-      case 'diamond': return 'text-purple-600 bg-purple-100';
-      case 'platinum': return 'text-cyan-600 bg-cyan-100';
-      case 'gold': return 'text-yellow-600 bg-yellow-100';
-      case 'silver': return 'text-gray-600 bg-gray-100';
-      case 'bronze': return 'text-orange-600 bg-orange-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'diamond': return 'text-purple-600 bg-purple-100';
+    case 'platinum': return 'text-cyan-600 bg-cyan-100';
+    case 'gold': return 'text-yellow-600 bg-yellow-100';
+    case 'silver': return 'text-gray-600 bg-gray-100';
+    case 'bronze': return 'text-orange-600 bg-orange-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'discovery': return <Eye className="w-4 h-4" />;
-      case 'usage': return <Download className="w-4 h-4" />;
-      case 'creation': return <PlusCircle className="w-4 h-4" />;
-      case 'social': return <Users className="w-4 h-4" />;
-      case 'learning': return <BookOpen className="w-4 h-4" />;
-      case 'special': return <Crown className="w-4 h-4" />;
-      default: return <Target className="w-4 h-4" />;
+    case 'discovery': return <Eye className="w-4 h-4" />;
+    case 'usage': return <Download className="w-4 h-4" />;
+    case 'creation': return <PlusCircle className="w-4 h-4" />;
+    case 'social': return <Users className="w-4 h-4" />;
+    case 'learning': return <BookOpen className="w-4 h-4" />;
+    case 'special': return <Crown className="w-4 h-4" />;
+    default: return <Target className="w-4 h-4" />;
     }
   };
 

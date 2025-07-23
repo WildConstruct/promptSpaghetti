@@ -299,24 +299,24 @@ const ApiManagementDashboard: React.FC = () => {
   };
 
   // Get status color
-  const getStatusColor = (status: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" => {
+  const getStatusColor = (status: string): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' => {
     switch (status) {
-      case 'active': return 'success';
-      case 'suspended': return 'warning';
-      case 'revoked': return 'error';
-      case 'expired': return 'secondary';
-      default: return 'default';
+    case 'active': return 'success';
+    case 'suspended': return 'warning';
+    case 'revoked': return 'error';
+    case 'expired': return 'secondary';
+    default: return 'default';
     }
   };
 
   // Get alert severity color
-  const getAlertSeverityColor = (severity: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" => {
+  const getAlertSeverityColor = (severity: string): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' => {
     switch (severity) {
-      case 'critical': return 'error';
-      case 'high': return 'warning';
-      case 'medium': return 'info';
-      case 'low': return 'default';
-      default: return 'default';
+    case 'critical': return 'error';
+    case 'high': return 'warning';
+    case 'medium': return 'info';
+    case 'low': return 'default';
+    default: return 'default';
     }
   };
 

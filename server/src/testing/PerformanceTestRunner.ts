@@ -775,28 +775,28 @@ export class PerformanceTestRunner extends EventEmitter {
     let content: string;
     
     switch (format) {
-      case 'json':
-        content = JSON.stringify(this.currentRun, null, 2);
-        break;
+    case 'json':
+      content = JSON.stringify(this.currentRun, null, 2);
+      break;
         
-      case 'html':
-        content = this.generateHtmlReport();
-        break;
+    case 'html':
+      content = this.generateHtmlReport();
+      break;
         
-      case 'markdown':
-        content = this.generateMarkdownReport();
-        break;
+    case 'markdown':
+      content = this.generateMarkdownReport();
+      break;
         
-      case 'junit':
-        content = this.generateJUnitReport();
-        break;
+    case 'junit':
+      content = this.generateJUnitReport();
+      break;
         
-      case 'csv':
-        content = this.generateCsvReport();
-        break;
+    case 'csv':
+      content = this.generateCsvReport();
+      break;
         
-      default:
-        throw new Error(`Unsupported report format: ${format}`);
+    default:
+      throw new Error(`Unsupported report format: ${format}`);
     }
     
     await fs.writeFile(filePath, content, 'utf-8');
@@ -862,8 +862,8 @@ export class PerformanceTestRunner extends EventEmitter {
     <h2>Performance Analysis</h2>
     <ul>
         ${this.currentRun.performanceAnalysis.recommendedActions.map(action => 
-            `<li>${action}</li>`
-        ).join('')}
+    `<li>${action}</li>`
+  ).join('')}
     </ul>
     
     <p><em>Generated on ${new Date().toISOString()}</em></p>
@@ -1055,7 +1055,7 @@ ${this.currentRun.suiteResults.map(suite => `
     running: boolean;
     currentRun?: string;
     suitesLoaded: number;
-  } {
+    } {
     return {
       running: this.isRunning,
       currentRun: this.currentRun?.runId,

@@ -627,42 +627,42 @@ export class ArchiveToggleService extends EventEmitter {
       
       // Check scope applicability
       switch (config.scope) {
-        case ArchiveToggleScope.GLOBAL:
-          isApplicable = true;
-          priority = 1;
-          break;
-        case ArchiveToggleScope.DATA_TYPE:
-          if (config.allowedArchiveTypes?.includes(context.archiveType) ||
+      case ArchiveToggleScope.GLOBAL:
+        isApplicable = true;
+        priority = 1;
+        break;
+      case ArchiveToggleScope.DATA_TYPE:
+        if (config.allowedArchiveTypes?.includes(context.archiveType) ||
               config.allowedCategories?.includes(context.category)) {
-            isApplicable = true;
-            priority = 5;
-          }
-          break;
-        case ArchiveToggleScope.USER_DATA:
-          if (context.category === ArchiveCategory.USER_DATA ||
+          isApplicable = true;
+          priority = 5;
+        }
+        break;
+      case ArchiveToggleScope.USER_DATA:
+        if (context.category === ArchiveCategory.USER_DATA ||
               context.category === ArchiveCategory.APPLICATION_DATA) {
-            isApplicable = true;
-            priority = 4;
-          }
-          break;
-        case ArchiveToggleScope.COMPLIANCE_DATA:
-          if (context.complianceRequirements && context.complianceRequirements.length > 0) {
-            isApplicable = true;
-            priority = 6;
-          }
-          break;
-        case ArchiveToggleScope.LOG_DATA:
-          if (context.category === ArchiveCategory.LOG_DATA) {
-            isApplicable = true;
-            priority = 3;
-          }
-          break;
-        case ArchiveToggleScope.SYSTEM_DATA:
-          if (context.category === ArchiveCategory.SYSTEM_DATA) {
-            isApplicable = true;
-            priority = 3;
-          }
-          break;
+          isApplicable = true;
+          priority = 4;
+        }
+        break;
+      case ArchiveToggleScope.COMPLIANCE_DATA:
+        if (context.complianceRequirements && context.complianceRequirements.length > 0) {
+          isApplicable = true;
+          priority = 6;
+        }
+        break;
+      case ArchiveToggleScope.LOG_DATA:
+        if (context.category === ArchiveCategory.LOG_DATA) {
+          isApplicable = true;
+          priority = 3;
+        }
+        break;
+      case ArchiveToggleScope.SYSTEM_DATA:
+        if (context.category === ArchiveCategory.SYSTEM_DATA) {
+          isApplicable = true;
+          priority = 3;
+        }
+        break;
       }
       
       // Additional classification-based filtering
@@ -692,99 +692,99 @@ export class ArchiveToggleService extends EventEmitter {
     const recommendations: string[] = [];
     
     switch (state.currentMode) {
-      case ArchiveToggleMode.DISABLED:
-        return {
-          isArchivingAllowed: false,
-          mode: state.currentMode,
-          reason: 'Archiving is disabled',
-          requiresUserConsent: false,
-          requiresAdminApproval: false,
-          complianceChecksRequired: false,
-          warnings: ['All archiving operations are disabled'],
-          recommendations: ['Enable archiving or use emergency mode if necessary']
-        };
+    case ArchiveToggleMode.DISABLED:
+      return {
+        isArchivingAllowed: false,
+        mode: state.currentMode,
+        reason: 'Archiving is disabled',
+        requiresUserConsent: false,
+        requiresAdminApproval: false,
+        complianceChecksRequired: false,
+        warnings: ['All archiving operations are disabled'],
+        recommendations: ['Enable archiving or use emergency mode if necessary']
+      };
         
-      case ArchiveToggleMode.MANUAL_ONLY:
-        const isManualTrigger = context.triggeredBy === 'user';
-        if (!isManualTrigger) {
-          warnings.push('Automatic archiving is disabled, only manual operations allowed');
-        }
-        return {
-          isArchivingAllowed: isManualTrigger,
-          mode: state.currentMode,
-          reason: isManualTrigger 
-            ? 'Manual archiving operation allowed'
-            : 'Only manual archiving operations are permitted',
-          requiresUserConsent: config.requiresExplicitConsent,
-          requiresAdminApproval: false,
-          complianceChecksRequired: config.complianceRequired,
-          warnings,
-          recommendations: isManualTrigger ? [] : ['Switch to scheduled or automatic mode for automated archiving']
-        };
+    case ArchiveToggleMode.MANUAL_ONLY:
+      const isManualTrigger = context.triggeredBy === 'user';
+      if (!isManualTrigger) {
+        warnings.push('Automatic archiving is disabled, only manual operations allowed');
+      }
+      return {
+        isArchivingAllowed: isManualTrigger,
+        mode: state.currentMode,
+        reason: isManualTrigger 
+          ? 'Manual archiving operation allowed'
+          : 'Only manual archiving operations are permitted',
+        requiresUserConsent: config.requiresExplicitConsent,
+        requiresAdminApproval: false,
+        complianceChecksRequired: config.complianceRequired,
+        warnings,
+        recommendations: isManualTrigger ? [] : ['Switch to scheduled or automatic mode for automated archiving']
+      };
         
-      case ArchiveToggleMode.SCHEDULED:
-        const isScheduledOrManual = context.isScheduled || context.triggeredBy === 'user';
-        if (!isScheduledOrManual) {
-          warnings.push('Only scheduled and manual archiving operations are allowed');
-        }
-        return {
-          isArchivingAllowed: isScheduledOrManual,
-          mode: state.currentMode,
-          reason: isScheduledOrManual
-            ? 'Scheduled archiving operation allowed'
-            : 'Only scheduled or manual operations are permitted',
-          requiresUserConsent: config.requiresExplicitConsent,
-          requiresAdminApproval: false,
-          complianceChecksRequired: config.complianceRequired,
-          warnings,
-          recommendations: []
-        };
+    case ArchiveToggleMode.SCHEDULED:
+      const isScheduledOrManual = context.isScheduled || context.triggeredBy === 'user';
+      if (!isScheduledOrManual) {
+        warnings.push('Only scheduled and manual archiving operations are allowed');
+      }
+      return {
+        isArchivingAllowed: isScheduledOrManual,
+        mode: state.currentMode,
+        reason: isScheduledOrManual
+          ? 'Scheduled archiving operation allowed'
+          : 'Only scheduled or manual operations are permitted',
+        requiresUserConsent: config.requiresExplicitConsent,
+        requiresAdminApproval: false,
+        complianceChecksRequired: config.complianceRequired,
+        warnings,
+        recommendations: []
+      };
         
-      case ArchiveToggleMode.AUTOMATIC:
-        return {
-          isArchivingAllowed: true,
-          mode: state.currentMode,
-          reason: 'Full automatic archiving enabled',
-          requiresUserConsent: config.requiresExplicitConsent,
-          requiresAdminApproval: false,
-          complianceChecksRequired: config.complianceRequired,
-          warnings: [],
-          recommendations: []
-        };
+    case ArchiveToggleMode.AUTOMATIC:
+      return {
+        isArchivingAllowed: true,
+        mode: state.currentMode,
+        reason: 'Full automatic archiving enabled',
+        requiresUserConsent: config.requiresExplicitConsent,
+        requiresAdminApproval: false,
+        complianceChecksRequired: config.complianceRequired,
+        warnings: [],
+        recommendations: []
+      };
         
-      case ArchiveToggleMode.COMPLIANCE_ONLY:
-        const hasComplianceRequirement = context.complianceRequirements && 
+    case ArchiveToggleMode.COMPLIANCE_ONLY:
+      const hasComplianceRequirement = context.complianceRequirements && 
           context.complianceRequirements.length > 0;
-        if (!hasComplianceRequirement) {
-          warnings.push('Only compliance-required archiving is allowed');
-        }
-        return {
-          isArchivingAllowed: hasComplianceRequirement || false,
-          mode: state.currentMode,
-          reason: hasComplianceRequirement
-            ? 'Compliance-required archiving allowed'
-            : 'No compliance requirement found',
-          requiresUserConsent: config.requiresExplicitConsent,
-          requiresAdminApproval: false,
-          complianceChecksRequired: true,
-          warnings,
-          recommendations: hasComplianceRequirement ? [] : ['Add compliance requirements or change mode']
-        };
+      if (!hasComplianceRequirement) {
+        warnings.push('Only compliance-required archiving is allowed');
+      }
+      return {
+        isArchivingAllowed: hasComplianceRequirement || false,
+        mode: state.currentMode,
+        reason: hasComplianceRequirement
+          ? 'Compliance-required archiving allowed'
+          : 'No compliance requirement found',
+        requiresUserConsent: config.requiresExplicitConsent,
+        requiresAdminApproval: false,
+        complianceChecksRequired: true,
+        warnings,
+        recommendations: hasComplianceRequirement ? [] : ['Add compliance requirements or change mode']
+      };
         
-      case ArchiveToggleMode.EMERGENCY:
-        return {
-          isArchivingAllowed: true,
-          mode: state.currentMode,
-          reason: 'Emergency archiving mode active',
-          requiresUserConsent: false,
-          requiresAdminApproval: config.requiresAdminApproval,
-          complianceChecksRequired: false,
-          warnings: ['Emergency mode bypasses normal constraints'],
-          recommendations: ['Switch back to normal mode when emergency is resolved']
-        };
+    case ArchiveToggleMode.EMERGENCY:
+      return {
+        isArchivingAllowed: true,
+        mode: state.currentMode,
+        reason: 'Emergency archiving mode active',
+        requiresUserConsent: false,
+        requiresAdminApproval: config.requiresAdminApproval,
+        complianceChecksRequired: false,
+        warnings: ['Emergency mode bypasses normal constraints'],
+        recommendations: ['Switch back to normal mode when emergency is resolved']
+      };
         
-      default:
-        throw new Error(`Unknown archive toggle mode: ${state.currentMode}`);
+    default:
+      throw new Error(`Unknown archive toggle mode: ${state.currentMode}`);
     }
   }
   

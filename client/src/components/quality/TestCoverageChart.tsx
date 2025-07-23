@@ -115,14 +115,14 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
   // Get component type icon
   const getComponentTypeIcon = (type: string) => {
     switch (type) {
-      case 'component':
-        return '🧩';
-      case 'service':
-        return '⚙️';
-      case 'utility':
-        return '🔧';
-      default:
-        return '📄';
+    case 'component':
+      return '🧩';
+    case 'service':
+      return '⚙️';
+    case 'utility':
+      return '🔧';
+    default:
+      return '📄';
     }
   };
 
@@ -440,8 +440,8 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
                         <Badge 
                           variant={
                             hotspot.importance === 'critical' ? 'destructive' :
-                            hotspot.importance === 'high' ? 'default' :
-                            hotspot.importance === 'medium' ? 'secondary' : 'outline'
+                              hotspot.importance === 'high' ? 'default' :
+                                hotspot.importance === 'medium' ? 'secondary' : 'outline'
                           }
                           size="sm"
                         >

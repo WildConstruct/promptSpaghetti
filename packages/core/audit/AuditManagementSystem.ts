@@ -271,27 +271,27 @@ export class AuditManagementSystem {
     // Generate requested metrics
     validatedRequest.metrics.forEach(metric => {
       switch (metric) {
-        case 'event_count':
-          analytics.metrics.event_count = this.calculateEventCountMetrics(events, validatedRequest.timeframe);
-          break;
-        case 'unique_users':
-          analytics.metrics.unique_users = this.calculateUniqueUsersMetrics(events);
-          break;
-        case 'risk_score_average':
-          analytics.metrics.risk_score_average = this.calculateRiskScoreMetrics(events);
-          break;
-        case 'severity_distribution':
-          analytics.metrics.severity_distribution = this.calculateSeverityDistribution(events);
-          break;
-        case 'compliance_violations':
-          analytics.metrics.compliance_violations = this.calculateComplianceViolations(events);
-          break;
-        case 'geographic_distribution':
-          analytics.metrics.geographic_distribution = this.calculateGeographicDistribution(events);
-          break;
-        case 'system_component_activity':
-          analytics.metrics.system_component_activity = this.calculateSystemComponentActivity(events);
-          break;
+      case 'event_count':
+        analytics.metrics.event_count = this.calculateEventCountMetrics(events, validatedRequest.timeframe);
+        break;
+      case 'unique_users':
+        analytics.metrics.unique_users = this.calculateUniqueUsersMetrics(events);
+        break;
+      case 'risk_score_average':
+        analytics.metrics.risk_score_average = this.calculateRiskScoreMetrics(events);
+        break;
+      case 'severity_distribution':
+        analytics.metrics.severity_distribution = this.calculateSeverityDistribution(events);
+        break;
+      case 'compliance_violations':
+        analytics.metrics.compliance_violations = this.calculateComplianceViolations(events);
+        break;
+      case 'geographic_distribution':
+        analytics.metrics.geographic_distribution = this.calculateGeographicDistribution(events);
+        break;
+      case 'system_component_activity':
+        analytics.metrics.system_component_activity = this.calculateSystemComponentActivity(events);
+        break;
       }
     });
     
@@ -675,20 +675,20 @@ export class AuditManagementSystem {
 
   private generateFrameworkSpecificReport(framework: ComplianceFramework, events: AuditEvent[]): any {
     switch (framework) {
-      case ComplianceFramework.GDPR:
-        return {
-          data_subject_requests: events.filter(e => e.category.includes('data_subject')).length,
-          consent_violations: events.filter(e => e.risk_factors.includes('consent')).length,
-          breach_notifications: events.filter(e => e.event_type === AuditEventType.SECURITY_INCIDENT && e.severity === AuditSeverity.CRITICAL).length
-        };
-      case ComplianceFramework.SOX:
-        return {
-          financial_control_events: events.filter(e => e.category.includes('financial')).length,
-          access_control_violations: events.filter(e => e.risk_factors.includes('access_control')).length,
-          change_management_events: events.filter(e => e.event_type === AuditEventType.CONFIGURATION_CHANGE).length
-        };
-      default:
-        return {};
+    case ComplianceFramework.GDPR:
+      return {
+        data_subject_requests: events.filter(e => e.category.includes('data_subject')).length,
+        consent_violations: events.filter(e => e.risk_factors.includes('consent')).length,
+        breach_notifications: events.filter(e => e.event_type === AuditEventType.SECURITY_INCIDENT && e.severity === AuditSeverity.CRITICAL).length
+      };
+    case ComplianceFramework.SOX:
+      return {
+        financial_control_events: events.filter(e => e.category.includes('financial')).length,
+        access_control_violations: events.filter(e => e.risk_factors.includes('access_control')).length,
+        change_management_events: events.filter(e => e.event_type === AuditEventType.CONFIGURATION_CHANGE).length
+      };
+    default:
+      return {};
     }
   }
 

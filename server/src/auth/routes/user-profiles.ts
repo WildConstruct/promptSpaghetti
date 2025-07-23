@@ -344,8 +344,8 @@ export async function registerUserProfileRoutes(
         message: action === 'unfollow' 
           ? 'User unfollowed successfully'
           : action === 'block'
-          ? 'User blocked successfully'
-          : 'User followed successfully'
+            ? 'User blocked successfully'
+            : 'User followed successfully'
       });
 
     } catch (error) {

@@ -244,7 +244,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({
       const response = await fetch('/api/export', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           format: selectedFormat.id,
@@ -829,34 +829,34 @@ async function prepareExportPayload(
 
   // Add format-specific data
   switch (format.category) {
-    case 'vfx':
-      return {
-        ...basePayload,
-        vfxData: {
-          pipeline: options.vfxOptions?.targetPipeline,
-          resolution: options.vfxOptions?.resolution,
-          controlNetCompatible: format.controlNetReady
-        }
-      };
-      
-    case 'script':
-      return {
-        ...basePayload,
-        scriptData: {
-          format: options.filmOptions?.scriptFormat,
-          includeNotes: options.filmOptions?.includeCharacterNotes || options.filmOptions?.includeDirectorNotes
-        }
-      };
-      
-    case 'report':
-      // Add variance analysis if requested
-      if (includeVarianceAnalysis) {
-        // This would calculate variance analysis across results
-        // Implementation would depend on the specific analytics needed
+  case 'vfx':
+    return {
+      ...basePayload,
+      vfxData: {
+        pipeline: options.vfxOptions?.targetPipeline,
+        resolution: options.vfxOptions?.resolution,
+        controlNetCompatible: format.controlNetReady
       }
-      return basePayload;
+    };
       
-    default:
-      return basePayload;
+  case 'script':
+    return {
+      ...basePayload,
+      scriptData: {
+        format: options.filmOptions?.scriptFormat,
+        includeNotes: options.filmOptions?.includeCharacterNotes || options.filmOptions?.includeDirectorNotes
+      }
+    };
+      
+  case 'report':
+    // Add variance analysis if requested
+    if (includeVarianceAnalysis) {
+      // This would calculate variance analysis across results
+      // Implementation would depend on the specific analytics needed
+    }
+    return basePayload;
+      
+  default:
+    return basePayload;
   }
 }

@@ -424,7 +424,7 @@ export class CompressionMiddleware {
     entries: number;
     hitRate: number;
     maxSize: number; // bytes
-  } {
+    } {
     const maxSize = (this.options.maxCacheSize || 100) * 1024 * 1024;
     
     return {

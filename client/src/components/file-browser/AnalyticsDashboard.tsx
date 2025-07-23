@@ -203,19 +203,19 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
 
   const getPriorityColor = (priority: string): string => {
     switch (priority) {
-      case 'high': return '#ef4444';
-      case 'medium': return '#f59e0b';
-      case 'low': return '#10b981';
-      default: return '#6b7280';
+    case 'high': return '#ef4444';
+    case 'medium': return '#f59e0b';
+    case 'low': return '#10b981';
+    default: return '#6b7280';
     }
   };
 
   const getSeverityColor = (severity: string): string => {
     switch (severity) {
-      case 'critical': return '#dc2626';
-      case 'warning': return '#d97706';
-      case 'info': return '#2563eb';
-      default: return '#6b7280';
+    case 'critical': return '#dc2626';
+    case 'warning': return '#d97706';
+    case 'info': return '#2563eb';
+    default: return '#6b7280';
     }
   };
 

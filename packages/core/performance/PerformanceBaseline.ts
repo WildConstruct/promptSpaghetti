@@ -164,60 +164,60 @@ export class PerformanceBaseline extends EventEmitter {
    */
   private async measureKPI(kpi: KPIDefinition, testConditions: BaselineSnapshot['testConditions']): Promise<number> {
     switch (kpi.id) {
-      // Runtime KPIs - would typically integrate with Web Vitals API
-      case 'runtime_fcp':
-        return this.measureFCP();
-      case 'runtime_lcp':
-        return this.measureLCP();
-      case 'runtime_fid':
-        return this.measureFID();
-      case 'runtime_cls':
-        return this.measureCLS();
-      case 'runtime_tti':
-        return this.measureTTI();
+    // Runtime KPIs - would typically integrate with Web Vitals API
+    case 'runtime_fcp':
+      return this.measureFCP();
+    case 'runtime_lcp':
+      return this.measureLCP();
+    case 'runtime_fid':
+      return this.measureFID();
+    case 'runtime_cls':
+      return this.measureCLS();
+    case 'runtime_tti':
+      return this.measureTTI();
 
       // API KPIs - measure actual execution times
-      case 'api_graph_execution':
-        return this.measureGraphExecution(testConditions.graphComplexity);
-      case 'api_preview_generation':
-        return this.measurePreviewGeneration(testConditions.dataSize);
-      case 'api_validation':
-        return this.measureValidation();
-      case 'api_throughput':
-        return this.measureThroughput();
+    case 'api_graph_execution':
+      return this.measureGraphExecution(testConditions.graphComplexity);
+    case 'api_preview_generation':
+      return this.measurePreviewGeneration(testConditions.dataSize);
+    case 'api_validation':
+      return this.measureValidation();
+    case 'api_throughput':
+      return this.measureThroughput();
 
       // Bundle KPIs - static measurements from build artifacts
-      case 'bundle_main_size':
-        return this.measureMainBundleSize();
-      case 'bundle_total_size':
-        return this.measureTotalBundleSize();
+    case 'bundle_main_size':
+      return this.measureMainBundleSize();
+    case 'bundle_total_size':
+      return this.measureTotalBundleSize();
 
       // Memory KPIs - runtime measurements
-      case 'memory_peak_usage':
-        return this.measurePeakMemoryUsage();
-      case 'memory_leak_rate':
-        return this.measureMemoryLeakRate();
+    case 'memory_peak_usage':
+      return this.measurePeakMemoryUsage();
+    case 'memory_leak_rate':
+      return this.measureMemoryLeakRate();
 
       // Network KPIs - simulated measurements
-      case 'network_transfer_size':
-        return this.measureTransferSize();
-      case 'network_request_count':
-        return this.measureRequestCount();
+    case 'network_transfer_size':
+      return this.measureTransferSize();
+    case 'network_request_count':
+      return this.measureRequestCount();
 
       // Build KPIs - would integrate with build system
-      case 'build_time':
-        return this.measureBuildTime();
-      case 'build_test_time':
-        return this.measureTestTime();
+    case 'build_time':
+      return this.measureBuildTime();
+    case 'build_test_time':
+      return this.measureTestTime();
 
       // User Experience KPIs - would integrate with analytics
-      case 'ux_graph_creation_time':
-        return this.measureGraphCreationTime(testConditions.graphComplexity);
-      case 'ux_error_rate':
-        return this.measureErrorRate();
+    case 'ux_graph_creation_time':
+      return this.measureGraphCreationTime(testConditions.graphComplexity);
+    case 'ux_error_rate':
+      return this.measureErrorRate();
 
-      default:
-        throw new Error(`Unknown KPI: ${kpi.id}`);
+    default:
+      throw new Error(`Unknown KPI: ${kpi.id}`);
     }
   }
 
@@ -481,11 +481,11 @@ export class PerformanceBaseline extends EventEmitter {
         // Convert status to numeric score for averaging
         const scores = categorySnapshots.map(snapshot => {
           switch (snapshot.status) {
-            case 'excellent': return 100;
-            case 'good': return 80;
-            case 'warning': return 60;
-            case 'critical': return 30;
-            default: return 70;
+          case 'excellent': return 100;
+          case 'good': return 80;
+          case 'warning': return 60;
+          case 'critical': return 30;
+          default: return 70;
           }
         });
         averages[category.replace('-', '')] = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);

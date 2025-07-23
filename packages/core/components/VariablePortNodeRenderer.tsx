@@ -86,8 +86,8 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             var(--bg-tertiary
           ) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%)`,
           border: selected 
-            ? `2px solid var(--accent-orange)` 
-            : `1px solid var(--border)`,
+            ? '2px solid var(--accent-orange)' 
+            : '1px solid var(--border)',
           borderRadius: 'var(--radius-md)',
           minWidth: 200, // Slightly wider to accommodate variable ports
           minHeight: hasVariablePorts ? 120 : 90, // Taller if we have variable ports
@@ -194,7 +194,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             lineHeight: 1.3,
             // Subtle glow for selected state
             ...(selected && {
-              textShadow: '0 0 8px var(--accent-orange)40',
+              textShadow: '0 0 8px var(--accent-orange)40'
             })
           }}>
             {data?.label || nodeMeta.label || nodeType || id}
@@ -275,7 +275,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
               cursor: 'crosshair',
               zIndex: 10,
               transition: 'all 0.2s ease',
-              boxShadow: 'var(--shadow-sm)',
+              boxShadow: 'var(--shadow-sm)'
             }}
             isConnectable={true}
           />
@@ -352,7 +352,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
             cursor: 'crosshair',
             zIndex: 10,
             transition: 'all 0.2s ease',
-            boxShadow: 'var(--shadow-sm)',
+            boxShadow: 'var(--shadow-sm)'
           }}
           isConnectable={true}
         />
@@ -365,7 +365,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
       <div
         style={{
           cursor: 'pointer',
-          background: `linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%)`,
+          background: 'linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%)',
           border: '1px solid var(--accent-red)',
           borderRadius: 'var(--radius-md)',
           minWidth: 200,
@@ -377,7 +377,7 @@ export const VariablePortNodeRenderer = memo<VariablePortNodeRendererProps>(({
           justifyContent: 'center',
           fontFamily: 'var(--font-primary)',
           boxShadow: 'var(--shadow-md)',
-          textAlign: 'center',
+          textAlign: 'center'
         }}
       >
         <div>

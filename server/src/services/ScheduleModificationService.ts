@@ -431,8 +431,8 @@ export class ScheduleModificationService {
     // Determine severity
     const severity: ModificationSeverity = 
       riskScore >= 80 ? 'critical' :
-      riskScore >= 60 ? 'high' :
-      riskScore >= 30 ? 'medium' : 'low';
+        riskScore >= 60 ? 'high' :
+          riskScore >= 30 ? 'medium' : 'low';
 
     // Generate recommendations
     const recommendations: string[] = [];
@@ -679,18 +679,18 @@ export class ScheduleModificationService {
 
   private getChangeDescription(field: string, oldValue: any, newValue: any): string {
     switch (field) {
-      case 'startTime':
-        return `Start time changed from ${new Date(oldValue).toLocaleString()} to ${new Date(newValue).toLocaleString()}`;
-      case 'endTime':
-        return `End time changed from ${oldValue ? new Date(oldValue).toLocaleString() : 'none'} to ${newValue ? new Date(newValue).toLocaleString() : 'none'}`;
-      case 'action':
-        return `Action changed from ${oldValue} to ${newValue}`;
-      case 'enabled':
-        return `Schedule ${newValue ? 'enabled' : 'disabled'}`;
-      case 'priority':
-        return `Priority changed from ${oldValue} to ${newValue}`;
-      default:
-        return `${field} updated`;
+    case 'startTime':
+      return `Start time changed from ${new Date(oldValue).toLocaleString()} to ${new Date(newValue).toLocaleString()}`;
+    case 'endTime':
+      return `End time changed from ${oldValue ? new Date(oldValue).toLocaleString() : 'none'} to ${newValue ? new Date(newValue).toLocaleString() : 'none'}`;
+    case 'action':
+      return `Action changed from ${oldValue} to ${newValue}`;
+    case 'enabled':
+      return `Schedule ${newValue ? 'enabled' : 'disabled'}`;
+    case 'priority':
+      return `Priority changed from ${oldValue} to ${newValue}`;
+    default:
+      return `${field} updated`;
     }
   }
 
@@ -705,14 +705,14 @@ export class ScheduleModificationService {
     if (schedule.recurrence) {
       const { type, interval } = schedule.recurrence;
       switch (type) {
-        case RecurrenceType.DAILY:
-          return Math.floor(timeSpan / (24 * 60 * 60 * 1000 * interval));
-        case RecurrenceType.WEEKLY:
-          return Math.floor(timeSpan / (7 * 24 * 60 * 60 * 1000 * interval));
-        case RecurrenceType.MONTHLY:
-          return Math.floor(timeSpan / (30 * 24 * 60 * 60 * 1000 * interval));
-        default:
-          return 10; // Default estimate
+      case RecurrenceType.DAILY:
+        return Math.floor(timeSpan / (24 * 60 * 60 * 1000 * interval));
+      case RecurrenceType.WEEKLY:
+        return Math.floor(timeSpan / (7 * 24 * 60 * 60 * 1000 * interval));
+      case RecurrenceType.MONTHLY:
+        return Math.floor(timeSpan / (30 * 24 * 60 * 60 * 1000 * interval));
+      default:
+        return 10; // Default estimate
       }
     }
     
@@ -745,7 +745,7 @@ export class ScheduleModificationService {
 
   private createRollbackPlan(schedule: FeatureToggleSchedule, request: ModificationRequest): RollbackPlan {
     const steps: RollbackStep[] = [];
-    let canRollback = true;
+    const canRollback = true;
 
     // Add rollback steps for each change
     Object.keys(request.changes).forEach((field, index) => {

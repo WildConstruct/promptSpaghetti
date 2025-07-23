@@ -649,8 +649,8 @@ export class ActivityHistoryService {
         resource_type, resource_id, details, metadata, timestamp,
         ip_address, user_agent, location
       ) VALUES ${activities.map((_, i) => 
-        `($${i * 14 + 1}, $${i * 14 + 2}, $${i * 14 + 3}, $${i * 14 + 4}, $${i * 14 + 5}, $${i * 14 + 6}, $${i * 14 + 7}, $${i * 14 + 8}, $${i * 14 + 9}, $${i * 14 + 10}, $${i * 14 + 11}, $${i * 14 + 12}, $${i * 14 + 13}, $${i * 14 + 14})`
-      ).join(', ')}
+    `($${i * 14 + 1}, $${i * 14 + 2}, $${i * 14 + 3}, $${i * 14 + 4}, $${i * 14 + 5}, $${i * 14 + 6}, $${i * 14 + 7}, $${i * 14 + 8}, $${i * 14 + 9}, $${i * 14 + 10}, $${i * 14 + 11}, $${i * 14 + 12}, $${i * 14 + 13}, $${i * 14 + 14})`
+  ).join(', ')}
     `;
 
     const values = activities.flatMap(activity => [
@@ -730,26 +730,26 @@ export class ActivityHistoryService {
     const resourceName = details.resourceName || 'item';
     
     switch (type) {
-      case ActivityType.LOGIN:
-        return 'User logged in';
-      case ActivityType.LOGOUT:
-        return 'User logged out';
-      case ActivityType.GRAPH_CREATED:
-        return `Created graph "${resourceName}"`;
-      case ActivityType.GRAPH_UPDATED:
-        return `Updated graph "${resourceName}"`;
-      case ActivityType.GRAPH_DELETED:
-        return `Deleted graph "${resourceName}"`;
-      case ActivityType.GRAPH_EXECUTED:
-        return `Executed graph "${resourceName}"`;
-      case ActivityType.NODE_CREATED:
-        return `Added node to graph`;
-      case ActivityType.NODE_UPDATED:
-        return `Modified node in graph`;
-      case ActivityType.NODE_DELETED:
-        return `Removed node from graph`;
-      default:
-        return this.getActionForActivityType(type);
+    case ActivityType.LOGIN:
+      return 'User logged in';
+    case ActivityType.LOGOUT:
+      return 'User logged out';
+    case ActivityType.GRAPH_CREATED:
+      return `Created graph "${resourceName}"`;
+    case ActivityType.GRAPH_UPDATED:
+      return `Updated graph "${resourceName}"`;
+    case ActivityType.GRAPH_DELETED:
+      return `Deleted graph "${resourceName}"`;
+    case ActivityType.GRAPH_EXECUTED:
+      return `Executed graph "${resourceName}"`;
+    case ActivityType.NODE_CREATED:
+      return 'Added node to graph';
+    case ActivityType.NODE_UPDATED:
+      return 'Modified node in graph';
+    case ActivityType.NODE_DELETED:
+      return 'Removed node from graph';
+    default:
+      return this.getActionForActivityType(type);
     }
   }
 

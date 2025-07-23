@@ -338,21 +338,21 @@ export class ReviewerAssignmentService {
     let description = '';
 
     switch (reviewer.availability.status) {
-      case 'available':
-        score = 1.0;
-        description = 'Fully available';
-        break;
-      case 'busy':
-        score = priority === 'emergency' || priority === 'urgent' ? 0.6 : 0.3;
-        description = 'Currently busy but can handle urgent work';
-        break;
-      case 'on_break':
-        score = priority === 'emergency' ? 0.2 : 0;
-        description = 'On break, emergency only';
-        break;
-      default:
-        score = 0;
-        description = 'Not available';
+    case 'available':
+      score = 1.0;
+      description = 'Fully available';
+      break;
+    case 'busy':
+      score = priority === 'emergency' || priority === 'urgent' ? 0.6 : 0.3;
+      description = 'Currently busy but can handle urgent work';
+      break;
+    case 'on_break':
+      score = priority === 'emergency' ? 0.2 : 0;
+      description = 'On break, emergency only';
+      break;
+    default:
+      score = 0;
+      description = 'Not available';
     }
 
     return {
@@ -635,14 +635,14 @@ export class ReviewerAssignmentService {
 
   private getReassignmentStrategy(reason: ReassignmentReason, currentReviewer: ReviewerProfile): AssignmentType {
     switch (reason) {
-      case 'performance_issue':
-        return 'expertise_based';
-      case 'workload_overload':
-        return 'load_balanced';
-      case 'expertise_mismatch':
-        return 'expertise_based';
-      default:
-        return 'load_balanced';
+    case 'performance_issue':
+      return 'expertise_based';
+    case 'workload_overload':
+      return 'load_balanced';
+    case 'expertise_mismatch':
+      return 'expertise_based';
+    default:
+      return 'load_balanced';
     }
   }
 

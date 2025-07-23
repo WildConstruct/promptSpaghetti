@@ -185,11 +185,11 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
   // Risk level color mapping
   const getRiskColor = useCallback((level: RiskLevel) => {
     switch (level) {
-      case RiskLevel.CRITICAL: return themeStyles.critical;
-      case RiskLevel.HIGH: return themeStyles.danger;
-      case RiskLevel.MEDIUM: return themeStyles.warning;
-      case RiskLevel.LOW: return themeStyles.success;
-      default: return themeStyles.textMuted;
+    case RiskLevel.CRITICAL: return themeStyles.critical;
+    case RiskLevel.HIGH: return themeStyles.danger;
+    case RiskLevel.MEDIUM: return themeStyles.warning;
+    case RiskLevel.LOW: return themeStyles.success;
+    default: return themeStyles.textMuted;
     }
   }, [themeStyles]);
 
@@ -454,7 +454,7 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
               fontSize: executiveMode ? '36px' : '32px',
               fontWeight: 800,
               color: state.summary.systemHealth.securityPosture >= 80 ? themeStyles.success :
-                     state.summary.systemHealth.securityPosture >= 60 ? themeStyles.warning : themeStyles.danger,
+                state.summary.systemHealth.securityPosture >= 60 ? themeStyles.warning : themeStyles.danger,
               marginBottom: '8px'
             }}>
               {state.summary.systemHealth.securityPosture}%
@@ -526,8 +526,8 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                     marginBottom: '12px',
                     borderLeft: `4px solid ${
                       pattern.riskScore >= 80 ? themeStyles.critical :
-                      pattern.riskScore >= 60 ? themeStyles.danger :
-                      pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success
+                        pattern.riskScore >= 60 ? themeStyles.danger :
+                          pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success
                     }`
                   }}
                 >
@@ -553,11 +553,11 @@ export const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProp
                       <span style={{
                         fontSize: '12px',
                         background: `${pattern.riskScore >= 80 ? themeStyles.critical : 
-                                      pattern.riskScore >= 60 ? themeStyles.danger :
-                                      pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success}20`,
+                          pattern.riskScore >= 60 ? themeStyles.danger :
+                            pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success}20`,
                         color: pattern.riskScore >= 80 ? themeStyles.critical :
-                               pattern.riskScore >= 60 ? themeStyles.danger :
-                               pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success,
+                          pattern.riskScore >= 60 ? themeStyles.danger :
+                            pattern.riskScore >= 40 ? themeStyles.warning : themeStyles.success,
                         padding: '2px 6px',
                         borderRadius: '4px',
                         fontWeight: 600
@@ -801,18 +801,18 @@ function getTimeframeRange(timeframe: DashboardState['selectedTimeframe']): { st
   const start = new Date();
 
   switch (timeframe) {
-    case '1h':
-      start.setHours(start.getHours() - 1);
-      break;
-    case '24h':
-      start.setHours(start.getHours() - 24);
-      break;
-    case '7d':
-      start.setDate(start.getDate() - 7);
-      break;
-    case '30d':
-      start.setDate(start.getDate() - 30);
-      break;
+  case '1h':
+    start.setHours(start.getHours() - 1);
+    break;
+  case '24h':
+    start.setHours(start.getHours() - 24);
+    break;
+  case '7d':
+    start.setDate(start.getDate() - 7);
+    break;
+  case '30d':
+    start.setDate(start.getDate() - 30);
+    break;
   }
 
   return { start, end };
@@ -820,11 +820,11 @@ function getTimeframeRange(timeframe: DashboardState['selectedTimeframe']): { st
 
 function getInsightIcon(type: SecurityInsight['type']): string {
   switch (type) {
-    case 'trend': return '📈';
-    case 'anomaly': return '🔍';
-    case 'prediction': return '🔮';
-    case 'recommendation': return '💡';
-    default: return '📊';
+  case 'trend': return '📈';
+  case 'anomaly': return '🔍';
+  case 'prediction': return '🔮';
+  case 'recommendation': return '💡';
+  default: return '📊';
   }
 }
 

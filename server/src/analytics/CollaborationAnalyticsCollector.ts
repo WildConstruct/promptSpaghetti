@@ -351,26 +351,26 @@ export class CollaborationAnalyticsCollector {
   
   private updateRealTimeMetrics(event: CollaborationTelemetryEvent): void {
     switch (event.eventType) {
-      case CollaborationEventType.COLLABORATION_LATENCY_MEASURED:
-        if ('value' in event.data) {
-          this.metrics.realTimeLatency.samples.push(event.data.value);
-          if (this.metrics.realTimeLatency.samples.length > 1000) {
-            this.metrics.realTimeLatency.samples = this.metrics.realTimeLatency.samples.slice(-1000);
-          }
-          this.updateLatencyPercentiles();
+    case CollaborationEventType.COLLABORATION_LATENCY_MEASURED:
+      if ('value' in event.data) {
+        this.metrics.realTimeLatency.samples.push(event.data.value);
+        if (this.metrics.realTimeLatency.samples.length > 1000) {
+          this.metrics.realTimeLatency.samples = this.metrics.realTimeLatency.samples.slice(-1000);
         }
-        break;
+        this.updateLatencyPercentiles();
+      }
+      break;
         
-      case CollaborationEventType.CONFLICT_RESOLUTION_TRIGGERED:
-        this.metrics.conflictResolution.totalConflicts++;
-        break;
+    case CollaborationEventType.CONFLICT_RESOLUTION_TRIGGERED:
+      this.metrics.conflictResolution.totalConflicts++;
+      break;
         
-      case CollaborationEventType.CONFLICT_RESOLUTION_COMPLETED:
-        this.metrics.conflictResolution.resolvedSuccessfully++;
-        if ('resolutionTimeMs' in event.data && event.data.resolutionTimeMs) {
-          this.updateAverageResolutionTime(event.data.resolutionTimeMs);
-        }
-        break;
+    case CollaborationEventType.CONFLICT_RESOLUTION_COMPLETED:
+      this.metrics.conflictResolution.resolvedSuccessfully++;
+      if ('resolutionTimeMs' in event.data && event.data.resolutionTimeMs) {
+        this.updateAverageResolutionTime(event.data.resolutionTimeMs);
+      }
+      break;
     }
   }
 
@@ -432,26 +432,26 @@ export class CollaborationAnalyticsCollector {
   private evaluateEpic23Criteria(event: CollaborationTelemetryEvent): void {
     // Check if event affects Epic 23 success criteria and emit alerts if needed
     switch (event.eventType) {
-      case CollaborationEventType.COLLABORATION_LATENCY_MEASURED:
-        if ('value' in event.data && 
+    case CollaborationEventType.COLLABORATION_LATENCY_MEASURED:
+      if ('value' in event.data && 
             event.data.value > EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET * 2) {
-          this.emitEpic23Alert('latency_threshold_exceeded', {
-            measured: event.data.value,
-            target: EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET
-          });
-        }
-        break;
+        this.emitEpic23Alert('latency_threshold_exceeded', {
+          measured: event.data.value,
+          target: EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET
+        });
+      }
+      break;
         
-      case CollaborationEventType.CONFLICT_RESOLUTION_COMPLETED:
-        const successRate = this.metrics.conflictResolution.resolvedSuccessfully / 
+    case CollaborationEventType.CONFLICT_RESOLUTION_COMPLETED:
+      const successRate = this.metrics.conflictResolution.resolvedSuccessfully / 
                            this.metrics.conflictResolution.totalConflicts;
-        if (successRate < EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE) {
-          this.emitEpic23Alert('conflict_resolution_rate_below_target', {
-            current: successRate,
-            target: EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE
-          });
-        }
-        break;
+      if (successRate < EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE) {
+        this.emitEpic23Alert('conflict_resolution_rate_below_target', {
+          current: successRate,
+          target: EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE
+        });
+      }
+      break;
     }
   }
 

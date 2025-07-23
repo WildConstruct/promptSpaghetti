@@ -104,8 +104,8 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
       const response = await fetch(`${API_BASE_URL}/status/${userId}`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {
@@ -152,9 +152,9 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
       const response = await fetch(`${API_BASE_URL}/submit`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify(requestBody)
       });
 
       if (!response.ok) {
@@ -212,9 +212,9 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
       const response = await fetch(`${API_BASE_URL}/upload/${requestId}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ files: uploadFiles }),
+        body: JSON.stringify({ files: uploadFiles })
       });
 
       if (!response.ok) {
@@ -246,8 +246,8 @@ export function useVerificationRequests(userId: string): VerificationRequestsHoo
       const response = await fetch(`${API_BASE_URL}/types`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {

@@ -854,18 +854,18 @@ export class MarketplacePolicyPublishingService {
     const strategy = request.rollout_strategy;
 
     switch (strategy.type) {
-      case 'immediate':
-        await this.publishToAllChannels(policy, request.publication_channels);
-        break;
-      case 'phased':
-        await this.executePhasedRollout(policy, strategy);
-        break;
-      case 'canary':
-        await this.executeCanaryRollout(policy, strategy);
-        break;
-      case 'scheduled':
-        await this.schedulePublication(policy, strategy.start_date);
-        break;
+    case 'immediate':
+      await this.publishToAllChannels(policy, request.publication_channels);
+      break;
+    case 'phased':
+      await this.executePhasedRollout(policy, strategy);
+      break;
+    case 'canary':
+      await this.executeCanaryRollout(policy, strategy);
+      break;
+    case 'scheduled':
+      await this.schedulePublication(policy, strategy.start_date);
+      break;
     }
   }
 

@@ -417,10 +417,10 @@ export class DataRetentionService {
     let deleted = 0;
 
     switch (dataType.type) {
-      case 'user_account':
-        if (deleteType === 'soft') {
-          // Soft delete inactive users
-          const result = await this.db.query(`
+    case 'user_account':
+      if (deleteType === 'soft') {
+        // Soft delete inactive users
+        const result = await this.db.query(`
             UPDATE users 
             SET deleted_at = NOW(), status = 'deleted'
             WHERE last_login_at < $1 
@@ -428,57 +428,57 @@ export class DataRetentionService {
             AND status = 'active'
             RETURNING id
           `, [cutoffDate]);
-          processed = result.rowCount || 0;
-          deleted = processed;
-        } else if (deleteType === 'hard') {
-          // Hard delete soft-deleted users past grace period
-          const result = await this.db.query(`
+        processed = result.rowCount || 0;
+        deleted = processed;
+      } else if (deleteType === 'hard') {
+        // Hard delete soft-deleted users past grace period
+        const result = await this.db.query(`
             DELETE FROM users 
             WHERE deleted_at < $1 AND deleted_at IS NOT NULL
             RETURNING id
           `, [cutoffDate]);
-          processed = result.rowCount || 0;
-          deleted = processed;
-        }
-        break;
+        processed = result.rowCount || 0;
+        deleted = processed;
+      }
+      break;
 
-      case 'session_data':
-        // Delete expired sessions
-        const result = await this.db.query(`
+    case 'session_data':
+      // Delete expired sessions
+      const result = await this.db.query(`
           DELETE FROM user_sessions 
           WHERE expires_at < $1
           RETURNING id
         `, [cutoffDate]);
-        processed = result.rowCount || 0;
-        deleted = processed;
-        break;
+      processed = result.rowCount || 0;
+      deleted = processed;
+      break;
 
-      case 'authentication_logs':
-        if (deleteType === 'archive') {
-          // Archive old authentication logs
-          await this.archiveAuthenticationLogs(cutoffDate);
-        } else if (deleteType === 'hard') {
-          const result = await this.db.query(`
+    case 'authentication_logs':
+      if (deleteType === 'archive') {
+        // Archive old authentication logs
+        await this.archiveAuthenticationLogs(cutoffDate);
+      } else if (deleteType === 'hard') {
+        const result = await this.db.query(`
             DELETE FROM audit_logs 
             WHERE action_type = 'authentication' 
             AND created_at < $1
             RETURNING id
           `, [cutoffDate]);
-          processed = result.rowCount || 0;
-          deleted = processed;
-        }
-        break;
+        processed = result.rowCount || 0;
+        deleted = processed;
+      }
+      break;
 
-      case 'usage_analytics':
-        // Archive or delete analytics data
-        if (deleteType === 'archive') {
-          await this.archiveAnalyticsData(cutoffDate);
-        }
-        break;
+    case 'usage_analytics':
+      // Archive or delete analytics data
+      if (deleteType === 'archive') {
+        await this.archiveAnalyticsData(cutoffDate);
+      }
+      break;
 
-      case 'project_data':
-        // Handle user project data
-        const projectResult = await this.db.query(`
+    case 'project_data':
+      // Handle user project data
+      const projectResult = await this.db.query(`
           UPDATE user_projects 
           SET deleted_at = NOW() 
           WHERE updated_at < $1 
@@ -488,9 +488,9 @@ export class DataRetentionService {
           AND deleted_at IS NULL
           RETURNING id
         `, [cutoffDate]);
-        processed = projectResult.rowCount || 0;
-        deleted = processed;
-        break;
+      processed = projectResult.rowCount || 0;
+      deleted = processed;
+      break;
     }
 
     return { processed, deleted };
@@ -620,34 +620,34 @@ export class DataRetentionService {
 
     for (const dataType of dataTypes) {
       switch (dataType) {
-        case 'user_account':
-          const userResult = await this.db.query(`
+      case 'user_account':
+        const userResult = await this.db.query(`
             SELECT email, created_at, last_login_at, status 
             FROM users WHERE id = $1
           `, [userId]);
-          exportData.userAccount = userResult.rows[0];
-          recordCount += userResult.rowCount || 0;
-          break;
+        exportData.userAccount = userResult.rows[0];
+        recordCount += userResult.rowCount || 0;
+        break;
 
-        case 'project_data':
-          const projectResult = await this.db.query(`
+      case 'project_data':
+        const projectResult = await this.db.query(`
             SELECT name, description, graph_data, created_at, updated_at
             FROM user_projects WHERE user_id = $1 AND deleted_at IS NULL
           `, [userId]);
-          exportData.projects = projectResult.rows;
-          recordCount += projectResult.rowCount || 0;
-          break;
+        exportData.projects = projectResult.rows;
+        recordCount += projectResult.rowCount || 0;
+        break;
 
-        case 'authentication_logs':
-          const authResult = await this.db.query(`
+      case 'authentication_logs':
+        const authResult = await this.db.query(`
             SELECT action, details, created_at 
             FROM audit_logs 
             WHERE user_id = $1 AND action_type = 'authentication'
             ORDER BY created_at DESC
           `, [userId]);
-          exportData.authenticationLogs = authResult.rows;
-          recordCount += authResult.rowCount || 0;
-          break;
+        exportData.authenticationLogs = authResult.rows;
+        recordCount += authResult.rowCount || 0;
+        break;
       }
     }
 

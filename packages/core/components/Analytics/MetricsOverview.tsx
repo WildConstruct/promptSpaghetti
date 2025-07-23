@@ -287,7 +287,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
             value: performanceMetrics.overview?.healthScore || 100,
             max: 100,
             color: (performanceMetrics.overview?.healthScore || 100) > 90 ? 'green' : 
-                   (performanceMetrics.overview?.healthScore || 100) > 70 ? 'yellow' : 'red'
+              (performanceMetrics.overview?.healthScore || 100) > 70 ? 'yellow' : 'red'
           }}
           icon={<Activity className="w-5 h-5" />}
         />
@@ -361,7 +361,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
                   <div className="metric-header">
                     <span className="metric-name">{metric.name.replace('-', ' ')}</span>
                     <Badge variant={metric.trend === 'improving' ? 'default' : 
-                                   metric.trend === 'degrading' ? 'destructive' : 'secondary'}>
+                      metric.trend === 'degrading' ? 'destructive' : 'secondary'}>
                       {metric.trend}
                     </Badge>
                   </div>
@@ -399,7 +399,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
                           width: `${Math.min(
                             100,
                             (node.count / Math.max(...usage.popularNodes.map((n: any
-                          ) => n.count))) * 100)}%` 
+                            ) => n.count))) * 100)}%` 
                         }}
                       />
                     </div>

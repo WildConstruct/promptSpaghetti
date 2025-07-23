@@ -78,14 +78,14 @@ class CircuitBreaker extends EventEmitter {
       newState,
       failures: this.failures,
       successes: this.successes,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
 
     this.emit('stateChanged', {
       name: this.options.name,
       previousState,
       newState,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     });
   }
 
@@ -113,7 +113,7 @@ class CircuitBreaker extends EventEmitter {
       lastFailureTime: this.lastFailureTime,
       lastSuccessTime: this.lastSuccessTime,
       stateChangedTime: this.stateChangedTime,
-      nextRetryTime: this.nextRetryTime,
+      nextRetryTime: this.nextRetryTime
     };
   }
 
@@ -138,7 +138,7 @@ class CircuitBreaker extends EventEmitter {
           setTimeout(() => {
             reject(new Error(`Operation timed out after ${this.options.timeout}ms`));
           }, this.options.timeout);
-        }),
+        })
       ]);
 
       // Success case
@@ -241,7 +241,7 @@ export class CircuitBreakerService {
         resetTimeout: 30000,
         monitoringPeriod: 60000,
         name: breakerName,
-        ...options,
+        ...options
       };
       breaker = this.createCircuitBreaker(defaultOptions);
     }
@@ -261,7 +261,7 @@ export class CircuitBreakerService {
         successThreshold: 2,
         timeout: 10000, // 10s for database operations
         resetTimeout: 30000, // 30s before retry
-        monitoringPeriod: 300000, // 5min window
+        monitoringPeriod: 300000 // 5min window
       });
     }
 
@@ -279,7 +279,7 @@ export class CircuitBreakerService {
         successThreshold: 3,
         timeout: 2000, // 2s for cache operations
         resetTimeout: 15000, // 15s before retry
-        monitoringPeriod: 120000, // 2min window
+        monitoringPeriod: 120000 // 2min window
       });
     }
 
@@ -297,7 +297,7 @@ export class CircuitBreakerService {
         successThreshold: 2,
         timeout: 5000, // 5s for external API calls
         resetTimeout: 60000, // 1min before retry
-        monitoringPeriod: 600000, // 10min window
+        monitoringPeriod: 600000 // 10min window
       });
     }
 
@@ -315,7 +315,7 @@ export class CircuitBreakerService {
         successThreshold: 2,
         timeout: 5000, // 5s for file operations
         resetTimeout: 20000, // 20s before retry
-        monitoringPeriod: 180000, // 3min window
+        monitoringPeriod: 180000 // 3min window
       });
     }
 

@@ -293,7 +293,7 @@ export class UsageQuotaService {
       console.log(`✅ Violation handled for quota ${quota.quotaId}`);
 
     } catch (error) {
-      console.error(`❌ Error handling quota violation:`, error);
+      console.error('❌ Error handling quota violation:', error);
       throw error;
     }
   }
@@ -309,40 +309,40 @@ export class UsageQuotaService {
     console.log(`⚖️ Executing enforcement action: ${quota.enforcementAction}`);
 
     switch (quota.enforcementAction) {
-      case 'warn':
-        await this.sendWarningNotification(violation, quota);
-        break;
+    case 'warn':
+      await this.sendWarningNotification(violation, quota);
+      break;
 
-      case 'throttle':
-        await this.applyThrottling(request.userId, quota);
-        break;
+    case 'throttle':
+      await this.applyThrottling(request.userId, quota);
+      break;
 
-      case 'soft_block':
-        await this.applySoftBlock(request.userId, quota, violation);
-        break;
+    case 'soft_block':
+      await this.applySoftBlock(request.userId, quota, violation);
+      break;
 
-      case 'hard_block':
-        await this.applyHardBlock(request.userId, quota, violation);
-        break;
+    case 'hard_block':
+      await this.applyHardBlock(request.userId, quota, violation);
+      break;
 
-      case 'review':
-        await this.queueForReview(violation, quota);
-        break;
+    case 'review':
+      await this.queueForReview(violation, quota);
+      break;
 
-      case 'degrade':
-        await this.applyServiceDegradation(request.userId, quota);
-        break;
+    case 'degrade':
+      await this.applyServiceDegradation(request.userId, quota);
+      break;
 
-      case 'redirect':
-        await this.setupTrafficRedirect(request.userId, quota);
-        break;
+    case 'redirect':
+      await this.setupTrafficRedirect(request.userId, quota);
+      break;
 
-      case 'upgrade_prompt':
-        await this.sendUpgradePrompt(request.userId, quota, violation);
-        break;
+    case 'upgrade_prompt':
+      await this.sendUpgradePrompt(request.userId, quota, violation);
+      break;
 
-      default:
-        console.warn(`⚠️ Unknown enforcement action: ${quota.enforcementAction}`);
+    default:
+      console.warn(`⚠️ Unknown enforcement action: ${quota.enforcementAction}`);
     }
   }
 
@@ -421,7 +421,7 @@ export class UsageQuotaService {
       return newQuota;
 
     } catch (error) {
-      console.error(`❌ Error creating quota:`, error);
+      console.error('❌ Error creating quota:', error);
       throw error;
     }
   }
@@ -653,7 +653,7 @@ export class UsageQuotaService {
       return result.rows.map(row => this.mapDbRowToQuota(row));
 
     } catch (error) {
-      console.error(`❌ Error finding applicable quotas:`, error);
+      console.error('❌ Error finding applicable quotas:', error);
       return [];
     }
   }
@@ -751,50 +751,50 @@ export class UsageQuotaService {
     let end: Date;
 
     switch (limitPeriod) {
-      case 'second':
-        start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
-        end = new Date(start.getTime() + 1000);
-        break;
+    case 'second':
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
+      end = new Date(start.getTime() + 1000);
+      break;
 
-      case 'minute':
-        start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
-        end = new Date(start.getTime() + 60000);
-        break;
+    case 'minute':
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+      end = new Date(start.getTime() + 60000);
+      break;
 
-      case 'hour':
-        start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
-        end = new Date(start.getTime() + 3600000);
-        break;
+    case 'hour':
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
+      end = new Date(start.getTime() + 3600000);
+      break;
 
-      case 'day':
-        start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        end = new Date(start.getTime() + 86400000);
-        break;
+    case 'day':
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      end = new Date(start.getTime() + 86400000);
+      break;
 
-      case 'week':
-        const dayOfWeek = now.getDay();
-        start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOfWeek);
-        end = new Date(start.getTime() + 7 * 86400000);
-        break;
+    case 'week':
+      const dayOfWeek = now.getDay();
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - dayOfWeek);
+      end = new Date(start.getTime() + 7 * 86400000);
+      break;
 
-      case 'month':
-        start = new Date(now.getFullYear(), now.getMonth());
-        end = new Date(now.getFullYear(), now.getMonth() + 1);
-        break;
+    case 'month':
+      start = new Date(now.getFullYear(), now.getMonth());
+      end = new Date(now.getFullYear(), now.getMonth() + 1);
+      break;
 
-      case 'year':
-        start = new Date(now.getFullYear(), 0);
-        end = new Date(now.getFullYear() + 1, 0);
-        break;
+    case 'year':
+      start = new Date(now.getFullYear(), 0);
+      end = new Date(now.getFullYear() + 1, 0);
+      break;
 
-      case 'rolling':
-        // Rolling 24-hour window
-        start = new Date(now.getTime() - 86400000);
-        end = now;
-        break;
+    case 'rolling':
+      // Rolling 24-hour window
+      start = new Date(now.getTime() - 86400000);
+      end = now;
+      break;
 
-      default:
-        throw new Error(`Unsupported limit period: ${limitPeriod}`);
+    default:
+      throw new Error(`Unsupported limit period: ${limitPeriod}`);
     }
 
     return { start, end };

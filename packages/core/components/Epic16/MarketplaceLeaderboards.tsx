@@ -192,15 +192,15 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
 
   const handleEntryClick = (entry: LeaderboardEntry) => {
     switch (activeTab) {
-      case 'templates':
-        onTemplateClick?.(entry.id);
-        break;
-      case 'creators':
-        onCreatorClick?.(entry.id);
-        break;
-      case 'categories':
-        onCategoryClick?.(entry.id);
-        break;
+    case 'templates':
+      onTemplateClick?.(entry.id);
+      break;
+    case 'creators':
+      onCreatorClick?.(entry.id);
+      break;
+    case 'categories':
+      onCategoryClick?.(entry.id);
+      break;
     }
   };
 
@@ -402,56 +402,56 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
 
   const renderEntryDetails = (entry: LeaderboardEntry) => {
     switch (activeTab) {
-      case 'templates':
-        const templateData = entry.metadata as any;
-        return (
-          <div className="flex items-center space-x-4 text-xs">
-            <span>by {templateData.creatorName}</span>
-            <span className="flex items-center">
-              <Eye className="w-3 h-3 mr-1" />
-              {templateData.totalPurchases} purchases
-            </span>
-            <span className="flex items-center">
-              <Star className="w-3 h-3 mr-1" />
-              {templateData.averageRating?.toFixed(1) || 'N/A'}
-            </span>
-          </div>
-        );
-      case 'creators':
-        const creatorData = entry.metadata as any;
-        return (
-          <div className="flex items-center space-x-4 text-xs">
-            <span>{creatorData.templateCount} templates</span>
-            <span className="flex items-center">
-              <Star className="w-3 h-3 mr-1" />
-              {creatorData.averageRating?.toFixed(1) || 'N/A'}
-            </span>
-            {creatorData.verificationBadges?.length > 0 && (
-              <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">
+    case 'templates':
+      const templateData = entry.metadata as any;
+      return (
+        <div className="flex items-center space-x-4 text-xs">
+          <span>by {templateData.creatorName}</span>
+          <span className="flex items-center">
+            <Eye className="w-3 h-3 mr-1" />
+            {templateData.totalPurchases} purchases
+          </span>
+          <span className="flex items-center">
+            <Star className="w-3 h-3 mr-1" />
+            {templateData.averageRating?.toFixed(1) || 'N/A'}
+          </span>
+        </div>
+      );
+    case 'creators':
+      const creatorData = entry.metadata as any;
+      return (
+        <div className="flex items-center space-x-4 text-xs">
+          <span>{creatorData.templateCount} templates</span>
+          <span className="flex items-center">
+            <Star className="w-3 h-3 mr-1" />
+            {creatorData.averageRating?.toFixed(1) || 'N/A'}
+          </span>
+          {creatorData.verificationBadges?.length > 0 && (
+            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">
                 Verified
-              </span>
-            )}
-          </div>
-        );
-      case 'categories':
-        const categoryData = entry.metadata as any;
-        return (
-          <div className="flex items-center space-x-4 text-xs">
-            <span>{categoryData.templateCount} templates</span>
-            <span>Growth: {categoryData.growthRate?.toFixed(1)}%</span>
-          </div>
-        );
-      case 'engagement':
-        const engagementData = entry.metadata as any;
-        return (
-          <div className="flex items-center space-x-4 text-xs">
-            <span>{engagementData.badgeCount} badges</span>
-            <span>Level {engagementData.level}</span>
-            <span>{engagementData.reviewsWritten} reviews</span>
-          </div>
-        );
-      default:
-        return null;
+            </span>
+          )}
+        </div>
+      );
+    case 'categories':
+      const categoryData = entry.metadata as any;
+      return (
+        <div className="flex items-center space-x-4 text-xs">
+          <span>{categoryData.templateCount} templates</span>
+          <span>Growth: {categoryData.growthRate?.toFixed(1)}%</span>
+        </div>
+      );
+    case 'engagement':
+      const engagementData = entry.metadata as any;
+      return (
+        <div className="flex items-center space-x-4 text-xs">
+          <span>{engagementData.badgeCount} badges</span>
+          <span>Level {engagementData.level}</span>
+          <span>{engagementData.reviewsWritten} reviews</span>
+        </div>
+      );
+    default:
+      return null;
     }
   };
 
@@ -538,65 +538,65 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
 function getLeaderboardEndpoint(tab: string, metric: string): string {
   const baseUrl = '/api/leaderboards';
   switch (tab) {
-    case 'templates':
-      return `${baseUrl}/templates/${metric}`;
-    case 'creators':
-      return `${baseUrl}/creators/${metric}`;
-    case 'categories':
-      return `${baseUrl}/categories/${metric}`;
-    case 'engagement':
-      return `${baseUrl}/engagement/${metric}`;
-    default:
-      return `${baseUrl}/templates/revenue`;
+  case 'templates':
+    return `${baseUrl}/templates/${metric}`;
+  case 'creators':
+    return `${baseUrl}/creators/${metric}`;
+  case 'categories':
+    return `${baseUrl}/categories/${metric}`;
+  case 'engagement':
+    return `${baseUrl}/engagement/${metric}`;
+  default:
+    return `${baseUrl}/templates/revenue`;
   }
 }
 
 function getDefaultMetric(tab: string): string {
   switch (tab) {
-    case 'templates':
-      return 'revenue';
-    case 'creators':
-      return 'revenue';
-    case 'categories':
-      return 'revenue';
-    case 'engagement':
-      return 'points';
-    default:
-      return 'revenue';
+  case 'templates':
+    return 'revenue';
+  case 'creators':
+    return 'revenue';
+  case 'categories':
+    return 'revenue';
+  case 'engagement':
+    return 'points';
+  default:
+    return 'revenue';
   }
 }
 
 function getMetricsForTab(tab: string): Array<{ id: string; label: string }> {
   switch (tab) {
-    case 'templates':
-      return [
-        { id: 'revenue', label: 'Revenue' },
-        { id: 'purchases', label: 'Purchases' },
-        { id: 'rating', label: 'Rating' },
-        { id: 'trending', label: 'Trending' }
-      ];
-    case 'creators':
-      return [
-        { id: 'revenue', label: 'Revenue' },
-        { id: 'templates', label: 'Templates' },
-        { id: 'rating', label: 'Rating' },
-        { id: 'badges', label: 'Badges' }
-      ];
-    case 'categories':
-      return [
-        { id: 'revenue', label: 'Revenue' },
-        { id: 'templates', label: 'Templates' },
-        { id: 'growth', label: 'Growth' }
-      ];
-    case 'engagement':
-      return [
-        { id: 'points', label: 'Points' },
-        { id: 'badges', label: 'Badges' },
-        { id: 'reviews', label: 'Reviews' },
-        { id: 'contributions', label: 'Contributions' }
-      ];
-    default:
-      return [{ id: 'revenue', label: 'Revenue' }];
+  case 'templates':
+    return [
+      { id: 'revenue', label: 'Revenue' },
+      { id: 'purchases', label: 'Purchases' },
+      { id: 'rating', label: 'Rating' },
+      { id: 'trending', label: 'Trending' }
+    ];
+  case 'creators':
+    return [
+      { id: 'revenue', label: 'Revenue' },
+      { id: 'templates', label: 'Templates' },
+      { id: 'rating', label: 'Rating' },
+      { id: 'badges', label: 'Badges' }
+    ];
+  case 'categories':
+    return [
+      { id: 'revenue', label: 'Revenue' },
+      { id: 'templates', label: 'Templates' },
+      { id: 'growth', label: 'Growth' }
+    ];
+  case 'engagement':
+    return [
+      { id: 'points', label: 'Points' },
+      { id: 'badges', label: 'Badges' },
+      { id: 'reviews', label: 'Reviews' },
+      { id: 'contributions', label: 'Contributions' }
+    ];
+  default:
+    return [{ id: 'revenue', label: 'Revenue' }];
   }
 }
 
@@ -626,27 +626,27 @@ function getLeaderboardTitle(tab: string, metric: string): string {
 
 function formatScore(score: number, metric: string): string {
   switch (metric) {
-    case 'revenue':
-      return `$${(score / 100).toFixed(2)}`;
-    case 'rating':
-      return `${score.toFixed(1)} ★`;
-    case 'growth':
-      return `${score.toFixed(1)}%`;
-    default:
-      return score.toLocaleString();
+  case 'revenue':
+    return `$${(score / 100).toFixed(2)}`;
+  case 'rating':
+    return `${score.toFixed(1)} ★`;
+  case 'growth':
+    return `${score.toFixed(1)}%`;
+  default:
+    return score.toLocaleString();
   }
 }
 
 function getRankIcon(rank: number): React.ReactNode | null {
   switch (rank) {
-    case 1:
-      return <Trophy className="w-6 h-6 text-yellow-500" />;
-    case 2:
-      return <Medal className="w-6 h-6 text-gray-400" />;
-    case 3:
-      return <Award className="w-6 h-6 text-orange-500" />;
-    default:
-      return null;
+  case 1:
+    return <Trophy className="w-6 h-6 text-yellow-500" />;
+  case 2:
+    return <Medal className="w-6 h-6 text-gray-400" />;
+  case 3:
+    return <Award className="w-6 h-6 text-orange-500" />;
+  default:
+    return null;
   }
 }
 

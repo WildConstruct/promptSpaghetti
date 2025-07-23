@@ -47,14 +47,14 @@ export const usePreviewSeeds = () => {
       const response = await fetch('/preview', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           graph,
           runs: 5,
           seedStart: Math.floor(Math.random() * 10000)
         }),
-        signal: controller.signal,
+        signal: controller.signal
       });
 
       if (!response.ok) {

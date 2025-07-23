@@ -435,9 +435,9 @@ class FinalDebtPrioritizationEngine {
     
     report.push('# Final Technical Debt Prioritization Report');
     report.push(`**Generated**: ${new Date().toISOString()}`);
-    report.push(`**Epic 18 Task**: E18-1753114561979-82AADE - Apply framework to inventory`);
-    report.push(`**Framework Version**: 2.2.0 (Final Corrected)`);
-    report.push(`**Scoring Method**: Epic 18 Prioritization Framework (100-point scale)\n`);
+    report.push('**Epic 18 Task**: E18-1753114561979-82AADE - Apply framework to inventory');
+    report.push('**Framework Version**: 2.2.0 (Final Corrected)');
+    report.push('**Scoring Method**: Epic 18 Prioritization Framework (100-point scale)\n');
     
     // Executive Summary
     report.push('## 📊 Executive Summary\n');
@@ -474,7 +474,7 @@ class FinalDebtPrioritizationEngine {
         report.push(`**Impact**: ${item.impact}`);
         
         if (item.blocksDeployment) {
-          report.push(`**🚫 DEPLOYMENT BLOCKER** - Cannot deploy until resolved`);
+          report.push('**🚫 DEPLOYMENT BLOCKER** - Cannot deploy until resolved');
         }
         
         report.push('\n**Scoring Breakdown**:');
@@ -568,18 +568,18 @@ class FinalDebtPrioritizationEngine {
       report.push('### Phase 1: Critical Security Fixes (Immediate)');
       report.push(`- **Items**: ${p0Count} critical deployment blockers`);
       report.push(`- **Effort**: ${p0Effort} hours`);
-      report.push(`- **Duration**: 1-2 days`);
-      report.push(`- **Team**: Senior developer + security reviewer`);
-      report.push(`- **Outcome**: Deployment unblocked, critical security vulnerabilities resolved\n`);
+      report.push('- **Duration**: 1-2 days');
+      report.push('- **Team**: Senior developer + security reviewer');
+      report.push('- **Outcome**: Deployment unblocked, critical security vulnerabilities resolved\n');
     }
     
     if (p1Count > 0) {
       report.push('### Phase 2: High Priority Issues (Next Sprint)');
       report.push(`- **Items**: ${p1Count} high priority items`);
       report.push(`- **Effort**: ${p1Effort} hours`);
-      report.push(`- **Duration**: 1-2 weeks`);
-      report.push(`- **Team**: Development team`);
-      report.push(`- **Outcome**: Major technical debt addressed\n`);
+      report.push('- **Duration**: 1-2 weeks');
+      report.push('- **Team**: Development team');
+      report.push('- **Outcome**: Major technical debt addressed\n');
     }
     
     const p2Count = processedData.summary.priorityDistribution.P2;
@@ -589,9 +589,9 @@ class FinalDebtPrioritizationEngine {
       report.push('### Phase 3: Medium Priority Improvements (Upcoming Sprints)');
       report.push(`- **Items**: ${p2Count} medium priority items`);
       report.push(`- **Effort**: ${p2Effort} hours`);
-      report.push(`- **Duration**: 4-6 weeks`);
-      report.push(`- **Team**: Development team (background work)`);
-      report.push(`- **Outcome**: Code quality and maintainability improvements\n`);
+      report.push('- **Duration**: 4-6 weeks');
+      report.push('- **Team**: Development team (background work)');
+      report.push('- **Outcome**: Code quality and maintainability improvements\n');
     }
     
     return report.join('\n');
@@ -645,7 +645,7 @@ class FinalDebtPrioritizationEngine {
       };
       fs.writeFileSync(dashboardPath, JSON.stringify(dashboard, null, 2));
       
-      console.log(`✅ Final results saved:`);
+      console.log('✅ Final results saved:');
       console.log(`   📄 Complete inventory: ${finalInventoryPath}`);
       console.log(`   📊 Comprehensive report: ${reportPath}`);
       console.log(`   📈 Executive dashboard: ${dashboardPath}\n`);

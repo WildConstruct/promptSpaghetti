@@ -286,7 +286,7 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
               <span className="text-sm font-medium text-gray-700">Response SLA</span>
               <span className={`text-xs font-medium ${
                 slaStatus.responseOverdue ? 'text-red-600' : 
-                slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600'
+                  slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600'
               }`}>
                 {currentTicket.sla.responseTime.actual 
                   ? `Responded in ${currentTicket.sla.responseTime.actual}m`
@@ -303,7 +303,7 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
               <span className="text-sm font-medium text-gray-700">Resolution SLA</span>
               <span className={`text-xs font-medium ${
                 slaStatus.resolutionOverdue ? 'text-red-600' : 
-                slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600'
+                  slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600'
               }`}>
                 {currentTicket.sla.resolutionTime.actual 
                   ? `Resolved in ${Math.round(currentTicket.sla.resolutionTime.actual / 60)}h`
@@ -434,8 +434,8 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({
                     <span className="text-sm font-medium">{integration.system}</span>
                     <span className={`px-2 py-1 text-xs rounded ${
                       integration.status === 'synced' ? 'bg-green-100 text-green-800' :
-                      integration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
+                        integration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
                     }`}>
                       {integration.status}
                     </span>

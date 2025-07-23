@@ -15,16 +15,16 @@ const MedicalEntitySchema = z.object({
   text: z.string(),
   label: z.enum(
     ['PERSON',
-    'DATE',
-    'PHONE',
-    'EMAIL',
-    'SSN',
-    'MEDICAL_RECORD_NUMBER',
-    'DIAGNOSIS',
-    'MEDICATION',
-    'PROCEDURE',
-    'ANATOMY',
-    'DOSAGE']
+      'DATE',
+      'PHONE',
+      'EMAIL',
+      'SSN',
+      'MEDICAL_RECORD_NUMBER',
+      'DIAGNOSIS',
+      'MEDICATION',
+      'PROCEDURE',
+      'ANATOMY',
+      'DOSAGE']
   ),
   start: z.number(),
   end: z.number(),
@@ -191,18 +191,18 @@ export class HealthcareService {
 
     try {
       switch (format) {
-        case 'fhir':
-          return await this.validateFHIRData(data, { version, strict });
-        case 'hl7v2':
-          return await this.validateHL7v2Data(data, { version, strict });
-        case 'hl7v3':
-          return await this.validateHL7v3Data(data, { version, strict });
-        case 'cda':
-          return await this.validateCDAData(data, { version, strict });
-        case 'dicom':
-          return await this.validateDICOMData(data, { version, strict });
-        default:
-          throw new Error(`Unsupported healthcare data format: ${format}`);
+      case 'fhir':
+        return await this.validateFHIRData(data, { version, strict });
+      case 'hl7v2':
+        return await this.validateHL7v2Data(data, { version, strict });
+      case 'hl7v3':
+        return await this.validateHL7v3Data(data, { version, strict });
+      case 'cda':
+        return await this.validateCDAData(data, { version, strict });
+      case 'dicom':
+        return await this.validateDICOMData(data, { version, strict });
+      default:
+        throw new Error(`Unsupported healthcare data format: ${format}`);
       }
     } catch (error) {
       return {
@@ -226,7 +226,7 @@ export class HealthcareService {
 
     try {
       // Find or use default template
-      let template = templateId 
+      const template = templateId 
         ? this.workflowTemplates.find(t => t.id === templateId)
         : this.workflowTemplates.find(t => t.type === workflowType);
 

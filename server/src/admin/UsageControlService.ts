@@ -771,23 +771,23 @@ export class UsageControlService {
     let currentUsage = 0;
     
     switch (limit.type) {
-      case UsageLimitType.REQUESTS_PER_MINUTE:
-      case UsageLimitType.REQUESTS_PER_HOUR:
-      case UsageLimitType.REQUESTS_PER_DAY:
-        currentUsage = this.getRequestCount(key, windowStart, now);
-        break;
+    case UsageLimitType.REQUESTS_PER_MINUTE:
+    case UsageLimitType.REQUESTS_PER_HOUR:
+    case UsageLimitType.REQUESTS_PER_DAY:
+      currentUsage = this.getRequestCount(key, windowStart, now);
+      break;
         
-      case UsageLimitType.BANDWIDTH_PER_HOUR:
-      case UsageLimitType.BANDWIDTH_PER_DAY:
-        currentUsage = this.getBandwidthUsage(key, windowStart, now);
-        break;
+    case UsageLimitType.BANDWIDTH_PER_HOUR:
+    case UsageLimitType.BANDWIDTH_PER_DAY:
+      currentUsage = this.getBandwidthUsage(key, windowStart, now);
+      break;
         
-      case UsageLimitType.CONCURRENT_CONNECTIONS:
-        currentUsage = this.activeConnections.get(key) || 0;
-        break;
+    case UsageLimitType.CONCURRENT_CONNECTIONS:
+      currentUsage = this.activeConnections.get(key) || 0;
+      break;
         
-      default:
-        currentUsage = 0;
+    default:
+      currentUsage = 0;
     }
 
     const percentage = (currentUsage / limit.threshold) * 100;
@@ -827,13 +827,13 @@ export class UsageControlService {
     const baseWaitTime = 1000; // 1 second
 
     switch (limit.configuration.backoffStrategy) {
-      case 'linear':
-        return Math.min(baseWaitTime * excessUsage, limit.configuration.maxBackoffTime);
-      case 'exponential':
-        return Math.min(baseWaitTime * Math.pow(2, excessUsage), limit.configuration.maxBackoffTime);
-      case 'fixed':
-      default:
-        return baseWaitTime;
+    case 'linear':
+      return Math.min(baseWaitTime * excessUsage, limit.configuration.maxBackoffTime);
+    case 'exponential':
+      return Math.min(baseWaitTime * Math.pow(2, excessUsage), limit.configuration.maxBackoffTime);
+    case 'fixed':
+    default:
+      return baseWaitTime;
     }
   }
 
@@ -858,17 +858,17 @@ export class UsageControlService {
     const windowStart = now - limit.period;
     
     switch (limit.type) {
-      case UsageLimitType.REQUESTS_PER_MINUTE:
-      case UsageLimitType.REQUESTS_PER_HOUR:
-      case UsageLimitType.REQUESTS_PER_DAY:
-        return this.getRequestCount(key, windowStart, now);
-      case UsageLimitType.BANDWIDTH_PER_HOUR:
-      case UsageLimitType.BANDWIDTH_PER_DAY:
-        return this.getBandwidthUsage(key, windowStart, now);
-      case UsageLimitType.CONCURRENT_CONNECTIONS:
-        return this.activeConnections.get(key) || 0;
-      default:
-        return 0;
+    case UsageLimitType.REQUESTS_PER_MINUTE:
+    case UsageLimitType.REQUESTS_PER_HOUR:
+    case UsageLimitType.REQUESTS_PER_DAY:
+      return this.getRequestCount(key, windowStart, now);
+    case UsageLimitType.BANDWIDTH_PER_HOUR:
+    case UsageLimitType.BANDWIDTH_PER_DAY:
+      return this.getBandwidthUsage(key, windowStart, now);
+    case UsageLimitType.CONCURRENT_CONNECTIONS:
+      return this.activeConnections.get(key) || 0;
+    default:
+      return 0;
     }
   }
 

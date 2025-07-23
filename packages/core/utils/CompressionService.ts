@@ -457,20 +457,20 @@ export class CompressionService {
     
     // Algorithm selection based on data type and size
     switch (dataType) {
-      case DataType.JSON:
-      case DataType.TEXT:
-        return inputBuffer.length > 50000 ? CompressionAlgorithm.BROTLI : CompressionAlgorithm.GZIP;
+    case DataType.JSON:
+    case DataType.TEXT:
+      return inputBuffer.length > 50000 ? CompressionAlgorithm.BROTLI : CompressionAlgorithm.GZIP;
       
-      case DataType.HTML:
-      case DataType.CSS:
-      case DataType.JAVASCRIPT:
-        return CompressionAlgorithm.BROTLI;
+    case DataType.HTML:
+    case DataType.CSS:
+    case DataType.JAVASCRIPT:
+      return CompressionAlgorithm.BROTLI;
       
-      case DataType.BINARY:
-        return inputBuffer.length > 100000 ? CompressionAlgorithm.DEFLATE : CompressionAlgorithm.GZIP;
+    case DataType.BINARY:
+      return inputBuffer.length > 100000 ? CompressionAlgorithm.DEFLATE : CompressionAlgorithm.GZIP;
       
-      default:
-        return CompressionAlgorithm.GZIP;
+    default:
+      return CompressionAlgorithm.GZIP;
     }
   }
 
@@ -538,7 +538,7 @@ export class CompressionService {
     averageCompressionRatio: number;
     bestPerformingAlgorithm: CompressionAlgorithm;
     recommendedSettings: CompressionOptions;
-  } {
+    } {
     const totalOriginal = this.stats.totalBytesCompressed;
     const totalCompressed = Array.from(this.stats.algorithmStats.values())
       .reduce((sum, stat) => sum + (stat.totalBytesProcessed * (1 - stat.averageCompressionRatio)), 0);

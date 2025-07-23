@@ -31,7 +31,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
     process.env.NODE_ENV = 'test';
     mockDatabase = {
       query: jest.fn(),
-      transaction: jest.fn(),
+      transaction: jest.fn()
     };
   });
 

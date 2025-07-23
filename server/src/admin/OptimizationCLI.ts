@@ -455,7 +455,7 @@ export class OptimizationCLI {
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
       
-      console.log(`\n📊 OPTIMIZATION SUMMARY:`);
+      console.log('\n📊 OPTIMIZATION SUMMARY:');
       console.log(`✅ Successful: ${successCount}`);
       console.log(`❌ Failed: ${errorCount}`);
       console.log(`📈 Total processed: ${successCount + errorCount}`);

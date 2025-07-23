@@ -300,7 +300,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     tokenBuckets: Record<string, { tokens: number; capacity: number }>;
     systemCondition: SystemCondition;
     systemMetrics: SystemMetrics;
-  } {
+    } {
     const circuitBreakers: Record<string, CircuitBreakerState> = {};
     for (const [id, state] of this.circuitBreakerStates) {
       circuitBreakers[id] = state;

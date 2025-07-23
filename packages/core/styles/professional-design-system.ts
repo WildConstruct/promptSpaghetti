@@ -158,7 +158,7 @@ export const professionalColors: ProfessionalColorPalette = {
     secondary: '#2a2a2a',   // Panel backgrounds
     tertiary: '#353535',    // Elevated surfaces
     elevated: '#404040',    // Modal backgrounds
-    inverse: '#f5f5f5',     // Light surfaces
+    inverse: '#f5f5f5'     // Light surfaces
   },
   
   text: {
@@ -166,7 +166,7 @@ export const professionalColors: ProfessionalColorPalette = {
     secondary: '#b8b8b8',   // Secondary text
     tertiary: '#888888',    // Disabled text
     inverse: '#1e1e1e',     // Text on light backgrounds
-    accent: '#ff7c00',      // Cinema 4D orange accent
+    accent: '#ff7c00'      // Cinema 4D orange accent
   },
   
   accent: {
@@ -176,7 +176,7 @@ export const professionalColors: ProfessionalColorPalette = {
     purple: '#b45cff',      // Advanced features purple
     green: '#4ade80',       // Success green
     red: '#ef4444',         // Error red
-    yellow: '#fbbf24',      // Warning yellow
+    yellow: '#fbbf24'      // Warning yellow
   },
   
   nodes: {
@@ -185,7 +185,7 @@ export const professionalColors: ProfessionalColorPalette = {
     output: '#dc2626',      // Red for outputs
     variable: '#7c3aed',    // Purple for variables
     advanced: '#6366f1',    // Blue-violet for advanced
-    transform: '#f59e0b',   // Amber for transforms
+    transform: '#f59e0b'   // Amber for transforms
   },
   
   ui: {
@@ -194,8 +194,8 @@ export const professionalColors: ProfessionalColorPalette = {
     borderActive: '#ff7c00', // Active borders (Cinema 4D orange)
     focus: '#4a9eff',       // Focus ring color
     selection: '#ff7c0040', // Selection highlight with opacity
-    hover: '#2d2d2d',       // Hover background
-  },
+    hover: '#2d2d2d'       // Hover background
+  }
 };
 
 // Professional Typography System
@@ -204,7 +204,7 @@ export const professionalTypography: ProfessionalTypography = {
     // Technical-friendly font stack inspired by VFX tools
     primary: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif',
     mono: '"SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", "Consolas", monospace',
-    heading: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif',
+    heading: '-apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display", system-ui, sans-serif'
   },
   
   fontSizes: {
@@ -214,27 +214,27 @@ export const professionalTypography: ProfessionalTypography = {
     lg: '16px',
     xl: '18px',
     '2xl': '20px',
-    '3xl': '24px',
+    '3xl': '24px'
   },
   
   fontWeights: {
     normal: 400,
     medium: 500,
     semibold: 600,
-    bold: 700,
+    bold: 700
   },
   
   lineHeights: {
     tight: 1.25,
     normal: 1.5,
-    relaxed: 1.75,
+    relaxed: 1.75
   },
   
   letterSpacing: {
     tight: '-0.025em',
     normal: '0em',
-    wide: '0.025em',
-  },
+    wide: '0.025em'
+  }
 };
 
 // Professional Shadow System
@@ -245,22 +245,22 @@ export const professionalShadows: ProfessionalShadows = {
     md: '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)',
     lg: '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.25)',
     xl: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3)',
-    '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.6)',
+    '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.6)'
   },
   
   node: {
     default: '0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)',
     hover: '0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25)',
     selected: '0 0 0 2px #ff7c00, 0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4)',
-    focus: '0 0 0 3px rgba(74, 158, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35)',
+    focus: '0 0 0 3px rgba(74, 158, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35)'
   },
   
   glow: {
     subtle: '0 0 10px rgba(255, 124, 0, 0.1)',
     medium: '0 0 20px rgba(255, 124, 0, 0.2)',
     strong: '0 0 30px rgba(255, 124, 0, 0.3)',
-    accent: '0 0 15px rgba(74, 158, 255, 0.25)',
-  },
+    accent: '0 0 15px rgba(74, 158, 255, 0.25)'
+  }
 };
 
 // Professional Spacing System (8px grid)
@@ -279,7 +279,7 @@ export const professionalSpacing: ProfessionalSpacing = {
   16: '64px',
   20: '80px',
   24: '96px',
-  32: '128px',
+  32: '128px'
 };
 
 // Professional Border Radius
@@ -290,7 +290,7 @@ export const professionalBorderRadius: ProfessionalBorderRadius = {
   lg: '8px',
   xl: '12px',
   '2xl': '16px',
-  full: '50%',
+  full: '50%'
 };
 
 // Complete Professional Design System
@@ -307,7 +307,7 @@ export const professionalDesignSystem: ProfessionalDesignSystem = {
   typography: professionalTypography,
   shadows: professionalShadows,
   spacing: professionalSpacing,
-  borderRadius: professionalBorderRadius,
+  borderRadius: professionalBorderRadius
 };
 
 // CSS Custom Properties Generator
@@ -366,6 +366,6 @@ export const generateCSSCustomProperties = (
     // Border Radius
     '--radius-sm': borderRadius.sm,
     '--radius-md': borderRadius.md,
-    '--radius-lg': borderRadius.lg,
+    '--radius-lg': borderRadius.lg
   };
 };

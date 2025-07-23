@@ -926,7 +926,7 @@ export class EscalationProcedureService extends EventEmitter {
 
   private async loadActiveCases(): Promise<void> {
     const rows = await this.database.query(
-      "SELECT * FROM escalation_cases WHERE status IN ('pending', 'in_progress', 'escalated') ORDER BY created_at DESC"
+      'SELECT * FROM escalation_cases WHERE status IN (\'pending\', \'in_progress\', \'escalated\') ORDER BY created_at DESC'
     );
 
     for (const row of rows) {

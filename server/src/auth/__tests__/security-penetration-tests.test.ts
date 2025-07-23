@@ -313,8 +313,8 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       // Tampered payload
       const tamperedPayload = 'header.' + Buffer.from(
         JSON.stringify({ userId: 1,
-        role: 'admin' }
-      )).toString('base64') + '.valid-signature';
+          role: 'admin' }
+        )).toString('base64') + '.valid-signature';
       expect(validateJWT(tamperedPayload).valid).toBe(false);
 
       // Invalid signature
@@ -373,7 +373,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       const sanitizeInput = (input: string): string => {
         // Basic SQL injection prevention
         const dangerous = [
-          "'",
+          '\'',
           '"',
           ';',
           '--',
@@ -401,9 +401,9 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       };
 
       const maliciousInputs = [
-        "'; DROP TABLE users; --",
-        "' OR 1=1; --",
-        "' UNION SELECT * FROM passwords --",
+        '\'; DROP TABLE users; --',
+        '\' OR 1=1; --',
+        '\' UNION SELECT * FROM passwords --',
         '" OR "1"="1'
       ];
 

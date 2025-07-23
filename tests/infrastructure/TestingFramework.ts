@@ -392,25 +392,25 @@ export class TestUtilities {
    */
   generateData(type: 'string' | 'number' | 'boolean' | 'array' | 'object', options?: any): any {
     switch (type) {
-      case 'string':
-        return this.generateRandomString(options?.length || 10);
-      case 'number':
-        return Math.floor(Math.random() * (options?.max || 1000)) + (options?.min || 0);
-      case 'boolean':
-        return Math.random() > 0.5;
-      case 'array':
-        return Array.from({ length: options?.length || 5 }, () => 
-          this.generateData(options?.itemType || 'string', options?.itemOptions)
-        );
-      case 'object':
-        const obj: Record<string, any> = {};
-        const keys = options?.keys || ['id', 'name', 'value'];
-        keys.forEach((key: string) => {
-          obj[key] = this.generateData('string');
-        });
-        return obj;
-      default:
-        return null;
+    case 'string':
+      return this.generateRandomString(options?.length || 10);
+    case 'number':
+      return Math.floor(Math.random() * (options?.max || 1000)) + (options?.min || 0);
+    case 'boolean':
+      return Math.random() > 0.5;
+    case 'array':
+      return Array.from({ length: options?.length || 5 }, () => 
+        this.generateData(options?.itemType || 'string', options?.itemOptions)
+      );
+    case 'object':
+      const obj: Record<string, any> = {};
+      const keys = options?.keys || ['id', 'name', 'value'];
+      keys.forEach((key: string) => {
+        obj[key] = this.generateData('string');
+      });
+      return obj;
+    default:
+      return null;
     }
   }
 
@@ -441,18 +441,18 @@ export class TestUtilities {
     deepEqual: (actual: any, expected: any, message?: string): AssertionResult => {
       const passed = JSON.stringify(actual) === JSON.stringify(expected);
       return {
-        description: message || `Expected deep equality`,
+        description: message || 'Expected deep equality',
         passed,
         expected,
         actual,
-        error: passed ? undefined : `Objects are not deeply equal`
+        error: passed ? undefined : 'Objects are not deeply equal'
       };
     },
 
     truthy: (value: any, message?: string): AssertionResult => {
       const passed = !!value;
       return {
-        description: message || `Expected value to be truthy`,
+        description: message || 'Expected value to be truthy',
         passed,
         actual: value,
         error: passed ? undefined : `Expected truthy value, got: ${value}`
@@ -462,7 +462,7 @@ export class TestUtilities {
     falsy: (value: any, message?: string): AssertionResult => {
       const passed = !value;
       return {
-        description: message || `Expected value to be falsy`,
+        description: message || 'Expected value to be falsy',
         passed,
         actual: value,
         error: passed ? undefined : `Expected falsy value, got: ${value}`

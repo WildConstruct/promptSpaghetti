@@ -782,14 +782,14 @@ export class ServiceMockManager extends EventEmitter {
     };
 
     switch (config.type) {
-      case 'http':
-        return { ...baseService, ...this.createHTTPMethods(name) };
-      case 'cache':
-        return { ...baseService, ...this.createCacheMethods(name) };
-      case 'message_queue':
-        return { ...baseService, ...this.createMessageQueueMethods(name) };
-      default:
-        return baseService;
+    case 'http':
+      return { ...baseService, ...this.createHTTPMethods(name) };
+    case 'cache':
+      return { ...baseService, ...this.createCacheMethods(name) };
+    case 'message_queue':
+      return { ...baseService, ...this.createMessageQueueMethods(name) };
+    default:
+      return baseService;
     }
   }
 

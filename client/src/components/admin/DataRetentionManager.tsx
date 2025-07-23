@@ -209,22 +209,22 @@ const DataRetentionManager: React.FC = () => {
 
   const getStatusBadgeClass = (status: string): string => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'inactive': return 'bg-yellow-100 text-yellow-800';
-      case 'expired': return 'bg-red-100 text-red-800';
-      case 'draft': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'active': return 'bg-green-100 text-green-800';
+    case 'inactive': return 'bg-yellow-100 text-yellow-800';
+    case 'expired': return 'bg-red-100 text-red-800';
+    case 'draft': return 'bg-gray-100 text-gray-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'user_data': return <Shield className="w-4 h-4" />;
-      case 'system_data': return <Settings className="w-4 h-4" />;
-      case 'log_data': return <FileText className="w-4 h-4" />;
-      case 'analytics_data': return <BarChart3 className="w-4 h-4" />;
-      case 'backup_data': return <Database className="w-4 h-4" />;
-      default: return <Database className="w-4 h-4" />;
+    case 'user_data': return <Shield className="w-4 h-4" />;
+    case 'system_data': return <Settings className="w-4 h-4" />;
+    case 'log_data': return <FileText className="w-4 h-4" />;
+    case 'analytics_data': return <BarChart3 className="w-4 h-4" />;
+    case 'backup_data': return <Database className="w-4 h-4" />;
+    default: return <Database className="w-4 h-4" />;
     }
   };
 
@@ -245,24 +245,24 @@ const DataRetentionManager: React.FC = () => {
     .sort((a, b) => {
       let aValue, bValue;
       switch (sortBy) {
-        case 'name':
-          aValue = a.name;
-          bValue = b.name;
-          break;
-        case 'created':
-          aValue = a.createdAt;
-          bValue = b.createdAt;
-          break;
-        case 'execution':
-          aValue = a.nextExecution;
-          bValue = b.nextExecution;
-          break;
-        case 'affected':
-          aValue = a.affectedRecords;
-          bValue = b.affectedRecords;
-          break;
-        default:
-          return 0;
+      case 'name':
+        aValue = a.name;
+        bValue = b.name;
+        break;
+      case 'created':
+        aValue = a.createdAt;
+        bValue = b.createdAt;
+        break;
+      case 'execution':
+        aValue = a.nextExecution;
+        bValue = b.nextExecution;
+        break;
+      case 'affected':
+        aValue = a.affectedRecords;
+        bValue = b.affectedRecords;
+        break;
+      default:
+        return 0;
       }
       
       if (sortOrder === 'asc') {

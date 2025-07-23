@@ -205,35 +205,35 @@ export const createLargeGraph = (nodeCount = 100): TestGraph => {
     const y = Math.floor(i / gridSize) * 120 + 100;
     
     const baseData = {
-      label: `Node ${i}`,
+      label: `Node ${i}`
     };
 
     let specificData = {};
     switch (nodeType) {
-      case 'WeightedChoice':
-        specificData = {
-          choices: [`Option ${i}A`, `Option ${i}B`],
-          weights: [0.7, 0.3]
-        };
-        break;
-      case 'Concat':
-        specificData = { separator: ' | ' };
-        break;
-      case 'Output':
-        specificData = { template: `Output ${i}: {{value}}` };
-        break;
-      case 'Include':
-        specificData = { bundleName: `bundle-${i}` };
-        break;
-      case 'SetVariable':
-        specificData = {
-          variableName: `var${i}`,
-          value: `value${i}`
-        };
-        break;
-      case 'GetVariable':
-        specificData = { variableName: `var${Math.max(0, i-1)}` };
-        break;
+    case 'WeightedChoice':
+      specificData = {
+        choices: [`Option ${i}A`, `Option ${i}B`],
+        weights: [0.7, 0.3]
+      };
+      break;
+    case 'Concat':
+      specificData = { separator: ' | ' };
+      break;
+    case 'Output':
+      specificData = { template: `Output ${i}: {{value}}` };
+      break;
+    case 'Include':
+      specificData = { bundleName: `bundle-${i}` };
+      break;
+    case 'SetVariable':
+      specificData = {
+        variableName: `var${i}`,
+        value: `value${i}`
+      };
+      break;
+    case 'GetVariable':
+      specificData = { variableName: `var${Math.max(0, i-1)}` };
+      break;
     }
     
     nodes.push({

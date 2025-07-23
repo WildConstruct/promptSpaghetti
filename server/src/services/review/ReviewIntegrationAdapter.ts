@@ -241,24 +241,24 @@ export class ReviewIntegrationAdapter {
       console.log(`🔄 Syncing review ${review.reviewId} status to ${review.sourceSystem}`);
 
       switch (review.sourceSystem) {
-        case 'fraud_monitoring':
-          await this.syncToFraudSystem(review, status, decision);
-          break;
+      case 'fraud_monitoring':
+        await this.syncToFraudSystem(review, status, decision);
+        break;
         
-        case 'enforcement_actions':
-          await this.syncToEnforcementSystem(review, status, decision);
-          break;
+      case 'enforcement_actions':
+        await this.syncToEnforcementSystem(review, status, decision);
+        break;
         
-        case 'identity_verification':
-          await this.syncToVerificationSystem(review, status, decision);
-          break;
+      case 'identity_verification':
+        await this.syncToVerificationSystem(review, status, decision);
+        break;
         
-        case 'marketplace':
-          await this.syncToMarketplaceSystem(review, status, decision);
-          break;
+      case 'marketplace':
+        await this.syncToMarketplaceSystem(review, status, decision);
+        break;
         
-        default:
-          console.log(`⚠️ No sync handler for ${review.sourceSystem}`);
+      default:
+        console.log(`⚠️ No sync handler for ${review.sourceSystem}`);
       }
 
       await this.logIntegrationEvent('status_synced', {
@@ -641,29 +641,29 @@ export class ReviewIntegrationAdapter {
     sourceData: any
   ): { title: string; description: string } {
     switch (sourceSystem) {
-      case 'fraud_monitoring':
-        return {
-          title: `Fraud Case Review: ${sourceData.caseId}`,
-          description: `Review fraud case with score ${sourceData.fraudScore} for ${sourceData.entityType} ${sourceData.entityId}`
-        };
+    case 'fraud_monitoring':
+      return {
+        title: `Fraud Case Review: ${sourceData.caseId}`,
+        description: `Review fraud case with score ${sourceData.fraudScore} for ${sourceData.entityType} ${sourceData.entityId}`
+      };
       
-      case 'enforcement_actions':
-        return {
-          title: `Enforcement ${sourceType}: ${sourceData.actionId || sourceData.appealId}`,
-          description: `Review ${sourceType} for ${sourceData.targetType || 'action'} ${sourceData.targetId || sourceData.actionId}`
-        };
+    case 'enforcement_actions':
+      return {
+        title: `Enforcement ${sourceType}: ${sourceData.actionId || sourceData.appealId}`,
+        description: `Review ${sourceType} for ${sourceData.targetType || 'action'} ${sourceData.targetId || sourceData.actionId}`
+      };
       
-      case 'marketplace':
-        return {
-          title: `Template Submission: ${sourceData.templateData?.name || sourceData.submissionId}`,
-          description: `Review template submission from ${sourceData.submittedBy}`
-        };
+    case 'marketplace':
+      return {
+        title: `Template Submission: ${sourceData.templateData?.name || sourceData.submissionId}`,
+        description: `Review template submission from ${sourceData.submittedBy}`
+      };
       
-      default:
-        return {
-          title: `${sourceSystem} Review: ${sourceData.id}`,
-          description: `Review ${sourceType} from ${sourceSystem}`
-        };
+    default:
+      return {
+        title: `${sourceSystem} Review: ${sourceData.id}`,
+        description: `Review ${sourceType} from ${sourceSystem}`
+      };
     }
   }
 

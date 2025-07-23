@@ -549,39 +549,39 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       action.status = 'executing';
 
       switch (action.type) {
-        case SecurityActionType.BLOCK_IP:
-          // Call API to block IP
-          await fetch('/api/security/actions/block-ip', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ip: action.target, reason: action.parameters.reason })
-          });
-          break;
+      case SecurityActionType.BLOCK_IP:
+        // Call API to block IP
+        await fetch('/api/security/actions/block-ip', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ip: action.target, reason: action.parameters.reason })
+        });
+        break;
 
-        case SecurityActionType.DISABLE_ACCOUNT:
-          // Call API to disable account
-          await fetch('/api/security/actions/disable-account', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ account: action.target, reason: action.parameters.reason })
-          });
-          break;
+      case SecurityActionType.DISABLE_ACCOUNT:
+        // Call API to disable account
+        await fetch('/api/security/actions/disable-account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ account: action.target, reason: action.parameters.reason })
+        });
+        break;
 
-        case SecurityActionType.NOTIFY_TEAM:
-          // Send notification to security team
-          await fetch('/api/security/notifications', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              type: 'security_alert', 
-              target: 'security_team',
-              message: action.parameters.reason
-            })
-          });
-          break;
+      case SecurityActionType.NOTIFY_TEAM:
+        // Send notification to security team
+        await fetch('/api/security/notifications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            type: 'security_alert', 
+            target: 'security_team',
+            message: action.parameters.reason
+          })
+        });
+        break;
 
-        default:
-          throw new Error(`Unsupported action type: ${action.type}`);
+      default:
+        throw new Error(`Unsupported action type: ${action.type}`);
       }
 
       action.status = 'completed';

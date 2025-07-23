@@ -354,10 +354,10 @@ export class AuditLogger {
   private assessPotentialImpact(status: string, severity?: string): string {
     if (status === 'NON_COMPLIANT') {
       switch (severity) {
-        case 'CRITICAL': return 'Regulatory fines, legal action, reputational damage';
-        case 'HIGH': return 'Regulatory investigation, compliance penalties';
-        case 'MEDIUM': return 'Warning notice, corrective action required';
-        default: return 'Minor compliance gap, monitoring required';
+      case 'CRITICAL': return 'Regulatory fines, legal action, reputational damage';
+      case 'HIGH': return 'Regulatory investigation, compliance penalties';
+      case 'MEDIUM': return 'Warning notice, corrective action required';
+      default: return 'Minor compliance gap, monitoring required';
       }
     }
     return 'No immediate impact identified';

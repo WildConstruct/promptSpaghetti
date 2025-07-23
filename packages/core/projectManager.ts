@@ -89,11 +89,11 @@ export class ProjectManager {
           ${nodeCount} nodes
         </text>
         ${Array.from({length: Math.min(nodeCount, 8)}, (_, i) => {
-          const x = 15 + (i % 4) * 25;
-          const y = 55 + Math.floor(i / 4) * 15;
-          const color = colors[i % colors.length];
-          return `<circle cx="${x}" cy="${y}" r="6" fill="${color}" opacity="0.7"/>`;
-        }).join('')}
+    const x = 15 + (i % 4) * 25;
+    const y = 55 + Math.floor(i / 4) * 15;
+    const color = colors[i % colors.length];
+    return `<circle cx="${x}" cy="${y}" r="6" fill="${color}" opacity="0.7"/>`;
+  }).join('')}
       </svg>
     `;
     

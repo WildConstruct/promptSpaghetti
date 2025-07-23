@@ -243,7 +243,7 @@ class ReportExportTester {
           const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/export`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               reportData: SAMPLE_REPORT_DATA,
@@ -315,7 +315,7 @@ class ReportExportTester {
           const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/export`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               reportData: SAMPLE_REPORT_DATA,
@@ -374,7 +374,7 @@ class ReportExportTester {
           const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/export`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               reportData: SAMPLE_REPORT_DATA,
@@ -431,7 +431,7 @@ class ReportExportTester {
         const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/bulk-export`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             reports,
@@ -495,7 +495,7 @@ class ReportExportTester {
         const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/schedule`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify(scheduleData)
         });
@@ -594,7 +594,7 @@ class ReportExportTester {
           const response = await fetch(`${TEST_CONFIG.server.baseUrl}/api/reports/preview`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               reportData: SAMPLE_REPORT_DATA,
@@ -700,7 +700,7 @@ class ReportExportTester {
     const htmlPath = path.join(TEST_CONFIG.export.outputDir, `export-system-test-report-${Date.now()}.html`);
     await fs.writeFile(htmlPath, htmlReport);
 
-    console.log(`📄 Test reports generated:`);
+    console.log('📄 Test reports generated:');
     console.log(`   JSON: ${jsonPath}`);
     console.log(`   HTML: ${htmlPath}`);
   }

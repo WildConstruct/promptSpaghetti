@@ -150,25 +150,25 @@ export async function enhancedSecurityRoutes(fastify: FastifyInstance) {
 
       let result;
       switch (action) {
-        case 'terminate':
-          if (!sessionId) {
-            reply.code(400).send({ error: 'Session ID required for terminate action' });
-            return;
-          }
-          result = await terminateSession(user.id, sessionId, reason);
-          break;
-        case 'terminate_all':
-          result = await terminateAllSessions(user.id, reason);
-          break;
-        case 'extend':
-          result = await extendSession(user.id, sessionId);
-          break;
-        case 'refresh_security':
-          result = await refreshSessionSecurity(user.id, request);
-          break;
-        default:
-          reply.code(400).send({ error: 'Invalid action' });
+      case 'terminate':
+        if (!sessionId) {
+          reply.code(400).send({ error: 'Session ID required for terminate action' });
           return;
+        }
+        result = await terminateSession(user.id, sessionId, reason);
+        break;
+      case 'terminate_all':
+        result = await terminateAllSessions(user.id, reason);
+        break;
+      case 'extend':
+        result = await extendSession(user.id, sessionId);
+        break;
+      case 'refresh_security':
+        result = await refreshSessionSecurity(user.id, request);
+        break;
+      default:
+        reply.code(400).send({ error: 'Invalid action' });
+        return;
       }
 
       await auditService.logEvent({

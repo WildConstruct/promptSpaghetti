@@ -525,22 +525,22 @@ export type ExportScheduleWithStats = ExportSchedule & {
 // Validation helpers
 export function validateExportOptions(format: ExportFormat, options: any) {
   switch (format) {
-    case 'yaml':
-      return YamlExportOptionsSchema.safeParse(options);
-    case 'xml':
-      return XmlExportOptionsSchema.safeParse(options);
-    case 'csv':
-      return CsvExportOptionsSchema.safeParse(options);
-    case 'markdown':
-      return MarkdownExportOptionsSchema.safeParse(options);
-    case 'pdf':
-      return PdfExportOptionsSchema.safeParse(options);
-    case 'html':
-      return HtmlExportOptionsSchema.safeParse(options);
-    case 'zip':
-      return ZipExportOptionsSchema.safeParse(options);
-    default:
-      return CommonExportOptionsSchema.safeParse(options);
+  case 'yaml':
+    return YamlExportOptionsSchema.safeParse(options);
+  case 'xml':
+    return XmlExportOptionsSchema.safeParse(options);
+  case 'csv':
+    return CsvExportOptionsSchema.safeParse(options);
+  case 'markdown':
+    return MarkdownExportOptionsSchema.safeParse(options);
+  case 'pdf':
+    return PdfExportOptionsSchema.safeParse(options);
+  case 'html':
+    return HtmlExportOptionsSchema.safeParse(options);
+  case 'zip':
+    return ZipExportOptionsSchema.safeParse(options);
+  default:
+    return CommonExportOptionsSchema.safeParse(options);
   }
 }
 

@@ -238,18 +238,18 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({
   const sortedSessions = useMemo(() => {
     return [...filteredSessions].sort((a, b) => {
       switch (sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'date':
-          return b.createdAt.getTime() - a.createdAt.getTime();
-        case 'similarity':
-          // Would need comparison results to sort by similarity
-          return 0;
-        case 'changes':
-          // Would need change count to sort by changes
-          return 0;
-        default:
-          return 0;
+      case 'name':
+        return a.name.localeCompare(b.name);
+      case 'date':
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      case 'similarity':
+        // Would need comparison results to sort by similarity
+        return 0;
+      case 'changes':
+        // Would need change count to sort by changes
+        return 0;
+      default:
+        return 0;
       }
     });
   }, [filteredSessions, sortBy]);
@@ -524,7 +524,7 @@ const ComparisonSessionCard: React.FC<ComparisonSessionCardProps> = ({
         <div className="session-badges">
           <Badge variant={
             session.comparisonType === 'structural' ? 'secondary' :
-            session.comparisonType === 'semantic' ? 'default' : 'destructive'
+              session.comparisonType === 'semantic' ? 'default' : 'destructive'
           }>
             {session.comparisonType}
           </Badge>

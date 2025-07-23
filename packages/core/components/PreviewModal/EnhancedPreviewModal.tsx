@@ -107,8 +107,8 @@ export const EnhancedPreviewModal: React.FC<EnhancedPreviewModalProps> = ({
     const totalWords = validResults.reduce((sum, r) => sum + (r.metadata?.wordCount || 0), 0);
     const avgReadingTime = validResults.reduce(
       (sum,
-      r
-    ) => sum + (r.metadata?.estimatedReadingTime || 0), 0) / validResults.length;
+        r
+      ) => sum + (r.metadata?.estimatedReadingTime || 0), 0) / validResults.length;
     const avgRating = validResults.reduce((sum, r) => sum + (r.metadata?.rating || 0), 0) / validResults.length;
     
     return {
@@ -173,10 +173,10 @@ export const EnhancedPreviewModal: React.FC<EnhancedPreviewModalProps> = ({
 
   const getContentTypeIcon = (contentType?: string) => {
     switch (contentType) {
-      case 'dialogue': return '💬';
-      case 'action': return '🎬';
-      case 'description': return '📝';
-      default: return '📄';
+    case 'dialogue': return '💬';
+    case 'action': return '🎬';
+    case 'description': return '📝';
+    default: return '📄';
     }
   };
 
@@ -430,271 +430,271 @@ export const EnhancedPreviewModal: React.FC<EnhancedPreviewModalProps> = ({
 
             {/* Results List */}
             {!loading && !error && (
-          <div style={{ 
-            flex: 1, 
-            overflowY: 'auto',
-            paddingRight: 8
-          }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {results.slice(0, maxResults).map((result, index) => (
-                <div
-                  key={result.id}
-                  onMouseEnter={() => onResultHover?.(index)}
-                  style={{
-                    background: selectedResults.has(result.id) 
-                      ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%)'
-                      : 'rgba(255, 255, 255, 0.05)',
-                    border: `1px solid ${selectedResults.has(result.id) ? '#4f46e5' : 'rgba(255, 255, 255, 0.1)'}`,
-                    borderRadius: 12,
-                    padding: 20,
-                    position: 'relative',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    ':hover': {
-                      background: 'rgba(255, 255, 255, 0.08)',
-                      borderColor: 'rgba(255, 255, 255, 0.2)'
-                    }
-                  }}
-                >
-                  {/* Result Header */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                      {enableSelection && (
-                        <input
-                          type="checkbox"
-                          checked={selectedResults.has(result.id)}
-                          onChange={(e) => handleResultSelect(result.id, e.target.checked)}
-                          style={{
-                            width: 16,
-                            height: 16,
-                            accentColor: '#4f46e5'
-                          }}
-                        />
-                      )}
-                      <span style={{
-                        background: result.error ? 
-                          'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)' : 
-                          'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                        color: '#fff',
-                        fontSize: 11,
-                        padding: '4px 10px',
+              <div style={{ 
+                flex: 1, 
+                overflowY: 'auto',
+                paddingRight: 8
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  {results.slice(0, maxResults).map((result, index) => (
+                    <div
+                      key={result.id}
+                      onMouseEnter={() => onResultHover?.(index)}
+                      style={{
+                        background: selectedResults.has(result.id) 
+                          ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%)'
+                          : 'rgba(255, 255, 255, 0.05)',
+                        border: `1px solid ${selectedResults.has(result.id) ? '#4f46e5' : 'rgba(255, 255, 255, 0.1)'}`,
                         borderRadius: 12,
-                        fontWeight: 600
-                      }}>
+                        padding: 20,
+                        position: 'relative',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        ':hover': {
+                          background: 'rgba(255, 255, 255, 0.08)',
+                          borderColor: 'rgba(255, 255, 255, 0.2)'
+                        }
+                      }}
+                    >
+                      {/* Result Header */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                          {enableSelection && (
+                            <input
+                              type="checkbox"
+                              checked={selectedResults.has(result.id)}
+                              onChange={(e) => handleResultSelect(result.id, e.target.checked)}
+                              style={{
+                                width: 16,
+                                height: 16,
+                                accentColor: '#4f46e5'
+                              }}
+                            />
+                          )}
+                          <span style={{
+                            background: result.error ? 
+                              'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)' : 
+                              'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                            color: '#fff',
+                            fontSize: 11,
+                            padding: '4px 10px',
+                            borderRadius: 12,
+                            fontWeight: 600
+                          }}>
                         🎲 {result.seed}
-                      </span>
-                      {result.metadata?.contentType && (
-                        <span style={{ fontSize: 16 }}>
-                          {getContentTypeIcon(result.metadata.contentType)}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 11, color: '#999' }}>
-                        {formatExecutionTime(result.executionTimeMs)}
-                      </span>
-                      {result.saved && <span style={{ fontSize: 12 }}>💾</span>}
-                      {result.exported && <span style={{ fontSize: 12 }}>📤</span>}
-                    </div>
-                  </div>
-
-                  {/* Result Content */}
-                  {result.error ? (
-                    <div style={{ color: '#ef4444', fontFamily: 'monospace', fontSize: 14 }}>
-                      {result.error}
-                    </div>
-                  ) : (
-                    <div style={{ 
-                      fontFamily: "'Georgia', 'Times New Roman', serif", 
-                      fontSize: 15,
-                      lineHeight: 1.6,
-                      whiteSpace: 'pre-wrap',
-                      color: '#e5e5e5',
-                      maxHeight: expandedResult === result.id ? 'none' : 150,
-                      overflow: 'hidden',
-                      position: 'relative'
-                    }}>
-                      {result.output}
-                      {result.output && result.output.length > 300 && expandedResult !== result.id && (
-                        <div style={{
-                          position: 'absolute',
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          height: 40,
-                          background: 'linear-gradient(transparent, rgba(45, 45, 45, 0.9))',
-                          display: 'flex',
-                          alignItems: 'end',
-                          justifyContent: 'center'
-                        }}>
-                          <button
-                            onClick={() => setExpandedResult(result.id)}
-                            style={{
-                              background: 'transparent',
-                              border: '1px solid #666',
-                              color: '#b0b0b0',
-                              padding: '4px 12px',
-                              borderRadius: 4,
-                              cursor: 'pointer',
-                              fontSize: 12
-                            }}
-                          >
-                            Show More
-                          </button>
+                          </span>
+                          {result.metadata?.contentType && (
+                            <span style={{ fontSize: 16 }}>
+                              {getContentTypeIcon(result.metadata.contentType)}
+                            </span>
+                          )}
                         </div>
-                      )}
-                      {expandedResult === result.id && (
-                        <button
-                          onClick={() => setExpandedResult(null)}
-                          style={{
-                            background: 'transparent',
-                            border: '1px solid #666',
-                            color: '#b0b0b0',
-                            padding: '4px 12px',
-                            borderRadius: 4,
-                            cursor: 'pointer',
-                            fontSize: 12,
-                            marginTop: 12
-                          }}
-                        >
-                          Show Less
-                        </button>
-                      )}
-                    </div>
-                  )}
+                    
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ fontSize: 11, color: '#999' }}>
+                            {formatExecutionTime(result.executionTimeMs)}
+                          </span>
+                          {result.saved && <span style={{ fontSize: 12 }}>💾</span>}
+                          {result.exported && <span style={{ fontSize: 12 }}>📤</span>}
+                        </div>
+                      </div>
 
-                  {/* Metadata */}
-                  {result.metadata && (
-                    <div style={{ 
-                      marginTop: 16,
-                      display: 'flex',
-                      gap: 16,
-                      fontSize: 12,
-                      color: '#999'
-                    }}>
-                      {result.metadata.wordCount && (
-                        <span>📝 {result.metadata.wordCount} words</span>
-                      )}
-                      {result.metadata.estimatedReadingTime && (
-                        <span>⏱️ {result.metadata.estimatedReadingTime}s read</span>
-                      )}
-                      {result.metadata.tags?.length && (
-                        <span>🏷️ {result.metadata.tags.join(', ')}</span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Rating System */}
-                  {enableRating && !result.error && (
-                    <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 12, color: '#b0b0b0' }}>Rate:</span>
-                      {[1, 2, 3, 4, 5].map(star => (
-                        <button
-                          key={star}
-                          onClick={() => handleRating(result.id, star)}
-                          style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: (result.metadata?.rating || 0) >= star ? '#fbbf24' : '#666',
-                            cursor: 'pointer',
-                            fontSize: 16,
-                            padding: 2
-                          }}
-                        >
-                          ⭐
-                        </button>
-                      ))}
-                      {ratingInProgress === result.id && (
-                        <span style={{ fontSize: 12, color: '#4f46e5' }}>✓</span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Notes */}
-                  {enableNotes && !result.error && (
-                    <div style={{ marginTop: 12 }}>
-                      {noteEditing === result.id ? (
-                        <div style={{ display: 'flex', gap: 8 }}>
-                          <input
-                            type="text"
-                            value={tempNote}
-                            onChange={(e) => setTempNote(e.target.value)}
-                            placeholder="Add a note..."
-                            style={{
-                              flex: 1,
-                              background: 'rgba(255, 255, 255, 0.1)',
-                              border: '1px solid rgba(255, 255, 255, 0.2)',
-                              color: '#ffffff',
-                              padding: '6px 12px',
-                              borderRadius: 4,
-                              fontSize: 12
-                            }}
-                            autoFocus
-                          />
-                          <button
-                            onClick={() => handleNoteSave(result.id)}
-                            style={{
-                              background: '#4f46e5',
-                              border: 'none',
-                              color: '#ffffff',
-                              padding: '6px 12px',
-                              borderRadius: 4,
-                              cursor: 'pointer',
-                              fontSize: 12
-                            }}
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={() => {
-                              setNoteEditing(null);
-                              setTempNote('');
-                            }}
-                            style={{
-                              background: '#666',
-                              border: 'none',
-                              color: '#ffffff',
-                              padding: '6px 12px',
-                              borderRadius: 4,
-                              cursor: 'pointer',
-                              fontSize: 12
-                            }}
-                          >
-                            Cancel
-                          </button>
+                      {/* Result Content */}
+                      {result.error ? (
+                        <div style={{ color: '#ef4444', fontFamily: 'monospace', fontSize: 14 }}>
+                          {result.error}
                         </div>
                       ) : (
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div style={{ fontSize: 12, color: '#b0b0b0', fontStyle: 'italic' }}>
-                            {result.metadata?.notes || 'No notes'}
-                          </div>
-                          <button
-                            onClick={() => {
-                              setNoteEditing(result.id);
-                              setTempNote(result.metadata?.notes || '');
-                            }}
-                            style={{
-                              background: 'transparent',
-                              border: '1px solid #666',
-                              color: '#b0b0b0',
-                              padding: '4px 8px',
-                              borderRadius: 4,
-                              cursor: 'pointer',
-                              fontSize: 11
-                            }}
-                          >
+                        <div style={{ 
+                          fontFamily: '\'Georgia\', \'Times New Roman\', serif', 
+                          fontSize: 15,
+                          lineHeight: 1.6,
+                          whiteSpace: 'pre-wrap',
+                          color: '#e5e5e5',
+                          maxHeight: expandedResult === result.id ? 'none' : 150,
+                          overflow: 'hidden',
+                          position: 'relative'
+                        }}>
+                          {result.output}
+                          {result.output && result.output.length > 300 && expandedResult !== result.id && (
+                            <div style={{
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              height: 40,
+                              background: 'linear-gradient(transparent, rgba(45, 45, 45, 0.9))',
+                              display: 'flex',
+                              alignItems: 'end',
+                              justifyContent: 'center'
+                            }}>
+                              <button
+                                onClick={() => setExpandedResult(result.id)}
+                                style={{
+                                  background: 'transparent',
+                                  border: '1px solid #666',
+                                  color: '#b0b0b0',
+                                  padding: '4px 12px',
+                                  borderRadius: 4,
+                                  cursor: 'pointer',
+                                  fontSize: 12
+                                }}
+                              >
+                            Show More
+                              </button>
+                            </div>
+                          )}
+                          {expandedResult === result.id && (
+                            <button
+                              onClick={() => setExpandedResult(null)}
+                              style={{
+                                background: 'transparent',
+                                border: '1px solid #666',
+                                color: '#b0b0b0',
+                                padding: '4px 12px',
+                                borderRadius: 4,
+                                cursor: 'pointer',
+                                fontSize: 12,
+                                marginTop: 12
+                              }}
+                            >
+                          Show Less
+                            </button>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Metadata */}
+                      {result.metadata && (
+                        <div style={{ 
+                          marginTop: 16,
+                          display: 'flex',
+                          gap: 16,
+                          fontSize: 12,
+                          color: '#999'
+                        }}>
+                          {result.metadata.wordCount && (
+                            <span>📝 {result.metadata.wordCount} words</span>
+                          )}
+                          {result.metadata.estimatedReadingTime && (
+                            <span>⏱️ {result.metadata.estimatedReadingTime}s read</span>
+                          )}
+                          {result.metadata.tags?.length && (
+                            <span>🏷️ {result.metadata.tags.join(', ')}</span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Rating System */}
+                      {enableRating && !result.error && (
+                        <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ fontSize: 12, color: '#b0b0b0' }}>Rate:</span>
+                          {[1, 2, 3, 4, 5].map(star => (
+                            <button
+                              key={star}
+                              onClick={() => handleRating(result.id, star)}
+                              style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: (result.metadata?.rating || 0) >= star ? '#fbbf24' : '#666',
+                                cursor: 'pointer',
+                                fontSize: 16,
+                                padding: 2
+                              }}
+                            >
+                          ⭐
+                            </button>
+                          ))}
+                          {ratingInProgress === result.id && (
+                            <span style={{ fontSize: 12, color: '#4f46e5' }}>✓</span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Notes */}
+                      {enableNotes && !result.error && (
+                        <div style={{ marginTop: 12 }}>
+                          {noteEditing === result.id ? (
+                            <div style={{ display: 'flex', gap: 8 }}>
+                              <input
+                                type="text"
+                                value={tempNote}
+                                onChange={(e) => setTempNote(e.target.value)}
+                                placeholder="Add a note..."
+                                style={{
+                                  flex: 1,
+                                  background: 'rgba(255, 255, 255, 0.1)',
+                                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                                  color: '#ffffff',
+                                  padding: '6px 12px',
+                                  borderRadius: 4,
+                                  fontSize: 12
+                                }}
+                                autoFocus
+                              />
+                              <button
+                                onClick={() => handleNoteSave(result.id)}
+                                style={{
+                                  background: '#4f46e5',
+                                  border: 'none',
+                                  color: '#ffffff',
+                                  padding: '6px 12px',
+                                  borderRadius: 4,
+                                  cursor: 'pointer',
+                                  fontSize: 12
+                                }}
+                              >
+                            Save
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setNoteEditing(null);
+                                  setTempNote('');
+                                }}
+                                style={{
+                                  background: '#666',
+                                  border: 'none',
+                                  color: '#ffffff',
+                                  padding: '6px 12px',
+                                  borderRadius: 4,
+                                  cursor: 'pointer',
+                                  fontSize: 12
+                                }}
+                              >
+                            Cancel
+                              </button>
+                            </div>
+                          ) : (
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <div style={{ fontSize: 12, color: '#b0b0b0', fontStyle: 'italic' }}>
+                                {result.metadata?.notes || 'No notes'}
+                              </div>
+                              <button
+                                onClick={() => {
+                                  setNoteEditing(result.id);
+                                  setTempNote(result.metadata?.notes || '');
+                                }}
+                                style={{
+                                  background: 'transparent',
+                                  border: '1px solid #666',
+                                  color: '#b0b0b0',
+                                  padding: '4px 8px',
+                                  borderRadius: 4,
+                                  cursor: 'pointer',
+                                  fontSize: 11
+                                }}
+                              >
                             📝 {result.metadata?.notes ? 'Edit' : 'Add'} Note
-                          </button>
+                              </button>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                  )}
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
+              </div>
+            )}
           </>
         )}
 

@@ -101,7 +101,7 @@ interface ReportExportPanelProps {
 }
 
 export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
-  title = "Report Export System",
+  title = 'Report Export System',
   showQuickExport = true,
   showSampleData = true,
   allowScheduling = true,
@@ -306,7 +306,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
                       <div key={export_.id} className="flex items-center justify-between p-3 border rounded-lg">
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <Badge variant={export_.success ? "default" : "destructive"}>
+                            <Badge variant={export_.success ? 'default' : 'destructive'}>
                               {export_.format.toUpperCase()}
                             </Badge>
                             <span className="text-sm font-medium">{export_.filename}</span>
@@ -387,7 +387,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Quick Export Buttons */}
             <Card className="cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => handleQuickExport('pdf')}>
+              onClick={() => handleQuickExport('pdf')}>
               <CardContent className="p-6 text-center">
                 <FileText className="w-8 h-8 mx-auto mb-3 text-red-500" />
                 <h3 className="font-semibold">Export as PDF</h3>
@@ -398,7 +398,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
             </Card>
 
             <Card className="cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => handleQuickExport('excel')}>
+              onClick={() => handleQuickExport('excel')}>
               <CardContent className="p-6 text-center">
                 <BarChart3 className="w-8 h-8 mx-auto mb-3 text-green-500" />
                 <h3 className="font-semibold">Export as Excel</h3>
@@ -409,7 +409,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
             </Card>
 
             <Card className="cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => handleQuickExport('csv')}>
+              onClick={() => handleQuickExport('csv')}>
               <CardContent className="p-6 text-center">
                 <FileExport className="w-8 h-8 mx-auto mb-3 text-blue-500" />
                 <h3 className="font-semibold">Export as CSV</h3>
@@ -420,7 +420,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
             </Card>
 
             <Card className="cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => handleQuickExport('json')}>
+              onClick={() => handleQuickExport('json')}>
               <CardContent className="p-6 text-center">
                 <Settings className="w-8 h-8 mx-auto mb-3 text-purple-500" />
                 <h3 className="font-semibold">Export as JSON</h3>
@@ -501,7 +501,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
                     {Object.entries(exportFormats.supportedFeatures).map(([feature, enabled]) => (
                       <div key={feature} className="flex items-center justify-between">
                         <span className="capitalize">{feature.replace(/([A-Z])/g, ' $1')}</span>
-                        <Badge variant={enabled ? "default" : "secondary"}>
+                        <Badge variant={enabled ? 'default' : 'secondary'}>
                           {enabled ? (
                             <>
                               <CheckCircle className="w-3 h-3 mr-1" />

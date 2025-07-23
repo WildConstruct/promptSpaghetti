@@ -157,7 +157,7 @@ export class EmailMFAProvider {
         'already_configured',
         undefined,
         { userId,
-        operation: 'enroll_email_mfa' }
+          operation: 'enroll_email_mfa' }
       );
     }
 
@@ -168,7 +168,7 @@ export class EmailMFAProvider {
         'invalid_email',
         validated.emailAddress,
         { userId,
-        operation: 'enroll_email_mfa' }
+          operation: 'enroll_email_mfa' }
       );
     }
 
@@ -179,7 +179,7 @@ export class EmailMFAProvider {
         'unsuitable_email',
         validated.emailAddress,
         { userId,
-        operation: 'enroll_email_mfa' }
+          operation: 'enroll_email_mfa' }
       );
     }
 
@@ -264,7 +264,7 @@ export class EmailMFAProvider {
         'invalid_config',
         undefined,
         { userId,
-        operation: 'challenge_user' }
+          operation: 'challenge_user' }
       );
     }
 
@@ -674,7 +674,7 @@ export class EmailMFAProvider {
         'invalid_config',
         undefined,
         { userId,
-        operation: 'challenge_user' }
+          operation: 'challenge_user' }
       );
     }
 
@@ -685,7 +685,7 @@ export class EmailMFAProvider {
         'invalid_email',
         newEmailAddress,
         { userId,
-        operation: 'update_email_address' }
+          operation: 'update_email_address' }
       );
     }
 
@@ -708,7 +708,7 @@ export class EmailMFAProvider {
         'invalid_config',
         undefined,
         { userId,
-        operation: 'challenge_user' }
+          operation: 'challenge_user' }
       );
     }
 
@@ -725,7 +725,7 @@ export class EmailMFAProvider {
         'invalid_config',
         undefined,
         { userId,
-        operation: 'challenge_user' }
+          operation: 'challenge_user' }
       );
     }
 

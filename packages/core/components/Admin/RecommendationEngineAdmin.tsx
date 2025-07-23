@@ -373,22 +373,22 @@ export const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'training': return 'text-blue-600 bg-blue-100';
-      case 'failed': return 'text-red-600 bg-red-100';
-      case 'idle': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'completed': return 'text-green-600 bg-green-100';
+    case 'training': return 'text-blue-600 bg-blue-100';
+    case 'failed': return 'text-red-600 bg-red-100';
+    case 'idle': return 'text-gray-600 bg-gray-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getAlgorithmTypeIcon = (type: string) => {
     switch (type) {
-      case 'collaborative_filtering': return Users;
-      case 'content_based': return Database;
-      case 'deep_learning': return Brain;
-      case 'performance_based': return Target;
-      case 'hybrid': return Network;
-      default: return Cpu;
+    case 'collaborative_filtering': return Users;
+    case 'content_based': return Database;
+    case 'deep_learning': return Brain;
+    case 'performance_based': return Target;
+    case 'hybrid': return Network;
+    default: return Cpu;
     }
   };
 

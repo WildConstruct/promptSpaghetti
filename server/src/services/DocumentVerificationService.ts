@@ -201,20 +201,20 @@ export class DocumentVerificationService {
       let analysis: DocumentAnalysis;
       
       switch (analysisType) {
-        case 'identity':
-          analysis = await this.analyzeIdentityDocument(documentId, ocrResult, filePath);
-          break;
-        case 'business':
-          analysis = await this.analyzeBusinessDocument(documentId, ocrResult, filePath);
-          break;
-        case 'address':
-          analysis = await this.analyzeAddressDocument(documentId, ocrResult, filePath);
-          break;
-        case 'financial':
-          analysis = await this.analyzeFinancialDocument(documentId, ocrResult, filePath);
-          break;
-        default:
-          throw new BadRequestException('Invalid analysis type');
+      case 'identity':
+        analysis = await this.analyzeIdentityDocument(documentId, ocrResult, filePath);
+        break;
+      case 'business':
+        analysis = await this.analyzeBusinessDocument(documentId, ocrResult, filePath);
+        break;
+      case 'address':
+        analysis = await this.analyzeAddressDocument(documentId, ocrResult, filePath);
+        break;
+      case 'financial':
+        analysis = await this.analyzeFinancialDocument(documentId, ocrResult, filePath);
+        break;
+      default:
+        throw new BadRequestException('Invalid analysis type');
       }
 
       analysis.processing_time_ms = Date.now() - startTime;
@@ -455,8 +455,8 @@ export class DocumentVerificationService {
           background: { r: 255, g: 255, b: 255 }
         }
       })
-      .png()
-      .toBuffer();
+        .png()
+        .toBuffer();
 
       return placeholderImage;
     } catch (error) {
@@ -469,14 +469,14 @@ export class DocumentVerificationService {
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing time
     
     return {
-      text: "SAMPLE GOVERNMENT ISSUED IDENTIFICATION\nNAME: JOHN DOE\nDOB: 01/01/1990\nID: 123456789\nEXPIRES: 12/31/2025",
+      text: 'SAMPLE GOVERNMENT ISSUED IDENTIFICATION\nNAME: JOHN DOE\nDOB: 01/01/1990\nID: 123456789\nEXPIRES: 12/31/2025',
       confidence: 0.85,
       regions: [
-        { bbox: { x: 10, y: 10, width: 300, height: 30 }, text: "GOVERNMENT ISSUED IDENTIFICATION", confidence: 0.95 },
-        { bbox: { x: 10, y: 50, width: 150, height: 20 }, text: "NAME: JOHN DOE", confidence: 0.90 },
-        { bbox: { x: 10, y: 80, width: 150, height: 20 }, text: "DOB: 01/01/1990", confidence: 0.88 },
-        { bbox: { x: 10, y: 110, width: 120, height: 20 }, text: "ID: 123456789", confidence: 0.92 },
-        { bbox: { x: 10, y: 140, width: 160, height: 20 }, text: "EXPIRES: 12/31/2025", confidence: 0.87 }
+        { bbox: { x: 10, y: 10, width: 300, height: 30 }, text: 'GOVERNMENT ISSUED IDENTIFICATION', confidence: 0.95 },
+        { bbox: { x: 10, y: 50, width: 150, height: 20 }, text: 'NAME: JOHN DOE', confidence: 0.90 },
+        { bbox: { x: 10, y: 80, width: 150, height: 20 }, text: 'DOB: 01/01/1990', confidence: 0.88 },
+        { bbox: { x: 10, y: 110, width: 120, height: 20 }, text: 'ID: 123456789', confidence: 0.92 },
+        { bbox: { x: 10, y: 140, width: 160, height: 20 }, text: 'EXPIRES: 12/31/2025', confidence: 0.87 }
       ]
     };
   }

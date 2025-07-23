@@ -13,7 +13,7 @@ jest.mock('../services/TemplateService', () => ({
   templateService: {
     searchTemplates: jest.fn<unknown[], unknown>(),
     instantiateTemplate: jest.fn<unknown[], unknown>(),
-    deleteTemplate: jest.fn<unknown[], unknown>(),
+    deleteTemplate: jest.fn<unknown[], unknown>()
   }
 }));
 

@@ -469,9 +469,9 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
     trustPercentage: userTrustScore?.overall || 0,
     canAccessPremiumFeatures: (
       userTrustScore?.tier && ['verified',
-      'professional',
-      'expert'].includes(userTrustScore.tier
-    )) || false,
+        'professional',
+        'expert'].includes(userTrustScore.tier
+      )) || false,
     canSellTemplates: (userTrustScore?.tier && ['professional', 'expert'].includes(userTrustScore.tier)) || false,
 
     // Direct service access

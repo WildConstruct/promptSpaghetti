@@ -302,16 +302,16 @@ export class EnforcementActionExecutor {
         stepResults.push(stepResult);
 
         switch (stepResult.status) {
-          case 'success':
-            successCount++;
-            break;
-          case 'failure':
-            failureCount++;
-            if (stepResult.error) errors.push(stepResult.error);
-            break;
-          case 'skipped':
-            skippedCount++;
-            break;
+        case 'success':
+          successCount++;
+          break;
+        case 'failure':
+          failureCount++;
+          if (stepResult.error) errors.push(stepResult.error);
+          break;
+        case 'skipped':
+          skippedCount++;
+          break;
         }
 
         // Stop on critical failures
@@ -411,7 +411,7 @@ export class EnforcementActionExecutor {
       step.error = error.message;
       step.completedAt = new Date();
 
-      console.error(`❌ Step execution failed:`, error);
+      console.error('❌ Step execution failed:', error);
 
       return {
         stepId: step.stepId,
@@ -473,43 +473,43 @@ export class EnforcementActionExecutor {
     console.log(`🔧 Applying override ${override.overrideType} to step ${step.stepId}`);
 
     switch (override.overrideType) {
-      case 'skip':
-        step.status = 'skipped';
-        return {
-          stepId: step.stepId,
-          actionId: step.action.actionId,
-          status: 'skipped',
-          executionTime: Date.now() - startTime
-        };
+    case 'skip':
+      step.status = 'skipped';
+      return {
+        stepId: step.stepId,
+        actionId: step.action.actionId,
+        status: 'skipped',
+        executionTime: Date.now() - startTime
+      };
 
-      case 'modify':
-        // Modify action based on override data
-        const modifiedAction = { ...step.action, ...override.overrideData };
-        step.action = modifiedAction;
-        // Continue with normal execution
-        return await this.executeStep(step, override.adminUserId);
+    case 'modify':
+      // Modify action based on override data
+      const modifiedAction = { ...step.action, ...override.overrideData };
+      step.action = modifiedAction;
+      // Continue with normal execution
+      return await this.executeStep(step, override.adminUserId);
 
-      case 'delay':
-        // Reschedule the action
-        step.status = 'pending';
-        return {
-          stepId: step.stepId,
-          actionId: step.action.actionId,
-          status: 'skipped',
-          executionTime: Date.now() - startTime
-        };
+    case 'delay':
+      // Reschedule the action
+      step.status = 'pending';
+      return {
+        stepId: step.stepId,
+        actionId: step.action.actionId,
+        status: 'skipped',
+        executionTime: Date.now() - startTime
+      };
 
-      case 'cancel':
-        step.status = 'skipped';
-        return {
-          stepId: step.stepId,
-          actionId: step.action.actionId,
-          status: 'skipped',
-          executionTime: Date.now() - startTime
-        };
+    case 'cancel':
+      step.status = 'skipped';
+      return {
+        stepId: step.stepId,
+        actionId: step.action.actionId,
+        status: 'skipped',
+        executionTime: Date.now() - startTime
+      };
 
-      default:
-        throw new Error(`Unknown override type: ${override.overrideType}`);
+    default:
+      throw new Error(`Unknown override type: ${override.overrideType}`);
     }
   }
 
@@ -694,15 +694,15 @@ export class EnforcementActionExecutor {
 
   private getRollbackType(action: EnforcementAction): 'revert' | 'expire' | 'modify' | 'escalate' {
     switch (action.actionType) {
-      case 'suspend':
-      case 'restrict':
-        return 'revert';
-      case 'flag':
-        return 'expire';
-      case 'block_transaction':
-        return 'modify';
-      default:
-        return 'revert';
+    case 'suspend':
+    case 'restrict':
+      return 'revert';
+    case 'flag':
+      return 'expire';
+    case 'block_transaction':
+      return 'modify';
+    default:
+      return 'revert';
     }
   }
 

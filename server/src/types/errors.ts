@@ -87,7 +87,7 @@ export abstract class BaseError extends Error {
       retryable: this.retryable,
       context: this.context,
       details: this.details,
-      stack: this.stack,
+      stack: this.stack
     };
   }
 }

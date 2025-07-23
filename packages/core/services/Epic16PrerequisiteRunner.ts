@@ -132,15 +132,15 @@ export class Epic16PrerequisiteRunner {
       
       let message: string;
       switch (quickStatus.overall) {
-        case 'healthy':
-          message = '✅ All critical prerequisites are healthy';
-          break;
-        case 'degraded':
-          message = `⚠️ ${quickStatus.criticalFailures} critical prerequisite(s) failing`;
-          break;
-        case 'critical':
-          message = `❌ ${quickStatus.criticalFailures} critical prerequisites failing - Epic 16 may not function properly`;
-          break;
+      case 'healthy':
+        message = '✅ All critical prerequisites are healthy';
+        break;
+      case 'degraded':
+        message = `⚠️ ${quickStatus.criticalFailures} critical prerequisite(s) failing`;
+        break;
+      case 'critical':
+        message = `❌ ${quickStatus.criticalFailures} critical prerequisites failing - Epic 16 may not function properly`;
+        break;
       }
       
       return {
@@ -245,24 +245,24 @@ export class Epic16PrerequisiteRunner {
     let extension: string;
     
     switch (this.options.format) {
-      case 'json':
-        output = JSON.stringify({ report, autoFixResults }, null, 2);
-        extension = 'json';
-        break;
+    case 'json':
+      output = JSON.stringify({ report, autoFixResults }, null, 2);
+      extension = 'json';
+      break;
       
-      case 'html':
-        output = this.generateHTMLReport(report, autoFixResults);
-        extension = 'html';
-        break;
+    case 'html':
+      output = this.generateHTMLReport(report, autoFixResults);
+      extension = 'html';
+      break;
       
-      case 'markdown':
-        output = this.generateMarkdownReport(report, autoFixResults);
-        extension = 'md';
-        break;
+    case 'markdown':
+      output = this.generateMarkdownReport(report, autoFixResults);
+      extension = 'md';
+      break;
       
-      case 'console':
-      default:
-        return undefined;
+    case 'console':
+    default:
+      return undefined;
     }
     
     if (this.options.outputFile) {
@@ -349,11 +349,11 @@ export class Epic16PrerequisiteRunner {
                 <h3>${category.replace(/_/g, ' ').toUpperCase()}</h3>
                 <div class="checks">
                     ${Object.entries(report.results)
-                      .filter(([checkId]) => {
-                        // Find the check category (this is simplified)
-                        return true; // Would need to implement proper category filtering
-                      })
-                      .map(([checkId, result]) => `
+    .filter(([checkId]) => {
+      // Find the check category (this is simplified)
+      return true; // Would need to implement proper category filtering
+    })
+    .map(([checkId, result]) => `
                         <div class="check ${result.passed ? 'passed' : 'failed'}">
                             <span class="check-icon">${result.passed ? '✅' : '❌'}</span>
                             <span class="check-name">${checkId}</span>
@@ -396,16 +396,16 @@ export class Epic16PrerequisiteRunner {
     const statusEmoji = report.overall.passed ? '✅' : '❌';
     const statusText = report.overall.passed ? 'PASSED' : 'FAILED';
     
-    let markdown = `# Epic 16 Prerequisites Report\n\n`;
+    let markdown = '# Epic 16 Prerequisites Report\n\n';
     markdown += `## ${statusEmoji} Overall Status: ${statusText}\n\n`;
     markdown += `**Generated:** ${report.generatedAt.toLocaleString()}\n`;
     markdown += `**Report ID:** ${report.reportId}\n`;
     markdown += `**Version:** ${report.version}\n\n`;
     
     // Summary
-    markdown += `## 📊 Summary\n\n`;
-    markdown += `| Metric | Value |\n`;
-    markdown += `|--------|-------|\n`;
+    markdown += '## 📊 Summary\n\n';
+    markdown += '| Metric | Value |\n';
+    markdown += '|--------|-------|\n';
     markdown += `| Total Checks | ${report.overall.totalChecks} |\n`;
     markdown += `| Passed | ${report.overall.passedChecks} |\n`;
     markdown += `| Failed | ${report.overall.failedChecks} |\n`;
@@ -413,7 +413,7 @@ export class Epic16PrerequisiteRunner {
     markdown += `| Estimated Fix Time | ${report.overall.estimatedFixTime} minutes |\n\n`;
     
     // Categories
-    markdown += `## 📋 Categories\n\n`;
+    markdown += '## 📋 Categories\n\n';
     for (const [category, stats] of Object.entries(report.categories)) {
       const categoryEmoji = stats.passed ? '✅' : '❌';
       markdown += `### ${categoryEmoji} ${category.replace(/_/g, ' ').toUpperCase()}\n\n`;
@@ -422,7 +422,7 @@ export class Epic16PrerequisiteRunner {
     }
     
     // Detailed Results
-    markdown += `## 🔍 Detailed Results\n\n`;
+    markdown += '## 🔍 Detailed Results\n\n';
     for (const [checkId, result] of Object.entries(report.results)) {
       const checkEmoji = result.passed ? '✅' : '❌';
       markdown += `### ${checkEmoji} ${checkId}\n\n`;
@@ -437,21 +437,21 @@ export class Epic16PrerequisiteRunner {
     
     // Recommendations
     if (report.recommendations.length > 0) {
-      markdown += `## 💡 Recommendations\n\n`;
+      markdown += '## 💡 Recommendations\n\n';
       for (const recommendation of report.recommendations) {
         markdown += `- ${recommendation}\n`;
       }
-      markdown += `\n`;
+      markdown += '\n';
     }
     
     // Auto-fix results
     if (autoFixResults) {
-      markdown += `## 🔧 Auto-Fix Results\n\n`;
+      markdown += '## 🔧 Auto-Fix Results\n\n';
       for (const [checkId, success] of Object.entries(autoFixResults)) {
         const fixEmoji = success ? '✅' : '❌';
         markdown += `- ${fixEmoji} **${checkId}:** ${success ? 'Fixed successfully' : 'Failed to fix'}\n`;
       }
-      markdown += `\n`;
+      markdown += '\n';
     }
     
     return markdown;
@@ -550,24 +550,24 @@ export class Epic16PrerequisiteRunner {
     let colorCode = '';
     if (this.options.colors) {
       switch (level) {
-        case 'error':
-        case 'red':
-          colorCode = '\x1b[31m'; // Red
-          break;
-        case 'warn':
-        case 'yellow':
-          colorCode = '\x1b[33m'; // Yellow
-          break;
-        case 'green':
-          colorCode = '\x1b[32m'; // Green
-          break;
-        case 'debug':
-          colorCode = '\x1b[36m'; // Cyan
-          break;
-        case 'info':
-        default:
-          colorCode = '\x1b[0m'; // Reset
-          break;
+      case 'error':
+      case 'red':
+        colorCode = '\x1b[31m'; // Red
+        break;
+      case 'warn':
+      case 'yellow':
+        colorCode = '\x1b[33m'; // Yellow
+        break;
+      case 'green':
+        colorCode = '\x1b[32m'; // Green
+        break;
+      case 'debug':
+        colorCode = '\x1b[36m'; // Cyan
+        break;
+      case 'info':
+      default:
+        colorCode = '\x1b[0m'; // Reset
+        break;
       }
     }
     
@@ -606,13 +606,13 @@ export async function checkEpic16Health(): Promise<number> {
     console.log(status.message);
     
     switch (status.status) {
-      case 'healthy':
-        return 0;
-      case 'degraded':
-        return 1;
-      case 'critical':
-      default:
-        return 2;
+    case 'healthy':
+      return 0;
+    case 'degraded':
+      return 1;
+    case 'critical':
+    default:
+      return 2;
     }
   } catch (error) {
     console.error(`❌ Health check failed: ${error instanceof Error ? error.message : String(error)}`);

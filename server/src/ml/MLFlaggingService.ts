@@ -215,7 +215,7 @@ export class MLFlaggingService {
     const requestId = `flag_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     try {
-      let results: FlaggedCategory[] = [];
+      const results: FlaggedCategory[] = [];
       let fallbackUsed = false;
       let confidence = 0;
 
@@ -423,23 +423,23 @@ export class MLFlaggingService {
    */
   private getRulePatternsForCategory(category: FlaggingCategory): RegExp[] {
     switch (category) {
-      case 'security_threat':
-        return [
-          ...SECURITY_PATTERNS.sqlInjection,
-          ...SECURITY_PATTERNS.xssAttack
-        ];
-      case 'prompt_injection':
-        return SECURITY_PATTERNS.promptInjection;
-      case 'data_leak':
-        return SECURITY_PATTERNS.dataLeak;
-      case 'content_moderation':
-        return [
-          ...CONTENT_MODERATION_PATTERNS.hate,
-          ...CONTENT_MODERATION_PATTERNS.violence,
-          ...CONTENT_MODERATION_PATTERNS.selfHarm
-        ];
-      default:
-        return [];
+    case 'security_threat':
+      return [
+        ...SECURITY_PATTERNS.sqlInjection,
+        ...SECURITY_PATTERNS.xssAttack
+      ];
+    case 'prompt_injection':
+      return SECURITY_PATTERNS.promptInjection;
+    case 'data_leak':
+      return SECURITY_PATTERNS.dataLeak;
+    case 'content_moderation':
+      return [
+        ...CONTENT_MODERATION_PATTERNS.hate,
+        ...CONTENT_MODERATION_PATTERNS.violence,
+        ...CONTENT_MODERATION_PATTERNS.selfHarm
+      ];
+    default:
+      return [];
     }
   }
 
@@ -475,10 +475,10 @@ export class MLFlaggingService {
   ): 'allow' | 'warn' | 'block' | 'review' | 'quarantine' {
     if (confidence >= this.config.autoActionThreshold) {
       switch (riskLevel) {
-        case 'critical': return 'quarantine';
-        case 'high': return 'block';
-        case 'medium': return 'warn';
-        default: return 'allow';
+      case 'critical': return 'quarantine';
+      case 'high': return 'block';
+      case 'medium': return 'warn';
+      default: return 'allow';
       }
     }
 
@@ -503,13 +503,13 @@ export class MLFlaggingService {
 
     const categoryDescriptions = categories.map(c => {
       const severityText = c.severity === 'high' ? 'potentially dangerous' : 
-                          c.severity === 'medium' ? 'concerning' : 'questionable';
+        c.severity === 'medium' ? 'concerning' : 'questionable';
       return `${severityText} ${c.category.replace('_', ' ')} content`;
     }).join(', ');
 
     const confidenceText = confidence > 0.9 ? 'very high' :
-                          confidence > 0.8 ? 'high' :
-                          confidence > 0.6 ? 'moderate' : 'low';
+      confidence > 0.8 ? 'high' :
+        confidence > 0.6 ? 'moderate' : 'low';
 
     return `Content flagged with ${confidenceText} confidence (${Math.round(confidence * 100)}%) for: ${categoryDescriptions}. Risk level: ${riskLevel}.`;
   }

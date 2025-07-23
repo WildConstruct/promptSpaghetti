@@ -161,12 +161,12 @@ export class PolicyManagementService {
       query += ` AND is_system_template = $${params.length}`;
     }
 
-    query += ` ORDER BY created_at DESC`;
+    query += ' ORDER BY created_at DESC';
 
     // Get total count
     const countResult = await this.db.query(
       query.replace('SELECT template_id, name, description, category, severity, default_config, is_system_template, created_at, updated_at',
-      'SELECT COUNT(*)'), params);
+        'SELECT COUNT(*)'), params);
     const total = parseInt(countResult.rows[0].count);
 
     // Get paginated results
@@ -296,7 +296,7 @@ export class PolicyManagementService {
       query += ` AND severity = $${params.length}`;
     }
 
-    query += ` ORDER BY detected_at DESC`;
+    query += ' ORDER BY detected_at DESC';
 
     // Get total count
     const countResult = await this.db.query(query.replace(/SELECT .* FROM/, 'SELECT COUNT(*) FROM'), params);
@@ -695,7 +695,7 @@ export class PolicyManagementService {
   }
 
   private async getPendingViolationsCount(): Promise<number> {
-    const result = await this.db.query(`SELECT COUNT(*) FROM policy_violations WHERE status = 'pending'`);
+    const result = await this.db.query('SELECT COUNT(*) FROM policy_violations WHERE status = \'pending\'');
     return parseInt(result.rows[0].count || '0');
   }
 
@@ -741,11 +741,11 @@ export class PolicyManagementService {
 
   private getDefaultActionForSeverity(severity: 'low' | 'medium' | 'high' | 'critical'): 'suspend' | 'restrict' | 'flag' | 'require_verification' | 'block_transaction' | 'quarantine_template' {
     switch (severity) {
-      case 'critical': return 'suspend';
-      case 'high': return 'restrict';
-      case 'medium': return 'flag';
-      case 'low': return 'flag';
-      default: return 'flag';
+    case 'critical': return 'suspend';
+    case 'high': return 'restrict';
+    case 'medium': return 'flag';
+    case 'low': return 'flag';
+    default: return 'flag';
     }
   }
 }

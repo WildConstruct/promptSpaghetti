@@ -397,7 +397,7 @@ export class PerformanceAnalytics extends EventEmitter {
     insights: PerformanceInsight[];
     benchmarks: PerformanceBenchmark[];
     reports: Array<{ timestamp: number; report: PerformanceReport }>;
-  } {
+    } {
     return {
       insights: Array.from(this.insights.values()),
       benchmarks: Array.from(this.benchmarks.values()),

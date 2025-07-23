@@ -410,7 +410,7 @@ export class AutomatedModerationService {
     if (accountAge < 7) riskFactors.push('new_account');
     
     const trustTrend = trustScore > 70 ? 'increasing' : 
-                      trustScore > 40 ? 'stable' : 'decreasing';
+      trustScore > 40 ? 'stable' : 'decreasing';
 
     return {
       authorTrustScore: trustScore,
@@ -460,7 +460,7 @@ export class AutomatedModerationService {
     let decision: ModerationAction = 'approve';
     let confidence = 85;
     let severity: ModerationSeverity = 'low';
-    let reasons: ModerationReason[] = [];
+    const reasons: ModerationReason[] = [];
     let requiresHumanReview = false;
     let reviewPriority: ModerationResult['reviewPriority'] = 'low';
 
@@ -556,24 +556,24 @@ export class AutomatedModerationService {
     console.log(`Executing moderation action: ${result.decision} for content ${request.contentId}`);
     
     switch (result.decision) {
-      case 'block_content':
-        // Block content and notify user
-        console.log('Blocking content and sending user notification');
-        break;
-      case 'quarantine':
-        // Move content to quarantine
-        console.log('Moving content to quarantine');
-        break;
-      case 'warn_user':
-        // Send warning to user
-        console.log('Sending warning notification to user');
-        break;
-      case 'suspend_user':
-        // Suspend user account
-        console.log('Suspending user account');
-        break;
-      default:
-        console.log(`No automated action required for: ${result.decision}`);
+    case 'block_content':
+      // Block content and notify user
+      console.log('Blocking content and sending user notification');
+      break;
+    case 'quarantine':
+      // Move content to quarantine
+      console.log('Moving content to quarantine');
+      break;
+    case 'warn_user':
+      // Send warning to user
+      console.log('Sending warning notification to user');
+      break;
+    case 'suspend_user':
+      // Suspend user account
+      console.log('Suspending user account');
+      break;
+    default:
+      console.log(`No automated action required for: ${result.decision}`);
     }
   }
 

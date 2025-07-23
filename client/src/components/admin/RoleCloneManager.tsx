@@ -354,12 +354,12 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
       const updatedRoles = state.availableRoles.map(role =>
         role.id === state.selectedSourceRole!.id
           ? {
-              ...role,
-              metadata: {
-                ...role.metadata,
-                cloneCount: (role.metadata?.cloneCount || 0) + 1
-              }
+            ...role,
+            metadata: {
+              ...role.metadata,
+              cloneCount: (role.metadata?.cloneCount || 0) + 1
             }
+          }
           : role
       );
 
@@ -387,10 +387,10 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
         cloneOperations: prev.cloneOperations.map(op =>
           op.id === operationId
             ? {
-                ...op,
-                status: 'failed' as const,
-                error: error instanceof Error ? error.message : 'Clone operation failed'
-              }
+              ...op,
+              status: 'failed' as const,
+              error: error instanceof Error ? error.message : 'Clone operation failed'
+            }
             : op
         ),
         isLoading: false,
@@ -406,29 +406,29 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
     let selectedPermissions: Set<string>;
 
     switch (presetType) {
-      case 'minimal':
-        // Only basic read permissions
-        selectedPermissions = new Set(
-          Array.from(sourcePermissions).filter(id =>
-            mockPermissions.find(p => p.id === id)?.action === 'read'
-          )
-        );
-        break;
-      case 'standard':
-        // Read and basic write permissions
-        selectedPermissions = new Set(
-          Array.from(sourcePermissions).filter(id => {
-            const permission = mockPermissions.find(p => p.id === id);
-            return permission && ['read', 'write'].includes(permission.action);
-          })
-        );
-        break;
-      case 'extended':
-        // All permissions from source
-        selectedPermissions = new Set(sourcePermissions);
-        break;
-      default:
-        selectedPermissions = new Set();
+    case 'minimal':
+      // Only basic read permissions
+      selectedPermissions = new Set(
+        Array.from(sourcePermissions).filter(id =>
+          mockPermissions.find(p => p.id === id)?.action === 'read'
+        )
+      );
+      break;
+    case 'standard':
+      // Read and basic write permissions
+      selectedPermissions = new Set(
+        Array.from(sourcePermissions).filter(id => {
+          const permission = mockPermissions.find(p => p.id === id);
+          return permission && ['read', 'write'].includes(permission.action);
+        })
+      );
+      break;
+    case 'extended':
+      // All permissions from source
+      selectedPermissions = new Set(sourcePermissions);
+      break;
+    default:
+      selectedPermissions = new Set();
     }
 
     setState(prev => ({
@@ -873,7 +873,7 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
                   borderRadius: '4px',
                   marginBottom: '8px',
                   backgroundColor: operation.status === 'success' ? '#d4edda' : 
-                                 operation.status === 'failed' ? '#f8d7da' : '#fff3cd'
+                    operation.status === 'failed' ? '#f8d7da' : '#fff3cd'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -885,7 +885,7 @@ export const RoleCloneManager: React.FC<RoleCloneManagerProps> = ({
                     borderRadius: '12px',
                     fontSize: '10px',
                     backgroundColor: operation.status === 'success' ? '#28a745' :
-                                   operation.status === 'failed' ? '#dc3545' : '#ffc107',
+                      operation.status === 'failed' ? '#dc3545' : '#ffc107',
                     color: 'white'
                   }}>
                     {operation.status}

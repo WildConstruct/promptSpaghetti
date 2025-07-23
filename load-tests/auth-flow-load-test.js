@@ -312,42 +312,42 @@ class AuthFlowTests {
       const testPattern = user.id % 5;
 
       switch (testPattern) {
-        case 0:
-          // Registration + Login flow
-          flowResults.registration = await AuthFlowTests.registrationFlowTest(user);
-          await user.thinkTime();
-          flowResults.login = await AuthFlowTests.loginFlowTest(user);
-          break;
+      case 0:
+        // Registration + Login flow
+        flowResults.registration = await AuthFlowTests.registrationFlowTest(user);
+        await user.thinkTime();
+        flowResults.login = await AuthFlowTests.loginFlowTest(user);
+        break;
           
-        case 1:
-          // Login + Session Management flow
-          flowResults.login = await AuthFlowTests.loginFlowTest(user);
-          await user.thinkTime();
-          flowResults.sessionManagement = await AuthFlowTests.sessionManagementTest(user);
-          break;
+      case 1:
+        // Login + Session Management flow
+        flowResults.login = await AuthFlowTests.loginFlowTest(user);
+        await user.thinkTime();
+        flowResults.sessionManagement = await AuthFlowTests.sessionManagementTest(user);
+        break;
           
-        case 2:
-          // Password Reset flow
-          flowResults.passwordReset = await AuthFlowTests.passwordResetFlowTest(user);
-          await user.thinkTime();
-          flowResults.login = await AuthFlowTests.loginFlowTest(user);
-          break;
+      case 2:
+        // Password Reset flow
+        flowResults.passwordReset = await AuthFlowTests.passwordResetFlowTest(user);
+        await user.thinkTime();
+        flowResults.login = await AuthFlowTests.loginFlowTest(user);
+        break;
           
-        case 3:
-          // OAuth flow
-          flowResults.oauth = await AuthFlowTests.oauthFlowTest(user);
-          await user.thinkTime();
-          flowResults.login = await AuthFlowTests.loginFlowTest(user);
-          break;
+      case 3:
+        // OAuth flow
+        flowResults.oauth = await AuthFlowTests.oauthFlowTest(user);
+        await user.thinkTime();
+        flowResults.login = await AuthFlowTests.loginFlowTest(user);
+        break;
           
-        case 4:
-          // Full flow test
-          flowResults.registration = await AuthFlowTests.registrationFlowTest(user);
-          await user.thinkTime();
-          flowResults.login = await AuthFlowTests.loginFlowTest(user);
-          await user.thinkTime();
-          flowResults.sessionManagement = await AuthFlowTests.sessionManagementTest(user);
-          break;
+      case 4:
+        // Full flow test
+        flowResults.registration = await AuthFlowTests.registrationFlowTest(user);
+        await user.thinkTime();
+        flowResults.login = await AuthFlowTests.loginFlowTest(user);
+        await user.thinkTime();
+        flowResults.sessionManagement = await AuthFlowTests.sessionManagementTest(user);
+        break;
       }
 
       // Store results for reporting

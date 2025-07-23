@@ -378,7 +378,7 @@ describe('Epic 20.1 - PerformanceOptimizer Unit Tests', () => {
       const mockFailingStrategy = OptimizationStrategy.THROTTLE_CONNECTIONS;
       
       // Mock a failing optimization
-            jest.spyOn(optimizer, 'executeOptimization').mockImplementationOnce(async () => ({
+      jest.spyOn(optimizer, 'executeOptimization').mockImplementationOnce(async () => ({
         success: false,
         strategy: mockFailingStrategy,
         executionTime: 100,

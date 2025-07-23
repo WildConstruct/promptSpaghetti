@@ -253,7 +253,7 @@ export class SecurityEventEnrichmentService {
   ): Promise<DeviceFingerprint> {
     try {
       const fingerprintId = await this.deviceFingerprintingService.generateFingerprint({
-        userAgent,
+        userAgent
         // Additional fingerprinting data would be collected client-side
       });
       

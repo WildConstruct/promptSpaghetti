@@ -521,15 +521,15 @@ expect.extend({
     if (pass) {
       return {
         message: () => `expected ${received} not to be one of ${expected}`,
-        pass: true,
+        pass: true
       };
     } else {
       return {
         message: () => `expected ${received} to be one of ${expected}`,
-        pass: false,
+        pass: false
       };
     }
-  },
+  }
 });
 
 declare global {

@@ -97,36 +97,36 @@ class CoreEnginePerformanceTester {
       const nodeId = `node-${i}`;
       
       switch (nodeType) {
-        case 0:
-          nodes.push(this.createWeightedChoiceNode(
-            nodeId,
-            [`choice-${i}-1`, `choice-${i}-2`, `choice-${i}-3`],
-            [0.5, 0.3, 0.2]
-          ));
-          break;
-        case 1:
-          nodes.push(new (class extends RuntimeNode {
-            async execute(context: ExecutionContext): Promise<string> {
-              return `concat-${i}-${context.getVariable('counter') || 0}`;
-            }
-          })(nodeId));
-          break;
-        case 2:
-          nodes.push(new (class extends RuntimeNode {
-            async execute(context: ExecutionContext): Promise<string> {
-              const counter = (context.getVariable('counter') as number) || 0;
-              context.setVariable('counter', counter + 1);
-              return `variable-${counter}`;
-            }
-          })(nodeId));
-          break;
-        case 3:
-          nodes.push(new (class extends RuntimeNode {
-            async execute(context: ExecutionContext): Promise<string> {
-              return `output-${i}-${Date.now()}`;
-            }
-          })(nodeId));
-          break;
+      case 0:
+        nodes.push(this.createWeightedChoiceNode(
+          nodeId,
+          [`choice-${i}-1`, `choice-${i}-2`, `choice-${i}-3`],
+          [0.5, 0.3, 0.2]
+        ));
+        break;
+      case 1:
+        nodes.push(new (class extends RuntimeNode {
+          async execute(context: ExecutionContext): Promise<string> {
+            return `concat-${i}-${context.getVariable('counter') || 0}`;
+          }
+        })(nodeId));
+        break;
+      case 2:
+        nodes.push(new (class extends RuntimeNode {
+          async execute(context: ExecutionContext): Promise<string> {
+            const counter = (context.getVariable('counter') as number) || 0;
+            context.setVariable('counter', counter + 1);
+            return `variable-${counter}`;
+          }
+        })(nodeId));
+        break;
+      case 3:
+        nodes.push(new (class extends RuntimeNode {
+          async execute(context: ExecutionContext): Promise<string> {
+            return `output-${i}-${Date.now()}`;
+          }
+        })(nodeId));
+        break;
       }
     }
     

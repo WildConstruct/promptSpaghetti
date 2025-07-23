@@ -151,20 +151,20 @@ export class AlertingService extends EventEmitter {
   private evaluateCondition(value: number | string, condition: string, threshold: number | string): boolean {
     if (typeof value === 'number' && typeof threshold === 'number') {
       switch (condition) {
-        case 'gt': return value > threshold;
-        case 'gte': return value >= threshold;
-        case 'lt': return value < threshold;
-        case 'lte': return value <= threshold;
-        case 'eq': return value === threshold;
-        default: return false;
+      case 'gt': return value > threshold;
+      case 'gte': return value >= threshold;
+      case 'lt': return value < threshold;
+      case 'lte': return value <= threshold;
+      case 'eq': return value === threshold;
+      default: return false;
       }
     }
 
     if (typeof value === 'string' && typeof threshold === 'string') {
       switch (condition) {
-        case 'eq': return value === threshold;
-        case 'contains': return value.includes(threshold);
-        default: return false;
+      case 'eq': return value === threshold;
+      case 'contains': return value.includes(threshold);
+      default: return false;
       }
     }
 
@@ -251,18 +251,18 @@ export class AlertingService extends EventEmitter {
     for (const channel of config.channels) {
       try {
         switch (channel.type) {
-          case 'email':
-            await this.sendEmailAlert(channel, config, message, context);
-            break;
-          case 'slack':
-            await this.sendSlackAlert(channel, config, message, context);
-            break;
-          case 'webhook':
-            await this.sendWebhookAlert(channel, config, message, value, context);
-            break;
-          case 'sms':
-            await this.sendSMSAlert(channel, config, message);
-            break;
+        case 'email':
+          await this.sendEmailAlert(channel, config, message, context);
+          break;
+        case 'slack':
+          await this.sendSlackAlert(channel, config, message, context);
+          break;
+        case 'webhook':
+          await this.sendWebhookAlert(channel, config, message, value, context);
+          break;
+        case 'sms':
+          await this.sendSMSAlert(channel, config, message);
+          break;
         }
       } catch (error) {
         console.error(`Failed to send ${channel.type} alert:`, error);
@@ -394,7 +394,7 @@ export class AlertingService extends EventEmitter {
           });
         }
       } catch (error) {
-        console.error(`Failed to send resolution notification:`, error);
+        console.error('Failed to send resolution notification:', error);
       }
     }
   }
@@ -455,11 +455,11 @@ export class AlertingService extends EventEmitter {
    */
   private getSeverityColor(severity: string): string {
     switch (severity) {
-      case 'info': return '#36a3f7';
-      case 'warning': return '#faad14';
-      case 'critical': return '#ff4d4f';
-      case 'emergency': return '#a61e4d';
-      default: return '#666666';
+    case 'info': return '#36a3f7';
+    case 'warning': return '#faad14';
+    case 'critical': return '#ff4d4f';
+    case 'emergency': return '#a61e4d';
+    default: return '#666666';
     }
   }
 

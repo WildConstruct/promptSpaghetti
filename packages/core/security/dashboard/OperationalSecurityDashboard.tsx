@@ -200,17 +200,17 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
     let filtered = alerts;
     
     switch (selectedFilter) {
-      case 'critical':
-        filtered = alerts.filter(alert => alert.severity === 'critical');
-        break;
-      case 'high':
-        filtered = alerts.filter(alert => alert.severity === 'high' || alert.severity === 'critical');
-        break;
-      case 'new':
-        filtered = alerts.filter(alert => alert.status === 'new');
-        break;
-      default:
-        filtered = alerts;
+    case 'critical':
+      filtered = alerts.filter(alert => alert.severity === 'critical');
+      break;
+    case 'high':
+      filtered = alerts.filter(alert => alert.severity === 'high' || alert.severity === 'critical');
+      break;
+    case 'new':
+      filtered = alerts.filter(alert => alert.status === 'new');
+      break;
+    default:
+      filtered = alerts;
     }
     
     return filtered
@@ -228,22 +228,22 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
   // Get severity color
   const getSeverityColor = useCallback((severity: string) => {
     switch (severity) {
-      case 'critical': return themeStyles.critical;
-      case 'high': return themeStyles.error;
-      case 'medium': return themeStyles.warning;
-      case 'low': return themeStyles.success;
-      default: return themeStyles.textSecondary;
+    case 'critical': return themeStyles.critical;
+    case 'high': return themeStyles.error;
+    case 'medium': return themeStyles.warning;
+    case 'low': return themeStyles.success;
+    default: return themeStyles.textSecondary;
     }
   }, [themeStyles]);
 
   // Get status color
   const getStatusColor = useCallback((status: string) => {
     switch (status) {
-      case 'operational': return themeStyles.success;
-      case 'degraded': return themeStyles.warning;
-      case 'outage': return themeStyles.critical;
-      case 'maintenance': return themeStyles.primary;
-      default: return themeStyles.textSecondary;
+    case 'operational': return themeStyles.success;
+    case 'degraded': return themeStyles.warning;
+    case 'outage': return themeStyles.critical;
+    case 'maintenance': return themeStyles.primary;
+    default: return themeStyles.textSecondary;
     }
   }, [themeStyles]);
 
@@ -646,11 +646,11 @@ export const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboard
                         fontSize: '10px',
                         padding: '2px 6px',
                         background: intel.confidence === 'high' ? themeStyles.success + '20' : 
-                                   intel.confidence === 'medium' ? themeStyles.warning + '20' : 
-                                   themeStyles.error + '20',
+                          intel.confidence === 'medium' ? themeStyles.warning + '20' : 
+                            themeStyles.error + '20',
                         color: intel.confidence === 'high' ? themeStyles.success : 
-                               intel.confidence === 'medium' ? themeStyles.warning : 
-                               themeStyles.error,
+                          intel.confidence === 'medium' ? themeStyles.warning : 
+                            themeStyles.error,
                         borderRadius: '4px',
                         textTransform: 'uppercase'
                       }}>

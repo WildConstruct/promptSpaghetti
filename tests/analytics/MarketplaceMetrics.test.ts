@@ -12,27 +12,27 @@ Object.defineProperty(window, 'localStorage', {
   value: {
     getItem: jest.fn(() => 'test-user-123'),
     setItem: jest.fn<unknown[], unknown>(),
-    removeItem: jest.fn<unknown[], unknown>(),
+    removeItem: jest.fn<unknown[], unknown>()
   },
-  writable: true,
+  writable: true
 });
 
 Object.defineProperty(window, 'sessionStorage', {
   value: {
     getItem: jest.fn<unknown[], unknown>(),
-    setItem: jest.fn<unknown[], unknown>(),
+    setItem: jest.fn<unknown[], unknown>()
   },
-  writable: true,
+  writable: true
 });
 
 Object.defineProperty(navigator, 'userAgent', {
   value: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-  writable: true,
+  writable: true
 });
 
 Object.defineProperty(document, 'referrer', {
   value: 'https://example.com',
-  writable: true,
+  writable: true
 });
 
 // Mock conversion tracker

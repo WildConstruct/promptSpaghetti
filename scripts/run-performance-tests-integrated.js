@@ -71,7 +71,7 @@ async function main() {
     }
 
     console.log(`Mode: ${isQuick ? 'Quick Test' : 'Comprehensive Test'}`);
-    console.log(`Configuration:`);
+    console.log('Configuration:');
     console.log(`  Execution Benchmarks: ${config.enableExecutionBenchmarks ? '✅' : '❌'}`);
     console.log(`  Load Testing: ${config.enableLoadTesting ? '✅' : '❌'}`);
     console.log(`  System Monitoring: ${config.enableSystemMonitoring ? '✅' : '❌'}`);
@@ -190,10 +190,10 @@ async function main() {
 
 function getStatusIcon(status) {
   switch (status) {
-    case 'HEALTHY': return '✅';
-    case 'WARNING': return '⚠️';
-    case 'CRITICAL': return '❌';
-    default: return '❓';
+  case 'HEALTHY': return '✅';
+  case 'WARNING': return '⚠️';
+  case 'CRITICAL': return '❌';
+  default: return '❓';
   }
 }
 

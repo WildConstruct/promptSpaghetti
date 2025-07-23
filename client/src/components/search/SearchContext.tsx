@@ -99,139 +99,139 @@ const initialState: SearchState = {
 // Reducer
 const searchReducer = (state: SearchState, action: SearchAction): SearchState => {
   switch (action.type) {
-    case 'SET_QUERY':
-      return {
-        ...state,
-        currentQuery: { ...state.currentQuery, ...action.payload }
-      };
+  case 'SET_QUERY':
+    return {
+      ...state,
+      currentQuery: { ...state.currentQuery, ...action.payload }
+    };
       
-    case 'SET_TEXT':
-      return {
-        ...state,
-        currentQuery: { ...state.currentQuery, text: action.payload }
-      };
+  case 'SET_TEXT':
+    return {
+      ...state,
+      currentQuery: { ...state.currentQuery, text: action.payload }
+    };
       
-    case 'ADD_FILTER':
-      return {
-        ...state,
-        currentQuery: {
-          ...state.currentQuery,
-          filters: [...state.currentQuery.filters, action.payload]
-        }
-      };
+  case 'ADD_FILTER':
+    return {
+      ...state,
+      currentQuery: {
+        ...state.currentQuery,
+        filters: [...state.currentQuery.filters, action.payload]
+      }
+    };
       
-    case 'REMOVE_FILTER':
-      return {
-        ...state,
-        currentQuery: {
-          ...state.currentQuery,
-          filters: state.currentQuery.filters.filter((_, index) => index !== action.payload)
-        }
-      };
+  case 'REMOVE_FILTER':
+    return {
+      ...state,
+      currentQuery: {
+        ...state.currentQuery,
+        filters: state.currentQuery.filters.filter((_, index) => index !== action.payload)
+      }
+    };
       
-    case 'UPDATE_FILTER':
-      return {
-        ...state,
-        currentQuery: {
-          ...state.currentQuery,
-          filters: state.currentQuery.filters.map((filter, index) =>
-            index === action.payload.index ? action.payload.filter : filter
-          )
-        }
-      };
+  case 'UPDATE_FILTER':
+    return {
+      ...state,
+      currentQuery: {
+        ...state.currentQuery,
+        filters: state.currentQuery.filters.map((filter, index) =>
+          index === action.payload.index ? action.payload.filter : filter
+        )
+      }
+    };
       
-    case 'SET_FILTERS':
-      return {
-        ...state,
-        currentQuery: { ...state.currentQuery, filters: action.payload }
-      };
+  case 'SET_FILTERS':
+    return {
+      ...state,
+      currentQuery: { ...state.currentQuery, filters: action.payload }
+    };
       
-    case 'ADD_SORT':
-      // Remove existing sort for same field, then add new one
-      const existingSorts = state.currentQuery.sorts.filter(s => s.field !== action.payload.field);
-      return {
-        ...state,
-        currentQuery: {
-          ...state.currentQuery,
-          sorts: [...existingSorts, action.payload]
-        }
-      };
+  case 'ADD_SORT':
+    // Remove existing sort for same field, then add new one
+    const existingSorts = state.currentQuery.sorts.filter(s => s.field !== action.payload.field);
+    return {
+      ...state,
+      currentQuery: {
+        ...state.currentQuery,
+        sorts: [...existingSorts, action.payload]
+      }
+    };
       
-    case 'REMOVE_SORT':
-      return {
-        ...state,
-        currentQuery: {
-          ...state.currentQuery,
-          sorts: state.currentQuery.sorts.filter((_, index) => index !== action.payload)
-        }
-      };
+  case 'REMOVE_SORT':
+    return {
+      ...state,
+      currentQuery: {
+        ...state.currentQuery,
+        sorts: state.currentQuery.sorts.filter((_, index) => index !== action.payload)
+      }
+    };
       
-    case 'SET_SORTS':
-      return {
-        ...state,
-        currentQuery: { ...state.currentQuery, sorts: action.payload }
-      };
+  case 'SET_SORTS':
+    return {
+      ...state,
+      currentQuery: { ...state.currentQuery, sorts: action.payload }
+    };
       
-    case 'SET_RESULTS':
-      return {
-        ...state,
-        results: action.payload,
-        isLoading: false,
-        error: null
-      };
+  case 'SET_RESULTS':
+    return {
+      ...state,
+      results: action.payload,
+      isLoading: false,
+      error: null
+    };
       
-    case 'SET_LOADING':
-      return {
-        ...state,
-        isLoading: action.payload
-      };
+  case 'SET_LOADING':
+    return {
+      ...state,
+      isLoading: action.payload
+    };
       
-    case 'SET_ERROR':
-      return {
-        ...state,
-        error: action.payload,
-        isLoading: false
-      };
+  case 'SET_ERROR':
+    return {
+      ...state,
+      error: action.payload,
+      isLoading: false
+    };
       
-    case 'ADD_TO_HISTORY':
-      const newHistory = [action.payload, ...state.searchHistory.filter(
-        h => JSON.stringify(h) !== JSON.stringify(action.payload)
-      )].slice(0, 10); // Keep last 10 searches
+  case 'ADD_TO_HISTORY':
+    const newHistory = [action.payload, ...state.searchHistory.filter(
+      h => JSON.stringify(h) !== JSON.stringify(action.payload)
+    )].slice(0, 10); // Keep last 10 searches
       
-      return {
-        ...state,
-        searchHistory: newHistory
-      };
+    return {
+      ...state,
+      searchHistory: newHistory
+    };
       
-    case 'SAVE_SEARCH':
-      return {
-        ...state,
-        savedSearches: [...state.savedSearches.filter(s => s.id !== action.payload.id), action.payload]
-      };
+  case 'SAVE_SEARCH':
+    return {
+      ...state,
+      savedSearches: [...state.savedSearches.filter(s => s.id !== action.payload.id), action.payload]
+    };
       
-    case 'REMOVE_SAVED_SEARCH':
-      return {
-        ...state,
-        savedSearches: state.savedSearches.filter(s => s.id !== action.payload)
-      };
+  case 'REMOVE_SAVED_SEARCH':
+    return {
+      ...state,
+      savedSearches: state.savedSearches.filter(s => s.id !== action.payload)
+    };
       
-    case 'CLEAR_RESULTS':
-      return {
-        ...state,
-        results: null,
-        error: null
-      };
+  case 'CLEAR_RESULTS':
+    return {
+      ...state,
+      results: null,
+      error: null
+    };
       
-    case 'RESET_QUERY':
-      return {
-        ...state,
-        currentQuery: initialState.currentQuery,
-        results: null,
-        error: null
-      };
+  case 'RESET_QUERY':
+    return {
+      ...state,
+      currentQuery: initialState.currentQuery,
+      results: null,
+      error: null
+    };
       
-    default:
-      return state;
+  default:
+    return state;
   }
 };
 
@@ -372,7 +372,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
     !state.currentQuery.text && 
     state.currentQuery.filters.length === 0 && 
     state.currentQuery.sorts.length === 0,
-    [state.currentQuery]
+  [state.currentQuery]
   );
 
   const contextValue: SearchContextValue = {

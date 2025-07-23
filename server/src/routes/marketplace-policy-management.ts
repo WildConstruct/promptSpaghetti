@@ -720,13 +720,13 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
     const [major, minor, patch] = currentVersion.split('.').map(Number);
     
     switch (increment) {
-      case 'major':
-        return `${major + 1}.0.0`;
-      case 'minor':
-        return `${major}.${minor + 1}.0`;
-      case 'patch':
-      default:
-        return `${major}.${minor}.${patch + 1}`;
+    case 'major':
+      return `${major + 1}.0.0`;
+    case 'minor':
+      return `${major}.${minor + 1}.0`;
+    case 'patch':
+    default:
+      return `${major}.${minor}.${patch + 1}`;
     }
   }
 }

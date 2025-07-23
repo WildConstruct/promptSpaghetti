@@ -330,8 +330,8 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
         apiKeyService.recordUsage.mockResolvedValue();
         apiKeyService.checkRateLimit.mockResolvedValue(
           { allowed: true,
-          remaining: 99,
-          resetTime: Date.now() + 3600000 });
+            remaining: 99,
+            resetTime: Date.now() + 3600000 });
 
         fastify.get('/api/tracked', async (request, reply) => {
           await apiKeyService.recordUsage('ak_test_123');
@@ -682,7 +682,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
           method: 'POST',
           url: '/auth/register',
           payload: {
-            email: "'; DROP TABLE users; --",
+            email: '\'; DROP TABLE users; --',
             password: 'SecurePass123',
             username: 'testuser'
           }

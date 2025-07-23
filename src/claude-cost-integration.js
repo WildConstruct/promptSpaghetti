@@ -293,38 +293,38 @@ async function main() {
 
   try {
     switch (command) {
-      case 'report':
-        await integration.generateReport();
-        break;
+    case 'report':
+      await integration.generateReport();
+      break;
         
-      case 'install':
-        await integration.installCCUsage();
-        break;
+    case 'install':
+      await integration.installCCUsage();
+      break;
         
-      case 'check':
-        const available = await integration.checkCCUsageAvailable();
-        console.log('ccusage available:', available);
-        if (available) {
-          console.log('Data directory:', integration.getConversationDataDir());
-        }
-        break;
+    case 'check':
+      const available = await integration.checkCCUsageAvailable();
+      console.log('ccusage available:', available);
+      if (available) {
+        console.log('Data directory:', integration.getConversationDataDir());
+      }
+      break;
         
-      case 'cache':
-        const cached = integration.getCachedCosts();
-        if (cached) {
-          console.log('Cached data:', cached);
-        } else {
-          console.log('No cached data available');
-        }
-        break;
+    case 'cache':
+      const cached = integration.getCachedCosts();
+      if (cached) {
+        console.log('Cached data:', cached);
+      } else {
+        console.log('No cached data available');
+      }
+      break;
         
-      default:
-        console.log('Claude Cost Integration - Usage:');
-        console.log('  node claude-cost-integration.js report   # Generate cost report');
-        console.log('  node claude-cost-integration.js install  # Install ccusage');
-        console.log('  node claude-cost-integration.js check    # Check if ccusage is available');
-        console.log('  node claude-cost-integration.js cache    # Show cached data');
-        break;
+    default:
+      console.log('Claude Cost Integration - Usage:');
+      console.log('  node claude-cost-integration.js report   # Generate cost report');
+      console.log('  node claude-cost-integration.js install  # Install ccusage');
+      console.log('  node claude-cost-integration.js check    # Check if ccusage is available');
+      console.log('  node claude-cost-integration.js cache    # Show cached data');
+      break;
     }
   } catch (error) {
     console.error('Error:', error.message);

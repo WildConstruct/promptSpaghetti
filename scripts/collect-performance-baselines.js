@@ -350,8 +350,8 @@ class PerformanceBaselineCollectionScript {
 | Baseline | Category | Status | Average | Target | Warning | Critical |
 |----------|----------|--------|---------|--------|---------|----------|
 ${report.baselineAnalysis.map(b => 
-  `| ${b.baseline} | ${b.category} | ${b.status === 'OPTIMAL' ? '✅' : b.status === 'WARNING' ? '⚠️' : '❌'} ${b.status} | ${b.measurements.average} | ${b.thresholds.target} | ${b.thresholds.warning} | ${b.thresholds.critical} |`
-).join('\n')}
+    `| ${b.baseline} | ${b.category} | ${b.status === 'OPTIMAL' ? '✅' : b.status === 'WARNING' ? '⚠️' : '❌'} ${b.status} | ${b.measurements.average} | ${b.thresholds.target} | ${b.thresholds.warning} | ${b.thresholds.critical} |`
+  ).join('\n')}
 
 ## Detailed Analysis
 

@@ -380,34 +380,34 @@ const ComplianceReportingDashboard: React.FC = () => {
 
   const getRiskBadgeClass = (risk: string): string => {
     switch (risk) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'low': return 'bg-green-100 text-green-800 border-green-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusBadgeClass = (status: string): string => {
     switch (status) {
-      case 'compliant':
-      case 'resolved':
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'investigating':
-      case 'resolving':
-      case 'in_progress':
-        return 'bg-blue-100 text-blue-800';
-      case 'open':
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'non_compliant':
-      case 'failed':
-        return 'bg-red-100 text-red-800';
-      case 'partial':
-        return 'bg-orange-100 text-orange-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+    case 'compliant':
+    case 'resolved':
+    case 'completed':
+      return 'bg-green-100 text-green-800';
+    case 'investigating':
+    case 'resolving':
+    case 'in_progress':
+      return 'bg-blue-100 text-blue-800';
+    case 'open':
+    case 'pending':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'non_compliant':
+    case 'failed':
+      return 'bg-red-100 text-red-800';
+    case 'partial':
+      return 'bg-orange-100 text-orange-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -643,9 +643,9 @@ const ComplianceReportingDashboard: React.FC = () => {
                           <div 
                             className={`h-2 rounded-full transition-all duration-500 ${
                               framework.complianceScore >= 95 ? 'bg-green-500' :
-                              framework.complianceScore >= 85 ? 'bg-blue-500' :
-                              framework.complianceScore >= 70 ? 'bg-yellow-500' :
-                              framework.complianceScore >= 50 ? 'bg-orange-500' : 'bg-red-500'
+                                framework.complianceScore >= 85 ? 'bg-blue-500' :
+                                  framework.complianceScore >= 70 ? 'bg-yellow-500' :
+                                    framework.complianceScore >= 50 ? 'bg-orange-500' : 'bg-red-500'
                             }`}
                             style={{ width: `${framework.complianceScore}%` }}
                           />
@@ -716,9 +716,9 @@ const ComplianceReportingDashboard: React.FC = () => {
                       <div key={risk} className="text-center">
                         <div className={`w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center ${
                           risk === 'critical' ? 'bg-red-100 text-red-600' :
-                          risk === 'high' ? 'bg-orange-100 text-orange-600' :
-                          risk === 'medium' ? 'bg-yellow-100 text-yellow-600' :
-                          'bg-green-100 text-green-600'
+                            risk === 'high' ? 'bg-orange-100 text-orange-600' :
+                              risk === 'medium' ? 'bg-yellow-100 text-yellow-600' :
+                                'bg-green-100 text-green-600'
                         }`}>
                           <span className="text-lg font-bold">{count}</span>
                         </div>

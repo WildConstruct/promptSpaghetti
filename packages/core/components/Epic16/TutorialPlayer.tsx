@@ -235,206 +235,206 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'beginner': return 'bg-green-100 text-green-800';
+    case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+    case 'advanced': return 'bg-red-100 text-red-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'getting-started': return <BookOpen className="w-4 h-4" />;
-      case 'template-creation': return <Target className="w-4 h-4" />;
-      case 'marketplace': return <Download className="w-4 h-4" />;
-      case 'collaboration': return <Users className="w-4 h-4" />;
-      case 'advanced': return <Zap className="w-4 h-4" />;
-      default: return <BookOpen className="w-4 h-4" />;
+    case 'getting-started': return <BookOpen className="w-4 h-4" />;
+    case 'template-creation': return <Target className="w-4 h-4" />;
+    case 'marketplace': return <Download className="w-4 h-4" />;
+    case 'collaboration': return <Users className="w-4 h-4" />;
+    case 'advanced': return <Zap className="w-4 h-4" />;
+    default: return <BookOpen className="w-4 h-4" />;
     }
   };
 
   const renderStepContent = () => {
     switch (currentStep.type) {
-      case 'introduction':
-        return (
-          <div className="text-center space-y-4">
-            <div className="p-4 bg-blue-50 rounded-lg">
-              <Lightbulb className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{currentStep.title}</h3>
-              <p className="text-gray-600">{currentStep.description}</p>
-            </div>
-            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
-          </div>
-        );
-
-      case 'demonstration':
-        return (
-          <div className="space-y-4">
-            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-              {currentStep.videoUrl ? (
-                <video
-                  ref={videoRef}
-                  src={currentStep.videoUrl}
-                  controls
-                  className="w-full h-full object-cover"
-                  muted={isMuted}
-                  onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
-                />
-              ) : currentStep.imageUrl ? (
-                <img
-                  src={currentStep.imageUrl}
-                  alt={currentStep.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  <Video className="w-16 h-16" />
-                </div>
-              )}
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">{currentStep.title}</h3>
-              <p className="text-gray-600 mb-4">{currentStep.description}</p>
-              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
-            </div>
-          </div>
-        );
-
-      case 'interaction':
-        return (
-          <div className="space-y-4">
-            <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
-              <div className="flex items-center gap-2 mb-2">
-                <MousePointer className="w-5 h-5 text-yellow-600" />
-                <h3 className="text-lg font-semibold">Interactive Step</h3>
-              </div>
-              <p className="text-gray-600">{currentStep.description}</p>
-            </div>
-
-            {currentStep.actions && (
-              <div className="space-y-3">
-                <h4 className="font-medium">Actions to complete:</h4>
-                {currentStep.actions.map((action, index) => (
-                  <div
-                    key={action.id}
-                    className={`flex items-center gap-3 p-3 rounded-lg border ${
-                      completedActions.has(action.id) 
-                        ? 'bg-green-50 border-green-200' 
-                        : 'bg-gray-50 border-gray-200'
-                    }`}
-                  >
-                    {completedActions.has(action.id) ? (
-                      <CheckCircle className="w-5 h-5 text-green-600" />
-                    ) : (
-                      <Circle className="w-5 h-5 text-gray-400" />
-                    )}
-                    <div className="flex-1">
-                      <div className="font-medium">{action.type.toUpperCase()}</div>
-                      <div className="text-sm text-gray-600">{action.message}</div>
-                    </div>
-                    {enableInteractions && !completedActions.has(action.id) && (
-                      <Button
-                        size="sm"
-                        onClick={() => handleActionComplete(action.id)}
-                      >
-                        Complete
-                      </Button>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
-          </div>
-        );
-
-      case 'practice':
-        return (
-          <div className="space-y-4">
-            <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
-              <div className="flex items-center gap-2 mb-2">
-                <Target className="w-5 h-5 text-purple-600" />
-                <h3 className="text-lg font-semibold">Practice Exercise</h3>
-              </div>
-              <p className="text-gray-600">{currentStep.description}</p>
-            </div>
-            
-            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
-            
-            {currentStep.tips && (
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2 flex items-center gap-2">
-                  <Lightbulb className="w-4 h-4 text-blue-600" />
-                  Tips:
-                </h4>
-                <ul className="space-y-1">
-                  {currentStep.tips.map((tip, index) => (
-                    <li key={index} className="text-sm text-gray-600">• {tip}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        );
-
-      case 'completion':
-        return (
-          <div className="text-center space-y-6">
-            <div className="p-6 bg-green-50 rounded-lg">
-              <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-green-800 mb-2">Congratulations!</h3>
-              <p className="text-green-700">You've completed the tutorial: {tutorial.title}</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Timer className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                  <div className="font-semibold">Time Spent</div>
-                  <div className="text-sm text-gray-600">{formatTime(timeSpent)}</div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Award className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
-                  <div className="font-semibold">XP Earned</div>
-                  <div className="text-sm text-gray-600">+{tutorial.completionRewards.xp}</div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-4 text-center">
-                  <Star className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                  <div className="font-semibold">Score</div>
-                  <div className="text-sm text-gray-600">
-                    {Math.round((completedActions.size / getTotalActions()) * 100)}%
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {tutorial.completionRewards.badge && (
-              <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
-                <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-yellow-600" />
-                  <span className="font-medium">Badge Unlocked: {tutorial.completionRewards.badge}</span>
-                </div>
-              </div>
-            )}
-          </div>
-        );
-
-      default:
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">{currentStep.title}</h3>
+    case 'introduction':
+      return (
+        <div className="text-center space-y-4">
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <Lightbulb className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">{currentStep.title}</h3>
             <p className="text-gray-600">{currentStep.description}</p>
+          </div>
+          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
+        </div>
+      );
+
+    case 'demonstration':
+      return (
+        <div className="space-y-4">
+          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+            {currentStep.videoUrl ? (
+              <video
+                ref={videoRef}
+                src={currentStep.videoUrl}
+                controls
+                className="w-full h-full object-cover"
+                muted={isMuted}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+              />
+            ) : currentStep.imageUrl ? (
+              <img
+                src={currentStep.imageUrl}
+                alt={currentStep.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <Video className="w-16 h-16" />
+              </div>
+            )}
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">{currentStep.title}</h3>
+            <p className="text-gray-600 mb-4">{currentStep.description}</p>
             <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
           </div>
-        );
+        </div>
+      );
+
+    case 'interaction':
+      return (
+        <div className="space-y-4">
+          <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+            <div className="flex items-center gap-2 mb-2">
+              <MousePointer className="w-5 h-5 text-yellow-600" />
+              <h3 className="text-lg font-semibold">Interactive Step</h3>
+            </div>
+            <p className="text-gray-600">{currentStep.description}</p>
+          </div>
+
+          {currentStep.actions && (
+            <div className="space-y-3">
+              <h4 className="font-medium">Actions to complete:</h4>
+              {currentStep.actions.map((action, index) => (
+                <div
+                  key={action.id}
+                  className={`flex items-center gap-3 p-3 rounded-lg border ${
+                    completedActions.has(action.id) 
+                      ? 'bg-green-50 border-green-200' 
+                      : 'bg-gray-50 border-gray-200'
+                  }`}
+                >
+                  {completedActions.has(action.id) ? (
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-gray-400" />
+                  )}
+                  <div className="flex-1">
+                    <div className="font-medium">{action.type.toUpperCase()}</div>
+                    <div className="text-sm text-gray-600">{action.message}</div>
+                  </div>
+                  {enableInteractions && !completedActions.has(action.id) && (
+                    <Button
+                      size="sm"
+                      onClick={() => handleActionComplete(action.id)}
+                    >
+                        Complete
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
+        </div>
+      );
+
+    case 'practice':
+      return (
+        <div className="space-y-4">
+          <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
+            <div className="flex items-center gap-2 mb-2">
+              <Target className="w-5 h-5 text-purple-600" />
+              <h3 className="text-lg font-semibold">Practice Exercise</h3>
+            </div>
+            <p className="text-gray-600">{currentStep.description}</p>
+          </div>
+            
+          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
+            
+          {currentStep.tips && (
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-medium mb-2 flex items-center gap-2">
+                <Lightbulb className="w-4 h-4 text-blue-600" />
+                  Tips:
+              </h4>
+              <ul className="space-y-1">
+                {currentStep.tips.map((tip, index) => (
+                  <li key={index} className="text-sm text-gray-600">• {tip}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      );
+
+    case 'completion':
+      return (
+        <div className="text-center space-y-6">
+          <div className="p-6 bg-green-50 rounded-lg">
+            <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-green-800 mb-2">Congratulations!</h3>
+            <p className="text-green-700">You've completed the tutorial: {tutorial.title}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <CardContent className="p-4 text-center">
+                <Timer className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                <div className="font-semibold">Time Spent</div>
+                <div className="text-sm text-gray-600">{formatTime(timeSpent)}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-4 text-center">
+                <Award className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
+                <div className="font-semibold">XP Earned</div>
+                <div className="text-sm text-gray-600">+{tutorial.completionRewards.xp}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-4 text-center">
+                <Star className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                <div className="font-semibold">Score</div>
+                <div className="text-sm text-gray-600">
+                  {Math.round((completedActions.size / getTotalActions()) * 100)}%
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {tutorial.completionRewards.badge && (
+            <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+              <div className="flex items-center gap-2">
+                <Award className="w-5 h-5 text-yellow-600" />
+                <span className="font-medium">Badge Unlocked: {tutorial.completionRewards.badge}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+
+    default:
+      return (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">{currentStep.title}</h3>
+          <p className="text-gray-600">{currentStep.description}</p>
+          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
+        </div>
+      );
     }
   };
 
@@ -447,8 +447,8 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
             index === currentStepIndex 
               ? 'bg-blue-100 text-blue-800' 
               : index < currentStepIndex
-              ? 'bg-green-50 text-green-700'
-              : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                ? 'bg-green-50 text-green-700'
+                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
           }`}
           onClick={() => setCurrentStepIndex(index)}
         >
@@ -692,21 +692,21 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'beginner': return 'bg-green-100 text-green-800';
+    case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+    case 'advanced': return 'bg-red-100 text-red-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'getting-started': return <BookOpen className="w-4 h-4" />;
-      case 'template-creation': return <Target className="w-4 h-4" />;
-      case 'marketplace': return <Download className="w-4 h-4" />;
-      case 'collaboration': return <Users className="w-4 h-4" />;
-      case 'advanced': return <Zap className="w-4 h-4" />;
-      default: return <BookOpen className="w-4 h-4" />;
+    case 'getting-started': return <BookOpen className="w-4 h-4" />;
+    case 'template-creation': return <Target className="w-4 h-4" />;
+    case 'marketplace': return <Download className="w-4 h-4" />;
+    case 'collaboration': return <Users className="w-4 h-4" />;
+    case 'advanced': return <Zap className="w-4 h-4" />;
+    default: return <BookOpen className="w-4 h-4" />;
     }
   };
 

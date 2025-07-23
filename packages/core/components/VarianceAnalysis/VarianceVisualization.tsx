@@ -513,7 +513,7 @@ export const VarianceVisualization: React.FC<VarianceVisualizationProps> = ({
                   results.map((result2, j) => {
                     const similarity = i === j ? 1 : (
                       i < j ? Math.random() * 0.6 + 0.2 : // Simulated similarity
-                      results.length // Use symmetry from upper triangle
+                        results.length // Use symmetry from upper triangle
                     );
                     
                     return (

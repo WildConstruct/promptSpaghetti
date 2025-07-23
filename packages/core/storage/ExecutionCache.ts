@@ -286,7 +286,7 @@ export class ExecutionCache {
     resultCacheEntries: number;
     estimatedMemoryMB: number;
     oldestEntry?: number;
-  } {
+    } {
     let oldestTimestamp = Date.now();
     
     for (const cached of this.resultCache.values()) {

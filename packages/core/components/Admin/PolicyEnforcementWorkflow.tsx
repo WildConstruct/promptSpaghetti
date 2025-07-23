@@ -275,36 +275,36 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'paused': return 'text-yellow-600 bg-yellow-100';
-      case 'disabled': return 'text-gray-600 bg-gray-100';
-      case 'running': return 'text-blue-600 bg-blue-100';
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'failed': return 'text-red-600 bg-red-100';
-      case 'cancelled': return 'text-gray-600 bg-gray-100';
-      case 'pending_approval': return 'text-orange-600 bg-orange-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'active': return 'text-green-600 bg-green-100';
+    case 'paused': return 'text-yellow-600 bg-yellow-100';
+    case 'disabled': return 'text-gray-600 bg-gray-100';
+    case 'running': return 'text-blue-600 bg-blue-100';
+    case 'completed': return 'text-green-600 bg-green-100';
+    case 'failed': return 'text-red-600 bg-red-100';
+    case 'cancelled': return 'text-gray-600 bg-gray-100';
+    case 'pending_approval': return 'text-orange-600 bg-orange-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'low': return 'text-blue-600 bg-blue-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'critical': return 'text-red-600 bg-red-100';
+    case 'high': return 'text-orange-600 bg-orange-100';
+    case 'medium': return 'text-yellow-600 bg-yellow-100';
+    case 'low': return 'text-blue-600 bg-blue-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getStepIcon = (type: string) => {
     switch (type) {
-      case 'enforcement_action': return Zap;
-      case 'notification': return Bell;
-      case 'human_review': return Users;
-      case 'condition_check': return CheckCircle;
-      case 'data_collection': return FileText;
-      default: return Activity;
+    case 'enforcement_action': return Zap;
+    case 'notification': return Bell;
+    case 'human_review': return Users;
+    case 'condition_check': return CheckCircle;
+    case 'data_collection': return FileText;
+    default: return Activity;
     }
   };
 

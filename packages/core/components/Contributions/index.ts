@@ -11,17 +11,17 @@ export { ContributionSubmissionForm } from './ContributionSubmissionForm';
 export { ContributorProfileManager } from './ContributorProfileManager';
 
 export type { 
-  ContributionDashboardProps,
+  ContributionDashboardProps
 } from './ContributionDashboard';
 
 export type { 
-  ContributionCardProps,
+  ContributionCardProps
 } from './ContributionCard';
 
 export type { 
-  ContributionSubmissionFormProps,
+  ContributionSubmissionFormProps
 } from './ContributionSubmissionForm';
 
 export type { 
-  ContributorProfileManagerProps,
+  ContributorProfileManagerProps
 } from './ContributorProfileManager';

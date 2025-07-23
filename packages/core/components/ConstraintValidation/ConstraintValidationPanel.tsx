@@ -286,9 +286,9 @@ const ConstraintItem: React.FC<ConstraintItemProps> = ({
 }) => {
   const getIcon = () => {
     switch (type) {
-      case 'violation': return <AlertTriangle size={14} />;
-      case 'warning': return <Info size={14} />;
-      case 'suggestion': return <CheckCircle size={14} />;
+    case 'violation': return <AlertTriangle size={14} />;
+    case 'warning': return <Info size={14} />;
+    case 'suggestion': return <CheckCircle size={14} />;
     }
   };
 

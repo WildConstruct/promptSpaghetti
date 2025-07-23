@@ -492,20 +492,20 @@ export class HealthCheckDefinitionService {
     const { checkDefinition } = context;
 
     switch (checkDefinition.config.type) {
-      case HealthCheckType.HTTP_ENDPOINT:
-        return this.executeHttpEndpointCheck(context);
+    case HealthCheckType.HTTP_ENDPOINT:
+      return this.executeHttpEndpointCheck(context);
       
-      case HealthCheckType.DATABASE_QUERY:
-        return this.executeDatabaseQueryCheck(context);
+    case HealthCheckType.DATABASE_QUERY:
+      return this.executeDatabaseQueryCheck(context);
         
-      case HealthCheckType.SYSTEM_COMMAND:
-        return this.executeSystemCommandCheck(context);
+    case HealthCheckType.SYSTEM_COMMAND:
+      return this.executeSystemCommandCheck(context);
         
-      case HealthCheckType.COMPOSITE_CHECK:
-        return this.executeCompositeCheck(context);
+    case HealthCheckType.COMPOSITE_CHECK:
+      return this.executeCompositeCheck(context);
         
-      default:
-        throw new Error(`Unsupported health check type: ${checkDefinition.config.type}`);
+    default:
+      throw new Error(`Unsupported health check type: ${checkDefinition.config.type}`);
     }
   }
 
@@ -648,20 +648,20 @@ export class HealthCheckDefinitionService {
     
     // Deduct points based on status
     switch (status) {
-      case HealthStatus.HEALTHY:
-        baseScore = 100;
-        break;
-      case HealthStatus.DEGRADED:
-        baseScore = 75;
-        break;
-      case HealthStatus.UNHEALTHY:
-        baseScore = 50;
-        break;
-      case HealthStatus.CRITICAL:
-        baseScore = 25;
-        break;
-      default:
-        baseScore = 0;
+    case HealthStatus.HEALTHY:
+      baseScore = 100;
+      break;
+    case HealthStatus.DEGRADED:
+      baseScore = 75;
+      break;
+    case HealthStatus.UNHEALTHY:
+      baseScore = 50;
+      break;
+    case HealthStatus.CRITICAL:
+      baseScore = 25;
+      break;
+    default:
+      baseScore = 0;
     }
 
     // Adjust based on performance

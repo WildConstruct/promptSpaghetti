@@ -662,39 +662,39 @@ export class ErrorTrackingService {
 
   private async evaluateAlertCondition(alert: ErrorAlert, group: ErrorGroup, errorEvent: ErrorEvent): Promise<boolean> {
     switch (alert.alertType) {
-      case 'new_error':
-        return group.occurrenceCount === 1;
+    case 'new_error':
+      return group.occurrenceCount === 1;
 
-      case 'threshold_exceeded':
-        if (!alert.threshold) return false;
-        return this.checkThresholdExceeded(alert.threshold, group);
+    case 'threshold_exceeded':
+      if (!alert.threshold) return false;
+      return this.checkThresholdExceeded(alert.threshold, group);
 
-      case 'severity_increased':
-        return this.compareSeverity(errorEvent.severity, ErrorSeverity.HIGH) >= 0;
+    case 'severity_increased':
+      return this.compareSeverity(errorEvent.severity, ErrorSeverity.HIGH) >= 0;
 
-      case 'user_impact_high':
-        return errorEvent.userImpact.impactLevel === 'high' || 
+    case 'user_impact_high':
+      return errorEvent.userImpact.impactLevel === 'high' || 
                errorEvent.userImpact.impactLevel === 'critical';
 
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
   private checkThresholdExceeded(threshold: AlertThreshold, group: ErrorGroup): boolean {
     switch (threshold.type) {
-      case 'occurrence_count':
-        return threshold.comparison === 'greater_than' ? 
-               group.occurrenceCount > threshold.value :
-               group.occurrenceCount === threshold.value;
+    case 'occurrence_count':
+      return threshold.comparison === 'greater_than' ? 
+        group.occurrenceCount > threshold.value :
+        group.occurrenceCount === threshold.value;
 
-      case 'severity_level':
-        const severityOrder = { 'low': 1, 'medium': 2, 'high': 3, 'critical': 4 };
-        const groupSeverityLevel = severityOrder[group.severity];
-        return groupSeverityLevel >= threshold.value;
+    case 'severity_level':
+      const severityOrder = { 'low': 1, 'medium': 2, 'high': 3, 'critical': 4 };
+      const groupSeverityLevel = severityOrder[group.severity];
+      return groupSeverityLevel >= threshold.value;
 
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
@@ -779,7 +779,7 @@ export class ErrorTrackingService {
         uniqueUsers: group.uniqueUsers,
         severity: group.severity,
         trend: group.trend.direction === 'increasing' ? 'up' as const :
-               group.trend.direction === 'decreasing' ? 'down' as const : 'stable' as const,
+          group.trend.direction === 'decreasing' ? 'down' as const : 'stable' as const,
         lastSeen: group.lastSeen
       }));
 
@@ -820,7 +820,7 @@ export class ErrorTrackingService {
 
     return {
       overallTrend: increasingGroups > totalGroups * 0.3 ? 'worsening' :
-                    increasingGroups < totalGroups * 0.1 ? 'improving' : 'stable',
+        increasingGroups < totalGroups * 0.1 ? 'improving' : 'stable',
       errorRateTrend: increasingGroups / totalGroups * 100,
       resolutionTimeTrend: 0, // Would calculate from historical data
       newErrorsRate: newGroups,
@@ -1078,16 +1078,16 @@ export class ErrorTrackingService {
         let aVal: any, bVal: any;
         
         switch (query.sortBy) {
-          case 'timestamp':
-            aVal = a.timestamp.getTime();
-            bVal = b.timestamp.getTime();
-            break;
-          case 'severity':
-            aVal = this.compareSeverity(a.severity, ErrorSeverity.LOW);
-            bVal = this.compareSeverity(b.severity, ErrorSeverity.LOW);
-            break;
-          default:
-            return 0;
+        case 'timestamp':
+          aVal = a.timestamp.getTime();
+          bVal = b.timestamp.getTime();
+          break;
+        case 'severity':
+          aVal = this.compareSeverity(a.severity, ErrorSeverity.LOW);
+          bVal = this.compareSeverity(b.severity, ErrorSeverity.LOW);
+          break;
+        default:
+          return 0;
         }
 
         return query.sortOrder === 'desc' ? bVal - aVal : aVal - bVal;

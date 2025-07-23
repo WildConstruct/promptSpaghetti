@@ -135,20 +135,20 @@ class PromptAnalyzer {
     const opts = {
       includeInfluence: options.includeInfluence ?? true,
       includeOptimizations: options.includeOptimizations ?? true,
-      analysisDepth: options.analysisDepth ?? 'detailed',
+      analysisDepth: options.analysisDepth ?? 'detailed'
     };
 
     logger.info('Starting comprehensive prompt analysis', {
       promptLength: prompt.length,
       includeInfluence: opts.includeInfluence,
-      analysisDepth: opts.analysisDepth,
+      analysisDepth: opts.analysisDepth
     });
 
     try {
       // Perform parallel analysis components
       const analysisPromises: Promise<any>[] = [
         this.analyzeStructure(prompt),
-        this.analyzeQuality(prompt),
+        this.analyzeQuality(prompt)
       ];
 
       if (opts.includeInfluence) {
@@ -164,7 +164,7 @@ class PromptAnalyzer {
         suggestions: [],
         alternativeVersions: [],
         tokenOptimizations: [],
-        structuralImprovements: [],
+        structuralImprovements: []
       };
 
       if (opts.includeOptimizations) {
@@ -185,14 +185,14 @@ class PromptAnalyzer {
           tokenInfluence: tokenInfluence || ({} as TokenInfluenceResult),
           structure,
           quality,
-          optimization,
+          optimization
         },
         summary,
         timestamp: startTime,
         metadata: {
           analysisTime: Date.now() - startTime,
-          version: '1.0.0',
-        },
+          version: '1.0.0'
+        }
       };
 
       // Track analytics
@@ -202,14 +202,14 @@ class PromptAnalyzer {
         overallScore: summary.overallScore,
         analysisTime: result.metadata.analysisTime,
         strengthsCount: summary.strengths.length,
-        weaknessesCount: summary.weaknesses.length,
+        weaknessesCount: summary.weaknesses.length
       });
 
       return result;
     } catch (error) {
       logger.error('Prompt analysis failed', {
         error: error instanceof Error ? error.message : String(error),
-        analysisTime: Date.now() - startTime,
+        analysisTime: Date.now() - startTime
       });
       throw error;
     }
@@ -248,7 +248,7 @@ class PromptAnalyzer {
       complexity,
       readabilityScore,
       keyPhrases,
-      semanticClusters,
+      semanticClusters
     };
   }
 
@@ -276,7 +276,7 @@ class PromptAnalyzer {
       consistency,
       specificity,
       actionability,
-      overallQuality,
+      overallQuality
     };
   }
 
@@ -327,7 +327,7 @@ class PromptAnalyzer {
       ['brief', 'detailed'],
       ['short', 'comprehensive'],
       ['simple', 'complex'],
-      ['formal', 'casual'],
+      ['formal', 'casual']
     ];
 
     for (const [term1, term2] of contradictions) {
@@ -438,7 +438,7 @@ class PromptAnalyzer {
             phrase,
             importance,
             category: this.categorizePhrases(phrase),
-            positions: [i],
+            positions: [i]
           });
         }
       }
@@ -487,7 +487,7 @@ class PromptAnalyzer {
       action: ['create', 'generate', 'write', 'develop', 'build', 'analyze'],
       quality: ['good', 'best', 'excellent', 'high', 'quality', 'detailed'],
       format: ['format', 'style', 'structure', 'layout', 'paragraph', 'list'],
-      content: ['content', 'information', 'data', 'text', 'material', 'topic'],
+      content: ['content', 'information', 'data', 'text', 'material', 'topic']
     };
 
     for (const [category, words] of Object.entries(categories)) {
@@ -504,7 +504,7 @@ class PromptAnalyzer {
       tokens,
       centroid: category,
       coherence: tokens.length / 10, // Simple coherence measure
-      importance: this.calculateClusterImportance(tokens),
+      importance: this.calculateClusterImportance(tokens)
     }));
   }
 
@@ -531,7 +531,7 @@ class PromptAnalyzer {
         priority: 'high',
         description: 'Improve clarity by being more specific',
         reasoning: 'Clarity score is below optimal threshold',
-        expectedImprovement: 0.3,
+        expectedImprovement: 0.3
       });
     }
 
@@ -541,7 +541,7 @@ class PromptAnalyzer {
         priority: 'medium',
         description: 'Add context or constraints to make instructions more complete',
         reasoning: 'Missing key instruction components',
-        expectedImprovement: 0.2,
+        expectedImprovement: 0.2
       });
     }
 
@@ -557,7 +557,7 @@ class PromptAnalyzer {
           currentToken: token.token,
           suggestedToken: token.alternatives?.[0] || '[REMOVE]',
           improvement: 0.1,
-          reasoning: 'Low influence token that could be optimized',
+          reasoning: 'Low influence token that could be optimized'
         });
       });
     }
@@ -568,7 +568,7 @@ class PromptAnalyzer {
         issue: 'Prompt is too complex and verbose',
         severity: 'major',
         solution: 'Break into simpler, more focused instructions',
-        impact: 0.25,
+        impact: 0.25
       });
     }
 
@@ -577,7 +577,7 @@ class PromptAnalyzer {
         issue: 'Sentences are too long',
         severity: 'minor',
         solution: 'Use shorter, more direct sentences',
-        impact: 0.15,
+        impact: 0.15
       });
     }
 
@@ -586,28 +586,28 @@ class PromptAnalyzer {
       version: this.generateAlternativeVersion(prompt, 'concise'),
       changes: ['Reduced verbosity', 'Simplified language'],
       expectedScore: quality.overallQuality + 0.1,
-      confidenceLevel: 0.7,
+      confidenceLevel: 0.7
     });
 
     return {
       suggestions,
       alternativeVersions,
       tokenOptimizations,
-      structuralImprovements,
+      structuralImprovements
     };
   }
 
   private generateAlternativeVersion(prompt: string, style: string): string {
     // Simple alternative generation - in production use more sophisticated methods
     switch (style) {
-      case 'concise':
-        return prompt
-          .replace(/\b(please|kindly|if you would)\b/gi, '')
-          .replace(/\b(very|quite|rather|really)\b/gi, '')
-          .replace(/\s+/g, ' ')
-          .trim();
-      default:
-        return prompt;
+    case 'concise':
+      return prompt
+        .replace(/\b(please|kindly|if you would)\b/gi, '')
+        .replace(/\b(very|quite|rather|really)\b/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    default:
+      return prompt;
     }
   }
 
@@ -639,7 +639,7 @@ class PromptAnalyzer {
       overallScore,
       strengths,
       weaknesses,
-      keyTokens,
+      keyTokens
     };
   }
 
@@ -656,8 +656,8 @@ class PromptAnalyzer {
         analysisTime: result.metadata.analysisTime,
         strengthsCount: result.summary.strengths.length,
         weaknessesCount: result.summary.weaknesses.length,
-        optimizationCount: result.analysis.optimization.suggestions.length,
-      },
+        optimizationCount: result.analysis.optimization.suggestions.length
+      }
     });
   }
 }

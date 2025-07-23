@@ -362,17 +362,17 @@ export class EvidenceAccessAuditMiddleware {
     
     // Map HTTP methods to actions
     switch (upperMethod) {
-      case 'GET':
-      case 'HEAD':
-        return EvidenceAccessAction.READ;
-      case 'POST':
-      case 'PUT':
-      case 'PATCH':
-        return EvidenceAccessAction.WRITE;
-      case 'DELETE':
-        return EvidenceAccessAction.DELETE;
-      default:
-        return EvidenceAccessAction.READ;
+    case 'GET':
+    case 'HEAD':
+      return EvidenceAccessAction.READ;
+    case 'POST':
+    case 'PUT':
+    case 'PATCH':
+      return EvidenceAccessAction.WRITE;
+    case 'DELETE':
+      return EvidenceAccessAction.DELETE;
+    default:
+      return EvidenceAccessAction.READ;
     }
   }
 

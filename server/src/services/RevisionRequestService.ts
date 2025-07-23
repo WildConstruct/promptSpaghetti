@@ -185,7 +185,7 @@ export class RevisionRequestService {
           newStatus === RevisionRequestStatus.REJECTED || 
           newStatus === RevisionRequestStatus.CANCELLED || 
           newStatus === RevisionRequestStatus.IMPLEMENTED ? 
-          { completedAt: new Date() } : {})
+        { completedAt: new Date() } : {})
     };
 
     return this.updateRevisionRequest(requestId, updates, actorId, actorName);
@@ -241,23 +241,23 @@ export class RevisionRequestService {
     let description: string;
 
     switch (reviewData.decision) {
-      case 'approve':
-        newStatus = RevisionRequestStatus.APPROVED;
-        timelineEventType = RevisionTimelineEventType.APPROVAL_GIVEN;
-        description = 'Request approved';
-        break;
-      case 'reject':
-        newStatus = RevisionRequestStatus.REJECTED;
-        timelineEventType = RevisionTimelineEventType.REJECTION_GIVEN;
-        description = 'Request rejected';
-        break;
-      case 'request_info':
-        newStatus = RevisionRequestStatus.ADDITIONAL_INFO_REQUESTED;
-        timelineEventType = RevisionTimelineEventType.ADDITIONAL_INFO_REQUESTED;
-        description = 'Additional information requested';
-        break;
-      default:
-        throw new Error(`Invalid review decision: ${reviewData.decision}`);
+    case 'approve':
+      newStatus = RevisionRequestStatus.APPROVED;
+      timelineEventType = RevisionTimelineEventType.APPROVAL_GIVEN;
+      description = 'Request approved';
+      break;
+    case 'reject':
+      newStatus = RevisionRequestStatus.REJECTED;
+      timelineEventType = RevisionTimelineEventType.REJECTION_GIVEN;
+      description = 'Request rejected';
+      break;
+    case 'request_info':
+      newStatus = RevisionRequestStatus.ADDITIONAL_INFO_REQUESTED;
+      timelineEventType = RevisionTimelineEventType.ADDITIONAL_INFO_REQUESTED;
+      description = 'Additional information requested';
+      break;
+    default:
+      throw new Error(`Invalid review decision: ${reviewData.decision}`);
     }
 
     const updates = {
@@ -426,7 +426,7 @@ export class RevisionRequestService {
 
   async removeEvidence(evidenceId: string, actorId: string, actorName: string): Promise<void> {
     // Get the evidence info first for timeline
-    const evidenceQuery = `SELECT * FROM revision_evidence WHERE id = $1`;
+    const evidenceQuery = 'SELECT * FROM revision_evidence WHERE id = $1';
     const evidenceResult = await this.db.query(evidenceQuery, [evidenceId]);
     
     if (evidenceResult.rows.length === 0) {
@@ -436,7 +436,7 @@ export class RevisionRequestService {
     const evidence = evidenceResult.rows[0];
 
     // Delete the evidence
-    const deleteQuery = `DELETE FROM revision_evidence WHERE id = $1`;
+    const deleteQuery = 'DELETE FROM revision_evidence WHERE id = $1';
     await this.db.query(deleteQuery, [evidenceId]);
 
     // Create timeline event
@@ -680,14 +680,14 @@ export class RevisionRequestService {
     });
 
     switch (request.format) {
-      case 'csv':
-        return this.generateCSV(searchResults.requests, request.fields);
-      case 'json':
-        return this.generateJSON(searchResults.requests, request);
-      case 'excel':
-        return this.generateExcel(searchResults.requests, request.fields);
-      default:
-        throw new Error(`Unsupported export format: ${request.format}`);
+    case 'csv':
+      return this.generateCSV(searchResults.requests, request.fields);
+    case 'json':
+      return this.generateJSON(searchResults.requests, request);
+    case 'excel':
+      return this.generateExcel(searchResults.requests, request.fields);
+    default:
+      throw new Error(`Unsupported export format: ${request.format}`);
     }
   }
 
@@ -734,11 +734,11 @@ export class RevisionRequestService {
     let baseScore = 0;
     
     switch (priority) {
-      case RevisionRequestPriority.CRITICAL: baseScore = 100; break;
-      case RevisionRequestPriority.URGENT: baseScore = 80; break;
-      case RevisionRequestPriority.HIGH: baseScore = 60; break;
-      case RevisionRequestPriority.MEDIUM: baseScore = 40; break;
-      case RevisionRequestPriority.LOW: baseScore = 20; break;
+    case RevisionRequestPriority.CRITICAL: baseScore = 100; break;
+    case RevisionRequestPriority.URGENT: baseScore = 80; break;
+    case RevisionRequestPriority.HIGH: baseScore = 60; break;
+    case RevisionRequestPriority.MEDIUM: baseScore = 40; break;
+    case RevisionRequestPriority.LOW: baseScore = 20; break;
     }
 
     if (dueDate) {
@@ -755,13 +755,13 @@ export class RevisionRequestService {
     let baseScore = 0;
 
     switch (type) {
-      case RevisionRequestType.CONTENT_UPDATE: baseScore = 20; break;
-      case RevisionRequestType.BUG_FIX: baseScore = 30; break;
-      case RevisionRequestType.ACCESSIBILITY_IMPROVEMENT: baseScore = 40; break;
-      case RevisionRequestType.PERFORMANCE_IMPROVEMENT: baseScore = 50; break;
-      case RevisionRequestType.FEATURE_ENHANCEMENT: baseScore = 70; break;
-      case RevisionRequestType.SECURITY_UPDATE: baseScore = 80; break;
-      case RevisionRequestType.COMPLIANCE_UPDATE: baseScore = 90; break;
+    case RevisionRequestType.CONTENT_UPDATE: baseScore = 20; break;
+    case RevisionRequestType.BUG_FIX: baseScore = 30; break;
+    case RevisionRequestType.ACCESSIBILITY_IMPROVEMENT: baseScore = 40; break;
+    case RevisionRequestType.PERFORMANCE_IMPROVEMENT: baseScore = 50; break;
+    case RevisionRequestType.FEATURE_ENHANCEMENT: baseScore = 70; break;
+    case RevisionRequestType.SECURITY_UPDATE: baseScore = 80; break;
+    case RevisionRequestType.COMPLIANCE_UPDATE: baseScore = 90; break;
     }
 
     if (estimatedHours) {
@@ -814,7 +814,7 @@ export class RevisionRequestService {
     }
 
     if (query.unassigned) {
-      conditions.push(`rr.reviewer_id IS NULL`);
+      conditions.push('rr.reviewer_id IS NULL');
     }
 
     if (query.dateRange) {

@@ -292,7 +292,7 @@ export class PerformanceMonitor extends EventEmitter {
     activeAlerts: number;
     topPerformingTypes: string[];
     underperformingTypes: string[];
-  } {
+    } {
     const allMetrics = Array.from(this.metrics.values());
     const totalExecutions = allMetrics.length;
     const activeExecutions = this.activeExecutions.size;

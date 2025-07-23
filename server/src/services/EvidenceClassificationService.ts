@@ -651,29 +651,29 @@ export class EvidenceClassificationService {
     let fieldValue: any;
     
     switch (condition.field) {
-      case 'content':
-        fieldValue = evidence.content;
-        break;
-      case 'metadata':
-        fieldValue = JSON.stringify(evidence.metadata);
-        break;
-      case 'filename':
-        fieldValue = evidence.filename || '';
-        break;
-      case 'size':
-        fieldValue = evidence.size;
-        break;
-      case 'source':
-        fieldValue = evidence.source;
-        break;
-      case 'evidence_type':
-        fieldValue = evidence.type;
-        break;
-      case 'compliance_framework':
-        fieldValue = evidence.complianceFramework || '';
-        break;
-      default:
-        return false;
+    case 'content':
+      fieldValue = evidence.content;
+      break;
+    case 'metadata':
+      fieldValue = JSON.stringify(evidence.metadata);
+      break;
+    case 'filename':
+      fieldValue = evidence.filename || '';
+      break;
+    case 'size':
+      fieldValue = evidence.size;
+      break;
+    case 'source':
+      fieldValue = evidence.source;
+      break;
+    case 'evidence_type':
+      fieldValue = evidence.type;
+      break;
+    case 'compliance_framework':
+      fieldValue = evidence.complianceFramework || '';
+      break;
+    default:
+      return false;
     }
 
     return this.evaluateOperator(fieldValue, condition.operator, condition.value, condition.caseSensitive);
@@ -688,24 +688,24 @@ export class EvidenceClassificationService {
     const normalize = (val: string) => caseSensitive ? val : val.toLowerCase();
     
     switch (operator) {
-      case 'contains':
-        return normalize(String(fieldValue)).includes(normalize(String(conditionValue)));
-      case 'equals':
-        return String(fieldValue) === String(conditionValue);
-      case 'matches':
-        const regex = conditionValue instanceof RegExp ? conditionValue : new RegExp(conditionValue);
-        return regex.test(String(fieldValue));
-      case 'gt':
-        return Number(fieldValue) > Number(conditionValue);
-      case 'lt':
-        return Number(fieldValue) < Number(conditionValue);
-      case 'in':
-        const values = Array.isArray(conditionValue) ? conditionValue : [conditionValue];
-        return values.includes(fieldValue);
-      case 'exists':
-        return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
-      default:
-        return false;
+    case 'contains':
+      return normalize(String(fieldValue)).includes(normalize(String(conditionValue)));
+    case 'equals':
+      return String(fieldValue) === String(conditionValue);
+    case 'matches':
+      const regex = conditionValue instanceof RegExp ? conditionValue : new RegExp(conditionValue);
+      return regex.test(String(fieldValue));
+    case 'gt':
+      return Number(fieldValue) > Number(conditionValue);
+    case 'lt':
+      return Number(fieldValue) < Number(conditionValue);
+    case 'in':
+      const values = Array.isArray(conditionValue) ? conditionValue : [conditionValue];
+      return values.includes(fieldValue);
+    case 'exists':
+      return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
+    default:
+      return false;
     }
   }
 

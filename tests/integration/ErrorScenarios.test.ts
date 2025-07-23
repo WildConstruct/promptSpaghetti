@@ -309,7 +309,7 @@ describe('Error Scenarios - Integration Tests', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {
-                choices: "invalid-type-should-be-array" as any
+                choices: 'invalid-type-should-be-array' as any
               }
             }
           ]

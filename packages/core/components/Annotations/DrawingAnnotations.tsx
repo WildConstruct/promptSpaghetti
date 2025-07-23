@@ -253,101 +253,101 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
     }
     
     switch (annotation.type) {
-      case 'freehand':
-        if (annotation.points.length > 1) {
-          ctx.beginPath();
-          ctx.moveTo(annotation.points[0].x, annotation.points[0].y);
-          for (let i = 1; i < annotation.points.length; i++) {
-            ctx.lineTo(annotation.points[i].x, annotation.points[i].y);
-          }
-          ctx.stroke();
+    case 'freehand':
+      if (annotation.points.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(annotation.points[0].x, annotation.points[0].y);
+        for (let i = 1; i < annotation.points.length; i++) {
+          ctx.lineTo(annotation.points[i].x, annotation.points[i].y);
         }
-        break;
+        ctx.stroke();
+      }
+      break;
         
-      case 'line':
-        if (annotation.points.length >= 2) {
-          ctx.beginPath();
-          ctx.moveTo(annotation.points[0].x, annotation.points[0].y);
-          ctx.lineTo(annotation.points[1].x, annotation.points[1].y);
-          ctx.stroke();
-        }
-        break;
+    case 'line':
+      if (annotation.points.length >= 2) {
+        ctx.beginPath();
+        ctx.moveTo(annotation.points[0].x, annotation.points[0].y);
+        ctx.lineTo(annotation.points[1].x, annotation.points[1].y);
+        ctx.stroke();
+      }
+      break;
         
-      case 'arrow':
-        if (annotation.points.length >= 2) {
-          const start = annotation.points[0];
-          const end = annotation.points[1];
-          const angle = Math.atan2(end.y - start.y, end.x - start.x);
-          const arrowLength = 15;
-          const arrowAngle = Math.PI / 6;
+    case 'arrow':
+      if (annotation.points.length >= 2) {
+        const start = annotation.points[0];
+        const end = annotation.points[1];
+        const angle = Math.atan2(end.y - start.y, end.x - start.x);
+        const arrowLength = 15;
+        const arrowAngle = Math.PI / 6;
           
-          // Draw line
-          ctx.beginPath();
-          ctx.moveTo(start.x, start.y);
-          ctx.lineTo(end.x, end.y);
-          ctx.stroke();
+        // Draw line
+        ctx.beginPath();
+        ctx.moveTo(start.x, start.y);
+        ctx.lineTo(end.x, end.y);
+        ctx.stroke();
           
-          // Draw arrowhead
-          ctx.beginPath();
-          ctx.moveTo(end.x, end.y);
-          ctx.lineTo(
-            end.x - arrowLength * Math.cos(angle - arrowAngle),
-            end.y - arrowLength * Math.sin(angle - arrowAngle)
-          );
-          ctx.moveTo(end.x, end.y);
-          ctx.lineTo(
-            end.x - arrowLength * Math.cos(angle + arrowAngle),
-            end.y - arrowLength * Math.sin(angle + arrowAngle)
-          );
-          ctx.stroke();
-        }
-        break;
+        // Draw arrowhead
+        ctx.beginPath();
+        ctx.moveTo(end.x, end.y);
+        ctx.lineTo(
+          end.x - arrowLength * Math.cos(angle - arrowAngle),
+          end.y - arrowLength * Math.sin(angle - arrowAngle)
+        );
+        ctx.moveTo(end.x, end.y);
+        ctx.lineTo(
+          end.x - arrowLength * Math.cos(angle + arrowAngle),
+          end.y - arrowLength * Math.sin(angle + arrowAngle)
+        );
+        ctx.stroke();
+      }
+      break;
         
-      case 'rectangle':
-        if (annotation.points.length >= 2) {
-          const startX = Math.min(annotation.points[0].x, annotation.points[1].x);
-          const startY = Math.min(annotation.points[0].y, annotation.points[1].y);
-          const width = Math.abs(annotation.points[1].x - annotation.points[0].x);
-          const height = Math.abs(annotation.points[1].y - annotation.points[0].y);
+    case 'rectangle':
+      if (annotation.points.length >= 2) {
+        const startX = Math.min(annotation.points[0].x, annotation.points[1].x);
+        const startY = Math.min(annotation.points[0].y, annotation.points[1].y);
+        const width = Math.abs(annotation.points[1].x - annotation.points[0].x);
+        const height = Math.abs(annotation.points[1].y - annotation.points[0].y);
           
-          ctx.beginPath();
-          ctx.rect(startX, startY, width, height);
-          if (annotation.style.fillOpacity && annotation.style.fillOpacity > 0) {
-            ctx.globalAlpha = annotation.style.fillOpacity;
-            ctx.fill();
-            ctx.globalAlpha = annotation.style.opacity;
-          }
-          ctx.stroke();
+        ctx.beginPath();
+        ctx.rect(startX, startY, width, height);
+        if (annotation.style.fillOpacity && annotation.style.fillOpacity > 0) {
+          ctx.globalAlpha = annotation.style.fillOpacity;
+          ctx.fill();
+          ctx.globalAlpha = annotation.style.opacity;
         }
-        break;
+        ctx.stroke();
+      }
+      break;
         
-      case 'circle':
-        if (annotation.points.length >= 2) {
-          const centerX = annotation.points[0].x;
-          const centerY = annotation.points[0].y;
-          const radius = Math.sqrt(
-            Math.pow(annotation.points[1].x - centerX, 2) +
+    case 'circle':
+      if (annotation.points.length >= 2) {
+        const centerX = annotation.points[0].x;
+        const centerY = annotation.points[0].y;
+        const radius = Math.sqrt(
+          Math.pow(annotation.points[1].x - centerX, 2) +
             Math.pow(annotation.points[1].y - centerY, 2)
-          );
+        );
           
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-          if (annotation.style.fillOpacity && annotation.style.fillOpacity > 0) {
-            ctx.globalAlpha = annotation.style.fillOpacity;
-            ctx.fill();
-            ctx.globalAlpha = annotation.style.opacity;
-          }
-          ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        if (annotation.style.fillOpacity && annotation.style.fillOpacity > 0) {
+          ctx.globalAlpha = annotation.style.fillOpacity;
+          ctx.fill();
+          ctx.globalAlpha = annotation.style.opacity;
         }
-        break;
+        ctx.stroke();
+      }
+      break;
         
-      case 'text':
-        if (annotation.points.length > 0 && annotation.text) {
-          ctx.font = `${annotation.style.fontWeight} ${annotation.style.fontSize}px ${annotation.style.fontFamily}`;
-          ctx.fillStyle = annotation.style.color;
-          ctx.fillText(annotation.text, annotation.points[0].x, annotation.points[0].y);
-        }
-        break;
+    case 'text':
+      if (annotation.points.length > 0 && annotation.text) {
+        ctx.font = `${annotation.style.fontWeight} ${annotation.style.fontSize}px ${annotation.style.fontFamily}`;
+        ctx.fillStyle = annotation.style.color;
+        ctx.fillText(annotation.text, annotation.points[0].x, annotation.points[0].y);
+      }
+      break;
     }
     
     ctx.restore();
@@ -377,54 +377,54 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
       ctx.lineJoin = drawingStyle.lineJoin;
       
       switch (currentTool) {
-        case 'freehand':
-          if (currentPoints.length > 1) {
-            ctx.beginPath();
-            ctx.moveTo(currentPoints[0].x, currentPoints[0].y);
-            for (let i = 1; i < currentPoints.length; i++) {
-              ctx.lineTo(currentPoints[i].x, currentPoints[i].y);
-            }
-            ctx.stroke();
+      case 'freehand':
+        if (currentPoints.length > 1) {
+          ctx.beginPath();
+          ctx.moveTo(currentPoints[0].x, currentPoints[0].y);
+          for (let i = 1; i < currentPoints.length; i++) {
+            ctx.lineTo(currentPoints[i].x, currentPoints[i].y);
           }
-          break;
+          ctx.stroke();
+        }
+        break;
           
-        case 'line':
-        case 'arrow':
-          if (currentPoints.length === 2) {
-            ctx.beginPath();
-            ctx.moveTo(currentPoints[0].x, currentPoints[0].y);
-            ctx.lineTo(currentPoints[1].x, currentPoints[1].y);
-            ctx.stroke();
-          }
-          break;
+      case 'line':
+      case 'arrow':
+        if (currentPoints.length === 2) {
+          ctx.beginPath();
+          ctx.moveTo(currentPoints[0].x, currentPoints[0].y);
+          ctx.lineTo(currentPoints[1].x, currentPoints[1].y);
+          ctx.stroke();
+        }
+        break;
           
-        case 'rectangle':
-          if (currentPoints.length === 2) {
-            const startX = Math.min(currentPoints[0].x, currentPoints[1].x);
-            const startY = Math.min(currentPoints[0].y, currentPoints[1].y);
-            const rectWidth = Math.abs(currentPoints[1].x - currentPoints[0].x);
-            const rectHeight = Math.abs(currentPoints[1].y - currentPoints[0].y);
+      case 'rectangle':
+        if (currentPoints.length === 2) {
+          const startX = Math.min(currentPoints[0].x, currentPoints[1].x);
+          const startY = Math.min(currentPoints[0].y, currentPoints[1].y);
+          const rectWidth = Math.abs(currentPoints[1].x - currentPoints[0].x);
+          const rectHeight = Math.abs(currentPoints[1].y - currentPoints[0].y);
             
-            ctx.beginPath();
-            ctx.rect(startX, startY, rectWidth, rectHeight);
-            ctx.stroke();
-          }
-          break;
+          ctx.beginPath();
+          ctx.rect(startX, startY, rectWidth, rectHeight);
+          ctx.stroke();
+        }
+        break;
           
-        case 'circle':
-          if (currentPoints.length === 2) {
-            const centerX = currentPoints[0].x;
-            const centerY = currentPoints[0].y;
-            const radius = Math.sqrt(
-              Math.pow(currentPoints[1].x - centerX, 2) +
+      case 'circle':
+        if (currentPoints.length === 2) {
+          const centerX = currentPoints[0].x;
+          const centerY = currentPoints[0].y;
+          const radius = Math.sqrt(
+            Math.pow(currentPoints[1].x - centerX, 2) +
               Math.pow(currentPoints[1].y - centerY, 2)
-            );
+          );
             
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            ctx.stroke();
-          }
-          break;
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+          ctx.stroke();
+        }
+        break;
       }
       
       ctx.restore();

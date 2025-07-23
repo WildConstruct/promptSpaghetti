@@ -211,7 +211,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
           maxRefundRate: 25 // percentage
         },
         timeframes: {
-          evaluationPeriod: 90, // days
+          evaluationPeriod: 90 // days
         },
         actions: ['require_payment_verification', 'limit_purchases', 'flag_for_review']
       }
@@ -220,23 +220,23 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'creator': return Users;
-      case 'buyer': return ShoppingCart;
-      case 'template': return FileText;
-      case 'transaction': return DollarSign;
-      case 'system': return Settings;
-      default: return Shield;
+    case 'creator': return Users;
+    case 'buyer': return ShoppingCart;
+    case 'template': return FileText;
+    case 'transaction': return DollarSign;
+    case 'system': return Settings;
+    default: return Shield;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'creator': return 'text-blue-600 bg-blue-100';
-      case 'buyer': return 'text-green-600 bg-green-100';
-      case 'template': return 'text-purple-600 bg-purple-100';
-      case 'transaction': return 'text-orange-600 bg-orange-100';
-      case 'system': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'creator': return 'text-blue-600 bg-blue-100';
+    case 'buyer': return 'text-green-600 bg-green-100';
+    case 'template': return 'text-purple-600 bg-purple-100';
+    case 'transaction': return 'text-orange-600 bg-orange-100';
+    case 'system': return 'text-gray-600 bg-gray-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -317,9 +317,9 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
             <span className="stat-label">Severity</span>
             <Badge className={
               template.defaultSeverity === 'critical' ? 'text-red-600 bg-red-100' :
-              template.defaultSeverity === 'high' ? 'text-orange-600 bg-orange-100' :
-              template.defaultSeverity === 'medium' ? 'text-yellow-600 bg-yellow-100' :
-              'text-blue-600 bg-blue-100'
+                template.defaultSeverity === 'high' ? 'text-orange-600 bg-orange-100' :
+                  template.defaultSeverity === 'medium' ? 'text-yellow-600 bg-yellow-100' :
+                    'text-blue-600 bg-blue-100'
             }>
               {template.defaultSeverity.toUpperCase()}
             </Badge>

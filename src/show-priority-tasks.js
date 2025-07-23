@@ -211,10 +211,10 @@ function getEpic8StoryTitle(story) {
 
 function getPriorityIcon(priority) {
   switch (priority) {
-    case 'high': return '🔥';
-    case 'medium': return '⚡';
-    case 'low': return '💡';
-    default: return '❓';
+  case 'high': return '🔥';
+  case 'medium': return '⚡';
+  case 'low': return '💡';
+  default: return '❓';
   }
 }
 

@@ -153,6 +153,6 @@ const server = http.createServer(async (req, res) => {
 const PORT = 8000;
 server.listen(PORT, () => {
   console.log(`🚀 Simple Mock Auth Server running on http://localhost:${PORT}`);
-  console.log(`🔐 Test login: test@example.com / password123`);
-  console.log(`📋 Endpoints: /api/auth/login, /api/auth/register, /api/auth/me, /api/health`);
+  console.log('🔐 Test login: test@example.com / password123');
+  console.log('📋 Endpoints: /api/auth/login, /api/auth/register, /api/auth/me, /api/health');
 });

@@ -797,25 +797,25 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
           
           // Determine new value based on operation type
           switch (operation.operationType) {
-            case 'bulk_enable':
-              newValue = true;
-              break;
-            case 'bulk_disable':
-              newValue = false;
-              break;
-            case 'bulk_update':
-              newValue = operation.parameters.newValue;
-              break;
-            case 'bulk_delete':
-              await this.deleteToggle(toggleId, operatedBy);
-              results.push({
-                toggleId,
-                success: true,
-                previousValue,
-                newValue: null,
-                executionTime: Date.now() - startTime
-              });
-              continue;
+          case 'bulk_enable':
+            newValue = true;
+            break;
+          case 'bulk_disable':
+            newValue = false;
+            break;
+          case 'bulk_update':
+            newValue = operation.parameters.newValue;
+            break;
+          case 'bulk_delete':
+            await this.deleteToggle(toggleId, operatedBy);
+            results.push({
+              toggleId,
+              success: true,
+              previousValue,
+              newValue: null,
+              executionTime: Date.now() - startTime
+            });
+            continue;
           }
           
           // Update toggle
@@ -1016,31 +1016,31 @@ export class Epic17ToggleStatusControlsService extends EventEmitter {
     
     // Add category-specific safety checks
     switch (category) {
-      case ToggleCategory.SECURITY:
-        defaultChecks.push({
-          checkId: 'security_impact',
-          checkName: 'Security Impact Assessment',
-          description: 'Validates security implications of toggle changes',
-          checkType: 'security',
-          enabled: true,
-          required: true,
-          errorMessage: 'Security validation failed',
-          parameters: {}
-        });
-        break;
+    case ToggleCategory.SECURITY:
+      defaultChecks.push({
+        checkId: 'security_impact',
+        checkName: 'Security Impact Assessment',
+        description: 'Validates security implications of toggle changes',
+        checkType: 'security',
+        enabled: true,
+        required: true,
+        errorMessage: 'Security validation failed',
+        parameters: {}
+      });
+      break;
         
-      case ToggleCategory.SYSTEM:
-        defaultChecks.push({
-          checkId: 'system_impact',
-          checkName: 'System Impact Assessment',
-          description: 'Validates system performance implications',
-          checkType: 'performance',
-          enabled: true,
-          required: true,
-          errorMessage: 'System validation failed',
-          parameters: {}
-        });
-        break;
+    case ToggleCategory.SYSTEM:
+      defaultChecks.push({
+        checkId: 'system_impact',
+        checkName: 'System Impact Assessment',
+        description: 'Validates system performance implications',
+        checkType: 'performance',
+        enabled: true,
+        required: true,
+        errorMessage: 'System validation failed',
+        parameters: {}
+      });
+      break;
     }
     
     return defaultChecks;

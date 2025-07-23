@@ -14,65 +14,65 @@ export class NodeAdapter {
   static toUI(internal: InternalNode): UINode {
     const baseUI = {
       name: this.extractUserFriendlyName(internal),
-      description: this.extractDescription(internal),
+      description: this.extractDescription(internal)
     };
 
     switch (internal.type) {
-      case 'WeightedChoice':
-        return {
-          ...baseUI,
-          type: 'WeightedChoice',
-          choices: this.extractChoices(internal),
-        };
+    case 'WeightedChoice':
+      return {
+        ...baseUI,
+        type: 'WeightedChoice',
+        choices: this.extractChoices(internal)
+      };
 
-      case 'Concat':
-        return {
-          ...baseUI,
-          type: 'Concat',
-          separator: this.extractSeparator(internal),
-        };
+    case 'Concat':
+      return {
+        ...baseUI,
+        type: 'Concat',
+        separator: this.extractSeparator(internal)
+      };
 
-      case 'Output':
-        return {
-          ...baseUI,
-          type: 'Output',
-          template: this.extractTemplate(internal),
-        };
+    case 'Output':
+      return {
+        ...baseUI,
+        type: 'Output',
+        template: this.extractTemplate(internal)
+      };
 
-      case 'SetVariable':
-        return {
-          ...baseUI,
-          type: 'SetVariable',
-          variableName: internal.key || '',
-          value: internal.value || '',
-        };
+    case 'SetVariable':
+      return {
+        ...baseUI,
+        type: 'SetVariable',
+        variableName: internal.key || '',
+        value: internal.value || ''
+      };
 
-      case 'GetVariable':
-        return {
-          ...baseUI,
-          type: 'GetVariable',
-          variableName: internal.key || '',
-          defaultValue: this.extractDefaultValue(internal),
-        };
+    case 'GetVariable':
+      return {
+        ...baseUI,
+        type: 'GetVariable',
+        variableName: internal.key || '',
+        defaultValue: this.extractDefaultValue(internal)
+      };
 
-      case 'Conditional':
-        return {
-          ...baseUI,
-          type: 'Conditional',
-          conditions: this.extractConditions(internal),
-          otherwise: this.extractDefaultOutput(internal),
-        };
+    case 'Conditional':
+      return {
+        ...baseUI,
+        type: 'Conditional',
+        conditions: this.extractConditions(internal),
+        otherwise: this.extractDefaultOutput(internal)
+      };
 
-      case 'Sequential':
-        return {
-          ...baseUI,
-          type: 'Sequential',
-          items: this.extractSequenceItems(internal),
-          mode: this.extractSequenceMode(internal),
-        };
+    case 'Sequential':
+      return {
+        ...baseUI,
+        type: 'Sequential',
+        items: this.extractSequenceItems(internal),
+        mode: this.extractSequenceMode(internal)
+      };
 
-      default:
-        throw new Error(`Unsupported node type for UI conversion: ${internal.type}`);
+    default:
+      throw new Error(`Unsupported node type for UI conversion: ${internal.type}`);
     }
   }
 
@@ -83,73 +83,73 @@ export class NodeAdapter {
   static toInternal(ui: UINode, existingId?: string): InternalNode {
     const baseInternal = {
       id: existingId || uuidv4(),
-      inputs: [], // Will be set by graph connection logic
+      inputs: [] // Will be set by graph connection logic
     };
 
     switch (ui.type) {
-      case 'WeightedChoice':
-        return {
-          ...baseInternal,
-          type: 'WeightedChoice',
-          choices: ui.choices.map(choice => ({
-            value: choice,
-            weight: 1, // Default equal weights
-          })),
-        };
+    case 'WeightedChoice':
+      return {
+        ...baseInternal,
+        type: 'WeightedChoice',
+        choices: ui.choices.map(choice => ({
+          value: choice,
+          weight: 1 // Default equal weights
+        }))
+      };
 
-      case 'Concat':
-        return {
-          ...baseInternal,
-          type: 'Concat',
-          // Internal concat nodes don't need additional config
-        };
+    case 'Concat':
+      return {
+        ...baseInternal,
+        type: 'Concat'
+        // Internal concat nodes don't need additional config
+      };
 
-      case 'Output':
-        return {
-          ...baseInternal,
-          type: 'Output',
-          // Internal output nodes don't need additional config
-        };
+    case 'Output':
+      return {
+        ...baseInternal,
+        type: 'Output'
+        // Internal output nodes don't need additional config
+      };
 
-      case 'SetVariable':
-        return {
-          ...baseInternal,
-          type: 'SetVariable',
-          key: ui.variableName,
-          value: ui.value,
-        };
+    case 'SetVariable':
+      return {
+        ...baseInternal,
+        type: 'SetVariable',
+        key: ui.variableName,
+        value: ui.value
+      };
 
-      case 'GetVariable':
-        return {
-          ...baseInternal,
-          type: 'GetVariable',
-          key: ui.variableName,
-        };
+    case 'GetVariable':
+      return {
+        ...baseInternal,
+        type: 'GetVariable',
+        key: ui.variableName
+      };
 
-      case 'Conditional':
-        return {
-          ...baseInternal,
-          type: 'Conditional',
-          branches: ui.conditions.map(condition => ({
-            condition: condition.when,
-            output: condition.then,
-            label: condition.label,
-          })),
-          defaultOutput: ui.otherwise,
-        };
+    case 'Conditional':
+      return {
+        ...baseInternal,
+        type: 'Conditional',
+        branches: ui.conditions.map(condition => ({
+          condition: condition.when,
+          output: condition.then,
+          label: condition.label
+        })),
+        defaultOutput: ui.otherwise
+      };
 
-      case 'Sequential':
-        return {
-          ...baseInternal,
-          type: 'Sequential',
-          sequence: ui.items,
-          pattern: {
-            type: this.mapSequenceMode(ui.mode),
-          },
-        };
+    case 'Sequential':
+      return {
+        ...baseInternal,
+        type: 'Sequential',
+        sequence: ui.items,
+        pattern: {
+          type: this.mapSequenceMode(ui.mode)
+        }
+      };
 
-      default:
-        throw new Error(`Unsupported UI node type: ${ui.type}`);
+    default:
+      throw new Error(`Unsupported UI node type: ${ui.type}`);
     }
   }
 
@@ -166,7 +166,7 @@ export class NodeAdapter {
       variables.push({
         name: match[1],
         placeholder: match[0],
-        position: match.index,
+        position: match.index
       });
     }
 
@@ -199,7 +199,7 @@ export class NodeAdapter {
 
     return {
       valid: errors.length === 0,
-      errors,
+      errors
     };
   }
 
@@ -249,7 +249,7 @@ export class NodeAdapter {
     return branches.map((branch: any) => ({
       when: branch.condition || '',
       then: branch.output || '',
-      label: branch.label,
+      label: branch.label
     }));
   }
 
@@ -266,19 +266,19 @@ export class NodeAdapter {
     const type = pattern?.type || 'linear';
     
     switch (type) {
-      case 'linear': return 'in-order';
-      case 'cyclical': return 'cycle';
-      case 'random': return 'random';
-      default: return 'in-order';
+    case 'linear': return 'in-order';
+    case 'cyclical': return 'cycle';
+    case 'random': return 'random';
+    default: return 'in-order';
     }
   }
 
   private static mapSequenceMode(mode: 'in-order' | 'cycle' | 'random'): string {
     switch (mode) {
-      case 'in-order': return 'linear';
-      case 'cycle': return 'cyclical';
-      case 'random': return 'random';
-      default: return 'linear';
+    case 'in-order': return 'linear';
+    case 'cycle': return 'cyclical';
+    case 'random': return 'random';
+    default: return 'linear';
     }
   }
 }

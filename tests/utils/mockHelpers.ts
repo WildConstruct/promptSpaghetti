@@ -13,7 +13,7 @@ export const createMockReactFlow = (overrides = {}) => ({
   setEdges: jest.fn(),
   addEdge: jest.fn(),
   getViewport: jest.fn(() => ({ x: 0, y: 0, zoom: 1 })),
-  ...overrides,
+  ...overrides
 });
 
 // API Mock Utilities  
@@ -23,7 +23,7 @@ export const createMockApiResponse = (data: any, status = 200) => ({
   statusText: status === 200 ? 'OK' : 'Error',
   json: jest.fn<unknown[], unknown>().mockResolvedValue(data as unknown),
   text: jest.fn<unknown[], unknown>().mockResolvedValue(JSON.stringify(data as unknown)),
-  headers: new Headers(),
+  headers: new Headers()
 });
 
 // Local Storage Mock
@@ -92,7 +92,7 @@ export const createMockPerformance = () => ({
   measure: jest.fn<unknown[], unknown>(),
   getEntriesByName: jest.fn(() => []),
   clearMarks: jest.fn<unknown[], unknown>(),
-  clearMeasures: jest.fn<unknown[], unknown>(),
+  clearMeasures: jest.fn<unknown[], unknown>()
 });
 
 // Intersection Observer Mock
@@ -104,7 +104,7 @@ export const createMockIntersectionObserver = () => {
   return jest.fn<unknown[], unknown>().mockImplementation(() => ({
     observe: mockObserve,
     unobserve: mockUnobserve,
-    disconnect: mockDisconnect,
+    disconnect: mockDisconnect
   }));
 };
 
@@ -117,7 +117,7 @@ export const createMockResizeObserver = () => {
   return jest.fn<unknown[], unknown>().mockImplementation(() => ({
     observe: mockObserve,
     unobserve: mockUnobserve,
-    disconnect: mockDisconnect,
+    disconnect: mockDisconnect
   }));
 };
 
@@ -132,7 +132,7 @@ export const createMockFileReader = () => {
     removeEventListener: jest.fn<unknown[], unknown>(),
     result: null,
     error: null,
-    readyState: FileReader.EMPTY,
+    readyState: FileReader.EMPTY
   };
 
   // Utility to simulate successful file read
@@ -178,7 +178,7 @@ export const createMockCanvasContext = () => ({
   rotate: jest.fn<unknown[], unknown>(),
   scale: jest.fn<unknown[], unknown>(),
   setTransform: jest.fn<unknown[], unknown>(),
-  clearRect: jest.fn<unknown[], unknown>(),
+  clearRect: jest.fn<unknown[], unknown>()
 });
 
 // Date Mock Utilities
@@ -222,7 +222,7 @@ export const mockTimers = () => {
     advanceByTime: (ms: number) => jest.advanceTimersByTime(ms),
     runAllTimers: () => jest.runAllTimers(),
     runOnlyPendingTimers: () => jest.runOnlyPendingTimers(),
-    cleanup: () => jest.useRealTimers(),
+    cleanup: () => jest.useRealTimers()
   };
 };
 
@@ -252,7 +252,7 @@ export const mockConsole = () => {
     },
     getLogs: () => (console.log as jest.Mock).mock.calls.map(call => call.join(' ')),
     getErrors: () => (console.error as jest.Mock).mock.calls.map(call => call.join(' ')),
-    getWarnings: () => (console.warn as jest.Mock).mock.calls.map(call => call.join(' ')),
+    getWarnings: () => (console.warn as jest.Mock).mock.calls.map(call => call.join(' '))
   };
 };
 
@@ -285,7 +285,7 @@ export const createMockEvent = (type: string, properties = {}) => ({
   preventDefault: jest.fn<unknown[], unknown>(),
   stopPropagation: jest.fn<unknown[], unknown>(),
   stopImmediatePropagation: jest.fn<unknown[], unknown>(),
-  ...properties,
+  ...properties
 });
 
 // Mouse Event Mock
@@ -307,7 +307,7 @@ export const createMockMouseEvent = (type: string, properties = {}) => ({
   ctrlKey: false,
   metaKey: false,
   shiftKey: false,
-  ...properties,
+  ...properties
 });
 
 // Keyboard Event Mock
@@ -322,7 +322,7 @@ export const createMockKeyboardEvent = (type: string, properties = {}) => ({
   metaKey: false,
   shiftKey: false,
   repeat: false,
-  ...properties,
+  ...properties
 });
 
 // Media Query Mock
@@ -335,7 +335,7 @@ export const mockMediaQuery = (query: string, matches = false) => {
     removeListener: jest.fn<unknown[], unknown>(),
     addEventListener: jest.fn<unknown[], unknown>(),
     removeEventListener: jest.fn<unknown[], unknown>(),
-    dispatchEvent: jest.fn<unknown[], unknown>(),
+    dispatchEvent: jest.fn<unknown[], unknown>()
   };
 
   window.matchMedia = jest.fn<unknown[], unknown>().mockImplementation(() => mockMatch);

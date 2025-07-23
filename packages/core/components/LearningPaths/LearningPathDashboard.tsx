@@ -223,8 +223,8 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({
               <div className="mt-2 flex items-center justify-between">
                 <span className={`text-xs font-medium px-2 py-1 rounded-full ${
                   status === EnrollmentStatus.COMPLETED ? 'bg-green-100 text-green-800' :
-                  status === EnrollmentStatus.IN_PROGRESS ? 'bg-blue-100 text-blue-800' :
-                  'bg-gray-100 text-gray-800'
+                    status === EnrollmentStatus.IN_PROGRESS ? 'bg-blue-100 text-blue-800' :
+                      'bg-gray-100 text-gray-800'
                 }`}>
                   {status?.replace('_', ' ').toUpperCase()}
                 </span>

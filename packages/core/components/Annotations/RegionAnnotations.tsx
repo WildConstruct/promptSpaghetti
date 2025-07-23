@@ -256,35 +256,35 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({
   // Check if point is inside region
   const isPointInRegion = useCallback((point: { x: number; y: number }, region: RegionAnnotation): boolean => {
     switch (region.area.shape) {
-      case 'rectangle':
-        const bounds = region.area.bounds;
-        return point.x >= bounds.x && 
+    case 'rectangle':
+      const bounds = region.area.bounds;
+      return point.x >= bounds.x && 
                point.x <= bounds.x + bounds.width &&
                point.y >= bounds.y && 
                point.y <= bounds.y + bounds.height;
                
-      case 'circle':
-        if (!region.area.center || !region.area.radius) return false;
-        const dx = point.x - region.area.center.x;
-        const dy = point.y - region.area.center.y;
-        return Math.sqrt(dx * dx + dy * dy) <= region.area.radius;
+    case 'circle':
+      if (!region.area.center || !region.area.radius) return false;
+      const dx = point.x - region.area.center.x;
+      const dy = point.y - region.area.center.y;
+      return Math.sqrt(dx * dx + dy * dy) <= region.area.radius;
         
-      case 'polygon':
-      case 'freehand':
-        // Ray casting algorithm for polygon containment
-        const points = region.area.points;
-        let inside = false;
+    case 'polygon':
+    case 'freehand':
+      // Ray casting algorithm for polygon containment
+      const points = region.area.points;
+      let inside = false;
         
-        for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
-          if (((points[i].y > point.y) !== (points[j].y > point.y)) &&
+      for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+        if (((points[i].y > point.y) !== (points[j].y > point.y)) &&
               (point.x < (points[j].x - points[i].x) * (point.y - points[i].y) / (points[j].y - points[i].y) + points[i].x)) {
-            inside = !inside;
-          }
+          inside = !inside;
         }
-        return inside;
+      }
+      return inside;
         
-      default:
-        return false;
+    default:
+      return false;
     }
   }, []);
 
@@ -343,49 +343,49 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({
     
     // Set line style
     switch (region.style.borderStyle) {
-      case 'dashed':
-        ctx.setLineDash([5, 5]);
-        break;
-      case 'dotted':
-        ctx.setLineDash([2, 2]);
-        break;
-      default:
-        ctx.setLineDash([]);
+    case 'dashed':
+      ctx.setLineDash([5, 5]);
+      break;
+    case 'dotted':
+      ctx.setLineDash([2, 2]);
+      break;
+    default:
+      ctx.setLineDash([]);
     }
     
     // Draw shape
     switch (region.area.shape) {
-      case 'rectangle':
-        const bounds = region.area.bounds;
-        ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    case 'rectangle':
+      const bounds = region.area.bounds;
+      ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+      ctx.globalAlpha = 1;
+      ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
+      break;
+        
+    case 'circle':
+      if (region.area.center && region.area.radius) {
+        ctx.beginPath();
+        ctx.arc(region.area.center.x, region.area.center.y, region.area.radius, 0, 2 * Math.PI);
+        ctx.fill();
         ctx.globalAlpha = 1;
-        ctx.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
-        break;
+        ctx.stroke();
+      }
+      break;
         
-      case 'circle':
-        if (region.area.center && region.area.radius) {
-          ctx.beginPath();
-          ctx.arc(region.area.center.x, region.area.center.y, region.area.radius, 0, 2 * Math.PI);
-          ctx.fill();
-          ctx.globalAlpha = 1;
-          ctx.stroke();
+    case 'polygon':
+    case 'freehand':
+      if (region.area.points.length > 2) {
+        ctx.beginPath();
+        ctx.moveTo(region.area.points[0].x, region.area.points[0].y);
+        for (let i = 1; i < region.area.points.length; i++) {
+          ctx.lineTo(region.area.points[i].x, region.area.points[i].y);
         }
-        break;
-        
-      case 'polygon':
-      case 'freehand':
-        if (region.area.points.length > 2) {
-          ctx.beginPath();
-          ctx.moveTo(region.area.points[0].x, region.area.points[0].y);
-          for (let i = 1; i < region.area.points.length; i++) {
-            ctx.lineTo(region.area.points[i].x, region.area.points[i].y);
-          }
-          ctx.closePath();
-          ctx.fill();
-          ctx.globalAlpha = 1;
-          ctx.stroke();
-        }
-        break;
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.stroke();
+      }
+      break;
     }
     
     // Draw selection indicator
@@ -825,7 +825,7 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({
                   
                   <div className="text-xs text-gray-500">
                     {creationTool === 'rectangle' ? 'Click and drag to create rectangle' : 
-                     'Click points to create shape, press Enter to complete'}
+                      'Click points to create shape, press Enter to complete'}
                   </div>
                 </CardContent>
               </Card>

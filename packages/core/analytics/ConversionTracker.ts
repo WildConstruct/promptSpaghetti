@@ -338,18 +338,18 @@ export class ConversionTracker {
     };
 
     switch (engagementType) {
-      case 'feature_usage':
-        this.trackEvent('feature_discovered', baseProperties);
-        break;
-      case 'help_interaction':
-        this.trackEvent('help_content_viewed', baseProperties);
-        break;
-      case 'collaboration':
-        this.trackEvent('collaboration_invited', baseProperties);
-        break;
-      case 'content_creation':
-        this.trackEvent('template_shared', baseProperties);
-        break;
+    case 'feature_usage':
+      this.trackEvent('feature_discovered', baseProperties);
+      break;
+    case 'help_interaction':
+      this.trackEvent('help_content_viewed', baseProperties);
+      break;
+    case 'collaboration':
+      this.trackEvent('collaboration_invited', baseProperties);
+      break;
+    case 'content_creation':
+      this.trackEvent('template_shared', baseProperties);
+      break;
     }
   }
 
@@ -462,7 +462,7 @@ export class ConversionTracker {
       };
     };
     recentEvents: ConversionEvent[];
-  } {
+    } {
     const now = Date.now();
     const last24h = now - (24 * 60 * 60 * 1000);
     const last48h = now - (48 * 60 * 60 * 1000);
@@ -721,7 +721,7 @@ export class ConversionTracker {
       await fetch(this.analyticsEndpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ events: eventsToFlush })
       });

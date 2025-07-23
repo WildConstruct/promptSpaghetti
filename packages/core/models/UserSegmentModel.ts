@@ -623,21 +623,21 @@ export class SegmentUtils {
     
     let segmentMatches: boolean;
     switch (segment.joinLogic) {
-      case 'all':
-        segmentMatches = matchingConditions.length === segment.conditions.filter(c => c.isEnabled).length;
-        break;
-      case 'any':
-        segmentMatches = matchingConditions.length > 0;
-        break;
-      case 'complex':
-        segmentMatches = this.evaluateComplexLogic(
-          segment.complexLogicExpression || '',
-          segment.conditions,
-          matchingConditions
-        );
-        break;
-      default:
-        segmentMatches = false;
+    case 'all':
+      segmentMatches = matchingConditions.length === segment.conditions.filter(c => c.isEnabled).length;
+      break;
+    case 'any':
+      segmentMatches = matchingConditions.length > 0;
+      break;
+    case 'complex':
+      segmentMatches = this.evaluateComplexLogic(
+        segment.complexLogicExpression || '',
+        segment.conditions,
+        matchingConditions
+      );
+      break;
+    default:
+      segmentMatches = false;
     }
 
     return {
@@ -658,38 +658,38 @@ export class SegmentUtils {
     const fieldValue = this.getFieldValue(userAttributes, condition.field, behaviorHistory);
     
     switch (condition.operator) {
-      case 'equals':
-        return fieldValue === condition.value;
-      case 'not_equals':
-        return fieldValue !== condition.value;
-      case 'in':
-        return Array.isArray(condition.value) && condition.value.includes(fieldValue);
-      case 'not_in':
-        return !(Array.isArray(condition.value) && condition.value.includes(fieldValue));
-      case 'greater_than':
-        return typeof fieldValue === 'number' && fieldValue > condition.value;
-      case 'less_than':
-        return typeof fieldValue === 'number' && fieldValue < condition.value;
-      case 'greater_equal':
-        return typeof fieldValue === 'number' && fieldValue >= condition.value;
-      case 'less_equal':
-        return typeof fieldValue === 'number' && fieldValue <= condition.value;
-      case 'contains':
-        return typeof fieldValue === 'string' && fieldValue.includes(condition.value);
-      case 'not_contains':
-        return typeof fieldValue === 'string' && !fieldValue.includes(condition.value);
-      case 'starts_with':
-        return typeof fieldValue === 'string' && fieldValue.startsWith(condition.value);
-      case 'ends_with':
-        return typeof fieldValue === 'string' && fieldValue.endsWith(condition.value);
-      case 'regex':
-        return typeof fieldValue === 'string' && new RegExp(condition.value).test(fieldValue);
-      case 'exists':
-        return fieldValue !== null && fieldValue !== undefined;
-      case 'not_exists':
-        return fieldValue === null || fieldValue === undefined;
-      default:
-        return false;
+    case 'equals':
+      return fieldValue === condition.value;
+    case 'not_equals':
+      return fieldValue !== condition.value;
+    case 'in':
+      return Array.isArray(condition.value) && condition.value.includes(fieldValue);
+    case 'not_in':
+      return !(Array.isArray(condition.value) && condition.value.includes(fieldValue));
+    case 'greater_than':
+      return typeof fieldValue === 'number' && fieldValue > condition.value;
+    case 'less_than':
+      return typeof fieldValue === 'number' && fieldValue < condition.value;
+    case 'greater_equal':
+      return typeof fieldValue === 'number' && fieldValue >= condition.value;
+    case 'less_equal':
+      return typeof fieldValue === 'number' && fieldValue <= condition.value;
+    case 'contains':
+      return typeof fieldValue === 'string' && fieldValue.includes(condition.value);
+    case 'not_contains':
+      return typeof fieldValue === 'string' && !fieldValue.includes(condition.value);
+    case 'starts_with':
+      return typeof fieldValue === 'string' && fieldValue.startsWith(condition.value);
+    case 'ends_with':
+      return typeof fieldValue === 'string' && fieldValue.endsWith(condition.value);
+    case 'regex':
+      return typeof fieldValue === 'string' && new RegExp(condition.value).test(fieldValue);
+    case 'exists':
+      return fieldValue !== null && fieldValue !== undefined;
+    case 'not_exists':
+      return fieldValue === null || fieldValue === undefined;
+    default:
+      return false;
     }
   }
 

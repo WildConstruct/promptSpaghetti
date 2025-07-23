@@ -609,21 +609,21 @@ export class AlertingConfigurationManager extends EventEmitter {
     
     // Type-specific validation
     switch (channel.type) {
-      case 'EMAIL':
-        if (!channel.configuration.smtpHost && !channel.configuration.apiKey) {
-          errors.push('Email channel requires SMTP configuration or API key');
-        }
-        break;
-      case 'WEBHOOK':
-        if (!channel.configuration.url) {
-          errors.push('Webhook channel requires URL');
-        }
-        break;
-      case 'SLACK':
-        if (!channel.configuration.webhookUrl && !channel.configuration.botToken) {
-          errors.push('Slack channel requires webhook URL or bot token');
-        }
-        break;
+    case 'EMAIL':
+      if (!channel.configuration.smtpHost && !channel.configuration.apiKey) {
+        errors.push('Email channel requires SMTP configuration or API key');
+      }
+      break;
+    case 'WEBHOOK':
+      if (!channel.configuration.url) {
+        errors.push('Webhook channel requires URL');
+      }
+      break;
+    case 'SLACK':
+      if (!channel.configuration.webhookUrl && !channel.configuration.botToken) {
+        errors.push('Slack channel requires webhook URL or bot token');
+      }
+      break;
     }
     
     return {
@@ -740,7 +740,7 @@ export class AlertingConfigurationManager extends EventEmitter {
       exportedAt: Date;
       version: string;
     };
-  } {
+    } {
     return {
       configuration: this.configuration,
       rules: Array.from(this.alertRules.values()),
@@ -912,26 +912,26 @@ export class AlertingConfigurationManager extends EventEmitter {
     const value = this.getFieldValue(data, condition.field);
     
     switch (condition.operator) {
-      case 'EQUALS':
-        return value === condition.value;
-      case 'NOT_EQUALS':
-        return value !== condition.value;
-      case 'CONTAINS':
-        return String(value).includes(String(condition.value));
-      case 'NOT_CONTAINS':
-        return !String(value).includes(String(condition.value));
-      case 'GREATER_THAN':
-        return Number(value) > Number(condition.value);
-      case 'LESS_THAN':
-        return Number(value) < Number(condition.value);
-      case 'IN':
-        return Array.isArray(condition.value) && condition.value.includes(value);
-      case 'NOT_IN':
-        return Array.isArray(condition.value) && !condition.value.includes(value);
-      case 'REGEX':
-        return new RegExp(String(condition.value)).test(String(value));
-      default:
-        return false;
+    case 'EQUALS':
+      return value === condition.value;
+    case 'NOT_EQUALS':
+      return value !== condition.value;
+    case 'CONTAINS':
+      return String(value).includes(String(condition.value));
+    case 'NOT_CONTAINS':
+      return !String(value).includes(String(condition.value));
+    case 'GREATER_THAN':
+      return Number(value) > Number(condition.value);
+    case 'LESS_THAN':
+      return Number(value) < Number(condition.value);
+    case 'IN':
+      return Array.isArray(condition.value) && condition.value.includes(value);
+    case 'NOT_IN':
+      return Array.isArray(condition.value) && !condition.value.includes(value);
+    case 'REGEX':
+      return new RegExp(String(condition.value)).test(String(value));
+    default:
+      return false;
     }
   }
   

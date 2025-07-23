@@ -424,7 +424,7 @@ export function useAuthMiddlewareStatus(): {
   isMonitoring: boolean;
   lastActivity: number;
   timeSinceLastActivity: number;
-} {
+  } {
   const [lastActivity, setLastActivity] = React.useState(Date.now());
   const [isMonitoring, setIsMonitoring] = React.useState(false);
   const { isAuthenticated } = useAuthStore();

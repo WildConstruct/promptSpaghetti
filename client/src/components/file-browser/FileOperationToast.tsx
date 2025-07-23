@@ -53,47 +53,47 @@ export const FileOperationToast: React.FC<FileOperationToastProps> = ({
     };
 
     switch (position) {
-      case 'top-right':
-        return { ...baseStyles, top: '20px', right: '20px' };
-      case 'top-left':
-        return { ...baseStyles, top: '20px', left: '20px' };
-      case 'bottom-left':
-        return { ...baseStyles, bottom: '20px', left: '20px' };
-      case 'bottom-right':
-      default:
-        return { ...baseStyles, bottom: '20px', right: '20px' };
+    case 'top-right':
+      return { ...baseStyles, top: '20px', right: '20px' };
+    case 'top-left':
+      return { ...baseStyles, top: '20px', left: '20px' };
+    case 'bottom-left':
+      return { ...baseStyles, bottom: '20px', left: '20px' };
+    case 'bottom-right':
+    default:
+      return { ...baseStyles, bottom: '20px', right: '20px' };
     }
   };
 
   const getOperationIcon = (operation: FileOperation) => {
     switch (operation.type) {
-      case 'create': return '📄';
-      case 'move': return '🔀';
-      case 'copy': return '📋';
-      case 'delete': return '🗑️';
-      case 'update': return '✏️';
-      default: return '📁';
+    case 'create': return '📄';
+    case 'move': return '🔀';
+    case 'copy': return '📋';
+    case 'delete': return '🗑️';
+    case 'update': return '✏️';
+    default: return '📁';
     }
   };
 
   const getStatusIcon = (status: FileOperation['status']) => {
     switch (status) {
-      case 'pending': return '⏳';
-      case 'success': return '✅';
-      case 'error': return '❌';
-      default: return '⏳';
+    case 'pending': return '⏳';
+    case 'success': return '✅';
+    case 'error': return '❌';
+    default: return '⏳';
     }
   };
 
   const getOperationText = (operation: FileOperation) => {
     const filename = operation.sourcePath.split('/').pop() || 'file';
     switch (operation.type) {
-      case 'create': return `Creating ${filename}`;
-      case 'move': return `Moving ${filename}`;
-      case 'copy': return `Copying ${filename}`;
-      case 'delete': return `Deleting ${filename}`;
-      case 'update': return `Updating ${filename}`;
-      default: return `Processing ${filename}`;
+    case 'create': return `Creating ${filename}`;
+    case 'move': return `Moving ${filename}`;
+    case 'copy': return `Copying ${filename}`;
+    case 'delete': return `Deleting ${filename}`;
+    case 'update': return `Updating ${filename}`;
+    default: return `Processing ${filename}`;
     }
   };
 

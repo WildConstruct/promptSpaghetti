@@ -721,79 +721,79 @@ const ActionConfigForm: React.FC<{
   };
 
   switch (action.type) {
-    case 'notification':
-      return (
-        <div className="config-form">
-          <div className="form-group">
-            <label>Message Template</label>
-            <Textarea
-              value={action.config.message_template || ''}
-              onChange={(e) => updateConfig('message_template', e.target.value)}
-              placeholder="Alert: {event_type} detected from {source_ip}"
-            />
-          </div>
+  case 'notification':
+    return (
+      <div className="config-form">
+        <div className="form-group">
+          <label>Message Template</label>
+          <Textarea
+            value={action.config.message_template || ''}
+            onChange={(e) => updateConfig('message_template', e.target.value)}
+            placeholder="Alert: {event_type} detected from {source_ip}"
+          />
         </div>
-      );
+      </div>
+    );
 
-    case 'containment':
-      return (
-        <div className="config-form">
-          <div className="form-group">
-            <label>Containment Actions</label>
-            <div className="checkbox-group">
-              <label>
-                <Checkbox
-                  checked={action.config.block_ip || false}
-                  onChange={(checked) => updateConfig('block_ip', checked)}
-                />
+  case 'containment':
+    return (
+      <div className="config-form">
+        <div className="form-group">
+          <label>Containment Actions</label>
+          <div className="checkbox-group">
+            <label>
+              <Checkbox
+                checked={action.config.block_ip || false}
+                onChange={(checked) => updateConfig('block_ip', checked)}
+              />
                 Block Source IP
-              </label>
-              <label>
-                <Checkbox
-                  checked={action.config.lock_account || false}
-                  onChange={(checked) => updateConfig('lock_account', checked)}
-                />
+            </label>
+            <label>
+              <Checkbox
+                checked={action.config.lock_account || false}
+                onChange={(checked) => updateConfig('lock_account', checked)}
+              />
                 Lock User Account
-              </label>
-              <label>
-                <Checkbox
-                  checked={action.config.isolate_system || false}
-                  onChange={(checked) => updateConfig('isolate_system', checked)}
-                />
+            </label>
+            <label>
+              <Checkbox
+                checked={action.config.isolate_system || false}
+                onChange={(checked) => updateConfig('isolate_system', checked)}
+              />
                 Isolate System
-              </label>
-            </div>
+            </label>
           </div>
         </div>
-      );
+      </div>
+    );
 
-    case 'webhook':
-      return (
-        <div className="config-form">
-          <div className="form-group">
-            <label>Webhook URL</label>
-            <Input
-              value={action.config.webhook_url || ''}
-              onChange={(e) => updateConfig('webhook_url', e.target.value)}
-              placeholder="https://api.example.com/alerts"
-            />
-          </div>
-          <div className="form-group">
-            <label>HTTP Method</label>
-            <Select
-              value={action.config.method || 'POST'}
-              onValueChange={(value) => updateConfig('method', value)}
-            >
-              <option value="POST">POST</option>
-              <option value="PUT">PUT</option>
-              <option value="PATCH">PATCH</option>
-            </Select>
-          </div>
+  case 'webhook':
+    return (
+      <div className="config-form">
+        <div className="form-group">
+          <label>Webhook URL</label>
+          <Input
+            value={action.config.webhook_url || ''}
+            onChange={(e) => updateConfig('webhook_url', e.target.value)}
+            placeholder="https://api.example.com/alerts"
+          />
         </div>
-      );
+        <div className="form-group">
+          <label>HTTP Method</label>
+          <Select
+            value={action.config.method || 'POST'}
+            onValueChange={(value) => updateConfig('method', value)}
+          >
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="PATCH">PATCH</option>
+          </Select>
+        </div>
+      </div>
+    );
 
-    default:
-      return null;
+  default:
+    return null;
   }
 };
 

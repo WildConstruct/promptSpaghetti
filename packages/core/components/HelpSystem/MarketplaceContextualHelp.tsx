@@ -167,7 +167,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
       triggerType: 'first-time',
       conditions: {
         pagePattern: /\/marketplace$/,
-        userBehavior: { timeOnPage: 5000 }, // 5 seconds
+        userBehavior: { timeOnPage: 5000 } // 5 seconds
       },
       helpContent: {
         id: 'first-visit-guide',
@@ -296,7 +296,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
       name: 'First Creator Dashboard Visit',
       triggerType: 'first-time',
       conditions: {
-        pagePattern: /\/creator\/dashboard$/,
+        pagePattern: /\/creator\/dashboard$/
       },
       helpContent: {
         id: 'creator-dashboard-intro',
@@ -326,7 +326,7 @@ export const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>
       name: 'Wishlist Feature Discovery',
       triggerType: 'hover',
       conditions: {
-        elementSelector: '.wishlist-button, .heart-button',
+        elementSelector: '.wishlist-button, .heart-button'
       },
       helpContent: {
         id: 'wishlist-feature',

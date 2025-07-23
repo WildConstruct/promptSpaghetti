@@ -436,11 +436,11 @@ export const ActivityFeedWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
 
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'error': return '🔴';
-      case 'warning': return '🟡';
-      case 'success': return '🟢';
-      case 'info': return '🔵';
-      default: return '⚪';
+    case 'error': return '🔴';
+    case 'warning': return '🟡';
+    case 'success': return '🟢';
+    case 'info': return '🔵';
+    default: return '⚪';
     }
   };
 
@@ -500,29 +500,29 @@ export const MonitoringWidget: React.FC<MonitoringWidgetProps> = (props) => {
 
   const getSizeStyles = (size: WidgetConfig['size']) => {
     switch (size) {
-      case 'small': return { gridColumn: 'span 1', minHeight: '200px' };
-      case 'medium': return { gridColumn: 'span 2', minHeight: '250px' };
-      case 'large': return { gridColumn: 'span 3', minHeight: '300px' };
-      case 'full-width': return { gridColumn: '1 / -1', minHeight: '200px' };
-      default: return { gridColumn: 'span 2', minHeight: '250px' };
+    case 'small': return { gridColumn: 'span 1', minHeight: '200px' };
+    case 'medium': return { gridColumn: 'span 2', minHeight: '250px' };
+    case 'large': return { gridColumn: 'span 3', minHeight: '300px' };
+    case 'full-width': return { gridColumn: '1 / -1', minHeight: '200px' };
+    default: return { gridColumn: 'span 2', minHeight: '250px' };
     }
   };
 
   const renderWidget = () => {
     switch (config.type) {
-      case 'metric':
-        if (config.id === 'system-health') return <SystemHealthWidget {...props} />;
-        if (config.id === 'resource-usage') return <ResourceUsageWidget {...props} />;
-        if (config.id === 'api-metrics') return <APIMetricsWidget {...props} />;
-        break;
-      case 'status':
-        if (config.id === 'security-overview') return <SecurityOverviewWidget {...props} />;
-        break;
-      case 'list':
-        if (config.id === 'activity-feed') return <ActivityFeedWidget {...props} />;
-        break;
-      default:
-        return <div>Widget type not implemented: {config.type}</div>;
+    case 'metric':
+      if (config.id === 'system-health') return <SystemHealthWidget {...props} />;
+      if (config.id === 'resource-usage') return <ResourceUsageWidget {...props} />;
+      if (config.id === 'api-metrics') return <APIMetricsWidget {...props} />;
+      break;
+    case 'status':
+      if (config.id === 'security-overview') return <SecurityOverviewWidget {...props} />;
+      break;
+    case 'list':
+      if (config.id === 'activity-feed') return <ActivityFeedWidget {...props} />;
+      break;
+    default:
+      return <div>Widget type not implemented: {config.type}</div>;
     }
     return <div>Unknown widget: {config.id}</div>;
   };

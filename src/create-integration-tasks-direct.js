@@ -161,13 +161,13 @@ for (const task of integrationTasks) {
   }
 }
 
-console.log(`📊 Summary:`);
+console.log('📊 Summary:');
 console.log(`   Created: ${created} integration tasks`);
 console.log(`   Total effort: ${integrationTasks.reduce((sum, t) => sum + t.estimated_hours, 0)} hours`);
 
-console.log(`\n🚀 Next steps:`);
-console.log(`   1. node src/grab-tasks.js <your-dev-id> 2 --priority-only`);
-console.log(`   2. Focus on quick wins: Palette categories (15 min)`);  
-console.log(`   3. Check progress: node src/monitor-available-tasks.js`);
+console.log('\n🚀 Next steps:');
+console.log('   1. node src/grab-tasks.js <your-dev-id> 2 --priority-only');
+console.log('   2. Focus on quick wins: Palette categories (15 min)');  
+console.log('   3. Check progress: node src/monitor-available-tasks.js');
 
 db.close();

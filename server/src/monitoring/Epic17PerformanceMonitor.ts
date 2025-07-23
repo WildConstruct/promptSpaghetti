@@ -655,7 +655,7 @@ export class Epic17PerformanceMonitor extends EventEmitter {
       [AdminOperation.POLICY_ENFORCEMENT]: [
         { level: 'warning', operator: 'gt', value: 100, description: 'Policy enforcement > 100ms' },
         { level: 'critical', operator: 'gt', value: 500, description: 'Policy enforcement > 500ms' }
-      ],
+      ]
       // ... additional thresholds for other operations
     };
     

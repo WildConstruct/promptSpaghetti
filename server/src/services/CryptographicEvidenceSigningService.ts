@@ -945,14 +945,14 @@ export class CryptographicEvidenceSigningService {
   private async validateFrameworkCompliance(signature: EvidenceSignature, framework: string): Promise<boolean> {
     // Simplified compliance validation - could be expanded with specific framework rules
     switch (framework) {
-      case 'ISO27001':
-        return signature.complianceContext.evidenceLevel !== EvidenceLevel.BASIC;
-      case 'SOC2':
-        return signature.verificationMetadata.nonRepudiation && signature.verificationMetadata.integrity;
-      case 'SOX':
-        return signature.complianceContext.retentionPeriod >= 2555; // 7 years
-      default:
-        return true;
+    case 'ISO27001':
+      return signature.complianceContext.evidenceLevel !== EvidenceLevel.BASIC;
+    case 'SOC2':
+      return signature.verificationMetadata.nonRepudiation && signature.verificationMetadata.integrity;
+    case 'SOX':
+      return signature.complianceContext.retentionPeriod >= 2555; // 7 years
+    default:
+      return true;
     }
   }
 

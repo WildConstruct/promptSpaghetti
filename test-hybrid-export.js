@@ -13,34 +13,34 @@ async function testHybridExports() {
     results: [
       {
         seed: 12345,
-        output: "A contemplative character standing in golden hour lighting, medium shot with shallow depth of field, natural cinematic atmosphere"
+        output: 'A contemplative character standing in golden hour lighting, medium shot with shallow depth of field, natural cinematic atmosphere'
       },
       {
         seed: 12346,
-        output: "Close-up of the same character with dramatic rim lighting, emotional expression conveying determination"
+        output: 'Close-up of the same character with dramatic rim lighting, emotional expression conveying determination'
       }
     ],
     variables: {
-      character: "protagonist",
-      lighting_mood: "golden hour",
-      camera_distance: "medium",
-      emotion: "contemplative",
-      setting: "outdoor scene"
+      character: 'protagonist',
+      lighting_mood: 'golden hour',
+      camera_distance: 'medium',
+      emotion: 'contemplative',
+      setting: 'outdoor scene'
     },
     graph: {
       nodes: [
-        { id: "node1", type: "WeightedChoice", data: { choices: ["character", "protagonist"] } },
-        { id: "node2", type: "Output", data: { template: "A {character} in {lighting_mood}" } }
+        { id: 'node1', type: 'WeightedChoice', data: { choices: ['character', 'protagonist'] } },
+        { id: 'node2', type: 'Output', data: { template: 'A {character} in {lighting_mood}' } }
       ],
       edges: [
-        { id: "edge1", source: "node1", target: "node2" }
+        { id: 'edge1', source: 'node1', target: 'node2' }
       ]
     },
     performance: {
       totalTime: 150,
       byNode: {
-        "node1": 50,
-        "node2": 100
+        'node1': 50,
+        'node2': 100
       }
     }
   };

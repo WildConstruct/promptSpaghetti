@@ -602,28 +602,28 @@ export class ContributionManagementService implements ContributionRepository {
     workflow: ContributionWorkflow
   ): Promise<void> {
     switch (stage) {
-      case 'quality_check':
-        await this.runQualityAssessment(contributionId);
-        await this.checkQualityGates(contributionId);
-        break;
+    case 'quality_check':
+      await this.runQualityAssessment(contributionId);
+      await this.checkQualityGates(contributionId);
+      break;
       
-      case 'editorial_review':
-        await this.autoAssignReviewers(contributionId, 'editorial');
-        break;
+    case 'editorial_review':
+      await this.autoAssignReviewers(contributionId, 'editorial');
+      break;
       
-      case 'technical_review':
-        await this.autoAssignReviewers(contributionId, 'technical');
-        break;
+    case 'technical_review':
+      await this.autoAssignReviewers(contributionId, 'technical');
+      break;
       
-      case 'community_review':
-        await this.openCommunityReview(contributionId);
-        break;
+    case 'community_review':
+      await this.openCommunityReview(contributionId);
+      break;
       
-      case 'publication':
-        if (workflow.publication_schedule?.auto_publish) {
-          await this.publishContribution(contributionId);
-        }
-        break;
+    case 'publication':
+      if (workflow.publication_schedule?.auto_publish) {
+        await this.publishContribution(contributionId);
+      }
+      break;
     }
   }
 

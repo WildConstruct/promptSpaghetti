@@ -180,14 +180,14 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
   // Filter contributions by tab
   const getFilteredContributions = () => {
     switch (activeTab) {
-      case 'drafts':
-        return contributions.filter(c => c.status === 'draft');
-      case 'published':
-        return contributions.filter(c => c.status === 'published');
-      case 'under-review':
-        return contributions.filter(c => ['submitted', 'under_review', 'revision_requested'].includes(c.status));
-      default:
-        return contributions;
+    case 'drafts':
+      return contributions.filter(c => c.status === 'draft');
+    case 'published':
+      return contributions.filter(c => c.status === 'published');
+    case 'under-review':
+      return contributions.filter(c => ['submitted', 'under_review', 'revision_requested'].includes(c.status));
+    default:
+      return contributions;
     }
   };
 
@@ -374,7 +374,7 @@ export const ContributionDashboard: React.FC<ContributionDashboardProps> = ({
             <h3>No contributions found</h3>
             <p>
               {activeTab === 'my-contributions' 
-                ? "You haven't created any contributions yet." 
+                ? 'You haven\'t created any contributions yet.' 
                 : `No ${activeTab.replace('-', ' ')} found.`
               }
             </p>

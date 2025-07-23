@@ -266,15 +266,15 @@ export class TestEnvironmentManager {
     if (!database) return;
 
     switch (database.type) {
-      case 'sqlite':
-        await this.setupSQLiteDatabase(instance);
-        break;
-      case 'postgres':
-        await this.setupPostgresDatabase(instance);
-        break;
-      case 'redis':
-        await this.setupRedisDatabase(instance);
-        break;
+    case 'sqlite':
+      await this.setupSQLiteDatabase(instance);
+      break;
+    case 'postgres':
+      await this.setupPostgresDatabase(instance);
+      break;
+    case 'redis':
+      await this.setupRedisDatabase(instance);
+      break;
     }
   }
 
@@ -328,15 +328,15 @@ export class TestEnvironmentManager {
 
       // Start service based on isolation type
       switch (instance.config.isolation) {
-        case 'process':
-          await this.startServiceProcess(instance, service, serviceConfig);
-          break;
-        case 'container':
-          await this.startServiceContainer(instance, service, serviceConfig);
-          break;
-        default:
-          // No isolation - service runs in same process
-          service.status = 'ready';
+      case 'process':
+        await this.startServiceProcess(instance, service, serviceConfig);
+        break;
+      case 'container':
+        await this.startServiceContainer(instance, service, serviceConfig);
+        break;
+      default:
+        // No isolation - service runs in same process
+        service.status = 'ready';
       }
 
       instance.services.set(serviceConfig.name, service);

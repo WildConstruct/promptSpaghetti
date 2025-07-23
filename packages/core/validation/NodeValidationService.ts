@@ -222,7 +222,7 @@ export class NodeValidationService extends EventEmitter {
     hitRate: number;
     oldestEntry: number;
     newestEntry: number;
-  } {
+    } {
     const entries = Array.from(this.cache.values());
     const timestamps = entries.map(e => e.timestamp);
     

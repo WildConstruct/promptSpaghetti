@@ -426,7 +426,7 @@ class PerformanceBudgetChecker {
         console.log(`\n${index + 1}. ${severityColor}[${violation.severity.toUpperCase()}]${colors.reset} ${violation.metric}`);
         console.log(`   Budget: ${violation.budget}, Actual: ${violation.actual}`);
         if (violation.suggestions && violation.suggestions.length > 0) {
-          console.log(`   Suggestions:`);
+          console.log('   Suggestions:');
           violation.suggestions.forEach(suggestion => {
             console.log(`     • ${suggestion}`);
           });
@@ -447,11 +447,11 @@ class PerformanceBudgetChecker {
 
   getSeverityColor(severity) {
     switch (severity) {
-      case 'critical': return colors.red + colors.bright;
-      case 'high': return colors.red;
-      case 'medium': return colors.yellow;
-      case 'low': return colors.cyan;
-      default: return colors.white;
+    case 'critical': return colors.red + colors.bright;
+    case 'high': return colors.red;
+    case 'medium': return colors.yellow;
+    case 'low': return colors.cyan;
+    default: return colors.white;
     }
   }
 
@@ -472,20 +472,20 @@ function main() {
   
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--config':
-        options.config = args[++i];
-        break;
-      case '--strict':
-        options.strict = true;
-        break;
-      case '--json':
-        options.output = 'json';
-        break;
-      case '--no-exit':
-        options.exitOnFailure = false;
-        break;
-      case '--help':
-        console.log(`
+    case '--config':
+      options.config = args[++i];
+      break;
+    case '--strict':
+      options.strict = true;
+      break;
+    case '--json':
+      options.output = 'json';
+      break;
+    case '--no-exit':
+      options.exitOnFailure = false;
+      break;
+    case '--help':
+      console.log(`
 Performance Budget Check for Epic 18
 
 Usage: node performance-budget-check.js [options]
@@ -502,8 +502,8 @@ Examples:
   node performance-budget-check.js --config budget.json
   node performance-budget-check.js --json --no-exit
         `);
-        process.exit(0);
-        break;
+      process.exit(0);
+      break;
     }
   }
   

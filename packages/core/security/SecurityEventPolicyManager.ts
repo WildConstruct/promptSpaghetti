@@ -299,45 +299,45 @@ export class SecurityEventPolicyManager {
 
       try {
         switch (actionType) {
-          case 'block_ip':
-            const blockResult = await this.executeIpBlock(event.source_ip || '');
-            action.success = blockResult.success;
-            action.details = blockResult.details;
+        case 'block_ip':
+          const blockResult = await this.executeIpBlock(event.source_ip || '');
+          action.success = blockResult.success;
+          action.details = blockResult.details;
             
-            if (blockResult.success) {
-              automatedResponses.push({
-                response_id: crypto.randomUUID(),
-                response_type: 'ip_block',
-                executed_at: new Date(),
-                success: true,
-                details: blockResult.details,
-                rollback_available: true,
-                rollback_deadline: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
-              });
-            }
-            break;
+          if (blockResult.success) {
+            automatedResponses.push({
+              response_id: crypto.randomUUID(),
+              response_type: 'ip_block',
+              executed_at: new Date(),
+              success: true,
+              details: blockResult.details,
+              rollback_available: true,
+              rollback_deadline: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+            });
+          }
+          break;
 
-          case 'lock_account':
-            const lockResult = await this.executeAccountLock(event.user_id || '');
-            action.success = lockResult.success;
-            action.details = lockResult.details;
-            break;
+        case 'lock_account':
+          const lockResult = await this.executeAccountLock(event.user_id || '');
+          action.success = lockResult.success;
+          action.details = lockResult.details;
+          break;
 
-          case 'preserve_evidence':
-            const preserveResult = await this.preserveEvidence(event);
-            action.success = preserveResult.success;
-            action.details = preserveResult.details;
-            break;
+        case 'preserve_evidence':
+          const preserveResult = await this.preserveEvidence(event);
+          action.success = preserveResult.success;
+          action.details = preserveResult.details;
+          break;
 
-          case 'isolate_network_segment':
-            const isolateResult = await this.isolateNetworkSegment(event.source_ip || '');
-            action.success = isolateResult.success;
-            action.details = isolateResult.details;
-            break;
+        case 'isolate_network_segment':
+          const isolateResult = await this.isolateNetworkSegment(event.source_ip || '');
+          action.success = isolateResult.success;
+          action.details = isolateResult.details;
+          break;
 
-          default:
-            action.success = true;
-            action.details = { message: `Action ${actionType} logged but not implemented` };
+        default:
+          action.success = true;
+          action.details = { message: `Action ${actionType} logged but not implemented` };
         }
       } catch (error) {
         action.success = false;
@@ -637,7 +637,7 @@ export class SecurityEventPolicyManager {
       [SecurityEventType.CODE_INJECTION_ATTEMPT]: AuditEventType.SECURITY_INCIDENT,
       [SecurityEventType.NETWORK_INTRUSION_ATTEMPT]: AuditEventType.SECURITY_INCIDENT,
       [SecurityEventType.SOX_ITGC_VIOLATION]: AuditEventType.COMPLIANCE_CHECK,
-      [SecurityEventType.GDPR_DATA_SUBJECT_REQUEST]: AuditEventType.COMPLIANCE_CHECK,
+      [SecurityEventType.GDPR_DATA_SUBJECT_REQUEST]: AuditEventType.COMPLIANCE_CHECK
       // Add more mappings as needed
     };
     return typeMap[securityEventType] || AuditEventType.SECURITY_INCIDENT;
@@ -660,7 +660,7 @@ export class SecurityEventPolicyManager {
       [ComplianceFramework.GDPR]: AuditComplianceFramework.GDPR,
       [ComplianceFramework.CCPA]: AuditComplianceFramework.CCPA,
       [ComplianceFramework.HIPAA]: AuditComplianceFramework.HIPAA,
-      [ComplianceFramework.ISO27001]: AuditComplianceFramework.ISO27001,
+      [ComplianceFramework.ISO27001]: AuditComplianceFramework.ISO27001
       // Map other frameworks as available
     };
     return securityFrameworks.map(f => frameworkMap[f]).filter(Boolean);
@@ -755,7 +755,7 @@ export class SecurityEventPolicyManager {
     compliance_violation_rate: number;
     top_performing_policies: PolicyMetrics[];
     recommendations: string[];
-  } {
+    } {
     const metrics = Array.from(this.policyMetrics.values());
     const activePolicies = securityEventPolicyEngine.getPolicies().filter(p => p.enabled);
 

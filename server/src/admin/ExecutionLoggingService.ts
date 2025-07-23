@@ -830,9 +830,9 @@ export class ExecutionLoggingService extends EventEmitter {
     
     if (query.hasErrors !== undefined) {
       if (query.hasErrors) {
-        conditions.push(`jsonb_array_length(errors) > 0`);
+        conditions.push('jsonb_array_length(errors) > 0');
       } else {
-        conditions.push(`jsonb_array_length(errors) = 0`);
+        conditions.push('jsonb_array_length(errors) = 0');
       }
     }
     

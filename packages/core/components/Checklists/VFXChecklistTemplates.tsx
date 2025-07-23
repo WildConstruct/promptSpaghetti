@@ -637,8 +637,8 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">No Templates Found</h3>
                   <p className="text-gray-600 text-center">
                     {allTemplates.length === 0 
-                      ? "No templates available. Create your first template to get started." 
-                      : "No templates match your current filters."}
+                      ? 'No templates available. Create your first template to get started.' 
+                      : 'No templates match your current filters.'}
                   </p>
                   {!readonly && onTemplateCreate && (
                     <Button
@@ -786,8 +786,8 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                       className="w-2 h-2 rounded-full"
                       style={{ 
                         backgroundColor: item.priority === 'critical' ? '#dc2626' : 
-                                        item.priority === 'high' ? '#ef4444' :
-                                        item.priority === 'medium' ? '#f59e0b' : '#10b981'
+                          item.priority === 'high' ? '#ef4444' :
+                            item.priority === 'medium' ? '#f59e0b' : '#10b981'
                       }}
                     />
                     <span className="truncate">{item.title}</span>

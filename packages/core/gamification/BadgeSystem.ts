@@ -509,25 +509,25 @@ export class BadgeSystem {
     const { criteria } = badge;
 
     switch (criteria.type) {
-      case 'verification':
-        return this.checkVerificationCriteria(criteria.metric!, userProgress.userId);
+    case 'verification':
+      return this.checkVerificationCriteria(criteria.metric!, userProgress.userId);
       
-      case 'count':
-        const currentValue = this.getStatisticValue(criteria.metric!, userProgress);
-        return currentValue >= (criteria.target || 0);
+    case 'count':
+      const currentValue = this.getStatisticValue(criteria.metric!, userProgress);
+      return currentValue >= (criteria.target || 0);
       
-      case 'threshold':
-        const thresholdValue = this.getStatisticValue(criteria.metric!, userProgress);
-        return thresholdValue >= (criteria.target || 0);
+    case 'threshold':
+      const thresholdValue = this.getStatisticValue(criteria.metric!, userProgress);
+      return thresholdValue >= (criteria.target || 0);
       
-      case 'completion':
-        return this.checkCompletionCriteria(criteria.conditions!, userProgress);
+    case 'completion':
+      return this.checkCompletionCriteria(criteria.conditions!, userProgress);
       
-      case 'composite':
-        return criteria.customLogic ? criteria.customLogic(userProgress) : false;
+    case 'composite':
+      return criteria.customLogic ? criteria.customLogic(userProgress) : false;
       
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
@@ -540,17 +540,17 @@ export class BadgeSystem {
     const stats = userProgress.statistics;
     
     switch (metric) {
-      case 'templates_created': return stats.templatesCreated;
-      case 'templates_downloaded': return stats.templatesDownloaded;
-      case 'projects_completed': return stats.projectsCompleted;
-      case 'collaborations': return stats.collaborations;
-      case 'ratings_given': return stats.ratingsGiven;
-      case 'helpful_reviews': return stats.helpfulVotes;
-      case 'mentoring_sessions': return stats.mentoringSessions;
-      case 'level': return userProgress.level;
-      case 'sales_count': return 5; // Mock data
-      case 'max_template_downloads': return 500; // Mock data
-      default: return 0;
+    case 'templates_created': return stats.templatesCreated;
+    case 'templates_downloaded': return stats.templatesDownloaded;
+    case 'projects_completed': return stats.projectsCompleted;
+    case 'collaborations': return stats.collaborations;
+    case 'ratings_given': return stats.ratingsGiven;
+    case 'helpful_reviews': return stats.helpfulVotes;
+    case 'mentoring_sessions': return stats.mentoringSessions;
+    case 'level': return userProgress.level;
+    case 'sales_count': return 5; // Mock data
+    case 'max_template_downloads': return 500; // Mock data
+    default: return 0;
     }
   }
 
@@ -558,11 +558,11 @@ export class BadgeSystem {
     // Check custom conditions
     for (const [key, value] of Object.entries(conditions)) {
       switch (key) {
-        case 'joined_before':
-          // This would check user registration date
-          return Date.now() < value;
-        default:
-          return false;
+      case 'joined_before':
+        // This would check user registration date
+        return Date.now() < value;
+      default:
+        return false;
       }
     }
     return true;
@@ -760,7 +760,7 @@ export class BadgeSystem {
     mostPopularBadge: string;
     rarest: string;
     averageBadgesPerUser: number;
-  } {
+    } {
     const totalBadges = this.badges.size;
     const totalUsers = this.userProgress.size;
     

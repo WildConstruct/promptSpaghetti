@@ -238,37 +238,37 @@ const DeletionWorkflowManager: React.FC = () => {
 
   const getStatusBadgeClass = (status: string): string => {
     switch (status) {
-      case 'running': return 'bg-blue-100 text-blue-800 animate-pulse';
-      case 'completed': return 'bg-green-100 text-green-800';
-      case 'failed': return 'bg-red-100 text-red-800';
-      case 'scheduled': return 'bg-yellow-100 text-yellow-800';
-      case 'paused': return 'bg-orange-100 text-orange-800';
-      case 'cancelled': return 'bg-gray-100 text-gray-800';
-      case 'draft': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'running': return 'bg-blue-100 text-blue-800 animate-pulse';
+    case 'completed': return 'bg-green-100 text-green-800';
+    case 'failed': return 'bg-red-100 text-red-800';
+    case 'scheduled': return 'bg-yellow-100 text-yellow-800';
+    case 'paused': return 'bg-orange-100 text-orange-800';
+    case 'cancelled': return 'bg-gray-100 text-gray-800';
+    case 'draft': return 'bg-purple-100 text-purple-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getPriorityBadgeClass = (priority: string): string => {
     switch (priority) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'normal': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'normal': return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'low': return 'bg-gray-100 text-gray-800 border-gray-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'running': return <Activity className="w-4 h-4 text-blue-600 animate-pulse" />;
-      case 'completed': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'failed': return <XCircle className="w-4 h-4 text-red-600" />;
-      case 'scheduled': return <Clock className="w-4 h-4 text-yellow-600" />;
-      case 'paused': return <Pause className="w-4 h-4 text-orange-600" />;
-      case 'cancelled': return <Square className="w-4 h-4 text-gray-600" />;
-      case 'draft': return <FileText className="w-4 h-4 text-purple-600" />;
-      default: return <Activity className="w-4 h-4 text-gray-600" />;
+    case 'running': return <Activity className="w-4 h-4 text-blue-600 animate-pulse" />;
+    case 'completed': return <CheckCircle className="w-4 h-4 text-green-600" />;
+    case 'failed': return <XCircle className="w-4 h-4 text-red-600" />;
+    case 'scheduled': return <Clock className="w-4 h-4 text-yellow-600" />;
+    case 'paused': return <Pause className="w-4 h-4 text-orange-600" />;
+    case 'cancelled': return <Square className="w-4 h-4 text-gray-600" />;
+    case 'draft': return <FileText className="w-4 h-4 text-purple-600" />;
+    default: return <Activity className="w-4 h-4 text-gray-600" />;
     }
   };
 
@@ -353,17 +353,17 @@ const DeletionWorkflowManager: React.FC = () => {
     })
     .sort((a, b) => {
       switch (sortBy) {
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'created':
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        case 'progress':
-          return b.progress - a.progress;
-        case 'priority':
-          const priorityOrder = { critical: 4, high: 3, normal: 2, low: 1 };
-          return priorityOrder[b.priority] - priorityOrder[a.priority];
-        default:
-          return 0;
+      case 'name':
+        return a.name.localeCompare(b.name);
+      case 'created':
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      case 'progress':
+        return b.progress - a.progress;
+      case 'priority':
+        const priorityOrder = { critical: 4, high: 3, normal: 2, low: 1 };
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
+      default:
+        return 0;
       }
     });
 

@@ -495,20 +495,20 @@ export class RealTimeComplianceMonitor extends EventEmitter {
 
     // Evaluate threshold condition
     switch (threshold.operator) {
-      case 'gt':
-        return metricValue > threshold.value;
-      case 'gte':
-        return metricValue >= threshold.value;
-      case 'lt':
-        return metricValue < threshold.value;
-      case 'lte':
-        return metricValue <= threshold.value;
-      case 'eq':
-        return metricValue === threshold.value;
-      case 'ne':
-        return metricValue !== threshold.value;
-      default:
-        return false;
+    case 'gt':
+      return metricValue > threshold.value;
+    case 'gte':
+      return metricValue >= threshold.value;
+    case 'lt':
+      return metricValue < threshold.value;
+    case 'lte':
+      return metricValue <= threshold.value;
+    case 'eq':
+      return metricValue === threshold.value;
+    case 'ne':
+      return metricValue !== threshold.value;
+    default:
+      return false;
     }
   }
 
@@ -517,16 +517,16 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    */
   private async getMetricValue(metric: string, since: Date): Promise<number> {
     switch (metric) {
-      case 'violations_per_hour':
-        return await this.getViolationCount(since);
-      case 'critical_violations_per_hour':
-        return await this.getCriticalViolationCount(since);
-      case 'error_rate':
-        return this.metrics.errorRate;
-      case 'processing_time':
-        return this.metrics.averageProcessingTime;
-      default:
-        return 0;
+    case 'violations_per_hour':
+      return await this.getViolationCount(since);
+    case 'critical_violations_per_hour':
+      return await this.getCriticalViolationCount(since);
+    case 'error_rate':
+      return this.metrics.errorRate;
+    case 'processing_time':
+      return this.metrics.averageProcessingTime;
+    default:
+      return 0;
     }
   }
 
@@ -639,20 +639,20 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     
     // Example implementations:
     switch (action) {
-      case 'block_user_access':
-        // Implement user access blocking
-        break;
-      case 'quarantine_data':
-        // Implement data quarantine
-        break;
-      case 'revoke_permissions':
-        // Implement permission revocation
-        break;
-      case 'send_security_alert':
-        // Send security team alert
-        break;
-      default:
-        console.warn(`Unknown remediation action: ${action}`);
+    case 'block_user_access':
+      // Implement user access blocking
+      break;
+    case 'quarantine_data':
+      // Implement data quarantine
+      break;
+    case 'revoke_permissions':
+      // Implement permission revocation
+      break;
+    case 'send_security_alert':
+      // Send security team alert
+      break;
+    default:
+      console.warn(`Unknown remediation action: ${action}`);
     }
   }
 
@@ -947,7 +947,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       processingQueue: number;
       activeEvaluations: number;
     };
-  } {
+    } {
     return {
       monitorId: this.config.monitorId,
       running: this.isRunning,

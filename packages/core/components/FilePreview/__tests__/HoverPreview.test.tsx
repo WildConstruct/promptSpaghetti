@@ -10,8 +10,8 @@ import { projectManager } from '../../../projectManager';
 // Mock the projectManager
 jest.mock('../../../projectManager', () => ({
   projectManager: {
-    generateThumbnail: jest.fn(),
-  },
+    generateThumbnail: jest.fn()
+  }
 }));
 
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
@@ -55,7 +55,7 @@ describe('HoverPreview Component', () => {
       width: 100,
       height: 50,
       x: 100,
-      y: 200,
+      y: 200
     });
 
     // Mock window dimensions
@@ -246,7 +246,7 @@ describe('HoverPreview Component', () => {
         width: 100,
         height: 50,
         x: 900,
-        y: 200,
+        y: 200
       });
 
       render(
@@ -277,7 +277,7 @@ describe('HoverPreview Component', () => {
         width: 100,
         height: 50,
         x: 100,
-        y: 700,
+        y: 700
       });
 
       render(

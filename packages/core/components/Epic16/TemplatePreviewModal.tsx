@@ -53,9 +53,9 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
   const getRateLimit = () => {
     if (!currentUser) return 3;
     switch (currentUser.tier) {
-      case 'enterprise': return 50;
-      case 'pro': return 25;
-      case 'free': default: return 3;
+    case 'enterprise': return 50;
+    case 'pro': return 25;
+    case 'free': default: return 3;
     }
   };
 
@@ -200,8 +200,8 @@ export const TemplatePreviewModal: React.FC<TemplatePreviewModalProps> = ({
                       value={previewInput}
                       onChange={(e) => setPreviewInput(e.target.value)}
                       placeholder={isPurchased 
-                        ? "Enter your prompt input to see the full template in action..." 
-                        : "Enter your prompt input to see a preview (some content will be masked until purchase)..."
+                        ? 'Enter your prompt input to see the full template in action...' 
+                        : 'Enter your prompt input to see a preview (some content will be masked until purchase)...'
                       }
                       className="w-full h-32 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     />

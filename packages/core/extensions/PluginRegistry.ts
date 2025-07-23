@@ -296,24 +296,24 @@ export class PluginRegistry extends EventEmitter {
           let aValue, bValue;
           
           switch (options.sortBy) {
-            case 'name':
-              aValue = a.name;
-              bValue = b.name;
-              break;
-            case 'downloads':
-              aValue = a.downloads;
-              bValue = b.downloads;
-              break;
-            case 'rating':
-              aValue = a.rating;
-              bValue = b.rating;
-              break;
-            case 'updated':
-              aValue = a.updatedAt;
-              bValue = b.updatedAt;
-              break;
-            default:
-              return 0;
+          case 'name':
+            aValue = a.name;
+            bValue = b.name;
+            break;
+          case 'downloads':
+            aValue = a.downloads;
+            bValue = b.downloads;
+            break;
+          case 'rating':
+            aValue = a.rating;
+            bValue = b.rating;
+            break;
+          case 'updated':
+            aValue = a.updatedAt;
+            bValue = b.updatedAt;
+            break;
+          default:
+            return 0;
           }
           
           const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;

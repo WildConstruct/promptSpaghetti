@@ -210,7 +210,7 @@ function getGoldenFile(testName: string, seed: number): string {
   if (!existsSync(filepath)) {
     throw new Error(
       `Golden file ${filepath} does not exist. ` +
-      `Run 'npm run test:regression:generate-golden' to create baseline files.`
+      'Run \'npm run test:regression:generate-golden\' to create baseline files.'
     );
   }
   

@@ -441,12 +441,12 @@ export class ComplianceReportValidationService {
     const allRules = Array.from(this.validationRules.values());
     
     switch (level) {
-      case 'basic':
-        return allRules.filter(rule => ['VR001', 'VR002'].includes(rule.ruleId));
-      case 'comprehensive':
-        return allRules;
-      default:
-        return allRules.filter(rule => !rule.ruleId.startsWith('VR99')); // Exclude advanced rules
+    case 'basic':
+      return allRules.filter(rule => ['VR001', 'VR002'].includes(rule.ruleId));
+    case 'comprehensive':
+      return allRules;
+    default:
+      return allRules.filter(rule => !rule.ruleId.startsWith('VR99')); // Exclude advanced rules
     }
   }
 
@@ -497,14 +497,14 @@ export class ComplianceReportValidationService {
   ): Promise<boolean> {
     // Simple rule evaluation - would be expanded based on rule type
     switch (rule.ruleType) {
-      case 'mathematical':
-        return this.evaluateMathematicalRule(report, rule);
-      case 'logical':
-        return this.evaluateLogicalRule(report, rule);
-      case 'pattern':
-        return this.evaluatePatternRule(report, rule);
-      default:
-        return true;
+    case 'mathematical':
+      return this.evaluateMathematicalRule(report, rule);
+    case 'logical':
+      return this.evaluateLogicalRule(report, rule);
+    case 'pattern':
+      return this.evaluatePatternRule(report, rule);
+    default:
+      return true;
     }
   }
 
@@ -614,17 +614,17 @@ export class ComplianceReportValidationService {
     
     // Set next validation based on report type and framework
     switch (report.reportType) {
-      case ComplianceReportType.MONTHLY_MONITORING:
-        nextValidation.setMonth(nextValidation.getMonth() + 1);
-        break;
-      case ComplianceReportType.QUARTERLY_REVIEW:
-        nextValidation.setMonth(nextValidation.getMonth() + 3);
-        break;
-      case ComplianceReportType.ANNUAL_ASSESSMENT:
-        nextValidation.setFullYear(nextValidation.getFullYear() + 1);
-        break;
-      default:
-        nextValidation.setMonth(nextValidation.getMonth() + 6);
+    case ComplianceReportType.MONTHLY_MONITORING:
+      nextValidation.setMonth(nextValidation.getMonth() + 1);
+      break;
+    case ComplianceReportType.QUARTERLY_REVIEW:
+      nextValidation.setMonth(nextValidation.getMonth() + 3);
+      break;
+    case ComplianceReportType.ANNUAL_ASSESSMENT:
+      nextValidation.setFullYear(nextValidation.getFullYear() + 1);
+      break;
+    default:
+      nextValidation.setMonth(nextValidation.getMonth() + 6);
     }
     
     return nextValidation;

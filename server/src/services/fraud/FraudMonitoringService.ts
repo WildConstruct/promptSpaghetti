@@ -410,7 +410,7 @@ export class FraudMonitoringService {
 
     // Update case with decision
     const newStatus = decision.decision === 'escalate' ? 'escalated' : 
-                     decision.decision === 'approve' ? 'approved' : 'rejected';
+      decision.decision === 'approve' ? 'approved' : 'rejected';
 
     await this.db.query(`
       UPDATE fraud_review_cases 

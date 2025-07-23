@@ -1381,7 +1381,7 @@ export class AccessControlFramework extends EventEmitter {
     }
 
     // Evaluate policy rules
-    let ruleResults: PolicyDecision[] = [];
+    const ruleResults: PolicyDecision[] = [];
     
     for (const rule of policy.rules) {
       if (!rule.enabled) continue;
@@ -1550,20 +1550,20 @@ export class AccessControlFramework extends EventEmitter {
     let match = false;
 
     switch (target.type) {
-      case 'IDENTITY':
-        match = target.value === subject.id;
-        break;
-      case 'ROLE':
-        match = subject.roles.some(role => role.name === target.value);
-        break;
-      case 'GROUP':
-        match = subject.groups.some(group => group.name === target.value);
-        break;
-      case 'ATTRIBUTE':
-        match = subject.attributes.some(attr => 
-          this.compareValues(attr.value, target.operator, target.value)
-        );
-        break;
+    case 'IDENTITY':
+      match = target.value === subject.id;
+      break;
+    case 'ROLE':
+      match = subject.roles.some(role => role.name === target.value);
+      break;
+    case 'GROUP':
+      match = subject.groups.some(group => group.name === target.value);
+      break;
+    case 'ATTRIBUTE':
+      match = subject.attributes.some(attr => 
+        this.compareValues(attr.value, target.operator, target.value)
+      );
+      break;
     }
 
     return target.negate ? !match : match;
@@ -1573,23 +1573,23 @@ export class AccessControlFramework extends EventEmitter {
     let match = false;
 
     switch (target.type) {
-      case 'ID':
-        match = target.value === resource.id;
-        break;
-      case 'TYPE':
-        match = target.value === resource.type;
-        break;
-      case 'PATH':
-        match = this.compareValues(resource.path, target.operator, target.value);
-        break;
-      case 'CLASSIFICATION':
-        match = target.value === resource.classification;
-        break;
-      case 'ATTRIBUTE':
-        match = resource.attributes.some(attr => 
-          this.compareValues(attr.value, target.operator, target.value)
-        );
-        break;
+    case 'ID':
+      match = target.value === resource.id;
+      break;
+    case 'TYPE':
+      match = target.value === resource.type;
+      break;
+    case 'PATH':
+      match = this.compareValues(resource.path, target.operator, target.value);
+      break;
+    case 'CLASSIFICATION':
+      match = target.value === resource.classification;
+      break;
+    case 'ATTRIBUTE':
+      match = resource.attributes.some(attr => 
+        this.compareValues(attr.value, target.operator, target.value)
+      );
+      break;
     }
 
     return target.negate ? !match : match;
@@ -1599,19 +1599,19 @@ export class AccessControlFramework extends EventEmitter {
     let match = false;
 
     switch (target.type) {
-      case 'ID':
-        match = target.value === action.id;
-        break;
-      case 'TYPE':
-        match = target.value === action.type;
-        break;
-      case 'OPERATION':
-        match = target.value === action.operation;
-        break;
-      case 'CATEGORY':
-        // Assuming we have action categories in metadata
-        match = action.metadata.category === target.value;
-        break;
+    case 'ID':
+      match = target.value === action.id;
+      break;
+    case 'TYPE':
+      match = target.value === action.type;
+      break;
+    case 'OPERATION':
+      match = target.value === action.operation;
+      break;
+    case 'CATEGORY':
+      // Assuming we have action categories in metadata
+      match = action.metadata.category === target.value;
+      break;
     }
 
     return target.negate ? !match : match;
@@ -1621,23 +1621,23 @@ export class AccessControlFramework extends EventEmitter {
     let match = false;
 
     switch (target.type) {
-      case 'TIME':
-        match = this.matchesTimeCondition(target, environment.timestamp);
-        break;
-      case 'LOCATION':
-        match = this.matchesLocationCondition(target, environment.geolocation);
-        break;
-      case 'DEVICE':
-        match = target.value === environment.deviceType;
-        break;
-      case 'NETWORK':
-        match = target.value === environment.networkType;
-        break;
-      case 'ATTRIBUTE':
-        match = environment.attributes.some(attr => 
-          this.compareValues(attr.value, target.operator, target.value)
-        );
-        break;
+    case 'TIME':
+      match = this.matchesTimeCondition(target, environment.timestamp);
+      break;
+    case 'LOCATION':
+      match = this.matchesLocationCondition(target, environment.geolocation);
+      break;
+    case 'DEVICE':
+      match = target.value === environment.deviceType;
+      break;
+    case 'NETWORK':
+      match = target.value === environment.networkType;
+      break;
+    case 'ATTRIBUTE':
+      match = environment.attributes.some(attr => 
+        this.compareValues(attr.value, target.operator, target.value)
+      );
+      break;
     }
 
     return target.negate ? !match : match;
@@ -1645,36 +1645,36 @@ export class AccessControlFramework extends EventEmitter {
 
   private compareValues(actual: any, operator: ComparisonOperator, expected: any): boolean {
     switch (operator) {
-      case 'EQUALS':
-        return actual === expected;
-      case 'NOT_EQUALS':
-        return actual !== expected;
-      case 'GREATER_THAN':
-        return actual > expected;
-      case 'LESS_THAN':
-        return actual < expected;
-      case 'GREATER_EQUAL':
-        return actual >= expected;
-      case 'LESS_EQUAL':
-        return actual <= expected;
-      case 'CONTAINS':
-        return String(actual).includes(String(expected));
-      case 'NOT_CONTAINS':
-        return !String(actual).includes(String(expected));
-      case 'IN':
-        return Array.isArray(expected) && expected.includes(actual);
-      case 'NOT_IN':
-        return Array.isArray(expected) && !expected.includes(actual);
-      case 'MATCHES':
-        return new RegExp(String(expected)).test(String(actual));
-      case 'NOT_MATCHES':
-        return !new RegExp(String(expected)).test(String(actual));
-      case 'STARTS_WITH':
-        return String(actual).startsWith(String(expected));
-      case 'ENDS_WITH':
-        return String(actual).endsWith(String(expected));
-      default:
-        return false;
+    case 'EQUALS':
+      return actual === expected;
+    case 'NOT_EQUALS':
+      return actual !== expected;
+    case 'GREATER_THAN':
+      return actual > expected;
+    case 'LESS_THAN':
+      return actual < expected;
+    case 'GREATER_EQUAL':
+      return actual >= expected;
+    case 'LESS_EQUAL':
+      return actual <= expected;
+    case 'CONTAINS':
+      return String(actual).includes(String(expected));
+    case 'NOT_CONTAINS':
+      return !String(actual).includes(String(expected));
+    case 'IN':
+      return Array.isArray(expected) && expected.includes(actual);
+    case 'NOT_IN':
+      return Array.isArray(expected) && !expected.includes(actual);
+    case 'MATCHES':
+      return new RegExp(String(expected)).test(String(actual));
+    case 'NOT_MATCHES':
+      return !new RegExp(String(expected)).test(String(actual));
+    case 'STARTS_WITH':
+      return String(actual).startsWith(String(expected));
+    case 'ENDS_WITH':
+      return String(actual).endsWith(String(expected));
+    default:
+      return false;
     }
   }
 
@@ -1692,28 +1692,28 @@ export class AccessControlFramework extends EventEmitter {
     if (!geolocation) return false;
     
     switch (target.operator) {
-      case 'EQUALS':
-        return geolocation.country === target.value;
-      case 'IN':
-        return Array.isArray(target.value) && target.value.includes(geolocation.country);
-      default:
-        return false;
+    case 'EQUALS':
+      return geolocation.country === target.value;
+    case 'IN':
+      return Array.isArray(target.value) && target.value.includes(geolocation.country);
+    default:
+      return false;
     }
   }
 
   private evaluateCondition(condition: PolicyCondition, context: AccessControlContext): boolean {
     // Simplified condition evaluation
     switch (condition.type) {
-      case 'TEMPORAL':
-        return this.evaluateTemporalCondition(condition, context);
-      case 'CONTEXTUAL':
-        return this.evaluateContextualCondition(condition, context);
-      case 'RISK':
-        return this.evaluateRiskCondition(condition, context);
-      case 'COMPLIANCE':
-        return this.evaluateComplianceCondition(condition, context);
-      default:
-        return true;
+    case 'TEMPORAL':
+      return this.evaluateTemporalCondition(condition, context);
+    case 'CONTEXTUAL':
+      return this.evaluateContextualCondition(condition, context);
+    case 'RISK':
+      return this.evaluateRiskCondition(condition, context);
+    case 'COMPLIANCE':
+      return this.evaluateComplianceCondition(condition, context);
+    default:
+      return true;
     }
   }
 
@@ -1774,20 +1774,20 @@ export class AccessControlFramework extends EventEmitter {
 
   private combineRuleResults(results: PolicyDecision[], algorithm: CombiningAlgorithm): PolicyDecision {
     switch (algorithm) {
-      case 'DENY_OVERRIDES':
-        return results.includes('DENY') ? 'DENY' : results.includes('PERMIT') ? 'PERMIT' : 'NOT_APPLICABLE';
-      case 'PERMIT_OVERRIDES':
-        return results.includes('PERMIT') ? 'PERMIT' : results.includes('DENY') ? 'DENY' : 'NOT_APPLICABLE';
-      case 'FIRST_APPLICABLE':
-        return results.find(r => r !== 'NOT_APPLICABLE') || 'NOT_APPLICABLE';
-      case 'ONLY_ONE_APPLICABLE':
-        const applicable = results.filter(r => r !== 'NOT_APPLICABLE');
-        return applicable.length === 1 ? applicable[0] : 'INDETERMINATE';
-      case 'WEIGHTED_AVERAGE':
-        // Simplified weighted average
-        return results.includes('PERMIT') ? 'PERMIT' : 'DENY';
-      default:
-        return 'DENY';
+    case 'DENY_OVERRIDES':
+      return results.includes('DENY') ? 'DENY' : results.includes('PERMIT') ? 'PERMIT' : 'NOT_APPLICABLE';
+    case 'PERMIT_OVERRIDES':
+      return results.includes('PERMIT') ? 'PERMIT' : results.includes('DENY') ? 'DENY' : 'NOT_APPLICABLE';
+    case 'FIRST_APPLICABLE':
+      return results.find(r => r !== 'NOT_APPLICABLE') || 'NOT_APPLICABLE';
+    case 'ONLY_ONE_APPLICABLE':
+      const applicable = results.filter(r => r !== 'NOT_APPLICABLE');
+      return applicable.length === 1 ? applicable[0] : 'INDETERMINATE';
+    case 'WEIGHTED_AVERAGE':
+      // Simplified weighted average
+      return results.includes('PERMIT') ? 'PERMIT' : 'DENY';
+    default:
+      return 'DENY';
     }
   }
 

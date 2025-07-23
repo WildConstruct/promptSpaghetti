@@ -179,7 +179,7 @@ export class ProjectHealthAlertService {
             id: `stalled-${project.id}-${Date.now()}`,
             alertType: 'STALLED_PROJECT',
             severity: daysSinceLastActivity >= 30 ? 'CRITICAL' : 
-                     daysSinceLastActivity >= 14 ? 'HIGH' : 'MEDIUM',
+              daysSinceLastActivity >= 14 ? 'HIGH' : 'MEDIUM',
             projectId: project.id,
             workspaceId: project.workspace_id,
             title: `Project "${project.name}" appears stalled`,
@@ -442,9 +442,9 @@ export class ProjectHealthAlertService {
       // Find dominant contributor
       const dominantContributor = contributionDistribution.length > 0 
         ? {
-            userId: contributionDistribution[0].userId,
-            percentage: contributionDistribution[0].percentage
-          }
+          userId: contributionDistribution[0].userId,
+          percentage: contributionDistribution[0].percentage
+        }
         : undefined;
 
       return {

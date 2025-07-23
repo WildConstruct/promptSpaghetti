@@ -194,13 +194,13 @@ export const DEFAULT_SECURITY_SCAN_CONFIG: SecurityScanConfig = {
   },
   integrations: {
     snyk: {
-      enabled: false, // Enable when API key is available
+      enabled: false // Enable when API key is available
     },
     sonarqube: {
-      enabled: false, // Enable when server is configured
+      enabled: false // Enable when server is configured
     },
     owaspZap: {
-      enabled: false, // Enable for dynamic scanning
+      enabled: false // Enable for dynamic scanning
     }
   },
   notifications: {
@@ -343,11 +343,11 @@ export class SecurityScanningService extends EventEmitter {
         updated_at TIMESTAMPTZ DEFAULT NOW()
       )`,
       
-      `CREATE INDEX IF NOT EXISTS idx_security_scan_results_timestamp ON security_scan_results(timestamp DESC)`,
-      `CREATE INDEX IF NOT EXISTS idx_security_scan_results_type ON security_scan_results(scan_type)`,
-      `CREATE INDEX IF NOT EXISTS idx_security_vulnerabilities_severity ON security_vulnerabilities(severity)`,
-      `CREATE INDEX IF NOT EXISTS idx_security_vulnerabilities_status ON security_vulnerabilities(status)`,
-      `CREATE INDEX IF NOT EXISTS idx_security_vulnerabilities_first_detected ON security_vulnerabilities(first_detected DESC)`,
+      'CREATE INDEX IF NOT EXISTS idx_security_scan_results_timestamp ON security_scan_results(timestamp DESC)',
+      'CREATE INDEX IF NOT EXISTS idx_security_scan_results_type ON security_scan_results(scan_type)',
+      'CREATE INDEX IF NOT EXISTS idx_security_vulnerabilities_severity ON security_vulnerabilities(severity)',
+      'CREATE INDEX IF NOT EXISTS idx_security_vulnerabilities_status ON security_vulnerabilities(status)',
+      'CREATE INDEX IF NOT EXISTS idx_security_vulnerabilities_first_detected ON security_vulnerabilities(first_detected DESC)'
     ];
 
     for (const query of queries) {
@@ -441,26 +441,26 @@ export class SecurityScanningService extends EventEmitter {
       let result: SecurityScanResult;
       
       switch (scanType) {
-        case 'dependency':
-          result = await this.executeDependencyScan(scanId, options);
-          break;
-        case 'static':
-          result = await this.executeStaticScan(scanId, options);
-          break;
-        case 'dynamic':
-          result = await this.executeDynamicScan(scanId, options);
-          break;
-        case 'infrastructure':
-          result = await this.executeInfrastructureScan(scanId, options);
-          break;
-        case 'compliance':
-          result = await this.executeComplianceScan(scanId, options);
-          break;
-        case 'comprehensive':
-          result = await this.executeComprehensiveScan(scanId, options);
-          break;
-        default:
-          throw new Error(`Unknown scan type: ${scanType}`);
+      case 'dependency':
+        result = await this.executeDependencyScan(scanId, options);
+        break;
+      case 'static':
+        result = await this.executeStaticScan(scanId, options);
+        break;
+      case 'dynamic':
+        result = await this.executeDynamicScan(scanId, options);
+        break;
+      case 'infrastructure':
+        result = await this.executeInfrastructureScan(scanId, options);
+        break;
+      case 'compliance':
+        result = await this.executeComplianceScan(scanId, options);
+        break;
+      case 'comprehensive':
+        result = await this.executeComprehensiveScan(scanId, options);
+        break;
+      default:
+        throw new Error(`Unknown scan type: ${scanType}`);
       }
       
       result.duration = Date.now() - startTime;
@@ -807,9 +807,9 @@ export class SecurityScanningService extends EventEmitter {
 
   private mapESLintSeverity(eslintSeverity: number): 'critical' | 'high' | 'medium' | 'low' | 'info' {
     switch (eslintSeverity) {
-      case 2: return 'high'; // error
-      case 1: return 'medium'; // warning
-      default: return 'info';
+    case 2: return 'high'; // error
+    case 1: return 'medium'; // warning
+    default: return 'info';
     }
   }
 
@@ -836,7 +836,7 @@ export class SecurityScanningService extends EventEmitter {
         
         patterns.forEach(({ pattern, severity, description }) => {
           let match;
-          let lineNumber = 0;
+          const lineNumber = 0;
           
           lines.forEach((line, index) => {
             const matches = line.match(pattern);
@@ -878,7 +878,7 @@ export class SecurityScanningService extends EventEmitter {
       { pattern: /(?:secret|token)\s*[:=]\s*['"][^'"]{16,}['"]/, type: 'secret' },
       { pattern: /sk_live_[a-zA-Z0-9]{24}/, type: 'stripe_key' },
       { pattern: /ghp_[a-zA-Z0-9]{36}/, type: 'github_token' },
-      { pattern: /xox[baprs]-[a-zA-Z0-9-]+/, type: 'slack_token' },
+      { pattern: /xox[baprs]-[a-zA-Z0-9-]+/, type: 'slack_token' }
     ];
     
     try {
@@ -905,7 +905,7 @@ export class SecurityScanningService extends EventEmitter {
                 description: `Potential hardcoded ${type} found in source code`,
                 file: filePath,
                 line: index + 1,
-                recommendation: `Remove hardcoded secret and use environment variables or secure configuration`,
+                recommendation: 'Remove hardcoded secret and use environment variables or secure configuration',
                 references: [
                   'https://owasp.org/www-community/vulnerabilities/Use_of_hard-coded_password',
                   'https://cwe.mitre.org/data/definitions/798.html'

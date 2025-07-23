@@ -317,7 +317,7 @@ export class OperationTypesService {
     }
 
     if (!includeDeprecated) {
-      query += ` AND is_deprecated = false`;
+      query += ' AND is_deprecated = false';
     }
 
     query += ' ORDER BY category, sort_order, display_name';
@@ -647,27 +647,27 @@ export class OperationTypesService {
 
   private validateParameterType(value: any, type: ParameterType): boolean {
     switch (type) {
-      case ParameterType.STRING:
-        return typeof value === 'string';
-      case ParameterType.NUMBER:
-        return typeof value === 'number' && !isNaN(value);
-      case ParameterType.BOOLEAN:
-        return typeof value === 'boolean';
-      case ParameterType.DATE:
-      case ParameterType.DATETIME:
-        return value instanceof Date || !isNaN(Date.parse(value));
-      case ParameterType.ARRAY:
-        return Array.isArray(value);
-      case ParameterType.OBJECT:
-        return typeof value === 'object' && value !== null && !Array.isArray(value);
-      case ParameterType.FILE:
-        return typeof value === 'string' || (typeof value === 'object' && value.filename);
-      case ParameterType.USER_ID:
-        return typeof value === 'string' && /^[0-9a-f-]{36}$/i.test(value);
-      case ParameterType.QUERY:
-        return typeof value === 'string' || typeof value === 'object';
-      default:
-        return true;
+    case ParameterType.STRING:
+      return typeof value === 'string';
+    case ParameterType.NUMBER:
+      return typeof value === 'number' && !isNaN(value);
+    case ParameterType.BOOLEAN:
+      return typeof value === 'boolean';
+    case ParameterType.DATE:
+    case ParameterType.DATETIME:
+      return value instanceof Date || !isNaN(Date.parse(value));
+    case ParameterType.ARRAY:
+      return Array.isArray(value);
+    case ParameterType.OBJECT:
+      return typeof value === 'object' && value !== null && !Array.isArray(value);
+    case ParameterType.FILE:
+      return typeof value === 'string' || (typeof value === 'object' && value.filename);
+    case ParameterType.USER_ID:
+      return typeof value === 'string' && /^[0-9a-f-]{36}$/i.test(value);
+    case ParameterType.QUERY:
+      return typeof value === 'string' || typeof value === 'object';
+    default:
+      return true;
     }
   }
 
@@ -676,39 +676,39 @@ export class OperationTypesService {
     message: string;
   } {
     switch (constraint.type) {
-      case 'min':
-        const isValidMin = typeof value === 'number' ? value >= constraint.value :
-                          typeof value === 'string' ? value.length >= constraint.value :
-                          Array.isArray(value) ? value.length >= constraint.value : false;
-        return {
-          isValid: isValidMin,
-          message: constraint.message || `Value must be at least ${constraint.value}`
-        };
+    case 'min':
+      const isValidMin = typeof value === 'number' ? value >= constraint.value :
+        typeof value === 'string' ? value.length >= constraint.value :
+          Array.isArray(value) ? value.length >= constraint.value : false;
+      return {
+        isValid: isValidMin,
+        message: constraint.message || `Value must be at least ${constraint.value}`
+      };
       
-      case 'max':
-        const isValidMax = typeof value === 'number' ? value <= constraint.value :
-                          typeof value === 'string' ? value.length <= constraint.value :
-                          Array.isArray(value) ? value.length <= constraint.value : false;
-        return {
-          isValid: isValidMax,
-          message: constraint.message || `Value must be at most ${constraint.value}`
-        };
+    case 'max':
+      const isValidMax = typeof value === 'number' ? value <= constraint.value :
+        typeof value === 'string' ? value.length <= constraint.value :
+          Array.isArray(value) ? value.length <= constraint.value : false;
+      return {
+        isValid: isValidMax,
+        message: constraint.message || `Value must be at most ${constraint.value}`
+      };
       
-      case 'pattern':
-        const pattern = new RegExp(constraint.value);
-        return {
-          isValid: pattern.test(String(value)),
-          message: constraint.message || 'Value does not match required pattern'
-        };
+    case 'pattern':
+      const pattern = new RegExp(constraint.value);
+      return {
+        isValid: pattern.test(String(value)),
+        message: constraint.message || 'Value does not match required pattern'
+      };
       
-      case 'enum':
-        return {
-          isValid: Array.isArray(constraint.value) && constraint.value.includes(value),
-          message: constraint.message || `Value must be one of: ${constraint.value.join(', ')}`
-        };
+    case 'enum':
+      return {
+        isValid: Array.isArray(constraint.value) && constraint.value.includes(value),
+        message: constraint.message || `Value must be one of: ${constraint.value.join(', ')}`
+      };
       
-      default:
-        return { isValid: true, message: '' };
+    default:
+      return { isValid: true, message: '' };
     }
   }
 

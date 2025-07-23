@@ -464,7 +464,7 @@ export class UserProfileService {
 
     // Active users filter
     if (query.isActive) {
-      conditions.push(`u.last_login_at > NOW() - INTERVAL '30 days'`);
+      conditions.push('u.last_login_at > NOW() - INTERVAL \'30 days\'');
     }
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -487,28 +487,28 @@ export class UserProfileService {
 
     let orderByClause: string;
     switch (sortBy) {
-      case 'name':
-        orderByClause = `ORDER BY p.display_name ${sortOrder}`;
-        break;
-      case 'recent':
-        orderByClause = `ORDER BY p.updated_at ${sortOrder}`;
-        break;
-      case 'activity':
-        orderByClause = `ORDER BY u.last_login_at ${sortOrder}`;
-        break;
-      case 'connections':
-        orderByClause = `ORDER BY followers_count ${sortOrder}`;
-        break;
-      case 'relevance':
-      default:
-        // Simple relevance scoring
-        orderByClause = `ORDER BY (
+    case 'name':
+      orderByClause = `ORDER BY p.display_name ${sortOrder}`;
+      break;
+    case 'recent':
+      orderByClause = `ORDER BY p.updated_at ${sortOrder}`;
+      break;
+    case 'activity':
+      orderByClause = `ORDER BY u.last_login_at ${sortOrder}`;
+      break;
+    case 'connections':
+      orderByClause = `ORDER BY followers_count ${sortOrder}`;
+      break;
+    case 'relevance':
+    default:
+      // Simple relevance scoring
+      orderByClause = `ORDER BY (
           CASE WHEN p.avatar_url IS NOT NULL THEN 1 ELSE 0 END +
           CASE WHEN p.bio IS NOT NULL THEN 1 ELSE 0 END +
           CASE WHEN array_length(p.skill_tags, 1) > 0 THEN 1 ELSE 0 END +
           p.completion_score / 100.0
         ) ${sortOrder}`;
-        break;
+      break;
     }
 
     const dataQuery = `
@@ -645,7 +645,7 @@ export class UserProfileService {
         followerId,
         ActivityType.COLLABORATION_LEFT,
         {
-          resourceName: `User connection`,
+          resourceName: 'User connection',
           resourceId: followingId,
           changeType: 'delete',
           success: true
@@ -671,7 +671,7 @@ export class UserProfileService {
       followerId,
       action === 'follow' ? ActivityType.COLLABORATION_JOINED : ActivityType.SECURITY_VIOLATION,
       {
-        resourceName: `User connection`,
+        resourceName: 'User connection',
         resourceId: followingId,
         changeType: action === 'follow' ? 'create' : 'update',
         success: true
@@ -876,7 +876,7 @@ export class UserProfileService {
       viewerId,
       ActivityType.PROFILE_UPDATED, // Using existing type for now
       {
-        resourceName: `User profile`,
+        resourceName: 'User profile',
         resourceId: profileUserId,
         changeType: 'view',
         success: true

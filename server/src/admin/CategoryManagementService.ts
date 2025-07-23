@@ -183,13 +183,13 @@ export class CategoryManagementService {
       fieldsToUpdate.forEach(field => {
         if (updates.hasOwnProperty(field)) {
           const dbField = field === 'displayName' ? 'display_name' : 
-                         field === 'backgroundColor' ? 'background_color' :
-                         field === 'sortOrder' ? 'sort_order' :
-                         field === 'isSystemManaged' ? 'is_system_managed' :
-                         field === 'isDeprecated' ? 'is_deprecated' :
-                         field === 'accessLevel' ? 'access_level' :
-                         field === 'requiredPermissions' ? 'required_permissions' :
-                         field;
+            field === 'backgroundColor' ? 'background_color' :
+              field === 'sortOrder' ? 'sort_order' :
+                field === 'isSystemManaged' ? 'is_system_managed' :
+                  field === 'isDeprecated' ? 'is_deprecated' :
+                    field === 'accessLevel' ? 'access_level' :
+                      field === 'requiredPermissions' ? 'required_permissions' :
+                        field;
           
           updateFields.push(`${dbField} = $${paramIndex++}`);
           
@@ -208,7 +208,7 @@ export class CategoryManagementService {
       }
 
       // Add updated_by and updated_at
-      updateFields.push(`updated_by = $${paramIndex++}`, `updated_at = NOW()`);
+      updateFields.push(`updated_by = $${paramIndex++}`, 'updated_at = NOW()');
       updateValues.push(adminId);
 
       // Add category ID for WHERE clause
@@ -875,17 +875,17 @@ export class CategoryManagementService {
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<any> {
     switch (operation.operation) {
-      case 'create':
-        return await this.createCategory(operation.data, adminId, context);
+    case 'create':
+      return await this.createCategory(operation.data, adminId, context);
       
-      case 'update':
-        return await this.updateCategory(operation.categoryId, operation.data, adminId, context);
+    case 'update':
+      return await this.updateCategory(operation.categoryId, operation.data, adminId, context);
       
-      case 'delete':
-        return await this.deleteCategory(operation.categoryId, adminId, operation.data, context);
+    case 'delete':
+      return await this.deleteCategory(operation.categoryId, adminId, operation.data, context);
       
-      default:
-        throw new Error(`Unsupported operation: ${operation.operation}`);
+    default:
+      throw new Error(`Unsupported operation: ${operation.operation}`);
     }
   }
 

@@ -290,7 +290,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
           recommendedValue: header.value,
           reason: header.description,
           priority: header.severity === 'critical' ? 'high' as const : 
-                   header.severity === 'high' ? 'medium' as const : 'low' as const
+            header.severity === 'high' ? 'medium' as const : 'low' as const
         });
       } else {
         const analysis = this.analyzeHeaderValue(header.name, current.value);
@@ -376,7 +376,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
       },
       {
         name: 'Content-Security-Policy',
-        value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
+        value: 'default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data: https:; font-src \'self\' https:; connect-src \'self\'; frame-ancestors \'none\'; object-src \'none\'; base-uri \'self\'',
         required: true,
         severity: 'critical',
         complianceStandards: ['OWASP', 'ISO27001'],
@@ -439,7 +439,7 @@ export class SecurityHeaderAuditService extends EventEmitter {
       status: 200,
       headers: {
         'strict-transport-security': 'max-age=31536000; includeSubDomains',
-        'content-security-policy': "default-src 'self'",
+        'content-security-policy': 'default-src \'self\'',
         'x-frame-options': 'DENY',
         'x-content-type-options': 'nosniff'
         // Some headers intentionally missing for demonstration
@@ -544,40 +544,40 @@ export class SecurityHeaderAuditService extends EventEmitter {
     const issues = [];
     
     switch (headerName.toLowerCase()) {
-      case 'strict-transport-security':
-        if (!value.includes('max-age=')) {
-          issues.push('Missing max-age directive');
-        } else {
-          const maxAge = parseInt(value.match(/max-age=(\d+)/)?.[1] || '0');
-          if (maxAge < 31536000) { // 1 year
-            issues.push('max-age should be at least 1 year (31536000 seconds)');
-          }
+    case 'strict-transport-security':
+      if (!value.includes('max-age=')) {
+        issues.push('Missing max-age directive');
+      } else {
+        const maxAge = parseInt(value.match(/max-age=(\d+)/)?.[1] || '0');
+        if (maxAge < 31536000) { // 1 year
+          issues.push('max-age should be at least 1 year (31536000 seconds)');
         }
-        if (!value.includes('includeSubDomains')) {
-          issues.push('Consider adding includeSubDomains directive');
-        }
-        break;
+      }
+      if (!value.includes('includeSubDomains')) {
+        issues.push('Consider adding includeSubDomains directive');
+      }
+      break;
         
-      case 'content-security-policy':
-        if (value.includes("'unsafe-eval'")) {
-          issues.push("Avoid 'unsafe-eval' directive");
-        }
-        if (value.includes('*') && !value.includes("'self'")) {
-          issues.push('Wildcard sources should be used carefully');
-        }
-        break;
+    case 'content-security-policy':
+      if (value.includes('\'unsafe-eval\'')) {
+        issues.push('Avoid \'unsafe-eval\' directive');
+      }
+      if (value.includes('*') && !value.includes('\'self\'')) {
+        issues.push('Wildcard sources should be used carefully');
+      }
+      break;
         
-      case 'x-frame-options':
-        if (!['DENY', 'SAMEORIGIN'].includes(value.toUpperCase())) {
-          issues.push('Value should be DENY or SAMEORIGIN');
-        }
-        break;
+    case 'x-frame-options':
+      if (!['DENY', 'SAMEORIGIN'].includes(value.toUpperCase())) {
+        issues.push('Value should be DENY or SAMEORIGIN');
+      }
+      break;
         
-      case 'x-content-type-options':
-        if (value.toLowerCase() !== 'nosniff') {
-          issues.push('Value should be nosniff');
-        }
-        break;
+    case 'x-content-type-options':
+      if (value.toLowerCase() !== 'nosniff') {
+        issues.push('Value should be nosniff');
+      }
+      break;
     }
     
     return {
@@ -636,20 +636,20 @@ export class SecurityHeaderAuditService extends EventEmitter {
 
     let intervalMs: number;
     switch (rule.schedule.frequency) {
-      case 'hourly':
-        intervalMs = 60 * 60 * 1000;
-        break;
-      case 'daily':
-        intervalMs = 24 * 60 * 60 * 1000;
-        break;
-      case 'weekly':
-        intervalMs = 7 * 24 * 60 * 60 * 1000;
-        break;
-      case 'monthly':
-        intervalMs = 30 * 24 * 60 * 60 * 1000;
-        break;
-      default:
-        intervalMs = 24 * 60 * 60 * 1000; // Default to daily
+    case 'hourly':
+      intervalMs = 60 * 60 * 1000;
+      break;
+    case 'daily':
+      intervalMs = 24 * 60 * 60 * 1000;
+      break;
+    case 'weekly':
+      intervalMs = 7 * 24 * 60 * 60 * 1000;
+      break;
+    case 'monthly':
+      intervalMs = 30 * 24 * 60 * 60 * 1000;
+      break;
+    default:
+      intervalMs = 24 * 60 * 60 * 1000; // Default to daily
     }
 
     const task = setInterval(async () => {

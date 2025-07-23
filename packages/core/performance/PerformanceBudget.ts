@@ -581,18 +581,18 @@ export class PerformanceBudgetManager extends EventEmitter {
     
     violations.forEach(violation => {
       switch (violation.severity) {
-        case 'critical':
-          score -= 25;
-          break;
-        case 'high':
-          score -= 15;
-          break;
-        case 'medium':
-          score -= 10;
-          break;
-        case 'low':
-          score -= 5;
-          break;
+      case 'critical':
+        score -= 25;
+        break;
+      case 'high':
+        score -= 15;
+        break;
+      case 'medium':
+        score -= 10;
+        break;
+      case 'low':
+        score -= 5;
+        break;
       }
     });
 
@@ -640,7 +640,7 @@ export class PerformanceBudgetManager extends EventEmitter {
     memoryUsage: number[];
     apiLatency: number[];
     violations: number[];
-  } {
+    } {
     const recent = this.snapshots.slice(-20);
     
     return {

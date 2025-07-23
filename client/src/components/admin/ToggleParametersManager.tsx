@@ -130,50 +130,50 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
 
     try {
       switch (toggleType) {
-        case ToggleType.PERCENTAGE_ROLLOUT:
-          const percentageParams = params as PercentageRolloutParams;
-          if (percentageParams.percentage < 0 || percentageParams.percentage > 100) {
-            errors.push('Percentage must be between 0 and 100');
+      case ToggleType.PERCENTAGE_ROLLOUT:
+        const percentageParams = params as PercentageRolloutParams;
+        if (percentageParams.percentage < 0 || percentageParams.percentage > 100) {
+          errors.push('Percentage must be between 0 and 100');
+          isValid = false;
+        }
+        if (percentageParams.gradualRollout?.enabled) {
+          if (percentageParams.gradualRollout.startPercentage >= percentageParams.gradualRollout.endPercentage) {
+            errors.push('Start percentage must be less than end percentage');
             isValid = false;
           }
-          if (percentageParams.gradualRollout?.enabled) {
-            if (percentageParams.gradualRollout.startPercentage >= percentageParams.gradualRollout.endPercentage) {
-              errors.push('Start percentage must be less than end percentage');
-              isValid = false;
-            }
-          }
-          break;
+        }
+        break;
 
-        case ToggleType.MULTIVARIATE:
-          const multivariateParams = params as MultivariateParams;
-          const totalPercentage = multivariateParams.variants?.reduce((sum, v) => sum + (v.enabled ? v.percentage : 0), 0) || 0;
-          if (Math.abs(totalPercentage - 100) > 0.01) {
-            errors.push(`Total variant percentages must equal 100% (currently ${totalPercentage.toFixed(1)}%)`);
-            isValid = false;
-          }
-          if (!multivariateParams.variants?.length) {
-            errors.push('At least one variant is required');
-            isValid = false;
-          }
-          break;
+      case ToggleType.MULTIVARIATE:
+        const multivariateParams = params as MultivariateParams;
+        const totalPercentage = multivariateParams.variants?.reduce((sum, v) => sum + (v.enabled ? v.percentage : 0), 0) || 0;
+        if (Math.abs(totalPercentage - 100) > 0.01) {
+          errors.push(`Total variant percentages must equal 100% (currently ${totalPercentage.toFixed(1)}%)`);
+          isValid = false;
+        }
+        if (!multivariateParams.variants?.length) {
+          errors.push('At least one variant is required');
+          isValid = false;
+        }
+        break;
 
-        case ToggleType.SCHEDULED:
-          const scheduledParams = params as ScheduledParams;
-          if (scheduledParams.enabled && scheduledParams.startTime && scheduledParams.endTime) {
-            if (new Date(scheduledParams.startTime) >= new Date(scheduledParams.endTime)) {
-              errors.push('Start time must be before end time');
-              isValid = false;
-            }
-          }
-          break;
-
-        case ToggleType.SEGMENTATION:
-          const segmentationParams = params as SegmentationParams;
-          if (!segmentationParams.rules?.length) {
-            errors.push('At least one segmentation rule is required');
+      case ToggleType.SCHEDULED:
+        const scheduledParams = params as ScheduledParams;
+        if (scheduledParams.enabled && scheduledParams.startTime && scheduledParams.endTime) {
+          if (new Date(scheduledParams.startTime) >= new Date(scheduledParams.endTime)) {
+            errors.push('Start time must be before end time');
             isValid = false;
           }
-          break;
+        }
+        break;
+
+      case ToggleType.SEGMENTATION:
+        const segmentationParams = params as SegmentationParams;
+        if (!segmentationParams.rules?.length) {
+          errors.push('At least one segmentation rule is required');
+          isValid = false;
+        }
+        break;
       }
     } catch (error) {
       errors.push('Invalid parameter configuration');
@@ -947,29 +947,29 @@ export const ToggleParametersManager: React.FC<ToggleParametersProps> = ({
 
   const renderParameterEditor = () => {
     switch (toggleType) {
-      case ToggleType.PERCENTAGE_ROLLOUT:
-        return renderPercentageRolloutEditor();
-      case ToggleType.MULTIVARIATE:
-        return renderMultivariateEditor();
-      case ToggleType.SCHEDULED:
-        return renderScheduledEditor();
-      case ToggleType.SEGMENTATION:
-        return renderSegmentationEditor();
-      default:
-        return (
-          <div className="parameters-editor boolean">
-            <div className="parameter-section">
-              <div className="section-header">
-                <Settings size={18} />
-                <h3>Boolean Toggle</h3>
-              </div>
-              <p className="help-text">
+    case ToggleType.PERCENTAGE_ROLLOUT:
+      return renderPercentageRolloutEditor();
+    case ToggleType.MULTIVARIATE:
+      return renderMultivariateEditor();
+    case ToggleType.SCHEDULED:
+      return renderScheduledEditor();
+    case ToggleType.SEGMENTATION:
+      return renderSegmentationEditor();
+    default:
+      return (
+        <div className="parameters-editor boolean">
+          <div className="parameter-section">
+            <div className="section-header">
+              <Settings size={18} />
+              <h3>Boolean Toggle</h3>
+            </div>
+            <p className="help-text">
                 Boolean toggles have no additional parameters to configure.
                 They are simply enabled or disabled.
-              </p>
-            </div>
+            </p>
           </div>
-        );
+        </div>
+      );
     }
   };
 

@@ -122,7 +122,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           justifyContent: 'center',
           fontSize: '24px',
           boxShadow: '0 4px 12px rgba(0, 123, 255, 0.3)',
-          zIndex: 999,
+          zIndex: 999
         }}
       >
         📊
@@ -143,7 +143,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
       border: '1px solid #e9ecef',
       zIndex: 999,
-      overflow: 'hidden',
+      overflow: 'hidden'
     }}>
       {/* Header */}
       <div style={{
@@ -152,13 +152,13 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
         borderBottom: '1px solid #e9ecef',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'center'
       }}>
         <h3 style={{
           margin: 0,
           fontSize: '16px',
           fontWeight: '600',
-          color: '#333',
+          color: '#333'
         }}>
           📊 Performance Monitor
         </h3>
@@ -172,7 +172,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
               border: 'none',
               borderRadius: '4px',
               fontSize: '12px',
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
           >
             {isCollecting ? 'Stop' : 'Start'}
@@ -185,7 +185,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
               fontSize: '18px',
               cursor: 'pointer',
               color: '#666',
-              padding: '2px',
+              padding: '2px'
             }}
           >
             ×
@@ -198,20 +198,20 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
         padding: '16px',
         textAlign: 'center',
         backgroundColor: `${performanceStatus.color}11`,
-        borderBottom: '1px solid #e9ecef',
+        borderBottom: '1px solid #e9ecef'
       }}>
         <div style={{
           fontSize: '24px',
           fontWeight: 'bold',
           color: performanceStatus.color,
-          marginBottom: '4px',
+          marginBottom: '4px'
         }}>
           {formatDuration(stats.averageExecutionTime)}
         </div>
         <div style={{
           fontSize: '14px',
           color: performanceStatus.color,
-          fontWeight: '500',
+          fontWeight: '500'
         }}>
           {performanceStatus.label} Performance
         </div>
@@ -223,13 +223,13 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: '12px',
-        fontSize: '13px',
+        fontSize: '13px'
       }}>
         <div style={{
           padding: '12px',
           backgroundColor: '#f8f9fa',
           borderRadius: '8px',
-          textAlign: 'center',
+          textAlign: 'center'
         }}>
           <div style={{ color: '#6c757d', marginBottom: '4px' }}>Peak Memory</div>
           <div style={{ fontWeight: 'bold', color: '#495057' }}>
@@ -241,7 +241,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           padding: '12px',
           backgroundColor: '#f8f9fa',
           borderRadius: '8px',
-          textAlign: 'center',
+          textAlign: 'center'
         }}>
           <div style={{ color: '#6c757d', marginBottom: '4px' }}>Total Runs</div>
           <div style={{ fontWeight: 'bold', color: '#495057' }}>
@@ -253,7 +253,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           padding: '12px',
           backgroundColor: '#f8f9fa',
           borderRadius: '8px',
-          textAlign: 'center',
+          textAlign: 'center'
         }}>
           <div style={{ color: '#6c757d', marginBottom: '4px' }}>Cache Hit Rate</div>
           <div style={{ fontWeight: 'bold', color: stats.cacheEfficiency > 70 ? '#28a745' : '#ffc107' }}>
@@ -265,7 +265,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           padding: '12px',
           backgroundColor: '#f8f9fa',
           borderRadius: '8px',
-          textAlign: 'center',
+          textAlign: 'center'
         }}>
           <div style={{ color: '#6c757d', marginBottom: '4px' }}>Status</div>
           <div style={{
@@ -273,7 +273,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
             height: '12px',
             backgroundColor: isCollecting ? '#28a745' : '#6c757d',
             borderRadius: '50%',
-            margin: '0 auto',
+            margin: '0 auto'
           }} />
         </div>
       </div>
@@ -282,13 +282,13 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
       {stats.recentMetrics.length > 0 && (
         <div style={{
           padding: '16px',
-          borderTop: '1px solid #e9ecef',
+          borderTop: '1px solid #e9ecef'
         }}>
           <div style={{
             fontSize: '14px',
             fontWeight: '600',
             color: '#495057',
-            marginBottom: '12px',
+            marginBottom: '12px'
           }}>
             Recent Executions
           </div>
@@ -298,7 +298,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
             flexDirection: 'column',
             gap: '4px',
             maxHeight: '120px',
-            overflowY: 'auto',
+            overflowY: 'auto'
           }}>
             {stats.recentMetrics.slice(-6).reverse().map((metric, index) => (
               <div
@@ -310,7 +310,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
                   padding: '6px 0',
                   fontSize: '12px',
                   color: '#6c757d',
-                  borderBottom: index < 5 ? '1px solid #f1f3f4' : 'none',
+                  borderBottom: index < 5 ? '1px solid #f1f3f4' : 'none'
                 }}
               >
                 <div>
@@ -318,8 +318,8 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
                 </div>
                 <div style={{
                   color: metric.duration < 100 ? '#28a745' : 
-                        metric.duration < 300 ? '#ffc107' : '#dc3545',
-                  fontWeight: '500',
+                    metric.duration < 300 ? '#ffc107' : '#dc3545',
+                  fontWeight: '500'
                 }}>
                   {formatDuration(metric.duration)}
                 </div>
@@ -335,7 +335,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
         backgroundColor: '#f8f9fa',
         borderTop: '1px solid #e9ecef',
         display: 'flex',
-        gap: '8px',
+        gap: '8px'
       }}>
         <button
           onClick={() => {
@@ -355,7 +355,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
             border: '1px solid #dee2e6',
             borderRadius: '4px',
             fontSize: '12px',
-            cursor: 'pointer',
+            cursor: 'pointer'
           }}
         >
           Clear History
@@ -379,7 +379,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
             border: 'none',
             borderRadius: '4px',
             fontSize: '12px',
-            cursor: 'pointer',
+            cursor: 'pointer'
           }}
         >
           Export Data

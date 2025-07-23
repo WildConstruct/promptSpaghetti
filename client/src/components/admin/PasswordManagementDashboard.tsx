@@ -550,8 +550,8 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
               boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
               borderLeft: `4px solid ${
                 event.severity === 'critical' ? '#dc2626' :
-                event.severity === 'high' ? '#ea580c' :
-                event.severity === 'medium' ? '#f59e0b' : '#6b7280'
+                  event.severity === 'high' ? '#ea580c' :
+                    event.severity === 'medium' ? '#f59e0b' : '#6b7280'
               }`
             }}
           >
@@ -560,13 +560,13 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
                 <span style={{
                   fontSize: '16px',
                   color: event.severity === 'critical' ? '#dc2626' :
-                        event.severity === 'high' ? '#ea580c' :
-                        event.severity === 'medium' ? '#f59e0b' : '#6b7280'
+                    event.severity === 'high' ? '#ea580c' :
+                      event.severity === 'medium' ? '#f59e0b' : '#6b7280'
                 }}>
                   {event.type === 'password_breach' ? '🚨' :
-                   event.type === 'weak_password' ? '⚠️' :
-                   event.type === 'policy_violation' ? '📋' :
-                   event.type === 'credential_rotation' ? '🔄' : '🔍'}
+                    event.type === 'weak_password' ? '⚠️' :
+                      event.type === 'policy_violation' ? '📋' :
+                        event.type === 'credential_rotation' ? '🔄' : '🔍'}
                 </span>
                 <span style={{ fontSize: '14px', fontWeight: '500', color: '#1f2937' }}>
                   {event.description}

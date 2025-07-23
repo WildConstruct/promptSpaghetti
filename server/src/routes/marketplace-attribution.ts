@@ -694,7 +694,7 @@ export default async function marketplaceAttributionRoutes(
         return reply.code(400).send({ error: 'No valid fields to update' });
       }
 
-      updateFields.push(`updated_at = NOW()`);
+      updateFields.push('updated_at = NOW()');
       updateValues.push(userId);
 
       const updateQuery = `
@@ -755,18 +755,18 @@ export default async function marketplaceAttributionRoutes(
       const startDate = new Date();
       
       switch (timeframe) {
-        case '24h':
-          startDate.setHours(startDate.getHours() - 24);
-          break;
-        case '7d':
-          startDate.setDate(startDate.getDate() - 7);
-          break;
-        case '30d':
-          startDate.setDate(startDate.getDate() - 30);
-          break;
-        case '90d':
-          startDate.setDate(startDate.getDate() - 90);
-          break;
+      case '24h':
+        startDate.setHours(startDate.getHours() - 24);
+        break;
+      case '7d':
+        startDate.setDate(startDate.getDate() - 7);
+        break;
+      case '30d':
+        startDate.setDate(startDate.getDate() - 30);
+        break;
+      case '90d':
+        startDate.setDate(startDate.getDate() - 90);
+        break;
       }
 
       // Build analytics query based on filters

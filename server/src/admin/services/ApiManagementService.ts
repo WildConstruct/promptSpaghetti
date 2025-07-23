@@ -378,11 +378,11 @@ export class ApiManagementService {
     }>;
   }> {
     const intervals = {
-      '1h': "NOW() - INTERVAL '1 hour'",
-      '6h': "NOW() - INTERVAL '6 hours'",
-      '24h': "NOW() - INTERVAL '1 day'",
-      '7d': "NOW() - INTERVAL '7 days'",
-      '30d': "NOW() - INTERVAL '30 days'"
+      '1h': 'NOW() - INTERVAL \'1 hour\'',
+      '6h': 'NOW() - INTERVAL \'6 hours\'',
+      '24h': 'NOW() - INTERVAL \'1 day\'',
+      '7d': 'NOW() - INTERVAL \'7 days\'',
+      '30d': 'NOW() - INTERVAL \'30 days\''
     };
 
     const since = intervals[timeRange];

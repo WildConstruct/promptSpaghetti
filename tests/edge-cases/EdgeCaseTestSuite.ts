@@ -337,11 +337,11 @@ export class EdgeCaseTestSuite {
         expectedBehavior: 'Should sanitize inputs and prevent SQL injection',
         testFn: async () => {
           const sqlInjectionPayloads = [
-            "'; DROP TABLE users; --",
-            "' OR '1'='1",
-            "'; DELETE FROM graphs WHERE '1'='1'; --",
-            "' UNION SELECT * FROM users --",
-            "'; INSERT INTO users VALUES ('hacker', 'password'); --"
+            '\'; DROP TABLE users; --',
+            '\' OR \'1\'=\'1',
+            '\'; DELETE FROM graphs WHERE \'1\'=\'1\'; --',
+            '\' UNION SELECT * FROM users --',
+            '\'; INSERT INTO users VALUES (\'hacker\', \'password\'); --'
           ];
           
           for (const payload of sqlInjectionPayloads) {

@@ -226,8 +226,8 @@ export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({
       requirement: requirement.description,
       status,
       severity: requirement.severity === 'critical' ? 'critical' : 
-                requirement.severity === 'high' ? 'error' :
-                requirement.severity === 'medium' ? 'warning' : 'info',
+        requirement.severity === 'high' ? 'error' :
+          requirement.severity === 'medium' ? 'warning' : 'info',
       description,
       remediation: remediation.length > 0 ? remediation : undefined,
       affectedSections: [] // Would be populated with actual section analysis
@@ -272,31 +272,31 @@ export const ComplianceChecker: React.FC<ComplianceCheckerProps> = ({
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return '#e53e3e';
-      case 'error': return '#f56565';
-      case 'warning': return '#ed8936';
-      case 'info': return '#4299e1';
-      default: return '#718096';
+    case 'critical': return '#e53e3e';
+    case 'error': return '#f56565';
+    case 'warning': return '#ed8936';
+    case 'info': return '#4299e1';
+    default: return '#718096';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'compliant': return '#48bb78';
-      case 'partial': return '#ed8936';
-      case 'non_compliant': return '#f56565';
-      case 'unknown': return '#718096';
-      default: return '#718096';
+    case 'compliant': return '#48bb78';
+    case 'partial': return '#ed8936';
+    case 'non_compliant': return '#f56565';
+    case 'unknown': return '#718096';
+    default: return '#718096';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'compliant': return '✅';
-      case 'partial': return '⚠️';
-      case 'non_compliant': return '❌';
-      case 'unknown': return '❓';
-      default: return '❓';
+    case 'compliant': return '✅';
+    case 'partial': return '⚠️';
+    case 'non_compliant': return '❌';
+    case 'unknown': return '❓';
+    default: return '❓';
     }
   };
 

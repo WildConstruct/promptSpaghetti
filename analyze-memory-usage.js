@@ -263,9 +263,9 @@ async function analyzeMemoryUsage() {
     console.log(`  Total growth: ${formatMemory(memoryGrowth.totalGrowth)} over ${memoryGrowth.duration.toFixed(1)}s`);
     
     if (memoryGrowth.growthRate > 1024 * 1024) { // 1MB/sec
-      console.log(`  ⚠️  Potential memory leak detected!`);
+      console.log('  ⚠️  Potential memory leak detected!');
     } else {
-      console.log(`  ✅ No significant memory leaks detected`);
+      console.log('  ✅ No significant memory leaks detected');
     }
   }
   
@@ -326,7 +326,7 @@ if (require.main === module) {
   analyzeMemoryUsage()
     .then(results => {
       console.log('\\n✅ Memory analysis complete!');
-      console.log(`\\n🎯 Key Findings:`);
+      console.log('\\n🎯 Key Findings:');
       console.log(`  - Baseline memory usage: ${formatMemory(results.baseline)}`);
       console.log(`  - Context memory: ${(results.contextMemoryPerUnit / 1024).toFixed(2)} KB each`);
       console.log(`  - Node memory: ${(results.nodeMemoryPerUnit / 1024).toFixed(2)} KB each`);

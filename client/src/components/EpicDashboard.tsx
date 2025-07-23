@@ -107,14 +107,14 @@ const EpicDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string): string => {
     switch (status) {
-      case 'complete': return '✅';
-      case 'in_progress': return '🔄';
-      case 'partial': return '⚡';
-      case 'missing': return '❌';
-      case 'exists': return '📁';
-      case 'backend_ready': return '🔧';
-      case 'unknown': return '❓';
-      default: return '📋';
+    case 'complete': return '✅';
+    case 'in_progress': return '🔄';
+    case 'partial': return '⚡';
+    case 'missing': return '❌';
+    case 'exists': return '📁';
+    case 'backend_ready': return '🔧';
+    case 'unknown': return '❓';
+    default: return '📋';
     }
   };
 

@@ -281,7 +281,7 @@ export class ComplianceScannerIntegration {
     integrated: boolean;
     config: ComplianceScannerIntegrationConfig;
     healthMonitoring: boolean;
-  } {
+    } {
     return {
       integrated: this.isIntegrated,
       config: this.config,

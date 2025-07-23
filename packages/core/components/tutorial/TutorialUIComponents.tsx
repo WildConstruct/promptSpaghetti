@@ -598,67 +598,67 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({
 
   const renderContent = () => {
     switch (step.content.format) {
-      case 'text':
-      case 'markdown':
-        return (
-          <div className="step-text-content">
-            <h2>{step.title}</h2>
-            <p className="step-description">{step.description}</p>
-            <div className="step-content">{step.content.primary}</div>
-            {step.content.secondary && (
-              <div className="step-secondary-content">{step.content.secondary}</div>
-            )}
+    case 'text':
+    case 'markdown':
+      return (
+        <div className="step-text-content">
+          <h2>{step.title}</h2>
+          <p className="step-description">{step.description}</p>
+          <div className="step-content">{step.content.primary}</div>
+          {step.content.secondary && (
+            <div className="step-secondary-content">{step.content.secondary}</div>
+          )}
+        </div>
+      );
+    case 'video':
+      return (
+        <div className="step-video-content">
+          <h2>{step.title}</h2>
+          <div className="video-container">
+            {step.content.media?.map(media => (
+              <video
+                key={media.id}
+                src={media.url}
+                controls={media.controls !== false}
+                autoPlay={media.autoplay && settings.autoplay}
+                className="tutorial-video"
+              />
+            ))}
           </div>
-        );
-      case 'video':
-        return (
-          <div className="step-video-content">
-            <h2>{step.title}</h2>
-            <div className="video-container">
-              {step.content.media?.map(media => (
-                <video
-                  key={media.id}
-                  src={media.url}
-                  controls={media.controls !== false}
-                  autoPlay={media.autoplay && settings.autoplay}
-                  className="tutorial-video"
-                />
-              ))}
-            </div>
-            <p className="step-description">{step.description}</p>
+          <p className="step-description">{step.description}</p>
+        </div>
+      );
+    case 'interactive':
+      return (
+        <div className="step-interactive-content">
+          <h2>{step.title}</h2>
+          <p className="step-description">{step.description}</p>
+          <div className="interactive-elements">
+            {step.content.interactive?.map(element => (
+              <InteractiveElement
+                key={element.id}
+                element={element}
+                onInteraction={() => {
+                  // Handle interaction
+                }}
+              />
+            ))}
           </div>
-        );
-      case 'interactive':
-        return (
-          <div className="step-interactive-content">
-            <h2>{step.title}</h2>
-            <p className="step-description">{step.description}</p>
-            <div className="interactive-elements">
-              {step.content.interactive?.map(element => (
-                <InteractiveElement
-                  key={element.id}
-                  element={element}
-                  onInteraction={() => {
-                    // Handle interaction
-                  }}
-                />
-              ))}
-            </div>
+        </div>
+      );
+    default:
+      return (
+        <div className="step-mixed-content">
+          <h2>{step.title}</h2>
+          <p className="step-description">{step.description}</p>
+          <div className="mixed-content">
+            <div className="primary-content">{step.content.primary}</div>
+            {step.content.media?.map(media => (
+              <MediaContentRenderer key={media.id} media={media} settings={settings} />
+            ))}
           </div>
-        );
-      default:
-        return (
-          <div className="step-mixed-content">
-            <h2>{step.title}</h2>
-            <p className="step-description">{step.description}</p>
-            <div className="mixed-content">
-              <div className="primary-content">{step.content.primary}</div>
-              {step.content.media?.map(media => (
-                <MediaContentRenderer key={media.id} media={media} settings={settings} />
-              ))}
-            </div>
-          </div>
-        );
+        </div>
+      );
     }
   };
 
@@ -1206,17 +1206,17 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({
       })
       .sort((a, b) => {
         switch (sortBy) {
-          case 'title':
-            return a.title.localeCompare(b.title);
-          case 'difficulty':
-            const difficultyOrder = { beginner: 1, intermediate: 2, advanced: 3, expert: 4 };
-            return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-          case 'duration':
-            return a.estimatedDuration - b.estimatedDuration;
-          case 'rating':
-            return b.metadata.rating - a.metadata.rating;
-          default:
-            return 0;
+        case 'title':
+          return a.title.localeCompare(b.title);
+        case 'difficulty':
+          const difficultyOrder = { beginner: 1, intermediate: 2, advanced: 3, expert: 4 };
+          return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+        case 'duration':
+          return a.estimatedDuration - b.estimatedDuration;
+        case 'rating':
+          return b.metadata.rating - a.metadata.rating;
+        default:
+          return 0;
         }
       });
   }, [tutorials, searchQuery, selectedCategory, selectedDifficulty, sortBy]);

@@ -203,7 +203,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
 
   // Filter and sort annotations
   const filteredAndSortedAnnotations = useMemo(() => {
-    let filtered = annotations.filter(annotation => {
+    const filtered = annotations.filter(annotation => {
       if (!showResolved && ['resolved', 'approved', 'rejected'].includes(annotation.status)) return false;
       if (filterType !== 'all' && annotation.type !== filterType) return false;
       if (filterStatus !== 'all' && annotation.status !== filterStatus) return false;
@@ -214,14 +214,14 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
     // Sort annotations
     filtered.sort((a, b) => {
       switch (sortBy) {
-        case 'priority':
-          const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
-          return priorityOrder[b.priority] - priorityOrder[a.priority];
-        case 'status':
-          return a.status.localeCompare(b.status);
-        case 'timestamp':
-        default:
-          return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+      case 'priority':
+        const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
+      case 'status':
+        return a.status.localeCompare(b.status);
+      case 'timestamp':
+      default:
+        return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
       }
     });
 

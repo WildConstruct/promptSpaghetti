@@ -146,7 +146,7 @@ const getOptionColor = (index: number): string => {
     '#ed8936', // Orange
     '#9f7aea', // Purple
     '#38b2ac', // Teal
-    '#ec4899', // Pink
+    '#ec4899' // Pink
   ];
   return colors[index % colors.length];
 };

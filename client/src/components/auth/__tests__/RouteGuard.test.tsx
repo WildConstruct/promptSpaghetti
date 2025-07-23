@@ -18,7 +18,7 @@ const mockUseAuthStore = useAuthStore as jest.MockedFunction<typeof useAuthStore
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
+  useNavigate: () => mockNavigate
 }));
 
 // Test components
@@ -38,7 +38,7 @@ describe('RouteGuard', () => {
         isLoading: true,
         user: null,
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -59,7 +59,7 @@ describe('RouteGuard', () => {
         isLoading: true,
         user: null,
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -79,7 +79,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: null,
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -106,7 +106,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'test@example.com', roles: ['user'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -130,7 +130,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'admin@example.com', roles: ['admin'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -152,7 +152,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -175,7 +175,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'moderator@example.com', roles: ['moderator'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -199,7 +199,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -224,7 +224,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'viewer@example.com', roles: ['viewer'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -254,7 +254,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -286,7 +286,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -314,7 +314,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -339,7 +339,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -374,7 +374,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'admin@example.com', roles: ['admin'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -396,7 +396,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'user@example.com', roles: ['user'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -423,7 +423,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: { id: '1', email: 'moderator@example.com', roles: ['moderator'] },
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -447,7 +447,7 @@ describe('RouteGuard', () => {
         isLoading: false,
         user: null,
         checkAuthStatus: jest.fn(),
-        setReturnUrl: jest.fn(),
+        setReturnUrl: jest.fn()
       } as any);
 
       render(
@@ -482,7 +482,7 @@ describe('usePermissions Hook', () => {
 
   it('correctly identifies user permissions', () => {
     mockUseAuthStore.mockReturnValue({
-      user: { roles: ['user'] },
+      user: { roles: ['user'] }
     } as any);
 
     render(<TestHookComponent />);
@@ -494,7 +494,7 @@ describe('usePermissions Hook', () => {
 
   it('handles admin permissions', () => {
     mockUseAuthStore.mockReturnValue({
-      user: { roles: ['admin'] },
+      user: { roles: ['admin'] }
     } as any);
 
     render(<TestHookComponent />);
@@ -520,7 +520,7 @@ describe('useRouteAccess Hook', () => {
   it('correctly identifies public route access', () => {
     mockUseAuthStore.mockReturnValue({
       isAuthenticated: false,
-      user: null,
+      user: null
     } as any);
 
     render(<TestRouteAccessComponent pathname="/login" />);
@@ -532,7 +532,7 @@ describe('useRouteAccess Hook', () => {
   it('correctly identifies protected route access for authenticated user', () => {
     mockUseAuthStore.mockReturnValue({
       isAuthenticated: true,
-      user: { roles: ['user'] },
+      user: { roles: ['user'] }
     } as any);
 
     render(<TestRouteAccessComponent pathname="/" />);
@@ -544,7 +544,7 @@ describe('useRouteAccess Hook', () => {
   it('correctly identifies access denial for unauthenticated user', () => {
     mockUseAuthStore.mockReturnValue({
       isAuthenticated: false,
-      user: null,
+      user: null
     } as any);
 
     render(<TestRouteAccessComponent pathname="/" />);

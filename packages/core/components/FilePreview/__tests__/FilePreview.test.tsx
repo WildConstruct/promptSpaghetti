@@ -11,8 +11,8 @@ import { projectManager } from '../../../projectManager';
 jest.mock('../../../projectManager', () => ({
   projectManager: {
     generateThumbnail: jest.fn(),
-    getMockFile: jest.fn(),
-  },
+    getMockFile: jest.fn()
+  }
 }));
 
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;

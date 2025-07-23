@@ -519,20 +519,20 @@ export class AlertSystem {
     }
 
     switch (condition.operator) {
-      case 'eq': return fieldValue === condition.value;
-      case 'ne': return fieldValue !== condition.value;
-      case 'gt': return Number(fieldValue) > Number(condition.value);
-      case 'gte': return Number(fieldValue) >= Number(condition.value);
-      case 'lt': return Number(fieldValue) < Number(condition.value);
-      case 'lte': return Number(fieldValue) <= Number(condition.value);
-      case 'contains': return String(fieldValue).includes(String(condition.value));
-      case 'regex': 
-        try {
-          return new RegExp(String(condition.value)).test(String(fieldValue));
-        } catch {
-          return false;
-        }
-      default: return false;
+    case 'eq': return fieldValue === condition.value;
+    case 'ne': return fieldValue !== condition.value;
+    case 'gt': return Number(fieldValue) > Number(condition.value);
+    case 'gte': return Number(fieldValue) >= Number(condition.value);
+    case 'lt': return Number(fieldValue) < Number(condition.value);
+    case 'lte': return Number(fieldValue) <= Number(condition.value);
+    case 'contains': return String(fieldValue).includes(String(condition.value));
+    case 'regex': 
+      try {
+        return new RegExp(String(condition.value)).test(String(fieldValue));
+      } catch {
+        return false;
+      }
+    default: return false;
     }
   }
 
@@ -611,23 +611,23 @@ export class AlertSystem {
 
   private async executeAction(action: AlertAction, alert: Alert): Promise<void> {
     switch (action.type) {
-      case 'notification':
-        await this.sendNotification(alert, action.configuration);
-        break;
-      case 'email':
-        await this.sendEmail(alert, action.configuration);
-        break;
-      case 'webhook':
-        await this.callWebhook(alert, action.configuration);
-        break;
-      case 'script':
-        await this.executeScript(alert, action.configuration);
-        break;
-      case 'create_task':
-        await this.createTask(alert, action.configuration);
-        break;
-      default:
-        console.warn(`Unknown action type: ${action.type}`);
+    case 'notification':
+      await this.sendNotification(alert, action.configuration);
+      break;
+    case 'email':
+      await this.sendEmail(alert, action.configuration);
+      break;
+    case 'webhook':
+      await this.callWebhook(alert, action.configuration);
+      break;
+    case 'script':
+      await this.executeScript(alert, action.configuration);
+      break;
+    case 'create_task':
+      await this.createTask(alert, action.configuration);
+      break;
+    default:
+      console.warn(`Unknown action type: ${action.type}`);
     }
   }
 
@@ -664,14 +664,14 @@ export class AlertSystem {
 
   private shouldEscalate(alert: Alert, stage: AlertEscalationStage): boolean {
     switch (stage.condition) {
-      case 'unacknowledged':
-        return !alert.acknowledgedAt;
-      case 'unresolved':
-        return alert.status !== 'resolved';
-      case 'recurring':
-        return alert.occurrenceCount > 1;
-      default:
-        return true;
+    case 'unacknowledged':
+      return !alert.acknowledgedAt;
+    case 'unresolved':
+      return alert.status !== 'resolved';
+    case 'recurring':
+      return alert.occurrenceCount > 1;
+    default:
+      return true;
     }
   }
 
@@ -773,12 +773,12 @@ export class AlertSystem {
 
   private mapSeverityToPriority(severity: AlertSeverity): AlertPriority {
     switch (severity) {
-      case 'critical': return 'urgent';
-      case 'high': return 'high';
-      case 'medium': return 'normal';
-      case 'low': return 'low';
-      case 'info': return 'low';
-      default: return 'normal';
+    case 'critical': return 'urgent';
+    case 'high': return 'high';
+    case 'medium': return 'normal';
+    case 'low': return 'low';
+    case 'info': return 'low';
+    default: return 'normal';
     }
   }
 

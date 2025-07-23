@@ -303,7 +303,7 @@ export const InspectorPanel = ({
                   padding: '1px 4px',
                   background: 
                     complexityLevel === 'basic' ? '#22543d' : 
-                    complexityLevel === 'advanced' ? '#2a4365' : '#553c9a',
+                      complexityLevel === 'advanced' ? '#2a4365' : '#553c9a',
                   borderRadius: 2,
                   display: 'inline-block',
                   minWidth: 40,
@@ -311,12 +311,12 @@ export const InspectorPanel = ({
                 }}
                 title={
                   complexityLevel === 'basic' ? 'Basic: Essential fields only' :
-                  complexityLevel === 'advanced' ? 'Advanced: Power user options' :
-                  'Expert: All technical details'
+                    complexityLevel === 'advanced' ? 'Advanced: Power user options' :
+                      'Expert: All technical details'
                 }
               >
                 {complexityLevel === 'basic' ? 'BASIC' : 
-                 complexityLevel === 'advanced' ? 'ADV' : 'EXP'}
+                  complexityLevel === 'advanced' ? 'ADV' : 'EXP'}
               </div>
               <button
                 onClick={() => setShowPreferences(!showPreferences)}

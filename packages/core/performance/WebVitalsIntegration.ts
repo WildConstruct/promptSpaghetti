@@ -194,9 +194,9 @@ export class WebVitalsIntegration extends EventEmitter {
       const response = await fetch(this.config.analyticsEndpoint, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(analyticsData),
+        body: JSON.stringify(analyticsData)
       });
 
       if (response.ok) {

@@ -409,18 +409,18 @@ export class ConsentEnforcementMiddleware {
     );
 
     switch (violation.action) {
-      case 'blocked':
-        await this.blockRequest(violation, reply);
-        break;
+    case 'blocked':
+      await this.blockRequest(violation, reply);
+      break;
         
-      case 'allowed_with_warning':
-        await this.allowWithWarning(violation, reply);
-        break;
+    case 'allowed_with_warning':
+      await this.allowWithWarning(violation, reply);
+      break;
         
-      case 'audit_logged':
-        // Just log - request continues normally
-        await this.auditLog(violation);
-        break;
+    case 'audit_logged':
+      // Just log - request continues normally
+      await this.auditLog(violation);
+      break;
     }
   }
 
@@ -518,14 +518,14 @@ export class ConsentEnforcementMiddleware {
 
   private determineViolationAction(rule: ConsentEnforcementRule): ConsentViolation['action'] {
     switch (rule.enforcementLevel) {
-      case 'strict':
-        return 'blocked';
-      case 'permissive':
-        return 'allowed_with_warning';
-      case 'audit_only':
-        return 'audit_logged';
-      default:
-        return 'blocked';
+    case 'strict':
+      return 'blocked';
+    case 'permissive':
+      return 'allowed_with_warning';
+    case 'audit_only':
+      return 'audit_logged';
+    default:
+      return 'blocked';
     }
   }
 

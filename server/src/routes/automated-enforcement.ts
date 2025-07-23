@@ -224,7 +224,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
         }
 
         if (!include_expired) {
-          conditions.push(`(expires_at IS NULL OR expires_at > NOW())`);
+          conditions.push('(expires_at IS NULL OR expires_at > NOW())');
         }
 
         if (conditions.length > 0) {
@@ -569,7 +569,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           return;
         }
 
-        updateFields.push(`updated_at = NOW()`);
+        updateFields.push('updated_at = NOW()');
         params.push(policyId);
 
         const result = await db.query(`

@@ -65,19 +65,19 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({
 
   const getStatusColor = (status: string): string => {
     switch (status) {
-      case 'healthy':
-      case 'ready':
-      case 'compliant':
-        return 'text-green-600 bg-green-100';
-      case 'warning':
-      case 'needs_preparation':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'critical':
-      case 'not_ready':
-      case 'non_compliant':
-        return 'text-red-600 bg-red-100';
-      default:
-        return 'text-gray-600 bg-gray-100';
+    case 'healthy':
+    case 'ready':
+    case 'compliant':
+      return 'text-green-600 bg-green-100';
+    case 'warning':
+    case 'needs_preparation':
+      return 'text-yellow-600 bg-yellow-100';
+    case 'critical':
+    case 'not_ready':
+    case 'non_compliant':
+      return 'text-red-600 bg-red-100';
+    default:
+      return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -314,8 +314,8 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({
                 {dashboardData.historicalTrends.forecastAlerts.map((alert, index) => (
                   <div key={index} className={`p-4 rounded-lg border ${
                     alert.risk === 'high' ? 'bg-red-50 border-red-200' :
-                    alert.risk === 'medium' ? 'bg-yellow-50 border-yellow-200' :
-                    'bg-blue-50 border-blue-200'
+                      alert.risk === 'medium' ? 'bg-yellow-50 border-yellow-200' :
+                        'bg-blue-50 border-blue-200'
                   }`}>
                     <div className="flex items-center justify-between">
                       <div>
@@ -325,8 +325,8 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({
                       <div className="text-right">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           alert.risk === 'high' ? 'text-red-800 bg-red-100' :
-                          alert.risk === 'medium' ? 'text-yellow-800 bg-yellow-100' :
-                          'text-blue-800 bg-blue-100'
+                            alert.risk === 'medium' ? 'text-yellow-800 bg-yellow-100' :
+                              'text-blue-800 bg-blue-100'
                         }`}>
                           {alert.risk} risk
                         </span>
@@ -421,7 +421,7 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({
                     <p className={`text-2xl font-bold ${
                       frameworkTrends[selectedFramework]!.summary.improvementTrend === 'positive' ? 'text-green-600' :
                       frameworkTrends[selectedFramework]!.summary.improvementTrend === 'negative' ? 'text-red-600' :
-                      'text-blue-600'
+                        'text-blue-600'
                     }`}>
                       {frameworkTrends[selectedFramework]!.summary.improvementTrend === 'positive' ? '↗️' :
                        frameworkTrends[selectedFramework]!.summary.improvementTrend === 'negative' ? '↘️' : '➡️'}
@@ -449,10 +449,10 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({
                           <div className="flex items-center space-x-2">
                             <span className={`text-lg ${
                               metric.trendDirection === 'up' ? 'text-green-600' :
-                              metric.trendDirection === 'down' ? 'text-red-600' : 'text-blue-600'
+                                metric.trendDirection === 'down' ? 'text-red-600' : 'text-blue-600'
                             }`}>
                               {metric.trendDirection === 'up' ? '↗️' :
-                               metric.trendDirection === 'down' ? '↘️' : '➡️'}
+                                metric.trendDirection === 'down' ? '↘️' : '➡️'}
                             </span>
                             <span className="text-sm text-gray-600">
                               {metric.complianceRate}% compliant

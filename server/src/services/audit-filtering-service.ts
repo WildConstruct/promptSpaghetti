@@ -659,7 +659,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     circuitBreakerState: string;
     activeRequests: number;
     cacheSize: number;
-  } {
+    } {
     return {
       circuitBreakerState: this.circuitBreaker.state,
       activeRequests: this.activeRequests.size,

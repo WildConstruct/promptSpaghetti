@@ -490,7 +490,7 @@ export class AdminEnforcementController {
     fastify.post(
       '/admin/enforcement/templates/:templateId/policies',
       controller.createPolicyFromTemplate.bind(controller
-    ));
+      ));
 
     // Violation Management
     fastify.get('/admin/enforcement/violations', controller.getViolations.bind(controller));
@@ -502,13 +502,13 @@ export class AdminEnforcementController {
     fastify.put(
       '/admin/enforcement/requests/:requestId/process',
       controller.processEnforcementRequest.bind(controller
-    ));
+      ));
 
     // Trust Score Integration
     fastify.post(
       '/admin/enforcement/evaluate/:entityType/:entityId',
       controller.triggerEnforcementEvaluation.bind(controller
-    ));
+      ));
     fastify.get('/admin/enforcement/actions/:entityType/:entityId', controller.getEnforcementActions.bind(controller));
 
     // Analytics and Health

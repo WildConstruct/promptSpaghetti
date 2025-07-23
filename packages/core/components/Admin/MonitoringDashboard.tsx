@@ -222,85 +222,85 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({
           let data = {};
           
           switch (widget.id) {
-            case 'system-health':
-              data = {
-                healthScore: Math.floor(Math.random() * 20) + 80,
-                components: [
-                  { name: 'Database', status: 'healthy' },
-                  { name: 'API Gateway', status: 'healthy' },
-                  { name: 'Cache Layer', status: 'warning' },
-                  { name: 'File Storage', status: 'healthy' }
+          case 'system-health':
+            data = {
+              healthScore: Math.floor(Math.random() * 20) + 80,
+              components: [
+                { name: 'Database', status: 'healthy' },
+                { name: 'API Gateway', status: 'healthy' },
+                { name: 'Cache Layer', status: 'warning' },
+                { name: 'File Storage', status: 'healthy' }
+              ]
+            };
+            break;
+              
+          case 'resource-usage':
+            data = {
+              resources: {
+                cpu: Math.random() * 40 + 30,
+                memory: Math.random() * 30 + 50,
+                disk: Math.random() * 20 + 60,
+                network: Math.random() * 25 + 35
+              }
+            };
+            break;
+              
+          case 'api-metrics':
+            data = {
+              api: {
+                requestsPerSecond: Math.floor(Math.random() * 500) + 200,
+                averageLatency: Math.floor(Math.random() * 100) + 50,
+                errorRate: Math.random() * 2 + 0.1,
+                activeConnections: Math.floor(Math.random() * 1000) + 500
+              }
+            };
+            break;
+              
+          case 'security-overview':
+            data = {
+              security: {
+                activeThreats: Math.floor(Math.random() * 3),
+                blockedAttempts: Math.floor(Math.random() * 50) + 10,
+                complianceScore: Math.floor(Math.random() * 10) + 90,
+                lastScan: new Date().toISOString(),
+                threats: [
+                  { type: 'Brute Force', source: '192.168.1.100' },
+                  { type: 'SQL Injection', source: '10.0.0.50' }
                 ]
-              };
-              break;
+              }
+            };
+            break;
               
-            case 'resource-usage':
-              data = {
-                resources: {
-                  cpu: Math.random() * 40 + 30,
-                  memory: Math.random() * 30 + 50,
-                  disk: Math.random() * 20 + 60,
-                  network: Math.random() * 25 + 35
+          case 'activity-feed':
+            data = {
+              activities: [
+                {
+                  id: 1,
+                  timestamp: new Date(Date.now() - 60000).toISOString(),
+                  type: 'info',
+                  message: 'Health check completed successfully',
+                  source: 'health-monitor'
+                },
+                {
+                  id: 2,
+                  timestamp: new Date(Date.now() - 120000).toISOString(),
+                  type: 'warning',
+                  message: 'High memory usage detected',
+                  source: 'resource-monitor'
+                },
+                {
+                  id: 3,
+                  timestamp: new Date(Date.now() - 180000).toISOString(),
+                  type: 'success',
+                  message: 'Security scan completed',
+                  source: 'security-scanner'
                 }
-              };
-              break;
+              ]
+            };
+            break;
               
-            case 'api-metrics':
-              data = {
-                api: {
-                  requestsPerSecond: Math.floor(Math.random() * 500) + 200,
-                  averageLatency: Math.floor(Math.random() * 100) + 50,
-                  errorRate: Math.random() * 2 + 0.1,
-                  activeConnections: Math.floor(Math.random() * 1000) + 500
-                }
-              };
-              break;
-              
-            case 'security-overview':
-              data = {
-                security: {
-                  activeThreats: Math.floor(Math.random() * 3),
-                  blockedAttempts: Math.floor(Math.random() * 50) + 10,
-                  complianceScore: Math.floor(Math.random() * 10) + 90,
-                  lastScan: new Date().toISOString(),
-                  threats: [
-                    { type: 'Brute Force', source: '192.168.1.100' },
-                    { type: 'SQL Injection', source: '10.0.0.50' }
-                  ]
-                }
-              };
-              break;
-              
-            case 'activity-feed':
-              data = {
-                activities: [
-                  {
-                    id: 1,
-                    timestamp: new Date(Date.now() - 60000).toISOString(),
-                    type: 'info',
-                    message: 'Health check completed successfully',
-                    source: 'health-monitor'
-                  },
-                  {
-                    id: 2,
-                    timestamp: new Date(Date.now() - 120000).toISOString(),
-                    type: 'warning',
-                    message: 'High memory usage detected',
-                    source: 'resource-monitor'
-                  },
-                  {
-                    id: 3,
-                    timestamp: new Date(Date.now() - 180000).toISOString(),
-                    type: 'success',
-                    message: 'Security scan completed',
-                    source: 'security-scanner'
-                  }
-                ]
-              };
-              break;
-              
-            default:
-              data = {};
+          default:
+            data = {};
           }
           
           return { widgetId: widget.id, data };
@@ -350,14 +350,14 @@ export const MonitoringDashboard: React.FC<MonitoringDashboardProps> = ({
     console.log('Widget action:', { widgetId, action, params });
     
     switch (action) {
-      case 'view-details':
-        // Navigate to detailed view
-        break;
-      case 'export':
-        onExport?.(action, '24h');
-        break;
-      default:
-        break;
+    case 'view-details':
+      // Navigate to detailed view
+      break;
+    case 'export':
+      onExport?.(action, '24h');
+      break;
+    default:
+      break;
     }
   }, [onExport]);
 

@@ -505,8 +505,8 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
           average_retention_period: allSignatures.length > 0 
             ? Math.round(
               allSignatures.reduce((sum,
-              s
-            ) => sum + s.complianceContext.retentionPeriod, 0) / allSignatures.length)
+                s
+              ) => sum + s.complianceContext.retentionPeriod, 0) / allSignatures.length)
             : 0
         }
       };

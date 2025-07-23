@@ -475,7 +475,7 @@ export const EdgeAddOperationSchema = z.object({
  */
 export const MutationOperationSchema = z.discriminatedUnion('type', [
   NodeAddOperationSchema,
-  NodeUpdateOperationSchema,
+  NodeUpdateOperationSchema
   // Additional schemas would be added here for other operation types
 ]);
 
@@ -515,19 +515,19 @@ export function generateEdgeId(sourceId: string, targetId: string): string {
  */
 export function operationAffectsNode(operation: MutationOperation, nodeId: string): boolean {
   switch (operation.type) {
-    case 'NODE_ADD':
-    case 'NODE_UPDATE':
-    case 'NODE_REMOVE':
-    case 'PARAMETER_UPDATE':
-      return operation.nodeId === nodeId;
-    case 'EDGE_ADD':
-    case 'EDGE_UPDATE':
-    case 'EDGE_REMOVE':
-      return operation.sourceNodeId === nodeId || operation.targetNodeId === nodeId;
-    case 'BATCH_MUTATION':
-      return operation.operations.some(op => operationAffectsNode(op, nodeId));
-    default:
-      return false;
+  case 'NODE_ADD':
+  case 'NODE_UPDATE':
+  case 'NODE_REMOVE':
+  case 'PARAMETER_UPDATE':
+    return operation.nodeId === nodeId;
+  case 'EDGE_ADD':
+  case 'EDGE_UPDATE':
+  case 'EDGE_REMOVE':
+    return operation.sourceNodeId === nodeId || operation.targetNodeId === nodeId;
+  case 'BATCH_MUTATION':
+    return operation.operations.some(op => operationAffectsNode(op, nodeId));
+  default:
+    return false;
   }
 }
 
@@ -536,14 +536,14 @@ export function operationAffectsNode(operation: MutationOperation, nodeId: strin
  */
 export function operationAffectsEdge(operation: MutationOperation, edgeId: string): boolean {
   switch (operation.type) {
-    case 'EDGE_ADD':
-    case 'EDGE_UPDATE': 
-    case 'EDGE_REMOVE':
-      return operation.edgeId === edgeId;
-    case 'BATCH_MUTATION':
-      return operation.operations.some(op => operationAffectsEdge(op, edgeId));
-    default:
-      return false;
+  case 'EDGE_ADD':
+  case 'EDGE_UPDATE': 
+  case 'EDGE_REMOVE':
+    return operation.edgeId === edgeId;
+  case 'BATCH_MUTATION':
+    return operation.operations.some(op => operationAffectsEdge(op, edgeId));
+  default:
+    return false;
   }
 }
 
@@ -593,22 +593,22 @@ export function getAffectedNodeIds(operation: MutationOperation): string[] {
   const nodeIds: string[] = [];
   
   switch (operation.type) {
-    case 'NODE_ADD':
-    case 'NODE_UPDATE':
-    case 'NODE_REMOVE':
-    case 'PARAMETER_UPDATE':
-      nodeIds.push(operation.nodeId);
-      break;
-    case 'EDGE_ADD':
-    case 'EDGE_UPDATE':
-    case 'EDGE_REMOVE':
-      nodeIds.push(operation.sourceNodeId, operation.targetNodeId);
-      break;
-    case 'BATCH_MUTATION':
-      operation.operations.forEach(op => {
-        nodeIds.push(...getAffectedNodeIds(op));
-      });
-      break;
+  case 'NODE_ADD':
+  case 'NODE_UPDATE':
+  case 'NODE_REMOVE':
+  case 'PARAMETER_UPDATE':
+    nodeIds.push(operation.nodeId);
+    break;
+  case 'EDGE_ADD':
+  case 'EDGE_UPDATE':
+  case 'EDGE_REMOVE':
+    nodeIds.push(operation.sourceNodeId, operation.targetNodeId);
+    break;
+  case 'BATCH_MUTATION':
+    operation.operations.forEach(op => {
+      nodeIds.push(...getAffectedNodeIds(op));
+    });
+    break;
   }
   
   return Array.from(new Set(nodeIds));
@@ -621,16 +621,16 @@ export function getAffectedEdgeIds(operation: MutationOperation): string[] {
   const edgeIds: string[] = [];
   
   switch (operation.type) {
-    case 'EDGE_ADD':
-    case 'EDGE_UPDATE':
-    case 'EDGE_REMOVE':
-      edgeIds.push(operation.edgeId);
-      break;
-    case 'BATCH_MUTATION':
-      operation.operations.forEach(op => {
-        edgeIds.push(...getAffectedEdgeIds(op));
-      });
-      break;
+  case 'EDGE_ADD':
+  case 'EDGE_UPDATE':
+  case 'EDGE_REMOVE':
+    edgeIds.push(operation.edgeId);
+    break;
+  case 'BATCH_MUTATION':
+    operation.operations.forEach(op => {
+      edgeIds.push(...getAffectedEdgeIds(op));
+    });
+    break;
   }
   
   return Array.from(new Set(edgeIds));

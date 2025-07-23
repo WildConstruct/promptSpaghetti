@@ -22,7 +22,7 @@ export class JSONFormatProcessor implements FormatProcessor {
     include_metadata?: boolean;
   } = {}): Promise<string> {
     const exportData: any = {
-      template,
+      template
     };
 
     if (options.include_version_info && version) {
@@ -114,7 +114,7 @@ export class YAMLFormatProcessor implements FormatProcessor {
     include_metadata?: boolean;
   } = {}): Promise<string> {
     const exportData: any = {
-      template,
+      template
     };
 
     if (options.include_version_info && version) {

@@ -809,17 +809,17 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
       
       // Set appropriate content type
       switch (format) {
-        case 'csv':
-          reply.header('content-type', 'text/csv');
-          reply.header('content-disposition', 'attachment; filename="escalations.csv"');
-          break;
-        case 'xlsx':
-          reply.header('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-          reply.header('content-disposition', 'attachment; filename="escalations.xlsx"');
-          break;
-        default:
-          reply.header('content-type', 'application/json');
-          break;
+      case 'csv':
+        reply.header('content-type', 'text/csv');
+        reply.header('content-disposition', 'attachment; filename="escalations.csv"');
+        break;
+      case 'xlsx':
+        reply.header('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        reply.header('content-disposition', 'attachment; filename="escalations.xlsx"');
+        break;
+      default:
+        reply.header('content-type', 'application/json');
+        break;
       }
       
       return exportData;

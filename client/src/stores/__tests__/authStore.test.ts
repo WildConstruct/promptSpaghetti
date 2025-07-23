@@ -16,10 +16,10 @@ const mockLocalStorage = {
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
-  clear: jest.fn(),
+  clear: jest.fn()
 };
 Object.defineProperty(window, 'localStorage', {
-  value: mockLocalStorage,
+  value: mockLocalStorage
 });
 
 describe('Authentication Store', () => {
@@ -68,7 +68,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockResponse),
+        json: () => Promise.resolve(mockResponse)
       } as Response);
 
       let success: boolean;
@@ -90,7 +90,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: () => Promise.resolve({ message: 'Invalid credentials' }),
+        json: () => Promise.resolve({ message: 'Invalid credentials' })
       } as Response);
 
       let success: boolean;
@@ -129,7 +129,7 @@ describe('Authentication Store', () => {
       await act(async () => {
         resolvePromise!({
           ok: false,
-          json: () => Promise.resolve({ message: 'Error' }),
+          json: () => Promise.resolve({ message: 'Error' })
         });
       });
 
@@ -144,7 +144,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve({ message: 'Registration successful' }),
+        json: () => Promise.resolve({ message: 'Registration successful' })
       } as Response);
 
       let success: boolean;
@@ -167,7 +167,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: () => Promise.resolve({ message: 'Email already exists' }),
+        json: () => Promise.resolve({ message: 'Email already exists' })
       } as Response);
 
       let success: boolean;
@@ -195,7 +195,7 @@ describe('Authentication Store', () => {
           isAuthenticated: true,
           accessToken: 'old-access-token',
           refreshToken: 'valid-refresh-token',
-          tokenExpiration: Date.now() + 60000, // 1 minute
+          tokenExpiration: Date.now() + 60000 // 1 minute
         });
       });
 
@@ -204,7 +204,7 @@ describe('Authentication Store', () => {
         json: () => Promise.resolve({
           accessToken: 'new-access-token',
           refreshToken: 'new-refresh-token'
-        }),
+        })
       } as Response);
 
       let success: boolean;
@@ -233,7 +233,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: () => Promise.resolve({ message: 'Invalid refresh token' }),
+        json: () => Promise.resolve({ message: 'Invalid refresh token' })
       } as Response);
 
       let success: boolean;
@@ -280,7 +280,7 @@ describe('Authentication Store', () => {
         useAuthStore.setState({
           accessToken: 'expired-token',
           refreshToken: 'valid-refresh-token',
-          tokenExpiration: Date.now() - 60000, // Expired 1 minute ago
+          tokenExpiration: Date.now() - 60000 // Expired 1 minute ago
         });
       });
 
@@ -290,7 +290,7 @@ describe('Authentication Store', () => {
         json: () => Promise.resolve({
           accessToken: 'new-access-token',
           refreshToken: 'new-refresh-token'
-        }),
+        })
       } as Response);
 
       let status: boolean;
@@ -310,7 +310,7 @@ describe('Authentication Store', () => {
         useAuthStore.setState({
           accessToken: 'valid-token',
           refreshToken: 'refresh-token',
-          tokenExpiration: Date.now() + 600000, // Valid for 10 minutes
+          tokenExpiration: Date.now() + 600000 // Valid for 10 minutes
         });
       });
 
@@ -326,7 +326,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockUser),
+        json: () => Promise.resolve(mockUser)
       } as Response);
 
       let status: boolean;
@@ -359,7 +359,7 @@ describe('Authentication Store', () => {
 
       // Mock logout endpoint
       mockFetch.mockResolvedValueOnce({
-        ok: true,
+        ok: true
       } as Response);
 
       act(() => {
@@ -410,7 +410,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockOAuthResponse),
+        json: () => Promise.resolve(mockOAuthResponse)
       } as Response);
 
       let oauthResult: { url: string; state: string };
@@ -445,7 +445,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockCallbackResponse),
+        json: () => Promise.resolve(mockCallbackResponse)
       } as Response);
 
       let success: boolean;
@@ -534,7 +534,7 @@ describe('Authentication Store', () => {
 
       mockFetch.mockResolvedValueOnce({
         ok: false,
-        json: () => Promise.reject(new Error('Invalid JSON')),
+        json: () => Promise.reject(new Error('Invalid JSON'))
       } as Response);
 
       let success: boolean;

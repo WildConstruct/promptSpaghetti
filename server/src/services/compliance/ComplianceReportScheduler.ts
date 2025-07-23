@@ -392,23 +392,23 @@ export class ComplianceReportScheduler extends EventEmitter {
     const [hour, minute] = config.executionTime.split(':').map(Number);
 
     switch (config.frequency) {
-      case 'daily':
-        return `${minute} ${hour} * * *`;
-      case 'weekly':
-        const weekday = config.weekdays?.[0] || 0;
-        return `${minute} ${hour} * * ${weekday}`;
-      case 'monthly':
-        const monthDay = config.monthDay || 1;
-        return `${minute} ${hour} ${monthDay} * *`;
-      case 'quarterly':
-        const quarterMonths = this.getQuarterMonths(config.fiscalYearEnd);
-        return `${minute} ${hour} ${config.monthDay || 1} ${quarterMonths.join(',')} *`;
-      case 'annually':
-        const yearMonth = config.fiscalYearEnd ? config.fiscalYearEnd.getMonth() + 1 : 12;
-        const yearDay = config.fiscalYearEnd ? config.fiscalYearEnd.getDate() : 31;
-        return `${minute} ${hour} ${yearDay} ${yearMonth} *`;
-      default:
-        throw new Error(`Unsupported frequency: ${config.frequency}`);
+    case 'daily':
+      return `${minute} ${hour} * * *`;
+    case 'weekly':
+      const weekday = config.weekdays?.[0] || 0;
+      return `${minute} ${hour} * * ${weekday}`;
+    case 'monthly':
+      const monthDay = config.monthDay || 1;
+      return `${minute} ${hour} ${monthDay} * *`;
+    case 'quarterly':
+      const quarterMonths = this.getQuarterMonths(config.fiscalYearEnd);
+      return `${minute} ${hour} ${config.monthDay || 1} ${quarterMonths.join(',')} *`;
+    case 'annually':
+      const yearMonth = config.fiscalYearEnd ? config.fiscalYearEnd.getMonth() + 1 : 12;
+      const yearDay = config.fiscalYearEnd ? config.fiscalYearEnd.getDate() : 31;
+      return `${minute} ${hour} ${yearDay} ${yearMonth} *`;
+    default:
+      throw new Error(`Unsupported frequency: ${config.frequency}`);
     }
   }
 
@@ -422,21 +422,21 @@ export class ComplianceReportScheduler extends EventEmitter {
     // If time has passed today, move to next occurrence
     if (nextExecution <= now) {
       switch (config.frequency) {
-        case 'daily':
-          nextExecution.setDate(nextExecution.getDate() + 1);
-          break;
-        case 'weekly':
-          nextExecution.setDate(nextExecution.getDate() + 7);
-          break;
-        case 'monthly':
-          nextExecution.setMonth(nextExecution.getMonth() + 1);
-          break;
-        case 'quarterly':
-          nextExecution.setMonth(nextExecution.getMonth() + 3);
-          break;
-        case 'annually':
-          nextExecution.setFullYear(nextExecution.getFullYear() + 1);
-          break;
+      case 'daily':
+        nextExecution.setDate(nextExecution.getDate() + 1);
+        break;
+      case 'weekly':
+        nextExecution.setDate(nextExecution.getDate() + 7);
+        break;
+      case 'monthly':
+        nextExecution.setMonth(nextExecution.getMonth() + 1);
+        break;
+      case 'quarterly':
+        nextExecution.setMonth(nextExecution.getMonth() + 3);
+        break;
+      case 'annually':
+        nextExecution.setFullYear(nextExecution.getFullYear() + 1);
+        break;
       }
     }
 
@@ -454,34 +454,34 @@ export class ComplianceReportScheduler extends EventEmitter {
     let endDate: Date;
 
     switch (schedule.schedule.frequency) {
-      case 'monthly':
-        startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        endDate = new Date(now.getFullYear(), now.getMonth(), 0);
-        break;
-      case 'quarterly':
-        const quarter = Math.floor((now.getMonth()) / 3);
-        startDate = new Date(now.getFullYear(), quarter * 3, 1);
-        endDate = new Date(now.getFullYear(), (quarter + 1) * 3, 0);
-        break;
-      case 'annually':
-        const fiscalYearEnd = schedule.schedule.fiscalYearEnd || new Date(now.getFullYear(), 11, 31);
-        startDate = new Date(fiscalYearEnd.getFullYear() - 1, fiscalYearEnd.getMonth(), fiscalYearEnd.getDate() + 1);
-        endDate = new Date(fiscalYearEnd.getFullYear(), fiscalYearEnd.getMonth(), fiscalYearEnd.getDate());
-        break;
-      default:
-        // For daily/weekly, use last 30 days
-        startDate = new Date(now);
-        startDate.setDate(startDate.getDate() - 30);
-        endDate = new Date(now);
-        break;
+    case 'monthly':
+      startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      endDate = new Date(now.getFullYear(), now.getMonth(), 0);
+      break;
+    case 'quarterly':
+      const quarter = Math.floor((now.getMonth()) / 3);
+      startDate = new Date(now.getFullYear(), quarter * 3, 1);
+      endDate = new Date(now.getFullYear(), (quarter + 1) * 3, 0);
+      break;
+    case 'annually':
+      const fiscalYearEnd = schedule.schedule.fiscalYearEnd || new Date(now.getFullYear(), 11, 31);
+      startDate = new Date(fiscalYearEnd.getFullYear() - 1, fiscalYearEnd.getMonth(), fiscalYearEnd.getDate() + 1);
+      endDate = new Date(fiscalYearEnd.getFullYear(), fiscalYearEnd.getMonth(), fiscalYearEnd.getDate());
+      break;
+    default:
+      // For daily/weekly, use last 30 days
+      startDate = new Date(now);
+      startDate.setDate(startDate.getDate() - 30);
+      endDate = new Date(now);
+      break;
     }
 
     return {
       startDate,
       endDate,
       periodType: schedule.schedule.frequency === 'annually' ? 'annual' : 
-                  schedule.schedule.frequency === 'quarterly' ? 'quarterly' : 
-                  schedule.schedule.frequency === 'monthly' ? 'monthly' : 'custom'
+        schedule.schedule.frequency === 'quarterly' ? 'quarterly' : 
+          schedule.schedule.frequency === 'monthly' ? 'monthly' : 'custom'
     };
   }
 
@@ -592,16 +592,16 @@ export class ComplianceReportScheduler extends EventEmitter {
 
   private async generateReport(schedule: ReportSchedule, period: ReportingPeriod): Promise<any> {
     switch (schedule.framework) {
-      case ComplianceFramework.GDPR:
-        return this.gdprModule.generateGDPRReport(schedule.reportType, period);
-      case ComplianceFramework.SOX:
-        return this.soxModule.generateSOXReport(schedule.reportType, period);
-      default:
-        return this.reportingService.generateStandardReport(
-          schedule.framework,
-          schedule.reportType,
-          period
-        );
+    case ComplianceFramework.GDPR:
+      return this.gdprModule.generateGDPRReport(schedule.reportType, period);
+    case ComplianceFramework.SOX:
+      return this.soxModule.generateSOXReport(schedule.reportType, period);
+    default:
+      return this.reportingService.generateStandardReport(
+        schedule.framework,
+        schedule.reportType,
+        period
+      );
     }
   }
 
@@ -668,23 +668,23 @@ export class ComplianceReportScheduler extends EventEmitter {
       );
 
       switch (method.type) {
-        case 'email':
-          await this.deliverViaEmail(recipientReports, recipient, method.configuration);
-          break;
-        case 'secure_portal':
-          await this.deliverViaSecurePortal(recipientReports, recipient, method.configuration);
-          break;
-        case 'sftp':
-          await this.deliverViaSFTP(recipientReports, recipient, method.configuration);
-          break;
-        case 'api':
-          await this.deliverViaAPI(recipientReports, recipient, method.configuration);
-          break;
-        case 'webhook':
-          await this.deliverViaWebhook(recipientReports, recipient, method.configuration);
-          break;
-        default:
-          throw new Error(`Unsupported delivery method: ${method.type}`);
+      case 'email':
+        await this.deliverViaEmail(recipientReports, recipient, method.configuration);
+        break;
+      case 'secure_portal':
+        await this.deliverViaSecurePortal(recipientReports, recipient, method.configuration);
+        break;
+      case 'sftp':
+        await this.deliverViaSFTP(recipientReports, recipient, method.configuration);
+        break;
+      case 'api':
+        await this.deliverViaAPI(recipientReports, recipient, method.configuration);
+        break;
+      case 'webhook':
+        await this.deliverViaWebhook(recipientReports, recipient, method.configuration);
+        break;
+      default:
+        throw new Error(`Unsupported delivery method: ${method.type}`);
       }
 
       return {

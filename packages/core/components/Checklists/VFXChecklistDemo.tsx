@@ -909,8 +909,8 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
                       <div className="space-y-3">
                         {Object.entries(analytics.priorityDistribution).map(([priority, count]) => {
                           const color = priority === 'critical' ? 'bg-red-500' :
-                                       priority === 'high' ? 'bg-orange-500' :
-                                       priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500';
+                            priority === 'high' ? 'bg-orange-500' :
+                              priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500';
                           
                           return (
                             <div key={priority} className="flex items-center justify-between">

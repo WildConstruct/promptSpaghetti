@@ -89,17 +89,17 @@ export class TestDataPersistence {
     };
 
     switch (this.config.storage) {
-      case 'file':
-        await this.storeToFile(storedData);
-        break;
-      case 'memory':
-        this.memoryStore.set(key, storedData);
-        break;
-      case 'sqlite':
-        await this.storeToSQLite(storedData);
-        break;
-      default:
-        throw new Error(`Unsupported storage type: ${this.config.storage}`);
+    case 'file':
+      await this.storeToFile(storedData);
+      break;
+    case 'memory':
+      this.memoryStore.set(key, storedData);
+      break;
+    case 'sqlite':
+      await this.storeToSQLite(storedData);
+      break;
+    default:
+      throw new Error(`Unsupported storage type: ${this.config.storage}`);
     }
 
     return id;
@@ -112,17 +112,17 @@ export class TestDataPersistence {
     let storedData: StoredTestData | null = null;
 
     switch (this.config.storage) {
-      case 'file':
-        storedData = await this.retrieveFromFile(key);
-        break;
-      case 'memory':
-        storedData = this.memoryStore.get(key) || null;
-        break;
-      case 'sqlite':
-        storedData = await this.retrieveFromSQLite(key);
-        break;
-      default:
-        throw new Error(`Unsupported storage type: ${this.config.storage}`);
+    case 'file':
+      storedData = await this.retrieveFromFile(key);
+      break;
+    case 'memory':
+      storedData = this.memoryStore.get(key) || null;
+      break;
+    case 'sqlite':
+      storedData = await this.retrieveFromSQLite(key);
+      break;
+    default:
+      throw new Error(`Unsupported storage type: ${this.config.storage}`);
     }
 
     if (!storedData) {
@@ -168,15 +168,15 @@ export class TestDataPersistence {
     };
 
     switch (this.config.storage) {
-      case 'file':
-        await this.storeToFile(updated);
-        break;
-      case 'memory':
-        this.memoryStore.set(key, updated);
-        break;
-      case 'sqlite':
-        await this.updateInSQLite(updated);
-        break;
+    case 'file':
+      await this.storeToFile(updated);
+      break;
+    case 'memory':
+      this.memoryStore.set(key, updated);
+      break;
+    case 'sqlite':
+      await this.updateInSQLite(updated);
+      break;
     }
 
     return true;
@@ -187,14 +187,14 @@ export class TestDataPersistence {
    */
   async delete(key: string): Promise<boolean> {
     switch (this.config.storage) {
-      case 'file':
-        return await this.deleteFromFile(key);
-      case 'memory':
-        return this.memoryStore.delete(key);
-      case 'sqlite':
-        return await this.deleteFromSQLite(key);
-      default:
-        return false;
+    case 'file':
+      return await this.deleteFromFile(key);
+    case 'memory':
+      return this.memoryStore.delete(key);
+    case 'sqlite':
+      return await this.deleteFromSQLite(key);
+    default:
+      return false;
     }
   }
 
@@ -205,15 +205,15 @@ export class TestDataPersistence {
     let results: StoredTestData[] = [];
 
     switch (this.config.storage) {
-      case 'file':
-        results = await this.queryFiles(options);
-        break;
-      case 'memory':
-        results = this.queryMemory(options);
-        break;
-      case 'sqlite':
-        results = await this.querySQLite(options);
-        break;
+    case 'file':
+      results = await this.queryFiles(options);
+      break;
+    case 'memory':
+      results = this.queryMemory(options);
+      break;
+    case 'sqlite':
+      results = await this.querySQLite(options);
+      break;
     }
 
     // Apply filters
@@ -327,15 +327,15 @@ export class TestDataPersistence {
    */
   async clear(): Promise<void> {
     switch (this.config.storage) {
-      case 'file':
-        await this.clearFiles();
-        break;
-      case 'memory':
-        this.memoryStore.clear();
-        break;
-      case 'sqlite':
-        await this.clearSQLite();
-        break;
+    case 'file':
+      await this.clearFiles();
+      break;
+    case 'memory':
+      this.memoryStore.clear();
+      break;
+    case 'sqlite':
+      await this.clearSQLite();
+      break;
     }
   }
 
@@ -469,9 +469,9 @@ export class TestDataPersistence {
       )
     `);
 
-    await run(`CREATE INDEX IF NOT EXISTS idx_key ON test_data(key)`);
-    await run(`CREATE INDEX IF NOT EXISTS idx_created ON test_data(created_at)`);
-    await run(`CREATE INDEX IF NOT EXISTS idx_tags ON test_data(tags)`);
+    await run('CREATE INDEX IF NOT EXISTS idx_key ON test_data(key)');
+    await run('CREATE INDEX IF NOT EXISTS idx_created ON test_data(created_at)');
+    await run('CREATE INDEX IF NOT EXISTS idx_tags ON test_data(tags)');
   }
 
   private async storeToSQLite(storedData: StoredTestData): Promise<void> {
@@ -500,7 +500,7 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return null;
 
     const get = promisify(this.sqliteDb.get.bind(this.sqliteDb));
-    const row = await get(`SELECT * FROM test_data WHERE key = ?`, [key]) as any;
+    const row = await get('SELECT * FROM test_data WHERE key = ?', [key]) as any;
 
     if (!row) return null;
 
@@ -528,7 +528,7 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return false;
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
-    const result = await run(`DELETE FROM test_data WHERE key = ?`, [key]) as any;
+    const result = await run('DELETE FROM test_data WHERE key = ?', [key]) as any;
     return result.changes > 0;
   }
 
@@ -536,7 +536,7 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return [];
 
     const all = promisify(this.sqliteDb.all.bind(this.sqliteDb));
-    const rows = await all(`SELECT * FROM test_data`) as any[];
+    const rows = await all('SELECT * FROM test_data') as any[];
 
     return rows.map(row => ({
       id: row.id,
@@ -558,21 +558,21 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return;
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
-    await run(`DELETE FROM test_data`);
+    await run('DELETE FROM test_data');
   }
 
   // Utility methods
 
   private async getStoredData(key: string): Promise<StoredTestData | null> {
     switch (this.config.storage) {
-      case 'file':
-        return await this.retrieveFromFile(key);
-      case 'memory':
-        return this.memoryStore.get(key) || null;
-      case 'sqlite':
-        return await this.retrieveFromSQLite(key);
-      default:
-        return null;
+    case 'file':
+      return await this.retrieveFromFile(key);
+    case 'memory':
+      return this.memoryStore.get(key) || null;
+    case 'sqlite':
+      return await this.retrieveFromSQLite(key);
+    default:
+      return null;
     }
   }
 
@@ -581,15 +581,15 @@ export class TestDataPersistence {
     if (existing) {
       existing.metadata = metadata;
       switch (this.config.storage) {
-        case 'file':
-          await this.storeToFile(existing);
-          break;
-        case 'memory':
-          this.memoryStore.set(key, existing);
-          break;
-        case 'sqlite':
-          await this.updateInSQLite(existing);
-          break;
+      case 'file':
+        await this.storeToFile(existing);
+        break;
+      case 'memory':
+        this.memoryStore.set(key, existing);
+        break;
+      case 'sqlite':
+        await this.updateInSQLite(existing);
+        break;
       }
     }
   }
@@ -630,23 +630,23 @@ export class TestDataPersistence {
       let dateB: Date;
 
       switch (orderBy) {
-        case 'updated':
-          dateA = new Date(a.metadata.updatedAt);
-          dateB = new Date(b.metadata.updatedAt);
-          break;
-        case 'accessed':
-          // Sort by access count (descending) then by updated date
-          if (a.metadata.accessCount !== b.metadata.accessCount) {
-            return b.metadata.accessCount - a.metadata.accessCount;
-          }
-          dateA = new Date(a.metadata.updatedAt);
-          dateB = new Date(b.metadata.updatedAt);
-          break;
-        case 'created':
-        default:
-          dateA = new Date(a.metadata.createdAt);
-          dateB = new Date(b.metadata.createdAt);
-          break;
+      case 'updated':
+        dateA = new Date(a.metadata.updatedAt);
+        dateB = new Date(b.metadata.updatedAt);
+        break;
+      case 'accessed':
+        // Sort by access count (descending) then by updated date
+        if (a.metadata.accessCount !== b.metadata.accessCount) {
+          return b.metadata.accessCount - a.metadata.accessCount;
+        }
+        dateA = new Date(a.metadata.updatedAt);
+        dateB = new Date(b.metadata.updatedAt);
+        break;
+      case 'created':
+      default:
+        dateA = new Date(a.metadata.createdAt);
+        dateB = new Date(b.metadata.createdAt);
+        break;
       }
 
       return dateB.getTime() - dateA.getTime(); // Most recent first

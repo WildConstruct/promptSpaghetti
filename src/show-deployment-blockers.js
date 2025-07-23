@@ -49,8 +49,8 @@ function showDeploymentBlockers() {
     
     foundational.forEach(t => {
       const status = t.state === 'UNASSIGNED' ? '🔴 UNASSIGNED' : 
-                    t.state === 'IN_PROGRESS' ? '🟡 IN PROGRESS' : 
-                    t.state === 'DONE' ? '✅ COMPLETE' : `🔵 ${t.state}`;
+        t.state === 'IN_PROGRESS' ? '🟡 IN PROGRESS' : 
+          t.state === 'DONE' ? '✅ COMPLETE' : `🔵 ${t.state}`;
       
       console.log(`   ${status} ${t.id}: ${t.metadata?.taskCode}`);
       console.log(`      "${t.title}"`);
@@ -67,8 +67,8 @@ function showDeploymentBlockers() {
     
     infrastructure.forEach(t => {
       const status = t.state === 'UNASSIGNED' ? '🔴 UNASSIGNED' : 
-                    t.state === 'IN_PROGRESS' ? '🟡 IN PROGRESS' : 
-                    t.state === 'DONE' ? '✅ COMPLETE' : `🔵 ${t.state}`;
+        t.state === 'IN_PROGRESS' ? '🟡 IN PROGRESS' : 
+          t.state === 'DONE' ? '✅ COMPLETE' : `🔵 ${t.state}`;
       
       console.log(`   ${status} ${t.id}: ${t.metadata?.taskCode}`);
       console.log(`      "${t.title}"`);
@@ -85,8 +85,8 @@ function showDeploymentBlockers() {
     
     features.forEach(t => {
       const status = t.state === 'UNASSIGNED' ? '🔴 UNASSIGNED' : 
-                    t.state === 'IN_PROGRESS' ? '🟡 IN PROGRESS' : 
-                    t.state === 'DONE' ? '✅ COMPLETE' : `🔵 ${t.state}`;
+        t.state === 'IN_PROGRESS' ? '🟡 IN PROGRESS' : 
+          t.state === 'DONE' ? '✅ COMPLETE' : `🔵 ${t.state}`;
       
       console.log(`   ${status} ${t.id}: ${t.metadata?.taskCode}`);
       console.log(`      "${t.title}"`);

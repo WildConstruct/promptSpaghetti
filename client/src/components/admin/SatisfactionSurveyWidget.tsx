@@ -185,7 +185,7 @@ export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> =
           <MessageSquare className="w-5 h-5" />
           User Satisfaction Tracking
           <Badge variant={summary.trendDirection === 'up' ? 'success' : 
-                         summary.trendDirection === 'down' ? 'destructive' : 'secondary'}>
+            summary.trendDirection === 'down' ? 'destructive' : 'secondary'}>
             {summary.trendDirection === 'up' && <TrendingUp className="w-3 h-3 mr-1" />}
             {summary.trendDirection === 'down' && <TrendingDown className="w-3 h-3 mr-1" />}
             {summary.trendDirection}
@@ -383,7 +383,7 @@ export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> =
                         )}
                         <span className="text-sm font-medium">{feature.current}</span>
                         <Badge 
-                          variant={feature.change > 0 ? "success" : "destructive"} 
+                          variant={feature.change > 0 ? 'success' : 'destructive'} 
                           className="text-xs"
                         >
                           {feature.change > 0 ? '+' : ''}{feature.change}%
@@ -408,9 +408,9 @@ export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> =
                     key={alert.alertId}
                     className={`border rounded-lg p-4 ${
                       alert.severity === 'critical' ? 'border-red-300 bg-red-50' :
-                      alert.severity === 'high' ? 'border-orange-300 bg-orange-50' :
-                      alert.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :
-                      'border-blue-300 bg-blue-50'
+                        alert.severity === 'high' ? 'border-orange-300 bg-orange-50' :
+                          alert.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :
+                            'border-blue-300 bg-blue-50'
                     }`}
                   >
                     <div className="flex justify-between items-start">
@@ -418,16 +418,16 @@ export const SatisfactionSurveyWidget: React.FC<SatisfactionSurveyWidgetProps> =
                         <div className="flex items-center gap-2 mb-2">
                           <AlertTriangle className={`w-4 h-4 ${
                             alert.severity === 'critical' ? 'text-red-600' :
-                            alert.severity === 'high' ? 'text-orange-600' :
-                            alert.severity === 'medium' ? 'text-yellow-600' :
-                            'text-blue-600'
+                              alert.severity === 'high' ? 'text-orange-600' :
+                                alert.severity === 'medium' ? 'text-yellow-600' :
+                                  'text-blue-600'
                           }`} />
                           <h4 className="font-medium">{alert.title}</h4>
                           <Badge variant={
                             alert.severity === 'critical' ? 'destructive' :
-                            alert.severity === 'high' ? 'destructive' :
-                            alert.severity === 'medium' ? 'warning' :
-                            'secondary'
+                              alert.severity === 'high' ? 'destructive' :
+                                alert.severity === 'medium' ? 'warning' :
+                                  'secondary'
                           }>
                             {alert.severity}
                           </Badge>

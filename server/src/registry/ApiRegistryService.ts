@@ -751,29 +751,29 @@ export class ApiRegistryService extends EventEmitter {
       let aVal: any, bVal: any;
       
       switch (sortBy) {
-        case 'name':
-          aVal = a.name;
-          bVal = b.name;
-          break;
-        case 'createdAt':
-          aVal = a.createdAt.getTime();
-          bVal = b.createdAt.getTime();
-          break;
-        case 'updatedAt':
-          aVal = a.updatedAt.getTime();
-          bVal = b.updatedAt.getTime();
-          break;
-        case 'popularity':
-          aVal = a.metrics.popularityScore;
-          bVal = b.metrics.popularityScore;
-          break;
-        case 'responseTime':
-          aVal = a.metrics.averageResponseTime;
-          bVal = b.metrics.averageResponseTime;
-          break;
-        default:
-          aVal = a.name;
-          bVal = b.name;
+      case 'name':
+        aVal = a.name;
+        bVal = b.name;
+        break;
+      case 'createdAt':
+        aVal = a.createdAt.getTime();
+        bVal = b.createdAt.getTime();
+        break;
+      case 'updatedAt':
+        aVal = a.updatedAt.getTime();
+        bVal = b.updatedAt.getTime();
+        break;
+      case 'popularity':
+        aVal = a.metrics.popularityScore;
+        bVal = b.metrics.popularityScore;
+        break;
+      case 'responseTime':
+        aVal = a.metrics.averageResponseTime;
+        bVal = b.metrics.averageResponseTime;
+        break;
+      default:
+        aVal = a.name;
+        bVal = b.name;
       }
       
       if (order === 'desc') {

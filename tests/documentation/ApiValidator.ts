@@ -562,7 +562,7 @@ export class ApiValidator {
       }
       
       if (Array.isArray(expected) !== Array.isArray(actual)) {
-        errors.push(`Response structure mismatch: array vs object`);
+        errors.push('Response structure mismatch: array vs object');
         return errors;
       }
       

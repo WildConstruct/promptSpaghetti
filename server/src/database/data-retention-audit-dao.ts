@@ -101,7 +101,7 @@ export class DataRetentionAuditDAO {
       return; // Nothing to update
     }
 
-    updateFields.push(`updated_at = NOW()`);
+    updateFields.push('updated_at = NOW()');
     values.push(id);
 
     const query = `

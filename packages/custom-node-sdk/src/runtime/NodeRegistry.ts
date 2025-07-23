@@ -121,7 +121,7 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
     authorsCount: number;
     categories: Record<string, number>;
     authors: Record<string, number>;
-  } {
+    } {
     const registrations = this.getAll();
     const categories = new Map<string, number>();
     const authors = new Map<string, number>();
@@ -164,7 +164,7 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
     }
 
     if (errors.length > 0) {
-      console.warn(`Failed to register some node types:`, errors);
+      console.warn('Failed to register some node types:', errors);
     }
 
     return registered;

@@ -112,29 +112,29 @@ export const SecurityDashboard: React.FC<SecurityDashboardProps> = ({
 
   const getAlertIcon = (type: SecurityAlert['type']) => {
     switch (type) {
-      case 'critical':
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case 'high':
-        return <AlertCircle className="h-4 w-4 text-orange-500" />;
-      case 'medium':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'low':
-        return <CheckCircle className="h-4 w-4 text-blue-500" />;
-      default:
-        return <AlertCircle className="h-4 w-4 text-gray-500" />;
+    case 'critical':
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    case 'high':
+      return <AlertCircle className="h-4 w-4 text-orange-500" />;
+    case 'medium':
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case 'low':
+      return <CheckCircle className="h-4 w-4 text-blue-500" />;
+    default:
+      return <AlertCircle className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getStatusColor = (status: SecurityAlert['status']) => {
     switch (status) {
-      case 'open':
-        return 'bg-red-100 text-red-800';
-      case 'investigating':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'resolved':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+    case 'open':
+      return 'bg-red-100 text-red-800';
+    case 'investigating':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'resolved':
+      return 'bg-green-100 text-green-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
     }
   };
 

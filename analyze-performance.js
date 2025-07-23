@@ -33,41 +33,41 @@ class MockBasicNode {
     const start = performance.now();
     
     switch(this.type) {
-      case 'WeightedChoice':
-        // Simulate weighted random selection
-        const choices = ['A', 'B', 'C'];
-        const weights = [0.5, 0.3, 0.2];
-        let r = context.random();
-        for (let i = 0; i < choices.length; i++) {
-          if (r < weights[i]) {
-            return choices[i];
-          }
-          r -= weights[i];
+    case 'WeightedChoice':
+      // Simulate weighted random selection
+      const choices = ['A', 'B', 'C'];
+      const weights = [0.5, 0.3, 0.2];
+      let r = context.random();
+      for (let i = 0; i < choices.length; i++) {
+        if (r < weights[i]) {
+          return choices[i];
         }
-        return choices[choices.length - 1];
+        r -= weights[i];
+      }
+      return choices[choices.length - 1];
         
-      case 'Concat':
-        // Simulate string concatenation
-        const parts = ['Hello', ' ', 'World'];
-        return parts.join('');
+    case 'Concat':
+      // Simulate string concatenation
+      const parts = ['Hello', ' ', 'World'];
+      return parts.join('');
         
-      case 'Output':
-        // Simulate output passthrough
-        return 'output-value';
+    case 'Output':
+      // Simulate output passthrough
+      return 'output-value';
         
-      case 'SetVariable':
-        // Simulate variable setting with security validation
-        const value = 'test-value';
-        // Simulate JSON deep clone for security
-        context.variables['testKey'] = JSON.parse(JSON.stringify(value));
-        return;
+    case 'SetVariable':
+      // Simulate variable setting with security validation
+      const value = 'test-value';
+      // Simulate JSON deep clone for security
+      context.variables['testKey'] = JSON.parse(JSON.stringify(value));
+      return;
         
-      case 'GetVariable':
-        // Simulate variable retrieval with validation
-        return context.variables['testKey'] || 'default';
+    case 'GetVariable':
+      // Simulate variable retrieval with validation
+      return context.variables['testKey'] || 'default';
         
-      default:
-        return 'unknown';
+    default:
+      return 'unknown';
     }
   }
 }
@@ -82,67 +82,67 @@ class MockAdvancedNode {
     const start = performance.now();
     
     switch(this.type) {
-      case 'WeightedAdvanced':
-        // Simulate advanced weighted distribution calculation
-        const choices = ['choice1', 'choice2', 'choice3', 'choice4'];
-        const weights = [1, 2, 3, 4];
+    case 'WeightedAdvanced':
+      // Simulate advanced weighted distribution calculation
+      const choices = ['choice1', 'choice2', 'choice3', 'choice4'];
+      const weights = [1, 2, 3, 4];
         
-        // Simulate exponential distribution calculation
-        const expWeights = weights.map(w => Math.exp(w * 0.5));
-        const totalWeight = expWeights.reduce((sum, w) => sum + w, 0);
-        const normalizedWeights = expWeights.map(w => w / totalWeight);
+      // Simulate exponential distribution calculation
+      const expWeights = weights.map(w => Math.exp(w * 0.5));
+      const totalWeight = expWeights.reduce((sum, w) => sum + w, 0);
+      const normalizedWeights = expWeights.map(w => w / totalWeight);
         
-        let r = context.random();
-        for (let i = 0; i < choices.length; i++) {
-          if (r < normalizedWeights[i]) {
-            return choices[i];
-          }
-          r -= normalizedWeights[i];
+      let r = context.random();
+      for (let i = 0; i < choices.length; i++) {
+        if (r < normalizedWeights[i]) {
+          return choices[i];
         }
-        return choices[choices.length - 1];
+        r -= normalizedWeights[i];
+      }
+      return choices[choices.length - 1];
         
-      case 'Conditional':
-        // Simulate expression evaluation
-        const condition = 'getValue("counter") > 5';
-        // Simulate parsing and evaluation overhead
-        const counter = context.variables.counter || 0;
-        const result = counter > 5;
-        return result ? 'true-branch' : 'false-branch';
+    case 'Conditional':
+      // Simulate expression evaluation
+      const condition = 'getValue("counter") > 5';
+      // Simulate parsing and evaluation overhead
+      const counter = context.variables.counter || 0;
+      const result = counter > 5;
+      return result ? 'true-branch' : 'false-branch';
         
-      case 'Sequential':
-        // Simulate stateful sequence processing
-        const sequence = ['seq1', 'seq2', 'seq3', 'seq4'];
-        const index = (context.variables.sequenceIndex || 0) % sequence.length;
-        context.variables.sequenceIndex = index + 1;
-        return sequence[index];
+    case 'Sequential':
+      // Simulate stateful sequence processing
+      const sequence = ['seq1', 'seq2', 'seq3', 'seq4'];
+      const index = (context.variables.sequenceIndex || 0) % sequence.length;
+      context.variables.sequenceIndex = index + 1;
+      return sequence[index];
         
-      case 'Markov':
-        // Simulate matrix transition calculation
-        const states = ['state1', 'state2', 'state3'];
-        const currentState = context.variables.markovState || 'state1';
+    case 'Markov':
+      // Simulate matrix transition calculation
+      const states = ['state1', 'state2', 'state3'];
+      const currentState = context.variables.markovState || 'state1';
         
-        // Simulate transition matrix lookup and calculation
-        const transitions = {
-          'state1': { 'state2': 0.7, 'state3': 0.3 },
-          'state2': { 'state1': 0.4, 'state3': 0.6 },
-          'state3': { 'state1': 0.5, 'state2': 0.5 }
-        };
+      // Simulate transition matrix lookup and calculation
+      const transitions = {
+        'state1': { 'state2': 0.7, 'state3': 0.3 },
+        'state2': { 'state1': 0.4, 'state3': 0.6 },
+        'state3': { 'state1': 0.5, 'state2': 0.5 }
+      };
         
-        const currentTransitions = transitions[currentState] || {};
-        let rMarkov = context.random();
+      const currentTransitions = transitions[currentState] || {};
+      let rMarkov = context.random();
         
-        for (const [nextState, probability] of Object.entries(currentTransitions)) {
-          if (rMarkov < probability) {
-            context.variables.markovState = nextState;
-            return nextState;
-          }
-          rMarkov -= probability;
+      for (const [nextState, probability] of Object.entries(currentTransitions)) {
+        if (rMarkov < probability) {
+          context.variables.markovState = nextState;
+          return nextState;
         }
+        rMarkov -= probability;
+      }
         
-        return currentState;
+      return currentState;
         
-      default:
-        return 'unknown-advanced';
+    default:
+      return 'unknown-advanced';
     }
   }
 }

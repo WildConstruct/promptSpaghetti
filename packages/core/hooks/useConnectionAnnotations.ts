@@ -94,12 +94,12 @@ export const useConnectionAnnotations = ({
     const updatedEdges = annotatedEdges.map(edge => 
       edge.id === edgeId 
         ? { 
-            ...edge, 
-            label, 
-            showLabel: true,
-            interactive: true,
-            ...options 
-          }
+          ...edge, 
+          label, 
+          showLabel: true,
+          interactive: true,
+          ...options 
+        }
         : edge
     );
     onEdgesChange(updatedEdges);

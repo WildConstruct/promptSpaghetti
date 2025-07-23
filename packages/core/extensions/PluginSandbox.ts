@@ -265,7 +265,7 @@ export class PluginSandbox {
       version: process.version,
       platform: process.platform,
       arch: process.arch,
-      pid: process.pid,
+      pid: process.pid
       // Exclude dangerous methods like exit, kill, etc.
     };
   }
@@ -286,22 +286,22 @@ export class PluginSandbox {
       
       // Special handling for core modules
       switch (id) {
-        case 'fs':
-          return this.createFileSystemProxy();
-        case 'crypto':
-          return this.createCryptoProxy();
-        case 'path':
-          return require('path');
-        case 'util':
-          return require('util');
-        default:
-          // For relative imports, resolve relative to plugin path
-          if (id.startsWith('./') || id.startsWith('../')) {
-            const resolvedPath = resolve(this.pluginPath, id);
-            return require(resolvedPath);
-          }
+      case 'fs':
+        return this.createFileSystemProxy();
+      case 'crypto':
+        return this.createCryptoProxy();
+      case 'path':
+        return require('path');
+      case 'util':
+        return require('util');
+      default:
+        // For relative imports, resolve relative to plugin path
+        if (id.startsWith('./') || id.startsWith('../')) {
+          const resolvedPath = resolve(this.pluginPath, id);
+          return require(resolvedPath);
+        }
           
-          throw new Error(`Module '${id}' is not available`);
+        throw new Error(`Module '${id}' is not available`);
       }
     };
   }
@@ -346,7 +346,7 @@ export class PluginSandbox {
     return {
       randomBytes: cryptoModule.randomBytes,
       createHash: cryptoModule.createHash,
-      createHmac: cryptoModule.createHmac,
+      createHmac: cryptoModule.createHmac
       // Exclude potentially dangerous functions like createCipher
     };
   }

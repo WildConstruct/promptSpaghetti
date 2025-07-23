@@ -310,7 +310,7 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
 
   // Filtered and sorted items
   const filteredItems = useMemo(() => {
-    let filtered = checklist.items.filter(item => {
+    const filtered = checklist.items.filter(item => {
       // Search filter
       if (searchTerm && !item.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !item.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
@@ -340,22 +340,22 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
       let comparison = 0;
 
       switch (sortBy) {
-        case 'priority':
-          const priorityOrder = ['critical', 'high', 'medium', 'low'];
-          comparison = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority);
-          break;
-        case 'dueDate':
-          const aDate = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
-          const bDate = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
-          comparison = aDate - bDate;
-          break;
-        case 'status':
-          const statusOrder = ['blocked', 'rejected', 'pending', 'in_progress', 'review', 'approved'];
-          comparison = statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
-          break;
-        case 'progress':
-          comparison = a.completion - b.completion;
-          break;
+      case 'priority':
+        const priorityOrder = ['critical', 'high', 'medium', 'low'];
+        comparison = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority);
+        break;
+      case 'dueDate':
+        const aDate = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
+        const bDate = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
+        comparison = aDate - bDate;
+        break;
+      case 'status':
+        const statusOrder = ['blocked', 'rejected', 'pending', 'in_progress', 'review', 'approved'];
+        comparison = statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+        break;
+      case 'progress':
+        comparison = a.completion - b.completion;
+        break;
       }
 
       return sortOrder === 'asc' ? comparison : -comparison;
@@ -766,8 +766,8 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No Items Found</h3>
                     <p className="text-gray-600 text-center">
                       {checklist.items.length === 0 
-                        ? "This checklist doesn't have any items yet." 
-                        : "No items match your current filters."}
+                        ? 'This checklist doesn\'t have any items yet.' 
+                        : 'No items match your current filters.'}
                     </p>
                     {checklist.items.length === 0 && !readonly && currentUser.permissions.canCreate && (
                       <Button

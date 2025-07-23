@@ -165,17 +165,17 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
 
   const getSeverityColor = (severity: 'low' | 'medium' | 'high') => {
     switch (severity) {
-      case 'high': return '#dc3545';
-      case 'medium': return '#ffc107';
-      case 'low': return '#28a745';
+    case 'high': return '#dc3545';
+    case 'medium': return '#ffc107';
+    case 'low': return '#28a745';
     }
   };
 
   const getComplexityColor = (complexity: 'low' | 'medium' | 'high') => {
     switch (complexity) {
-      case 'high': return '#dc3545';
-      case 'medium': return '#fd7e14';
-      case 'low': return '#28a745';
+    case 'high': return '#dc3545';
+    case 'medium': return '#fd7e14';
+    case 'low': return '#28a745';
     }
   };
 
@@ -192,7 +192,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000,
+      zIndex: 1000
     }}>
       <div style={{
         backgroundColor: 'white',
@@ -202,20 +202,20 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
         maxWidth: '800px',
         maxHeight: '90vh',
         overflowY: 'auto',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
       }}>
         {/* Header */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '24px',
+          marginBottom: '24px'
         }}>
           <h2 style={{
             margin: 0,
             fontSize: '20px',
             fontWeight: '600',
-            color: '#333',
+            color: '#333'
           }}>
             📊 Graph Analysis & Optimization
           </h2>
@@ -232,7 +232,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
               height: '32px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'center'
             }}
           >
             ×
@@ -244,13 +244,13 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
           gap: '16px',
-          marginBottom: '24px',
+          marginBottom: '24px'
         }}>
           <div style={{
             padding: '16px',
             border: '1px solid #e9ecef',
             borderRadius: '8px',
-            textAlign: 'center',
+            textAlign: 'center'
           }}>
             <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#495057' }}>
               {analysis.nodeCount}
@@ -262,7 +262,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
             padding: '16px',
             border: '1px solid #e9ecef',
             borderRadius: '8px',
-            textAlign: 'center',
+            textAlign: 'center'
           }}>
             <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#495057' }}>
               {analysis.edgeCount}
@@ -274,7 +274,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
             padding: '16px',
             border: '1px solid #e9ecef',
             borderRadius: '8px',
-            textAlign: 'center',
+            textAlign: 'center'
           }}>
             <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#495057' }}>
               {analysis.maxDepth}
@@ -286,7 +286,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
             padding: '16px',
             border: '1px solid #e9ecef',
             borderRadius: '8px',
-            textAlign: 'center',
+            textAlign: 'center'
           }}>
             <div style={{ 
               fontSize: '20px', 
@@ -306,7 +306,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
             margin: '0 0 16px 0',
             fontSize: '18px',
             fontWeight: '600',
-            color: '#333',
+            color: '#333'
           }}>
             🚀 Optimization Opportunities
           </h3>
@@ -317,7 +317,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
               backgroundColor: '#d4edda',
               border: '1px solid #c3e6cb',
               borderRadius: '4px',
-              color: '#155724',
+              color: '#155724'
             }}>
               ✅ Your graph is already well-optimized! No major improvements detected.
             </div>
@@ -330,20 +330,20 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
                     padding: '16px',
                     border: `1px solid ${getSeverityColor(opportunity.severity)}33`,
                     backgroundColor: `${getSeverityColor(opportunity.severity)}11`,
-                    borderRadius: '8px',
+                    borderRadius: '8px'
                   }}
                 >
                   <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
-                    marginBottom: '8px',
+                    marginBottom: '8px'
                   }}>
                     <h4 style={{
                       margin: 0,
                       fontSize: '16px',
                       fontWeight: '600',
-                      color: '#333',
+                      color: '#333'
                     }}>
                       {opportunity.description}
                     </h4>
@@ -354,7 +354,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
                       borderRadius: '12px',
                       fontSize: '12px',
                       fontWeight: '500',
-                      textTransform: 'uppercase',
+                      textTransform: 'uppercase'
                     }}>
                       {opportunity.severity}
                     </span>
@@ -364,7 +364,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
                     fontSize: '14px',
                     color: '#28a745',
                     fontWeight: '500',
-                    marginBottom: '8px',
+                    marginBottom: '8px'
                   }}>
                     💡 Estimated improvement: {opportunity.estimatedImprovement}
                   </div>
@@ -373,7 +373,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
                     <div style={{
                       fontSize: '12px',
                       color: '#6c757d',
-                      fontFamily: 'monospace',
+                      fontFamily: 'monospace'
                     }}>
                       Affected nodes: {opportunity.nodeIds.slice(0, 5).join(', ')}
                       {opportunity.nodeIds.length > 5 && ` (+${opportunity.nodeIds.length - 5} more)`}
@@ -390,13 +390,13 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
           padding: '16px',
           backgroundColor: '#f8f9fa',
           borderRadius: '8px',
-          textAlign: 'center',
+          textAlign: 'center'
         }}>
           <h3 style={{
             margin: '0 0 12px 0',
             fontSize: '18px',
             fontWeight: '600',
-            color: '#333',
+            color: '#333'
           }}>
             📈 Graph Health Score
           </h3>
@@ -418,13 +418,13 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
                   fontSize: '48px',
                   fontWeight: 'bold',
                   color: getScoreColor(score),
-                  marginBottom: '8px',
+                  marginBottom: '8px'
                 }}>
                   {score}
                 </div>
                 <div style={{
                   fontSize: '14px',
-                  color: '#6c757d',
+                  color: '#6c757d'
                 }}>
                   {score >= 80 ? 'Excellent' : score >= 60 ? 'Good' : 'Needs Optimization'}
                 </div>
@@ -436,7 +436,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
         {/* Action Button */}
         <div style={{
           marginTop: '24px',
-          textAlign: 'center',
+          textAlign: 'center'
         }}>
           <button
             onClick={onClose}
@@ -448,7 +448,7 @@ export const GraphAnalysisPanel: React.FC<GraphAnalysisPanelProps> = ({
               borderRadius: '6px',
               fontSize: '16px',
               fontWeight: '500',
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
           >
             Apply Optimizations

@@ -227,20 +227,20 @@ export class MutationCoordinator {
     
     // Apply operation-specific transforms
     switch (`${op1.type}_${op2.type}`) {
-      case 'NODE_ADD_NODE_ADD':
-        return this.transformNodeAdd(op1 as NodeAddOperation, op2 as NodeAddOperation);
-      case 'NODE_UPDATE_NODE_UPDATE':
-        return this.transformNodeUpdate(op1 as NodeUpdateOperation, op2 as NodeUpdateOperation);
-      case 'NODE_UPDATE_NODE_REMOVE':
-        return this.transformUpdateDelete(op1 as NodeUpdateOperation, op2 as NodeRemoveOperation);
-      case 'NODE_REMOVE_NODE_UPDATE':
-        return this.transformUpdateDelete(op2 as NodeUpdateOperation, op1 as NodeRemoveOperation);
-      case 'EDGE_ADD_EDGE_ADD':
-        return this.transformEdgeAdd(op1 as EdgeAddOperation, op2 as EdgeAddOperation);
-      case 'PARAMETER_UPDATE_PARAMETER_UPDATE':
-        return this.transformParameterUpdate(op1 as ParameterUpdateOperation, op2 as ParameterUpdateOperation);
-      default:
-        return this.handleGenericConflict(op1, op2);
+    case 'NODE_ADD_NODE_ADD':
+      return this.transformNodeAdd(op1 as NodeAddOperation, op2 as NodeAddOperation);
+    case 'NODE_UPDATE_NODE_UPDATE':
+      return this.transformNodeUpdate(op1 as NodeUpdateOperation, op2 as NodeUpdateOperation);
+    case 'NODE_UPDATE_NODE_REMOVE':
+      return this.transformUpdateDelete(op1 as NodeUpdateOperation, op2 as NodeRemoveOperation);
+    case 'NODE_REMOVE_NODE_UPDATE':
+      return this.transformUpdateDelete(op2 as NodeUpdateOperation, op1 as NodeRemoveOperation);
+    case 'EDGE_ADD_EDGE_ADD':
+      return this.transformEdgeAdd(op1 as EdgeAddOperation, op2 as EdgeAddOperation);
+    case 'PARAMETER_UPDATE_PARAMETER_UPDATE':
+      return this.transformParameterUpdate(op1 as ParameterUpdateOperation, op2 as ParameterUpdateOperation);
+    default:
+      return this.handleGenericConflict(op1, op2);
     }
   }
 
@@ -462,26 +462,26 @@ export class MutationCoordinator {
    */
   private async executeOperation(operation: MutationOperation): Promise<boolean> {
     switch (operation.type) {
-      case 'NODE_ADD':
-        return this.graphCRDT.addNode(operation as NodeAddOperation);
-      case 'NODE_UPDATE':
-        return this.graphCRDT.updateNode(operation as NodeUpdateOperation);
-      case 'NODE_REMOVE':
-        return this.graphCRDT.removeNode(operation as NodeRemoveOperation);
-      case 'EDGE_ADD':
-        return this.graphCRDT.addEdge(operation as EdgeAddOperation);
-      case 'EDGE_UPDATE':
-        return this.graphCRDT.updateEdge(operation as EdgeUpdateOperation);
-      case 'EDGE_REMOVE':
-        return this.graphCRDT.removeEdge(operation as EdgeRemoveOperation);
-      case 'PARAMETER_UPDATE':
-        return this.graphCRDT.updateParameter(operation as ParameterUpdateOperation);
-      case 'BATCH_MUTATION':
-        const result = await this.applyBatchOperation(operation as BatchMutationOperation);
-        return result.success;
-      default:
-        console.warn(`Unknown operation type: ${(operation as any).type}`);
-        return false;
+    case 'NODE_ADD':
+      return this.graphCRDT.addNode(operation as NodeAddOperation);
+    case 'NODE_UPDATE':
+      return this.graphCRDT.updateNode(operation as NodeUpdateOperation);
+    case 'NODE_REMOVE':
+      return this.graphCRDT.removeNode(operation as NodeRemoveOperation);
+    case 'EDGE_ADD':
+      return this.graphCRDT.addEdge(operation as EdgeAddOperation);
+    case 'EDGE_UPDATE':
+      return this.graphCRDT.updateEdge(operation as EdgeUpdateOperation);
+    case 'EDGE_REMOVE':
+      return this.graphCRDT.removeEdge(operation as EdgeRemoveOperation);
+    case 'PARAMETER_UPDATE':
+      return this.graphCRDT.updateParameter(operation as ParameterUpdateOperation);
+    case 'BATCH_MUTATION':
+      const result = await this.applyBatchOperation(operation as BatchMutationOperation);
+      return result.success;
+    default:
+      console.warn(`Unknown operation type: ${(operation as any).type}`);
+      return false;
     }
   }
 
@@ -565,23 +565,23 @@ export class MutationCoordinator {
       let valueToApply: any;
       
       switch (resolution.strategy) {
-        case ResolutionStrategy.ACCEPT_LOCAL:
-          valueToApply = conflict.localValue;
-          break;
-        case ResolutionStrategy.ACCEPT_REMOTE:
-          valueToApply = conflict.remoteValue;
-          break;
-        case ResolutionStrategy.LAST_WRITER_WINS:
-          valueToApply = conflict.localValue; // Assume local is newer
-          break;
-        case ResolutionStrategy.FIRST_WRITER_WINS:
-          valueToApply = conflict.remoteValue; // Assume remote was first
-          break;
-        case ResolutionStrategy.AUTO_MERGE:
-          valueToApply = this.attemptAutoMerge(conflict.localValue, conflict.remoteValue);
-          break;
-        default:
-          return false;
+      case ResolutionStrategy.ACCEPT_LOCAL:
+        valueToApply = conflict.localValue;
+        break;
+      case ResolutionStrategy.ACCEPT_REMOTE:
+        valueToApply = conflict.remoteValue;
+        break;
+      case ResolutionStrategy.LAST_WRITER_WINS:
+        valueToApply = conflict.localValue; // Assume local is newer
+        break;
+      case ResolutionStrategy.FIRST_WRITER_WINS:
+        valueToApply = conflict.remoteValue; // Assume remote was first
+        break;
+      case ResolutionStrategy.AUTO_MERGE:
+        valueToApply = this.attemptAutoMerge(conflict.localValue, conflict.remoteValue);
+        break;
+      default:
+        return false;
       }
       
       // Create and apply resolution operation
@@ -745,41 +745,41 @@ export class MutationCoordinator {
    */
   private createInverseOperation(operation: MutationOperation): MutationOperation | null {
     switch (operation.type) {
-      case 'NODE_ADD':
-        const nodeRemoveOp: NodeRemoveOperation = {
-          type: 'NODE_REMOVE',
-          operationId: generateOperationId(this.userId),
-          documentId: operation.documentId,
-          nodeId: operation.nodeId,
-          cascadeDelete: true,
-          preserveConnections: false,
-          timestamp: Date.now(),
-          userId: operation.userId
-        };
-        return nodeRemoveOp;
+    case 'NODE_ADD':
+      const nodeRemoveOp: NodeRemoveOperation = {
+        type: 'NODE_REMOVE',
+        operationId: generateOperationId(this.userId),
+        documentId: operation.documentId,
+        nodeId: operation.nodeId,
+        cascadeDelete: true,
+        preserveConnections: false,
+        timestamp: Date.now(),
+        userId: operation.userId
+      };
+      return nodeRemoveOp;
       
-      case 'NODE_REMOVE':
-        // Cannot easily inverse node removal without snapshot data
-        return null;
+    case 'NODE_REMOVE':
+      // Cannot easily inverse node removal without snapshot data
+      return null;
       
-      case 'NODE_UPDATE':
-        const nodeUpdateOp: NodeUpdateOperation = {
-          type: 'NODE_UPDATE',
-          operationId: generateOperationId(this.userId),
-          documentId: operation.documentId,
-          nodeId: operation.nodeId,
-          propertyPath: operation.propertyPath,
-          oldValue: operation.newValue,
-          newValue: operation.oldValue,
-          partialUpdate: operation.partialUpdate,
-          timestamp: Date.now(),
-          userId: operation.userId
-        };
-        return nodeUpdateOp;
+    case 'NODE_UPDATE':
+      const nodeUpdateOp: NodeUpdateOperation = {
+        type: 'NODE_UPDATE',
+        operationId: generateOperationId(this.userId),
+        documentId: operation.documentId,
+        nodeId: operation.nodeId,
+        propertyPath: operation.propertyPath,
+        oldValue: operation.newValue,
+        newValue: operation.oldValue,
+        partialUpdate: operation.partialUpdate,
+        timestamp: Date.now(),
+        userId: operation.userId
+      };
+      return nodeUpdateOp;
       
       // Add other operation types as needed
-      default:
-        return null;
+    default:
+      return null;
     }
   }
 
@@ -854,7 +854,7 @@ export class MutationCoordinator {
     conflictResolutionStrategy: ResolutionStrategy;
     maxOperationHistory: number;
     operationTimeout: number;
-  } {
+    } {
     return {
       conflictResolutionStrategy: this.conflictResolutionStrategy,
       maxOperationHistory: this.maxOperationHistory,

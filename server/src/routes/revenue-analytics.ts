@@ -265,7 +265,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
         reply.code(200).send({
           success: true,
           creatorAnalytics,
-          message: `Creator revenue analytics generated successfully`
+          message: 'Creator revenue analytics generated successfully'
         });
 
       } catch (error) {
@@ -353,7 +353,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           success: true,
           templateAnalytics,
           comparison,
-          message: `Template revenue analytics generated successfully`
+          message: 'Template revenue analytics generated successfully'
         });
 
       } catch (error) {
@@ -521,7 +521,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
         const { templateId, creatorId } = request.params;
         const { optimizationType = 'all', timeframe = 'medium' } = request.query;
 
-        console.log(`⚡ Generating revenue optimization insights`);
+        console.log('⚡ Generating revenue optimization insights');
 
         let optimization;
         if (templateId) {
@@ -545,7 +545,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           optimization: optimization.insights,
           recommendations: optimization.recommendations,
           projectedImpact: optimization.projectedImpact,
-          message: `Revenue optimization insights generated successfully`
+          message: 'Revenue optimization insights generated successfully'
         });
 
       } catch (error) {
@@ -626,28 +626,28 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
 
         let comparison;
         switch (comparisonType) {
-          case 'templates':
-            comparison = await revenueService.compareTemplatesRevenue(
-              templateIds,
-              timeRange,
-              metrics
-            );
-            break;
-          case 'creators':
-            comparison = await revenueService.compareCreatorsRevenue(
-              creatorIds,
-              timeRange,
-              metrics
-            );
-            break;
-          case 'categories':
-            comparison = await revenueService.compareCategoriesRevenue(
-              timeRange,
-              metrics
-            );
-            break;
-          default:
-            throw new Error(`Unsupported comparison type: ${comparisonType}`);
+        case 'templates':
+          comparison = await revenueService.compareTemplatesRevenue(
+            templateIds,
+            timeRange,
+            metrics
+          );
+          break;
+        case 'creators':
+          comparison = await revenueService.compareCreatorsRevenue(
+            creatorIds,
+            timeRange,
+            metrics
+          );
+          break;
+        case 'categories':
+          comparison = await revenueService.compareCategoriesRevenue(
+            timeRange,
+            metrics
+          );
+          break;
+        default:
+          throw new Error(`Unsupported comparison type: ${comparisonType}`);
         }
 
         // Generate insights based on comparison

@@ -82,7 +82,7 @@ export const SmoothInspectorPanel = ({
   // Smooth hover states
   const collapseHover = useSmoothHover();
   const debugHover = useSmoothHover();
-    const maximizeHover = useSmoothHover();
+  const maximizeHover = useSmoothHover();
 
   // Resize handlers with smooth animations
   const handleMouseDown = useCallback((e: React.MouseEvent) => {

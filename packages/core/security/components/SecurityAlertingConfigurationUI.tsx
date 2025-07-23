@@ -302,7 +302,7 @@ export const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigura
           <div style={{
             padding: '4px 12px',
             background: securityScore >= 80 ? themeStyles.success : 
-                       securityScore >= 60 ? themeStyles.warning : themeStyles.error,
+              securityScore >= 60 ? themeStyles.warning : themeStyles.error,
             color: themeStyles.background,
             borderRadius: '12px',
             fontSize: '12px',

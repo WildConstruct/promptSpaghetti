@@ -861,26 +861,26 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
     try {
       // Route to appropriate handler based on target type
       switch (operation.target) {
-        case BulkChangeTarget.API_KEYS:
-          return await this.executeApiKeyStatusChange(operation, targetId);
+      case BulkChangeTarget.API_KEYS:
+        return await this.executeApiKeyStatusChange(operation, targetId);
           
-        case BulkChangeTarget.USER_ACCOUNTS:
-          return await this.executeUserAccountStatusChange(operation, targetId);
+      case BulkChangeTarget.USER_ACCOUNTS:
+        return await this.executeUserAccountStatusChange(operation, targetId);
           
-        case BulkChangeTarget.PERMISSIONS:
-          return await this.executePermissionStatusChange(operation, targetId);
+      case BulkChangeTarget.PERMISSIONS:
+        return await this.executePermissionStatusChange(operation, targetId);
           
-        case BulkChangeTarget.SERVICES:
-          return await this.executeServiceStatusChange(operation, targetId);
+      case BulkChangeTarget.SERVICES:
+        return await this.executeServiceStatusChange(operation, targetId);
           
-        case BulkChangeTarget.SESSIONS:
-          return await this.executeSessionStatusChange(operation, targetId);
+      case BulkChangeTarget.SESSIONS:
+        return await this.executeSessionStatusChange(operation, targetId);
           
-        case BulkChangeTarget.CONFIGURATIONS:
-          return await this.executeConfigurationStatusChange(operation, targetId);
+      case BulkChangeTarget.CONFIGURATIONS:
+        return await this.executeConfigurationStatusChange(operation, targetId);
           
-        default:
-          throw new Error(`Unsupported target type: ${operation.target}`);
+      default:
+        throw new Error(`Unsupported target type: ${operation.target}`);
       }
       
     } catch (error) {
@@ -941,49 +941,49 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
       let updateParams: any[] = [];
       
       switch (operation.operationType) {
-        case 'suspend':
-          updateQuery = `
+      case 'suspend':
+        updateQuery = `
             UPDATE api_keys 
             SET status = 'suspended', suspended_reason = $2, suspended_at = NOW(), updated_at = NOW()
             WHERE key_id = $1
           `;
-          updateParams = [keyId, operation.reason];
-          break;
+        updateParams = [keyId, operation.reason];
+        break;
           
-        case 'activate':
-          updateQuery = `
+      case 'activate':
+        updateQuery = `
             UPDATE api_keys 
             SET status = 'active', suspended_reason = NULL, suspended_at = NULL, updated_at = NOW()
             WHERE key_id = $1
           `;
-          updateParams = [keyId];
-          break;
+        updateParams = [keyId];
+        break;
           
-        case 'revoke':
-          updateQuery = `
+      case 'revoke':
+        updateQuery = `
             UPDATE api_keys 
             SET status = 'revoked', revoked_reason = $2, revoked_at = NOW(), updated_at = NOW()
             WHERE key_id = $1
           `;
-          updateParams = [keyId, operation.reason];
-          break;
+        updateParams = [keyId, operation.reason];
+        break;
           
-        case 'expire':
-          updateQuery = `
+      case 'expire':
+        updateQuery = `
             UPDATE api_keys 
             SET status = 'expired', expires_at = NOW(), updated_at = NOW()
             WHERE key_id = $1
           `;
-          updateParams = [keyId];
-          break;
+        updateParams = [keyId];
+        break;
           
-        default:
-          return {
-            success: false,
-            message: `Unsupported operation type: ${operation.operationType}`,
-            errorType: 'validation',
-            errorCode: 'UNSUPPORTED_OPERATION'
-          };
+      default:
+        return {
+          success: false,
+          message: `Unsupported operation type: ${operation.operationType}`,
+          errorType: 'validation',
+          errorCode: 'UNSUPPORTED_OPERATION'
+        };
       }
       
       // Execute the update
@@ -1249,18 +1249,18 @@ export class Epic17BulkStatusChangeService extends EventEmitter {
   ): Promise<{ valid: boolean; reason?: string }> {
     try {
       switch (operation.target) {
-        case BulkChangeTarget.API_KEYS:
-          const keyResult = await this.database.query('SELECT status FROM api_keys WHERE key_id = $1', [targetId]);
-          if (keyResult.rows.length === 0) {
-            return { valid: false, reason: 'API key not found' };
-          }
+      case BulkChangeTarget.API_KEYS:
+        const keyResult = await this.database.query('SELECT status FROM api_keys WHERE key_id = $1', [targetId]);
+        if (keyResult.rows.length === 0) {
+          return { valid: false, reason: 'API key not found' };
+        }
           
-          const currentStatus = keyResult.rows[0].status;
-          const transition = this.validateApiKeyStatusTransition(currentStatus, operation.toStatus);
-          return { valid: transition.valid, reason: transition.reason };
+        const currentStatus = keyResult.rows[0].status;
+        const transition = this.validateApiKeyStatusTransition(currentStatus, operation.toStatus);
+        return { valid: transition.valid, reason: transition.reason };
           
-        default:
-          return { valid: true };
+      default:
+        return { valid: true };
       }
     } catch (error) {
       return { valid: false, reason: `Validation error: ${error.message}` };

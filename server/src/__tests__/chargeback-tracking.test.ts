@@ -30,7 +30,7 @@ describe('Chargeback Tracking System', () => {
     
     // Mock database service
     mockDb = {
-      query: jest.fn<unknown[], unknown>(),
+      query: jest.fn<unknown[], unknown>()
     };
     
     // Add mock database to fastify instance
@@ -272,7 +272,7 @@ describe('Chargeback Tracking System', () => {
     test('should reject invalid status transition', async () => {
       const closedChargeback = {
         id: 'cb-closed',
-        status: ChargebackStatus.CLOSED,
+        status: ChargebackStatus.CLOSED
         // ... other required fields
       };
 
@@ -298,7 +298,7 @@ describe('Chargeback Tracking System', () => {
       const chargeback: Chargeback = {
         id: 'cb-123',
         status: ChargebackStatus.EVIDENCE_REQUESTED,
-        due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+        due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
         // ... other required fields (simplified for test)
       } as Chargeback;
 
@@ -335,7 +335,7 @@ describe('Chargeback Tracking System', () => {
     test('should reject evidence submission for closed chargeback', async () => {
       const closedChargeback = {
         id: 'cb-closed',
-        status: ChargebackStatus.CLOSED,
+        status: ChargebackStatus.CLOSED
         // ... other fields
       } as Chargeback;
 
@@ -359,7 +359,7 @@ describe('Chargeback Tracking System', () => {
     test('should generate automatic evidence', async () => {
       const chargeback = {
         id: 'cb-123',
-        transaction_id: 'txn-123',
+        transaction_id: 'txn-123'
         // ... other fields
       } as Chargeback;
 

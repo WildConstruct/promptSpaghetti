@@ -1065,29 +1065,29 @@ export class Epic17AdministrativeTools extends EventEmitter {
       const recoveryId = crypto.randomUUID();
       
       switch (recoveryType) {
-        case 'unlock':
-          // Restore active API keys (excluding those manually suspended)
-          await this.database.query(`
+      case 'unlock':
+        // Restore active API keys (excluding those manually suspended)
+        await this.database.query(`
             UPDATE api_keys SET status = 'active', 
             suspended_reason = NULL, suspended_at = NULL
             WHERE status = 'suspended' AND suspended_reason LIKE 'Emergency lockdown:%'
           `);
           
-          // Disable maintenance mode
-          this.config.maintenanceMode = false;
-          await this.redis.del('epic17:maintenance_mode');
-          await this.redis.del('epic17:maintenance_message');
-          break;
+        // Disable maintenance mode
+        this.config.maintenanceMode = false;
+        await this.redis.del('epic17:maintenance_mode');
+        await this.redis.del('epic17:maintenance_message');
+        break;
           
-        case 'restore':
-          // Implement backup restoration logic
-          await this.restoreFromBackup(notes);
-          break;
+      case 'restore':
+        // Implement backup restoration logic
+        await this.restoreFromBackup(notes);
+        break;
           
-        case 'failover':
-          // Implement failover logic
-          await this.performFailover(notes);
-          break;
+      case 'failover':
+        // Implement failover logic
+        await this.performFailover(notes);
+        break;
       }
       
       // Log recovery action

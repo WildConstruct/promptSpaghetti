@@ -388,22 +388,22 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
   // Convenience getters
   const activePolicies = useMemo(() => 
     policies.filter(p => p.status === PolicyStatus.ACTIVE), 
-    [policies]
+  [policies]
   );
 
   const vfxPolicies = useMemo(() => 
     policies.filter(p => p.domain === PolicyDomain.VFX_PIPELINE), 
-    [policies]
+  [policies]
   );
 
   const securityPolicies = useMemo(() => 
     policies.filter(p => p.domain === PolicyDomain.SECURITY), 
-    [policies]
+  [policies]
   );
 
   const compliancePolicies = useMemo(() => 
     policies.filter(p => p.domain === PolicyDomain.COMPLIANCE), 
-    [policies]
+  [policies]
   );
 
   return {

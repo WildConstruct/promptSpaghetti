@@ -348,7 +348,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({
                   <span className="insight-label">Price</span>
                   <span className="insight-value">
                     {reviewItem.template_data.price_cents === 0 ? 'Free' : 
-                     `$${(reviewItem.template_data.price_cents / 100).toFixed(2)}`}
+                      `$${(reviewItem.template_data.price_cents / 100).toFixed(2)}`}
                   </span>
                 </div>
               </div>
@@ -377,7 +377,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({
               <div className="progress-header">
                 <span>Verification Criteria</span>
                 <span>{reviewItem.verification_data.verification_criteria.filter(c => c.status === 'passed').length}/
-                      {reviewItem.verification_data.verification_criteria.length} Complete</span>
+                  {reviewItem.verification_data.verification_criteria.length} Complete</span>
               </div>
               <div className="criteria-list">
                 {reviewItem.verification_data.verification_criteria.map(criterion => (
@@ -724,7 +724,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({
                   <input
                     type="date"
                     value={reviewDecision.follow_up_date ? 
-                           reviewDecision.follow_up_date.toISOString().split('T')[0] : ''}
+                      reviewDecision.follow_up_date.toISOString().split('T')[0] : ''}
                     onChange={(e) => setReviewDecision(prev => ({ 
                       ...prev, 
                       follow_up_date: e.target.value ? new Date(e.target.value) : undefined 

@@ -217,20 +217,20 @@ export class PerformanceDashboard extends EventEmitter {
       const data = JSON.parse(message);
       
       switch (data.type) {
-        case 'subscribe':
-          this.handleSubscription(clientId, data.subscription);
-          break;
-        case 'unsubscribe':
-          this.handleUnsubscription(clientId, data.subscriptionType);
-          break;
-        case 'get_widget_data':
-          this.handleWidgetDataRequest(clientId, data.widgetId);
-          break;
-        case 'ping':
-          this.handlePing(clientId);
-          break;
-        default:
-          console.warn(`Unknown message type from client ${clientId}:`, data.type);
+      case 'subscribe':
+        this.handleSubscription(clientId, data.subscription);
+        break;
+      case 'unsubscribe':
+        this.handleUnsubscription(clientId, data.subscriptionType);
+        break;
+      case 'get_widget_data':
+        this.handleWidgetDataRequest(clientId, data.widgetId);
+        break;
+      case 'ping':
+        this.handlePing(clientId);
+        break;
+      default:
+        console.warn(`Unknown message type from client ${clientId}:`, data.type);
       }
       
       client.lastActivity = new Date();
@@ -479,26 +479,26 @@ export class PerformanceDashboard extends EventEmitter {
    */
   private async generateWidgetData(widget: DashboardWidget): Promise<any> {
     switch (widget.type) {
-      case 'system_health':
-        return this.generateSystemHealthData(widget);
+    case 'system_health':
+      return this.generateSystemHealthData(widget);
       
-      case 'metric_chart':
-        return this.generateMetricChartData(widget);
+    case 'metric_chart':
+      return this.generateMetricChartData(widget);
       
-      case 'benchmark_summary':
-        return this.generateBenchmarkSummaryData(widget);
+    case 'benchmark_summary':
+      return this.generateBenchmarkSummaryData(widget);
       
-      case 'alert_list':
-        return this.generateAlertListData(widget);
+    case 'alert_list':
+      return this.generateAlertListData(widget);
       
-      case 'performance_heatmap':
-        return this.generatePerformanceHeatmapData(widget);
+    case 'performance_heatmap':
+      return this.generatePerformanceHeatmapData(widget);
       
-      case 'trend_analysis':
-        return this.generateTrendAnalysisData(widget);
+    case 'trend_analysis':
+      return this.generateTrendAnalysisData(widget);
       
-      default:
-        return null;
+    default:
+      return null;
     }
   }
 
@@ -838,18 +838,18 @@ export class PerformanceDashboard extends EventEmitter {
     let data: any = null;
     
     switch (subscription.type) {
-      case 'metrics':
-        data = this.dashboardData?.recentMetrics;
-        break;
-      case 'benchmarks':
-        data = this.dashboardData?.benchmarkSummary;
-        break;
-      case 'alerts':
-        data = this.dashboardData?.activeAlerts;
-        break;
-      case 'system_health':
-        data = this.dashboardData?.systemHealth;
-        break;
+    case 'metrics':
+      data = this.dashboardData?.recentMetrics;
+      break;
+    case 'benchmarks':
+      data = this.dashboardData?.benchmarkSummary;
+      break;
+    case 'alerts':
+      data = this.dashboardData?.activeAlerts;
+      break;
+    case 'system_health':
+      data = this.dashboardData?.systemHealth;
+      break;
     }
     
     if (data) {
@@ -964,32 +964,32 @@ export class PerformanceDashboard extends EventEmitter {
     const now = new Date();
     
     switch (widget.config.timeRange.type) {
-      case 'last_hour':
-        return {
-          start: new Date(now.getTime() - 60 * 60 * 1000),
-          end: now
-        };
-      case 'last_24h':
-        return {
-          start: new Date(now.getTime() - 24 * 60 * 60 * 1000),
-          end: now
-        };
-      case 'last_7d':
-        return {
-          start: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
-          end: now
-        };
-      case 'custom':
-        return {
-          start: widget.config.timeRange.customStart || new Date(now.getTime() - 60 * 60 * 1000),
-          end: widget.config.timeRange.customEnd || now
-        };
-      case 'realtime':
-      default:
-        return {
-          start: new Date(now.getTime() - 5 * 60 * 1000), // Last 5 minutes
-          end: now
-        };
+    case 'last_hour':
+      return {
+        start: new Date(now.getTime() - 60 * 60 * 1000),
+        end: now
+      };
+    case 'last_24h':
+      return {
+        start: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+        end: now
+      };
+    case 'last_7d':
+      return {
+        start: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+        end: now
+      };
+    case 'custom':
+      return {
+        start: widget.config.timeRange.customStart || new Date(now.getTime() - 60 * 60 * 1000),
+        end: widget.config.timeRange.customEnd || now
+      };
+    case 'realtime':
+    default:
+      return {
+        start: new Date(now.getTime() - 5 * 60 * 1000), // Last 5 minutes
+        end: now
+      };
     }
   }
 
@@ -1068,7 +1068,7 @@ export class PerformanceDashboard extends EventEmitter {
     connectedClients: number;
     widgetCount: number;
     lastUpdate: Date;
-  } {
+    } {
     return {
       active: this.updateInterval !== undefined,
       connectedClients: Array.from(this.clients.values()).filter(c => c.isActive).length,

@@ -43,21 +43,21 @@ const getFileIcon = (item: any) => {
   
   const extension = item.extension?.toLowerCase();
   switch (extension) {
-    case 'psg':
-      return '🔗'; // Prompt graph file
-    case 'txt':
-      return '📄';
-    case 'md':
-      return '📝';
-    case 'json':
-      return '📋';
-    case 'png':
-    case 'jpg':
-    case 'jpeg':
-    case 'gif':
-      return '🖼️';
-    default:
-      return '📄';
+  case 'psg':
+    return '🔗'; // Prompt graph file
+  case 'txt':
+    return '📄';
+  case 'md':
+    return '📝';
+  case 'json':
+    return '📋';
+  case 'png':
+  case 'jpg':
+  case 'jpeg':
+  case 'gif':
+    return '🖼️';
+  default:
+    return '📄';
   }
 };
 

@@ -112,7 +112,7 @@ describe('Storage Optimization Benchmarks', () => {
       const storage = new OptimizedGraphStorage(largeGraphNodes, largeGraphEdges);
       const stats = storage.getStats();
       
-      console.log(`Optimized storage stats:`, {
+      console.log('Optimized storage stats:', {
         nodeCount: stats.nodeCount,
         edgeCount: stats.edgeCount,
         estimatedMemoryMB: Math.round(stats.memoryUsage.estimatedBytes / 1024 / 1024),

@@ -250,7 +250,7 @@ export class ConstraintOverrideManager {
     active: ConstraintOverride[], 
     history: ConstraintOverride[], 
     export_date: string 
-  } {
+    } {
     return {
       active: this.getActiveOverrides(),
       history: this.overrideHistory,

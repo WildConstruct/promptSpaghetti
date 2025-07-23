@@ -358,31 +358,31 @@ export class GraphMutationEngine extends EventEmitter {
     
     try {
       switch (operation.type) {
-        case OperationType.NODE_ADD:
-          await this.executeNodeAdd(operation as NodeAddOperation);
-          break;
+      case OperationType.NODE_ADD:
+        await this.executeNodeAdd(operation as NodeAddOperation);
+        break;
           
-        case OperationType.NODE_DELETE:
-          await this.executeNodeDelete(operation as NodeDeleteOperation);
-          break;
+      case OperationType.NODE_DELETE:
+        await this.executeNodeDelete(operation as NodeDeleteOperation);
+        break;
           
-        case OperationType.NODE_UPDATE:
-          await this.executeNodeUpdate(operation as NodeUpdateOperation);
-          break;
+      case OperationType.NODE_UPDATE:
+        await this.executeNodeUpdate(operation as NodeUpdateOperation);
+        break;
           
-        case OperationType.EDGE_ADD:
-          await this.executeEdgeAdd(operation as EdgeAddOperation);
-          break;
+      case OperationType.EDGE_ADD:
+        await this.executeEdgeAdd(operation as EdgeAddOperation);
+        break;
           
-        case OperationType.EDGE_DELETE:
-          await this.executeEdgeDelete(operation as EdgeDeleteOperation);
-          break;
+      case OperationType.EDGE_DELETE:
+        await this.executeEdgeDelete(operation as EdgeDeleteOperation);
+        break;
           
-        case OperationType.BATCH_OPERATION:
-          return await this.executeBatch((operation as BatchOperation).payload.operations);
+      case OperationType.BATCH_OPERATION:
+        return await this.executeBatch((operation as BatchOperation).payload.operations);
           
-        default:
-          throw new Error(`Unsupported operation type: ${operation.type}`);
+      default:
+        throw new Error(`Unsupported operation type: ${operation.type}`);
       }
       
       // Emit state change event
@@ -445,17 +445,17 @@ export class GraphMutationEngine extends EventEmitter {
   ): Promise<GraphOperation> {
     // Implement conflict resolution based on strategy
     switch (this.config.conflictResolution.strategy) {
-      case 'LAST_WRITER_WINS':
-        return operation; // Keep original operation
+    case 'LAST_WRITER_WINS':
+      return operation; // Keep original operation
         
-      case 'FIRST_WRITER_WINS':
-        throw new Error('Operation conflicts with existing changes');
+    case 'FIRST_WRITER_WINS':
+      throw new Error('Operation conflicts with existing changes');
         
-      case 'OPERATIONAL_TRANSFORM':
-        return await this.conflictResolver.resolve(operation, conflictResult);
+    case 'OPERATIONAL_TRANSFORM':
+      return await this.conflictResolver.resolve(operation, conflictResult);
         
-      default:
-        throw new Error('Manual conflict resolution required');
+    default:
+      throw new Error('Manual conflict resolution required');
     }
   }
   

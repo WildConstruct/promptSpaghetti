@@ -412,12 +412,12 @@ async function createBusinessPrioritiesAlignmentStory() {
     console.log('🔄 IMPLEMENTATION SEQUENCE:\n');
     implementationTasks.forEach((task, index) => {
       const phase = index === 0 ? 'AUDIT PHASE (Critical)' :
-                   index <= 3 ? 'RESOURCE REBALANCING PHASE (Critical)' :
-                   'SYSTEMIC PREVENTION PHASE (High Priority)';
+        index <= 3 ? 'RESOURCE REBALANCING PHASE (Critical)' :
+          'SYSTEMIC PREVENTION PHASE (High Priority)';
       console.log(`${index + 1}. ${task.title} (${task.estimate}) - ${phase}`);
       console.log(`   🎯 Key Outcome: ${task.acceptanceCriteria[0]}`);
       if (index === 2) {
-        console.log(`   💰 REVENUE IMPACT: $2.3B Epic 8 Film Industry Opportunity`);
+        console.log('   💰 REVENUE IMPACT: $2.3B Epic 8 Film Industry Opportunity');
       }
       console.log('');
     });

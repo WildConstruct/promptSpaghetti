@@ -732,24 +732,24 @@ export class Epic17PasswordManagementService extends EventEmitter {
       let credentials: any = {};
       
       switch (authType) {
-        case 'bearer_token':
-        case 'api_key':
-          const token = this.generateSecureSecret(this.config.serviceTokenLength);
-          const backupToken = this.generateSecureSecret(this.config.serviceTokenLength);
-          credentials = {
-            primary: token,
-            backup: backupToken
-          };
-          break;
+      case 'bearer_token':
+      case 'api_key':
+        const token = this.generateSecureSecret(this.config.serviceTokenLength);
+        const backupToken = this.generateSecureSecret(this.config.serviceTokenLength);
+        credentials = {
+          primary: token,
+          backup: backupToken
+        };
+        break;
           
-        case 'certificate':
-        case 'mutual_tls':
-          const certData = await this.generateServiceCertificate(serviceName);
-          credentials = {
-            certificate: certData.certificate,
-            privateKey: certData.privateKey
-          };
-          break;
+      case 'certificate':
+      case 'mutual_tls':
+        const certData = await this.generateServiceCertificate(serviceName);
+        credentials = {
+          certificate: certData.certificate,
+          privateKey: certData.privateKey
+        };
+        break;
       }
       
       // Encrypt credentials if required
@@ -1195,8 +1195,8 @@ export class Epic17PasswordManagementService extends EventEmitter {
   private async generateServiceCertificate(serviceName: string): Promise<{ certificate: string; privateKey: string }> {
     // Implementation for generating service certificates
     return {
-      certificate: `-----BEGIN CERTIFICATE-----\n[certificate data]\n-----END CERTIFICATE-----`,
-      privateKey: `-----BEGIN PRIVATE KEY-----\n[private key data]\n-----END PRIVATE KEY-----`
+      certificate: '-----BEGIN CERTIFICATE-----\n[certificate data]\n-----END CERTIFICATE-----',
+      privateKey: '-----BEGIN PRIVATE KEY-----\n[private key data]\n-----END PRIVATE KEY-----'
     };
   }
 

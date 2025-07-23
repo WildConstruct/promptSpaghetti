@@ -264,7 +264,7 @@ export const loadingAnimations = {
    */
   createSpinner(): React.CSSProperties {
     return {
-      animation: `spin 1s linear infinite`,
+      animation: 'spin 1s linear infinite',
       willChange: 'transform'
     };
   },
@@ -274,7 +274,7 @@ export const loadingAnimations = {
    */
   createPulse(): React.CSSProperties {
     return {
-      animation: `pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite`,
+      animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       willChange: 'opacity'
     };
   }
@@ -317,16 +317,16 @@ export const AnimatedContainer: React.FC<AnimatedProps> = ({
 
     if (!mounted || !isVisible) {
       switch (animationType) {
-        case 'fade':
-          return { ...baseStyle, opacity: 0 };
-        case 'slide':
-          return { ...baseStyle, opacity: 0, transform: 'translateY(20px)' };
-        case 'scale':
-          return { ...baseStyle, opacity: 0, transform: 'scale(0.95)' };
-        case 'lift':
-          return { ...baseStyle, opacity: 0, transform: 'translateY(10px)' };
-        default:
-          return { ...baseStyle, opacity: 0 };
+      case 'fade':
+        return { ...baseStyle, opacity: 0 };
+      case 'slide':
+        return { ...baseStyle, opacity: 0, transform: 'translateY(20px)' };
+      case 'scale':
+        return { ...baseStyle, opacity: 0, transform: 'scale(0.95)' };
+      case 'lift':
+        return { ...baseStyle, opacity: 0, transform: 'translateY(10px)' };
+      default:
+        return { ...baseStyle, opacity: 0 };
       }
     }
 

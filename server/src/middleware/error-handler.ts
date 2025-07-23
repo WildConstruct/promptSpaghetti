@@ -48,7 +48,7 @@ class ErrorHandlerService {
     errorsByCategory: Object.values(ErrorCategory).reduce((acc, cat) => ({ ...acc, [cat]: 0 }), {} as Record<ErrorCategory, number>),
     errorsBySeverity: Object.values(ErrorSeverity).reduce((acc, sev) => ({ ...acc, [sev]: 0 }), {} as Record<ErrorSeverity, number>),
     errorsByEndpoint: {},
-    lastReset: new Date(),
+    lastReset: new Date()
   };
 
   private static instance: ErrorHandlerService;
@@ -70,7 +70,7 @@ class ErrorHandlerService {
       errorsByCategory: Object.values(ErrorCategory).reduce((acc, cat) => ({ ...acc, [cat]: 0 }), {} as Record<ErrorCategory, number>),
       errorsBySeverity: Object.values(ErrorSeverity).reduce((acc, sev) => ({ ...acc, [sev]: 0 }), {} as Record<ErrorSeverity, number>),
       errorsByEndpoint: {},
-      lastReset: new Date(),
+      lastReset: new Date()
     };
   }
 
@@ -92,7 +92,7 @@ class ErrorHandlerService {
       method: request.method,
       userAgent: request.headers['user-agent'] as string,
       ip: request.ip,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
       // Don't include sensitive data like authorization headers
     };
   }
@@ -106,7 +106,7 @@ class ErrorHandlerService {
       field: issue.path.join('.'),
       code: issue.code,
       message: issue.message,
-      value: issue.received || issue.input,
+      value: issue.received || issue.input
     }));
 
     return new ValidationError(
@@ -222,23 +222,23 @@ class ErrorHandlerService {
       message: error.message,
       context: error.context,
       details: error.details,
-      stack: error.stack,
+      stack: error.stack
     };
 
     switch (error.severity) {
-      case ErrorSeverity.CRITICAL:
-        logger.error('CRITICAL ERROR', logData);
-        // In a real implementation, this would trigger alerts/notifications
-        break;
-      case ErrorSeverity.HIGH:
-        logger.error('HIGH SEVERITY ERROR', logData);
-        break;
-      case ErrorSeverity.MEDIUM:
-        logger.warn('MEDIUM SEVERITY ERROR', logData);
-        break;
-      case ErrorSeverity.LOW:
-        logger.info('LOW SEVERITY ERROR', logData);
-        break;
+    case ErrorSeverity.CRITICAL:
+      logger.error('CRITICAL ERROR', logData);
+      // In a real implementation, this would trigger alerts/notifications
+      break;
+    case ErrorSeverity.HIGH:
+      logger.error('HIGH SEVERITY ERROR', logData);
+      break;
+    case ErrorSeverity.MEDIUM:
+      logger.warn('MEDIUM SEVERITY ERROR', logData);
+      break;
+    case ErrorSeverity.LOW:
+      logger.info('LOW SEVERITY ERROR', logData);
+      break;
     }
   }
 
@@ -255,9 +255,9 @@ class ErrorHandlerService {
         context: {
           endpoint: error.context?.endpoint,
           method: error.context?.method,
-          requestId: error.context?.requestId,
-        },
-      },
+          requestId: error.context?.requestId
+        }
+      }
     };
 
     // Include validation details if present
@@ -315,7 +315,7 @@ export const errorHandlerPlugin = async (fastify: FastifyInstance) => {
       requestId: request.id,
       endpoint: request.url,
       method: request.method,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     const error = new (require('../types/errors').NotFoundError)(

@@ -155,97 +155,97 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (showSuggestions && suggestions.length > 0) {
       switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          setSuggestionIndex(prev => {
-            const newIndex = prev < suggestions.length - 1 ? prev + 1 : 0;
-            scrollToSuggestion(newIndex);
-            return newIndex;
-          });
-          break;
+      case 'ArrowDown':
+        e.preventDefault();
+        setSuggestionIndex(prev => {
+          const newIndex = prev < suggestions.length - 1 ? prev + 1 : 0;
+          scrollToSuggestion(newIndex);
+          return newIndex;
+        });
+        break;
           
-        case 'ArrowUp':
-          e.preventDefault();
-          setSuggestionIndex(prev => {
-            const newIndex = prev > 0 ? prev - 1 : suggestions.length - 1;
-            scrollToSuggestion(newIndex);
-            return newIndex;
-          });
-          break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSuggestionIndex(prev => {
+          const newIndex = prev > 0 ? prev - 1 : suggestions.length - 1;
+          scrollToSuggestion(newIndex);
+          return newIndex;
+        });
+        break;
           
-        case 'PageDown':
-          e.preventDefault();
-          setSuggestionIndex(prev => {
-            const newIndex = Math.min(prev + 5, suggestions.length - 1);
-            scrollToSuggestion(newIndex);
-            return newIndex;
-          });
-          break;
+      case 'PageDown':
+        e.preventDefault();
+        setSuggestionIndex(prev => {
+          const newIndex = Math.min(prev + 5, suggestions.length - 1);
+          scrollToSuggestion(newIndex);
+          return newIndex;
+        });
+        break;
           
-        case 'PageUp':
-          e.preventDefault();
-          setSuggestionIndex(prev => {
-            const newIndex = Math.max(prev - 5, 0);
-            scrollToSuggestion(newIndex);
-            return newIndex;
-          });
-          break;
+      case 'PageUp':
+        e.preventDefault();
+        setSuggestionIndex(prev => {
+          const newIndex = Math.max(prev - 5, 0);
+          scrollToSuggestion(newIndex);
+          return newIndex;
+        });
+        break;
           
-        case 'Home':
-          e.preventDefault();
-          setSuggestionIndex(0);
-          scrollToSuggestion(0);
-          break;
+      case 'Home':
+        e.preventDefault();
+        setSuggestionIndex(0);
+        scrollToSuggestion(0);
+        break;
           
-        case 'End':
-          e.preventDefault();
-          const lastIndex = suggestions.length - 1;
-          setSuggestionIndex(lastIndex);
-          scrollToSuggestion(lastIndex);
-          break;
+      case 'End':
+        e.preventDefault();
+        const lastIndex = suggestions.length - 1;
+        setSuggestionIndex(lastIndex);
+        scrollToSuggestion(lastIndex);
+        break;
           
-        case 'Enter':
-        case 'Tab':
-          e.preventDefault();
-          if (suggestionIndex >= 0) {
-            applySuggestion(suggestions[suggestionIndex]);
-          }
-          break;
+      case 'Enter':
+      case 'Tab':
+        e.preventDefault();
+        if (suggestionIndex >= 0) {
+          applySuggestion(suggestions[suggestionIndex]);
+        }
+        break;
           
-        case 'Escape':
-          e.preventDefault();
-          setShowSuggestions(false);
-          setSuggestionIndex(-1);
-          inputRef.current?.focus();
-          break;
+      case 'Escape':
+        e.preventDefault();
+        setShowSuggestions(false);
+        setSuggestionIndex(-1);
+        inputRef.current?.focus();
+        break;
 
         // Quick filter by category using number keys
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            const categoryIndex = parseInt(e.key) - 1;
-            if (categoryIndex < VARIABLE_CATEGORIES.length) {
-              setSelectedCategory(VARIABLE_CATEGORIES[categoryIndex]);
-              setSuggestionIndex(0);
-            }
-          }
-          break;
-          
-        case '0':
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            setSelectedCategory('all');
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          const categoryIndex = parseInt(e.key) - 1;
+          if (categoryIndex < VARIABLE_CATEGORIES.length) {
+            setSelectedCategory(VARIABLE_CATEGORIES[categoryIndex]);
             setSuggestionIndex(0);
           }
-          break;
+        }
+        break;
+          
+      case '0':
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          setSelectedCategory('all');
+          setSuggestionIndex(0);
+        }
+        break;
       }
     }
   };
@@ -340,7 +340,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
             fontFamily: 'Monaco, Consolas, "Courier New", monospace',
             resize: 'vertical',
             outline: 'none',
-            lineHeight: 1.4,
+            lineHeight: 1.4
           }}
         />
         
@@ -359,7 +359,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
               fontFamily: 'Monaco, Consolas, "Courier New", monospace',
               lineHeight: 1.4,
               whiteSpace: 'pre-wrap',
-              wordWrap: 'break-word',
+              wordWrap: 'break-word'
             }}
             dangerouslySetInnerHTML={{ __html: renderHighlightedTemplate() }}
           />

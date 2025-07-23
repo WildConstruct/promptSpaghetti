@@ -214,15 +214,15 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
       const { action, reason, userId = 'unknown' } = request.body;
 
       switch (action) {
-        case 'acknowledge':
-          await alertService.acknowledgeAlert(alertId, userId);
-          break;
-        case 'resolve':
-          await alertService.resolveAlert(alertId);
-          break;
-        case 'dismiss':
-          await alertService.dismissAlert(alertId, userId, reason || 'No reason provided');
-          break;
+      case 'acknowledge':
+        await alertService.acknowledgeAlert(alertId, userId);
+        break;
+      case 'resolve':
+        await alertService.resolveAlert(alertId);
+        break;
+      case 'dismiss':
+        await alertService.dismissAlert(alertId, userId, reason || 'No reason provided');
+        break;
       }
 
       return {

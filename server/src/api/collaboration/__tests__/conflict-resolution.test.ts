@@ -68,25 +68,25 @@ describe('Conflict Resolution API', () => {
         let response;
 
         switch (method) {
-          case 'GET':
-            response = await app.inject({ method: 'GET', url: path });
-            break;
-          case 'POST':
-            response = await app.inject({ 
-              method: 'POST', 
-              url: path,
-              payload: {}
-            });
-            break;
-          case 'PUT':
-            response = await app.inject({ 
-              method: 'PUT', 
-              url: path,
-              payload: {}
-            });
-            break;
-          default:
-            continue;
+        case 'GET':
+          response = await app.inject({ method: 'GET', url: path });
+          break;
+        case 'POST':
+          response = await app.inject({ 
+            method: 'POST', 
+            url: path,
+            payload: {}
+          });
+          break;
+        case 'PUT':
+          response = await app.inject({ 
+            method: 'PUT', 
+            url: path,
+            payload: {}
+          });
+          break;
+        default:
+          continue;
         }
 
         expect(response.statusCode).toBe(401);

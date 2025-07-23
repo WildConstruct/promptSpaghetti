@@ -528,20 +528,20 @@ export const validateContribution = (contribution: unknown): Contribution => {
   const base = BaseContributionSchema.parse(contribution);
   
   switch (base.type) {
-    case 'template':
-      return TemplateContributionSchema.parse(contribution);
-    case 'knowledge_article':
-      return KnowledgeArticleContributionSchema.parse(contribution);
-    case 'tutorial':
-      return TutorialContributionSchema.parse(contribution);
-    case 'case_study':
-      return CaseStudyContributionSchema.parse(contribution);
-    case 'pattern_library':
-      return PatternLibraryContributionSchema.parse(contribution);
-    case 'community_post':
-      return CommunityPostContributionSchema.parse(contribution);
-    default:
-      throw new Error(`Unknown contribution type: ${base.type}`);
+  case 'template':
+    return TemplateContributionSchema.parse(contribution);
+  case 'knowledge_article':
+    return KnowledgeArticleContributionSchema.parse(contribution);
+  case 'tutorial':
+    return TutorialContributionSchema.parse(contribution);
+  case 'case_study':
+    return CaseStudyContributionSchema.parse(contribution);
+  case 'pattern_library':
+    return PatternLibraryContributionSchema.parse(contribution);
+  case 'community_post':
+    return CommunityPostContributionSchema.parse(contribution);
+  default:
+    throw new Error(`Unknown contribution type: ${base.type}`);
   }
 };
 

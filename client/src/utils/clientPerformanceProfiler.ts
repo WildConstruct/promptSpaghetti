@@ -291,7 +291,7 @@ export class ClientPerformanceProfiler {
     let totalSize = 0;
     let totalResponseTime = 0;
     let cacheHits = 0;
-    let errorCount = 0;
+    const errorCount = 0;
 
     resources.forEach(resource => {
       totalSize += resource.transferSize || 0;
@@ -331,8 +331,8 @@ export class ClientPerformanceProfiler {
     const averageInteractionTime = this.userInteractions.interactionTimes.length > 0
       ? this.userInteractions.interactionTimes.reduce(
         (a,
-        b
-      ) => a + b, 0) / this.userInteractions.interactionTimes.length
+          b
+        ) => a + b, 0) / this.userInteractions.interactionTimes.length
       : 0;
 
     return {

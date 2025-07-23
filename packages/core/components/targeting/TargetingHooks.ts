@@ -70,7 +70,7 @@ export const useTargetingConditions = (initialConditions: TargetingCondition[] =
 
   const activeConditions = useMemo(() => 
     conditions.filter(c => c.isEnabled), 
-    [conditions]
+  [conditions]
   );
 
   const conditionsByType = useMemo(() => {
@@ -226,7 +226,7 @@ export const useUserSegments = () => {
 
   const activeSegments = useMemo(() => 
     segments.filter(s => s.isActive), 
-    [segments]
+  [segments]
   );
 
   const segmentsByTag = useMemo(() => {
@@ -437,7 +437,7 @@ export const useAudienceManagement = () => {
 
   const activeAudiences = useMemo(() => 
     audiences.filter(a => a.isActive), 
-    [audiences]
+  [audiences]
   );
 
   return {

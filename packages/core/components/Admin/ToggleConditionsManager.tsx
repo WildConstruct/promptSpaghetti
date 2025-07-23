@@ -346,9 +346,9 @@ export const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps> = (
                         </span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           condition.metadata.riskLevel === 'critical' ? 'bg-red-500 text-white' :
-                          condition.metadata.riskLevel === 'high' ? 'bg-red-400 text-white' :
-                          condition.metadata.riskLevel === 'medium' ? 'bg-yellow-400 text-gray-800' :
-                          'bg-gray-400 text-white'
+                            condition.metadata.riskLevel === 'high' ? 'bg-red-400 text-white' :
+                              condition.metadata.riskLevel === 'medium' ? 'bg-yellow-400 text-gray-800' :
+                                'bg-gray-400 text-white'
                         }`}>
                           {condition.metadata.riskLevel.toUpperCase()} RISK
                         </span>
@@ -569,55 +569,55 @@ const ConditionDetails: React.FC<ConditionDetailsProps> = ({ condition }) => {
     const params = condition.parameters;
     
     switch (condition.conditionType) {
-      case ConditionType.PERCENTAGE:
-        return (
-          <div className="text-sm">
-            <span className="font-medium">Rollout: </span>
-            <span>{params.percentage}%</span>
-            {params.salt && <span className="text-gray-500 ml-2">(Salt: {params.salt})</span>}
-          </div>
-        );
+    case ConditionType.PERCENTAGE:
+      return (
+        <div className="text-sm">
+          <span className="font-medium">Rollout: </span>
+          <span>{params.percentage}%</span>
+          {params.salt && <span className="text-gray-500 ml-2">(Salt: {params.salt})</span>}
+        </div>
+      );
         
-      case ConditionType.USER_SEGMENT:
-        return (
-          <div className="text-sm">
-            <span className="font-medium">Segments: </span>
-            <span>{params.userSegments?.join(', ') || 'None'}</span>
-          </div>
-        );
+    case ConditionType.USER_SEGMENT:
+      return (
+        <div className="text-sm">
+          <span className="font-medium">Segments: </span>
+          <span>{params.userSegments?.join(', ') || 'None'}</span>
+        </div>
+      );
         
-      case ConditionType.TIME_WINDOW:
-        return (
-          <div className="text-sm space-y-1">
-            {params.startTime && (
-              <div>
-                <span className="font-medium">Start: </span>
-                <span>{params.startTime.toLocaleString()}</span>
-              </div>
-            )}
-            {params.endTime && (
-              <div>
-                <span className="font-medium">End: </span>
-                <span>{params.endTime.toLocaleString()}</span>
-              </div>
-            )}
-          </div>
-        );
+    case ConditionType.TIME_WINDOW:
+      return (
+        <div className="text-sm space-y-1">
+          {params.startTime && (
+            <div>
+              <span className="font-medium">Start: </span>
+              <span>{params.startTime.toLocaleString()}</span>
+            </div>
+          )}
+          {params.endTime && (
+            <div>
+              <span className="font-medium">End: </span>
+              <span>{params.endTime.toLocaleString()}</span>
+            </div>
+          )}
+        </div>
+      );
         
-      case ConditionType.CUSTOM_EXPRESSION:
-        return (
-          <div className="text-sm">
-            <span className="font-medium">Expression: </span>
-            <code className="bg-gray-100 px-2 py-1 rounded text-xs">{condition.expression}</code>
-          </div>
-        );
+    case ConditionType.CUSTOM_EXPRESSION:
+      return (
+        <div className="text-sm">
+          <span className="font-medium">Expression: </span>
+          <code className="bg-gray-100 px-2 py-1 rounded text-xs">{condition.expression}</code>
+        </div>
+      );
         
-      default:
-        return (
-          <div className="text-sm text-gray-500">
+    default:
+      return (
+        <div className="text-sm text-gray-500">
             Configuration details for {condition.conditionType}
-          </div>
-        );
+        </div>
+      );
     }
   };
 

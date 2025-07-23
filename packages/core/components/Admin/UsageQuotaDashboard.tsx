@@ -620,8 +620,8 @@ const OverviewTab: React.FC<{
           </div>
           <div className="metric-value text-green-600">
             {analytics.usageTrend === 'increasing' ? <TrendingUp size={24} /> : 
-             analytics.usageTrend === 'decreasing' ? <TrendingDown size={24} /> : 
-             <Activity size={24} />}
+              analytics.usageTrend === 'decreasing' ? <TrendingDown size={24} /> : 
+                <Activity size={24} />}
           </div>
           <div className="metric-detail">
             {Math.round(analytics.trendSignificance * 100)}% confidence
@@ -666,9 +666,9 @@ const OverviewTab: React.FC<{
             <div key={index} className="activity-item">
               <div className="activity-icon">
                 {activity.type === 'violation_occurred' ? <AlertCircle size={16} /> :
-                 activity.type === 'quota_created' ? <Plus size={16} /> :
-                 activity.type === 'quota_updated' ? <Edit2 size={16} /> :
-                 <CheckCircle size={16} />}
+                  activity.type === 'quota_created' ? <Plus size={16} /> :
+                    activity.type === 'quota_updated' ? <Edit2 size={16} /> :
+                      <CheckCircle size={16} />}
               </div>
               <div className="activity-content">
                 <div className="activity-description">{activity.description}</div>

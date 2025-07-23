@@ -142,7 +142,7 @@ const createMockStatistics = (overrides: Partial<WorkflowStatistics> = {}): Work
 const mockApiResponse = (data: any) => {
   mockFetch.mockResolvedValueOnce({
     ok: true,
-    json: async () => data,
+    json: async () => data
   } as Response);
 };
 
@@ -152,7 +152,7 @@ const mockApiError = (status: number = 500, statusText: string = 'Internal Serve
     ok: false,
     status,
     statusText,
-    json: async () => ({ error: statusText }),
+    json: async () => ({ error: statusText })
   } as Response);
 };
 

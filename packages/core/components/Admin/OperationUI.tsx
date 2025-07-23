@@ -127,12 +127,12 @@ export const OperationUI: React.FC<OperationUIProps> = ({
 
   const isValid = useMemo(() => 
     Object.keys(validationErrors).length === 0, 
-    [validationErrors]
+  [validationErrors]
   );
 
   const canExecute = useMemo(() => 
     !readonly && !isExecuting && isValid && !execution,
-    [readonly, isExecuting, isValid, execution]
+  [readonly, isExecuting, isValid, execution]
   );
 
   return (
@@ -191,11 +191,11 @@ const OperationHeader: React.FC<OperationHeaderProps> = ({
 }) => {
   const getRiskLevelColor = (risk: RiskLevel) => {
     switch (risk) {
-      case RiskLevel.LOW: return 'green';
-      case RiskLevel.MEDIUM: return 'yellow';
-      case RiskLevel.HIGH: return 'orange';
-      case RiskLevel.CRITICAL: return 'red';
-      default: return 'gray';
+    case RiskLevel.LOW: return 'green';
+    case RiskLevel.MEDIUM: return 'yellow';
+    case RiskLevel.HIGH: return 'orange';
+    case RiskLevel.CRITICAL: return 'red';
+    default: return 'gray';
     }
   };
 
@@ -340,111 +340,111 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
     };
 
     switch (parameter.inputType) {
-      case InputType.TEXT:
-        return <input type="text" {...commonProps} />;
+    case InputType.TEXT:
+      return <input type="text" {...commonProps} />;
       
-      case InputType.TEXTAREA:
-        return <textarea {...commonProps} rows={4} />;
+    case InputType.TEXTAREA:
+      return <textarea {...commonProps} rows={4} />;
       
-      case InputType.NUMBER:
-        return (
-          <input 
-            type="number" 
-            {...commonProps}
-            onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
-          />
-        );
+    case InputType.NUMBER:
+      return (
+        <input 
+          type="number" 
+          {...commonProps}
+          onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
+        />
+      );
       
-      case InputType.CHECKBOX:
-        return (
-          <input
-            type="checkbox"
-            checked={Boolean(value)}
-            onChange={(e) => onChange(e.target.checked)}
-            disabled={readonly}
-            className={error ? 'error' : ''}
-          />
-        );
+    case InputType.CHECKBOX:
+      return (
+        <input
+          type="checkbox"
+          checked={Boolean(value)}
+          onChange={(e) => onChange(e.target.checked)}
+          disabled={readonly}
+          className={error ? 'error' : ''}
+        />
+      );
       
-      case InputType.SELECT:
-        return (
-          <select {...commonProps}>
-            <option value="">Select...</option>
-            {parameter.options?.map(option => (
-              <option 
-                key={option.value} 
-                value={option.value}
-                disabled={option.disabled}
-              >
-                {option.label}
-              </option>
-            ))}
-          </select>
-        );
+    case InputType.SELECT:
+      return (
+        <select {...commonProps}>
+          <option value="">Select...</option>
+          {parameter.options?.map(option => (
+            <option 
+              key={option.value} 
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
+      );
       
-      case InputType.MULTISELECT:
-        return (
-          <div className="multiselect">
-            {parameter.options?.map(option => (
-              <label key={option.value} className="multiselect-option">
-                <input
-                  type="checkbox"
-                  checked={Array.isArray(value) && value.includes(option.value)}
-                  onChange={(e) => {
-                    const currentValues = Array.isArray(value) ? value : [];
-                    if (e.target.checked) {
-                      onChange([...currentValues, option.value]);
-                    } else {
-                      onChange(currentValues.filter((v: any) => v !== option.value));
-                    }
-                  }}
-                  disabled={readonly || option.disabled}
-                />
-                {option.label}
-              </label>
-            ))}
-          </div>
-        );
+    case InputType.MULTISELECT:
+      return (
+        <div className="multiselect">
+          {parameter.options?.map(option => (
+            <label key={option.value} className="multiselect-option">
+              <input
+                type="checkbox"
+                checked={Array.isArray(value) && value.includes(option.value)}
+                onChange={(e) => {
+                  const currentValues = Array.isArray(value) ? value : [];
+                  if (e.target.checked) {
+                    onChange([...currentValues, option.value]);
+                  } else {
+                    onChange(currentValues.filter((v: any) => v !== option.value));
+                  }
+                }}
+                disabled={readonly || option.disabled}
+              />
+              {option.label}
+            </label>
+          ))}
+        </div>
+      );
       
-      case InputType.DATE_PICKER:
-        return (
-          <input
-            type="date"
-            value={value ? new Date(value).toISOString().split('T')[0] : ''}
-            onChange={(e) => onChange(new Date(e.target.value))}
-            disabled={readonly}
-            className={error ? 'error' : ''}
-          />
-        );
+    case InputType.DATE_PICKER:
+      return (
+        <input
+          type="date"
+          value={value ? new Date(value).toISOString().split('T')[0] : ''}
+          onChange={(e) => onChange(new Date(e.target.value))}
+          disabled={readonly}
+          className={error ? 'error' : ''}
+        />
+      );
       
-      case InputType.DATETIME_PICKER:
-        return (
-          <input
-            type="datetime-local"
-            value={value ? new Date(value).toISOString().slice(0, -1) : ''}
-            onChange={(e) => onChange(new Date(e.target.value))}
-            disabled={readonly}
-            className={error ? 'error' : ''}
-          />
-        );
+    case InputType.DATETIME_PICKER:
+      return (
+        <input
+          type="datetime-local"
+          value={value ? new Date(value).toISOString().slice(0, -1) : ''}
+          onChange={(e) => onChange(new Date(e.target.value))}
+          disabled={readonly}
+          className={error ? 'error' : ''}
+        />
+      );
       
-      case InputType.FILE_UPLOAD:
-        return (
-          <input
-            type="file"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                onChange(file);
-              }
-            }}
-            disabled={readonly}
-            className={error ? 'error' : ''}
-          />
-        );
+    case InputType.FILE_UPLOAD:
+      return (
+        <input
+          type="file"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              onChange(file);
+            }
+          }}
+          disabled={readonly}
+          className={error ? 'error' : ''}
+        />
+      );
       
-      default:
-        return <input type="text" {...commonProps} />;
+    default:
+      return <input type="text" {...commonProps} />;
     }
   };
 
@@ -578,11 +578,11 @@ const OperationProgress: React.FC<OperationProgressProps> = ({
 
   const getStatusColor = (status: ExecutionStatus) => {
     switch (status) {
-      case ExecutionStatus.RUNNING: return 'blue';
-      case ExecutionStatus.COMPLETED: return 'green';
-      case ExecutionStatus.FAILED: return 'red';
-      case ExecutionStatus.CANCELLED: return 'gray';
-      default: return 'gray';
+    case ExecutionStatus.RUNNING: return 'blue';
+    case ExecutionStatus.COMPLETED: return 'green';
+    case ExecutionStatus.FAILED: return 'red';
+    case ExecutionStatus.CANCELLED: return 'gray';
+    default: return 'gray';
     }
   };
 
@@ -689,18 +689,18 @@ const OperationProgress: React.FC<OperationProgressProps> = ({
 // Utility functions
 function validateParameterType(value: any, type: ParameterType): boolean {
   switch (type) {
-    case ParameterType.STRING:
-      return typeof value === 'string';
-    case ParameterType.NUMBER:
-      return typeof value === 'number' && !isNaN(value);
-    case ParameterType.BOOLEAN:
-      return typeof value === 'boolean';
-    case ParameterType.ARRAY:
-      return Array.isArray(value);
-    case ParameterType.OBJECT:
-      return typeof value === 'object' && value !== null && !Array.isArray(value);
-    default:
-      return true;
+  case ParameterType.STRING:
+    return typeof value === 'string';
+  case ParameterType.NUMBER:
+    return typeof value === 'number' && !isNaN(value);
+  case ParameterType.BOOLEAN:
+    return typeof value === 'boolean';
+  case ParameterType.ARRAY:
+    return Array.isArray(value);
+  case ParameterType.OBJECT:
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+  default:
+    return true;
   }
 }
 

@@ -392,7 +392,7 @@ export class K6PerformanceIntegration {
                 current: currentValue,
                 change: change * 100, // Convert to percentage
                 severity: Math.abs(change) > 0.5 ? 'critical' : 
-                         Math.abs(change) > 0.3 ? 'major' : 'minor'
+                  Math.abs(change) > 0.3 ? 'major' : 'minor'
               });
               analysis.detected = true;
             } else {
@@ -469,23 +469,23 @@ export class K6PerformanceIntegration {
             <div class="metric-grid">
                 <div class="metric-card">
                     <div class="metric-value">${this.formatMetric(
-                      this.extractMetricValue(result,
-                      'response_time_p95'
-                    ))}ms</div>
+    this.extractMetricValue(result,
+      'response_time_p95'
+    ))}ms</div>
                     <div class="metric-label">Response Time (P95)</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-value">${this.formatMetric(
-                      this.extractMetricValue(result,
-                      'error_rate'
-                    ) * 100)}%</div>
+    this.extractMetricValue(result,
+      'error_rate'
+    ) * 100)}%</div>
                     <div class="metric-label">Error Rate</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-value">${this.formatMetric(
-                      this.extractMetricValue(result,
-                      'throughput'
-                    ))}/s</div>
+    this.extractMetricValue(result,
+      'throughput'
+    ))}/s</div>
                     <div class="metric-label">Throughput</div>
                 </div>
             </div>
@@ -610,16 +610,16 @@ export class K6PerformanceIntegration {
     const metrics = result.metrics;
     
     switch (key) {
-      case 'response_time_p95':
-        return metrics?.http?.http_req_duration?.p95;
-      case 'error_rate':
-        return metrics?.http?.http_req_failed?.rate;
-      case 'throughput':
-        return metrics?.http?.http_reqs?.rate;
-      case 'connection_failures':
-        return metrics?.websocket?.ws_connection_errors?.count;
-      default:
-        return undefined;
+    case 'response_time_p95':
+      return metrics?.http?.http_req_duration?.p95;
+    case 'error_rate':
+      return metrics?.http?.http_req_failed?.rate;
+    case 'throughput':
+      return metrics?.http?.http_reqs?.rate;
+    case 'connection_failures':
+      return metrics?.websocket?.ws_connection_errors?.count;
+    default:
+      return undefined;
     }
   }
 

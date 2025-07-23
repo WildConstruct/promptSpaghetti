@@ -239,11 +239,11 @@ export const OAuthSecurityDashboard: React.FC = () => {
 
   const getSeverityColor = (severity: string): string => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'low': return 'text-blue-600 bg-blue-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'critical': return 'text-red-600 bg-red-100';
+    case 'high': return 'text-orange-600 bg-orange-100';
+    case 'medium': return 'text-yellow-600 bg-yellow-100';
+    case 'low': return 'text-blue-600 bg-blue-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -521,8 +521,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
                       </span>
                       <span className={`ml-2 w-2 h-2 rounded-full ${
                         compliance.status === 'compliant' ? 'bg-green-400' :
-                        compliance.status === 'partial' ? 'bg-yellow-400' :
-                        'bg-red-400'
+                          compliance.status === 'partial' ? 'bg-yellow-400' :
+                            'bg-red-400'
                       }`}></span>
                     </div>
                   </div>
@@ -611,8 +611,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
                   </span>
                   <span className={`w-3 h-3 rounded-full ${
                     compliance.status === 'compliant' ? 'bg-green-400' :
-                    compliance.status === 'partial' ? 'bg-yellow-400' :
-                    'bg-red-400'
+                      compliance.status === 'partial' ? 'bg-yellow-400' :
+                        'bg-red-400'
                   }`}></span>
                 </div>
               </div>
@@ -628,9 +628,9 @@ export const OAuthSecurityDashboard: React.FC = () => {
                     {compliance.issues.map((issue) => (
                       <div key={issue.id} className={`p-3 rounded border ${
                         issue.severity === 'critical' ? 'bg-red-50 border-red-200' :
-                        issue.severity === 'high' ? 'bg-orange-50 border-orange-200' :
-                        issue.severity === 'medium' ? 'bg-yellow-50 border-yellow-200' :
-                        'bg-blue-50 border-blue-200'
+                          issue.severity === 'high' ? 'bg-orange-50 border-orange-200' :
+                            issue.severity === 'medium' ? 'bg-yellow-50 border-yellow-200' :
+                              'bg-blue-50 border-blue-200'
                       }`}>
                         <div className="flex justify-between items-start">
                           <div>
@@ -671,9 +671,9 @@ export const OAuthSecurityDashboard: React.FC = () => {
                 {threats.map((threat) => (
                   <div key={threat.threatId} className={`border rounded-lg p-4 ${
                     threat.severity === 'critical' ? 'border-red-300 bg-red-50' :
-                    threat.severity === 'high' ? 'border-orange-300 bg-orange-50' :
-                    threat.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :
-                    'border-blue-300 bg-blue-50'
+                      threat.severity === 'high' ? 'border-orange-300 bg-orange-50' :
+                        threat.severity === 'medium' ? 'border-yellow-300 bg-yellow-50' :
+                          'border-blue-300 bg-blue-50'
                   }`}>
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-semibold text-gray-900">{threat.threatType.replace(
@@ -686,8 +686,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
                         </span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           threat.status === 'active' ? 'bg-red-100 text-red-800' :
-                          threat.status === 'mitigated' ? 'bg-green-100 text-green-800' :
-                          'bg-gray-100 text-gray-800'
+                            threat.status === 'mitigated' ? 'bg-green-100 text-green-800' :
+                              'bg-gray-100 text-gray-800'
                         }`}>
                           {threat.status}
                         </span>
@@ -770,8 +770,8 @@ export const OAuthSecurityDashboard: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                         log.result === 'success' ? 'bg-green-100 text-green-800' :
-                        log.result === 'partial' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
+                          log.result === 'partial' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
                       }`}>
                         {log.result}
                       </span>

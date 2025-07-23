@@ -186,7 +186,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
     trendAnalysisEnabled: true,
     autoOptimizationEnabled: false,
     reportingFrequency: 300000, // 5 minutes
-    monitoringFrequency: 30000, // 30 seconds
+    monitoringFrequency: 30000 // 30 seconds
   };
 
   constructor(
@@ -696,10 +696,10 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
     let healthPenalty = 0;
     activeAnomalies.forEach(anomaly => {
       switch (anomaly.severity) {
-        case 'critical': healthPenalty += 20; break;
-        case 'high': healthPenalty += 10; break;
-        case 'medium': healthPenalty += 5; break;
-        case 'low': healthPenalty += 2; break;
+      case 'critical': healthPenalty += 20; break;
+      case 'high': healthPenalty += 10; break;
+      case 'medium': healthPenalty += 5; break;
+      case 'low': healthPenalty += 2; break;
       }
     });
 
@@ -835,7 +835,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
   private async storePerformanceReport(report: PerformanceReport): Promise<void> {
     try {
       await this.dbService.query(
-        `INSERT INTO performance_reports (id, data, created_at) VALUES ($1, $2, $3)`,
+        'INSERT INTO performance_reports (id, data, created_at) VALUES ($1, $2, $3)',
         [report.id, JSON.stringify(report), new Date(report.generatedAt)]
       );
     } catch (error) {
@@ -846,7 +846,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
   private async storeAnomaly(anomaly: PerformanceAnomaly): Promise<void> {
     try {
       await this.dbService.query(
-        `INSERT INTO performance_anomalies (id, data, created_at) VALUES ($1, $2, $3)`,
+        'INSERT INTO performance_anomalies (id, data, created_at) VALUES ($1, $2, $3)',
         [anomaly.id, JSON.stringify(anomaly), new Date(anomaly.timestamp)]
       );
     } catch (error) {
@@ -869,11 +869,11 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
   private extractMetricValue(metric: any, metricName: string): number {
     // Extract specific metric value from the metric object
     switch (metricName) {
-      case 'responseTime': return metric.responseTime || 0;
-      case 'averageQueryTime': return metric.averageQueryTime || 0;
-      case 'cpuUsage': return metric.cpuUsage || 0;
-      case 'memoryUsage': return metric.memoryUsage?.percentage || 0;
-      default: return 0;
+    case 'responseTime': return metric.responseTime || 0;
+    case 'averageQueryTime': return metric.averageQueryTime || 0;
+    case 'cpuUsage': return metric.cpuUsage || 0;
+    case 'memoryUsage': return metric.memoryUsage?.percentage || 0;
+    default: return 0;
     }
   }
 
@@ -898,18 +898,18 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
     const recommendations: string[] = [];
     
     switch (component) {
-      case 'api':
-        if (metric === 'responseTime') {
-          recommendations.push('Investigate slow database queries or external service calls');
-          recommendations.push('Consider implementing caching for frequently accessed data');
-        }
-        break;
-      case 'database':
-        if (metric === 'averageQueryTime') {
-          recommendations.push('Analyze query execution plans and add missing indexes');
-          recommendations.push('Consider query optimization or database connection pooling');
-        }
-        break;
+    case 'api':
+      if (metric === 'responseTime') {
+        recommendations.push('Investigate slow database queries or external service calls');
+        recommendations.push('Consider implementing caching for frequently accessed data');
+      }
+      break;
+    case 'database':
+      if (metric === 'averageQueryTime') {
+        recommendations.push('Analyze query execution plans and add missing indexes');
+        recommendations.push('Consider query optimization or database connection pooling');
+      }
+      break;
     }
     
     return recommendations;

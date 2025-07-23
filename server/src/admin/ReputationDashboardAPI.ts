@@ -221,7 +221,7 @@ export class ReputationDashboardAPI {
       
       return reply.code(200).send({
         success: true,
-        message: `Verification status updated successfully`
+        message: 'Verification status updated successfully'
       });
     } catch (error) {
       return reply.code(400).send({
@@ -472,17 +472,17 @@ export class ReputationDashboardAPI {
       let contentType: string;
       
       switch (format) {
-        case 'csv':
-          responseData = this.formatReputationDataAsCSV(exportData);
-          contentType = 'text/csv';
-          break;
-        case 'excel':
-          responseData = await this.formatReputationDataAsExcel(exportData);
-          contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-          break;
-        default:
-          responseData = exportData;
-          contentType = 'application/json';
+      case 'csv':
+        responseData = this.formatReputationDataAsCSV(exportData);
+        contentType = 'text/csv';
+        break;
+      case 'excel':
+        responseData = await this.formatReputationDataAsExcel(exportData);
+        contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        break;
+      default:
+        responseData = exportData;
+        contentType = 'application/json';
       }
       
       // Audit export
@@ -599,26 +599,26 @@ export class ReputationDashboardAPI {
     }
     
     if (filters.minScore !== undefined) {
-      query += ` AND ur.overall_trust_score >= ?`;
+      query += ' AND ur.overall_trust_score >= ?';
       params.push(filters.minScore);
     }
     
     if (filters.maxScore !== undefined) {
-      query += ` AND ur.overall_trust_score <= ?`;
+      query += ' AND ur.overall_trust_score <= ?';
       params.push(filters.maxScore);
     }
     
     if (filters.flagged) {
-      query += ` AND JSON_EXTRACT(ur.admin_notes, '$.flagged') = ?`;
+      query += ' AND JSON_EXTRACT(ur.admin_notes, \'$.flagged\') = ?';
       params.push(filters.flagged);
     }
     
     if (filters.search) {
-      query += ` AND (u.username LIKE ? OR u.email LIKE ?)`;
+      query += ' AND (u.username LIKE ? OR u.email LIKE ?)';
       params.push(`%${filters.search}%`, `%${filters.search}%`);
     }
     
-    query += ` ORDER BY ur.overall_trust_score DESC LIMIT ? OFFSET ?`;
+    query += ' ORDER BY ur.overall_trust_score DESC LIMIT ? OFFSET ?';
     params.push(filters.limit || 50, filters.offset || 0);
     
     const rows = await this.databaseService.query(query, params);

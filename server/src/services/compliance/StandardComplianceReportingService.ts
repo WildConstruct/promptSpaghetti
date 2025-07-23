@@ -393,18 +393,18 @@ export class StandardComplianceReportingService {
     console.log(`📄 Exporting ${report.framework} report ${report.id} as ${format}`);
 
     switch (format) {
-      case 'pdf':
-        return this.exportToPDF(report, options);
-      case 'excel':
-        return this.exportToExcel(report, options);
-      case 'json':
-        return this.exportToJSON(report, options);
-      case 'html':
-        return this.exportToHTML(report, options);
-      case 'docx':
-        return this.exportToDocx(report, options);
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    case 'pdf':
+      return this.exportToPDF(report, options);
+    case 'excel':
+      return this.exportToExcel(report, options);
+    case 'json':
+      return this.exportToJSON(report, options);
+    case 'html':
+      return this.exportToHTML(report, options);
+    case 'docx':
+      return this.exportToDocx(report, options);
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
   }
 
@@ -552,7 +552,7 @@ export class StandardComplianceReportingService {
       const recommendation: Recommendation = {
         id: crypto.randomUUID(),
         priority: gap.severity === 'critical' ? 'critical' : 
-                 gap.severity === 'high' ? 'high' : 'medium',
+          gap.severity === 'high' ? 'high' : 'medium',
         category: gap.category,
         framework,
         title: gap.title,

@@ -93,7 +93,7 @@ export const useBadgeSystem = (config: BadgeSystemHookConfig = {}) => {
       new Notification('Badge Unlocked!', {
         body: `${badge.name}: ${badge.description}`,
         icon: '/badge-icon.png', // You'd provide this icon
-        tag: `badge-${unlockEvent.badgeId}`,
+        tag: `badge-${unlockEvent.badgeId}`
       });
     }
   }, []);

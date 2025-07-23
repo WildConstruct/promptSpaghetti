@@ -157,7 +157,7 @@ export class UserStatusService {
   }> {
     try {
       let whereClause = '';
-      let queryParams: any[] = [limit, offset];
+      const queryParams: any[] = [limit, offset];
       
       if (userIds && userIds.length > 0) {
         whereClause = 'WHERE u.id = ANY($3)';

@@ -549,16 +549,16 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     
     // Set status-specific timestamps
     switch (status) {
-      case AlertStatus.ACKNOWLEDGED:
-        alert.acknowledgedAt = new Date();
-        break;
-      case AlertStatus.RESOLVED:
-      case AlertStatus.CLOSED:
-        alert.resolvedAt = new Date();
-        break;
-      case AlertStatus.ESCALATED:
-        alert.escalatedAt = new Date();
-        break;
+    case AlertStatus.ACKNOWLEDGED:
+      alert.acknowledgedAt = new Date();
+      break;
+    case AlertStatus.RESOLVED:
+    case AlertStatus.CLOSED:
+      alert.resolvedAt = new Date();
+      break;
+    case AlertStatus.ESCALATED:
+      alert.escalatedAt = new Date();
+      break;
     }
     
     // Add comment if provided
@@ -769,8 +769,8 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     const resolvedAlerts = allAlerts.filter(a => a.resolvedAt);
     const avgResolutionTime = resolvedAlerts.length > 0 
       ? resolvedAlerts.reduce((sum, alert) => {
-          return sum + (alert.resolvedAt!.getTime() - alert.createdAt.getTime());
-        }, 0) / resolvedAlerts.length
+        return sum + (alert.resolvedAt!.getTime() - alert.createdAt.getTime());
+      }, 0) / resolvedAlerts.length
       : 0;
     
     return {
@@ -985,26 +985,26 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     const alertValue = this.getAlertFieldValue(alert, condition.field);
     
     switch (condition.operator) {
-      case 'EQUALS':
-        return alertValue === condition.value;
-      case 'NOT_EQUALS':
-        return alertValue !== condition.value;
-      case 'CONTAINS':
-        return String(alertValue).includes(String(condition.value));
-      case 'NOT_CONTAINS':
-        return !String(alertValue).includes(String(condition.value));
-      case 'GREATER_THAN':
-        return Number(alertValue) > Number(condition.value);
-      case 'LESS_THAN':
-        return Number(alertValue) < Number(condition.value);
-      case 'IN':
-        return Array.isArray(condition.value) && condition.value.includes(alertValue);
-      case 'NOT_IN':
-        return Array.isArray(condition.value) && !condition.value.includes(alertValue);
-      case 'REGEX':
-        return new RegExp(String(condition.value)).test(String(alertValue));
-      default:
-        return false;
+    case 'EQUALS':
+      return alertValue === condition.value;
+    case 'NOT_EQUALS':
+      return alertValue !== condition.value;
+    case 'CONTAINS':
+      return String(alertValue).includes(String(condition.value));
+    case 'NOT_CONTAINS':
+      return !String(alertValue).includes(String(condition.value));
+    case 'GREATER_THAN':
+      return Number(alertValue) > Number(condition.value);
+    case 'LESS_THAN':
+      return Number(alertValue) < Number(condition.value);
+    case 'IN':
+      return Array.isArray(condition.value) && condition.value.includes(alertValue);
+    case 'NOT_IN':
+      return Array.isArray(condition.value) && !condition.value.includes(alertValue);
+    case 'REGEX':
+      return new RegExp(String(condition.value)).test(String(alertValue));
+    default:
+      return false;
     }
   }
   
@@ -1042,18 +1042,18 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   
   private async executeAction(alert: UnifiedAlert, action: RuleAction): Promise<void> {
     switch (action.type) {
-      case 'EMAIL':
-        await this.sendEmailNotification(alert, action.parameters);
-        break;
-      case 'WEBHOOK':
-        await this.sendWebhookNotification(alert, action.parameters);
-        break;
-      case 'UPDATE_STATUS':
-        await this.updateAlertStatus(alert.id, action.parameters.status);
-        break;
-      case 'ASSIGN':
-        await this.assignAlert(alert.id, action.parameters.assignee, 'system');
-        break;
+    case 'EMAIL':
+      await this.sendEmailNotification(alert, action.parameters);
+      break;
+    case 'WEBHOOK':
+      await this.sendWebhookNotification(alert, action.parameters);
+      break;
+    case 'UPDATE_STATUS':
+      await this.updateAlertStatus(alert.id, action.parameters.status);
+      break;
+    case 'ASSIGN':
+      await this.assignAlert(alert.id, action.parameters.assignee, 'system');
+      break;
       // Additional action types would be implemented here
     }
   }
@@ -1133,30 +1133,30 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   
   private mapPriorityToSeverity(priority: AlertPriority): 'INFO' | 'WARNING' | 'ERROR' | 'CRITICAL' {
     switch (priority) {
-      case AlertPriority.LOW:
-        return 'INFO';
-      case AlertPriority.MEDIUM:
-        return 'WARNING';
-      case AlertPriority.HIGH:
-        return 'ERROR';
-      case AlertPriority.CRITICAL:
-      case AlertPriority.EMERGENCY:
-        return 'CRITICAL';
+    case AlertPriority.LOW:
+      return 'INFO';
+    case AlertPriority.MEDIUM:
+      return 'WARNING';
+    case AlertPriority.HIGH:
+      return 'ERROR';
+    case AlertPriority.CRITICAL:
+    case AlertPriority.EMERGENCY:
+      return 'CRITICAL';
     }
   }
   
   private mapSeverityToPriority(severity: string): AlertPriority {
     switch (severity?.toUpperCase()) {
-      case 'CRITICAL':
-        return AlertPriority.CRITICAL;
-      case 'HIGH':
-        return AlertPriority.HIGH;
-      case 'MEDIUM':
-        return AlertPriority.MEDIUM;
-      case 'LOW':
-        return AlertPriority.LOW;
-      default:
-        return AlertPriority.MEDIUM;
+    case 'CRITICAL':
+      return AlertPriority.CRITICAL;
+    case 'HIGH':
+      return AlertPriority.HIGH;
+    case 'MEDIUM':
+      return AlertPriority.MEDIUM;
+    case 'LOW':
+      return AlertPriority.LOW;
+    default:
+      return AlertPriority.MEDIUM;
     }
   }
   

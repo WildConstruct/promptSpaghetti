@@ -617,55 +617,55 @@ export class TransactionMonitoringService {
     const summary = await this.getTransactionSummary(startDate, endDate);
 
     switch (reportType) {
-      case 'summary':
-        return {
-          reportType: 'Transaction Summary',
-          period: { startDate, endDate },
-          summary,
-          generatedAt: new Date()
-        };
+    case 'summary':
+      return {
+        reportType: 'Transaction Summary',
+        period: { startDate, endDate },
+        summary,
+        generatedAt: new Date()
+      };
 
-      case 'detailed':
-        const { transactions } = await this.searchTransactions({
-          startDate,
-          endDate,
-          limit: 1000
-        });
+    case 'detailed':
+      const { transactions } = await this.searchTransactions({
+        startDate,
+        endDate,
+        limit: 1000
+      });
         
-        return {
-          reportType: 'Detailed Transaction Report',
-          period: { startDate, endDate },
-          summary,
-          transactions,
-          generatedAt: new Date()
-        };
+      return {
+        reportType: 'Detailed Transaction Report',
+        period: { startDate, endDate },
+        summary,
+        transactions,
+        generatedAt: new Date()
+      };
 
-      case 'fraud_analysis':
-        const fraudTransactions = await this.searchTransactions({
-          startDate,
-          endDate,
-          hasFlags: true,
-          limit: 1000
-        });
+    case 'fraud_analysis':
+      const fraudTransactions = await this.searchTransactions({
+        startDate,
+        endDate,
+        hasFlags: true,
+        limit: 1000
+      });
 
-        const highRiskTransactions = await this.searchTransactions({
-          startDate,
-          endDate,
-          riskScore: { min: 70 },
-          limit: 1000
-        });
+      const highRiskTransactions = await this.searchTransactions({
+        startDate,
+        endDate,
+        riskScore: { min: 70 },
+        limit: 1000
+      });
 
-        return {
-          reportType: 'Fraud Analysis Report',
-          period: { startDate, endDate },
-          summary,
-          fraudTransactions: fraudTransactions.transactions,
-          highRiskTransactions: highRiskTransactions.transactions,
-          generatedAt: new Date()
-        };
+      return {
+        reportType: 'Fraud Analysis Report',
+        period: { startDate, endDate },
+        summary,
+        fraudTransactions: fraudTransactions.transactions,
+        highRiskTransactions: highRiskTransactions.transactions,
+        generatedAt: new Date()
+      };
 
-      default:
-        throw new Error('Invalid report type');
+    default:
+      throw new Error('Invalid report type');
     }
   }
 }

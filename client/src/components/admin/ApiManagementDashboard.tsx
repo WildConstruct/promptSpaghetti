@@ -348,20 +348,20 @@ export const ApiManagementDashboard: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      default: return 'bg-blue-100 text-blue-800 border-blue-200';
+    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    default: return 'bg-blue-100 text-blue-800 border-blue-200';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'expired': return 'bg-yellow-100 text-yellow-800';
-      case 'revoked': return 'bg-red-100 text-red-800';
-      case 'suspended': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+    case 'active': return 'bg-green-100 text-green-800';
+    case 'expired': return 'bg-yellow-100 text-yellow-800';
+    case 'revoked': return 'bg-red-100 text-red-800';
+    case 'suspended': return 'bg-orange-100 text-orange-800';
+    default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -728,7 +728,7 @@ export const ApiManagementDashboard: React.FC = () => {
                         </span>
                         <div className="text-xs text-gray-500 mt-1">
                           {key.expiresAt && new Date(key.expiresAt) < new Date() ? 'Expired' : 
-                           key.expiresAt ? `Expires ${new Date(key.expiresAt).toLocaleDateString()}` : 'No expiry'}
+                            key.expiresAt ? `Expires ${new Date(key.expiresAt).toLocaleDateString()}` : 'No expiry'}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -781,8 +781,8 @@ export const ApiManagementDashboard: React.FC = () => {
                 realTimeAlerts.filter(alert => !alert.resolved).length === 0
                   ? 'bg-green-100 text-green-800'
                   : realTimeAlerts.some(alert => alert.severity === 'critical' && !alert.resolved)
-                  ? 'bg-red-100 text-red-800'
-                  : 'bg-yellow-100 text-yellow-800'
+                    ? 'bg-red-100 text-red-800'
+                    : 'bg-yellow-100 text-yellow-800'
               }`}>
                 {realTimeAlerts.filter(alert => !alert.resolved).length} Active
               </span>
@@ -1016,8 +1016,8 @@ export const ApiManagementDashboard: React.FC = () => {
                             <span className="text-gray-500">{activity.timestamp.toLocaleString()}</span>
                             <span className={`font-medium ${
                               activity.action === 'error' ? 'text-red-600' :
-                              activity.action === 'rate_limit' ? 'text-orange-600' :
-                              'text-blue-600'
+                                activity.action === 'rate_limit' ? 'text-orange-600' :
+                                  'text-blue-600'
                             }`}>
                               {activity.action.toUpperCase()}
                             </span>

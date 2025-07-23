@@ -78,13 +78,13 @@ export const useAuthStore = create<AuthState>()(
           const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({ 
               email, 
               password, 
               rememberMe 
-            }),
+            })
           });
 
           if (!response.ok) {
@@ -104,7 +104,7 @@ export const useAuthStore = create<AuthState>()(
             accessToken: data.accessToken,
             refreshToken: data.refreshToken,
             tokenExpiration,
-            error: null,
+            error: null
           });
 
           return true;
@@ -116,7 +116,7 @@ export const useAuthStore = create<AuthState>()(
             user: null,
             accessToken: null,
             refreshToken: null,
-            tokenExpiration: null,
+            tokenExpiration: null
           });
           return false;
         }
@@ -130,9 +130,9 @@ export const useAuthStore = create<AuthState>()(
           const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userData),
+            body: JSON.stringify(userData)
           });
 
           if (!response.ok) {
@@ -144,7 +144,7 @@ export const useAuthStore = create<AuthState>()(
           
           set({
             isLoading: false,
-            error: null,
+            error: null
           });
 
           // Note: After registration, user typically needs to verify email
@@ -153,7 +153,7 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           set({
             isLoading: false,
-            error: error instanceof Error ? error.message : 'Registration failed',
+            error: error instanceof Error ? error.message : 'Registration failed'
           });
           return false;
         }
@@ -172,8 +172,8 @@ export const useAuthStore = create<AuthState>()(
           const response = await fetch(`${API_BASE_URL}/api/auth/oauth/authorize?${queryParams.toString()}`, {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/json',
-            },
+              'Content-Type': 'application/json'
+            }
           });
 
           if (!response.ok) {
@@ -188,7 +188,7 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           set({
             isLoading: false,
-            error: error instanceof Error ? error.message : 'OAuth authorization failed',
+            error: error instanceof Error ? error.message : 'OAuth authorization failed'
           });
           throw error;
         }
@@ -207,8 +207,8 @@ export const useAuthStore = create<AuthState>()(
           const response = await fetch(`${API_BASE_URL}/api/auth/oauth/callback/${provider}?${queryParams.toString()}`, {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/json',
-            },
+              'Content-Type': 'application/json'
+            }
           });
 
           if (!response.ok) {
@@ -228,7 +228,7 @@ export const useAuthStore = create<AuthState>()(
             accessToken: data.tokens.accessToken,
             refreshToken: data.tokens.refreshToken,
             tokenExpiration,
-            error: null,
+            error: null
           });
 
           return true;
@@ -240,7 +240,7 @@ export const useAuthStore = create<AuthState>()(
             user: null,
             accessToken: null,
             refreshToken: null,
-            tokenExpiration: null,
+            tokenExpiration: null
           });
           return false;
         }
@@ -255,9 +255,9 @@ export const useAuthStore = create<AuthState>()(
           fetch(`${API_BASE_URL}/api/auth/logout`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ sessionId: undefined }),
+            body: JSON.stringify({ sessionId: undefined })
           }).catch(console.error); // Don't block logout on server error
         }
 
@@ -268,7 +268,7 @@ export const useAuthStore = create<AuthState>()(
           refreshToken: null,
           tokenExpiration: null,
           error: null,
-          returnUrl: null,
+          returnUrl: null
         });
       },
 
@@ -284,9 +284,9 @@ export const useAuthStore = create<AuthState>()(
           const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ refreshToken }),
+            body: JSON.stringify({ refreshToken })
           });
 
           if (!response.ok) {
@@ -300,7 +300,7 @@ export const useAuthStore = create<AuthState>()(
             accessToken: data.accessToken,
             refreshToken: data.refreshToken || refreshToken,
             tokenExpiration,
-            error: null,
+            error: null
           });
 
           return true;
@@ -347,8 +347,8 @@ export const useAuthStore = create<AuthState>()(
         try {
           const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
             headers: {
-              'Authorization': `Bearer ${accessToken}`,
-            },
+              'Authorization': `Bearer ${accessToken}`
+            }
           });
 
           if (!response.ok) {
@@ -366,7 +366,7 @@ export const useAuthStore = create<AuthState>()(
           // Auth check failed, try to refresh
           return await get().refreshTokens();
         }
-      },
+      }
     }),
     {
       name: 'auth-storage', // localStorage key
@@ -378,8 +378,8 @@ export const useAuthStore = create<AuthState>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
         tokenExpiration: state.tokenExpiration,
-        returnUrl: state.returnUrl,
-      }),
+        returnUrl: state.returnUrl
+      })
     }
   )
 );
@@ -391,12 +391,12 @@ export const getAuthHeaders = (): Record<string, string> => {
   if (accessToken) {
     return {
       'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     };
   }
   
   return {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   };
 };
 
@@ -411,8 +411,8 @@ export const authenticatedFetch = async (
     ...options,
     headers: {
       ...authHeaders,
-      ...options.headers,
-    },
+      ...options.headers
+    }
   });
 
   // If token expired, try to refresh and retry
@@ -427,8 +427,8 @@ export const authenticatedFetch = async (
         ...options,
         headers: {
           ...newAuthHeaders,
-          ...options.headers,
-        },
+          ...options.headers
+        }
       });
     }
   }

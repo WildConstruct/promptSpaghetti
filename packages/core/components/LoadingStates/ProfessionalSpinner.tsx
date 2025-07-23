@@ -78,115 +78,115 @@ export const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps> = ({
 
   const renderSpinner = () => {
     switch (type) {
-      case 'spinner':
-        return (
-          <div
-            style={{
-              width: spinnerSize,
-              height: spinnerSize,
-              border: `2px solid ${colors.light}`,
-              borderTop: `2px solid ${colors.main}`,
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite',
-              ...createSmoothTransition(['border-color'])
-            }}
-            className="animate-loading-spinner"
-          />
-        );
+    case 'spinner':
+      return (
+        <div
+          style={{
+            width: spinnerSize,
+            height: spinnerSize,
+            border: `2px solid ${colors.light}`,
+            borderTop: `2px solid ${colors.main}`,
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            ...createSmoothTransition(['border-color'])
+          }}
+          className="animate-loading-spinner"
+        />
+      );
 
-      case 'dots':
-        return (
-          <div 
-            className="spinner-dots"
-            style={{ gap: spinnerSize / 4 }}
-          >
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="dot"
-                style={{
-                  width: spinnerSize / 3,
-                  height: spinnerSize / 3,
-                  background: colors.main,
-                  animationDelay: `${i * 0.16}s`
-                }}
-              />
-            ))}
-          </div>
-        );
-
-      case 'pulse':
-        return (
-          <div
-            style={{
-              width: spinnerSize,
-              height: spinnerSize,
-              borderRadius: '50%',
-              background: colors.gradient,
-              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              ...createSmoothTransition(['background'])
-            }}
-            className="animate-loading-pulse"
-          />
-        );
-
-      case 'bars':
-        return (
-          <div
-            style={{
-              display: 'flex',
-              gap: spinnerSize / 8,
-              alignItems: 'flex-end',
-              height: spinnerSize
-            }}
-          >
-            {[0, 1, 2, 3].map((i) => (
-              <div
-                key={i}
-                style={{
-                  width: spinnerSize / 6,
-                  background: colors.gradient,
-                  borderRadius: spinnerSize / 12,
-                  animation: `bar-bounce 1.2s ease-in-out infinite`,
-                  animationDelay: `${i * 0.1}s`,
-                  height: '100%',
-                  transformOrigin: 'bottom'
-                }}
-              />
-            ))}
-          </div>
-        );
-
-      case 'ring':
-        return (
-          <div
-            style={{
-              width: spinnerSize,
-              height: spinnerSize,
-              border: `3px solid ${colors.light}`,
-              borderRadius: '50%',
-              position: 'relative',
-              animation: 'spin 2s linear infinite'
-            }}
-          >
+    case 'dots':
+      return (
+        <div 
+          className="spinner-dots"
+          style={{ gap: spinnerSize / 4 }}
+        >
+          {[0, 1, 2].map((i) => (
             <div
+              key={i}
+              className="dot"
               style={{
-                position: 'absolute',
-                top: -3,
-                left: -3,
-                right: -3,
-                bottom: -3,
-                border: `3px solid transparent`,
-                borderTop: `3px solid ${colors.main}`,
-                borderRadius: '50%',
-                animation: 'spin 1s linear infinite reverse'
+                width: spinnerSize / 3,
+                height: spinnerSize / 3,
+                background: colors.main,
+                animationDelay: `${i * 0.16}s`
               }}
             />
-          </div>
-        );
+          ))}
+        </div>
+      );
 
-      default:
-        return null;
+    case 'pulse':
+      return (
+        <div
+          style={{
+            width: spinnerSize,
+            height: spinnerSize,
+            borderRadius: '50%',
+            background: colors.gradient,
+            animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            ...createSmoothTransition(['background'])
+          }}
+          className="animate-loading-pulse"
+        />
+      );
+
+    case 'bars':
+      return (
+        <div
+          style={{
+            display: 'flex',
+            gap: spinnerSize / 8,
+            alignItems: 'flex-end',
+            height: spinnerSize
+          }}
+        >
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={i}
+              style={{
+                width: spinnerSize / 6,
+                background: colors.gradient,
+                borderRadius: spinnerSize / 12,
+                animation: 'bar-bounce 1.2s ease-in-out infinite',
+                animationDelay: `${i * 0.1}s`,
+                height: '100%',
+                transformOrigin: 'bottom'
+              }}
+            />
+          ))}
+        </div>
+      );
+
+    case 'ring':
+      return (
+        <div
+          style={{
+            width: spinnerSize,
+            height: spinnerSize,
+            border: `3px solid ${colors.light}`,
+            borderRadius: '50%',
+            position: 'relative',
+            animation: 'spin 2s linear infinite'
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: -3,
+              left: -3,
+              right: -3,
+              bottom: -3,
+              border: '3px solid transparent',
+              borderTop: `3px solid ${colors.main}`,
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite reverse'
+            }}
+          />
+        </div>
+      );
+
+    default:
+      return null;
     }
   };
 
@@ -283,24 +283,24 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
     };
 
     switch (backdrop) {
-      case 'blur':
-        return {
-          ...base,
-          background: 'rgba(0, 0, 0, 0.5)',
-          backdropFilter: 'blur(8px)'
-        };
-      case 'solid':
-        return {
-          ...base,
-          background: 'rgba(0, 0, 0, 0.8)'
-        };
-      case 'transparent':
-        return {
-          ...base,
-          background: 'transparent'
-        };
-      default:
-        return base;
+    case 'blur':
+      return {
+        ...base,
+        background: 'rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'blur(8px)'
+      };
+    case 'solid':
+      return {
+        ...base,
+        background: 'rgba(0, 0, 0, 0.8)'
+      };
+    case 'transparent':
+      return {
+        ...base,
+        background: 'transparent'
+      };
+    default:
+      return base;
     }
   };
 

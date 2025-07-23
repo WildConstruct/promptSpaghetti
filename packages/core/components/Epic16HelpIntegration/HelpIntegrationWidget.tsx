@@ -256,25 +256,25 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({
       const updatedSession = { ...currentSession };
       
       switch (interactionType) {
-        case 'completed':
-          if (!updatedSession.userProgress.completedActions.includes(contentId)) {
-            updatedSession.userProgress.completedActions.push(contentId);
-            updatedSession.currentStep = Math.min(
-              updatedSession.currentStep + 1, 
-              updatedSession.totalSteps
-            );
-          }
-          break;
-        case 'skipped':
-          if (!updatedSession.userProgress.skippedContent.includes(contentId)) {
-            updatedSession.userProgress.skippedContent.push(contentId);
-          }
-          break;
-        case 'rated':
-          if (data?.rating) {
-            updatedSession.userProgress.ratings[contentId] = data.rating;
-          }
-          break;
+      case 'completed':
+        if (!updatedSession.userProgress.completedActions.includes(contentId)) {
+          updatedSession.userProgress.completedActions.push(contentId);
+          updatedSession.currentStep = Math.min(
+            updatedSession.currentStep + 1, 
+            updatedSession.totalSteps
+          );
+        }
+        break;
+      case 'skipped':
+        if (!updatedSession.userProgress.skippedContent.includes(contentId)) {
+          updatedSession.userProgress.skippedContent.push(contentId);
+        }
+        break;
+      case 'rated':
+        if (data?.rating) {
+          updatedSession.userProgress.ratings[contentId] = data.rating;
+        }
+        break;
       }
 
       setCurrentSession(updatedSession);

@@ -309,18 +309,18 @@ export class KPIMonitoringService extends EventEmitter {
     let message: string;
 
     switch (type) {
-      case 'status_violation':
-        severity = snapshot.status === 'critical' ? 'critical' : 'high';
-        message = `${kpi.name} is ${snapshot.status}: ${snapshot.value}${kpi.unit} (target: ${kpi.target}${kpi.unit})`;
-        break;
-      case 'trend_degradation':
-        severity = 'medium';
-        message = `${kpi.name} shows degrading trend: ${snapshot.value}${kpi.unit}`;
-        break;
-      case 'consecutive_violations':
-        severity = 'high';
-        message = `${kpi.name} has consecutive violations: ${snapshot.value}${kpi.unit}`;
-        break;
+    case 'status_violation':
+      severity = snapshot.status === 'critical' ? 'critical' : 'high';
+      message = `${kpi.name} is ${snapshot.status}: ${snapshot.value}${kpi.unit} (target: ${kpi.target}${kpi.unit})`;
+      break;
+    case 'trend_degradation':
+      severity = 'medium';
+      message = `${kpi.name} shows degrading trend: ${snapshot.value}${kpi.unit}`;
+      break;
+    case 'consecutive_violations':
+      severity = 'high';
+      message = `${kpi.name} has consecutive violations: ${snapshot.value}${kpi.unit}`;
+      break;
     }
 
     const alert: KPIAlert = {
@@ -506,7 +506,7 @@ export class KPIMonitoringService extends EventEmitter {
     alerts: KPIAlert[];
     trends: KPITrendAnalysis[];
     recommendations: string[];
-  } {
+    } {
     const monitoredKPIs = this.getFilteredKPIs();
     const activeAlerts = this.alerts.filter(a => !a.acknowledged);
     
@@ -559,11 +559,11 @@ export class KPIMonitoringService extends EventEmitter {
 
     const scores = snapshots.map(snapshot => {
       switch (snapshot.status) {
-        case 'excellent': return 100;
-        case 'good': return 80;
-        case 'warning': return 60;
-        case 'critical': return 30;
-        default: return 70;
+      case 'excellent': return 100;
+      case 'good': return 80;
+      case 'warning': return 60;
+      case 'critical': return 30;
+      default: return 70;
       }
     });
 
@@ -701,7 +701,7 @@ export class KPIMonitoringService extends EventEmitter {
     alerts: KPIAlert[];
     kpiHistory: Record<string, KPISnapshot[]>;
     baselines: BaselineSnapshot[];
-  } {
+    } {
     return {
       config: this.config,
       alerts: this.alerts,
@@ -719,7 +719,7 @@ export class KPIMonitoringService extends EventEmitter {
     kpisMonitored: number;
     activeAlerts: number;
     lastCycle?: number;
-  } {
+    } {
     return {
       isRunning: this.isMonitoring,
       uptime: this.isMonitoring ? Date.now() - (this.monitoringInterval as any)?._idleStart || 0 : 0,

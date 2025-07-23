@@ -540,40 +540,40 @@ async function main() {
   
   try {
     switch (command) {
-      case 'migrate':
-        await enhancer.migrate();
-        break;
+    case 'migrate':
+      await enhancer.migrate();
+      break;
         
-      case 'index':
-        await enhancer.rebuildIndexes();
-        break;
+    case 'index':
+      await enhancer.rebuildIndexes();
+      break;
         
-      case 'validate':
-        await enhancer.validateSchema();
-        break;
+    case 'validate':
+      await enhancer.validateSchema();
+      break;
         
-      case 'api':
-        await enhancer.startAPIServer();
-        break;
+    case 'api':
+      await enhancer.startAPIServer();
+      break;
         
-      default:
-        console.log('Database Schema Enhancement Tool');
-        console.log('================================');
-        console.log('Usage: node enhance-database-schema.js <command>');
-        console.log('');
-        console.log('Commands:');
-        console.log('  migrate    Run database schema migration to v2.0');
-        console.log('  index      Rebuild search indexes for performance');
-        console.log('  validate   Validate schema integrity and coverage');
-        console.log('  api        Display API endpoints for dashboard integration');
-        console.log('');
-        console.log('Features:');
-        console.log('  • Epic and story-based sorting and filtering');
-        console.log('  • Enhanced search with keywords and categories');
-        console.log('  • Markdown documentation integration');
-        console.log('  • Performance indexes for quick dashboard queries');
-        console.log('  • Real-time analytics API endpoints');
-        break;
+    default:
+      console.log('Database Schema Enhancement Tool');
+      console.log('================================');
+      console.log('Usage: node enhance-database-schema.js <command>');
+      console.log('');
+      console.log('Commands:');
+      console.log('  migrate    Run database schema migration to v2.0');
+      console.log('  index      Rebuild search indexes for performance');
+      console.log('  validate   Validate schema integrity and coverage');
+      console.log('  api        Display API endpoints for dashboard integration');
+      console.log('');
+      console.log('Features:');
+      console.log('  • Epic and story-based sorting and filtering');
+      console.log('  • Enhanced search with keywords and categories');
+      console.log('  • Markdown documentation integration');
+      console.log('  • Performance indexes for quick dashboard queries');
+      console.log('  • Real-time analytics API endpoints');
+      break;
     }
     
   } catch (error) {

@@ -159,7 +159,7 @@ export class SecurityManager {
       { pattern: /global\s*\./g, message: 'Global object access is not allowed for security reasons' },
       { pattern: /__dirname|__filename/g, message: 'File system path access is restricted' },
       { pattern: /require\s*\(/g, message: 'Require is only allowed if file access is enabled' },
-      { pattern: /import\s+.*\s+from/g, message: 'Dynamic imports may be restricted' },
+      { pattern: /import\s+.*\s+from/g, message: 'Dynamic imports may be restricted' }
     ];
 
     for (const { pattern, message } of dangerousPatterns) {
@@ -175,7 +175,7 @@ export class SecurityManager {
     const warningPatterns = [
       { pattern: /setTimeout|setInterval/g, message: 'Timers should be used carefully to avoid blocking execution' },
       { pattern: /while\s*\(.*true.*\)/g, message: 'Infinite loops detected - ensure they have break conditions' },
-      { pattern: /for\s*\(.*;;.*\)/g, message: 'Infinite loops detected - ensure they have break conditions' },
+      { pattern: /for\s*\(.*;;.*\)/g, message: 'Infinite loops detected - ensure they have break conditions' }
     ];
 
     for (const { pattern, message } of warningPatterns) {

@@ -32,7 +32,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
   onClose,
   nodes,
   edges,
-  onExport,
+  onExport
 }) => {
   const { currentProject } = useGraphStore();
   
@@ -97,22 +97,22 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
 
   const convertToFormat = (bundle: any, format: string) => {
     switch (format) {
-      case 'yaml':
-        // Convert to YAML (simplified)
-        return convertToYAML(bundle);
-      case 'xml':
-        // Convert to XML (simplified)
-        return convertToXML(bundle);
-      case 'graph':
-        // Export as native graph format
-        return JSON.stringify({ nodes, edges, metadata: bundle.metadata }, null, 2);
-      case 'csv':
-        // Export as CSV
-        return convertToCSV(nodes, edges);
-      case 'compressed':
-        return JSON.stringify(bundle);
-      default:
-        return JSON.stringify(bundle, null, formData.minifyOutput ? 0 : 2);
+    case 'yaml':
+      // Convert to YAML (simplified)
+      return convertToYAML(bundle);
+    case 'xml':
+      // Convert to XML (simplified)
+      return convertToXML(bundle);
+    case 'graph':
+      // Export as native graph format
+      return JSON.stringify({ nodes, edges, metadata: bundle.metadata }, null, 2);
+    case 'csv':
+      // Export as CSV
+      return convertToCSV(nodes, edges);
+    case 'compressed':
+      return JSON.stringify(bundle);
+    default:
+      return JSON.stringify(bundle, null, formData.minifyOutput ? 0 : 2);
     }
   };
 
@@ -205,7 +205,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
       const response = await fetch('/export', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           graph: { nodes, edges },
@@ -245,7 +245,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
       const response = await fetch('/export', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           graph: { nodes, edges },
@@ -267,8 +267,8 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
       // Process bundle based on options and format
       const formatInfo = getFormatInfo(formData.format);
       let exportContent = convertToFormat(bundle, formData.format);
-      let exportFilename = filename.replace('.bundle.json', formatInfo.extension);
-      let mimeType = formatInfo.mimeType;
+      const exportFilename = filename.replace('.bundle.json', formatInfo.extension);
+      const mimeType = formatInfo.mimeType;
 
       // Add quality metadata for non-JSON formats
       if (formData.format !== 'json' && formData.format !== 'compressed') {
@@ -324,7 +324,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000,
+      zIndex: 1000
     }}>
       <div style={{
         backgroundColor: 'white',
@@ -334,20 +334,20 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
         maxWidth: '600px',
         maxHeight: '90vh',
         overflowY: 'auto',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
       }}>
         {/* Header */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '24px',
+          marginBottom: '24px'
         }}>
           <h2 style={{
             margin: 0,
             fontSize: '20px',
             fontWeight: '600',
-            color: '#333',
+            color: '#333'
           }}>
             📦 Export GeneratorBundle
           </h2>
@@ -364,7 +364,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               height: '32px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'center'
             }}
             disabled={isLoading}
           >
@@ -380,7 +380,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               marginBottom: '6px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333',
+              color: '#333'
             }}>
               Bundle Name *
             </label>
@@ -397,7 +397,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 border: '1px solid #ddd',
                 borderRadius: '4px',
                 fontSize: '14px',
-                boxSizing: 'border-box',
+                boxSizing: 'border-box'
               }}
             />
           </div>
@@ -410,7 +410,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 marginBottom: '6px',
                 fontSize: '14px',
                 fontWeight: '500',
-                color: '#333',
+                color: '#333'
               }}>
                 Version
               </label>
@@ -426,7 +426,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                   border: '1px solid #ddd',
                   borderRadius: '4px',
                   fontSize: '14px',
-                  boxSizing: 'border-box',
+                  boxSizing: 'border-box'
                 }}
               />
             </div>
@@ -436,7 +436,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 marginBottom: '6px',
                 fontSize: '14px',
                 fontWeight: '500',
-                color: '#333',
+                color: '#333'
               }}>
                 Author
               </label>
@@ -452,7 +452,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                   border: '1px solid #ddd',
                   borderRadius: '4px',
                   fontSize: '14px',
-                  boxSizing: 'border-box',
+                  boxSizing: 'border-box'
                 }}
               />
             </div>
@@ -465,7 +465,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               marginBottom: '6px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333',
+              color: '#333'
             }}>
               Description
             </label>
@@ -482,7 +482,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 borderRadius: '4px',
                 fontSize: '14px',
                 resize: 'vertical',
-                boxSizing: 'border-box',
+                boxSizing: 'border-box'
               }}
             />
           </div>
@@ -494,7 +494,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               marginBottom: '6px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333',
+              color: '#333'
             }}>
               Export Format
             </label>
@@ -510,7 +510,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 borderRadius: '4px',
                 fontSize: '14px',
                 marginBottom: '8px',
-                boxSizing: 'border-box',
+                boxSizing: 'border-box'
               }}
             >
               <option value="json">📦 GeneratorBundle JSON - Standard format</option>
@@ -526,7 +526,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               color: '#666', 
               padding: '6px',
               background: '#f9f9f9',
-              borderRadius: '4px',
+              borderRadius: '4px'
             }}>
               {getFormatInfo(formData.format).description}
             </div>
@@ -539,7 +539,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               marginBottom: '6px',
               fontSize: '14px',
               fontWeight: '500',
-              color: '#333',
+              color: '#333'
             }}>
               Export Options
             </label>
@@ -593,7 +593,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                   padding: '4px 8px',
                   border: '1px solid #ddd',
                   borderRadius: '4px',
-                  fontSize: '13px',
+                  fontSize: '13px'
                 }}
               >
                 <option value="draft">📝 Draft - Basic export</option>
@@ -617,7 +617,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 borderRadius: '4px',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 fontSize: '13px',
-                marginBottom: '8px',
+                marginBottom: '8px'
               }}
             >
               {isLoading ? 'Loading...' : '🔍 Preview Bundle'}
@@ -632,7 +632,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 fontSize: '12px',
                 fontFamily: 'monospace',
                 maxHeight: '200px',
-                overflowY: 'auto',
+                overflowY: 'auto'
               }}>
                 <strong>Bundle Preview:</strong>
                 <pre style={{ margin: '8px 0 0 0', whiteSpace: 'pre-wrap' }}>
@@ -649,7 +649,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
             border: '1px solid #b3d9ff',
             padding: '12px',
             borderRadius: '4px',
-            marginBottom: '16px',
+            marginBottom: '16px'
           }}>
             <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#0066cc' }}>
               📋 Export Information
@@ -659,7 +659,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               paddingLeft: '16px',
               fontSize: '13px',
               color: '#0066cc',
-              lineHeight: 1.4,
+              lineHeight: 1.4
             }}>
               <li>Contains {nodes.length} nodes and {edges.length} connections</li>
               <li>Format: {getFormatInfo(formData.format).name}</li>
@@ -689,7 +689,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
               padding: '12px',
               borderRadius: '4px',
               marginBottom: '16px',
-              fontSize: '14px',
+              fontSize: '14px'
             }}>
               <strong>Error:</strong> {error}
             </div>
@@ -699,7 +699,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
           <div style={{
             display: 'flex',
             gap: '12px',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-end'
           }}>
             <button
               type="button"
@@ -712,7 +712,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 color: '#666',
                 borderRadius: '4px',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                fontSize: '14px',
+                fontSize: '14px'
               }}
             >
               Cancel
@@ -727,7 +727,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
                 color: 'white',
                 borderRadius: '4px',
                 cursor: isLoading || !formData.name.trim() ? 'not-allowed' : 'pointer',
-                fontSize: '14px',
+                fontSize: '14px'
               }}
             >
               {isLoading ? 'Exporting...' : '📦 Export Bundle'}

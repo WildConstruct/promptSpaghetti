@@ -317,10 +317,10 @@ export class DirectPermissionService {
     const params: any[] = [userId];
 
     if (activeOnly) {
-      query += ` AND status = 'active' AND (expires_at IS NULL OR expires_at > NOW())`;
+      query += ' AND status = \'active\' AND (expires_at IS NULL OR expires_at > NOW())';
     }
 
-    query += ` ORDER BY granted_at DESC`;
+    query += ' ORDER BY granted_at DESC';
 
     const result = await this.dbService.query(query, params);
     return result.rows.map(this.mapDirectPermission);
@@ -345,7 +345,7 @@ export class DirectPermissionService {
 
     // Add scope context filtering if provided
     if (scopeContext) {
-      query += ` AND (scope_context IS NULL OR scope_context @> $4::jsonb)`;
+      query += ' AND (scope_context IS NULL OR scope_context @> $4::jsonb)';
       params.push(JSON.stringify(scopeContext));
     }
 

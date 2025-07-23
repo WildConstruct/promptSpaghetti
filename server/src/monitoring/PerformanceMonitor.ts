@@ -863,15 +863,15 @@ export class PerformanceMonitor extends EventEmitter {
       const exceeded = this.evaluateThreshold(value, threshold);
       if (exceeded) {
         switch (threshold.level) {
-          case 'warning':
-            if (status === 'normal') status = 'warning';
-            break;
-          case 'critical':
-            if (status !== 'emergency') status = 'critical';
-            break;
-          case 'emergency':
-            status = 'emergency';
-            break;
+        case 'warning':
+          if (status === 'normal') status = 'warning';
+          break;
+        case 'critical':
+          if (status !== 'emergency') status = 'critical';
+          break;
+        case 'emergency':
+          status = 'emergency';
+          break;
         }
       }
     }
@@ -884,13 +884,13 @@ export class PerformanceMonitor extends EventEmitter {
    */
   private evaluateThreshold(value: number, threshold: PerformanceThreshold): boolean {
     switch (threshold.operator) {
-      case 'lt': return value < threshold.value;
-      case 'lte': return value <= threshold.value;
-      case 'gt': return value > threshold.value;
-      case 'gte': return value >= threshold.value;
-      case 'eq': return value === threshold.value;
-      case 'ne': return value !== threshold.value;
-      default: return false;
+    case 'lt': return value < threshold.value;
+    case 'lte': return value <= threshold.value;
+    case 'gt': return value > threshold.value;
+    case 'gte': return value >= threshold.value;
+    case 'eq': return value === threshold.value;
+    case 'ne': return value !== threshold.value;
+    default: return false;
     }
   }
 
@@ -1009,8 +1009,8 @@ export class PerformanceMonitor extends EventEmitter {
     healthScore = Math.max(0, healthScore);
     
     const status = healthScore >= 90 ? 'healthy' : 
-                  healthScore >= 70 ? 'warning' : 
-                  healthScore >= 50 ? 'degraded' : 'critical';
+      healthScore >= 70 ? 'warning' : 
+        healthScore >= 50 ? 'degraded' : 'critical';
     
     return {
       score: healthScore,

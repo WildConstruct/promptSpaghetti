@@ -215,22 +215,22 @@ export const OAuthUserAccountManager: React.FC = () => {
   // Utility functions
   const getStatusColor = (status: string): string => {
     switch (status) {
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'inactive': return 'text-gray-600 bg-gray-100';
-      case 'error': return 'text-red-600 bg-red-100';
-      case 'expired': return 'text-orange-600 bg-orange-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'active': return 'text-green-600 bg-green-100';
+    case 'inactive': return 'text-gray-600 bg-gray-100';
+    case 'error': return 'text-red-600 bg-red-100';
+    case 'expired': return 'text-orange-600 bg-orange-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getScopeIcon = (category: string): string => {
     switch (category) {
-      case 'profile': return '👤';
-      case 'email': return '📧';
-      case 'calendar': return '📅';
-      case 'files': return '📁';
-      case 'repositories': return '🔀';
-      default: return '⚙️';
+    case 'profile': return '👤';
+    case 'email': return '📧';
+    case 'calendar': return '📅';
+    case 'files': return '📁';
+    case 'repositories': return '🔀';
+    default: return '⚙️';
     }
   };
 
@@ -547,8 +547,8 @@ export const OAuthUserAccountManager: React.FC = () => {
                       <span className="text-gray-500">Security Level:</span>
                       <span className={`font-medium ${
                         selectedAccount.metadata.securityLevel === 'high' ? 'text-green-600' :
-                        selectedAccount.metadata.securityLevel === 'standard' ? 'text-blue-600' :
-                        'text-gray-600'
+                          selectedAccount.metadata.securityLevel === 'standard' ? 'text-blue-600' :
+                            'text-gray-600'
                       }`}>
                         {selectedAccount.metadata.securityLevel.toUpperCase()}
                       </span>
@@ -683,8 +683,8 @@ export const OAuthUserAccountManager: React.FC = () => {
                           isLinked
                             ? 'bg-gray-50 border-gray-200 cursor-not-allowed'
                             : linking[provider.id]
-                            ? 'bg-gray-50 border-gray-200 cursor-wait'
-                            : 'hover:bg-gray-50 border-gray-200'
+                              ? 'bg-gray-50 border-gray-200 cursor-wait'
+                              : 'hover:bg-gray-50 border-gray-200'
                         }`}
                       >
                         <img

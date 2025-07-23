@@ -372,8 +372,8 @@ describe('Refactoring Test Utilities', () => {
       );
 
       expect(result.compatible).toBe(false); // prop1 is missing
-      expect(result.issues).toContain("Required property 'prop1' is missing");
-      expect(result.warnings).toContain("Property 'prop1' was removed");
+      expect(result.issues).toContain('Required property \'prop1\' is missing');
+      expect(result.warnings).toContain('Property \'prop1\' was removed');
       expect(result.addedMembers).toContain('newProp');
       expect(result.removedMembers).toContain('prop1');
     });

@@ -433,21 +433,21 @@ export class FileCompressionUtils {
     // Create compression stream based on algorithm
     let compressStream;
     switch (algorithm) {
-      case CompressionAlgorithm.GZIP:
-        compressStream = createGzip({ level });
-        break;
-      case CompressionAlgorithm.DEFLATE:
-        compressStream = createDeflate({ level });
-        break;
-      case CompressionAlgorithm.BROTLI:
-        compressStream = createBrotliCompress({
-          params: {
-            [require('zlib').constants.BROTLI_PARAM_QUALITY]: level
-          }
-        });
-        break;
-      default:
-        throw new Error(`Streaming compression not supported for ${algorithm}`);
+    case CompressionAlgorithm.GZIP:
+      compressStream = createGzip({ level });
+      break;
+    case CompressionAlgorithm.DEFLATE:
+      compressStream = createDeflate({ level });
+      break;
+    case CompressionAlgorithm.BROTLI:
+      compressStream = createBrotliCompress({
+        params: {
+          [require('zlib').constants.BROTLI_PARAM_QUALITY]: level
+        }
+      });
+      break;
+    default:
+      throw new Error(`Streaming compression not supported for ${algorithm}`);
     }
     
     // Create streams
@@ -591,14 +591,14 @@ export class FileCompressionUtils {
    */
   private static getDefaultSuffix(algorithm: CompressionAlgorithm): string {
     switch (algorithm) {
-      case CompressionAlgorithm.GZIP:
-        return '.gz';
-      case CompressionAlgorithm.DEFLATE:
-        return '.zz';
-      case CompressionAlgorithm.BROTLI:
-        return '.br';
-      default:
-        return '.compressed';
+    case CompressionAlgorithm.GZIP:
+      return '.gz';
+    case CompressionAlgorithm.DEFLATE:
+      return '.zz';
+    case CompressionAlgorithm.BROTLI:
+      return '.br';
+    default:
+      return '.compressed';
     }
   }
   
@@ -609,25 +609,25 @@ export class FileCompressionUtils {
     const ext = extname(filePath).toLowerCase();
     
     switch (ext) {
-      case '.json':
-        return DataType.JSON;
-      case '.html':
-      case '.htm':
-        return DataType.HTML;
-      case '.css':
-        return DataType.CSS;
-      case '.js':
-      case '.mjs':
-        return DataType.JAVASCRIPT;
-      case '.txt':
-      case '.md':
-      case '.csv':
-      case '.xml':
-      case '.yaml':
-      case '.yml':
-        return DataType.TEXT;
-      default:
-        return DataType.BINARY;
+    case '.json':
+      return DataType.JSON;
+    case '.html':
+    case '.htm':
+      return DataType.HTML;
+    case '.css':
+      return DataType.CSS;
+    case '.js':
+    case '.mjs':
+      return DataType.JAVASCRIPT;
+    case '.txt':
+    case '.md':
+    case '.csv':
+    case '.xml':
+    case '.yaml':
+    case '.yml':
+      return DataType.TEXT;
+    default:
+      return DataType.BINARY;
     }
   }
   

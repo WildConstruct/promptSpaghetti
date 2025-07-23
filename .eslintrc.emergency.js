@@ -41,7 +41,6 @@ module.exports = {
     'no-duplicate-case': 'off',
     'no-empty-character-class': 'off',
     'no-ex-assign': 'off',
-    'no-extra-parens': 'off',
     'no-func-assign': 'off',
     'no-invalid-regexp': 'off',
     'no-obj-calls': 'off',

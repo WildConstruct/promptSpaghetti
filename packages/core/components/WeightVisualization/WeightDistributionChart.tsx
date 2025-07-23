@@ -122,7 +122,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
             `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
           
           const isHovered = hoveredOption === option.id;
-          const transform = isHovered ? `scale(1.05)` : 'scale(1)';
+          const transform = isHovered ? 'scale(1.05)' : 'scale(1)';
           const transformOrigin = `${centerX}px ${centerY}px`;
           
           // Label position

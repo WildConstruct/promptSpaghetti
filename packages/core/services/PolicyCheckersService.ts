@@ -601,7 +601,7 @@ class SecurityCompliancePolicyChecker implements PolicyChecker {
       policyName: this.name,
       status: complianceResult.overallStatus === 'compliant' ? 'passed' : 'failed',
       severity: complianceResult.criticalViolations > 0 ? 'critical' : 
-                complianceResult.highViolations > 0 ? 'high' : 'medium',
+        complianceResult.highViolations > 0 ? 'high' : 'medium',
       score: Math.round(complianceResult.compliancePercentage),
       message: `Security compliance: ${Math.round(complianceResult.compliancePercentage)}%`,
       details: {

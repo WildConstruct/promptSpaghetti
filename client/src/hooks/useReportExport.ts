@@ -177,7 +177,7 @@ export const useReportExport = (): UseReportExportReturn => {
       const response = await fetch('/api/reports/export', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           reportData,
@@ -223,7 +223,7 @@ export const useReportExport = (): UseReportExportReturn => {
       const response = await fetch('/api/reports/bulk-export', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           reports,
@@ -251,7 +251,7 @@ export const useReportExport = (): UseReportExportReturn => {
     const response = await fetch('/api/reports/schedule', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(schedule)
     });
@@ -280,7 +280,7 @@ export const useReportExport = (): UseReportExportReturn => {
       const response = await fetch('/api/reports/test-export', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           format,
@@ -309,7 +309,7 @@ export const useReportExport = (): UseReportExportReturn => {
     const response = await fetch('/api/reports/preview', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         reportData,

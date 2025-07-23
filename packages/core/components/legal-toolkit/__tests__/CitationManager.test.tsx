@@ -628,7 +628,7 @@ describe('CitationManager Component', () => {
         id: 'invalid',
         type: 'bluebook',
         shortForm: '',
-        longForm: '',
+        longForm: ''
       } as Citation;
 
       render(

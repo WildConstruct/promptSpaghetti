@@ -479,7 +479,7 @@ class TemplateParser {
   private performParse(template: string): TemplateParseResult {
     const variables: ExtractedVariable[] = [];
     const errors: TemplateError[] = [];
-    let processedTemplate = template;
+    const processedTemplate = template;
     
     // Find all potential variable patterns
     const braceRegex = /{([^{}]*)}/g;
@@ -700,7 +700,7 @@ class TemplateParser {
         return {
           type: 'number',
           confidence: 0.6,
-          reason: `Surrounding text suggests numeric context`,
+          reason: 'Surrounding text suggests numeric context',
           defaultValue: '1'
         };
       }
@@ -710,7 +710,7 @@ class TemplateParser {
         return {
           type: 'boolean',
           confidence: 0.6,
-          reason: `Surrounding text suggests boolean context`,
+          reason: 'Surrounding text suggests boolean context',
           defaultValue: 'true'
         };
       }
@@ -754,7 +754,7 @@ class TemplateParser {
     return {
       type: 'string',
       confidence: 0.5,
-      reason: `Default to text - most template variables are descriptive`,
+      reason: 'Default to text - most template variables are descriptive',
       defaultValue
     };
   }
@@ -874,7 +874,7 @@ class TemplateParser {
     context?: string,
     includeHistory: boolean = true
   ): VariableSuggestion[] {
-    let allSuggestions: VariableSuggestion[] = [];
+    const allSuggestions: VariableSuggestion[] = [];
 
     // Start with contextual suggestions (highest priority)
     const contextualSuggestions = this.getContextualSuggestions();

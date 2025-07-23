@@ -891,21 +891,21 @@ const CreateScheduleModal: React.FC<any> = ({ visible, onCancel, onSubmit }) => 
 // Utility functions
 const getViewDateRange = (view: string, selectedDate: Moment) => {
   switch (view) {
-    case 'week':
-      return {
-        startDate: selectedDate.clone().startOf('week'),
-        endDate: selectedDate.clone().endOf('week')
-      };
-    case 'day':
-      return {
-        startDate: selectedDate.clone().startOf('day'),
-        endDate: selectedDate.clone().endOf('day')
-      };
-    default: // month
-      return {
-        startDate: selectedDate.clone().startOf('month'),
-        endDate: selectedDate.clone().endOf('month')
-      };
+  case 'week':
+    return {
+      startDate: selectedDate.clone().startOf('week'),
+      endDate: selectedDate.clone().endOf('week')
+    };
+  case 'day':
+    return {
+      startDate: selectedDate.clone().startOf('day'),
+      endDate: selectedDate.clone().endOf('day')
+    };
+  default: // month
+    return {
+      startDate: selectedDate.clone().startOf('month'),
+      endDate: selectedDate.clone().endOf('month')
+    };
   }
 };
 

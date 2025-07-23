@@ -223,39 +223,39 @@ export class GraphValidator extends EventEmitter {
     currentState: GraphState
   ): Promise<ValidationError[]> {
     switch (operation.type) {
-      case OperationType.NODE_ADD:
-        return this.validateNodeAdd(operation as NodeAddOperation, currentState);
+    case OperationType.NODE_ADD:
+      return this.validateNodeAdd(operation as NodeAddOperation, currentState);
         
-      case OperationType.NODE_DELETE:
-        return this.validateNodeDelete(operation as NodeDeleteOperation, currentState);
+    case OperationType.NODE_DELETE:
+      return this.validateNodeDelete(operation as NodeDeleteOperation, currentState);
         
-      case OperationType.NODE_UPDATE:
-        return this.validateNodeUpdate(operation as NodeUpdateOperation, currentState);
+    case OperationType.NODE_UPDATE:
+      return this.validateNodeUpdate(operation as NodeUpdateOperation, currentState);
         
-      case OperationType.EDGE_ADD:
-        return this.validateEdgeAdd(operation as EdgeAddOperation, currentState);
+    case OperationType.EDGE_ADD:
+      return this.validateEdgeAdd(operation as EdgeAddOperation, currentState);
         
-      case OperationType.EDGE_DELETE:
-        return this.validateEdgeDelete(operation as EdgeDeleteOperation, currentState);
+    case OperationType.EDGE_DELETE:
+      return this.validateEdgeDelete(operation as EdgeDeleteOperation, currentState);
         
-      case OperationType.VARIATION_ADD:
-        return this.validateVariationAdd(operation as VariationAddOperation, currentState);
+    case OperationType.VARIATION_ADD:
+      return this.validateVariationAdd(operation as VariationAddOperation, currentState);
         
-      case OperationType.VARIATION_DELETE:
-        return this.validateVariationDelete(operation as VariationDeleteOperation, currentState);
+    case OperationType.VARIATION_DELETE:
+      return this.validateVariationDelete(operation as VariationDeleteOperation, currentState);
         
-      case OperationType.VARIATION_UPDATE:
-        return this.validateVariationUpdate(operation as VariationUpdateOperation, currentState);
+    case OperationType.VARIATION_UPDATE:
+      return this.validateVariationUpdate(operation as VariationUpdateOperation, currentState);
         
-      case OperationType.VARIATION_REORDER:
-        return this.validateVariationReorder(operation as VariationReorderOperation, currentState);
+    case OperationType.VARIATION_REORDER:
+      return this.validateVariationReorder(operation as VariationReorderOperation, currentState);
         
-      default:
-        return [{
-          type: 'UNSUPPORTED_OPERATION',
-          message: `Operation type ${operation.type} is not supported`,
-          severity: 'error'
-        }];
+    default:
+      return [{
+        type: 'UNSUPPORTED_OPERATION',
+        message: `Operation type ${operation.type} is not supported`,
+        severity: 'error'
+      }];
     }
   }
   
@@ -739,15 +739,15 @@ export class GraphValidator extends EventEmitter {
     };
     
     switch (operation.type) {
-      case OperationType.NODE_ADD:
-        const nodeOp = operation as NodeAddOperation;
-        simulatedState.nodes.push(nodeOp.payload.node);
-        break;
+    case OperationType.NODE_ADD:
+      const nodeOp = operation as NodeAddOperation;
+      simulatedState.nodes.push(nodeOp.payload.node);
+      break;
         
-      case OperationType.EDGE_ADD:
-        const edgeOp = operation as EdgeAddOperation;
-        simulatedState.edges.push(edgeOp.payload.edge);
-        break;
+    case OperationType.EDGE_ADD:
+      const edgeOp = operation as EdgeAddOperation;
+      simulatedState.edges.push(edgeOp.payload.edge);
+      break;
         
       // Add other operation simulations as needed
     }

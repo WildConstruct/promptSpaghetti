@@ -316,10 +316,10 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
       };
 
       const injectionAttempts = [
-        "admin@test.com'; DROP TABLE users; --",
-        "admin@test.com' OR 1=1; --",
-        "admin@test.com' UNION SELECT * FROM passwords; --",
-        "test@example.com' OR 'x'='x"
+        'admin@test.com\'; DROP TABLE users; --',
+        'admin@test.com\' OR 1=1; --',
+        'admin@test.com\' UNION SELECT * FROM passwords; --',
+        'test@example.com\' OR \'x\'=\'x'
       ];
 
       injectionAttempts.forEach(maliciousEmail => {
@@ -767,7 +767,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
     it('should validate security headers are properly set', () => {
       const generateSecurityHeaders = (): Record<string, string> => {
         return {
-          'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'",
+          'Content-Security-Policy': 'default-src \'self\'; script-src \'self\'; style-src \'self\' \'unsafe-inline\'',
           'X-Frame-Options': 'DENY',
           'X-Content-Type-Options': 'nosniff',
           'X-XSS-Protection': '1; mode=block',
@@ -787,7 +787,7 @@ describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {
       expect(headers['Referrer-Policy']).toBeDefined();
 
       // CSP should be restrictive
-      expect(headers['Content-Security-Policy']).toContain("default-src 'self'");
+      expect(headers['Content-Security-Policy']).toContain('default-src \'self\'');
       expect(headers['Content-Security-Policy']).not.toContain('unsafe-eval');
     });
 

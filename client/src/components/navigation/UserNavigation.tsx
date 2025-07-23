@@ -42,24 +42,24 @@ export const UserNavigation: React.FC<UserNavigationProps> = ({ className = '' }
     setDropdownOpen(false);
     
     switch (action) {
-      case 'profile':
-        // Navigate to profile page
-        navigate('/profile');
-        break;
-      case 'settings':
-        // Navigate to user settings
-        navigate('/settings');
-        break;
-      case 'admin':
-        // Navigate to admin panel
-        navigate('/admin');
-        break;
-      case 'user-management':
-        // Navigate to user management dashboard
-        navigate('/admin/users');
-        break;
-      default:
-        break;
+    case 'profile':
+      // Navigate to profile page
+      navigate('/profile');
+      break;
+    case 'settings':
+      // Navigate to user settings
+      navigate('/settings');
+      break;
+    case 'admin':
+      // Navigate to admin panel
+      navigate('/admin');
+      break;
+    case 'user-management':
+      // Navigate to user management dashboard
+      navigate('/admin/users');
+      break;
+    default:
+      break;
     }
   };
 

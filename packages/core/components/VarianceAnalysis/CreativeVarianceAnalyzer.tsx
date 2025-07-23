@@ -422,13 +422,13 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
                   <div key={index} style={{
                     padding: 12,
                     background: insight.type === 'positive' ? '#dcfce7' :
-                              insight.type === 'warning' ? '#fef3c7' :
-                              insight.type === 'suggestion' ? '#dbeafe' : '#f3f4f6',
+                      insight.type === 'warning' ? '#fef3c7' :
+                        insight.type === 'suggestion' ? '#dbeafe' : '#f3f4f6',
                     borderRadius: 6,
                     borderLeft: `4px solid ${
                       insight.type === 'positive' ? '#10b981' :
-                      insight.type === 'warning' ? '#f59e0b' :
-                      insight.type === 'suggestion' ? '#3b82f6' : '#6b7280'
+                        insight.type === 'warning' ? '#f59e0b' :
+                          insight.type === 'suggestion' ? '#3b82f6' : '#6b7280'
                     }`
                   }}>
                     <div style={{

@@ -1650,8 +1650,8 @@ export class Epic16LearningPathService extends EventEmitter {
     // Create sample learning paths for demonstration
     const samplePaths: Partial<LearningPath>[] = [
       {
-        title: "Marketplace Fundamentals",
-        description: "Learn the basics of buying and selling in our marketplace",
+        title: 'Marketplace Fundamentals',
+        description: 'Learn the basics of buying and selling in our marketplace',
         category: LearningCategory.MARKETPLACE_BASICS,
         difficulty: DifficultyLevel.BEGINNER,
         estimatedDuration: 120,
@@ -1675,8 +1675,8 @@ export class Epic16LearningPathService extends EventEmitter {
         communityIntegration: { enabled: true, forumLinks: [], discussionTopics: [], mentorshipProgram: { enabled: true, availableMentors: [], matchingCriteria: [], sessionFormats: [] }, peerLearning: { enabled: true, studyGroups: [], peerReview: { enabled: true, reviewCriteria: [], reviewersPerSubmission: 2, anonymousReview: true, qualityControl: true }, collaborativeProjects: [] }, communityEvents: [] }
       },
       {
-        title: "Advanced Template Creation",
-        description: "Master the art of creating high-quality, marketable templates",
+        title: 'Advanced Template Creation',
+        description: 'Master the art of creating high-quality, marketable templates',
         category: LearningCategory.TEMPLATE_CREATION,
         difficulty: DifficultyLevel.ADVANCED,
         estimatedDuration: 480,

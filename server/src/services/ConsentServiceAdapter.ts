@@ -250,7 +250,7 @@ export class ConsentServiceAdapter {
       
       const response = await fetch(`${apiUrl}/api/consents?${params.toString()}`, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       });
       

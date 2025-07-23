@@ -451,7 +451,7 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
       const dashboard = analyticsService.getAnalyticsDashboard(timeRange);
 
       // Apply basic filters
-      let filteredData = { ...dashboard };
+      const filteredData = { ...dashboard };
 
       // Filter by integration IDs if specified
       if (request.query.integrationIds) {

@@ -431,7 +431,7 @@ export class PerformanceMonitor {
       trend: 'improving' | 'stable' | 'degrading';
     }[];
     recentAlerts: PerformanceAlert[];
-  } {
+    } {
     const totalMetrics = this.metrics.size;
     const recentAlerts = this.alerts.filter(alert => 
       alert.timestamp > Date.now() - 60000 // Last minute

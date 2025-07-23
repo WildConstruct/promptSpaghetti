@@ -708,7 +708,7 @@ export class DashboardRegistry {
     presetCount: number;
     widgetCount: number;
     categoriesByType: Record<DashboardType, number>;
-  } {
+    } {
     const categoriesByType: Record<DashboardType, number> = {
       [DashboardType.EXECUTIVE]: 0,
       [DashboardType.OPERATIONAL]: 0,

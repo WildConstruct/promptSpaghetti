@@ -577,16 +577,16 @@ export class ActivityTimelineService {
       let comparison = 0;
       
       switch (sortBy) {
-        case 'timestamp':
-          comparison = a.timestamp.getTime() - b.timestamp.getTime();
-          break;
-        case 'impact':
-          const impactOrder = { none: 0, low: 1, medium: 2, high: 3, critical: 4 };
-          comparison = impactOrder[a.impact] - impactOrder[b.impact];
-          break;
-        case 'duration':
-          comparison = (a.duration || 0) - (b.duration || 0);
-          break;
+      case 'timestamp':
+        comparison = a.timestamp.getTime() - b.timestamp.getTime();
+        break;
+      case 'impact':
+        const impactOrder = { none: 0, low: 1, medium: 2, high: 3, critical: 4 };
+        comparison = impactOrder[a.impact] - impactOrder[b.impact];
+        break;
+      case 'duration':
+        comparison = (a.duration || 0) - (b.duration || 0);
+        break;
       }
       
       return sortDirection === 'desc' ? -comparison : comparison;
@@ -631,7 +631,7 @@ export class ActivityTimelineService {
     const peakHour = Object.entries(eventsPerHour)
       .reduce((peak, [hour, count]) => 
         count > peak.count ? { hour: parseInt(hour), count } : peak,
-        { hour: 0, count: 0 }
+      { hour: 0, count: 0 }
       );
 
     // Most active users

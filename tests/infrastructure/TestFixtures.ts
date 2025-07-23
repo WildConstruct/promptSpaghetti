@@ -398,11 +398,11 @@ export class TestFixtureManager {
     this.register('security-sql-injection', {
       category: 'security',
       data: [
-        "'; DROP TABLE users; --",
-        "' OR '1'='1",
-        "' UNION SELECT password FROM users --",
-        "'; DELETE FROM graphs; --",
-        "' OR 1=1 --"
+        '\'; DROP TABLE users; --',
+        '\' OR \'1\'=\'1',
+        '\' UNION SELECT password FROM users --',
+        '\'; DELETE FROM graphs; --',
+        '\' OR 1=1 --'
       ],
       metadata: { description: 'SQL injection attack patterns' }
     });

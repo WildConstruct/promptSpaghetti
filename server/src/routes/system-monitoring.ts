@@ -39,10 +39,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             detailed: { type: 'boolean', default: false },
-            include: { type: 'string' },
-          },
-        },
-      },
+            include: { type: 'string' }
+          }
+        }
+      }
     },
     async (request: FastifyRequest<{ Querystring: SystemStatusQuery }>, reply: FastifyReply) => {
       const { detailed = false, include } = request.query;
@@ -52,7 +52,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         timestamp: Date.now(),
         uptime: process.uptime() * 1000,
         nodeVersion: process.version,
-        environment: process.env.NODE_ENV || 'development',
+        environment: process.env.NODE_ENV || 'development'
       };
 
       // Health monitoring
@@ -62,7 +62,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           response.health = detailed ? healthSummary : {
             overall: healthSummary.overall,
             score: healthSummary.score,
-            issueCount: healthSummary.issues.length,
+            issueCount: healthSummary.issues.length
           };
         } catch (error) {
           response.health = { error: 'Failed to collect health metrics' };
@@ -78,7 +78,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             requestsPerSecond: metrics.requestMetrics.requestsPerSecond,
             averageResponseTime: metrics.requestMetrics.averageResponseTime,
             memoryUsage: Math.round(metrics.memoryUsage.heapUsed / 1024 / 1024), // MB
-            cpuUsage: metrics.cpuUsage,
+            cpuUsage: metrics.cpuUsage
           };
         } catch (error) {
           response.metrics = { error: 'Failed to collect operational metrics' };
@@ -93,8 +93,8 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             ...acc,
             [name]: {
               state: metrics.state,
-              failureRate: metrics.failureRate,
-            },
+              failureRate: metrics.failureRate
+            }
           }), {});
       }
 
@@ -106,8 +106,8 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             ...acc,
             [name]: {
               successRate: metrics.successRate,
-              averageAttempts: metrics.averageAttempts,
-            },
+              averageAttempts: metrics.averageAttempts
+            }
           }), {});
       }
 
@@ -117,7 +117,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         response.alerts = detailed ? alerts : {
           count: alerts.length,
           critical: alerts.filter(a => a.severity === 'critical').length,
-          high: alerts.filter(a => a.severity === 'high').length,
+          high: alerts.filter(a => a.severity === 'high').length
         };
       }
 
@@ -147,20 +147,20 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
       // Set appropriate HTTP status based on health
       let statusCode = 200;
       switch (healthSummary.overall) {
-        case 'healthy':
-          statusCode = 200;
-          break;
-        case 'degraded':
-          statusCode = 200; // Still operational
-          break;
-        case 'unhealthy':
-          statusCode = 503;
-          break;
-        case 'critical':
-          statusCode = 503;
-          break;
-        default:
-          statusCode = 503;
+      case 'healthy':
+        statusCode = 200;
+        break;
+      case 'degraded':
+        statusCode = 200; // Still operational
+        break;
+      case 'unhealthy':
+        statusCode = 503;
+        break;
+      case 'critical':
+        statusCode = 503;
+        break;
+      default:
+        statusCode = 503;
       }
 
       reply.status(statusCode).send(healthSummary);
@@ -169,7 +169,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         overall: 'critical',
         error: 'Health check system failure',
         message: error instanceof Error ? error.message : String(error),
-        timestamp: Date.now(),
+        timestamp: Date.now()
       });
     }
   });
@@ -195,14 +195,14 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           params: {
             type: 'object',
             properties: { name: { type: 'string' } },
-            required: ['name'],
+            required: ['name']
           },
           body: {
             type: 'object',
             properties: { action: { type: 'string', enum: ['open', 'close', 'half-open'] } },
-            required: ['action'],
-          },
-        },
+            required: ['action']
+          }
+        }
       },
       async (request, reply) => {
         const { name } = request.params;
@@ -214,15 +214,15 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         }
 
         switch (action) {
-          case 'open':
-            breaker.forceOpen();
-            break;
-          case 'close':
-            breaker.forceClosed();
-            break;
-          case 'half-open':
-            breaker.forceHalfOpen();
-            break;
+        case 'open':
+          breaker.forceOpen();
+          break;
+        case 'close':
+          breaker.forceClosed();
+          break;
+        case 'half-open':
+          breaker.forceHalfOpen();
+          break;
         }
 
         reply.send({ message: `Circuit breaker '${name}' ${action}ed successfully` });
@@ -245,10 +245,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           type: 'object',
           properties: {
             minutes: { type: 'number', minimum: 1, maximum: 1440 },
-            limit: { type: 'number', minimum: 1, maximum: 1000 },
-          },
-        },
-      },
+            limit: { type: 'number', minimum: 1, maximum: 1000 }
+          }
+        }
+      }
     },
     async (request: FastifyRequest<{ Querystring: MetricsQuery }>, reply: FastifyReply) => {
       const { minutes, limit } = request.query;
@@ -295,10 +295,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             type: 'object',
             properties: {
               errorType: { type: 'string', enum: ['validation', 'timeout', 'external', 'database', 'internal'] },
-              delay: { type: 'number', minimum: 0, maximum: 10000 },
-            },
-          },
-        },
+              delay: { type: 'number', minimum: 0, maximum: 10000 }
+            }
+          }
+        }
       },
       async (request, reply) => {
         const { errorType = 'internal', delay = 0 } = request.body;
@@ -308,18 +308,18 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         }
 
         switch (errorType) {
-          case 'validation':
-            throw ErrorFactory.validation('Test validation error', [
-              { field: 'testField', code: 'invalid', message: 'Test field is invalid' }
-            ]);
-          case 'timeout':
-            throw ErrorFactory.timeout('test-operation', 5000);
-          case 'external':
-            throw ErrorFactory.externalService('test-service', 'Test external service error', 503);
-          case 'database':
-            throw ErrorFactory.database('Test database error', 'SELECT', 'test_table');
-          default:
-            throw ErrorFactory.internal('Test internal server error');
+        case 'validation':
+          throw ErrorFactory.validation('Test validation error', [
+            { field: 'testField', code: 'invalid', message: 'Test field is invalid' }
+          ]);
+        case 'timeout':
+          throw ErrorFactory.timeout('test-operation', 5000);
+        case 'external':
+          throw ErrorFactory.externalService('test-service', 'Test external service error', 503);
+        case 'database':
+          throw ErrorFactory.database('Test database error', 'SELECT', 'test_table');
+        default:
+          throw ErrorFactory.internal('Test internal server error');
         }
       }
     );
@@ -332,10 +332,10 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             type: 'object',
             properties: {
               count: { type: 'number', minimum: 1, maximum: 1000 },
-              intervalMs: { type: 'number', minimum: 0, maximum: 5000 },
-            },
-          },
-        },
+              intervalMs: { type: 'number', minimum: 0, maximum: 5000 }
+            }
+          }
+        }
       },
       async (request, reply) => {
         const { count = 10, intervalMs = 100 } = request.body;
@@ -362,7 +362,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         reply.send({
           message: `Generated ${count} test requests`,
           results,
-          averageResponseTime: results.reduce((sum, r) => sum + r.responseTime, 0) / results.length,
+          averageResponseTime: results.reduce((sum, r) => sum + r.responseTime, 0) / results.length
         });
       }
     );
@@ -380,17 +380,17 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024), // MB
         heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024), // MB
         external: Math.round(memoryUsage.external / 1024 / 1024), // MB
-        rss: Math.round(memoryUsage.rss / 1024 / 1024), // MB
+        rss: Math.round(memoryUsage.rss / 1024 / 1024) // MB
       },
       cpu: {
         user: cpuUsage.user / 1000, // ms
-        system: cpuUsage.system / 1000, // ms
+        system: cpuUsage.system / 1000 // ms
       },
       nodejs: {
         version: process.version,
         platform: process.platform,
-        arch: process.arch,
-      },
+        arch: process.arch
+      }
     });
   });
 }

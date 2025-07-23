@@ -38,12 +38,12 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => `expected execution time ${received.executionTime}ms not to be within ${maxTime}ms`,
-          pass: true,
+          pass: true
         };
       } else {
         return {
           message: () => `expected execution time ${received.executionTime}ms to be within ${maxTime}ms`,
-          pass: false,
+          pass: false
         };
       }
     },
@@ -54,12 +54,12 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => `expected memory usage ${memoryUsage}MB not to be below ${maxMemory}MB`,
-          pass: true,
+          pass: true
         };
       } else {
         return {
           message: () => `expected memory usage ${memoryUsage}MB to be below ${maxMemory}MB`,
-          pass: false,
+          pass: false
         };
       }
     },
@@ -70,12 +70,12 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => `expected throughput ${throughput} not to be above ${minThroughput}`,
-          pass: true,
+          pass: true
         };
       } else {
         return {
           message: () => `expected throughput ${throughput} to be above ${minThroughput}`,
-          pass: false,
+          pass: false
         };
       }
     },
@@ -87,13 +87,13 @@ export function registerCustomMatchers(): void {
       
       if (pass) {
         return {
-          message: () => `expected object not to be a valid graph`,
-          pass: true,
+          message: () => 'expected object not to be a valid graph',
+          pass: true
         };
       } else {
         return {
-          message: () => `expected object to have nodes and edges arrays`,
-          pass: false,
+          message: () => 'expected object to have nodes and edges arrays',
+          pass: false
         };
       }
     },
@@ -106,13 +106,13 @@ export function registerCustomMatchers(): void {
       
       if (pass) {
         return {
-          message: () => `expected object not to be a valid node`,
-          pass: true,
+          message: () => 'expected object not to be a valid node',
+          pass: true
         };
       } else {
         return {
-          message: () => `expected object to have id, type, and data properties`,
-          pass: false,
+          message: () => 'expected object to have id, type, and data properties',
+          pass: false
         };
       }
     },
@@ -125,13 +125,13 @@ export function registerCustomMatchers(): void {
       
       if (pass) {
         return {
-          message: () => `expected object not to be a valid edge`,
-          pass: true,
+          message: () => 'expected object not to be a valid edge',
+          pass: true
         };
       } else {
         return {
-          message: () => `expected object to have id, source, and target properties`,
-          pass: false,
+          message: () => 'expected object to have id, source, and target properties',
+          pass: false
         };
       }
     },
@@ -144,19 +144,19 @@ export function registerCustomMatchers(): void {
         
         if (pass) {
           return {
-            message: () => `expected object not to have valid schema`,
-            pass: true,
+            message: () => 'expected object not to have valid schema',
+            pass: true
           };
         } else {
           return {
-            message: () => `expected object to have valid schema`,
-            pass: false,
+            message: () => 'expected object to have valid schema',
+            pass: false
           };
         }
       } catch (error) {
         return {
           message: () => `schema validation failed: ${error}`,
-          pass: false,
+          pass: false
         };
       }
     },
@@ -169,13 +169,13 @@ export function registerCustomMatchers(): void {
       
       if (pass) {
         return {
-          message: () => `expected code not to be security compliant`,
-          pass: true,
+          message: () => 'expected code not to be security compliant',
+          pass: true
         };
       } else {
         return {
-          message: () => `expected code to be security compliant (no eval, innerHTML)`,
-          pass: false,
+          message: () => 'expected code to be security compliant (no eval, innerHTML)',
+          pass: false
         };
       }
     },
@@ -188,13 +188,13 @@ export function registerCustomMatchers(): void {
       
       if (pass) {
         return {
-          message: () => `expected element not to be accessibility compliant`,
-          pass: true,
+          message: () => 'expected element not to be accessibility compliant',
+          pass: true
         };
       } else {
         return {
-          message: () => `expected element to have accessibility attributes`,
-          pass: false,
+          message: () => 'expected element to have accessibility attributes',
+          pass: false
         };
       }
     },
@@ -208,12 +208,12 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => `expected not to have validation errors${expectedCount ? ` (count: ${expectedCount})` : ''}`,
-          pass: true,
+          pass: true
         };
       } else {
         return {
           message: () => `expected to have validation errors${expectedCount ? ` (expected: ${expectedCount}, got: ${errors.length})` : ''}`,
-          pass: false,
+          pass: false
         };
       }
     },
@@ -224,12 +224,12 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => `expected ${received} not to be within range [${min}, ${max}]`,
-          pass: true,
+          pass: true
         };
       } else {
         return {
           message: () => `expected ${received} to be within range [${min}, ${max}]`,
-          pass: false,
+          pass: false
         };
       }
     },
@@ -241,13 +241,13 @@ export function registerCustomMatchers(): void {
       
       if (pass) {
         return {
-          message: () => `expected graph not to be executable`,
-          pass: true,
+          message: () => 'expected graph not to be executable',
+          pass: true
         };
       } else {
         return {
-          message: () => `expected graph to be executable (needs nodes, edges, and output node)`,
-          pass: false,
+          message: () => 'expected graph to be executable (needs nodes, edges, and output node)',
+          pass: false
         };
       }
     },
@@ -260,13 +260,13 @@ export function registerCustomMatchers(): void {
       
       if (pass) {
         return {
-          message: () => `expected output not to be deterministic`,
-          pass: true,
+          message: () => 'expected output not to be deterministic',
+          pass: true
         };
       } else {
         return {
-          message: () => `expected output to be deterministic (needs output and seed)`,
-          pass: false,
+          message: () => 'expected output to be deterministic (needs output and seed)',
+          pass: false
         };
       }
     }

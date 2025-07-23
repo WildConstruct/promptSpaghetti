@@ -118,8 +118,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
         ...prev,
         source: file,
         format: file.name.endsWith('.yaml') || file.name.endsWith('.yml') ? 'yaml' :
-                file.name.endsWith('.zip') ? 'zip' :
-                file.name.endsWith('.bundle') ? 'template_bundle' : 'json'
+          file.name.endsWith('.zip') ? 'zip' :
+            file.name.endsWith('.bundle') ? 'template_bundle' : 'json'
       }));
     }
   }, []);
@@ -314,8 +314,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
         <div key={step} className="flex items-center">
           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
             importStep === step ? 'bg-blue-600 text-white' :
-            ['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? 'bg-green-600 text-white' :
-            'bg-gray-300 text-gray-600'
+              ['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? 'bg-green-600 text-white' :
+                'bg-gray-300 text-gray-600'
           }`}>
             {['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? <FiCheck /> : index + 1}
           </div>

@@ -133,7 +133,7 @@ export class QuotaIntegrationService {
       return integratedResult;
 
     } catch (error) {
-      console.error(`❌ Error in integrated quota check:`, error);
+      console.error('❌ Error in integrated quota check:', error);
       
       // Log integration failure
       await this.auditService.logEvent({
@@ -159,7 +159,7 @@ export class QuotaIntegrationService {
     request: QuotaCheckRequest,
     result: QuotaCheckResult
   ): Promise<void> {
-    console.log(`🚨 Handling quota violation with integrated response`);
+    console.log('🚨 Handling quota violation with integrated response');
 
     try {
       // 1. Fraud detection integration
@@ -181,7 +181,7 @@ export class QuotaIntegrationService {
       await this.handleIntegratedNotifications(request, result);
 
     } catch (error) {
-      console.error(`❌ Error handling integrated quota violation:`, error);
+      console.error('❌ Error handling integrated quota violation:', error);
     }
   }
 
@@ -197,7 +197,7 @@ export class QuotaIntegrationService {
     result: QuotaCheckResult
   ): Promise<void> {
     try {
-      console.log(`🏃 Integrating with rate limiting service`);
+      console.log('🏃 Integrating with rate limiting service');
 
       // Apply additional rate limiting based on quota utilization
       const rateLimitKey = `quota_${result.quotaId}_${request.userId}`;
@@ -221,7 +221,7 @@ export class QuotaIntegrationService {
       console.log(`🎚️ Applied rate limit adjustment: ${adjustedLimit} requests/hour`);
 
     } catch (error) {
-      console.error(`❌ Rate limiting integration error:`, error);
+      console.error('❌ Rate limiting integration error:', error);
       this.integrationHealth.set('rate_limiting', false);
     }
   }
@@ -234,7 +234,7 @@ export class QuotaIntegrationService {
     result: QuotaCheckResult
   ): Promise<void> {
     try {
-      console.log(`⚡ Integrating with adaptive throttling`);
+      console.log('⚡ Integrating with adaptive throttling');
 
       // Create throttling rule for quota violators
       const throttleRule = {
@@ -264,10 +264,10 @@ export class QuotaIntegrationService {
 
       this.throttlingEngine.addRule(throttleRule);
 
-      console.log(`🔄 Added throttling rule for quota violation`);
+      console.log('🔄 Added throttling rule for quota violation');
 
     } catch (error) {
-      console.error(`❌ Adaptive throttling integration error:`, error);
+      console.error('❌ Adaptive throttling integration error:', error);
       this.integrationHealth.set('adaptive_throttling', false);
     }
   }
@@ -280,7 +280,7 @@ export class QuotaIntegrationService {
     result: QuotaCheckResult
   ): Promise<void> {
     try {
-      console.log(`🔍 Integrating with fraud detection service`);
+      console.log('🔍 Integrating with fraud detection service');
 
       // Check for suspicious quota violation patterns
       const recentViolations = await this.getRecentUserViolations(request.userId);
@@ -305,11 +305,11 @@ export class QuotaIntegrationService {
           timestamp: new Date()
         });
 
-        console.log(`⚠️ Reported quota abuse pattern to fraud detection`);
+        console.log('⚠️ Reported quota abuse pattern to fraud detection');
       }
 
     } catch (error) {
-      console.error(`❌ Fraud detection integration error:`, error);
+      console.error('❌ Fraud detection integration error:', error);
       this.integrationHealth.set('fraud_detection', false);
     }
   }
@@ -322,7 +322,7 @@ export class QuotaIntegrationService {
     result: QuotaCheckResult
   ): Promise<void> {
     try {
-      console.log(`⚖️ Integrating with enforcement actions service`);
+      console.log('⚖️ Integrating with enforcement actions service');
 
       // Create enforcement action based on quota violation
       const enforcementSeverity = this.mapQuotaToEnforcementSeverity(result);
@@ -352,7 +352,7 @@ export class QuotaIntegrationService {
       }
 
     } catch (error) {
-      console.error(`❌ Enforcement actions integration error:`, error);
+      console.error('❌ Enforcement actions integration error:', error);
       this.integrationHealth.set('enforcement_actions', false);
     }
   }
@@ -365,7 +365,7 @@ export class QuotaIntegrationService {
     result: QuotaCheckResult
   ): Promise<void> {
     try {
-      console.log(`📝 Integrating with audit logging service`);
+      console.log('📝 Integrating with audit logging service');
 
       // Create detailed audit log entry
       await this.auditService.logEvent({
@@ -392,10 +392,10 @@ export class QuotaIntegrationService {
         severity: this.mapQuotaToAuditSeverity(result)
       });
 
-      console.log(`📋 Audit log entry created for quota violation`);
+      console.log('📋 Audit log entry created for quota violation');
 
     } catch (error) {
-      console.error(`❌ Audit logging integration error:`, error);
+      console.error('❌ Audit logging integration error:', error);
       this.integrationHealth.set('audit_logging', false);
     }
   }
@@ -452,7 +452,7 @@ export class QuotaIntegrationService {
       }
 
     } catch (error) {
-      console.error(`❌ Error enhancing quota result:`, error);
+      console.error('❌ Error enhancing quota result:', error);
     }
 
     return enhancedResult;
@@ -466,7 +466,7 @@ export class QuotaIntegrationService {
     result: QuotaCheckResult
   ): Promise<void> {
     try {
-      console.log(`📢 Handling integrated notifications`);
+      console.log('📢 Handling integrated notifications');
 
       // User notifications
       if (this.config.userNotifications) {
@@ -484,7 +484,7 @@ export class QuotaIntegrationService {
       }
 
     } catch (error) {
-      console.error(`❌ Notification integration error:`, error);
+      console.error('❌ Notification integration error:', error);
     }
   }
 
@@ -527,7 +527,7 @@ export class QuotaIntegrationService {
     services: Record<string, boolean>;
     lastHealthCheck: Date;
     config: QuotaIntegrationConfig;
-  } {
+    } {
     const services: Record<string, boolean> = {};
     let overallHealth = true;
 
@@ -652,11 +652,11 @@ export class QuotaIntegrationService {
 
   private async sendSystemAdminAlert(request: QuotaCheckRequest, result: QuotaCheckResult): Promise<void> {
     // Implementation for admin alerts
-    console.log(`🚨 Sending admin alert for critical quota violation`);
+    console.log('🚨 Sending admin alert for critical quota violation');
   }
 
   private async sendStakeholderNotification(request: QuotaCheckRequest, result: QuotaCheckResult): Promise<void> {
     // Implementation for stakeholder notifications
-    console.log(`📊 Sending stakeholder notification for business-critical quota`);
+    console.log('📊 Sending stakeholder notification for business-critical quota');
   }
 }

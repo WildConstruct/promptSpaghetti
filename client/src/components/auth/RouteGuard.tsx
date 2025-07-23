@@ -431,7 +431,7 @@ export function usePermissions(): {
   hasRole: (role: UserRole) => boolean;
   userRoles: UserRole[];
   userPermissions: Permission[];
-} {
+  } {
   const { user } = useAuthStore();
   
   const userRoles: UserRole[] = user?.roles?.length > 0 ? user.roles as UserRole[] : ['user'];

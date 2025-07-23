@@ -830,17 +830,17 @@ export class RuleEvaluationEngine extends EventEmitter {
     const entriesToEvict = Math.floor(this.config.caching.maxCacheSize * 0.1); // Evict 10%
 
     switch (strategy) {
-      case CacheStrategy.LRU:
-        this.evictLRU(entriesToEvict);
-        break;
-      case CacheStrategy.LFU:
-        this.evictLFU(entriesToEvict);
-        break;
-      case CacheStrategy.TTL:
-        this.cleanupExpiredCacheEntries();
-        break;
-      default:
-        this.evictLRU(entriesToEvict);
+    case CacheStrategy.LRU:
+      this.evictLRU(entriesToEvict);
+      break;
+    case CacheStrategy.LFU:
+      this.evictLFU(entriesToEvict);
+      break;
+    case CacheStrategy.TTL:
+      this.cleanupExpiredCacheEntries();
+      break;
+    default:
+      this.evictLRU(entriesToEvict);
     }
   }
 
@@ -942,7 +942,7 @@ export class RuleEvaluationEngine extends EventEmitter {
   }
 
   private determineOutcome(rule: ComplianceRule, conditionResults: ConditionEvaluationResult[]): EvaluationOutcome {
-        const requiredResults = conditionResults.filter((_, index) => rule.conditions[index]?.required);
+    const requiredResults = conditionResults.filter((_, index) => rule.conditions[index]?.required);
     
     const allRequiredPassed = requiredResults.every(r => r.result);
     const allConditionsPassed = conditionResults.every(r => r.result);
@@ -1064,16 +1064,16 @@ export class RuleEvaluationEngine extends EventEmitter {
 
   private getCurrentMetricValue(metric: string): number {
     switch (metric) {
-      case 'averageEvaluationTime':
-        return this.performanceMetrics.averageEvaluationTime;
-      case 'errorRate':
-        return this.performanceMetrics.errorRate * 100; // Convert to percentage
-      case 'cacheSize':
-        return this.evaluationCache.size;
-      case 'memoryUsage':
-        return process.memoryUsage().heapUsed;
-      default:
-        return 0;
+    case 'averageEvaluationTime':
+      return this.performanceMetrics.averageEvaluationTime;
+    case 'errorRate':
+      return this.performanceMetrics.errorRate * 100; // Convert to percentage
+    case 'cacheSize':
+      return this.evaluationCache.size;
+    case 'memoryUsage':
+      return process.memoryUsage().heapUsed;
+    default:
+      return 0;
     }
   }
 

@@ -131,7 +131,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
 
       const response = await fetch('/api/import', {
         method: 'POST',
-        body: formData,
+        body: formData
       });
 
       clearInterval(progressInterval);

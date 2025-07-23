@@ -23,14 +23,14 @@ import {
 const GenerateReportRequestSchema = z.object({
   reportType: z.enum(
     ['COMPLIANCE_ASSESSMENT',
-    'RISK_ASSESSMENT',
-    'AUDIT_READINESS',
-    'GAP_ANALYSIS',
-    'CERTIFICATION_PREP',
-    'POLICY_EFFECTIVENESS',
-    'INCIDENT_ANALYSIS',
-    'METRICS_DASHBOARD',
-    'CUSTOM']
+      'RISK_ASSESSMENT',
+      'AUDIT_READINESS',
+      'GAP_ANALYSIS',
+      'CERTIFICATION_PREP',
+      'POLICY_EFFECTIVENESS',
+      'INCIDENT_ANALYSIS',
+      'METRICS_DASHBOARD',
+      'CUSTOM']
   ),
   framework: z.enum(['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO_27001', 'NIST', 'CUSTOM']),
   scope: z.object({
@@ -127,12 +127,12 @@ const GetMetricsQuerySchema = z.object({
 const CreateCertificationRequestSchema = z.object({
   certificationType: z.enum(
     ['SOC2_TYPE1',
-    'SOC2_TYPE2',
-    'ISO_27001',
-    'PCI_DSS',
-    'HIPAA_COMPLIANCE',
-    'GDPR_CERTIFICATION',
-    'CUSTOM']
+      'SOC2_TYPE2',
+      'ISO_27001',
+      'PCI_DSS',
+      'HIPAA_COMPLIANCE',
+      'GDPR_CERTIFICATION',
+      'CUSTOM']
   ),
   framework: z.enum(['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO_27001', 'NIST', 'CUSTOM']),
   scope: z.string().min(1),
@@ -197,14 +197,14 @@ const UpdateCertificationStatusRequestSchema = z.object({
 const ScheduleReportRequestSchema = z.object({
   reportType: z.enum(
     ['COMPLIANCE_ASSESSMENT',
-    'RISK_ASSESSMENT',
-    'AUDIT_READINESS',
-    'GAP_ANALYSIS',
-    'CERTIFICATION_PREP',
-    'POLICY_EFFECTIVENESS',
-    'INCIDENT_ANALYSIS',
-    'METRICS_DASHBOARD',
-    'CUSTOM']
+      'RISK_ASSESSMENT',
+      'AUDIT_READINESS',
+      'GAP_ANALYSIS',
+      'CERTIFICATION_PREP',
+      'POLICY_EFFECTIVENESS',
+      'INCIDENT_ANALYSIS',
+      'METRICS_DASHBOARD',
+      'CUSTOM']
   ),
   framework: z.enum(['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI_DSS', 'ISO_27001', 'NIST', 'CUSTOM']),
   schedule: z.object({

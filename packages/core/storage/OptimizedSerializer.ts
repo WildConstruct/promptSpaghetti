@@ -68,14 +68,14 @@ export class OptimizedSerializer {
       let result: SerializationResult;
       
       switch (finalOptions.format) {
-        case 'binary':
-          result = await this.serializeToBinary(projectData, finalOptions);
-          break;
-        case 'compressed':
-          result = await this.serializeCompressed(projectData, finalOptions);
-          break;
-        default:
-          result = await this.serializeToJSON(projectData, finalOptions);
+      case 'binary':
+        result = await this.serializeToBinary(projectData, finalOptions);
+        break;
+      case 'compressed':
+        result = await this.serializeCompressed(projectData, finalOptions);
+        break;
+      default:
+        result = await this.serializeToJSON(projectData, finalOptions);
       }
       
       result.serializationTime = performance.now() - startTime;
@@ -182,7 +182,7 @@ export class OptimizedSerializer {
       averageRatio: number;
       timeSaved: number;
     };
-  } {
+    } {
     // Implementation would track these metrics
     return {
       averageSerializationTime: 0,

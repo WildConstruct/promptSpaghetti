@@ -740,7 +740,7 @@ export class Epic16IntegratedService implements Epic16UnifiedService {
   ): Promise<MarketplaceTutorial[]> {
     // Apply marketplace-specific personalization to tutorials
     return tutorials.map(tutorial => ({
-      ...tutorial,
+      ...tutorial
       // Add marketplace-specific customizations
     }));
   }
@@ -779,13 +779,13 @@ export class Epic16IntegratedService implements Epic16UnifiedService {
   private formatTimeRange(timeRange: TimeRange): string {
     // Convert TimeRange enum to human-readable string
     switch (timeRange) {
-      case TimeRange.LAST_24H: return 'Last 24 hours';
-      case TimeRange.LAST_7D: return 'Last 7 days';
-      case TimeRange.LAST_30D: return 'Last 30 days';
-      case TimeRange.LAST_90D: return 'Last 90 days';
-      case TimeRange.LAST_YEAR: return 'Last year';
-      case TimeRange.ALL_TIME: return 'All time';
-      default: return 'Custom range';
+    case TimeRange.LAST_24H: return 'Last 24 hours';
+    case TimeRange.LAST_7D: return 'Last 7 days';
+    case TimeRange.LAST_30D: return 'Last 30 days';
+    case TimeRange.LAST_90D: return 'Last 90 days';
+    case TimeRange.LAST_YEAR: return 'Last year';
+    case TimeRange.ALL_TIME: return 'All time';
+    default: return 'Custom range';
     }
   }
 

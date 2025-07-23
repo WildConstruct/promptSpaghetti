@@ -179,21 +179,21 @@ const UserProfileDetail: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return '#10b981';
-      case 'pending': return '#f59e0b';
-      case 'suspended': return '#ef4444';
-      case 'inactive': return '#6b7280';
-      default: return '#9ca3af';
+    case 'active': return '#10b981';
+    case 'pending': return '#f59e0b';
+    case 'suspended': return '#ef4444';
+    case 'inactive': return '#6b7280';
+    default: return '#9ca3af';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return <CheckCircle size={16} />;
-      case 'pending': return <Clock size={16} />;
-      case 'suspended': return <XCircle size={16} />;
-      case 'inactive': return <AlertCircle size={16} />;
-      default: return <AlertCircle size={16} />;
+    case 'active': return <CheckCircle size={16} />;
+    case 'pending': return <Clock size={16} />;
+    case 'suspended': return <XCircle size={16} />;
+    case 'inactive': return <AlertCircle size={16} />;
+    default: return <AlertCircle size={16} />;
     }
   };
 

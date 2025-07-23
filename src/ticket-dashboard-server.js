@@ -1049,7 +1049,7 @@ function handleDashboard(req, res) {
 
 // Start server
 server.listen(PORT, () => {
-  console.log(`🎯 Ticketing System Dashboard running at:`);
+  console.log('🎯 Ticketing System Dashboard running at:');
   console.log(`   http://localhost:${PORT}`);
   console.log('');
   console.log('Features:');

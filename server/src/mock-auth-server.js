@@ -174,12 +174,12 @@ app.get('/api/health', (req, res) => {
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`🚀 Mock Auth Server running on http://localhost:${PORT}`);
-  console.log(`🔐 Test credentials: test@example.com / password123`);
-  console.log(`📋 Available endpoints:`);
-  console.log(`   POST /api/auth/login`);
-  console.log(`   POST /api/auth/register`);
-  console.log(`   GET  /api/auth/me`);
-  console.log(`   POST /api/auth/refresh`);
-  console.log(`   POST /api/auth/logout`);
-  console.log(`   GET  /api/health`);
+  console.log('🔐 Test credentials: test@example.com / password123');
+  console.log('📋 Available endpoints:');
+  console.log('   POST /api/auth/login');
+  console.log('   POST /api/auth/register');
+  console.log('   GET  /api/auth/me');
+  console.log('   POST /api/auth/refresh');
+  console.log('   POST /api/auth/logout');
+  console.log('   GET  /api/health');
 });

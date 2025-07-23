@@ -443,11 +443,11 @@ export class ActivityTrackingService {
 
   private mapThreatLevelToSeverity(threatLevel: 'low' | 'medium' | 'high' | 'critical'): ActivitySeverity {
     switch (threatLevel) {
-      case 'low': return 'low';
-      case 'medium': return 'medium';
-      case 'high': return 'high';
-      case 'critical': return 'critical';
-      default: return 'medium';
+    case 'low': return 'low';
+    case 'medium': return 'medium';
+    case 'high': return 'high';
+    case 'critical': return 'critical';
+    default: return 'medium';
     }
   }
 

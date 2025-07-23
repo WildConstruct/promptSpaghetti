@@ -80,26 +80,26 @@ export class TestDataGenerator {
     const { nodeCount, seed, scenario, complexity, includeAdvancedNodes } = options;
 
     switch (scenario) {
-      case TestScenario.SIMPLE_LINEAR:
-        return this.generateLinearGraph(nodeCount, seed);
+    case TestScenario.SIMPLE_LINEAR:
+      return this.generateLinearGraph(nodeCount, seed);
       
-      case TestScenario.COMPLEX_BRANCHING:
-        return this.generateBranchingGraph(nodeCount, seed, complexity);
+    case TestScenario.COMPLEX_BRANCHING:
+      return this.generateBranchingGraph(nodeCount, seed, complexity);
       
-      case TestScenario.CIRCULAR_DEPENDENCY:
-        return this.generateCircularGraph(nodeCount, seed);
+    case TestScenario.CIRCULAR_DEPENDENCY:
+      return this.generateCircularGraph(nodeCount, seed);
       
-      case TestScenario.DEEP_NESTING:
-        return this.generateDeepNestedGraph(nodeCount, seed);
+    case TestScenario.DEEP_NESTING:
+      return this.generateDeepNestedGraph(nodeCount, seed);
       
-      case TestScenario.MEMORY_INTENSIVE:
-        return this.generateMemoryIntensiveGraph(nodeCount, seed);
+    case TestScenario.MEMORY_INTENSIVE:
+      return this.generateMemoryIntensiveGraph(nodeCount, seed);
       
-      case TestScenario.PERFORMANCE_STRESS:
-        return this.generatePerformanceStressGraph(nodeCount, seed, includeAdvancedNodes);
+    case TestScenario.PERFORMANCE_STRESS:
+      return this.generatePerformanceStressGraph(nodeCount, seed, includeAdvancedNodes);
       
-      default:
-        return this.generateStandardGraph(nodeCount, seed);
+    default:
+      return this.generateStandardGraph(nodeCount, seed);
     }
   }
 
@@ -405,46 +405,46 @@ export class TestDataGenerator {
       let nodeData: any = {};
       
       switch (nodeType) {
-        case 'WeightedChoice':
-          nodeData = {
-            choices: Array.from({ length: 20 }, (_, j) => ({
-              value: `Stress choice ${i}_${j}`,
-              weight: this.random(seed + i + j, 0.1, 10.0)
-            }))
-          };
-          break;
+      case 'WeightedChoice':
+        nodeData = {
+          choices: Array.from({ length: 20 }, (_, j) => ({
+            value: `Stress choice ${i}_${j}`,
+            weight: this.random(seed + i + j, 0.1, 10.0)
+          }))
+        };
+        break;
           
-        case 'Concat':
-          nodeData = {
-            separator: ' | ',
-            texts: Array.from({ length: 10 }, (_, j) => `Text ${i}_${j}`)
-          };
-          break;
+      case 'Concat':
+        nodeData = {
+          separator: ' | ',
+          texts: Array.from({ length: 10 }, (_, j) => `Text ${i}_${j}`)
+        };
+        break;
           
-        case 'SetVariable':
-          nodeData = {
-            variableName: `var_${i}`,
-            value: `Complex value ${i} with data: ${new Array(50).fill('DATA').join(' ')}`
-          };
-          break;
+      case 'SetVariable':
+        nodeData = {
+          variableName: `var_${i}`,
+          value: `Complex value ${i} with data: ${new Array(50).fill('DATA').join(' ')}`
+        };
+        break;
           
-        case 'GetVariable':
-          nodeData = {
-            variableName: `var_${Math.max(0, i - 1)}`,
-            defaultValue: `Default for ${i}`
-          };
-          break;
+      case 'GetVariable':
+        nodeData = {
+          variableName: `var_${Math.max(0, i - 1)}`,
+          defaultValue: `Default for ${i}`
+        };
+        break;
           
-        case 'Conditional':
-          nodeData = {
-            branches: Array.from({ length: 5 }, (_, j) => ({
-              condition: `variable_${i} > ${j * 10}`,
-              output: `Condition ${i}_${j} met`,
-              label: `Branch ${j}`
-            })),
-            defaultOutput: `Default for ${i}`
-          };
-          break;
+      case 'Conditional':
+        nodeData = {
+          branches: Array.from({ length: 5 }, (_, j) => ({
+            condition: `variable_${i} > ${j * 10}`,
+            output: `Condition ${i}_${j} met`,
+            label: `Branch ${j}`
+          })),
+          defaultOutput: `Default for ${i}`
+        };
+        break;
       }
 
       nodes.push({
@@ -533,33 +533,33 @@ export class TestDataGenerator {
       let item: any;
 
       switch (pattern) {
-        case DataPattern.SEQUENTIAL:
-          item = { id: i, value: `Item ${i}`, index: i };
-          break;
+      case DataPattern.SEQUENTIAL:
+        item = { id: i, value: `Item ${i}`, index: i };
+        break;
           
-        case DataPattern.RANDOM:
-          item = { 
-            id: Math.random(), 
-            value: Math.random().toString(36),
-            data: memoryIntensive ? new Array(1000).fill('X').join('') : null
-          };
-          break;
+      case DataPattern.RANDOM:
+        item = { 
+          id: Math.random(), 
+          value: Math.random().toString(36),
+          data: memoryIntensive ? new Array(1000).fill('X').join('') : null
+        };
+        break;
           
-        case DataPattern.WEIGHTED:
-          item = {
-            id: i,
-            weight: this.random(i, 0.1, 10.0),
-            category: ['A', 'B', 'C'][i % 3],
-            priority: this.randomInt(i, 1, 5)
-          };
-          break;
+      case DataPattern.WEIGHTED:
+        item = {
+          id: i,
+          weight: this.random(i, 0.1, 10.0),
+          category: ['A', 'B', 'C'][i % 3],
+          priority: this.randomInt(i, 1, 5)
+        };
+        break;
           
-        case DataPattern.NESTED:
-          item = this.createNestedObject(i, nestedDepth, memoryIntensive);
-          break;
+      case DataPattern.NESTED:
+        item = this.createNestedObject(i, nestedDepth, memoryIntensive);
+        break;
           
-        default:
-          item = { id: i, value: `Item ${i}` };
+      default:
+        item = { id: i, value: `Item ${i}` };
       }
 
       dataset.push(item);
@@ -604,7 +604,7 @@ export class TestDataGenerator {
       // Special character scenarios
       unicodeString: '🎯🔥💡🚀✨🎪🌟⚡🎨🔧',
       specialChars: '!@#$%^&*()[]{}|\\;:\'",.<>?`~',
-      sqlInjection: "'; DROP TABLE users; --",
+      sqlInjection: '\'; DROP TABLE users; --',
       xssAttempt: '<script>alert("XSS")</script>',
       
       // Date edge cases

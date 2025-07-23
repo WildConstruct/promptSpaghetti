@@ -93,13 +93,13 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({
 
   const getStatusColor = (status: ValidationStatus) => {
     switch (status) {
-      case 'approved': return 'text-green-600 bg-green-100';
-      case 'rejected': return 'text-red-600 bg-red-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'in_review': return 'text-blue-600 bg-blue-100';
-      case 'requires_update': return 'text-orange-600 bg-orange-100';
-      case 'expired': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'approved': return 'text-green-600 bg-green-100';
+    case 'rejected': return 'text-red-600 bg-red-100';
+    case 'pending': return 'text-yellow-600 bg-yellow-100';
+    case 'in_review': return 'text-blue-600 bg-blue-100';
+    case 'requires_update': return 'text-orange-600 bg-orange-100';
+    case 'expired': return 'text-gray-600 bg-gray-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -227,14 +227,14 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({
 
   const renderVerificationData = () => {
     switch (request.type) {
-      case 'government_id':
-        return renderGovernmentIdData();
-      case 'professional_credentials':
-        return renderProfessionalCredentialsData();
-      case 'social_media_verification':
-        return renderSocialMediaData();
-      default:
-        return renderGenericVerificationData();
+    case 'government_id':
+      return renderGovernmentIdData();
+    case 'professional_credentials':
+      return renderProfessionalCredentialsData();
+    case 'social_media_verification':
+      return renderSocialMediaData();
+    default:
+      return renderGenericVerificationData();
     }
   };
 

@@ -113,49 +113,49 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
 
   const getViewIcon = (view: ToolkitView) => {
     switch (view) {
-      case 'upload': return '📄';
-      case 'analyze': return '🔍';
-      case 'compliance': return '✅';
-      case 'citations': return '📚';
-      case 'terminology': return '📖';
-      case 'summary': return '📊';
-      default: return '📄';
+    case 'upload': return '📄';
+    case 'analyze': return '🔍';
+    case 'compliance': return '✅';
+    case 'citations': return '📚';
+    case 'terminology': return '📖';
+    case 'summary': return '📊';
+    default: return '📄';
     }
   };
 
   const getViewTitle = (view: ToolkitView) => {
     switch (view) {
-      case 'upload': return 'Upload Document';
-      case 'analyze': return 'Analyze Contract';
-      case 'compliance': return 'Check Compliance';
-      case 'citations': return 'Manage Citations';
-      case 'terminology': return 'Validate Terminology';
-      case 'summary': return 'Review Summary';
-      default: return 'Legal Toolkit';
+    case 'upload': return 'Upload Document';
+    case 'analyze': return 'Analyze Contract';
+    case 'compliance': return 'Check Compliance';
+    case 'citations': return 'Manage Citations';
+    case 'terminology': return 'Validate Terminology';
+    case 'summary': return 'Review Summary';
+    default: return 'Legal Toolkit';
     }
   };
 
   const isViewEnabled = (view: ToolkitView) => {
     switch (view) {
-      case 'upload': return true;
-      case 'analyze': return !!document;
-      case 'compliance': return !!document;
-      case 'citations': return true; // Always available
-      case 'terminology': return !!document;
-      case 'summary': return !!document && workflowProgress > 20;
-      default: return false;
+    case 'upload': return true;
+    case 'analyze': return !!document;
+    case 'compliance': return !!document;
+    case 'citations': return true; // Always available
+    case 'terminology': return !!document;
+    case 'summary': return !!document && workflowProgress > 20;
+    default: return false;
     }
   };
 
   const getViewCompletionStatus = (view: ToolkitView) => {
     switch (view) {
-      case 'upload': return !!document;
-      case 'analyze': return !!analysis;
-      case 'compliance': return complianceResults.length > 0;
-      case 'citations': return citations.length > 0;
-      case 'terminology': return terminologyResults.length > 0;
-      case 'summary': return workflowProgress >= 100;
-      default: return false;
+    case 'upload': return !!document;
+    case 'analyze': return !!analysis;
+    case 'compliance': return complianceResults.length > 0;
+    case 'citations': return citations.length > 0;
+    case 'terminology': return terminologyResults.length > 0;
+    case 'summary': return workflowProgress >= 100;
+    default: return false;
     }
   };
 
@@ -644,7 +644,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
       <div className="workflow-actions">
         <div className="workflow-info">
           {workflowProgress < 100 
-            ? `Complete all sections to finish the legal document workflow`
+            ? 'Complete all sections to finish the legal document workflow'
             : 'Legal document analysis complete - ready to export results'
           }
         </div>

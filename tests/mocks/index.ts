@@ -136,7 +136,7 @@ export class ComprehensiveMockSystem {
       uptime: number;
       memoryUsage: any;
     };
-  } {
+    } {
     return {
       factory: this.factory.getStatistics(),
       database: {
@@ -188,7 +188,7 @@ export class ComprehensiveMockSystem {
     errorFlow: () => void;
     slowResponse: () => void;
     authenticationFlow: () => void;
-  } {
+    } {
     return {
       successFlow: () => {
         // Configure all mocks for successful responses

@@ -544,8 +544,8 @@ export class UserSegmentationService {
     
     let hasAndGroup = false;
     let hasOrGroup = false;
-    let andResults: boolean[] = [];
-    let orResults: boolean[] = [];
+    const andResults: boolean[] = [];
+    const orResults: boolean[] = [];
 
     for (const rule of rules) {
       const ruleMatches = this.evaluateRule(rule, userData);
@@ -596,49 +596,49 @@ export class UserSegmentationService {
     const ruleValue = rule.value;
 
     switch (rule.operator) {
-      case 'equals':
-        return value === ruleValue;
-      case 'not_equals':
-        return value !== ruleValue;
-      case 'contains':
-        return String(value || '').includes(String(ruleValue));
-      case 'not_contains':
-        return !String(value || '').includes(String(ruleValue));
-      case 'starts_with':
-        return String(value || '').startsWith(String(ruleValue));
-      case 'ends_with':
-        return String(value || '').endsWith(String(ruleValue));
-      case 'greater_than':
-        return Number(value) > Number(ruleValue);
-      case 'less_than':
-        return Number(value) < Number(ruleValue);
-      case 'greater_equal':
-        return Number(value) >= Number(ruleValue);
-      case 'less_equal':
-        return Number(value) <= Number(ruleValue);
-      case 'in':
-        return Array.isArray(ruleValue) && ruleValue.includes(value);
-      case 'not_in':
-        return Array.isArray(ruleValue) && !ruleValue.includes(value);
-      case 'exists':
-        return value !== undefined && value !== null;
-      case 'not_exists':
-        return value === undefined || value === null;
-      case 'matches':
-        try {
-          const regex = new RegExp(ruleValue);
-          return regex.test(String(value || ''));
-        } catch {
-          return false;
-        }
-      case 'within_days':
-        const daysDiff = (Date.now() - new Date(value).getTime()) / (24 * 60 * 60 * 1000);
-        return daysDiff <= Number(ruleValue);
-      case 'older_than_days':
-        const daysOld = (Date.now() - new Date(value).getTime()) / (24 * 60 * 60 * 1000);
-        return daysOld > Number(ruleValue);
-      default:
+    case 'equals':
+      return value === ruleValue;
+    case 'not_equals':
+      return value !== ruleValue;
+    case 'contains':
+      return String(value || '').includes(String(ruleValue));
+    case 'not_contains':
+      return !String(value || '').includes(String(ruleValue));
+    case 'starts_with':
+      return String(value || '').startsWith(String(ruleValue));
+    case 'ends_with':
+      return String(value || '').endsWith(String(ruleValue));
+    case 'greater_than':
+      return Number(value) > Number(ruleValue);
+    case 'less_than':
+      return Number(value) < Number(ruleValue);
+    case 'greater_equal':
+      return Number(value) >= Number(ruleValue);
+    case 'less_equal':
+      return Number(value) <= Number(ruleValue);
+    case 'in':
+      return Array.isArray(ruleValue) && ruleValue.includes(value);
+    case 'not_in':
+      return Array.isArray(ruleValue) && !ruleValue.includes(value);
+    case 'exists':
+      return value !== undefined && value !== null;
+    case 'not_exists':
+      return value === undefined || value === null;
+    case 'matches':
+      try {
+        const regex = new RegExp(ruleValue);
+        return regex.test(String(value || ''));
+      } catch {
         return false;
+      }
+    case 'within_days':
+      const daysDiff = (Date.now() - new Date(value).getTime()) / (24 * 60 * 60 * 1000);
+      return daysDiff <= Number(ruleValue);
+    case 'older_than_days':
+      const daysOld = (Date.now() - new Date(value).getTime()) / (24 * 60 * 60 * 1000);
+      return daysOld > Number(ruleValue);
+    default:
+      return false;
     }
   }
 
@@ -656,18 +656,18 @@ export class UserSegmentationService {
 
   private isValidValueForOperator(operator: RuleOperator, value: any): boolean {
     switch (operator) {
-      case 'in':
-      case 'not_in':
-        return Array.isArray(value);
-      case 'greater_than':
-      case 'less_than':
-      case 'greater_equal':
-      case 'less_equal':
-      case 'within_days':
-      case 'older_than_days':
-        return !isNaN(Number(value));
-      default:
-        return true;
+    case 'in':
+    case 'not_in':
+      return Array.isArray(value);
+    case 'greater_than':
+    case 'less_than':
+    case 'greater_equal':
+    case 'less_equal':
+    case 'within_days':
+    case 'older_than_days':
+      return !isNaN(Number(value));
+    default:
+      return true;
     }
   }
 

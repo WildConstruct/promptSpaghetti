@@ -31,7 +31,7 @@ class ArchitectureValidator {
         requiredDirectories: ['src', 'types', '__tests__'],
         prohibitedPatterns: [
           /.*\/utils\/.*\/utils\//,  // Nested utils directories
-          /.*\/helpers\/.*\/helpers\//,  // Nested helpers directories
+          /.*\/helpers\/.*\/helpers\//  // Nested helpers directories
         ]
       },
       
@@ -631,9 +631,9 @@ Generated: ${report.timestamp}
         violations.forEach(violation => {
           markdown += `- **${violation.type}**: ${violation.message}`;
           if (violation.file) markdown += ` (${violation.file})`;
-          markdown += `\n`;
+          markdown += '\n';
         });
-        markdown += `\n`;
+        markdown += '\n';
       }
     }
 

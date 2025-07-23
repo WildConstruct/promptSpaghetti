@@ -463,24 +463,24 @@ export class SegmentTestingService {
   // Test Execution by Type
   private async executeTest(test: SegmentTest): Promise<TestResult> {
     switch (test.testType) {
-      case 'validation':
-        return await this.runValidationTest(test);
-      case 'performance':
-        return await this.runPerformanceTest(test);
-      case 'accuracy':
-        return await this.runAccuracyTest(test);
-      case 'overlap':
-        return await this.runOverlapTest(test);
-      case 'stability':
-        return await this.runStabilityTest(test);
-      case 'integration':
-        return await this.runIntegrationTest(test);
-      case 'load':
-        return await this.runLoadTest(test);
-      case 'regression':
-        return await this.runRegressionTest(test);
-      default:
-        throw new Error(`Unknown test type: ${test.testType}`);
+    case 'validation':
+      return await this.runValidationTest(test);
+    case 'performance':
+      return await this.runPerformanceTest(test);
+    case 'accuracy':
+      return await this.runAccuracyTest(test);
+    case 'overlap':
+      return await this.runOverlapTest(test);
+    case 'stability':
+      return await this.runStabilityTest(test);
+    case 'integration':
+      return await this.runIntegrationTest(test);
+    case 'load':
+      return await this.runLoadTest(test);
+    case 'regression':
+      return await this.runRegressionTest(test);
+    default:
+      throw new Error(`Unknown test type: ${test.testType}`);
     }
   }
 
@@ -817,7 +817,7 @@ export class SegmentTestingService {
     
     const stabilityScore = Math.max(0, 100 - (coefficientOfVariation * 100));
     
-    let score = stabilityScore;
+    const score = stabilityScore;
     const warnings: TestWarning[] = [];
     
     if (coefficientOfVariation > 0.1) {
@@ -1120,23 +1120,23 @@ export class SegmentTestingService {
       let passed = false;
       
       switch (expectation.operator) {
-        case 'equals':
-          passed = actualValue === expectation.expectedValue;
-          break;
-        case 'not_equals':
-          passed = actualValue !== expectation.expectedValue;
-          break;
-        case 'greater_than':
-          passed = actualValue > (expectation.expectedValue as number);
-          break;
-        case 'less_than':
-          passed = actualValue < (expectation.expectedValue as number);
-          break;
-        case 'between':
-          if (Array.isArray(expectation.expectedValue) && expectation.expectedValue.length === 2) {
-            passed = actualValue >= expectation.expectedValue[0] && actualValue <= expectation.expectedValue[1];
-          }
-          break;
+      case 'equals':
+        passed = actualValue === expectation.expectedValue;
+        break;
+      case 'not_equals':
+        passed = actualValue !== expectation.expectedValue;
+        break;
+      case 'greater_than':
+        passed = actualValue > (expectation.expectedValue as number);
+        break;
+      case 'less_than':
+        passed = actualValue < (expectation.expectedValue as number);
+        break;
+      case 'between':
+        if (Array.isArray(expectation.expectedValue) && expectation.expectedValue.length === 2) {
+          passed = actualValue >= expectation.expectedValue[0] && actualValue <= expectation.expectedValue[1];
+        }
+        break;
       }
       
       evaluationResults.push({ expectation, passed, actualValue });

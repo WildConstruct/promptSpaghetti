@@ -162,20 +162,20 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
 
   const getDocumentTypeIcon = (type: string) => {
     switch (type) {
-      case 'image': return Image;
-      case 'pdf': return FileText;
-      default: return FileText;
+    case 'image': return Image;
+    case 'pdf': return FileText;
+    default: return FileText;
     }
   };
 
   const getAnnotationColor = (type: ReviewAnnotation['type']) => {
     switch (type) {
-      case 'highlight': return '#fbbf24';
-      case 'redact': return '#ef4444';
-      case 'question': return '#3b82f6';
-      case 'approve': return '#10b981';
-      case 'reject': return '#ef4444';
-      default: return '#6b7280';
+    case 'highlight': return '#fbbf24';
+    case 'redact': return '#ef4444';
+    case 'question': return '#3b82f6';
+    case 'approve': return '#10b981';
+    case 'reject': return '#ef4444';
+    default: return '#6b7280';
     }
   };
 
@@ -245,7 +245,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
             className="document-display"
             onClick={handleDocumentClick}
             style={{
-              transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
+              transform: `scale(${zoom / 100}) rotate(${rotation}deg)`
             }}
           >
             {currentDocument.type === 'image' ? (
@@ -276,7 +276,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
                   width: `${annotation.width}%`,
                   height: `${annotation.height}%`,
                   borderColor: getAnnotationColor(annotation.type),
-                  backgroundColor: `${getAnnotationColor(annotation.type)}20`,
+                  backgroundColor: `${getAnnotationColor(annotation.type)}20`
                 }}
                 title={annotation.note}
               />
@@ -395,8 +395,8 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
               <span className="metadata-label">Quality</span>
               <Badge className={
                 currentDocument.metadata.quality === 'high' ? 'text-green-600 bg-green-100' :
-                currentDocument.metadata.quality === 'medium' ? 'text-yellow-600 bg-yellow-100' :
-                'text-red-600 bg-red-100'
+                  currentDocument.metadata.quality === 'medium' ? 'text-yellow-600 bg-yellow-100' :
+                    'text-red-600 bg-red-100'
               }>
                 {currentDocument.metadata.quality.toUpperCase()}
               </Badge>

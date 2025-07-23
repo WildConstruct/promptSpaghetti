@@ -231,7 +231,7 @@ export class MockFactory extends EventEmitter {
     mocksByType: Record<string, number>;
     totalCalls: number;
     averageCallsPerMock: number;
-  } {
+    } {
     const activeMocks = this.listMocks();
     const mocksByType: Record<string, number> = {};
     let totalCalls = 0;
@@ -285,24 +285,24 @@ export class MockFactory extends EventEmitter {
    */
   private createSpecificMock<T>(type: MockType, id: string, config: MockConfig): T {
     switch (type) {
-      case 'api':
-        return this.createAPIMock(id, config) as T;
-      case 'database':
-        return this.createDatabaseMock(id, config) as T;
-      case 'service':
-        return this.createServiceMock(id, config) as T;
-      case 'component':
-        return this.createComponentMock(id, config) as T;
-      case 'filesystem':
-        return this.createFilesystemMock(id, config) as T;
-      case 'network':
-        return this.createNetworkMock(id, config) as T;
-      case 'auth':
-        return this.createAuthMock(id, config) as T;
-      case 'analytics':
-        return this.createAnalyticsMock(id, config) as T;
-      default:
-        throw new Error(`Unknown mock type: ${type}`);
+    case 'api':
+      return this.createAPIMock(id, config) as T;
+    case 'database':
+      return this.createDatabaseMock(id, config) as T;
+    case 'service':
+      return this.createServiceMock(id, config) as T;
+    case 'component':
+      return this.createComponentMock(id, config) as T;
+    case 'filesystem':
+      return this.createFilesystemMock(id, config) as T;
+    case 'network':
+      return this.createNetworkMock(id, config) as T;
+    case 'auth':
+      return this.createAuthMock(id, config) as T;
+    case 'analytics':
+      return this.createAnalyticsMock(id, config) as T;
+    default:
+      throw new Error(`Unknown mock type: ${type}`);
     }
   }
 

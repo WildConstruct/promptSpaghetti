@@ -855,20 +855,20 @@ export class WorkspaceService {
     // Get current usage
     let current = 0;
     switch (resourceType) {
-      case 'projects':
-        const projects = await this.dao.getProjectsInWorkspace(workspaceId, { status: ['active', 'draft'] });
-        current = projects.data.length;
-        break;
+    case 'projects':
+      const projects = await this.dao.getProjectsInWorkspace(workspaceId, { status: ['active', 'draft'] });
+      current = projects.data.length;
+      break;
       
-      case 'resources':
-        // Would query total resources across all projects
-        current = 0; // Placeholder
-        break;
+    case 'resources':
+      // Would query total resources across all projects
+      current = 0; // Placeholder
+      break;
       
-      case 'storage':
-        // Would query total storage usage
-        current = 0; // Placeholder
-        break;
+    case 'storage':
+      // Would query total storage usage
+      current = 0; // Placeholder
+      break;
     }
 
     const allowed = (current + requestedAmount) <= limit;

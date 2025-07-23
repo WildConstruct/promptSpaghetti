@@ -159,7 +159,7 @@ export class GraphExecutionTracker implements ExecutionTracker {
   getTrackingStats(): {
     activeExecutions: number;
     totalExecutionsTracked: number;
-  } {
+    } {
     return {
       activeExecutions: this.activeExecutions.size,
       totalExecutionsTracked: this.executionCounter

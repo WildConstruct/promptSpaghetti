@@ -421,7 +421,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    */
   async invalidateUserCache(userId: string): Promise<void> {
     const keysToInvalidate = [
-      { type: 'user_permissions' as const, identifier: userId },
+      { type: 'user_permissions' as const, identifier: userId }
       // Could expand to include decision caches that depend on this user
     ];
     

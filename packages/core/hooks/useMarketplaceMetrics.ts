@@ -225,10 +225,10 @@ export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => 
 
   const getTopPerformingTemplates = useCallback(
     (metric: 'revenue' | 'downloads' | 'rating' = 'revenue',
-    limit: number = 10
-  ) => {
-    return marketplaceMetrics.getTopPerformingTemplates(metric, limit);
-  }, []);
+      limit: number = 10
+    ) => {
+      return marketplaceMetrics.getTopPerformingTemplates(metric, limit);
+    }, []);
 
   const getSearchAnalytics = useCallback(() => {
     return marketplaceMetrics.getSearchAnalytics();

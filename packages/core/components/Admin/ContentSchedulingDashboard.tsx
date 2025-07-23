@@ -132,19 +132,19 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
         let start: Date;
         
         switch (dateRange) {
-          case 'today':
-            start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            break;
-          case 'week':
-            start = new Date();
-            start.setDate(now.getDate() - 7);
-            break;
-          case 'month':
-            start = new Date();
-            start.setMonth(now.getMonth() - 1);
-            break;
-          default:
-            start = new Date(0);
+        case 'today':
+          start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          break;
+        case 'week':
+          start = new Date();
+          start.setDate(now.getDate() - 7);
+          break;
+        case 'month':
+          start = new Date();
+          start.setMonth(now.getMonth() - 1);
+          break;
+        default:
+          start = new Date(0);
         }
         contentFilter.dateRange = { start, end: now };
       }
@@ -1156,12 +1156,12 @@ interface BatchCardProps {
 const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'processing': return 'text-blue-600 bg-blue-100';
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'failed': return 'text-red-600 bg-red-100';
-      case 'cancelled': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+    case 'pending': return 'text-yellow-600 bg-yellow-100';
+    case 'processing': return 'text-blue-600 bg-blue-100';
+    case 'completed': return 'text-green-600 bg-green-100';
+    case 'failed': return 'text-red-600 bg-red-100';
+    case 'cancelled': return 'text-gray-600 bg-gray-100';
+    default: return 'text-gray-600 bg-gray-100';
     }
   };
 

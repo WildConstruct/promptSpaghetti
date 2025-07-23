@@ -92,9 +92,9 @@ export const ShareManager: React.FC<ShareManagerProps> = ({
       const response = await fetch(`/api/export/shares/${shareId}`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ is_active: false }),
+        body: JSON.stringify({ is_active: false })
       });
 
       if (!response.ok) {
@@ -111,7 +111,7 @@ export const ShareManager: React.FC<ShareManagerProps> = ({
   const handleDeleteShare = async (shareId: string) => {
     try {
       const response = await fetch(`/api/export/shares/${shareId}`, {
-        method: 'DELETE',
+        method: 'DELETE'
       });
 
       if (!response.ok) {

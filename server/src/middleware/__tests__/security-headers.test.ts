@@ -60,7 +60,7 @@ describe('Security Headers Middleware', () => {
       // Content Security Policy
       expect(reply.header).toHaveBeenCalledWith(
         'Content-Security-Policy',
-        expect.stringContaining("default-src 'self'")
+        expect.stringContaining('default-src \'self\'')
       );
 
       // X-Frame-Options
@@ -152,7 +152,7 @@ describe('Security Headers Middleware', () => {
 
       expect(reply.header).toHaveBeenCalledWith(
         'Content-Security-Policy',
-        "default-src 'self'; script-src 'self' https://trusted.com; style-src 'self' 'unsafe-inline'"
+        'default-src \'self\'; script-src \'self\' https://trusted.com; style-src \'self\' \'unsafe-inline\''
       );
     });
 
@@ -175,7 +175,7 @@ describe('Security Headers Middleware', () => {
 
       expect(reply.header).toHaveBeenCalledWith(
         'Content-Security-Policy-Report-Only',
-        "default-src 'self'"
+        'default-src \'self\''
       );
     });
 
@@ -198,7 +198,7 @@ describe('Security Headers Middleware', () => {
 
       expect(reply.header).toHaveBeenCalledWith(
         'Content-Security-Policy',
-        "default-src 'self'; report-uri /csp-violation"
+        'default-src \'self\'; report-uri /csp-violation'
       );
     });
 
@@ -488,7 +488,7 @@ describe('Security Headers Middleware', () => {
 
       await middleware(request, reply);
 
-      expect(reply.header).toHaveBeenCalledWith('Content-Security-Policy', "default-src 'self'");
+      expect(reply.header).toHaveBeenCalledWith('Content-Security-Policy', 'default-src \'self\'');
       expect(reply.header).not.toHaveBeenCalledWith('X-Frame-Options', expect.any(String));
     });
 
@@ -514,7 +514,7 @@ describe('Security Headers Middleware', () => {
   describe('Security Headers Audit', () => {
     it('should pass audit with all headers present', () => {
       const headers = {
-        'Content-Security-Policy': "default-src 'self'",
+        'Content-Security-Policy': 'default-src \'self\'',
         'X-Frame-Options': 'DENY',
         'X-Content-Type-Options': 'nosniff',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
@@ -545,7 +545,7 @@ describe('Security Headers Middleware', () => {
 
     it('should handle case-insensitive header names', () => {
       const headers = {
-        'content-security-policy': "default-src 'self'",
+        'content-security-policy': 'default-src \'self\'',
         'x-frame-options': 'DENY'
       };
 
@@ -560,7 +560,7 @@ describe('Security Headers Middleware', () => {
 
     it('should recognize CSP report-only header as alternative', () => {
       const headers = {
-        'Content-Security-Policy-Report-Only': "default-src 'self'"
+        'Content-Security-Policy-Report-Only': 'default-src \'self\''
       };
 
       const result = auditSecurityHeaders(headers);
@@ -763,7 +763,7 @@ describe('Security Headers Middleware', () => {
         
         expect(reply.header).toHaveBeenCalledWith(
           'Content-Security-Policy',
-          "default-src 'self'; script-src 'self' https://cdn.example.com"
+          'default-src \'self\'; script-src \'self\' https://cdn.example.com'
         );
       }
     });

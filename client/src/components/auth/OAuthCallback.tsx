@@ -45,7 +45,7 @@ export const OAuthCallback: React.FC = () => {
 
         // Get stored OAuth state
         const storedProvider = sessionStorage.getItem('oauth_provider');
-                const storedReturnUrl = sessionStorage.getItem('oauth_return_url');
+        const storedReturnUrl = sessionStorage.getItem('oauth_return_url');
 
         if (!storedProvider) {
           throw new Error('Invalid OAuth state: missing provider information');
@@ -62,8 +62,8 @@ export const OAuthCallback: React.FC = () => {
         const response = await fetch(`${API_BASE_URL}/auth/oauth/callback/${storedProvider}?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`, {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         });
 
         if (!response.ok) {
@@ -124,66 +124,66 @@ export const OAuthCallback: React.FC = () => {
 
   const getProviderDisplayName = (provider?: string) => {
     switch (provider) {
-      case 'google': return 'Google';
-      case 'github': return 'GitHub';
-      case 'microsoft': return 'Microsoft';
-      default: return 'OAuth Provider';
+    case 'google': return 'Google';
+    case 'github': return 'GitHub';
+    case 'microsoft': return 'Microsoft';
+    default: return 'OAuth Provider';
     }
   };
 
   const getStatusIcon = () => {
     switch (state.status) {
-      case 'loading':
-        return (
-          <div style={{
-            width: '40px',
-            height: '40px',
-            border: '4px solid #007bff',
-            borderTop: '4px solid transparent',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
-          }} />
-        );
-      case 'success':
-        return (
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            backgroundColor: '#28a745',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontSize: '20px'
-          }}>
+    case 'loading':
+      return (
+        <div style={{
+          width: '40px',
+          height: '40px',
+          border: '4px solid #007bff',
+          borderTop: '4px solid transparent',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
+      );
+    case 'success':
+      return (
+        <div style={{
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          backgroundColor: '#28a745',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          fontSize: '20px'
+        }}>
             ✓
-          </div>
-        );
-      case 'error':
-        return (
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            backgroundColor: '#dc3545',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontSize: '20px'
-          }}>
+        </div>
+      );
+    case 'error':
+      return (
+        <div style={{
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          backgroundColor: '#dc3545',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          fontSize: '20px'
+        }}>
             ✕
-          </div>
-        );
+        </div>
+      );
     }
   };
 
   const getStatusColor = () => {
     switch (state.status) {
-      case 'loading': return '#007bff';
-      case 'success': return '#28a745';
-      case 'error': return '#dc3545';
+    case 'loading': return '#007bff';
+    case 'success': return '#28a745';
+    case 'error': return '#dc3545';
     }
   };
 

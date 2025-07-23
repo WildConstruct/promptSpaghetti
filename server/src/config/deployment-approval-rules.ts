@@ -490,7 +490,7 @@ export function validateAutoApprovalCriteria(
   if (!hasBreakingChanges || conditions.breakingChanges.allowed) {
     passedCriteria.push(`Breaking changes: ${hasBreakingChanges ? 'allowed' : 'none'}`);
   } else {
-    failedCriteria.push(`Breaking changes detected and not allowed`);
+    failedCriteria.push('Breaking changes detected and not allowed');
   }
 
   // Check deployment size
@@ -514,9 +514,9 @@ export function validateAutoApprovalCriteria(
     const inAllowedDays = conditions.businessHours.allowedDays.includes(currentDay);
     
     if (inAllowedHours && inAllowedDays) {
-      passedCriteria.push(`Business hours: deployment during allowed time`);
+      passedCriteria.push('Business hours: deployment during allowed time');
     } else {
-      failedCriteria.push(`Business hours: deployment outside allowed time window`);
+      failedCriteria.push('Business hours: deployment outside allowed time window');
     }
   }
 
@@ -544,56 +544,56 @@ export function getReviewerAssignments(
   const pools: string[] = [];
 
   switch (assignment.strategy) {
-    case 'automatic':
-      // Use first available reviewer from each pool
-      assignment.reviewerPools.forEach(pool => {
-        const availableMembers = assignment.excludeRequestor 
-          ? pool.members.filter(member => member !== requestorEmail)
-          : pool.members;
+  case 'automatic':
+    // Use first available reviewer from each pool
+    assignment.reviewerPools.forEach(pool => {
+      const availableMembers = assignment.excludeRequestor 
+        ? pool.members.filter(member => member !== requestorEmail)
+        : pool.members;
         
-        if (availableMembers.length > 0) {
-          reviewers.push(availableMembers[0]);
-          pools.push(pool.name);
-        }
-      });
-      break;
+      if (availableMembers.length > 0) {
+        reviewers.push(availableMembers[0]);
+        pools.push(pool.name);
+      }
+    });
+    break;
 
-    case 'round-robin':
-      // TODO: Implement round-robin logic with persistent state
-      assignment.reviewerPools.forEach(pool => {
-        const availableMembers = assignment.excludeRequestor 
-          ? pool.members.filter(member => member !== requestorEmail)
-          : pool.members;
+  case 'round-robin':
+    // TODO: Implement round-robin logic with persistent state
+    assignment.reviewerPools.forEach(pool => {
+      const availableMembers = assignment.excludeRequestor 
+        ? pool.members.filter(member => member !== requestorEmail)
+        : pool.members;
         
-        if (availableMembers.length > 0) {
-          // For now, just use first member (would implement rotation logic)
-          reviewers.push(availableMembers[0]);
-          pools.push(pool.name);
-        }
-      });
-      break;
+      if (availableMembers.length > 0) {
+        // For now, just use first member (would implement rotation logic)
+        reviewers.push(availableMembers[0]);
+        pools.push(pool.name);
+      }
+    });
+    break;
 
-    case 'load-balanced':
-      // TODO: Implement load-balanced assignment based on current workload
-      assignment.reviewerPools.forEach(pool => {
-        const availableMembers = assignment.excludeRequestor 
-          ? pool.members.filter(member => member !== requestorEmail)
-          : pool.members;
+  case 'load-balanced':
+    // TODO: Implement load-balanced assignment based on current workload
+    assignment.reviewerPools.forEach(pool => {
+      const availableMembers = assignment.excludeRequestor 
+        ? pool.members.filter(member => member !== requestorEmail)
+        : pool.members;
         
-        if (availableMembers.length > 0) {
-          // For now, just use first member (would implement load balancing)
-          reviewers.push(availableMembers[0]);
-          pools.push(pool.name);
-        }
-      });
-      break;
+      if (availableMembers.length > 0) {
+        // For now, just use first member (would implement load balancing)
+        reviewers.push(availableMembers[0]);
+        pools.push(pool.name);
+      }
+    });
+    break;
 
-    case 'manual':
-    default:
-      // Manual assignment - use fallback reviewers
-      reviewers = assignment.fallbackReviewers;
-      pools.push('fallback');
-      break;
+  case 'manual':
+  default:
+    // Manual assignment - use fallback reviewers
+    reviewers = assignment.fallbackReviewers;
+    pools.push('fallback');
+    break;
   }
 
   // If no reviewers found, use fallbacks

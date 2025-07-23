@@ -323,7 +323,7 @@ function createTaskObject(taskDef, taskId) {
       automated: true,
       priority_level: taskDef.priority === 'high' ? 1 : 2,
       epic: storyCode === '20.1' ? 'Authentication System' : 
-            storyCode === '20.2' ? 'File Browser System' : 'Other'
+        storyCode === '20.2' ? 'File Browser System' : 'Other'
     }
   };
 }

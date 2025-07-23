@@ -632,7 +632,7 @@ export class EnforcementActionService {
     // Update appeal
     await this.updateAppeal(appealId, {
       status: decision.outcome === 'approved' ? 'approved' : 
-              decision.outcome === 'denied' ? 'denied' : 'partially_approved',
+        decision.outcome === 'denied' ? 'denied' : 'partially_approved',
       decision: appealDecision,
       decidedBy: decision.decidedBy,
       decidedAt: now
@@ -728,22 +728,22 @@ export class EnforcementActionService {
   ): Promise<{ success: boolean; error?: string }> {
     try {
       switch (action.actionType) {
-        case 'warning':
-          return await this.executeWarning(action, client);
-        case 'content_flag':
-          return await this.executeContentFlag(action, client);
-        case 'content_removal':
-          return await this.executeContentRemoval(action, client);
-        case 'account_warning':
-          return await this.executeAccountWarning(action, client);
-        case 'account_restriction':
-          return await this.executeAccountRestriction(action, client);
-        case 'account_suspension':
-          return await this.executeAccountSuspension(action, client);
-        case 'transaction_block':
-          return await this.executeTransactionBlock(action, client);
-        default:
-          return { success: false, error: `Unknown action type: ${action.actionType}` };
+      case 'warning':
+        return await this.executeWarning(action, client);
+      case 'content_flag':
+        return await this.executeContentFlag(action, client);
+      case 'content_removal':
+        return await this.executeContentRemoval(action, client);
+      case 'account_warning':
+        return await this.executeAccountWarning(action, client);
+      case 'account_restriction':
+        return await this.executeAccountRestriction(action, client);
+      case 'account_suspension':
+        return await this.executeAccountSuspension(action, client);
+      case 'transaction_block':
+        return await this.executeTransactionBlock(action, client);
+      default:
+        return { success: false, error: `Unknown action type: ${action.actionType}` };
       }
     } catch (error) {
       return { success: false, error: error.message };
@@ -955,14 +955,14 @@ export class EnforcementActionService {
     // Capture snapshot of target entity at time of report
     try {
       switch (targetType) {
-        case 'template':
-          const template = await this.db.query('SELECT * FROM templates WHERE id = $1', [targetId]);
-          return template.rows[0] || null;
-        case 'user':
-          const user = await this.db.query('SELECT id, email, created_at, status FROM users WHERE id = $1', [targetId]);
-          return user.rows[0] || null;
-        default:
-          return null;
+      case 'template':
+        const template = await this.db.query('SELECT * FROM templates WHERE id = $1', [targetId]);
+        return template.rows[0] || null;
+      case 'user':
+        const user = await this.db.query('SELECT id, email, created_at, status FROM users WHERE id = $1', [targetId]);
+        return user.rows[0] || null;
+      default:
+        return null;
       }
     } catch (error) {
       console.error('Failed to capture target snapshot:', error);

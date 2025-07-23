@@ -253,13 +253,13 @@ export class DatabaseMockService {
             // Handle operators like { $gt: 10, $lt: 20 }
             return Object.entries(value).every(([op, val]) => {
               switch (op) {
-                case '$gt': return record[key] > val;
-                case '$gte': return record[key] >= val;
-                case '$lt': return record[key] < val;
-                case '$lte': return record[key] <= val;
-                case '$ne': return record[key] !== val;
-                case '$like': return String(record[key]).includes(String(val));
-                default: return record[key] === val;
+              case '$gt': return record[key] > val;
+              case '$gte': return record[key] >= val;
+              case '$lt': return record[key] < val;
+              case '$lte': return record[key] <= val;
+              case '$ne': return record[key] !== val;
+              case '$like': return String(record[key]).includes(String(val));
+              default: return record[key] === val;
               }
             });
           }
@@ -768,25 +768,25 @@ export class DatabaseMockService {
 
   private generateMockRecord(tableName: string): any {
     switch (tableName) {
-      case 'users':
-        return {
-          email: `user${Math.floor(this.rng() * 1000)}@example.com`,
-          username: `user${Math.floor(this.rng() * 1000)}`,
-          role: 'user',
-          created_at: new Date().toISOString()
-        };
-      case 'projects':
-        return {
-          name: `Project ${Math.floor(this.rng() * 100)}`,
-          description: 'Mock project description',
-          owner_id: Math.floor(this.rng() * 10) + 1,
-          created_at: new Date().toISOString()
-        };
-      default:
-        return {
-          name: `Mock ${tableName} record`,
-          created_at: new Date().toISOString()
-        };
+    case 'users':
+      return {
+        email: `user${Math.floor(this.rng() * 1000)}@example.com`,
+        username: `user${Math.floor(this.rng() * 1000)}`,
+        role: 'user',
+        created_at: new Date().toISOString()
+      };
+    case 'projects':
+      return {
+        name: `Project ${Math.floor(this.rng() * 100)}`,
+        description: 'Mock project description',
+        owner_id: Math.floor(this.rng() * 10) + 1,
+        created_at: new Date().toISOString()
+      };
+    default:
+      return {
+        name: `Mock ${tableName} record`,
+        created_at: new Date().toISOString()
+      };
     }
   }
 
@@ -805,13 +805,13 @@ export class DatabaseMockService {
         const id = record.id || record[field];
         
         switch (operation) {
-          case 'insert':
-          case 'update':
-            index.add(id);
-            break;
-          case 'delete':
-            index.delete(id);
-            break;
+        case 'insert':
+        case 'update':
+          index.add(id);
+          break;
+        case 'delete':
+          index.delete(id);
+          break;
         }
       }
     });

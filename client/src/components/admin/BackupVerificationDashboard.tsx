@@ -290,58 +290,58 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
 
   const getStatusColor = (status: VerificationStatus | SessionStatus) => {
     switch (status) {
-      case 'passed':
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'failed':
-      case 'error':
-        return 'bg-red-100 text-red-800';
-      case 'warning':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'running':
-      case 'pending':
-        return 'bg-blue-100 text-blue-800';
-      case 'timeout':
-      case 'cancelled':
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+    case 'passed':
+    case 'completed':
+      return 'bg-green-100 text-green-800';
+    case 'failed':
+    case 'error':
+      return 'bg-red-100 text-red-800';
+    case 'warning':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'running':
+    case 'pending':
+      return 'bg-blue-100 text-blue-800';
+    case 'timeout':
+    case 'cancelled':
+      return 'bg-gray-100 text-gray-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getRiskLevelColor = (level: RiskLevel) => {
     switch (level) {
-      case RiskLevel.LOW:
-        return 'bg-green-100 text-green-800';
-      case RiskLevel.MEDIUM:
-        return 'bg-yellow-100 text-yellow-800';
-      case RiskLevel.HIGH:
-        return 'bg-orange-100 text-orange-800';
-      case RiskLevel.CRITICAL:
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+    case RiskLevel.LOW:
+      return 'bg-green-100 text-green-800';
+    case RiskLevel.MEDIUM:
+      return 'bg-yellow-100 text-yellow-800';
+    case RiskLevel.HIGH:
+      return 'bg-orange-100 text-orange-800';
+    case RiskLevel.CRITICAL:
+      return 'bg-red-100 text-red-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStepIcon = (stepType: VerificationStepType) => {
     switch (stepType) {
-      case VerificationStepType.INTEGRITY:
-        return <Shield className="w-4 h-4" />;
-      case VerificationStepType.ACCESSIBILITY:
-        return <Unlock className="w-4 h-4" />;
-      case VerificationStepType.ENCRYPTION:
-        return <Lock className="w-4 h-4" />;
-      case VerificationStepType.RESTORATION:
-        return <RotateCcw className="w-4 h-4" />;
-      case VerificationStepType.COMPLIANCE:
-        return <FileCheck className="w-4 h-4" />;
-      case VerificationStepType.METADATA:
-        return <Database className="w-4 h-4" />;
-      case VerificationStepType.PERFORMANCE:
-        return <Zap className="w-4 h-4" />;
-      default:
-        return <Target className="w-4 h-4" />;
+    case VerificationStepType.INTEGRITY:
+      return <Shield className="w-4 h-4" />;
+    case VerificationStepType.ACCESSIBILITY:
+      return <Unlock className="w-4 h-4" />;
+    case VerificationStepType.ENCRYPTION:
+      return <Lock className="w-4 h-4" />;
+    case VerificationStepType.RESTORATION:
+      return <RotateCcw className="w-4 h-4" />;
+    case VerificationStepType.COMPLIANCE:
+      return <FileCheck className="w-4 h-4" />;
+    case VerificationStepType.METADATA:
+      return <Database className="w-4 h-4" />;
+    case VerificationStepType.PERFORMANCE:
+      return <Zap className="w-4 h-4" />;
+    default:
+      return <Target className="w-4 h-4" />;
     }
   };
 

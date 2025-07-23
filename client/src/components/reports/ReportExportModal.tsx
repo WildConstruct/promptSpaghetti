@@ -87,7 +87,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
   isOpen,
   onClose,
   reportData,
-  title = "Export Report"
+  title = 'Export Report'
 }) => {
   const [activeTab, setActiveTab] = useState('export');
   const [exportConfig, setExportConfig] = useState<ExportConfig>({
@@ -150,7 +150,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
       const response = await fetch('/api/reports/export', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           reportData,
@@ -192,7 +192,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
       const response = await fetch('/api/reports/schedule', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           name: scheduleName,
@@ -274,7 +274,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
                   {formatOptions.map((option) => (
                     <Button
                       key={option.value}
-                      variant={exportConfig.format === option.value ? "default" : "outline"}
+                      variant={exportConfig.format === option.value ? 'default' : 'outline'}
                       className="justify-start h-auto p-3"
                       onClick={() => updateExportConfig({ format: option.value as any })}
                     >
@@ -292,7 +292,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
                   {deliveryOptions.map((option) => (
                     <Button
                       key={option.value}
-                      variant={exportConfig.delivery === option.value ? "default" : "outline"}
+                      variant={exportConfig.delivery === option.value ? 'default' : 'outline'}
                       className="w-full justify-start h-auto p-3"
                       onClick={() => updateExportConfig({ delivery: option.value as any })}
                     >

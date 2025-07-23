@@ -17,7 +17,7 @@ const ProjectMetadataSchema = z.object({
   lastModified: z.string().datetime(),
   author: z.string().optional(),
   tags: z.array(z.string()).default([]),
-  fileFormatVersion: z.string().default('1.0.0'),
+  fileFormatVersion: z.string().default('1.0.0')
 });
 
 const PSGFileSchema = z.object({
@@ -35,19 +35,19 @@ const PSGFileSchema = z.object({
     theme: z.enum(['light', 'dark']).default('light'),
     gridVisible: z.boolean().default(true),
     snapToGrid: z.boolean().default(false),
-    miniMapVisible: z.boolean().default(true),
-  }).default({}),
+    miniMapVisible: z.boolean().default(true)
+  }).default({})
 });
 
 const SaveProjectRequestSchema = z.object({
   project: PSGFileSchema,
-  userId: z.number().optional(), // Optional for anonymous saves
+  userId: z.number().optional() // Optional for anonymous saves
 });
 
 const UpdateProjectRequestSchema = z.object({
   projectId: z.string(),
   project: PSGFileSchema,
-  userId: z.number().optional(),
+  userId: z.number().optional()
 });
 
 const ProjectQuerySchema = z.object({
@@ -57,7 +57,7 @@ const ProjectQuerySchema = z.object({
   search: z.string().optional(),
   tags: z.array(z.string()).optional(),
   sortBy: z.enum(['createdAt', 'lastModified', 'name']).default('lastModified'),
-  sortOrder: z.enum(['asc', 'desc']).default('desc'),
+  sortOrder: z.enum(['asc', 'desc']).default('desc')
 });
 
 interface DatabaseProject {
@@ -105,7 +105,7 @@ function initializeProjectsTable() {
     'CREATE INDEX IF NOT EXISTS idx_projects_user_id ON projects(user_id);',
     'CREATE INDEX IF NOT EXISTS idx_projects_last_modified ON projects(last_modified);',
     'CREATE INDEX IF NOT EXISTS idx_projects_name ON projects(name);',
-    'CREATE INDEX IF NOT EXISTS idx_projects_created_at ON projects(created_at);',
+    'CREATE INDEX IF NOT EXISTS idx_projects_created_at ON projects(created_at);'
   ];
   
   try {
@@ -133,10 +133,10 @@ function dbProjectToAPI(dbProject: DatabaseProject): any {
       lastModified: dbProject.last_modified,
       author: dbProject.author,
       tags: JSON.parse(dbProject.tags || '[]'),
-      fileFormatVersion: dbProject.file_format_version,
+      fileFormatVersion: dbProject.file_format_version
     },
     graph: JSON.parse(dbProject.graph_data),
-    settings: JSON.parse(dbProject.settings || '{}'),
+    settings: JSON.parse(dbProject.settings || '{}')
   };
 }
 

@@ -75,7 +75,7 @@ export class ExternalDataService {
    */
   async queryHistoricalData(query: HistoricalQuery, sourcIds?: string[]): Promise<HistoricalQueryResult> {
     const startTime = performance.now();
-        const sourcesUsed: string[] = [];
+    const sourcesUsed: string[] = [];
     
     // Generate cache key
     const cacheKey = this.generateCacheKey(query, sourcIds);
@@ -227,14 +227,14 @@ export class ExternalDataService {
    */
   private async queryDataSource(source: DataSource, query: HistoricalQuery): Promise<UTDGNode[]> {
     switch (source.type) {
-      case 'api':
-        return this.queryApiSource(source, query);
-      case 'database':
-        return this.queryDatabaseSource(source, query);
-      case 'file':
-        return this.queryFileSource(source, query);
-      default:
-        throw new Error(`Unsupported source type: ${source.type}`);
+    case 'api':
+      return this.queryApiSource(source, query);
+    case 'database':
+      return this.queryDatabaseSource(source, query);
+    case 'file':
+      return this.queryFileSource(source, query);
+    default:
+      throw new Error(`Unsupported source type: ${source.type}`);
     }
   }
 
@@ -313,18 +313,18 @@ export class ExternalDataService {
 
     for (const transform of transforms) {
       switch (transform.type) {
-        case 'map_fields':
-          transformedData = this.mapFields(transformedData, transform.config);
-          break;
-        case 'filter':
-          transformedData = this.filterData(transformedData, transform.config);
-          break;
-        case 'validate':
-          transformedData = this.validateData(transformedData, transform.config);
-          break;
-        case 'enrich':
-          transformedData = this.enrichData(transformedData, transform.config);
-          break;
+      case 'map_fields':
+        transformedData = this.mapFields(transformedData, transform.config);
+        break;
+      case 'filter':
+        transformedData = this.filterData(transformedData, transform.config);
+        break;
+      case 'validate':
+        transformedData = this.validateData(transformedData, transform.config);
+        break;
+      case 'enrich':
+        transformedData = this.enrichData(transformedData, transform.config);
+        break;
       }
     }
 
@@ -512,16 +512,16 @@ export class ExternalDataService {
     if (!auth) return headers;
 
     switch (auth.type) {
-      case 'api_key':
-        headers['X-API-Key'] = auth.credentials.api_key;
-        break;
-      case 'bearer':
-        headers['Authorization'] = `Bearer ${auth.credentials.token}`;
-        break;
-      case 'basic':
-        const encoded = btoa(`${auth.credentials.username}:${auth.credentials.password}`);
-        headers['Authorization'] = `Basic ${encoded}`;
-        break;
+    case 'api_key':
+      headers['X-API-Key'] = auth.credentials.api_key;
+      break;
+    case 'bearer':
+      headers['Authorization'] = `Bearer ${auth.credentials.token}`;
+      break;
+    case 'basic':
+      const encoded = btoa(`${auth.credentials.username}:${auth.credentials.password}`);
+      headers['Authorization'] = `Basic ${encoded}`;
+      break;
     }
 
     return headers;

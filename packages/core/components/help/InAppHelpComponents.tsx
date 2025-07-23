@@ -171,22 +171,22 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({
         let top = 0, left = 0;
         
         switch (position) {
-          case 'top':
-            top = triggerRect.top - tooltipRect.height - 8;
-            left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
-            break;
-          case 'bottom':
-            top = triggerRect.bottom + 8;
-            left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
-            break;
-          case 'left':
-            top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-            left = triggerRect.left - tooltipRect.width - 8;
-            break;
-          case 'right':
-            top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-            left = triggerRect.right + 8;
-            break;
+        case 'top':
+          top = triggerRect.top - tooltipRect.height - 8;
+          left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
+          break;
+        case 'bottom':
+          top = triggerRect.bottom + 8;
+          left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
+          break;
+        case 'left':
+          top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
+          left = triggerRect.left - tooltipRect.width - 8;
+          break;
+        case 'right':
+          top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
+          left = triggerRect.right + 8;
+          break;
         }
         
         // Viewport collision detection
@@ -419,7 +419,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
             <div className="help-content-body">
               <div className="help-content-meta">
                 <Badge variant={selectedContent.difficulty === 'beginner' ? 'secondary' : 
-                               selectedContent.difficulty === 'intermediate' ? 'default' : 'destructive'}>
+                  selectedContent.difficulty === 'intermediate' ? 'default' : 'destructive'}>
                   {selectedContent.difficulty}
                 </Badge>
                 <span className="help-content-type">
@@ -451,7 +451,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({
               )}
               
               <div className="help-content-text" 
-                   dangerouslySetInnerHTML={{ __html: selectedContent.content }} />
+                dangerouslySetInnerHTML={{ __html: selectedContent.content }} />
               
               <div className="help-content-actions">
                 <div className="help-content-feedback">
@@ -844,7 +844,7 @@ export const HelpHub: React.FC<HelpHubProps> = ({
                     <div key={tour.id} className="help-tour-card">
                       <div className="help-tour-header">
                         <Badge variant={tour.difficulty === 'beginner' ? 'secondary' : 
-                                     tour.difficulty === 'intermediate' ? 'default' : 'destructive'}>
+                          tour.difficulty === 'intermediate' ? 'default' : 'destructive'}>
                           {tour.difficulty}
                         </Badge>
                         <span className="help-tour-duration">
@@ -917,7 +917,7 @@ export const HelpHub: React.FC<HelpHubProps> = ({
                       <div className="help-content-card-header">
                         <BookOpen size={20} />
                         <Badge variant={item.difficulty === 'beginner' ? 'secondary' : 
-                                     item.difficulty === 'intermediate' ? 'default' : 'destructive'}>
+                          item.difficulty === 'intermediate' ? 'default' : 'destructive'}>
                           {item.difficulty}
                         </Badge>
                       </div>

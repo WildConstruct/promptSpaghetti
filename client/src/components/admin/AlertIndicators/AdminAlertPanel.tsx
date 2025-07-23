@@ -237,9 +237,9 @@ const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({
                     <div className="flex-shrink-0 mt-0.5">
                       <SeverityIcon className={`w-4 h-4 ${
                         alert.severity === 'critical' ? 'text-red-500' :
-                        alert.severity === 'high' ? 'text-orange-500' :
-                        alert.severity === 'medium' ? 'text-yellow-500' :
-                        'text-blue-500'
+                          alert.severity === 'high' ? 'text-orange-500' :
+                            alert.severity === 'medium' ? 'text-yellow-500' :
+                              'text-blue-500'
                       }`} />
                     </div>
 
@@ -252,8 +252,8 @@ const AdminAlertPanel: React.FC<AdminAlertPanelProps> = ({
                         <div className="flex items-center space-x-2 ml-2 flex-shrink-0">
                           <StatusIcon className={`w-3 h-3 ${
                             alert.status === 'resolved' ? 'text-green-500' :
-                            alert.status === 'acknowledged' ? 'text-blue-500' :
-                            'text-gray-400'
+                              alert.status === 'acknowledged' ? 'text-blue-500' :
+                                'text-gray-400'
                           }`} />
                           <span className="text-xs text-gray-500">
                             {formatTimeAgo(alert.timestamp)}

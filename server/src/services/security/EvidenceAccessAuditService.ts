@@ -550,7 +550,7 @@ export class EvidenceAccessAuditService {
 
   private async triggerSecurityAlert(entry: EvidenceAccessAuditEntry): Promise<void> {
     // Integrate with security monitoring systems
-    console.warn(`High-risk evidence access detected:`, {
+    console.warn('High-risk evidence access detected:', {
       evidenceId: entry.evidenceId,
       userId: entry.subject.userId,
       riskLevel: entry.risk.level,

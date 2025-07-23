@@ -382,7 +382,7 @@ export class PerformanceProfiler extends EventEmitter {
     try {
       let diskUsage = 0;
       let fileDescriptors = 0;
-      let threadCount = 0;
+      const threadCount = 0;
       const networkIO = { bytesIn: 0, bytesOut: 0, packetsIn: 0, packetsOut: 0 };
 
       // Get disk usage (Unix-like systems)

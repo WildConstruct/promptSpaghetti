@@ -343,15 +343,15 @@ export class PolicyVersionService {
     for (const change of changes) {
       if (change.path.includes('content.sections')) {
         switch (change.type) {
-          case 'added':
-            summary.addedSections++;
-            break;
-          case 'removed':
-            summary.removedSections++;
-            break;
-          case 'modified':
-            summary.modifiedSections++;
-            break;
+        case 'added':
+          summary.addedSections++;
+          break;
+        case 'removed':
+          summary.removedSections++;
+          break;
+        case 'modified':
+          summary.modifiedSections++;
+          break;
         }
       }
     }

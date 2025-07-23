@@ -131,25 +131,25 @@ export const SearchResults = <T = any,>({
     };
 
     switch (currentViewMode) {
-      case 'grid':
-        return {
-          ...baseStyle,
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '16px'
-        };
-      case 'table':
-        return {
-          ...baseStyle,
-          display: 'block'
-        };
-      default: // list
-        return {
-          ...baseStyle,
-          display: 'flex',
-          flexDirection: 'column' as const,
-          gap: '8px'
-        };
+    case 'grid':
+      return {
+        ...baseStyle,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '16px'
+      };
+    case 'table':
+      return {
+        ...baseStyle,
+        display: 'block'
+      };
+    default: // list
+      return {
+        ...baseStyle,
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '8px'
+      };
     }
   };
 

@@ -92,10 +92,10 @@ export async function generatePreviewOutputs(
       const debugInfo = executionPath 
         ? ExecutionPathAnalyzer.generateDebugInfo(executionPath)
         : {
-            performanceBreakdown: {},
-            bottleneckNodes: [],
-            randomizationSummary: 'No execution path data available'
-          };
+          performanceBreakdown: {},
+          bottleneckNodes: [],
+          randomizationSummary: 'No execution path data available'
+        };
       
       const result: PreviewResultWithPath = {
         seed,
@@ -468,7 +468,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
       
       try {
         const { graph, runs = 5, seedStart = 1 } = request.body;
-                const validationResult = validateGraph(graph);
+        const validationResult = validateGraph(graph);
         
         if (!validationResult.valid) {
           reply.status(400).send({

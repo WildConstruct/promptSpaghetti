@@ -195,7 +195,7 @@ const UserManagementDashboard: React.FC = () => {
 
   // Filter and sort users
   const filteredAndSortedUsers = useMemo(() => {
-    let filtered = state.users.filter(user => {
+    const filtered = state.users.filter(user => {
       const searchMatch = !state.filters.searchTerm || 
         user.name.toLowerCase().includes(state.filters.searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(state.filters.searchTerm.toLowerCase()) ||
@@ -276,21 +276,21 @@ const UserManagementDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return '#10b981';
-      case 'pending': return '#f59e0b';
-      case 'suspended': return '#ef4444';
-      case 'inactive': return '#6b7280';
-      default: return '#9ca3af';
+    case 'active': return '#10b981';
+    case 'pending': return '#f59e0b';
+    case 'suspended': return '#ef4444';
+    case 'inactive': return '#6b7280';
+    default: return '#9ca3af';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'active': return '🟢';
-      case 'pending': return '🟡';
-      case 'suspended': return '🔴';
-      case 'inactive': return '⚪';
-      default: return '⚫';
+    case 'active': return '🟢';
+    case 'pending': return '🟡';
+    case 'suspended': return '🔴';
+    case 'inactive': return '⚪';
+    default: return '⚫';
     }
   };
 

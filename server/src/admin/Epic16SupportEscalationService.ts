@@ -914,36 +914,36 @@ export class Epic16SupportEscalationService extends EventEmitter {
       
       // Handle status-specific updates
       switch (newStatus) {
-        case TicketStatus.IN_PROGRESS:
-          if (!ticket.firstResponseAt) {
-            ticket.firstResponseAt = new Date();
-            // Update SLA response time tracking
-            ticket.slaStatus.responseTimeRemaining = 0;
-            ticket.slaStatus.responseBreached = false;
-          }
-          break;
+      case TicketStatus.IN_PROGRESS:
+        if (!ticket.firstResponseAt) {
+          ticket.firstResponseAt = new Date();
+          // Update SLA response time tracking
+          ticket.slaStatus.responseTimeRemaining = 0;
+          ticket.slaStatus.responseBreached = false;
+        }
+        break;
           
-        case TicketStatus.RESOLVED:
-          ticket.resolvedAt = new Date();
-          if (options.resolutionSummary) {
-            ticket.resolutionSummary = options.resolutionSummary;
-          }
-          if (options.resolutionCategory) {
-            ticket.resolutionCategory = options.resolutionCategory;
-          }
-          break;
+      case TicketStatus.RESOLVED:
+        ticket.resolvedAt = new Date();
+        if (options.resolutionSummary) {
+          ticket.resolutionSummary = options.resolutionSummary;
+        }
+        if (options.resolutionCategory) {
+          ticket.resolutionCategory = options.resolutionCategory;
+        }
+        break;
           
-        case TicketStatus.CLOSED:
-          ticket.closedAt = new Date();
-          // Release agent workload
-          if (ticket.assignedTo) {
-            const agent = this.supportAgents.get(ticket.assignedTo);
-            if (agent) {
-              agent.currentWorkload = Math.max(0, agent.currentWorkload - 1);
-              await this.saveSupportAgent(agent);
-            }
+      case TicketStatus.CLOSED:
+        ticket.closedAt = new Date();
+        // Release agent workload
+        if (ticket.assignedTo) {
+          const agent = this.supportAgents.get(ticket.assignedTo);
+          if (agent) {
+            agent.currentWorkload = Math.max(0, agent.currentWorkload - 1);
+            await this.saveSupportAgent(agent);
           }
-          break;
+        }
+        break;
       }
       
       // Add system comment if provided
@@ -1283,14 +1283,14 @@ export class Epic16SupportEscalationService extends EventEmitter {
 
   private buildTriggerCondition(escalationType: EscalationType, ticket: SupportTicket): string {
     switch (escalationType) {
-      case EscalationType.TIME_BASED:
-        return `Ticket open for more than configured threshold`;
-      case EscalationType.SLA_BREACH:
-        return `SLA response/resolution time exceeded`;
-      case EscalationType.PRIORITY_BASED:
-        return `Ticket priority requires escalation`;
-      default:
-        return `Manual escalation requested`;
+    case EscalationType.TIME_BASED:
+      return 'Ticket open for more than configured threshold';
+    case EscalationType.SLA_BREACH:
+      return 'SLA response/resolution time exceeded';
+    case EscalationType.PRIORITY_BASED:
+      return 'Ticket priority requires escalation';
+    default:
+      return 'Manual escalation requested';
     }
   }
 

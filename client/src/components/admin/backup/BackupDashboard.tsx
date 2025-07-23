@@ -363,8 +363,8 @@ const BackupDashboard: React.FC = () => {
               System Health
               <Badge className={`ml-2 ${
                 metrics.health_status.overall_status === 'healthy' ? 'bg-green-100 text-green-800' :
-                metrics.health_status.overall_status === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                'bg-red-100 text-red-800'
+                  metrics.health_status.overall_status === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
               }`}>
                 {metrics.health_status.overall_status}
               </Badge>
@@ -588,8 +588,8 @@ const BackupDashboard: React.FC = () => {
                     {execution.duration_seconds 
                       ? formatDuration(execution.duration_seconds)
                       : execution.status === 'running' 
-                      ? `${Math.floor((Date.now() - new Date(execution.started_at).getTime()) / 1000)}s`
-                      : '-'
+                        ? `${Math.floor((Date.now() - new Date(execution.started_at).getTime()) / 1000)}s`
+                        : '-'
                     }
                   </span>
                 </div>

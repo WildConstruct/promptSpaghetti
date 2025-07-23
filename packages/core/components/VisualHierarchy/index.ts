@@ -28,7 +28,7 @@ export {
   // Props interfaces
   type HierarchyHeaderProps,
   type HierarchyFieldProps,
-  type ComplexityIndicatorProps,
+  type ComplexityIndicatorProps
 } from './HierarchyDesignSystem';
 
 // Re-export enhanced progressive disclosure component
@@ -54,5 +54,5 @@ export default {
   ComplexityIndicator,
   AccessibilityUtils,
   ProgressiveDisclosureSection,
-  VisualHierarchyDemoEditor,
+  VisualHierarchyDemoEditor
 };

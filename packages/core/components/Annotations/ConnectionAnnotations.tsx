@@ -150,7 +150,7 @@ export const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps> = ({
     sourcePosition,
     targetX,
     targetY,
-    targetPosition,
+    targetPosition
   });
 
   // Calculate label position based on labelPosition setting

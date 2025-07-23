@@ -171,7 +171,7 @@ describe('Compression System Tests', () => {
       };
       
       let compressedData: Buffer | null = null;
-      let compressionHeaders: Record<string, string> = {};
+      const compressionHeaders: Record<string, string> = {};
       
       const mockReply = {
         send: jest.fn((data) => {

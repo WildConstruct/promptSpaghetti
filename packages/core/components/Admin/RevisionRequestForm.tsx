@@ -85,63 +85,63 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
     const errors: ValidationErrors = {};
 
     switch (step) {
-      case 1: // Basic Information
-        if (!formData.title.trim()) {
-          errors.title = 'Title is required';
-        } else if (formData.title.length > 500) {
-          errors.title = 'Title must be less than 500 characters';
-        }
+    case 1: // Basic Information
+      if (!formData.title.trim()) {
+        errors.title = 'Title is required';
+      } else if (formData.title.length > 500) {
+        errors.title = 'Title must be less than 500 characters';
+      }
 
-        if (!formData.description.trim()) {
-          errors.description = 'Description is required';
-        } else if (formData.description.length < 10) {
-          errors.description = 'Description must be at least 10 characters';
-        }
+      if (!formData.description.trim()) {
+        errors.description = 'Description is required';
+      } else if (formData.description.length < 10) {
+        errors.description = 'Description must be at least 10 characters';
+      }
 
-        if (!formData.contentType) {
-          errors.contentType = 'Content type is required';
-        }
+      if (!formData.contentType) {
+        errors.contentType = 'Content type is required';
+      }
 
-        if (!formData.contentId.trim()) {
-          errors.contentId = 'Content ID is required';
-        }
-        break;
+      if (!formData.contentId.trim()) {
+        errors.contentId = 'Content ID is required';
+      }
+      break;
 
-      case 2: // Request Details
-        if (!formData.requestedChanges.trim()) {
-          errors.requestedChanges = 'Requested changes are required';
-        } else if (formData.requestedChanges.length < 10) {
-          errors.requestedChanges = 'Requested changes must be at least 10 characters';
-        }
+    case 2: // Request Details
+      if (!formData.requestedChanges.trim()) {
+        errors.requestedChanges = 'Requested changes are required';
+      } else if (formData.requestedChanges.length < 10) {
+        errors.requestedChanges = 'Requested changes must be at least 10 characters';
+      }
 
-        if (!formData.businessJustification.trim()) {
-          errors.businessJustification = 'Business justification is required';
-        } else if (formData.businessJustification.length < 10) {
-          errors.businessJustification = 'Business justification must be at least 10 characters';
-        }
+      if (!formData.businessJustification.trim()) {
+        errors.businessJustification = 'Business justification is required';
+      } else if (formData.businessJustification.length < 10) {
+        errors.businessJustification = 'Business justification must be at least 10 characters';
+      }
 
-        if (!formData.type) {
-          errors.type = 'Request type is required';
-        }
+      if (!formData.type) {
+        errors.type = 'Request type is required';
+      }
 
-        if (!formData.priority) {
-          errors.priority = 'Priority is required';
-        }
-        break;
+      if (!formData.priority) {
+        errors.priority = 'Priority is required';
+      }
+      break;
 
-      case 3: // Timeline & Estimation (optional)
-        if (formData.estimatedHours && formData.estimatedHours < 0) {
-          errors.estimatedHours = 'Estimated hours must be positive';
-        }
+    case 3: // Timeline & Estimation (optional)
+      if (formData.estimatedHours && formData.estimatedHours < 0) {
+        errors.estimatedHours = 'Estimated hours must be positive';
+      }
 
-        if (formData.dueDate && formData.dueDate < new Date()) {
-          errors.dueDate = 'Due date cannot be in the past';
-        }
-        break;
+      if (formData.dueDate && formData.dueDate < new Date()) {
+        errors.dueDate = 'Due date cannot be in the past';
+      }
+      break;
 
-      case 4: // Evidence & Review (optional)
-        // No required validations for evidence
-        break;
+    case 4: // Evidence & Review (optional)
+      // No required validations for evidence
+      break;
     }
 
     return errors;
@@ -216,7 +216,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
       id: `evidence_${Date.now()}`,
       type: RevisionEvidenceType.SCREENSHOT,
       title: '',
-      description: '',
+      description: ''
     };
     setEvidenceItems(prev => [...prev, newEvidence]);
   }, []);
@@ -258,11 +258,11 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
   // Priority color mapping
   const getPriorityColor = (priority: RevisionRequestPriority): string => {
     switch (priority) {
-      case RevisionRequestPriority.CRITICAL: return 'text-red-800 bg-red-100';
-      case RevisionRequestPriority.URGENT: return 'text-orange-800 bg-orange-100';
-      case RevisionRequestPriority.HIGH: return 'text-yellow-800 bg-yellow-100';
-      case RevisionRequestPriority.MEDIUM: return 'text-blue-800 bg-blue-100';
-      case RevisionRequestPriority.LOW: return 'text-gray-800 bg-gray-100';
+    case RevisionRequestPriority.CRITICAL: return 'text-red-800 bg-red-100';
+    case RevisionRequestPriority.URGENT: return 'text-orange-800 bg-orange-100';
+    case RevisionRequestPriority.HIGH: return 'text-yellow-800 bg-yellow-100';
+    case RevisionRequestPriority.MEDIUM: return 'text-blue-800 bg-blue-100';
+    case RevisionRequestPriority.LOW: return 'text-gray-800 bg-gray-100';
     }
   };
 
@@ -278,8 +278,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
             <div className={`
               flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-semibold
               ${isActive ? 'border-blue-500 bg-blue-500 text-white' : 
-                isCompleted ? 'border-green-500 bg-green-500 text-white' : 
-                'border-gray-300 bg-white text-gray-500'}
+            isCompleted ? 'border-green-500 bg-green-500 text-white' : 
+              'border-gray-300 bg-white text-gray-500'}
             `}>
               {isCompleted ? '✓' : stepNumber}
             </div>

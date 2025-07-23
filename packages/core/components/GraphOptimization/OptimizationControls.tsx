@@ -30,7 +30,7 @@ const DEFAULT_SETTINGS: OptimizationSettings = {
   memoryOptimization: true,
   precompilation: false,
   performanceMonitoring: true,
-  debugMode: false,
+  debugMode: false
 };
 
 export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
@@ -74,7 +74,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '🗑️',
       impact: 'High',
       impactColor: '#28a745',
-      recommended: true,
+      recommended: true
     },
     {
       key: 'constantPropagation' as keyof OptimizationSettings,
@@ -83,7 +83,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '⚡',
       impact: 'Medium',
       impactColor: '#ffc107',
-      recommended: true,
+      recommended: true
     },
     {
       key: 'resultCaching' as keyof OptimizationSettings,
@@ -92,7 +92,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '💾',
       impact: 'High',
       impactColor: '#28a745',
-      recommended: true,
+      recommended: true
     },
     {
       key: 'parallelExecution' as keyof OptimizationSettings,
@@ -102,7 +102,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       impact: 'High',
       impactColor: '#28a745',
       recommended: false,
-      experimental: true,
+      experimental: true
     },
     {
       key: 'memoryOptimization' as keyof OptimizationSettings,
@@ -111,7 +111,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '🧹',
       impact: 'Medium',
       impactColor: '#ffc107',
-      recommended: true,
+      recommended: true
     },
     {
       key: 'precompilation' as keyof OptimizationSettings,
@@ -121,7 +121,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       impact: 'High',
       impactColor: '#28a745',
       recommended: false,
-      experimental: true,
+      experimental: true
     },
     {
       key: 'performanceMonitoring' as keyof OptimizationSettings,
@@ -130,7 +130,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '📊',
       impact: 'Low',
       impactColor: '#17a2b8',
-      recommended: true,
+      recommended: true
     },
     {
       key: 'debugMode' as keyof OptimizationSettings,
@@ -139,8 +139,8 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       icon: '🐛',
       impact: 'None',
       impactColor: '#6c757d',
-      recommended: false,
-    },
+      recommended: false
+    }
   ];
 
   return (
@@ -154,7 +154,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000,
+      zIndex: 1000
     }}>
       <div style={{
         backgroundColor: 'white',
@@ -164,20 +164,20 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
         maxWidth: '700px',
         maxHeight: '90vh',
         overflowY: 'auto',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
       }}>
         {/* Header */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '24px',
+          marginBottom: '24px'
         }}>
           <h2 style={{
             margin: 0,
             fontSize: '20px',
             fontWeight: '600',
-            color: '#333',
+            color: '#333'
           }}>
             ⚙️ Optimization Settings
           </h2>
@@ -194,7 +194,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
               height: '32px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'center'
             }}
           >
             ×
@@ -209,7 +209,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
           borderRadius: '4px',
           marginBottom: '24px',
           fontSize: '14px',
-          color: '#856404',
+          color: '#856404'
         }}>
           ⚠️ <strong>Note:</strong> Experimental features may affect graph execution behavior. 
           Enable them only if you understand the implications.
@@ -219,7 +219,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
         <div style={{
           display: 'grid',
           gap: '16px',
-          marginBottom: '24px',
+          marginBottom: '24px'
         }}>
           {optimizationFeatures.map((feature) => (
             <div
@@ -228,14 +228,14 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                 padding: '16px',
                 border: '1px solid #e9ecef',
                 borderRadius: '8px',
-                backgroundColor: localSettings[feature.key] ? '#f8f9fa' : 'white',
+                backgroundColor: localSettings[feature.key] ? '#f8f9fa' : 'white'
               }}
             >
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
-                marginBottom: '8px',
+                marginBottom: '8px'
               }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
@@ -244,7 +244,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                       margin: 0,
                       fontSize: '16px',
                       fontWeight: '600',
-                      color: '#333',
+                      color: '#333'
                     }}>
                       {feature.title}
                     </h3>
@@ -256,7 +256,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                         borderRadius: '8px',
                         fontSize: '10px',
                         fontWeight: '500',
-                        textTransform: 'uppercase',
+                        textTransform: 'uppercase'
                       }}>
                         Experimental
                       </span>
@@ -269,7 +269,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                         borderRadius: '8px',
                         fontSize: '10px',
                         fontWeight: '500',
-                        textTransform: 'uppercase',
+                        textTransform: 'uppercase'
                       }}>
                         Recommended
                       </span>
@@ -280,7 +280,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                     margin: '0 0 8px 0',
                     fontSize: '14px',
                     color: '#6c757d',
-                    lineHeight: 1.4,
+                    lineHeight: 1.4
                   }}>
                     {feature.description}
                   </p>
@@ -288,7 +288,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                   <div style={{
                     fontSize: '12px',
                     color: feature.impactColor,
-                    fontWeight: '500',
+                    fontWeight: '500'
                   }}>
                     Impact: {feature.impact}
                   </div>
@@ -298,7 +298,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   cursor: 'pointer',
-                  marginLeft: '16px',
+                  marginLeft: '16px'
                 }}>
                   <input
                     type="checkbox"
@@ -307,7 +307,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
                     style={{
                       width: '18px',
                       height: '18px',
-                      margin: 0,
+                      margin: 0
                     }}
                   />
                 </label>
@@ -322,19 +322,19 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
           backgroundColor: '#e7f3ff',
           border: '1px solid #b3d9ff',
           borderRadius: '8px',
-          marginBottom: '24px',
+          marginBottom: '24px'
         }}>
           <h4 style={{
             margin: '0 0 8px 0',
             fontSize: '14px',
-            color: '#0066cc',
+            color: '#0066cc'
           }}>
             📈 Current Configuration Impact
           </h4>
           <div style={{
             fontSize: '13px',
             color: '#0066cc',
-            lineHeight: 1.5,
+            lineHeight: 1.5
           }}>
             {(() => {
               const enabledFeatures = optimizationFeatures.filter(f => localSettings[f.key]);
@@ -356,7 +356,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
         <div style={{
           display: 'flex',
           gap: '12px',
-          justifyContent: 'flex-end',
+          justifyContent: 'flex-end'
         }}>
           <button
             onClick={handleReset}
@@ -367,7 +367,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
               color: '#6c757d',
               borderRadius: '4px',
               cursor: 'pointer',
-              fontSize: '14px',
+              fontSize: '14px'
             }}
           >
             Reset to Defaults
@@ -382,7 +382,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
               color: '#666',
               borderRadius: '4px',
               cursor: 'pointer',
-              fontSize: '14px',
+              fontSize: '14px'
             }}
           >
             Cancel
@@ -398,7 +398,7 @@ export const OptimizationControls: React.FC<OptimizationControlsProps> = ({
               color: 'white',
               borderRadius: '4px',
               cursor: hasChanges ? 'pointer' : 'not-allowed',
-              fontSize: '14px',
+              fontSize: '14px'
             }}
           >
             Apply Changes

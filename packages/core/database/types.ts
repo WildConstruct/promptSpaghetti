@@ -216,8 +216,8 @@ export function createPaginatedResult<T>(
       hasNextPage: page < totalPages,
       hasPreviousPage: page > 1,
       nextPage: page < totalPages ? page + 1 : undefined,
-      previousPage: page > 1 ? page - 1 : undefined,
-    },
+      previousPage: page > 1 ? page - 1 : undefined
+    }
   };
 }
 
@@ -235,6 +235,6 @@ export function createOperationResult<T>(
     error,
     errorCode,
     timestamp: new Date(),
-    executionTime,
+    executionTime
   };
 }

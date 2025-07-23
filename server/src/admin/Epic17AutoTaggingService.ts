@@ -655,7 +655,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
       params.push(ruleIds);
     }
     
-    query += ` ORDER BY priority DESC`;
+    query += ' ORDER BY priority DESC';
     
     const results = await this.dbService.query(query, params);
     
@@ -706,23 +706,23 @@ export class Epic17AutoTaggingService extends EventEmitter {
       let params: any[] = [];
       
       switch (resourceType) {
-        case 'api_key':
-          query = 'SELECT key_id as id, \'api_key\' as type, * FROM api_keys WHERE status = $1';
-          params = ['active'];
-          break;
+      case 'api_key':
+        query = 'SELECT key_id as id, \'api_key\' as type, * FROM api_keys WHERE status = $1';
+        params = ['active'];
+        break;
           
-        case 'user':
-          query = 'SELECT user_id as id, \'user\' as type, * FROM users WHERE active = $1';
-          params = [true];
-          break;
+      case 'user':
+        query = 'SELECT user_id as id, \'user\' as type, * FROM users WHERE active = $1';
+        params = [true];
+        break;
           
-        case 'permission':
-          query = 'SELECT permission_id as id, \'permission\' as type, * FROM permissions WHERE enabled = $1';
-          params = [true];
-          break;
+      case 'permission':
+        query = 'SELECT permission_id as id, \'permission\' as type, * FROM permissions WHERE enabled = $1';
+        params = [true];
+        break;
           
-        default:
-          continue;
+      default:
+        continue;
       }
 
       if (resourceIds && resourceIds.length > 0) {
@@ -812,33 +812,33 @@ export class Epic17AutoTaggingService extends EventEmitter {
     const fieldValue = this.getResourceFieldValue(resource, condition.field);
     
     switch (condition.operator) {
-      case 'equals':
-        return fieldValue === condition.value;
+    case 'equals':
+      return fieldValue === condition.value;
         
-      case 'contains':
-        return String(fieldValue).toLowerCase().includes(String(condition.value).toLowerCase());
+    case 'contains':
+      return String(fieldValue).toLowerCase().includes(String(condition.value).toLowerCase());
         
-      case 'matches':
-        const regex = new RegExp(condition.value, 'i');
-        return regex.test(String(fieldValue));
+    case 'matches':
+      const regex = new RegExp(condition.value, 'i');
+      return regex.test(String(fieldValue));
         
-      case 'greater_than':
-        return Number(fieldValue) > Number(condition.value);
+    case 'greater_than':
+      return Number(fieldValue) > Number(condition.value);
         
-      case 'less_than':
-        return Number(fieldValue) < Number(condition.value);
+    case 'less_than':
+      return Number(fieldValue) < Number(condition.value);
         
-      case 'in':
-        return Array.isArray(condition.value) && condition.value.includes(fieldValue);
+    case 'in':
+      return Array.isArray(condition.value) && condition.value.includes(fieldValue);
         
-      case 'not_in':
-        return Array.isArray(condition.value) && !condition.value.includes(fieldValue);
+    case 'not_in':
+      return Array.isArray(condition.value) && !condition.value.includes(fieldValue);
         
-      case 'exists':
-        return fieldValue !== undefined && fieldValue !== null;
+    case 'exists':
+      return fieldValue !== undefined && fieldValue !== null;
         
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
@@ -868,7 +868,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     tagsUpdated: number;
     conflictsResolved: number;
   }> {
-    let result = {
+    const result = {
       tagsAdded: 0,
       tagsRemoved: 0,
       tagsUpdated: 0,
@@ -881,19 +881,19 @@ export class Epic17AutoTaggingService extends EventEmitter {
     }
 
     switch (action.actionType) {
-      case 'add_tag':
-        result.tagsAdded += await this.addTagsToResource(resource, action.tags, action.tagMetadata);
-        break;
+    case 'add_tag':
+      result.tagsAdded += await this.addTagsToResource(resource, action.tags, action.tagMetadata);
+      break;
         
-      case 'remove_tag':
-        result.tagsRemoved += await this.removeTagsFromResource(resource, action.tags);
-        break;
+    case 'remove_tag':
+      result.tagsRemoved += await this.removeTagsFromResource(resource, action.tags);
+      break;
         
-      case 'replace_tag':
-        // Remove old tags and add new ones
-        result.tagsRemoved += await this.removeTagsFromResource(resource, action.tags.slice(0, 1));
-        result.tagsAdded += await this.addTagsToResource(resource, action.tags.slice(1), action.tagMetadata);
-        break;
+    case 'replace_tag':
+      // Remove old tags and add new ones
+      result.tagsRemoved += await this.removeTagsFromResource(resource, action.tags.slice(0, 1));
+      result.tagsAdded += await this.addTagsToResource(resource, action.tags.slice(1), action.tagMetadata);
+      break;
     }
 
     return result;

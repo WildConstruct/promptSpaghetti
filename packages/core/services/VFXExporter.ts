@@ -71,51 +71,51 @@ export class WildConstructVFXExporter implements VFXExporter {
   private buildMetadata(exportId: string, timestamp: string, options: VFXExportOptions) {
     return {
       exportId,
-      version: options.formatVersion || "1.2.0", // Updated for reproducibility features
+      version: options.formatVersion || '1.2.0', // Updated for reproducibility features
       timestamp,
       generator: {
-        name: "Wild Construct Prompt Generator" as const,
-        version: process.env.npm_package_version || "1.0.0",
-        build: process.env.BUILD_NUMBER || "development",
+        name: 'Wild Construct Prompt Generator' as const,
+        version: process.env.npm_package_version || '1.0.0',
+        build: process.env.BUILD_NUMBER || 'development',
         // Enhanced version tracking for reproducibility
-        coreVersion: "2.1.0", // Core engine version
-        exporterVersion: "1.2.0", // VFX exporter version
-        schemaVersion: "1.2.0", // Export schema version
+        coreVersion: '2.1.0', // Core engine version
+        exporterVersion: '1.2.0', // VFX exporter version
+        schemaVersion: '1.2.0', // Export schema version
         dependencies: {
-          reactflow: "11.10.1",
-          seedrandom: "3.0.5",
-          typescript: "5.0.0"
+          reactflow: '11.10.1',
+          seedrandom: '3.0.5',
+          typescript: '5.0.0'
         }
       },
       project: {
-        name: "Untitled Project",
+        name: 'Untitled Project',
         id: this.generateProjectId(),
-        scene: "Main Scene",
+        scene: 'Main Scene',
         shot: undefined
       },
       export: {
-        format: "vfx-pipeline-v1" as const,
+        format: 'vfx-pipeline-v1' as const,
         quality: options.quality,
         includeDebugInfo: options.includeDebugInfo || false,
         includeHistoricalData: options.includeHistoricalData || false,
         // Version compatibility tracking
-        compatibilityLevel: "1.2.0",
-        backwardsCompatible: ["1.0.0", "1.1.0"], // Versions this export can work with
-        minimumVersion: "1.0.0", // Minimum version required to import
+        compatibilityLevel: '1.2.0',
+        backwardsCompatible: ['1.0.0', '1.1.0'], // Versions this export can work with
+        minimumVersion: '1.0.0', // Minimum version required to import
         breaking_changes: [] // List of breaking changes from base version
       },
       compatibility: {
         controlNet: true,
-        diffusionModels: ["stable-diffusion", "sdxl", "midjourney-v6", "dall-e-3"],
+        diffusionModels: ['stable-diffusion', 'sdxl', 'midjourney-v6', 'dall-e-3'],
         animationFramework: true,
         billboardProjection: true,
         // Enhanced compatibility tracking
         vfxSoftware: {
-          blender: { supported: true, minVersion: "3.6.0" },
-          maya: { supported: true, minVersion: "2023" },
-          houdini: { supported: true, minVersion: "19.5" },
-          nuke: { supported: true, minVersion: "13.0" },
-          afterEffects: { supported: true, minVersion: "2023" }
+          blender: { supported: true, minVersion: '3.6.0' },
+          maya: { supported: true, minVersion: '2023' },
+          houdini: { supported: true, minVersion: '19.5' },
+          nuke: { supported: true, minVersion: '13.0' },
+          afterEffects: { supported: true, minVersion: '2023' }
         },
         renderEngines: {
           cycles: true,
@@ -125,21 +125,21 @@ export class WildConstructVFXExporter implements VFXExporter {
           vray: true
         },
         platforms: {
-          windows: { supported: true, minVersion: "10" },
-          macos: { supported: true, minVersion: "12.0" },
-          linux: { supported: true, distributions: ["ubuntu-20.04", "centos-8"] }
+          windows: { supported: true, minVersion: '10' },
+          macos: { supported: true, minVersion: '12.0' },
+          linux: { supported: true, distributions: ['ubuntu-20.04', 'centos-8'] }
         }
       },
       // Version migration information
       versionInfo: {
-        exportedFrom: options.formatVersion || "1.2.0",
-        canUpgradeTo: ["1.3.0", "2.0.0"], // Future versions this can upgrade to
+        exportedFrom: options.formatVersion || '1.2.0',
+        canUpgradeTo: ['1.3.0', '2.0.0'], // Future versions this can upgrade to
         deprecatedFeatures: [], // Features that will be removed
         newFeatures: [
-          "enhanced-reproducibility",
-          "weight-distribution-analysis",
-          "node-configuration-preservation",
-          "multi-platform-compatibility"
+          'enhanced-reproducibility',
+          'weight-distribution-analysis',
+          'node-configuration-preservation',
+          'multi-platform-compatibility'
         ]
       }
     };
@@ -150,7 +150,7 @@ export class WildConstructVFXExporter implements VFXExporter {
     executionResults?: any,
     options?: VFXExportOptions
   ) {
-    const finalPrompt = executionResults?.finalPrompt || "No prompt generated";
+    const finalPrompt = executionResults?.finalPrompt || 'No prompt generated';
     const variables = executionResults?.variables || {};
 
     return {
@@ -193,7 +193,7 @@ export class WildConstructVFXExporter implements VFXExporter {
     for (const [name, value] of Object.entries(variables)) {
       result[name] = {
         value,
-        source: "user" as const,
+        source: 'user' as const,
         alternatives: this.generateVariableAlternatives(name, value),
         confidence: 1.0
       };
@@ -216,15 +216,15 @@ export class WildConstructVFXExporter implements VFXExporter {
 
   private generateNegativePrompt(prompt: string): string {
     // Generate appropriate negative prompt based on content
-    const baseNegative = "blurry, low quality, distorted, deformed, ugly";
+    const baseNegative = 'blurry, low quality, distorted, deformed, ugly';
     
     // Add context-specific negative prompts
     if (prompt.includes('realistic') || prompt.includes('photo')) {
-      return baseNegative + ", cartoon, anime, painting, illustration";
+      return baseNegative + ', cartoon, anime, painting, illustration';
     }
     
     if (prompt.includes('cartoon') || prompt.includes('anime')) {
-      return baseNegative + ", photorealistic, photography";
+      return baseNegative + ', photorealistic, photography';
     }
     
     return baseNegative;
@@ -289,7 +289,7 @@ export class WildConstructVFXExporter implements VFXExporter {
     };
   }
 
-  private categorizeNode(type: string): "input" | "logic" | "transformation" | "output" | "variable" {
+  private categorizeNode(type: string): 'input' | 'logic' | 'transformation' | 'output' | 'variable' {
     const categories: Record<string, typeof return> = {
       'Subject': 'input',
       'WeightedChoice': 'logic',
@@ -353,7 +353,7 @@ export class WildConstructVFXExporter implements VFXExporter {
   private analyzeComplexity(
     nodes: VFXGraphNode[],
     connections: VFXGraphConnection[]
-  ): "simple" | "moderate" | "complex" {
+  ): 'simple' | 'moderate' | 'complex' {
     const nodeCount = nodes.length;
     const connectionCount = connections.length;
     const logicNodeCount = nodes.filter(n => n.category === 'logic').length;
@@ -458,7 +458,7 @@ export class WildConstructVFXExporter implements VFXExporter {
       pose: {
         enabled: false,
         strength: 0.8,
-        poseDescription: "Natural standing pose"
+        poseDescription: 'Natural standing pose'
       },
       depth: {
         enabled: false,
@@ -477,7 +477,7 @@ export class WildConstructVFXExporter implements VFXExporter {
       frameCount: 1,
       fps: 24,
       keyframes: [],
-      interpolation: "ease-in-out"
+      interpolation: 'ease-in-out'
     };
     
     return extensions;
@@ -507,8 +507,8 @@ export class WildConstructVFXExporter implements VFXExporter {
         exposure: 0
       },
       style: {
-        filmstock: this.extractFromVariables(variables, ['film', 'filmstock']) as any || "digital",
-        colorGrading: "cinematic",
+        filmstock: this.extractFromVariables(variables, ['film', 'filmstock']) as any || 'digital',
+        colorGrading: 'cinematic',
         dof: {
           enabled: true,
           focusDistance: 10,
@@ -563,18 +563,18 @@ export class WildConstructVFXExporter implements VFXExporter {
     const warnings: string[] = [];
 
     // Required field validation
-    if (!exportData.metadata?.exportId) errors.push("Missing export ID");
-    if (!exportData.prompt?.finalPrompt) errors.push("Missing final prompt");
-    if (!exportData.graph?.nodes?.length) errors.push("Graph has no nodes");
+    if (!exportData.metadata?.exportId) errors.push('Missing export ID');
+    if (!exportData.prompt?.finalPrompt) errors.push('Missing final prompt');
+    if (!exportData.graph?.nodes?.length) errors.push('Graph has no nodes');
 
     // Enhanced reproducibility validation
     const randomization = exportData.execution?.randomization;
     if (!randomization?.masterSeed && randomization?.masterSeed !== 0) {
-      errors.push("Missing master seed for reproducibility");
+      errors.push('Missing master seed for reproducibility');
     }
     
     if (!randomization?.reproducibilityHash) {
-      warnings.push("Missing reproducibility hash - exact reproduction may not be possible");
+      warnings.push('Missing reproducibility hash - exact reproduction may not be possible');
     }
     
     // Validate node configuration preservation
@@ -603,11 +603,11 @@ export class WildConstructVFXExporter implements VFXExporter {
     // Version compatibility validation
     const version = exportData.metadata?.version;
     if (!version) {
-      warnings.push("Missing format version - compatibility cannot be guaranteed");
+      warnings.push('Missing format version - compatibility cannot be guaranteed');
     } else {
       const [major, minor] = version.split('.').map(Number);
       if (major < 1 || (major === 1 && minor < 2)) {
-        warnings.push("Export version may not support full reproducibility features");
+        warnings.push('Export version may not support full reproducibility features');
       }
     }
 
@@ -627,19 +627,19 @@ export class WildConstructVFXExporter implements VFXExporter {
 
     // Performance warnings
     if (exportData.execution?.performance?.totalTime > 5000) {
-      warnings.push("Execution time exceeds 5 seconds - may impact real-time usage");
+      warnings.push('Execution time exceeds 5 seconds - may impact real-time usage');
     }
     
     // Graph complexity warnings
     const complexity = exportData.graph?.analysis?.complexity;
     if (complexity === 'complex') {
-      warnings.push("Complex graph may require significant computational resources for reproduction");
+      warnings.push('Complex graph may require significant computational resources for reproduction');
     }
     
     // Memory usage warnings
     const memoryUsage = exportData.execution?.performance?.memoryUsage;
     if (memoryUsage && memoryUsage > 100 * 1024 * 1024) { // 100MB
-      warnings.push("High memory usage detected - reproduction may require substantial RAM");
+      warnings.push('High memory usage detected - reproduction may require substantial RAM');
     }
 
     return {
@@ -672,8 +672,8 @@ export class WildConstructVFXExporter implements VFXExporter {
 
 ## Variables Used
 ${Object.entries(exportData.prompt.variables)
-  .map(([name, data]) => `- **{${name}}**: "${data.value}" (${data.source})`)
-  .join('\n')}
+    .map(([name, data]) => `- **{${name}}**: "${data.value}" (${data.source})`)
+    .join('\n')}
 
 ## Rendering Settings
 - **Resolution**: ${exportData.rendering.resolution.width}x${exportData.rendering.resolution.height}

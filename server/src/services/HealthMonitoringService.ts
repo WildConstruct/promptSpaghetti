@@ -103,7 +103,7 @@ class HealthMonitoringService extends EventEmitter {
         {} as Record<HealthStatus, number>
       ),
       totalHealthScore: 0,
-      responseTimeSums: new Map(),
+      responseTimeSums: new Map()
     };
   }
 
@@ -121,7 +121,7 @@ class HealthMonitoringService extends EventEmitter {
     logger.info(`Registered health check for dependency '${check.name}'`, {
       type: check.type,
       weight: check.weight,
-      timeoutMs: check.timeoutMs,
+      timeoutMs: check.timeoutMs
     });
   }
 
@@ -167,7 +167,7 @@ class HealthMonitoringService extends EventEmitter {
         responseTimeMs: responseTime,
         timestamp: startTime,
         error: error instanceof Error ? error.message : String(error),
-        message: `Health check failed: ${error instanceof Error ? error.message : String(error)}`,
+        message: `Health check failed: ${error instanceof Error ? error.message : String(error)}`
       };
     }
   }
@@ -215,29 +215,29 @@ class HealthMonitoringService extends EventEmitter {
       // Convert status to score (0-100)
       let statusScore: number;
       switch (result.status) {
-        case HealthStatus.HEALTHY:
-          statusScore = 100;
-          break;
-        case HealthStatus.DEGRADED:
-          statusScore = 70;
-          issues.push(`${name} is degraded: ${result.message || 'Performance issues detected'}`);
-          recommendations.push(`Monitor ${name} closely and investigate performance issues`);
-          break;
-        case HealthStatus.UNHEALTHY:
-          statusScore = 30;
-          issues.push(`${name} is unhealthy: ${result.message || result.error || 'Health check failed'}`);
-          recommendations.push(`Investigate and fix issues with ${name}`);
-          break;
-        case HealthStatus.CRITICAL:
-          statusScore = 10;
-          issues.push(`${name} is in critical state: ${result.message || result.error || 'Critical failure detected'}`);
-          recommendations.push(`URGENT: Address critical issues with ${name} immediately`);
-          break;
-        case HealthStatus.UNKNOWN:
-          statusScore = 50; // Neutral score for unknown status
-          issues.push(`${name} status is unknown`);
-          recommendations.push(`Check ${name} health monitoring configuration`);
-          break;
+      case HealthStatus.HEALTHY:
+        statusScore = 100;
+        break;
+      case HealthStatus.DEGRADED:
+        statusScore = 70;
+        issues.push(`${name} is degraded: ${result.message || 'Performance issues detected'}`);
+        recommendations.push(`Monitor ${name} closely and investigate performance issues`);
+        break;
+      case HealthStatus.UNHEALTHY:
+        statusScore = 30;
+        issues.push(`${name} is unhealthy: ${result.message || result.error || 'Health check failed'}`);
+        recommendations.push(`Investigate and fix issues with ${name}`);
+        break;
+      case HealthStatus.CRITICAL:
+        statusScore = 10;
+        issues.push(`${name} is in critical state: ${result.message || result.error || 'Critical failure detected'}`);
+        recommendations.push(`URGENT: Address critical issues with ${name} immediately`);
+        break;
+      case HealthStatus.UNKNOWN:
+        statusScore = 50; // Neutral score for unknown status
+        issues.push(`${name} status is unknown`);
+        recommendations.push(`Check ${name} health monitoring configuration`);
+        break;
       }
 
       weightedScore += statusScore * weight;
@@ -286,7 +286,7 @@ class HealthMonitoringService extends EventEmitter {
       this.lastStatusChange = {
         from: this.currentOverallStatus,
         to: status,
-        timestamp: Date.now(),
+        timestamp: Date.now()
       };
 
       this.currentOverallStatus = status;
@@ -295,7 +295,7 @@ class HealthMonitoringService extends EventEmitter {
         from: this.lastStatusChange.from,
         to: status,
         timestamp: this.lastStatusChange.timestamp,
-        score,
+        score
       });
 
       logger.warn('System health status changed', this.lastStatusChange);
@@ -309,7 +309,7 @@ class HealthMonitoringService extends EventEmitter {
         dependencies[name] = {
           ...result,
           weight: dependency.weight,
-          type: dependency.type,
+          type: dependency.type
         };
       }
     });
@@ -322,7 +322,7 @@ class HealthMonitoringService extends EventEmitter {
       issues,
       recommendations,
       uptime: Date.now() - this.startTime,
-      lastStatusChange: this.lastStatusChange,
+      lastStatusChange: this.lastStatusChange
     };
   }
 
@@ -336,7 +336,7 @@ class HealthMonitoringService extends EventEmitter {
       .map(([name, data]) => ({
         name,
         averageResponseTime: Math.round((data.total / data.count) * 100) / 100,
-        type: this.dependencies.get(name)?.type || DependencyType.CUSTOM,
+        type: this.dependencies.get(name)?.type || DependencyType.CUSTOM
       }))
       .sort((a, b) => b.averageResponseTime - a.averageResponseTime)
       .slice(0, 5);
@@ -363,7 +363,7 @@ class HealthMonitoringService extends EventEmitter {
             dependency: dependencyName,
             status: check.status,
             duration: check.timestamp - downtimeStart,
-            timestamp: downtimeStart,
+            timestamp: downtimeStart
           });
           downtimeStart = null;
         }
@@ -375,7 +375,7 @@ class HealthMonitoringService extends EventEmitter {
       averageHealthScore,
       statusDistribution: this.metrics.statusCounts,
       slowestDependencies,
-      recentDowntime: recentDowntime.sort((a, b) => b.timestamp - a.timestamp).slice(0, 10),
+      recentDowntime: recentDowntime.sort((a, b) => b.timestamp - a.timestamp).slice(0, 10)
     };
   }
 
@@ -400,7 +400,7 @@ class HealthMonitoringService extends EventEmitter {
         logger.error(
           'Error in periodic health check',
           { error: error instanceof Error ? error.message : String(error
-        ) });
+          ) });
       }
     }, intervalMs);
 
@@ -435,9 +435,9 @@ class HealthMonitoringService extends EventEmitter {
           status: isConnected ? HealthStatus.HEALTHY : HealthStatus.UNHEALTHY,
           responseTimeMs: 0, // Will be set by performHealthCheck
           timestamp: Date.now(),
-          message: isConnected ? 'Database connection is healthy' : 'Database connection failed',
+          message: isConnected ? 'Database connection is healthy' : 'Database connection failed'
         };
-      },
+      }
     });
   }
 
@@ -455,9 +455,9 @@ class HealthMonitoringService extends EventEmitter {
           status: isConnected ? HealthStatus.HEALTHY : HealthStatus.UNHEALTHY,
           responseTimeMs: 0,
           timestamp: Date.now(),
-          message: isConnected ? 'Redis connection is healthy' : 'Redis connection failed',
+          message: isConnected ? 'Redis connection is healthy' : 'Redis connection failed'
         };
-      },
+      }
     });
   }
 
@@ -479,9 +479,9 @@ class HealthMonitoringService extends EventEmitter {
           responseTimeMs: 0,
           timestamp: Date.now(),
           message: response.ok ? `${serviceName} API is healthy` : `${serviceName} API is not responding`,
-          details: { statusCode: response.status },
+          details: { statusCode: response.status }
         };
-      },
+      }
     });
   }
 }

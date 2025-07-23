@@ -143,10 +143,10 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
 
   const getEnforcementIcon = (enforcement: string) => {
     switch (enforcement) {
-      case 'strict': return <AlertTriangle size={16} className="text-red-500" />;
-      case 'warning': return <Info size={16} className="text-yellow-500" />;
-      case 'suggestion': return <CheckCircle size={16} className="text-green-500" />;
-      default: return <Settings size={16} />;
+    case 'strict': return <AlertTriangle size={16} className="text-red-500" />;
+    case 'warning': return <Info size={16} className="text-yellow-500" />;
+    case 'suggestion': return <CheckCircle size={16} className="text-green-500" />;
+    default: return <Settings size={16} />;
     }
   };
 
@@ -264,10 +264,10 @@ const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({
 }) => {
   const getEnforcementIcon = (enforcement: string) => {
     switch (enforcement) {
-      case 'strict': return <AlertTriangle size={14} className="text-red-500" />;
-      case 'warning': return <Info size={14} className="text-yellow-500" />;
-      case 'suggestion': return <CheckCircle size={14} className="text-green-500" />;
-      default: return <Settings size={14} />;
+    case 'strict': return <AlertTriangle size={14} className="text-red-500" />;
+    case 'warning': return <Info size={14} className="text-yellow-500" />;
+    case 'suggestion': return <CheckCircle size={14} className="text-green-500" />;
+    default: return <Settings size={14} />;
     }
   };
 

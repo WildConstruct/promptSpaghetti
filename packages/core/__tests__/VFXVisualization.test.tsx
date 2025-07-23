@@ -70,7 +70,7 @@ jest.mock('../components/ui/Select', () => ({
   SelectItem: ({ children, value }: unknown) => <div className="select-item" data-value={value}>{children}</div>,
   SelectTrigger: (
     { children,
-    className }: unknown
+      className }: unknown
   ) => <div className={`select-trigger ${className || ''}`}>{children}</div>,
   SelectValue: () => <div className="select-value">Selected Value</div>
 }));

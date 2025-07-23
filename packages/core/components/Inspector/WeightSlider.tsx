@@ -138,7 +138,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({
             flex: 1,
             border: '1px solid #4a5568',
             background: 'linear-gradient(90deg, #2d3748 0%, #4a5568 100%)',
-            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
           }}
         >
           {/* Fill track */}
@@ -156,7 +156,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({
                 ? '#4a5568' 
                 : 'linear-gradient(90deg, #3182ce 0%, #63b3ed 100%)',
               transition: isDragging ? 'none' : 'width 0.1s ease',
-              boxShadow: '0 0 4px rgba(49, 130, 206, 0.3)',
+              boxShadow: '0 0 4px rgba(49, 130, 206, 0.3)'
             }}
           />
           
@@ -183,7 +183,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({
                   : '0 2px 4px rgba(0,0,0,0.2)',
               transition: isDragging ? 'none' : 'all 0.1s ease',
               outline: 'none',
-              scale: isDragging ? 1.1 : 1,
+              scale: isDragging ? 1.1 : 1
             }}
             onFocus={() => setShowTooltip(true)}
             onBlur={() => setShowTooltip(false)}
@@ -208,7 +208,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({
                 boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
                 whiteSpace: 'nowrap',
                 zIndex: 10,
-                pointerEvents: 'none',
+                pointerEvents: 'none'
               }}
             >
               {value.toFixed(step < 1 ? 1 : 0)}
@@ -222,7 +222,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({
                   height: 0,
                   borderLeft: '4px solid transparent',
                   borderRight: '4px solid transparent',
-                  borderTop: '4px solid #1a202c',
+                  borderTop: '4px solid #1a202c'
                 }}
               />
             </div>
@@ -249,7 +249,7 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({
               color: '#e2e8f0',
               fontSize: 12,
               textAlign: 'center',
-              outline: 'none',
+              outline: 'none'
             }}
             min={min}
             max={max}

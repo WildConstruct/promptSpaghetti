@@ -167,23 +167,23 @@ export const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProp
   // Get risk level color
   const getRiskColor = useCallback((level: string) => {
     switch (level) {
-      case 'low': return themeStyles.success;
-      case 'medium': return themeStyles.warning;
-      case 'high': return themeStyles.error;
-      case 'critical': return themeStyles.critical;
-      default: return themeStyles.textSecondary;
+    case 'low': return themeStyles.success;
+    case 'medium': return themeStyles.warning;
+    case 'high': return themeStyles.error;
+    case 'critical': return themeStyles.critical;
+    default: return themeStyles.textSecondary;
     }
   }, [themeStyles]);
 
   // Get trend icon
   const getTrendIcon = useCallback((trend: string) => {
     switch (trend) {
-      case 'improving':
-      case 'decreasing': return '📈';
-      case 'stable': return '➡️';
-      case 'declining':
-      case 'increasing': return '📉';
-      default: return '❓';
+    case 'improving':
+    case 'decreasing': return '📈';
+    case 'stable': return '➡️';
+    case 'declining':
+    case 'increasing': return '📉';
+    default: return '❓';
     }
   }, []);
 

@@ -881,24 +881,24 @@ export class PlacementAdminController {
 
       for (const task of body.tasks) {
         switch (task) {
-          case 'cleanup_expired':
-            await this.cleanupExpiredPlacements();
-            results.push({ task, status: 'completed', message: 'Expired placements cleaned up' });
-            break;
-          case 'rebuild_cache':
-            await this.rebuildCache();
-            results.push({ task, status: 'completed', message: 'Cache rebuilt successfully' });
-            break;
-          case 'update_metrics':
-            await this.updateMetrics();
-            results.push({ task, status: 'completed', message: 'Metrics updated' });
-            break;
-          case 'archive_old_data':
-            await this.archiveOldData();
-            results.push({ task, status: 'completed', message: 'Old data archived' });
-            break;
-          default:
-            results.push({ task, status: 'skipped', message: 'Unknown maintenance task' });
+        case 'cleanup_expired':
+          await this.cleanupExpiredPlacements();
+          results.push({ task, status: 'completed', message: 'Expired placements cleaned up' });
+          break;
+        case 'rebuild_cache':
+          await this.rebuildCache();
+          results.push({ task, status: 'completed', message: 'Cache rebuilt successfully' });
+          break;
+        case 'update_metrics':
+          await this.updateMetrics();
+          results.push({ task, status: 'completed', message: 'Metrics updated' });
+          break;
+        case 'archive_old_data':
+          await this.archiveOldData();
+          results.push({ task, status: 'completed', message: 'Old data archived' });
+          break;
+        default:
+          results.push({ task, status: 'skipped', message: 'Unknown maintenance task' });
         }
       }
 

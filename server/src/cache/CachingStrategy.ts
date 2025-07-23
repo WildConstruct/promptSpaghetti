@@ -613,7 +613,7 @@ export class ComprehensiveCachingService extends EventEmitter {
     }
     
     const status = issues.length === 0 ? 'healthy' :
-                   issues.length < 3 ? 'degraded' : 'unhealthy';
+      issues.length < 3 ? 'degraded' : 'unhealthy';
     
     return { status, issues, metrics };
   }

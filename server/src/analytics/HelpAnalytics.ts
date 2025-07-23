@@ -466,20 +466,20 @@ export class HelpAnalytics extends EventEmitter {
 
     let eventType: HelpEventType;
     switch (interactionType) {
-      case 'ticket':
-        eventType = HelpEventType.SUPPORT_TICKET_CREATED;
-        break;
-      case 'chat':
-        eventType = HelpEventType.SUPPORT_CHAT_STARTED;
-        break;
-      case 'faq':
-        eventType = HelpEventType.SUPPORT_FAQ_VIEWED;
-        break;
-      case 'escalation':
-        eventType = HelpEventType.SUPPORT_ESCALATION;
-        break;
-      default:
-        eventType = HelpEventType.SUPPORT_TICKET_CREATED;
+    case 'ticket':
+      eventType = HelpEventType.SUPPORT_TICKET_CREATED;
+      break;
+    case 'chat':
+      eventType = HelpEventType.SUPPORT_CHAT_STARTED;
+      break;
+    case 'faq':
+      eventType = HelpEventType.SUPPORT_FAQ_VIEWED;
+      break;
+    case 'escalation':
+      eventType = HelpEventType.SUPPORT_ESCALATION;
+      break;
+    default:
+      eventType = HelpEventType.SUPPORT_TICKET_CREATED;
     }
 
     const event: SupportInteractionEvent = {
@@ -722,21 +722,21 @@ export class HelpAnalytics extends EventEmitter {
     const metrics = this.contentMetrics.get(contentId)!;
     
     switch (action) {
-      case 'view':
-        metrics.views++;
-        if (viewDuration) {
-          metrics.totalViewDuration += viewDuration;
-          if (viewDuration < 30000) { // Less than 30 seconds considered early exit
-            metrics.totalExitEarly++;
-          }
+    case 'view':
+      metrics.views++;
+      if (viewDuration) {
+        metrics.totalViewDuration += viewDuration;
+        if (viewDuration < 30000) { // Less than 30 seconds considered early exit
+          metrics.totalExitEarly++;
         }
-        break;
-      case 'helpful':
-        metrics.helpfulVotes++;
-        break;
-      case 'unhelpful':
-        metrics.unhelpfulVotes++;
-        break;
+      }
+      break;
+    case 'helpful':
+      metrics.helpfulVotes++;
+      break;
+    case 'unhelpful':
+      metrics.unhelpfulVotes++;
+      break;
     }
 
     // Calculate derived metrics

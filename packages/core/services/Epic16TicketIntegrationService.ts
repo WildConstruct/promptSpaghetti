@@ -840,22 +840,22 @@ export class Epic16TicketIntegrationService extends EventEmitter {
 
   private async executeWorkflowAction(action: WorkflowAction, ticket: MarketplaceTicket, context?: any): Promise<void> {
     switch (action.type) {
-      case 'set_field':
-        // Set field on ticket
-        const field = action.parameters.field as keyof MarketplaceTicket;
-        const value = action.parameters.value;
-        if (field in ticket) {
-          (ticket as any)[field] = value;
-        }
-        break;
+    case 'set_field':
+      // Set field on ticket
+      const field = action.parameters.field as keyof MarketplaceTicket;
+      const value = action.parameters.value;
+      if (field in ticket) {
+        (ticket as any)[field] = value;
+      }
+      break;
         
-      case 'update_status':
-        ticket.status = action.parameters.status as TicketStatus;
-        break;
+    case 'update_status':
+      ticket.status = action.parameters.status as TicketStatus;
+      break;
         
-      case 'call_webhook':
-        await this.callWebhook(action.parameters.url, ticket, action.parameters.method || 'POST');
-        break;
+    case 'call_webhook':
+      await this.callWebhook(action.parameters.url, ticket, action.parameters.method || 'POST');
+      break;
     }
   }
 
@@ -869,23 +869,23 @@ export class Epic16TicketIntegrationService extends EventEmitter {
 
   private async sendNotificationByChannel(channel: string, ticket: MarketplaceTicket, event: string, context?: any): Promise<void> {
     switch (channel) {
-      case 'email':
-        if (this.integrations.email.enabled) {
-          await this.sendEmailNotification(ticket, event, context);
-        }
-        break;
+    case 'email':
+      if (this.integrations.email.enabled) {
+        await this.sendEmailNotification(ticket, event, context);
+      }
+      break;
         
-      case 'slack':
-        if (this.integrations.slack.enabled) {
-          await this.sendSlackNotification(ticket, event, context);
-        }
-        break;
+    case 'slack':
+      if (this.integrations.slack.enabled) {
+        await this.sendSlackNotification(ticket, event, context);
+      }
+      break;
         
-      case 'discord':
-        if (this.integrations.discord.enabled) {
-          await this.sendDiscordNotification(ticket, event, context);
-        }
-        break;
+    case 'discord':
+      if (this.integrations.discord.enabled) {
+        await this.sendDiscordNotification(ticket, event, context);
+      }
+      break;
     }
   }
 

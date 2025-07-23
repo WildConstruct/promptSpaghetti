@@ -504,7 +504,7 @@ export class StateTransitionTestFramework {
     statesVisited: string[];
     transitionsByState: Record<string, number>;
     averageTransitionTime: number;
-  } {
+    } {
     const statesVisited = [...new Set(this.transitionHistory.map(t => t.from).concat(this.transitionHistory.map(t => t.to)))];
     const transitionsByState: Record<string, number> = {};
     

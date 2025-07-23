@@ -330,7 +330,7 @@ class ComprehensiveTestRunner {
       
       this.results.reliability = reliabilityReport;
       
-      console.log(chalk.green(`✅ Reliability analysis completed`));
+      console.log(chalk.green('✅ Reliability analysis completed'));
       console.log(`  📊 Success rate: ${(reliabilityReport.overallSuccessRate * 100).toFixed(1)}%`);
       console.log(`  ⚠️ Flaky tests: ${reliabilityReport.flakyTests}`);
       

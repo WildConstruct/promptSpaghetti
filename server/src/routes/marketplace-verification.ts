@@ -357,9 +357,9 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
         insights: {
           queue_health: statistics.total_pending < 50 ? 'healthy' : 'needs_attention',
           processing_efficiency: statistics.avg_processing_time < 3 ? 'excellent' : 
-                                statistics.avg_processing_time < 7 ? 'good' : 'needs_improvement',
+            statistics.avg_processing_time < 7 ? 'good' : 'needs_improvement',
           approval_trend: statistics.approval_rate > 80 ? 'high_approval' :
-                         statistics.approval_rate > 60 ? 'moderate_approval' : 'high_rejection'
+            statistics.approval_rate > 60 ? 'moderate_approval' : 'high_rejection'
         },
         recommendations: this.generateRecommendations(statistics)
       };
@@ -398,7 +398,7 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
         summary: {
           overall_status: validation.is_valid ? 'valid' : 'invalid',
           confidence_level: validation.validation_score > 0.8 ? 'high' :
-                           validation.validation_score > 0.6 ? 'medium' : 'low',
+            validation.validation_score > 0.6 ? 'medium' : 'low',
           issues_count: validation.issues.length,
           recommendations_count: validation.recommendations.length
         }

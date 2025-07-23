@@ -527,7 +527,7 @@ export function getPerformanceTargetSummary(): {
   medium: number;
   low: number;
   categories: Record<string, number>;
-} {
+  } {
   const targets = Object.values(performanceTargets);
   
   const businessImpactCounts = {

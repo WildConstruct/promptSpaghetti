@@ -403,16 +403,16 @@ export const validateFeedback = (feedback: unknown): Feedback => {
   const base = BaseFeedbackSchema.parse(feedback);
   
   switch (base.type) {
-    case 'review':
-      return ReviewFeedbackSchema.parse(feedback);
-    case 'report':
-      return ReportFeedbackSchema.parse(feedback);
-    case 'bug_report':
-      return BugReportFeedbackSchema.parse(feedback);
-    case 'suggestion':
-      return SuggestionFeedbackSchema.parse(feedback);
-    default:
-      return BaseFeedbackSchema.parse(feedback);
+  case 'review':
+    return ReviewFeedbackSchema.parse(feedback);
+  case 'report':
+    return ReportFeedbackSchema.parse(feedback);
+  case 'bug_report':
+    return BugReportFeedbackSchema.parse(feedback);
+  case 'suggestion':
+    return SuggestionFeedbackSchema.parse(feedback);
+  default:
+    return BaseFeedbackSchema.parse(feedback);
   }
 };
 

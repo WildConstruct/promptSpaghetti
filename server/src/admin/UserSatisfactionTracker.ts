@@ -674,7 +674,7 @@ export class UserSatisfactionTracker extends EventEmitter {
         responseRate: 0, // Would calculate from survey invitations vs responses
         totalResponses: metrics.overallSatisfaction.sampleSize,
         trendDirection: metrics.overallSatisfaction.trend === 'improving' ? 'up' : 
-                       metrics.overallSatisfaction.trend === 'declining' ? 'down' : 'stable'
+          metrics.overallSatisfaction.trend === 'declining' ? 'down' : 'stable'
       },
       realtime: await this.generateRealtimeMetrics(),
       segments: await this.generateSegmentAnalysis(),

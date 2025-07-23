@@ -55,7 +55,7 @@ const axe = configureAxe({
     // Disable rules that may not apply in test environment
     'meta-viewport': { enabled: false }, // Not relevant in JSDOM
     'css-orientation-lock': { enabled: false }, // CSS-based, not testable in JSDOM
-    'autocomplete-valid': { enabled: false }, // May conflict with test data
+    'autocomplete-valid': { enabled: false } // May conflict with test data
   },
   
   // Target WCAG 2.1 AA compliance
@@ -166,21 +166,21 @@ export class AccessibilityTester {
       
       // Common ARIA requirements based on role
       switch (role) {
-        case 'button':
-          expect(element).toHaveAttribute('aria-label');
-          break;
-        case 'dialog':
-          expect(element).toHaveAttribute('aria-labelledby');
-          break;
-        case 'progressbar':
-          expect(element).toHaveAttribute('aria-valuenow');
-          break;
-        case 'tab':
-          expect(element).toHaveAttribute('aria-selected');
-          break;
-        case 'tabpanel':
-          expect(element).toHaveAttribute('aria-labelledby');
-          break;
+      case 'button':
+        expect(element).toHaveAttribute('aria-label');
+        break;
+      case 'dialog':
+        expect(element).toHaveAttribute('aria-labelledby');
+        break;
+      case 'progressbar':
+        expect(element).toHaveAttribute('aria-valuenow');
+        break;
+      case 'tab':
+        expect(element).toHaveAttribute('aria-selected');
+        break;
+      case 'tabpanel':
+        expect(element).toHaveAttribute('aria-labelledby');
+        break;
       }
     });
     
@@ -192,7 +192,7 @@ export class AccessibilityTester {
                       container.querySelector(`label[for="${input.getAttribute('id')}"]`);
       
       if (!hasLabel) {
-        console.warn(`Input element without proper labeling found:`, input);
+        console.warn('Input element without proper labeling found:', input);
       }
     });
   }

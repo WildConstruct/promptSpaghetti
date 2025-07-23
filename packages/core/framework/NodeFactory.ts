@@ -318,7 +318,7 @@ export class NodeFactory {
     averageCreationTime: number;
     typeDistribution: Record<string, number>;
     recentFailures: Array<{ nodeType: string; nodeId: string; error: string; timestamp: number }>;
-  } {
+    } {
     const total = this.creationHistory.length;
     const successful = this.creationHistory.filter(h => h.success).length;
     const failed = total - successful;
@@ -399,18 +399,18 @@ export class NodeFactory {
     
     // Apply type-specific optimizations
     switch (type) {
-      case 'WeightedChoice':
-        // Enable caching for weighted choices as they're often reused
-        optimized.cacheable = true;
-        break;
-      case 'Sequential':
-        // Sequential nodes are stateful by nature
-        optimized.stateful = true;
-        break;
-      case 'Conditional':
-        // Conditionals should be deterministic for testing
-        optimized.deterministic = true;
-        break;
+    case 'WeightedChoice':
+      // Enable caching for weighted choices as they're often reused
+      optimized.cacheable = true;
+      break;
+    case 'Sequential':
+      // Sequential nodes are stateful by nature
+      optimized.stateful = true;
+      break;
+    case 'Conditional':
+      // Conditionals should be deterministic for testing
+      optimized.deterministic = true;
+      break;
     }
 
     return optimized;
@@ -421,21 +421,21 @@ export class NodeFactory {
     
     // Apply type-specific data optimizations
     switch (type) {
-      case 'WeightedChoice':
-        // Normalize weights if they exist
-        if (optimized.weights && Array.isArray(optimized.weights)) {
-          const total = optimized.weights.reduce((sum: number, w: number) => sum + w, 0);
-          if (total > 0) {
-            optimized.normalizedWeights = optimized.weights.map((w: number) => w / total);
-          }
+    case 'WeightedChoice':
+      // Normalize weights if they exist
+      if (optimized.weights && Array.isArray(optimized.weights)) {
+        const total = optimized.weights.reduce((sum: number, w: number) => sum + w, 0);
+        if (total > 0) {
+          optimized.normalizedWeights = optimized.weights.map((w: number) => w / total);
         }
-        break;
-      case 'Markov':
-        // Pre-calculate transition probabilities
-        if (optimized.transitionMatrix) {
-          optimized.normalizedMatrix = this.normalizeTransitionMatrix(optimized.transitionMatrix);
-        }
-        break;
+      }
+      break;
+    case 'Markov':
+      // Pre-calculate transition probabilities
+      if (optimized.transitionMatrix) {
+        optimized.normalizedMatrix = this.normalizeTransitionMatrix(optimized.transitionMatrix);
+      }
+      break;
     }
 
     return optimized;

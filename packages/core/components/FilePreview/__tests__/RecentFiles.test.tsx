@@ -14,8 +14,8 @@ jest.mock('../../../projectManager', () => ({
     getFavoriteFiles: jest.fn(),
     toggleFavorite: jest.fn(),
     addToRecentFiles: jest.fn(),
-    isFavorite: jest.fn(),
-  },
+    isFavorite: jest.fn()
+  }
 }));
 
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
@@ -25,7 +25,7 @@ const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
-  clear: jest.fn(),
+  clear: jest.fn()
 };
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 

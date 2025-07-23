@@ -190,26 +190,26 @@ export class ReportExportService extends EventEmitter {
       let fileSize: number;
 
       switch (config.format) {
-        case ExportFormat.PDF:
-          fileContent = await this.exportToPDF(reportData, config);
-          break;
-        case ExportFormat.EXCEL:
-          fileContent = await this.exportToExcel(reportData, config);
-          break;
-        case ExportFormat.CSV:
-          fileContent = this.exportToCSV(reportData, config);
-          break;
-        case ExportFormat.JSON:
-          fileContent = this.exportToJSON(reportData, config);
-          break;
-        case ExportFormat.XML:
-          fileContent = this.exportToXML(reportData, config);
-          break;
-        case ExportFormat.HTML:
-          fileContent = this.exportToHTML(reportData, config);
-          break;
-        default:
-          throw new Error(`Unsupported export format: ${config.format}`);
+      case ExportFormat.PDF:
+        fileContent = await this.exportToPDF(reportData, config);
+        break;
+      case ExportFormat.EXCEL:
+        fileContent = await this.exportToExcel(reportData, config);
+        break;
+      case ExportFormat.CSV:
+        fileContent = this.exportToCSV(reportData, config);
+        break;
+      case ExportFormat.JSON:
+        fileContent = this.exportToJSON(reportData, config);
+        break;
+      case ExportFormat.XML:
+        fileContent = this.exportToXML(reportData, config);
+        break;
+      case ExportFormat.HTML:
+        fileContent = this.exportToHTML(reportData, config);
+        break;
+      default:
+        throw new Error(`Unsupported export format: ${config.format}`);
       }
 
       fileSize = Buffer.isBuffer(fileContent) ? fileContent.length : Buffer.byteLength(fileContent);
@@ -229,24 +229,24 @@ export class ReportExportService extends EventEmitter {
       let deliveredAt: Date | undefined;
 
       switch (config.delivery) {
-        case DeliveryMethod.FILE:
-          const filePath = join(this.outputDirectory, filename);
-          writeFileSync(filePath, fileContent);
-          downloadUrl = `/api/reports/download/${exportId}`;
-          deliveredAt = new Date();
-          break;
-        case DeliveryMethod.EMAIL:
-          await this.deliverViaEmail(fileContent, filename, config);
-          deliveredAt = new Date();
-          break;
-        case DeliveryMethod.WEBHOOK:
-          await this.deliverViaWebhook(fileContent, filename, config);
-          deliveredAt = new Date();
-          break;
-        case DeliveryMethod.API:
-          await this.deliverViaAPI(fileContent, filename, config);
-          deliveredAt = new Date();
-          break;
+      case DeliveryMethod.FILE:
+        const filePath = join(this.outputDirectory, filename);
+        writeFileSync(filePath, fileContent);
+        downloadUrl = `/api/reports/download/${exportId}`;
+        deliveredAt = new Date();
+        break;
+      case DeliveryMethod.EMAIL:
+        await this.deliverViaEmail(fileContent, filename, config);
+        deliveredAt = new Date();
+        break;
+      case DeliveryMethod.WEBHOOK:
+        await this.deliverViaWebhook(fileContent, filename, config);
+        deliveredAt = new Date();
+        break;
+      case DeliveryMethod.API:
+        await this.deliverViaAPI(fileContent, filename, config);
+        deliveredAt = new Date();
+        break;
       }
 
       const processingTime = Date.now() - startTime;
@@ -412,12 +412,12 @@ startxref
     const escapeXml = (str: string): string => {
       return str.replace(/[<>&'"]/g, (c) => {
         switch (c) {
-          case '<': return '&lt;';
-          case '>': return '&gt;';
-          case '&': return '&amp;';
-          case "'": return '&apos;';
-          case '"': return '&quot;';
-          default: return c;
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '&': return '&amp;';
+        case '\'': return '&apos;';
+        case '"': return '&quot;';
+        default: return c;
         }
       });
     };
@@ -682,27 +682,27 @@ startxref
     const now = new Date();
     const [hours, minutes] = schedule.time.split(':').map(Number);
     
-    let nextRun = new Date();
+    const nextRun = new Date();
     nextRun.setHours(hours, minutes, 0, 0);
 
     switch (schedule.frequency) {
-      case 'daily':
-        if (nextRun <= now) {
-          nextRun.setDate(nextRun.getDate() + 1);
-        }
-        break;
-      case 'weekly':
-        nextRun.setDate(nextRun.getDate() + ((7 + (schedule.dayOfWeek || 0) - nextRun.getDay()) % 7));
-        if (nextRun <= now) {
-          nextRun.setDate(nextRun.getDate() + 7);
-        }
-        break;
-      case 'monthly':
-        nextRun.setDate(schedule.dayOfMonth || 1);
-        if (nextRun <= now) {
-          nextRun.setMonth(nextRun.getMonth() + 1);
-        }
-        break;
+    case 'daily':
+      if (nextRun <= now) {
+        nextRun.setDate(nextRun.getDate() + 1);
+      }
+      break;
+    case 'weekly':
+      nextRun.setDate(nextRun.getDate() + ((7 + (schedule.dayOfWeek || 0) - nextRun.getDay()) % 7));
+      if (nextRun <= now) {
+        nextRun.setDate(nextRun.getDate() + 7);
+      }
+      break;
+    case 'monthly':
+      nextRun.setDate(schedule.dayOfMonth || 1);
+      if (nextRun <= now) {
+        nextRun.setMonth(nextRun.getMonth() + 1);
+      }
+      break;
     }
 
     return nextRun;
@@ -783,7 +783,7 @@ startxref
     averageProcessingTime: number;
     formatBreakdown: Record<string, number>;
     deliveryBreakdown: Record<string, number>;
-  } {
+    } {
     const total = this.exportHistory.length;
     const successful = this.exportHistory.filter(e => e.success).length;
     const failed = total - successful;

@@ -172,11 +172,11 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({
     setAlerts(prev => prev.map(alert => 
       alert.id === alertId 
         ? { 
-            ...alert, 
-            acknowledged: action === 'acknowledge' ? true : alert.acknowledged,
-            resolved: action === 'resolve' ? true : alert.resolved,
-            assignee: action === 'assign' ? userId : alert.assignee
-          }
+          ...alert, 
+          acknowledged: action === 'acknowledge' ? true : alert.acknowledged,
+          resolved: action === 'resolve' ? true : alert.resolved,
+          assignee: action === 'assign' ? userId : alert.assignee
+        }
         : alert
     ));
   }, [onAlertAction, userId]);
@@ -199,12 +199,12 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({
   // Alert severity colors
   const getSeverityColor = (severity: AlertData['severity']) => {
     switch (severity) {
-      case 'critical': return '#dc2626';
-      case 'high': return '#ea580c';
-      case 'medium': return '#d97706';
-      case 'low': return '#65a30d';
-      case 'info': return '#2563eb';
-      default: return '#6b7280';
+    case 'critical': return '#dc2626';
+    case 'high': return '#ea580c';
+    case 'medium': return '#d97706';
+    case 'low': return '#65a30d';
+    case 'info': return '#2563eb';
+    default: return '#6b7280';
     }
   };
 

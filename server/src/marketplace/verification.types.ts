@@ -146,7 +146,7 @@ export const VerificationInformationSchema = z.object({
     city: z.string().optional(),
     postal_code: z.string().optional(),
     address_line_1: z.string().optional(),
-    address_line_2: z.string().optional(),
+    address_line_2: z.string().optional()
   }),
   professional_info: z.object({
     job_title: z.string().optional(),
@@ -155,7 +155,7 @@ export const VerificationInformationSchema = z.object({
     years_experience: z.number().int().min(0).max(70).optional(),
     linkedin_url: z.string().url().optional(),
     website_url: z.string().url().optional(),
-    portfolio_url: z.string().url().optional(),
+    portfolio_url: z.string().url().optional()
   }).optional(),
   business_info: z.object({
     business_name: z.string().optional(),
@@ -168,21 +168,21 @@ export const VerificationInformationSchema = z.object({
       city: z.string().optional(),
       postal_code: z.string().optional(),
       address_line_1: z.string().optional(),
-      address_line_2: z.string().optional(),
-    }).optional(),
+      address_line_2: z.string().optional()
+    }).optional()
   }).optional(),
   verification_purpose: z.string().min(10).max(1000),
-  additional_notes: z.string().max(2000).optional(),
+  additional_notes: z.string().max(2000).optional()
 });
 
 export const CreateVerificationRequestSchema = z.object({
   requested_level: z.nativeEnum(VerificationLevel),
-  information: VerificationInformationSchema,
+  information: VerificationInformationSchema
 });
 
 export const UpdateVerificationRequestSchema = z.object({
   information: VerificationInformationSchema.optional(),
-  status: z.nativeEnum(VerificationRequestStatus).optional(),
+  status: z.nativeEnum(VerificationRequestStatus).optional()
 });
 
 export const CreateDocumentUploadSchema = z.object({
@@ -197,7 +197,7 @@ export const ReviewVerificationRequestSchema = z.object({
   status: z.enum(['approved', 'rejected', 'requires_additional_info']),
   review_notes: z.string().optional(),
   rejection_reason: z.string().optional(),
-  approved_level: z.nativeEnum(VerificationLevel).optional(),
+  approved_level: z.nativeEnum(VerificationLevel).optional()
 });
 
 // Analytics and reporting interfaces

@@ -473,7 +473,7 @@ export class ComplianceMonitor {
    */
   private async sendCriticalComplianceAlert(violation: ComplianceViolation, result: ComplianceResult): Promise<void> {
     // In a real implementation, this would send alerts via email, Slack, etc.
-    console.error(`🚨 CRITICAL COMPLIANCE VIOLATION DETECTED!`);
+    console.error('🚨 CRITICAL COMPLIANCE VIOLATION DETECTED!');
     console.error(`Check: ${violation.checkId}`);
     console.error(`Severity: ${violation.severity}`);
     console.error(`Description: ${violation.description}`);
@@ -531,11 +531,11 @@ export class ComplianceMonitor {
    */
   private getIntervalMs(frequency: string): number {
     switch (frequency) {
-      case 'hourly': return 60 * 60 * 1000;
-      case 'daily': return 24 * 60 * 60 * 1000;
-      case 'weekly': return 7 * 24 * 60 * 60 * 1000;
-      case 'monthly': return 30 * 24 * 60 * 60 * 1000;
-      default: return 60 * 60 * 1000; // Default to hourly
+    case 'hourly': return 60 * 60 * 1000;
+    case 'daily': return 24 * 60 * 60 * 1000;
+    case 'weekly': return 7 * 24 * 60 * 60 * 1000;
+    case 'monthly': return 30 * 24 * 60 * 60 * 1000;
+    default: return 60 * 60 * 1000; // Default to hourly
     }
   }
 
@@ -547,7 +547,7 @@ export class ComplianceMonitor {
   private async checkDataEncryption(context: ComplianceContext): Promise<ComplianceResult> {
     const evidence: ComplianceEvidence[] = [];
     let score = 100;
-    let issues: string[] = [];
+    const issues: string[] = [];
 
     // Check database encryption
     try {
@@ -583,14 +583,14 @@ export class ComplianceMonitor {
     }
 
     const status = score >= 90 ? 'compliant' : 
-                  score >= 70 ? 'warning' : 'non_compliant';
+      score >= 70 ? 'warning' : 'non_compliant';
 
     return {
       checkId: 'gdpr_data_encryption',
       status,
       score,
       message: issues.length === 0 ? 'All data encryption requirements met' : 
-               `Data encryption issues found: ${issues.join(', ')}`,
+        `Data encryption issues found: ${issues.join(', ')}`,
       evidence,
       timestamp: new Date()
     };
@@ -634,7 +634,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Consent management compliant' : 
-               `Consent issues: ${issues.join(', ')}`,
+        `Consent issues: ${issues.join(', ')}`,
       evidence,
       timestamp: new Date()
     };
@@ -674,7 +674,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Data retention compliant' : 
-               `Data retention issues: ${issues.join(', ')}`,
+        `Data retention issues: ${issues.join(', ')}`,
       remediation: remediation.length > 0 ? remediation : undefined,
       timestamp: new Date()
     };
@@ -710,7 +710,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Data portability requirements met' : 
-               `Data portability issues: ${issues.join(', ')}`,
+        `Data portability issues: ${issues.join(', ')}`,
       timestamp: new Date()
     };
   }
@@ -758,7 +758,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Access controls compliant' : 
-               `Access control issues: ${issues.join(', ')}`,
+        `Access control issues: ${issues.join(', ')}`,
       evidence,
       timestamp: new Date()
     };
@@ -799,7 +799,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Audit logging compliant' : 
-               `Audit logging issues: ${issues.join(', ')}`,
+        `Audit logging issues: ${issues.join(', ')}`,
       timestamp: new Date()
     };
   }
@@ -840,7 +840,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Encryption standards met' : 
-               `Encryption issues: ${issues.join(', ')}`,
+        `Encryption issues: ${issues.join(', ')}`,
       timestamp: new Date()
     };
   }
@@ -878,7 +878,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Content encryption compliant' : 
-               `Content encryption issues: ${issues.join(', ')}`,
+        `Content encryption issues: ${issues.join(', ')}`,
       timestamp: new Date()
     };
   }
@@ -911,7 +911,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Content access tracking compliant' : 
-               `Access tracking issues: ${issues.join(', ')}`,
+        `Access tracking issues: ${issues.join(', ')}`,
       timestamp: new Date()
     };
   }
@@ -962,7 +962,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'All SSL certificates valid' : 
-               `SSL certificate issues: ${issues.join(', ')}`,
+        `SSL certificate issues: ${issues.join(', ')}`,
       remediation: remediation.length > 0 ? remediation : undefined,
       timestamp: new Date()
     };
@@ -1018,7 +1018,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'All required security headers present' : 
-               `Security header issues: ${issues.join(', ')}`,
+        `Security header issues: ${issues.join(', ')}`,
       remediation: remediation.length > 0 ? remediation : undefined,
       timestamp: new Date()
     };
@@ -1061,7 +1061,7 @@ export class ComplianceMonitor {
       status,
       score,
       message: issues.length === 0 ? 'Rate limiting properly configured' : 
-               `Rate limiting issues: ${issues.join(', ')}`,
+        `Rate limiting issues: ${issues.join(', ')}`,
       timestamp: new Date()
     };
   }
@@ -1265,7 +1265,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
           matchingBaseline.id,
           actualValue,
           context,
-          `Automated measurement from compliance monitor`
+          'Automated measurement from compliance monitor'
         );
       }
     } catch (error) {
@@ -1351,7 +1351,7 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
         readinessScore = Math.min(readinessScore, complianceRate * 100);
 
         const status = readinessScore >= 90 ? 'ready' : 
-                     readinessScore >= 70 ? 'needs_preparation' : 'not_ready';
+          readinessScore >= 70 ? 'needs_preparation' : 'not_ready';
 
         const missingEvidence = this.identifyMissingEvidence(framework, frameworkHealth);
         const nextAuditDue = this.getNextAuditDate(framework);
@@ -1381,25 +1381,25 @@ export class EnhancedComplianceMonitor extends ComplianceMonitor {
 
     if (frameworkHealth.score < 90) {
       switch (framework) {
-        case 'GDPR':
-          if (frameworkHealth.criticalDeviations > 0) {
-            missingEvidence.push('Data processing records', 'Consent management documentation');
-          }
-          break;
-        case 'SOC2':
-          if (frameworkHealth.criticalDeviations > 0) {
-            missingEvidence.push('Access control logs', 'Security monitoring reports');
-          }
-          break;
-        case 'MPA':
-          if (frameworkHealth.criticalDeviations > 0) {
-            missingEvidence.push('Content encryption certificates', 'Access audit trails');
-          }
-          break;
-        default:
-          if (frameworkHealth.criticalDeviations > 0) {
-            missingEvidence.push('Security configuration documentation', 'Monitoring evidence');
-          }
+      case 'GDPR':
+        if (frameworkHealth.criticalDeviations > 0) {
+          missingEvidence.push('Data processing records', 'Consent management documentation');
+        }
+        break;
+      case 'SOC2':
+        if (frameworkHealth.criticalDeviations > 0) {
+          missingEvidence.push('Access control logs', 'Security monitoring reports');
+        }
+        break;
+      case 'MPA':
+        if (frameworkHealth.criticalDeviations > 0) {
+          missingEvidence.push('Content encryption certificates', 'Access audit trails');
+        }
+        break;
+      default:
+        if (frameworkHealth.criticalDeviations > 0) {
+          missingEvidence.push('Security configuration documentation', 'Monitoring evidence');
+        }
       }
     }
 

@@ -550,16 +550,16 @@ describe('EvidenceAccessAuditService', () => {
       mockConnection.query.mockResolvedValue({ rows: [] });
 
       await auditService.getAuditTrail({
-        evidenceId: "evidence'; DROP TABLE evidence_access_audit; --",
-        userId: "user'; DELETE FROM users; --"
+        evidenceId: 'evidence\'; DROP TABLE evidence_access_audit; --',
+        userId: 'user\'; DELETE FROM users; --'
       });
 
       // Verify parameterized queries are used
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('evidence_id = $'),
         expect.arrayContaining([
-          "evidence'; DROP TABLE evidence_access_audit; --",
-          "user'; DELETE FROM users; --"
+          'evidence\'; DROP TABLE evidence_access_audit; --',
+          'user\'; DELETE FROM users; --'
         ])
       );
     });

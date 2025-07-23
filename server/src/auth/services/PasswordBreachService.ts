@@ -453,7 +453,7 @@ export class PasswordBreachService {
     cacheHitRate: number;
     totalChecks: number;
     averageResponseTime: number;
-  } {
+    } {
     // This would typically be implemented with persistent metrics
     return {
       cacheSize: this.cache.size,

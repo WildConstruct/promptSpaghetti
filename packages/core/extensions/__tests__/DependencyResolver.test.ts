@@ -507,7 +507,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         {
           plugin: 'theme-aware-plugin',
           dependency: 'theme-engine',
-          versions: ['2.1.0'], // Regular dependency
+          versions: ['2.1.0'] // Regular dependency
         }
       ];
 
@@ -743,7 +743,7 @@ describe('Epic 24.2 - Dependency Resolver Unit Tests', () => {
         dependencies: {
           'valid-dep': '^1.0.0',
           'invalid-dep': 'not-a-version', // Invalid version spec
-          '': '1.0.0', // Empty dependency name
+          '': '1.0.0' // Empty dependency name
         }
       };
 

@@ -432,7 +432,7 @@ export class ComplianceBaselineTracker {
 
       const averageScore = frameworkBaselines.length > 0 ? totalScore / frameworkBaselines.length : 0;
       const status = averageScore >= 90 ? 'healthy' : 
-                    averageScore >= 70 ? 'warning' : 'critical';
+        averageScore >= 70 ? 'warning' : 'critical';
 
       frameworkHealth[framework] = {
         score: Math.round(averageScore),
@@ -611,56 +611,56 @@ export class ComplianceBaselineTracker {
     const lastMeasurement = measurements[measurements.length - 1];
 
     switch (trend) {
-      case 'critical':
-        recommendations.push(`Immediate action required: ${baseline.name} shows critical deviations`);
-        recommendations.push('Engage incident response team and compliance officer');
-        recommendations.push('Review and update security controls immediately');
-        break;
+    case 'critical':
+      recommendations.push(`Immediate action required: ${baseline.name} shows critical deviations`);
+      recommendations.push('Engage incident response team and compliance officer');
+      recommendations.push('Review and update security controls immediately');
+      break;
 
-      case 'declining':
-        recommendations.push(`Address declining trend in ${baseline.name}`);
-        recommendations.push('Investigate root causes of performance degradation');
-        recommendations.push('Consider adjusting baseline targets if industry standards have changed');
-        break;
+    case 'declining':
+      recommendations.push(`Address declining trend in ${baseline.name}`);
+      recommendations.push('Investigate root causes of performance degradation');
+      recommendations.push('Consider adjusting baseline targets if industry standards have changed');
+      break;
 
-      case 'stable':
-        if (lastMeasurement.status === 'below_baseline') {
-          recommendations.push(`Optimize ${baseline.name} to exceed baseline targets`);
-          recommendations.push('Implement continuous improvement initiatives');
-        } else {
-          recommendations.push(`Maintain current performance levels for ${baseline.name}`);
-        }
-        break;
+    case 'stable':
+      if (lastMeasurement.status === 'below_baseline') {
+        recommendations.push(`Optimize ${baseline.name} to exceed baseline targets`);
+        recommendations.push('Implement continuous improvement initiatives');
+      } else {
+        recommendations.push(`Maintain current performance levels for ${baseline.name}`);
+      }
+      break;
 
-      case 'improving':
-        recommendations.push(`Continue positive momentum for ${baseline.name}`);
-        recommendations.push('Document successful practices for replication');
-        recommendations.push('Consider raising baseline targets to drive further improvement');
-        break;
+    case 'improving':
+      recommendations.push(`Continue positive momentum for ${baseline.name}`);
+      recommendations.push('Document successful practices for replication');
+      recommendations.push('Consider raising baseline targets to drive further improvement');
+      break;
     }
 
     // Framework-specific recommendations
     switch (baseline.framework) {
-      case 'GDPR':
-        if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
-          recommendations.push('Review data processing activities and consent mechanisms');
-          recommendations.push('Audit data retention and deletion procedures');
-        }
-        break;
+    case 'GDPR':
+      if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
+        recommendations.push('Review data processing activities and consent mechanisms');
+        recommendations.push('Audit data retention and deletion procedures');
+      }
+      break;
 
-      case 'SOC2':
-        if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
-          recommendations.push('Review access controls and audit logging mechanisms');
-          recommendations.push('Validate security monitoring and incident response procedures');
-        }
-        break;
+    case 'SOC2':
+      if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
+        recommendations.push('Review access controls and audit logging mechanisms');
+        recommendations.push('Validate security monitoring and incident response procedures');
+      }
+      break;
 
-      case 'MPA':
-        if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
-          recommendations.push('Strengthen content encryption and access tracking');
-          recommendations.push('Review pre-release content handling procedures');
-        }
-        break;
+    case 'MPA':
+      if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
+        recommendations.push('Strengthen content encryption and access tracking');
+        recommendations.push('Review pre-release content handling procedures');
+      }
+      break;
     }
 
     return recommendations.slice(0, 5); // Limit to top 5 recommendations
@@ -673,9 +673,9 @@ export class ComplianceBaselineTracker {
         const gap = Math.abs(trend.lastMeasurement.deviation);
         const impact = gap > 20 ? 'high' : gap > 10 ? 'medium' : 'low';
         const difficulty: 'low' | 'medium' | 'high' = trend.framework === 'GDPR' ? 'high' : 
-                          trend.framework === 'SOC2' ? 'medium' : 'low';
+          trend.framework === 'SOC2' ? 'medium' : 'low';
         const timeframe = difficulty === 'high' ? '3-6 months' : 
-                         difficulty === 'medium' ? '1-3 months' : '2-4 weeks';
+          difficulty === 'medium' ? '1-3 months' : '2-4 weeks';
 
         return {
           baselineId: trend.baselineId,
@@ -711,11 +711,11 @@ export class ComplianceBaselineTracker {
 
   private getUnitSymbol(unit: ComplianceBaseline['measurementUnit']): string {
     switch (unit) {
-      case 'percentage': return '%';
-      case 'time': return 'h';
-      case 'count': return '';
-      case 'score': return '/100';
-      default: return '';
+    case 'percentage': return '%';
+    case 'time': return 'h';
+    case 'count': return '';
+    case 'score': return '/100';
+    default: return '';
     }
   }
 }

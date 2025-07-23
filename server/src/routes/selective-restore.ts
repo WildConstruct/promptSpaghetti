@@ -354,18 +354,18 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
       
       // Adjust based on restore scope and strategy
       switch (restore_scope) {
-        case 'schema_only':
-          estimatedDuration *= 0.3;
-          break;
-        case 'data_only':
-          estimatedDuration *= 1.2;
-          break;
-        case 'record_level':
-          estimatedDuration *= 1.5;
-          break;
-        case 'full_database':
-          estimatedDuration *= 1.3;
-          break;
+      case 'schema_only':
+        estimatedDuration *= 0.3;
+        break;
+      case 'data_only':
+        estimatedDuration *= 1.2;
+        break;
+      case 'record_level':
+        estimatedDuration *= 1.5;
+        break;
+      case 'full_database':
+        estimatedDuration *= 1.3;
+        break;
       }
       
       // Generate warnings and recommendations

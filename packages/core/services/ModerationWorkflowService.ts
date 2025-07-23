@@ -918,23 +918,23 @@ export class ModerationWorkflowService {
     try {
       // Execute step based on type
       switch (step.type) {
-        case 'automation':
-          await this.executeAutomationStep(execution, step, stepExecution);
-          break;
-        case 'review':
-          await this.executeReviewStep(execution, step, stepExecution);
-          break;
-        case 'validation':
-          await this.executeValidationStep(execution, step, stepExecution);
-          break;
-        case 'approval':
-          await this.executeApprovalStep(execution, step, stepExecution);
-          break;
-        case 'notification':
-          await this.executeNotificationStep(execution, step, stepExecution);
-          break;
-        default:
-          await this.executeCustomStep(execution, step, stepExecution);
+      case 'automation':
+        await this.executeAutomationStep(execution, step, stepExecution);
+        break;
+      case 'review':
+        await this.executeReviewStep(execution, step, stepExecution);
+        break;
+      case 'validation':
+        await this.executeValidationStep(execution, step, stepExecution);
+        break;
+      case 'approval':
+        await this.executeApprovalStep(execution, step, stepExecution);
+        break;
+      case 'notification':
+        await this.executeNotificationStep(execution, step, stepExecution);
+        break;
+      default:
+        await this.executeCustomStep(execution, step, stepExecution);
       }
 
       stepExecution.completedAt = new Date();
@@ -1152,25 +1152,25 @@ export class ModerationWorkflowService {
   private validateWorkflowConditions(workflow: ModerationWorkflow, item: ModerationItem): boolean {
     return workflow.conditions.every(condition => {
       switch (condition.type) {
-        case 'content_type':
-          return this.evaluateCondition(item.type, condition);
-        case 'category':
-          return this.evaluateCondition(item.category, condition);
-        case 'severity_level':
-          return this.evaluateCondition(item.severity, condition);
-        default:
-          return true;
+      case 'content_type':
+        return this.evaluateCondition(item.type, condition);
+      case 'category':
+        return this.evaluateCondition(item.category, condition);
+      case 'severity_level':
+        return this.evaluateCondition(item.severity, condition);
+      default:
+        return true;
       }
     });
   }
 
   private evaluateCondition(value: any, condition: WorkflowCondition): boolean {
     switch (condition.operator) {
-      case 'equals': return value === condition.value;
-      case 'not_equals': return value !== condition.value;
-      case 'contains': return String(value).includes(String(condition.value));
-      case 'in': return Array.isArray(condition.value) && condition.value.includes(value);
-      default: return true;
+    case 'equals': return value === condition.value;
+    case 'not_equals': return value !== condition.value;
+    case 'contains': return String(value).includes(String(condition.value));
+    case 'in': return Array.isArray(condition.value) && condition.value.includes(value);
+    default: return true;
     }
   }
 

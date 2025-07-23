@@ -245,20 +245,20 @@ export async function registerActivityHistoryRoutes(
       } else {
         end = new Date();
         switch (period) {
-          case 'day':
-            start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
-            break;
-          case 'week':
-            start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
-            break;
-          case 'month':
-            start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
-            break;
-          case 'year':
-            start = new Date(end.getTime() - 365 * 24 * 60 * 60 * 1000);
-            break;
-          default:
-            start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000); // Default to week
+        case 'day':
+          start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+          break;
+        case 'week':
+          start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        case 'month':
+          start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
+          break;
+        case 'year':
+          start = new Date(end.getTime() - 365 * 24 * 60 * 60 * 1000);
+          break;
+        default:
+          start = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000); // Default to week
         }
       }
 
@@ -321,15 +321,15 @@ export async function registerActivityHistoryRoutes(
       // Set appropriate content type based on format
       let contentType: string;
       switch (exportData.format) {
-        case 'csv':
-          contentType = 'text/csv';
-          break;
-        case 'xml':
-          contentType = 'application/xml';
-          break;
-        case 'json':
-        default:
-          contentType = 'application/json';
+      case 'csv':
+        contentType = 'text/csv';
+        break;
+      case 'xml':
+        contentType = 'application/xml';
+        break;
+      case 'json':
+      default:
+        contentType = 'application/json';
       }
 
       reply.header('Content-Type', contentType);

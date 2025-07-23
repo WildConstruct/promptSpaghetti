@@ -570,18 +570,18 @@ export class LogAnalysisService {
 
       // Process logs based on analysis type
       switch (session.analysis_type) {
-        case 'real_time':
-          await this.processRealTimeLogs(session, rules);
-          break;
-        case 'batch':
-          await this.processBatchLogs(session, rules);
-          break;
-        case 'historical':
-          await this.processHistoricalLogs(session, rules);
-          break;
-        case 'custom':
-          await this.processCustomLogs(session, rules);
-          break;
+      case 'real_time':
+        await this.processRealTimeLogs(session, rules);
+        break;
+      case 'batch':
+        await this.processBatchLogs(session, rules);
+        break;
+      case 'historical':
+        await this.processHistoricalLogs(session, rules);
+        break;
+      case 'custom':
+        await this.processCustomLogs(session, rules);
+        break;
       }
 
       session.status = 'completed';
@@ -693,32 +693,32 @@ export class LogAnalysisService {
 
     // Apply pattern matching based on rule type
     switch (rule.pattern_type) {
-      case 'regex':
-        if (rule.pattern_definition.regex) {
-          const regex = new RegExp(rule.pattern_definition.regex, 'i');
-          return regex.test(log.message);
-        }
-        break;
+    case 'regex':
+      if (rule.pattern_definition.regex) {
+        const regex = new RegExp(rule.pattern_definition.regex, 'i');
+        return regex.test(log.message);
+      }
+      break;
 
-      case 'keyword':
-        if (rule.pattern_definition.keywords) {
-          return rule.pattern_definition.keywords.some(keyword =>
-            log.message.toLowerCase().includes(keyword.toLowerCase())
-          );
-        }
-        break;
+    case 'keyword':
+      if (rule.pattern_definition.keywords) {
+        return rule.pattern_definition.keywords.some(keyword =>
+          log.message.toLowerCase().includes(keyword.toLowerCase())
+        );
+      }
+      break;
 
-      case 'statistical':
-        // Implementation for statistical pattern matching
-        return await this.checkStatisticalPattern(rule, log);
+    case 'statistical':
+      // Implementation for statistical pattern matching
+      return await this.checkStatisticalPattern(rule, log);
 
-      case 'ml_based':
-        // Implementation for ML-based pattern matching
-        return await this.checkMLPattern(rule, log);
+    case 'ml_based':
+      // Implementation for ML-based pattern matching
+      return await this.checkMLPattern(rule, log);
 
-      case 'custom':
-        // Implementation for custom pattern matching
-        return await this.checkCustomPattern(rule, log);
+    case 'custom':
+      // Implementation for custom pattern matching
+      return await this.checkCustomPattern(rule, log);
     }
 
     return false;
@@ -1176,7 +1176,7 @@ export class LogAnalysisService {
   }> {
     // Get active sessions count
     const sessionsResult = await this.db.query(
-      "SELECT COUNT(*) FROM log_analysis_sessions WHERE status = 'processing'"
+      'SELECT COUNT(*) FROM log_analysis_sessions WHERE status = \'processing\''
     );
     const active_sessions = parseInt(sessionsResult.rows[0].count);
 
@@ -1189,7 +1189,7 @@ export class LogAnalysisService {
 
     // Get alert backlog
     const alertsResult = await this.db.query(
-      "SELECT COUNT(*) FROM log_analysis_alerts WHERE status = 'new'"
+      'SELECT COUNT(*) FROM log_analysis_alerts WHERE status = \'new\''
     );
     const alert_backlog = parseInt(alertsResult.rows[0].count);
 

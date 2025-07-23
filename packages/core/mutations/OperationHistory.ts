@@ -228,72 +228,72 @@ export class OperationHistory {
   
   private generateDescription(operation: GraphOperation): string {
     switch (operation.type) {
-      case OperationType.NODE_ADD:
-        const addOp = operation as NodeAddOperation;
-        const nodeType = (addOp.payload.node.data as any).nodeType || 'node';
-        return `Add ${nodeType}`;
+    case OperationType.NODE_ADD:
+      const addOp = operation as NodeAddOperation;
+      const nodeType = (addOp.payload.node.data as any).nodeType || 'node';
+      return `Add ${nodeType}`;
         
-      case OperationType.NODE_DELETE:
-        return 'Delete node';
+    case OperationType.NODE_DELETE:
+      return 'Delete node';
         
-      case OperationType.NODE_UPDATE:
-        const updateOp = operation as NodeUpdateOperation;
-        const updateKeys = Object.keys(updateOp.payload.updates);
-        return `Update ${updateKeys.join(', ')}`;
+    case OperationType.NODE_UPDATE:
+      const updateOp = operation as NodeUpdateOperation;
+      const updateKeys = Object.keys(updateOp.payload.updates);
+      return `Update ${updateKeys.join(', ')}`;
         
-      case OperationType.NODE_MOVE:
-        return 'Move node';
+    case OperationType.NODE_MOVE:
+      return 'Move node';
         
-      case OperationType.NODE_DUPLICATE:
-        return 'Duplicate node';
+    case OperationType.NODE_DUPLICATE:
+      return 'Duplicate node';
         
-      case OperationType.EDGE_ADD:
-        return 'Add connection';
+    case OperationType.EDGE_ADD:
+      return 'Add connection';
         
-      case OperationType.EDGE_DELETE:
-        return 'Remove connection';
+    case OperationType.EDGE_DELETE:
+      return 'Remove connection';
         
-      case OperationType.EDGE_UPDATE:
-        return 'Update connection';
+    case OperationType.EDGE_UPDATE:
+      return 'Update connection';
         
-      case OperationType.VARIATION_ADD:
-        return 'Add variation';
+    case OperationType.VARIATION_ADD:
+      return 'Add variation';
         
-      case OperationType.VARIATION_DELETE:
-        return 'Remove variation';
+    case OperationType.VARIATION_DELETE:
+      return 'Remove variation';
         
-      case OperationType.VARIATION_UPDATE:
-        return 'Update variation';
+    case OperationType.VARIATION_UPDATE:
+      return 'Update variation';
         
-      case OperationType.VARIATION_REORDER:
-        return 'Reorder variations';
+    case OperationType.VARIATION_REORDER:
+      return 'Reorder variations';
         
-      case OperationType.BATCH_OPERATION:
-        return 'Batch operation';
+    case OperationType.BATCH_OPERATION:
+      return 'Batch operation';
         
-      case OperationType.GRAPH_CLEAR:
-        return 'Clear graph';
+    case OperationType.GRAPH_CLEAR:
+      return 'Clear graph';
         
-      case OperationType.GRAPH_IMPORT:
-        return 'Import graph';
+    case OperationType.GRAPH_IMPORT:
+      return 'Import graph';
         
-      case OperationType.GRAPH_MERGE:
-        return 'Merge graph';
+    case OperationType.GRAPH_MERGE:
+      return 'Merge graph';
         
-      default:
-        return 'Unknown operation';
+    default:
+      return 'Unknown operation';
     }
   }
   
   private canCreateInverseOperation(operation: GraphOperation): boolean {
     // Some operations cannot be easily reversed
     switch (operation.type) {
-      case OperationType.GRAPH_CLEAR:
-        return true; // We have snapshot
-      case OperationType.GRAPH_IMPORT:
-        return true; // We have previous state
-      default:
-        return true; // Most operations can be reversed
+    case OperationType.GRAPH_CLEAR:
+      return true; // We have snapshot
+    case OperationType.GRAPH_IMPORT:
+      return true; // We have previous state
+    default:
+      return true; // Most operations can be reversed
     }
   }
   
@@ -305,38 +305,38 @@ export class OperationHistory {
     const inverseTimestamp = new Date();
     
     switch (operation.type) {
-      case OperationType.NODE_ADD:
-        return this.createNodeDeleteInverse(operation as NodeAddOperation, inverseId, inverseTimestamp);
+    case OperationType.NODE_ADD:
+      return this.createNodeDeleteInverse(operation as NodeAddOperation, inverseId, inverseTimestamp);
         
-      case OperationType.NODE_DELETE:
-        return this.createNodeAddInverse(operation as NodeDeleteOperation, inverseId, inverseTimestamp);
+    case OperationType.NODE_DELETE:
+      return this.createNodeAddInverse(operation as NodeDeleteOperation, inverseId, inverseTimestamp);
         
-      case OperationType.NODE_UPDATE:
-        return this.createNodeUpdateInverse(operation as NodeUpdateOperation, inverseId, inverseTimestamp);
+    case OperationType.NODE_UPDATE:
+      return this.createNodeUpdateInverse(operation as NodeUpdateOperation, inverseId, inverseTimestamp);
         
-      case OperationType.NODE_MOVE:
-        return this.createNodeMoveInverse(operation as NodeMoveOperation, inverseId, inverseTimestamp);
+    case OperationType.NODE_MOVE:
+      return this.createNodeMoveInverse(operation as NodeMoveOperation, inverseId, inverseTimestamp);
         
-      case OperationType.EDGE_ADD:
-        return this.createEdgeDeleteInverse(operation as EdgeAddOperation, inverseId, inverseTimestamp);
+    case OperationType.EDGE_ADD:
+      return this.createEdgeDeleteInverse(operation as EdgeAddOperation, inverseId, inverseTimestamp);
         
-      case OperationType.EDGE_DELETE:
-        return this.createEdgeAddInverse(operation as EdgeDeleteOperation, inverseId, inverseTimestamp);
+    case OperationType.EDGE_DELETE:
+      return this.createEdgeAddInverse(operation as EdgeDeleteOperation, inverseId, inverseTimestamp);
         
-      case OperationType.VARIATION_ADD:
-        return this.createVariationDeleteInverse(operation as VariationAddOperation, inverseId, inverseTimestamp);
+    case OperationType.VARIATION_ADD:
+      return this.createVariationDeleteInverse(operation as VariationAddOperation, inverseId, inverseTimestamp);
         
-      case OperationType.VARIATION_DELETE:
-        return this.createVariationAddInverse(operation as VariationDeleteOperation, inverseId, inverseTimestamp);
+    case OperationType.VARIATION_DELETE:
+      return this.createVariationAddInverse(operation as VariationDeleteOperation, inverseId, inverseTimestamp);
         
-      case OperationType.VARIATION_UPDATE:
-        return this.createVariationUpdateInverse(operation as VariationUpdateOperation, inverseId, inverseTimestamp);
+    case OperationType.VARIATION_UPDATE:
+      return this.createVariationUpdateInverse(operation as VariationUpdateOperation, inverseId, inverseTimestamp);
         
-      case OperationType.VARIATION_REORDER:
-        return this.createVariationReorderInverse(operation as VariationReorderOperation, inverseId, inverseTimestamp);
+    case OperationType.VARIATION_REORDER:
+      return this.createVariationReorderInverse(operation as VariationReorderOperation, inverseId, inverseTimestamp);
         
-      default:
-        throw new Error(`Cannot create inverse operation for type: ${operation.type}`);
+    default:
+      throw new Error(`Cannot create inverse operation for type: ${operation.type}`);
     }
   }
   

@@ -691,21 +691,21 @@ export class Epic17AuthorizationService extends EventEmitter {
 
       try {
         switch (condition.type) {
-          case ConditionType.USER_ATTRIBUTE:
-            ({ result, value, reason } = this.evaluateUserAttributeCondition(condition, context));
-            break;
-          case ConditionType.RESOURCE_ATTRIBUTE:
-            ({ result, value, reason } = this.evaluateResourceAttributeCondition(condition, context));
-            break;
-          case ConditionType.TIME_BASED:
-            ({ result, value, reason } = this.evaluateTimeBasedCondition(condition, context));
-            break;
-          case ConditionType.IP_BASED:
-            ({ result, value, reason } = this.evaluateIpBasedCondition(condition, context));
-            break;
-          case ConditionType.CONTEXT_BASED:
-            ({ result, value, reason } = this.evaluateContextBasedCondition(condition, context));
-            break;
+        case ConditionType.USER_ATTRIBUTE:
+          ({ result, value, reason } = this.evaluateUserAttributeCondition(condition, context));
+          break;
+        case ConditionType.RESOURCE_ATTRIBUTE:
+          ({ result, value, reason } = this.evaluateResourceAttributeCondition(condition, context));
+          break;
+        case ConditionType.TIME_BASED:
+          ({ result, value, reason } = this.evaluateTimeBasedCondition(condition, context));
+          break;
+        case ConditionType.IP_BASED:
+          ({ result, value, reason } = this.evaluateIpBasedCondition(condition, context));
+          break;
+        case ConditionType.CONTEXT_BASED:
+          ({ result, value, reason } = this.evaluateContextBasedCondition(condition, context));
+          break;
         }
       } catch (error) {
         result = false;
@@ -796,12 +796,12 @@ export class Epic17AuthorizationService extends EventEmitter {
 
   private checkPermissionScope(permission: Permission, context: AuthorizationContext): boolean {
     switch (permission.scope) {
-      case PermissionScope.GLOBAL:
-        return true;
-      case PermissionScope.SELF:
-        return context.resource?.owner === context.user.id;
-      default:
-        return true; // Other scopes need more complex implementation
+    case PermissionScope.GLOBAL:
+      return true;
+    case PermissionScope.SELF:
+      return context.resource?.owner === context.user.id;
+    default:
+      return true; // Other scopes need more complex implementation
     }
   }
 

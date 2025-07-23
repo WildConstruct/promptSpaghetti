@@ -265,20 +265,20 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     message: any
   ): Promise<void> {
     switch (message.type) {
-      case 'subscribe':
-        await this.handleSubscribeMessage(ws, clientId, message);
-        break;
-      case 'unsubscribe':
-        await this.handleUnsubscribeMessage(clientId, message);
-        break;
-      case 'ping':
-        this.handlePingMessage(ws, clientId);
-        break;
-      case 'update_filters':
-        await this.handleUpdateFiltersMessage(clientId, message);
-        break;
-      default:
-        this.sendWebSocketError(ws, `Unknown message type: ${message.type}`);
+    case 'subscribe':
+      await this.handleSubscribeMessage(ws, clientId, message);
+      break;
+    case 'unsubscribe':
+      await this.handleUnsubscribeMessage(clientId, message);
+      break;
+    case 'ping':
+      this.handlePingMessage(ws, clientId);
+      break;
+    case 'update_filters':
+      await this.handleUpdateFiltersMessage(clientId, message);
+      break;
+    default:
+      this.sendWebSocketError(ws, `Unknown message type: ${message.type}`);
     }
   }
 
@@ -552,31 +552,31 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     const fieldValue = this.getEventFieldValue(event, filter.field);
     
     switch (filter.operator) {
-      case 'eq':
-        return fieldValue === filter.value;
-      case 'ne':
-        return fieldValue !== filter.value;
-      case 'gt':
-        return fieldValue > filter.value;
-      case 'gte':
-        return fieldValue >= filter.value;
-      case 'lt':
-        return fieldValue < filter.value;
-      case 'lte':
-        return fieldValue <= filter.value;
-      case 'contains':
-        const searchValue = filter.caseSensitive ? filter.value : filter.value.toLowerCase();
-        const searchIn = filter.caseSensitive ? fieldValue : (fieldValue || '').toLowerCase();
-        return searchIn.includes(searchValue);
-      case 'regex':
-        const regex = new RegExp(filter.value, filter.caseSensitive ? '' : 'i');
-        return regex.test(fieldValue || '');
-      case 'in':
-        return Array.isArray(filter.value) && filter.value.includes(fieldValue);
-      case 'not_in':
-        return Array.isArray(filter.value) && !filter.value.includes(fieldValue);
-      default:
-        return true;
+    case 'eq':
+      return fieldValue === filter.value;
+    case 'ne':
+      return fieldValue !== filter.value;
+    case 'gt':
+      return fieldValue > filter.value;
+    case 'gte':
+      return fieldValue >= filter.value;
+    case 'lt':
+      return fieldValue < filter.value;
+    case 'lte':
+      return fieldValue <= filter.value;
+    case 'contains':
+      const searchValue = filter.caseSensitive ? filter.value : filter.value.toLowerCase();
+      const searchIn = filter.caseSensitive ? fieldValue : (fieldValue || '').toLowerCase();
+      return searchIn.includes(searchValue);
+    case 'regex':
+      const regex = new RegExp(filter.value, filter.caseSensitive ? '' : 'i');
+      return regex.test(fieldValue || '');
+    case 'in':
+      return Array.isArray(filter.value) && filter.value.includes(fieldValue);
+    case 'not_in':
+      return Array.isArray(filter.value) && !filter.value.includes(fieldValue);
+    default:
+      return true;
     }
   }
 
@@ -640,17 +640,17 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       let success = false;
       
       switch (channel.type) {
-        case 'websocket':
-          success = await this.deliverViaWebSocket(event, channel);
-          break;
-        case 'webhook':
-          success = await this.deliverViaWebhook(event, channel);
-          break;
-        case 'redis':
-          success = await this.deliverViaRedis(event, channel);
-          break;
-        default:
-          throw new Error(`Unsupported channel type: ${channel.type}`);
+      case 'websocket':
+        success = await this.deliverViaWebSocket(event, channel);
+        break;
+      case 'webhook':
+        success = await this.deliverViaWebhook(event, channel);
+        break;
+      case 'redis':
+        success = await this.deliverViaRedis(event, channel);
+        break;
+      default:
+        throw new Error(`Unsupported channel type: ${channel.type}`);
       }
       
       if (success) {
@@ -993,7 +993,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     metrics: StreamMetrics;
     subscriptions: number;
     bufferSize: number;
-  } {
+    } {
     return {
       streamId: this.config.streamId,
       running: this.isRunning,

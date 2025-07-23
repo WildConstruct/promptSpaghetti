@@ -83,8 +83,8 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             135deg,
             var(--bg-tertiary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%)`,
           border: selected 
-            ? `2px solid var(--accent-orange)` 
-            : `1px solid var(--border)`,
+            ? '2px solid var(--accent-orange)' 
+            : '1px solid var(--border)',
           borderRadius: 'var(--radius-md)',
           minWidth: 180, // Slightly larger for professional appearance
           minHeight: 90,
@@ -195,7 +195,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
             lineHeight: 1.3,
             // Subtle glow for selected state
             ...(selected && {
-              textShadow: '0 0 8px var(--accent-orange)40',
+              textShadow: '0 0 8px var(--accent-orange)40'
             })
           }}>
             {data?.label || nodeMeta.label || nodeType || id}
@@ -307,7 +307,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
       <div
         style={{
           cursor: 'pointer',
-          background: `linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%)`,
+          background: 'linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%)',
           border: '1px solid var(--accent-red)',
           borderRadius: 'var(--radius-md)',
           minWidth: 180,
@@ -319,7 +319,7 @@ export const NodeRenderer = memo<NodeRendererProps>(({
           justifyContent: 'center',
           fontFamily: 'var(--font-primary)',
           boxShadow: 'var(--shadow-md)',
-          textAlign: 'center',
+          textAlign: 'center'
         }}
       >
         <div>

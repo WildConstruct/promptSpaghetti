@@ -271,7 +271,7 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
     memoryOptimization: true,
     precompilation: false,
     performanceMonitoring: true,
-    debugMode: false,
+    debugMode: false
   });
   
   // Graph store for project management
@@ -763,224 +763,224 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
       }}
     >
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <RestorePrompt
-        show={showRestorePrompt}
-        draft={restoreDraft}
-        onRestore={(nodes, edges) => {
-          setNodes(nodes);
-          setEdges(edges);
-          setShowRestorePrompt(false);
-          setStatusMessage('Draft Restored');
-          setTimeout(() => setStatusMessage(''), 3000);
-        }}
-        onDismiss={() => {
-          setShowRestorePrompt(false);
-          localStorage.removeItem('graphDraft');
-        }}
-      />
-      <div style={{ display: 'flex', height: '100%' }}>
-        <Palette
-          nodes={NODE_TYPES}
-          collapsed={paletteCollapsed}
-          onToggle={() => setPaletteCollapsed((c) => !c)}
-          onDragStart={handlePaletteDragStart}
+        <RestorePrompt
+          show={showRestorePrompt}
+          draft={restoreDraft}
+          onRestore={(nodes, edges) => {
+            setNodes(nodes);
+            setEdges(edges);
+            setShowRestorePrompt(false);
+            setStatusMessage('Draft Restored');
+            setTimeout(() => setStatusMessage(''), 3000);
+          }}
+          onDismiss={() => {
+            setShowRestorePrompt(false);
+            localStorage.removeItem('graphDraft');
+          }}
         />
-        <div 
-          ref={canvasRef}
-          style={{ flex: 1, position: 'relative', overflow: 'visible' }} 
-          data-testid="react-flow-canvas-wrapper"
-        >
-          <ReactFlow
-            nodes={styledNodes}
-            edges={styledEdges}
-            data-testid="react-flow-canvas"
-            onNodesChange={(changes) => {
-              lastChangeRef.current = Date.now();
-              onNodesChange(changes);
-            }}
-            onEdgesChange={(changes) => {
-              lastChangeRef.current = Date.now();
-              onEdgesChange(changes);
-            }}
-            onConnect={onConnect}
-            onNodeClick={onNodeClick}
-            fitView
-            style={{ background: '#1a202c', height: '100%' }}
-            nodeTypes={nodeTypes}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-            // Node interaction
-            elementsSelectable={true}
-            // Professional 3D-style mouse controls with performance optimization
-            panOnScroll={false} // Disable scroll to pan
-            zoomOnScroll={true} // Enable scroll to zoom (standard 3D behavior)
-            panOnDrag={[1, 2]} // Pan with left or middle mouse button
-            selectionOnDrag={nodes.length < 100} // Disable box selection for large graphs
-            zoomOnDoubleClick={false} // Disable double-click zoom
-            // Performance optimizations
-            nodesDraggable={nodes.length < 150}
-            nodesConnectable={nodes.length < 200}
-            snapToGrid={viewport.zoom > 0.6}
-            snapGrid={[16, 16]}
-            // Keyboard shortcuts - completely disable all keyboard handling
-            deleteKeyCode={null} // Disable delete key completely
-            multiSelectionKeyCode={null} // Disable multi-selection
-            zoomActivationKeyCode={null} // Disable zoom activation
-            // Disable all keyboard event capturing
-            onKeyDown={(e) => {
+        <div style={{ display: 'flex', height: '100%' }}>
+          <Palette
+            nodes={NODE_TYPES}
+            collapsed={paletteCollapsed}
+            onToggle={() => setPaletteCollapsed((c) => !c)}
+            onDragStart={handlePaletteDragStart}
+          />
+          <div 
+            ref={canvasRef}
+            style={{ flex: 1, position: 'relative', overflow: 'visible' }} 
+            data-testid="react-flow-canvas-wrapper"
+          >
+            <ReactFlow
+              nodes={styledNodes}
+              edges={styledEdges}
+              data-testid="react-flow-canvas"
+              onNodesChange={(changes) => {
+                lastChangeRef.current = Date.now();
+                onNodesChange(changes);
+              }}
+              onEdgesChange={(changes) => {
+                lastChangeRef.current = Date.now();
+                onEdgesChange(changes);
+              }}
+              onConnect={onConnect}
+              onNodeClick={onNodeClick}
+              fitView
+              style={{ background: '#1a202c', height: '100%' }}
+              nodeTypes={nodeTypes}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              // Node interaction
+              elementsSelectable={true}
+              // Professional 3D-style mouse controls with performance optimization
+              panOnScroll={false} // Disable scroll to pan
+              zoomOnScroll={true} // Enable scroll to zoom (standard 3D behavior)
+              panOnDrag={[1, 2]} // Pan with left or middle mouse button
+              selectionOnDrag={nodes.length < 100} // Disable box selection for large graphs
+              zoomOnDoubleClick={false} // Disable double-click zoom
+              // Performance optimizations
+              nodesDraggable={nodes.length < 150}
+              nodesConnectable={nodes.length < 200}
+              snapToGrid={viewport.zoom > 0.6}
+              snapGrid={[16, 16]}
+              // Keyboard shortcuts - completely disable all keyboard handling
+              deleteKeyCode={null} // Disable delete key completely
+              multiSelectionKeyCode={null} // Disable multi-selection
+              zoomActivationKeyCode={null} // Disable zoom activation
+              // Disable all keyboard event capturing
+              onKeyDown={(e) => {
               // Check if the event target is inside an input or textarea
-              const target = e.target as HTMLElement;
-              const isFormElement = target.tagName === 'INPUT' ||
+                const target = e.target as HTMLElement;
+                const isFormElement = target.tagName === 'INPUT' ||
                 target.tagName === 'TEXTAREA' ||
                 target.tagName === 'SELECT';
-              const isInInspector = target.closest('aside') !== null;
+                const isInInspector = target.closest('aside') !== null;
                 
-              if (isFormElement || isInInspector) {
+                if (isFormElement || isInInspector) {
                 // Don't capture keyboard events for form elements or inspector
-                return;
-              }
+                  return;
+                }
                 
-              // Only handle keyboard events for canvas interaction
-              e.stopPropagation();
-            }}
-            // Professional connection styling with performance optimization
-            connectionLineStyle={{ 
-              stroke: isPerformanceGood ? '#ff7c00' : '#4a5568', 
-              strokeWidth: isPerformanceGood ? 3 : 2,
-              filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none'
-            }}
-            connectionLineType={viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight}
-            // Dynamic edge options based on performance
-            defaultEdgeOptions={{
-              type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
-              style: { 
-                stroke: isPerformanceGood ? '#ff7c00' : '#666', 
-                strokeWidth: isPerformanceGood ? 2.5 : 2,
-                filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none'
-              },
-              markerEnd: { 
-                type: 'arrow', 
-                color: isPerformanceGood ? '#ff7c00' : '#666',
-                width: isPerformanceGood ? 16 : 12,
-                height: isPerformanceGood ? 16 : 12
-              }
-            }}
-            // Professional zoom/pan settings with smooth transitions
-            minZoom={0.05}
-            maxZoom={6}
-            defaultViewport={{ x: 0, y: 0, zoom: 1 }}
-            // Smooth zoom and pan transitions
-            translateExtent={[[-2000, -2000], [4000, 4000]]}
-            nodeExtent={[[-1500, -1500], [3000, 3000]]}
-            // Performance-aware rendering
-            {...optimizer.getOptimizedRenderSettings(nodes.length, viewport.zoom)}
-          >
-            <Background 
-            color="#2d3748" 
-            gap={viewport.zoom > 0.8 ? 16 : viewport.zoom > 0.4 ? 24 : 32}
-            size={viewport.zoom > 0.8 ? 1 : viewport.zoom > 0.4 ? 1.5 : 2}
-          />
-          {nodes.length < 200 && (
-            <MiniMap 
-              nodeColor={() => isPerformanceGood ? '#ff7c00' : '#363a45'} 
-              maskColor="#181b21BB"
-              style={{
-                backgroundColor: 'rgba(31, 41, 55, 0.8)',
-                border: '1px solid rgba(55, 65, 81, 0.6)'
+                // Only handle keyboard events for canvas interaction
+                e.stopPropagation();
               }}
-            />
-          )}
-          <Controls 
-            style={{
-              button: {
-                backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                border: '1px solid rgba(55, 65, 81, 0.6)',
-                color: '#e5e7eb'
-              }
-            }}
-          />
-          </ReactFlow>
+              // Professional connection styling with performance optimization
+              connectionLineStyle={{ 
+                stroke: isPerformanceGood ? '#ff7c00' : '#4a5568', 
+                strokeWidth: isPerformanceGood ? 3 : 2,
+                filter: isPerformanceGood ? 'drop-shadow(0 0 6px rgba(255, 124, 0, 0.3))' : 'none'
+              }}
+              connectionLineType={viewport.zoom > 0.5 ? ConnectionLineType.SmoothStep : ConnectionLineType.Straight}
+              // Dynamic edge options based on performance
+              defaultEdgeOptions={{
+                type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
+                style: { 
+                  stroke: isPerformanceGood ? '#ff7c00' : '#666', 
+                  strokeWidth: isPerformanceGood ? 2.5 : 2,
+                  filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none'
+                },
+                markerEnd: { 
+                  type: 'arrow', 
+                  color: isPerformanceGood ? '#ff7c00' : '#666',
+                  width: isPerformanceGood ? 16 : 12,
+                  height: isPerformanceGood ? 16 : 12
+                }
+              }}
+              // Professional zoom/pan settings with smooth transitions
+              minZoom={0.05}
+              maxZoom={6}
+              defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+              // Smooth zoom and pan transitions
+              translateExtent={[[-2000, -2000], [4000, 4000]]}
+              nodeExtent={[[-1500, -1500], [3000, 3000]]}
+              // Performance-aware rendering
+              {...optimizer.getOptimizedRenderSettings(nodes.length, viewport.zoom)}
+            >
+              <Background 
+                color="#2d3748" 
+                gap={viewport.zoom > 0.8 ? 16 : viewport.zoom > 0.4 ? 24 : 32}
+                size={viewport.zoom > 0.8 ? 1 : viewport.zoom > 0.4 ? 1.5 : 2}
+              />
+              {nodes.length < 200 && (
+                <MiniMap 
+                  nodeColor={() => isPerformanceGood ? '#ff7c00' : '#363a45'} 
+                  maskColor="#181b21BB"
+                  style={{
+                    backgroundColor: 'rgba(31, 41, 55, 0.8)',
+                    border: '1px solid rgba(55, 65, 81, 0.6)'
+                  }}
+                />
+              )}
+              <Controls 
+                style={{
+                  button: {
+                    backgroundColor: 'rgba(31, 41, 55, 0.9)',
+                    border: '1px solid rgba(55, 65, 81, 0.6)',
+                    color: '#e5e7eb'
+                  }
+                }}
+              />
+            </ReactFlow>
 
-          {/* Epic 8.7: Sticky Notes Collaboration System */}
-          <StickyNotesManager
-            disabled={false}
-            readonly={false}
-          />
+            {/* Epic 8.7: Sticky Notes Collaboration System */}
+            <StickyNotesManager
+              disabled={false}
+              readonly={false}
+            />
             
-          {/* Mouse Controls Help Overlay */}
-          <div style={{
-            position: 'absolute',
-            bottom: 10,
-            right: 10,
-            background: 'rgba(42, 42, 42, 0.9)',
-            border: '1px solid #444',
-            borderRadius: 4,
-            padding: 8,
-            fontSize: 11,
-            color: '#a0aec0',
-            cursor: 'pointer',
-            userSelect: 'none'
-          }}
-          onClick={() => setShowControls(!showControls)}
-          >
-            <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>
+            {/* Mouse Controls Help Overlay */}
+            <div style={{
+              position: 'absolute',
+              bottom: 10,
+              right: 10,
+              background: 'rgba(42, 42, 42, 0.9)',
+              border: '1px solid #444',
+              borderRadius: 4,
+              padding: 8,
+              fontSize: 11,
+              color: '#a0aec0',
+              cursor: 'pointer',
+              userSelect: 'none'
+            }}
+            onClick={() => setShowControls(!showControls)}
+            >
+              <div style={{ fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>
                 🖱️ Controls {showControls ? '▼' : '▶'}
+              </div>
+              {showControls && (
+                <div style={{ marginTop: 8, lineHeight: 1.6 }}>
+                  <div><b>Pan:</b> Left-click + drag on canvas</div>
+                  <div><b>Zoom:</b> Mouse wheel / trackpad scroll</div>
+                  <div><b>Select:</b> Click node</div>
+                  <div><b>Multi-select:</b> Shift/Ctrl + Click</div>
+                  <div><b>Connect:</b> Drag from output port</div>
+                  <div><b>Delete:</b> Select + Delete/Backspace</div>
+                  <div><b>Alternative Pan:</b> Middle-click + drag</div>
+                </div>
+              )}
             </div>
-            {showControls && (
-              <div style={{ marginTop: 8, lineHeight: 1.6 }}>
-                <div><b>Pan:</b> Left-click + drag on canvas</div>
-                <div><b>Zoom:</b> Mouse wheel / trackpad scroll</div>
-                <div><b>Select:</b> Click node</div>
-                <div><b>Multi-select:</b> Shift/Ctrl + Click</div>
-                <div><b>Connect:</b> Drag from output port</div>
-                <div><b>Delete:</b> Select + Delete/Backspace</div>
-                <div><b>Alternative Pan:</b> Middle-click + drag</div>
+          </div>
+        
+          {/* Smooth Panel Transition Container */}
+          <div 
+            style={{
+              transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+              width: selectedNode ? 320 : 0,
+              opacity: selectedNode ? 1 : 0,
+              overflow: 'hidden',
+              borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none'
+            }}
+          >
+            {selectedNode && (
+              <div
+                style={{
+                  transform: selectedNode ? 'translateX(0)' : 'translateX(100%)',
+                  transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                  width: 320,
+                  height: '100%'
+                }}
+              >
+                {isPerformanceGood ? (
+                  <SmoothInspectorPanel
+                    node={selectedNode}
+                    schema={selectedSchema}
+                    onChange={handleInspectorChange}
+                    onGlobalPreviewRequest={handleGlobalPreviewRequest}
+                  />
+                ) : (
+                  <InspectorPanel
+                    node={selectedNode}
+                    schema={selectedSchema}
+                    onChange={handleInspectorChange}
+                    onGlobalPreviewRequest={handleGlobalPreviewRequest}
+                  />
+                )}
               </div>
             )}
           </div>
         </div>
-        
-        {/* Smooth Panel Transition Container */}
-        <div 
-          style={{
-            transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
-            width: selectedNode ? 320 : 0,
-            opacity: selectedNode ? 1 : 0,
-            overflow: 'hidden',
-            borderLeft: selectedNode ? '1px solid rgba(55, 65, 81, 0.6)' : 'none'
-          }}
-        >
-          {selectedNode && (
-            <div
-              style={{
-                transform: selectedNode ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                width: 320,
-                height: '100%'
-              }}
-            >
-              {isPerformanceGood ? (
-                <SmoothInspectorPanel
-                  node={selectedNode}
-                  schema={selectedSchema}
-                  onChange={handleInspectorChange}
-                  onGlobalPreviewRequest={handleGlobalPreviewRequest}
-                />
-              ) : (
-                <InspectorPanel
-                  node={selectedNode}
-                  schema={selectedSchema}
-                  onChange={handleInspectorChange}
-                  onGlobalPreviewRequest={handleGlobalPreviewRequest}
-                />
-              )}
-            </div>
-          )}
-        </div>
-      </div>
       
-      {/* Professional CSS Transitions and Animations */}
-      <style>{`
+        {/* Professional CSS Transitions and Animations */}
+        <style>{`
         .react-flow__node {
           transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
                      box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
@@ -1069,21 +1069,68 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
         }
       `}</style>
       
-      {/* Epic 8.3 - Director Preview Toolbar Integration */}
-      <DirectorPreviewToolbar
-        nodes={nodes}
-        edges={edges}
-        isPreviewOpen={previewOpen}
-        onPreviewToggle={() => {
-          if (previewOpen) {
-            setPreviewOpen(false);
-          } else {
+        {/* Epic 8.3 - Director Preview Toolbar Integration */}
+        <DirectorPreviewToolbar
+          nodes={nodes}
+          edges={edges}
+          isPreviewOpen={previewOpen}
+          onPreviewToggle={() => {
+            if (previewOpen) {
+              setPreviewOpen(false);
+            } else {
+              const now = Date.now();
+              const sinceChange = now - lastChangeRef.current;
+              const run = () => {
+                runPreview({ nodes, edges });
+                setPreviewOpen(true);
+              
+                // Track progress for contextual help system
+                helpContentManager.updateProgress('previewsGenerated', 1);
+              };
+              if (sinceChange < 500) {
+                if (previewTimeoutRef.current) clearTimeout(previewTimeoutRef.current);
+                previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
+              } else {
+                run();
+              }
+            }
+          }}
+          onHighlightPath={(nodeIds, edgeIds) => {
+          // Highlight execution path on the canvas
+            setHighlightNodeIds(new Set(nodeIds));
+            setHighlightEdgeIds(new Set(edgeIds));
+          }}
+        />
+
+        {/* Epic 8.4 - Contextual Help System Integration */}
+        <ContextualHelpSystem
+          nodes={nodes}
+          edges={edges}
+          selectedNodeId={selectedNodeId}
+          selectedEdgeId={selectedEdgeId}
+          userLevel="beginner" // This could be dynamic based on user profile
+          enabled={true}
+          autoTrigger={true}
+          showProgressiveHints={true}
+          onHelpContentViewed={(contentId) => {
+            helpContentManager.markContentViewed(contentId);
+          }}
+          onUserLevelChange={(level) => {
+            console.log('User level changed to:', level);
+          // Could integrate with user profile management
+          }}
+        />
+
+        <StatusBar
+          statusMessage={statusMessage}
+          errors={errors}
+          onPreview={() => {
             const now = Date.now();
             const sinceChange = now - lastChangeRef.current;
             const run = () => {
               runPreview({ nodes, edges });
               setPreviewOpen(true);
-              
+            
               // Track progress for contextual help system
               helpContentManager.updateProgress('previewsGenerated', 1);
             };
@@ -1093,346 +1140,299 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({
             } else {
               run();
             }
-          }
-        }}
-        onHighlightPath={(nodeIds, edgeIds) => {
-          // Highlight execution path on the canvas
-          setHighlightNodeIds(new Set(nodeIds));
-          setHighlightEdgeIds(new Set(edgeIds));
-        }}
-      />
-
-      {/* Epic 8.4 - Contextual Help System Integration */}
-      <ContextualHelpSystem
-        nodes={nodes}
-        edges={edges}
-        selectedNodeId={selectedNodeId}
-        selectedEdgeId={selectedEdgeId}
-        userLevel="beginner" // This could be dynamic based on user profile
-        enabled={true}
-        autoTrigger={true}
-        showProgressiveHints={true}
-        onHelpContentViewed={(contentId) => {
-          helpContentManager.markContentViewed(contentId);
-        }}
-        onUserLevelChange={(level) => {
-          console.log('User level changed to:', level);
-          // Could integrate with user profile management
-        }}
-      />
-
-      <StatusBar
-        statusMessage={statusMessage}
-        errors={errors}
-        onPreview={() => {
-          const now = Date.now();
-          const sinceChange = now - lastChangeRef.current;
-          const run = () => {
-            runPreview({ nodes, edges });
-            setPreviewOpen(true);
-            
-            // Track progress for contextual help system
-            helpContentManager.updateProgress('previewsGenerated', 1);
-          };
-          if (sinceChange < 500) {
-            if (previewTimeoutRef.current) clearTimeout(previewTimeoutRef.current);
-            previewTimeoutRef.current = setTimeout(run, 500 - sinceChange);
-          } else {
-            run();
-          }
-        }}
-        onSaveJson={() => {
-          const blob = new Blob([
-            JSON.stringify({ nodes, edges }, null, 2)
-          ], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'graph.json';
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-          }, 0);
-        }}
-        onExportBundle={handleExportBundle}
-        onSaveProject={handleSaveProject}
-        onLoadProject={handleLoadProject}
-        onNewProject={handleNewProject}
-        hasUnsavedChanges={hasUnsavedChanges}
-        currentProjectName={currentProject?.name}
-        onCorrections={() => setCorrectionsOpen(true)}
-        correctionsEnabled={correctionsEnabled}
-        correctionsOpen={correctionsOpen}
-        onStats={() => setStatsOpen(true)}
-        statsOpen={statsOpen}
-        onExtensions={() => setExtensionsOpen(true)}
-        extensionsOpen={extensionsOpen}
-        encryptionState={encryptionState}
-        onEncrypt={handleEncrypt}
-        onDecrypt={handleDecrypt}
-        onChangeAlgorithm={handleChangeAlgorithm}
-        onOptimization={handleOptimizationOpen}
-        optimizationEnabled={isOptimizationEnabled}
-        onSaveTemplate={handleSaveTemplate}
-        onBrowseTemplates={handleBrowseTemplates}
-      />
-      
-      {/* Professional Loading State */}
-      {(previewLoading || isCreatingNode) && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.3)',
-            backdropFilter: 'blur(2px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999
           }}
-        >
-          <ProfessionalSpinner 
-            type="dots" 
-            size={48} 
-            color="#ff7c00"
-            message={isCreatingNode ? "Creating node..." : "Generating previews..."}
-          />
-        </div>
-      )}
-      
-      {/* Performance Monitor (dev mode only) */}
-      {process.env.NODE_ENV === 'development' && (
-        <div
-          className="development-only"
-          style={{
-            position: 'fixed',
-            top: 10,
-            left: 10,
-            background: 'rgba(0, 0, 0, 0.8)',
-            color: 'white',
-            padding: 8,
-            borderRadius: 6,
-            fontFamily: 'monospace',
-            fontSize: 11,
-            zIndex: 10000
+          onSaveJson={() => {
+            const blob = new Blob([
+              JSON.stringify({ nodes, edges }, null, 2)
+            ], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'graph.json';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }, 0);
           }}
-        >
-          <div>FPS: {metrics.fps}</div>
-          <div>Nodes: {metrics.visibleNodes}/{nodes.length}</div>
-          <div>Quality: {isPerformanceGood ? 'High' : 'Optimized'}</div>
-        </div>
-      )}
+          onExportBundle={handleExportBundle}
+          onSaveProject={handleSaveProject}
+          onLoadProject={handleLoadProject}
+          onNewProject={handleNewProject}
+          hasUnsavedChanges={hasUnsavedChanges}
+          currentProjectName={currentProject?.name}
+          onCorrections={() => setCorrectionsOpen(true)}
+          correctionsEnabled={correctionsEnabled}
+          correctionsOpen={correctionsOpen}
+          onStats={() => setStatsOpen(true)}
+          statsOpen={statsOpen}
+          onExtensions={() => setExtensionsOpen(true)}
+          extensionsOpen={extensionsOpen}
+          encryptionState={encryptionState}
+          onEncrypt={handleEncrypt}
+          onDecrypt={handleDecrypt}
+          onChangeAlgorithm={handleChangeAlgorithm}
+          onOptimization={handleOptimizationOpen}
+          optimizationEnabled={isOptimizationEnabled}
+          onSaveTemplate={handleSaveTemplate}
+          onBrowseTemplates={handleBrowseTemplates}
+        />
       
-      <PreviewModal
-        open={previewOpen}
-        loading={previewLoading}
-        error={previewError}
-        results={previewResults}
-        onClose={() => {
-          cancelPreview();
-          setPreviewOpen(false);
-          setHighlightEdgeIds(new Set());
-          setHighlightNodeIds(new Set());
-        }}
-        onCancel={cancelPreview}
-        onResultHover={(idx) => {
-          const res = previewResults[idx];
-          if (res?.usedEdgeIds) {
-            setHighlightEdgeIds(new Set(res.usedEdgeIds));
-          } else {
+        {/* Professional Loading State */}
+        {(previewLoading || isCreatingNode) && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0, 0, 0, 0.3)',
+              backdropFilter: 'blur(2px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 9999
+            }}
+          >
+            <ProfessionalSpinner 
+              type="dots" 
+              size={48} 
+              color="#ff7c00"
+              message={isCreatingNode ? 'Creating node...' : 'Generating previews...'}
+            />
+          </div>
+        )}
+      
+        {/* Performance Monitor (dev mode only) */}
+        {process.env.NODE_ENV === 'development' && (
+          <div
+            className="development-only"
+            style={{
+              position: 'fixed',
+              top: 10,
+              left: 10,
+              background: 'rgba(0, 0, 0, 0.8)',
+              color: 'white',
+              padding: 8,
+              borderRadius: 6,
+              fontFamily: 'monospace',
+              fontSize: 11,
+              zIndex: 10000
+            }}
+          >
+            <div>FPS: {metrics.fps}</div>
+            <div>Nodes: {metrics.visibleNodes}/{nodes.length}</div>
+            <div>Quality: {isPerformanceGood ? 'High' : 'Optimized'}</div>
+          </div>
+        )}
+      
+        <PreviewModal
+          open={previewOpen}
+          loading={previewLoading}
+          error={previewError}
+          results={previewResults}
+          onClose={() => {
+            cancelPreview();
+            setPreviewOpen(false);
             setHighlightEdgeIds(new Set());
-          }
-          if (res?.usedNodeIds) {
-            setHighlightNodeIds(new Set(res.usedNodeIds));
-          } else {
             setHighlightNodeIds(new Set());
-          }
-        }}
-      />
-      <ResponsiveCorrectionsPanel
-        isOpen={correctionsOpen}
-        onClose={() => setCorrectionsOpen(false)}
-      />
-      <CorrectionsStatsDashboard
-        isOpen={statsOpen}
-        onClose={() => setStatsOpen(false)}
-      />
-      {extensionsOpen && (
-        <ExtensionManagerPanel
-          onClose={() => setExtensionsOpen(false)}
-        />
-      )}
-
-      {/* Project Management Dialogs */}
-      <SaveProjectDialog
-        isOpen={saveDialogOpen}
-        onClose={() => setSaveDialogOpen(false)}
-        onSave={handleSaveSuccess}
-      />
-      
-      <LoadProjectDialog
-        isOpen={loadDialogOpen}
-        onClose={() => setLoadDialogOpen(false)}
-        onLoad={handleLoadSuccess}
-      />
-      
-      <ExportBundleDialog
-        isOpen={exportDialogOpen}
-        onClose={() => setExportDialogOpen(false)}
-        nodes={nodes}
-        edges={edges}
-        onExport={handleExportSuccess}
-      />
-
-      {/* Template Dialogs */}
-      <SaveTemplateDialog
-        isOpen={saveTemplateDialogOpen}
-        onClose={() => setSaveTemplateDialogOpen(false)}
-        onSave={handleTemplateSave}
-      />
-      
-      <TemplateBrowser
-        isOpen={templateBrowserOpen}
-        onClose={() => setTemplateBrowserOpen(false)}
-        onApplyTemplate={handleTemplateApply}
-        currentAuthor="current-user"
-      />
-
-      {/* Graph Optimization Components */}
-      <OptimizationControls
-        settings={optimizationSettings}
-        onSettingsChange={handleOptimizationSettingsChange}
-        isOpen={optimizationControlsOpen}
-        onClose={() => setOptimizationControlsOpen(false)}
-      />
-      
-      <GraphAnalysisPanel
-        nodes={nodes}
-        edges={edges}
-        isOpen={graphAnalysisOpen}
-        onClose={() => setGraphAnalysisOpen(false)}
-      />
-      
-      <PerformanceMonitor
-        isVisible={performanceMonitorVisible}
-        onToggle={handlePerformanceMonitorToggle}
-      />
-
-      {/* Optimization Menu */}
-      {optimizationMenuOpen && (
-        <div data-optimization-menu style={{
-          position: 'fixed',
-          bottom: '60px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: 'white',
-          border: '1px solid #ddd',
-          borderRadius: '8px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-          padding: '8px',
-          zIndex: 1001,
-          display: 'flex',
-          gap: '8px',
-        }}>
-          <button
-            onClick={() => {
-              setGraphAnalysisOpen(true);
-              setOptimizationMenuOpen(false);
-            }}
-            style={{
-              padding: '12px 16px',
-              backgroundColor: '#17a2b8',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-            }}
-          >
-            📊 Analyze Graph
-          </button>
-          <button
-            onClick={() => {
-              setOptimizationControlsOpen(true);
-              setOptimizationMenuOpen(false);
-            }}
-            style={{
-              padding: '12px 16px',
-              backgroundColor: '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-            }}
-          >
-            ⚙️ Settings
-          </button>
-          <button
-            onClick={() => {
-              setPerformanceMonitorVisible(true);
-              setOptimizationMenuOpen(false);
-            }}
-            style={{
-              padding: '12px 16px',
-              backgroundColor: '#fd7e14',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500',
-            }}
-          >
-            📈 Monitor
-          </button>
-        </div>
-      )}
-      
-      {/* Node Creation Animation Overlay */}
-      {nodeCreationAnimation && (
-        <div
-          className="animate-node-create-overlay"
-          style={{
-            position: 'fixed',
-            pointerEvents: 'none',
-            zIndex: 1000,
-            width: 200,
-            height: 100,
-            background: 'radial-gradient(circle, rgba(255, 124, 0, 0.3), transparent)',
-            borderRadius: 12,
-            animation: 'nodeCreatePulse 0.6s ease-out'
           }}
-        />
-      )}
-      
-      {/* Demo Performance Tester (development only) */}
-      {process.env.NODE_ENV === 'development' && (
-        <DemoPerformanceTester
-          onTestComplete={(result) => {
-            console.log('Performance test completed:', result);
-            if (!result.passedThreshold) {
-              setStatusMessage(`Performance warning: ${result.recommendations[0]}`);
-              setTimeout(() => setStatusMessage(''), 5000);
+          onCancel={cancelPreview}
+          onResultHover={(idx) => {
+            const res = previewResults[idx];
+            if (res?.usedEdgeIds) {
+              setHighlightEdgeIds(new Set(res.usedEdgeIds));
+            } else {
+              setHighlightEdgeIds(new Set());
+            }
+            if (res?.usedNodeIds) {
+              setHighlightNodeIds(new Set(res.usedNodeIds));
+            } else {
+              setHighlightNodeIds(new Set());
             }
           }}
-          onGraphGenerated={(testNodes, testEdges) => {
-            // Replace current graph with test graph
-            setNodes(testNodes);
-            setEdges(testEdges);
-          }}
-          targetFPS={30}
-          maxRenderTime={16}
         />
-      )}
-    </div>
+        <ResponsiveCorrectionsPanel
+          isOpen={correctionsOpen}
+          onClose={() => setCorrectionsOpen(false)}
+        />
+        <CorrectionsStatsDashboard
+          isOpen={statsOpen}
+          onClose={() => setStatsOpen(false)}
+        />
+        {extensionsOpen && (
+          <ExtensionManagerPanel
+            onClose={() => setExtensionsOpen(false)}
+          />
+        )}
+
+        {/* Project Management Dialogs */}
+        <SaveProjectDialog
+          isOpen={saveDialogOpen}
+          onClose={() => setSaveDialogOpen(false)}
+          onSave={handleSaveSuccess}
+        />
+      
+        <LoadProjectDialog
+          isOpen={loadDialogOpen}
+          onClose={() => setLoadDialogOpen(false)}
+          onLoad={handleLoadSuccess}
+        />
+      
+        <ExportBundleDialog
+          isOpen={exportDialogOpen}
+          onClose={() => setExportDialogOpen(false)}
+          nodes={nodes}
+          edges={edges}
+          onExport={handleExportSuccess}
+        />
+
+        {/* Template Dialogs */}
+        <SaveTemplateDialog
+          isOpen={saveTemplateDialogOpen}
+          onClose={() => setSaveTemplateDialogOpen(false)}
+          onSave={handleTemplateSave}
+        />
+      
+        <TemplateBrowser
+          isOpen={templateBrowserOpen}
+          onClose={() => setTemplateBrowserOpen(false)}
+          onApplyTemplate={handleTemplateApply}
+          currentAuthor="current-user"
+        />
+
+        {/* Graph Optimization Components */}
+        <OptimizationControls
+          settings={optimizationSettings}
+          onSettingsChange={handleOptimizationSettingsChange}
+          isOpen={optimizationControlsOpen}
+          onClose={() => setOptimizationControlsOpen(false)}
+        />
+      
+        <GraphAnalysisPanel
+          nodes={nodes}
+          edges={edges}
+          isOpen={graphAnalysisOpen}
+          onClose={() => setGraphAnalysisOpen(false)}
+        />
+      
+        <PerformanceMonitor
+          isVisible={performanceMonitorVisible}
+          onToggle={handlePerformanceMonitorToggle}
+        />
+
+        {/* Optimization Menu */}
+        {optimizationMenuOpen && (
+          <div data-optimization-menu style={{
+            position: 'fixed',
+            bottom: '60px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: 'white',
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            padding: '8px',
+            zIndex: 1001,
+            display: 'flex',
+            gap: '8px'
+          }}>
+            <button
+              onClick={() => {
+                setGraphAnalysisOpen(true);
+                setOptimizationMenuOpen(false);
+              }}
+              style={{
+                padding: '12px 16px',
+                backgroundColor: '#17a2b8',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}
+            >
+            📊 Analyze Graph
+            </button>
+            <button
+              onClick={() => {
+                setOptimizationControlsOpen(true);
+                setOptimizationMenuOpen(false);
+              }}
+              style={{
+                padding: '12px 16px',
+                backgroundColor: '#28a745',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}
+            >
+            ⚙️ Settings
+            </button>
+            <button
+              onClick={() => {
+                setPerformanceMonitorVisible(true);
+                setOptimizationMenuOpen(false);
+              }}
+              style={{
+                padding: '12px 16px',
+                backgroundColor: '#fd7e14',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}
+            >
+            📈 Monitor
+            </button>
+          </div>
+        )}
+      
+        {/* Node Creation Animation Overlay */}
+        {nodeCreationAnimation && (
+          <div
+            className="animate-node-create-overlay"
+            style={{
+              position: 'fixed',
+              pointerEvents: 'none',
+              zIndex: 1000,
+              width: 200,
+              height: 100,
+              background: 'radial-gradient(circle, rgba(255, 124, 0, 0.3), transparent)',
+              borderRadius: 12,
+              animation: 'nodeCreatePulse 0.6s ease-out'
+            }}
+          />
+        )}
+      
+        {/* Demo Performance Tester (development only) */}
+        {process.env.NODE_ENV === 'development' && (
+          <DemoPerformanceTester
+            onTestComplete={(result) => {
+              console.log('Performance test completed:', result);
+              if (!result.passedThreshold) {
+                setStatusMessage(`Performance warning: ${result.recommendations[0]}`);
+                setTimeout(() => setStatusMessage(''), 5000);
+              }
+            }}
+            onGraphGenerated={(testNodes, testEdges) => {
+            // Replace current graph with test graph
+              setNodes(testNodes);
+              setEdges(testEdges);
+            }}
+            targetFPS={30}
+            maxRenderTime={16}
+          />
+        )}
+      </div>
     </DemoModeManager>
   );
 };

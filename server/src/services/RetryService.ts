@@ -61,7 +61,7 @@ class RetryStrategy {
       jitterMax: options.jitterMax,
       retryCondition: options.retryCondition || this.defaultRetryCondition,
       onRetry: options.onRetry || (() => {}),
-      name: options.name || 'anonymous-operation',
+      name: options.name || 'anonymous-operation'
     };
 
     this.metrics = {
@@ -71,7 +71,7 @@ class RetryStrategy {
       totalAttempts: 0,
       totalSuccessTimeMs: 0,
       errors: new Map(),
-      lastExecutionTime: 0,
+      lastExecutionTime: 0
     };
   }
 
@@ -91,7 +91,7 @@ class RetryStrategy {
         'temporary failure',
         'service unavailable',
         'too many requests',
-        'internal server error',
+        'internal server error'
       ];
 
       return retryableMessages.some(msg => message.includes(msg));
@@ -147,14 +147,14 @@ class RetryStrategy {
         logger.info(`Operation '${this.options.name}' succeeded`, {
           attempt,
           totalTimeMs,
-          retriesNeeded: attempt - 1,
+          retriesNeeded: attempt - 1
         });
 
         return {
           result,
           attempts: attempt,
           totalTimeMs,
-          errors,
+          errors
         };
       } catch (error) {
         lastError = error;
@@ -164,7 +164,7 @@ class RetryStrategy {
         logger.warn(`Operation '${this.options.name}' failed on attempt ${attempt}`, {
           error: error instanceof Error ? error.message : String(error),
           attempt,
-          maxAttempts: this.options.maxAttempts,
+          maxAttempts: this.options.maxAttempts
         });
 
         // Check if we should retry
@@ -176,7 +176,7 @@ class RetryStrategy {
         if (!this.options.retryCondition(error, attempt)) {
           logger.info(`Operation '${this.options.name}' will not be retried`, {
             reason: 'retry condition failed',
-            error: error instanceof Error ? error.message : String(error),
+            error: error instanceof Error ? error.message : String(error)
           });
           break;
         }
@@ -186,7 +186,7 @@ class RetryStrategy {
         
         logger.debug(`Retrying operation '${this.options.name}' in ${delayMs}ms`, {
           nextAttempt: attempt + 1,
-          maxAttempts: this.options.maxAttempts,
+          maxAttempts: this.options.maxAttempts
         });
 
         this.options.onRetry(error, attempt, delayMs);
@@ -202,7 +202,7 @@ class RetryStrategy {
     logger.error(`Operation '${this.options.name}' failed after all retry attempts`, {
       totalAttempts: this.options.maxAttempts,
       totalTimeMs,
-      finalError: lastError instanceof Error ? lastError.message : String(lastError),
+      finalError: lastError instanceof Error ? lastError.message : String(lastError)
     });
 
     throw lastError;
@@ -218,7 +218,7 @@ class RetryStrategy {
       .map(([error, count]) => ({
         error,
         count,
-        percentage: Math.round((count / totalErrors) * 100 * 100) / 100, // Round to 2 decimal places
+        percentage: Math.round((count / totalErrors) * 100 * 100) / 100 // Round to 2 decimal places
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5); // Top 5 errors
@@ -235,7 +235,7 @@ class RetryStrategy {
         ? Math.round((this.metrics.totalSuccessTimeMs / successfulExecutions) * 100) / 100
         : 0,
       lastExecutionTime: this.metrics.lastExecutionTime,
-      commonErrors,
+      commonErrors
     };
   }
 
@@ -247,7 +247,7 @@ class RetryStrategy {
       totalAttempts: 0,
       totalSuccessTimeMs: 0,
       errors: new Map(),
-      lastExecutionTime: 0,
+      lastExecutionTime: 0
     };
   }
 }
@@ -296,7 +296,7 @@ export class RetryService {
         retryCondition: (error) => {
           return error instanceof DatabaseError || 
                  (error instanceof Error && error.message.includes('connection'));
-        },
+        }
       });
     }
 
@@ -322,7 +322,7 @@ export class RetryService {
                    error.message.includes('timeout') ||
                    error.message.includes('503') ||
                    error.message.includes('502')));
-        },
+        }
       });
     }
 
@@ -348,7 +348,7 @@ export class RetryService {
                    message.includes('temporary');
           }
           return false;
-        },
+        }
       });
     }
 
@@ -370,7 +370,7 @@ export class RetryService {
         backoffMultiplier: 2,
         jitterMax: 0.1,
         name: operationName,
-        ...options,
+        ...options
       };
       strategy = this.createStrategy(operationName, defaultOptions);
     }

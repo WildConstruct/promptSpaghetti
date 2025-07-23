@@ -218,7 +218,7 @@ export class TypeScriptValidator {
         getCanonicalFileName: (fileName) => fileName,
         useCaseSensitiveFileNames: () => true,
         getNewLine: () => '\n',
-        resolveModuleNames: () => [],
+        resolveModuleNames: () => []
       };
       
       // Create program
@@ -451,18 +451,18 @@ export class TypeScriptValidator {
    */
   private getScriptKind(language: string): ts.ScriptKind {
     switch (language.toLowerCase()) {
-      case 'typescript':
-      case 'ts':
-        return ts.ScriptKind.TS;
-      case 'tsx':
-        return ts.ScriptKind.TSX;
-      case 'javascript':
-      case 'js':
-        return ts.ScriptKind.JS;
-      case 'jsx':
-        return ts.ScriptKind.JSX;
-      default:
-        return ts.ScriptKind.JS;
+    case 'typescript':
+    case 'ts':
+      return ts.ScriptKind.TS;
+    case 'tsx':
+      return ts.ScriptKind.TSX;
+    case 'javascript':
+    case 'js':
+      return ts.ScriptKind.JS;
+    case 'jsx':
+      return ts.ScriptKind.JSX;
+    default:
+      return ts.ScriptKind.JS;
     }
   }
   
@@ -471,18 +471,18 @@ export class TypeScriptValidator {
    */
   private getFileExtension(language: string): string {
     switch (language.toLowerCase()) {
-      case 'typescript':
-      case 'ts':
-        return 'ts';
-      case 'tsx':
-        return 'tsx';
-      case 'javascript':
-      case 'js':
-        return 'js';
-      case 'jsx':
-        return 'jsx';
-      default:
-        return 'js';
+    case 'typescript':
+    case 'ts':
+      return 'ts';
+    case 'tsx':
+      return 'tsx';
+    case 'javascript':
+    case 'js':
+      return 'js';
+    case 'jsx':
+      return 'jsx';
+    default:
+      return 'js';
     }
   }
 }
@@ -517,33 +517,33 @@ export class TypeScriptAnalyzer {
     
     function visit(node: ts.Node) {
       switch (node.kind) {
-        case ts.SyntaxKind.IfStatement:
-        case ts.SyntaxKind.WhileStatement:
-        case ts.SyntaxKind.ForStatement:
-        case ts.SyntaxKind.ForInStatement:
-        case ts.SyntaxKind.ForOfStatement:
-        case ts.SyntaxKind.DoWhileStatement:
-        case ts.SyntaxKind.SwitchStatement:
-        case ts.SyntaxKind.ConditionalExpression:
-        case ts.SyntaxKind.CaseClause:
-        case ts.SyntaxKind.CatchClause:
-          cyclomaticComplexity++;
-          break;
-        case ts.SyntaxKind.FunctionDeclaration:
-        case ts.SyntaxKind.FunctionExpression:
-        case ts.SyntaxKind.ArrowFunction:
-        case ts.SyntaxKind.MethodDeclaration:
-          functions++;
-          break;
-        case ts.SyntaxKind.ClassDeclaration:
-          classes++;
-          break;
-        case ts.SyntaxKind.InterfaceDeclaration:
-          interfaces++;
-          break;
-        case ts.SyntaxKind.ImportDeclaration:
-          imports++;
-          break;
+      case ts.SyntaxKind.IfStatement:
+      case ts.SyntaxKind.WhileStatement:
+      case ts.SyntaxKind.ForStatement:
+      case ts.SyntaxKind.ForInStatement:
+      case ts.SyntaxKind.ForOfStatement:
+      case ts.SyntaxKind.DoWhileStatement:
+      case ts.SyntaxKind.SwitchStatement:
+      case ts.SyntaxKind.ConditionalExpression:
+      case ts.SyntaxKind.CaseClause:
+      case ts.SyntaxKind.CatchClause:
+        cyclomaticComplexity++;
+        break;
+      case ts.SyntaxKind.FunctionDeclaration:
+      case ts.SyntaxKind.FunctionExpression:
+      case ts.SyntaxKind.ArrowFunction:
+      case ts.SyntaxKind.MethodDeclaration:
+        functions++;
+        break;
+      case ts.SyntaxKind.ClassDeclaration:
+        classes++;
+        break;
+      case ts.SyntaxKind.InterfaceDeclaration:
+        interfaces++;
+        break;
+      case ts.SyntaxKind.ImportDeclaration:
+        imports++;
+        break;
       }
       
       ts.forEachChild(node, visit);

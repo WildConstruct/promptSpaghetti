@@ -94,13 +94,13 @@ class TokenInfluenceAnalyzer {
       neighborhoodSize: options.neighborhoodSize || 100,
       kernelWidth: options.kernelWidth || 0.75,
       maxFeatures: options.maxFeatures || 10,
-      regularization: options.regularization || 1.0,
+      regularization: options.regularization || 1.0
     };
 
     logger.info('Starting LIME analysis for token influence', {
       promptLength: prompt.length,
       numSamples: opts.numSamples,
-      strategy: opts.perturbationStrategy,
+      strategy: opts.perturbationStrategy
     });
 
     try {
@@ -123,7 +123,7 @@ class TokenInfluenceAnalyzer {
             logger.warn(
               `Perturbation ${index} failed`,
               { error: error instanceof Error ? error.message : String(error
-            ) });
+              ) });
             return { ...p, prediction: null, index };
           }
         })
@@ -154,8 +154,8 @@ class TokenInfluenceAnalyzer {
         metadata: {
           analysisTime: Date.now() - startTime,
           tokenCount: tokens.length,
-          perturbationCount: validPerturbations.length,
-        },
+          perturbationCount: validPerturbations.length
+        }
       };
 
       // Track analytics
@@ -165,14 +165,14 @@ class TokenInfluenceAnalyzer {
         tokenCount: tokens.length,
         perturbationsUsed: validPerturbations.length,
         analysisTime: result.metadata.analysisTime,
-        overallScore,
+        overallScore
       });
 
       return result;
     } catch (error) {
       logger.error('LIME analysis failed', {
         error: error instanceof Error ? error.message : String(error),
-        analysisTime: Date.now() - startTime,
+        analysisTime: Date.now() - startTime
       });
       throw error;
     }
@@ -193,13 +193,13 @@ class TokenInfluenceAnalyzer {
       baselineStrategy: options.baselineStrategy || 'zero',
       numSteps: options.numSteps || 50,
       noiseLevel: options.noiseLevel || 0.1,
-      aggregationMethod: options.aggregationMethod || 'mean',
+      aggregationMethod: options.aggregationMethod || 'mean'
     };
 
     logger.info('Starting Saliency analysis for token influence', {
       promptLength: prompt.length,
       gradientMethod: opts.gradientMethod,
-      baselineStrategy: opts.baselineStrategy,
+      baselineStrategy: opts.baselineStrategy
     });
 
     try {
@@ -210,20 +210,20 @@ class TokenInfluenceAnalyzer {
       let saliencyScores: number[];
       
       switch (opts.gradientMethod) {
-        case 'integrated':
-          saliencyScores = await this.calculateIntegratedGradients(
-            prompt, tokens, gradientFunction, opts
-          );
-          break;
-        case 'smoothgrad':
-          saliencyScores = await this.calculateSmoothGrad(
-            prompt, tokens, gradientFunction, opts
-          );
-          break;
-        case 'vanilla':
-        default:
-          saliencyScores = await gradientFunction(prompt);
-          break;
+      case 'integrated':
+        saliencyScores = await this.calculateIntegratedGradients(
+          prompt, tokens, gradientFunction, opts
+        );
+        break;
+      case 'smoothgrad':
+        saliencyScores = await this.calculateSmoothGrad(
+          prompt, tokens, gradientFunction, opts
+        );
+        break;
+      case 'vanilla':
+      default:
+        saliencyScores = await gradientFunction(prompt);
+        break;
       }
 
       // Convert saliency scores to token influences
@@ -244,8 +244,8 @@ class TokenInfluenceAnalyzer {
         timestamp: startTime,
         metadata: {
           analysisTime: Date.now() - startTime,
-          tokenCount: tokens.length,
-        },
+          tokenCount: tokens.length
+        }
       };
 
       // Track analytics
@@ -255,14 +255,14 @@ class TokenInfluenceAnalyzer {
         tokenCount: tokens.length,
         analysisTime: result.metadata.analysisTime,
         overallScore,
-        gradientMethod: opts.gradientMethod,
+        gradientMethod: opts.gradientMethod
       });
 
       return result;
     } catch (error) {
       logger.error('Saliency analysis failed', {
         error: error instanceof Error ? error.message : String(error),
-        analysisTime: Date.now() - startTime,
+        analysisTime: Date.now() - startTime
       });
       throw error;
     }
@@ -288,7 +288,7 @@ class TokenInfluenceAnalyzer {
 
     const [limeResult, saliencyResult] = await Promise.all([
       this.analyzeLIME(prompt, predictionFunction),
-      this.analyzeSaliency(prompt, gradientFunction),
+      this.analyzeSaliency(prompt, gradientFunction)
     ]);
 
     const comparison = this.compareResults(limeResult, saliencyResult);
@@ -300,14 +300,14 @@ class TokenInfluenceAnalyzer {
       metadata: {
         correlation: comparison.correlation,
         agreement: comparison.agreement,
-        divergentCount: comparison.divergentTokens.length,
-      },
+        divergentCount: comparison.divergentTokens.length
+      }
     });
 
     return {
       lime: limeResult,
       saliency: saliencyResult,
-      comparison,
+      comparison
     };
   }
 
@@ -324,7 +324,7 @@ class TokenInfluenceAnalyzer {
     const perturbations: PromptPerturbation[] = [];
 
     for (let i = 0; i < options.numSamples; i++) {
-      let perturbedTokens = [...tokens];
+      const perturbedTokens = [...tokens];
       const changedPositions: number[] = [];
 
       // Randomly select tokens to perturb
@@ -338,21 +338,21 @@ class TokenInfluenceAnalyzer {
         changedPositions.push(pos);
         
         switch (options.perturbationStrategy) {
-          case 'mask':
-            perturbedTokens[pos] = '[MASK]';
-            break;
-          case 'replace':
-            perturbedTokens[pos] = this.getRandomReplacement(tokens[pos]);
-            break;
-          case 'reorder':
-            // Swap with adjacent token if possible
-            const swapPos = pos > 0 ? pos - 1 : pos + 1;
-            if (swapPos < tokens.length) {
-              [perturbedTokens[pos], perturbedTokens[swapPos]] = 
+        case 'mask':
+          perturbedTokens[pos] = '[MASK]';
+          break;
+        case 'replace':
+          perturbedTokens[pos] = this.getRandomReplacement(tokens[pos]);
+          break;
+        case 'reorder':
+          // Swap with adjacent token if possible
+          const swapPos = pos > 0 ? pos - 1 : pos + 1;
+          if (swapPos < tokens.length) {
+            [perturbedTokens[pos], perturbedTokens[swapPos]] = 
                 [perturbedTokens[swapPos], perturbedTokens[pos]];
-              changedPositions.push(swapPos);
-            }
-            break;
+            changedPositions.push(swapPos);
+          }
+          break;
         }
       }
 
@@ -362,7 +362,7 @@ class TokenInfluenceAnalyzer {
       perturbations.push({
         perturbedPrompt,
         changedPositions,
-        similarity,
+        similarity
       });
     }
 
@@ -476,7 +476,7 @@ class TokenInfluenceAnalyzer {
       confidence,
       importance,
       isPositive: score > 0,
-      alternatives: this.generateAlternatives(token),
+      alternatives: this.generateAlternatives(token)
     };
   }
 
@@ -486,7 +486,7 @@ class TokenInfluenceAnalyzer {
       token.toLowerCase(),
       token.toUpperCase(),
       token + 's',
-      token.slice(0, -1),
+      token.slice(0, -1)
     ].filter(alt => alt !== token && alt.length > 0);
 
     return alternatives.slice(0, 3);
@@ -596,14 +596,14 @@ class TokenInfluenceAnalyzer {
 
   private createBaseline(prompt: string, tokens: string[], strategy: string): string {
     switch (strategy) {
-      case 'zero':
-        return '';
-      case 'mask':
-        return tokens.map(() => '[MASK]').join(' ');
-      case 'random':
-        return tokens.map(() => this.getRandomReplacement('')).join(' ');
-      default:
-        return '';
+    case 'zero':
+      return '';
+    case 'mask':
+      return tokens.map(() => '[MASK]').join(' ');
+    case 'random':
+      return tokens.map(() => this.getRandomReplacement('')).join(' ');
+    default:
+      return '';
     }
   }
 
@@ -667,8 +667,8 @@ class TokenInfluenceAnalyzer {
         tokenCount: result.metadata.tokenCount,
         analysisTime: result.metadata.analysisTime,
         overallScore: result.overallScore,
-        highInfluenceTokens: result.tokens.filter(t => t.importance === 'high').length,
-      },
+        highInfluenceTokens: result.tokens.filter(t => t.importance === 'high').length
+      }
     });
   }
 }

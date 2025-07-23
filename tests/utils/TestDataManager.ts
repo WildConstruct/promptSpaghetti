@@ -498,10 +498,10 @@ export class TestDataManager {
 
   private getFixtureGraph(type: string) {
     switch (type) {
-      case 'simple': return fixtures.graphs.simple;
-      case 'branching': return fixtures.graphs.branching;
-      case 'complex': return fixtures.graphs.complex;
-      default: return fixtures.graphs.simple;
+    case 'simple': return fixtures.graphs.simple;
+    case 'branching': return fixtures.graphs.branching;
+    case 'complex': return fixtures.graphs.complex;
+    default: return fixtures.graphs.simple;
     }
   }
 
@@ -514,16 +514,16 @@ export class TestDataManager {
 
   private generateFileContent(type: string, options: any): string {
     switch (type) {
-      case 'json':
-        return JSON.stringify({ test: true, data: options.data || 'sample' }, null, 2);
-      case 'csv':
-        return 'id,name,value\n1,test1,100\n2,test2,200\n3,test3,300';
-      case 'txt':
-        return 'This is a test file content.\nGenerated for testing purposes.';
-      case 'xml':
-        return '<?xml version="1.0"?>\n<root>\n  <test>data</test>\n</root>';
-      default:
-        return 'Test file content';
+    case 'json':
+      return JSON.stringify({ test: true, data: options.data || 'sample' }, null, 2);
+    case 'csv':
+      return 'id,name,value\n1,test1,100\n2,test2,200\n3,test3,300';
+    case 'txt':
+      return 'This is a test file content.\nGenerated for testing purposes.';
+    case 'xml':
+      return '<?xml version="1.0"?>\n<root>\n  <test>data</test>\n</root>';
+    default:
+      return 'Test file content';
     }
   }
 

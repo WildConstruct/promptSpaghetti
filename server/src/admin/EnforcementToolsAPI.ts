@@ -679,21 +679,21 @@ export class EnforcementToolsAPI {
         this.getEnforcementStats(request, { send: () => {}, code: () => ({ send: (data: any) => data.data }) }),
         this.getEnforcementActions(
           { ...request,
-          query: { limit: 10 } },
+            query: { limit: 10 } },
           { send: (
-        ) => {}, code: () => ({ send: (data: any) => data.data }) }),
+          ) => {}, code: () => ({ send: (data: any) => data.data }) }),
         this.getEnforcementActions(
           { ...request,
-          query: { reviewRequired: 'true',
-          limit: 10 } },
+            query: { reviewRequired: 'true',
+              limit: 10 } },
           { send: (
-        ) => {}, code: () => ({ send: (data: any) => data.data }) }),
+          ) => {}, code: () => ({ send: (data: any) => data.data }) }),
         this.getViolationReports(
           { ...request,
-          query: { status: 'pending',
-          limit: 5 } },
+            query: { status: 'pending',
+              limit: 5 } },
           { send: (
-        ) => {}, code: () => ({ send: (data: any) => data.data }) })
+          ) => {}, code: () => ({ send: (data: any) => data.data }) })
       ]);
 
       return reply.code(200).send({
@@ -755,48 +755,48 @@ export class EnforcementToolsAPI {
       await db.run('BEGIN');
       
       switch (actionRow.action_type) {
-        case 'suspend':
-          if (actionRow.entity_type === 'user') {
-            await db.run(`
+      case 'suspend':
+        if (actionRow.entity_type === 'user') {
+          await db.run(`
               UPDATE user_verification_status 
               SET status = 'verified', suspension_reason = NULL,
                   suspended_at = NULL, suspension_expires_at = NULL
               WHERE user_id = ?
             `, [actionRow.entity_id]);
-          }
-          break;
+        }
+        break;
           
-        case 'restrict':
-          if (actionRow.entity_type === 'user') {
-            await db.run(`
+      case 'restrict':
+        if (actionRow.entity_type === 'user') {
+          await db.run(`
               DELETE FROM user_restrictions 
               WHERE user_id = ? AND restriction_type = 'limited_access'
             `, [actionRow.entity_id]);
-          }
-          break;
+        }
+        break;
           
-        case 'flag':
-          await db.run(`
+      case 'flag':
+        await db.run(`
             DELETE FROM entity_flags 
             WHERE entity_type = ? AND entity_id = ? AND flagged_by = 'automated_enforcement'
           `, [actionRow.entity_type, actionRow.entity_id]);
-          break;
+        break;
           
-        case 'block_transaction':
-          await db.run(`
+      case 'block_transaction':
+        await db.run(`
             UPDATE transactions 
             SET status = 'pending', block_reason = NULL, blocked_at = NULL
             WHERE id = ?
           `, [actionRow.entity_id]);
-          break;
+        break;
           
-        case 'quarantine_template':
-          await db.run(`
+      case 'quarantine_template':
+        await db.run(`
             UPDATE templates 
             SET status = 'active', quarantine_reason = NULL, quarantined_at = NULL
             WHERE id = ?
           `, [actionRow.entity_id]);
-          break;
+        break;
       }
       
       await db.run('COMMIT');
