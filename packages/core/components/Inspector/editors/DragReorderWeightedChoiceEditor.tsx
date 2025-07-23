@@ -89,7 +89,9 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   }, [data.choices, newChoiceText, onChange]);
 
   // Remove choice
-      const newChoices = currentChoices.filter((_, i) => i !== index);
+  const removeChoice = useCallback((index: number) => {
+    const currentChoices = data.choices || [];
+    const newChoices = currentChoices.filter((_, i) => i !== index);
     onChange({ choices: newChoices });
   }, [data.choices, onChange]);
 

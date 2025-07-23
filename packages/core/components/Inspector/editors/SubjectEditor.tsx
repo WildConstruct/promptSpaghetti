@@ -34,7 +34,7 @@ const SUBJECT_CATEGORIES: SelectOption[] = [
   { value: 'other', label: 'Other', group: 'Misc' }
 ];
 
-export   
+export const SubjectEditor: React.FC<SubjectEditorProps> = ({ nodeId, nodeData, onChange }) => {
   // Subject specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';
@@ -464,3 +464,5 @@ export
     </div>
   );
 };
+
+export default SubjectEditor;

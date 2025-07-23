@@ -27,7 +27,8 @@ const SCOPE_OPTIONS: SelectOption[] = [
   { value: 'session', label: 'Session (persistent)' }
 ];
 
-export   const { debugMode } = useUISettingsStore();
+export const VariableEditor: React.FC<VariableEditorProps> = ({ nodeId, nodeData, onChange }) => {
+  const { debugMode } = useUISettingsStore();
   
   // Simplified fields - focus on template-based workflow
   const label = (nodeData.label as string) || '';
@@ -257,3 +258,5 @@ export   const { debugMode } = useUISettingsStore();
     </div>
   );
 };
+
+export default VariableEditor;

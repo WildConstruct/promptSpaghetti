@@ -21,7 +21,7 @@ export interface WeightedAdvancedEditorProps extends Omit<BaseNodeEditorProps, '
  * - Debug: Technical details, visualization, and raw data (developers)
  */
 
-export   
+export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ nodeId, nodeData, onChange }) => {
   // WeightedAdvanced specific fields
   const choices = (nodeData.choices as WeightedChoice[]) || [];
   const distributionType = (nodeData.distributionType as WeightDistributionType) || 'linear';
@@ -682,3 +682,5 @@ export
     </div>
   );
 };
+
+export default WeightedAdvancedEditor;
