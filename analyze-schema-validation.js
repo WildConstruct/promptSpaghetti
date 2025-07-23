@@ -65,19 +65,20 @@ class MockZodSchema {
       }
       break;
         
-    case 'union':
+    case 'union': {
       let matched = false;
       for (const option of this.constraints.options) {
         try {
           option.parse(data);
           matched = true;
           break;
-        } catch (e) {
+        } catch (_e) {
           // Continue to next option
         }
       }
       if (!matched) throw new Error('No union option matched');
       break;
+    }
     }
     
     return data;
@@ -294,7 +295,7 @@ async function analyzeSchemaValidationPerformance() {
       const { duration } = await measureValidationTime(() => {
         try {
           schema.parse(invalidData);
-        } catch (e) {
+        } catch (_e) {
           // Expected to fail
         }
       });
@@ -371,7 +372,7 @@ async function analyzeSchemaValidationPerformance() {
   // Simulate compiled validation (pre-computed validation functions)
   const compiledValidators = {};
   
-  for (const [nodeType, schema] of Object.entries(nodeSchemas)) {
+  for (const [nodeType, _schema] of Object.entries(nodeSchemas)) {
     // Create a "compiled" validator (simplified validation logic)
     compiledValidators[nodeType] = (data) => {
       // Simplified validation - would be much faster in real implementation
