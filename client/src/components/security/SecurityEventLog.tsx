@@ -18,7 +18,7 @@ import {
   ChevronDown,
   ExternalLink
 } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
+import { format, // parseISO // Unused import } from 'date-fns';
 
 interface SecurityEvent {
   id: string;
@@ -143,7 +143,7 @@ export const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ onEventClick
   };
 
   const filteredAndSortedEvents = useMemo(() => {
-    let filtered = events.filter(event => {
+    const filtered = events.filter(event => {
       const matchesSearch = !searchTerm || 
         event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.event_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -186,31 +186,31 @@ export const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ onEventClick
 
   const getSeverityIcon = (severity: SecurityEvent['severity']) => {
     switch (severity) {
-      case 'critical':
-        return <XCircle className="h-4 w-4 text-red-600" />;
-      case 'high':
-        return <AlertTriangle className="h-4 w-4 text-orange-600" />;
-      case 'medium':
-        return <Shield className="h-4 w-4 text-yellow-600" />;
-      case 'low':
-        return <Info className="h-4 w-4 text-blue-600" />;
-      case 'info':
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      default:
-        return <Info className="h-4 w-4 text-gray-600" />;
+    case 'critical':
+      return <XCircle className="h-4 w-4 text-red-600" />;
+    case 'high':
+      return <AlertTriangle className="h-4 w-4 text-orange-600" />;
+    case 'medium':
+      return <Shield className="h-4 w-4 text-yellow-600" />;
+    case 'low':
+      return <Info className="h-4 w-4 text-blue-600" />;
+    case 'info':
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    default:
+      return <Info className="h-4 w-4 text-gray-600" />;
     }
   };
 
   const getOutcomeColor = (outcome: SecurityEvent['outcome']) => {
     switch (outcome) {
-      case 'success':
-        return 'text-green-600 bg-green-50';
-      case 'failure':
-        return 'text-red-600 bg-red-50';
-      case 'blocked':
-        return 'text-orange-600 bg-orange-50';
-      default:
-        return 'text-gray-600 bg-gray-50';
+    case 'success':
+      return 'text-green-600 bg-green-50';
+    case 'failure':
+      return 'text-red-600 bg-red-50';
+    case 'blocked':
+      return 'text-orange-600 bg-orange-50';
+    default:
+      return 'text-gray-600 bg-gray-50';
     }
   };
 

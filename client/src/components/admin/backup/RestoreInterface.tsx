@@ -164,7 +164,7 @@ export interface RestorePreview {
     restore_record_count: number;
     estimated_changes: number;
     conflict_count: number;
-    preview_records: any[];
+    preview_records: unknown[];
   }[];
   
   impact_analysis: {
@@ -180,7 +180,7 @@ export interface RestorePreview {
   blockers: string[];
 }
 
-const RestoreInterface: React.FC = () => {
+const ___RestoreInterface: React.FC = () => {
   // State management
   const [recoveryPoints, setRecoveryPoints] = useState<AdminRestorePoint[]>([]);
   const [selectedPoint, setSelectedPoint] = useState<AdminRestorePoint | null>(null);
@@ -210,7 +210,7 @@ const RestoreInterface: React.FC = () => {
     }
   });
   const [activeExecutions, setActiveExecutions] = useState<RestoreExecution[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [___loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('select');
 
   // Load recovery points
@@ -263,7 +263,7 @@ const RestoreInterface: React.FC = () => {
     
     // Generate preview
     try {
-      const response = await fetch(`/api/admin/restore/preview`, {
+      const response = await fetch('/api/admin/restore/preview', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -326,7 +326,7 @@ const RestoreInterface: React.FC = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const formatDuration = (totalSeconds: number) => {
+  const ___formatDuration = (totalSeconds: number) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;

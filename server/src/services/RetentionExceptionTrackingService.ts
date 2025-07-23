@@ -1899,7 +1899,7 @@ export class RetentionExceptionTrackingService {
 
   private async setupMonitoring(
     exceptionType: ExceptionType,
-    category: DataCategory
+    _____category: DataCategory
   ): Promise<ExceptionMonitoring> {
     return {
       monitoringPlan: {
@@ -1930,17 +1930,17 @@ export class RetentionExceptionTrackingService {
   }
 
   private async assessRisks(
-    exceptionType: ExceptionType,
-    category: DataCategory,
-    requestedPeriod: number
+    _____exceptionType: ExceptionType,
+    _____category: DataCategory,
+    _____requestedPeriod: number
   ): Promise<ExceptionRisk[]> {
     // Implementation would perform risk assessment
     return [];
   }
 
   private async scheduleReviews(
-    exceptionType: ExceptionType,
-    requestedPeriod: number
+    _____exceptionType: ExceptionType,
+    _____requestedPeriod: number
   ): Promise<ExceptionReview[]> {
     // Implementation would schedule periodic reviews
     return [];
@@ -2126,7 +2126,7 @@ export class RetentionExceptionTrackingService {
     );
   }
 
-  private async collectMonitoringMetrics(exception: RetentionException): Promise<MonitoringMetric[]> {
+  private async collectMonitoringMetrics(_____exception: RetentionException): Promise<MonitoringMetric[]> {
     // Implementation would collect actual monitoring metrics
     return [];
   }
@@ -2144,7 +2144,7 @@ export class RetentionExceptionTrackingService {
   private async generateReportSummary(
     metrics: MonitoringMetric[],
     compliance: ExceptionCompliance,
-    conditions: ExceptionCondition[]
+    _____conditions: ExceptionCondition[]
   ): Promise<ReportSummary> {
     return {
       overallStatus: OverallStatus.GOOD,
@@ -2160,18 +2160,18 @@ export class RetentionExceptionTrackingService {
   }
 
   private async generateFindings(
-    metrics: MonitoringMetric[],
-    compliance: ExceptionCompliance,
-    conditions: ExceptionCondition[]
+    _____metrics: MonitoringMetric[],
+    _____compliance: ExceptionCompliance,
+    _____conditions: ExceptionCondition[]
   ): Promise<ReportFinding[]> {
     // Implementation would generate actual findings
     return [];
   }
 
   private async generateRecommendations(
-    metrics: MonitoringMetric[],
-    compliance: ExceptionCompliance,
-    conditions: ExceptionCondition[]
+    _____metrics: MonitoringMetric[],
+    _____compliance: ExceptionCompliance,
+    _____conditions: ExceptionCondition[]
   ): Promise<ReportRecommendation[]> {
     // Implementation would generate actual recommendations
     return [];

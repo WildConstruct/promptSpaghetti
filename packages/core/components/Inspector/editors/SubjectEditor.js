@@ -25,7 +25,7 @@ const SUBJECT_CATEGORIES = [
     { value: 'organization', label: 'Organization', group: 'Abstract' },
     { value: 'other', label: 'Other', group: 'Misc' }
 ];
-export const SubjectEditor = ({ nodeId, nodeData, onChange }) => {
+export const SubjectEditor = ({ _____nodeId, nodeData, onChange }) => {
     // Subject specific fields
     const label = nodeData.label || '';
     const template = nodeData.template || '';

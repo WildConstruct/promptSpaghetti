@@ -612,7 +612,7 @@ export class OpenIDConnectService {
    */
   private async addStandardClaims(
     claims: IDTokenClaims | UserInfoClaims,
-    user: any,
+    user: unknown,
     scopes: string[]
   ): Promise<void> {
     // Profile scope claims
@@ -666,7 +666,7 @@ export class OpenIDConnectService {
    * Get User by ID
    * Retrieves user data for claim generation
    */
-  private async getUserById(userId: string): Promise<any> {
+  private async getUserById(userId: string): Promise<unknown> {
     try {
       const result = await this.db.query(`
         SELECT 

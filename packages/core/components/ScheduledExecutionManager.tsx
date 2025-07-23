@@ -342,7 +342,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const ___getStatusIcon = (status: string) => {
     switch (status) {
     case 'running': return <PlayIcon className="h-4 w-4 text-blue-600" />;
     case 'completed': return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
@@ -538,7 +538,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
   const renderStatisticsTab = () => {
     const totalExecutions = executionLogs.length;
     const completedExecutions = executionLogs.filter(log => log.status === 'completed').length;
-    const failedExecutions = executionLogs.filter(log => log.status === 'failed').length;
+    const ___failedExecutions = executionLogs.filter(log => log.status === 'failed').length;
     const successRate = totalExecutions > 0 ? ((completedExecutions / totalExecutions) * 100).toFixed(1) : '0';
     const avgExecutionTime = executionLogs
       .filter(log => log.execution_time_ms)

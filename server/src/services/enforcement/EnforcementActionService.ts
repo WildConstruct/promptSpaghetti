@@ -280,7 +280,7 @@ export class EnforcementActionService {
     
     // Build dynamic query
     const conditions: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (filters.targetType) {
@@ -724,7 +724,7 @@ export class EnforcementActionService {
 
   private async executeActionType(
     action: EnforcementAction,
-    client: any
+    client: unknown
   ): Promise<{ success: boolean; error?: string }> {
     try {
       switch (action.actionType) {
@@ -750,7 +750,7 @@ export class EnforcementActionService {
     }
   }
 
-  private async executeWarning(action: EnforcementAction, client: any): Promise<{ success: boolean }> {
+  private async executeWarning(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
     // Record warning in user's record
     await client.query(`
       INSERT INTO user_warnings (user_id, warning_type, reason, issued_by, issued_at, expires_at)
@@ -767,7 +767,7 @@ export class EnforcementActionService {
     return { success: true };
   }
 
-  private async executeContentFlag(action: EnforcementAction, client: any): Promise<{ success: boolean }> {
+  private async executeContentFlag(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
     // Flag content for review
     await client.query(`
       INSERT INTO content_flags (content_type, content_id, flag_type, reason, flagged_by, flagged_at)
@@ -784,7 +784,7 @@ export class EnforcementActionService {
     return { success: true };
   }
 
-  private async executeContentRemoval(action: EnforcementAction, client: any): Promise<{ success: boolean }> {
+  private async executeContentRemoval(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
     // Remove or hide content
     if (action.targetType === 'template') {
       await client.query(`
@@ -800,7 +800,7 @@ export class EnforcementActionService {
     return { success: true };
   }
 
-  private async executeAccountWarning(action: EnforcementAction, client: any): Promise<{ success: boolean }> {
+  private async executeAccountWarning(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
     // Issue account-level warning
     await client.query(`
       INSERT INTO account_warnings (user_id, warning_level, reason, issued_by, issued_at, acknowledged)
@@ -816,7 +816,7 @@ export class EnforcementActionService {
     return { success: true };
   }
 
-  private async executeAccountRestriction(action: EnforcementAction, client: any): Promise<{ success: boolean }> {
+  private async executeAccountRestriction(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
     // Apply account restrictions
     await client.query(`
       INSERT INTO user_restrictions (user_id, restriction_type, reason, expires_at, created_by)
@@ -828,7 +828,7 @@ export class EnforcementActionService {
     return { success: true };
   }
 
-  private async executeAccountSuspension(action: EnforcementAction, client: any): Promise<{ success: boolean }> {
+  private async executeAccountSuspension(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
     // Suspend user account
     await client.query(`
       UPDATE user_verification_status 
@@ -859,7 +859,7 @@ export class EnforcementActionService {
     return { success: true };
   }
 
-  private async executeTransactionBlock(action: EnforcementAction, client: any): Promise<{ success: boolean }> {
+  private async executeTransactionBlock(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
     // Block transaction
     await client.query(`
       UPDATE transactions 
@@ -951,7 +951,7 @@ export class EnforcementActionService {
     return actions;
   }
 
-  private async captureTargetSnapshot(targetType: TargetType, targetId: string): Promise<any> {
+  private async captureTargetSnapshot(targetType: TargetType, targetId: string): Promise<unknown> {
     // Capture snapshot of target entity at time of report
     try {
       switch (targetType) {
@@ -1054,7 +1054,7 @@ export class EnforcementActionService {
   }
 
   // Mapping methods
-  private mapRowToEnforcementAction(row: any): EnforcementAction {
+  private mapRowToEnforcementAction(row: unknown): EnforcementAction {
     return {
       actionId: row.action_id,
       actionType: row.action_type,
@@ -1086,7 +1086,7 @@ export class EnforcementActionService {
     };
   }
 
-  private mapRowToViolationReport(row: any): ViolationReport {
+  private mapRowToViolationReport(row: unknown): ViolationReport {
     return {
       reportId: row.report_id,
       reportType: row.report_type,
@@ -1110,7 +1110,7 @@ export class EnforcementActionService {
     };
   }
 
-  private mapRowToAppeal(row: any): EnforcementAppeal {
+  private mapRowToAppeal(row: unknown): EnforcementAppeal {
     return {
       appealId: row.appeal_id,
       enforcementActionId: row.enforcement_action_id,
@@ -1152,7 +1152,7 @@ export class EnforcementActionService {
   }
 
   // Analytics calculation methods (simplified implementations)
-  private async calculateOverallMetrics(timeRange: any): Promise<any> {
+  private async calculateOverallMetrics(_____timeRange: Error): Promise<unknown> {
     // Implementation would query database for metrics
     return {
       totalActions: 0,
@@ -1168,15 +1168,15 @@ export class EnforcementActionService {
     };
   }
 
-  private async calculateActionBreakdown(timeRange: any): Promise<any> {
+  private async calculateActionBreakdown(_____timeRange: Error): Promise<unknown> {
     return { byType: [], bySeverity: [], byStatus: [], byExecutionType: [] };
   }
 
-  private async calculateViolationBreakdown(timeRange: any): Promise<any> {
+  private async calculateViolationBreakdown(_____timeRange: Error): Promise<unknown> {
     return { byCategory: [], bySource: [], byConfidence: [] };
   }
 
-  private async calculateEffectivenessMetrics(timeRange: any): Promise<any> {
+  private async calculateEffectivenessMetrics(_____timeRange: Error): Promise<unknown> {
     return {
       deterrentEffect: 0,
       recidivismRate: 0,
@@ -1189,7 +1189,7 @@ export class EnforcementActionService {
     };
   }
 
-  private async calculateEnforcementTrends(timeRange: any): Promise<any> {
+  private async calculateEnforcementTrends(_____timeRange: Error): Promise<unknown> {
     return {
       violationTrend: 'stable',
       actionTrend: 'stable',
@@ -1203,7 +1203,7 @@ export class EnforcementActionService {
     };
   }
 
-  private async calculateAppealMetrics(timeRange: any): Promise<any> {
+  private async calculateAppealMetrics(_____timeRange: Error): Promise<unknown> {
     return {
       totalAppeals: 0,
       appealRate: 0,
@@ -1217,16 +1217,16 @@ export class EnforcementActionService {
     };
   }
 
-  private async generateInsights(overallMetrics: any, trends: any): Promise<any[]> {
+  private async generateInsights(_____overallMetrics: unknown, _____trends: unknown): Promise<any[]> {
     return [];
   }
 
-  private async generateRecommendations(effectivenessMetrics: any, appealMetrics: any): Promise<any[]> {
+  private async generateRecommendations(_____effectivenessMetrics: unknown, _____appealMetrics: unknown): Promise<any[]> {
     return [];
   }
 
   // Additional helper methods
-  private async recordActionExecution(actionId: string, result: any, client: any): Promise<void> {
+  private async recordActionExecution(actionId: string, result: Record<string, unknown>, client: unknown): Promise<void> {
     await client.query(`
       INSERT INTO enforcement_action_executions (action_id, executed_at, result, details)
       VALUES ($1, NOW(), $2, $3)
@@ -1246,7 +1246,7 @@ export class EnforcementActionService {
     `, [status, reportId]);
   }
 
-  private async resolveViolationReport(reportId: string, resolution: any): Promise<void> {
+  private async resolveViolationReport(reportId: string, resolution: unknown): Promise<void> {
     await this.db.query(`
       UPDATE violation_reports 
       SET status = 'resolved', resolution = $1, updated_at = NOW()
@@ -1254,7 +1254,7 @@ export class EnforcementActionService {
     `, [JSON.stringify(resolution), reportId]);
   }
 
-  private async updateAppeal(appealId: string, updates: any): Promise<void> {
+  private async updateAppeal(appealId: string, updates: unknown): Promise<void> {
     const setClause = Object.keys(updates).map((key, index) => `${key} = $${index + 2}`).join(', ');
     const values = [appealId, ...Object.values(updates)];
     

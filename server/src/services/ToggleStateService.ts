@@ -8,7 +8,8 @@
 
 import { EventEmitter } from 'events';
 import { FeatureToggleDAO } from '../database/feature-toggle-dao';
-import { RetryUtils, retryableDatabase } from '../utils/RetryUtils';
+import { retryableDatabase } from '../utils/RetryUtils';
+// import { RetryUtils } from '../utils/RetryUtils';
 import { 
   FeatureToggle, 
   ToggleType, 
@@ -41,7 +42,7 @@ export interface BulkStateOperation {
   operation: 'enable' | 'disable' | 'toggle' | 'update_values';
   toggles: Array<string | {
     key: string;
-    value?: any;
+    value?: unknown;
     reason?: string;
   }>;
   reason?: string;
@@ -75,21 +76,21 @@ export interface StateWatchRequest {
   keys?: string[];
   events?: string[];
   filters?: ToggleStateQuery;
-  callback: (event: any) => void;
+  callback: (event: unknown) => void;
 }
 
 // Response interfaces
 export interface ToggleStateQueryResult {
-  states: any[];
+  states: unknown[];
   total: number;
   cacheHit?: boolean;
 }
 
 export interface BulkOperationResult {
   results: {
-    successful: any[];
-    failed: any[];
-    rollbacks: any[];
+    successful: unknown[];
+    failed: unknown[];
+    rollbacks: unknown[];
   };
   summary: {
     total: number;
@@ -205,7 +206,7 @@ export class ToggleStateService extends EventEmitter {
     orgId?: string;
     groupBy?: string[];
     timeRange?: string;
-  }): Promise<any> {
+  }): Promise<unknown> {
     try {
       // Get all toggles for the organization
       const result = await this.dao.listToggles({
@@ -465,7 +466,7 @@ export class ToggleStateService extends EventEmitter {
   // ==========================================
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 500 })
-  async cloneStates(request: StateCloneRequest): Promise<any> {
+  async cloneStates(request: StateCloneRequest): Promise<unknown> {
     try {
       // Get source toggles
       const sourceQuery = await this.queryStates({
@@ -562,7 +563,7 @@ export class ToggleStateService extends EventEmitter {
     this.watchers.set(watcherId, request);
 
     // Set up event listener for state changes
-    const handleStateChange = (event: any) => {
+    const handleStateChange = (event: unknown) => {
       // Check if event matches watch criteria
       if (request.keys && request.keys.length > 0) {
         if (!request.keys.includes(event.toggleKey)) {
@@ -598,7 +599,7 @@ export class ToggleStateService extends EventEmitter {
   // ==========================================
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
-  async compareStates(request: StateComparisonRequest): Promise<any> {
+  async compareStates(request: StateComparisonRequest): Promise<unknown> {
     try {
       // Get states for both sides
       const [leftStates, rightStates] = await Promise.all([
@@ -683,7 +684,7 @@ export class ToggleStateService extends EventEmitter {
   async getSystemHealth(options: {
     orgId?: string;
     includeDetails?: boolean;
-  }): Promise<any> {
+  }): Promise<unknown> {
     try {
       const summary = await this.getStateSummary({
         orgId: options.orgId,
@@ -746,7 +747,7 @@ export class ToggleStateService extends EventEmitter {
     keys?: string[];
     orgId?: string;
     checks?: string[];
-  }): Promise<any> {
+  }): Promise<unknown> {
     const validation = {
       isValid: true,
       issues: [] as any[],
@@ -820,7 +821,7 @@ export class ToggleStateService extends EventEmitter {
       grouped[groupField] = {};
       
       for (const toggle of toggles) {
-        let groupValue: any;
+        let groupValue: Error;
         switch (groupField) {
         case 'type':
           groupValue = toggle.type;
@@ -848,7 +849,7 @@ export class ToggleStateService extends EventEmitter {
     return grouped;
   }
 
-  private calculateDifferences(left: any, right: any): string[] {
+  private calculateDifferences(left: unknown, right: unknown): string[] {
     const differences = [];
     
     if (left.enabled !== right.enabled) {

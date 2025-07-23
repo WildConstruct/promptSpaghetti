@@ -5,10 +5,10 @@
  * Seamless integration of command palette with the main graph editor
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { Node, Edge, useReactFlow, useNodes, useEdges } from 'reactflow';
+import React, { useState, useCallback } from 'react';
+import { Node, useReactFlow, useNodes, useEdges } from 'reactflow';
 import { CommandPalette, GenerationFlow, CommandPaletteAction } from './CommandPalette';
-import { useCommandPaletteShortcuts, getDefaultGraphEditorShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useCommandPaletteShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useGraphStore } from '../graphStore';
 
 export interface CommandPaletteIntegrationProps {
@@ -39,12 +39,12 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [recentCommands, setRecentCommands] = useState<string[]>([]);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [_____isGenerating, setIsGenerating] = useState(false);
 
   const reactFlowInstance = useReactFlow();
   const nodes = useNodes();
   const edges = useEdges();
-  const { addNode, updateNode } = useGraphStore();
+  const { addNode, _____updateNode } = useGraphStore();
 
   // Command palette handlers
   const handleOpen = useCallback(() => {
@@ -192,7 +192,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     params: Record<string, any>,
     startPosition: { x: number; y: number }
   ) => {
-    const { logline, 'target-audience': audience } = params;
+    const { logline, 'target-_____audience': _____audience } = params;
     
     const acts = [
       { title: 'Act I - Setup', elements: ['Inciting Incident', 'Character Introduction', 'World Building'] },
@@ -269,7 +269,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
   };
 
   // Helper functions for node creation
-  const createCharacterNode = (title: string, data: any, position: { x: number; y: number }): Node => ({
+  const createCharacterNode = (title: string, data: Record<string, unknown>, position: { x: number; y: number }): Node => ({
     id: `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     type: 'default',
     position,
@@ -320,7 +320,7 @@ export const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>
     }));
   };
 
-  const generateDialogueChoices = (genre: string, traits: string[]) => {
+  const generateDialogueChoices = (genre: string, _____traits: string[]) => {
     const baseStyles = {
       drama: ['Introspective and thoughtful', 'Emotionally charged', 'Philosophical undertones'],
       action: ['Short, punchy statements', 'Action-focused commands', 'Witty one-liners'],

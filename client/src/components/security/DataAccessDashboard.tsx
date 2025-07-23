@@ -172,7 +172,7 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
   };
 
   // Check specific resource access
-  const checkResourceAccess = async (resourceId: string): Promise<AccessPermissions | null> => {
+  const ___checkResourceAccess = async (resourceId: string): Promise<AccessPermissions | null> => {
     try {
       const response = await fetch(`${apiBaseUrl}/access/resource/${resourceId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -202,21 +202,21 @@ const DataAccessDashboard: React.FC<DataAccessDashboardProps> = ({
 
   const getClassificationColor = (classification: string) => {
     switch (classification) {
-      case 'PUBLIC': return '#28a745';
-      case 'INTERNAL': return '#ffc107';
-      case 'CONFIDENTIAL': return '#fd7e14';
-      case 'RESTRICTED': return '#dc3545';
-      default: return '#6c757d';
+    case 'PUBLIC': return '#28a745';
+    case 'INTERNAL': return '#ffc107';
+    case 'CONFIDENTIAL': return '#fd7e14';
+    case 'RESTRICTED': return '#dc3545';
+    default: return '#6c757d';
     }
   };
 
   const getAccessLevelIcon = (level: string) => {
     switch (level) {
-      case 'GRANTED': return '✅';
-      case 'DENIED': return '❌';
-      case 'PENDING': return '⏳';
-      case 'EXPIRED': return '⏰';
-      default: return '❓';
+    case 'GRANTED': return '✅';
+    case 'DENIED': return '❌';
+    case 'PENDING': return '⏳';
+    case 'EXPIRED': return '⏰';
+    default: return '❓';
     }
   };
 

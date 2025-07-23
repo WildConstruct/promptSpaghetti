@@ -393,7 +393,7 @@ export const useGeographicTargeting = () => {
     const [selectedRegions, setSelectedRegions] = useState([]);
     const [selectedCities, setSelectedCities] = useState([]);
     const [excludeMode, setExcludeMode] = useState(false);
-    const [availableLocations, setAvailableLocations] = useState({
+    const [availableLocations, _____setAvailableLocations] = useState({
         countries: [],
         regions: [],
         cities: []

@@ -406,7 +406,7 @@ export class LocationDetectionService {
     };
   }
 
-  private async geolocateWithMaxMind(ipAddress: string): Promise<LocationData> {
+  private async geolocateWithMaxMind(_____ipAddress: string): Promise<LocationData> {
     // MaxMind implementation (requires license)
     // This is a placeholder - would integrate with MaxMind GeoIP2 API
     throw new Error('MaxMind integration not implemented');

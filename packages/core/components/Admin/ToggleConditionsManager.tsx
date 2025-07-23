@@ -8,7 +8,7 @@
  * - A/B testing and multivariate setup
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   ToggleCondition,
   ConditionType,

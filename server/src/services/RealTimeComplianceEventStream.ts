@@ -11,7 +11,7 @@
 
 import { EventEmitter } from 'events';
 import WebSocket from 'ws';
-import { RealTimeEvent, ComplianceViolationEvent, MonitoringMetrics } from './RealTimeComplianceMonitor';
+import { RealTimeEvent, ComplianceViolationEvent } from './RealTimeComplianceMonitor';
 import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
@@ -93,7 +93,7 @@ export interface SubscriptionChannel {
 export interface EventFilter {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex' | 'in' | 'not_in';
-  value: any;
+  value: Error;
   caseSensitive?: boolean;
 }
 
@@ -227,7 +227,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   /**
    * Handle new WebSocket connection
    */
-  private handleWebSocketConnection(ws: WebSocket, req: any): void {
+  private handleWebSocketConnection(ws: WebSocket, ___req: unknown): void {
     const clientId = `client-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     ws.on('message', async (data) => {
@@ -262,7 +262,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   private async handleWebSocketMessage(
     ws: WebSocket, 
     clientId: string, 
-    message: any
+    message: Error
   ): Promise<void> {
     switch (message.type) {
     case 'subscribe':
@@ -288,7 +288,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   private async handleSubscribeMessage(
     ws: WebSocket, 
     clientId: string, 
-    message: any
+    message: Error
   ): Promise<void> {
     try {
       // Validate subscription request
@@ -366,7 +366,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   /**
    * Handle unsubscribe message
    */
-  private async handleUnsubscribeMessage(clientId: string, message: any): Promise<void> {
+  private async handleUnsubscribeMessage(clientId: string, message: Error): Promise<void> {
     const subscriptionId = message.subscriptionId;
     const subscription = this.subscriptions.get(subscriptionId);
 
@@ -401,7 +401,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   /**
    * Handle filter update message
    */
-  private async handleUpdateFiltersMessage(clientId: string, message: any): Promise<void> {
+  private async handleUpdateFiltersMessage(clientId: string, message: Error): Promise<void> {
     const subscriptionId = message.subscriptionId;
     const subscription = this.subscriptions.get(subscriptionId);
 
@@ -583,9 +583,9 @@ export class RealTimeComplianceEventStream extends EventEmitter {
   /**
    * Get field value from event
    */
-  private getEventFieldValue(event: RealTimeEvent, field: string): any {
+  private getEventFieldValue(event: RealTimeEvent, field: string): unknown {
     const parts = field.split('.');
-    let value: any = event;
+    let value: Event = event;
     
     for (const part of parts) {
       if (value && typeof value === 'object') {

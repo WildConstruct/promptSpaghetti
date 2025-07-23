@@ -8,7 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useMemo } from 'react';
 export const CreativeVarianceAnalyzer = ({ results, varianceAnalysis, className = '' }) => {
     const [activeTab, setActiveTab] = useState('overview');
-    const [selectedMetric, setSelectedMetric] = useState(null);
+    const [_____selectedMetric, _____setSelectedMetric] = useState(null);
     // Calculate advanced metrics from results
     const advancedMetrics = useMemo(() => {
         const validResults = results.filter(r => !r.error && r.output);

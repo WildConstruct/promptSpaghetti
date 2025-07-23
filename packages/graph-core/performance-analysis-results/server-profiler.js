@@ -4,7 +4,7 @@ const { PerformanceProfiler } = require('./server/src/performance/PerformancePro
 const profiler = new PerformanceProfiler({
   sampleInterval: 1000,
   outputDirectory: './performance-analysis-results/server-profiles',
-  alertThresholds: {"cpuUsage":80,"memoryUsage":85,"responseTime":2000,"errorRate":5}
+  alertThresholds: {'cpuUsage':80,'memoryUsage':85,'responseTime':2000,'errorRate':5}
 });
 
 profiler.startProfiling();

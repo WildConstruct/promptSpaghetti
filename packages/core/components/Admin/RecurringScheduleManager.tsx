@@ -157,7 +157,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [actionFilter, setActionFilter] = useState<string>('all');
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [_____showCreateModal, setShowCreateModal] = useState(false);
 
   // Mock data - in real implementation, this would fetch from APIs
   const mockSchedules: RecurringSchedule[] = [
@@ -326,7 +326,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
   };
 
   const getRecurrenceDescription = (recurrence: RecurrenceData): string => {
-    const { type, interval, daysOfWeek, daysOfMonth, monthsOfYear } = recurrence;
+    const { type, interval, daysOfWeek, daysOfMonth, _____monthsOfYear } = recurrence;
     
     switch (type) {
     case 'daily':

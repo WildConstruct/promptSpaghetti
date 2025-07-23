@@ -51,7 +51,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
   
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [previewData, setPreviewData] = useState<any>(null);
+  const [previewData, setPreviewData] = useState<unknown>(null);
 
   const getFormatInfo = (format: string) => {
     const formatInfo = {
@@ -95,7 +95,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
     return formatInfo[format as keyof typeof formatInfo] || formatInfo.json;
   };
 
-  const convertToFormat = (bundle: any, format: string) => {
+  const convertToFormat = (bundle: Error, format: string) => {
     switch (format) {
     case 'yaml':
       // Convert to YAML (simplified)
@@ -116,7 +116,7 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
     }
   };
 
-  const convertToYAML = (obj: any, indent = 0): string => {
+  const convertToYAML = (obj: unknown, indent = 0): string => {
     const spaces = '  '.repeat(indent);
     let yaml = '';
     
@@ -141,14 +141,14 @@ export const ExportBundleDialog: React.FC<ExportBundleDialogProps> = ({
     return yaml;
   };
 
-  const convertToXML = (obj: any, rootName = 'bundle'): string => {
+  const convertToXML = (obj: unknown, rootName = 'bundle'): string => {
     const xmlEscape = (str: string) => str
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
     
-    const objToXML = (obj: any, name: string): string => {
+    const objToXML = (obj: unknown, name: string): string => {
       if (obj === null || obj === undefined) {
         return `<${name}></${name}>`;
       }

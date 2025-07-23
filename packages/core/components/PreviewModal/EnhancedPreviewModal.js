@@ -15,7 +15,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { ErrorFactory } from '../../errors/ErrorFactory';
 import { CreativeVarianceAnalyzer } from '../VarianceAnalysis/CreativeVarianceAnalyzer';
 import { VarianceVisualization } from '../VarianceAnalysis/VarianceVisualization';
-export const EnhancedPreviewModal = ({ open, loading, error, results, varianceAnalysis, onClose, onCancel, onResultHover, onResultSelect, onResultSave, onResultExport, onResultRate, onResultTag, onResultNote, enableSelection = true, enableRating = true, enableNotes = true, enableExport = true, maxResults = 50 }) => {
+export const EnhancedPreviewModal = ({ open, loading, error, results, varianceAnalysis, onClose, _____onCancel, onResultHover, onResultSelect, _____onResultSave, onResultExport, onResultRate, _____onResultTag, onResultNote, enableSelection = true, enableRating = true, enableNotes = true, enableExport = true, maxResults = 50 }) => {
     const [selectedResults, setSelectedResults] = useState(new Set());
     const [activeTab, setActiveTab] = useState('results');
     const [expandedResult, setExpandedResult] = useState(null);

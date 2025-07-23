@@ -6,7 +6,7 @@
  * across different types of operations and failure scenarios.
  */
 
-import { RetryUtils, RetryPatterns, retryableDatabase, retryableHttp, RetryError } from '../utils/RetryUtils';
+import { RetryUtils, RetryPatterns, retryableDatabase, retryableHttp } from '../utils/RetryUtils';
 
 export class RetryDemoService {
   /**
@@ -19,7 +19,7 @@ export class RetryDemoService {
       console.log(`Database operation attempt ${attempt} failed: ${error.message}`);
     }
   })
-  async performDatabaseOperation(): Promise<{ success: boolean; data: any }> {
+  async performDatabaseOperation(): Promise<{ success: boolean; data: Record<string, unknown> }> {
     // Simulate a database operation that might fail
     const shouldFail = Math.random() < 0.3;
     
@@ -38,7 +38,7 @@ export class RetryDemoService {
     baseDelay: 1000,
     maxDelay: 8000
   })
-  async callExternalAPI(url: string): Promise<any> {
+  async callExternalAPI(___url: string): Promise<unknown> {
     // Simulate HTTP call that might fail with server errors
     const shouldFail = Math.random() < 0.4;
     
@@ -87,7 +87,7 @@ export class RetryDemoService {
   /**
    * Example 4: File operation with retry
    */
-  async exportLogsToFile(logData: any[], filename: string): Promise<string> {
+  async exportLogsToFile(logData: unknown[], filename: string): Promise<string> {
     return RetryPatterns.fileOperation(async () => {
       // Simulate file operation that might fail due to file system issues
       const shouldFail = Math.random() < 0.2;
@@ -107,7 +107,7 @@ export class RetryDemoService {
   /**
    * Example 5: Circuit breaker pattern with retry
    */
-  async sendCriticalAlert(alertData: any): Promise<void> {
+  async sendCriticalAlert(alertData: unknown): Promise<void> {
     return RetryUtils.executeWithCircuitBreaker(
       async () => {
         return this.sendNotificationToExternalService(alertData);
@@ -155,7 +155,7 @@ export class RetryDemoService {
   /**
    * Example 7: Graceful degradation with retry
    */
-  async getLogAnalytics(startDate: Date, endDate: Date): Promise<any> {
+  async getLogAnalytics(startDate: Date, endDate: Date): Promise<unknown> {
     try {
       // Try primary analytics service first
       return await RetryPatterns.apiCall(
@@ -183,7 +183,7 @@ export class RetryDemoService {
   /**
    * Example 8: Batch processing with retry and progress tracking
    */
-  async processBatchLogs(logs: any[], batchSize: number = 100): Promise<void> {
+  async processBatchLogs(logs: unknown[], batchSize: number = 100): Promise<void> {
     const batches = this.chunkArray(logs, batchSize);
     let processed = 0;
     const failed = [];
@@ -231,7 +231,7 @@ export class RetryDemoService {
     console.log(`Log analysis completed for session: ${sessionId}`);
   }
 
-  private async sendNotificationToExternalService(alertData: any): Promise<void> {
+  private async sendNotificationToExternalService(___alertData: unknown): Promise<void> {
     const shouldFail = Math.random() < 0.4;
     if (shouldFail) {
       const error = new Error('External notification service unavailable') as any;
@@ -241,53 +241,53 @@ export class RetryDemoService {
     console.log('Critical alert sent successfully');
   }
 
-  private async beginTransaction(): Promise<any> {
+  private async beginTransaction(): Promise<unknown> {
     return {
       commit: async () => console.log('Transaction committed'),
       rollback: async () => console.log('Transaction rolled back')
     };
   }
 
-  private async insertLogEntry(transaction: any): Promise<void> {
+  private async insertLogEntry(___transaction: unknown): Promise<void> {
     // Simulate database insert that might fail
     if (Math.random() < 0.1) {
       throw new Error('Database deadlock detected');
     }
   }
 
-  private async updateLogMetrics(transaction: any): Promise<void> {
+  private async updateLogMetrics(___transaction: unknown): Promise<void> {
     // Simulate metrics update that might fail
     if (Math.random() < 0.1) {
       throw new Error('Lock timeout exceeded');
     }
   }
 
-  private async createLogAlert(transaction: any): Promise<void> {
+  private async createLogAlert(___transaction: unknown): Promise<void> {
     // Simulate alert creation that might fail
     if (Math.random() < 0.1) {
       throw new Error('Connection lost during alert creation');
     }
   }
 
-  private async getPrimaryAnalytics(startDate: Date, endDate: Date): Promise<any> {
+  private async getPrimaryAnalytics(___startDate: Date, ___endDate: Date): Promise<unknown> {
     if (Math.random() < 0.5) {
       throw new Error('Primary analytics service timeout');
     }
     return { source: 'primary', data: { logs: 1000, errors: 50 } };
   }
 
-  private async getSecondaryAnalytics(startDate: Date, endDate: Date): Promise<any> {
+  private async getSecondaryAnalytics(___startDate: Date, ___endDate: Date): Promise<unknown> {
     if (Math.random() < 0.3) {
       throw new Error('Secondary analytics service overloaded');
     }
     return { source: 'secondary', data: { logs: 950, errors: 48 } };
   }
 
-  private getCachedAnalytics(startDate: Date, endDate: Date): any {
+  private getCachedAnalytics(___startDate: Date, ___endDate: Date): unknown {
     return { source: 'cache', data: { logs: 900, errors: 45 }, cached: true };
   }
 
-  private async processBatch(logs: any[]): Promise<void> {
+  private async processBatch(___logs: unknown[]): Promise<void> {
     // Simulate batch processing that might fail
     if (Math.random() < 0.2) {
       throw new Error('Batch processing failed due to resource constraints');

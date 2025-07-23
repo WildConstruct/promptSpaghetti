@@ -35,9 +35,9 @@ export interface ToggleOperation {
   type: OperationType;
   targetToggleId: string;
   newState?: boolean;
-  newValue?: any;
+  newValue?: unknown;
   reason: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 export enum OperationType {
@@ -150,7 +150,7 @@ export interface RollbackStep {
   stepNumber: number;
   action: OperationType;
   toggleId: string;
-  targetState: any;
+  targetState: Error;
   reason: string;
   dependencies: number[]; // step numbers this depends on
   validationRequired: boolean;
@@ -562,11 +562,11 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
    */
   async getImpactPreview(
     operation: ToggleOperation,
-    context: EnforcementContext = { requestSource: RequestSource.ADMIN_DASHBOARD, urgencyLevel: UrgencyLevel.NORMAL }
+    _____context: EnforcementContext = { requestSource: RequestSource.ADMIN_DASHBOARD, urgencyLevel: UrgencyLevel.NORMAL }
   ): Promise<ImpactPreview> {
     try {
       // Get dependency analysis
-      const dependencyAnalysis = await this.dependencyService.analyzeDependencies([operation.targetToggleId]);
+      const _____dependencyAnalysis = await this.dependencyService.analyzeDependencies([operation.targetToggleId]);
 
       // Get direct dependencies
       const directImpact = await this.dependencyService.getImpactAnalysis(
@@ -715,7 +715,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
 
   private async assessOperationImpact(
     operation: ToggleOperation,
-    context: EnforcementContext
+    _____context: EnforcementContext
   ): Promise<OperationImpact> {
     try {
       const impactAnalysis = await this.dependencyService.getImpactAnalysis(
@@ -838,8 +838,8 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
   private generateRecommendation(
     riskScore: number,
     dependencyValidation: { blockers: DependencyBlocker[]; warnings: DependencyWarning[] },
-    impactAssessment: OperationImpact,
-    context: EnforcementContext
+    _____impactAssessment: OperationImpact,
+    _____context: EnforcementContext
   ): EnforcementRecommendation {
     if (dependencyValidation.blockers.some(b => b.severity === BlockerSeverity.CRITICAL)) {
       return {
@@ -931,7 +931,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     return `enforcement_${operation.targetToggleId}_${operation.type}_${context.urgencyLevel}`;
   }
 
-  private isCacheValid(result: EnforcementResult): boolean {
+  private isCacheValid(_____result: EnforcementResult): boolean {
     // Implementation would check cache validity based on timestamps and configuration
     return false; // Placeholder
   }
@@ -960,7 +960,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
   }
 
   // Additional helper methods would be implemented here
-  private async sendNotifications(operation: ToggleOperation, result: EnforcementResult, context: EnforcementContext, actorId: string): Promise<void> {
+  private async sendNotifications(_____operation: ToggleOperation, _____result: EnforcementResult, _____context: EnforcementContext, _____actorId: string): Promise<void> {
     // Implementation would send notifications based on configuration
   }
 
@@ -1021,29 +1021,29 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
   }
 
   // Placeholder methods for complete interface implementation
-  private extractAffectedFeatures(impactAnalysis: any): string[] { return []; }
-  private assessBusinessImpact(riskScore: number): 'none' | 'low' | 'medium' | 'high' | 'critical' { return 'low'; }
-  private assessTechnicalComplexity(operation: ToggleOperation, impactAnalysis: any): 'simple' | 'moderate' | 'complex' | 'critical' { return 'simple'; }
-  private estimateRolloutDuration(impactAnalysis: any): number { return 5; }
-  private async executePrimaryOperation(operation: ToggleOperation, actorId: string): Promise<any> { return { success: true }; }
-  private async executeCascadeAction(cascadeAction: CascadeAction, actorId: string): Promise<any> { return { success: true }; }
-  private async validateFinalState(operation: ToggleOperation, cascadeActions: CascadeAction[], cascadeResults: any[]): Promise<any> { return { valid: true }; }
-  private async attemptRollback(executionId: string, error: any, actorId: string): Promise<void> { }
-  private async previewCascadeEffects(operation: ToggleOperation): Promise<any[]> { return []; }
-  private assessPreviewRisks(operation: ToggleOperation, directImpact: any, cascadePreview: any[]): any[] { return []; }
-  private calculateOverallRisk(riskFactors: any[]): number { return 0.3; }
+  private extractAffectedFeatures(_____impactAnalysis: unknown): string[] { return []; }
+  private assessBusinessImpact(_____riskScore: number): 'none' | 'low' | 'medium' | 'high' | 'critical' { return 'low'; }
+  private assessTechnicalComplexity(_____operation: ToggleOperation, _____impactAnalysis: unknown): 'simple' | 'moderate' | 'complex' | 'critical' { return 'simple'; }
+  private estimateRolloutDuration(_____impactAnalysis: unknown): number { return 5; }
+  private async executePrimaryOperation(_____operation: ToggleOperation, _____actorId: string): Promise<unknown> { return { success: true }; }
+  private async executeCascadeAction(_____cascadeAction: CascadeAction, _____actorId: string): Promise<unknown> { return { success: true }; }
+  private async validateFinalState(_____operation: ToggleOperation, _____cascadeActions: CascadeAction[], _____cascadeResults: unknown[]): Promise<unknown> { return { valid: true }; }
+  private async attemptRollback(_____executionId: string, _____error: Error, _____actorId: string): Promise<void> { }
+  private async previewCascadeEffects(_____operation: ToggleOperation): Promise<any[]> { return []; }
+  private assessPreviewRisks(_____operation: ToggleOperation, _____directImpact: unknown, _____cascadePreview: unknown[]): unknown[] { return []; }
+  private calculateOverallRisk(_____riskFactors: unknown[]): number { return 0.3; }
   private estimateExecutionTime(cascadeCount: number): number { return cascadeCount * 30; } // 30 seconds per cascade
-  private getRecommendedApprovals(riskFactors: any[]): string[] { return []; }
-  private getSafetyCheckRecommendations(operation: ToggleOperation, riskFactors: any[]): string[] { return []; }
+  private getRecommendedApprovals(_____riskFactors: unknown[]): string[] { return []; }
+  private getSafetyCheckRecommendations(_____operation: ToggleOperation, _____riskFactors: unknown[]): string[] { return []; }
 }
 
 // Supporting interfaces for completeness
 export interface OperationExecutionResult {
   executionId: string;
   success: boolean;
-  primaryResult: any;
+  primaryResult: unknown;
   cascadeResults: CascadeExecutionResult[];
-  finalValidation: any;
+  finalValidation: unknown;
   executionTime: number;
   rollbackPlanId?: string;
 }
@@ -1051,16 +1051,16 @@ export interface OperationExecutionResult {
 export interface CascadeExecutionResult {
   cascadeAction: CascadeAction;
   success: boolean;
-  result: any;
+  result: Record<string, unknown>;
   executionTime: number;
 }
 
 export interface ImpactPreview {
   operation: ToggleOperation;
-  directImpact: any[];
-  indirectImpact: any[];
-  cascadePreview: any[];
-  riskFactors: any[];
+  directImpact: unknown[];
+  indirectImpact: unknown[];
+  cascadePreview: unknown[];
+  riskFactors: unknown[];
   overallRiskScore: number;
   estimatedAffectedUsers: number;
   estimatedExecutionTime: number;

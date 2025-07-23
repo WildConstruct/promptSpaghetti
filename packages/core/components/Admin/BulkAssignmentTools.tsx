@@ -7,7 +7,7 @@
  * wizard, conflict resolution, and progress tracking.
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import './BulkAssignmentTools.css';
 
 // =============================================================================
@@ -123,7 +123,7 @@ export interface AssignmentTemplate {
 export interface TargetFilter {
   field: string;
   operator: 'eq' | 'ne' | 'in' | 'not_in' | 'contains' | 'starts_with';
-  value: any;
+  value: Error;
   logicalOperator?: 'AND' | 'OR';
 }
 
@@ -806,9 +806,9 @@ const BulkAssignmentActions: React.FC<BulkAssignmentActionsProps> = ({
 };
 
 // Placeholder components for remaining steps
-const ResourceSelectionStep: React.FC<any> = () => <div>Resource Selection Step - To be implemented</div>;
-const ParametersConfigurationStep: React.FC<any> = () => <div>Parameters Configuration Step - To be implemented</div>;
-const ConflictResolutionStep: React.FC<any> = () => <div>Conflict Resolution Step - To be implemented</div>;
-const ExecutionStep: React.FC<any> = () => <div>Execution Step - To be implemented</div>;
+const ResourceSelectionStep: React.FC<unknown> = () => <div>Resource Selection Step - To be implemented</div>;
+const ParametersConfigurationStep: React.FC<unknown> = () => <div>Parameters Configuration Step - To be implemented</div>;
+const ConflictResolutionStep: React.FC<unknown> = () => <div>Conflict Resolution Step - To be implemented</div>;
+const ExecutionStep: React.FC<unknown> = () => <div>Execution Step - To be implemented</div>;
 
 export default BulkAssignmentTools;

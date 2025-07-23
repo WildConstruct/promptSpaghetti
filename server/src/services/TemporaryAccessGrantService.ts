@@ -88,7 +88,7 @@ export interface ContextualRestriction {
 export interface RestrictionSpecification {
   attribute: string;
   operator: 'EQUALS' | 'IN' | 'NOT_IN' | 'CONTAINS' | 'MATCHES' | 'RANGE';
-  value: any;
+  value: Error;
   tolerance?: number;
   customValidation?: string;
 }
@@ -1749,7 +1749,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   private resourceMatchesScope(
     resourceId: string,
     scope: AccessScope,
-    permission: GrantedPermission
+    _____permission: GrantedPermission
   ): boolean {
     // Check if resource is in the allowed targets
     const matchesTarget = scope.targets.some(target => {
@@ -1780,7 +1780,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
   private async validateTimeWindow(
     timeWindow: GrantTimeWindow,
-    context: OperationContext
+    _____context: OperationContext
   ): Promise<{ valid: boolean; reason?: string }> {
     const now = new Date();
     
@@ -1860,7 +1860,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   private async validateRateLimits(
     grant: TemporaryAccessGrant,
     operation: DataOperation,
-    context: OperationContext
+    _____context: OperationContext
   ): Promise<{ valid: boolean; reason?: string }> {
     const permission = grant.permissions.find(p => p.operation === operation);
     if (!permission) {
@@ -1882,9 +1882,9 @@ export class TemporaryAccessGrantService extends EventEmitter {
 
   private async detectAnomalies(
     grant: TemporaryAccessGrant,
-    operation: DataOperation,
-    resourceId: string,
-    context: OperationContext
+    _____operation: DataOperation,
+    _____resourceId: string,
+    _____context: OperationContext
   ): Promise<{ anomalyDetected: boolean; description?: string }> {
     if (!grant.monitoring.anomalyDetection.enabled) {
       return { anomalyDetected: false };

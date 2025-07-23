@@ -301,16 +301,16 @@ export const SharePreview: React.FC<SharePreviewProps> = ({
 
   const renderPreview = () => {
     switch (activePreview) {
-      case 'twitter':
-        return renderTwitterPreview();
-      case 'linkedin':
-        return renderLinkedInPreview();
-      case 'discord':
-        return renderDiscordPreview();
-      case 'embed':
-        return renderEmbedPreview();
-      default:
-        return renderOpenGraphPreview();
+    case 'twitter':
+      return renderTwitterPreview();
+    case 'linkedin':
+      return renderLinkedInPreview();
+    case 'discord':
+      return renderDiscordPreview();
+    case 'embed':
+      return renderEmbedPreview();
+    default:
+      return renderOpenGraphPreview();
     }
   };
 

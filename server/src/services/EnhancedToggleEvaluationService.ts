@@ -154,7 +154,7 @@ export interface TraceStep {
   step: string;
   timestamp: number;
   duration: number;
-  details: any;
+  details: unknown;
 }
 
 export interface RuleEvaluationResult {
@@ -162,7 +162,7 @@ export interface RuleEvaluationResult {
   matched: boolean;
   reason: string;
   executionTime: number;
-  metadata: any;
+  metadata: Record<string, unknown>;
 }
 
 // Advanced rule evaluation engine
@@ -189,7 +189,7 @@ export interface RuleCondition {
   type: ConditionType;
   attribute: string;
   operator: ConditionOperator;
-  value: any;
+  value: Error;
   weight?: number; // for weighted evaluation
   nested?: RuleCondition[]; // for complex nested conditions
 }
@@ -226,8 +226,8 @@ export enum ConditionOperator {
 export interface RuleAction {
   type: ActionType;
   target?: string;
-  value?: any;
-  metadata?: any;
+  value?: unknown;
+  metadata?: unknown;
 }
 
 export enum ActionType {
@@ -426,7 +426,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
       }
 
       // 7. Generate Claude-specific metadata
-      let claudeMetadata: any;
+      let claudeMetadata: Record<string, unknown>;
       if (context.claudeContext) {
         claudeMetadata = this.generateClaudeMetadata(finalResult, context.claudeContext, riskAssessment);
         this.addTraceStep(trace, 'claude_metadata', claudeMetadata);
@@ -586,7 +586,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     return `eval_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private addTraceStep(trace: EvaluationTrace, step: string, details: any = {}): void {
+  private addTraceStep(trace: EvaluationTrace, step: string, details: unknown = {}): void {
     if (!this.config.debugging.enableTracing) return;
     
     trace.steps.push({
@@ -611,8 +611,8 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
   }
 
   private async checkEvaluationCache(
-    key: string,
-    context: EnhancedEvaluationContext
+    _____key: string,
+    _____context: EnhancedEvaluationContext
   ): Promise<EnhancedEvaluationResult | null> {
     // Implementation would check cache based on cache strategy
     return null; // Placeholder
@@ -620,7 +620,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
 
   private async checkDependencies(
     key: string,
-    context: EnhancedEvaluationContext
+    _____context: EnhancedEvaluationContext
   ): Promise<DependencyStatus> {
     try {
       const validation = await this.dependencyService.validateToggleActivation(key);
@@ -659,7 +659,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     }
   }
 
-  private async getAdvancedRules(key: string): Promise<AdvancedRule[]> {
+  private async getAdvancedRules(_____key: string): Promise<AdvancedRule[]> {
     // Implementation would fetch advanced rules for this toggle
     return []; // Placeholder
   }
@@ -829,7 +829,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     result: ToggleEvaluationResult,
     claudeContext: ClaudeEvaluationContext,
     riskAssessment?: RiskAssessment
-  ): any {
+  ): unknown {
     return {
       costImpact: claudeContext.costImpact || 'none',
       qualityImpact: claudeContext.qualityImpact || 'none',
@@ -911,9 +911,9 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
   }
 
   private async cacheEvaluationResult(
-    key: string,
-    context: EnhancedEvaluationContext,
-    result: EnhancedEvaluationResult
+    _____key: string,
+    _____context: EnhancedEvaluationContext,
+    _____result: EnhancedEvaluationResult
   ): Promise<void> {
     // Implementation would cache based on cache strategy
   }
@@ -968,7 +968,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
 interface CompiledRule {
   id: string;
   compiledCondition: Function;
-  metadata: any;
+  metadata: Record<string, unknown>;
 }
 
 interface CachedEvaluation {
@@ -996,7 +996,7 @@ interface EvaluationHistoryEntry {
   key: string;
   result: EnhancedEvaluationResult;
   timestamp: number;
-  context: any;
+  context: unknown;
 }
 
 export default EnhancedToggleEvaluationService;

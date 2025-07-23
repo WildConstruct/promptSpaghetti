@@ -57,7 +57,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     setHasChanges(true);
   };
 
-  const updateTypePreferences = (type: keyof PrefsType, updates: any) => {
+  const updateTypePreferences = (type: keyof PrefsType, updates: unknown) => {
     if (!preferences) return;
     
     const newPrefs = {
@@ -426,7 +426,7 @@ interface NotificationTypeSectionProps {
     enabled: boolean;
     channels: ('in_app' | 'email' | 'push')[];
   };
-  onChange: (updates: any) => void;
+  onChange: (updates: unknown) => void;
   extraOptions?: React.ReactNode;
 }
 

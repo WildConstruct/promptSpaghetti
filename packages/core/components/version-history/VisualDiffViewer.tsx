@@ -498,7 +498,7 @@ const ChangeItem: React.FC<ChangeItemProps> = ({
 };
 
 // Placeholder components for different view modes
-const SideBySideView: React.FC<any> = ({ fromGraph, toGraph, diff, selectedChange, showRegions, showPaths, zoom, pan, onZoomChange, onPanChange }) => (
+const SideBySideView: React.FC<unknown> = ({ _____fromGraph, _____toGraph, _____diff, _____selectedChange, _____showRegions, _____showPaths, _____zoom, _____pan, _____onZoomChange, _____onPanChange }) => (
   <div className="h-full flex">
     <div className="flex-1 border-r border-gray-300 bg-white">
       <div className="h-8 bg-gray-100 border-b border-gray-300 flex items-center px-3 text-sm font-medium text-gray-700">
@@ -519,7 +519,7 @@ const SideBySideView: React.FC<any> = ({ fromGraph, toGraph, diff, selectedChang
   </div>
 );
 
-const OverlayView: React.FC<any> = ({ fromGraph, toGraph, diff, selectedChange, showRegions, showPaths, zoom, pan, onZoomChange, onPanChange }) => (
+const OverlayView: React.FC<unknown> = ({ _____fromGraph, _____toGraph, _____diff, _____selectedChange, _____showRegions, _____showPaths, _____zoom, _____pan, _____onZoomChange, _____onPanChange }) => (
   <div className="h-full bg-white">
     <div className="h-8 bg-gray-100 border-b border-gray-300 flex items-center px-3 text-sm font-medium text-gray-700">
       Overlay View
@@ -530,7 +530,7 @@ const OverlayView: React.FC<any> = ({ fromGraph, toGraph, diff, selectedChange, 
   </div>
 );
 
-const ChangesOnlyView: React.FC<any> = ({ diff, filteredChanges, selectedChange, getChangeColor, getChangeIcon }) => (
+const ChangesOnlyView: React.FC<unknown> = ({ _____diff, filteredChanges, _____selectedChange, getChangeColor, getChangeIcon }) => (
   <div className="h-full bg-white p-4">
     <h3 className="text-lg font-medium text-gray-900 mb-4">Changes Summary</h3>
     <div className="space-y-4">

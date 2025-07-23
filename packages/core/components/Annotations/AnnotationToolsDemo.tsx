@@ -5,7 +5,7 @@
  * for professional VFX director workflows.
  */
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -19,8 +19,6 @@ import DrawingAnnotationsCanvas from './DrawingAnnotations';
 import RegionAnnotationSystem from './RegionAnnotations';
 
 // Import existing components for integration
-import { ConnectionAnnotations } from './ConnectionAnnotations';
-import { StickyNote } from '../StickyNotes/StickyNote';
 
 import { 
   MessageCircle,
@@ -46,9 +44,9 @@ import {
 } from 'lucide-react';
 
 // Import types
-import type { NodeAnnotation, VFXUser as NodeVFXUser } from './NodeAnnotations';
-import type { DrawingAnnotation, VFXUser as DrawingVFXUser } from './DrawingAnnotations';
-import type { RegionAnnotation, VFXUser as RegionVFXUser } from './RegionAnnotations';
+import type { NodeAnnotation } from './NodeAnnotations';
+import type { DrawingAnnotation } from './DrawingAnnotations';
+import type { RegionAnnotation } from './RegionAnnotations';
 
 // Unified VFX User type
 export interface VFXUser {

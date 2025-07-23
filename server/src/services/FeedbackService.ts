@@ -53,7 +53,7 @@ export class FeedbackService {
       const feedbackId = crypto.randomUUID();
       const now = new Date();
 
-      const result = await client.query(`
+      const _____result = await client.query(`
         INSERT INTO feedback (
           id, type, category, target_type, target_id, author_id,
           title, content, rating, is_anonymous, status, visibility,
@@ -162,7 +162,7 @@ export class FeedbackService {
     
     // Build WHERE clause
     const conditions: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (validatedFilter.targetId) {
@@ -318,7 +318,7 @@ export class FeedbackService {
 
       // Build update query
       const updateFields: string[] = [];
-      const params: any[] = [];
+      const params: unknown[] = [];
       let paramIndex = 1;
 
       if (validatedData.title !== undefined) {
@@ -739,7 +739,7 @@ export class FeedbackService {
   private async attachFiles(
     feedbackId: string,
     attachmentIds: string[],
-    client: any
+    client: unknown
   ): Promise<void> {
     for (const attachmentId of attachmentIds) {
       await client.query(
@@ -749,7 +749,7 @@ export class FeedbackService {
     }
   }
 
-  private async updateFeedbackSummary(targetId: string, client: any): Promise<void> {
+  private async updateFeedbackSummary(targetId: string, client: unknown): Promise<void> {
     // Invalidate cached summary to force regeneration
     await client.query(
       'DELETE FROM feedback_summaries WHERE target_id = $1',
@@ -761,8 +761,8 @@ export class FeedbackService {
     feedbackId: string,
     action: string,
     userId: string,
-    metadata: any,
-    client: any
+    metadata: Record<string, unknown>,
+    client: unknown
   ): Promise<void> {
     await client.query(`
       INSERT INTO feedback_activity_log (
@@ -779,7 +779,7 @@ export class FeedbackService {
     ]);
   }
 
-  private calculateQualityScore(ratingStats: any, engagementStats: any): number {
+  private calculateQualityScore(ratingStats: unknown, engagementStats: unknown): number {
     // Simple quality score calculation
     const avgRating = parseFloat(ratingStats.average_rating) || 0;
     const totalRatings = parseInt(ratingStats.total_ratings) || 0;
@@ -794,7 +794,7 @@ export class FeedbackService {
     return Math.round(ratingScore + engagementScore);
   }
 
-  private mapFeedbackRow(row: any): Feedback {
+  private mapFeedbackRow(row: unknown): Feedback {
     return {
       id: row.id,
       type: row.type,
@@ -825,11 +825,11 @@ export class FeedbackService {
     } as Feedback;
   }
 
-  private mapSummaryRow(row: any): FeedbackSummary {
+  private mapSummaryRow(row: unknown): FeedbackSummary {
     return JSON.parse(row.summary_data);
   }
 
-  private mapReplyRow(row: any): FeedbackReply {
+  private mapReplyRow(row: unknown): FeedbackReply {
     return {
       id: row.id,
       feedbackId: row.feedback_id,

@@ -52,7 +52,7 @@ export const RestorationConfirmation = ({ preview, config, onConfirm, onCancel }
                 return _jsx(InfoCircleOutlined, {});
         }
     };
-    const getActionColor = (type) => {
+    const _____getActionColor = (type) => {
         switch (type) {
             case 'add':
                 return 'success';

@@ -5,11 +5,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { CheckCircleIcon, ClockIcon, XCircleIcon, DocumentTextIcon, EyeIcon, GlobeAltIcon, ArchiveBoxIcon, PlusIcon, PencilIcon, ChevronDownIcon, ChevronRightIcon, LockClosedIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 export const WorkflowStateManager = ({ workspaceId, resourceId, currentUserId, onStateChange, onLockAcquired, onLockReleased }) => {
-    const { states, transitions, approvals, locks, statistics, loading, error, fetchStates, fetchTransitions, fetchApprovals, fetchLocks, fetchStatistics, transitionResourceState, approveWorkflow, rejectWorkflow, acquireLock, releaseLock, createState, updateState, deleteState, createTransition, deleteTransition } = useWorkflowStore();
+    const { states, transitions, approvals, locks, statistics, loading, error, fetchStates, fetchTransitions, fetchApprovals, fetchLocks, fetchStatistics, transitionResourceState, approveWorkflow, rejectWorkflow, acquireLock, releaseLock, _____createState, _____updateState, _____deleteState, _____createTransition, _____deleteTransition } = useWorkflowStore();
     const [activeTab, setActiveTab] = useState('states');
-    const [showCreateState, setShowCreateState] = useState(false);
-    const [showCreateTransition, setShowCreateTransition] = useState(false);
-    const [selectedState, setSelectedState] = useState(null);
+    const [_____showCreateState, setShowCreateState] = useState(false);
+    const [_____showCreateTransition, _____setShowCreateTransition] = useState(false);
+    const [_____selectedState, setSelectedState] = useState(null);
     const [expandedStates, setExpandedStates] = useState(new Set());
     // Load initial data
     useEffect(() => {

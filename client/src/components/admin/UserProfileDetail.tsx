@@ -72,7 +72,7 @@ const UserProfileDetail: React.FC = () => {
   
   const [activeTab, setActiveTab] = useState<'profile' | 'permissions' | 'activity' | 'team' | 'settings' | 'security'>('profile');
   const [loading, setLoading] = useState(true);
-  const [editMode, setEditMode] = useState(false);
+  const [___editMode, setEditMode] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [activityLog, setActivityLog] = useState<ActivityLog[]>([]);
   const [teamMemberships, setTeamMemberships] = useState<TeamMembership[]>([]);

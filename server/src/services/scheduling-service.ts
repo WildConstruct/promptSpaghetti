@@ -354,7 +354,7 @@ export class SchedulingService {
     return action1 !== ScheduleAction.DISABLE && action2 !== ScheduleAction.DISABLE;
   }
 
-  private generateResolutionSuggestion(newRequest: CreateScheduleRequest, existing: FeatureToggleSchedule): any {
+  private generateResolutionSuggestion(_____newRequest: CreateScheduleRequest, _____existing: FeatureToggleSchedule): unknown {
     return {
       action: 'modify_priority',
       details: {
@@ -509,7 +509,7 @@ export class SchedulingService {
   }
 
   private async updateScheduleExecution(schedule: FeatureToggleSchedule, success: boolean): Promise<void> {
-    const updates: any = {
+    const updates: unknown = {
       id: schedule.id,
       lastExecution: new Date(),
       executionCount: schedule.executionCount + 1
@@ -554,7 +554,7 @@ export class SchedulingService {
     }
   }
 
-  private isRetryableError(error: any): boolean {
+  private isRetryableError(error: Error): boolean {
     // Define which errors are retryable
     const retryableErrors = [
       'NETWORK_ERROR',

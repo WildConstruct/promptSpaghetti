@@ -82,7 +82,7 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleCustomizationChange = (id: string, value: any) => {
+  const handleCustomizationChange = (id: string, value: Error) => {
     setCustomizations(prev => ({
       ...prev,
       [id]: value
@@ -246,9 +246,9 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
 
 interface VariableEditorProps {
   variable: TemplateVariable;
-  value: any;
+  value: Error;
   error?: string;
-  onChange: (value: any) => void;
+  onChange: (value: Error) => void;
 }
 
 const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error, onChange }) => {
@@ -351,8 +351,8 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
 
 interface CustomizationPointEditorProps {
   point: CustomizationPoint;
-  value: any;
-  onChange: (value: any) => void;
+  value: Error;
+  onChange: (value: Error) => void;
 }
 
 const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ point, value, onChange }) => {

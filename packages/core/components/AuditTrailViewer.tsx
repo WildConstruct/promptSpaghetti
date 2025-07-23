@@ -18,7 +18,7 @@ import {
   LockClosedIcon,
   LockOpenIcon
 } from '@heroicons/react/24/outline';
-import { useWorkflowStore, WorkflowHistoryEntry } from '../stores/workflowStore';
+import { useWorkflowStore } from '../stores/workflowStore';
 
 interface AuditTrailViewerProps {
   workspaceId: string;
@@ -52,7 +52,7 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
     resource_id: resourceId
   });
   const [showFilters, setShowFilters] = useState(false);
-  const [selectedEntries, setSelectedEntries] = useState<Set<string>>(new Set());
+  const [_____selectedEntries, _____setSelectedEntries] = useState<Set<string>>(new Set());
   const [showExportDialog, setShowExportDialog] = useState(false);
 
   // Load audit history
@@ -112,7 +112,7 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({
     Array.from(new Set(auditHistory.map(entry => entry.actor_id))).sort()
   , [auditHistory]);
 
-  const handleFilterChange = (key: keyof AuditFilters, value: any) => {
+  const handleFilterChange = (key: keyof AuditFilters, value: Error) => {
     setFilters(prev => ({
       ...prev,
       [key]: value

@@ -8,14 +8,13 @@
  * Epic: 17 - Backstage Admin Controls, Substory: 17.1.6 (Audit Logging)
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { Switch } from '../ui/Switch';
 import { 
   Search,
   Filter,
@@ -128,13 +127,13 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({
   
   // Filter state
   const [currentFilter, setCurrentFilter] = useState<AdvancedSearchFilter>({});
-  const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
-  const [filterPresets, setFilterPresets] = useState<Record<string, FilterPreset[]>>({});
+  const [_____savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
+  const [_____filterPresets, _____setFilterPresets] = useState<Record<string, FilterPreset[]>>({});
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
+  const [searchSuggestions, _____setSearchSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   
   // UI state
@@ -144,7 +143,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({
   const [filterName, setFilterName] = useState('');
   
   // Analytics state
-  const [analytics, setAnalytics] = useState<SearchAnalytics | null>(null);
+  const [_____analytics, _____setAnalytics] = useState<SearchAnalytics | null>(null);
 
   // Load initial data
   useEffect(() => {

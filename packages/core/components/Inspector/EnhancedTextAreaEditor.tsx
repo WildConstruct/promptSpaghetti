@@ -45,8 +45,8 @@ export const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const [suggestions, setSuggestions] = useState<CorrectionSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(null);
-  const [cursorPosition, setCursorPosition] = useState(0);
+  const [_____selectedSuggestion, _____setSelectedSuggestion] = useState<string | null>(null);
+  const [_____cursorPosition, setCursorPosition] = useState(0);
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);

@@ -145,27 +145,27 @@ export const ModerationAnalytics: React.FC = () => {
 
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
     switch (trend) {
-      case 'up': return '📈';
-      case 'down': return '📉';
-      case 'stable': return '➡️';
+    case 'up': return '📈';
+    case 'down': return '📉';
+    case 'stable': return '➡️';
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return '#dc3545';
-      case 'major': return '#fd7e14';
-      case 'minor': return '#ffc107';
-      default: return '#6c757d';
+    case 'critical': return '#dc3545';
+    case 'major': return '#fd7e14';
+    case 'minor': return '#ffc107';
+    default: return '#6c757d';
     }
   };
 
   const getRiskLevelColor = (risk: string) => {
     switch (risk) {
-      case 'high': return '#dc3545';
-      case 'medium': return '#ffc107';
-      case 'low': return '#28a745';
-      default: return '#6c757d';
+    case 'high': return '#dc3545';
+    case 'medium': return '#ffc107';
+    case 'low': return '#28a745';
+    default: return '#6c757d';
     }
   };
 

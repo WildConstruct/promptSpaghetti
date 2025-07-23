@@ -754,7 +754,7 @@ export class ISO27001ControlsService {
   /**
    * Create default metadata for a control
    */
-  private createDefaultMetadata(controlId: string): ControlMetadata {
+  private createDefaultMetadata(_____controlId: string): ControlMetadata {
     return {
       version: '1.0',
       lastUpdated: new Date(),

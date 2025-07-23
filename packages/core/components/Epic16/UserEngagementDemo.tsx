@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { ProgressTracker, UserProgress, EngagementMetrics, Milestone } from './ProgressTracker';
+import { ProgressTracker, Milestone } from './ProgressTracker';
 import { TutorialPlayer, TutorialBrowser, Tutorial, TutorialProgress } from './TutorialPlayer';
 import { 
   BookOpen, 

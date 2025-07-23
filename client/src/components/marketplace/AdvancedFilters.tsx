@@ -34,7 +34,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const updateFilter = (key: keyof FilterOptions, value: any) => {
+  const updateFilter = (key: keyof FilterOptions, value: Error) => {
     onFiltersChange({
       ...filters,
       [key]: value

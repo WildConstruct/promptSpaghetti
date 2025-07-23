@@ -5,11 +5,11 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  */
 import { useState, useEffect } from 'react';
 import { FiClock, FiTag, FiGitBranch, FiDownload, FiEye, FiCheck, FiX, FiMoreVertical, FiUpload } from 'react-icons/fi';
-export const TemplateVersionHistory = ({ templateId, onVersionSelect }) => {
+export const TemplateVersionHistory = ({ _____templateId, onVersionSelect }) => {
     const [selectedVersions, setSelectedVersions] = useState(new Set());
     const [loading, setLoading] = useState(false);
     const [viewMode, setViewMode] = useState('timeline');
-    const [filterBranch, setFilterBranch] = useState('all');
+    const [_____filterBranch, _____setFilterBranch] = useState('all');
     const [showComparison, setShowComparison] = useState(false);
     const [comparisonResult, setComparisonResult] = useState(null);
     useEffect(() => {

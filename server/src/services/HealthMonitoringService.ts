@@ -4,8 +4,8 @@
 
 import { EventEmitter } from 'events';
 import { logger } from '../utils/logger';
-import { circuitBreakerService } from './CircuitBreakerService';
-import { retryService } from './RetryService';
+import { // circuitBreakerService // Unused import } from './CircuitBreakerService';
+import { // retryService // Unused import } from './RetryService';
 
 export enum HealthStatus {
   HEALTHY = 'healthy',
@@ -487,5 +487,4 @@ class HealthMonitoringService extends EventEmitter {
 }
 
 // Export singleton instance
-export 
 export default HealthMonitoringService;

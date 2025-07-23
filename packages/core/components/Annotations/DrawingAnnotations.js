@@ -67,11 +67,11 @@ export const DrawingAnnotationsCanvas = ({ width, height, annotations, currentUs
         fontWeight: 'normal'
     });
     // UI state
-    const [selectedAnnotation, setSelectedAnnotation] = useState(null);
+    const [_____selectedAnnotation, _____setSelectedAnnotation] = useState(null);
     const [showLayers, setShowLayers] = useState(false);
     const [showStyles, setShowStyles] = useState(false);
-    const [zoom, setZoom] = useState(1);
-    const [pan, setPan] = useState({ x: 0, y: 0 });
+    const [zoom, _____setZoom] = useState(1);
+    const [pan, _____setPan] = useState({ x: 0, y: 0 });
     const [history, setHistory] = useState([annotations]);
     const [historyIndex, setHistoryIndex] = useState(0);
     // Get canvas context

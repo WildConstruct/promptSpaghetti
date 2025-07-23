@@ -105,8 +105,8 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
         // Calculate stats
         const calculatedStats: DashboardStats = {
           totalTemplates: data.templates.length,
-          totalRevenue: data.templates.reduce((sum: number, t: any) => sum + t.revenue.total, 0),
-          pendingRevenue: data.templates.reduce((sum: number, t: any) => sum + t.revenue.pending, 0),
+          totalRevenue: data.templates.reduce((sum: number, t: unknown) => sum + t.revenue.total, 0),
+          pendingRevenue: data.templates.reduce((sum: number, t: unknown) => sum + t.revenue.pending, 0),
           collaborations: data.collaborations.length,
           activeClaims: 0, // Would be calculated from claims data
           verificationRate: data.profile.attributionReputation.accuracyScore
@@ -115,7 +115,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
 
         // Calculate top performers
         const performers: TemplatePerformance[] = data.templates
-          .map((template: any) => ({
+          .map((template: Error) => ({
             templateId: template.templateId,
             title: template.title,
             views: template.performance.views,

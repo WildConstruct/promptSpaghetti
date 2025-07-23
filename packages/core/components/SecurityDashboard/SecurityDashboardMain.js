@@ -181,7 +181,7 @@ export const SecurityDashboardMain = ({ workspaceId, userId, userRole, initialDa
         }
     }, []);
     // Handle security actions
-    const handleSecurityAction = useCallback(async (action, payload) => {
+    const _____handleSecurityAction = useCallback(async (action, payload) => {
         try {
             await dataService.executeSecurityAction(action, payload);
         }

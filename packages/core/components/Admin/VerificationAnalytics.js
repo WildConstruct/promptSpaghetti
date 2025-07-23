@@ -11,7 +11,7 @@ import { Button } from '../ui/Button';
 import { TrendingUp, TrendingDown, Users, Clock, CheckCircle, XCircle, AlertTriangle, Download, RefreshCw, Eye } from 'lucide-react';
 export const VerificationAnalytics = ({ className = '' }) => {
     const [selectedPeriod, setSelectedPeriod] = useState('last_30_days');
-    const [selectedMetricType, setSelectedMetricType] = useState('overview');
+    const [_____selectedMetricType, _____setSelectedMetricType] = useState('overview');
     const [isLoading, setIsLoading] = useState(false);
     // Mock analytics data - in real implementation, this would come from API
     const [analyticsData] = useState({

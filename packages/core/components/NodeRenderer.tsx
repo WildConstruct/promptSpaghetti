@@ -1,11 +1,11 @@
 import React, { memo, useState, useRef, useEffect } from 'react';
-import { Node, Handle, Position } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 import { NodeMeta } from '../Palette';
 import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations';
 
 interface NodeRendererProps {
   id: string;
-  data: any;
+  data: Record<string, unknown>;
   selected?: boolean;
   onSelect: (nodeId: string) => void;
   getNodeMeta: (nodeType: string) => NodeMeta;
@@ -20,8 +20,8 @@ export const NodeRenderer = memo<NodeRendererProps>(({
   getNodeMeta,
   getCategoryColor
 }) => {
-  const [isCreating, setIsCreating] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [_____isCreating, setIsCreating] = useState(false);
+  const [isDeleting, _____setIsDeleting] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   const { isHovered, hoverProps } = useSmoothHover(150); // 150ms for micro-interactions
 

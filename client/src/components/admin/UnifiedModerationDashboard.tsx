@@ -34,7 +34,7 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
   const [overview, setOverview] = useState<DashboardOverview | null>(null);
   const [workloads, setWorkloads] = useState<ModerationWorkload[]>([]);
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [___searchResults, setSearchResults] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   
   // UI state
@@ -45,8 +45,8 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   // Search and filter state
-  const [searchQuery, setSearchQuery] = useState<AdvancedSearchQuery>({});
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+  const [___searchQuery, setSearchQuery] = useState<AdvancedSearchQuery>({});
+  const [___showAdvancedSearch, ___setShowAdvancedSearch] = useState(false);
 
   // Initialize dashboard service
   useEffect(() => {
@@ -106,7 +106,7 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
     }
   }, [dashboard, moderatorId]);
 
-  const handleAdvancedSearch = async (query: AdvancedSearchQuery) => {
+  const ___handleAdvancedSearch = async (query: AdvancedSearchQuery) => {
     if (!dashboard) return;
     
     setLoading(true);
@@ -121,7 +121,7 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
     }
   };
 
-  const handleBulkAction = async (action: Omit<BulkModerationAction, 'itemIds'>) => {
+  const ___handleBulkAction = async (action: Omit<BulkModerationAction, 'itemIds'>) => {
     if (!dashboard || selectedItems.length === 0) return;
     
     setLoading(true);
@@ -784,7 +784,7 @@ const AlertItem: React.FC<{ alert: ModerationAlert }> = ({ alert }) => {
 
 const WorkloadCard: React.FC<{ workload: ModerationWorkload }> = ({ workload }) => {
   const utilizationColor = workload.utilization >= 95 ? '#dc2626' : 
-                          workload.utilization >= 85 ? '#d97706' : '#059669';
+    workload.utilization >= 85 ? '#d97706' : '#059669';
 
   return (
     <div style={{

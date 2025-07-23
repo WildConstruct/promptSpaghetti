@@ -7,7 +7,7 @@ module.exports = {
     jest: true
   },
   extends: [
-    // Use minimal extends to avoid conflicting rules
+    'eslint:recommended'
   ],
   overrides: [
     {
@@ -15,22 +15,11 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint', 'react', 'react-hooks'],
       extends: [
-        // Minimal extends to avoid conflicts
-      ],
-      rules: {
-        'comma-dangle': 'off', // Disable comma-dangle for TypeScript files
-        '@typescript-eslint/comma-dangle': 'off', // Also disable TypeScript-specific comma-dangle
-        'max-len': ['warn', { 
-          code: 150, // Match global setting
-          ignoreUrls: true, 
-          ignoreComments: true,
-          ignoreStrings: true,
-          ignoreTemplateLiterals: true,
-          ignoreRegExpLiterals: true,
-          ignorePattern: '^\\s*\\*' // Ignore JSDoc comments
-        }],
-        '@typescript-eslint/no-explicit-any': 'warn' // Allow any with warning
-      }
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:react/recommended',
+        'plugin:react-hooks/recommended'
+      ]
     },
     {
       // Extra permissive rules for test files
@@ -49,16 +38,14 @@ module.exports = {
     'indent': ['warn', 2], // Changed from error to warn
     'quotes': ['warn', 'single'], // Changed from error to warn
     'semi': ['warn', 'always'], // Changed from error to warn
-    'comma-dangle': 'off', // Disable comma-dangle rule completely
+    'comma-dangle': ['warn', 'never'], // Changed from error to warn
     'max-len': ['warn', { 
-      code: 150, // Increased from 120 to 150
+      code: 120, 
       ignoreUrls: true, 
       ignoreComments: true,
       ignoreStrings: true,
-      ignoreTemplateLiterals: true,
-      ignoreRegExpLiterals: true,
-      ignorePattern: '^\\s*\\*' // Ignore JSDoc comments
-    }], // Very lenient line length
+      ignoreTemplateLiterals: true
+    }], // More lenient line length
     
     // React rules
     'react/react-in-jsx-scope': 'off',
@@ -104,17 +91,7 @@ module.exports = {
     // Ignore auto-generated files that often have linting issues
     'src/auto-*.js',
     'src/monitor-*.js',
-    'src/create-epic*.js',
-    'src/fix-*.js',
-    'src/analyze-*.js',
-    'src/count-*.js',
-    'scripts/*',
     '**/*.generated.ts',
-    '**/*.generated.js',
-    // Ignore data files that might have syntax issues
-    'src/data/*',
-    '*.db',
-    // Ignore docs folder that has missing files and separate ESLint configs
-    'docs/**/*'
+    '**/*.generated.js'
   ]
 };

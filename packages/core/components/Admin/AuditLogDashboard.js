@@ -50,19 +50,19 @@ const TIME_PRESETS = [
     { value: 'last_quarter', label: 'Last Quarter' },
     { value: 'last_year', label: 'Last Year' }
 ];
-export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
+export const AuditLogDashboard = ({ className = '', userId, _____userRole }) => {
     const [activeTab, setActiveTab] = useState('logs');
     const [searchResults, setSearchResults] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     // Filter state
     const [currentFilter, setCurrentFilter] = useState({});
-    const [savedFilters, setSavedFilters] = useState([]);
-    const [filterPresets, setFilterPresets] = useState({});
+    const [_____savedFilters, setSavedFilters] = useState([]);
+    const [_____filterPresets, _____setFilterPresets] = useState({});
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
     // Search state
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchSuggestions, setSearchSuggestions] = useState([]);
+    const [searchSuggestions, _____setSearchSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     // UI state
     const [selectedEvents, setSelectedEvents] = useState([]);
@@ -70,7 +70,7 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
     const [showSaveFilterDialog, setShowSaveFilterDialog] = useState(false);
     const [filterName, setFilterName] = useState('');
     // Analytics state
-    const [analytics, setAnalytics] = useState(null);
+    const [_____analytics, _____setAnalytics] = useState(null);
     // Load initial data
     useEffect(() => {
         loadInitialData();

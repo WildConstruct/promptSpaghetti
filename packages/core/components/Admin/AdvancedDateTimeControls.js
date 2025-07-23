@@ -63,7 +63,7 @@ export const AdvancedDateTimeControls = ({ value, onChange, businessHours, onBus
     const [selectedDate, setSelectedDate] = useState(value?.date || new Date());
     const [selectedTime, setSelectedTime] = useState(value?.time || '09:00');
     const [selectedTimezone, setSelectedTimezone] = useState(value?.timezone || 'UTC');
-    const [showTimezoneSearch, setShowTimezoneSearch] = useState(false);
+    const [_____showTimezoneSearch, _____setShowTimezoneSearch] = useState(false);
     const [timezoneSearchQuery, setTimezoneSearchQuery] = useState('');
     const [currentBusinessHours, setCurrentBusinessHours] = useState(businessHours || {
         enabled: true,
@@ -128,7 +128,7 @@ export const AdvancedDateTimeControls = ({ value, onChange, businessHours, onBus
         // Suggest optimal times based on business hours
         if (currentBusinessHours.enabled) {
             const [startHour, startMin] = currentBusinessHours.startTime.split(':').map(Number);
-            const [endHour, endMin] = currentBusinessHours.endTime.split(':').map(Number);
+            const [endHour, _____endMin] = currentBusinessHours.endTime.split(':').map(Number);
             // Suggest start of business day
             const startOfDay = new Date(baseDate);
             startOfDay.setHours(startHour, startMin, 0, 0);

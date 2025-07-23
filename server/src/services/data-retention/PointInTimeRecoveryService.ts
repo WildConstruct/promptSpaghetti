@@ -347,7 +347,7 @@ export class PointInTimeRecoveryService {
     offset?: number;
   } = {}): Promise<{ points: RecoveryPoint[]; total: number }> {
     let whereClause = '';
-    const params: any[] = [];
+    const params: unknown[] = [];
     const conditions: string[] = [];
 
     if (filters.configId) {
@@ -721,7 +721,7 @@ export class PointInTimeRecoveryService {
     ]);
   }
 
-  private mapRowToRecoveryPoint(row: any): RecoveryPoint {
+  private mapRowToRecoveryPoint(row: unknown): RecoveryPoint {
     return {
       recovery_point_id: row.recovery_point_id,
       name: row.name,
@@ -758,7 +758,7 @@ export class PointInTimeRecoveryService {
     };
   }
 
-  private mapRowToRecoveryConfiguration(row: any): RecoveryConfiguration {
+  private mapRowToRecoveryConfiguration(row: unknown): RecoveryConfiguration {
     return {
       config_id: row.config_id,
       name: row.name,
@@ -785,7 +785,7 @@ export class PointInTimeRecoveryService {
 
   private async performBackup(
     recoveryPoint: RecoveryPoint, 
-    config: RecoveryConfiguration
+    _____config: RecoveryConfiguration
   ): Promise<void> {
     // This would implement the actual backup logic
     // For now, simulate the process
@@ -835,17 +835,17 @@ export class PointInTimeRecoveryService {
     return tags;
   }
 
-  private async validateFileExists(location: string): Promise<boolean> {
+  private async validateFileExists(_____location: string): Promise<boolean> {
     // Would implement actual file existence check
     return true; // Simulate success
   }
 
-  private async validateChecksum(location: string, expectedChecksum: string): Promise<boolean> {
+  private async validateChecksum(_____location: string, _____expectedChecksum: string): Promise<boolean> {
     // Would implement actual checksum validation
     return true; // Simulate success
   }
 
-  private async validateBackupStructure(recoveryPoint: RecoveryPoint): Promise<boolean> {
+  private async validateBackupStructure(_____recoveryPoint: RecoveryPoint): Promise<boolean> {
     // Would implement actual backup structure validation
     return true; // Simulate success
   }
@@ -853,7 +853,7 @@ export class PointInTimeRecoveryService {
   private async updateRecoveryPointValidation(
     recoveryPointId: string,
     status: 'valid' | 'invalid',
-    details: any
+    details: unknown
   ): Promise<void> {
     await this.db.query(`
       UPDATE recovery_points 
@@ -864,7 +864,7 @@ export class PointInTimeRecoveryService {
     `, [recoveryPointId, status, JSON.stringify(details)]);
   }
 
-  private async shouldArchiveRecoveryPoint(recoveryPointId: string): Promise<boolean> {
+  private async shouldArchiveRecoveryPoint(_____recoveryPointId: string): Promise<boolean> {
     // Would implement archiving logic based on policies
     return false; // Default to deletion
   }
@@ -883,7 +883,7 @@ export class PointInTimeRecoveryService {
     `, [recoveryPointId]);
   }
 
-  private calculateStorageEfficiency(stats: any): number {
+  private calculateStorageEfficiency(_____stats: unknown): number {
     // Would implement storage efficiency calculation
     return 85; // Simulate 85% efficiency
   }

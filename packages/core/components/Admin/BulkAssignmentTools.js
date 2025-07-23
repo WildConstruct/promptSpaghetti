@@ -27,7 +27,7 @@ export var BulkOperationType;
     BulkOperationType["UPDATE"] = "update";
     BulkOperationType["TRANSFER"] = "transfer";
 })(BulkOperationType || (BulkOperationType = {}));
-export const BulkAssignmentTools = ({ assignmentType, operationType, availableTargets, availableResources, availableTemplates, onExecute, onCancel, onTemplateCreate, readonly = false }) => {
+export const BulkAssignmentTools = ({ assignmentType, operationType, availableTargets, availableResources, availableTemplates, onExecute, onCancel, _____onTemplateCreate, readonly = false }) => {
     const [currentStep, setCurrentStep] = useState(1);
     const [operation, setOperation] = useState({
         operationId: '',
@@ -135,7 +135,7 @@ const BulkAssignmentHeader = ({ assignmentType, operationType, operation, availa
                                 onTemplateLoad(template);
                         }, value: "", children: [_jsx("option", { value: "", children: "Choose a template..." }), applicableTemplates.map(template => (_jsxs("option", { value: template.id, children: [template.name, " (", template.usage.timesUsed, " uses, ", Math.round(template.usage.successRate), "% success)"] }, template.id)))] })] }), _jsx("div", { className: "operation-status", children: _jsx("span", { className: `status-badge status-${operation.status}`, children: operation.status.toUpperCase() }) })] }));
 };
-const BulkAssignmentWizard = ({ steps, currentStep, onStepChange, canProceed }) => {
+const BulkAssignmentWizard = ({ steps, currentStep, onStepChange, _____canProceed }) => {
     return (_jsx("div", { className: "bulk-assignment-wizard", children: steps.map((step) => (_jsxs("div", { className: `wizard-step ${currentStep === step.number ? 'active' : ''} ${currentStep > step.number ? 'completed' : ''}`, onClick: () => onStepChange(step.number), children: [_jsx("div", { className: "step-number", children: step.number }), _jsxs("div", { className: "step-content", children: [_jsx("div", { className: "step-title", children: step.title }), _jsx("div", { className: "step-description", children: step.description })] }), currentStep > step.number && _jsx("div", { className: "step-check", children: "\u2713" })] }, step.number))) }));
 };
 const TargetSelectionStep = ({ targets, selectedTargets, onTargetsChange, assignmentType, operationType }) => {
@@ -182,7 +182,7 @@ const TargetSelectionStep = ({ targets, selectedTargets, onTargetsChange, assign
                             setShowConflicts(false);
                         }, children: "Clear Filters" })] }))] }));
 };
-const TargetCard = ({ target, selected, onToggle, assignmentType, operationType }) => {
+const TargetCard = ({ target, selected, onToggle, assignmentType, _____operationType }) => {
     const [showDetails, setShowDetails] = useState(false);
     const getTypeIcon = (type) => {
         const icons = {

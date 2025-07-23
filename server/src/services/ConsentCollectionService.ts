@@ -334,8 +334,8 @@ export interface ConsentAuditEntry {
   timestamp: Date;
   action: ConsentAction;
   actor: ConsentActor;
-  previousState?: any;
-  newState?: any;
+  previousState?: unknown;
+  newState?: unknown;
   reason: string;
   evidence: AuditEvidence[];
   compliance: AuditCompliance;
@@ -360,7 +360,7 @@ export interface SessionInfo {
 export interface AuditEvidence {
   evidenceType: EvidenceType;
   description: string;
-  data: any;
+  data: Record<string, unknown>;
   signature?: string;
   timestamp: Date;
 }
@@ -961,7 +961,7 @@ export class ConsentCollectionService {
     };
   }
 
-  private async generateComplianceFlags(consentData: ConsentCollectionRequest): Promise<ComplianceFlag[]> {
+  private async generateComplianceFlags(_____consentData: ConsentCollectionRequest): Promise<ComplianceFlag[]> {
     return [
       {
         flagId: 'GDPR_ARTICLE_7',

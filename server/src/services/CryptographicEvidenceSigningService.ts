@@ -17,7 +17,7 @@ import { AuditService } from '../auth/services/AuditService';
 export interface EvidenceSigningRequest {
   evidenceId: string;
   evidenceType: string;
-  evidenceData: any;
+  evidenceData: unknown;
   collectorId: string;
   timestamp?: Date;
   metadata?: Record<string, any>;
@@ -593,7 +593,7 @@ export class CryptographicEvidenceSigningService {
     }
   }
 
-  private normalizeEvidenceData(data: any): string {
+  private normalizeEvidenceData(data: Record<string, unknown>): string {
     // Create canonical representation for consistent signing
     if (typeof data === 'string') {
       return data;
@@ -604,7 +604,7 @@ export class CryptographicEvidenceSigningService {
     return JSON.stringify(normalized);
   }
 
-  private sortObjectDeep(obj: any): any {
+  private sortObjectDeep(obj: unknown): unknown {
     if (obj === null || typeof obj !== 'object') {
       return obj;
     }
@@ -613,7 +613,7 @@ export class CryptographicEvidenceSigningService {
       return obj.map(item => this.sortObjectDeep(item));
     }
     
-    const sorted: any = {};
+    const sorted: unknown = {};
     Object.keys(obj).sort().forEach(key => {
       sorted[key] = this.sortObjectDeep(obj[key]);
     });
@@ -627,7 +627,7 @@ export class CryptographicEvidenceSigningService {
     return hash.digest('hex');
   }
 
-  private async getSigningKey(request: EvidenceSigningRequest): Promise<any> {
+  private async getSigningKey(request: EvidenceSigningRequest): Promise<unknown> {
     // Determine key requirements based on signing purpose and compliance needs
     const keyPurpose = this.mapSigningPurposeToKeyPurpose(request.signingPurpose);
     
@@ -677,7 +677,7 @@ export class CryptographicEvidenceSigningService {
     return JSON.stringify(payload);
   }
 
-  private async generateSignature(payload: string, signingKey: any, request: EvidenceSigningRequest): Promise<{
+  private async generateSignature(payload: string, signingKey: unknown, request: EvidenceSigningRequest): Promise<{
     signature: string;
     algorithm: SignatureAlgorithm;
     certificate?: string;
@@ -805,7 +805,7 @@ export class CryptographicEvidenceSigningService {
     }
   }
 
-  private verifyDataIntegrity(evidenceData: any, expectedHash: string, algorithm: HashAlgorithm): boolean {
+  private verifyDataIntegrity(evidenceData: unknown, expectedHash: string, algorithm: HashAlgorithm): boolean {
     try {
       const normalizedData = this.normalizeEvidenceData(evidenceData);
       const actualHash = this.generateEvidenceHash(normalizedData, algorithm);

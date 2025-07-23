@@ -3,8 +3,8 @@
  * Main interface for threaded commenting system
  */
 
-import React, { useState, useEffect } from 'react';
-import { Comment, CreateComment, UpdateComment } from '../../types/workspace';
+import React, { useState } from 'react';
+import { CreateComment, UpdateComment } from '../../types/workspace';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { useComments } from '../../hooks/useComments';

@@ -13,7 +13,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Help content management system
  */
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-export const ContextualHelpSystem = ({ nodes, edges, selectedNodeId, selectedEdgeId, userLevel = 'beginner', enabled = true, autoTrigger = true, showProgressiveHints = true, onHelpContentViewed, onUserLevelChange }) => {
+export const ContextualHelpSystem = ({ nodes, edges, selectedNodeId, _____selectedEdgeId, userLevel = 'beginner', enabled = true, autoTrigger = true, showProgressiveHints = true, onHelpContentViewed, _____onUserLevelChange }) => {
     // State management
     const [activeHelp, setActiveHelp] = useState(null);
     const [helpPosition, setHelpPosition] = useState({ x: 0, y: 0 });

@@ -22,7 +22,7 @@ export interface AlertConfig {
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook';
   config: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -33,7 +33,7 @@ export interface TimeoutAlert {
   operation: string;
   message: string;
   timestamp: Date;
-  metrics: any;
+  metrics: unknown;
   resolved: boolean;
   resolvedAt?: Date;
 }
@@ -104,7 +104,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   /**
    * Handle timeout events
    */
-  private async handleTimeoutEvent(event: any): Promise<void> {
+  private async handleTimeoutEvent(event: unknown): Promise<void> {
     const { metricKey, executionTime, totalTimeouts } = event;
     
     // Record performance metrics
@@ -136,7 +136,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   /**
    * Handle circuit breaker events
    */
-  private async handleCircuitBreakerEvent(event: any): Promise<void> {
+  private async handleCircuitBreakerEvent(event: unknown): Promise<void> {
     const { metricKey, failureCount } = event;
     
     // Track analytics
@@ -162,7 +162,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   /**
    * Handle fallback events
    */
-  private async handleFallbackEvent(event: any): Promise<void> {
+  private async handleFallbackEvent(event: unknown): Promise<void> {
     const { operationType, operationSubtype, fallbackSuccess } = event;
     
     // Track analytics
@@ -179,7 +179,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   /**
    * Record performance metric
    */
-  private recordPerformanceMetric(operation: string, responseTime: number, success: boolean): void {
+  private recordPerformanceMetric(operation: string, responseTime: number, _____success: boolean): void {
     if (!this.performanceHistory.has(operation)) {
       this.performanceHistory.set(operation, []);
     }
@@ -259,7 +259,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   /**
    * Send email alert
    */
-  private async sendEmailAlert(alert: TimeoutAlert, config: any): Promise<void> {
+  private async sendEmailAlert(alert: TimeoutAlert, _____config: unknown): Promise<void> {
     // Implementation would depend on email service
     console.log(`Email alert: ${alert.message}`);
   }
@@ -267,7 +267,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   /**
    * Send Slack alert
    */
-  private async sendSlackAlert(alert: TimeoutAlert, config: any): Promise<void> {
+  private async sendSlackAlert(alert: TimeoutAlert, config: unknown): Promise<void> {
     const webhook = config.webhookUrl;
     if (!webhook) return;
 
@@ -295,7 +295,7 @@ export class TimeoutMonitoringService extends EventEmitter {
   /**
    * Send webhook alert
    */
-  private async sendWebhookAlert(alert: TimeoutAlert, config: any): Promise<void> {
+  private async sendWebhookAlert(alert: TimeoutAlert, config: unknown): Promise<void> {
     const webhook = config.url;
     if (!webhook) return;
 
@@ -311,7 +311,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Resolve circuit breaker alert
    */
   private resolveCircuitBreakerAlert(operation: string): void {
-    for (const [alertId, alert] of this.activeAlerts.entries()) {
+    for (const [_____alertId, alert] of this.activeAlerts.entries()) {
       if (alert.type === 'circuit_breaker' && alert.operation === operation && !alert.resolved) {
         alert.resolved = true;
         alert.resolvedAt = new Date();
@@ -450,8 +450,8 @@ export class TimeoutMonitoringService extends EventEmitter {
     };
     performanceMetrics: PerformanceMetrics[];
     recentAlerts: TimeoutAlert[];
-    circuitBreakerStates: any;
-    healthStatus: any;
+    circuitBreakerStates: unknown;
+    healthStatus: unknown;
     } {
     const allMetrics = this.timeoutManager.getMetrics() as Map<string, TimeoutMetrics>;
     const totalOperations = Array.from(allMetrics.values())

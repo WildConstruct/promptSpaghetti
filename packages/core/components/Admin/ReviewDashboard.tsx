@@ -44,7 +44,7 @@ interface AssignmentAction {
   type: 'assign' | 'reassign' | 'escalate' | 'approve' | 'reject';
   reviewId: string;
   reviewerId?: string;
-  data?: any;
+  data?: unknown;
 }
 
 interface DashboardSummary {
@@ -78,10 +78,10 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({
   // State management
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [activeReviews, setActiveReviews] = useState<ReviewItem[]>([]);
-  const [pendingAssignments, setPendingAssignments] = useState<ReviewAssignment[]>([]);
-  const [escalatedReviews, setEscalatedReviews] = useState<ReviewItem[]>([]);
-  const [overdueReviews, setOverdueReviews] = useState<ReviewItem[]>([]);
-  const [recentDecisions, setRecentDecisions] = useState<ReviewDecision[]>([]);
+  const [pendingAssignments, _____setPendingAssignments] = useState<ReviewAssignment[]>([]);
+  const [escalatedReviews, _____setEscalatedReviews] = useState<ReviewItem[]>([]);
+  const [overdueReviews, _____setOverdueReviews] = useState<ReviewItem[]>([]);
+  const [recentDecisions, _____setRecentDecisions] = useState<ReviewDecision[]>([]);
   
   const [filters, setFilters] = useState<DashboardFilters>({});
   const [selectedTab, setSelectedTab] = useState<'overview' | 'queue' | 'assignments' | 'analytics'>('overview');

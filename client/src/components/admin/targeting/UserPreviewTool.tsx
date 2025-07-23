@@ -39,7 +39,7 @@ interface TogglePreview {
   key: string;
   name: string;
   enabled: boolean;
-  value: any;
+  value: Error;
   reason: string;
   segmentMatched?: string;
 }
@@ -51,7 +51,7 @@ interface UserPreviewToolProps {
   rules?: Array<{
     attribute: string;
     operator: string;
-    value: any;
+    value: Error;
     logicalOperator?: 'AND' | 'OR';
   }>;
 }
@@ -109,7 +109,7 @@ export const UserPreviewTool: React.FC<UserPreviewToolProps> = ({
     }
   };
 
-  const evaluateUserToggles = async (user: UserPreview) => {
+  const evaluateUserToggles = async (___user: UserPreview) => {
     setEvaluating(true);
     try {
       // Mock implementation - replace with actual API call
@@ -169,7 +169,7 @@ export const UserPreviewTool: React.FC<UserPreviewToolProps> = ({
     }
   };
 
-  const formatAttributeValue = (value: any): string => {
+  const formatAttributeValue = (value: Error): string => {
     if (value === null || value === undefined) return 'N/A';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
     if (typeof value === 'object') return JSON.stringify(value);

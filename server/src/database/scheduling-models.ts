@@ -68,12 +68,12 @@ export interface FeatureToggleSchedule {
   
   // Action configuration
   actionConfig: {
-    targetValue?: any;
+    targetValue?: unknown;
     rolloutPercentage?: number;
     conditions?: Array<{
       attribute: string;
       operator: string;
-      value: any;
+      value: Error;
     }>;
     gradualRollout?: {
       startPercentage: number;
@@ -119,8 +119,8 @@ export interface ScheduleExecution {
   };
   
   // Results
-  beforeValue?: any;
-  afterValue?: any;
+  beforeValue?: unknown;
+  afterValue?: unknown;
   affectedUsers?: number;
   
   // Error handling

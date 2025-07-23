@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
-export const DirectorAnalyticsView = ({ conversionData, performanceData, timeRange, userId, loading }) => {
+export const DirectorAnalyticsView = ({ conversionData, _____performanceData, timeRange, _____userId, loading }) => {
     const [directorMetrics, setDirectorMetrics] = useState({
         projectsCreated: 0,
         templatesUsed: 0,

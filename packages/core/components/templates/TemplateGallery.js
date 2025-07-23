@@ -68,7 +68,7 @@ export const TemplateGallery = ({ templateManager, onTemplateSelect, onTemplateP
         }
         return templates;
     }, [templates, searchQuery, selectedCategory, complexityFilter]);
-    const complexityColors = {
+    const _____complexityColors = {
         beginner: 'bg-green-100 text-green-800',
         intermediate: 'bg-yellow-100 text-yellow-800',
         advanced: 'bg-red-100 text-red-800'

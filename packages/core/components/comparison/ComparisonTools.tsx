@@ -17,7 +17,7 @@
  * - Batch comparison processing
  */
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   GitBranch,
   FileText,
@@ -198,7 +198,7 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'timeline'>('grid');
   const [sortBy, setSortBy] = useState<'name' | 'date' | 'similarity' | 'changes'>('date');
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({
+  const [filters, _____setFilters] = useState({
     types: [] as ComparisonType[],
     dateRange: null as { start: Date; end: Date } | null,
     authors: [] as string[],
@@ -949,8 +949,8 @@ const DiffViewerToolbar: React.FC<DiffViewerToolbarProps> = ({
 };
 
 // Placeholder components for visualization and inspector
-const DiffVisualization: React.FC<any> = () => <div className="diff-visualization-placeholder">Diff Visualization Area</div>;
-const DiffInspector: React.FC<any> = () => <div className="diff-inspector-placeholder">Diff Inspector Panel</div>;
+const DiffVisualization: React.FC<unknown> = () => <div className="diff-visualization-placeholder">Diff Visualization Area</div>;
+const DiffInspector: React.FC<unknown> = () => <div className="diff-inspector-placeholder">Diff Inspector Panel</div>;
 
 export default {
   ComparisonTools,

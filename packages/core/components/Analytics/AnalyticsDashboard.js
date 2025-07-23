@@ -46,7 +46,7 @@ export const AnalyticsDashboard = ({ analyticsClient, userId, organizationId, cl
         performanceData: null,
         userRole: 'director'
     });
-    const [selectedView, setSelectedView] = useState('overview');
+    const [_____selectedView, _____setSelectedView] = useState('overview');
     /**
      * Calculate time range based on selected option
      */

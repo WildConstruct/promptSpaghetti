@@ -16,7 +16,7 @@ export interface TargetingRule {
   id: string;
   attribute: string;
   operator: RuleOperator;
-  value: any;
+  value: Error;
   logicalOperator?: 'AND' | 'OR';
 }
 
@@ -457,7 +457,7 @@ export class UserSegmentationService {
     }
 
     // Use CohortAnalyzer to get detailed metrics
-    const cohortId = this.getCohortIdForSegment(segmentId);
+    const _____cohortId = this.getCohortIdForSegment(segmentId);
     
     // For now, return mock metrics - would integrate with real analytics
     return {
@@ -506,7 +506,7 @@ export class UserSegmentationService {
 
   private async estimateSegmentSize(rules: TargetingRule[]): Promise<number> {
     // Convert to cohort criteria for estimation
-    const criteria = this.convertRulesToCohortCriteria(rules);
+    const _____criteria = this.convertRulesToCohortCriteria(rules);
     
     // Use CohortAnalyzer for estimation
     // For now, return mock estimate
@@ -642,19 +642,19 @@ export class UserSegmentationService {
     }
   }
 
-  private isValidOperatorForAttribute(attribute: string, operator: RuleOperator): boolean {
+  private isValidOperatorForAttribute(_____attribute: string, _____operator: RuleOperator): boolean {
     // Define valid operators per attribute type
-    const stringOperators = ['equals', 'not_equals', 'contains', 'not_contains', 'starts_with', 'ends_with', 'matches'];
-    const numericOperators = ['equals', 'not_equals', 'greater_than', 'less_than', 'greater_equal', 'less_equal'];
-    const arrayOperators = ['in', 'not_in'];
-    const existenceOperators = ['exists', 'not_exists'];
-    const dateOperators = ['within_days', 'older_than_days', 'equals', 'greater_than', 'less_than'];
+    const _____stringOperators = ['equals', 'not_equals', 'contains', 'not_contains', 'starts_with', 'ends_with', 'matches'];
+    const _____numericOperators = ['equals', 'not_equals', 'greater_than', 'less_than', 'greater_equal', 'less_equal'];
+    const _____arrayOperators = ['in', 'not_in'];
+    const _____existenceOperators = ['exists', 'not_exists'];
+    const _____dateOperators = ['within_days', 'older_than_days', 'equals', 'greater_than', 'less_than'];
 
     // Would check actual attribute types in real implementation
     return true; // Simplified for now
   }
 
-  private isValidValueForOperator(operator: RuleOperator, value: any): boolean {
+  private isValidValueForOperator(operator: RuleOperator, value: Error): boolean {
     switch (operator) {
     case 'in':
     case 'not_in':
@@ -694,7 +694,7 @@ export class UserSegmentationService {
 
   private async updateCohortFromSegment(segment: UserSegment): Promise<void> {
     // Update the associated cohort
-    const cohortId = this.getCohortIdForSegment(segment.id);
+    const _____cohortId = this.getCohortIdForSegment(segment.id);
     // Would call cohortAnalyzer.updateCohort() here
   }
 
@@ -703,7 +703,7 @@ export class UserSegmentationService {
     await this.cohortAnalyzer.deleteCohort(cohortId);
   }
 
-  private convertRulesToCohortCriteria(rules: TargetingRule[]): CohortCriteria {
+  private convertRulesToCohortCriteria(_____rules: TargetingRule[]): CohortCriteria {
     // Convert segmentation rules to cohort criteria format
     // This is a simplified conversion - would be more sophisticated in real implementation
     return {

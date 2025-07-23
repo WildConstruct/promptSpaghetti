@@ -320,7 +320,9 @@ export
 };
 
 // Field classification helper
-export   const advancedPatterns = ['weight', 'seed', 'transform', 'validate', 'optimization'];
+export const classifyField = (fieldName: string, fieldType?: string): 'basic' | 'advanced' | 'technical' => {
+  const technicalPatterns = ['debug', 'trace', 'performance', 'meta', 'internal'];
+  const advancedPatterns = ['weight', 'seed', 'transform', 'validate', 'optimization'];
   
   const lowerName = fieldName.toLowerCase();
   

@@ -75,7 +75,7 @@ interface IncidentResponsePanelProps {
   onClose?: () => void;
 }
 
-export const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({ incidentId, onIncidentUpdate, onClose }) => {
+export const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({ incidentId, onIncidentUpdate, ___onClose }) => {
   const [incident, setIncident] = useState<SecurityIncident | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'evidence' | 'actions'>('overview');
@@ -183,32 +183,32 @@ export const IncidentResponsePanel: React.FC<IncidentResponsePanelProps> = ({ in
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-100 border-red-200';
-      case 'high': return 'text-orange-600 bg-orange-100 border-orange-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-100 border-yellow-200';
-      case 'low': return 'text-blue-600 bg-blue-100 border-blue-200';
-      default: return 'text-gray-600 bg-gray-100 border-gray-200';
+    case 'critical': return 'text-red-600 bg-red-100 border-red-200';
+    case 'high': return 'text-orange-600 bg-orange-100 border-orange-200';
+    case 'medium': return 'text-yellow-600 bg-yellow-100 border-yellow-200';
+    case 'low': return 'text-blue-600 bg-blue-100 border-blue-200';
+    default: return 'text-gray-600 bg-gray-100 border-gray-200';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'open': return 'text-red-600 bg-red-50';
-      case 'investigating': return 'text-yellow-600 bg-yellow-50';
-      case 'contained': return 'text-blue-600 bg-blue-50';
-      case 'resolved': return 'text-green-600 bg-green-50';
-      case 'closed': return 'text-gray-600 bg-gray-50';
-      default: return 'text-gray-600 bg-gray-50';
+    case 'open': return 'text-red-600 bg-red-50';
+    case 'investigating': return 'text-yellow-600 bg-yellow-50';
+    case 'contained': return 'text-blue-600 bg-blue-50';
+    case 'resolved': return 'text-green-600 bg-green-50';
+    case 'closed': return 'text-gray-600 bg-gray-50';
+    default: return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getActionStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'in_progress': return <Activity className="h-4 w-4 text-blue-600" />;
-      case 'pending': return <Clock className="h-4 w-4 text-gray-400" />;
-      case 'skipped': return <XCircle className="h-4 w-4 text-gray-400" />;
-      default: return <Clock className="h-4 w-4 text-gray-400" />;
+    case 'completed': return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case 'in_progress': return <Activity className="h-4 w-4 text-blue-600" />;
+    case 'pending': return <Clock className="h-4 w-4 text-gray-400" />;
+    case 'skipped': return <XCircle className="h-4 w-4 text-gray-400" />;
+    default: return <Clock className="h-4 w-4 text-gray-400" />;
     }
   };
 

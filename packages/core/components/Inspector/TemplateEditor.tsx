@@ -48,12 +48,12 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [currentSuggestion, setCurrentSuggestion] = useState('');
+  const [_____currentSuggestion, _____setCurrentSuggestion] = useState('');
   const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const [cursorPosition, setCursorPosition] = useState(0);
   
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [suggestionScrollIndex, setSuggestionScrollIndex] = useState(0);
+  const [_____suggestionScrollIndex, _____setSuggestionScrollIndex] = useState(0);
   
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);

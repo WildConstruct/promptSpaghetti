@@ -141,7 +141,7 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({
     return true;
   });
 
-  const getEnforcementIcon = (enforcement: string) => {
+  const _____getEnforcementIcon = (enforcement: string) => {
     switch (enforcement) {
     case 'strict': return <AlertTriangle size={16} className="text-red-500" />;
     case 'warning': return <Info size={16} className="text-yellow-500" />;

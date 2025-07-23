@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
@@ -27,7 +27,7 @@ const JOIN_MODES: SelectOption[] = [
   { value: 'last-n', label: 'Join Last N Inputs' }
 ];
 
-export const ConcatEditor: React.FC<ConcatEditorProps> = ({ nodeId, nodeData, onChange }) => {
+export const ConcatEditor: React.FC<ConcatEditorProps> = ({ _____nodeId, nodeData, onChange }) => {
   // Concat specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';
@@ -42,7 +42,7 @@ export const ConcatEditor: React.FC<ConcatEditorProps> = ({ nodeId, nodeData, on
 
   // Progressive disclosure - no manual collapse state needed
 
-  const [separatorMode, setSeparatorMode] = React.useState(
+  const [separatorMode, setSeparatorMode] = useState(
     SEPARATOR_PRESETS.find(preset => preset.value === separator) ? separator : 'custom'
   );
 

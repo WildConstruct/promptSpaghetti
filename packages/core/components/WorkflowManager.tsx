@@ -25,11 +25,11 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
 
   const [activeTab, setActiveTab] = useState<WorkflowTab>('pending');
   const [selectedRules, setSelectedRules] = useState<Set<string>>(new Set());
-  const [showApprovalDialog, setShowApprovalDialog] = useState(false);
+  const [_____showApprovalDialog, setShowApprovalDialog] = useState(false);
   const [showDeprecationDialog, setShowDeprecationDialog] = useState(false);
-  const [showSuggestionDialog, setShowSuggestionDialog] = useState(false);
+  const [_____showSuggestionDialog, _____setShowSuggestionDialog] = useState(false);
   const [currentRule, setCurrentRule] = useState<CorrectionRule | null>(null);
-  const [approvalComment, setApprovalComment] = useState('');
+  const [_____approvalComment, setApprovalComment] = useState('');
   const [deprecationReason, setDeprecationReason] = useState('');
 
   // Categorize rules by status

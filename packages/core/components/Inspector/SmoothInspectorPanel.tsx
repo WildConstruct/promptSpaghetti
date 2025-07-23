@@ -7,7 +7,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ZodSchema } from 'zod';
-import { ChevronLeft, ChevronRight, Settings, Maximize2, Minimize2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
 import { PropertiesSection } from './PropertiesSection';
 import { PreviewSection } from './PreviewSection';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
@@ -44,8 +44,8 @@ const getFilmmakerFriendlyName = (nodeType: string): string => {
 };
 
 export interface SmoothInspectorPanelProps {
-  node: any | null;
-  schema: ZodSchema<any> | null;
+  node: Error | null;
+  schema: ZodSchema<unknown> | null;
   onChange: (partial: Record<string, unknown>) => void;
   onClose?: () => void;
   onGlobalPreviewRequest?: () => void;

@@ -4,7 +4,7 @@ import { DocumentType } from './types';
 
 interface DocumentUploadProps {
   verificationRequestId: string;
-  onUploadComplete?: (document: any) => void;
+  onUploadComplete?: (document: unknown) => void;
   onError?: (error: string) => void;
 }
 

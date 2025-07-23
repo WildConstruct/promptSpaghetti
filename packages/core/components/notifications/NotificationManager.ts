@@ -75,7 +75,7 @@ export class NotificationManager {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
 
-  constructor(private apiClient: any, private userId: string) {
+  constructor(private apiClient: unknown, private userId: string) {
     this.initializeWebSocket();
     this.loadPreferences();
   }

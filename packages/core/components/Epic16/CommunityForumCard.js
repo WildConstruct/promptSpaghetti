@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with engagement metrics, moderation features, and real-time updates.
  */
 import { useState } from 'react';
-export const CommunityForumCard = ({ post, variant = 'detailed', showActions = true, currentUser, onLike, onDislike, onBookmark, onReply, onReport, onModerate, onClick, className = '' }) => {
+export const CommunityForumCard = ({ post, variant = 'detailed', showActions = true, currentUser, onLike, onDislike, onBookmark, onReply, onReport, _____onModerate, onClick, className = '' }) => {
     const [showModerationMenu, setShowModerationMenu] = useState(false);
     const [showReportDialog, setShowReportDialog] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);

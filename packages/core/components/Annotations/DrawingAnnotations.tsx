@@ -165,11 +165,11 @@ export const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps> = ({
   });
   
   // UI state
-  const [selectedAnnotation, setSelectedAnnotation] = useState<string | null>(null);
+  const [_____selectedAnnotation, _____setSelectedAnnotation] = useState<string | null>(null);
   const [showLayers, setShowLayers] = useState(false);
   const [showStyles, setShowStyles] = useState(false);
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [zoom, _____setZoom] = useState(1);
+  const [pan, _____setPan] = useState({ x: 0, y: 0 });
   const [history, setHistory] = useState<DrawingAnnotation[][]>([annotations]);
   const [historyIndex, setHistoryIndex] = useState(0);
 

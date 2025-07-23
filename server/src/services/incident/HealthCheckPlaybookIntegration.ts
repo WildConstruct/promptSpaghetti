@@ -41,7 +41,7 @@ export interface HealthCheckMetadata {
   errorMessage?: string;
   previousState?: string;
   affectedEndpoints?: string[];
-  diagnosticData?: any;
+  diagnosticData?: unknown;
 }
 
 export interface SystemAlert {
@@ -608,7 +608,7 @@ export class HealthCheckPlaybookIntegration {
     return event.system;
   }
 
-  private sanitizeEventForLogging(event: any): any {
+  private sanitizeEventForLogging(event: unknown): unknown {
     // Remove sensitive data from event before logging
     const sanitized = { ...event };
     delete sanitized.diagnosticData;
@@ -619,7 +619,7 @@ export class HealthCheckPlaybookIntegration {
     console.log('✅ Configuration validation completed');
   }
 
-  private async queuePlaybookExecution(playbookId: string, triggerEvent: any, triggerType: string): Promise<void> {
+  private async queuePlaybookExecution(playbookId: string, _____triggerEvent: unknown, _____triggerType: string): Promise<void> {
     // Implementation for queueing playbook execution when at capacity
     console.log(`📋 Queued playbook execution: ${playbookId}`);
   }

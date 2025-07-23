@@ -9,7 +9,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   AlertTriangle,
   Activity,
@@ -171,7 +171,7 @@ interface IncidentTimelineEntry {
   type: 'created' | 'playbook_executed' | 'escalated' | 'resolved' | 'note_added';
   description: string;
   userId: string;
-  data?: any;
+  data?: unknown;
 }
 
 export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({
@@ -184,7 +184,7 @@ export const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps> = ({
   const [selectedTab, setSelectedTab] = useState<'overview' | 'incidents' | 'playbooks' | 'systems' | 'analytics'>('overview');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [filters, setFilters] = useState({
+  const [_____filters, _____setFilters] = useState({
     severity: [] as ActionSeverity[],
     systems: [] as Epic17System[],
     timeRange: '24h' as '1h' | '24h' | '7d' | '30d'

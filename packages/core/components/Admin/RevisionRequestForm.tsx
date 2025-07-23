@@ -71,7 +71,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [evidenceItems, setEvidenceItems] = useState<EvidenceItem[]>([]);
   const [newTag, setNewTag] = useState<string>('');
-  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+  const [_____showAdvanced, _____setShowAdvanced] = useState<boolean>(false);
 
   const totalSteps = 4;
 
@@ -148,7 +148,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
   }, [formData]);
 
   // Form handlers
-  const handleInputChange = useCallback((field: keyof RevisionRequestFormData, value: any) => {
+  const handleInputChange = useCallback((field: keyof RevisionRequestFormData, value: Error) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -225,7 +225,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({
     setEvidenceItems(prev => prev.filter(item => item.id !== evidenceId));
   }, []);
 
-  const handleEvidenceChange = useCallback((evidenceId: string, field: keyof EvidenceItem, value: any) => {
+  const handleEvidenceChange = useCallback((evidenceId: string, field: keyof EvidenceItem, value: Error) => {
     setEvidenceItems(prev => prev.map(item => 
       item.id === evidenceId ? { ...item, [field]: value } : item
     ));

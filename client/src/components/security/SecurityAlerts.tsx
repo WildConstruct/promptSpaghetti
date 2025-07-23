@@ -163,7 +163,7 @@ export const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ onAlertAction, m
   };
 
   const filterAndSortAlerts = () => {
-    let filtered = alerts.filter(alert => {
+    const filtered = alerts.filter(alert => {
       if (!showDismissed && alert.status === 'dismissed') return false;
       if (selectedFilters.length === 0) return true;
       return selectedFilters.includes(alert.type) || selectedFilters.includes(alert.category);
@@ -204,33 +204,33 @@ export const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ onAlertAction, m
 
   const getAlertIcon = (type: SecurityAlert['type']) => {
     switch (type) {
-      case 'critical':
-        return <AlertOctagon className="h-4 w-4 text-red-600" />;
-      case 'high':
-        return <AlertTriangle className="h-4 w-4 text-orange-600" />;
-      case 'medium':
-        return <Zap className="h-4 w-4 text-yellow-600" />;
-      case 'low':
-        return <Shield className="h-4 w-4 text-blue-600" />;
-      case 'info':
-        return <Info className="h-4 w-4 text-green-600" />;
-      default:
-        return <Bell className="h-4 w-4 text-gray-600" />;
+    case 'critical':
+      return <AlertOctagon className="h-4 w-4 text-red-600" />;
+    case 'high':
+      return <AlertTriangle className="h-4 w-4 text-orange-600" />;
+    case 'medium':
+      return <Zap className="h-4 w-4 text-yellow-600" />;
+    case 'low':
+      return <Shield className="h-4 w-4 text-blue-600" />;
+    case 'info':
+      return <Info className="h-4 w-4 text-green-600" />;
+    default:
+      return <Bell className="h-4 w-4 text-gray-600" />;
     }
   };
 
   const getStatusIcon = (status: SecurityAlert['status']) => {
     switch (status) {
-      case 'unread':
-        return <Eye className="h-3 w-3 text-blue-600" />;
-      case 'read':
-        return <EyeOff className="h-3 w-3 text-gray-500" />;
-      case 'acknowledged':
-        return <CheckCircle className="h-3 w-3 text-green-600" />;
-      case 'dismissed':
-        return <XCircle className="h-3 w-3 text-gray-400" />;
-      default:
-        return null;
+    case 'unread':
+      return <Eye className="h-3 w-3 text-blue-600" />;
+    case 'read':
+      return <EyeOff className="h-3 w-3 text-gray-500" />;
+    case 'acknowledged':
+      return <CheckCircle className="h-3 w-3 text-green-600" />;
+    case 'dismissed':
+      return <XCircle className="h-3 w-3 text-gray-400" />;
+    default:
+      return null;
     }
   };
 

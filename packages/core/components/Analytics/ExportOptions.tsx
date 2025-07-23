@@ -1,13 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '../ui/Button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Input } from '../ui/Input';
 import { Label } from '../ui/Label';
 import { Checkbox } from '../ui/Checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/Dialog';
 import { Alert, AlertDescription } from '../ui/Alert';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
-import { Download, FileText, Table, Image, Calendar, Settings } from 'lucide-react';
+import { Download, FileText, Table, Image, Settings } from 'lucide-react';
 
 /**
  * Export configuration interface
@@ -58,7 +57,7 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({
   /**
    * Handle export configuration change
    */
-  const handleConfigChange = useCallback((key: keyof ExportConfig, value: any) => {
+  const handleConfigChange = useCallback((key: keyof ExportConfig, value: Error) => {
     setExportConfig(prev => ({
       ...prev,
       [key]: value

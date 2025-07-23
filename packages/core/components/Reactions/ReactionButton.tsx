@@ -586,15 +586,15 @@ export const ReactionButton: React.FC<ReactionButtonProps> = ({
   // Render based on variant
   const renderContent = () => {
     switch (variant) {
-      case 'minimal':
-        return renderMinimalVariant();
-      case 'picker':
-        return renderPickerVariant();
-      case 'full':
-        return renderCompactVariant();
-      case 'compact':
-      default:
-        return renderCompactVariant();
+    case 'minimal':
+      return renderMinimalVariant();
+    case 'picker':
+      return renderPickerVariant();
+    case 'full':
+      return renderCompactVariant();
+    case 'compact':
+    default:
+      return renderCompactVariant();
     }
   };
 
@@ -642,8 +642,8 @@ function generateMockSummary(contentId: string, userId?: string): ReactionSummar
 
   // Determine engagement level
   const engagementLevel = totalReactions > 50 ? 'viral' :
-                         totalReactions > 20 ? 'high' :
-                         totalReactions > 5 ? 'medium' : 'low';
+    totalReactions > 20 ? 'high' :
+      totalReactions > 5 ? 'medium' : 'low';
 
   // Simulate user reaction (20% chance)
   const userReaction = userId && Math.random() > 0.8 ? 
@@ -713,8 +713,8 @@ function updateSummaryAfterReaction(
 
   // Recalculate engagement level
   const engagementLevel = totalReactions > 50 ? 'viral' :
-                         totalReactions > 20 ? 'high' :
-                         totalReactions > 5 ? 'medium' : 'low';
+    totalReactions > 20 ? 'high' :
+      totalReactions > 5 ? 'medium' : 'low';
 
   return {
     ...currentSummary,

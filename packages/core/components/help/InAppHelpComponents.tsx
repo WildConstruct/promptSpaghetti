@@ -556,7 +556,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
 }) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [highlightedElement, setHighlightedElement] = useState<HTMLElement | null>(null);
+  const [_____highlightedElement, setHighlightedElement] = useState<HTMLElement | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const tourRef = useRef<HTMLDivElement>(null);
 
@@ -573,7 +573,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
       setHighlightedElement(targetElement);
       
       // Create overlay effect
-      const rect = targetElement.getBoundingClientRect();
+      const _____rect = targetElement.getBoundingClientRect();
       if (overlayRef.current) {
         overlayRef.current.style.display = 'block';
         // Add spotlight effect positioning

@@ -140,7 +140,7 @@ export interface LocationHistory {
 
 export interface FingerprintHistory {
   fingerprint: string;
-  components: any;
+  components: unknown;
   firstSeen: Date;
   lastSeen: Date;
   transitionReason?: string;
@@ -151,7 +151,7 @@ export interface SecurityEvent {
   type: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   timestamp: Date;
-  details: any;
+  details: unknown;
 }
 
 export interface AnomalyReport {
@@ -161,8 +161,8 @@ export interface AnomalyReport {
   timestamp: Date;
   details: {
     description: string;
-    oldValue?: any;
-    newValue?: any;
+    oldValue?: unknown;
+    newValue?: unknown;
     deviation?: number;
     recommendation?: string;
   };
@@ -187,13 +187,13 @@ export interface TouchBehavior {
   touchPressure: number[];
   touchArea: number[];
   swipeVelocity: number[];
-  multiTouchPatterns: any[];
+  multiTouchPatterns: unknown[];
 }
 
 export interface ScrollBehavior {
   scrollSpeed: number;
   scrollAcceleration: number;
-  scrollPatterns: any[];
+  scrollPatterns: unknown[];
 }
 
 export interface ClickPattern {
@@ -305,11 +305,11 @@ export class EnhancedDeviceIdentificationService {
    */
   async identifyDevice(request: {
     fingerprint: string;
-    components: any;
+    components: unknown;
     ipAddress: string;
     userId?: string;
     sessionId?: string;
-    behaviorData?: any;
+    behaviorData?: unknown;
   }): Promise<{
     deviceProfile: EnhancedDeviceProfile;
     isNewDevice: boolean;
@@ -546,7 +546,7 @@ export class EnhancedDeviceIdentificationService {
 
   // Private helper methods
 
-  private async getOrCreateDeviceProfile(request: any): Promise<EnhancedDeviceProfile> {
+  private async getOrCreateDeviceProfile(request: unknown): Promise<EnhancedDeviceProfile> {
     let profile = await this.getDeviceProfile(request.fingerprint);
     
     if (!profile) {
@@ -556,7 +556,7 @@ export class EnhancedDeviceIdentificationService {
     return profile;
   }
 
-  private async createNewDeviceProfile(request: any): Promise<EnhancedDeviceProfile> {
+  private async createNewDeviceProfile(request: unknown): Promise<EnhancedDeviceProfile> {
     const deviceId = this.generateDeviceId();
     const now = new Date();
     
@@ -653,7 +653,7 @@ export class EnhancedDeviceIdentificationService {
     return profile;
   }
 
-  private parseDeviceComponents(components: any): EnhancedDeviceProfile['components'] {
+  private parseDeviceComponents(components: unknown): EnhancedDeviceProfile['components'] {
     return {
       browser: {
         userAgent: components.userAgent || '',
@@ -714,7 +714,7 @@ export class EnhancedDeviceIdentificationService {
     };
   }
 
-  private parseUserAgent(userAgent: string): any {
+  private parseUserAgent(userAgent: string): unknown {
     // Simple user agent parsing - in production use a library like ua-parser-js
     if (!userAgent) {
       return {
@@ -738,7 +738,7 @@ export class EnhancedDeviceIdentificationService {
     };
   }
 
-  private async detectAnomalies(profile: EnhancedDeviceProfile, request: any): Promise<AnomalyReport[]> {
+  private async detectAnomalies(profile: EnhancedDeviceProfile, request: unknown): Promise<AnomalyReport[]> {
     const anomalies: AnomalyReport[] = [];
     
     // Check for fingerprint changes
@@ -810,7 +810,7 @@ export class EnhancedDeviceIdentificationService {
     return anomalies;
   }
 
-  private calculateFingerprintChangeScore(oldComponents: any, newComponents: any): number {
+  private calculateFingerprintChangeScore(oldComponents: unknown, newComponents: unknown): number {
     let changeScore = 0;
     const weights = {
       canvasFingerprint: 30,
@@ -831,7 +831,7 @@ export class EnhancedDeviceIdentificationService {
     return changeScore;
   }
 
-  private calculateDistance(coord1: any, coord2: any): number {
+  private calculateDistance(coord1: unknown, coord2: unknown): number {
     const R = 6371; // Earth's radius in km
     const dLat = this.toRad(coord2.latitude - coord1.latitude);
     const dLon = this.toRad(coord2.longitude - coord1.longitude);
@@ -1001,7 +1001,7 @@ export class EnhancedDeviceIdentificationService {
     ]);
   }
 
-  private async updateDeviceComponents(profile: EnhancedDeviceProfile, request: any): Promise<void> {
+  private async updateDeviceComponents(profile: EnhancedDeviceProfile, request: unknown): Promise<void> {
     profile.components = this.parseDeviceComponents(request.components);
     profile.lastSeen = new Date();
     profile.metadata.updateCount++;
@@ -1140,7 +1140,7 @@ export class EnhancedDeviceIdentificationService {
 
   private async logDeviceIdentification(
     profile: EnhancedDeviceProfile,
-    request: any,
+    request: unknown,
     decision: TrustDecision
   ): Promise<void> {
     await this.auditService.logEvent({
@@ -1164,7 +1164,7 @@ export class EnhancedDeviceIdentificationService {
     profile.history.users = await this.getUserAssociations(profile.fingerprint);
   }
 
-  private async analyzeBehavior(profile: EnhancedDeviceProfile, behaviorData: any): Promise<void> {
+  private async analyzeBehavior(profile: EnhancedDeviceProfile, _____behaviorData: unknown): Promise<void> {
     // Placeholder for behavioral analysis
     // Would implement mouse movement, keyboard dynamics, etc.
     console.log('Analyzing behavior for device:', profile.deviceId);
@@ -1172,8 +1172,8 @@ export class EnhancedDeviceIdentificationService {
 
   private async processExistingDevice(
     profile: EnhancedDeviceProfile,
-    request: any
-  ): Promise<any> {
+    request: unknown
+  ): Promise<unknown> {
     // Quick processing for cached devices
     const anomalies = await this.detectAnomalies(profile, request);
     const trustDecision = await this.makeTrustDecision(profile, anomalies);

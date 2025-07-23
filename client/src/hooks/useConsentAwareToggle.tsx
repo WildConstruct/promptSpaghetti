@@ -107,7 +107,7 @@ export function useConsentAwareToggle(
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include'
       });
@@ -214,7 +214,7 @@ export function useBatchConsentAwareToggle(
       const response = await fetch(`${API_BASE_URL}/consent-toggles/batch`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify(requestBody)

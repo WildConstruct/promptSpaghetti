@@ -72,11 +72,11 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [selectedPolicy, setSelectedPolicy] = useState<PolicyData | null>(null);
+  const [_____selectedPolicy, _____setSelectedPolicy] = useState<PolicyData | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [isLoading, setIsLoading] = useState(false);
+  const [_____isLoading, _____setIsLoading] = useState(false);
 
   // Mock data - in real implementation, this would come from PolicyManagementService
   const [policies, setPolicies] = useState<PolicyData[]>([
@@ -127,7 +127,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     }
   ]);
 
-  const [violations, setViolations] = useState<PolicyViolationData[]>([
+  const [violations, _____setViolations] = useState<PolicyViolationData[]>([
     {
       violationId: 'violation-001',
       policyId: 'policy-trust-001',

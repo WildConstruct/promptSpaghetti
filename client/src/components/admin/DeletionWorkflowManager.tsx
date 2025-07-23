@@ -136,7 +136,7 @@ interface WorkflowMetrics {
 
 const DeletionWorkflowManager: React.FC = () => {
   const [workflows, setWorkflows] = useState<DeletionWorkflow[]>([]);
-  const [templates, setTemplates] = useState<WorkflowTemplate[]>([]);
+  const [___templates, setTemplates] = useState<WorkflowTemplate[]>([]);
   const [metrics, setMetrics] = useState<WorkflowMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -149,15 +149,15 @@ const DeletionWorkflowManager: React.FC = () => {
   const [sortBy, setSortBy] = useState<'name' | 'created' | 'progress' | 'priority'>('created');
   
   // Modal and selection states
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showTemplateModal, setShowTemplateModal] = useState(false);
-  const [selectedWorkflow, setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
+  const [___showCreateModal, setShowCreateModal] = useState(false);
+  const [___showTemplateModal, setShowTemplateModal] = useState(false);
+  const [___selectedWorkflow, setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
   const [selectedWorkflows, setSelectedWorkflows] = useState<Set<string>>(new Set());
-  const [showBulkActions, setShowBulkActions] = useState(false);
+  const [___showBulkActions, ___setShowBulkActions] = useState(false);
 
   // Real-time updates
   const [autoRefresh, setAutoRefresh] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState(5000); // 5 seconds
+  const [refreshInterval, ___setRefreshInterval] = useState(5000); // 5 seconds
 
   // Load workflow data
   const loadWorkflowData = useCallback(async () => {

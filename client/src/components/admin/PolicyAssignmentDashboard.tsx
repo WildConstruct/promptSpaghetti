@@ -146,7 +146,7 @@ export const PolicyAssignmentDashboard: React.FC = () => {
     }
   };
 
-  const handleBulkAssignment = async (bulkData: any) => {
+  const handleBulkAssignment = async (bulkData: unknown) => {
     try {
       const response = await fetch('/api/policy-assignments/assignments/bulk', {
         method: 'POST',

@@ -185,7 +185,7 @@ export class HealthcareService {
     options: HealthcareDataValidationOptions = {}
   ): Promise<HealthcareDataValidationResult> {
     const { version, strict = true } = options;
-    const errors: string[] = [];
+    const _____errors: string[] = [];
     const warnings: string[] = [];
     const validatedFields: string[] = [];
 
@@ -387,7 +387,7 @@ export class HealthcareService {
 
   private async validateFHIRData(
     data: Record<string, unknown>,
-    options: HealthcareDataValidationOptions
+    _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
     const errors: string[] = [];
     const warnings: string[] = [];
@@ -417,7 +417,7 @@ export class HealthcareService {
 
   private async validateHL7v2Data(
     data: Record<string, unknown>,
-    options: HealthcareDataValidationOptions
+    _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
     // Mock HL7v2 validation
     return {
@@ -431,7 +431,7 @@ export class HealthcareService {
 
   private async validateHL7v3Data(
     data: Record<string, unknown>,
-    options: HealthcareDataValidationOptions
+    _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
     // Mock HL7v3 validation
     return {
@@ -445,7 +445,7 @@ export class HealthcareService {
 
   private async validateCDAData(
     data: Record<string, unknown>,
-    options: HealthcareDataValidationOptions
+    _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
     // Mock CDA validation
     return {
@@ -459,7 +459,7 @@ export class HealthcareService {
 
   private async validateDICOMData(
     data: Record<string, unknown>,
-    options: HealthcareDataValidationOptions
+    _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
     // Mock DICOM validation
     return {

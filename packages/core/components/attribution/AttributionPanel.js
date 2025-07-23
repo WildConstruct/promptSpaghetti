@@ -5,7 +5,7 @@ import { UserOutlined, SettingOutlined, TeamOutlined, ClockCircleOutlined, EditO
 import { CHANGE_TYPE_DESCRIPTIONS, RESOURCE_TYPE_DESCRIPTIONS } from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
 import { ContributorVisualization } from './ContributorVisualization';
-const { Text, Title } = Typography;
+const { Text, _____Title } = Typography;
 const AuthorIndicator = ({ attribution, showDetails = true, onClick }) => {
     const getAuthorInitials = (name) => {
         if (!name)
@@ -66,13 +66,13 @@ const AuthorIndicator = ({ attribution, showDetails = true, onClick }) => {
     }
     return content;
 };
-export const AttributionPanel = ({ projectId, selectedResourceType, selectedResourceId, visible, onClose, onAttributionRecord }) => {
+export const AttributionPanel = ({ projectId, selectedResourceType, selectedResourceId, visible, onClose, _____onAttributionRecord }) => {
     const [attributions, setAttributions] = useState([]);
     const [showContributors, setShowContributors] = useState(false);
     const [privacySettings, setPrivacySettings] = useState(null);
     const [showPrivacySettings, setShowPrivacySettings] = useState(false);
     const [selectedAttribution, setSelectedAttribution] = useState(null);
-    const { listAttributions, getResourceAttribution, getPrivacySettings, updatePrivacySettings, loading, error } = useAttribution();
+    const { listAttributions, getResourceAttribution, getPrivacySettings, updatePrivacySettings, _____loading, error } = useAttribution();
     useEffect(() => {
         if (visible) {
             loadPrivacySettings();
@@ -151,7 +151,7 @@ export const AttributionPanel = ({ projectId, selectedResourceType, selectedReso
             // Show recent attributions grouped by resource
             return (_jsxs("div", { children: [_jsx("div", { style: { marginBottom: '12px' }, children: _jsx(Text, { strong: true, children: "Recent Changes" }) }), Object.entries(groupedAttributions).map(([resourceKey, resourceAttributions]) => {
                         const [resourceType, resourceId] = resourceKey.split(':');
-                        const latestAttribution = resourceAttributions[0];
+                        const _____latestAttribution = resourceAttributions[0];
                         return (_jsxs(Card, { size: "small", style: { marginBottom: '8px' }, hoverable: true, children: [_jsx("div", { style: { marginBottom: '8px' }, children: _jsxs(Space, { children: [_jsx(Text, { strong: true, style: { fontSize: '12px' }, children: RESOURCE_TYPE_DESCRIPTIONS[resourceType] }), _jsx(Text, { code: true, style: { fontSize: '11px' }, children: resourceId }), _jsx(Badge, { count: resourceAttributions.length, size: "small" })] }) }), _jsxs("div", { style: { display: 'flex', gap: '4px', flexWrap: 'wrap' }, children: [resourceAttributions.slice(0, 3).map((attribution) => (_jsx(Tooltip, { title: _jsxs("div", { children: [_jsx("div", { children: attribution.authorName || 'Anonymous' }), _jsx("div", { children: CHANGE_TYPE_DESCRIPTIONS[attribution.changeType] }), _jsx("div", { children: attribution.createdAt.toLocaleString() })] }), children: _jsx(Avatar, { size: 20, style: {
                                                     backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
                                                     fontSize: '10px',

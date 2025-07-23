@@ -75,7 +75,7 @@ export interface EventPayload {
   dataAccessed?: DataAccessInfo;
   permissions?: string[];
   requestHeaders?: Record<string, string>;
-  responseData?: any;
+  responseData?: unknown;
   duration?: number;
   error?: ErrorInfo;
 }
@@ -108,7 +108,7 @@ export interface ViolationEvidence {
   type: 'log' | 'metric' | 'configuration' | 'data_sample' | 'user_action';
   source: string;
   timestamp: Date;
-  content: any;
+  content: unknown;
   hash?: string;
   signature?: string;
 }
@@ -377,7 +377,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    */
   private async processViolation(
     violation: ComplianceViolationEvent, 
-    originalEvent: RealTimeEvent
+    _____originalEvent: RealTimeEvent
   ): Promise<void> {
     // Store violation
     this.violationCache.set(violation.violationId, violation);
@@ -427,7 +427,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
   /**
    * Extract evidence from event and rule result
    */
-  private extractEvidence(event: RealTimeEvent, ruleResult: any): ViolationEvidence[] {
+  private extractEvidence(event: RealTimeEvent, ruleResult: unknown): ViolationEvidence[] {
     const evidence: ViolationEvidence[] = [];
 
     // Event payload evidence
@@ -487,7 +487,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    */
   private async evaluateThreshold(
     threshold: AlertThreshold, 
-    violation: ComplianceViolationEvent
+    _____violation: ComplianceViolationEvent
   ): Promise<boolean> {
     // Get metric value for the specified time window
     const timeWindow = new Date(Date.now() - (threshold.timeWindow * 60 * 1000));

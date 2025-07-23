@@ -138,12 +138,12 @@ export class ReviewIntegrationAdapter {
     sourceSystem: SourceSystem,
     sourceType: string,
     sourceId: string,
-    sourceData: any,
+    sourceData: unknown,
     options: {
       priority?: ReviewPriority;
       urgentOverride?: boolean;
       assignToReviewer?: string;
-      additionalContext?: any;
+      additionalContext?: unknown;
     } = {}
   ): Promise<ReviewItem | null> {
     if (!this.config.enabled || !this.config.autoCreateReviews) {
@@ -461,7 +461,7 @@ export class ReviewIntegrationAdapter {
   /**
    * Handle identity verification review creation
    */
-  async handleIdentityVerificationReview(verificationData: any): Promise<ReviewItem | null> {
+  async handleIdentityVerificationReview(verificationData: unknown): Promise<ReviewItem | null> {
     const sourceData = {
       verificationId: verificationData.id,
       userId: verificationData.userId,
@@ -509,7 +509,7 @@ export class ReviewIntegrationAdapter {
   /**
    * Handle template submission review creation
    */
-  async handleTemplateSubmissionReview(submission: any): Promise<ReviewItem | null> {
+  async handleTemplateSubmissionReview(submission: unknown): Promise<ReviewItem | null> {
     const sourceData = {
       submissionId: submission.id,
       templateData: submission.template,
@@ -604,12 +604,12 @@ export class ReviewIntegrationAdapter {
     ) || null;
   }
 
-  private mapPriority(sourceData: any, mapping: IntegrationMapping): ReviewPriority | null {
+  private mapPriority(sourceData: unknown, mapping: IntegrationMapping): ReviewPriority | null {
     const sourcePriority = sourceData.priority || sourceData.severity || 'medium';
     return mapping.priorityMapping[sourcePriority] || null;
   }
 
-  private mapComplexity(sourceData: any, mapping: IntegrationMapping): ReviewComplexity {
+  private mapComplexity(sourceData: unknown, mapping: IntegrationMapping): ReviewComplexity {
     const sourceComplexity = sourceData.complexity || 'simple';
     return mapping.complexityMapping[sourceComplexity] || 'simple';
   }
@@ -617,7 +617,7 @@ export class ReviewIntegrationAdapter {
   private async buildReviewMetadata(
     sourceSystem: SourceSystem,
     sourceType: string,
-    sourceData: any,
+    sourceData: unknown,
     complexity: ReviewComplexity,
     additionalContext?: any
   ): Promise<ReviewMetadata> {
@@ -638,7 +638,7 @@ export class ReviewIntegrationAdapter {
   private generateReviewContent(
     sourceSystem: SourceSystem,
     sourceType: string,
-    sourceData: any
+    sourceData: unknown
   ): { title: string; description: string } {
     switch (sourceSystem) {
     case 'fraud_monitoring':
@@ -729,7 +729,7 @@ export class ReviewIntegrationAdapter {
     console.log(`Processing integration event: ${event.type}`);
   }
 
-  private async logIntegrationEvent(type: string, data: any): Promise<void> {
+  private async logIntegrationEvent(type: string, data: Record<string, unknown>): Promise<void> {
     await this.auditService.logEvent({
       userId: 'system',
       action: `integration_${type}`,
@@ -739,27 +739,27 @@ export class ReviewIntegrationAdapter {
   }
 
   // Placeholder helper methods
-  private extractBusinessContext(sourceSystem: SourceSystem, sourceType: string, sourceData: any): string {
+  private extractBusinessContext(sourceSystem: SourceSystem, sourceType: string, _____sourceData: unknown): string {
     return `${sourceSystem} ${sourceType} review`;
   }
 
-  private assessRiskLevel(sourceData: any): string {
+  private assessRiskLevel(sourceData: unknown): string {
     return sourceData.riskLevel || sourceData.severity || 'medium';
   }
 
-  private generateAutomatedRecommendation(sourceSystem: SourceSystem, sourceData: any): string {
+  private generateAutomatedRecommendation(sourceSystem: SourceSystem, _____sourceData: unknown): string {
     return `Automated recommendation for ${sourceSystem} review`;
   }
 
-  private generateTags(sourceSystem: SourceSystem, sourceType: string, sourceData: any): string[] {
+  private generateTags(sourceSystem: SourceSystem, sourceType: string, sourceData: unknown): string[] {
     return [sourceSystem, sourceType, ...(sourceData.tags || [])];
   }
 
-  private checkForFlags(sourceData: any): boolean {
+  private checkForFlags(sourceData: unknown): boolean {
     return sourceData.flagged || (sourceData.riskFlags && sourceData.riskFlags.length > 0) || false;
   }
 
-  private estimateReviewTime(complexity: ReviewComplexity, sourceData: any): number {
+  private estimateReviewTime(complexity: ReviewComplexity, sourceData: unknown): number {
     const baseTime = {
       simple: 15,
       moderate: 30,
@@ -783,7 +783,7 @@ interface IntegrationStatus {
 interface IntegrationEvent {
   type: string;
   sourceSystem: SourceSystem;
-  data: any;
+  data: Record<string, unknown>;
   timestamp: Date;
   processed: boolean;
 }

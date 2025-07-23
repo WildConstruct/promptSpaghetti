@@ -91,14 +91,14 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
   /**
    * Get the current state for this node from the execution context
    */
-  protected getState(ctx: AdvancedExecutionContext): any {
+  protected getState(ctx: AdvancedExecutionContext): unknown {
     return ctx.nodeStates.get(this.id);
   }
 
   /**
    * Set the current state for this node in the execution context
    */
-  protected setState(ctx: AdvancedExecutionContext, state: any): void {
+  protected setState(ctx: AdvancedExecutionContext, state: Error): void {
     ctx.nodeStates.set(this.id, state);
   }
 
@@ -247,7 +247,7 @@ export class AdvancedExecutionUtils {
   /**
    * Check for potential infinite loops in stateful node execution
    */
-  static detectInfiniteLoop(ctx: AdvancedExecutionContext, nodeId: string): boolean {
+  static detectInfiniteLoop(ctx: AdvancedExecutionContext, _______nodeId: string): boolean {
     const MAX_DEPTH = 1000; // Configurable limit
     return ctx.evaluationDepth > MAX_DEPTH;
   }
@@ -287,13 +287,13 @@ export class ValidationHelpers {
     return { valid: false, errors, warnings };
   }
 
-  static validateRequired(value: any, fieldName: string): string[] {
+  static validateRequired(value: Error, fieldName: string): string[] {
     return value === undefined || value === null || value === '' 
       ? [`${fieldName} is required`] 
       : [];
   }
 
-  static validateArray(value: any, fieldName: string, minLength: number = 0): string[] {
+  static validateArray(value: Error, fieldName: string, minLength: number = 0): string[] {
     const errors: string[] = [];
     
     if (!Array.isArray(value)) {
@@ -306,7 +306,7 @@ export class ValidationHelpers {
   }
 
   static validateNumericRange(
-    value: any, 
+    value: Error, 
     fieldName: string, 
     min?: number, 
     max?: number
@@ -332,7 +332,7 @@ export class ValidationHelpers {
  * Enhanced AdvancedRuntimeNode with I/O system integration
  */
 export abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> extends AdvancedRuntimeNode<TOutput> {
-  protected ioHandler: any; // Will be imported from io-system
+  protected ioHandler: unknown; // Will be imported from io-system
 
   constructor(id: string, config: AdvancedNodeConfig, ioSpec?: any) {
     super(id, config);

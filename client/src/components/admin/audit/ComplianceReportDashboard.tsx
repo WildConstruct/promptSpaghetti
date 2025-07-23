@@ -94,7 +94,7 @@ interface ReportTemplate {
   description: string;
   standard: string;
   reportType: string;
-  defaultScope: any;
+  defaultScope: Error;
   schedule?: {
     frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';
     enabled: boolean;
@@ -139,7 +139,7 @@ const VIOLATION_SEVERITIES = {
 
 export const ComplianceReportDashboard: React.FC = () => {
   const [reports, setReports] = useState<ComplianceReport[]>([]);
-  const [templates, setTemplates] = useState<ReportTemplate[]>([]);
+  const [___templates, setTemplates] = useState<ReportTemplate[]>([]);
   const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);

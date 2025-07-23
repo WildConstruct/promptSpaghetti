@@ -319,28 +319,28 @@ export interface PolicyTarget {
 export interface SubjectTarget {
   type: 'IDENTITY' | 'ROLE' | 'GROUP' | 'ATTRIBUTE';
   operator: ComparisonOperator;
-  value: any;
+  value: Error;
   negate: boolean;
 }
 
 export interface ResourceTarget {
   type: 'ID' | 'TYPE' | 'PATH' | 'CLASSIFICATION' | 'ATTRIBUTE';
   operator: ComparisonOperator;
-  value: any;
+  value: Error;
   negate: boolean;
 }
 
 export interface ActionTarget {
   type: 'ID' | 'TYPE' | 'OPERATION' | 'CATEGORY';
   operator: ComparisonOperator;
-  value: any;
+  value: Error;
   negate: boolean;
 }
 
 export interface EnvironmentTarget {
   type: 'TIME' | 'LOCATION' | 'DEVICE' | 'NETWORK' | 'ATTRIBUTE';
   operator: ComparisonOperator;
-  value: any;
+  value: Error;
   negate: boolean;
 }
 
@@ -367,7 +367,7 @@ export interface PolicyRule {
 export interface RuleCondition {
   field: string;
   operator: ComparisonOperator;
-  value: any;
+  value: Error;
   type: ConditionType;
   weight: number; // 0-1
 }
@@ -375,7 +375,7 @@ export interface RuleCondition {
 export interface PolicyCondition {
   type: 'TEMPORAL' | 'CONTEXTUAL' | 'RISK' | 'COMPLIANCE';
   operator: ComparisonOperator;
-  value: any;
+  value: Error;
   required: boolean;
 }
 
@@ -530,7 +530,7 @@ export interface PermissionConstraint {
   type: ConstraintType;
   field: string;
   operator: ComparisonOperator;
-  value: any;
+  value: Error;
   required: boolean;
 }
 
@@ -546,7 +546,7 @@ export interface PermissionCondition {
 
 export interface SubjectAttribute {
   name: string;
-  value: any;
+  value: Error;
   type: AttributeType;
   category: AttributeCategory;
   
@@ -574,7 +574,7 @@ export interface SubjectAttribute {
 
 export interface ResourceAttribute {
   name: string;
-  value: any;
+  value: Error;
   type: AttributeType;
   category: AttributeCategory;
   
@@ -596,7 +596,7 @@ export interface ResourceAttribute {
 
 export interface EnvironmentAttribute {
   name: string;
-  value: any;
+  value: Error;
   type: AttributeType;
   category: AttributeCategory;
   
@@ -655,7 +655,7 @@ export interface GroupMember {
 
 export interface GroupAttribute {
   name: string;
-  value: any;
+  value: Error;
   type: AttributeType;
   inherited: boolean;
   metadata: Record<string, any>;
@@ -1643,7 +1643,7 @@ export class AccessControlFramework extends EventEmitter {
     return target.negate ? !match : match;
   }
 
-  private compareValues(actual: any, operator: ComparisonOperator, expected: any): boolean {
+  private compareValues(actual: unknown, operator: ComparisonOperator, expected: unknown): boolean {
     switch (operator) {
     case 'EQUALS':
       return actual === expected;
@@ -1717,12 +1717,12 @@ export class AccessControlFramework extends EventEmitter {
     }
   }
 
-  private evaluateTemporalCondition(condition: PolicyCondition, context: AccessControlContext): boolean {
+  private evaluateTemporalCondition(_____condition: PolicyCondition, _____context: AccessControlContext): boolean {
     // Implement time-based condition evaluation
     return true; // Simplified
   }
 
-  private evaluateContextualCondition(condition: PolicyCondition, context: AccessControlContext): boolean {
+  private evaluateContextualCondition(_____condition: PolicyCondition, _____context: AccessControlContext): boolean {
     // Implement context-based condition evaluation
     return true; // Simplified
   }
@@ -1760,9 +1760,9 @@ export class AccessControlFramework extends EventEmitter {
     return this.compareValues(actualValue, condition.operator, condition.value);
   }
 
-  private getContextValue(fieldPath: string, context: AccessControlContext): any {
+  private getContextValue(fieldPath: string, context: AccessControlContext): unknown {
     const pathParts = fieldPath.split('.');
-    let value: any = context;
+    let value: Error = context;
     
     for (const part of pathParts) {
       value = value?.[part];
@@ -1844,7 +1844,7 @@ export class AccessControlFramework extends EventEmitter {
   // Database Operations (Simplified - would be implemented properly)
   // =============================================================================
 
-  private async getApplicablePolicies(context: AccessControlContext): Promise<AccessPolicy[]> {
+  private async getApplicablePolicies(_____context: AccessControlContext): Promise<AccessPolicy[]> {
     // Mock implementation - would query database with complex filtering
     const allPolicies = Array.from(this.policyCache.values());
     return allPolicies.filter(policy => policy.enabled);
@@ -1895,7 +1895,7 @@ export class AccessControlFramework extends EventEmitter {
     console.log(`Storing role assignment: ${assignment.id}`);
   }
 
-  private async getRoleAssignment(assignmentId: string): Promise<RoleAssignment | null> {
+  private async getRoleAssignment(_____assignmentId: string): Promise<RoleAssignment | null> {
     // Mock implementation - would load from database
     return null;
   }

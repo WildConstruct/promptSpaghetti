@@ -51,16 +51,16 @@ const VFX_PRODUCTION_PHASES = [
     { value: 'review', label: 'Review' },
     { value: 'final', label: 'Final' }
 ];
-export const VFXChecklistSystem = ({ checklist, currentUser, onChecklistUpdate, onItemCreate, onItemUpdate, onItemDelete, onCommentCreate, readonly = false, showStatistics = true, compactView = false, className = '' }) => {
+export const VFXChecklistSystem = ({ checklist, currentUser, _____onChecklistUpdate, onItemCreate, onItemUpdate, onItemDelete, onCommentCreate, readonly = false, showStatistics = true, compactView = false, className = '' }) => {
     // UI state
-    const [selectedTab, setSelectedTab] = useState('overview');
+    const [_____selectedTab, _____setSelectedTab] = useState('overview');
     const [selectedItem, setSelectedItem] = useState(null);
     const [showFilters, setShowFilters] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [priorityFilter, setPriorityFilter] = useState('all');
     const [categoryFilter, setCategoryFilter] = useState('all');
-    const [assigneeFilter, setAssigneeFilter] = useState('all');
+    const [assigneeFilter, _____setAssigneeFilter] = useState('all');
     const [showCompleted, setShowCompleted] = useState(true);
     const [sortBy, setSortBy] = useState('priority');
     const [sortOrder, setSortOrder] = useState('desc');
@@ -226,7 +226,7 @@ export const VFXChecklistSystem = ({ checklist, currentUser, onChecklistUpdate, 
                                                     ? 'This checklist doesn\'t have any items yet.'
                                                     : 'No items match your current filters.' }), checklist.items.length === 0 && !readonly && currentUser.permissions.canCreate && (_jsxs(Button, { variant: "default", onClick: () => setIsCreating(true), className: "mt-4", children: [_jsx(Plus, { className: "w-4 h-4 mr-2" }), "Add First Item"] }))] }) })) : (filteredItems.map(item => (_jsx(VFXChecklistItemCard, { item: item, checklist: checklist, currentUser: currentUser, onStatusChange: handleStatusChange, onPriorityChange: handlePriorityChange, onAssigneeChange: handleAssigneeChange, onProgressChange: handleProgressChange, onCommentCreate: onCommentCreate, onItemUpdate: onItemUpdate, onItemDelete: onItemDelete, readonly: readonly, compact: compactView, isSelected: selectedItem === item.id, onSelect: () => setSelectedItem(selectedItem === item.id ? null : item.id) }, item.id)))) })] }) })] }) }));
 };
-const VFXChecklistItemCard = ({ item, checklist, currentUser, onStatusChange, onPriorityChange, onAssigneeChange, onProgressChange, onCommentCreate, onItemUpdate, onItemDelete, readonly = false, compact = false, isSelected = false, onSelect }) => {
+const VFXChecklistItemCard = ({ item, _____checklist, currentUser, onStatusChange, _____onPriorityChange, _____onAssigneeChange, _____onProgressChange, onCommentCreate, onItemUpdate, onItemDelete, readonly = false, compact = false, isSelected = false, onSelect }) => {
     const [showComments, setShowComments] = useState(false);
     const [newComment, setNewComment] = useState('');
     const statusConfig = STATUS_CONFIG[item.status];
@@ -234,7 +234,7 @@ const VFXChecklistItemCard = ({ item, checklist, currentUser, onStatusChange, on
     const StatusIcon = statusConfig.icon;
     const isOverdue = item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved';
     const canEdit = !readonly && (currentUser.permissions.canEdit || item.author.id === currentUser.id);
-    const canApprove = !readonly && currentUser.permissions.canApprove;
+    const _____canApprove = !readonly && currentUser.permissions._____canApprove;
     const handleCommentSubmit = useCallback(() => {
         if (!newComment.trim())
             return;

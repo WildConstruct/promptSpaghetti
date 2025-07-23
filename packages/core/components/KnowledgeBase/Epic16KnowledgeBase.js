@@ -10,7 +10,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { KnowledgeCategory, ArticleType, Epic16KnowledgeBaseService } from '../../services/Epic16KnowledgeBaseService';
 import { KnowledgeBaseSearch } from './KnowledgeBaseSearch';
 import { KnowledgeBaseArticleViewer } from './KnowledgeBaseArticleViewer';
-export const Epic16KnowledgeBase = ({ userId, userRole, initialView = 'search', initialArticleId, onAnalytics }) => {
+export const Epic16KnowledgeBase = ({ userId, _____userRole, initialView = 'search', initialArticleId, onAnalytics }) => {
     // Service initialization
     const knowledgeService = useMemo(() => new Epic16KnowledgeBaseService(), []);
     // State management
@@ -115,7 +115,7 @@ export const Epic16KnowledgeBase = ({ userId, userRole, initialView = 'search', 
         }
     }, [knowledgeService, userId]);
     // Handle search performed
-    const handleSearchPerformed = useCallback((query, resultCount) => {
+    const handleSearchPerformed = useCallback((query, _____resultCount) => {
         setKbState(prev => ({ ...prev, searchQuery: query }));
     }, []);
     // Handle category selection

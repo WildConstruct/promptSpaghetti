@@ -111,18 +111,18 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
         if (comment.commentId === commentId) {
           const updatedMetrics = { ...comment.score.metrics };
           switch (engagementType) {
-            case 'like':
-              updatedMetrics.totalLikes++;
-              break;
-            case 'reply':
-              updatedMetrics.totalReplies++;
-              break;
-            case 'share':
-              updatedMetrics.totalShares++;
-              break;
-            case 'helpful':
-              updatedMetrics.totalHelpfulVotes++;
-              break;
+          case 'like':
+            updatedMetrics.totalLikes++;
+            break;
+          case 'reply':
+            updatedMetrics.totalReplies++;
+            break;
+          case 'share':
+            updatedMetrics.totalShares++;
+            break;
+          case 'helpful':
+            updatedMetrics.totalHelpfulVotes++;
+            break;
           }
           return {
             ...comment,
@@ -320,8 +320,8 @@ export const TrendingCommentsList: React.FC<TrendingCommentsListProps> = ({
               fontSize: '16px',
               fontWeight: '600',
               color: summary.conversationHealth === 'excellent' ? '#059669' :
-                     summary.conversationHealth === 'good' ? '#0891b2' :
-                     summary.conversationHealth === 'fair' ? '#d97706' : '#dc2626'
+                summary.conversationHealth === 'good' ? '#0891b2' :
+                  summary.conversationHealth === 'fair' ? '#d97706' : '#dc2626'
             }}>
               {summary.conversationHealth.toUpperCase()}
             </div>

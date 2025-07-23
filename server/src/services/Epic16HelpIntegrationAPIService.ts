@@ -24,8 +24,8 @@ export interface HelpSessionAPIRequest {
     templateId?: string;
     searchQuery?: string;
     userRole: 'buyer' | 'seller' | 'admin';
-    graphContext?: any;
-    marketplaceContext?: any;
+    graphContext?: unknown;
+    marketplaceContext?: unknown;
   };
 }
 
@@ -90,7 +90,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   private supportService: Epic16SupportEscalationService;
   private ticketService: Epic16TicketIntegrationService;
   private activeSessions: Map<string, any> = new Map();
-  private analyticsBuffer: any[] = [];
+  private analyticsBuffer: unknown[] = [];
 
   constructor(
     database: Database,
@@ -332,7 +332,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       helpfulContent?: string[];
       skippedContent?: string[];
     }
-  ): Promise<{ success: boolean; session?: any }> {
+  ): Promise<{ success: boolean; session?: unknown }> {
     try {
       const session = this.activeSessions.get(sessionId);
       if (!session) {
@@ -363,8 +363,8 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       completionRate: number;
       helpfulnessScore: number;
       contentEngagement: Record<string, number>;
-      transitionPoints: any[];
-      escalationEvents: any[];
+      transitionPoints: unknown[];
+      escalationEvents: unknown[];
     };
   }> {
     try {
@@ -392,7 +392,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   // Private Helper Methods
   // =============================================================================
 
-  private async getUserProfile(userId: string): Promise<any> {
+  private async getUserProfile(userId: string): Promise<unknown> {
     // Implementation would fetch user profile from database
     return {
       id: userId,
@@ -411,7 +411,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     };
   }
 
-  private analyzeHelpContext(context: any, userProfile: any): { relevanceScore: number; contextFactors: string[] } {
+  private analyzeHelpContext(context: unknown, userProfile: Error): { relevanceScore: number; contextFactors: string[] } {
     let relevanceScore = 50; // Base score
     const contextFactors: string[] = [];
 
@@ -439,7 +439,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     return { relevanceScore: Math.min(relevanceScore, 100), contextFactors };
   }
 
-  private async fetchHelpContent(request: HelpSessionAPIRequest, analysis: any): Promise<HelpContentItem[]> {
+  private async fetchHelpContent(request: HelpSessionAPIRequest, _____analysis: unknown): Promise<HelpContentItem[]> {
     // Mock implementation - would integrate with actual help content system
     const mockContent: HelpContentItem[] = [
       {
@@ -528,7 +528,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     return transitionId;
   }
 
-  private generateSupportDescription(context: any): string {
+  private generateSupportDescription(context: unknown): string {
     return `
     User Help System Escalation
     
@@ -551,7 +551,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     `;
   }
 
-  private mapPriorityToTicketPriority(priority: string): any {
+  private mapPriorityToTicketPriority(priority: string): unknown {
     const priorityMap = {
       'low': 'low',
       'medium': 'medium', 
@@ -573,12 +573,12 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     return content.reduce((total, item) => total + item.estimatedTime, 0);
   }
 
-  private calculateHelpfulnessScore(session: any): number {
+  private calculateHelpfulnessScore(session: unknown): number {
     // Calculate based on user feedback and completion rate
     return Math.round((session.currentStep / session.totalSteps) * 100);
   }
 
-  private calculateContentEngagement(session: any): Record<string, number> {
+  private calculateContentEngagement(session: unknown): Record<string, number> {
     // Mock implementation
     return {
       'total_views': session.currentStep,
@@ -588,7 +588,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   }
 
   // Analytics tracking methods
-  private trackHelpRequest(request: any, content: any[], duration: number): void {
+  private trackHelpRequest(request: unknown, content: unknown[], duration: number): void {
     this.analyticsBuffer.push({
       event: 'help_content_requested',
       userId: request.userId,
@@ -599,7 +599,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     });
   }
 
-  private trackSystemTransition(request: any, continuousHelp: boolean): void {
+  private trackSystemTransition(request: unknown, continuousHelp: boolean): void {
     this.analyticsBuffer.push({
       event: 'system_transition',
       userId: request.userId,
@@ -610,7 +610,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     });
   }
 
-  private trackSupportEscalation(request: any, ticketId: string): void {
+  private trackSupportEscalation(request: unknown, ticketId: string): void {
     this.analyticsBuffer.push({
       event: 'support_escalation',
       userId: request.userId,
@@ -621,7 +621,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     });
   }
 
-  private trackSessionUpdate(sessionId: string, updates: any): void {
+  private trackSessionUpdate(sessionId: string, updates: unknown): void {
     this.analyticsBuffer.push({
       event: 'help_session_updated',
       sessionId,

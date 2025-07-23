@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Badge } from '../ui/Badge';
@@ -48,15 +47,15 @@ export interface AnalyticsDashboardProps {
 interface DashboardState {
   loading: boolean;
   error: string | null;
-  summary: any;
-  dashboardData: any;
-  alerts: any[];
-  recommendations: any[];
+  summary: unknown;
+  dashboardData: unknown;
+  alerts: unknown[];
+  recommendations: unknown[];
   timeRange: string;
   lastUpdated: Date | null;
-  conversionData: any;
-  realTimeMetrics: any;
-  performanceData: any;
+  conversionData: unknown;
+  realTimeMetrics: unknown;
+  performanceData: unknown;
   userRole: 'director' | 'producer' | 'admin' | 'user';
 }
 
@@ -86,7 +85,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
     userRole: 'director'
   });
 
-  const [selectedView, setSelectedView] = useState<'overview' | 'conversions' | 'director' | 'performance' | 'costs' | 'usage' | 'insights'>('overview');
+  const [_____selectedView, _____setSelectedView] = useState<'overview' | 'conversions' | 'director' | 'performance' | 'costs' | 'usage' | 'insights'>('overview');
 
   /**
    * Calculate time range based on selected option

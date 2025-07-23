@@ -7,8 +7,7 @@
  * Supports configurable layouts, real-time updates, and role-based visibility.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { MonitoringMetrics, AlertData } from './MonitoringInterface';
+import React, { useState, useEffect } from 'react';
 
 // Widget Configuration Types
 export interface WidgetConfig {
@@ -24,7 +23,7 @@ export interface WidgetConfig {
 interface MonitoringWidgetProps {
   config: WidgetConfig;
   userRole: string;
-  data?: any;
+  data?: unknown;
   onAction?: (widgetId: string, action: string, params?: any) => void;
   className?: string;
 }
@@ -96,13 +95,13 @@ export const SystemHealthWidget: React.FC<MonitoringWidgetProps> = ({ data, clas
             {getHealthStatus(healthScore)}
           </div>
           <div style={{ fontSize: '14px', color: '#6b7280' }}>
-            {components.filter((c: any) => c.status === 'healthy').length}/{components.length} components healthy
+            {components.filter((c: unknown) => c.status === 'healthy').length}/{components.length} components healthy
           </div>
         </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {components.slice(0, 4).map((component: any, index: number) => (
+        {components.slice(0, 4).map((component: unknown, index: number) => (
           <div key={index} style={{
             display: 'flex',
             alignItems: 'center',
@@ -402,7 +401,7 @@ export const SecurityOverviewWidget: React.FC<MonitoringWidgetProps> = ({ data, 
           <div style={{ fontSize: '12px', fontWeight: '500', color: '#dc2626', marginBottom: '4px' }}>
             Recent Threats Detected
           </div>
-          {threats.slice(0, 2).map((threat: any, index: number) => (
+          {threats.slice(0, 2).map((threat: unknown, index: number) => (
             <div key={index} style={{ fontSize: '11px', color: '#991b1b', marginBottom: '2px' }}>
               • {threat.type}: {threat.source}
             </div>

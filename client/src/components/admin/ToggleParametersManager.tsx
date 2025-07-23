@@ -29,7 +29,6 @@ import {
   Pause
 } from 'lucide-react';
 import { Badge } from '../common/Badge';
-import { LoadingSpinner } from '../common/LoadingSpinner';
 import './ToggleParametersManager.css';
 
 export enum ToggleType {
@@ -63,7 +62,7 @@ interface PercentageRolloutParams {
 
 interface MultivariateVariant {
   key: string;
-  value: any;
+  value: Error;
   percentage: number;
   description?: string;
   enabled: boolean;
@@ -94,14 +93,14 @@ interface SegmentationRule {
   id: string;
   attribute: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'starts_with' | 'ends_with';
-  value: any;
+  value: Error;
   logicalOperator: 'AND' | 'OR';
   enabled: boolean;
 }
 
 interface SegmentationParams {
   rules: SegmentationRule[];
-  defaultValue: any;
+  defaultValue: Error;
   evaluationMode: 'first_match' | 'all_rules' | 'weighted';
   fallbackBehavior: 'default' | 'disable' | 'error';
 }

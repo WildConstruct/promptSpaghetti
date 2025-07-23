@@ -127,7 +127,7 @@ export class AuditService extends EventEmitter {
   /**
    * Log feature toggle events
    */
-  async logToggleCreated(toggleId: string, toggleData: any, context: AuditContext): Promise<void> {
+  async logToggleCreated(toggleId: string, toggleData: unknown, context: AuditContext): Promise<void> {
     await this.logEvent({
       eventType: AuditEventType.TOGGLE_CREATED,
       category: AuditCategory.DATA_MODIFICATION,
@@ -147,7 +147,7 @@ export class AuditService extends EventEmitter {
     }, context);
   }
 
-  async logToggleUpdated(toggleId: string, beforeData: any, afterData: any, context: AuditContext): Promise<void> {
+  async logToggleUpdated(toggleId: string, beforeData: unknown, afterData: unknown, context: AuditContext): Promise<void> {
     await this.logEvent({
       eventType: AuditEventType.TOGGLE_UPDATED,
       category: AuditCategory.DATA_MODIFICATION,
@@ -203,7 +203,7 @@ export class AuditService extends EventEmitter {
   /**
    * Log schedule events
    */
-  async logScheduleCreated(scheduleId: string, scheduleData: any, context: AuditContext): Promise<void> {
+  async logScheduleCreated(scheduleId: string, scheduleData: unknown, context: AuditContext): Promise<void> {
     await this.logEvent({
       eventType: AuditEventType.SCHEDULE_CREATED,
       category: AuditCategory.DATA_MODIFICATION,
@@ -224,7 +224,7 @@ export class AuditService extends EventEmitter {
     }, context);
   }
 
-  async logScheduleExecuted(scheduleId: string, scheduleName: string, execution: any, context: AuditContext): Promise<void> {
+  async logScheduleExecuted(scheduleId: string, scheduleName: string, execution: unknown, context: AuditContext): Promise<void> {
     const severity = execution.status === 'success' ? AuditSeverity.MEDIUM : AuditSeverity.HIGH;
     
     await this.logEvent({
@@ -433,7 +433,7 @@ export class AuditService extends EventEmitter {
   /**
    * Create audit context from request
    */
-  createContext(req: any): AuditContext {
+  createContext(req: unknown): AuditContext {
     return {
       actorId: req.user?.id,
       actorType: req.user ? 'user' : 'anonymous',
@@ -527,7 +527,7 @@ export class AuditService extends EventEmitter {
    * Middleware for automatic request logging
    */
   getAuditMiddleware() {
-    return (req: any, res: any, next: any) => {
+    return (req: unknown, res: unknown, next: unknown) => {
       const startTime = Date.now();
       const context = this.createContext(req);
 
@@ -541,8 +541,8 @@ export class AuditService extends EventEmitter {
       req.auditContext = context;
       req.audit = {
         log: (eventRequest: CreateAuditEventRequest) => this.logEvent(eventRequest, context),
-        logToggleCreated: (toggleId: string, toggleData: any) => this.logToggleCreated(toggleId, toggleData, context),
-        logToggleUpdated: (toggleId: string, before: any, after: any) => this.logToggleUpdated(toggleId, before, after, context),
+        logToggleCreated: (toggleId: string, toggleData: unknown) => this.logToggleCreated(toggleId, toggleData, context),
+        logToggleUpdated: (toggleId: string, before: Error, after: unknown) => this.logToggleUpdated(toggleId, before, after, context),
         logAccessGranted: (resource: string, permission: string) => this.logAccessGranted(context.actorId || 'unknown', resource, permission, context),
         logAccessDenied: (resource: string, permission: string, reason?: string) => this.logAccessDenied(context.actorId || 'unknown', resource, permission, context, reason)
       };

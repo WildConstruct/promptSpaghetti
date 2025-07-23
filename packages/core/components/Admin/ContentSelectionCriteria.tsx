@@ -219,7 +219,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
 
   const categories = ['Business', 'Events', 'Marketing', 'Creative', 'Educational', 'Technology'];
   const contentTypes = ['Template', 'Asset Pack', 'Component', 'Theme', 'Tool'];
-  const languages = ['English', 'Spanish', 'French', 'German', 'Portuguese'];
+  const _____languages = ['English', 'Spanish', 'French', 'German', 'Portuguese'];
   const creatorTiers = ['premium', 'verified', 'community'];
 
   const getCategoryColor = (category: string) => {

@@ -17,7 +17,7 @@ const SCOPE_OPTIONS = [
     { value: 'local', label: 'Local (current branch)' },
     { value: 'session', label: 'Session (persistent)' }
 ];
-export const VariableEditor = ({ nodeId, nodeData, onChange }) => {
+export const VariableEditor = ({ _____nodeId, nodeData, onChange }) => {
     const { debugMode } = useUISettingsStore();
     // Simplified fields - focus on template-based workflow
     const label = nodeData.label || '';
@@ -28,7 +28,7 @@ export const VariableEditor = ({ nodeId, nodeData, onChange }) => {
     const variableType = nodeData.variableType || 'auto';
     const defaultValue = nodeData.defaultValue || '';
     const scope = nodeData.scope || 'global';
-    const persistent = nodeData.persistent ?? false;
+    const _____persistent = nodeData._____persistent ?? false;
     const allowOverwrite = nodeData.allowOverwrite ?? true; // For SetVariable
     const required = nodeData.required ?? false; // For GetVariable
     const handleFieldChange = (field, value) => {

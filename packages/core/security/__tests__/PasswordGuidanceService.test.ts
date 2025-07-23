@@ -22,7 +22,7 @@ describe('PasswordGuidanceService', () => {
 
   beforeEach(() => {
     mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
     
     service = new PasswordGuidanceService();
   });

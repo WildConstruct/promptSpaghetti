@@ -1,6 +1,6 @@
 // Epic 17.1 - Feature Toggle System Data Access Layer
 
-import { Pool, PoolClient } from 'pg';
+import { Pool, // PoolClient // Unused import } from 'pg';
 import {
   FeatureToggle,
   ToggleScope,
@@ -75,7 +75,7 @@ export class FeatureToggleDAO {
     const client = await this.pool.connect();
     try {
       let query = 'SELECT * FROM feature_toggle WHERE key = $1 AND archived = false';
-      const values: any[] = [key];
+      const values: unknown[] = [key];
 
       if (orgId) {
         query += ' AND (org_id = $2 OR org_id IS NULL) ORDER BY org_id DESC NULLS LAST LIMIT 1';
@@ -108,7 +108,7 @@ export class FeatureToggleDAO {
     const client = await this.pool.connect();
     try {
       const whereConditions = ['archived = false'];
-      const values: any[] = [];
+      const values: unknown[] = [];
       let paramIndex = 1;
 
       // Build WHERE conditions
@@ -176,7 +176,7 @@ export class FeatureToggleDAO {
     const client = await this.pool.connect();
     try {
       const setClause: string[] = [];
-      const values: any[] = [];
+      const values: unknown[] = [];
       let paramIndex = 1;
 
       // Build SET clause dynamically
@@ -435,7 +435,7 @@ export class FeatureToggleDAO {
     }
   }
 
-  async setCachedEvaluation(toggleId: string, cacheKey: string, result: any, ttlSeconds = 300): Promise<void> {
+  async setCachedEvaluation(toggleId: string, cacheKey: string, result: Record<string, unknown>, ttlSeconds = 300): Promise<void> {
     const client = await this.pool.connect();
     try {
       const expiresAt = new Date(Date.now() + ttlSeconds * 1000);
@@ -529,7 +529,7 @@ export class FeatureToggleDAO {
 
   // Utility methods
 
-  private mapToggleFromDB(row: any): FeatureToggle {
+  private mapToggleFromDB(row: unknown): FeatureToggle {
     return {
       id: row.id,
       key: row.key,
@@ -550,7 +550,7 @@ export class FeatureToggleDAO {
     };
   }
 
-  private mapScopeFromDB(row: any): ToggleScope {
+  private mapScopeFromDB(row: unknown): ToggleScope {
     return {
       id: row.id,
       toggleId: row.toggle_id,
@@ -561,7 +561,7 @@ export class FeatureToggleDAO {
     };
   }
 
-  private mapAuditFromDB(row: any): ToggleAudit {
+  private mapAuditFromDB(row: unknown): ToggleAudit {
     return {
       id: row.id,
       toggleId: row.toggle_id,
@@ -577,7 +577,7 @@ export class FeatureToggleDAO {
     };
   }
 
-  private mapDependencyFromDB(row: any): ToggleDependency {
+  private mapDependencyFromDB(row: unknown): ToggleDependency {
     return {
       id: row.id,
       parentToggleId: row.parent_toggle_id,

@@ -9,7 +9,7 @@ import { Button } from '../ui/Button';
 import { Alert, AlertDescription } from '../ui/Alert';
 import { Badge } from '../ui/Badge';
 import { Switch } from '../ui/Switch';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/Dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, // DialogTrigger // Unused import } from '../ui/Dialog';
 import { 
   Shield, 
   Smartphone, 
@@ -222,7 +222,7 @@ export function MFASettingsManager({ userId, onMethodChange }: MFASettingsManage
     URL.revokeObjectURL(url);
   };
 
-  const handleEnrollmentComplete = (methodType: MFAMethodType, configId: string) => {
+  const handleEnrollmentComplete = (___methodType: MFAMethodType, ___configId: string) => {
     setState(prev => ({ ...prev, showEnrollment: false }));
     loadMFAData();
   };

@@ -140,7 +140,7 @@ export const FieldImportanceStyles = {
 // Field priority classification system
 export type FieldPriority = 'critical' | 'important' | 'standard' | 'supplementary';
 
-export const classifyFieldPriority = (fieldName: string, nodeType?: string): FieldPriority => {
+export const classifyFieldPriority = (fieldName: string, _____nodeType?: string): FieldPriority => {
   const lowerName = fieldName.toLowerCase();
   
   // Critical fields - always essential for node function

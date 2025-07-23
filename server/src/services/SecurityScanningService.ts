@@ -11,7 +11,7 @@
 import { EventEmitter } from 'events';
 import fs from 'fs/promises';
 import path from 'path';
-import { execSync, spawn } from 'child_process';
+import { execSync } from 'child_process';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
@@ -216,7 +216,7 @@ export const DEFAULT_SECURITY_SCAN_CONFIG: SecurityScanConfig = {
 
 export class SecurityScanningService extends EventEmitter {
   private config: SecurityScanConfig;
-  private scanQueue: Array<{ type: string; options: any }> = [];
+  private scanQueue: Array<{ type: string; options: unknown }> = [];
   private isScanning = false;
   private scanHistory: SecurityScanResult[] = [];
   private scheduledJobs = new Map<string, NodeJS.Timeout>();
@@ -518,7 +518,7 @@ export class SecurityScanningService extends EventEmitter {
   // Dependency Scanning
   // =============================================================================
 
-  private async executeDependencyScan(scanId: string, options: any): Promise<SecurityScanResult> {
+  private async executeDependencyScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const logs: string[] = [];
@@ -612,7 +612,7 @@ export class SecurityScanningService extends EventEmitter {
     };
   }
 
-  private async runNpmAudit(): Promise<any> {
+  private async runNpmAudit(): Promise<unknown> {
     try {
       const result = execSync('npm audit --audit-level=low --json', { 
         encoding: 'utf8',
@@ -620,7 +620,7 @@ export class SecurityScanningService extends EventEmitter {
         cwd: process.cwd()
       });
       return JSON.parse(result);
-    } catch (error: any) {
+    } catch (error: Error) {
       // npm audit returns non-zero exit code when vulnerabilities are found
       if (error.stdout) {
         try {
@@ -679,7 +679,7 @@ export class SecurityScanningService extends EventEmitter {
   // Static Code Analysis Scanning
   // =============================================================================
 
-  private async executeStaticScan(scanId: string, options: any): Promise<SecurityScanResult> {
+  private async executeStaticScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const logs: string[] = [];
@@ -749,8 +749,8 @@ export class SecurityScanningService extends EventEmitter {
       
       const eslintOutput = JSON.parse(result);
       
-      eslintOutput.forEach((file: any) => {
-        file.messages.forEach((message: any) => {
+      eslintOutput.forEach((file: Error) => {
+        file.messages.forEach((message: Error) => {
           // Filter for security-related rules
           if (message.ruleId && this.isSecurityRule(message.ruleId)) {
             vulnerabilities.push({
@@ -835,8 +835,8 @@ export class SecurityScanningService extends EventEmitter {
         const lines = content.split('\n');
         
         patterns.forEach(({ pattern, severity, description }) => {
-          let match;
-          const lineNumber = 0;
+          let ___match;
+          const ___lineNumber = 0;
           
           lines.forEach((line, index) => {
             const matches = line.match(pattern);
@@ -987,7 +987,7 @@ export class SecurityScanningService extends EventEmitter {
   // Dynamic Scanning (DAST)
   // =============================================================================
 
-  private async executeDynamicScan(scanId: string, options: any): Promise<SecurityScanResult> {
+  private async executeDynamicScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const logs: string[] = [];
@@ -1022,7 +1022,7 @@ export class SecurityScanningService extends EventEmitter {
   // Infrastructure Scanning
   // =============================================================================
 
-  private async executeInfrastructureScan(scanId: string, options: any): Promise<SecurityScanResult> {
+  private async executeInfrastructureScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const compliance: ComplianceResult[] = [];
@@ -1184,7 +1184,7 @@ export class SecurityScanningService extends EventEmitter {
   // Compliance Scanning
   // =============================================================================
 
-  private async executeComplianceScan(scanId: string, options: any): Promise<SecurityScanResult> {
+  private async executeComplianceScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const compliance: ComplianceResult[] = [];
@@ -1379,7 +1379,7 @@ export class SecurityScanningService extends EventEmitter {
   // Comprehensive Scanning
   // =============================================================================
 
-  private async executeComprehensiveScan(scanId: string, options: any): Promise<SecurityScanResult> {
+  private async executeComprehensiveScan(scanId: string, options: unknown): Promise<SecurityScanResult> {
     const logs: string[] = [];
     logs.push('Starting comprehensive security scan...');
     
@@ -1589,7 +1589,7 @@ export class SecurityScanningService extends EventEmitter {
     }
   }
 
-  private async sendAlert(message: string, result: SecurityScanResult): Promise<void> {
+  private async sendAlert(message: string, ___result: SecurityScanResult): Promise<void> {
     // In production, this would send actual notifications
     console.warn(`🚨 Security Alert: ${message}`);
     

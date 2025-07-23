@@ -182,7 +182,7 @@ export interface DatasetStyling {
 export interface DataFilter {
   field: string;
   operator: string;
-  value: any;
+  value: Error;
   active: boolean;
 }
 
@@ -250,7 +250,7 @@ export interface TableRow {
 }
 
 export interface TableCell {
-  value: any;
+  value: Error;
   displayValue: string;
   formatting: CellFormatting;
   hyperlink: string;
@@ -321,8 +321,8 @@ export interface TableFiltering {
 export interface ColumnFilter {
   column: string;
   filterType: 'TEXT' | 'NUMBER' | 'DATE' | 'SELECT' | 'RANGE';
-  options: any[];
-  defaultValue: any;
+  options: unknown[];
+  defaultValue: Error;
 }
 
 export interface ReportAppendix {
@@ -872,7 +872,7 @@ export interface ComplianceReportRequest {
 export interface ReportCustomization {
   section: string;
   modification: 'ADD' | 'REMOVE' | 'MODIFY' | 'REORDER';
-  content?: any;
+  content?: unknown;
   position?: number;
   conditions?: string[];
 }
@@ -1111,7 +1111,7 @@ export class ComplianceReportingService {
     }
   }
 
-  private async collectComplianceData(scope: ReportScope, period: ReportPeriod): Promise<ComplianceData> {
+  private async collectComplianceData(_____scope: ReportScope, _____period: ReportPeriod): Promise<ComplianceData> {
     // Mock implementation - would collect actual compliance data
     return {
       policies: [],
@@ -1196,8 +1196,8 @@ export class ComplianceReportingService {
   }
 
   private async generateRecommendations(
-    findings: ComplianceFinding[], 
-    metrics: ComplianceMetrics
+    _____findings: ComplianceFinding[], 
+    _____metrics: ComplianceMetrics
   ): Promise<ComplianceRecommendation[]> {
     // Mock implementation - would generate recommendations
     return [
@@ -1233,7 +1233,7 @@ export class ComplianceReportingService {
     ];
   }
 
-  private async collectEvidence(scope: ReportScope, findings: ComplianceFinding[]): Promise<ReportEvidence[]> {
+  private async collectEvidence(_____scope: ReportScope, _____findings: ComplianceFinding[]): Promise<ReportEvidence[]> {
     // Mock implementation - would collect evidence
     return [];
   }
@@ -1243,7 +1243,7 @@ export class ComplianceReportingService {
     metrics: ComplianceMetrics,
     findings: ComplianceFinding[],
     recommendations: ComplianceRecommendation[],
-    evidence: ReportEvidence[]
+    _____evidence: ReportEvidence[]
   ): Promise<ReportContent> {
     return {
       executiveSummary: {
@@ -1340,19 +1340,19 @@ export class ComplianceReportingService {
     };
   }
 
-  private async storeReport(report: ComplianceReport): Promise<void> {
+  private async storeReport(_____report: ComplianceReport): Promise<void> {
     // Implementation would store report in database
   }
 
-  private async generateReportArtifacts(report: ComplianceReport, format: string): Promise<void> {
+  private async generateReportArtifacts(_____report: ComplianceReport, _____format: string): Promise<void> {
     // Implementation would generate report in requested format
   }
 
-  private async sendReportNotifications(report: ComplianceReport): Promise<void> {
+  private async sendReportNotifications(_____report: ComplianceReport): Promise<void> {
     // Implementation would send notifications via PolicyNotificationService
   }
 
-  private async getComplianceSummary(frameworks: string[]): Promise<ComplianceSummary> {
+  private async getComplianceSummary(_____frameworks: string[]): Promise<ComplianceSummary> {
     return {
       overallCompliance: 91.2,
       totalFindings: 23,
@@ -1380,22 +1380,22 @@ export class ComplianceReportingService {
     }));
   }
 
-  private async getRecentFindings(limit: number): Promise<ComplianceFinding[]> {
+  private async getRecentFindings(_____limit: number): Promise<ComplianceFinding[]> {
     // Implementation would fetch recent findings
     return [];
   }
 
-  private async getComplianceTrends(frameworks: string[], months: number): Promise<ComplianceTrend[]> {
+  private async getComplianceTrends(_____frameworks: string[], _____months: number): Promise<ComplianceTrend[]> {
     // Implementation would generate compliance trends
     return [];
   }
 
-  private async getUpcomingDeadlines(days: number): Promise<ComplianceDeadline[]> {
+  private async getUpcomingDeadlines(_____days: number): Promise<ComplianceDeadline[]> {
     // Implementation would fetch upcoming deadlines
     return [];
   }
 
-  private async generateRiskHeatmap(frameworks: string[]): Promise<RiskHeatmap> {
+  private async generateRiskHeatmap(_____frameworks: string[]): Promise<RiskHeatmap> {
     // Implementation would generate risk heatmap
     return {
       categories: [],
@@ -1404,7 +1404,7 @@ export class ComplianceReportingService {
     };
   }
 
-  private async getActionItems(frameworks: string[]): Promise<ActionItem[]> {
+  private async getActionItems(_____frameworks: string[]): Promise<ActionItem[]> {
     // Implementation would fetch action items
     return [];
   }
@@ -1431,12 +1431,12 @@ export class ComplianceReportingService {
 
 // Supporting interfaces
 export interface ComplianceData {
-  policies: any[];
-  controls: any[];
-  assessments: any[];
-  incidents: any[];
-  audits: any[];
-  evidence: any[];
+  policies: unknown[];
+  controls: unknown[];
+  assessments: unknown[];
+  incidents: unknown[];
+  audits: unknown[];
+  evidence: Error[];
   metrics: Map<string, number>;
 }
 

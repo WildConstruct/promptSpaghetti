@@ -11,12 +11,12 @@
 
 import { Pool, PoolClient } from 'pg';
 import { Logger } from '@nestjs/common';
-import { HealthMonitoringService, SystemHealth, HealthCheckResult } from './health/HealthMonitoringService.js';
+import { HealthMonitoringService, // SystemHealth // Unused import, // HealthCheckResult // Unused import } from './health/HealthMonitoringService.js';
 import { SecurityScanningService } from './security/SecurityScanningService.js';
 import http from 'http';
 import https from 'https';
 import fs from 'fs/promises';
-import semver from 'semver';
+import // semver // Unused import from 'semver';
 
 // =============================================================================
 // Dependency Verification Types
@@ -576,8 +576,8 @@ export class DependencyVerificationService {
     // This is a simplified example
     
     try {
-      const testKey = `health_check_${Date.now()}`;
-      const testValue = 'test_value';
+      const __testKey = `health_check_${Date.now()}`;
+      const __testValue = 'test_value';
       
       // Test write
       // await cache.set(testKey, testValue, 10); // 10 second expiry
@@ -990,7 +990,7 @@ export class DependencyVerificationService {
   }
 
   // Additional placeholder methods would be implemented here
-  private checkVersionCompatibility(dependency: DependencyConfiguration, version: string): CompatibilityStatus {
+  private checkVersionCompatibility(__dependency: DependencyConfiguration, __version: string): CompatibilityStatus {
     // Version compatibility checking logic
     return 'compatible';
   }
@@ -1005,7 +1005,7 @@ export class DependencyVerificationService {
     };
   }
 
-  private async getDatabaseMetrics(client: PoolClient): Promise<DependencyMetrics> {
+  private async getDatabaseMetrics(__client: PoolClient): Promise<DependencyMetrics> {
     // Database-specific metrics collection
     return {
       averageResponseTime: 0,
@@ -1017,22 +1017,22 @@ export class DependencyVerificationService {
   }
 
   private async generateRecommendations(
-    results: DependencyCheckResult[],
-    context: DependencyVerificationContext
+    __results: DependencyCheckResult[],
+    __context: DependencyVerificationContext
   ): Promise<VerificationRecommendation[]> {
     return []; // Implementation would analyze results and generate actionable recommendations
   }
 
   private generateWarnings(
-    results: DependencyCheckResult[],
-    context: DependencyVerificationContext
+    __results: DependencyCheckResult[],
+    __context: DependencyVerificationContext
   ): DependencyWarning[] {
     return []; // Implementation would generate warnings based on results
   }
 
   private async assessFailureImpact(
-    results: DependencyCheckResult[],
-    context: DependencyVerificationContext
+    __results: DependencyCheckResult[],
+    __context: DependencyVerificationContext
   ): Promise<FailureImpactAssessment> {
     return {
       overallImpact: 'minimal',
@@ -1053,8 +1053,8 @@ export class DependencyVerificationService {
   }
 
   private async getGracefulDegradationOptions(
-    results: DependencyCheckResult[],
-    context: DependencyVerificationContext
+    __results: DependencyCheckResult[],
+    __context: DependencyVerificationContext
   ): Promise<GracefulDegradationOption[]> {
     return []; // Implementation would return available degradation options
   }

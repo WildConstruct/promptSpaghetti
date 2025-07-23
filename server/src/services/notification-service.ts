@@ -343,7 +343,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
   private prepareNotificationVariables(
     notification: ScheduleNotification,
     event: NotificationEvent,
-    template: NotificationTemplate
+    _____template: NotificationTemplate
   ): Record<string, any> {
     const { schedule, execution, conflict, metadata } = event;
     

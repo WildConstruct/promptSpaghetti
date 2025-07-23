@@ -562,7 +562,7 @@ export class CommentModerationService {
         name: 'Appeals Review',
         description: 'Comments under appeal review',
         filters: {
-          status: 'rejected',
+          status: 'rejected'
           // Additional appeal-specific filters would go here
         },
         priority: 1,
@@ -610,20 +610,20 @@ export class CommentModerationService {
   ): Promise<any> {
     // Execute the specific moderation action
     switch (request.action.type) {
-      case 'approve':
-        return this.approveComment(request, commentData);
-      case 'reject':
-        return this.rejectComment(request, commentData);
-      case 'flag':
-        return this.flagComment(request, commentData);
-      case 'hide':
-        return this.hideComment(request, commentData);
-      case 'delete':
-        return this.deleteComment(request, commentData);
-      case 'escalate':
-        return this.escalateComment(request, commentData);
-      default:
-        throw new Error(`Unknown moderation action: ${request.action.type}`);
+    case 'approve':
+      return this.approveComment(request, commentData);
+    case 'reject':
+      return this.rejectComment(request, commentData);
+    case 'flag':
+      return this.flagComment(request, commentData);
+    case 'hide':
+      return this.hideComment(request, commentData);
+    case 'delete':
+      return this.deleteComment(request, commentData);
+    case 'escalate':
+      return this.escalateComment(request, commentData);
+    default:
+      throw new Error(`Unknown moderation action: ${request.action.type}`);
     }
   }
 

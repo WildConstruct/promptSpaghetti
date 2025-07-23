@@ -490,7 +490,7 @@ export class ComplianceStatusReportService {
     `;
 
     const result = await this.db.query(query, [regulation, period.startDate, period.endDate]);
-    const { total, compliant, non_compliant } = result.rows[0];
+    const { total, compliant, _____non_compliant } = result.rows[0];
 
     const complianceRate = compliant / total;
 
@@ -662,7 +662,7 @@ export class ComplianceStatusReportService {
 
   private generateRecommendations(
     areas: ComplianceArea[],
-    violations: ViolationSummary
+    _____violations: ViolationSummary
   ): Recommendation[] {
     const recommendations: Recommendation[] = [];
 
@@ -689,7 +689,7 @@ export class ComplianceStatusReportService {
 
   private generateNextActions(
     areas: ComplianceArea[],
-    remediation: RemediationSummary
+    _____remediation: RemediationSummary
   ): NextAction[] {
     const actions: NextAction[] = [];
 
@@ -719,8 +719,8 @@ export class ComplianceStatusReportService {
 
   private async generateAttachments(
     reportId: string,
-    regulation: ComplianceRegulation,
-    period: ReportPeriod
+    _____regulation: ComplianceRegulation,
+    _____period: ReportPeriod
   ): Promise<ReportAttachment[]> {
     // Implementation would generate actual attachments
     return [
@@ -746,7 +746,7 @@ export class ComplianceStatusReportService {
   }
 
   // Helper methods (implementations would be more detailed)
-  private getComplianceAreasConfig(regulation: ComplianceRegulation): any[] {
+  private getComplianceAreasConfig(regulation: ComplianceRegulation): unknown[] {
     const configs = {
       [ComplianceRegulation.GDPR]: [
         { id: 'gdpr_data_processing', name: 'Data Processing', description: 'Lawful basis for processing' },
@@ -762,22 +762,22 @@ export class ComplianceStatusReportService {
     return configs[regulation] || [];
   }
 
-  private async getRequirementsForArea(areaName: string, period: ReportPeriod): Promise<ComplianceRequirement[]> {
+  private async getRequirementsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ComplianceRequirement[]> {
     // Implementation would fetch actual requirements
     return [];
   }
 
-  private async getControlsForArea(areaName: string, period: ReportPeriod): Promise<ControlAssessment[]> {
+  private async getControlsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ControlAssessment[]> {
     // Implementation would fetch actual controls
     return [];
   }
 
-  private async getGapsForArea(areaName: string, period: ReportPeriod): Promise<ComplianceGap[]> {
+  private async getGapsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ComplianceGap[]> {
     // Implementation would fetch actual gaps
     return [];
   }
 
-  private calculateAreaScore(requirements: ComplianceRequirement[], controls: ControlAssessment[]): number {
+  private calculateAreaScore(_____requirements: ComplianceRequirement[], _____controls: ControlAssessment[]): number {
     // Implementation would calculate actual score
     return 85;
   }
@@ -795,27 +795,27 @@ export class ComplianceStatusReportService {
     return next;
   }
 
-  private async getViolationsByCategory(regulation: ComplianceRegulation, period: ReportPeriod): Promise<ViolationCategory[]> {
+  private async getViolationsByCategory(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationCategory[]> {
     // Implementation would fetch actual violation categories
     return [];
   }
 
-  private async getViolationsBySeverity(regulation: ComplianceRegulation, period: ReportPeriod): Promise<ViolationBySeverity[]> {
+  private async getViolationsBySeverity(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationBySeverity[]> {
     // Implementation would fetch actual violation severities
     return [];
   }
 
-  private async getViolationTrends(regulation: ComplianceRegulation, period: ReportPeriod): Promise<ViolationTrend[]> {
+  private async getViolationTrends(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationTrend[]> {
     // Implementation would fetch actual violation trends
     return [];
   }
 
-  private async getResourceUtilization(regulation: ComplianceRegulation, period: ReportPeriod): Promise<ResourceUtilization[]> {
+  private async getResourceUtilization(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ResourceUtilization[]> {
     // Implementation would fetch actual resource utilization
     return [];
   }
 
-  private async calculateProjectedCompletion(regulation: ComplianceRegulation): Promise<Date> {
+  private async calculateProjectedCompletion(_____regulation: ComplianceRegulation): Promise<Date> {
     // Implementation would calculate actual projected completion
     const projected = new Date();
     projected.setMonth(projected.getMonth() + 6);
@@ -829,7 +829,7 @@ export class ComplianceStatusReportService {
     return RiskLevel.LOW;
   }
 
-  private async calculateBudgetImpact(areas: ComplianceArea[]): Promise<BudgetImpact> {
+  private async calculateBudgetImpact(_____areas: ComplianceArea[]): Promise<BudgetImpact> {
     // Implementation would calculate actual budget impact
     return {
       estimatedCost: 150000,
@@ -862,7 +862,7 @@ export class ComplianceStatusReportService {
     return 'Currently compliant';
   }
 
-  private async getRecentRegulatoryChanges(regulation: ComplianceRegulation): Promise<RegulatoryChange[]> {
+  private async getRecentRegulatoryChanges(_____regulation: ComplianceRegulation): Promise<RegulatoryChange[]> {
     // Implementation would fetch actual regulatory changes
     return [];
   }

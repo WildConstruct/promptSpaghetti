@@ -19,7 +19,7 @@ interface ApiTokenStats {
   activeTokens: number;
   revokedTokens: number;
   expiredTokens: number;
-  recentlyUsed: any[];
+  recentlyUsed: unknown[];
 }
 
 interface Scope {

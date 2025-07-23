@@ -756,7 +756,7 @@ export class DataAccessControlService {
     }
   }
 
-  private mapAccessAuditEvent(row: any): AccessAuditEvent {
+  private mapAccessAuditEvent(row: Event): AccessAuditEvent {
     return {
       id: row.id,
       userId: row.user_id,
@@ -774,7 +774,7 @@ export class DataAccessControlService {
     };
   }
 
-  private mapAccessGrant(row: any): AccessGrant {
+  private mapAccessGrant(row: unknown): AccessGrant {
     return {
       id: row.id,
       userId: row.user_id,

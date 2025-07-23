@@ -4,7 +4,7 @@ import { ZodSchema } from 'zod';
 
 interface InspectorState {
   selectedNode: Node | null;
-  selectedSchema: ZodSchema<any> | null;
+  selectedSchema: ZodSchema<unknown> | null;
   panelWidth: number;
   panelCollapsed: boolean;
   panelVisible: boolean;
@@ -12,7 +12,7 @@ interface InspectorState {
 
 interface InspectorActions {
   setSelectedNode: (node: Node | null) => void;
-  setSelectedSchema: (schema: ZodSchema<any> | null) => void;
+  setSelectedSchema: (schema: ZodSchema<unknown> | null) => void;
   setPanelWidth: (width: number) => void;
   setPanelCollapsed: (collapsed: boolean) => void;
   setPanelVisible: (visible: boolean) => void;
@@ -39,7 +39,7 @@ export const InspectorProvider: React.FC<InspectorProviderProps> = ({
   initialVisible = true
 }) => {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-  const [selectedSchema, setSelectedSchema] = useState<ZodSchema<any> | null>(null);
+  const [selectedSchema, setSelectedSchema] = useState<ZodSchema<unknown> | null>(null);
   const [panelWidth, setPanelWidth] = useState(initialWidth);
   const [panelCollapsed, setPanelCollapsed] = useState(initialCollapsed);
   const [panelVisible, setPanelVisible] = useState(initialVisible);

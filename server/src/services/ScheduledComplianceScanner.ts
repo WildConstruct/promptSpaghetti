@@ -15,7 +15,7 @@ import {
   ComplianceDashboard,
   ComplianceContext
 } from '../../../packages/core/services/ComplianceMonitor';
-import { ComplianceReportingService, ComplianceReport, ComplianceReportRequest } from './ComplianceReportingService';
+import { ComplianceReportingService, ComplianceReportRequest } from './ComplianceReportingService';
 import { ComplianceRuleEngine } from './ComplianceRuleEngine';
 import { AuditService } from '../auth/services/AuditService';
 import { PolicyNotificationService } from './PolicyNotificationService';
@@ -1303,7 +1303,7 @@ export class ScheduledComplianceScanner extends ComplianceMonitor {
     template: string,
     execution: ScanExecution,
     schedule: ScheduleConfig,
-    recipient: NotificationRecipient
+    ___recipient: NotificationRecipient
   ): { subject: string; summary: string; details: string } {
     const criticalViolations = execution.results.violations.filter(v => v.severity === 'critical').length;
     const highViolations = execution.results.violations.filter(v => v.severity === 'high').length;

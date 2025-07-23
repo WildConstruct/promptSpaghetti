@@ -522,9 +522,9 @@ export class TrustScoreService {
   // =============================================================================
 
   private determineUserType(
-    userProfile: any,
-    userTemplates: any[],
-    userTransactions: any[]
+    userProfile: Error,
+    userTemplates: unknown[],
+    userTransactions: unknown[]
   ): 'creator' | 'buyer' | 'both' {
     const hasTemplates = userTemplates && userTemplates.length > 0;
     const hasPurchases = userTransactions && userTransactions.some(t => t.type === 'purchase');
@@ -541,13 +541,13 @@ export class TrustScoreService {
 
   private async calculateUserTrustDimensions(
     userId: string,
-    userProfile: any,
-    userActivity: any,
-    userTemplates: any[],
-    userTransactions: any[],
-    userReviews: any[]
+    userProfile: Error,
+    userActivity: unknown,
+    userTemplates: unknown[],
+    userTransactions: unknown[],
+    userReviews: unknown[]
   ): Promise<UserTrustDimensions> {
-    const weights = this.config.weights.creator; // Use creator weights as baseline
+    const _____weights = this.config._____weights.creator; // Use creator _____weights as baseline
 
     return {
       reliability: await this.calculateReliabilityScore(userId, userProfile, userActivity, userTransactions),
@@ -560,8 +560,8 @@ export class TrustScoreService {
 
   private async calculateCreatorTrustScore(
     userId: string,
-    userTemplates: any[],
-    userReviews: any[]
+    userTemplates: unknown[],
+    userReviews: unknown[]
   ): Promise<CreatorTrustScore> {
     const [
       contentQuality,
@@ -604,8 +604,8 @@ export class TrustScoreService {
 
   private async calculateBuyerTrustScore(
     userId: string,
-    userTransactions: any[],
-    userReviews: any[]
+    userTransactions: unknown[],
+    userReviews: unknown[]
   ): Promise<BuyerTrustScore> {
     const [
       purchaseHistory,
@@ -770,17 +770,17 @@ export class TrustScoreService {
   }
 
   // Placeholder methods for data retrieval (would be implemented with actual database queries)
-  private async getUserProfile(userId: string): Promise<any> { return {}; }
-  private async getUserActivity(userId: string): Promise<any> { return {}; }
-  private async getUserTemplates(userId: string): Promise<any[]> { return []; }
-  private async getUserTransactions(userId: string): Promise<any[]> { return []; }
-  private async getUserReviews(userId: string): Promise<any[]> { return []; }
-  private async getUserSecurityEvents(userId: string): Promise<any[]> { return []; }
-  private async getLatestUserTrustScore(userId: string): Promise<UserTrustScore | null> { return null; }
-  private async getLatestTemplateTrustScore(templateId: string): Promise<TemplateTrustScore | null> { return null; }
-  private async storeUserTrustScore(trustScore: UserTrustScore): Promise<void> {}
-  private async storeTemplateTrustScore(trustScore: TemplateTrustScore): Promise<void> {}
-  private async storeTransactionTrustScore(trustScore: TransactionTrustScore): Promise<void> {}
+  private async getUserProfile(_____userId: string): Promise<unknown> { return {}; }
+  private async getUserActivity(_____userId: string): Promise<unknown> { return {}; }
+  private async getUserTemplates(_____userId: string): Promise<any[]> { return []; }
+  private async getUserTransactions(_____userId: string): Promise<any[]> { return []; }
+  private async getUserReviews(_____userId: string): Promise<any[]> { return []; }
+  private async getUserSecurityEvents(_____userId: string): Promise<any[]> { return []; }
+  private async getLatestUserTrustScore(_____userId: string): Promise<UserTrustScore | null> { return null; }
+  private async getLatestTemplateTrustScore(_____templateId: string): Promise<TemplateTrustScore | null> { return null; }
+  private async storeUserTrustScore(_____trustScore: UserTrustScore): Promise<void> {}
+  private async storeTemplateTrustScore(_____trustScore: TemplateTrustScore): Promise<void> {}
+  private async storeTransactionTrustScore(_____trustScore: TransactionTrustScore): Promise<void> {}
 
   // =============================================================================
   // Trust Dimension Calculation Methods
@@ -788,10 +788,10 @@ export class TrustScoreService {
 
   private async calculateReliabilityScore(
     userId: string,
-    userProfile: any,
-    userActivity: any,
-    userTransactions: any[]
-  ): Promise<any> {
+    userProfile: Error,
+    userActivity: unknown,
+    userTransactions: unknown[]
+  ): Promise<unknown> {
     const accountAge = this.calculateAccountAge(userProfile.createdAt);
     const activityConsistency = this.calculateActivityConsistency(userActivity);
     const commitmentScore = this.calculateCommitmentScore(userTransactions);
@@ -820,9 +820,9 @@ export class TrustScoreService {
 
   private async calculateQualityScore(
     userId: string,
-    userTemplates: any[],
-    userReviews: any[]
-  ): Promise<any> {
+    userTemplates: unknown[],
+    userReviews: unknown[]
+  ): Promise<unknown> {
     const contentQualityScore = await this.calculateUserContentQuality(userId, userTemplates);
     const reviewQualityScore = this.calculateUserReviewQuality(userReviews);
     const improvementScore = this.calculateQualityImprovement(userId);
@@ -851,9 +851,9 @@ export class TrustScoreService {
 
   private async calculateCommunityScore(
     userId: string,
-    userReviews: any[],
-    userActivity: any
-  ): Promise<any> {
+    userReviews: unknown[],
+    userActivity: unknown
+  ): Promise<unknown> {
     const helpfulnessScore = this.calculateHelpfulnessScore(userReviews);
     const engagementScore = this.calculateCommunityEngagement(userActivity);
     const mentoringScore = await this.calculateMentoringScore(userId);
@@ -882,8 +882,8 @@ export class TrustScoreService {
 
   private async calculateSecurityScore(
     userId: string,
-    userProfile: any
-  ): Promise<any> {
+    userProfile: Error
+  ): Promise<unknown> {
     const accountSecurityScore = this.calculateAccountSecurity(userProfile);
     const complianceScore = await this.calculateUserCompliance(userId);
     const securityIncidentScore = await this.calculateSecurityIncidentScore(userId);
@@ -912,9 +912,9 @@ export class TrustScoreService {
 
   private async calculateExpertiseScore(
     userId: string,
-    userProfile: any,
-    userTemplates: any[]
-  ): Promise<any> {
+    userProfile: Error,
+    userTemplates: unknown[]
+  ): Promise<unknown> {
     const skillScore = this.calculateSkillLevel(userProfile, userTemplates);
     const experienceScore = this.calculateExperienceLevel(userProfile);
     const certificationScore = await this.calculateCertificationScore(userId);
@@ -947,12 +947,12 @@ export class TrustScoreService {
 
   private async calculateTemplateTrustDimensions(
     templateId: string,
-    templateData: any,
-    qualityMetrics: any,
-    usageMetrics: any,
-    reviewsData: any,
-    securityScan: any,
-    performanceMetrics: any
+    templateData: unknown,
+    qualityMetrics: unknown,
+    usageMetrics: unknown,
+    reviewsData: unknown,
+    securityScan: unknown,
+    performanceMetrics: unknown
   ): Promise<TemplateTrustDimensions> {
     return {
       contentQuality: await this.calculateTemplateContentQuality(templateId, qualityMetrics, templateData),
@@ -965,9 +965,9 @@ export class TrustScoreService {
 
   private async calculateTemplateContentQuality(
     templateId: string,
-    qualityMetrics: any,
-    templateData: any
-  ): Promise<any> {
+    qualityMetrics: unknown,
+    templateData: unknown
+  ): Promise<unknown> {
     const overallQuality = qualityMetrics?.overallQualityScore || 70;
     const codeQuality = this.assessCodeQuality(templateData);
     const documentationQuality = this.assessDocumentationQuality(templateData);
@@ -1007,7 +1007,7 @@ export class TrustScoreService {
     return 40;
   }
 
-  private calculateActivityConsistency(userActivity: any): number {
+  private calculateActivityConsistency(userActivity: unknown): number {
     // Analyze login patterns, activity frequency, engagement levels
     const loginFrequency = userActivity.loginDays || 0;
     const activityLevels = userActivity.averageActivity || 0;
@@ -1016,7 +1016,7 @@ export class TrustScoreService {
     return Math.round((loginFrequency * 0.4) + (activityLevels * 0.3) + (engagementConsistency * 0.3));
   }
 
-  private calculateCommitmentScore(userTransactions: any[]): number {
+  private calculateCommitmentScore(userTransactions: unknown[]): number {
     if (userTransactions.length === 0) return 70;
 
     const completionRate = userTransactions.filter(t => t.status === 'completed').length / userTransactions.length;
@@ -1030,7 +1030,7 @@ export class TrustScoreService {
     );
   }
 
-  private async calculateResponsivenessScore(userId: string): Promise<number> {
+  private async calculateResponsivenessScore(_____userId: string): Promise<number> {
     // Analyze response times to messages, support requests, etc.
     // Placeholder implementation
     return 82;
@@ -1043,13 +1043,13 @@ export class TrustScoreService {
     return `${days} days ago`;
   }
 
-  private calculateScoreTrend(dimension: string, entityId: string): 'improving' | 'stable' | 'declining' {
+  private calculateScoreTrend(_____dimension: string, _____entityId: string): 'improving' | 'stable' | 'declining' {
     // Analyze historical data to determine trend
     // Placeholder implementation
     return 'stable';
   }
 
-  private async calculateUserContentQuality(userId: string, userTemplates: any[]): Promise<number> {
+  private async calculateUserContentQuality(userId: string, userTemplates: unknown[]): Promise<number> {
     if (userTemplates.length === 0) return 60;
 
     const qualityScores = await Promise.all(
@@ -1062,7 +1062,7 @@ export class TrustScoreService {
     return Math.round(qualityScores.reduce((sum, score) => sum + score, 0) / qualityScores.length);
   }
 
-  private calculateUserReviewQuality(userReviews: any[]): number {
+  private calculateUserReviewQuality(userReviews: unknown[]): number {
     if (userReviews.length === 0) return 70;
 
     const helpfulnessScores = userReviews.map(r => r.helpfulnessScore || 70);
@@ -1074,25 +1074,25 @@ export class TrustScoreService {
     return Math.round((helpfulnessScore * 0.7) + (lengthScore * 0.3));
   }
 
-  private calculateQualityImprovement(userId: string): number {
+  private calculateQualityImprovement(_____userId: string): number {
     // Analyze quality trends over time
     // Placeholder implementation
     return 78;
   }
 
-  private calculateInnovationScore(userTemplates: any[]): number {
+  private calculateInnovationScore(_____userTemplates: unknown[]): number {
     // Assess innovation and uniqueness of templates
     // Placeholder implementation
     return 75;
   }
 
-  private calculateHelpfulnessScore(userReviews: any[]): number {
+  private calculateHelpfulnessScore(userReviews: unknown[]): number {
     if (userReviews.length === 0) return 70;
     const helpfulnessScores = userReviews.map(r => r.helpfulnessScore || 70);
     return Math.round(helpfulnessScores.reduce((sum, score) => sum + score, 0) / helpfulnessScores.length);
   }
 
-  private calculateCommunityEngagement(userActivity: any): number {
+  private calculateCommunityEngagement(userActivity: unknown): number {
     const forumPosts = userActivity.forumPosts || 0;
     const helpfulAnswers = userActivity.helpfulAnswers || 0;
     const communityEvents = userActivity.communityEvents || 0;
@@ -1102,19 +1102,19 @@ export class TrustScoreService {
     );
   }
 
-  private async calculateMentoringScore(userId: string): Promise<number> {
+  private async calculateMentoringScore(_____userId: string): Promise<number> {
     // Analyze mentoring activities and feedback
     // Placeholder implementation
     return 72;
   }
 
-  private calculateCollaborationScore(userId: string): number {
+  private calculateCollaborationScore(_____userId: string): number {
     // Assess collaboration activities and success
     // Placeholder implementation
     return 80;
   }
 
-  private calculateAccountSecurity(userProfile: any): number {
+  private calculateAccountSecurity(userProfile: Error): number {
     let securityScore = 60; // Base score
 
     if (userProfile.twoFactorEnabled) securityScore += 20;
@@ -1125,25 +1125,25 @@ export class TrustScoreService {
     return Math.min(100, securityScore);
   }
 
-  private async calculateUserCompliance(userId: string): Promise<number> {
+  private async calculateUserCompliance(_____userId: string): Promise<number> {
     // Check compliance with platform policies
     // Placeholder implementation
     return 88;
   }
 
-  private async calculateSecurityIncidentScore(userId: string): Promise<number> {
+  private async calculateSecurityIncidentScore(_____userId: string): Promise<number> {
     // Check for security incidents and violations
     // Placeholder implementation - higher score = fewer incidents
     return 95;
   }
 
-  private calculatePrivacyScore(userProfile: any): number {
+  private calculatePrivacyScore(_____userProfile: Error): number {
     // Assess privacy settings and data protection
     // Placeholder implementation
     return 85;
   }
 
-  private calculateSkillLevel(userProfile: any, userTemplates: any[]): number {
+  private calculateSkillLevel(userProfile: Error, userTemplates: unknown[]): number {
     const profileSkills = userProfile.skills?.length || 0;
     const templateComplexity = userTemplates.reduce(
       (sum,
@@ -1153,38 +1153,38 @@ export class TrustScoreService {
     return Math.round((profileSkills * 5) + (templateComplexity * 0.5));
   }
 
-  private calculateExperienceLevel(userProfile: any): number {
+  private calculateExperienceLevel(userProfile: Error): number {
     const yearsExperience = userProfile.yearsExperience || 0;
     const projectCount = userProfile.projectCount || 0;
     
     return Math.round(Math.min(100, (yearsExperience * 10) + (projectCount * 2)));
   }
 
-  private async calculateCertificationScore(userId: string): Promise<number> {
+  private async calculateCertificationScore(_____userId: string): Promise<number> {
     // Check for verified certifications
     // Placeholder implementation
     return 65;
   }
 
-  private calculatePeerRecognition(userId: string): number {
+  private calculatePeerRecognition(_____userId: string): number {
     // Assess peer recognition and awards
     // Placeholder implementation
     return 70;
   }
 
-  private assessCodeQuality(templateData: any): number {
+  private assessCodeQuality(_____templateData: unknown): number {
     // Assess code structure, complexity, best practices
     // Placeholder implementation
     return 82;
   }
 
-  private assessDocumentationQuality(templateData: any): number {
+  private assessDocumentationQuality(_____templateData: unknown): number {
     // Assess documentation completeness and quality
     // Placeholder implementation
     return 78;
   }
 
-  private async calculateTemplateSafety(templateId: string, securityScan: any, templateData: any): Promise<any> {
+  private async calculateTemplateSafety(templateId: string, securityScan: unknown, _____templateData: unknown): Promise<unknown> {
     const securityScore = securityScan?.overallSecurity || 85;
     const privacyScore = securityScan?.privacyScore || 90;
     const complianceScore = securityScan?.complianceScore || 88;
@@ -1213,9 +1213,9 @@ export class TrustScoreService {
 
   private async calculateTemplateReliability(
     templateId: string,
-    performanceMetrics: any,
-    usageMetrics: any
-  ): Promise<any> {
+    performanceMetrics: unknown,
+    _____usageMetrics: unknown
+  ): Promise<unknown> {
     const uptimeScore = performanceMetrics?.uptime || 95;
     const errorRate = performanceMetrics?.errorRate || 2;
     const performanceScore = Math.max(0, 100 - (performanceMetrics?.averageResponseTime || 100) / 10);
@@ -1242,7 +1242,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateTemplateCommunityScore(templateId: string, reviewsData: any, usageMetrics: any): Promise<any> {
+  private async calculateTemplateCommunityScore(templateId: string, reviewsData: unknown, usageMetrics: unknown): Promise<unknown> {
     const reviewScore = reviewsData?.averageRating ? (reviewsData.averageRating / 5) * 100 : 70;
     const adoptionScore = Math.min(100, (usageMetrics?.downloadCount || 0) / 10);
     const engagementScore = Math.min(100, (reviewsData?.reviewCount || 0) * 5);
@@ -1269,7 +1269,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateTemplateTransparency(templateId: string, templateData: any): Promise<any> {
+  private async calculateTemplateTransparency(templateId: string, templateData: unknown): Promise<unknown> {
     const documentationCompleteness = this.assessDocumentationCompleteness(templateData);
     const codeClarity = this.assessCodeClarity(templateData);
     const licenseClarity = templateData.license ? 90 : 60;
@@ -1296,7 +1296,7 @@ export class TrustScoreService {
     };
   }
 
-  private assessDocumentationCompleteness(templateData: any): number {
+  private assessDocumentationCompleteness(templateData: unknown): number {
     let score = 40; // Base score
     if (templateData.readme) score += 25;
     if (templateData.examples) score += 15;
@@ -1305,13 +1305,13 @@ export class TrustScoreService {
     return Math.min(100, score);
   }
 
-  private assessCodeClarity(templateData: any): number {
+  private assessCodeClarity(_____templateData: unknown): number {
     // Assess code structure, comments, naming conventions
     return 78; // Placeholder
   }
 
   // Additional placeholder methods for data retrieval
-  private async getTemplateData(templateId: string): Promise<any> { 
+  private async getTemplateData(templateId: string): Promise<unknown> { 
     return { 
       id: templateId,
       creatorId: 'creator-001',
@@ -1324,7 +1324,7 @@ export class TrustScoreService {
     }; 
   }
   
-  private async getTemplateUsageMetrics(templateId: string): Promise<any> { 
+  private async getTemplateUsageMetrics(_____templateId: string): Promise<unknown> { 
     return {
       downloadCount: 150,
       activeUsers: 75,
@@ -1332,7 +1332,7 @@ export class TrustScoreService {
     }; 
   }
   
-  private async getTemplateReviews(templateId: string): Promise<any> { 
+  private async getTemplateReviews(_____templateId: string): Promise<unknown> { 
     return {
       reviewCount: 12,
       averageRating: 4.2,
@@ -1340,7 +1340,7 @@ export class TrustScoreService {
     }; 
   }
   
-  private async getTemplateSecurityScan(templateId: string): Promise<any> { 
+  private async getTemplateSecurityScan(_____templateId: string): Promise<unknown> { 
     return {
       overallSecurity: 88,
       privacyScore: 92,
@@ -1349,7 +1349,7 @@ export class TrustScoreService {
     }; 
   }
   
-  private async getTemplatePerformanceMetrics(templateId: string): Promise<any> { 
+  private async getTemplatePerformanceMetrics(_____templateId: string): Promise<unknown> { 
     return {
       uptime: 98.5,
       errorRate: 1.2,
@@ -1369,7 +1369,7 @@ export class TrustScoreService {
     );
   }
 
-  private generateTemplateQualityAssessment(qualityMetrics: any): any {
+  private generateTemplateQualityAssessment(qualityMetrics: unknown): unknown {
     return {
       overallQuality: qualityMetrics?.overallQualityScore || 78,
       codeQuality: 82,
@@ -1381,7 +1381,7 @@ export class TrustScoreService {
     };
   }
 
-  private generateTemplateSafetyAssessment(securityScan: any, templateData: any): any {
+  private generateTemplateSafetyAssessment(securityScan: unknown, _____templateData: unknown): unknown {
     return {
       overallSafety: securityScan?.overallSecurity || 88,
       securityScore: securityScan?.overallSecurity || 88,
@@ -1393,7 +1393,7 @@ export class TrustScoreService {
     };
   }
 
-  private generateCommunityValidationMetrics(reviewsData: any, usageMetrics: any): any {
+  private generateCommunityValidationMetrics(reviewsData: unknown, _____usageMetrics: unknown): unknown {
     return {
       reviewCount: reviewsData?.reviewCount || 0,
       averageRating: reviewsData?.averageRating || 0,
@@ -1406,7 +1406,7 @@ export class TrustScoreService {
     };
   }
 
-  private generateTemplatePerformanceMetrics(performanceMetrics: any, usageMetrics: any): any {
+  private generateTemplatePerformanceMetrics(performanceMetrics: unknown, _____usageMetrics: unknown): unknown {
     return {
       executionSuccessRate: 98.5,
       averageExecutionTime: performanceMetrics?.averageResponseTime || 250,
@@ -1418,9 +1418,9 @@ export class TrustScoreService {
   }
 
   private async generateTemplateTrustIndicators(
-    templateId: string,
-    dimensions: any,
-    qualityMetrics: any
+    _____templateId: string,
+    _____dimensions: unknown,
+    _____qualityMetrics: unknown
   ): Promise<any[]> {
     return [
       {
@@ -1442,8 +1442,8 @@ export class TrustScoreService {
 
   private async generateTemplateWarnings(
     templateId: string,
-    safetyAssessment: any,
-    performanceMetrics: any
+    safetyAssessment: unknown,
+    _____performanceMetrics: unknown
   ): Promise<any[]> {
     const warnings = [];
     
@@ -1463,13 +1463,13 @@ export class TrustScoreService {
     return warnings;
   }
 
-  private calculateTemplateConfidence(dimensions: any, communityValidation: any): number {
+  private calculateTemplateConfidence(dimensions: unknown, communityValidation: unknown): number {
     const dataQuality = communityValidation.reviewCount > 5 ? 90 : 70;
     const consensusLevel = communityValidation.averageRating > 4 ? 85 : 75;
     return Math.round((dataQuality + consensusLevel) / 2);
   }
 
-  private extractTrustFactors(dimensions: any): TrustFactor[] {
+  private extractTrustFactors(dimensions: unknown): TrustFactor[] {
     const factors: TrustFactor[] = [];
     
     Object.keys(dimensions).forEach(dimensionName => {
@@ -1483,11 +1483,11 @@ export class TrustScoreService {
   }
 
   private calculateTransactionTrustFactors(
-    buyerTrustScore: any,
-    sellerTrustScore: any,
-    templateTrustScore: any,
-    transactionData: any
-  ): any {
+    buyerTrustScore: Error,
+    sellerTrustScore: Error,
+    templateTrustScore: Error,
+    transactionData: unknown
+  ): unknown {
     return {
       buyerTrustScore: buyerTrustScore?.score || 70,
       sellerTrustScore: sellerTrustScore?.score || 75,
@@ -1498,7 +1498,7 @@ export class TrustScoreService {
     };
   }
 
-  private async assessTransactionRisk(factors: any, context: any, transactionData: any): Promise<any> {
+  private async assessTransactionRisk(factors: unknown, context: unknown, _____transactionData: unknown): Promise<unknown> {
     const riskScore = this.calculateTransactionRiskScore(factors, context);
     
     return {
@@ -1510,7 +1510,7 @@ export class TrustScoreService {
     };
   }
 
-  private calculateTransactionRiskScore(factors: any, context: any): number {
+  private calculateTransactionRiskScore(factors: unknown, context: unknown): number {
     let riskScore = 20; // Base risk
     
     if (factors.buyerTrustScore < 60) riskScore += 20;
@@ -1522,7 +1522,7 @@ export class TrustScoreService {
     return Math.min(100, riskScore);
   }
 
-  private async calculateFraudScore(transactionData: any, context: any): Promise<number> {
+  private async calculateFraudScore(transactionData: unknown, context: unknown): Promise<number> {
     // Implement fraud detection algorithm
     let fraudScore = 10; // Base fraud probability
     
@@ -1534,7 +1534,7 @@ export class TrustScoreService {
     return Math.min(100, fraudScore);
   }
 
-  private async detectFraudIndicators(transactionData: any, context: any, factors: any): Promise<FraudIndicator[]> {
+  private async detectFraudIndicators(transactionData: unknown, context: unknown, _____factors: unknown): Promise<FraudIndicator[]> {
     const indicators: FraudIndicator[] = [];
     
     if (context?.locationInfo?.isVPN) {
@@ -1551,7 +1551,7 @@ export class TrustScoreService {
     return indicators;
   }
 
-  private calculateOverallTransactionTrustScore(factors: any, riskAssessment: any, fraudScore: number): number {
+  private calculateOverallTransactionTrustScore(factors: unknown, riskAssessment: unknown, fraudScore: number): number {
     const weights = this.config.weights.transaction;
     
     const baseScore = Math.round(
@@ -1567,13 +1567,13 @@ export class TrustScoreService {
     return Math.max(0, Math.round(baseScore - riskPenalty - fraudPenalty));
   }
 
-  private calculateTransactionConfidence(factors: any, riskAssessment: any): number {
+  private calculateTransactionConfidence(factors: unknown, riskAssessment: unknown): number {
     const dataCompleteness = Object.keys(factors).length * 15;
     const riskCertainty = 100 - riskAssessment.riskScore;
     return Math.round((dataCompleteness + riskCertainty) / 2);
   }
 
-  private createAnalyticsPeriod(timeRange: TimeRange): any {
+  private createAnalyticsPeriod(timeRange: TimeRange): unknown {
     const end = new Date();
     let start: Date;
 
@@ -1595,7 +1595,7 @@ export class TrustScoreService {
   }
 
   // Placeholder methods for analytics
-  private async calculateMarketplaceTrustMetrics(period: any): Promise<any> {
+  private async calculateMarketplaceTrustMetrics(_____period: unknown): Promise<unknown> {
     return {
       averageTrustScore: 78.5,
       trustScoreDistribution: {
@@ -1608,15 +1608,15 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateUserTrustDistribution(period: any): Promise<any> {
+  private async calculateUserTrustDistribution(_____period: unknown): Promise<unknown> {
     return { excellent: 25, good: 35, fair: 25, warning: 10, critical: 3, suspended: 2 };
   }
 
-  private async calculateTemplateTrustDistribution(period: any): Promise<any> {
+  private async calculateTemplateTrustDistribution(_____period: unknown): Promise<unknown> {
     return { excellent: 30, good: 40, fair: 20, warning: 7, critical: 2, suspended: 1 };
   }
 
-  private async analyzeTrustTrends(period: any): Promise<any> {
+  private async analyzeTrustTrends(_____period: unknown): Promise<unknown> {
     return {
       overallTrend: 'improving',
       trendVelocity: 5.2,
@@ -1626,7 +1626,7 @@ export class TrustScoreService {
     };
   }
 
-  private async analyzeRiskFactors(period: any): Promise<any> {
+  private async analyzeRiskFactors(_____period: unknown): Promise<unknown> {
     return {
       overallRiskLevel: 'low',
       riskFactors: [],
@@ -1636,7 +1636,7 @@ export class TrustScoreService {
     };
   }
 
-  private async generateTrustInsights(period: any): Promise<TrustInsight[]> {
+  private async generateTrustInsights(_____period: unknown): Promise<TrustInsight[]> {
     return [
       {
         insightId: 'insight-001',
@@ -1652,7 +1652,7 @@ export class TrustScoreService {
     ];
   }
 
-  private async generateTrustRecommendations(period: any): Promise<TrustRecommendation[]> {
+  private async generateTrustRecommendations(_____period: unknown): Promise<TrustRecommendation[]> {
     return [
       {
         recommendationId: 'rec-001',
@@ -1701,18 +1701,18 @@ export class TrustScoreService {
     };
   }
 
-  private async applyTrustEvents(currentScore: UserTrustScore, events: TrustEvent[]): Promise<UserTrustScore> {
+  private async applyTrustEvents(currentScore: UserTrustScore, _____events: TrustEvent[]): Promise<UserTrustScore> {
     // Apply incremental updates based on events
     // This would implement the actual event processing logic
     return currentScore;
   }
 
   private calculateDataQuality(
-    userProfile: any,
-    userActivity: any,
-    userTemplates: any[],
-    userTransactions: any[]
-  ): any {
+    userProfile: Error,
+    userActivity: unknown,
+    userTemplates: unknown[],
+    userTransactions: unknown[]
+  ): unknown {
     const completeness = this.calculateDataCompleteness(userProfile, userActivity, userTemplates, userTransactions);
     const accuracy = 85; // Placeholder
     const freshness = 90; // Placeholder
@@ -1728,10 +1728,10 @@ export class TrustScoreService {
   }
 
   private calculateDataCompleteness(
-    userProfile: any,
-    userActivity: any,
-    userTemplates: any[],
-    userTransactions: any[]
+    userProfile: Error,
+    userActivity: unknown,
+    userTemplates: unknown[],
+    userTransactions: unknown[]
   ): number {
     let completeness = 0;
     
@@ -1746,7 +1746,7 @@ export class TrustScoreService {
     return Math.min(100, completeness);
   }
 
-  private calculateConfidence(dataQuality: any, trustFactors: TrustFactor[]): number {
+  private calculateConfidence(dataQuality: unknown, trustFactors: TrustFactor[]): number {
     const dataQualityScore = dataQuality.overallQuality;
     const factorConfidence = trustFactors.length > 5 ? 90 : trustFactors.length * 15;
     
@@ -1773,8 +1773,8 @@ export class TrustScoreService {
 
   private async assessUserRiskFactors(
     userId: string,
-    userActivity: any,
-    securityEvents: any[],
+    userActivity: unknown,
+    securityEvents: unknown[],
     overallScore: number
   ): Promise<RiskFactor[]> {
     const riskFactors: RiskFactor[] = [];
@@ -1804,12 +1804,12 @@ export class TrustScoreService {
     return riskFactors;
   }
 
-  private async getUserTrustHistory(userId: string): Promise<any[]> {
+  private async getUserTrustHistory(_____userId: string): Promise<any[]> {
     // Retrieve historical trust scores
     return [];
   }
 
-  private async calculateUserTrustTrends(userId: string): Promise<any> {
+  private async calculateUserTrustTrends(_____userId: string): Promise<unknown> {
     return {
       direction: 'stable',
       velocity: 0,
@@ -1818,7 +1818,7 @@ export class TrustScoreService {
     };
   }
 
-  private async getUserVerificationStatus(userId: string): Promise<any> {
+  private async getUserVerificationStatus(_____userId: string): Promise<unknown> {
     return {
       isVerified: false,
       verificationType: [],
@@ -1828,15 +1828,15 @@ export class TrustScoreService {
     };
   }
 
-  private async getUserTrustBadges(userId: string): Promise<any[]> {
+  private async getUserTrustBadges(_____userId: string): Promise<any[]> {
     return [];
   }
 
-  private async getUserCertifications(userId: string): Promise<any[]> {
+  private async getUserCertifications(_____userId: string): Promise<any[]> {
     return [];
   }
 
-  private async calculateContentQualityTrustMetrics(userId: string, userTemplates: any[]): Promise<any> {
+  private async calculateContentQualityTrustMetrics(userId: string, userTemplates: unknown[]): Promise<unknown> {
     const averageQualityScore = userTemplates.length > 0 ? 78 : 60;
     
     return {
@@ -1848,7 +1848,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateReputationMetrics(userId: string, userReviews: any[]): Promise<any> {
+  private async calculateReputationMetrics(_____userId: string, _____userReviews: unknown[]): Promise<unknown> {
     return {
       overallReputation: 82,
       peerRecognition: 75,
@@ -1858,7 +1858,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateSatisfactionMetrics(userId: string, userReviews: any[]): Promise<any> {
+  private async calculateSatisfactionMetrics(_____userId: string, _____userReviews: unknown[]): Promise<unknown> {
     return {
       customerSatisfactionScore: 87,
       netPromoterScore: 45,
@@ -1867,7 +1867,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateComplianceMetrics(userId: string): Promise<any> {
+  private async calculateComplianceMetrics(_____userId: string): Promise<unknown> {
     return {
       complianceScore: 92,
       violationCount: 0,
@@ -1877,7 +1877,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculatePurchaseHistoryMetrics(userId: string, userTransactions: any[]): Promise<any> {
+  private async calculatePurchaseHistoryMetrics(userId: string, userTransactions: unknown[]): Promise<unknown> {
     const purchases = userTransactions.filter(t => t.type === 'purchase');
     
     return {
@@ -1890,7 +1890,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateReviewQualityMetrics(userId: string, userReviews: any[]): Promise<any> {
+  private async calculateReviewQualityMetrics(userId: string, userReviews: unknown[]): Promise<unknown> {
     const avgLength = userReviews.length > 0 ? userReviews.reduce(
       (sum,
         r
@@ -1905,7 +1905,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculateCommunityContributionMetrics(userId: string): Promise<any> {
+  private async calculateCommunityContributionMetrics(_____userId: string): Promise<unknown> {
     return {
       helpfulnessScore: 75,
       mentorshipScore: 68,
@@ -1915,7 +1915,7 @@ export class TrustScoreService {
     };
   }
 
-  private async calculatePaymentReliabilityMetrics(userId: string, userTransactions: any[]): Promise<any> {
+  private async calculatePaymentReliabilityMetrics(userId: string, userTransactions: unknown[]): Promise<unknown> {
     const payments = userTransactions.filter(t => t.type === 'payment');
     
     return {
@@ -1927,7 +1927,7 @@ export class TrustScoreService {
     };
   }
 
-  private async getTransactionData(transactionId: string): Promise<any> {
+  private async getTransactionData(transactionId: string): Promise<unknown> {
     return {
       id: transactionId,
       amount: 99.99,
@@ -1937,7 +1937,7 @@ export class TrustScoreService {
     };
   }
 
-  private async getTransactionContext(transactionId: string): Promise<any> {
+  private async getTransactionContext(_____transactionId: string): Promise<unknown> {
     return {
       deviceInfo: {
         deviceType: 'desktop',
@@ -1968,17 +1968,17 @@ export class TrustScoreService {
     };
   }
 
-  private async storeSuspiciousActivityReport(report: any): Promise<void> {
+  private async storeSuspiciousActivityReport(report: unknown): Promise<void> {
     // Store suspicious activity report in database
     console.log('📝 Storing suspicious activity report:', report.type);
   }
 
-  private async updateFraudDetectionModels(report: any): Promise<void> {
+  private async updateFraudDetectionModels(_____report: unknown): Promise<void> {
     // Update machine learning models with new fraud data
     console.log('🤖 Updating fraud detection models');
   }
 
-  private async sendSecurityAlert(report: any): Promise<void> {
+  private async sendSecurityAlert(report: unknown): Promise<void> {
     // Send security alerts to administrators
     console.log('🚨 Sending security alert:', report.severity);
   }
@@ -2378,7 +2378,7 @@ export class TrustScoreService {
   // Private Helper Methods for Enforcement Integration
   // =============================================================================
 
-  private checkForRapidScoreDecline(history: any[]): {
+  private checkForRapidScoreDecline(history: unknown[]): {
     isRapid: boolean;
     decline: number;
     severity: ActionSeverity;
@@ -2424,7 +2424,7 @@ export class TrustScoreService {
     return 'low';
   }
 
-  private async captureEntitySnapshot(entityType: string, entityId: string): Promise<any> {
+  private async captureEntitySnapshot(entityType: string, entityId: string): Promise<unknown> {
     try {
       switch (entityType) {
       case 'user':

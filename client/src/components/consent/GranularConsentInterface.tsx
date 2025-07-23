@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { ConsentCategory, ConsentOption, ConsentPreference, ConsentSettings } from '../../types/consent';
+import { ConsentCategory, ConsentOption, ConsentPreference } from '../../types/consent';
 
 interface GranularConsentInterfaceProps {
   userId: string;
@@ -170,36 +170,36 @@ export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> =
 
   const getComplianceInfo = () => {
     switch (complianceMode) {
-      case 'GDPR':
-        return {
-          title: 'GDPR Compliance',
-          description: 'Under GDPR, you have the right to withdraw consent at any time.',
-          legalBasis: 'Article 6(1)(a) and Article 7'
-        };
-      case 'CCPA':
-        return {
-          title: 'CCPA Compliance',
-          description: 'You have the right to opt-out of the sale of your personal information.',
-          legalBasis: 'California Civil Code Section 1798.120'
-        };
-      case 'LGPD':
-        return {
-          title: 'LGPD Compliance',
-          description: 'You may revoke consent at any time.',
-          legalBasis: 'Article 8, Lei Geral de Proteção de Dados'
-        };
-      case 'PIPEDA':
-        return {
-          title: 'PIPEDA Compliance',
-          description: 'You may withdraw consent for collection, use or disclosure.',
-          legalBasis: 'Personal Information Protection and Electronic Documents Act'
-        };
-      default:
-        return {
-          title: 'Privacy Compliance',
-          description: 'You can control how your data is used.',
-          legalBasis: 'Privacy Policy'
-        };
+    case 'GDPR':
+      return {
+        title: 'GDPR Compliance',
+        description: 'Under GDPR, you have the right to withdraw consent at any time.',
+        legalBasis: 'Article 6(1)(a) and Article 7'
+      };
+    case 'CCPA':
+      return {
+        title: 'CCPA Compliance',
+        description: 'You have the right to opt-out of the sale of your personal information.',
+        legalBasis: 'California Civil Code Section 1798.120'
+      };
+    case 'LGPD':
+      return {
+        title: 'LGPD Compliance',
+        description: 'You may revoke consent at any time.',
+        legalBasis: 'Article 8, Lei Geral de Proteção de Dados'
+      };
+    case 'PIPEDA':
+      return {
+        title: 'PIPEDA Compliance',
+        description: 'You may withdraw consent for collection, use or disclosure.',
+        legalBasis: 'Personal Information Protection and Electronic Documents Act'
+      };
+    default:
+      return {
+        title: 'Privacy Compliance',
+        description: 'You can control how your data is used.',
+        legalBasis: 'Privacy Policy'
+      };
     }
   };
 
@@ -296,11 +296,11 @@ export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> =
                         <div className={`
                           relative w-12 h-6 rounded-full transition-colors duration-200 ease-in-out
                           ${categoryState.allEnabled 
-                            ? 'bg-blue-600' 
-                            : categoryState.someEnabled 
-                              ? 'bg-yellow-400' 
-                              : 'bg-gray-300'
-                          }
+                      ? 'bg-blue-600' 
+                      : categoryState.someEnabled 
+                        ? 'bg-yellow-400' 
+                        : 'bg-gray-300'
+                    }
                         `}>
                           <div className={`
                             absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out
@@ -309,7 +309,7 @@ export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> =
                         </div>
                         <span className="ml-2 text-sm font-medium text-gray-700">
                           {categoryState.allEnabled ? 'All enabled' : 
-                           categoryState.someEnabled ? 'Partially enabled' : 'All disabled'}
+                            categoryState.someEnabled ? 'Partially enabled' : 'All disabled'}
                         </span>
                       </label>
                     </div>
@@ -338,9 +338,9 @@ export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> =
                             <div className={`
                               relative w-5 h-5 rounded border-2 transition-colors duration-200
                               ${isGranted 
-                                ? 'bg-blue-600 border-blue-600' 
-                                : 'bg-white border-gray-300'
-                              }
+                        ? 'bg-blue-600 border-blue-600' 
+                        : 'bg-white border-gray-300'
+                      }
                               ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                             `}>
                               {isGranted && (

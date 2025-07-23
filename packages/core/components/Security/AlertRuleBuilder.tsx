@@ -5,7 +5,7 @@
  * Provides drag-and-drop rule building, condition chaining, and action configuration.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   SecurityEventType,
   SecurityEventSeverity,
@@ -41,7 +41,7 @@ interface AlertCondition {
   id: string;
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex' | 'in' | 'not_in';
-  value: any;
+  value: Error;
   logic_operator?: 'and' | 'or';
 }
 
@@ -131,7 +131,7 @@ export const AlertRuleBuilder: React.FC<{
   alertRules: AlertRule[];
   onRulesChange: (rules: AlertRule[]) => void;
 }> = ({ alertRules, onRulesChange }) => {
-  const [selectedRule, setSelectedRule] = useState<AlertRule | null>(null);
+  const [_____selectedRule, setSelectedRule] = useState<AlertRule | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
   const [editingRule, setEditingRule] = useState<AlertRule | null>(null);
@@ -714,7 +714,7 @@ const ActionConfigForm: React.FC<{
   action: AlertAction;
   onUpdate: (updates: Partial<AlertAction>) => void;
 }> = ({ action, onUpdate }) => {
-  const updateConfig = (key: string, value: any) => {
+  const updateConfig = (key: string, value: Error) => {
     onUpdate({
       config: { ...action.config, [key]: value }
     });

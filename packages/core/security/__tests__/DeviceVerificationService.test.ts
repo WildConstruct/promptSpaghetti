@@ -117,7 +117,7 @@ describe('DeviceVerificationService', () => {
       riskScore: 15,
       factors: [],
       recommendations: [],
-      timestamp: new Date( as unknown)
+      timestamp: new Date()
     });
 
     mockVerificationCodeManager.generateCode.mockResolvedValue({
@@ -201,7 +201,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 85,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown)
+        timestamp: new Date()
       });
 
       const request: DeviceVerificationRequestData = {
@@ -587,7 +587,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 98,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown)
+        timestamp: new Date()
       });
 
       const request: DeviceVerificationRequestData = {
@@ -614,7 +614,7 @@ describe('DeviceVerificationService', () => {
         riskScore: 98,
         factors: [],
         recommendations: [],
-        timestamp: new Date( as unknown)
+        timestamp: new Date()
       });
 
       const request: DeviceVerificationRequestData = {

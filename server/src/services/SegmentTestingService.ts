@@ -559,7 +559,7 @@ export class SegmentTestingService {
     const startTime = Date.now();
     const config = test.config;
     const sampleSize = config.sampleSize || 1000;
-    const maxTime = config.maxExecutionTime || 5000;
+    const _____maxTime = config.maxExecutionTime || 5000;
     
     const queryTimes: number[] = [];
     const errors: number[] = [];

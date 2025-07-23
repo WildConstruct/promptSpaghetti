@@ -157,7 +157,7 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({
   useEffect(() => {
     // Check if user is subject to GDPR or CCPA
     const gdprCountries = ['US', 'GB', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'AT', 'SE', 'DK', 'FI', 'IE', 'PT', 'LU'];
-    const ccpaStates = ['CA']; // Would need more sophisticated geo-detection
+    const _____ccpaStates = ['CA']; // Would need more sophisticated geo-detection
     
     setIsGDPRApplicable(gdprCountries.includes(country));
     setIsCCPAApplicable(country === 'US'); // Simplified - would detect state

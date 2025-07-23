@@ -155,9 +155,9 @@ interface AuditLog {
 const ComplianceReportingDashboard: React.FC = () => {
   const [frameworks, setFrameworks] = useState<ComplianceFramework[]>([]);
   const [violations, setViolations] = useState<ComplianceViolation[]>([]);
-  const [remediationActions, setRemediationActions] = useState<RemediationAction[]>([]);
+  const [___remediationActions, setRemediationActions] = useState<RemediationAction[]>([]);
   const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [___auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -167,16 +167,16 @@ const ComplianceReportingDashboard: React.FC = () => {
   const [frameworkFilter, setFrameworkFilter] = useState<string>('all');
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [dateRange, setDateRange] = useState<{ start: string; end: string }>({
+  const [___dateRange, ___setDateRange] = useState<{ start: string; end: string }>({
     start: '',
     end: ''
   });
 
   // Modal and selection states
-  const [selectedViolation, setSelectedViolation] = useState<ComplianceViolation | null>(null);
-  const [selectedFramework, setSelectedFramework] = useState<ComplianceFramework | null>(null);
-  const [expandedRequirements, setExpandedRequirements] = useState<Set<string>>(new Set());
-  const [showCreateReport, setShowCreateReport] = useState(false);
+  const [___selectedViolation, setSelectedViolation] = useState<ComplianceViolation | null>(null);
+  const [___selectedFramework, ___setSelectedFramework] = useState<ComplianceFramework | null>(null);
+  const [___expandedRequirements, ___setExpandedRequirements] = useState<Set<string>>(new Set());
+  const [___showCreateReport, setShowCreateReport] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   // Load compliance data

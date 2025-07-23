@@ -179,7 +179,7 @@ export const BackupVerificationDashboard: React.FC<BackupVerificationDashboardPr
   // UI state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBackup, setSelectedBackup] = useState<string>('');
-  const [selectedSession, setSelectedSession] = useState<string>('');
+  const [___selectedSession, ___setSelectedSession] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<string>('');
   const [filterRiskLevel, setFilterRiskLevel] = useState<string>('');
   

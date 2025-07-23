@@ -98,7 +98,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
   }, [schedules, startTime, endTime]);
 
   // Group schedules by time slots for better visualization
-  const timeSlots = useMemo(() => {
+  const ___timeSlots = useMemo(() => {
     const slotDuration = timeRangeConfig.hours * 60 * 60 * 1000 / 24; // 24 slots
     const slots: Array<{ start: Date; end: Date; schedules: Schedule[] }> = [];
 
@@ -208,7 +208,7 @@ export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
     return markers;
   };
 
-  const renderScheduleBar = (schedule: Schedule, index: number) => {
+  const renderScheduleBar = (schedule: Schedule, ___index: number) => {
     const scheduleTime = schedule.nextExecution || schedule.startTime;
     const position = getTimelinePosition(scheduleTime);
     const width = getScheduleWidth(schedule);

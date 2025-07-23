@@ -812,7 +812,7 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({
 async function prepareExportPayload(
   results: EnhancedPreviewResult[],
   options: ExportOptions
-): Promise<any> {
+): Promise<unknown> {
   const { format, includeMetadata, includeExecutionPath, includeVarianceAnalysis } = options;
 
   const basePayload = {

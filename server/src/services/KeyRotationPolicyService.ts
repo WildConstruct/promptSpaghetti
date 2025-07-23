@@ -109,7 +109,7 @@ export interface RotationSchedule {
   // Results
   oldKeyId?: string;
   newKeyId?: string;
-  rollbackPlan?: any;
+  rollbackPlan?: unknown;
   
   // Metadata
   createdAt: Date;
@@ -601,7 +601,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     return `schedule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private validatePolicy(policy: any): void {
+  private validatePolicy(policy: unknown): void {
     if (!policy.policyName || !policy.keyPurpose) {
       throw new Error('Policy name and key purpose are required');
     }
@@ -615,7 +615,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     }
   }
 
-  private async getApplicablePolicies(key: any): Promise<RotationPolicy[]> {
+  private async getApplicablePolicies(key: unknown): Promise<RotationPolicy[]> {
     const result = await this.db.query(`
       SELECT * FROM key_rotation_policies
       WHERE is_active = true
@@ -627,7 +627,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     return result.rows.map(this.mapRowToPolicy);
   }
 
-  private async evaluateKeyAgainstPolicy(key: any, policy: RotationPolicy): Promise<PolicyEvaluation | null> {
+  private async evaluateKeyAgainstPolicy(key: unknown, policy: RotationPolicy): Promise<PolicyEvaluation | null> {
     const reasoning: string[] = [];
     let urgency: 'low' | 'medium' | 'high' | 'critical' = 'low';
     let recommendedAction: 'schedule' | 'immediate' | 'emergency' = 'schedule';
@@ -688,14 +688,14 @@ export class KeyRotationPolicyService extends EventEmitter {
     };
   }
 
-  private calculateRotationWindow(scheduledDate: Date, policy: RotationPolicy): { startTime: Date; endTime: Date } {
+  private calculateRotationWindow(scheduledDate: Date, _____policy: RotationPolicy): { startTime: Date; endTime: Date } {
     const startTime = new Date(scheduledDate);
     const endTime = new Date(scheduledDate.getTime() + this.config.rotationWindowHours * 60 * 60 * 1000);
     
     return { startTime, endTime };
   }
 
-  private async checkRotationConflicts(scheduledDate: Date, rotationWindow: any): Promise<void> {
+  private async checkRotationConflicts(scheduledDate: Date, rotationWindow: unknown): Promise<void> {
     const conflicts = await this.db.query(`
       SELECT COUNT(*) as count
       FROM rotation_schedules
@@ -713,7 +713,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     }
   }
 
-  private estimateRotationDuration(keyId: string): number {
+  private estimateRotationDuration(_____keyId: string): number {
     // Base estimation: 15 minutes, can be enhanced with historical data
     return 15;
   }
@@ -731,7 +731,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     return true;
   }
 
-  private calculateComplianceScore(stats: any): number {
+  private calculateComplianceScore(stats: unknown): number {
     const total = parseInt(stats.total_rotations || '0');
     const successful = parseInt(stats.successful_rotations || '0');
     
@@ -739,7 +739,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     return Math.round((successful / total) * 100);
   }
 
-  private mapRowToPolicy(row: any): RotationPolicy {
+  private mapRowToPolicy(row: unknown): RotationPolicy {
     return {
       id: row.id,
       policyName: row.policy_name,
@@ -770,7 +770,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     };
   }
 
-  private mapRowToSchedule(row: any): RotationSchedule {
+  private mapRowToSchedule(row: unknown): RotationSchedule {
     return {
       id: row.id,
       policyId: row.policy_id,
@@ -847,17 +847,17 @@ export class KeyRotationPolicyService extends EventEmitter {
     console.log(`Processing scheduled rotations for policy ${policy.id}`);
   }
 
-  private async scheduleNotifications(schedule: RotationSchedule, policy: RotationPolicy): Promise<void> {
+  private async scheduleNotifications(schedule: RotationSchedule, _____policy: RotationPolicy): Promise<void> {
     // Implementation for scheduling notifications
     console.log(`Scheduling notifications for rotation ${schedule.id}`);
   }
 
-  private async sendCompletionNotification(schedule: RotationSchedule, newKey: any): Promise<void> {
+  private async sendCompletionNotification(schedule: RotationSchedule, _____newKey: unknown): Promise<void> {
     // Implementation for sending completion notifications
     console.log(`Sending completion notification for rotation ${schedule.id}`);
   }
 
-  private async logPolicyEvent(policyId: string, eventType: string, details: any): Promise<void> {
+  private async logPolicyEvent(policyId: string, eventType: string, details: unknown): Promise<void> {
     if (!this.config.auditAllRotations) return;
     
     try {

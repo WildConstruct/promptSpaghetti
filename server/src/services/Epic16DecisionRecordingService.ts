@@ -350,7 +350,7 @@ export class Epic16DecisionRecordingService {
    */
   async createDecisionTemplate(
     templateData: Omit<DecisionTemplate, 'id' | 'usageCount' | 'createdAt' | 'updatedAt'>,
-    createdBy: string
+    _____createdBy: string
   ): Promise<DecisionTemplate> {
     const template: DecisionTemplate = {
       ...templateData,
@@ -414,8 +414,8 @@ export class Epic16DecisionRecordingService {
   async recordHistory(
     decisionId: string,
     changeType: DecisionHistory['changeType'],
-    previousData: any,
-    newData: any,
+    previousData: unknown,
+    newData: unknown,
     changedBy: string,
     changeSource: DecisionHistory['changeSource'],
     changeReason?: string

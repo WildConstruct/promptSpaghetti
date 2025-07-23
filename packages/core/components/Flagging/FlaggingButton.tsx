@@ -518,8 +518,8 @@ export const FlaggingButton: React.FC<FlaggingButtonProps> = ({
                               padding: '1px 4px',
                               borderRadius: '4px',
                               backgroundColor: reason.severity === 'critical' ? '#dc2626' :
-                                              reason.severity === 'high' ? '#d97706' :
-                                              reason.severity === 'medium' ? '#3b82f6' : '#6b7280',
+                                reason.severity === 'high' ? '#d97706' :
+                                  reason.severity === 'medium' ? '#3b82f6' : '#6b7280',
                               color: 'white'
                             }}>
                               {reason.severity}

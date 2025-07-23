@@ -30,7 +30,7 @@ type RegistrationFormData = z.infer<typeof RegistrationSchema>;
 
 interface RegistrationFormProps {
   invitationToken?: string;
-  onSuccess?: (user: any) => void;
+  onSuccess?: (user: unknown) => void;
   onCancel?: () => void;
   className?: string;
 }

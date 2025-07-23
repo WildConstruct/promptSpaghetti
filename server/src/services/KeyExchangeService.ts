@@ -544,7 +544,7 @@ export class KeyExchangeService extends EventEmitter {
     return publicKey.export({ type: 'spki', format: 'pem' }) as string;
   }
 
-  private importPublicKey(publicKeyPem: string, algorithm: string): crypto.KeyObject {
+  private importPublicKey(publicKeyPem: string, _____algorithm: string): crypto.KeyObject {
     return crypto.createPublicKey({
       key: publicKeyPem,
       format: 'pem',
@@ -552,7 +552,7 @@ export class KeyExchangeService extends EventEmitter {
     });
   }
 
-  private importPrivateKey(privateKeyPem: string, algorithm: string): crypto.KeyObject {
+  private importPrivateKey(privateKeyPem: string, _____algorithm: string): crypto.KeyObject {
     return crypto.createPrivateKey({
       key: privateKeyPem,
       format: 'pem',
@@ -621,7 +621,7 @@ export class KeyExchangeService extends EventEmitter {
     const [ivHex, encrypted, authTagHex] = encryptedKey.split(':');
     
     const key = crypto.scryptSync(sessionId, 'key-exchange-salt', 32);
-    const iv = Buffer.from(ivHex, 'hex');
+    const _____iv = Buffer.from(ivHex, 'hex');
     const authTag = Buffer.from(authTagHex, 'hex');
     
     const decipher = crypto.createDecipher('aes-256-gcm', key);
@@ -645,7 +645,7 @@ export class KeyExchangeService extends EventEmitter {
     return this.getSessionStatus(sessionId);
   }
 
-  private async cacheSessionData(sessionId: string, data: any): Promise<void> {
+  private async cacheSessionData(sessionId: string, data: Record<string, unknown>): Promise<void> {
     await this.redis.setex(`session:${sessionId}`, 900, JSON.stringify(data)); // 15 minutes
   }
 
@@ -690,7 +690,7 @@ export class KeyExchangeService extends EventEmitter {
   private async auditKeyExchangeEvent(
     sessionId: string,
     eventType: string,
-    eventData: any
+    eventData: unknown
   ): Promise<void> {
     if (!this.config.auditAllOperations) return;
     

@@ -915,7 +915,7 @@ export interface DashboardFilter {
   name: string;
   type: FilterType;
   options: FilterOption[];
-  defaultValue: any;
+  defaultValue: Error;
   required: boolean;
 }
 
@@ -928,7 +928,7 @@ export enum FilterType {
 }
 
 export interface FilterOption {
-  value: any;
+  value: Error;
   label: string;
   description?: string;
 }
@@ -1171,7 +1171,7 @@ export class RetentionMonitoringReportingService {
     };
   }
 
-  private async generateComplianceMetrics(scope: ReportScope, period: ReportPeriod): Promise<ComplianceMetrics> {
+  private async generateComplianceMetrics(scope: ReportScope, _____period: ReportPeriod): Promise<ComplianceMetrics> {
     return {
       overallScore: await this.calculateOverallComplianceRate(),
       categoryScores: await this.getCategoryComplianceScores(scope),
@@ -1256,8 +1256,8 @@ export class RetentionMonitoringReportingService {
 
   private generateRecommendations(
     compliance: ComplianceMetrics,
-    violations: ViolationMetrics,
-    risks: RiskMetrics
+    _____violations: ViolationMetrics,
+    _____risks: RiskMetrics
   ): Recommendation[] {
     const recommendations: Recommendation[] = [];
 
@@ -1310,7 +1310,7 @@ export class RetentionMonitoringReportingService {
     return '1.0';
   }
 
-  private async generateAttachments(reportId: string, reportType: ReportType): Promise<ReportAttachment[]> {
+  private async generateAttachments(reportId: string, _____reportType: ReportType): Promise<ReportAttachment[]> {
     // Implementation would generate actual attachments
     return [
       {
@@ -1326,17 +1326,17 @@ export class RetentionMonitoringReportingService {
   }
 
   // Placeholder implementations for data calculation methods
-  private async getTotalRecordCount(scope: ReportScope): Promise<number> {
+  private async getTotalRecordCount(_____scope: ReportScope): Promise<number> {
     // Implementation would query database
     return 1000000;
   }
 
-  private async getManagedRecordCount(scope: ReportScope): Promise<number> {
+  private async getManagedRecordCount(_____scope: ReportScope): Promise<number> {
     // Implementation would query database
     return 950000;
   }
 
-  private async calculateDataVolume(scope: ReportScope): Promise<DataVolume> {
+  private async calculateDataVolume(_____scope: ReportScope): Promise<DataVolume> {
     // Implementation would calculate actual data volume
     return {
       totalBytes: 1073741824000, // 1TB
@@ -1347,12 +1347,12 @@ export class RetentionMonitoringReportingService {
     };
   }
 
-  private async getCategoryBreakdown(scope: ReportScope): Promise<CategoryBreakdown[]> {
+  private async getCategoryBreakdown(_____scope: ReportScope): Promise<CategoryBreakdown[]> {
     // Implementation would generate category breakdown
     return [];
   }
 
-  private async getLifecycleBreakdown(scope: ReportScope): Promise<LifecycleBreakdown[]> {
+  private async getLifecycleBreakdown(_____scope: ReportScope): Promise<LifecycleBreakdown[]> {
     // Implementation would generate lifecycle breakdown
     return [];
   }
@@ -1362,7 +1362,7 @@ export class RetentionMonitoringReportingService {
     return 92.5;
   }
 
-  private async getCriticalFindings(scope: ReportScope, period: ReportPeriod): Promise<string[]> {
+  private async getCriticalFindings(_____scope: ReportScope, _____period: ReportPeriod): Promise<string[]> {
     // Implementation would identify critical findings
     return [
       '15 data retention periods exceeded',
@@ -1389,7 +1389,7 @@ export class RetentionMonitoringReportingService {
     }
   }
 
-  private async getMetricTrend(metric: string, days: number): Promise<TrendDirection> {
+  private async getMetricTrend(_____metric: string, _____days: number): Promise<TrendDirection> {
     // Implementation would analyze actual trend
     return TrendDirection.IMPROVING;
   }
@@ -1546,11 +1546,11 @@ export class RetentionMonitoringReportingService {
   }
 
   // Placeholder implementations for complex metric calculations
-  private async getCategoryComplianceScores(scope: ReportScope): Promise<CategoryComplianceScore[]> { return []; }
-  private async getRegulationComplianceScores(scope: ReportScope): Promise<RegulationComplianceScore[]> { return []; }
-  private async getControlEffectiveness(scope: ReportScope): Promise<ControlEffectiveness[]> { return []; }
-  private async performGapAnalysis(scope: ReportScope): Promise<ComplianceGap[]> { return []; }
-  private async assessMaturity(scope: ReportScope): Promise<MaturityAssessment> { 
+  private async getCategoryComplianceScores(_____scope: ReportScope): Promise<CategoryComplianceScore[]> { return []; }
+  private async getRegulationComplianceScores(_____scope: ReportScope): Promise<RegulationComplianceScore[]> { return []; }
+  private async getControlEffectiveness(_____scope: ReportScope): Promise<ControlEffectiveness[]> { return []; }
+  private async performGapAnalysis(_____scope: ReportScope): Promise<ComplianceGap[]> { return []; }
+  private async assessMaturity(_____scope: ReportScope): Promise<MaturityAssessment> { 
     return {
       overallLevel: MaturityLevel.DEFINED,
       dimensions: [],
@@ -1559,17 +1559,17 @@ export class RetentionMonitoringReportingService {
     };
   }
 
-  private async getTotalViolationCount(scope: ReportScope, period: ReportPeriod): Promise<number> { return 50; }
+  private async getTotalViolationCount(_____scope: ReportScope, _____period: ReportPeriod): Promise<number> { return 50; }
   private async getViolationsByCategory(
-    scope: ReportScope,
-    period: ReportPeriod
+    _____scope: ReportScope,
+    _____period: ReportPeriod
   ): Promise<ViolationByCategory[]> { return []; }
   private async getViolationsBySeverity(
-    scope: ReportScope,
-    period: ReportPeriod
+    _____scope: ReportScope,
+    _____period: ReportPeriod
   ): Promise<ViolationBySeverity[]> { return []; }
-  private async getViolationsByType(scope: ReportScope, period: ReportPeriod): Promise<ViolationByType[]> { return []; }
-  private async getResolutionMetrics(scope: ReportScope, period: ReportPeriod): Promise<ResolutionMetrics> { 
+  private async getViolationsByType(_____scope: ReportScope, _____period: ReportPeriod): Promise<ViolationByType[]> { return []; }
+  private async getResolutionMetrics(_____scope: ReportScope, _____period: ReportPeriod): Promise<ResolutionMetrics> { 
     return {
       averageResolutionTime: 14,
       resolutionTimeByCategory: [],
@@ -1578,12 +1578,12 @@ export class RetentionMonitoringReportingService {
       escalationRate: 8
     };
   }
-  private async getViolationTrends(scope: ReportScope, period: ReportPeriod): Promise<ViolationTrend[]> { return []; }
+  private async getViolationTrends(_____scope: ReportScope, _____period: ReportPeriod): Promise<ViolationTrend[]> { return []; }
 
-  private async getTotalExceptionCount(scope: ReportScope, period: ReportPeriod): Promise<number> { return 15; }
-  private async getExpiredExceptionCount(scope: ReportScope, period: ReportPeriod): Promise<number> { return 3; }
-  private async getExceptionsByType(scope: ReportScope, period: ReportPeriod): Promise<ExceptionByType[]> { return []; }
-  private async getApprovalMetrics(scope: ReportScope, period: ReportPeriod): Promise<ApprovalMetrics> { 
+  private async getTotalExceptionCount(_____scope: ReportScope, _____period: ReportPeriod): Promise<number> { return 15; }
+  private async getExpiredExceptionCount(_____scope: ReportScope, _____period: ReportPeriod): Promise<number> { return 3; }
+  private async getExceptionsByType(_____scope: ReportScope, _____period: ReportPeriod): Promise<ExceptionByType[]> { return []; }
+  private async getApprovalMetrics(_____scope: ReportScope, _____period: ReportPeriod): Promise<ApprovalMetrics> { 
     return {
       averageApprovalTime: 7,
       approvalSuccess: 90,
@@ -1592,7 +1592,7 @@ export class RetentionMonitoringReportingService {
       bottlenecks: []
     };
   }
-  private async getExceptionRiskMetrics(scope: ReportScope, period: ReportPeriod): Promise<ExceptionRiskMetrics> { 
+  private async getExceptionRiskMetrics(_____scope: ReportScope, _____period: ReportPeriod): Promise<ExceptionRiskMetrics> { 
     return {
       overallRisk: RiskLevel.MEDIUM,
       riskDistribution: [],
@@ -1600,7 +1600,7 @@ export class RetentionMonitoringReportingService {
       residualRisk: RiskLevel.LOW
     };
   }
-  private async getRenewalMetrics(scope: ReportScope, period: ReportPeriod): Promise<RenewalMetrics> { 
+  private async getRenewalMetrics(_____scope: ReportScope, _____period: ReportPeriod): Promise<RenewalMetrics> { 
     return {
       eligibleForRenewal: 5,
       renewalRate: 80,
@@ -1610,12 +1610,12 @@ export class RetentionMonitoringReportingService {
     };
   }
 
-  private async getStageDistribution(scope: ReportScope): Promise<StageDistribution[]> { return []; }
+  private async getStageDistribution(_____scope: ReportScope): Promise<StageDistribution[]> { return []; }
   private async getTransitionMetrics(
-    scope: ReportScope,
-    period: ReportPeriod
+    _____scope: ReportScope,
+    _____period: ReportPeriod
   ): Promise<TransitionMetrics[]> { return []; }
-  private async getLifecycleEfficiency(scope: ReportScope, period: ReportPeriod): Promise<LifecycleEfficiency> { 
+  private async getLifecycleEfficiency(_____scope: ReportScope, _____period: ReportPeriod): Promise<LifecycleEfficiency> { 
     return {
       overallEfficiency: 85,
       automationRate: 70,
@@ -1624,7 +1624,7 @@ export class RetentionMonitoringReportingService {
       bottleneckImpact: 15
     };
   }
-  private async getAutomationMetrics(scope: ReportScope, period: ReportPeriod): Promise<AutomationMetrics> { 
+  private async getAutomationMetrics(_____scope: ReportScope, _____period: ReportPeriod): Promise<AutomationMetrics> { 
     return {
       totalAutomatedActions: 5000,
       automationSuccess: 98,
@@ -1634,14 +1634,14 @@ export class RetentionMonitoringReportingService {
     };
   }
   private async getLifecycleBottlenecks(
-    scope: ReportScope,
-    period: ReportPeriod
+    _____scope: ReportScope,
+    _____period: ReportPeriod
   ): Promise<LifecycleBottleneck[]> { return []; }
 
-  private async calculateOverallRiskScore(scope: ReportScope): Promise<number> { return 45; }
-  private async getRisksByCategory(scope: ReportScope): Promise<RiskByCategory[]> { return []; }
-  private async getRiskTrends(scope: ReportScope, period: ReportPeriod): Promise<RiskTrend[]> { return []; }
-  private async getMitigationStatus(scope: ReportScope): Promise<MitigationStatus[]> { return []; }
+  private async calculateOverallRiskScore(_____scope: ReportScope): Promise<number> { return 45; }
+  private async getRisksByCategory(_____scope: ReportScope): Promise<RiskByCategory[]> { return []; }
+  private async getRiskTrends(_____scope: ReportScope, _____period: ReportPeriod): Promise<RiskTrend[]> { return []; }
+  private async getMitigationStatus(_____scope: ReportScope): Promise<MitigationStatus[]> { return []; }
   private async getRiskAppetite(): Promise<RiskAppetite> { 
     return {
       current: 45,
@@ -1670,11 +1670,11 @@ export class RetentionMonitoringReportingService {
     };
   }
 
-  private async calculateTotalCost(scope: ReportScope, period: ReportPeriod): Promise<number> { return 150000; }
-  private async getCostByCategory(scope: ReportScope, period: ReportPeriod): Promise<CostByCategory[]> { return []; }
-  private async getCostTrends(scope: ReportScope, period: ReportPeriod): Promise<CostTrend[]> { return []; }
-  private async getCostOptimization(scope: ReportScope): Promise<CostOptimization[]> { return []; }
-  private async getBudgetAnalysis(scope: ReportScope, period: ReportPeriod): Promise<BudgetAnalysis> { 
+  private async calculateTotalCost(_____scope: ReportScope, _____period: ReportPeriod): Promise<number> { return 150000; }
+  private async getCostByCategory(_____scope: ReportScope, _____period: ReportPeriod): Promise<CostByCategory[]> { return []; }
+  private async getCostTrends(_____scope: ReportScope, _____period: ReportPeriod): Promise<CostTrend[]> { return []; }
+  private async getCostOptimization(_____scope: ReportScope): Promise<CostOptimization[]> { return []; }
+  private async getBudgetAnalysis(_____scope: ReportScope, _____period: ReportPeriod): Promise<BudgetAnalysis> { 
     return {
       allocated: 200000,
       spent: 150000,

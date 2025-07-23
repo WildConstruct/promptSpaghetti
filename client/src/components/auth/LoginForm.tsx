@@ -43,7 +43,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({});
   const [showPassword, setShowPassword] = useState(false);
 
-  const validateField = (field: keyof LoginFormData, value: any): string | undefined => {
+  const validateField = (field: keyof LoginFormData, value: Error): string | undefined => {
     try {
       const fieldSchema = loginSchema.shape[field];
       fieldSchema.parse(value);
@@ -56,7 +56,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     }
   };
 
-  const handleInputChange = (field: keyof LoginFormData, value: any) => {
+  const handleInputChange = (field: keyof LoginFormData, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     
     // Clear field error when user starts typing

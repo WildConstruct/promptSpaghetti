@@ -19,7 +19,7 @@ import {
   RuleSeverity,
   RuleStatus
 } from './ComplianceRuleEngine';
-import { RuleTestingFramework, RuleTestSuite, TestExecutionResult } from './RuleTestingFramework';
+import { RuleTestingFramework } from './RuleTestingFramework';
 import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 
@@ -1134,7 +1134,7 @@ export class RuleManagementInterface {
     return version;
   }
 
-  private async validateRule(version: RuleVersion): Promise<ValidationResult> {
+  private async validateRule(___version: RuleVersion): Promise<ValidationResult> {
     // Implement comprehensive rule validation
     return {
       passed: true,
@@ -1145,7 +1145,7 @@ export class RuleManagementInterface {
     };
   }
 
-  private async detectConflicts(version: RuleVersion): Promise<RuleConflictDetection[]> {
+  private async detectConflicts(___version: RuleVersion): Promise<RuleConflictDetection[]> {
     // Implement conflict detection logic
     return [];
   }
@@ -1164,7 +1164,7 @@ export class RuleManagementInterface {
     return riskMap[category] || 'MEDIUM';
   }
 
-  private requiresApproval(category: ChangeCategory, impact: ChangeImpact): boolean {
+  private requiresApproval(category: ChangeCategory, ___impact: ChangeImpact): boolean {
     if (!this.configuration.requireApproval) return false;
     
     // Always require approval for breaking changes, emergency changes, and security changes
@@ -1209,7 +1209,7 @@ export class RuleManagementInterface {
   // Additional helper methods would be implemented here...
   // For brevity, I'm including simplified implementations
 
-  private async startApprovalWorkflow(version: RuleVersion): Promise<ApprovalWorkflowInstance> {
+  private async startApprovalWorkflow(___version: RuleVersion): Promise<ApprovalWorkflowInstance> {
     return {
       workflowId: `WORKFLOW-${Date.now()}`,
       status: 'PENDING',
@@ -1259,8 +1259,8 @@ export class RuleManagementInterface {
   }
 
   private calculateHealthScore(
-    metrics: any,
-    baselineComparison: any,
+    metrics: unknown,
+    baselineComparison: unknown,
     alerts: PerformanceAlert[]
   ): number {
     // Simplified health score calculation
@@ -1331,9 +1331,9 @@ export interface RulePerformanceReport {
   ruleId: string;
   version: string;
   timeWindow: TimeWindow;
-  metrics: any;
-  trends: any;
-  baselineComparison: any;
+  metrics: unknown;
+  trends: unknown;
+  baselineComparison: unknown;
   alerts: PerformanceAlert[];
   optimizations: PerformanceOptimization[];
   healthScore: number;
@@ -1345,12 +1345,12 @@ export interface RuleGovernanceReport {
   reportId: string;
   scope: ReportScope;
   timeWindow: TimeWindow;
-  governanceData: any;
-  complianceAnalysis: any;
-  riskAssessment: any;
-  qualityMetrics: any;
+  governanceData: unknown;
+  complianceAnalysis: unknown;
+  riskAssessment: unknown;
+  qualityMetrics: unknown;
   recommendations: string[];
-  summary: any;
+  summary: unknown;
   generatedAt: Date;
   generatedBy: string;
 }

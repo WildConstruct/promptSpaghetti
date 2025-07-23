@@ -495,32 +495,32 @@ export class SecurityEventCoordinator extends EventEmitter {
   /**
    * Helper methods for event enrichment
    */
-  private async getGeolocation(ipAddress: string): Promise<any> {
+  private async getGeolocation(_____ipAddress: string): Promise<unknown> {
     // Mock implementation - would integrate with geolocation service
     return { country: 'US', city: 'Unknown', latitude: 0, longitude: 0 };
   }
 
-  private async isKnownIP(ipAddress: string, userId?: string): Promise<boolean> {
+  private async isKnownIP(_____ipAddress: string, userId?: string): Promise<boolean> {
     // Mock implementation - would check against user's known IPs
     return false;
   }
 
-  private parseUserAgent(userAgent: string): any {
+  private parseUserAgent(_____userAgent: string): unknown {
     // Mock implementation - would parse user agent string
     return { browser: 'Unknown', os: 'Unknown', device: 'Unknown' };
   }
 
-  private async isKnownDevice(userAgent: string, userId?: string): Promise<boolean> {
+  private async isKnownDevice(_____userAgent: string, userId?: string): Promise<boolean> {
     // Mock implementation - would check against user's known devices
     return false;
   }
 
-  private async getUserContext(userId: string): Promise<any> {
+  private async getUserContext(_____userId: string): Promise<unknown> {
     // Mock implementation - would get user context
     return { lastLogin: new Date(), loginCount: 0, riskLevel: 'low' };
   }
 
-  private getTimeContext(timestamp: Date): any {
+  private getTimeContext(timestamp: Date): unknown {
     const hour = timestamp.getHours();
     const day = timestamp.getDay();
     
@@ -533,7 +533,7 @@ export class SecurityEventCoordinator extends EventEmitter {
     };
   }
 
-  private async getSessionContext(sessionId: string): Promise<any> {
+  private async getSessionContext(_____sessionId: string): Promise<unknown> {
     // Mock implementation - would get session context
     return { duration: 0, activityCount: 0, lastActivity: new Date() };
   }
@@ -631,7 +631,7 @@ export class SecurityEventCoordinator extends EventEmitter {
   /**
    * Find events with the same correlation ID
    */
-  private async findRelatedEvents(correlationId: string): Promise<SecurityEvent[]> {
+  private async findRelatedEvents(_____correlationId: string): Promise<SecurityEvent[]> {
     // Would query the audit log for related events
     return [];
   }
@@ -639,7 +639,7 @@ export class SecurityEventCoordinator extends EventEmitter {
   /**
    * Analyze patterns in related events
    */
-  private async analyzeEventPattern(events: SecurityEvent[]): Promise<void> {
+  private async analyzeEventPattern(_____events: SecurityEvent[]): Promise<void> {
     // Pattern analysis logic
     // Could detect attack chains, coordinated attacks, etc.
   }

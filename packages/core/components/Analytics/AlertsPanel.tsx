@@ -2,9 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { Alert, AlertDescription } from '../ui/Alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { AlertTriangle, DollarSign, TrendingUp, Clock, X, Check, Bell, BellOff, Filter } from 'lucide-react';
+import { AlertTriangle, DollarSign, TrendingUp, Clock, X, Check, BellOff, Filter } from 'lucide-react';
 
 /**
  * Alert severity colors
@@ -30,7 +29,7 @@ const ALERT_TYPE_ICONS = {
  * Alert item props
  */
 interface AlertItemProps {
-  alert: any;
+  alert: unknown;
   onAcknowledge: (alertId: string) => void;
   onDismiss?: (alertId: string) => void;
 }
@@ -158,7 +157,7 @@ const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }
  * Alert summary card props
  */
 interface AlertSummaryProps {
-  alerts: any[];
+  alerts: unknown[];
   title: string;
   icon: React.ReactNode;
   color: string;
@@ -197,7 +196,7 @@ const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, co
  * Alerts panel props
  */
 export interface AlertsPanelProps {
-  alerts: any[];
+  alerts: unknown[];
   onAcknowledge: (alertId: string) => void;
   onDismiss?: (alertId: string) => void;
   showSummary?: boolean;

@@ -60,8 +60,8 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({
     hasMore: false
   });
   
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [analytics, setAnalytics] = useState<any>(null);
+  const [_____showCreateModal, setShowCreateModal] = useState(false);
+  const [analytics, setAnalytics] = useState<unknown>(null);
   const [knowledgeBase, setKnowledgeBase] = useState<KnowledgeBaseArticle[]>([]);
 
   // Load help requests

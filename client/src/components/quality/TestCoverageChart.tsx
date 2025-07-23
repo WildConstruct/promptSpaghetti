@@ -132,7 +132,7 @@ export const TestCoverageChart: React.FC<TestCoverageChartProps> = ({
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: unknown, index: number) => (
             <div key={index} className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-2">
                 <div 

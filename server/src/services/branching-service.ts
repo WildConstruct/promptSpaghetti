@@ -1,4 +1,4 @@
-import { z } from 'zod';
+// import { z } from 'zod';
 import { DatabaseClient } from '../database/client';
 import { 
   ProjectBranch,
@@ -43,9 +43,9 @@ import {
 
 export class BranchingService {
   private db: DatabaseClient;
-  private readonly logger: any;
+  private readonly logger: unknown;
 
-  constructor(db: DatabaseClient, logger: any) {
+  constructor(db: DatabaseClient, logger: unknown) {
     this.db = db;
     this.logger = logger;
   }
@@ -151,7 +151,7 @@ export class BranchingService {
     }
 
     const updateFields: string[] = [];
-    const updateValues: any[] = [];
+    const updateValues: unknown[] = [];
     let paramIndex = 1;
 
     if (validatedRequest.displayName !== undefined) {
@@ -283,7 +283,7 @@ export class BranchingService {
       SELECT * FROM project_branches
       WHERE 1=1
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     // Build dynamic query based on filter
@@ -706,7 +706,7 @@ export class BranchingService {
     return mergeCommitId.id;
   }
 
-  private async findCommonAncestor(sourceBranchId: string, targetBranchId: string): Promise<BranchCommit | null> {
+  private async findCommonAncestor(____sourceBranchId: string, ____targetBranchId: string): Promise<BranchCommit | null> {
     // Simplified common ancestor finding - would need graph traversal
     return null;
   }
@@ -729,7 +729,7 @@ export class BranchingService {
   }
 
   // Database row mapping methods
-  private mapDatabaseRowToBranch(row: any): ProjectBranch {
+  private mapDatabaseRowToBranch(row: unknown): ProjectBranch {
     return {
       id: row.id,
       projectId: row.project_id,
@@ -759,7 +759,7 @@ export class BranchingService {
     };
   }
 
-  private mapDatabaseRowToCommit(row: any): BranchCommit {
+  private mapDatabaseRowToCommit(row: unknown): BranchCommit {
     return {
       id: row.id,
       branchId: row.branch_id,
@@ -776,7 +776,7 @@ export class BranchingService {
     };
   }
 
-  private mapDatabaseRowToMergeRequest(row: any): BranchMergeRequest {
+  private mapDatabaseRowToMergeRequest(row: unknown): BranchMergeRequest {
     return {
       id: row.id,
       projectId: row.project_id,
@@ -807,7 +807,7 @@ export class BranchingService {
     };
   }
 
-  private mapDatabaseRowToConflict(row: any): BranchConflict {
+  private mapDatabaseRowToConflict(row: unknown): BranchConflict {
     return {
       id: row.id,
       sourceBranchId: row.source_branch_id,

@@ -115,7 +115,7 @@ export interface AssignmentRule {
 export interface AssignmentCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in';
-  value: any;
+  value: Error;
   weight: number;
 }
 
@@ -835,7 +835,7 @@ export class ReviewerAssignmentService {
     client: PoolClient,
     assignmentId: string,
     action: string,
-    details: any
+    details: unknown
   ): Promise<void> {
     await client.query(`
       INSERT INTO assignment_history
@@ -865,7 +865,7 @@ export class ReviewerAssignmentService {
     }
   }
 
-  private mapToReviewerProfile(row: any): ReviewerProfile {
+  private mapToReviewerProfile(row: unknown): ReviewerProfile {
     return {
       id: row.id,
       user_id: row.user_id,
@@ -881,7 +881,7 @@ export class ReviewerAssignmentService {
     };
   }
 
-  private mapToReviewAssignment(row: any): ReviewAssignment {
+  private mapToReviewAssignment(row: unknown): ReviewAssignment {
     return {
       id: row.id,
       review_item_id: row.review_item_id,

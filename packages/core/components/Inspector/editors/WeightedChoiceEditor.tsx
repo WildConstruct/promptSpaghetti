@@ -96,7 +96,9 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
     });
   };
 
-      newWeights[index] = Math.max(0, weight); // Ensure non-negative weights
+  const handleWeightChange = (index: number, weight: number) => {
+    const newWeights = [...weights];
+    newWeights[index] = Math.max(0, weight); // Ensure non-negative weights
     onChange({ weights: newWeights });
   };
 
@@ -432,7 +434,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
                 );
               })}
             </div>
-          ))}
+          )}
         </div>
       </ProgressiveDisclosureSection>
     </div>

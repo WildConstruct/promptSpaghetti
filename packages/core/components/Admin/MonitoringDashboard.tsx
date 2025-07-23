@@ -8,7 +8,6 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { MonitoringInterface } from './MonitoringInterface';
 import { MonitoringWidget, WidgetConfig } from './MonitoringWidgets';
 
 // Dashboard Configuration Types

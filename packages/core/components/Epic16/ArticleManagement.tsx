@@ -349,7 +349,7 @@ export const ArticleEditor: React.FC<{
   const [newTag, setNewTag] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleInputChange = useCallback((field: string, value: any) => {
+  const handleInputChange = useCallback((field: string, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   }, []);
 

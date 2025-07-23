@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ChallengeType, ChallengeDifficulty } from '../../../../server/src/auth/types';
+import { ChallengeType } from '../../../../server/src/auth/types';
 
 // ========================================
 // Types
@@ -549,8 +549,8 @@ export const ChallengeComponent: React.FC<ChallengeComponentProps> = ({
 // Type declarations for external libraries
 declare global {
   interface Window {
-    grecaptcha: any;
-    hcaptcha: any;
+    grecaptcha: unknown;
+    hcaptcha: unknown;
   }
 }
 

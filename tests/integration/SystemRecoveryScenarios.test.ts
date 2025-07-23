@@ -330,7 +330,7 @@ describe('System Recovery and Resilience Scenarios', () => {
         
         // Simulate corrupted state data
         mockStorage.getItem = jest.fn<unknown[], unknown>().mockReturnValue(
-          '{"corrupted": json}' as unknown // Invalid JSON (missing quotes around json value)
+          '{"corrupted": "json"}' // Invalid JSON (missing quotes around json value)
         );
 
         const graph: Graph = {

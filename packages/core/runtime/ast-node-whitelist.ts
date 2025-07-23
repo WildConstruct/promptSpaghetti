@@ -247,7 +247,7 @@ export class ASTNodeWhitelistFilter {
   /**
    * Validate literal values
    */
-  private validateLiteral(node: acorn.Node & { value: any, raw?: string }, blockedNodes: BlockedNodeInfo[]): void {
+  private validateLiteral(node: acorn.Node & { value: Error, raw?: string }, blockedNodes: BlockedNodeInfo[]): void {
     // Check for dangerous string literals that might be used for code injection
     if (typeof node.value === 'string') {
       const dangerousPatterns = [

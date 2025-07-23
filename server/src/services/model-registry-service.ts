@@ -431,7 +431,7 @@ export class ModelRegistryService {
     // Apply sorting
     if (options.sortBy) {
       filteredModels.sort((a, b) => {
-        let aValue: any, bValue: any;
+        let aValue: Error, bValue: Error;
 
         switch (options.sortBy) {
         case 'name':

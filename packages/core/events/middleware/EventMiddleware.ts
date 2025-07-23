@@ -393,7 +393,9 @@ export const createPerformanceMiddleware = (options?: {
 /**
  * Event deduplication middleware
  */
-export   windowMs: number;
+export const createDeduplicationMiddleware = (options: {
+  keyGenerator: (event: BaseEvent) => string;
+  windowMs: number;
   strategy?: 'drop' | 'merge' | 'latest';
 }): EventMiddleware => {
   const {
@@ -449,7 +451,9 @@ export   windowMs: number;
 /**
  * Circuit breaker middleware
  */
-export   resetTimeoutMs: number;
+export const createCircuitBreakerMiddleware = (options: {
+  failureThreshold: number;
+  resetTimeoutMs: number;
   monitorWindowMs: number;
 }): EventMiddleware => {
   const { failureThreshold, resetTimeoutMs, monitorWindowMs } = options;
@@ -512,6 +516,19 @@ export   resetTimeoutMs: number;
 /**
  * Pre-configured middleware collections
  */
-export 
-export 
-export ];
+export const developmentMiddleware = [
+  createLoggingMiddleware({ level: 'info' }),
+  createPerformanceMiddleware({ trackMemoryUsage: true })
+];
+
+export const productionMiddleware = [
+  createRateLimitingMiddleware({ maxRequests: 1000, windowMs: 60000 }),
+  createCircuitBreakerMiddleware({ failureThreshold: 10, resetTimeoutMs: 30000, monitorWindowMs: 60000 })
+];
+
+export const testingMiddleware = [
+  createDeduplicationMiddleware({ 
+    keyGenerator: (event) => `${event.type}_${event.timestamp}`, 
+    windowMs: 1000 
+  })
+];

@@ -2,9 +2,9 @@
 // Safe expression evaluator using acorn AST parsing with enhanced security filtering
 
 import * as acorn from 'acorn';
-import { ASTNodeWhitelistFilter, createConditionalNodeFilter, NodeSafetyLevel } from './ast-node-whitelist';
+import { createConditionalNodeFilter } from './ast-node-whitelist';
 import { createAuditedSafeMathContext, MathFunctionAuditor } from './safe-math-context';
-import { securityAudit, SecuritySeverity, SecurityEventCategory } from './security-audit-logger';
+import { securityAudit } from './security-audit-logger';
 
 /**
  * Token types for expression parsing
@@ -37,7 +37,7 @@ interface Token {
  * AST Node types
  */
 type ASTNode = 
-  | { type: 'Literal'; value: any }
+  | { type: 'Literal'; value: Error }
   | { type: 'Identifier'; name: string }
   | { type: 'BinaryExpression'; operator: string; left: ASTNode; right: ASTNode }
   | { type: 'UnaryExpression'; operator: string; argument: ASTNode }
@@ -442,7 +442,7 @@ type ExtendedAcornNode = acorn.Node & {
   property?: ExtendedAcornNode;
   computed?: boolean;
   name?: string;
-  value?: any;
+  value?: unknown;
   raw?: string;
 };
 
@@ -470,7 +470,7 @@ export class SafeExpressionEvaluator {
   /**
    * Evaluate an expression safely with a given context and enhanced security filtering
    */
-  static evaluate(expression: string, context: Record<string, any>): any {
+  static evaluate(expression: string, context: Record<string, any>): unknown {
     // Parse using acorn
     const ast = this.parseExpressionWithAcorn(expression);
 
@@ -490,7 +490,7 @@ export class SafeExpressionEvaluator {
       const wrappedExpression = `(${expression})`;
       
       // Parse using acorn
-      const program = acorn.parse(wrappedExpression, ACORN_OPTIONS) as any;
+      const program = acorn.parse(wrappedExpression, ACORN_OPTIONS) as unknown;
       
       // Extract the expression from the ExpressionStatement
       if (program.type !== 'Program' || 
@@ -524,7 +524,7 @@ export class SafeExpressionEvaluator {
   }
 
 
-  private static evaluateAST(node: ExtendedAcornNode, context: Record<string, any>): any {
+  private static evaluateAST(node: ExtendedAcornNode, context: Record<string, any>): unknown {
     switch (node.type) {
     case 'Literal':
       return node.value;
@@ -596,7 +596,7 @@ export class SafeExpressionEvaluator {
       if (node.computed) {
         property = String(this.evaluateAST(node.property!, context));
       } else {
-        const propNode = node.property! as any;
+        const propNode = node.property! as unknown;
         property = propNode.name || String(propNode.value);
       }
         
@@ -629,7 +629,7 @@ export class SafeExpressionEvaluator {
       return callee(...args);
       
     default:
-      throw new Error(`Unknown AST node type: ${(node as any).type}`);
+      throw new Error(`Unknown AST node type: ${(node as unknown).type}`);
     }
   }
 
@@ -660,10 +660,10 @@ export class SafeExpressionEvaluator {
     context.Math = createAuditedSafeMathContext('expression-evaluator');
     
     // Add safe utility functions
-    context.getType = (value: any) => typeof value;
-    context.length = (value: any) => value?.length ?? 0;
-    context.isEmpty = (value: any) => !value || value.length === 0;
-    context.includes = (value: any, item: any) => {
+    context.getType = (value: unknown) => typeof value;
+    context.length = (value: unknown) => value?.length ?? 0;
+    context.isEmpty = (value: unknown) => !value || value.length === 0;
+    context.includes = (value: unknown, item: unknown) => {
       if (typeof value === 'string') {
         return String(value).includes(String(item));
       } else if (Array.isArray(value)) {
@@ -680,7 +680,7 @@ export class SafeExpressionEvaluator {
   /**
    * Get Math function audit log
    */
-  static getMathAuditLog(): any[] {
+  static getMathAuditLog(): unknown[] {
     return MathFunctionAuditor.getAuditLog();
   }
   

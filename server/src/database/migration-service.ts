@@ -15,7 +15,7 @@ export class MigrationService {
   /**
    * Migrate corrections from localStorage format to database
    */
-  async migrateFromLocalStorage(localStorageData: any): Promise<{
+  async migrateFromLocalStorage(localStorageData: unknown): Promise<{
     success: boolean;
     importedCount: number;
     errors: string[];
@@ -68,9 +68,9 @@ export class MigrationService {
   /**
    * Parse localStorage data into structured format
    */
-  private parseLocalStorageData(data: any): {
-    rules: any[];
-    preferences?: any;
+  private parseLocalStorageData(data: Record<string, unknown>): {
+    rules: unknown[];
+    preferences?: unknown;
   } | null {
     try {
       // Handle different localStorage formats
@@ -112,7 +112,7 @@ export class MigrationService {
   /**
    * Migrate user preferences
    */
-  private async migrateUserPreferences(preferences: any): Promise<void> {
+  private async migrateUserPreferences(preferences: unknown): Promise<void> {
     // TODO: Implement user preferences migration
     // This would update the user_preferences table with the settings
     console.log('User preferences migration not yet implemented:', preferences);
@@ -121,7 +121,7 @@ export class MigrationService {
   /**
    * Validate migration data before importing
    */
-  validateMigrationData(data: any): {
+  validateMigrationData(data: Record<string, unknown>): {
     valid: boolean;
     errors: string[];
     warnings: string[];
@@ -180,7 +180,7 @@ export class MigrationService {
   /**
    * Validate a single rule
    */
-  private validateRule(rule: any, index: number): string[] {
+  private validateRule(rule: Error, index: number): string[] {
     const errors: string[] = [];
 
     if (!rule.name || typeof rule.name !== 'string') {
@@ -273,7 +273,7 @@ export class MigrationService {
 /**
  * Standalone migration function for CLI usage
  */
-export async function runMigration(localStorageData: any): Promise<void> {
+export async function runMigration(localStorageData: unknown): Promise<void> {
   const migrationService = new MigrationService();
   
   console.log('Starting corrections migration...');

@@ -10,7 +10,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Epic16LearningPathService } from '../../services/Epic16LearningPathService';
 import { LearningPathDashboard } from './LearningPathDashboard';
 import { LearningPathViewer } from './LearningPathViewer';
-export const Epic16LearningPaths = ({ userId, userRole, userTier, onAnalytics, onCertification }) => {
+export const Epic16LearningPaths = ({ userId, userRole, _____userTier, onAnalytics, onCertification }) => {
     // Service initialization
     const learningService = useMemo(() => new Epic16LearningPathService(), []);
     // State management

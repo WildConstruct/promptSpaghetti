@@ -356,9 +356,9 @@ export class ${className} extends CustomNodeBase {
 
       // TODO: Implement your custom node logic here
       ${config.outputs.length === 1 && config.outputs[0].name === 'result' 
-        ? `const result = inputs.input; // Replace with actual logic`
-        : config.outputs.map(output => `const ${output.name} = undefined; // TODO: Implement logic for ${output.name}`).join('\n      ')
-      }
+    ? 'const result = inputs.input; // Replace with actual logic'
+    : config.outputs.map(output => `const ${output.name} = undefined; // TODO: Implement logic for ${output.name}`).join('\n      ')
+}
 
       return {
         outputs: {
@@ -502,12 +502,12 @@ function getTestValue(type: string): any {
 
   function getTestValue(type: string): string {
     switch (type) {
-      case 'string': return "'test string'";
-      case 'number': return "42";
-      case 'boolean': return "true";
-      case 'array': return "[1, 2, 3]";
-      case 'object': return "{ key: 'value' }";
-      default: return "'test value'";
+    case 'string': return '\'test string\'';
+    case 'number': return '42';
+    case 'boolean': return 'true';
+    case 'array': return '[1, 2, 3]';
+    case 'object': return '{ key: \'value\' }';
+    default: return '\'test value\'';
     }
   }
 
@@ -546,8 +546,8 @@ const node = new ${config.displayName.replace(/[^a-zA-Z0-9]/g, '')}('my-node', {
 ## Inputs
 
 ${config.inputs.map(
-  input => `- **${input.name}** (${input.type}${input.required ? ', required' : ', optional'}): ${input.description || 'No description'}`
-).join('\n')}
+    input => `- **${input.name}** (${input.type}${input.required ? ', required' : ', optional'}): ${input.description || 'No description'}`
+  ).join('\n')}
 
 ## Outputs
 

@@ -192,7 +192,7 @@ const ListView = ({ activities, onSelectActivity, compact }) => {
     }
     return (_jsx("div", { className: "space-y-2", children: activities.map(activity => (_jsx(ActivityCard, { activity: activity, onClick: () => onSelectActivity(activity), compact: compact, showDate: true }, activity.id))) }));
 };
-const AnalyticsView = ({ stats, activities }) => {
+const AnalyticsView = ({ stats, _____activities }) => {
     if (!stats)
         return null;
     return (_jsxs("div", { className: "space-y-6", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs(Card, { children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Activity Types" }) }), _jsx(CardContent, { children: _jsx("div", { className: "space-y-3", children: Object.entries(stats.byType)

@@ -116,7 +116,7 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({
   const [healthStatus, setHealthStatus] = useState<HealthStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
+  const [_____selectedComponent, setSelectedComponent] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'components' | 'metrics' | 'alerts' | 'trends'>('overview');
 
   // Fetch health status

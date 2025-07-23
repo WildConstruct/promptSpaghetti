@@ -368,7 +368,7 @@ export class PlacementAnalyticsService {
   /**
    * Stream real-time updates (placeholder for WebSocket implementation)
    */
-  async streamRealTimeUpdates(callback: (data: any) => void): Promise<void> {
+  async streamRealTimeUpdates(callback: (data: Record<string, unknown>) => void): Promise<void> {
     // This would implement WebSocket streaming of real-time metrics
     console.log('📡 Starting real-time metrics stream');
     
@@ -491,7 +491,7 @@ export class PlacementAnalyticsService {
     };
   }
 
-  private async calculateSlotBaseline(slotId: string, period: MetricsPeriod): Promise<PerformanceBaselineData> {
+  private async calculateSlotBaseline(slotId: string, _____period: MetricsPeriod): Promise<PerformanceBaselineData> {
     // Calculate historical averages
     return {
       slotId,
@@ -543,14 +543,14 @@ export class PlacementAnalyticsService {
   private async getActiveSlotsCount(): Promise<number> { return 20; }
   private async getTotalPlacementsCount(): Promise<number> { return 150; }
   private async getActivePlacementsCount(): Promise<number> { return 125; }
-  private async getTotalImpressions(start: Date, end: Date): Promise<number> { return 50000; }
+  private async getTotalImpressions(_____start: Date, _____end: Date): Promise<number> { return 50000; }
   private getSystemLoad(): number { return 65; }
 
   private async calculateAllSlotMetrics(): Promise<void> {
     console.log('🔄 Calculating metrics for all active slots');
   }
 
-  private async calculateOverallPerformance(period: MetricsPeriod): Promise<any> {
+  private async calculateOverallPerformance(_____period: MetricsPeriod): Promise<unknown> {
     return {
       totalImpressions: 100000,
       totalClicks: 5000,
@@ -560,27 +560,27 @@ export class PlacementAnalyticsService {
     };
   }
 
-  private async getTopPerformingSlots(period: MetricsPeriod, limit: number): Promise<PlacementSlotMetrics[]> { return []; }
-  private async getTopPerformingPlacements(period: MetricsPeriod, limit: number): Promise<ContentPlacementMetrics[]> { return []; }
-  private async getTopPerformingCampaigns(period: MetricsPeriod, limit: number): Promise<CampaignMetrics[]> { return []; }
-  private async getPerformanceData(period: MetricsPeriod): Promise<any> { return {}; }
-  private async getUnderperformingPlacements(period: MetricsPeriod): Promise<any[]> { return []; }
-  private async getOptimizationOpportunities(period: MetricsPeriod): Promise<any[]> { return []; }
-  private async analyzeContentPerformance(period: MetricsPeriod): Promise<any> { return {}; }
+  private async getTopPerformingSlots(_____period: MetricsPeriod, _____limit: number): Promise<PlacementSlotMetrics[]> { return []; }
+  private async getTopPerformingPlacements(_____period: MetricsPeriod, _____limit: number): Promise<ContentPlacementMetrics[]> { return []; }
+  private async getTopPerformingCampaigns(_____period: MetricsPeriod, _____limit: number): Promise<CampaignMetrics[]> { return []; }
+  private async getPerformanceData(_____period: MetricsPeriod): Promise<unknown> { return {}; }
+  private async getUnderperformingPlacements(_____period: MetricsPeriod): Promise<any[]> { return []; }
+  private async getOptimizationOpportunities(_____period: MetricsPeriod): Promise<any[]> { return []; }
+  private async analyzeContentPerformance(_____period: MetricsPeriod): Promise<unknown> { return {}; }
 
-  private async generatePerformanceInsights(data: any): Promise<PlacementInsight[]> { return []; }
-  private async generateTrendInsights(data: any): Promise<PlacementInsight[]> { return []; }
-  private async generateOptimizationInsights(data: any): Promise<PlacementInsight[]> { return []; }
+  private async generatePerformanceInsights(_____data: Record<string, unknown>): Promise<PlacementInsight[]> { return []; }
+  private async generateTrendInsights(_____data: Record<string, unknown>): Promise<PlacementInsight[]> { return []; }
+  private async generateOptimizationInsights(_____data: Record<string, unknown>): Promise<PlacementInsight[]> { return []; }
 
-  private generateUnderperformanceRecommendations(data: any[]): PlacementRecommendation[] { return []; }
-  private generateOptimizationRecommendations(data: any[]): PlacementRecommendation[] { return []; }
-  private generateContentRecommendations(data: any): PlacementRecommendation[] { return []; }
+  private generateUnderperformanceRecommendations(_____data: Record<string, unknown>[]): PlacementRecommendation[] { return []; }
+  private generateOptimizationRecommendations(_____data: Record<string, unknown>[]): PlacementRecommendation[] { return []; }
+  private generateContentRecommendations(_____data: Record<string, unknown>): PlacementRecommendation[] { return []; }
 
   // Storage methods
-  private async storeSlotMetrics(metrics: PlacementSlotMetrics): Promise<void> {}
-  private async storePlacementMetrics(metrics: ContentPlacementMetrics): Promise<void> {}
-  private async storeCampaignMetrics(metrics: CampaignMetrics): Promise<void> {}
-  private async storePerformanceBaseline(baseline: PerformanceBaselineData): Promise<void> {}
-  private async storeInsight(insight: PlacementInsight): Promise<void> {}
-  private async storeRecommendation(recommendation: PlacementRecommendation): Promise<void> {}
+  private async storeSlotMetrics(_____metrics: PlacementSlotMetrics): Promise<void> {}
+  private async storePlacementMetrics(_____metrics: ContentPlacementMetrics): Promise<void> {}
+  private async storeCampaignMetrics(_____metrics: CampaignMetrics): Promise<void> {}
+  private async storePerformanceBaseline(_____baseline: PerformanceBaselineData): Promise<void> {}
+  private async storeInsight(_____insight: PlacementInsight): Promise<void> {}
+  private async storeRecommendation(_____recommendation: PlacementRecommendation): Promise<void> {}
 }

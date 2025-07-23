@@ -26,7 +26,7 @@ interface StatusOverride {
   priority: 'LOW' | 'NORMAL' | 'HIGH' | 'EMERGENCY';
   
   // Override configuration
-  overrideValue?: any;
+  overrideValue?: unknown;
   percentageOverride?: number;
   targetingOverride?: string[];
   
@@ -70,7 +70,7 @@ const ToggleStatusOverridePanel: React.FC<ToggleStatusOverridePanelProps> = ({
   const [activeOverrides, setActiveOverrides] = useState<StatusOverride[]>([]);
   const [loading, setLoading] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [selectedOverrideType, setSelectedOverrideType] = useState<string>('FORCE_ENABLE');
+  const [___selectedOverrideType, ___setSelectedOverrideType] = useState<string>('FORCE_ENABLE');
   
   // Form state for creating new overrides
   const [newOverride, setNewOverride] = useState({

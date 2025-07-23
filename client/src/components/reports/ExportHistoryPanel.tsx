@@ -14,7 +14,7 @@ import { Badge } from '../ui/badge';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { Alert, AlertDescription } from '../ui/alert';
+import { // Alert // Unused import, // AlertDescription // Unused import } from '../ui/alert';
 import {
   Table,
   TableBody,
@@ -203,7 +203,7 @@ export const ExportHistoryPanel: React.FC = () => {
   });
 
   // Get format icon
-  const getFormatIcon = (format: string) => {
+  const getFormatIcon = (___format: string) => {
     return <FileText className="w-4 h-4" />;
   };
 
@@ -217,7 +217,7 @@ export const ExportHistoryPanel: React.FC = () => {
   };
 
   // Get status badge
-  const getStatusBadge = (success: boolean, error?: string) => {
+  const getStatusBadge = (success: boolean, ___error?: string) => {
     if (success) {
       return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Success</Badge>;
     } else {

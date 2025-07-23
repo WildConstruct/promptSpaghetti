@@ -5,7 +5,6 @@
  */
 
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { FilePreview } from './FilePreview';
 import { PSGFile, projectManager } from '../../projectManager';
 
 interface RecentFilesProps {

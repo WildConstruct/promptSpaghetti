@@ -72,7 +72,7 @@ const TEAM_MEMBERS = [
         avatar: '/avatars/pipeline-td.jpg'
     }
 ];
-export const AnnotationToolsDemo = ({ className = '', title = 'VFX Annotation Tools Demonstration', showAllTools = true, readonly = false, initialUser = DEFAULT_USER }) => {
+export const AnnotationToolsDemo = ({ className = '', title = 'VFX Annotation Tools Demonstration', _____showAllTools = true, readonly = false, initialUser = DEFAULT_USER }) => {
     // State for current user and selected tools
     const [currentUser, setCurrentUser] = useState(initialUser);
     const [selectedNode, setSelectedNode] = useState('node-002');

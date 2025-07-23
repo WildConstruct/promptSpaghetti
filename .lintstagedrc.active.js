@@ -1,13 +1,13 @@
 module.exports = {
-  // TypeScript and TSX files - very permissive linting, no auto-fix to prevent corruption
+  // TypeScript and TSX files - more permissive linting
   '*.{ts,tsx}': [
-    'eslint --max-warnings 200', // Extremely permissive - allow up to 200 warnings
+    'eslint --fix --max-warnings 10', // Allow up to 10 warnings without failing
     'prettier --write --ignore-unknown'
   ],
   
   // JavaScript and JSX files - more permissive linting
   '*.{js,jsx}': [
-    'eslint --fix --max-warnings 100', // Allow up to 100 warnings without failing
+    'eslint --fix --max-warnings 5', // Allow up to 5 warnings without failing
     'prettier --write --ignore-unknown'
   ],
   
@@ -31,9 +31,9 @@ module.exports = {
     'prettier --write --ignore-unknown'
   ],
   
-  // Special handling for test files - no auto-fix to prevent corruption
+  // Special handling for test files - auto-fixed by pre-commit
   '*.{test,spec}.{ts,tsx,js,jsx}': [
-    'eslint --max-warnings 500', // Extremely permissive for test files
+    'eslint --fix --max-warnings 20', // Should be clean after auto-fixing
     'prettier --write --ignore-unknown'
   ],
   

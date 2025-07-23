@@ -15,7 +15,7 @@ export const VersionHistoryPanel = ({ versionManager, currentGraphData, onRestor
     const [selectedSnapshots, setSelectedSnapshots] = useState(new Set());
     const [searchQuery, setSearchQuery] = useState('');
     const [dateFilter, setDateFilter] = useState('all');
-    const [authorFilter, setAuthorFilter] = useState('');
+    const [authorFilter, _____setAuthorFilter] = useState('');
     useEffect(() => {
         if (isOpen) {
             loadData();
@@ -199,7 +199,7 @@ const SnapshotTimeline = ({ snapshots, selectedSnapshots, onSnapshotSelect, onRe
                     ? 'border-blue-300 bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300'}`, children: _jsxs("div", { className: "flex items-start space-x-3", children: [_jsx("input", { type: "checkbox", checked: selectedSnapshots.has(snapshot.id), onChange: (e) => onSnapshotSelect(snapshot.id, e.target.checked), className: "mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsxs("div", { className: "flex items-center space-x-2 mb-1", children: [_jsxs("span", { className: `text-xs px-2 py-1 rounded-full ${getSnapshotTypeColor(snapshot.snapshot_type)}`, children: [getSnapshotTypeIcon(snapshot.snapshot_type), " ", snapshot.snapshot_type] }), snapshot.version_tag && (_jsx("span", { className: "text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full", children: snapshot.version_tag }))] }), _jsx("h4", { className: "text-sm font-medium text-gray-900 truncate", children: snapshot.title || `Version ${snapshot.version_number}` }), snapshot.description && (_jsx("p", { className: "text-xs text-gray-600 mt-1 line-clamp-2", children: snapshot.description })), _jsxs("div", { className: "flex items-center justify-between mt-2 text-xs text-gray-500", children: [_jsx("span", { children: formatTimeAgo(snapshot.created_at) }), _jsxs("span", { children: [snapshot.node_count, " nodes"] })] })] }), _jsx("div", { className: "flex flex-col space-y-1", children: _jsx("button", { onClick: () => onRestore(snapshot.id), className: "text-xs px-2 py-1 text-blue-600 hover:bg-blue-100 rounded transition-colors", title: "Restore this version", children: "Restore" }) })] }) }, snapshot.id))) })) }));
 };
-const BranchView = ({ branches, snapshots, selectedBranch, onBranchSelect, formatTimeAgo }) => {
+const BranchView = ({ branches, _____snapshots, selectedBranch, onBranchSelect, formatTimeAgo }) => {
     const getBranchIcon = (type) => {
         switch (type) {
             case 'main': return '🌳';

@@ -16,7 +16,7 @@ import { VersionSnapshot } from '../../version-history/VersionHistoryManager';
 
 interface VersionRestoreDialogProps {
   snapshot: VersionSnapshot;
-  currentGraphData: any;
+  currentGraphData: unknown;
   restoreManager: VersionRestoreManager;
   isOpen: boolean;
   onClose: () => void;

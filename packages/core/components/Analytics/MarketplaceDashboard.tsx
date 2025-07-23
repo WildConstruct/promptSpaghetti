@@ -49,7 +49,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
 
   const [selectedMetric, setSelectedMetric] = useState<'revenue' | 'downloads' | 'rating'>('revenue');
   const [topTemplates, setTopTemplates] = useState<any[]>([]);
-  const [searchData, setSearchData] = useState<any>(null);
+  const [searchData, setSearchData] = useState<unknown>(null);
 
   useEffect(() => {
     if (!isLoading && dashboardData) {
@@ -197,7 +197,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
         </CardHeader>
         <CardContent>
           <div className="categories-list">
-            {dashboardData.trends.topCategories.map((category: any, index: number) => (
+            {dashboardData.trends.topCategories.map((category: unknown, index: number) => (
               <div key={category.category} className="category-item">
                 <div className="category-info">
                   <div className="category-rank">#{index + 1}</div>
@@ -225,7 +225,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
         <CardHeader>
           <div className="templates-header">
             <CardTitle>Top Performing Templates</CardTitle>
-            <Select value={selectedMetric} onValueChange={(value: any) => setSelectedMetric(value)}>
+            <Select value={selectedMetric} onValueChange={(value: Error) => setSelectedMetric(value)}>
               <SelectTrigger className="w-48">
                 <SelectValue />
               </SelectTrigger>
@@ -303,7 +303,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
           </CardHeader>
           <CardContent>
             <div className="queries-list">
-              {searchData.topQueries?.slice(0, 8).map((query: any, index: number) => (
+              {searchData.topQueries?.slice(0, 8).map((query: unknown, index: number) => (
                 <div key={query.query} className="query-item">
                   <div className="query-rank">#{index + 1}</div>
                   <div className="query-info">
@@ -330,7 +330,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({
         </CardHeader>
         <CardContent>
           <div className="insights-list">
-            {insights.map((insight: any, index: number) => (
+            {insights.map((insight: unknown, index: number) => (
               <div key={index} className={`insight-item ${insight.impact}`}>
                 <div className="insight-icon">
                   {insight.type === 'opportunity' && <TrendingUp className="w-5 h-5" />}

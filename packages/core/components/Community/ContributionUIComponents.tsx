@@ -11,7 +11,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Input } from '../ui/Input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { 
   Upload, 
   Save, 
@@ -264,14 +263,14 @@ export class ContributionValidator {
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
-  errorInfo?: any;
+  errorInfo?: unknown;
 }
 
 export class ContributionErrorBoundary extends React.Component<
   { children: React.ReactNode; onError?: (error: Error) => void },
   ErrorBoundaryState
 > {
-  constructor(props: any) {
+  constructor(props: Record<string, unknown>) {
     super(props);
     this.state = { hasError: false };
   }
@@ -280,7 +279,7 @@ export class ContributionErrorBoundary extends React.Component<
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
+  componentDidCatch(error: Error, errorInfo: unknown) {
     this.setState({ errorInfo });
     
     // Log error for monitoring
@@ -393,7 +392,7 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({
   }, [formData, onSaveDraft, isSubmitting, isDraftSaving]);
 
   // Form update handlers with error handling
-  const updateFormData = useCallback((field: keyof ContributionFormData, value: any) => {
+  const updateFormData = useCallback((field: keyof ContributionFormData, value: Error) => {
     try {
       setFormData(prev => ({
         ...prev,

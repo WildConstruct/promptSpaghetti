@@ -53,7 +53,7 @@ export const StatusControls = ({ className = '', adminLevel = 'admin', onService
     const [systemOverview, setSystemOverview] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [refreshInterval, setRefreshInterval] = useState(null);
+    const [_____refreshInterval, setRefreshInterval] = useState(null);
     // Mock data - in real implementation, this would come from system APIs
     useEffect(() => {
         loadSystemData();

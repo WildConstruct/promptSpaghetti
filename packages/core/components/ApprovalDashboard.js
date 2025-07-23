@@ -8,7 +8,7 @@ export const ApprovalDashboard = ({ workspaceId, currentUserId, mode = 'reviewer
     const [reviewerAssignments, setReviewerAssignments] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedRequest, setSelectedRequest] = useState(null);
+    const [_____selectedRequest, setSelectedRequest] = useState(null);
     const [activeTab, setActiveTab] = useState('pending');
     const [expandedRequests, setExpandedRequests] = useState(new Set());
     const [filters, setFilters] = useState({

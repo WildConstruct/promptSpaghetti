@@ -10,7 +10,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { FileItem } from './types';
+// FileItem type removed - not needed for this component
 import { useAuthStore } from '../../stores/authStore';
 
 interface QuickNavigationProps {
@@ -153,7 +153,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({
       // Load custom bookmarks
       const savedBookmarks = localStorage.getItem('quickNavigationBookmarks');
       if (savedBookmarks) {
-        const parsed = JSON.parse(savedBookmarks).map((bookmark: any) => ({
+        const parsed = JSON.parse(savedBookmarks).map((bookmark: unknown) => ({
           ...bookmark,
           createdAt: new Date(bookmark.createdAt)
         }));

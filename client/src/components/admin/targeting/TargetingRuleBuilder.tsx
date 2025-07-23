@@ -19,7 +19,7 @@ interface TargetingRule {
   id: string;
   attribute: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains' | 'regex' | 'exists' | 'not_exists';
-  value: any;
+  value: Error;
   logicalOperator?: 'AND' | 'OR';
 }
 

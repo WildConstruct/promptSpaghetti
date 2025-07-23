@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Slider } from '../ui/Slider';
 import { Film, Palette, Clock, Globe, Layers, Eye, Settings, TrendingUp, AlertTriangle, CheckCircle, Play, Pause, SkipForward, Rewind, Camera, Users, Map, Brush, Zap } from 'lucide-react';
-export const VFXPipelineVisualizer = ({ scene, scenes = [], realTimeUpdate = true, showControls = true, onSceneUpdate, className = '' }) => {
+export const VFXPipelineVisualizer = ({ scene, scenes = [], _____realTimeUpdate = true, showControls = true, _____onSceneUpdate, className = '' }) => {
     const [activeView, setActiveView] = useState('scene');
     const [selectedScene, setSelectedScene] = useState(scene || scenes[0]);
     const [viewMode, setViewMode] = useState('2d');
@@ -83,7 +83,7 @@ export const VFXPipelineVisualizer = ({ scene, scenes = [], realTimeUpdate = tru
     };
     // Real-time Performance Metrics Visualization
     const PerformanceMetricsVisualizer = ({ scene }) => {
-        const [metrics, setMetrics] = useState({
+        const [metrics, _____setMetrics] = useState({
             renderTime: Math.random() * 120 + 80, // 80-200ms
             memoryUsage: Math.random() * 40 + 20, // 20-60%
             polyCount: scene.assets.length * 125000,

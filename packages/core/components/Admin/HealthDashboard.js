@@ -17,7 +17,7 @@ autoRefresh = true, showDetails = true, onAlertAction }) => {
     const [healthStatus, setHealthStatus] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedComponent, setSelectedComponent] = useState(null);
+    const [_____selectedComponent, setSelectedComponent] = useState(null);
     const [activeTab, setActiveTab] = useState('overview');
     // Fetch health status
     const fetchHealthStatus = useCallback(async () => {

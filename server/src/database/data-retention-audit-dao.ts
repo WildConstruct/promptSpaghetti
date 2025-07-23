@@ -314,7 +314,7 @@ export class DataRetentionAuditDAO {
 
   // Private Helper Methods
 
-  private mapDataRetentionAuditToParams(audit: Omit<DataRetentionAuditRecord, 'id' | 'createdAt' | 'updatedAt'>): any[] {
+  private mapDataRetentionAuditToParams(audit: Omit<DataRetentionAuditRecord, 'id' | 'createdAt' | 'updatedAt'>): unknown[] {
     return [
       audit.operationId,
       audit.correlationId,
@@ -371,7 +371,7 @@ export class DataRetentionAuditDAO {
     ];
   }
 
-  private mapDataSubjectRightsAuditToParams(audit: Omit<DataSubjectRightsAuditRecord, 'id' | 'createdAt' | 'updatedAt'>): any[] {
+  private mapDataSubjectRightsAuditToParams(audit: Omit<DataSubjectRightsAuditRecord, 'id' | 'createdAt' | 'updatedAt'>): unknown[] {
     return [
       audit.requestId,
       audit.dataSubjectId,
@@ -409,7 +409,7 @@ export class DataRetentionAuditDAO {
     ];
   }
 
-  private mapComplianceMonitoringAuditToParams(audit: Omit<ComplianceMonitoringAuditRecord, 'id' | 'createdAt' | 'updatedAt'>): any[] {
+  private mapComplianceMonitoringAuditToParams(audit: Omit<ComplianceMonitoringAuditRecord, 'id' | 'createdAt' | 'updatedAt'>): unknown[] {
     return [
       audit.monitoringEventId,
       audit.complianceFramework,
@@ -449,7 +449,7 @@ export class DataRetentionAuditDAO {
     ];
   }
 
-  private mapRowToDataRetentionAudit(row: any): DataRetentionAuditRecord {
+  private mapRowToDataRetentionAudit(row: unknown): DataRetentionAuditRecord {
     return {
       id: row.id,
       timestamp: row.timestamp,

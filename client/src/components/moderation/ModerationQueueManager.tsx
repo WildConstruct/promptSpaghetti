@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, // useEffect // Unused import, useMemo } from 'react';
 import './ModerationQueueManager.css';
 
 interface ModerationItem {
@@ -35,8 +35,8 @@ interface QueueFilters {
 interface ModerationQueueManagerProps {
   items: ModerationItem[];
   moderators: Array<{ id: string; name: string; online: boolean }>;
-  onItemAction: (itemId: string, action: string, data: any) => void;
-  onBulkAction: (itemIds: string[], action: string, data: any) => void;
+  onItemAction: (itemId: string, action: string, data: Record<string, unknown>) => void;
+  onBulkAction: (itemIds: string[], action: string, data: Record<string, unknown>) => void;
   currentUserId: string;
 }
 
@@ -61,10 +61,10 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
   const [sortBy, setSortBy] = useState<string>('priority');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'grid' | 'detailed'>('list');
-  const [showBulkActions, setShowBulkActions] = useState(false);
+  const [___showBulkActions, setShowBulkActions] = useState(false);
 
   const filteredAndSortedItems = useMemo(() => {
-    let filtered = items.filter(item => {
+    const filtered = items.filter(item => {
       if (filters.status !== 'all' && item.status !== filters.status) return false;
       if (filters.type !== 'all' && item.type !== filters.type) return false;
       if (filters.priority !== 'all' && item.priority !== filters.priority) return false;
@@ -72,7 +72,7 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
       
       if (filters.riskLevel !== 'all') {
         const riskThreshold = filters.riskLevel === 'high' ? 70 : 
-                             filters.riskLevel === 'medium' ? 40 : 10;
+          filters.riskLevel === 'medium' ? 40 : 10;
         if (item.riskScore < riskThreshold) return false;
       }
 
@@ -90,21 +90,21 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
       let compareValue = 0;
       
       switch (sortBy) {
-        case 'priority':
-          const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
-          compareValue = priorityOrder[a.priority] - priorityOrder[b.priority];
-          break;
-        case 'date':
-          compareValue = a.createdAt.getTime() - b.createdAt.getTime();
-          break;
-        case 'risk':
-          compareValue = a.riskScore - b.riskScore;
-          break;
-        case 'type':
-          compareValue = a.type.localeCompare(b.type);
-          break;
-        default:
-          return 0;
+      case 'priority':
+        const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+        compareValue = priorityOrder[a.priority] - priorityOrder[b.priority];
+        break;
+      case 'date':
+        compareValue = a.createdAt.getTime() - b.createdAt.getTime();
+        break;
+      case 'risk':
+        compareValue = a.riskScore - b.riskScore;
+        break;
+      case 'type':
+        compareValue = a.type.localeCompare(b.type);
+        break;
+      default:
+        return 0;
       }
 
       return sortOrder === 'asc' ? compareValue : -compareValue;
@@ -142,11 +142,11 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case 'critical': return '🔥';
-      case 'high': return '⚡';
-      case 'medium': return '⚠️';
-      case 'low': return '🔵';
-      default: return '';
+    case 'critical': return '🔥';
+    case 'high': return '⚡';
+    case 'medium': return '⚠️';
+    case 'low': return '🔵';
+    default: return '';
     }
   };
 

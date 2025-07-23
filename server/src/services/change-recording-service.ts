@@ -66,8 +66,8 @@ export interface ChangeRecord {
 export interface FieldChange {
   fieldPath: string; // Dot notation path (e.g., 'user.profile.email')
   fieldType: FieldType;
-  oldValue: any;
-  newValue: any;
+  oldValue: Error;
+  newValue: Error;
   changeOperation: ChangeOperation;
   
   // Change analysis
@@ -885,7 +885,7 @@ export class ChangeRecordingService extends EventEmitter {
     const sortOrder = filter.sortOrder || 'desc';
     
     records.sort((a, b) => {
-      let aVal: any, bVal: any;
+      let aVal: unknown, bVal: unknown;
       
       switch (sortBy) {
       case 'timestamp':
@@ -1202,7 +1202,7 @@ export class ChangeRecordingService extends EventEmitter {
     );
   }
 
-  private getNestedKeys(obj: any, prefix = ''): string[] {
+  private getNestedKeys(obj: unknown, prefix = ''): string[] {
     const keys: string[] = [];
     
     for (const key in obj) {
@@ -1219,15 +1219,15 @@ export class ChangeRecordingService extends EventEmitter {
     return keys;
   }
 
-  private getNestedValue(obj: any, path: string): any {
+  private getNestedValue(obj: unknown, path: string): unknown {
     return path.split('.').reduce((current, key) => current?.[key], obj);
   }
 
-  private isEqual(a: any, b: any): boolean {
+  private isEqual(a: unknown, b: unknown): boolean {
     return JSON.stringify(a) === JSON.stringify(b);
   }
 
-  private determineOperation(oldValue: any, newValue: any): ChangeOperation {
+  private determineOperation(oldValue: Error, newValue: Error): ChangeOperation {
     if (oldValue === undefined && newValue !== undefined) return 'set';
     if (oldValue !== undefined && newValue === undefined) return 'unset';
     if (Array.isArray(oldValue) && Array.isArray(newValue)) {
@@ -1237,7 +1237,7 @@ export class ChangeRecordingService extends EventEmitter {
     return 'update';
   }
 
-  private determineFieldType(value: any): FieldType {
+  private determineFieldType(value: Error): FieldType {
     if (value === null || value === undefined) return 'primitive';
     if (Array.isArray(value)) return 'array';
     if (typeof value === 'object') return 'object';
@@ -1246,8 +1246,8 @@ export class ChangeRecordingService extends EventEmitter {
 
   private assessFieldSignificance(
     fieldPath: string, 
-    oldValue: any, 
-    newValue: any
+    oldValue: Error, 
+    newValue: Error
   ): ChangeSeverity {
     // Security-related fields are always major
     if (this.isSecurityRelevantField(fieldPath)) return 'major';
@@ -1293,8 +1293,8 @@ export class ChangeRecordingService extends EventEmitter {
   
   private calculateComplexity(
     fieldChanges: FieldChange[],
-    beforeState: Record<string, any>,
-    afterState: Record<string, any>
+    _____beforeState: Record<string, any>,
+    _____afterState: Record<string, any>
   ): 'simple' | 'moderate' | 'complex' | 'critical' {
     const changeCount = fieldChanges.length;
     const securityChanges = fieldChanges.filter(fc => fc.isSecurityRelevant).length;
@@ -1365,10 +1365,10 @@ export class ChangeRecordingService extends EventEmitter {
   }
 
   private async detectAnomalies(
-    resourceType: string,
-    resourceId: string,
-    fieldChanges: FieldChange[],
-    context: ChangeContext
+    _____resourceType: string,
+    _____resourceId: string,
+    _____fieldChanges: FieldChange[],
+    _____context: ChangeContext
   ): Promise<ChangeAnomaly[]> {
     const anomalies: ChangeAnomaly[] = [];
     
@@ -1390,7 +1390,7 @@ export class ChangeRecordingService extends EventEmitter {
   private async analyzeFrequency(
     resourceType: string,
     resourceId: string,
-    fieldChanges: FieldChange[]
+    _____fieldChanges: FieldChange[]
   ): Promise<{
     isFrequentChange: boolean;
     changeFrequency: number;
@@ -1414,7 +1414,7 @@ export class ChangeRecordingService extends EventEmitter {
   private async findRelatedChanges(
     resourceType: string,
     resourceId: string,
-    fieldChanges: FieldChange[]
+    _____fieldChanges: FieldChange[]
   ): Promise<string[]> {
     // Find changes to the same resource in the last hour
     const cutoff = new Date(Date.now() - 60 * 60 * 1000);
@@ -1496,7 +1496,7 @@ export class ChangeRecordingService extends EventEmitter {
   }
 
   // Stub implementations for remaining methods
-  private determineChangeType(beforeState: any, afterState: any, context: ChangeContext): ChangeType {
+  private determineChangeType(beforeState: Error, afterState: Error, _____context: ChangeContext): ChangeType {
     if (!beforeState || Object.keys(beforeState).length === 0) return 'create';
     if (!afterState || Object.keys(afterState).length === 0) return 'delete';
     return 'update';

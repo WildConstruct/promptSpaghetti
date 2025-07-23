@@ -594,55 +594,55 @@ export class ReferralDetectionService extends EventEmitter {
     const touchpoints = referral.touchpointSequence;
     
     switch (referral.attributionModel) {
-      case AttributionModel.FIRST_TOUCH:
-        touchpoints.forEach((tp, index) => {
-          tp.weight = index === 0 ? 1.0 : 0.0;
-        });
-        break;
+    case AttributionModel.FIRST_TOUCH:
+      touchpoints.forEach((tp, index) => {
+        tp.weight = index === 0 ? 1.0 : 0.0;
+      });
+      break;
         
-      case AttributionModel.LAST_TOUCH:
-        touchpoints.forEach((tp, index) => {
-          tp.weight = index === touchpoints.length - 1 ? 1.0 : 0.0;
-        });
-        break;
+    case AttributionModel.LAST_TOUCH:
+      touchpoints.forEach((tp, index) => {
+        tp.weight = index === touchpoints.length - 1 ? 1.0 : 0.0;
+      });
+      break;
         
-      case AttributionModel.LINEAR:
-        const linearWeight = 1.0 / touchpoints.length;
-        touchpoints.forEach(tp => {
-          tp.weight = linearWeight;
-        });
-        break;
+    case AttributionModel.LINEAR:
+      const linearWeight = 1.0 / touchpoints.length;
+      touchpoints.forEach(tp => {
+        tp.weight = linearWeight;
+      });
+      break;
         
-      case AttributionModel.TIME_DECAY:
-        const halfLife = 604800; // 7 days in seconds
-        const now = Date.now();
-        touchpoints.forEach(tp => {
-          const ageSeconds = (now - tp.timestamp.getTime()) / 1000;
-          tp.weight = Math.pow(0.5, ageSeconds / halfLife);
-        });
-        // Normalize weights
-        const totalWeight = touchpoints.reduce((sum, tp) => sum + tp.weight, 0);
-        touchpoints.forEach(tp => {
-          tp.weight = tp.weight / totalWeight;
-        });
-        break;
+    case AttributionModel.TIME_DECAY:
+      const halfLife = 604800; // 7 days in seconds
+      const now = Date.now();
+      touchpoints.forEach(tp => {
+        const ageSeconds = (now - tp.timestamp.getTime()) / 1000;
+        tp.weight = Math.pow(0.5, ageSeconds / halfLife);
+      });
+      // Normalize weights
+      const totalWeight = touchpoints.reduce((sum, tp) => sum + tp.weight, 0);
+      touchpoints.forEach(tp => {
+        tp.weight = tp.weight / totalWeight;
+      });
+      break;
         
-      case AttributionModel.POSITION_BASED:
-        // 40% first, 40% last, 20% middle
-        if (touchpoints.length === 1) {
-          touchpoints[0].weight = 1.0;
-        } else if (touchpoints.length === 2) {
-          touchpoints[0].weight = 0.5;
-          touchpoints[1].weight = 0.5;
-        } else {
-          touchpoints[0].weight = 0.4;
-          touchpoints[touchpoints.length - 1].weight = 0.4;
-          const middleWeight = 0.2 / (touchpoints.length - 2);
-          for (let i = 1; i < touchpoints.length - 1; i++) {
-            touchpoints[i].weight = middleWeight;
-          }
+    case AttributionModel.POSITION_BASED:
+      // 40% first, 40% last, 20% middle
+      if (touchpoints.length === 1) {
+        touchpoints[0].weight = 1.0;
+      } else if (touchpoints.length === 2) {
+        touchpoints[0].weight = 0.5;
+        touchpoints[1].weight = 0.5;
+      } else {
+        touchpoints[0].weight = 0.4;
+        touchpoints[touchpoints.length - 1].weight = 0.4;
+        const middleWeight = 0.2 / (touchpoints.length - 2);
+        for (let i = 1; i < touchpoints.length - 1; i++) {
+          touchpoints[i].weight = middleWeight;
         }
-        break;
+      }
+      break;
     }
   }
 
@@ -1006,21 +1006,21 @@ export class ReferralDetectionService extends EventEmitter {
 
   private updatePerformanceMetrics(operation: string, processingTime?: number): void {
     switch (operation) {
-      case 'tracked':
-        this.performanceMetrics.totalReferrals++;
-        break;
-      case 'converted':
-        this.performanceMetrics.totalConversions++;
-        this.performanceMetrics.conversionRate = 
+    case 'tracked':
+      this.performanceMetrics.totalReferrals++;
+      break;
+    case 'converted':
+      this.performanceMetrics.totalConversions++;
+      this.performanceMetrics.conversionRate = 
           this.performanceMetrics.totalReferrals > 0 ? 
-          (this.performanceMetrics.totalConversions / this.performanceMetrics.totalReferrals) * 100 : 0;
-        break;
-      case 'fraud_detected':
-        this.performanceMetrics.totalFraudDetected++;
-        this.performanceMetrics.fraudRate = 
+            (this.performanceMetrics.totalConversions / this.performanceMetrics.totalReferrals) * 100 : 0;
+      break;
+    case 'fraud_detected':
+      this.performanceMetrics.totalFraudDetected++;
+      this.performanceMetrics.fraudRate = 
           this.performanceMetrics.totalReferrals > 0 ? 
-          (this.performanceMetrics.totalFraudDetected / this.performanceMetrics.totalReferrals) * 100 : 0;
-        break;
+            (this.performanceMetrics.totalFraudDetected / this.performanceMetrics.totalReferrals) * 100 : 0;
+      break;
     }
 
     if (processingTime) {

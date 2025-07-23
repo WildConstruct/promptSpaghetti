@@ -6,7 +6,6 @@
  */
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { MarketplaceTemplate } from './MarketplaceCard';
 
 export interface SearchFilters {
   priceRange: [number, number]; // in cents
@@ -136,7 +135,7 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({
     updateFilters({ tags: filters.tags.filter(tag => tag !== tagToRemove) });
   };
 
-  const formatPrice = (cents: number) => {
+  const _____formatPrice = (cents: number) => {
     return `$${(cents / 100).toFixed(0)}`;
   };
 

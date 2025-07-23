@@ -2,7 +2,7 @@
 // Visualization for lock queue management
 
 import React from 'react';
-import { Clock, User, AlertTriangle, X } from 'lucide-react';
+import { Clock, User, X } from 'lucide-react';
 import { LockQueue } from '../types/locking';
 
 interface LockQueueVisualizationProps {

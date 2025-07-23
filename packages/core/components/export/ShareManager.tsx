@@ -40,7 +40,7 @@ export const ShareManager: React.FC<ShareManagerProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
-  const [selectedShare, setSelectedShare] = useState<ExportShare | null>(null);
+  const [_____selectedShare, setSelectedShare] = useState<ExportShare | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {

@@ -9,7 +9,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-import { Pool, PoolClient } from 'pg';
+import { Pool } from 'pg';
 import { Logger } from '@nestjs/common';
 import { ReviewerAssignmentService, ReviewType, AssignmentStrategy } from './ReviewerAssignmentService.js';
 import { 
@@ -606,7 +606,7 @@ export class ReviewProcessService {
     return assignments.map(a => a.reviewer_id);
   }
 
-  private async evaluateCondition(condition: string, context: any): Promise<boolean> {
+  private async evaluateCondition(condition: string, context: unknown): Promise<boolean> {
     // Simple condition evaluation - in production, use a proper expression evaluator
     try {
       // This is a simplified implementation
@@ -666,8 +666,8 @@ export class ReviewProcessService {
     }
 
     // Simple majority rule - can be made more sophisticated
-    const approvals = decisions.filter((d: any) => d.decision === 'approve').length;
-    const rejections = decisions.filter((d: any) => d.decision === 'reject').length;
+    const approvals = decisions.filter((d: unknown) => d.decision === 'approve').length;
+    const rejections = decisions.filter((d: unknown) => d.decision === 'reject').length;
 
     if (approvals > rejections) {
       return 'approve';
@@ -889,51 +889,51 @@ export class ReviewProcessService {
   }
 
   // Placeholder methods for unimplemented functionality
-  private async executeAutoApproval(reviewItem: ReviewItem, autoApprovalResult: any): Promise<string> {
+  private async executeAutoApproval(___reviewItem: ReviewItem, ___autoApprovalResult: unknown): Promise<string> {
     throw new Error('Method not implemented');
   }
 
-  private async recordDecision(reviewProcess: ReviewProcess, decision: ReviewDecision): Promise<void> {
+  private async recordDecision(___reviewProcess: ReviewProcess, ___decision: ReviewDecision): Promise<void> {
     // Implementation needed
   }
 
-  private async evaluateConsensusRequirement(reviewProcess: ReviewProcess, template: ReviewProcessTemplate): Promise<void> {
+  private async evaluateConsensusRequirement(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<void> {
     // Implementation needed
   }
 
-  private async executeEscalationAction(reviewProcess: ReviewProcess, action: EscalationAction): Promise<void> {
+  private async executeEscalationAction(___reviewProcess: ReviewProcess, ___action: EscalationAction): Promise<void> {
     // Implementation needed
   }
 
-  private async logProcessEvent(processId: string, eventType: string, data: any): Promise<void> {
+  private async logProcessEvent(___processId: string, ___eventType: string, ___data: Record<string, unknown>): Promise<void> {
     // Implementation needed
   }
 
-  private async scheduleStageTimeout(processId: string, stageId: string, timeoutMinutes: number): Promise<void> {
+  private async scheduleStageTimeout(___processId: string, ___stageId: string, ___timeoutMinutes: number): Promise<void> {
     // Implementation needed
   }
 
-  private async executeStageAction(reviewProcess: ReviewProcess, action: StageAction): Promise<void> {
+  private async executeStageAction(___reviewProcess: ReviewProcess, ___action: StageAction): Promise<void> {
     // Implementation needed
   }
 
-  private async calculateFinalDecision(reviewProcess: ReviewProcess, template: ReviewProcessTemplate): Promise<DecisionType> {
+  private async calculateFinalDecision(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<DecisionType> {
     return 'approve'; // Placeholder
   }
 
-  private async isConsensusReached(reviewProcess: ReviewProcess, template: ReviewProcessTemplate): Promise<boolean> {
+  private async isConsensusReached(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<boolean> {
     return false; // Placeholder
   }
 
-  private async generateProcessResult(reviewProcess: ReviewProcess, template: ReviewProcessTemplate, finalDecision: DecisionType): Promise<ReviewProcessResult> {
+  private async generateProcessResult(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate, ___finalDecision: DecisionType): Promise<ReviewProcessResult> {
     return {} as ReviewProcessResult; // Placeholder
   }
 
-  private async saveProcessResult(result: ReviewProcessResult): Promise<void> {
+  private async saveProcessResult(___result: ReviewProcessResult): Promise<void> {
     // Implementation needed
   }
 
-  private async sendProcessCompletionNotifications(reviewProcess: ReviewProcess, template: ReviewProcessTemplate, result: ReviewProcessResult): Promise<void> {
+  private async sendProcessCompletionNotifications(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate, ___result: ReviewProcessResult): Promise<void> {
     // Implementation needed
   }
 }

@@ -4,7 +4,6 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Alert, AlertDescription } from '../ui/Alert';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 import { 
   Lightbulb, 
@@ -48,7 +47,7 @@ const RECOMMENDATION_TYPE_ICONS = {
  * Recommendation item props
  */
 interface RecommendationItemProps {
-  recommendation: any;
+  recommendation: unknown;
   onApply?: (recommendationId: string) => void;
   onDismiss?: (recommendationId: string) => void;
   onFeedback?: (recommendationId: string, feedback: 'positive' | 'negative') => void;
@@ -256,7 +255,7 @@ const RecommendationItem: React.FC<RecommendationItemProps> = ({
  * Recommendation summary props
  */
 interface RecommendationSummaryProps {
-  recommendations: any[];
+  recommendations: unknown[];
   onRefresh?: () => void;
 }
 
@@ -343,7 +342,7 @@ const RecommendationSummary: React.FC<RecommendationSummaryProps> = ({
  * Recommendations panel props
  */
 export interface RecommendationsPanelProps {
-  recommendations: any[];
+  recommendations: unknown[];
   analyticsClient: AnalyticsClient;
   userId?: number;
   organizationId?: number;

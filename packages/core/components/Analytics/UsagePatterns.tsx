@@ -6,9 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Alert, AlertDescription } from '../ui/Alert';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
-import { Activity, Calendar, Clock, MousePointer, Route, Users, Eye, Map } from 'lucide-react';
-import { HeatMapGrid } from 'react-grid-heatmap';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Area, AreaChart, Sankey, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts';
+import { Activity, Calendar, Clock, MousePointer, Route, Eye, Map } from 'lucide-react';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Area, AreaChart } from 'recharts';
 
 /**
  * Heat map component props
@@ -86,7 +85,7 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
 /**
  * User journey flow component
  */
-const UserJourneyFlow: React.FC<{ journeyData: any[] }> = ({ journeyData }) => {
+const UserJourneyFlow: React.FC<{ journeyData: unknown[] }> = ({ journeyData }) => {
   if (!journeyData || journeyData.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
@@ -137,11 +136,11 @@ export interface UsagePatternsProps {
 interface UsagePatternsState {
   loading: boolean;
   error: string | null;
-  heatMapData: any[];
-  hourlyPattern: any;
-  dailyPattern: any;
-  weeklyPattern: any;
-  journeyFlows: any[];
+  heatMapData: unknown[];
+  hourlyPattern: unknown;
+  dailyPattern: unknown;
+  weeklyPattern: unknown;
+  journeyFlows: unknown[];
   selectedPattern: 'hourly' | 'daily' | 'weekly';
 }
 
@@ -240,10 +239,10 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
   /**
    * Format pattern data for charts
    */
-  const formatPatternData = useCallback((patternData: any) => {
+  const formatPatternData = useCallback((patternData: unknown) => {
     if (!patternData || !patternData.data) return [];
 
-    return patternData.data.map((item: any) => ({
+    return patternData.data.map((item: unknown) => ({
       period: new Date(item.period).toLocaleDateString(),
       value: item.value,
       timestamp: new Date(item.period).getTime()
@@ -258,7 +257,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({
 
     const hourlyData = new Array(24).fill(0);
     
-    state.hourlyPattern.data.forEach((item: any) => {
+    state.hourlyPattern.data.forEach((item: unknown) => {
       const hour = new Date(item.period).getHours();
       hourlyData[hour] += item.value;
     });

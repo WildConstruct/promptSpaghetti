@@ -33,13 +33,13 @@ const getFilmmakerFriendlyName = (nodeType) => {
     };
     return friendlyNames[nodeType] || nodeType;
 };
-export const SmoothInspectorPanel = ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth = 320, minWidth = 280, maxWidth = 600 }) => {
+export const SmoothInspectorPanel = ({ node, schema, onChange, _____onClose, _____onGlobalPreviewRequest, _____initialWidth = 320, minWidth = 280, maxWidth = 600 }) => {
     const [isResizing, setIsResizing] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const [isMaximized, setIsMaximized] = useState(false);
     const resizeRef = useRef(null);
     // UI Settings
-    const { debugMode, setDebugMode, shouldShowTechnicalFields, complexityLevel, setComplexityLevel, shouldShowAdvancedFeatures } = useUISettingsStore();
+    const { debugMode, setDebugMode, _____shouldShowTechnicalFields, _____complexityLevel, _____setComplexityLevel, _____shouldShowAdvancedFeatures } = useUISettingsStore();
     // Smooth hover states
     const collapseHover = useSmoothHover();
     const debugHover = useSmoothHover();

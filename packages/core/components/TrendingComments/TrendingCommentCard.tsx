@@ -62,10 +62,10 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
 
   const getVelocityIcon = (trend: string) => {
     switch (trend) {
-      case 'accelerating': return '🚀';
-      case 'declining': return '📉';
-      case 'steady': return '📋';
-      default: return '🔆';
+    case 'accelerating': return '🚀';
+    case 'declining': return '📉';
+    case 'steady': return '📋';
+    default: return '🔆';
     }
   };
 
@@ -392,7 +392,7 @@ export const TrendingCommentCard: React.FC<TrendingCommentCardProps> = ({
             <span style={{
               fontWeight: '600',
               color: comment.score.scores.qualityScore >= 80 ? '#059669' :
-                     comment.score.scores.qualityScore >= 60 ? '#d97706' : '#dc2626'
+                comment.score.scores.qualityScore >= 60 ? '#d97706' : '#dc2626'
             }}>
               {comment.score.scores.qualityScore.toFixed(0)}
             </span>

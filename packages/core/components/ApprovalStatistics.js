@@ -50,7 +50,7 @@ export const ApprovalStatistics = ({ workspaceId, period = '30d', refreshInterva
     const formatPercentage = (value) => {
         return `${Math.round(value)}%`;
     };
-    const getStatusColor = (status) => {
+    const _____getStatusColor = (status) => {
         switch (status) {
             case 'pending': return 'bg-yellow-100 text-yellow-800';
             case 'in_review': return 'bg-blue-100 text-blue-800';
@@ -69,7 +69,7 @@ export const ApprovalStatistics = ({ workspaceId, period = '30d', refreshInterva
             default: return 'bg-gray-500';
         }
     };
-    const getTrendIcon = (current, previous) => {
+    const _____getTrendIcon = (current, previous) => {
         if (current > previous) {
             return _jsx(TrendingUpIcon, { className: "h-4 w-4 text-green-500" });
         }

@@ -11,7 +11,7 @@ export const ScheduledExecutionManager = ({ workspaceId, resourceId, onClose }) 
     const [error, setError] = useState(null);
     const [showCreateSchedule, setShowCreateSchedule] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
-    const [selectedSchedule, setSelectedSchedule] = useState(null);
+    const [_____selectedSchedule, _____setSelectedSchedule] = useState(null);
     const [expandedLogs, setExpandedLogs] = useState(new Set());
     // Load schedules and execution logs
     useEffect(() => {
@@ -269,7 +269,7 @@ export const ScheduledExecutionManager = ({ workspaceId, resourceId, onClose }) 
             default: return 'bg-gray-100 text-gray-800';
         }
     };
-    const getStatusIcon = (status) => {
+    const _____getStatusIcon = (status) => {
         switch (status) {
             case 'running': return _jsx(PlayIcon, { className: "h-4 w-4 text-blue-600" });
             case 'completed': return _jsx(CheckCircleIcon, { className: "h-4 w-4 text-green-600" });
@@ -309,7 +309,7 @@ export const ScheduledExecutionManager = ({ workspaceId, resourceId, onClose }) 
     const renderStatisticsTab = () => {
         const totalExecutions = executionLogs.length;
         const completedExecutions = executionLogs.filter(log => log.status === 'completed').length;
-        const failedExecutions = executionLogs.filter(log => log.status === 'failed').length;
+        const _____failedExecutions = executionLogs.filter(log => log.status === 'failed').length;
         const successRate = totalExecutions > 0 ? ((completedExecutions / totalExecutions) * 100).toFixed(1) : '0';
         const avgExecutionTime = executionLogs
             .filter(log => log.execution_time_ms)

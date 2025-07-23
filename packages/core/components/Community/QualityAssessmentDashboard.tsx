@@ -44,7 +44,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'detailed' | 'recommendations' | 'workflow' | 'review'>('overview');
   const [runningAssessment, setRunningAssessment] = useState(false);
-  const [showFlagModal, setShowFlagModal] = useState(false);
+  const [_____showFlagModal, setShowFlagModal] = useState(false);
 
   const qualityService = new ContentQualityAssessmentService(null); // API client would be injected
 

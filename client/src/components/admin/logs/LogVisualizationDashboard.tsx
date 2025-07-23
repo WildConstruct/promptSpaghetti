@@ -194,8 +194,8 @@ const SimpleChart: React.FC<{ data: ChartData[]; height?: number; type?: 'line' 
 export const LogVisualizationDashboard: React.FC = () => {
   const [timeRange, setTimeRange] = useState<string>('1h');
   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
-  const [selectedSources, setSelectedSources] = useState<string[]>(LOG_SOURCES);
-  const [selectedLevels, setSelectedLevels] = useState<string[]>(['warn', 'error', 'fatal']);
+  const [selectedSources, ___setSelectedSources] = useState<string[]>(LOG_SOURCES);
+  const [___selectedLevels, ___setSelectedLevels] = useState<string[]>(['warn', 'error', 'fatal']);
   const [loading, setLoading] = useState<boolean>(false);
   const [metrics, setMetrics] = useState<LogMetrics | null>(null);
   const [sources, setSources] = useState<LogSource[]>([]);
@@ -252,7 +252,7 @@ export const LogVisualizationDashboard: React.FC = () => {
         }));
         
         // Process alerts data
-        const processedAlerts: PatternAlert[] = alertsData.alerts.map((alert: any) => ({
+        const processedAlerts: PatternAlert[] = alertsData.alerts.map((alert: unknown) => ({
           id: alert.alert_id,
           type: alert.anomaly_type,
           severity: alert.severity,

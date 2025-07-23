@@ -42,7 +42,7 @@ export interface PlaybookExecutionContext {
   executionId: string;
   playbookId: string;
   triggerSource: Epic17System;
-  triggerEvent: any;
+  triggerEvent: unknown;
   severity: ActionSeverity;
   timestamp: Date;
   executionMetadata: ExecutionMetadata;
@@ -160,7 +160,7 @@ export class Epic17PlaybookOrchestrator {
   async executePlaybook(
     playbookId: string,
     triggerSource: Epic17System,
-    triggerEvent: any,
+    triggerEvent: unknown,
     options: {
       manualTrigger?: boolean;
       userId?: string;
@@ -485,7 +485,7 @@ export class Epic17PlaybookOrchestrator {
     action: PlaybookAction,
     context: PlaybookExecutionContext,
     dryRun: boolean = false
-  ): Promise<any> {
+  ): Promise<unknown> {
     if (dryRun) {
       console.log(`📝 DRY RUN - Would execute ${action.actionType} on ${action.targetSystem}`);
       return { status: 'dry_run_success', action: action.actionType };
@@ -630,7 +630,7 @@ export class Epic17PlaybookOrchestrator {
    */
   async handleHealthCheckFailure(
     healthCheckId: string,
-    failureData: any
+    failureData: unknown
   ): Promise<void> {
     console.log(`🚨 Health check failure detected: ${healthCheckId}`);
 
@@ -670,7 +670,7 @@ export class Epic17PlaybookOrchestrator {
   // Action Execution Methods (Epic 17 Specific)
   // =============================================================================
 
-  private async executeFeatureToggleAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> {
+  private async executeFeatureToggleAction(action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> {
     const { featureFlag, enabled, rollbackConfig } = action.parameters;
     
     console.log(`🎛️ ${enabled ? 'Enabling' : 'Disabling'} feature flag: ${featureFlag}`);
@@ -686,7 +686,7 @@ export class Epic17PlaybookOrchestrator {
     };
   }
 
-  private async executeEmergencyKillSwitchAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> {
+  private async executeEmergencyKillSwitchAction(action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> {
     const { scope, reason } = action.parameters;
     
     console.log(`🛑 Activating emergency kill switch: ${scope}`);
@@ -701,7 +701,7 @@ export class Epic17PlaybookOrchestrator {
     };
   }
 
-  private async executeUserSuspensionAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> {
+  private async executeUserSuspensionAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<unknown> {
     const { userId, reason, duration } = action.parameters;
     
     console.log(`👤 Suspending user account: ${userId}`);
@@ -739,7 +739,7 @@ export class Epic17PlaybookOrchestrator {
     };
   }
 
-  private async executeContentQuarantineAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> {
+  private async executeContentQuarantineAction(action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> {
     const { contentId, contentType, reason } = action.parameters;
     
     console.log(`🔒 Quarantining content: ${contentType} ${contentId}`);
@@ -754,8 +754,8 @@ export class Epic17PlaybookOrchestrator {
     };
   }
 
-  private async executeNotificationAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> {
-    const { recipients, message, urgency, channels } = action.parameters;
+  private async executeNotificationAction(action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> {
+    const { recipients, _____message, urgency, channels } = action.parameters;
     
     console.log(`📧 Sending notifications to ${recipients.length} recipients`);
     
@@ -797,7 +797,7 @@ export class Epic17PlaybookOrchestrator {
     return `CR-${Date.now()}-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
   }
 
-  private determineSeverity(triggerEvent: any, playbook: Epic17IncidentPlaybook): ActionSeverity {
+  private determineSeverity(triggerEvent: unknown, playbook: Epic17IncidentPlaybook): ActionSeverity {
     // Logic to determine severity based on trigger event and playbook context
     return triggerEvent.severity || playbook.epic17Context.businessImpact.severity || 'medium';
   }
@@ -829,28 +829,28 @@ export class Epic17PlaybookOrchestrator {
   }
 
   // Placeholder methods for complex operations
-  private async validatePrerequisites(playbook: Epic17IncidentPlaybook, context: PlaybookExecutionContext): Promise<void> {
+  private async validatePrerequisites(playbook: Epic17IncidentPlaybook, _____context: PlaybookExecutionContext): Promise<void> {
     // Validate that all prerequisites are met before execution
     console.log(`✅ Prerequisites validated for playbook ${playbook.id}`);
   }
 
-  private async validateStepConditions(step: PlaybookStep, context: PlaybookExecutionContext): Promise<boolean> {
+  private async validateStepConditions(_____step: PlaybookStep, _____context: PlaybookExecutionContext): Promise<boolean> {
     // Validate step conditions
     return true;
   }
 
-  private async validateStepCompletion(step: PlaybookStep, context: PlaybookExecutionContext, result: any): Promise<{ valid: boolean; error?: string }> {
+  private async validateStepCompletion(_____step: PlaybookStep, _____context: PlaybookExecutionContext, _____result: Record<string, unknown>): Promise<{ valid: boolean; error?: string }> {
     // Validate step completed successfully
     return { valid: true };
   }
 
-  private async executeRollbackAction(action: PlaybookAction, context: PlaybookExecutionContext, dryRun: boolean): Promise<any> {
+  private async executeRollbackAction(action: PlaybookAction, _____context: PlaybookExecutionContext, _____dryRun: boolean): Promise<unknown> {
     // Execute rollback action
     console.log(`🔄 Executing rollback action: ${action.actionType}`);
     return { status: 'rollback_success' };
   }
 
-  private async executeRecoveryProcedure(procedure: RecoveryProcedure, context: PlaybookExecutionContext, dryRun: boolean): Promise<{ success: boolean }> {
+  private async executeRecoveryProcedure(procedure: RecoveryProcedure, _____context: PlaybookExecutionContext, _____dryRun: boolean): Promise<{ success: boolean }> {
     // Execute recovery procedure
     console.log(`🔧 Executing recovery procedure: ${procedure.name}`);
     return { success: true };
@@ -899,12 +899,12 @@ export class Epic17PlaybookOrchestrator {
   }
 
   // Placeholder implementation methods
-  private async requestApprovalAndExecute(playbook: Epic17IncidentPlaybook, triggerSource: Epic17System, triggerEvent: any, options: any): Promise<PlaybookExecutionResult> {
+  private async requestApprovalAndExecute(_____playbook: Epic17IncidentPlaybook, _____triggerSource: Epic17System, _____triggerEvent: unknown, _____options: unknown): Promise<PlaybookExecutionResult> {
     // Implementation for approval workflow
     throw new Error('Approval workflow not yet implemented');
   }
 
-  private async updatePerformanceMetrics(playbookId: string, result: PlaybookExecutionResult): Promise<void> {
+  private async updatePerformanceMetrics(playbookId: string, _____result: PlaybookExecutionResult): Promise<void> {
     // Update performance metrics
     console.log(`📊 Updating performance metrics for playbook ${playbookId}`);
   }
@@ -924,7 +924,7 @@ export class Epic17PlaybookOrchestrator {
     });
   }
 
-  private shouldTriggerPlaybook(trigger: HealthCheckTrigger, failureData: any): boolean {
+  private shouldTriggerPlaybook(_____trigger: HealthCheckTrigger, _____failureData: unknown): boolean {
     // Logic to determine if playbook should be triggered
     return true;
   }
@@ -954,32 +954,32 @@ export class Epic17PlaybookOrchestrator {
     console.log('🔌 Validating Epic17 integrations...');
   }
 
-  private mapRowToPlaybook(row: any): Epic17IncidentPlaybook {
+  private mapRowToPlaybook(row: unknown): Epic17IncidentPlaybook {
     // Map database row to playbook object
     return JSON.parse(row.playbook_data);
   }
 
   // Placeholder action execution methods
-  private async executeFeatureRollbackAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeServiceRestartAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeResourceScalingAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeTrafficDrainAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeIPBlockAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executePermissionRevocationAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeDataBackupAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeDataRestoreAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeStatusPageUpdateAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeStakeholderAlertAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeConfigurationUpdateAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeConfigurationResetAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeMonitoringIncreaseAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
-  private async executeDiagnosticsCollectionAction(action: PlaybookAction, context: PlaybookExecutionContext): Promise<any> { return { status: 'success' }; }
+  private async executeFeatureRollbackAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeServiceRestartAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeResourceScalingAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeTrafficDrainAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeIPBlockAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executePermissionRevocationAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeDataBackupAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeDataRestoreAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeStatusPageUpdateAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeStakeholderAlertAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeConfigurationUpdateAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeConfigurationResetAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeMonitoringIncreaseAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
+  private async executeDiagnosticsCollectionAction(_____action: PlaybookAction, _____context: PlaybookExecutionContext): Promise<unknown> { return { status: 'success' }; }
 }
 
 // Supporting interfaces
 interface StepExecutionResult {
   success: boolean;
-  result?: any;
+  result?: unknown;
   error?: string;
   severity?: ActionSeverity;
   duration: number;

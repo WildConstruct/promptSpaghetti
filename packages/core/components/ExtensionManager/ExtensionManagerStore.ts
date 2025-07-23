@@ -6,7 +6,6 @@
 import { create } from 'zustand';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
-import { extensionUpgradeAdvisor } from '../../extensions/ExtensionUpgradeAdvisor';
 
 export interface ExtensionStatus {
   enabled: boolean;

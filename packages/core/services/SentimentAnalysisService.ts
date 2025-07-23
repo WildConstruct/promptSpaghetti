@@ -906,14 +906,14 @@ export class SentimentAnalysisService {
 
   private generateMockFeedback(): string {
     const feedbacks = [
-      "This is an amazing template! Really helpful for my project.",
-      "The interface could be more intuitive, but overall it's good.",
-      "I'm having trouble with the loading times. It's quite slow.",
-      "Excellent work! This solved exactly what I needed.",
-      "The documentation needs improvement, but the functionality is solid.",
-      "Not what I expected. The design feels outdated.",
-      "Perfect! Easy to use and well-designed.",
-      "Some bugs here and there, but generally works well."
+      'This is an amazing template! Really helpful for my project.',
+      'The interface could be more intuitive, but overall it\'s good.',
+      'I\'m having trouble with the loading times. It\'s quite slow.',
+      'Excellent work! This solved exactly what I needed.',
+      'The documentation needs improvement, but the functionality is solid.',
+      'Not what I expected. The design feels outdated.',
+      'Perfect! Easy to use and well-designed.',
+      'Some bugs here and there, but generally works well.'
     ];
     
     return feedbacks[Math.floor(Math.random() * feedbacks.length)];
@@ -933,8 +933,8 @@ export class SentimentAnalysisService {
         return {
           type: sentiment,
           score: sentiment === 'positive' ? 0.3 + Math.random() * 0.7 :
-                 sentiment === 'negative' ? -0.7 - Math.random() * 0.3 :
-                 -0.2 + Math.random() * 0.4,
+            sentiment === 'negative' ? -0.7 - Math.random() * 0.3 :
+              -0.2 + Math.random() * 0.4,
           confidence: 0.6 + Math.random() * 0.4,
           magnitude: 0.3 + Math.random() * 0.7,
           subjectivity: 0.4 + Math.random() * 0.5

@@ -43,7 +43,7 @@ const VERIFICATION_STEPS = [
         required: false
     }
 ];
-export const VerificationRequestForm = ({ userId, onSubmit, onCancel }) => {
+export const VerificationRequestForm = ({ _____userId, onSubmit, onCancel }) => {
     const [currentStep, setCurrentStep] = useState('email');
     const [formData, setFormData] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);

@@ -386,7 +386,7 @@ export class WorkflowService {
   // VALIDATION HELPERS
   // =============================================================================
 
-  async validateStateTransition(resourceId: string, toStateId: string): Promise<{
+  async validateStateTransition(_____resourceId: string, _____toStateId: string): Promise<{
     valid: boolean;
     transition?: WorkflowTransition;
     error?: string;
@@ -396,7 +396,7 @@ export class WorkflowService {
     return { valid: true };
   }
 
-  async canUserTransitionState(userId: string, resourceId: string, toStateId: string): Promise<boolean> {
+  async canUserTransitionState(_____userId: string, _____resourceId: string, _____toStateId: string): Promise<boolean> {
     // This would check user permissions against the transition requirements
     return true;
   }

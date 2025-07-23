@@ -36,10 +36,10 @@ export interface CreateSlotRequest {
   position: PlacementPosition;
   maxItems: number;
   minItems?: number;
-  dimensions: any;
-  layout: any;
-  targetingRules?: any;
-  displayRules?: any;
+  dimensions: unknown;
+  layout: unknown;
+  targetingRules?: unknown;
+  displayRules?: unknown;
   priority?: number;
   tags?: string[];
 }
@@ -49,10 +49,10 @@ export interface UpdateSlotRequest {
   description?: string;
   maxItems?: number;
   minItems?: number;
-  dimensions?: any;
-  layout?: any;
-  targetingRules?: any;
-  displayRules?: any;
+  dimensions?: unknown;
+  layout?: unknown;
+  targetingRules?: unknown;
+  displayRules?: unknown;
   priority?: number;
   isActive?: boolean;
   tags?: string[];
@@ -66,9 +66,9 @@ export interface CreatePlacementRequest {
   weight?: number;
   startTime?: Date;
   endTime?: Date;
-  targetingOverrides?: any;
-  customStyling?: any;
-  customData?: any;
+  targetingOverrides?: unknown;
+  customStyling?: unknown;
+  customData?: unknown;
   experimentId?: string;
   variantId?: string;
   notes?: string;
@@ -81,9 +81,9 @@ export interface UpdatePlacementRequest {
   startTime?: Date;
   endTime?: Date;
   status?: PlacementStatus;
-  targetingOverrides?: any;
-  customStyling?: any;
-  customData?: any;
+  targetingOverrides?: unknown;
+  customStyling?: unknown;
+  customData?: unknown;
   notes?: string;
   tags?: string[];
 }
@@ -178,7 +178,7 @@ export class PlacementManagementService {
       WHERE 1=1
     `;
     
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (criteria.placementArea) {
@@ -231,7 +231,7 @@ export class PlacementManagementService {
       throw new Error(`Placement slot not found: ${slotId}`);
     }
 
-    const updateData: any = {
+    const updateData: unknown = {
       updated_at: new Date(),
       last_modified_by: updatedBy
     };
@@ -410,7 +410,7 @@ export class PlacementManagementService {
       WHERE 1=1
     `;
     
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     // Apply filters
@@ -495,7 +495,7 @@ export class PlacementManagementService {
       throw new Error(`Content placement not found: ${placementId}`);
     }
 
-    const updateData: any = {
+    const updateData: unknown = {
       updated_at: new Date(),
       last_modified_by: updatedBy
     };
@@ -582,7 +582,7 @@ export class PlacementManagementService {
    */
   async generatePlacementPreview(
     slotId: string,
-    viewerContext: any,
+    viewerContext: unknown,
     previewMode: 'live' | 'staged' | 'test' = 'test'
   ): Promise<PlacementPreview> {
     console.log(`👁️ Generating placement preview for slot: ${slotId}`);
@@ -632,7 +632,7 @@ export class PlacementManagementService {
   /**
    * Get placement slot metrics
    */
-  async getSlotMetrics(slotId: string, period: any): Promise<PlacementSlotMetrics> {
+  async getSlotMetrics(slotId: string, period: unknown): Promise<PlacementSlotMetrics> {
     const [
       impressions,
       clicks,
@@ -675,7 +675,7 @@ export class PlacementManagementService {
   /**
    * Get placement analytics
    */
-  async getPlacementAnalytics(period: any): Promise<PlacementAnalytics> {
+  async getPlacementAnalytics(period: unknown): Promise<PlacementAnalytics> {
     console.log('📊 Generating placement analytics', period);
 
     const [
@@ -712,7 +712,7 @@ export class PlacementManagementService {
   // Private Helper Methods
   // =============================================================================
 
-  private hydratePlacementSlot(row: any): PlacementSlot {
+  private hydratePlacementSlot(row: unknown): PlacementSlot {
     return {
       slotId: row.slot_id,
       name: row.name,
@@ -737,7 +737,7 @@ export class PlacementManagementService {
     };
   }
 
-  private hydrateContentPlacement(row: any): ContentPlacement {
+  private hydrateContentPlacement(row: unknown): ContentPlacement {
     return {
       placementId: row.placement_id,
       slotId: row.slot_id,
@@ -776,7 +776,7 @@ export class PlacementManagementService {
     return `prev-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private getDefaultStyling(): any {
+  private getDefaultStyling(): unknown {
     return {
       backgroundColor: 'transparent',
       borderRadius: 0,
@@ -852,7 +852,7 @@ export class PlacementManagementService {
     }
   }
 
-  private calculateDefaultPriority(slotId: string): number {
+  private calculateDefaultPriority(_____slotId: string): number {
     return 50; // Default middle priority
   }
 
@@ -870,7 +870,7 @@ export class PlacementManagementService {
     return PlacementStatus.ACTIVE;
   }
 
-  private determineApprovalRequirement(slot: PlacementSlot, request: CreatePlacementRequest): any {
+  private determineApprovalRequirement(slot: PlacementSlot, _____request: CreatePlacementRequest): unknown {
     // Auto-approve for most placements, require review for high-visibility slots
     if (slot.placementArea === PlacementArea.HOMEPAGE || slot.position === PlacementPosition.HERO_BANNER) {
       return 'pending';
@@ -893,33 +893,33 @@ export class PlacementManagementService {
   }
 
   // Placeholder methods for advanced functionality
-  private async getPlacementsForSlot(slotId: string, mode: string): Promise<ContentPlacement[]> { return []; }
+  private async getPlacementsForSlot(_____slotId: string, _____mode: string): Promise<ContentPlacement[]> { return []; }
   private async applyTargetingRules(
     placements: ContentPlacement[],
-    context: any,
-    rules: any
+    _____context: unknown,
+    _____rules: unknown
   ): Promise<ContentPlacement[]> { return placements; }
   private sortPlacementsByPriority(placements: ContentPlacement[]): ContentPlacement[] { return placements; }
   private async renderPlacementContent(
-    placements: ContentPlacement[],
-    slot: PlacementSlot
+    _____placements: ContentPlacement[],
+    _____slot: PlacementSlot
   ): Promise<any[]> { return []; }
   private async estimatePerformance(
-    placements: ContentPlacement[],
-    slot: PlacementSlot,
-    context: any
-  ): Promise<any> { return {}; }
+    _____placements: ContentPlacement[],
+    _____slot: PlacementSlot,
+    _____context: unknown
+  ): Promise<unknown> { return {}; }
   
   // Analytics placeholder methods
-  private async getSlotImpressions(slotId: string, period: any): Promise<number> { return 1000; }
-  private async getSlotClicks(slotId: string, period: any): Promise<number> { return 50; }
-  private async getSlotConversions(slotId: string, period: any): Promise<number> { return 5; }
-  private async getSlotRevenue(slotId: string, period: any): Promise<number> { return 250; }
-  private async getSlotLoadTime(slotId: string, period: any): Promise<number> { return 450; }
+  private async getSlotImpressions(_____slotId: string, _____period: unknown): Promise<number> { return 1000; }
+  private async getSlotClicks(_____slotId: string, _____period: unknown): Promise<number> { return 50; }
+  private async getSlotConversions(_____slotId: string, _____period: unknown): Promise<number> { return 5; }
+  private async getSlotRevenue(_____slotId: string, _____period: unknown): Promise<number> { return 250; }
+  private async getSlotLoadTime(_____slotId: string, _____period: unknown): Promise<number> { return 450; }
   private async getTotalSlotsCount(): Promise<number> { return 25; }
   private async getActiveSlotsCount(): Promise<number> { return 20; }
-  private async getTotalPlacementsCount(period: any): Promise<number> { return 150; }
-  private async getOverallPerformanceMetrics(period: any): Promise<any> {
+  private async getTotalPlacementsCount(_____period: unknown): Promise<number> { return 150; }
+  private async getOverallPerformanceMetrics(_____period: unknown): Promise<unknown> {
     return {
       totalImpressions: 50000,
       totalClicks: 2500,

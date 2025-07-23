@@ -9,7 +9,6 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { Textarea } from '../ui/Textarea';
 import { 
   Workflow,
   Play,
@@ -101,7 +100,7 @@ export const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>
 }) => {
   const [activeTab, setActiveTab] = useState('workflows');
   const [selectedWorkflow, setSelectedWorkflow] = useState<EnforcementWorkflow | null>(null);
-  const [isDesignerOpen, setIsDesignerOpen] = useState(false);
+  const [_____isDesignerOpen, setIsDesignerOpen] = useState(false);
 
   // Mock enforcement actions
   const [enforcementActions] = useState<EnforcementAction[]>([

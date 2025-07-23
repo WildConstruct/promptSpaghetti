@@ -64,7 +64,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({
   onRequestUpdate,
   className = ''
 }) => {
-  const [activeSection, setActiveSection] = useState('details');
+  const [_____activeSection, _____setActiveSection] = useState('details');
   const [reviewDecision, setReviewDecision] = useState<Partial<ReviewDecision>>({
     status: 'pending',
     reviewNotes: '',

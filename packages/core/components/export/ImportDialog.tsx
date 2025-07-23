@@ -10,14 +10,14 @@ import {
 
 interface ImportDialogProps {
   onClose: () => void;
-  onImportComplete: (result: any) => void;
+  onImportComplete: (result: Record<string, unknown>) => void;
   className?: string;
 }
 
 interface ImportResult {
   success: boolean;
   message: string;
-  data?: any;
+  data?: unknown;
   warnings?: string[];
 }
 

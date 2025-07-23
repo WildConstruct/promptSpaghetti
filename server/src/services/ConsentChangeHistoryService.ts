@@ -113,8 +113,8 @@ export interface ConsentFieldChange {
   fieldPath: string;
   fieldName: string;
   changeType: 'added' | 'removed' | 'modified';
-  previousValue: any;
-  newValue: any;
+  previousValue: Error;
+  newValue: Error;
   impactLevel: ConsentImpactLevel;
   reason?: string;
 }
@@ -522,7 +522,7 @@ export class ConsentChangeHistoryService {
         SELECT * FROM consent_change_history 
         WHERE consent_id = ?
       `;
-      const params: any[] = [consentId];
+      const params: unknown[] = [consentId];
 
       // Add filters
       if (options?.startDate) {
@@ -806,7 +806,7 @@ export class ConsentChangeHistoryService {
     return `CHG-${Date.now()}-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
   }
 
-  private extractUserIdFromConsent(consentId: string): string {
+  private extractUserIdFromConsent(_____consentId: string): string {
     // Mock implementation - would extract from consent record
     return 'user_123';
   }
@@ -931,8 +931,8 @@ export class ConsentChangeHistoryService {
   }
 
   private analyzeLegalBasisChange(
-    previousState: ConsentChangeState,
-    newState: ConsentChangeState
+    _____previousState: ConsentChangeState,
+    _____newState: ConsentChangeState
   ): ConsentLegalBasisChange {
     return {
       previousBasis: 'CONSENT',
@@ -1082,8 +1082,8 @@ export class ConsentChangeHistoryService {
 
   private generateChangeFlags(
     changeType: ConsentChangeType,
-    previousState: ConsentChangeState,
-    newState: ConsentChangeState
+    _____previousState: ConsentChangeState,
+    _____newState: ConsentChangeState
   ): string[] {
     const flags: string[] = [];
     
@@ -1174,7 +1174,7 @@ export class ConsentChangeHistoryService {
     }
   }
 
-  private deserializeChangeEvent(row: any): ConsentChangeEvent {
+  private deserializeChangeEvent(row: Event): ConsentChangeEvent {
     return {
       changeId: row.change_id,
       consentId: row.consent_id,

@@ -29,7 +29,7 @@ export interface EnforcementAction {
   severity: 'low' | 'medium' | 'high' | 'critical';
   reason: string;
   triggeredBy: 'trust_score' | 'risk_factor' | 'fraud_detection' | 'policy_violation' | 'manual_review';
-  triggerDetails: any;
+  triggerDetails: unknown;
   autoApplied: boolean;
   actionTaken: boolean;
   actionTimestamp?: Date;
@@ -457,7 +457,7 @@ export class AutomatedEnforcementService {
 
   private evaluateTemplateWarnings(
     templateId: string,
-    warnings: any[],
+    warnings: unknown[],
     policy: EnforcementPolicy,
     triggeredBy: string
   ): EnforcementAction[] {
@@ -501,7 +501,7 @@ export class AutomatedEnforcementService {
     fraudIndicators: FraudIndicator[],
     fraudScore: number,
     policy: EnforcementPolicy,
-    triggeredBy: string
+    _____triggeredBy: string
   ): EnforcementAction[] {
     const actions: EnforcementAction[] = [];
     
@@ -552,7 +552,7 @@ export class AutomatedEnforcementService {
     severity: 'low' | 'medium' | 'high' | 'critical',
     reason: string,
     triggeredBy: string,
-    triggerDetails: any,
+    triggerDetails: unknown,
     autoApply: boolean
   ): EnforcementAction {
     return {
@@ -650,7 +650,7 @@ export class AutomatedEnforcementService {
   // Action Implementation Methods
   // =============================================================================
 
-  private async applySuspension(client: any, action: EnforcementAction): Promise<void> {
+  private async applySuspension(client: unknown, action: EnforcementAction): Promise<void> {
     if (action.entityType === 'user') {
       // Update user status to suspended
       await client.query(`
@@ -685,7 +685,7 @@ export class AutomatedEnforcementService {
     }
   }
 
-  private async applyRestriction(client: any, action: EnforcementAction): Promise<void> {
+  private async applyRestriction(client: unknown, action: EnforcementAction): Promise<void> {
     if (action.entityType === 'user') {
       // Apply user restrictions
       await client.query(`
@@ -707,7 +707,7 @@ export class AutomatedEnforcementService {
     }
   }
 
-  private async applyFlagging(client: any, action: EnforcementAction): Promise<void> {
+  private async applyFlagging(client: unknown, action: EnforcementAction): Promise<void> {
     // Add flag to entity
     await client.query(`
       INSERT INTO entity_flags (entity_type, entity_id, flag_type, reason, flagged_by, expires_at)
@@ -715,7 +715,7 @@ export class AutomatedEnforcementService {
     `, [action.entityType, action.entityId, action.reason, action.expiresAt]);
   }
 
-  private async applyVerificationRequirement(client: any, action: EnforcementAction): Promise<void> {
+  private async applyVerificationRequirement(client: unknown, action: EnforcementAction): Promise<void> {
     if (action.entityType === 'user') {
       // Require additional verification
       await client.query(`
@@ -728,7 +728,7 @@ export class AutomatedEnforcementService {
     }
   }
 
-  private async applyTransactionBlock(client: any, action: EnforcementAction): Promise<void> {
+  private async applyTransactionBlock(client: unknown, action: EnforcementAction): Promise<void> {
     // Block/cancel transaction
     await client.query(`
       UPDATE transactions 
@@ -740,7 +740,7 @@ export class AutomatedEnforcementService {
     `, [action.reason, action.entityId]);
   }
 
-  private async applyTemplateQuarantine(client: any, action: EnforcementAction): Promise<void> {
+  private async applyTemplateQuarantine(client: unknown, action: EnforcementAction): Promise<void> {
     // Quarantine template
     await client.query(`
       UPDATE templates 
@@ -877,7 +877,7 @@ export class AutomatedEnforcementService {
 
   private async sendEnforcementAlert(
     alertType: string,
-    context: any,
+    context: unknown,
     actions: EnforcementAction[]
   ): Promise<void> {
     if (this.config.notificationSettings.adminAlerts) {

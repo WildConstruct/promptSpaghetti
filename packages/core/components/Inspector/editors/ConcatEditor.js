@@ -20,7 +20,7 @@ const JOIN_MODES = [
     { value: 'first-n', label: 'Join First N Inputs' },
     { value: 'last-n', label: 'Join Last N Inputs' }
 ];
-export const ConcatEditor = ({ nodeId, nodeData, onChange }) => {
+export const ConcatEditor = ({ _____nodeId, nodeData, onChange }) => {
     // Concat specific fields
     const label = nodeData.label || '';
     const template = nodeData.template || '';

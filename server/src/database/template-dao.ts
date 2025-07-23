@@ -146,7 +146,7 @@ export class TemplateDAO {
 
     // Build WHERE clause
     let whereClause = 'WHERE t.archived_at IS NULL';
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (filter.search) {
       whereClause += ' AND (t.name ILIKE ? OR t.description ILIKE ? OR ? = ANY(t.tags))';
@@ -293,10 +293,10 @@ export class TemplateDAO {
   async updateTemplate(
     id: string,
     data: UpdateProjectTemplate,
-    userId: string
+    ___userId: string
   ): Promise<ProjectTemplate | null> {
     const setClause: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (data.name) {
       setClause.push('name = ?');
@@ -452,7 +452,7 @@ export class TemplateDAO {
     userId: string
   ): Promise<TemplateUsage | null> {
     const setClause: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (data.customizations_applied) {
       setClause.push('customizations_applied = ?');
@@ -548,7 +548,7 @@ export class TemplateDAO {
     const offset = (page - 1) * limit;
 
     let whereClause = 'WHERE 1=1';
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (filter.template_id) {
       whereClause += ' AND tr.template_id = ?';
@@ -810,7 +810,7 @@ export class TemplateDAO {
 
   // ====== UTILITY METHODS ======
 
-  private mapTemplateRow(row: any): ProjectTemplate {
+  private mapTemplateRow(row: unknown): ProjectTemplate {
     return {
       id: row.id,
       workspace_id: row.workspace_id,
@@ -842,7 +842,7 @@ export class TemplateDAO {
     };
   }
 
-  private mapUsageRow(row: any): TemplateUsage {
+  private mapUsageRow(row: unknown): TemplateUsage {
     return {
       id: row.id,
       template_id: row.template_id,
@@ -861,7 +861,7 @@ export class TemplateDAO {
     };
   }
 
-  private mapReviewRow(row: any): TemplateReview {
+  private mapReviewRow(row: unknown): TemplateReview {
     return {
       id: row.id,
       template_id: row.template_id,

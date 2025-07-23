@@ -435,7 +435,7 @@ export interface ActionEvidence {
 export interface TriggerCondition {
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'GREATER_THAN' | 'LESS_THAN' | 'CONTAINS' | 'REGEX';
-  value: any;
+  value: Error;
   caseSensitive?: boolean;
 }
 
@@ -925,7 +925,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
         rule.lastTriggered = new Date();
 
         // Create violation based on rule
-        const violation = await this.createViolationFromRule(rule, context);
+        const _____violation = await this.createViolationFromRule(rule, context);
         await this.detectViolations(context);
       }
 
@@ -984,27 +984,27 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     };
   }
 
-  private async detectConsentViolations(context: OperationContext): Promise<ComplianceViolation[]> {
+  private async detectConsentViolations(_____context: OperationContext): Promise<ComplianceViolation[]> {
     // Simplified consent violation detection
     return [];
   }
 
-  private async detectRetentionViolations(context: OperationContext): Promise<ComplianceViolation[]> {
+  private async detectRetentionViolations(_____context: OperationContext): Promise<ComplianceViolation[]> {
     // Simplified retention violation detection
     return [];
   }
 
-  private async detectAccessViolations(context: OperationContext): Promise<ComplianceViolation[]> {
+  private async detectAccessViolations(_____context: OperationContext): Promise<ComplianceViolation[]> {
     // Simplified access violation detection
     return [];
   }
 
-  private async detectAuditViolations(context: OperationContext): Promise<ComplianceViolation[]> {
+  private async detectAuditViolations(_____context: OperationContext): Promise<ComplianceViolation[]> {
     // Simplified audit violation detection
     return [];
   }
 
-  private async storeViolation(violation: ComplianceViolation, context: OperationContext): Promise<void> {
+  private async storeViolation(violation: ComplianceViolation, _____context: OperationContext): Promise<void> {
     await this.db.query(`
       INSERT INTO compliance_violations (
         violation_id, user_id, user_email, policy_id, policy_version,
@@ -1035,7 +1035,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     ]);
   }
 
-  private async updateViolation(violation: ComplianceViolation, context: OperationContext): Promise<void> {
+  private async updateViolation(violation: ComplianceViolation, _____context: OperationContext): Promise<void> {
     await this.db.query(`
       UPDATE compliance_violations 
       SET status = $1, resolved_at = $2, resolution_description = $3,
@@ -1051,7 +1051,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     ]);
   }
 
-  private async triggerImmediateRemediation(violation: ComplianceViolation, context: OperationContext): Promise<void> {
+  private async triggerImmediateRemediation(violation: ComplianceViolation, _____context: OperationContext): Promise<void> {
     // Implement immediate remediation logic
     console.log(`Triggering immediate remediation for critical violation: ${violation.violationId}`);
   }
@@ -1084,7 +1084,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     ]);
   }
 
-  private async calculateComplianceScores(filters?: any): Promise<any> {
+  private async calculateComplianceScores(filters?: any): Promise<unknown> {
     // Simplified compliance score calculation
     return {
       overall: 85,
@@ -1094,7 +1094,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     };
   }
 
-  private async getViolationMetrics(filters?: any): Promise<any> {
+  private async getViolationMetrics(filters?: any): Promise<unknown> {
     // Simplified violation metrics
     return {
       active: this.activeViolations.size,
@@ -1104,7 +1104,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     };
   }
 
-  private async getRiskMetrics(filters?: any): Promise<any> {
+  private async getRiskMetrics(filters?: any): Promise<unknown> {
     // Simplified risk metrics
     return {
       topViolationTypes: [],
@@ -1113,7 +1113,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     };
   }
 
-  private async getPerformanceMetrics(filters?: any): Promise<any> {
+  private async getPerformanceMetrics(filters?: any): Promise<unknown> {
     // Simplified performance metrics
     return {
       avgResolutionTime: 240, // 4 hours
@@ -1122,7 +1122,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     };
   }
 
-  private async getRegulatoryStatus(filters?: any): Promise<any> {
+  private async getRegulatoryStatus(filters?: any): Promise<unknown> {
     // Simplified regulatory status
     return {
       compliance: [],
@@ -1130,7 +1130,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     };
   }
 
-  private async getPredictiveAnalytics(filters?: any): Promise<any> {
+  private async getPredictiveAnalytics(filters?: any): Promise<unknown> {
     // Simplified predictive analytics
     return {
       predictions: [],

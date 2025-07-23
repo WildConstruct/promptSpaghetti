@@ -304,7 +304,7 @@ export class WorkspaceDAO {
       AND um.user_id = ?
       AND um.status = 'active'
     `;
-    const params: any[] = [userId];
+    const params: unknown[] = [userId];
 
     if (filter.search) {
       whereClause += ' AND (w.name ILIKE ? OR w.description ILIKE ?)';
@@ -375,7 +375,7 @@ export class WorkspaceDAO {
 
   async updateWorkspace(id: string, data: UpdateWorkspace): Promise<Workspace | null> {
     const setClause: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (data.name) {
       setClause.push('name = ?');
@@ -481,7 +481,7 @@ export class WorkspaceDAO {
     const offset = (page - 1) * limit;
 
     let whereClause = 'WHERE p.workspace_id = ? AND p.status != \'deleted\'';
-    const params: any[] = [workspaceId];
+    const params: unknown[] = [workspaceId];
 
     if (filter.status && filter.status.length > 0) {
       const placeholders = filter.status.map(() => '?').join(',');
@@ -555,7 +555,7 @@ export class WorkspaceDAO {
 
   async updateProject(id: string, data: UpdateProject, userId: string): Promise<Project | null> {
     const setClause: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (data.name) {
       setClause.push('name = ?');
@@ -815,7 +815,7 @@ export class WorkspaceDAO {
     const offset = (page - 1) * limit;
 
     let whereClause = 'WHERE ae.workspace_id = ?';
-    const params: any[] = [workspaceId];
+    const params: unknown[] = [workspaceId];
 
     if (filter.project_id) {
       whereClause += ' AND ae.project_id = ?';
@@ -1535,7 +1535,7 @@ export class WorkspaceDAO {
   async updateUser(id: string, data: UpdateUser): Promise<User | null> {
     const now = new Date().toISOString();
     const updates: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
 
     if (data.name !== undefined) {
       updates.push('name = ?');
@@ -1817,7 +1817,7 @@ export class WorkspaceDAO {
     limit: number = 100
   ): Promise<any[]> {
     let query = 'SELECT * FROM security_audit_log WHERE 1=1';
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (userId) {
       query += ' AND user_id = ?';
@@ -2018,7 +2018,7 @@ export class WorkspaceDAO {
       WHERE workspace_id = ?
     `;
     
-    const params: any[] = [workspaceId];
+    const params: unknown[] = [workspaceId];
     
     if (filter.status) {
       query += ' AND status = ?';

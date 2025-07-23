@@ -322,7 +322,7 @@ export class RetentionEnforcementService {
     await this.logEnforcementEvent('DATA_QUARANTINED', event);
   }
 
-  private async executeApprovalRequest(event: EnforcementEvent, rule: EnforcementRule): Promise<void> {
+  private async executeApprovalRequest(event: EnforcementEvent, _____rule: EnforcementRule): Promise<void> {
     event.status = EnforcementStatus.AWAITING_APPROVAL;
     
     // Send approval requests
@@ -334,7 +334,7 @@ export class RetentionEnforcementService {
     await this.logEnforcementEvent('APPROVAL_REQUESTED', event);
   }
 
-  private async executeNotification(event: EnforcementEvent, rule: EnforcementRule): Promise<void> {
+  private async executeNotification(event: EnforcementEvent, _____rule: EnforcementRule): Promise<void> {
     const notifications = await this.getNotificationRules(event.trigger);
     
     for (const notification of notifications) {
@@ -470,7 +470,7 @@ export class RetentionEnforcementService {
     console.log(`Quarantining data for record: ${record.recordId}`);
   }
 
-  private async estimateDataSize(dataId: string): Promise<number> {
+  private async estimateDataSize(_____dataId: string): Promise<number> {
     // Implementation would calculate actual data size
     return 1024; // placeholder
   }
@@ -560,12 +560,12 @@ export class RetentionEnforcementService {
     return result.rows[0] || null;
   }
 
-  private async getEnforcementPolicy(recordId: string): Promise<EnforcementPolicy | null> {
+  private async getEnforcementPolicy(_____recordId: string): Promise<EnforcementPolicy | null> {
     // Implementation would retrieve the appropriate policy for the record
     return null;
   }
 
-  private async getApproverRole(approverId: string): Promise<RecipientType> {
+  private async getApproverRole(_____approverId: string): Promise<RecipientType> {
     // Implementation would determine the approver's role
     return RecipientType.ADMIN;
   }
@@ -575,7 +575,7 @@ export class RetentionEnforcementService {
     return event.approvals.every(a => a.approved);
   }
 
-  private async getNotificationRules(trigger: EnforcementTrigger): Promise<NotificationRule[]> {
+  private async getNotificationRules(_____trigger: EnforcementTrigger): Promise<NotificationRule[]> {
     // Implementation would retrieve notification rules for the trigger
     return [];
   }
@@ -588,7 +588,7 @@ export class RetentionEnforcementService {
   private async sendNotification(
     event: EnforcementEvent,
     recipient: NotificationRecipient,
-    rule: NotificationRule
+    _____rule: NotificationRule
   ): Promise<void> {
     // Implementation would send notification
     console.log(`Sending notification for event ${event.eventId} to ${recipient.identifier}`);
@@ -596,7 +596,7 @@ export class RetentionEnforcementService {
 
   private async logEnforcementEvent(
     eventType: string,
-    context: any,
+    context: unknown,
     additionalData?: any
   ): Promise<void> {
     await this.auditService.logEvent({

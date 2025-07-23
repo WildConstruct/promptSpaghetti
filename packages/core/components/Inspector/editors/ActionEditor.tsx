@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { VariationList } from '../VariationList';
@@ -40,7 +40,7 @@ const ACTION_TYPES: SelectOption[] = [
   { value: 'linking', label: 'Linking Verb (is, seems)', group: 'Grammar' }
 ];
 
-export const ActionEditor: React.FC<ActionEditorProps> = ({ nodeId, nodeData, onChange }) => {
+export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeData, onChange }) => {
   // Action specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';

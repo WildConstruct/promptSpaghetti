@@ -1,4 +1,6 @@
 /**
+import { Shield } from 'lucide-react';
+
  * Admin Alert Panel Component
  * 
  * Epic 17.1.2 - Admin Dashboard UI

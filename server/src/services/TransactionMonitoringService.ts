@@ -34,7 +34,7 @@ export interface TransactionDetails extends Transaction {
   risk_assessment?: RiskAssessment;
   user_email?: string;
   user_name?: string;
-  refund_requests?: any[];
+  refund_requests?: unknown[];
   related_transactions?: Transaction[];
 }
 
@@ -109,7 +109,7 @@ export class TransactionMonitoringService {
 
     // Build dynamic query
     const conditions: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (filters.userId) {
       conditions.push('t.user_id = ?');
@@ -245,7 +245,7 @@ export class TransactionMonitoringService {
     return await this.enrichTransactionDetails(result[0]);
   }
 
-  private async enrichTransactionDetails(transaction: any): Promise<TransactionDetails> {
+  private async enrichTransactionDetails(transaction: unknown): Promise<TransactionDetails> {
     // Parse JSON fields
     transaction.fraud_flags = JSON.parse(transaction.fraud_flags || '[]');
     transaction.metadata = JSON.parse(transaction.metadata || '{}');
@@ -613,7 +613,7 @@ export class TransactionMonitoringService {
     startDate: Date,
     endDate: Date,
     reportType: 'summary' | 'detailed' | 'fraud_analysis'
-  ): Promise<any> {
+  ): Promise<unknown> {
     const summary = await this.getTransactionSummary(startDate, endDate);
 
     switch (reportType) {

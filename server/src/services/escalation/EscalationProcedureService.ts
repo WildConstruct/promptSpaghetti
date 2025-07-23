@@ -1146,22 +1146,22 @@ export class EscalationProcedureService extends EventEmitter {
     this.lastMetricsUpdate = new Date();
   }
 
-  private async findApplicableRule(sourceType: string, sourceData: Record<string, any>): Promise<string> {
+  private async findApplicableRule(_____sourceType: string, _____sourceData: Record<string, any>): Promise<string> {
     // Implementation for finding applicable rule
     return Array.from(this.activeRules.keys())[0]; // Simplified
   }
 
-  private determinePriority(sourceType: string, sourceData: Record<string, any>): EscalationPriority {
+  private determinePriority(_____sourceType: string, _____sourceData: Record<string, any>): EscalationPriority {
     // Implementation for determining priority
     return EscalationPriority.MEDIUM; // Simplified
   }
 
-  private extractTags(sourceType: string, sourceData: Record<string, any>): string[] {
+  private extractTags(sourceType: string, _____sourceData: Record<string, any>): string[] {
     // Implementation for extracting tags
     return [sourceType];
   }
 
-  private calculateDeadlines(escalationCase: EscalationCase, rule: EscalationRule): void {
+  private calculateDeadlines(_____escalationCase: EscalationCase, _____rule: EscalationRule): void {
     // Implementation for calculating deadlines
   }
 
@@ -1170,11 +1170,11 @@ export class EscalationProcedureService extends EventEmitter {
     return levelConfig.assignmentTarget;
   }
 
-  private async executeEscalationAction(escalationCase: EscalationCase, action: EscalationAction): Promise<void> {
+  private async executeEscalationAction(_____escalationCase: EscalationCase, _____action: EscalationAction): Promise<void> {
     // Implementation for executing escalation actions
   }
 
-  private async sendLevelNotifications(escalationCase: EscalationCase, levelConfig: EscalationLevel): Promise<void> {
+  private async sendLevelNotifications(_____escalationCase: EscalationCase, _____levelConfig: EscalationLevel): Promise<void> {
     // Implementation for sending notifications
   }
 
@@ -1186,35 +1186,35 @@ export class EscalationProcedureService extends EventEmitter {
     // Implementation for cleaning up expired cases
   }
 
-  private calculateAverageWaitTime(cases: EscalationCase[]): number {
+  private calculateAverageWaitTime(_____cases: EscalationCase[]): number {
     // Implementation for calculating average wait time
     return 0;
   }
 
-  private async generateEscalationAlerts(cases: EscalationCase[]): Promise<EscalationAlert[]> {
+  private async generateEscalationAlerts(_____cases: EscalationCase[]): Promise<EscalationAlert[]> {
     // Implementation for generating alerts
     return [];
   }
 
-  private async generateEscalationRecommendations(cases: EscalationCase[]): Promise<EscalationRecommendation[]> {
+  private async generateEscalationRecommendations(_____cases: EscalationCase[]): Promise<EscalationRecommendation[]> {
     // Implementation for generating recommendations
     return [];
   }
 
   // Event handlers
-  private async handleFraudCaseCreated(data: any): Promise<void> {
+  private async handleFraudCaseCreated(data: Record<string, unknown>): Promise<void> {
     await this.createEscalationCase('fraud_case', data.caseId, data, undefined, EscalationPriority.HIGH);
   }
 
-  private async handleAppealSubmitted(data: any): Promise<void> {
+  private async handleAppealSubmitted(data: Record<string, unknown>): Promise<void> {
     await this.createEscalationCase('appeal', data.appealId, data, undefined, EscalationPriority.MEDIUM);
   }
 
-  private async handlePolicyViolation(data: any): Promise<void> {
+  private async handlePolicyViolation(data: Record<string, unknown>): Promise<void> {
     await this.createEscalationCase('policy_violation', data.violationId, data, undefined, EscalationPriority.HIGH);
   }
 
-  private async handleSystemIncident(data: any): Promise<void> {
+  private async handleSystemIncident(data: Record<string, unknown>): Promise<void> {
     await this.createEscalationCase('system_incident', data.incidentId, data, undefined, EscalationPriority.CRITICAL);
   }
 }

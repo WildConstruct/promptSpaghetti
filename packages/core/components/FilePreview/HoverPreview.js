@@ -9,7 +9,7 @@ import { FilePreview } from './FilePreview';
 export const HoverPreview = ({ file, targetElement, delay = 300, onClick, children }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [isLoading, setIsLoading] = useState(false);
+    const [_____isLoading, _____setIsLoading] = useState(false);
     const showTimeoutRef = useRef(null);
     const hideTimeoutRef = useRef(null);
     const triggerRef = useRef(null);

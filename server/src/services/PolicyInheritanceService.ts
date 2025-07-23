@@ -893,12 +893,12 @@ export class PolicyInheritanceService extends EventEmitter {
   }
 
   // Additional helper methods would be implemented here...
-  private updateHierarchyRelationships(node: PolicyNode): Promise<void> {
+  private updateHierarchyRelationships(_____node: PolicyNode): Promise<void> {
     // Implementation for updating hierarchy relationships
     return Promise.resolve();
   }
 
-  private recomputeAffectedPolicies(nodeId: string): Promise<void> {
+  private recomputeAffectedPolicies(_____nodeId: string): Promise<void> {
     // Implementation for recomputing affected policies
     return Promise.resolve();
   }
@@ -913,7 +913,7 @@ export class PolicyInheritanceService extends EventEmitter {
     return { valid: errors.length === 0, errors };
   }
 
-  private detectRuleConflicts(rule: InheritanceRule): Promise<RuleConflict[]> {
+  private detectRuleConflicts(_____rule: InheritanceRule): Promise<RuleConflict[]> {
     // Implementation for detecting rule conflicts
     return Promise.resolve([]);
   }
@@ -933,7 +933,7 @@ export class PolicyInheritanceService extends EventEmitter {
     return { valid: errors.length === 0, errors };
   }
 
-  private isOverrideAuthorized(override: PolicyOverride): Promise<boolean> {
+  private isOverrideAuthorized(_____override: PolicyOverride): Promise<boolean> {
     // Implementation for checking override authorization
     return Promise.resolve(true);
   }
@@ -947,32 +947,32 @@ export class PolicyInheritanceService extends EventEmitter {
     return `v${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private collectDirectPolicies(node: PolicyNode): Promise<ResolvedPolicy[]> {
+  private collectDirectPolicies(_____node: PolicyNode): Promise<ResolvedPolicy[]> {
     // Implementation for collecting direct policies
     return Promise.resolve([]);
   }
 
-  private collectInheritedPolicies(node: PolicyNode): Promise<ResolvedPolicy[]> {
+  private collectInheritedPolicies(_____node: PolicyNode): Promise<ResolvedPolicy[]> {
     // Implementation for collecting inherited policies
     return Promise.resolve([]);
   }
 
-  private applyInheritanceRules(policies: ResolvedPolicy[], node: PolicyNode): Promise<ResolvedPolicy[]> {
+  private applyInheritanceRules(policies: ResolvedPolicy[], _____node: PolicyNode): Promise<ResolvedPolicy[]> {
     // Implementation for applying inheritance rules
     return Promise.resolve(policies);
   }
 
-  private applyOverrides(policies: ResolvedPolicy[], node: PolicyNode): Promise<ResolvedPolicy[]> {
+  private applyOverrides(policies: ResolvedPolicy[], _____node: PolicyNode): Promise<ResolvedPolicy[]> {
     // Implementation for applying overrides
     return Promise.resolve(policies);
   }
 
-  private resolveConflicts(policies: ResolvedPolicy[], node: PolicyNode): Promise<{ resolvedPolicies: ResolvedPolicy[]; conflicts: PolicyConflict[] }> {
+  private resolveConflicts(policies: ResolvedPolicy[], _____node: PolicyNode): Promise<{ resolvedPolicies: ResolvedPolicy[]; conflicts: PolicyConflict[] }> {
     // Implementation for resolving conflicts
     return Promise.resolve({ resolvedPolicies: policies, conflicts: [] });
   }
 
-  private detectPolicyGaps(policies: ResolvedPolicy[], node: PolicyNode): Promise<PolicyGap[]> {
+  private detectPolicyGaps(_____policies: ResolvedPolicy[], _____node: PolicyNode): Promise<PolicyGap[]> {
     // Implementation for detecting policy gaps
     return Promise.resolve([]);
   }
@@ -990,7 +990,7 @@ export class PolicyInheritanceService extends EventEmitter {
     };
   }
 
-  private generateInheritanceTraces(policies: ResolvedPolicy[], node: PolicyNode): Promise<InheritanceTrace[]> {
+  private generateInheritanceTraces(_____policies: ResolvedPolicy[], _____node: PolicyNode): Promise<InheritanceTrace[]> {
     // Implementation for generating inheritance traces
     return Promise.resolve([]);
   }
@@ -999,12 +999,12 @@ export class PolicyInheritanceService extends EventEmitter {
     return `analysis_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private findImpactedNodes(change: PolicyChange): Promise<string[]> {
+  private findImpactedNodes(_____change: PolicyChange): Promise<string[]> {
     // Implementation for finding impacted nodes
     return Promise.resolve([]);
   }
 
-  private simulateChanges(changes: PolicyChange[]): Promise<SimulationResults> {
+  private simulateChanges(_____changes: PolicyChange[]): Promise<SimulationResults> {
     // Implementation for simulating changes
     return Promise.resolve({
       newConflicts: 0,
@@ -1014,7 +1014,7 @@ export class PolicyInheritanceService extends EventEmitter {
     });
   }
 
-  private generateRecommendations(analysis: InheritanceImpactAnalysis): Promise<Recommendation[]> {
+  private generateRecommendations(_____analysis: InheritanceImpactAnalysis): Promise<Recommendation[]> {
     // Implementation for generating recommendations
     return Promise.resolve([]);
   }
@@ -1023,27 +1023,27 @@ export class PolicyInheritanceService extends EventEmitter {
     return `lineage_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private traceAncestry(nodeId: string, policyId: string): Promise<LineageNode[]> {
+  private traceAncestry(_____nodeId: string, _____policyId: string): Promise<LineageNode[]> {
     // Implementation for tracing ancestry
     return Promise.resolve([]);
   }
 
-  private findDescendants(nodeId: string, policyId: string): Promise<LineageNode[]> {
+  private findDescendants(_____nodeId: string, _____policyId: string): Promise<LineageNode[]> {
     // Implementation for finding descendants
     return Promise.resolve([]);
   }
 
-  private collectTransformations(nodeId: string, policyId: string): Promise<PolicyTransformation[]> {
+  private collectTransformations(_____nodeId: string, _____policyId: string): Promise<PolicyTransformation[]> {
     // Implementation for collecting transformations
     return Promise.resolve([]);
   }
 
-  private findRelatedOverrides(nodeId: string, policyId: string): Promise<PolicyOverride[]> {
+  private findRelatedOverrides(_____nodeId: string, _____policyId: string): Promise<PolicyOverride[]> {
     // Implementation for finding related overrides
     return Promise.resolve([]);
   }
 
-  private findRelatedConflicts(nodeId: string, policyId: string): Promise<PolicyConflict[]> {
+  private findRelatedConflicts(_____nodeId: string, _____policyId: string): Promise<PolicyConflict[]> {
     // Implementation for finding related conflicts
     return Promise.resolve([]);
   }

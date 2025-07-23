@@ -31,8 +31,8 @@ interface Epic16InteractiveElementsProps {
     templateId?: string;
     categoryId?: string;
   };
-  onElementInteraction?: (elementId: string, interaction: any) => void;
-  onAnalyticsUpdate?: (analytics: any) => void;
+  onElementInteraction?: (elementId: string, interaction: unknown) => void;
+  onAnalyticsUpdate?: (analytics: unknown) => void;
 }
 
 interface ElementState {
@@ -45,7 +45,7 @@ interface ElementState {
 
 interface PreviewData {
   templateId: string;
-  templateData: any;
+  templateData: unknown;
 }
 
 export const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps> = ({
@@ -512,7 +512,7 @@ export const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>
   }, [interactiveService, activationContext, pageContext, userRole, sampleProgress, onElementInteraction]);
 
   // Handle template preview
-  const handleTemplatePreview = useCallback((templateId: string, templateData: any) => {
+  const handleTemplatePreview = useCallback((templateId: string, templateData: unknown) => {
     setPreviewData({ templateId, templateData });
   }, []);
 

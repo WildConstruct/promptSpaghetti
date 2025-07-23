@@ -164,24 +164,24 @@ export class SharingService {
         .replace('{url}', shareLink.shortUrl) || '';
 
       switch (platform) {
-        case 'twitter':
-          socialLinks.twitter = this.buildTwitterShareUrl(config.title, shareLink.shortUrl, config.tags);
-          break;
-        case 'linkedin':
-          socialLinks.linkedin = this.buildLinkedInShareUrl(config.title, shareLink.shortUrl, config.description);
-          break;
-        case 'discord':
-          socialLinks.discord = shareLink.shortUrl; // Discord auto-previews
-          break;
-        case 'slack':
-          socialLinks.slack = this.buildSlackShareUrl(message, shareLink.shortUrl);
-          break;
-        case 'email':
-          socialLinks.email = this.buildEmailShareUrl(config.title, shareLink.shortUrl, config.description);
-          break;
-        case 'github':
-          socialLinks.github = shareLink.shortUrl; // For README inclusion
-          break;
+      case 'twitter':
+        socialLinks.twitter = this.buildTwitterShareUrl(config.title, shareLink.shortUrl, config.tags);
+        break;
+      case 'linkedin':
+        socialLinks.linkedin = this.buildLinkedInShareUrl(config.title, shareLink.shortUrl, config.description);
+        break;
+      case 'discord':
+        socialLinks.discord = shareLink.shortUrl; // Discord auto-previews
+        break;
+      case 'slack':
+        socialLinks.slack = this.buildSlackShareUrl(message, shareLink.shortUrl);
+        break;
+      case 'email':
+        socialLinks.email = this.buildEmailShareUrl(config.title, shareLink.shortUrl, config.description);
+        break;
+      case 'github':
+        socialLinks.github = shareLink.shortUrl; // For README inclusion
+        break;
       }
     }
 

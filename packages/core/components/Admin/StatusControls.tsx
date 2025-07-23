@@ -13,7 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Switch } from '../ui/Switch';
 import { 
   Power,
   PlayCircle,
@@ -155,7 +154,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({
   const [systemOverview, setSystemOverview] = useState<SystemOverview | null>(null);
   const [selectedService, setSelectedService] = useState<SystemService | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [refreshInterval, setRefreshInterval] = useState<number | null>(null);
+  const [_____refreshInterval, setRefreshInterval] = useState<number | null>(null);
 
   // Mock data - in real implementation, this would come from system APIs
   useEffect(() => {

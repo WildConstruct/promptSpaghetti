@@ -2,7 +2,7 @@
 // Standardized Input/Output handling system for Epic 7 advanced nodes
 
 import { z } from 'zod';
-import { ValidationResult, ValidationHelpers } from './advanced';
+import { ValidationResult } from './advanced';
 import { ErrorFactory } from '../errors/ErrorFactory';
 
 /**
@@ -33,7 +33,7 @@ export interface IOPortDefinition {
   /** Whether this port is required */
   required: boolean;
   /** Default value if not connected */
-  defaultValue?: any;
+  defaultValue?: unknown;
   /** Validation constraints */
   constraints?: IOConstraints;
   /** Human-readable description */
@@ -57,9 +57,9 @@ export interface IOConstraints {
   /** Regular expression pattern (for strings) */
   pattern?: string;
   /** Allowed values (for enums/choices) */
-  allowedValues?: any[];
+  allowedValues?: unknown[];
   /** Custom validation function */
-  customValidator?: (value: any) => ValidationResult;
+  customValidator?: (value: unknown) => ValidationResult;
 }
 
 /**
@@ -143,7 +143,7 @@ export class AdvancedIOHandler {
    */
   resolveInputs(
     connectedInputs: Map<string, any>,
-    nodeId: string
+    ___nodeId: string
   ): ResolvedInputs {
     const values = new Map<string, any>();
     const metadata = new Map<string, IOResolutionMetadata>();
@@ -225,7 +225,7 @@ export class AdvancedIOHandler {
   /**
    * Validate a value against a port definition
    */
-  private validateValue(value: any, portDef: IOPortDefinition): ValidationResult {
+  private validateValue(value: unknown, portDef: IOPortDefinition): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -254,7 +254,7 @@ export class AdvancedIOHandler {
   /**
    * Check if value matches expected data type
    */
-  private isValidType(value: any, dataType: IODataType): boolean {
+  private isValidType(value: unknown, dataType: IODataType): boolean {
     switch (dataType) {
     case 'string':
       return typeof value === 'string';
@@ -284,7 +284,7 @@ export class AdvancedIOHandler {
   /**
    * Validate value against constraints
    */
-  private validateConstraints(value: any, constraints: IOConstraints): ValidationResult {
+  private validateConstraints(value: unknown, constraints: IOConstraints): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -340,10 +340,10 @@ export class AdvancedIOHandler {
    * Coerce value to target data type with warnings
    */
   private coerceValue(
-    value: any, 
+    value: unknown, 
     targetType: IODataType
   ): { 
-    value: any; 
+    value: unknown; 
     coercion?: { from: IODataType; to: IODataType }; 
     warnings: string[] 
   } {
@@ -373,7 +373,7 @@ export class AdvancedIOHandler {
   /**
    * Get the IODataType for a value
    */
-  private getValueType(value: any): IODataType {
+  private getValueType(value: unknown): IODataType {
     if (typeof value === 'string') return 'string';
     if (typeof value === 'number') return 'number';
     if (typeof value === 'boolean') return 'boolean';
@@ -389,7 +389,7 @@ export class AdvancedIOHandler {
   /**
    * Perform actual type coercion
    */
-  private performCoercion(value: any, from: IODataType, to: IODataType): any {
+  private performCoercion(value: unknown, from: IODataType, to: IODataType): unknown {
     switch (to) {
     case 'string':
       return String(value);
@@ -496,9 +496,9 @@ export class IOSpecBuilder {
   addChoiceInput(
     id: string, 
     label: string, 
-    allowedValues: any[], 
+    allowedValues: unknown[], 
     required: boolean = false,
-    defaultValue?: any
+    defaultValue?: unknown
   ): IOSpecBuilder {
     return this.addInput({
       id,

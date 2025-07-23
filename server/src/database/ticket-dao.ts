@@ -251,7 +251,7 @@ export class TicketDAO {
   }
 
   // Handle ticket approval - trigger GitHub automation
-  private async handleTicketApproval(ticket: Ticket, _approvedBy: string): Promise<void> {
+  private async handleTicketApproval(ticket: Ticket, ____approvedBy: string): Promise<void> {
     const config = this.getGitHubAutomationConfig();
     
     if (!config?.enabled || !config.auto_create_pr) {

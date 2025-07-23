@@ -117,7 +117,7 @@ export const SubmissionReview: React.FC = () => {
     }
   };
 
-  const handleFeedbackChange = (index: number, field: keyof ReviewFeedback, value: any) => {
+  const handleFeedbackChange = (index: number, field: keyof ReviewFeedback, value: Error) => {
     const updated = [...detailedFeedback];
     updated[index] = { ...updated[index], [field]: value };
     setDetailedFeedback(updated);

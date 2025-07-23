@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Area, AreaChart, Legend } from 'recharts';
-import { TrendingUp, TrendingDown, Activity, Zap, Clock, AlertTriangle } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { TrendingUp, TrendingDown, Activity, AlertTriangle } from 'lucide-react';
 
 /**
  * Time series chart props
  */
 interface TimeSeriesChartProps {
-  data: any[];
+  data: Record<string, unknown>[];
   title: string;
   metric: string;
   unit: string;
@@ -164,10 +163,10 @@ export interface PerformanceChartsProps {
  * Performance charts state
  */
 interface PerformanceChartsState {
-  executionsData: any[];
-  tokensData: any[];
-  costData: any[];
-  errorsData: any[];
+  executionsData: unknown[];
+  tokensData: unknown[];
+  costData: unknown[];
+  errorsData: unknown[];
   granularity: 'hour' | 'day';
   loading: {
     executions: boolean;
@@ -291,7 +290,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({
   /**
    * Calculate trend
    */
-  const calculateTrend = useCallback((data: any[]) => {
+  const calculateTrend = useCallback((data: Record<string, unknown>[]) => {
     if (data.length < 2) return null;
     
     const recent = data.slice(-Math.floor(data.length / 2));

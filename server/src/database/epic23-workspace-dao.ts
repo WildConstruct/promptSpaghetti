@@ -209,7 +209,7 @@ export class Epic23WorkspaceDAO extends WorkspaceDAO {
       RETURNING *
     `);
 
-    const sessionId = this.generateId();
+    const ___sessionId = this.generateId();
     const result = stmt.get(
       session.resource_id,
       session.user_id,

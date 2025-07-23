@@ -42,7 +42,7 @@ export const CreativeVarianceAnalyzer: React.FC<CreativeVarianceAnalyzerProps> =
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'creative' | 'professional'>('overview');
-  const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
+  const [_____selectedMetric, _____setSelectedMetric] = useState<string | null>(null);
 
   // Calculate advanced metrics from results
   const advancedMetrics = useMemo((): AdvancedVarianceMetrics => {

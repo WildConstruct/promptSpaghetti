@@ -807,7 +807,7 @@ export const SegmentManagement: React.FC<SegmentManagementProps> = ({
   onDuplicateSegment
 }) => {
   const [expandedSegment, setExpandedSegment] = useState<string | null>(null);
-  const [editingSegment, setEditingSegment] = useState<string | null>(null);
+  const [__editingSegment, setEditingSegment] = useState<string | null>(null);
 
   return (
     <div className="segment-management">

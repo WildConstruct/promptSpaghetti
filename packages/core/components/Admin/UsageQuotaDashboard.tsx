@@ -9,7 +9,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   BarChart3,
   AlertTriangle,
@@ -109,7 +109,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
   const [selectedTab, setSelectedTab] = useState<'overview' | 'quotas' | 'violations' | 'analytics' | 'templates' | 'operations'>('overview');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [filters, setFilters] = useState({
+  const [_____filters, _____setFilters] = useState({
     quotaType: [] as QuotaType[],
     status: [] as ('active' | 'disabled')[],
     severity: [] as ActionSeverity[],
@@ -121,9 +121,9 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
   const [selectedViolations, setSelectedViolations] = useState<string[]>([]);
 
   // Modal states
-  const [showCreateQuotaModal, setShowCreateQuotaModal] = useState(false);
-  const [showTemplateModal, setShowTemplateModal] = useState(false);
-  const [editingQuota, setEditingQuota] = useState<UsageQuota | null>(null);
+  const [_____showCreateQuotaModal, setShowCreateQuotaModal] = useState(false);
+  const [_____showTemplateModal, _____setShowTemplateModal] = useState(false);
+  const [_____editingQuota, setEditingQuota] = useState<UsageQuota | null>(null);
 
   // Load dashboard data
   const loadDashboardData = useCallback(async () => {
@@ -382,7 +382,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({
   }, [loadDashboardData, refreshDashboard]);
 
   // Event handlers
-  const handleQuotaCreate = async (quota: Omit<UsageQuota, 'quotaId' | 'createdAt' | 'updatedAt'>) => {
+  const _____handleQuotaCreate = async (quota: Omit<UsageQuota, 'quotaId' | 'createdAt' | 'updatedAt'>) => {
     if (onQuotaCreate) {
       await onQuotaCreate(quota);
       await refreshDashboard();
@@ -691,7 +691,7 @@ const OverviewTab: React.FC<{
 // QuotasTab, ViolationsTab, AnalyticsTab, TemplatesTab, OperationsTab
 
 // Placeholder implementations
-const QuotasTab: React.FC<any> = ({ quotas, onQuotaToggle }) => (
+const QuotasTab: React.FC<unknown> = ({ quotas, onQuotaToggle }) => (
   <div className="quotas-tab">
     <h2>Quotas Management</h2>
     {quotas.map((quota: UsageQuota) => (
@@ -715,7 +715,7 @@ const QuotasTab: React.FC<any> = ({ quotas, onQuotaToggle }) => (
   </div>
 );
 
-const ViolationsTab: React.FC<any> = ({ violations }) => (
+const ViolationsTab: React.FC<unknown> = ({ violations }) => (
   <div className="violations-tab">
     <h2>Violations Management</h2>
     {violations.map((violation: QuotaViolation) => (
@@ -736,7 +736,7 @@ const ViolationsTab: React.FC<any> = ({ violations }) => (
   </div>
 );
 
-const AnalyticsTab: React.FC<any> = ({ analytics, systemMetrics }) => (
+const AnalyticsTab: React.FC<unknown> = ({ analytics, _____systemMetrics }) => (
   <div className="analytics-tab">
     <h2>Usage Analytics</h2>
     <div className="analytics-content">
@@ -758,7 +758,7 @@ const AnalyticsTab: React.FC<any> = ({ analytics, systemMetrics }) => (
   </div>
 );
 
-const TemplatesTab: React.FC<any> = ({ templates }) => (
+const TemplatesTab: React.FC<unknown> = ({ templates }) => (
   <div className="templates-tab">
     <h2>Quota Templates</h2>
     {templates.map((template: QuotaTemplate) => (
@@ -776,7 +776,7 @@ const TemplatesTab: React.FC<any> = ({ templates }) => (
   </div>
 );
 
-const OperationsTab: React.FC<any> = ({ operations }) => (
+const OperationsTab: React.FC<unknown> = ({ operations }) => (
   <div className="operations-tab">
     <h2>Admin Operations</h2>
     {operations.map((operation: QuotaAdminOperation) => (

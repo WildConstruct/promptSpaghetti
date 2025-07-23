@@ -118,8 +118,8 @@ export const OAuthConfigurationInterface: React.FC = () => {
   // State management
   const [selectedProvider, setSelectedProvider] = useState<string>('');
   const [configuration, setConfiguration] = useState<Partial<OAuthConfiguration>>({});
-  const [providers, setProviders] = useState<OAuthProvider[]>([]);
-  const [configurations, setConfigurations] = useState<OAuthConfiguration[]>([]);
+  const [___providers, ___setProviders] = useState<OAuthProvider[]>([]);
+  const [___configurations, setConfigurations] = useState<OAuthConfiguration[]>([]);
   const [securityAssessment, setSecurityAssessment] = useState<SecurityAssessment | null>(null);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [loading, setLoading] = useState(false);

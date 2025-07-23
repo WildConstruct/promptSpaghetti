@@ -97,7 +97,7 @@ interface ReportExportPanelProps {
   showQuickExport?: boolean;
   showSampleData?: boolean;
   allowScheduling?: boolean;
-  customReportData?: any;
+  customReportData?: unknown;
 }
 
 export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
@@ -109,8 +109,8 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [exportModalOpen, setExportModalOpen] = useState(false);
-  const [currentReportData, setCurrentReportData] = useState<any>(null);
-  const [statistics, setStatistics] = useState<any>(null);
+  const [currentReportData, setCurrentReportData] = useState<unknown>(null);
+  const [statistics, setStatistics] = useState<unknown>(null);
 
   const {
     isExporting,
@@ -149,7 +149,7 @@ export const ReportExportPanel: React.FC<ReportExportPanelProps> = ({
   };
 
   // Handle quick export with sample data
-  const handleQuickExport = (format: 'pdf' | 'excel' | 'csv' | 'json') => {
+  const handleQuickExport = (___format: 'pdf' | 'excel' | 'csv' | 'json') => {
     const reportData = customReportData || generateSampleReportData();
     setCurrentReportData(reportData);
     setExportModalOpen(true);

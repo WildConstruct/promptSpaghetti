@@ -376,7 +376,7 @@ export const customMatchers = {
     return {
       message: () =>
         pass
-          ? `expected API response not to match structure`
+          ? 'expected API response not to match structure'
           : `expected API response to have fields: ${missingFields.join(', ')}`,
       pass
     };

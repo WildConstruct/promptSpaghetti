@@ -349,7 +349,7 @@ export class GDPRComplianceReportModule {
   async generateGDPRReport(
     reportType: ComplianceReportType,
     period: ReportingPeriod,
-    includeDetails: boolean = true
+    _____includeDetails: boolean = true
   ): Promise<GDPRComplianceReport> {
     console.log(`🇪🇺 Generating GDPR compliance report for period ${period.startDate} to ${period.endDate}`);
 
@@ -461,7 +461,7 @@ export class GDPRComplianceReportModule {
   /**
    * Generate processing activity reports for all registered activities
    */
-  private async generateProcessingActivityReports(period: ReportingPeriod): Promise<ProcessingActivityReport[]> {
+  private async generateProcessingActivityReports(_____period: ReportingPeriod): Promise<ProcessingActivityReport[]> {
     const activities = await this.getProcessingActivities();
     
     return Promise.all(activities.map(async (activity) => {
@@ -531,7 +531,7 @@ export class GDPRComplianceReportModule {
   }
 
   // Additional helper methods for data gathering and analysis
-  private async queryDataSubjectRequests(period: ReportingPeriod): Promise<any> {
+  private async queryDataSubjectRequests(_____period: ReportingPeriod): Promise<unknown> {
     // Implementation would query actual data subject rights database
     return {
       total: 150,
@@ -562,7 +562,7 @@ export class GDPRComplianceReportModule {
     };
   }
 
-  private analyzeRequestType(data: any, type: string): RequestTypeStats {
+  private analyzeRequestType(data: Record<string, unknown>, _____type: string): RequestTypeStats {
     // Implementation would analyze specific request type data
     return {
       received: Math.floor(data.total * 0.3), // Placeholder percentages
@@ -585,20 +585,20 @@ export class GDPRComplianceReportModule {
 
   // Additional private methods would be implemented for other report sections...
   private async getProcessingActivities(): Promise<any[]> { return []; }
-  private async assessSecurityMeasures(activityId: string): Promise<any> { return {}; }
-  private async assessProcessingRisk(activityId: string): Promise<any> { return {}; }
-  private assessActivityCompliance(activity: any): 'compliant' | 'non_compliant' | 'under_review' { return 'compliant'; }
-  private async queryConsentData(period: ReportingPeriod): Promise<any> { return {}; }
-  private async validateConsentCriteria(criteria: string): Promise<ValidationResult> { 
+  private async assessSecurityMeasures(_____activityId: string): Promise<unknown> { return {}; }
+  private async assessProcessingRisk(_____activityId: string): Promise<unknown> { return {}; }
+  private assessActivityCompliance(_____activity: unknown): 'compliant' | 'non_compliant' | 'under_review' { return 'compliant'; }
+  private async queryConsentData(_____period: ReportingPeriod): Promise<unknown> { return {}; }
+  private async validateConsentCriteria(_____criteria: string): Promise<ValidationResult> { 
     return { isValid: true, score: 95, details: '' }; 
   }
-  private async generateDataTransferReports(period: ReportingPeriod): Promise<DataTransferReport[]> { return []; }
-  private async generatePIAReports(period: ReportingPeriod): Promise<PIAReport[]> { return []; }
-  private async generateBreachNotificationReports(period: ReportingPeriod): Promise<BreachNotificationReport[]> { return []; }
-  private async generateDPOReport(period: ReportingPeriod): Promise<DPOReport> { return {} as DPOReport; }
-  private async generateProcessingRecordsReport(period: ReportingPeriod): Promise<ProcessingRecordReport> { return {} as ProcessingRecordReport; }
-  private async generateRightsExerciseReport(period: ReportingPeriod): Promise<RightsExerciseReport> { return {} as RightsExerciseReport; }
-  private async generateLegalBasisAssessment(period: ReportingPeriod): Promise<LegalBasisReport> { return {} as LegalBasisReport; }
+  private async generateDataTransferReports(_____period: ReportingPeriod): Promise<DataTransferReport[]> { return []; }
+  private async generatePIAReports(_____period: ReportingPeriod): Promise<PIAReport[]> { return []; }
+  private async generateBreachNotificationReports(_____period: ReportingPeriod): Promise<BreachNotificationReport[]> { return []; }
+  private async generateDPOReport(_____period: ReportingPeriod): Promise<DPOReport> { return {} as DPOReport; }
+  private async generateProcessingRecordsReport(_____period: ReportingPeriod): Promise<ProcessingRecordReport> { return {} as ProcessingRecordReport; }
+  private async generateRightsExerciseReport(_____period: ReportingPeriod): Promise<RightsExerciseReport> { return {} as RightsExerciseReport; }
+  private async generateLegalBasisAssessment(_____period: ReportingPeriod): Promise<LegalBasisReport> { return {} as LegalBasisReport; }
 }
 
 // Supporting types and interfaces

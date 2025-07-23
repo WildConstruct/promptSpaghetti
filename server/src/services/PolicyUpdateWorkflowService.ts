@@ -698,7 +698,7 @@ export class PolicyUpdateWorkflowService {
 
   // Private helper methods
 
-  private async validateUpdateRequest(request: any): Promise<void> {
+  private async validateUpdateRequest(request: unknown): Promise<void> {
     if (!request.policyId) {
       throw new Error('Policy ID is required');
     }
@@ -938,7 +938,7 @@ export class PolicyUpdateWorkflowService {
     return policyVersion;
   }
 
-  private async validateDeploymentConfig(config: any): Promise<void> {
+  private async validateDeploymentConfig(config: unknown): Promise<void> {
     if (!config.targetEnvironments || config.targetEnvironments.length === 0) {
       throw new Error('At least one target environment must be specified');
     }
@@ -954,7 +954,7 @@ export class PolicyUpdateWorkflowService {
     `, [DeploymentStatus.COMPLETED, deployment.deploymentId]);
   }
 
-  private async notifyApprover(requestId: string, approver: Approver): Promise<void> {
+  private async notifyApprover(_____requestId: string, _____approver: Approver): Promise<void> {
     // Implementation for sending notifications to approvers
   }
 
@@ -993,7 +993,7 @@ export class PolicyUpdateWorkflowService {
     return this.mapToPolicyUpdateRequest(result.rows[0]);
   }
 
-  private mapToPolicyUpdateRequest(row: any): PolicyUpdateRequest {
+  private mapToPolicyUpdateRequest(row: unknown): PolicyUpdateRequest {
     return {
       requestId: row.request_id,
       policyId: row.policy_id,

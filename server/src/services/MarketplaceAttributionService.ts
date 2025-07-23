@@ -70,7 +70,7 @@ export interface RevenueDistributionResult {
 export class MarketplaceAttributionService extends EventEmitter {
   private database: Database;
   private config: AttributionServiceConfig;
-  private analyticsBuffer: any[] = [];
+  private analyticsBuffer: unknown[] = [];
 
   constructor(config: AttributionServiceConfig) {
     super();
@@ -649,7 +649,7 @@ export class MarketplaceAttributionService extends EventEmitter {
     return result.rows[0].id;
   }
 
-  private async addCollaborators(attributionId: string, collaborators: any[]): Promise<void> {
+  private async addCollaborators(attributionId: string, collaborators: unknown[]): Promise<void> {
     for (const collaborator of collaborators) {
       const user = await this.getUserInfo(collaborator.userId);
       
@@ -672,7 +672,7 @@ export class MarketplaceAttributionService extends EventEmitter {
     }
   }
 
-  private async createDerivationRecord(templateId: string, derivedFrom: any): Promise<void> {
+  private async createDerivationRecord(templateId: string, derivedFrom: unknown): Promise<void> {
     const insertQuery = `
       INSERT INTO template_derivations (
         derived_template_id, original_template_id, original_creator_id,
@@ -723,12 +723,12 @@ export class MarketplaceAttributionService extends EventEmitter {
     };
   }
 
-  private async getRelatedTemplates(templateId: string): Promise<any[]> {
+  private async getRelatedTemplates(_____templateId: string): Promise<any[]> {
     // Implementation would return related templates (derivatives, similar, etc.)
     return [];
   }
 
-  private async getTemplateRevenueStatistics(templateId: string): Promise<any> {
+  private async getTemplateRevenueStatistics(templateId: string): Promise<unknown> {
     const query = `
       SELECT 
         COALESCE(SUM(ra.total_revenue_cents), 0) as total_revenue,
@@ -749,7 +749,7 @@ export class MarketplaceAttributionService extends EventEmitter {
     };
   }
 
-  private trackAttributionEvent(eventType: string, data: any): void {
+  private trackAttributionEvent(eventType: string, data: Record<string, unknown>): void {
     if (this.config.enableAnalytics) {
       this.analyticsBuffer.push({
         event_type: eventType,

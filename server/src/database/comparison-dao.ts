@@ -158,7 +158,7 @@ export class ComparisonDAO {
       SELECT * FROM graph_comparisons 
       WHERE source_version_id = ? AND target_version_id = ?
     `;
-    const params: any[] = [sourceVersionId, targetVersionId];
+    const params: unknown[] = [sourceVersionId, targetVersionId];
 
     if (comparisonType) {
       query += ' AND comparison_type = ?';
@@ -182,7 +182,7 @@ export class ComparisonDAO {
     const offset = (page - 1) * limit;
 
     const whereConditions: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (filter.source_version_id) {
       whereConditions.push('source_version_id = ?');
@@ -408,7 +408,7 @@ export class ComparisonDAO {
 
   async updateDiffSession(id: string, updates: Partial<VisualDiffSession>): Promise<boolean> {
     const setClause: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (updates.view_mode) {
       setClause.push('view_mode = ?');
@@ -503,7 +503,7 @@ export class ComparisonDAO {
     recent_comparisons: number;
   }> {
     let whereClause = '';
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     if (graphId) {
       whereClause = `
@@ -551,7 +551,7 @@ export class ComparisonDAO {
   }
 
   // Utility method to parse comparison row
-  private parseComparisonRow(row: any): GraphComparison {
+  private parseComparisonRow(row: unknown): GraphComparison {
     return {
       ...row,
       changes_summary: JSON.parse(row.changes_summary),

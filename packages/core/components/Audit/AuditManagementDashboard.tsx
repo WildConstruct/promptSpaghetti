@@ -4,7 +4,7 @@
  * React dashboard providing advanced audit analytics, compliance monitoring, and management tools
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Card,
   Table,
@@ -22,7 +22,7 @@ import {
   Tabs,
   Progress
 } from 'antd';
-import { Line, Bar, Pie, Column } from '@ant-design/plots';
+import { Bar, Pie } from '@ant-design/plots';
 import { 
   SecurityScanOutlined, 
   AlertOutlined, 
@@ -57,8 +57,8 @@ interface DashboardState {
   loading: boolean;
   selectedEvent: AuditEvent | null;
   currentQuery: AuditQuery;
-  analytics: any;
-  anomalousPatterns: any[];
+  analytics: unknown;
+  anomalousPatterns: unknown[];
 }
 
 interface AuditFilters {
@@ -621,7 +621,7 @@ export const AuditManagementDashboard: React.FC = () => {
 // Compliance Reports Tab Component
 const ComplianceReportsTab: React.FC = () => {
   const [selectedFramework, setSelectedFramework] = useState<ComplianceFramework>(ComplianceFramework.GDPR);
-  const [reportData, setReportData] = useState<any>(null);
+  const [reportData, setReportData] = useState<unknown>(null);
   const [loading, setLoading] = useState(false);
 
   const generateComplianceReport = async () => {

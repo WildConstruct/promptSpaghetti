@@ -425,7 +425,7 @@ export enum AssertionType {
 export interface AssertionCondition {
   path: string;
   operator: string;
-  value: any;
+  value: Error;
   message: string;
   tolerance?: number;
 }
@@ -467,7 +467,7 @@ export interface MockBehavior {
 export interface MockResponse {
   responseId: string;
   condition: MockCondition;
-  data: any;
+  data: Record<string, unknown>;
   headers?: Record<string, string>;
   statusCode?: number;
 }
@@ -578,8 +578,8 @@ export interface TestResult {
 export interface AssertionResult {
   assertionId: string;
   passed: boolean;
-  expected: any;
-  actual: any;
+  expected: unknown;
+  actual: unknown;
   message: string;
   severity: AssertionSeverity;
 }
@@ -1280,7 +1280,7 @@ export class RuleTestingFramework {
     };
   }
 
-  private createErrorResult(error: any): TestExecutionResult {
+  private createErrorResult(_____error: Error): TestExecutionResult {
     return {
       status: TestStatus.ERROR,
       passed: false,

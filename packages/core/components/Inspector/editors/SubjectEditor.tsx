@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { VariationList } from '../VariationList';
@@ -34,7 +34,7 @@ const SUBJECT_CATEGORIES: SelectOption[] = [
   { value: 'other', label: 'Other', group: 'Misc' }
 ];
 
-export const SubjectEditor: React.FC<SubjectEditorProps> = ({ nodeId, nodeData, onChange }) => {
+export const SubjectEditor: React.FC<SubjectEditorProps> = ({ _____nodeId, nodeData, onChange }) => {
   // Subject specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';

@@ -1,10 +1,11 @@
-import { FastifyInstance } from 'fastify';
+// import { FastifyInstance } from 'fastify';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
 import { z } from 'zod';
 import { randomBytes, createHash } from 'crypto';
 import { WorkspaceDAO } from '../database/workspace-dao.js';
-import { User, UserRole, Permission } from '../database/workspace-models.js';
+import { Permission } from '../database/workspace-models.js';
+// import { User, UserRole } from '../database/workspace-models.js';
 
 // OAuth Provider Configuration Schema
 const OAuthProviderSchema = z.object({
@@ -214,7 +215,7 @@ export class AuthService {
     return jwt.sign(payload, this.jwtSecret, { expiresIn });
   }
 
-  async verifyJWT(token: string): Promise<any> {
+  async verifyJWT(token: string): Promise<unknown> {
     try {
       return jwt.verify(token, this.jwtSecret);
     } catch (error) {
@@ -332,7 +333,7 @@ export class AuthService {
     return endpoints[provider as keyof typeof endpoints];
   }
 
-  private normalizeUserInfo(provider: string, userInfo: any): UserInfo {
+  private normalizeUserInfo(provider: string, userInfo: unknown): UserInfo {
     switch (provider) {
     case 'google':
       return {
@@ -390,7 +391,7 @@ export class AuthService {
   }
 
   // Enterprise SSO Support
-  async configureSAML(workspaceId: string, config: {
+  async configureSAML(____workspaceId: string, ____config: {
     entityId: string;
     ssoUrl: string;
     certificate: string;
@@ -401,7 +402,7 @@ export class AuthService {
     throw new Error('SAML configuration not yet implemented');
   }
 
-  async configureOIDC(workspaceId: string, config: {
+  async configureOIDC(____workspaceId: string, ____config: {
     issuer: string;
     clientId: string;
     clientSecret: string;

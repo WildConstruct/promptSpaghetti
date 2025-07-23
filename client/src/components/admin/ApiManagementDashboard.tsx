@@ -116,8 +116,8 @@ export const ApiManagementDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   
   // State for analytics
-  const [usageMetrics, setUsageMetrics] = useState<Record<string, UsageMetrics>>({});
-  const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
+  const [___usageMetrics, setUsageMetrics] = useState<Record<string, UsageMetrics>>({});
+  const [timeRange, ___setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
   
   // State for monitoring
   const [realTimeAlerts, setRealTimeAlerts] = useState<Array<{
@@ -131,9 +131,9 @@ export const ApiManagementDashboard: React.FC = () => {
   }>>([]);
   
   // State for configuration
-  const [bulkOperationMode, setBulkOperationMode] = useState<'revoke' | 'suspend' | 'rate_limit' | null>(null);
+  const [___bulkOperationMode, setBulkOperationMode] = useState<'revoke' | 'suspend' | 'rate_limit' | null>(null);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-  const [rateLimitConfig, setRateLimitConfig] = useState<RateLimitConfiguration | null>(null);
+  const [___rateLimitConfig, ___setRateLimitConfig] = useState<RateLimitConfiguration | null>(null);
 
   // Check if user has admin privileges
   const isAdmin = user?.roles?.includes('admin') || user?.roles?.includes('super_admin');
@@ -279,7 +279,7 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   };
 
-  const updateRateLimits = async (keyId: string, rateLimits: RateLimitConfiguration) => {
+  const ___updateRateLimits = async (keyId: string, rateLimits: RateLimitConfiguration) => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/rate-limits', {
         method: 'PUT',
@@ -301,7 +301,7 @@ export const ApiManagementDashboard: React.FC = () => {
     }
   };
 
-  const performBulkOperation = async (operation: string, keyIds: string[], parameters: any) => {
+  const ___performBulkOperation = async (operation: string, keyIds: string[], parameters: unknown) => {
     try {
       const response = await fetch('/api/auth/api-keys/admin/bulk', {
         method: 'POST',

@@ -384,20 +384,20 @@ export class UnifiedModerationDashboard {
     const reasoning: string[] = [];
 
     switch (distribution) {
-      case 'urgent':
-        // Assign to most available moderators immediately
-        this.distributeUrgent(items, availableModerators, assignments, unassigned, reasoning);
-        break;
+    case 'urgent':
+      // Assign to most available moderators immediately
+      this.distributeUrgent(items, availableModerators, assignments, unassigned, reasoning);
+      break;
         
-      case 'balanced':
-        // Distribute evenly based on current workload
-        this.distributeBalanced(items, availableModerators, assignments, unassigned, reasoning);
-        break;
+    case 'balanced':
+      // Distribute evenly based on current workload
+      this.distributeBalanced(items, availableModerators, assignments, unassigned, reasoning);
+      break;
         
-      case 'expertise':
-        // Match items to moderators with relevant expertise
-        await this.distributeByExpertise(items, availableModerators, assignments, unassigned, reasoning);
-        break;
+    case 'expertise':
+      // Match items to moderators with relevant expertise
+      await this.distributeByExpertise(items, availableModerators, assignments, unassigned, reasoning);
+      break;
     }
 
     // Log distribution results
@@ -564,17 +564,17 @@ export class UnifiedModerationDashboard {
 
   private async executeSingleBulkAction(action: BulkModerationAction, moderatorId: string): Promise<void> {
     switch (action.actionType) {
-      case 'approve':
-        await this.automatedService.batchApprove(action.itemIds, moderatorId, action.reason);
-        break;
-      case 'reject':
-        await this.automatedService.batchReject(action.itemIds, moderatorId, action.reason);
-        break;
-      case 'escalate':
-        await this.workflowService.batchEscalate(action.itemIds, action.reason);
-        break;
-      default:
-        throw new Error(`Unknown bulk action type: ${action.actionType}`);
+    case 'approve':
+      await this.automatedService.batchApprove(action.itemIds, moderatorId, action.reason);
+      break;
+    case 'reject':
+      await this.automatedService.batchReject(action.itemIds, moderatorId, action.reason);
+      break;
+    case 'escalate':
+      await this.workflowService.batchEscalate(action.itemIds, action.reason);
+      break;
+    default:
+      throw new Error(`Unknown bulk action type: ${action.actionType}`);
     }
   }
 

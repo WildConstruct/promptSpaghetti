@@ -324,9 +324,10 @@ export class WebSocketEventAdapter {
 }
 
 // Export singleton instance
-export 
+export const webSocketAdapter = new WebSocketEventAdapter();
+
 // Export utility functions
-export   },
+export const webSocketUtils = {
 
   /**
    * Get WebSocket message type for event type

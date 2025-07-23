@@ -492,36 +492,36 @@ export class ReactionService {
     for (const operation of operations.operations) {
       try {
         switch (operation.action) {
-          case 'add':
-            await this.addReaction({
-              contentId: operation.contentId,
-              contentType: 'template', // Would be determined from content
-              userId: operation.userId,
-              reactionType: operation.reactionType
-            });
-            break;
-          case 'remove':
-            // Find and remove user's reaction
-            const userReaction = await this.getUserReaction(operation.contentId, operation.userId);
-            if (userReaction) {
-              await this.removeReaction(userReaction.reactionId, operation.userId);
+        case 'add':
+          await this.addReaction({
+            contentId: operation.contentId,
+            contentType: 'template', // Would be determined from content
+            userId: operation.userId,
+            reactionType: operation.reactionType
+          });
+          break;
+        case 'remove':
+          // Find and remove user's reaction
+          const userReaction = await this.getUserReaction(operation.contentId, operation.userId);
+          if (userReaction) {
+            await this.removeReaction(userReaction.reactionId, operation.userId);
+          }
+          break;
+        case 'change':
+          // Remove old, add new
+          if (operation.previousReaction) {
+            const oldReaction = await this.getUserReaction(operation.contentId, operation.userId);
+            if (oldReaction) {
+              await this.removeReaction(oldReaction.reactionId, operation.userId);
             }
-            break;
-          case 'change':
-            // Remove old, add new
-            if (operation.previousReaction) {
-              const oldReaction = await this.getUserReaction(operation.contentId, operation.userId);
-              if (oldReaction) {
-                await this.removeReaction(oldReaction.reactionId, operation.userId);
-              }
-            }
-            await this.addReaction({
-              contentId: operation.contentId,
-              contentType: 'template',
-              userId: operation.userId,
-              reactionType: operation.reactionType
-            });
-            break;
+          }
+          await this.addReaction({
+            contentId: operation.contentId,
+            contentType: 'template',
+            userId: operation.userId,
+            reactionType: operation.reactionType
+          });
+          break;
         }
 
         results.successful++;
@@ -561,29 +561,29 @@ export class ReactionService {
         }
 
         switch (action.actionType) {
-          case 'remove':
-            this.reactions.delete(reactionId);
-            await this.updateReactionSummary(reaction.contentId);
-            break;
-          case 'hide':
-            // Mark as hidden (would update in database)
-            reaction.metadata = { ...reaction.metadata, hidden: true };
-            break;
-          case 'flag':
-            // Mark as flagged
-            reaction.metadata = { ...reaction.metadata, flagged: true };
-            break;
-          case 'approve':
-            // Remove any flags
-            if (reaction.metadata) {
-              delete reaction.metadata.flagged;
-              delete reaction.metadata.hidden;
-            }
-            break;
-          case 'escalate':
-            // Escalate to higher-level moderation
-            reaction.metadata = { ...reaction.metadata, escalated: true };
-            break;
+        case 'remove':
+          this.reactions.delete(reactionId);
+          await this.updateReactionSummary(reaction.contentId);
+          break;
+        case 'hide':
+          // Mark as hidden (would update in database)
+          reaction.metadata = { ...reaction.metadata, hidden: true };
+          break;
+        case 'flag':
+          // Mark as flagged
+          reaction.metadata = { ...reaction.metadata, flagged: true };
+          break;
+        case 'approve':
+          // Remove any flags
+          if (reaction.metadata) {
+            delete reaction.metadata.flagged;
+            delete reaction.metadata.hidden;
+          }
+          break;
+        case 'escalate':
+          // Escalate to higher-level moderation
+          reaction.metadata = { ...reaction.metadata, escalated: true };
+          break;
         }
 
         processed++;

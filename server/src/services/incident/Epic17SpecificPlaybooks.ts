@@ -31,7 +31,7 @@ import {
   PlaybookConfiguration,
   PlaybookMetadata
 } from '../../../packages/core/types/Epic17IncidentPlaybooks';
-import { ActionSeverity } from '../../../packages/core/types/EnforcementTypes';
+// import { ActionSeverity } from '../../../packages/core/types/EnforcementTypes';
 
 export class Epic17SpecificPlaybooks {
   
@@ -800,7 +800,7 @@ export class Epic17SpecificPlaybooks {
     };
   }
 
-  private static getDefaultPlaybookMetadata(playbookId: string): PlaybookMetadata {
+  private static getDefaultPlaybookMetadata(____playbookId: string): PlaybookMetadata {
     return {
       createdBy: 'epic17_system',
       createdAt: new Date(),

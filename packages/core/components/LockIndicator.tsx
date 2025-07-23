@@ -2,7 +2,7 @@
 // Visual indicator for lock status on resources
 
 import React from 'react';
-import { Lock, Clock, AlertTriangle, Users, Shield } from 'lucide-react';
+import { Lock, AlertTriangle, Users, Shield } from 'lucide-react';
 import { WorkflowLock } from '../types/locking';
 
 interface LockIndicatorProps {

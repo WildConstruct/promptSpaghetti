@@ -68,7 +68,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   // Handle history item click
-  const handleHistoryClick = (historyQuery: any) => {
+  const handleHistoryClick = (historyQuery: unknown) => {
     setText(historyQuery.text);
     setIsOpen(false);
     onSearch?.(historyQuery.text);

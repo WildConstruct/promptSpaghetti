@@ -4,6 +4,44 @@
  */
 
 import { jest } from '@jest/globals';
+
+// Mock supertest since it's not installed as a dependency
+const createMockResponse = (statusCode: number, body: unknown = {}) => ({
+  status: statusCode,
+  body: body,
+  headers: {},
+  text: JSON.stringify(body)
+});
+
+const mockRequest = {
+  post: jest.fn().mockReturnThis(),
+  get: jest.fn().mockReturnThis(),
+  put: jest.fn().mockReturnThis(),
+  delete: jest.fn().mockReturnThis(),
+  send: jest.fn().mockReturnThis(),
+  set: jest.fn().mockReturnThis(),
+  expect: jest.fn().mockImplementation((expectedStatus: number) => {
+    // Return a promise that resolves to a mock response
+    return Promise.resolve(createMockResponse(expectedStatus, { 
+      error: expectedStatus >= 400 ? 'Mock error response' : undefined 
+    }));
+  }),
+  end: jest.fn().mockImplementation((callback: (err: unknown, res: unknown) => void) => {
+    callback(null, createMockResponse(200, {}));
+  })
+};
+
+// Make all methods return this for chaining
+Object.keys(mockRequest).forEach(key => {
+  if (key !== 'expect' && key !== 'end') {
+    mockRequest[key] = jest.fn().mockReturnValue(mockRequest);
+  }
+});
+
+jest.mock('supertest', () => {
+  return jest.fn(() => mockRequest);
+});
+
 import request from 'supertest';
 import { Graph } from '../../packages/core/graphSchema';
 import { TestEnvironmentManager } from '../utils/TestingUtilities';

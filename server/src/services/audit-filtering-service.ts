@@ -564,7 +564,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
   }
 
   private getCommonPatternsOptimized(
-    partialFilter: Partial<AdvancedSearchFilter>
+    _____partialFilter: Partial<AdvancedSearchFilter>
   ): string[] {
     // Return common search patterns efficiently
     return [
@@ -623,8 +623,8 @@ export class OptimizedAuditFilteringService extends EventEmitter {
   }
 
   private async loadSavedFiltersForUser(
-    userId: string,
-    includePublic: boolean
+    _____userId: string,
+    _____includePublic: boolean
   ): Promise<SavedFilter[]> {
     // Implementation would load from database
     return [];

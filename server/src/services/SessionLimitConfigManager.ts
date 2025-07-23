@@ -8,7 +8,7 @@
 import { EventEmitter } from 'events';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
-import { SessionLimitConfig, OrganizationLimitConfig, UserLimitOverride } from './SessionLimitManager';
+import { SessionLimitConfig } from './SessionLimitManager';
 import { z } from 'zod';
 
 // Configuration schema for validation
@@ -74,7 +74,7 @@ export interface ConfigurationAuditLog {
   id: string;
   configId: string;
   action: 'created' | 'updated' | 'deleted' | 'applied';
-  changes: Record<string, { old: any; new: any }>;
+  changes: Record<string, { old: unknown; new: unknown }>;
   userId: string;
   timestamp: Date;
   reason?: string;
@@ -203,7 +203,7 @@ export class SessionLimitConfigManager extends EventEmitter {
   async getConfigurationTemplates(category?: string): Promise<ConfigurationTemplate[]> {
     try {
       let query = 'SELECT * FROM session_limit_config_templates';
-      const params: any[] = [];
+      const params: unknown[] = [];
       
       if (category) {
         query += ' WHERE category = $1';
@@ -452,7 +452,7 @@ export class SessionLimitConfigManager extends EventEmitter {
       maxDevicesPerUser: parseInt(process.env.MAX_DEVICES_PER_USER || '5'),
       deviceTrustDuration: parseInt(process.env.DEVICE_TRUST_DURATION || '30'),
       
-      conflictResolution: (process.env.CONFLICT_RESOLUTION as any) || 'kick_oldest',
+      conflictResolution: (process.env.CONFLICT_RESOLUTION as unknown) || 'kick_oldest',
       gracePeriotMinutes: parseInt(process.env.GRACE_PERIOD_MINUTES || '5'),
       
       enableSessionPriority: process.env.ENABLE_SESSION_PRIORITY !== 'false',
@@ -481,7 +481,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     Object.keys(envConfig).forEach(key => {
       const envKey = this.camelToSnakeCase(key).toUpperCase();
       if (process.env[envKey] !== undefined) {
-        (config as any)[key] = (envConfig as any)[key];
+        (config as unknown)[key] = (envConfig as unknown)[key];
       }
     });
     
@@ -586,11 +586,11 @@ export class SessionLimitConfigManager extends EventEmitter {
     userId: string,
     reason?: string
   ): Promise<void> {
-    const changes: Record<string, { old: any; new: any }> = {};
+    const changes: Record<string, { old: unknown; new: unknown }> = {};
     
     Object.keys(newConfig).forEach(key => {
-      const oldValue = (oldConfig as any)[key];
-      const newValue = (newConfig as any)[key];
+      const oldValue = (oldConfig as unknown)[key];
+      const newValue = (newConfig as unknown)[key];
       
       if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
         changes[key] = { old: oldValue, new: newValue };

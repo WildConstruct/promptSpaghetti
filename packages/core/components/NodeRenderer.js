@@ -3,8 +3,8 @@ import { memo, useState, useRef, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations';
 export const NodeRenderer = memo(({ id, data, selected = false, onSelect, getNodeMeta, getCategoryColor }) => {
-    const [isCreating, setIsCreating] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
+    const [_____isCreating, setIsCreating] = useState(false);
+    const [isDeleting, _____setIsDeleting] = useState(false);
     const nodeRef = useRef(null);
     const { isHovered, hoverProps } = useSmoothHover(150); // 150ms for micro-interactions
     // Node creation animation effect

@@ -72,7 +72,7 @@ interface CalendarState {
   showEditModal: boolean;
   upcomingDeadlines: AuditSchedule[];
   overdueSchedules: AuditSchedule[];
-  calendarEvents: any[];
+  calendarEvents: unknown[];
 }
 
 interface FilterState {
@@ -168,7 +168,7 @@ export const AuditCalendarDashboard: React.FC = () => {
 
   const loadMonitoringData = () => {
     try {
-      const monitoring = auditCalendarSystem.processScheduleMonitoring();
+      const _____monitoring = auditCalendarSystem.processScheduleMonitoring();
       const upcomingDeadlines = auditCalendarSystem.getUpcomingDeadlines(7);
       const overdueSchedules = auditCalendarSystem.getOverdueSchedules();
       
@@ -219,12 +219,12 @@ export const AuditCalendarDashboard: React.FC = () => {
     );
   };
 
-  const monthCellRender = (value: Moment) => {
+  const monthCellRender = (_____value: Moment) => {
     // Month view cell rendering if needed
     return null;
   };
 
-  const handleEventClick = (event: any) => {
+  const handleEventClick = (event: unknown) => {
     // Find the full schedule data
     const schedule = auditCalendarSystem.querySchedules({
       page: 1,
@@ -237,7 +237,7 @@ export const AuditCalendarDashboard: React.FC = () => {
     }
   };
 
-  const handleCreateSchedule = (values: any) => {
+  const handleCreateSchedule = (values: unknown) => {
     try {
       const scheduleData = {
         title: values.title,
@@ -271,7 +271,7 @@ export const AuditCalendarDashboard: React.FC = () => {
     }
   };
 
-  const handleUpdateSchedule = (scheduleId: string, updates: any) => {
+  const handleUpdateSchedule = (scheduleId: string, updates: unknown) => {
     try {
       auditCalendarSystem.updateSchedule(scheduleId, updates);
       loadCalendarData();
@@ -563,8 +563,8 @@ export const AuditCalendarDashboard: React.FC = () => {
 
 // Agenda View Component
 const AgendaView: React.FC<{
-  events: any[];
-  onEventClick: (event: any) => void;
+  events: unknown[];
+  onEventClick: (event: unknown) => void;
 }> = ({ events, onEventClick }) => {
   const groupedEvents = useMemo(() => {
     const groups: Record<string, any[]> = {};
@@ -588,7 +588,7 @@ const AgendaView: React.FC<{
           </h4>
           <List
             dataSource={dayEvents}
-            renderItem={(event: any) => (
+            renderItem={(event: unknown) => (
               <List.Item 
                 style={{ cursor: 'pointer' }}
                 onClick={() => onEventClick(event)}
@@ -622,7 +622,7 @@ const AgendaView: React.FC<{
 // Schedule Details View Component
 const ScheduleDetailsView: React.FC<{
   schedule: AuditSchedule;
-  onUpdate: (updates: any) => void;
+  onUpdate: (updates: unknown) => void;
 }> = ({ schedule, onUpdate }) => (
   <div>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
@@ -728,9 +728,9 @@ const ScheduleDetailsView: React.FC<{
 
 // Schedule List View Component  
 const ScheduleListView: React.FC<{
-  schedules: any[];
-  onScheduleClick: (schedule: any) => void;
-  onScheduleUpdate: (scheduleId: string, updates: any) => void;
+  schedules: unknown[];
+  onScheduleClick: (schedule: Error) => void;
+  onScheduleUpdate: (scheduleId: string, updates: unknown) => void;
   loading: boolean;
 }> = ({ schedules, onScheduleClick, onScheduleUpdate, loading }) => {
   const columns = [
@@ -738,7 +738,7 @@ const ScheduleListView: React.FC<{
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
-      render: (title: string, record: any) => (
+      render: (title: string, record: unknown) => (
         <Button type="link" onClick={() => onScheduleClick(record)}>
           {title}
         </Button>
@@ -804,7 +804,7 @@ const ScheduleListView: React.FC<{
 };
 
 // Additional components would be implemented here...
-const CalendarFiltersPanel: React.FC<any> = ({ filters, onFiltersChange }) => (
+const CalendarFiltersPanel: React.FC<unknown> = ({ filters, onFiltersChange }) => (
   <Card title="Filters" size="small">
     <Space direction="vertical" style={{ width: '100%' }}>
       <div>
@@ -827,7 +827,7 @@ const CalendarFiltersPanel: React.FC<any> = ({ filters, onFiltersChange }) => (
   </Card>
 );
 
-const CreateScheduleModal: React.FC<any> = ({ visible, onCancel, onSubmit }) => {
+const CreateScheduleModal: React.FC<unknown> = ({ visible, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
   
   return (
@@ -947,7 +947,7 @@ const EditScheduleModal: React.FC<{
   visible: boolean;
   schedule: AuditSchedule | null;
   onCancel: () => void;
-  onSubmit: (updates: any) => void;
+  onSubmit: (updates: unknown) => void;
 }> = ({ visible, schedule, onCancel, onSubmit }) => {
   const [form] = Form.useForm();
 
@@ -1093,7 +1093,7 @@ const EditScheduleModal: React.FC<{
 const OverdueSchedulesView: React.FC<{
   schedules: AuditSchedule[];
   onScheduleClick: (schedule: AuditSchedule) => void;
-  onScheduleUpdate: (scheduleId: string, updates: any) => void;
+  onScheduleUpdate: (scheduleId: string, updates: unknown) => void;
 }> = ({ schedules, onScheduleClick, onScheduleUpdate }) => {
   const columns = [
     {
@@ -1251,7 +1251,7 @@ const OverdueSchedulesView: React.FC<{
 
 // Calendar Analytics View Component
 const CalendarAnalyticsView: React.FC = () => {
-  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [analyticsData, setAnalyticsData] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState<[Moment, Moment]>([
     moment().subtract(30, 'days'),
@@ -1405,7 +1405,7 @@ const CalendarAnalyticsView: React.FC = () => {
         {analyticsData?.timeline_analysis && analyticsData.timeline_analysis.length > 0 ? (
           <div style={{ height: 300, overflowX: 'auto' }}>
             <Timeline>
-              {analyticsData.timeline_analysis.slice(0, 10).map((item: any) => (
+              {analyticsData.timeline_analysis.slice(0, 10).map((item: unknown) => (
                 <Timeline.Item
                   key={item.date}
                   color={item.overdue > 0 ? 'red' : item.completed > item.scheduled / 2 ? 'green' : 'blue'}

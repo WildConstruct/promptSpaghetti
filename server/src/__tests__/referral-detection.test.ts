@@ -190,23 +190,23 @@ class ReferralDetectionService {
     const rewardId = crypto.randomUUID();
     
     switch (campaign.rewardType) {
-      case 'percentage':
-        rewardAmount = (referral.conversionValue * campaign.rewardValue) / 100;
-        break;
-      case 'fixed_amount':
-        rewardAmount = campaign.rewardValue;
-        break;
-      case 'tiered':
-        if (referral.conversionValue >= 100) {
-          rewardAmount = 50;
-        } else if (referral.conversionValue >= 50) {
-          rewardAmount = 25;
-        } else {
-          rewardAmount = 10;
-        }
-        break;
-      default:
-        rewardAmount = 0;
+    case 'percentage':
+      rewardAmount = (referral.conversionValue * campaign.rewardValue) / 100;
+      break;
+    case 'fixed_amount':
+      rewardAmount = campaign.rewardValue;
+      break;
+    case 'tiered':
+      if (referral.conversionValue >= 100) {
+        rewardAmount = 50;
+      } else if (referral.conversionValue >= 50) {
+        rewardAmount = 25;
+      } else {
+        rewardAmount = 10;
+      }
+      break;
+    default:
+      rewardAmount = 0;
     }
 
     const attributionWeight = await this.calculateAttributionWeight(referralId, referral.attributionModel);
@@ -250,17 +250,17 @@ class ReferralDetectionService {
 
   async calculateAttributionWeight(referralId: string, model: string) {
     switch (model) {
-      case 'first_touch':
-      case 'last_touch':
-        return 1.0;
-      case 'linear':
-        return 1.0;
-      case 'time_decay':
-        return 0.8;
-      case 'position_based':
-        return 1.0;
-      default:
-        return 1.0;
+    case 'first_touch':
+    case 'last_touch':
+      return 1.0;
+    case 'linear':
+      return 1.0;
+    case 'time_decay':
+      return 0.8;
+    case 'position_based':
+      return 1.0;
+    default:
+      return 1.0;
     }
   }
 

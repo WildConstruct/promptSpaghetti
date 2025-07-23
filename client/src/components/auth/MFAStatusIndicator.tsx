@@ -198,7 +198,7 @@ export function MFAStatusIndicator({
     return MFASecurityLevel.NONE;
   };
 
-  const generateRecommendations = (profile: UserMFAProfile, activity: any): string[] => {
+  const generateRecommendations = (profile: UserMFAProfile, activity: unknown): string[] => {
     const recommendations: string[] = [];
 
     if (!profile.isEnabled) {

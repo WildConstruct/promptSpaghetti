@@ -2,7 +2,7 @@
 // Interface for assigning and managing user roles with organization and team context
 
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, X, Calendar, Users, Shield, AlertCircle, CheckCircle } from 'lucide-react';
+import { Search, Plus, X, Calendar, Users, Shield, AlertCircle } from 'lucide-react';
 
 interface User {
   id: string;
@@ -47,7 +47,7 @@ export const UserRoleAssignment: React.FC = () => {
   const [userRoles, setUserRoles] = useState<UserRole[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [roleFilter, setRoleFilter] = useState('');
+  const [roleFilter, ___setRoleFilter] = useState('');
   const [showAssignModal, setShowAssignModal] = useState(false);
   
   // Assignment form state
@@ -110,7 +110,7 @@ export const UserRoleAssignment: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         // Transform roles to include assignment details
-        const userRolesWithDetails = data.roles.map((role: any) => ({
+        const userRolesWithDetails = data.roles.map((role: Error) => ({
           id: role.assignmentId || role.id,
           userId,
           roleId: role.id,

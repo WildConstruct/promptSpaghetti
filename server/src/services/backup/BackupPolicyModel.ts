@@ -173,7 +173,7 @@ export interface PolicyRule {
   condition: {
     field: string;
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not_in' | 'contains' | 'regex';
-    value: any;
+    value: Error;
     data_type: 'string' | 'number' | 'boolean' | 'date' | 'array';
   };
   
@@ -374,7 +374,7 @@ export class BackupPolicyModelService {
     offset?: number;
   } = {}): Promise<{ policies: BackupPolicy[]; total: number }> {
     let whereClause = '';
-    const params: any[] = [];
+    const params: unknown[] = [];
     const conditions: string[] = [];
 
     if (filters.status) {
@@ -747,7 +747,7 @@ export class BackupPolicyModelService {
     ]);
   }
 
-  private mapRowToBackupPolicy(row: any): BackupPolicy {
+  private mapRowToBackupPolicy(row: unknown): BackupPolicy {
     return {
       policy_id: row.policy_id,
       name: row.name,
@@ -775,7 +775,7 @@ export class BackupPolicyModelService {
     };
   }
 
-  private mapRowToPolicyRule(row: any): PolicyRule {
+  private mapRowToPolicyRule(row: unknown): PolicyRule {
     return {
       rule_id: row.rule_id,
       policy_id: row.policy_id,
@@ -871,7 +871,7 @@ export class BackupPolicyModelService {
     `, [executionId, status]);
   }
 
-  private async markPolicyExecutionFailed(executionId: string, errorMessage: string): Promise<void> {
+  private async markPolicyExecutionFailed(executionId: string, _____errorMessage: string): Promise<void> {
     await this.db.query(`
       UPDATE backup_policy_executions 
       SET status = 'failed',
@@ -883,7 +883,7 @@ export class BackupPolicyModelService {
 
   private async generateOptimizationRecommendations(
     policy: BackupPolicy, 
-    metrics: any
+    metrics: unknown
   ): Promise<PolicyAnalytics['optimization_recommendations']> {
     const recommendations: PolicyAnalytics['optimization_recommendations'] = [];
     

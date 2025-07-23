@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Steps, Button, Form, Select, Checkbox, Alert, Progress, Typography } from 'antd';
+import { Modal, Steps, Button, Form, Select, Checkbox, Alert, Typography } from 'antd';
 import { 
   RestoreOutlined, 
   ExclamationCircleOutlined, 

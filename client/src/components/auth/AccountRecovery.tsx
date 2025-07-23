@@ -123,7 +123,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
       setMode('success');
       onSuccess?.('Account unlock instructions have been sent to your email address.');
       
-    } catch (error: any) {
+    } catch (error: Error) {
       onError?.(error.message || 'Failed to request account unlock');
     } finally {
       setIsLoading(false);
@@ -155,7 +155,7 @@ export const AccountRecovery: React.FC<AccountRecoveryProps> = ({
       setMode('success');
       onSuccess?.('Your account has been successfully unlocked. You can now sign in.');
       
-    } catch (error: any) {
+    } catch (error: Error) {
       onError?.(error.message || 'Failed to unlock account');
     } finally {
       setIsLoading(false);

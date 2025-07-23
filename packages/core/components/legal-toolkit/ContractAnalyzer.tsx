@@ -98,7 +98,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({
     }
   }, [document, analyzeContract]);
 
-  const identifyClauses = async (content: string): Promise<ContractClause[]> => {
+  const identifyClauses = async (_____content: string): Promise<ContractClause[]> => {
     // Mock clause identification - in real implementation would use AI/ML
     const clauses: ContractClause[] = [
       {
@@ -152,9 +152,9 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({
     return clauses;
   };
 
-  const assessRisks = async (clauses: ContractClause[], content: string): Promise<RiskAssessment> => {
+  const assessRisks = async (clauses: ContractClause[], _____content: string): Promise<RiskAssessment> => {
     const highRiskClauses = clauses.filter(c => c.riskLevel === 'high' || c.riskLevel === 'critical');
-    const nonCompliantClauses = clauses.filter(c => !c.standardCompliance);
+    const _____nonCompliantClauses = clauses.filter(c => !c.standardCompliance);
 
     return {
       overallRisk: highRiskClauses.length > 0 ? 'high' : 'medium',
@@ -183,7 +183,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({
     };
   };
 
-  const checkCompliance = async (document: any, clauses: ContractClause[]): Promise<ComplianceCheck[]> => {
+  const checkCompliance = async (_____document: unknown, _____clauses: ContractClause[]): Promise<ComplianceCheck[]> => {
     return [
       {
         id: 'comp_1',

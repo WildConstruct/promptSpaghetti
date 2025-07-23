@@ -13,7 +13,7 @@
 import { EventEmitter } from 'events';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
-import { SessionService, ActiveSession } from '../auth/services/SessionService';
+import { SessionService } from '../auth/services/SessionService';
 import { AuditService } from '../auth/services/AuditService';
 import { ConnectionManager } from '../websocket/ConnectionManager';
 
@@ -606,7 +606,7 @@ export class SessionLimitManager extends EventEmitter {
         SELECT * FROM session_limit_violations 
         WHERE resolved_at IS NULL
       `;
-      const params: any[] = [];
+      const params: unknown[] = [];
       let paramIndex = 1;
       
       if (filters?.userId) {

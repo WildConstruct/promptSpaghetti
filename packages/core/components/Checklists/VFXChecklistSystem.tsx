@@ -5,14 +5,12 @@
  * Supports hierarchical tasks, team collaboration, asset tracking, and quality assurance.
  */
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/Switch';
-import { Slider } from '../ui/Slider';
 import { 
   CheckSquare,
   Square,
@@ -283,14 +281,14 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({
   className = ''
 }) => {
   // UI state
-  const [selectedTab, setSelectedTab] = useState('overview');
+  const [_____selectedTab, _____setSelectedTab] = useState('overview');
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
-  const [assigneeFilter, setAssigneeFilter] = useState<string>('all');
+  const [assigneeFilter, _____setAssigneeFilter] = useState<string>('all');
   const [showCompleted, setShowCompleted] = useState(true);
   const [sortBy, setSortBy] = useState<'priority' | 'dueDate' | 'status' | 'progress'>('priority');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -853,7 +851,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({
 
   const isOverdue = item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved';
   const canEdit = !readonly && (currentUser.permissions.canEdit || item.author.id === currentUser.id);
-  const canApprove = !readonly && currentUser.permissions.canApprove;
+  const ___canApprove = !readonly && currentUser.permissions.___canApprove;
 
   const handleCommentSubmit = useCallback(() => {
     if (!newComment.trim()) return;

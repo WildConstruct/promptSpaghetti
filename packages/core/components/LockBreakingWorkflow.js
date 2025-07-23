@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Workflow for breaking existing locks with proper authorization
 import { useState, useEffect } from 'react';
 import { X, AlertTriangle, Shield, Clock, User, FileText } from 'lucide-react';
-export const LockBreakingWorkflow = ({ isOpen, onClose, resourceId, onBreakLock, userId }) => {
+export const LockBreakingWorkflow = ({ isOpen, onClose, resourceId, onBreakLock, _____userId }) => {
     const [currentStep, setCurrentStep] = useState('select');
     const [selectedLock, setSelectedLock] = useState(null);
     const [justification, setJustification] = useState('');

@@ -124,7 +124,7 @@ export class CorrectionsDAO {
     }
     
     const updates: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     
     // Build dynamic update query
     Object.entries(input).forEach(([key, value]) => {
@@ -823,10 +823,10 @@ export class CorrectionsDAO {
   /**
    * Import rules from localStorage format
    */
-  importFromLocalStorage(localStorageRules: any[], userId: number = 1): number {
+  importFromLocalStorage(localStorageRules: unknown[], userId: number = 1): number {
     let importedCount = 0;
     
-    const transaction = this.db.transaction((rules: any[]) => {
+    const transaction = this.db.transaction((rules: unknown[]) => {
       for (const rule of rules) {
         try {
           const input: CreateCorrectionRuleInput = {
@@ -856,7 +856,7 @@ export class CorrectionsDAO {
   /**
    * Export rules to localStorage format
    */
-  exportToLocalStorage(userId: number): any[] {
+  exportToLocalStorage(userId: number): unknown[] {
     const rules = this.getRulesByUser(userId, true);
     
     return rules.map(rule => ({

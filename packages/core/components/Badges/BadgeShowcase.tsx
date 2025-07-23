@@ -206,7 +206,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
     </div>
   );
 
-  const renderBadgeGrid = (badges: any[]) => (
+  const renderBadgeGrid = (badges: unknown[]) => (
     <div className="badge-grid">
       {badges.map((badge, index) => {
         const isUnlocked = userBadges.some(ub => ub.badgeId === badge.id);
@@ -552,7 +552,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({
                 </SelectContent>
               </Select>
 
-              <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+              <Select value={sortBy} onValueChange={(value: Error) => setSortBy(value)}>
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>

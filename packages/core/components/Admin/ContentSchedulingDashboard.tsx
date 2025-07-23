@@ -102,7 +102,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
   const [isLoading, setIsLoading] = useState(false);
 
   // Filters
-  const [filter, setFilter] = useState<ContentFilter>({});
+  const [_____filter, _____setFilter] = useState<ContentFilter>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<ContentType | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<ContentStatus | 'all'>('all');

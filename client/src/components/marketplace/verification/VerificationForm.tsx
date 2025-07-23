@@ -38,7 +38,7 @@ const COUNTRIES = [
   { code: 'UK', name: 'United Kingdom' },
   { code: 'DE', name: 'Germany' },
   { code: 'FR', name: 'France' },
-  { code: 'AU', name: 'Australia' },
+  { code: 'AU', name: 'Australia' }
   // Add more countries as needed
 ];
 
@@ -55,7 +55,7 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ onSubmit, on
       city: initialData?.personal_info?.city || '',
       postal_code: initialData?.personal_info?.postal_code || '',
       address_line_1: initialData?.personal_info?.address_line_1 || '',
-      address_line_2: initialData?.personal_info?.address_line_2 || '',
+      address_line_2: initialData?.personal_info?.address_line_2 || ''
     },
     professional_info: {
       job_title: initialData?.professional_info?.job_title || '',
@@ -64,7 +64,7 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ onSubmit, on
       years_experience: initialData?.professional_info?.years_experience || undefined,
       linkedin_url: initialData?.professional_info?.linkedin_url || '',
       website_url: initialData?.professional_info?.website_url || '',
-      portfolio_url: initialData?.professional_info?.portfolio_url || '',
+      portfolio_url: initialData?.professional_info?.portfolio_url || ''
     },
     business_info: {
       business_name: initialData?.business_info?.business_name || '',
@@ -77,16 +77,16 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({ onSubmit, on
         city: initialData?.business_info?.business_address?.city || '',
         postal_code: initialData?.business_info?.business_address?.postal_code || '',
         address_line_1: initialData?.business_info?.business_address?.address_line_1 || '',
-        address_line_2: initialData?.business_info?.business_address?.address_line_2 || '',
+        address_line_2: initialData?.business_info?.business_address?.address_line_2 || ''
       }
     },
     verification_purpose: initialData?.verification_purpose || '',
-    additional_notes: initialData?.additional_notes || '',
+    additional_notes: initialData?.additional_notes || ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = useCallback((section: keyof VerificationInformation, field: string, value: any) => {
+  const handleInputChange = useCallback((section: keyof VerificationInformation, field: string, value: Error) => {
     setFormData(prev => {
       if (section === 'business_info' && field.startsWith('business_address.')) {
         const addressField = field.replace('business_address.', '');

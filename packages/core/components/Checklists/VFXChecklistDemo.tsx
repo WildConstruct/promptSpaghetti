@@ -494,7 +494,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({
   const [currentUser, setCurrentUser] = useState<VFXTeamMember>(initialUser);
   const [activeTab, setActiveTab] = useState('checklist');
   const [checklist, setChecklist] = useState<VFXChecklist>(createSampleChecklist());
-  const [customTemplates, setCustomTemplates] = useState<VFXChecklistTemplate[]>([]);
+  const [customTemplates, _____setCustomTemplates] = useState<VFXChecklistTemplate[]>([]);
   
   // UI state
   const [autoRefresh, setAutoRefresh] = useState(true);

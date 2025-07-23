@@ -481,13 +481,13 @@ export function auditSecurityEvent(
   category: SecurityEventCategory = SecurityEventCategory.EXPRESSION_VALIDATION
 ): MethodDecorator {
   return function (
-    target: any,
+    target: unknown,
     propertyName: string | symbol,
     descriptor: PropertyDescriptor
   ): PropertyDescriptor {
     const method = descriptor.value;
     
-    descriptor.value = function (...args: any[]) {
+    descriptor.value = function (...args: unknown[]) {
       const startTime = Date.now();
       const context: SecurityEventContext = {
         functionName: `${target.constructor.name}.${String(propertyName)}`,

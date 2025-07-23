@@ -85,7 +85,7 @@ export class HIPAAComplianceService {
   async assessHIPAACompliance(
     content: string,
     documentType: 'clinical_note' | 'patient_record' | 'research_data' | 'administrative_document',
-    checkLevel: 'basic' | 'comprehensive' | 'audit' = 'comprehensive'
+    _____checkLevel: 'basic' | 'comprehensive' | 'audit' = 'comprehensive'
   ): Promise<ComplianceAssessment> {
     try {
       const findings = [];
@@ -447,7 +447,7 @@ export class HIPAAComplianceService {
   private async applySyntheticDataMethod(
     content: string,
     phiElements: PHIElement[],
-    preserveStructure: boolean
+    _____preserveStructure: boolean
   ): Promise<{ content: string; removedElements: PHIElement[] }> {
     let deidentifiedContent = content;
     const removedElements: PHIElement[] = [];
@@ -512,7 +512,7 @@ export class HIPAAComplianceService {
     }
   }
 
-  private assessPHIElementRisk(type: PHIElement['type'], value: string): PHIElement['riskLevel'] {
+  private assessPHIElementRisk(type: PHIElement['type'], _____value: string): PHIElement['riskLevel'] {
     const criticalTypes: PHIElement['type'][] = ['ssn', 'medical_record_number', 'biometric_identifier'];
     const highTypes: PHIElement['type'][] = ['name', 'address', 'phone', 'email'];
     
@@ -521,7 +521,7 @@ export class HIPAAComplianceService {
     return 'medium';
   }
 
-  private calculatePHIConfidence(type: PHIElement['type'], value: string): number {
+  private calculatePHIConfidence(type: PHIElement['type'], _____value: string): number {
     // Mock confidence calculation based on pattern strength
     const strongPatterns: PHIElement['type'][] = ['ssn', 'phone', 'email'];
     const mediumPatterns: PHIElement['type'][] = ['date', 'medical_record_number'];

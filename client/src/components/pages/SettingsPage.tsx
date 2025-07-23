@@ -4,7 +4,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { ArrowLeft } from 'lucide-react';
 
 const SettingsPage: React.FC = () => {
-  const { user } = useAuthStore();
+  const { ___user } = useAuthStore();
   const navigate = useNavigate();
   const [settings, setSettings] = useState({
     notifications: {
@@ -28,7 +28,7 @@ const SettingsPage: React.FC = () => {
 
   const [activeSection, setActiveSection] = useState('notifications');
 
-  const handleSettingChange = (section: string, key: string, value: any) => {
+  const handleSettingChange = (section: string, key: string, value: Error) => {
     setSettings(prev => ({
       ...prev,
       [section]: {

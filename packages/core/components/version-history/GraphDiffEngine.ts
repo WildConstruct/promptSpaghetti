@@ -7,8 +7,8 @@ export interface GraphNode {
   id: string;
   type: string;
   position: { x: number; y: number };
-  data: any;
-  style?: any;
+  data: Record<string, unknown>;
+  style?: unknown;
 }
 
 export interface GraphEdge {
@@ -16,22 +16,22 @@ export interface GraphEdge {
   source: string;
   target: string;
   type?: string;
-  data?: any;
-  style?: any;
+  data?: unknown;
+  style?: unknown;
 }
 
 export interface GraphData {
   nodes: GraphNode[];
   edges: GraphEdge[];
-  metadata?: any;
+  metadata?: unknown;
 }
 
 export interface DiffChange {
   type: 'added' | 'removed' | 'modified' | 'moved';
   element_type: 'node' | 'edge' | 'property';
   element_id: string;
-  old_value?: any;
-  new_value?: any;
+  old_value?: unknown;
+  new_value?: unknown;
   property_path?: string;
   position_change?: {
     from: { x: number; y: number };
@@ -325,8 +325,8 @@ export class GraphDiffEngine {
   }
 
   private compareObjectProperties(
-    fromObj: any,
-    toObj: any,
+    fromObj: unknown,
+    toObj: unknown,
     basePath: string
   ): Array<Omit<DiffChange, 'element_type' | 'element_id'>> {
     const changes: Array<Omit<DiffChange, 'element_type' | 'element_id'>> = [];
@@ -383,7 +383,7 @@ export class GraphDiffEngine {
     return Math.sqrt(Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2));
   }
 
-  private calculateSignificance(changeType: string, elementType: string, element: any): number {
+  private calculateSignificance(changeType: string, elementType: string, element: HTMLElement): number {
     // Base significance by change type
     let significance = 0.5;
     
@@ -413,7 +413,7 @@ export class GraphDiffEngine {
     return Math.min(1, significance);
   }
 
-  private calculatePropertySignificance(propertyName: string, value: any): number {
+  private calculatePropertySignificance(propertyName: string, value: Error): number {
     // Some properties are more significant than others
     const significantProperties = {
       'id': 0.9,

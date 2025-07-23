@@ -67,13 +67,13 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
   const [activeTab, setActiveTab] = useState<'dashboard' | 'rules' | 'criteria' | 'statistics'>('dashboard');
   const [approvalCriteria, setApprovalCriteria] = useState<ApprovalCriteria[]>([]);
   const [approvalRules, setApprovalRules] = useState<ApprovalRule[]>([]);
-  const [selectedRequest, setSelectedRequest] = useState<any>(null);
+  const [selectedRequest, setSelectedRequest] = useState<unknown>(null);
   const [showReviewInterface, setShowReviewInterface] = useState(false);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
-  const [showRuleModal, setShowRuleModal] = useState(false);
+  const [_____showRuleModal, setShowRuleModal] = useState(false);
   const [editingCriteria, setEditingCriteria] = useState<ApprovalCriteria | null>(null);
-  const [editingRule, setEditingRule] = useState<ApprovalRule | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [_____editingRule, setEditingRule] = useState<ApprovalRule | null>(null);
+  const [_____loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Determine dashboard mode based on user role
@@ -159,7 +159,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
     }
   };
 
-  const handleCreateRule = async (data: Partial<ApprovalRule>) => {
+  const _____handleCreateRule = async (data: Partial<ApprovalRule>) => {
     try {
       const response = await fetch('/api/approval/rules', {
         method: 'POST',

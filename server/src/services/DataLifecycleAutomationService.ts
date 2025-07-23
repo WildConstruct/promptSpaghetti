@@ -4,7 +4,7 @@
 
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
-import { DataRetentionFrameworkService, RetentionRecord } from './DataRetentionFrameworkService';
+import { DataRetentionFrameworkService, // RetentionRecord // Unused import } from './DataRetentionFrameworkService';
 import { RetentionEnforcementService } from './RetentionEnforcementService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
@@ -597,13 +597,13 @@ export class DataLifecycleAutomationService {
     return recentAccess.length === 0 || recentAccess.every(pattern => pattern.frequency < 5);
   }
 
-  private isRetentionExpired(record: DataLifecycleRecord): boolean {
+  private isRetentionExpired(__record: DataLifecycleRecord): boolean {
     // This would check against the retention framework
     return false; // Placeholder
   }
 
   // Database operations and helper methods
-  private async buildDefaultMetadata(category: DataCategory, dataType: string): Promise<DataLifecycleMetadata> {
+  private async buildDefaultMetadata(category: DataCategory, __dataType: string): Promise<DataLifecycleMetadata> {
     return {
       classification: {
         primary: category,
@@ -621,8 +621,8 @@ export class DataLifecycleAutomationService {
   }
 
   private async getApplicableAutomationRules(
-    category: DataCategory,
-    metadata: DataLifecycleMetadata
+    __category: DataCategory,
+    __metadata: DataLifecycleMetadata
   ): Promise<AutomationRule[]> {
     // Implementation would retrieve applicable automation rules
     return [];
@@ -639,47 +639,47 @@ export class DataLifecycleAutomationService {
     );
   }
 
-  private async scheduleInitialAutomation(record: DataLifecycleRecord): Promise<void> {
+  private async scheduleInitialAutomation(__record: DataLifecycleRecord): Promise<void> {
     // Implementation would schedule initial automation jobs
   }
 
-  private async scheduleNextAutomation(record: DataLifecycleRecord): Promise<void> {
+  private async scheduleNextAutomation(__record: DataLifecycleRecord): Promise<void> {
     // Implementation would schedule next automation based on current stage
   }
 
   private async evaluateStageConditions(
-    record: DataLifecycleRecord,
-    targetStage: LifecycleStage
+    __record: DataLifecycleRecord,
+    __targetStage: LifecycleStage
   ): Promise<{ allMet: boolean; conditions: StageCondition[] }> {
     // Implementation would evaluate stage transition conditions
     return { allMet: true, conditions: [] };
   }
 
   private async executePreTransitionActions(
-    record: DataLifecycleRecord,
-    targetStage: LifecycleStage
+    __record: DataLifecycleRecord,
+    __targetStage: LifecycleStage
   ): Promise<void> {
     // Implementation would execute pre-transition actions
   }
 
   private async executePostTransitionActions(
-    record: DataLifecycleRecord,
-    targetStage: LifecycleStage
+    __record: DataLifecycleRecord,
+    __targetStage: LifecycleStage
   ): Promise<void> {
     // Implementation would execute post-transition actions
   }
 
-  private async getStageTriggersFor(stage: LifecycleStage): Promise<StageTrigger[]> {
+  private async getStageTriggersFor(__stage: LifecycleStage): Promise<StageTrigger[]> {
     // Implementation would return stage-specific triggers
     return [];
   }
 
-  private async getStageActionsFor(stage: LifecycleStage): Promise<StageAction[]> {
+  private async getStageActionsFor(__stage: LifecycleStage): Promise<StageAction[]> {
     // Implementation would return stage-specific actions
     return [];
   }
 
-  private async getStageConditionsFor(stage: LifecycleStage): Promise<StageCondition[]> {
+  private async getStageConditionsFor(__stage: LifecycleStage): Promise<StageCondition[]> {
     // Implementation would return stage-specific conditions
     return [];
   }
@@ -710,22 +710,22 @@ export class DataLifecycleAutomationService {
     return record.metadata.classification;
   }
 
-  private async prepareForArchival(record: DataLifecycleRecord): Promise<void> {
+  private async prepareForArchival(__record: DataLifecycleRecord): Promise<void> {
     // Implementation would prepare data for archival
   }
 
-  private async performDeletion(record: DataLifecycleRecord): Promise<void> {
+  private async performDeletion(__record: DataLifecycleRecord): Promise<void> {
     // Implementation would perform actual data deletion
   }
 
-  private async checkCompliance(record: DataLifecycleRecord): Promise<{ compliant: boolean; violations: string[] }> {
+  private async checkCompliance(__record: DataLifecycleRecord): Promise<{ compliant: boolean; violations: string[] }> {
     // Implementation would check compliance status
     return { compliant: true, violations: [] };
   }
 
   private async handleComplianceViolation(
-    record: DataLifecycleRecord,
-    status: { compliant: boolean; violations: string[] }
+    __record: DataLifecycleRecord,
+    __status: { compliant: boolean; violations: string[] }
   ): Promise<void> {
     // Implementation would handle compliance violations
   }

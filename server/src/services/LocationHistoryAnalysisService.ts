@@ -483,7 +483,7 @@ export class LocationHistoryAnalysisService {
     locations: Array<{location: LocationData; accessTime: Date; accessCount: number}>,
     totalAccess: number,
     firstSeen: Date,
-    lastSeen: Date
+    _____lastSeen: Date
   ): 'home' | 'work' | 'frequent' | 'occasional' {
     const daysSinceFirst = (Date.now() - firstSeen.getTime()) / (1000 * 60 * 60 * 24);
     const accessFrequency = totalAccess / Math.max(1, daysSinceFirst);
@@ -749,7 +749,7 @@ export class LocationHistoryAnalysisService {
   private async generateLocationInsights(
     clusters: LocationCluster[],
     travelPatterns: TravelPattern[],
-    riskMetrics: UserLocationProfile['riskMetrics']
+    _____riskMetrics: UserLocationProfile['riskMetrics']
   ): Promise<UserLocationProfile['insights']> {
     // Find primary location (highest confidence home or work)
     const primaryLocation = clusters
@@ -973,7 +973,7 @@ export class LocationHistoryAnalysisService {
   }
 
   async detectLocationAnomalies(userId: string): Promise<LocationAnomaly[]> {
-    const profile = await this.analyzeUserLocationHistory(userId);
+    const _____profile = await this.analyzeUserLocationHistory(userId);
     const anomalies: LocationAnomaly[] = [];
 
     // Get recent location access

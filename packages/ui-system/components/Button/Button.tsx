@@ -41,14 +41,14 @@ const buttonStyles = {
     // Focus styles
     '&:focus-visible': {
       outline: '2px solid',
-      outlineOffset: '2px',
+      outlineOffset: '2px'
     },
     
     // Disabled styles
     '&:disabled': {
       cursor: 'not-allowed',
-      opacity: 0.6,
-    },
+      opacity: 0.6
+    }
   },
   
   variants: {
@@ -58,16 +58,16 @@ const buttonStyles = {
       borderColor: colors.component.button.primary.border,
       
       '&:hover:not(:disabled)': {
-        backgroundColor: colors.component.button.primary.backgroundHover,
+        backgroundColor: colors.component.button.primary.backgroundHover
       },
       
       '&:active:not(:disabled)': {
-        backgroundColor: colors.component.button.primary.backgroundActive,
+        backgroundColor: colors.component.button.primary.backgroundActive
       },
       
       '&:focus-visible': {
-        outlineColor: colors.component.button.primary.borderFocus,
-      },
+        outlineColor: colors.component.button.primary.borderFocus
+      }
     },
     
     secondary: {
@@ -77,16 +77,16 @@ const buttonStyles = {
       
       '&:hover:not(:disabled)': {
         backgroundColor: colors.component.button.secondary.backgroundHover,
-        borderColor: colors.component.button.secondary.borderHover,
+        borderColor: colors.component.button.secondary.borderHover
       },
       
       '&:active:not(:disabled)': {
-        backgroundColor: colors.component.button.secondary.backgroundActive,
+        backgroundColor: colors.component.button.secondary.backgroundActive
       },
       
       '&:focus-visible': {
-        outlineColor: colors.component.button.secondary.borderFocus,
-      },
+        outlineColor: colors.component.button.secondary.borderFocus
+      }
     },
     
     ghost: {
@@ -95,16 +95,16 @@ const buttonStyles = {
       borderColor: colors.component.button.ghost.border,
       
       '&:hover:not(:disabled)': {
-        backgroundColor: colors.component.button.ghost.backgroundHover,
+        backgroundColor: colors.component.button.ghost.backgroundHover
       },
       
       '&:active:not(:disabled)': {
-        backgroundColor: colors.component.button.ghost.backgroundActive,
+        backgroundColor: colors.component.button.ghost.backgroundActive
       },
       
       '&:focus-visible': {
-        outlineColor: colors.component.button.ghost.borderFocus,
-      },
+        outlineColor: colors.component.button.ghost.borderFocus
+      }
     },
     
     destructive: {
@@ -113,17 +113,17 @@ const buttonStyles = {
       borderColor: colors.component.button.destructive.border,
       
       '&:hover:not(:disabled)': {
-        backgroundColor: colors.component.button.destructive.backgroundHover,
+        backgroundColor: colors.component.button.destructive.backgroundHover
       },
       
       '&:active:not(:disabled)': {
-        backgroundColor: colors.component.button.destructive.backgroundActive,
+        backgroundColor: colors.component.button.destructive.backgroundActive
       },
       
       '&:focus-visible': {
-        outlineColor: colors.component.button.destructive.borderFocus,
-      },
-    },
+        outlineColor: colors.component.button.destructive.borderFocus
+      }
+    }
   },
   
   sizes: {
@@ -131,23 +131,23 @@ const buttonStyles = {
       fontSize: '0.875rem', // 14px
       lineHeight: '1.25rem', // 20px
       padding: '0.5rem 0.75rem', // 8px 12px
-      minHeight: '2rem', // 32px
+      minHeight: '2rem' // 32px
     },
     
     md: {
       fontSize: '0.875rem', // 14px
       lineHeight: '1.25rem', // 20px
       padding: '0.625rem 1rem', // 10px 16px
-      minHeight: '2.5rem', // 40px
+      minHeight: '2.5rem' // 40px
     },
     
     lg: {
       fontSize: '1rem', // 16px
       lineHeight: '1.5rem', // 24px
       padding: '0.75rem 1.5rem', // 12px 24px
-      minHeight: '3rem', // 48px
-    },
-  },
+      minHeight: '3rem' // 48px
+    }
+  }
 } as const;
 
 // Loading spinner component
@@ -162,7 +162,7 @@ const LoadingSpinner: React.FC<{ size: ButtonSize }> = ({ size }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{
-        animation: 'spin 1s linear infinite',
+        animation: 'spin 1s linear infinite'
       }}
     >
       <circle
@@ -175,7 +175,7 @@ const LoadingSpinner: React.FC<{ size: ButtonSize }> = ({ size }) => {
         strokeDasharray="32"
         strokeDashoffset="32"
         style={{
-          animation: 'dash 1.5s ease-in-out infinite',
+          animation: 'dash 1.5s ease-in-out infinite'
         }}
       />
     </svg>
@@ -199,7 +199,7 @@ const createInlineStyles = (
     ...sizeStyles,
     width: fullWidth ? '100%' : 'auto',
     opacity: loading || disabled ? 0.6 : 1,
-    pointerEvents: loading || disabled ? 'none' : 'auto',
+    pointerEvents: loading || disabled ? 'none' : 'auto'
   } as React.CSSProperties;
 };
 
@@ -261,7 +261,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           className={`ui-button ${className}`}
           style={{
             ...inlineStyles,
-            ...style,
+            ...style
           }}
           {...props}
         >
@@ -301,14 +301,14 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   spacing = 'normal',
   fullWidth = false,
   className = '',
-  style,
+  style
 }) => {
   const groupStyles: React.CSSProperties = {
     display: 'flex',
     flexDirection: orientation === 'horizontal' ? 'row' : 'column',
     gap: spacing === 'tight' ? '0.25rem' : spacing === 'normal' ? '0.5rem' : '1rem',
     width: fullWidth ? '100%' : 'auto',
-    alignItems: orientation === 'horizontal' ? 'center' : 'stretch',
+    alignItems: orientation === 'horizontal' ? 'center' : 'stretch'
   };
   
   return (
@@ -316,7 +316,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
       className={`ui-button-group ${className}`}
       style={{
         ...groupStyles,
-        ...style,
+        ...style
       }}
     >
       {children}
@@ -335,7 +335,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     const iconButtonStyles: React.CSSProperties = {
       padding: size === 'sm' ? '0.5rem' : size === 'md' ? '0.625rem' : '0.75rem',
       minWidth: size === 'sm' ? '2rem' : size === 'md' ? '2.5rem' : '3rem',
-      aspectRatio: '1',
+      aspectRatio: '1'
     };
     
     return (

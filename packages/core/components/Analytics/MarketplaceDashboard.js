@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { useMarketplaceMetrics } from '../../hooks/useMarketplaceMetrics';
 import { TrendingUp, DollarSign, Download, Search, Users, Star, Target } from 'lucide-react';
-export const MarketplaceDashboard = ({ userId, userRole = 'director', timeRange = '30d', className = '' }) => {
+export const MarketplaceDashboard = ({ _____userId, userRole = 'director', _____timeRange = '30d', className = '' }) => {
     const { dashboardData, insights, isLoading, getTopPerformingTemplates, getSearchAnalytics, refreshData } = useMarketplaceMetrics({ userRole });
     const [selectedMetric, setSelectedMetric] = useState('revenue');
     const [topTemplates, setTopTemplates] = useState([]);

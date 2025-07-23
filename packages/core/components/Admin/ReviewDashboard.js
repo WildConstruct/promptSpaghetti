@@ -14,10 +14,10 @@ export const ReviewDashboard = ({ onReviewSelect, onAssignmentAction, className 
     // State management
     const [summary, setSummary] = useState(null);
     const [activeReviews, setActiveReviews] = useState([]);
-    const [pendingAssignments, setPendingAssignments] = useState([]);
-    const [escalatedReviews, setEscalatedReviews] = useState([]);
-    const [overdueReviews, setOverdueReviews] = useState([]);
-    const [recentDecisions, setRecentDecisions] = useState([]);
+    const [pendingAssignments, _____setPendingAssignments] = useState([]);
+    const [escalatedReviews, _____setEscalatedReviews] = useState([]);
+    const [overdueReviews, _____setOverdueReviews] = useState([]);
+    const [recentDecisions, _____setRecentDecisions] = useState([]);
     const [filters, setFilters] = useState({});
     const [selectedTab, setSelectedTab] = useState('overview');
     const [loading, setLoading] = useState(true);
@@ -128,7 +128,7 @@ export const ReviewDashboard = ({ onReviewSelect, onAssignmentAction, className 
     return (_jsxs("div", { className: `review-dashboard ${className}`, children: [_jsxs("div", { className: "dashboard-header", children: [_jsxs("div", { className: "header-content", children: [_jsx("h1", { children: "Review Dashboard" }), _jsxs("div", { className: "header-actions", children: [_jsxs("button", { onClick: refreshDashboard, disabled: refreshing, className: "refresh-button", children: [_jsx(RefreshCw, { className: refreshing ? 'animate-spin' : '', size: 16 }), "Refresh"] }), _jsxs("button", { className: "settings-button", children: [_jsx(Settings, { size: 16 }), "Settings"] })] })] }), _jsxs("div", { className: "tab-navigation", children: [_jsx("button", { className: `tab ${selectedTab === 'overview' ? 'active' : ''}`, onClick: () => setSelectedTab('overview'), children: "Overview" }), _jsx("button", { className: `tab ${selectedTab === 'queue' ? 'active' : ''}`, onClick: () => setSelectedTab('queue'), children: "Review Queue" }), _jsx("button", { className: `tab ${selectedTab === 'assignments' ? 'active' : ''}`, onClick: () => setSelectedTab('assignments'), children: "Assignments" }), _jsx("button", { className: `tab ${selectedTab === 'analytics' ? 'active' : ''}`, onClick: () => setSelectedTab('analytics'), children: "Analytics" })] })] }), _jsxs("div", { className: "dashboard-content", children: [selectedTab === 'overview' && (_jsx(OverviewTab, { summary: summary, escalatedReviews: escalatedReviews, overdueReviews: overdueReviews, recentDecisions: recentDecisions, onReviewSelect: handleReviewClick })), selectedTab === 'queue' && (_jsx(QueueTab, { reviews: filteredReviews, filters: filters, onFilterChange: handleFilterChange, onReviewSelect: handleReviewClick, onAssignmentAction: handleAssignmentAction })), selectedTab === 'assignments' && (_jsx(AssignmentsTab, { pendingAssignments: pendingAssignments, onAssignmentAction: handleAssignmentAction })), selectedTab === 'analytics' && (_jsx(AnalyticsTab, { summary: summary }))] })] }));
 };
 // Overview Tab Component
-const OverviewTab = ({ summary, escalatedReviews, overdueReviews, recentDecisions, onReviewSelect }) => {
+const OverviewTab = ({ summary, escalatedReviews, overdueReviews, _____recentDecisions, onReviewSelect }) => {
     if (!summary)
         return _jsx("div", { children: "Loading..." });
     return (_jsxs("div", { className: "overview-tab", children: [_jsxs("div", { className: "summary-cards", children: [_jsx(SummaryCard, { title: "Active Reviews", value: summary.totalActiveReviews, icon: _jsx(Clock, { size: 20 }), trend: { value: 12, direction: 'up' }, className: "active-reviews" }), _jsx(SummaryCard, { title: "Pending Assignments", value: summary.pendingAssignments, icon: _jsx(Users, { size: 20 }), trend: { value: -3, direction: 'down' }, className: "pending-assignments" }), _jsx(SummaryCard, { title: "Overdue Reviews", value: summary.overdueReviews, icon: _jsx(AlertTriangle, { size: 20 }), trend: { value: 2, direction: 'up' }, className: "overdue-reviews alert" }), _jsx(SummaryCard, { title: "Quality Score", value: `${summary.qualityScore}%`, icon: _jsx(CheckCircle, { size: 20 }), trend: { value: 1.5, direction: 'up' }, className: "quality-score" })] }), _jsx("div", { className: "key-metrics", children: _jsxs("div", { className: "metric-row", children: [_jsxs("div", { className: "metric", children: [_jsx("span", { className: "metric-label", children: "Avg Completion Time" }), _jsxs("span", { className: "metric-value", children: [summary.averageCompletionTime, "h"] })] }), _jsxs("div", { className: "metric", children: [_jsx("span", { className: "metric-label", children: "Reviewer Utilization" }), _jsxs("span", { className: "metric-value", children: [summary.reviewerUtilization, "%"] })] }), _jsxs("div", { className: "metric", children: [_jsx("span", { className: "metric-label", children: "Daily Throughput" }), _jsx("span", { className: "metric-value", children: summary.throughput })] })] }) }), _jsxs("div", { className: "priority-sections", children: [escalatedReviews.length > 0 && (_jsx(PrioritySection, { title: "Escalated Reviews", icon: _jsx(ArrowUp, { className: "text-red-500", size: 16 }), reviews: escalatedReviews, onReviewSelect: onReviewSelect, className: "escalated-section" })), overdueReviews.length > 0 && (_jsx(PrioritySection, { title: "Overdue Reviews", icon: _jsx(Clock, { className: "text-orange-500", size: 16 }), reviews: overdueReviews, onReviewSelect: onReviewSelect, className: "overdue-section" }))] })] }));
@@ -155,10 +155,10 @@ const ReviewSummaryCard = ({ review, onClick }) => {
     return (_jsx("div", { className: "review-summary-card", onClick: onClick, children: _jsxs("div", { className: "card-content", children: [_jsxs("div", { className: "review-header", children: [_jsx("span", { className: "review-id", children: review.reviewId }), _jsx("span", { className: `priority-badge ${priorityColors[review.priority]}`, children: review.priority })] }), _jsx("h4", { className: "review-title", children: review.title }), _jsx("p", { className: "review-description", children: review.description }), _jsxs("div", { className: "review-meta", children: [_jsx("span", { className: "review-type", children: review.reviewType }), _jsx("span", { className: "review-status", children: review.status }), review.assignedTo && (_jsxs("span", { className: "assigned-to", children: ["Assigned to: ", review.assignedTo] }))] })] }) }));
 };
 // Placeholder components for other tabs
-const AssignmentsTab = ({ pendingAssignments, onAssignmentAction }) => {
+const AssignmentsTab = ({ _____pendingAssignments, _____onAssignmentAction }) => {
     return (_jsx("div", { className: "assignments-tab", children: _jsx("h2", { children: "Pending Assignments" }) }));
 };
-const AnalyticsTab = ({ summary }) => {
+const AnalyticsTab = ({ _____summary }) => {
     return (_jsx("div", { className: "analytics-tab", children: _jsx("h2", { children: "Review Analytics" }) }));
 };
 const ReviewFilters = ({ filters, onFilterChange }) => {
@@ -167,7 +167,7 @@ const ReviewFilters = ({ filters, onFilterChange }) => {
 const ReviewList = ({ reviews, onReviewSelect, onAssignmentAction }) => {
     return (_jsx("div", { className: "review-list", children: reviews.map(review => (_jsx(ReviewListItem, { review: review, onSelect: () => onReviewSelect(review), onAssignmentAction: onAssignmentAction }, review.reviewId))) }));
 };
-const ReviewListItem = ({ review, onSelect, onAssignmentAction }) => {
+const ReviewListItem = ({ review, onSelect, _____onAssignmentAction }) => {
     return (_jsx("div", { className: "review-list-item", onClick: onSelect, children: _jsxs("div", { className: "review-summary", children: [_jsx("h4", { children: review.title }), _jsx("p", { children: review.description })] }) }));
 };
 export default ReviewDashboard;

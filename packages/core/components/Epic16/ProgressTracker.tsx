@@ -34,7 +34,7 @@ import {
   Gift,
   Flame
 } from 'lucide-react';
-import { defaultEpic16Theme, Epic16DesignTokens } from './index';
+// Epic 16 theme imports removed
 
 export interface UserProgress {
   userId: string;

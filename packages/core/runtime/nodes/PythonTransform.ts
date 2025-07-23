@@ -182,7 +182,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   /**
    * Set output helper
    */
-  private setOutput(outputId: string, value: any, context: AdvancedExecutionContext): void {
+  private setOutput(outputId: string, value: Error, context: AdvancedExecutionContext): void {
     // Store output in context for later retrieval
     if (!context.outputs) {
       context.outputs = {};
@@ -261,7 +261,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   /**
    * Process the Python execution result
    */
-  private processResult(result: any): string {
+  private processResult(result: Record<string, unknown>): string {
     // Ensure result is a string
     if (typeof result === 'string') {
       return result;
@@ -333,7 +333,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   /**
    * Log security events from Python execution
    */
-  private logSecurityEvents(events: any[], context: AdvancedExecutionContext): void {
+  private logSecurityEvents(events: unknown[], ______context: AdvancedExecutionContext): void {
     for (const event of events) {
       console.warn(`Python security event in node ${this.id}:`, {
         level: event.level,
@@ -348,7 +348,7 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
   /**
    * Log warnings from Python execution
    */
-  private logWarnings(warnings: string[], context: AdvancedExecutionContext): void {
+  private logWarnings(warnings: string[], ______context: AdvancedExecutionContext): void {
     for (const warning of warnings) {
       console.warn(`Python warning in node ${this.id}:`, {
         warning,
@@ -457,9 +457,9 @@ export class PythonTransformNode extends AdvancedRuntimeNode<string> {
       };
     }
 
-    const successful = executions.filter((e: any) => e.success).length;
-    const totalTime = executions.reduce((sum: number, e: any) => sum + (e.executionTime || 0), 0);
-    const totalViolations = executions.reduce((sum: number, e: any) => sum + (e.securityViolations || 0), 0);
+    const successful = executions.filter((e: Error) => e.success).length;
+    const totalTime = executions.reduce((sum: number, e: Error) => sum + (e.executionTime || 0), 0);
+    const totalViolations = executions.reduce((sum: number, e: Error) => sum + (e.securityViolations || 0), 0);
 
     return {
       executionsRun: executions.length,

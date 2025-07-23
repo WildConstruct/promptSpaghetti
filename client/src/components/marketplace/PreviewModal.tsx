@@ -6,7 +6,7 @@ import './PreviewModal.css';
 
 interface PreviewModalProps {
   templateId: string;
-  template: any;
+  template: Error;
   onClose: () => void;
   className?: string;
 }

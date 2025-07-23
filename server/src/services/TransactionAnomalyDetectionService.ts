@@ -1,7 +1,8 @@
 // Epic 17.5.3 - Transaction-Specific Anomaly Detection Service
 import { FastifyInstance } from 'fastify';
 import { DatabaseService } from '../database/database.service.js';
-import { Transaction, PaymentProvider } from '../marketplace/transaction.types.js';
+import { Transaction } from '../marketplace/transaction.types.js';
+// import { PaymentProvider } from '../marketplace/transaction.types.js';
 
 export interface TransactionAnomalyPattern {
   patternType: 'velocity' | 'amount' | 'location' | 'time' | 'behavior' | 'payment_method';
@@ -469,7 +470,7 @@ export class TransactionAnomalyDetectionService {
 
   private async checkTimeAnomaly(
     transaction: Transaction, 
-    pattern: TransactionAnomalyPattern
+    ____pattern: TransactionAnomalyPattern
   ): Promise<TransactionAnomaly | null> {
     const transactionTime = new Date(transaction.created_at);
     const hour = transactionTime.getUTCHours();
@@ -652,7 +653,7 @@ export class TransactionAnomalyDetectionService {
     }
   }
 
-  private async detectIPRings(fraudRings: FraudRing[]): Promise<void> {
+  private async detectIPRings(____fraudRings: FraudRing[]): Promise<void> {
     // This would require IP address data from risk assessments
     // Implementation would be similar to payment method rings but based on IP clustering
     // Skipping for now as IP data structure is not fully defined

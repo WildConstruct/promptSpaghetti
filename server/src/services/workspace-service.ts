@@ -660,7 +660,7 @@ export class WorkspaceService {
     workspaceId: string,
     userId: string,
     requestingUserId: string
-  ): Promise<{ permissions: number; roles: any[] } | null> {
+  ): Promise<{ permissions: number; roles: unknown[] } | null> {
     // Check if requesting user can view permissions (admin permission required)
     const hasAccess = await this.checkWorkspaceAccess(
       workspaceId,
@@ -679,8 +679,8 @@ export class WorkspaceService {
     userId: string
   ): Promise<Array<{
     user_id: string;
-    membership: any;
-    roles: any[];
+    membership: unknown;
+    roles: unknown[];
     permissions: number;
   }>> {
     // Check access
@@ -782,7 +782,7 @@ export class WorkspaceService {
   async switchWorkspaceContext(
     userId: string,
     targetWorkspaceId: string
-  ): Promise<{ success: boolean; workspaceInfo?: any; permissions?: number }> {
+  ): Promise<{ success: boolean; workspaceInfo?: unknown; permissions?: number }> {
     // Verify user has access to target workspace
     const hasAccess = await this.checkWorkspaceAccess(
       targetWorkspaceId,
@@ -907,7 +907,7 @@ export class WorkspaceService {
     return notification;
   }
 
-  async markNotificationAsRead(id: string, userId: string): Promise<boolean> {
+  async markNotificationAsRead(____id: string, ____userId: string): Promise<boolean> {
     // Implementation would mark notification as read
     // For now, return true
     return true;
@@ -917,7 +917,7 @@ export class WorkspaceService {
     userId: string,
     workspaceId?: string,
     onlyUnread = false,
-    pagination: PaginationOptions = {}
+    ____pagination: PaginationOptions = {}
   ): Promise<PaginatedResult<Notification>> {
     // Implementation would get user notifications
     // For now, return empty

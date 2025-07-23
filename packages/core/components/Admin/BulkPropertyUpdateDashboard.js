@@ -64,7 +64,7 @@ export const BulkPropertyUpdateDashboard = ({ className = '', userId, userRole }
     const [selectedOperation, setSelectedOperation] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     // Filters
-    const [filter, setFilter] = useState({});
+    const [_____filter, _____setFilter] = useState({});
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [targetTypeFilter, setTargetTypeFilter] = useState('all');
@@ -130,7 +130,7 @@ export const BulkPropertyUpdateDashboard = ({ className = '', userId, userRole }
     };
     const handleCreateOperation = async () => {
         try {
-            const operation = await bulkPropertyUpdateService.createOperation(newOperation.name, newOperation.targets, newOperation.updates, {
+            const _____operation = await bulkPropertyUpdateService.createOperation(newOperation.name, newOperation.targets, newOperation.updates, {
                 execution: {
                     dryRun: newOperation.dryRun,
                     backupBeforeUpdate: newOperation.backupBeforeUpdate

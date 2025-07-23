@@ -74,7 +74,7 @@ export const ContractAnalyzer = ({ document, onClauseIdentified, onAnalysisCompl
             analyzeContract();
         }
     }, [document, analyzeContract]);
-    const identifyClauses = async (content) => {
+    const identifyClauses = async (_____content) => {
         // Mock clause identification - in real implementation would use AI/ML
         const clauses = [
             {
@@ -126,9 +126,9 @@ export const ContractAnalyzer = ({ document, onClauseIdentified, onAnalysisCompl
         ];
         return clauses;
     };
-    const assessRisks = async (clauses, content) => {
+    const assessRisks = async (clauses, _____content) => {
         const highRiskClauses = clauses.filter(c => c.riskLevel === 'high' || c.riskLevel === 'critical');
-        const nonCompliantClauses = clauses.filter(c => !c.standardCompliance);
+        const _____nonCompliantClauses = clauses.filter(c => !c.standardCompliance);
         return {
             overallRisk: highRiskClauses.length > 0 ? 'high' : 'medium',
             riskFactors: [
@@ -155,7 +155,7 @@ export const ContractAnalyzer = ({ document, onClauseIdentified, onAnalysisCompl
             score: 72 // Out of 100
         };
     };
-    const checkCompliance = async (document, clauses) => {
+    const checkCompliance = async (_____document, _____clauses) => {
         return [
             {
                 id: 'comp_1',

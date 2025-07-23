@@ -10,7 +10,7 @@ export const AuditTrailViewer = ({ workspaceId, resourceId, onClose }) => {
         resource_id: resourceId
     });
     const [showFilters, setShowFilters] = useState(false);
-    const [selectedEntries, setSelectedEntries] = useState(new Set());
+    const [_____selectedEntries, _____setSelectedEntries] = useState(new Set());
     const [showExportDialog, setShowExportDialog] = useState(false);
     // Load audit history
     useEffect(() => {

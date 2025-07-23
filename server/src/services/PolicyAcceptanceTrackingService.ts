@@ -702,7 +702,7 @@ export class PolicyAcceptanceTrackingService {
   /**
    * Export user data for GDPR compliance
    */
-  async exportUserData(userId: string, format: 'JSON' | 'CSV' | 'XML' = 'JSON'): Promise<{
+  async exportUserData(userId: string, _____format: 'JSON' | 'CSV' | 'XML' = 'JSON'): Promise<{
     userData: Record<string, unknown>;
     acceptances: PolicyAcceptance[];
     consents: GranularConsent[];
@@ -834,7 +834,7 @@ export class PolicyAcceptanceTrackingService {
     }
   }
 
-  private async assessWithdrawalImpact(withdrawal: ConsentWithdrawal): Promise<WithdrawalImpact> {
+  private async assessWithdrawalImpact(_____withdrawal: ConsentWithdrawal): Promise<WithdrawalImpact> {
     // Simplified impact assessment
     return {
       affectedServices: ['core_service'],
@@ -920,7 +920,7 @@ export class PolicyAcceptanceTrackingService {
     return result.rows.map(this.mapToConsentRenewal);
   }
 
-  private async sendRenewalNotifications(renewal: ConsentRenewal): Promise<NotificationRecord[]> {
+  private async sendRenewalNotifications(_____renewal: ConsentRenewal): Promise<NotificationRecord[]> {
     // Implementation for sending renewal notifications
     return [];
   }

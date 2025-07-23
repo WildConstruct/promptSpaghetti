@@ -14,7 +14,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useStickyNotesStore } from '../../stores/stickyNotesStore';
 import { StickyNote } from './StickyNote';
 import { StickyNoteToolbar } from './StickyNoteToolbar';
-export const StickyNotesManager = ({ canvasRef, disabled = false, readonly = false, onNotesChange, className = '' }) => {
+export const StickyNotesManager = ({ _____canvasRef, disabled = false, readonly = false, onNotesChange, className = '' }) => {
     const containerRef = useRef(null);
     const { notes, groups, selection, activeNote, settings, 
     // Actions

@@ -1,5 +1,5 @@
 import { Pool, PoolClient } from 'pg';
-import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, // ForbiddenException // Unused import, NotFoundException } from '@nestjs/common';
 
 // Violation and enforcement types
 export enum ViolationType {
@@ -596,7 +596,7 @@ export class MarketplacePolicyEnforcementService {
   }
 
   // Get enforcement dashboard data
-  async getEnforcementDashboard(adminId: string): Promise<EnforcementDashboard> {
+  async getEnforcementDashboard(__adminId: string): Promise<EnforcementDashboard> {
     const client = await this.pool.connect();
     try {
       // Get summary statistics
@@ -816,7 +816,7 @@ export class MarketplacePolicyEnforcementService {
     }
   }
 
-  private async performEnforcementAction(action: any, executorId: string): Promise<any> {
+  private async performEnforcementAction(action: any, __executorId: string): Promise<any> {
     // Implementation would perform the actual enforcement action
     // (suspend account, delist content, send warning, etc.)
     console.log(`Executing ${action.action_type} for violation ${action.violation_id}`);
@@ -837,7 +837,7 @@ export class MarketplacePolicyEnforcementService {
     }
   }
 
-  private async calculateEnforcementAnalytics(client: PoolClient): Promise<EnforcementAnalytics> {
+  private async calculateEnforcementAnalytics(__client: PoolClient): Promise<EnforcementAnalytics> {
     // Simplified analytics calculation
     return {
       detection_accuracy: 0.85,
@@ -850,7 +850,7 @@ export class MarketplacePolicyEnforcementService {
 
   private async performAIClassification(
     content: string,
-    contentType: string
+    __contentType: string
   ): Promise<{ violations: ViolationType[]; confidence: number; reasoning: string }> {
     // Simulate AI classification - in production, call actual AI service
     await new Promise(resolve => setTimeout(resolve, 100));

@@ -42,7 +42,7 @@ export interface AnalyticsEvent {
   template_id: string;
   user_id?: string;
   event_type: MetricType;
-  event_data: Record<string, any>;
+  event_data: Record<string, unknown>;
   metadata: {
     user_agent?: string;
     ip_address?: string;

@@ -131,19 +131,19 @@ const DataProtectionDashboard: React.FC = () => {
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
   // Filters and search
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [frameworkFilter, setFrameworkFilter] = useState<string>('all');
-  const [dateRange, setDateRange] = useState<{ start: string; end: string }>({
+  const [___searchTerm, ___setSearchTerm] = useState('');
+  const [___statusFilter, ___setStatusFilter] = useState<string>('all');
+  const [___frameworkFilter, ___setFrameworkFilter] = useState<string>('all');
+  const [___dateRange, ___setDateRange] = useState<{ start: string; end: string }>({
     start: '',
     end: ''
   });
 
   // Modal states
-  const [showCreatePolicy, setShowCreatePolicy] = useState(false);
-  const [showCreateWorkflow, setShowCreateWorkflow] = useState(false);
-  const [selectedPolicy, setSelectedPolicy] = useState<RetentionPolicy | null>(null);
-  const [selectedWorkflow, setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
+  const [___showCreatePolicy, ___setShowCreatePolicy] = useState(false);
+  const [___showCreateWorkflow, ___setShowCreateWorkflow] = useState(false);
+  const [___selectedPolicy, ___setSelectedPolicy] = useState<RetentionPolicy | null>(null);
+  const [___selectedWorkflow, ___setSelectedWorkflow] = useState<DeletionWorkflow | null>(null);
 
   // Fetch dashboard data
   const fetchDashboardData = useCallback(async () => {

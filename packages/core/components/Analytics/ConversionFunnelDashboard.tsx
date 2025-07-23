@@ -8,11 +8,10 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
 import { conversionTracker } from '../../analytics/ConversionTracker';
 
 export interface ConversionFunnelDashboardProps {
-  conversionData: any;
+  conversionData: unknown;
   timeRange: { startTime: number; endTime: number };
   loading: boolean;
 }
@@ -23,7 +22,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
   loading
 }) => {
   const [selectedFunnel, setSelectedFunnel] = useState('director-onboarding');
-  const [funnelMetrics, setFunnelMetrics] = useState<any>(null);
+  const [funnelMetrics, setFunnelMetrics] = useState<unknown>(null);
   const [availableFunnels] = useState([
     { id: 'director-onboarding', name: 'Director Onboarding', category: 'activation' },
     { id: 'creative-workflow', name: 'Creative Workflow', category: 'activation' },
@@ -41,7 +40,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
     }
   }, [selectedFunnel, timeRange]);
 
-  const renderFunnelVisualization = (metrics: any) => {
+  const renderFunnelVisualization = (metrics: unknown) => {
     if (!metrics || !metrics.metrics.dropoffPoints) return null;
 
     const steps = metrics.metrics.dropoffPoints;
@@ -87,7 +86,7 @@ export const ConversionFunnelDashboard: React.FC<ConversionFunnelDashboardProps>
     );
   };
 
-  const renderSegmentBreakdown = (metrics: any) => {
+  const renderSegmentBreakdown = (metrics: unknown) => {
     if (!metrics || !metrics.segmentBreakdown) return null;
 
     return (

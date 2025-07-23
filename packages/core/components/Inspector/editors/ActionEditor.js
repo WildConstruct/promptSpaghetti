@@ -31,7 +31,7 @@ const ACTION_TYPES = [
     { value: 'intransitive', label: 'Intransitive (no object)', group: 'Grammar' },
     { value: 'linking', label: 'Linking Verb (is, seems)', group: 'Grammar' }
 ];
-export const ActionEditor = ({ nodeId, nodeData, onChange }) => {
+export const ActionEditor = ({ _____nodeId, nodeData, onChange }) => {
     // Action specific fields
     const label = nodeData.label || '';
     const template = nodeData.template || '';

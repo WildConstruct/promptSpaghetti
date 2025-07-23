@@ -238,7 +238,7 @@ export const ExportWizard: React.FC<ExportWizardProps> = ({
   );
 
   const renderOptionsStep = () => {
-    const currentFormat = formatDefinitions.find(f => f.format_name === exportData.export_format);
+    const _____currentFormat = formatDefinitions.find(f => f.format_name === exportData.export_format);
     
     return (
       <div className="space-y-6">

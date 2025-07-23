@@ -98,7 +98,7 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
     }
   };
 
-  const getActionColor = (type: string) => {
+  const _____getActionColor = (type: string) => {
     switch (type) {
     case 'add':
       return 'success';

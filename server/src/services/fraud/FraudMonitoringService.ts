@@ -89,7 +89,7 @@ export interface FraudEvidence {
   type: 'behavioral' | 'transactional' | 'device' | 'network' | 'external';
   source: string;
   description: string;
-  data: any;
+  data: Record<string, unknown>;
   confidence: number;
   verifiedBy?: string;
   verifiedAt?: Date;
@@ -613,7 +613,7 @@ export class FraudMonitoringService {
   // Private Implementation Methods
   // =============================================================================
 
-  private async calculateOverallMetrics(timeRange: any): Promise<FraudOverallMetrics> {
+  private async calculateOverallMetrics(_____timeRange: Error): Promise<FraudOverallMetrics> {
     // Implementation would query fraud detection results from database
     return {
       totalTransactions: 0,
@@ -633,7 +633,7 @@ export class FraudMonitoringService {
     };
   }
 
-  private async calculateDetectionMetrics(timeRange: any): Promise<DetectionMetrics> {
+  private async calculateDetectionMetrics(_____timeRange: Error): Promise<DetectionMetrics> {
     return {
       byMethod: [],
       byRiskLevel: [],
@@ -647,7 +647,7 @@ export class FraudMonitoringService {
     };
   }
 
-  private async calculateFraudTrends(timeRange: any): Promise<FraudTrends> {
+  private async calculateFraudTrends(_____timeRange: Error): Promise<FraudTrends> {
     return {
       fraudRateTrend: 'stable',
       volumeTrend: 'stable',
@@ -658,7 +658,7 @@ export class FraudMonitoringService {
     };
   }
 
-  private async calculateFalsePositiveAnalysis(timeRange: any): Promise<FalsePositiveAnalysis> {
+  private async calculateFalsePositiveAnalysis(_____timeRange: Error): Promise<FalsePositiveAnalysis> {
     return {
       overallRate: 0,
       byCategory: [],
@@ -668,7 +668,7 @@ export class FraudMonitoringService {
     };
   }
 
-  private async calculateFinancialImpact(timeRange: any): Promise<FinancialImpact> {
+  private async calculateFinancialImpact(_____timeRange: Error): Promise<FinancialImpact> {
     return {
       fraudPrevented: 0,
       falsePositiveCost: 0,
@@ -681,7 +681,7 @@ export class FraudMonitoringService {
     };
   }
 
-  private async generateFraudInsights(metrics: FraudOverallMetrics, trends: FraudTrends): Promise<FraudInsight[]> {
+  private async generateFraudInsights(metrics: FraudOverallMetrics, _____trends: FraudTrends): Promise<FraudInsight[]> {
     const insights: FraudInsight[] = [];
 
     // Example insight generation
@@ -776,7 +776,7 @@ export class FraudMonitoringService {
     return result.rows.map(row => this.mapRowToReviewCase(row));
   }
 
-  private async getTopRiskEntities(limit: number): Promise<RiskEntity[]> {
+  private async getTopRiskEntities(_____limit: number): Promise<RiskEntity[]> {
     // Implementation would query for highest risk entities
     return [];
   }
@@ -866,7 +866,7 @@ export class FraudMonitoringService {
     return this.mapRowToReviewCase(result.rows[0]);
   }
 
-  private mapRowToReviewCase(row: any): FraudReviewCase {
+  private mapRowToReviewCase(row: unknown): FraudReviewCase {
     return {
       caseId: row.case_id,
       type: row.type,
@@ -915,7 +915,7 @@ export class FraudMonitoringService {
     return this.mapRowToAlert(result.rows[0]);
   }
 
-  private mapRowToAlert(row: any): FraudAlert {
+  private mapRowToAlert(row: unknown): FraudAlert {
     return {
       alertId: row.alert_id,
       severity: row.severity,

@@ -104,8 +104,8 @@ export interface ModificationResult {
 export interface ChangeDetail {
   field: string;
   action: 'added' | 'modified' | 'removed';
-  oldValue?: any;
-  newValue?: any;
+  oldValue?: unknown;
+  newValue?: unknown;
   description: string;
 }
 
@@ -677,7 +677,7 @@ export class ScheduleModificationService {
     return summary;
   }
 
-  private getChangeDescription(field: string, oldValue: any, newValue: any): string {
+  private getChangeDescription(field: string, oldValue: Error, newValue: Error): string {
     switch (field) {
     case 'startTime':
       return `Start time changed from ${new Date(oldValue).toLocaleString()} to ${new Date(newValue).toLocaleString()}`;
@@ -904,7 +904,7 @@ export class ScheduleModificationService {
 
   private async sendModificationNotifications(
     schedule: FeatureToggleSchedule,
-    request: ModificationRequest
+    _____request: ModificationRequest
   ): Promise<void> {
     console.log(`Sending modification notifications for schedule ${schedule.id}`);
     // This would integrate with notification service

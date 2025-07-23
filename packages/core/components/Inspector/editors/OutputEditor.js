@@ -14,7 +14,7 @@ const OUTPUT_DESTINATIONS = [
     { value: 'intermediate', label: 'Intermediate Result' },
     { value: 'debug', label: 'Debug Output' }
 ];
-export const OutputEditor = ({ nodeId, nodeData, onChange }) => {
+export const OutputEditor = ({ _____nodeId, nodeData, onChange }) => {
     // Output specific fields
     const label = nodeData.label || '';
     const template = nodeData.template || '';

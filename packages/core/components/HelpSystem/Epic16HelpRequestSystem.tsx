@@ -37,7 +37,7 @@ export const Epic16HelpRequestSystem: React.FC<Epic16HelpRequestSystemProps> = (
   }, [config]);
 
   // State management
-  const [selectedRequest, setSelectedRequest] = useState<HelpRequest | null>(null);
+  const [_____selectedRequest, setSelectedRequest] = useState<HelpRequest | null>(null);
   const [view, setView] = useState<'dashboard' | 'form' | 'settings'>('dashboard');
   const [notifications, setNotifications] = useState<Array<{
     id: string;

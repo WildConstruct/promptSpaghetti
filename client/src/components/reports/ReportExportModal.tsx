@@ -522,7 +522,7 @@ export const ReportExportModal: React.FC<ReportExportModalProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label>Frequency</Label>
-                  <Select value={scheduleFrequency} onValueChange={(value: any) => setScheduleFrequency(value)}>
+                  <Select value={scheduleFrequency} onValueChange={(value: Error) => setScheduleFrequency(value)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>

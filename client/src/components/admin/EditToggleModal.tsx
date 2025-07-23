@@ -1,6 +1,6 @@
 // Epic 17.1.3 - Edit Toggle Modal Component
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { X, Save, AlertCircle, Info } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { ValidationMessage } from '../common/ValidationMessage';
@@ -42,9 +42,9 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
     if (isOpen && toggleId) {
       fetchToggle();
     }
-  }, [isOpen, toggleId]);
+  }, [isOpen, toggleId, fetchToggle]);
 
-  const fetchToggle = async () => {
+  const fetchToggle = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/feature-toggles/toggles/${toggleId}`, {
@@ -71,7 +71,7 @@ export const EditToggleModal: React.FC<EditToggleModalProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [toggleId]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};

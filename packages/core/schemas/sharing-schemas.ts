@@ -371,32 +371,32 @@ export const ShareEventSchema = z.object({
 export function validateShareContent(content: unknown, type: string): boolean {
   try {
     switch (type) {
-      case 'graph':
-        return z.object({
-          nodes: z.array(z.any()),
-          edges: z.array(z.any())
-        }).parse(content) !== null;
+    case 'graph':
+      return z.object({
+        nodes: z.array(z.any()),
+        edges: z.array(z.any())
+      }).parse(content) !== null;
       
-      case 'template':
-        return z.object({
-          template: z.string(),
-          variables: z.record(z.any())
-        }).parse(content) !== null;
+    case 'template':
+      return z.object({
+        template: z.string(),
+        variables: z.record(z.any())
+      }).parse(content) !== null;
       
-      case 'bundle':
-        return z.object({
-          version: z.string(),
-          generators: z.array(z.any())
-        }).parse(content) !== null;
+    case 'bundle':
+      return z.object({
+        version: z.string(),
+        generators: z.array(z.any())
+      }).parse(content) !== null;
       
-      case 'dataset':
-        return z.object({
-          format: z.string(),
-          data: z.any()
-        }).parse(content) !== null;
+    case 'dataset':
+      return z.object({
+        format: z.string(),
+        data: z.any()
+      }).parse(content) !== null;
       
-      default:
-        return false;
+    default:
+      return false;
     }
   } catch {
     return false;

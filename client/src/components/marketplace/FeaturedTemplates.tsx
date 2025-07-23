@@ -41,7 +41,7 @@ export const FeaturedTemplates: React.FC<FeaturedTemplatesProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
-  const [isDragging, setIsDragging] = useState(false);
+  const [___isDragging, ___setIsDragging] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 

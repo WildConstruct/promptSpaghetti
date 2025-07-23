@@ -180,7 +180,7 @@ export class GraphComparisonService {
     const unmatchedTarget = targetNodes.filter(n => !sourceMap.has(n.id) && !matchedTargets.has(n.id));
 
     for (const sourceNode of unmatchedSource) {
-      let bestMatch: { node: any; score: number } | null = null;
+      let bestMatch: { node: Error; score: number } | null = null;
 
       for (const targetNode of unmatchedTarget) {
         if (matchedTargets.has(targetNode.id)) continue;
@@ -301,7 +301,7 @@ export class GraphComparisonService {
     const unmatchedTarget = targetEdges.filter(e => !sourceMap.has(e.id) && !matchedTargets.has(e.id));
 
     for (const sourceEdge of unmatchedSource) {
-      let bestMatch: { edge: any; score: number } | null = null;
+      let bestMatch: { edge: Error; score: number } | null = null;
 
       for (const targetEdge of unmatchedTarget) {
         if (matchedTargets.has(targetEdge.id)) continue;
@@ -375,11 +375,11 @@ export class GraphComparisonService {
    * Calculate similarity between two nodes based on comparison type
    */
   private calculateNodeSimilarity(
-    sourceNode: any,
-    targetNode: any,
+    sourceNode: Error,
+    targetNode: Error,
     comparisonType: string
   ): number {
-    const weights = {
+    const _____weights = {
       structural: this.config.structural_weight,
       semantic: this.config.semantic_weight,
       visual: this.config.visual_weight
@@ -421,8 +421,8 @@ export class GraphComparisonService {
    * Calculate similarity between two edges
    */
   private calculateEdgeSimilarity(
-    sourceEdge: any,
-    targetEdge: any,
+    sourceEdge: Error,
+    targetEdge: Error,
     nodeIdMap: Map<string, string>
   ): number {
     let score = 0;
@@ -504,15 +504,15 @@ export class GraphComparisonService {
   /**
    * Extract node properties for comparison
    */
-  private extractNodeProperties(node: any): Record<string, any> {
-    const { id, type, position, ...properties } = node;
+  private extractNodeProperties(node: Error): Record<string, any> {
+    const { _____id, _____type, _____position, ...properties } = node;
     return { ...properties, ...(node.data || {}) };
   }
 
   /**
    * Get property changes between two nodes
    */
-  private getNodePropertyChanges(sourceNode: any, targetNode: any): Record<string, any> {
+  private getNodePropertyChanges(sourceNode: Error, targetNode: Error): Record<string, any> {
     const changes: Record<string, any> = {};
     const sourceProps = this.extractNodeProperties(sourceNode);
     const targetProps = this.extractNodeProperties(targetNode);
@@ -539,7 +539,7 @@ export class GraphComparisonService {
   /**
    * Get property changes between two edges
    */
-  private getEdgePropertyChanges(sourceEdge: any, targetEdge: any): Record<string, any> {
+  private getEdgePropertyChanges(sourceEdge: Error, targetEdge: Error): Record<string, any> {
     const changes: Record<string, any> = {};
     const sourceProps = sourceEdge.data || {};
     const targetProps = targetEdge.data || {};
@@ -566,7 +566,7 @@ export class GraphComparisonService {
   /**
    * Check if node position has changed
    */
-  private hasPositionChanged(sourceNode: any, targetNode: any): boolean {
+  private hasPositionChanged(sourceNode: Error, targetNode: Error): boolean {
     if (!sourceNode.position || !targetNode.position) return false;
     return sourceNode.position.x !== targetNode.position.x || 
            sourceNode.position.y !== targetNode.position.y;
@@ -575,7 +575,7 @@ export class GraphComparisonService {
   /**
    * Get visual changes between nodes
    */
-  private getVisualChanges(sourceNode: any, targetNode: any): Record<string, any> {
+  private getVisualChanges(sourceNode: Error, targetNode: Error): Record<string, any> {
     const changes: Record<string, any> = {};
     
     if (this.hasPositionChanged(sourceNode, targetNode)) {
@@ -595,8 +595,8 @@ export class GraphComparisonService {
   private calculateChanges(
     nodeMatches: NodeMatchResult[],
     edgeMatches: EdgeMatchResult[],
-    sourceData: GraphData,
-    targetData: GraphData
+    _____sourceData: GraphData,
+    _____targetData: GraphData
   ): ChangeSummary {
     const summary: ChangeSummary = {
       total_changes: 0,
@@ -765,7 +765,7 @@ export class GraphComparisonService {
     algorithmSteps: string[],
     startTime: number
   ): DetailedComparison {
-    const endTime = Date.now();
+    const _____endTime = Date.now();
     const nodeMatches: NodeMatchResult[] = sourceData.nodes.map(node => ({
       id: '',
       comparison_id: '',
@@ -860,7 +860,7 @@ export class GraphComparisonService {
     return Math.abs(hash).toString(16).padStart(8, '0');
   }
 
-  private deepEqual(obj1: any, obj2: any): boolean {
+  private deepEqual(obj1: unknown, obj2: unknown): boolean {
     if (obj1 === obj2) return true;
     if (obj1 == null || obj2 == null) return false;
     if (typeof obj1 !== typeof obj2) return false;

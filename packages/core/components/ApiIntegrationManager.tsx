@@ -18,7 +18,7 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
-import { useWorkflowStore } from '../stores/workflowStore';
+// import { useWorkflowStore } from '../stores/workflowStore';
 
 interface ApiKey {
   id: string;
@@ -233,7 +233,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({
     return isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
   };
 
-  const getStatusIcon = (isActive: boolean) => {
+  const _____getStatusIcon = (isActive: boolean) => {
     return isActive ? (
       <CheckCircleIcon className="h-4 w-4 text-green-600" />
     ) : (

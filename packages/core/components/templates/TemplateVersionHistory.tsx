@@ -38,11 +38,11 @@ interface VersionNode {
   hasBranches: boolean;
 }
 
-export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ templateId, onVersionSelect }) => {
+export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ _____templateId, onVersionSelect }) => {
   const [selectedVersions, setSelectedVersions] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'timeline' | 'tree' | 'table'>('timeline');
-  const [filterBranch, setFilterBranch] = useState<string>('all');
+  const [_____filterBranch, _____setFilterBranch] = useState<string>('all');
   const [showComparison, setShowComparison] = useState(false);
   const [comparisonResult, setComparisonResult] = useState<VersionComparisonResult | null>(null);
 

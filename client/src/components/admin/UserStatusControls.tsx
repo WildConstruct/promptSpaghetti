@@ -7,7 +7,7 @@
  * Provides status change controls, bulk operations, and audit compliance.
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 
 // User Status Types
 export type UserStatus = 'active' | 'suspended' | 'deleted' | 'locked' | 'pending_activation';

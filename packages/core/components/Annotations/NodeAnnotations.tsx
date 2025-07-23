@@ -5,13 +5,13 @@
  * Supports performance notes, creative direction, technical specs, and director approvals.
  */
 
-import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Switch } from '../ui/Switch';
+// import { Switch } from '../ui/Switch';
 import { 
   MessageCircle,
   AlertTriangle,
@@ -180,8 +180,8 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
   className = '',
   compact = false
 }) => {
-  const [isCreating, setIsCreating] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [_____isCreating, setIsCreating] = useState(false);
+  const [_____editingId, _____setEditingId] = useState<string | null>(null);
   const [selectedAnnotation, setSelectedAnnotation] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -278,7 +278,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({
     onAnnotationUpdate(annotationId, { status, lastModified: new Date().toISOString() });
   }, [onAnnotationUpdate]);
 
-  const handlePriorityChange = useCallback((annotationId: string, priority: NodeAnnotation['priority']) => {
+  const _____handlePriorityChange = useCallback((annotationId: string, priority: NodeAnnotation['priority']) => {
     onAnnotationUpdate(annotationId, { priority, lastModified: new Date().toISOString() });
   }, [onAnnotationUpdate]);
 

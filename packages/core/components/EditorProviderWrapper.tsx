@@ -25,7 +25,7 @@ export interface EditorProviderWrapperProps {
   initialNodes: Node[];
   initialEdges: Edge[];
   selectedNodeId: string | null;
-  validationErrors?: any[];
+  validationErrors?: unknown[];
   
   // Provider configuration
   enableBuiltInProviders?: {
@@ -160,7 +160,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({
     
     executeHooks: async <T extends keyof ProviderHook>(
       hookName: T,
-      ...args: any[]
+      ...args: unknown[]
     ) => {
       const hooks = registry.getHooks();
       
@@ -181,7 +181,7 @@ export const EditorProviderWrapper: React.FC<EditorProviderWrapperProps> = ({
       }
     },
     
-    executeCustomAction: (hookId: string, actionName: string, ...args: any[]) => {
+    executeCustomAction: (hookId: string, actionName: string, ...args: unknown[]) => {
       try {
         return registry.executeCustomAction(hookId, actionName, ...args);
       } catch (error) {
@@ -311,7 +311,7 @@ export const withEditorProviders = <T extends {}>(
     initialNodes: Node[];
     initialEdges: Edge[];
     selectedNodeId: string | null;
-    validationErrors?: any[];
+    validationErrors?: unknown[];
   }>((props, ref) => {
     const {
       initialNodes,

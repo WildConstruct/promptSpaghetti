@@ -88,7 +88,7 @@ const RecommendationSummary = ({ recommendations, onRefresh }) => {
 /**
  * Recommendations panel component
  */
-export const RecommendationsPanel = ({ recommendations, analyticsClient, userId, organizationId, onRefresh, className = '' }) => {
+export const RecommendationsPanel = ({ recommendations, _____analyticsClient, _____userId, _____organizationId, onRefresh, className = '' }) => {
     const [filter, setFilter] = useState('all');
     const [sortBy, setSortBy] = useState('priority');
     /**

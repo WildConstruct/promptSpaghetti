@@ -55,8 +55,8 @@ interface ExecutionRecord {
     actualTime: Date;
     delay?: number;
   };
-  beforeValue?: any;
-  afterValue?: any;
+  beforeValue?: unknown;
+  afterValue?: unknown;
   affectedUsers?: number;
   error?: {
     code: string;

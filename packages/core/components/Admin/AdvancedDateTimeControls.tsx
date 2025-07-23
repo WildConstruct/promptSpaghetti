@@ -8,7 +8,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -134,7 +134,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
   const [selectedDate, setSelectedDate] = useState<Date>(value?.date || new Date());
   const [selectedTime, setSelectedTime] = useState<string>(value?.time || '09:00');
   const [selectedTimezone, setSelectedTimezone] = useState<string>(value?.timezone || 'UTC');
-  const [showTimezoneSearch, setShowTimezoneSearch] = useState(false);
+  const [_____showTimezoneSearch, _____setShowTimezoneSearch] = useState(false);
   const [timezoneSearchQuery, setTimezoneSearchQuery] = useState('');
   
   const [currentBusinessHours, setCurrentBusinessHours] = useState<BusinessHours>(
@@ -211,7 +211,7 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
     // Suggest optimal times based on business hours
     if (currentBusinessHours.enabled) {
       const [startHour, startMin] = currentBusinessHours.startTime.split(':').map(Number);
-      const [endHour, endMin] = currentBusinessHours.endTime.split(':').map(Number);
+      const [endHour, _____endMin] = currentBusinessHours.endTime.split(':').map(Number);
       
       // Suggest start of business day
       const startOfDay = new Date(baseDate);

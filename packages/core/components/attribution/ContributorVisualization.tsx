@@ -40,10 +40,10 @@ import {
 } from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text, _____Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
-const { Option } = Select;
+const { _____Option } = Select;
 
 interface ContributorVisualizationProps {
   projectId: string;
@@ -57,7 +57,7 @@ interface ContributorCardProps {
   onViewDetails: (contributorId: string) => void;
 }
 
-const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, projectId, onViewDetails }) => {
+const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____projectId, onViewDetails }) => {
   const getContributorInitials = (name?: string) => {
     if (!name) return '?';
     return name.split(' ').map(n => n[0]).join('').toUpperCase();

@@ -54,7 +54,7 @@ export interface SequenceState {
 export class LinearPattern implements SequencePattern {
   type: 'linear' = 'linear';
 
-  getNext(sequence: string[], state: SequenceState, ctx: AdvancedExecutionContext): string {
+  getNext(sequence: string[], state: SequenceState, ______ctx: AdvancedExecutionContext): string {
     if (state.index >= sequence.length) {
       // Return last item when sequence is exhausted
       return sequence[sequence.length - 1] || '';
@@ -69,7 +69,7 @@ export class LinearPattern implements SequencePattern {
 export class CyclicalPattern implements SequencePattern {
   type: 'cyclical' = 'cyclical';
 
-  getNext(sequence: string[], state: SequenceState, ctx: AdvancedExecutionContext): string {
+  getNext(sequence: string[], state: SequenceState, ______ctx: AdvancedExecutionContext): string {
     if (sequence.length === 0) return '';
     const index = state.index % sequence.length;
     return sequence[index];
@@ -169,7 +169,7 @@ export function createSequencePattern(
   case 'weighted':
     return new WeightedPattern(config);
   default:
-    const _exhaustive: never = type;
+    const _______exhaustive: never = type;
     throw new Error(`Unknown sequence pattern type: ${type}`);
   }
 }
@@ -375,7 +375,7 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
   /**
    * Get effective sequence from constructor data or dynamic inputs
    */
-  private getEffectiveSequence(ctx: AdvancedExecutionContext): string[] {
+  private getEffectiveSequence(______ctx: AdvancedExecutionContext): string[] {
     // For now, use constructor sequence
     // In full implementation, would merge with dynamic inputs from I/O system
     return this.sequence;
@@ -400,10 +400,10 @@ export function createSequentialNode(
  */
 export const SequentialPresets = {
   /** Simple linear sequence */
-  linear: (sequence: string[]) => createSequencePattern('linear'),
+  linear: (______sequence: string[]) => createSequencePattern('linear'),
   
   /** Infinite cycling sequence */
-  cycle: (sequence: string[]) => createSequencePattern('cyclical'),
+  cycle: (______sequence: string[]) => createSequencePattern('cyclical'),
   
   /** Random selection with repeats */
   random: (allowRepeats: boolean = true) => 

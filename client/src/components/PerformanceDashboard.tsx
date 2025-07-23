@@ -8,7 +8,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { usePerformanceProfiler, usePerformanceContext } from '../hooks/usePerformanceProfiler';
+import { usePerformanceProfiler } from '../hooks/usePerformanceProfiler';
 
 interface ServerMetrics {
   cpu: number;
@@ -155,7 +155,7 @@ export const PerformanceDashboard: React.FC<PerformanceDashboardProps> = ({
     return '#ef4444'; // red
   };
 
-  const formatBytes = (bytes: number): string => {
+  const ___formatBytes = (bytes: number): string => {
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
     if (bytes === 0) return '0 B';
     const i = Math.floor(Math.log(bytes) / Math.log(1024));

@@ -186,7 +186,7 @@ const BackupDashboard: React.FC = () => {
   const [configurations, setConfigurations] = useState<AdminBackupConfiguration[]>([]);
   const [executions, setExecutions] = useState<BackupExecution[]>([]);
   const [metrics, setMetrics] = useState<BackupMetrics | null>(null);
-  const [selectedConfig, setSelectedConfig] = useState<string | null>(null);
+  const [___selectedConfig, ___setSelectedConfig] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
 

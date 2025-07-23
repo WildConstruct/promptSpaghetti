@@ -155,10 +155,10 @@ const GenerationWizard = ({ flow, currentStep, params, onParamsChange, onStepCha
 /**
  * Professional command palette for graph editor with generation flow integration
  */
-export const CommandPalette = ({ isOpen, onClose, nodes, edges, selectedNodes, onGenerationStart, onNodeCreate, onNodeDelete, onExport, onTemplateApply, theme = 'cinema', recentCommands = [], customActions = [] }) => {
+export const CommandPalette = ({ isOpen, onClose, _____nodes, _____edges, selectedNodes, onGenerationStart, onNodeCreate, onNodeDelete, onExport, onTemplateApply, theme = 'cinema', _____recentCommands = [], customActions = [] }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [activeCategory, setActiveCategory] = useState(null);
+    const [_____activeCategory, _____setActiveCategory] = useState(null);
     const [showGenerationWizard, setShowGenerationWizard] = useState(false);
     const [activeGenerationFlow, setActiveGenerationFlow] = useState(null);
     const [generationParams, setGenerationParams] = useState({});

@@ -76,7 +76,7 @@ export interface PolicyScope {
     custom_filters?: Array<{
       field: string;
       operator: ConditionOperator;
-      value: any;
+      value: Error;
     }>;
   };
   exceptions?: {
@@ -91,7 +91,7 @@ export interface PolicyCondition {
   description?: string;
   field: string;
   operator: ConditionOperator;
-  value: any;
+  value: Error;
   data_type: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'date';
   required: boolean;
   group?: string;
@@ -192,7 +192,7 @@ export interface Policy {
   };
   testing?: {
     test_cases: PolicyTestCase[];
-    simulation_data: any[];
+    simulation_data: Record<string, unknown>[];
     performance_benchmarks: {
       max_evaluation_time: number;
       max_memory_usage: number;
@@ -205,7 +205,7 @@ export interface PolicyTestCase {
   id: string;
   name: string;
   description: string;
-  input_data: any;
+  input_data: Record<string, unknown>;
   expected_conditions: Array<{
     condition_id: string;
     expected_result: boolean;
@@ -225,7 +225,7 @@ export interface PolicyEvaluationContext {
   timestamp: Date;
   entity_type: 'user' | 'template' | 'transaction' | 'system';
   entity_id: string;
-  entity_data: any;
+  entity_data: Record<string, unknown>;
   trigger_event: string;
   session_info?: {
     user_id?: string;
@@ -251,7 +251,7 @@ export interface PolicyEvaluationResult {
   conditions_met: Array<{
     condition_id: string;
     met: boolean;
-    value: any;
+    value: Error;
     evaluation_time: number;
   }>;
   actions_triggered: Array<{
@@ -259,13 +259,13 @@ export interface PolicyEvaluationResult {
     triggered: boolean;
     executed: boolean;
     execution_time?: number;
-    result?: any;
+    result?: unknown;
     error?: string;
   }>;
   overall_result: 'pass' | 'fail' | 'partial' | 'error';
   execution_time: number;
   memory_usage?: number;
-  debug_info?: any;
+  debug_info?: unknown;
 }
 
 // =============================================================================
@@ -285,12 +285,12 @@ export interface PolicyTemplate {
     description: string;
     type: string;
     required: boolean;
-    default_value?: any;
+    default_value?: unknown;
     validation?: {
       min?: number;
       max?: number;
       pattern?: string;
-      options?: any[];
+      options?: unknown[];
     };
   }>;
   examples: Array<{
@@ -318,8 +318,8 @@ export interface PolicyVersion {
   created_by: string;
   changes: Array<{
     field: string;
-    old_value: any;
-    new_value: any;
+    old_value: Error;
+    new_value: Error;
     change_type: 'create' | 'update' | 'delete';
   }>;
   change_summary: string;
@@ -371,9 +371,9 @@ export interface PolicyAuditLog {
     name?: string;
   };
   details: {
-    event_data: any;
-    context: any;
-    result?: any;
+    event_data: Record<string, unknown>;
+    context: unknown;
+    result?: unknown;
     error?: string;
   };
   impact: {
@@ -441,8 +441,8 @@ export interface PolicyRecommendation {
   rationale: string;
   suggested_changes: Array<{
     field: string;
-    current_value: any;
-    suggested_value: any;
+    current_value: Error;
+    suggested_value: Error;
     impact: string;
   }>;
   expected_benefits: string[];
@@ -620,7 +620,7 @@ export class PolicyDataService {
     offset?: number;
   } = {}): Promise<{ policies: Policy[]; total: number }> {
     let whereClause = '';
-    const params: any[] = [];
+    const params: unknown[] = [];
     const conditions: string[] = [];
 
     if (filters.type) {
@@ -763,7 +763,7 @@ export class PolicyDataService {
   }
 
   // Private helper methods
-  private mapRowToPolicy(row: any): Policy {
+  private mapRowToPolicy(row: unknown): Policy {
     return {
       metadata: {
         id: row.id,
@@ -801,7 +801,7 @@ export class PolicyDataService {
 
     // Evaluate conditions
     for (const condition of rule.conditions) {
-      const startTime = Date.now();
+      const _____startTime = Date.now();
       const met = this.evaluateCondition(condition, context);
       
       conditionsMetResults.push({
@@ -875,9 +875,9 @@ export class PolicyDataService {
     }
   }
 
-  private getFieldValue(field: string, context: PolicyEvaluationContext): any {
+  private getFieldValue(field: string, context: PolicyEvaluationContext): unknown {
     const parts = field.split('.');
-    let value: any = context;
+    let value: Error = context;
     
     for (const part of parts) {
       value = value?.[part];
@@ -887,7 +887,7 @@ export class PolicyDataService {
     return value;
   }
 
-  private async executeAction(action: PolicyAction, context: PolicyEvaluationContext): Promise<any> {
+  private async executeAction(action: PolicyAction, context: PolicyEvaluationContext): Promise<unknown> {
     // Placeholder for action execution
     console.log(`Executing action: ${action.type}`, { action, context });
     return { success: true, timestamp: new Date() };

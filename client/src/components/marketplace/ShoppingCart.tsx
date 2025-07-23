@@ -48,14 +48,14 @@ export const ShoppingCart: React.FC<ShoppingCartProps> = ({
     }
   };
 
-  const formatLicenseType = (licenseType: LicenseType): string => {
+  const ___formatLicenseType = (licenseType: LicenseType): string => {
     return licenseType
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
 
-  const getLicenseDescription = (licenseType: LicenseType): string => {
+  const ___getLicenseDescription = (licenseType: LicenseType): string => {
     const descriptions = {
       [LicenseType.PERSONAL]: 'For personal use only',
       [LicenseType.COMMERCIAL]: 'For commercial projects',
@@ -180,7 +180,7 @@ const CartItemComponent: React.FC<CartItemComponentProps> = ({
   onRemove,
   disabled
 }) => {
-  const [template, setTemplate] = useState<any>(null);
+  const [template, setTemplate] = useState<unknown>(null);
 
   useEffect(() => {
     // Fetch template details - in a real app, this would come from a context or service
@@ -193,7 +193,7 @@ const CartItemComponent: React.FC<CartItemComponentProps> = ({
     });
   }, [item.template_id]);
 
-  const formatLicenseType = (licenseType: LicenseType): string => {
+  const ___formatLicenseType = (licenseType: LicenseType): string => {
     return licenseType
       .split('_')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))

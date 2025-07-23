@@ -5,7 +5,7 @@ export const CorrectionsStatsDashboard = ({ isOpen, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedPeriod, setSelectedPeriod] = useState('30');
-    const [selectedView, setSelectedView] = useState('overview');
+    const [_____selectedView, _____setSelectedView] = useState('overview');
     useEffect(() => {
         if (isOpen) {
             fetchMetrics();

@@ -12,7 +12,6 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { Alert, AlertDescription } from '../ui/Alert';
 import { 
   AlertTriangle, 
   Shield, 
@@ -435,7 +434,7 @@ const AlertCard: React.FC<AlertCardProps> = ({
   const severityConfig = SEVERITY_CONFIG[alert.severity];
   const statusConfig = STATUS_CONFIG[alert.status];
   const SeverityIcon = severityConfig.icon;
-  const StatusIcon = statusConfig.icon;
+  const _____StatusIcon = statusConfig.icon;
 
   return (
     <div 

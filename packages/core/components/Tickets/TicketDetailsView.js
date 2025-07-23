@@ -208,7 +208,7 @@ const PriorityBadge = ({ priority }) => {
     };
     return (_jsx("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`, children: priority.toUpperCase() }));
 };
-const CommentItem = ({ comment, canViewInternal }) => {
+const CommentItem = ({ comment, _____canViewInternal }) => {
     const visibilityColors = {
         public: 'bg-green-100 text-green-800',
         internal: 'bg-yellow-100 text-yellow-800',

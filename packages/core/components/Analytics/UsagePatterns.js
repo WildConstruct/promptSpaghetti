@@ -53,7 +53,7 @@ const UserJourneyFlow = ({ journeyData }) => {
 /**
  * Usage patterns component
  */
-export const UsagePatterns = ({ analyticsClient, timeRange, userId, organizationId }) => {
+export const UsagePatterns = ({ analyticsClient, timeRange, _____userId, _____organizationId }) => {
     const [state, setState] = useState({
         loading: true,
         error: null,

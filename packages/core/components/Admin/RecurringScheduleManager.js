@@ -84,7 +84,7 @@ const STATUS_CONFIG = {
     failed: { color: 'text-red-600 bg-red-100', icon: AlertTriangle },
     paused: { color: 'text-yellow-600 bg-yellow-100', icon: Pause }
 };
-export const RecurringScheduleManager = ({ className = '', userId, userRole }) => {
+export const RecurringScheduleManager = ({ className = '', _____userId, _____userRole }) => {
     const [activeTab, setActiveTab] = useState('schedules');
     const [schedules, setSchedules] = useState([]);
     const [conflicts, setConflicts] = useState([]);
@@ -92,7 +92,7 @@ export const RecurringScheduleManager = ({ className = '', userId, userRole }) =
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [actionFilter, setActionFilter] = useState('all');
-    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [_____showCreateModal, setShowCreateModal] = useState(false);
     // Mock data - in real implementation, this would fetch from APIs
     const mockSchedules = [
         {
@@ -252,7 +252,7 @@ export const RecurringScheduleManager = ({ className = '', userId, userRole }) =
         }).format(date);
     };
     const getRecurrenceDescription = (recurrence) => {
-        const { type, interval, daysOfWeek, daysOfMonth, monthsOfYear } = recurrence;
+        const { type, interval, daysOfWeek, daysOfMonth, _____monthsOfYear } = recurrence;
         switch (type) {
             case 'daily':
                 return interval === 1 ? 'Every day' : `Every ${interval} days`;

@@ -210,7 +210,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
   }, []);
 
   // Render section content
-  const renderSectionContent = useCallback((section: any) => {
+  const renderSectionContent = useCallback((section: unknown) => {
     const setSectionRef = (element: HTMLElement | null) => {
       if (element) {
         sectionsRef.current.set(section.id, element);

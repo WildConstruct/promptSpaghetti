@@ -13,14 +13,14 @@ import { useGraphStore } from '../graphStore';
 /**
  * Command palette integration component for the graph editor
  */
-export const CommandPaletteIntegration = ({ theme = 'cinema', onNodeCreate, onNodesDelete, onExport, onTemplateApply, onSave, selectedNodes = [], customActions = [], disabled = false }) => {
+export const CommandPaletteIntegration = ({ theme = 'cinema', onNodeCreate, onNodesDelete, onExport, onTemplateApply, _____onSave, selectedNodes = [], customActions = [], disabled = false }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [recentCommands, setRecentCommands] = useState([]);
-    const [isGenerating, setIsGenerating] = useState(false);
+    const [_____isGenerating, setIsGenerating] = useState(false);
     const reactFlowInstance = useReactFlow();
     const nodes = useNodes();
     const edges = useEdges();
-    const { addNode, updateNode } = useGraphStore();
+    const { addNode, _____updateNode } = useGraphStore();
     // Command palette handlers
     const handleOpen = useCallback(() => {
         if (disabled)
@@ -135,7 +135,7 @@ export const CommandPaletteIntegration = ({ theme = 'cinema', onNodeCreate, onNo
     };
     // Story structure generation
     const generateStoryStructure = async (params, startPosition) => {
-        const { logline, 'target-audience': audience } = params;
+        const { logline, 'target-_____audience': _____audience } = params;
         const acts = [
             { title: 'Act I - Setup', elements: ['Inciting Incident', 'Character Introduction', 'World Building'] },
             { title: 'Act II - Confrontation', elements: ['Rising Action', 'Midpoint', 'Plot Complications'] },
@@ -167,7 +167,7 @@ export const CommandPaletteIntegration = ({ theme = 'cinema', onNodeCreate, onNo
     };
     // Dialogue generator
     const generateDialogueNode = async (params, startPosition) => {
-        const { 'scene-description': description, 'characters-present': characters, 'scene-tone': tone } = params;
+        const { 'scene-description': description, '_____characters-present': _____characters, 'scene-tone': tone } = params;
         const dialogueStyles = generateDialogueStylesForTone(tone);
         const dialogueNode = createCharacterNode(`${tone} Dialogue`, {
             choices: dialogueStyles.map((style, index) => ({
@@ -238,7 +238,7 @@ export const CommandPaletteIntegration = ({ theme = 'cinema', onNodeCreate, onNo
             weight: 100 - (index * 15)
         }));
     };
-    const generateDialogueChoices = (genre, traits) => {
+    const generateDialogueChoices = (genre, _____traits) => {
         const baseStyles = {
             drama: ['Introspective and thoughtful', 'Emotionally charged', 'Philosophical undertones'],
             action: ['Short, punchy statements', 'Action-focused commands', 'Witty one-liners'],

@@ -858,15 +858,15 @@ export class DatabaseMockService {
   }
 
   private closeConnection(_connectionId: string): boolean {
-    return this.connections.delete(connectionId);
+    return this.connections.delete(_connectionId);
   }
 
   private getConnectionStats(_connectionId: string): unknown {
-    const connection = this.connections.get(connectionId);
+    const connection = this.connections.get(_connectionId);
     if (!connection) return null;
 
     return {
-      connectionId,
+      connectionId: _connectionId,
       type: connection.type,
       connected: true,
       queryCount: this.queryLog.length,

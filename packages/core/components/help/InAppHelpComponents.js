@@ -101,7 +101,7 @@ export const HelpTooltip = ({ content, title, position = 'top', trigger = 'hover
                     zIndex: 9999
                 }, children: [showArrow && _jsx("div", { className: `help-tooltip-arrow help-tooltip-arrow-${position}` }), _jsxs("div", { className: "help-tooltip-content", children: [title && _jsx("div", { className: "help-tooltip-title", children: title }), _jsx("div", { className: "help-tooltip-body", children: content }), (helpLink || helpText) && (_jsx("div", { className: "help-tooltip-actions", children: helpLink && (_jsxs(Button, { variant: "ghost", size: "sm", onClick: () => window.open(helpLink, '_blank'), className: "help-tooltip-link", children: [_jsx(ExternalLink, { size: 12 }), helpText || 'Learn more'] })) }))] })] }))] }));
 };
-export const ContextualHelpPanel = ({ title, content, context, position = 'right', collapsible = true, defaultCollapsed = false, searchable = true, filterable = true, className = '', onContentSelect, onFeedback }) => {
+export const ContextualHelpPanel = ({ title, content, _____context, position = 'right', collapsible = true, defaultCollapsed = false, searchable = true, filterable = true, className = '', onContentSelect, onFeedback }) => {
     const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('all');
@@ -138,7 +138,7 @@ export const ContextualHelpPanel = ({ title, content, context, position = 'right
 export const GuidedTour = ({ tour, isActive, onComplete, onSkip, onStepChange, className = '' }) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [highlightedElement, setHighlightedElement] = useState(null);
+    const [_____highlightedElement, setHighlightedElement] = useState(null);
     const overlayRef = useRef(null);
     const tourRef = useRef(null);
     const currentStep = tour.steps[currentStepIndex];
@@ -152,7 +152,7 @@ export const GuidedTour = ({ tour, isActive, onComplete, onSkip, onStepChange, c
         if (targetElement) {
             setHighlightedElement(targetElement);
             // Create overlay effect
-            const rect = targetElement.getBoundingClientRect();
+            const _____rect = targetElement.getBoundingClientRect();
             if (overlayRef.current) {
                 overlayRef.current.style.display = 'block';
                 // Add spotlight effect positioning

@@ -31,7 +31,7 @@ export const RealTimePreviewIntegration = ({ nodes, edges, enableRealTime = true
         autoRefresh
     }), [previewCount, autoRefresh]);
     // Real-time preview hook
-    const { variants, isGenerating: realTimeGenerating, performance, error: realTimeError, generateVariants, clearVariants } = useRealTimePreview(realTimeConfig);
+    const { variants, isGenerating: realTimeGenerating, performance, error: realTimeError, generateVariants, _____clearVariants } = useRealTimePreview(realTimeConfig);
     // Enhanced preview for detailed analysis
     const { loading: enhancedLoading, error: enhancedError, results: enhancedResults, varianceAnalysis, runEnhancedPreview, cancelPreview } = useEnhancedPreview();
     // Track graph changes for real-time updates

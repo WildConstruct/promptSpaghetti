@@ -5,7 +5,7 @@
  * and SLA tracking. Provides full ticket management capabilities.
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   MarketplaceTicket,
   TicketComment,
@@ -516,7 +516,7 @@ const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => 
   );
 };
 
-const CommentItem: React.FC<{ comment: TicketComment; canViewInternal: boolean }> = ({ comment, canViewInternal }) => {
+const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean }> = ({ comment, canViewInternal }) => {
   const visibilityColors = {
     public: 'bg-green-100 text-green-800',
     internal: 'bg-yellow-100 text-yellow-800',

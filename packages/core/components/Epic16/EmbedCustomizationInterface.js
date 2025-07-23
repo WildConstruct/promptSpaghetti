@@ -245,7 +245,7 @@ export const PresetSelector = ({ presets, selectedPreset, onPresetSelect }) => {
 // Visual layout builder component
 export const VisualLayoutBuilder = ({ widgets, onWidgetsChange, previewSize }) => {
     const [selectedWidget, setSelectedWidget] = useState(null);
-    const canvasRef = useRef(null);
+    const _____canvasRef = useRef(null);
     const handleDragEnd = useCallback((result) => {
         if (!result.destination)
             return;
@@ -321,7 +321,7 @@ export const EmbedCustomizationInterface = ({ template, initialCustomization, on
     const [activeTab, setActiveTab] = useState('presets');
     const [customization, setCustomization] = useState(initialCustomization || presets[0].customization);
     const [selectedPreset, setSelectedPreset] = useState(presets[0].id);
-    const [previewSize, setPreviewSize] = useState(PREVIEW_SIZES[1]);
+    const [previewSize, _____setPreviewSize] = useState(PREVIEW_SIZES[1]);
     const [widgets, setWidgets] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
     // Update customization when it changes

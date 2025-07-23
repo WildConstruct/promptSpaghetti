@@ -590,7 +590,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     }
   }
 
-  private async generateReport(schedule: ReportSchedule, period: ReportingPeriod): Promise<any> {
+  private async generateReport(schedule: ReportSchedule, period: ReportingPeriod): Promise<unknown> {
     switch (schedule.framework) {
     case ComplianceFramework.GDPR:
       return this.gdprModule.generateGDPRReport(schedule.reportType, period);
@@ -605,7 +605,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     }
   }
 
-  private async exportReports(report: any, schedule: ReportSchedule): Promise<GeneratedReport[]> {
+  private async exportReports(report: unknown, schedule: ReportSchedule): Promise<GeneratedReport[]> {
     const formats = new Set<string>();
     
     // Collect all required formats
@@ -657,9 +657,9 @@ export class ComplianceReportScheduler extends EventEmitter {
     reports: GeneratedReport[],
     recipient: ReportRecipient,
     method: DeliveryMethod,
-    schedule: ReportSchedule
+    _____schedule: ReportSchedule
   ): Promise<DeliveryResult> {
-    const startTime = Date.now();
+    const _____startTime = Date.now();
 
     try {
       // Filter reports by recipient's preferred formats
@@ -741,7 +741,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     ].sort();
   }
 
-  private skipHolidays(date: Date, holidays: HolidayRule[]): Date {
+  private skipHolidays(date: Date, _____holidays: HolidayRule[]): Date {
     // Implementation would check against holiday rules and skip to next business day
     // For now, just return the date
     return date;
@@ -751,7 +751,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   private async deliverViaEmail(
     reports: GeneratedReport[],
     recipient: ReportRecipient,
-    config: DeliveryConfiguration
+    _____config: DeliveryConfiguration
   ): Promise<void> {
     console.log(`📧 Delivering reports via email to ${recipient.email}`);
   }
@@ -759,7 +759,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   private async deliverViaSecurePortal(
     reports: GeneratedReport[],
     recipient: ReportRecipient,
-    config: DeliveryConfiguration
+    _____config: DeliveryConfiguration
   ): Promise<void> {
     console.log(`🔒 Delivering reports via secure portal to ${recipient.name}`);
   }
@@ -767,7 +767,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   private async deliverViaSFTP(
     reports: GeneratedReport[],
     recipient: ReportRecipient,
-    config: DeliveryConfiguration
+    _____config: DeliveryConfiguration
   ): Promise<void> {
     console.log(`📁 Delivering reports via SFTP to ${recipient.name}`);
   }
@@ -775,7 +775,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   private async deliverViaAPI(
     reports: GeneratedReport[],
     recipient: ReportRecipient,
-    config: DeliveryConfiguration
+    _____config: DeliveryConfiguration
   ): Promise<void> {
     console.log(`🔌 Delivering reports via API to ${recipient.name}`);
   }
@@ -783,7 +783,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   private async deliverViaWebhook(
     reports: GeneratedReport[],
     recipient: ReportRecipient,
-    config: DeliveryConfiguration
+    _____config: DeliveryConfiguration
   ): Promise<void> {
     console.log(`🪝 Delivering reports via webhook to ${recipient.name}`);
   }
@@ -831,7 +831,7 @@ interface WatermarkOptions {
 
 interface AccessRestriction {
   type: 'ip_whitelist' | 'user_authentication' | 'time_limited' | 'download_limit';
-  configuration: any;
+  configuration: unknown;
 }
 
 interface ExpirationPolicy {
@@ -847,14 +847,14 @@ interface RetryPolicy {
 }
 
 interface DeliveryConfiguration {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface ExecutionError {
   type: string;
   message: string;
   timestamp: Date;
-  context: any;
+  context: unknown;
 }
 
 interface ExecutionMetadata {

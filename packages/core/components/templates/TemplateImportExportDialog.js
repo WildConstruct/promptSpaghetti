@@ -18,8 +18,8 @@ export const TemplateImportExportDialog = ({ isOpen, onClose, mode, template, on
         token: ''
     });
     // Export state
-    const [exportStep, setExportStep] = useState('format');
-    const [exportFormat, setExportFormat] = useState('json');
+    const [_____exportStep, setExportStep] = useState('format');
+    const [_____exportFormat, _____setExportFormat] = useState('json');
     const [selectedVersionId, setSelectedVersionId] = useState('');
     // Common state
     const [loading, setLoading] = useState(false);

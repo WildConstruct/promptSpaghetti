@@ -4,7 +4,7 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 import { useState, useCallback, useMemo } from 'react';
 import { getBezierPath } from 'reactflow';
 // Floating connection label component
-export const ConnectionLabel = ({ edge, x, y, onLabelChange, onLabelStyleChange }) => {
+export const ConnectionLabel = ({ edge, x, y, onLabelChange, _____onLabelStyleChange }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(edge.label || '');
     const labelStyle = useMemo(() => ({
@@ -223,7 +223,7 @@ export const toggleEdgeLabel = (edges, edgeId) => {
         ? { ...edge, showLabel: !edge.showLabel }
         : edge);
 };
-export const getEdgeCenter = (edge) => {
+export const getEdgeCenter = (_____edge) => {
     // This would need access to node positions to calculate properly
     // For now, return a placeholder - would be calculated in the actual component
     return { x: 0, y: 0 };

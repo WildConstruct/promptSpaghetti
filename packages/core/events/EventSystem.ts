@@ -295,7 +295,7 @@ export class EventBus extends EventEmitter {
     middleware: number;
     historySize: number;
     eventTypes: string[];
-  } {
+    } {
     const eventTypes = [...new Set(this.eventHistory.map(e => e.type))];
     
     return {
@@ -372,11 +372,11 @@ export class EventBus extends EventEmitter {
 
   private priorityOrder(priority: EventPriority): number {
     switch (priority) {
-      case EventPriority.CRITICAL: return 1;
-      case EventPriority.HIGH: return 2;
-      case EventPriority.MEDIUM: return 3;
-      case EventPriority.LOW: return 4;
-      default: return 5;
+    case EventPriority.CRITICAL: return 1;
+    case EventPriority.HIGH: return 2;
+    case EventPriority.MEDIUM: return 3;
+    case EventPriority.LOW: return 4;
+    default: return 5;
     }
   }
 

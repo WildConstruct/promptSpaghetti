@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export interface WeightControlOption {
   id: string;
@@ -139,7 +139,7 @@ export const WeightControlSlider: React.FC<WeightControlSliderProps> = ({
 };
 
 // Helper function to get consistent colors for options
-const getOptionColor = (index: number): string => {
+const _____getOptionColor = (index: number): string => {
   const colors = [
     '#4299e1', // Blue
     '#48bb78', // Green

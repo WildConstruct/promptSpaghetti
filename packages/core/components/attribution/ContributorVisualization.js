@@ -4,11 +4,11 @@ import { Card, Avatar, Typography, Timeline, Tag, Tooltip, Space, Progress, Row,
 import { UserOutlined, ClockCircleOutlined, EditOutlined, TeamOutlined, TrophyOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { CHANGE_TYPE_DESCRIPTIONS, RESOURCE_TYPE_DESCRIPTIONS } from '../../types/attribution';
 import { useAttribution } from '../../hooks/useAttribution';
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text, _____Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
-const { Option } = Select;
-const ContributorCard = ({ contributor, projectId, onViewDetails }) => {
+const { _____Option } = Select;
+const ContributorCard = ({ contributor, _____projectId, onViewDetails }) => {
     const getContributorInitials = (name) => {
         if (!name)
             return '?';
@@ -55,7 +55,7 @@ export const ContributorVisualization = ({ projectId, visible = true, onClose })
     const [dateRange, setDateRange] = useState(null);
     const [selectedContributor, setSelectedContributor] = useState(null);
     const [showAnonymous, setShowAnonymous] = useState(false);
-    const { getContributorStats, listAttributions, loading, error } = useAttribution();
+    const { getContributorStats, listAttributions, _____loading, _____error } = useAttribution();
     useEffect(() => {
         if (visible) {
             loadContributors();
@@ -148,9 +148,9 @@ export const ContributorVisualization = ({ projectId, visible = true, onClose })
                                                 })) }) }) })] })] }, "overview"), _jsx(TabPane, { tab: "Details", children: selectedContributor ? (_jsx(ContributorDetails, { projectId: projectId, contributorId: selectedContributor, onBack: () => setSelectedContributor(null) })) : (_jsx("div", { style: { textAlign: 'center', padding: '40px' }, children: _jsx(Text, { type: "secondary", children: "Select a contributor to view details" }) })) }, "details"), _jsx(TabPane, { tab: "Analytics", children: _jsx(ContributorAnalytics, { contributors: contributors, projectId: projectId }) }, "analytics")] })] }));
 };
 // Placeholder components for detailed views
-const ContributorDetails = ({ projectId, contributorId, onBack }) => {
+const ContributorDetails = ({ _____projectId, contributorId, onBack }) => {
     return (_jsxs("div", { children: [_jsx(Button, { onClick: onBack, style: { marginBottom: '16px' }, children: "\u2190 Back to Overview" }), _jsx(Card, { title: "Contributor Details", children: _jsxs(Text, { children: ["Detailed contributor information for ", contributorId] }) })] }));
 };
-const ContributorAnalytics = ({ contributors, projectId }) => {
+const ContributorAnalytics = ({ _____contributors, _____projectId }) => {
     return (_jsx("div", { children: _jsxs(Row, { gutter: 16, children: [_jsx(Col, { span: 12, children: _jsx(Card, { title: "Contribution Patterns", children: _jsx(Text, { children: "Analytics about contribution patterns" }) }) }), _jsx(Col, { span: 12, children: _jsx(Card, { title: "Collaboration Network", children: _jsx(Text, { children: "Collaboration network visualization" }) }) })] }) }));
 };

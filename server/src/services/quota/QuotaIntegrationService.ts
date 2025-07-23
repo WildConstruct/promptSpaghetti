@@ -578,12 +578,12 @@ export class QuotaIntegrationService {
     }
   }
 
-  private async performServiceHealthCheck(service: any): Promise<boolean> {
+  private async performServiceHealthCheck(service: Error): Promise<boolean> {
     // Basic health check implementation
     return service && typeof service === 'object';
   }
 
-  private async getRecentUserViolations(userId: string): Promise<QuotaViolation[]> {
+  private async getRecentUserViolations(_____userId: string): Promise<QuotaViolation[]> {
     // Implementation would fetch recent violations from database
     return [];
   }
@@ -645,17 +645,17 @@ export class QuotaIntegrationService {
     return criticalTypes.includes(quotaType);
   }
 
-  private async sendUserQuotaNotification(userId: string, result: QuotaCheckResult): Promise<void> {
+  private async sendUserQuotaNotification(userId: string, _____result: QuotaCheckResult): Promise<void> {
     // Implementation for user notifications
     console.log(`📬 Sending quota notification to user ${userId}`);
   }
 
-  private async sendSystemAdminAlert(request: QuotaCheckRequest, result: QuotaCheckResult): Promise<void> {
+  private async sendSystemAdminAlert(_____request: QuotaCheckRequest, _____result: QuotaCheckResult): Promise<void> {
     // Implementation for admin alerts
     console.log('🚨 Sending admin alert for critical quota violation');
   }
 
-  private async sendStakeholderNotification(request: QuotaCheckRequest, result: QuotaCheckResult): Promise<void> {
+  private async sendStakeholderNotification(_____request: QuotaCheckRequest, _____result: QuotaCheckResult): Promise<void> {
     // Implementation for stakeholder notifications
     console.log('📊 Sending stakeholder notification for business-critical quota');
   }

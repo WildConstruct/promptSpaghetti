@@ -594,34 +594,34 @@ export class ComplianceQualityAssurance {
   }
 
   // Additional helper methods would be implemented...
-  private async assessClarityDimension(report: StandardComplianceReport): Promise<QualityDimension> { return {} as QualityDimension; }
-  private async assessConsistencyDimension(report: StandardComplianceReport): Promise<QualityDimension> { return {} as QualityDimension; }
-  private async assessRelevanceDimension(report: StandardComplianceReport): Promise<QualityDimension> { return {} as QualityDimension; }
+  private async assessClarityDimension(_____report: StandardComplianceReport): Promise<QualityDimension> { return {} as QualityDimension; }
+  private async assessConsistencyDimension(_____report: StandardComplianceReport): Promise<QualityDimension> { return {} as QualityDimension; }
+  private async assessRelevanceDimension(_____report: StandardComplianceReport): Promise<QualityDimension> { return {} as QualityDimension; }
   private async assessComplianceDimension(
-    report: StandardComplianceReport,
-    validation: ValidationResult
+    _____report: StandardComplianceReport,
+    _____validation: ValidationResult
   ): Promise<QualityDimension> { return {} as QualityDimension; }
   private getAccuracyRubric(): ScoringRubric { return {} as ScoringRubric; }
   private generateAccuracyFeedback(score: number): string { return `Accuracy score: ${score}%`; }
-  private generateAccuracyRecommendations(score: number): string[] { return []; }
+  private generateAccuracyRecommendations(_____score: number): string[] { return []; }
   private generateCompletenessFeedback(score: number): string { return `Completeness score: ${score}%`; }
-  private generateCompletenessRecommendations(score: number): string[] { return []; }
+  private generateCompletenessRecommendations(_____score: number): string[] { return []; }
   private async generateImprovementActions(
-    dimensions: QualityDimension[],
-    benchmark: BenchmarkComparison
+    _____dimensions: QualityDimension[],
+    _____benchmark: BenchmarkComparison
   ): Promise<ImprovementAction[]> { return []; }
   private async generateQualityCertification(
-    report: StandardComplianceReport,
-    score: number,
-    assessor: QualityAssessor
+    _____report: StandardComplianceReport,
+    _____score: number,
+    _____assessor: QualityAssessor
   ): Promise<QualityCertification> { return {} as QualityCertification; }
-  private async updateQualityScoreWithPeerFeedback(assessment: QualityAssessment): Promise<void> { }
+  private async updateQualityScoreWithPeerFeedback(_____assessment: QualityAssessment): Promise<void> { }
   private async generateDimensionImprovements(
-    dimension: QualityDimension,
-    assessment: QualityAssessment
+    _____dimension: QualityDimension,
+    _____assessment: QualityAssessment
   ): Promise<ImprovementAction[]> { return []; }
-  private async analyzePeerFeedback(reviews: PeerReview[]): Promise<ImprovementAction[]> { return []; }
-  private async generateBenchmarkImprovements(benchmark: BenchmarkComparison): Promise<ImprovementAction[]> { return []; }
-  private async getReportFramework(reportId: string): Promise<ComplianceFramework | null> { return null; }
-  private getFrameworkReportCount(metrics: QualityMetrics, framework: ComplianceFramework): number { return 1; }
+  private async analyzePeerFeedback(_____reviews: PeerReview[]): Promise<ImprovementAction[]> { return []; }
+  private async generateBenchmarkImprovements(_____benchmark: BenchmarkComparison): Promise<ImprovementAction[]> { return []; }
+  private async getReportFramework(_____reportId: string): Promise<ComplianceFramework | null> { return null; }
+  private getFrameworkReportCount(_____metrics: QualityMetrics, _____framework: ComplianceFramework): number { return 1; }
 }

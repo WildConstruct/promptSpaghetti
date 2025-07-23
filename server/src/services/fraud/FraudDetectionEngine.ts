@@ -44,10 +44,10 @@ export interface FraudDetectionRequest {
   userId?: string;
   sessionId?: string;
   transactionId?: string;
-  paymentData?: any;
-  deviceData?: any;
-  locationData?: any;
-  behaviorData?: any;
+  paymentData?: unknown;
+  deviceData?: unknown;
+  locationData?: unknown;
+  behaviorData?: unknown;
   context: FraudContext;
 }
 
@@ -150,7 +150,7 @@ export class FraudDetectionEngine {
 
       // Collect successful results
       const results = assessments
-        .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
+        .filter((result): result is PromiseFulfilledResult<unknown> => result.status === 'fulfilled')
         .map(result => result.value)
         .filter(Boolean);
 
@@ -200,7 +200,7 @@ export class FraudDetectionEngine {
    */
   async detectPaymentFraud(
     transactionId: string,
-    paymentData: any,
+    paymentData: unknown,
     context: FraudContext
   ): Promise<PaymentFraudAssessment> {
     console.log(`💳 Analyzing payment fraud for transaction: ${transactionId}`);
@@ -533,7 +533,7 @@ export class FraudDetectionEngine {
   // Velocity and Pattern Analysis
   // =============================================================================
 
-  private async performVelocityChecks(paymentData: any, context: FraudContext): Promise<VelocityCheck[]> {
+  private async performVelocityChecks(paymentData: unknown, context: FraudContext): Promise<VelocityCheck[]> {
     const checks: VelocityCheck[] = [];
     const timeWindows = [5, 15, 60, 1440]; // 5min, 15min, 1hr, 24hr
 
@@ -587,8 +587,8 @@ export class FraudDetectionEngine {
     return checks;
   }
 
-  private async analyzeCardTesting(paymentData: any, context: FraudContext): Promise<CardTestingAnalysis> {
-    const patterns: any[] = [];
+  private async analyzeCardTesting(paymentData: unknown, context: FraudContext): Promise<CardTestingAnalysis> {
+    const patterns: unknown[] = [];
     
     // Check for sequential attempts
     const sequentialAttempts = await this.checkSequentialAttempts(context);
@@ -643,7 +643,7 @@ export class FraudDetectionEngine {
   // Result Aggregation and Decision Making
   // =============================================================================
 
-  private aggregateResults(results: any[], request: FraudDetectionRequest): FraudDetectionResult {
+  private aggregateResults(results: unknown[], request: FraudDetectionRequest): FraudDetectionResult {
     const validResults = results.filter(r => r && typeof r.fraudScore === 'number');
     
     if (validResults.length === 0) {
@@ -765,7 +765,7 @@ export class FraudDetectionEngine {
     return 'very_low';
   }
 
-  private calculateConfidence(results: any[]): number {
+  private calculateConfidence(results: unknown[]): number {
     if (results.length === 0) return 0;
     
     const confidences = results.map(r => r.confidence || 70);
@@ -884,17 +884,17 @@ export class FraudDetectionEngine {
   // Placeholder Methods (would be implemented with actual logic)
   // =============================================================================
 
-  private async getActiveRules(type: string): Promise<FraudRule[]> {
+  private async getActiveRules(_____type: string): Promise<FraudRule[]> {
     // Implementation would load active fraud rules from database
     return [];
   }
 
-  private async evaluateRule(rule: FraudRule, request: FraudDetectionRequest): Promise<boolean> {
+  private async evaluateRule(_____rule: FraudRule, _____request: FraudDetectionRequest): Promise<boolean> {
     // Implementation would evaluate rule conditions against request data
     return false;
   }
 
-  private calculateRuleScore(rule: FraudRule): number {
+  private calculateRuleScore(_____rule: FraudRule): number {
     // Implementation would calculate score contribution from triggered rule
     return 10;
   }
@@ -917,7 +917,7 @@ export class FraudDetectionEngine {
     return Math.round(riskScore * 0.8); // Slightly lower weight for behavioral analysis
   }
 
-  private createBehavioralRiskFactors(analysis: any): FraudRiskFactor[] {
+  private createBehavioralRiskFactors(analysis: unknown): FraudRiskFactor[] {
     const factors: FraudRiskFactor[] = [];
     
     if (analysis.riskScore > 70) {
@@ -980,7 +980,7 @@ export class FraudDetectionEngine {
     return thresholds[metric]?.[timeWindow] || 10;
   }
 
-  private calculateVelocitySeverity(metric: VelocityMetric, current: number, threshold: number): any {
+  private calculateVelocitySeverity(metric: VelocityMetric, current: number, threshold: number): unknown {
     const ratio = current / threshold;
     if (ratio >= 3) return 'critical';
     if (ratio >= 2) return 'high';
@@ -989,19 +989,19 @@ export class FraudDetectionEngine {
   }
 
   // Additional placeholder methods
-  private async checkSequentialAttempts(context: FraudContext): Promise<{ detected: boolean; evidence: string[] }> {
+  private async checkSequentialAttempts(_____context: FraudContext): Promise<{ detected: boolean; evidence: string[] }> {
     return { detected: false, evidence: [] };
   }
 
-  private async checkMultipleCards(context: FraudContext): Promise<{ detected: boolean; evidence: string[] }> {
+  private async checkMultipleCards(_____context: FraudContext): Promise<{ detected: boolean; evidence: string[] }> {
     return { detected: false, evidence: [] };
   }
 
-  private checkSmallAmounts(paymentData: any): { detected: boolean; evidence: string[] } {
+  private checkSmallAmounts(_____paymentData: unknown): { detected: boolean; evidence: string[] } {
     return { detected: false, evidence: [] };
   }
 
-  private async checkSuspiciousIP(ipAddress: string): Promise<boolean> {
+  private async checkSuspiciousIP(_____ipAddress: string): Promise<boolean> {
     return false;
   }
 
@@ -1027,15 +1027,15 @@ export class FraudDetectionEngine {
   }
 
   // Default implementations for payment fraud assessment
-  private calculatePaymentRiskFactors(assessments: any, paymentData: any): any[] {
+  private calculatePaymentRiskFactors(_____assessments: unknown, _____paymentData: unknown): unknown[] {
     return [];
   }
 
-  private calculatePaymentFraudScore(riskFactors: any[]): number {
+  private calculatePaymentFraudScore(_____riskFactors: unknown[]): number {
     return 0;
   }
 
-  private generatePaymentRecommendation(fraudScore: number, riskFactors: any[]): PaymentRecommendation {
+  private generatePaymentRecommendation(_____fraudScore: number, _____riskFactors: unknown[]): PaymentRecommendation {
     return {
       action: 'approve',
       confidence: 80,
@@ -1085,20 +1085,20 @@ export class FraudDetectionEngine {
     };
   }
 
-  private async assessChargebackRisk(paymentData: any, context: FraudContext): Promise<ChargebackRiskAssessment> {
+  private async assessChargebackRisk(_____paymentData: unknown, _____context: FraudContext): Promise<ChargebackRiskAssessment> {
     return this.getDefaultChargebackRisk();
   }
 
-  private async analyzeGeolocationRisk(context: FraudContext): Promise<GeolocationRisk> {
+  private async analyzeGeolocationRisk(_____context: FraudContext): Promise<GeolocationRisk> {
     return this.getDefaultGeolocationRisk();
   }
 
-  private async assessDeviceRisk(context: FraudContext): Promise<DeviceRiskAssessment> {
+  private async assessDeviceRisk(_____context: FraudContext): Promise<DeviceRiskAssessment> {
     return this.getDefaultDeviceRisk();
   }
 
   // Account fraud assessment helpers
-  private buildAccountRiskProfile(trustScore: any, enforcementHistory: any, behavioralAnalysis: any): any {
+  private buildAccountRiskProfile(trustScore: Error, _____enforcementHistory: unknown, _____behavioralAnalysis: unknown): unknown {
     return {
       overallRisk: 'low',
       riskFactors: [],
@@ -1109,7 +1109,7 @@ export class FraudDetectionEngine {
     };
   }
 
-  private async assessSyntheticIdentityRisk(userId: string): Promise<any> {
+  private async assessSyntheticIdentityRisk(_____userId: string): Promise<unknown> {
     return {
       riskScore: 0,
       indicators: [],
@@ -1118,7 +1118,7 @@ export class FraudDetectionEngine {
     };
   }
 
-  private async assessAccountTakeoverRisk(userId: string, context: FraudContext): Promise<any> {
+  private async assessAccountTakeoverRisk(userId: string, context: FraudContext): Promise<unknown> {
     return {
       riskScore: 0,
       indicators: [],
@@ -1145,7 +1145,7 @@ export class FraudDetectionEngine {
     };
   }
 
-  private async getIdentityVerificationStatus(userId: string): Promise<any> {
+  private async getIdentityVerificationStatus(_____userId: string): Promise<unknown> {
     return {
       level: 'email',
       documents: [],
@@ -1179,11 +1179,11 @@ export class FraudDetectionEngine {
     };
   }
 
-  private calculateAccountFraudScore(data: any): number {
+  private calculateAccountFraudScore(_____data: Record<string, unknown>): number {
     return 0;
   }
 
-  private generateAccountRecommendation(fraudScore: number, accountRisk: any): AccountRecommendation {
+  private generateAccountRecommendation(_____fraudScore: number, _____accountRisk: unknown): AccountRecommendation {
     return {
       action: 'allow',
       priority: 'low',
@@ -1194,7 +1194,7 @@ export class FraudDetectionEngine {
     };
   }
 
-  private mapBehavioralAnalysis(analysis: any): any {
+  private mapBehavioralAnalysis(_____analysis: unknown): unknown {
     return {
       behaviorScore: 0,
       patterns: [],

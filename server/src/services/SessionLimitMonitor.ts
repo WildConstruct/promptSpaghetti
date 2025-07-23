@@ -13,7 +13,8 @@ import { EventEmitter } from 'events';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
-import { SessionLimitManager, SessionLimitMetrics, SessionLimitViolation } from './SessionLimitManager';
+import { SessionLimitManager, SessionLimitMetrics } from './SessionLimitManager';
+// import { SessionLimitViolation } from './SessionLimitManager';
 import { ConnectionManager } from '../websocket/ConnectionManager';
 
 export interface AlertRule {
@@ -450,7 +451,7 @@ export class SessionLimitMonitor extends EventEmitter {
   /**
    * Get performance metrics
    */
-  async getPerformanceMetrics(timeRange: { start: Date; end: Date }): Promise<any> {
+  async getPerformanceMetrics(timeRange: { start: Date; end: Date }): Promise<unknown> {
     try {
       const result = await this.dbService.query(`
         SELECT 
@@ -860,7 +861,7 @@ export class SessionLimitMonitor extends EventEmitter {
     return 'healthy';
   }
   
-  private async getRealTimeMetrics(): Promise<any> {
+  private async getRealTimeMetrics(): Promise<unknown> {
     // Implementation for real-time metrics calculation
     return {
       sessionsPerMinute: 0,
@@ -870,7 +871,7 @@ export class SessionLimitMonitor extends EventEmitter {
     };
   }
   
-  private async getTrends(): Promise<any> {
+  private async getTrends(): Promise<unknown> {
     // Implementation for trend calculation
     return {
       sessionTrends: [],
@@ -879,7 +880,7 @@ export class SessionLimitMonitor extends EventEmitter {
     };
   }
   
-  private mapDatabaseAlert(row: any): Alert {
+  private mapDatabaseAlert(row: unknown): Alert {
     return {
       id: row.id,
       ruleId: row.rule_id,

@@ -251,7 +251,7 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
   }, [comparison, highlightMode, showUnchanged]);
 
   // Get node styling based on diff state
-  const getDiffNodeStyle = (diffState: string, highlightMode: HighlightMode) => {
+  const getDiffNodeStyle = (diffState: string, __highlightMode: HighlightMode) => {
     const baseStyle = {
       border: '2px solid',
       borderRadius: '6px',
@@ -271,7 +271,7 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
   };
 
   // Get edge styling based on diff state
-  const getDiffEdgeStyle = (diffState: string, highlightMode: HighlightMode) => {
+  const getDiffEdgeStyle = (diffState: string, __highlightMode: HighlightMode) => {
     const baseStyle = {
       strokeWidth: 2,
       transition: 'all 0.2s ease'

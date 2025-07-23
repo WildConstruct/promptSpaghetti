@@ -2,14 +2,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useMemo } from 'react';
 import { useCorrectionsStore } from '../correctionsStore';
 export const WorkflowManager = ({ isOpen, onClose }) => {
-    const { rules, getDraftRules, getPublishedRules, approveRule, deprecateRule, suggestRule, updateRule, deleteRule } = useCorrectionsStore();
+    const { rules, _____getDraftRules, _____getPublishedRules, approveRule, deprecateRule, _____suggestRule, _____updateRule, deleteRule } = useCorrectionsStore();
     const [activeTab, setActiveTab] = useState('pending');
     const [selectedRules, setSelectedRules] = useState(new Set());
-    const [showApprovalDialog, setShowApprovalDialog] = useState(false);
+    const [_____showApprovalDialog, setShowApprovalDialog] = useState(false);
     const [showDeprecationDialog, setShowDeprecationDialog] = useState(false);
-    const [showSuggestionDialog, setShowSuggestionDialog] = useState(false);
+    const [_____showSuggestionDialog, _____setShowSuggestionDialog] = useState(false);
     const [currentRule, setCurrentRule] = useState(null);
-    const [approvalComment, setApprovalComment] = useState('');
+    const [_____approvalComment, setApprovalComment] = useState('');
     const [deprecationReason, setDeprecationReason] = useState('');
     // Categorize rules by status
     const rulesByStatus = useMemo(() => {

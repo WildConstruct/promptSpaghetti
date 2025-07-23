@@ -4,7 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback } from 'react';
 import { ConnectionLabelEditor } from './ConnectionAnnotations';
 import { connectionAnnotationPresets, labelTemplates } from '../../hooks/useConnectionAnnotations';
-export const ConnectionAnnotationPanel = ({ edges, selectedEdgeId, labelEditMode, smartPositioning, showAllLabels, onAddLabel, onUpdateLabel, onRemoveLabel, onToggleLabel, onSelectEdge, onShowAllLabelsToggle, onHideAllLabels, onClearAllLabels, onOptimizePositions, onSetLabelEditMode, onSetSmartPositioning, getVisibleLabelsCount }) => {
+export const ConnectionAnnotationPanel = ({ edges, selectedEdgeId, labelEditMode, smartPositioning, showAllLabels, onAddLabel, onUpdateLabel, onRemoveLabel, onToggleLabel, onSelectEdge, onShowAllLabelsToggle, _____onHideAllLabels, onClearAllLabels, onOptimizePositions, onSetLabelEditMode, onSetSmartPositioning, getVisibleLabelsCount }) => {
     const [showEditor, setShowEditor] = useState(false);
     const [quickLabelInput, setQuickLabelInput] = useState('');
     const [selectedPreset, setSelectedPreset] = useState('dataFlow');

@@ -99,7 +99,7 @@ export class ReviewOrchestrationService {
     reviewType: ReviewType,
     sourceSystem: SourceSystem,
     sourceId: string,
-    data: any,
+    data: Record<string, unknown>,
     options: {
       title: string;
       description: string;
@@ -575,7 +575,7 @@ export class ReviewOrchestrationService {
   // Private Implementation Methods
   // =============================================================================
 
-  private async determinePriority(reviewType: ReviewType, data: any): Promise<ReviewPriority> {
+  private async determinePriority(reviewType: ReviewType, data: Record<string, unknown>): Promise<ReviewPriority> {
     // Priority determination logic based on review type and content
     switch (reviewType) {
     case 'fraud_case':
@@ -595,7 +595,7 @@ export class ReviewOrchestrationService {
     }
   }
 
-  private async determineComplexity(reviewType: ReviewType, data: any): Promise<ReviewComplexity> {
+  private async determineComplexity(reviewType: ReviewType, data: Record<string, unknown>): Promise<ReviewComplexity> {
     // Complexity determination logic
     const indicators = [
       data.multipleStakeholders ? 1 : 0,
@@ -613,7 +613,7 @@ export class ReviewOrchestrationService {
     return 'simple';
   }
 
-  private async buildReviewCriteria(reviewType: ReviewType, data: any): Promise<ReviewCriteria[]> {
+  private async buildReviewCriteria(reviewType: ReviewType, _____data: Record<string, unknown>): Promise<ReviewCriteria[]> {
     // Get criteria template for review type
     const criteriaTemplates = await this.getCriteriaTemplates(reviewType);
     
@@ -627,7 +627,7 @@ export class ReviewOrchestrationService {
   private async scoreReviewers(
     review: ReviewItem,
     reviewers: ReviewerProfile[],
-    rules: AssignmentRule[]
+    _____rules: AssignmentRule[]
   ): Promise<Array<{ reviewerId: string; score: number; reasons: string[] }>> {
     const scoredReviewers = [];
 
@@ -724,7 +724,7 @@ export class ReviewOrchestrationService {
     return this.mapRowToReview(row);
   }
 
-  private mapRowToReview(row: any): ReviewItem {
+  private mapRowToReview(row: unknown): ReviewItem {
     return {
       reviewId: row.review_id,
       reviewType: row.review_type,
@@ -757,17 +757,17 @@ export class ReviewOrchestrationService {
   }
 
   // Placeholder implementations for complex methods
-  private async getWorkflow(reviewType: ReviewType): Promise<ReviewWorkflow | null> {
+  private async getWorkflow(_____reviewType: ReviewType): Promise<ReviewWorkflow | null> {
     // Would implement workflow retrieval
     return null;
   }
 
-  private async getAvailableReviewers(reviewType: ReviewType): Promise<ReviewerProfile[]> {
+  private async getAvailableReviewers(_____reviewType: ReviewType): Promise<ReviewerProfile[]> {
     // Would implement available reviewer lookup
     return [];
   }
 
-  private async getAssignmentRules(reviewType: ReviewType): Promise<AssignmentRule[]> {
+  private async getAssignmentRules(_____reviewType: ReviewType): Promise<AssignmentRule[]> {
     // Would implement assignment rules retrieval
     return [];
   }
@@ -804,50 +804,50 @@ export class ReviewOrchestrationService {
     console.log(`📧 Notifying reviewer assignment: ${assignment.assignmentId}`);
   }
 
-  private async notifyReviewStakeholders(reviewId: string, event: string, data: any): Promise<void> {
+  private async notifyReviewStakeholders(reviewId: string, event: string, _____data: Record<string, unknown>): Promise<void> {
     console.log(`📧 Notifying stakeholders of ${event} for review ${reviewId}`);
   }
 
   // Placeholder helper methods - would implement full functionality
-  private async extractBusinessContext(reviewType: ReviewType, data: any): Promise<string> { return ''; }
-  private async assessRiskLevel(reviewType: ReviewType, data: any): Promise<any> { return 'medium'; }
-  private async calculateConfidenceScore(reviewType: ReviewType, data: any): Promise<number> { return 75; }
-  private async generateAutomatedRecommendation(reviewType: ReviewType, data: any): Promise<string> { return ''; }
-  private async generateTags(reviewType: ReviewType, data: any): Promise<string[]> { return []; }
-  private async checkForFlags(reviewType: ReviewType, data: any): Promise<boolean> { return false; }
+  private async extractBusinessContext(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<string> { return ''; }
+  private async assessRiskLevel(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<unknown> { return 'medium'; }
+  private async calculateConfidenceScore(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<number> { return 75; }
+  private async generateAutomatedRecommendation(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<string> { return ''; }
+  private async generateTags(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<string[]> { return []; }
+  private async checkForFlags(_____reviewType: ReviewType, _____data: Record<string, unknown>): Promise<boolean> { return false; }
   private async estimateReviewTime(reviewType: ReviewType, complexity: ReviewComplexity): Promise<number> { 
     const timeMap = { simple: 15, moderate: 30, complex: 60, expert_required: 120 };
     return timeMap[complexity]; 
   }
-  private async getCriteriaTemplates(reviewType: ReviewType): Promise<any[]> { return []; }
-  private async getReviewer(reviewerId: string): Promise<ReviewerProfile | null> { return null; }
-  private async storeAssignment(assignment: ReviewAssignment): Promise<void> { }
-  private async updateReviewStatus(reviewId: string, status: ReviewStatus): Promise<void> { }
-  private async updateReviewerWorkload(reviewerId: string, delta: number): Promise<void> { }
-  private async getAssignment(reviewId: string, reviewerId: string): Promise<ReviewAssignment | null> { return null; }
-  private async storeDecision(reviewId: string, decision: ReviewDecision): Promise<void> { }
-  private async updateAssignmentStatus(assignmentId: string, status: any): Promise<void> { }
-  private async storeNote(reviewId: string, note: ReviewNote): Promise<void> { }
-  private async updateReviewTimestamp(reviewId: string): Promise<void> { }
-  private async handleNoAvailableReviewers(review: ReviewItem): Promise<void> { }
-  private async executeEscalationAction(review: ReviewItem, action: any, reason: string): Promise<void> { }
-  private async assignToSeniorReviewer(review: ReviewItem): Promise<void> { }
+  private async getCriteriaTemplates(_____reviewType: ReviewType): Promise<any[]> { return []; }
+  private async getReviewer(_____reviewerId: string): Promise<ReviewerProfile | null> { return null; }
+  private async storeAssignment(_____assignment: ReviewAssignment): Promise<void> { }
+  private async updateReviewStatus(_____reviewId: string, _____status: ReviewStatus): Promise<void> { }
+  private async updateReviewerWorkload(_____reviewerId: string, _____delta: number): Promise<void> { }
+  private async getAssignment(_____reviewId: string, _____reviewerId: string): Promise<ReviewAssignment | null> { return null; }
+  private async storeDecision(_____reviewId: string, _____decision: ReviewDecision): Promise<void> { }
+  private async updateAssignmentStatus(_____assignmentId: string, _____status: unknown): Promise<void> { }
+  private async storeNote(_____reviewId: string, _____note: ReviewNote): Promise<void> { }
+  private async updateReviewTimestamp(_____reviewId: string): Promise<void> { }
+  private async handleNoAvailableReviewers(_____review: ReviewItem): Promise<void> { }
+  private async executeEscalationAction(_____review: ReviewItem, _____action: unknown, _____reason: string): Promise<void> { }
+  private async assignToSeniorReviewer(_____review: ReviewItem): Promise<void> { }
   
   // Analytics placeholder methods
-  private async calculateOverallMetrics(timeRange: any): Promise<any> { return {}; }
-  private async calculatePerformanceMetrics(timeRange: any): Promise<any> { return {}; }
-  private async calculateQualityMetrics(timeRange: any): Promise<any> { return {}; }
-  private async calculateWorkflowMetrics(timeRange: any): Promise<any> { return {}; }
-  private async calculateReviewerMetrics(timeRange: any): Promise<any> { return {}; }
-  private async calculateTrends(timeRange: any): Promise<any> { return {}; }
-  private async generateInsights(metrics: any, trends: any): Promise<any[]> { return []; }
-  private async generateRecommendations(performance: any, quality: any): Promise<any[]> { return []; }
-  private async getDashboardSummary(): Promise<any> { return {}; }
-  private async getActiveReviews(limit: number): Promise<ReviewItem[]> { return []; }
-  private async getPendingAssignments(limit: number): Promise<ReviewAssignment[]> { return []; }
-  private async getEscalatedReviews(limit: number): Promise<ReviewItem[]> { return []; }
-  private async getOverdueReviews(limit: number): Promise<ReviewItem[]> { return []; }
-  private async getRecentDecisions(limit: number): Promise<ReviewDecision[]> { return []; }
+  private async calculateOverallMetrics(_____timeRange: Error): Promise<unknown> { return {}; }
+  private async calculatePerformanceMetrics(_____timeRange: Error): Promise<unknown> { return {}; }
+  private async calculateQualityMetrics(_____timeRange: Error): Promise<unknown> { return {}; }
+  private async calculateWorkflowMetrics(_____timeRange: Error): Promise<unknown> { return {}; }
+  private async calculateReviewerMetrics(_____timeRange: Error): Promise<unknown> { return {}; }
+  private async calculateTrends(_____timeRange: Error): Promise<unknown> { return {}; }
+  private async generateInsights(_____metrics: unknown, _____trends: unknown): Promise<any[]> { return []; }
+  private async generateRecommendations(_____performance: Error, _____quality: unknown): Promise<any[]> { return []; }
+  private async getDashboardSummary(): Promise<unknown> { return {}; }
+  private async getActiveReviews(_____limit: number): Promise<ReviewItem[]> { return []; }
+  private async getPendingAssignments(_____limit: number): Promise<ReviewAssignment[]> { return []; }
+  private async getEscalatedReviews(_____limit: number): Promise<ReviewItem[]> { return []; }
+  private async getOverdueReviews(_____limit: number): Promise<ReviewItem[]> { return []; }
+  private async getRecentDecisions(_____limit: number): Promise<ReviewDecision[]> { return []; }
 }
 
 // Supporting interfaces

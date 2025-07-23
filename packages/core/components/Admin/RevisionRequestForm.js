@@ -29,7 +29,7 @@ export const RevisionRequestForm = ({ initialData = {}, contentType: initialCont
     const [validationErrors, setValidationErrors] = useState({});
     const [evidenceItems, setEvidenceItems] = useState([]);
     const [newTag, setNewTag] = useState('');
-    const [showAdvanced, setShowAdvanced] = useState(false);
+    const [_____showAdvanced, _____setShowAdvanced] = useState(false);
     const totalSteps = 4;
     // Memoized content title for display
     const displayContentTitle = useMemo(() => {

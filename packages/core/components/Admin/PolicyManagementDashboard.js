@@ -13,11 +13,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Shield, AlertTriangle, CheckCircle, Clock, Plus, Edit3, Trash2, Eye, Flag, TrendingUp, Search, RefreshCw, Download } from 'lucide-react';
 export const PolicyManagementDashboard = ({ className = '' }) => {
     const [activeTab, setActiveTab] = useState('overview');
-    const [selectedPolicy, setSelectedPolicy] = useState(null);
+    const [_____selectedPolicy, _____setSelectedPolicy] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [typeFilter, setTypeFilter] = useState('all');
-    const [isLoading, setIsLoading] = useState(false);
+    const [_____isLoading, _____setIsLoading] = useState(false);
     // Mock data - in real implementation, this would come from PolicyManagementService
     const [policies, setPolicies] = useState([
         {
@@ -66,7 +66,7 @@ export const PolicyManagementDashboard = ({ className = '' }) => {
             updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
         }
     ]);
-    const [violations, setViolations] = useState([
+    const [violations, _____setViolations] = useState([
         {
             violationId: 'violation-001',
             policyId: 'policy-trust-001',

@@ -11,7 +11,7 @@
 
 import { Database } from '../../database';
 import { AuditService } from '../../auth/services/AuditService';
-import { AppealProcessService, Appeal, AppealDecision, AppealStatus } from './AppealProcessService';
+import { AppealProcessService, Appeal } from './AppealProcessService';
 import { PolicyDataService } from './PolicyDataModel';
 
 // =============================================================================
@@ -721,7 +721,7 @@ export class AppealReviewService {
     ]);
   }
 
-  private mapRowToReviewWorkflow(row: any): ReviewWorkflow {
+  private mapRowToReviewWorkflow(row: unknown): ReviewWorkflow {
     return {
       review_id: row.review_id,
       appeal_id: row.appeal_id,
@@ -800,7 +800,7 @@ export class AppealReviewService {
     }
   }
 
-  private calculateEstimatedHours(complexity: ReviewComplexity, category: string): number {
+  private calculateEstimatedHours(complexity: ReviewComplexity, ____category: string): number {
     const baseHours = {
       routine: 2,
       standard: 4,
@@ -827,7 +827,7 @@ export class AppealReviewService {
     return new Date(Date.now() + deadlineHours * 60 * 60 * 1000);
   }
 
-  private async getReviewerExpertise(reviewerId: string): Promise<ReviewerExpertise[]> {
+  private async getReviewerExpertise(____reviewerId: string): Promise<ReviewerExpertise[]> {
     // Would query reviewer expertise from user/reviewer profile
     // For now, return default expertise
     return ['trust_scoring', 'policy_enforcement'];
@@ -854,14 +854,14 @@ export class AppealReviewService {
     };
   }
 
-  private async getReviewTemplate(templateId: string): Promise<ReviewTemplate | null> {
+  private async getReviewTemplate(____templateId: string): Promise<ReviewTemplate | null> {
     // Would implement template retrieval
     return null;
   }
 
   private async calculateSimilarityScore(
     appeal: Appeal, 
-    precedentRow: any
+    precedentRow: unknown
   ): Promise<{ score: number; matchingFactors: string[]; differences: string[]; policyMatch: boolean; notes: string }> {
     let score = 0;
     const matchingFactors: string[] = [];
@@ -901,7 +901,7 @@ export class AppealReviewService {
     };
   }
 
-  private extractKeyFacts(appeal: Appeal, workflow: ReviewWorkflow): any {
+  private extractKeyFacts(appeal: Appeal, workflow: ReviewWorkflow): unknown {
     return {
       category: appeal.category,
       original_decision: appeal.original_decision_type,
@@ -942,7 +942,7 @@ export class AppealReviewService {
   }
 
   private generateTrainingRecommendations(
-    stats: any, 
+    stats: unknown, 
     domainPerformance: Record<ReviewerExpertise, any>
   ): string[] {
     const recommendations: string[] = [];

@@ -886,12 +886,12 @@ export class RuleEvaluationEngine extends EventEmitter {
     };
   }
 
-  private async isRuleApplicable(rule: ComplianceRule, context: RuleEvaluationContext): Promise<boolean> {
+  private async isRuleApplicable(rule: ComplianceRule, _____context: RuleEvaluationContext): Promise<boolean> {
     // Simplified applicability check - in production, this would evaluate scope conditions
     return rule.status === 'ACTIVE';
   }
 
-  private optimizeConditions(conditions: RuleCondition[], context: RuleEvaluationContext): RuleCondition[] {
+  private optimizeConditions(conditions: RuleCondition[], _____context: RuleEvaluationContext): RuleCondition[] {
     // Reorder conditions by estimated evaluation cost (cheap conditions first)
     return [...conditions].sort((a, b) => {
       const costA = this.estimateConditionCost(a);
@@ -919,7 +919,7 @@ export class RuleEvaluationEngine extends EventEmitter {
   private async evaluateConditions(
     conditions: RuleCondition[],
     context: RuleEvaluationContext,
-    options: EvaluationOptions
+    _____options: EvaluationOptions
   ): Promise<ConditionEvaluationResult[]> {
     const results: ConditionEvaluationResult[] = [];
 
@@ -962,7 +962,7 @@ export class RuleEvaluationEngine extends EventEmitter {
     rule: ComplianceRule,
     context: RuleEvaluationContext,
     conditionResults: ConditionEvaluationResult[]
-  ): any[] {
+  ): unknown[] {
     return conditionResults
       .filter(r => r.evidence && r.evidence.length > 0)
       .flatMap(r => r.evidence || []);
@@ -1141,7 +1141,7 @@ class DataFieldEvaluator implements ConditionEvaluator {
   evaluatorId = 'data_field_evaluator';
   conditionType = 'DATA_FIELD';
 
-  async evaluate(condition: RuleCondition, context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+  async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
     // Implementation for data field evaluation
     return {
       conditionId: condition.conditionId,
@@ -1163,7 +1163,7 @@ class DataFieldEvaluator implements ConditionEvaluator {
     };
   }
 
-  validate(condition: RuleCondition): ValidationResult {
+  validate(_____condition: RuleCondition): ValidationResult {
     return { valid: true, errors: [], warnings: [], suggestions: [] };
   }
 
@@ -1180,7 +1180,7 @@ class ContextPropertyEvaluator implements ConditionEvaluator {
   evaluatorId = 'context_property_evaluator';
   conditionType = 'CONTEXT_PROPERTY';
 
-  async evaluate(condition: RuleCondition, context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+  async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1201,7 +1201,7 @@ class ContextPropertyEvaluator implements ConditionEvaluator {
     };
   }
 
-  validate(condition: RuleCondition): ValidationResult {
+  validate(_____condition: RuleCondition): ValidationResult {
     return { valid: true, errors: [], warnings: [], suggestions: [] };
   }
 
@@ -1218,7 +1218,7 @@ class TimeBasedEvaluator implements ConditionEvaluator {
   evaluatorId = 'time_based_evaluator';
   conditionType = 'TIME_BASED';
 
-  async evaluate(condition: RuleCondition, context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+  async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1239,7 +1239,7 @@ class TimeBasedEvaluator implements ConditionEvaluator {
     };
   }
 
-  validate(condition: RuleCondition): ValidationResult {
+  validate(_____condition: RuleCondition): ValidationResult {
     return { valid: true, errors: [], warnings: [], suggestions: [] };
   }
 
@@ -1256,7 +1256,7 @@ class ThresholdEvaluator implements ConditionEvaluator {
   evaluatorId = 'threshold_evaluator';
   conditionType = 'THRESHOLD';
 
-  async evaluate(condition: RuleCondition, context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+  async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1277,7 +1277,7 @@ class ThresholdEvaluator implements ConditionEvaluator {
     };
   }
 
-  validate(condition: RuleCondition): ValidationResult {
+  validate(_____condition: RuleCondition): ValidationResult {
     return { valid: true, errors: [], warnings: [], suggestions: [] };
   }
 
@@ -1294,7 +1294,7 @@ class PatternEvaluator implements ConditionEvaluator {
   evaluatorId = 'pattern_evaluator';
   conditionType = 'PATTERN';
 
-  async evaluate(condition: RuleCondition, context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+  async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1315,7 +1315,7 @@ class PatternEvaluator implements ConditionEvaluator {
     };
   }
 
-  validate(condition: RuleCondition): ValidationResult {
+  validate(_____condition: RuleCondition): ValidationResult {
     return { valid: true, errors: [], warnings: [], suggestions: [] };
   }
 
@@ -1332,7 +1332,7 @@ class ExpressionEvaluator implements ConditionEvaluator {
   evaluatorId = 'expression_evaluator';
   conditionType = 'EXPRESSION';
 
-  async evaluate(condition: RuleCondition, context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+  async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1353,7 +1353,7 @@ class ExpressionEvaluator implements ConditionEvaluator {
     };
   }
 
-  validate(condition: RuleCondition): ValidationResult {
+  validate(_____condition: RuleCondition): ValidationResult {
     return { valid: true, errors: [], warnings: [], suggestions: [] };
   }
 

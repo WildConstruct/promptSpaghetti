@@ -64,7 +64,7 @@ export const CorrectionsStatsDashboard: React.FC<CorrectionsStatsDashboardProps>
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<'7' | '30' | '90'>('30');
-  const [selectedView, setSelectedView] = useState<'overview' | 'rules' | 'trends' | 'effectiveness'>('overview');
+  const [_____selectedView, _____setSelectedView] = useState<'overview' | 'rules' | 'trends' | 'effectiveness'>('overview');
 
   useEffect(() => {
     if (isOpen) {

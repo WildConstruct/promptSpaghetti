@@ -21,7 +21,7 @@ interface FeatureToggle {
   name: string;
   enabled: boolean;
   type: 'BOOLEAN' | 'PERCENTAGE' | 'MULTIVARIATE' | 'SCHEDULED' | 'SEGMENTATION';
-  value?: any;
+  value?: unknown;
   percentage?: number;
   hasActiveOverride?: boolean;
   overrideType?: string;

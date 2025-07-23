@@ -60,7 +60,7 @@ const LEGAL_TERMINOLOGY_DB: LegalTerminology[] = [
   }
 ];
 
-const COMMON_LEGAL_ISSUES = [
+const _____COMMON_LEGAL_ISSUES = [
   'informal language',
   'ambiguous terms',
   'jurisdiction mismatch',
@@ -218,7 +218,7 @@ export const TerminologyValidator: React.FC<TerminologyValidatorProps> = ({
     // Three-word terms
     for (let i = 0; i < tokens.length - 2; i++) {
       const threeWordTerm = `${tokens[i].token} ${tokens[i + 1].token} ${tokens[i + 2].token}`;
-      const isLegalTerm = LEGAL_TERMINOLOGY_DB.some(term => 
+      const _____isLegalTerm = LEGAL_TERMINOLOGY_DB.some(term => 
         term.term.toLowerCase() === threeWordTerm.toLowerCase()
       );
       

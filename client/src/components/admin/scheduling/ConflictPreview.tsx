@@ -101,7 +101,7 @@ export const ConflictPreview: React.FC<ConflictPreviewProps> = ({
   }
 
   const resolutionConfig = RESOLUTION_CONFIG[resolution];
-  const severestConflict = conflicts.reduce((prev, current) => {
+  const ___severestConflict = conflicts.reduce((prev, current) => {
     const severityLevels = { low: 1, medium: 2, high: 3, critical: 4 };
     return severityLevels[current.severity] > severityLevels[prev.severity] ? current : prev;
   });

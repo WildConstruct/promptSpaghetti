@@ -114,7 +114,7 @@ export const PreferenceCenter: React.FC<PreferenceCenterProps> = ({ userId, onCl
     }
   };
 
-  const updatePreferences = (section: keyof UserPreferences, updates: Partial<any>) => {
+  const updatePreferences = (section: keyof UserPreferences, updates: Partial<unknown>) => {
     if (!preferences) return;
     
     setPreferences(prev => ({
@@ -799,8 +799,8 @@ const AccessibilitySettingsPanel: React.FC<{
 };
 
 const AccountSettingsPanel: React.FC<{
-  preferences: any;
-  onChange: (updates: any) => void;
+  preferences: unknown;
+  onChange: (updates: unknown) => void;
 }> = ({ preferences, onChange }) => {
   return (
     <div>

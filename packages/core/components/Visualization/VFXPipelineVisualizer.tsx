@@ -12,7 +12,6 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Switch } from '../ui/Switch';
 import { Slider } from '../ui/Slider';
 import { 
   Film, 
@@ -512,7 +511,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({
 
   // Real-time Performance Metrics Visualization
   const PerformanceMetricsVisualizer: React.FC<{ scene: VFXScene }> = ({ scene }) => {
-    const [metrics, setMetrics] = useState({
+    const [metrics, _____setMetrics] = useState({
       renderTime: Math.random() * 120 + 80, // 80-200ms
       memoryUsage: Math.random() * 40 + 20, // 20-60%
       polyCount: scene.assets.length * 125000,

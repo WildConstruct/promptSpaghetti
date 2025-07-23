@@ -67,7 +67,7 @@ export class WorkspaceServiceWithTimeout {
   }
 
   // Transaction with timeout and fallback
-  async createWorkspaceWithFallback(workspaceData: any, readOnlyDb?: Database) {
+  async createWorkspaceWithFallback(workspaceData: unknown, readOnlyDb?: Database) {
     const result = await this.dbIntegration.queryWithFallback(
       'INSERT INTO workspaces (name, description, created_at) VALUES (?, ?, ?)',
       [workspaceData.name, workspaceData.description, new Date().toISOString()],
@@ -82,7 +82,7 @@ export class WorkspaceServiceWithTimeout {
   }
 
   // Complex transaction with timeout
-  async updateWorkspaceWithHistory(workspaceId: number, updates: any) {
+  async updateWorkspaceWithHistory(workspaceId: number, updates: unknown) {
     const result = await this.dbIntegration.transaction(
       (db) => {
         // Insert history record
@@ -118,14 +118,14 @@ export class WorkspaceServiceWithTimeout {
  */
 export class CacheServiceWithTimeout {
   private redisIntegration: RedisTimeoutIntegration;
-  private inMemoryCache = new Map<string, { value: any; expires: number }>();
+  private inMemoryCache = new Map<string, { value: Error; expires: number }>();
 
   constructor(private redis: RedisService) {
     this.redisIntegration = createRedisIntegration(redis);
   }
 
   // Cache with Redis fallback to in-memory
-  async getCachedData(key: string, generator: () => Promise<any>, ttl: number = 3600) {
+  async getCachedData(key: string, generator: () => Promise<unknown>, ttl: number = 3600) {
     const result = await this.redisIntegration.cacheWithFallback(
       key,
       generator,
@@ -143,7 +143,7 @@ export class CacheServiceWithTimeout {
   }
 
   // Publish with timeout
-  async publishEvent(event: string, data: any) {
+  async publishEvent(event: string, data: Record<string, unknown>) {
     const result = await this.redisIntegration.publish(
       'events',
       JSON.stringify({ event, data, timestamp: Date.now() }),
@@ -218,7 +218,7 @@ export class FileServiceWithTimeout {
 
   // File upload with timeout
   @withFileTimeout('upload')
-  async uploadFile(file: any, destination: string) {
+  async uploadFile(file: Error, destination: string) {
     // Simulate file upload
     await this.simulateFileOperation(5000);
     return { path: destination, size: file.size, uploaded: true };
@@ -307,7 +307,7 @@ export class ExternalAPIServiceWithTimeout {
   }
 
   // Webhook with timeout
-  async sendWebhook(url: string, payload: any) {
+  async sendWebhook(url: string, payload: unknown) {
     const result = await this.apiIntegration.webhook(
       url,
       payload,
@@ -396,7 +396,7 @@ export class ManualTimeoutExample {
   private timeoutManager = getTimeoutManager();
 
   // Manual timeout usage for custom operations
-  async customDatabaseOperation(query: string) {
+  async customDatabaseOperation(_____query: string) {
     const result = await this.timeoutManager.executeWithTimeout(
       async () => {
         // Custom database operation
@@ -444,9 +444,9 @@ export class ManualTimeoutExample {
 /**
  * Example 9: Fastify Route Integration
  */
-export function exampleRouteWithTimeout(fastify: any) {
+export function exampleRouteWithTimeout(fastify: unknown) {
   // Using middleware decorators
-  fastify.get('/example/workspace/:id', async (request: any, reply: any) => {
+  fastify.get('/example/workspace/:id', async (request: unknown, reply: unknown) => {
     // The middleware automatically provides timeout context
     const result = await request.executeWithTimeout(async () => {
       // Your business logic here
@@ -468,7 +468,7 @@ export function exampleRouteWithTimeout(fastify: any) {
   });
 
   // Using fallback
-  fastify.get('/example/data/:id', async (request: any, reply: any) => {
+  fastify.get('/example/data/:id', async (request: unknown, _____reply: unknown) => {
     const result = await request.executeWithFallback(
       async () => {
         // Primary data source

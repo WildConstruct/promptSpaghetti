@@ -1,4 +1,4 @@
-import { z } from 'zod';
+// import { z } from 'zod';
 import { DatabaseClient } from '../database/client';
 import { 
   RestorationAttempt, 
@@ -31,9 +31,9 @@ import {
 
 export class RestorationService {
   private db: DatabaseClient;
-  private readonly logger: any;
+  private readonly logger: unknown;
 
-  constructor(db: DatabaseClient, logger: any) {
+  constructor(db: DatabaseClient, logger: unknown) {
     this.db = db;
     this.logger = logger;
   }
@@ -343,7 +343,7 @@ export class RestorationService {
       SELECT * FROM restoration_attempts
       WHERE 1=1
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (filter.projectId) {
@@ -432,7 +432,7 @@ export class RestorationService {
     };
   }
 
-  private async generateRestorationOperations(context: RestorationContext): Promise<RestorationOperation[]> {
+  private async generateRestorationOperations(____context: RestorationContext): Promise<RestorationOperation[]> {
     const operations: RestorationOperation[] = [];
     // Implementation would generate operations based on the restoration strategy
     // This is a simplified placeholder
@@ -474,16 +474,16 @@ export class RestorationService {
     }
   }
 
-  private async executeOperation(operation: RestorationOperation): Promise<void> {
+  private async executeOperation(____operation: RestorationOperation): Promise<void> {
     // Implementation would execute the specific operation
     // This is a placeholder
   }
 
   private async detectConflicts(
-    sourceSnapshot: any, 
-    targetSnapshot: any, 
-    currentState: any, 
-    config: RestorationConfig
+    ____sourceSnapshot: unknown, 
+    ____targetSnapshot: unknown, 
+    ____currentState: Error, 
+    ____config: RestorationConfig
   ): Promise<RestorationConflict[]> {
     const conflicts: RestorationConflict[] = [];
     // Implementation would detect conflicts between snapshots
@@ -492,11 +492,11 @@ export class RestorationService {
   }
 
   private async generateRestorationPreview(
-    sourceSnapshot: any, 
-    targetSnapshot: any, 
-    currentState: any, 
-    config: RestorationConfig
-  ): Promise<any> {
+    ____sourceSnapshot: unknown, 
+    ____targetSnapshot: unknown, 
+    ____currentState: Error, 
+    ____config: RestorationConfig
+  ): Promise<unknown> {
     // Implementation would generate preview data
     return {
       nodesToAdd: [],
@@ -508,7 +508,7 @@ export class RestorationService {
     };
   }
 
-  private generateConflictSummary(conflicts: RestorationConflict[]): any {
+  private generateConflictSummary(conflicts: RestorationConflict[]): unknown {
     const summary = conflicts.reduce((acc, conflict) => {
       acc[conflict.conflictType] = (acc[conflict.conflictType] || 0) + 1;
       return acc;
@@ -520,7 +520,7 @@ export class RestorationService {
     };
   }
 
-  private estimateRestorationDuration(preview: any, conflicts: RestorationConflict[]): number {
+  private estimateRestorationDuration(preview: unknown, conflicts: RestorationConflict[]): number {
     const totalChanges = preview.nodesToAdd.length + preview.nodesToUpdate.length + 
                        preview.nodesToDelete.length + preview.edgesToAdd.length + 
                        preview.edgesToUpdate.length + preview.edgesToDelete.length;
@@ -559,17 +559,17 @@ export class RestorationService {
     `, [progress, restorationAttemptId]);
   }
 
-  private async getSnapshotData(snapshotId: string): Promise<any> {
+  private async getSnapshotData(____snapshotId: string): Promise<unknown> {
     // Implementation would fetch snapshot data from S3
     return {};
   }
 
-  private async getCurrentProjectState(projectId: string): Promise<any> {
+  private async getCurrentProjectState(____projectId: string): Promise<unknown> {
     // Implementation would get current project state
     return {};
   }
 
-  private mapDatabaseRowToRestoration(row: any): RestorationAttempt {
+  private mapDatabaseRowToRestoration(row: unknown): RestorationAttempt {
     return {
       id: row.id,
       projectId: row.project_id,
@@ -588,7 +588,7 @@ export class RestorationService {
     };
   }
 
-  private mapDatabaseRowToBookmark(row: any): RestorationBookmark {
+  private mapDatabaseRowToBookmark(row: unknown): RestorationBookmark {
     return {
       id: row.id,
       projectId: row.project_id,

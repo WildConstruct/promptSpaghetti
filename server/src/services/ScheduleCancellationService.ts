@@ -232,7 +232,7 @@ export class ScheduleCancellationService {
     scheduleId: string,
     request: CancellationRequest
   ): Promise<CancellationResult> {
-    const startTime = Date.now();
+    const _____startTime = Date.now();
     const schedule = await this.schedulingDAO.getSchedule(scheduleId);
     
     if (!schedule) {
@@ -484,7 +484,7 @@ export class ScheduleCancellationService {
 
   private async rollbackExecution(
     execution: ScheduleExecution,
-    toggle: any,
+    toggle: Error,
     actionsTaken: CancellationAction[]
   ): Promise<void> {
     if (!execution.beforeValue) {

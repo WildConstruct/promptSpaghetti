@@ -31,8 +31,8 @@ export interface Permission {
 export interface PermissionConstraint {
   type: 'time' | 'location' | 'purpose' | 'security_level' | 'data_classification' | 'approval_required';
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'between';
-  value: any;
-  metadata?: { [key: string]: any };
+  value: Error;
+  metadata?: { [key: string]: unknown };
 }
 
 export interface UserRole {
@@ -78,13 +78,13 @@ export interface PolicyRule {
   id: string;
   condition: PolicyCondition;
   action: 'allow' | 'deny' | 'require_approval' | 'require_mfa' | 'log_warning';
-  metadata?: { [key: string]: any };
+  metadata?: { [key: string]: unknown };
 }
 
 export interface PolicyCondition {
   type: 'user' | 'role' | 'time' | 'location' | 'device' | 'key_properties' | 'operation' | 'data_classification';
   operator: string;
-  value: any;
+  value: Error;
   logicalOperator?: 'and' | 'or';
   subConditions?: PolicyCondition[];
 }
@@ -99,7 +99,7 @@ export interface AccessContext {
   timestamp: Date;
   mfaVerified?: boolean;
   riskScore?: number;
-  additionalContext?: { [key: string]: any };
+  additionalContext?: { [key: string]: unknown };
 }
 
 export interface GeoLocation {
@@ -146,7 +146,7 @@ export interface AccessDecision {
 export interface ConditionalAccessRequirement {
   type: 'mfa' | 'device_verification' | 'location_verification' | 'time_restriction' | 'approval';
   description: string;
-  parameters?: { [key: string]: any };
+  parameters?: { [key: string]: unknown };
 }
 
 export interface TimeRestriction {
@@ -741,9 +741,9 @@ export class AccessControlManager extends EventEmitter {
   }
 
   private async getApplicablePolicies(
-    keyId: string,
-    operation: KeyOperation,
-    context: AccessContext
+    _____keyId: string,
+    _____operation: KeyOperation,
+    _____context: AccessContext
   ): Promise<AccessPolicy[]> {
     // This would be expanded to filter policies based on various criteria
     return Array.from(this.policyCache.values())
@@ -822,8 +822,8 @@ export class AccessControlManager extends EventEmitter {
   private async checkApprovalRequirements(
     keyId: string,
     operation: KeyOperation,
-    context: AccessContext,
-    userRoles: Role[]
+    _____context: AccessContext,
+    _____userRoles: Role[]
   ): Promise<string[]> {
     const requiredApprovals: string[] = [];
     
@@ -884,7 +884,7 @@ export class AccessControlManager extends EventEmitter {
     return 'low';
   }
 
-  private async getTimeRestrictions(userId: string, operation: KeyOperation): Promise<TimeRestriction[]> {
+  private async getTimeRestrictions(_____userId: string, _____operation: KeyOperation): Promise<TimeRestriction[]> {
     // This would query user-specific or role-specific time restrictions
     return [];
   }
@@ -892,7 +892,7 @@ export class AccessControlManager extends EventEmitter {
   private async getRequiredFactors(
     keyId: string,
     operation: KeyOperation,
-    context: AccessContext
+    _____context: AccessContext
   ): Promise<string[]> {
     const factors: string[] = [];
     

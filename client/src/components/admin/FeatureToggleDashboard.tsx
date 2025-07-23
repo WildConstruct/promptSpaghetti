@@ -1,7 +1,8 @@
 // Epic 17.1.2 - Feature Toggle Admin Dashboard
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
+import {
+  Settings,
   Search, 
   Plus, 
   Filter, 

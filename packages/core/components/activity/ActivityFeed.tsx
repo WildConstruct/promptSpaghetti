@@ -3,7 +3,7 @@
  * Main activity feed interface for workspace activity
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ActivityItem } from './ActivityItem';
 import { ActivityFilters } from './ActivityFilters';
 import { ActivityStats } from './ActivityStats';

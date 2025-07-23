@@ -725,7 +725,7 @@ export class OAuthGuidanceService {
   private async analyzeSecurityRequirements(
     clientType: OAuthClientType,
     dataClassifications: string[],
-    complianceRequirements: string[]
+    _____complianceRequirements: string[]
   ): Promise<SecurityRequirements> {
     // Implement security requirements analysis
     return {
@@ -782,7 +782,7 @@ export class OAuthGuidanceService {
     return typeMap[clientType] || ['AUTHORIZATION_CODE'];
   }
 
-  private generateDefaultScopes(clientType: OAuthClientType, useCase: string): OAuthScope[] {
+  private generateDefaultScopes(_____clientType: OAuthClientType, _____useCase: string): OAuthScope[] {
     return [
       {
         name: 'openid',
@@ -1004,7 +1004,7 @@ export class OAuthGuidanceService {
     return `This guide provides comprehensive implementation instructions for OAuth 2.0 with ${configuration.clientType} client type. The configuration includes advanced security features such as PKCE, mTLS, and DPoP for enhanced protection of sensitive data.`;
   }
 
-  private generatePrerequisites(configuration: OAuthConfiguration): string[] {
+  private generatePrerequisites(_____configuration: OAuthConfiguration): string[] {
     return [
       'OAuth 2.0 and OpenID Connect understanding',
       'HTTPS endpoint configuration',
@@ -1015,7 +1015,7 @@ export class OAuthGuidanceService {
     ];
   }
 
-  private generateStepByStepInstructions(configuration: OAuthConfiguration): GuidanceStep[] {
+  private generateStepByStepInstructions(_____configuration: OAuthConfiguration): GuidanceStep[] {
     return [
       {
         stepNumber: 1,
@@ -1091,7 +1091,7 @@ window.location.href = authUrl.toString();
     ];
   }
 
-  private generateSecurityConsiderations(securityRequirements: SecurityRequirements): SecurityConsideration[] {
+  private generateSecurityConsiderations(_____securityRequirements: SecurityRequirements): SecurityConsideration[] {
     return [
       {
         category: 'CRITICAL',
@@ -1118,7 +1118,7 @@ window.location.href = authUrl.toString();
     ];
   }
 
-  private generateComplianceNotes(configuration: OAuthConfiguration): ComplianceNote[] {
+  private generateComplianceNotes(_____configuration: OAuthConfiguration): ComplianceNote[] {
     return [
       {
         regulation: 'GDPR',
@@ -1133,7 +1133,7 @@ window.location.href = authUrl.toString();
     ];
   }
 
-  private generateTroubleshootingGuide(configuration: OAuthConfiguration): TroubleshootingEntry[] {
+  private generateTroubleshootingGuide(_____configuration: OAuthConfiguration): TroubleshootingEntry[] {
     return [
       {
         problem: 'Invalid redirect URI error',
@@ -1211,7 +1211,7 @@ window.location.href = authUrl.toString();
   private async validateComplianceConfiguration(
     configuration: OAuthConfiguration,
     issues: ComplianceIssue[],
-    recommendations: SecurityRecommendation[]
+    _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
     // Validate GDPR compliance
     if (configuration.complianceSettings.gdprCompliance.enabled && 
@@ -1269,55 +1269,55 @@ window.location.href = authUrl.toString();
   }
 
   // Database and utility methods
-  private async getConfiguration(configId: string): Promise<OAuthConfiguration> {
+  private async getConfiguration(_____configId: string): Promise<OAuthConfiguration> {
     // Implementation would fetch from database
     throw new Error('Not implemented');
   }
 
-  private async getConfigurationByClientId(clientId: string): Promise<OAuthConfiguration> {
+  private async getConfigurationByClientId(_____clientId: string): Promise<OAuthConfiguration> {
     // Implementation would fetch from database
     throw new Error('Not implemented');
   }
 
-  private async storeAssessment(assessment: OAuthIntegrationAssessment): Promise<void> {
+  private async storeAssessment(_____assessment: OAuthIntegrationAssessment): Promise<void> {
     // Implementation would store in database
   }
 
   private async performConfigurationReview(
-    configuration: OAuthConfiguration,
-    findings: SecurityFinding[],
-    recommendations: SecurityRecommendation[]
+    _____configuration: OAuthConfiguration,
+    _____findings: SecurityFinding[],
+    _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
     // Implementation would perform configuration review
   }
 
   private async performSecurityTesting(
-    configuration: OAuthConfiguration,
-    findings: SecurityFinding[],
-    recommendations: SecurityRecommendation[]
+    _____configuration: OAuthConfiguration,
+    _____findings: SecurityFinding[],
+    _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
     // Implementation would perform security testing
   }
 
   private async performComplianceValidation(
-    configuration: OAuthConfiguration,
-    findings: SecurityFinding[],
-    recommendations: SecurityRecommendation[]
+    _____configuration: OAuthConfiguration,
+    _____findings: SecurityFinding[],
+    _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
     // Implementation would perform compliance validation
   }
 
   private async performDataFlowAnalysis(
-    configuration: OAuthConfiguration,
-    findings: SecurityFinding[],
-    recommendations: SecurityRecommendation[]
+    _____configuration: OAuthConfiguration,
+    _____findings: SecurityFinding[],
+    _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
     // Implementation would perform data flow analysis
   }
 
   private async determineComplianceStatus(
-    configuration: OAuthConfiguration,
-    findings: SecurityFinding[]
+    _____configuration: OAuthConfiguration,
+    _____findings: SecurityFinding[]
   ): Promise<ComplianceStatus> {
     return {
       gdprCompliant: true,

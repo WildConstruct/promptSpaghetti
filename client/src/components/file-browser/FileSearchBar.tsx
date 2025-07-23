@@ -99,7 +99,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
     onAdvancedSearch?.(newOptions);
   };
 
-  const handleTagClick = (tag: string) => {
+  const ___handleTagClick = (tag: string) => {
     onTagFilter?.(tag);
   };
 
@@ -291,7 +291,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({
 };
 
 // Debounce utility function
-function debounce<T extends (...args: any[]) => any>(
+function debounce<T extends (...args: unknown[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

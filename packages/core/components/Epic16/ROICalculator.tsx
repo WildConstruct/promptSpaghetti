@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Calculator, DollarSign, Clock, TrendingUp, BarChart3, Target, Zap } from 'lucide-react';
+import { Calculator, DollarSign, Clock, TrendingUp, Target, Zap } from 'lucide-react';
 
 interface ROIInputs {
   // Template costs

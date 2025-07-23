@@ -51,7 +51,7 @@ export interface AuthContextValue {
   // Authentication actions
   login: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>;
   logout: () => void;
-  register: (userData: any) => Promise<boolean>;
+  register: (userData: unknown) => Promise<boolean>;
   
   // OAuth actions
   oauthLogin: (provider: string, returnUrl?: string) => Promise<{ url: string; state: string }>;
@@ -202,7 +202,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     authStore.logout();
   };
 
-  const register = async (userData: any): Promise<boolean> => {
+  const register = async (userData: unknown): Promise<boolean> => {
     try {
       return await authStore.register(userData);
     } catch (error) {

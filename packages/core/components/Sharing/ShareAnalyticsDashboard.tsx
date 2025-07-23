@@ -8,7 +8,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { ShareMetrics, ShareAnalyticsEvent } from '../../types/sharingTypes';
+import { ShareMetrics } from '../../types/sharingTypes';
 import { SharingService } from '../../services/SharingService';
 
 interface ShareAnalyticsDashboardProps {

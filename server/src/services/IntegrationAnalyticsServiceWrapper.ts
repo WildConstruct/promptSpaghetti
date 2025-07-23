@@ -177,7 +177,7 @@ export class IntegrationAnalyticsServiceWrapper {
   /**
    * Get integration health summary
    */
-  public getIntegrationHealthSummary(): any {
+  public getIntegrationHealthSummary(): unknown {
     if (!this.analyticsService) {
       return { error: 'Service not initialized' };
     }
@@ -305,8 +305,8 @@ export class IntegrationAnalyticsServiceWrapper {
     route: string, 
     responseTime: number, 
     success: boolean, 
-    request: any, 
-    reply: any
+    request: unknown, 
+    reply: unknown
   ): void {
     if (!this.analyticsService) return;
 

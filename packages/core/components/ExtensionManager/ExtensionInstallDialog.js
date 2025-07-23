@@ -10,7 +10,7 @@ export const ExtensionInstallDialog = ({ onInstall, onCancel }) => {
     const [installMethod, setInstallMethod] = useState('file');
     const [manifestUrl, setManifestUrl] = useState('');
     const [devPath, setDevPath] = useState('');
-    const [manifestContent, setManifestContent] = useState('');
+    const [_____manifestContent, setManifestContent] = useState('');
     const [parsedManifest, setParsedManifest] = useState(null);
     const [compatibilityResult, setCompatibilityResult] = useState(null);
     const [isValidating, setIsValidating] = useState(false);

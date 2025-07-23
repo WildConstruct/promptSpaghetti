@@ -541,7 +541,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
    */
   async updateInvestigation(id: string, updates: Partial<Investigation>, updatedBy: string): Promise<void> {
     const updateFields: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     // Build dynamic update query
@@ -928,7 +928,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     offset?: number;
   } = {}): Promise<{ investigations: Investigation[]; total: number }> {
     const conditions: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (filters.status) {
@@ -1142,7 +1142,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
   /**
    * Map database row to Investigation object
    */
-  private mapDatabaseInvestigation(row: any): Investigation {
+  private mapDatabaseInvestigation(row: unknown): Investigation {
     return {
       id: row.id,
       title: row.title,

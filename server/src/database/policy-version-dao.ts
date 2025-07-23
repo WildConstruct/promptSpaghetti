@@ -77,7 +77,7 @@ export class PolicyVersionDAO {
       SELECT id, policy_key, name, description, category, created_by, created_at, updated_at
       FROM policies
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (category) {
@@ -174,11 +174,11 @@ export class PolicyVersionDAO {
   async updatePolicyVersion(
     versionId: string,
     request: UpdatePolicyVersionRequest,
-    updatedBy: string
+    ___updatedBy: string
   ): Promise<PolicyVersion> {
     // Build dynamic update query
     const updateFields: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (request.title !== undefined) {
@@ -290,7 +290,7 @@ export class PolicyVersionDAO {
 
     // Build WHERE clause
     const conditions: string[] = ['policy_id = $1'];
-    const params: any[] = [policyId];
+    const params: unknown[] = [policyId];
     let paramIndex = 2;
 
     if (status && status.length > 0) {
@@ -398,7 +398,7 @@ export class PolicyVersionDAO {
     notes?: string
   ): Promise<PolicyVersion> {
     const updates = ['status = $2', 'updated_at = NOW()'];
-    const params: any[] = [versionId, status];
+    const params: unknown[] = [versionId, status];
     let paramIndex = 3;
 
     // Set specific timestamps based on status
@@ -467,8 +467,8 @@ export class PolicyVersionDAO {
     versionId: string,
     changeType: string,
     fieldPath: string,
-    oldValue: any,
-    newValue: any,
+    oldValue: Error,
+    newValue: Error,
     changeReason: string,
     createdBy: string
   ): Promise<PolicyVersionChange> {
@@ -525,7 +525,7 @@ export class PolicyVersionDAO {
     return columnMap[sortBy] || 'created_at';
   }
 
-  private mapRowToPolicy(row: any): Policy {
+  private mapRowToPolicy(row: unknown): Policy {
     return {
       id: row.id,
       policyKey: row.policy_key,
@@ -538,7 +538,7 @@ export class PolicyVersionDAO {
     };
   }
 
-  private mapRowToPolicyVersion(row: any): PolicyVersion {
+  private mapRowToPolicyVersion(row: unknown): PolicyVersion {
     return {
       id: row.id,
       policyId: row.policy_id,
@@ -568,7 +568,7 @@ export class PolicyVersionDAO {
     };
   }
 
-  private mapRowToPolicyVersionChange(row: any): PolicyVersionChange {
+  private mapRowToPolicyVersionChange(row: unknown): PolicyVersionChange {
     return {
       id: row.id,
       versionId: row.version_id,

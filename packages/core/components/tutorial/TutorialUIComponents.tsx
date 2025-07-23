@@ -1,4 +1,6 @@
 /**
+import { Plus } from 'lucide-react';
+
  * Tutorial UI Components (Epic 16)
  * 
  * DEPLOYMENT BLOCKER FIX: Comprehensive tutorial UI components for creating
@@ -17,7 +19,7 @@
  * - Analytics and engagement tracking
  */
 
-import React, { useState, useEffect, useCallback, useRef, useMemo, ReactNode } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   Play,
   Pause,
@@ -329,7 +331,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === tutorial.steps.length - 1;
 
-  const tutorialProgress = useMemo(() => {
+  const _____tutorialProgress = useMemo(() => {
     const completed = progress?.completedSteps.length || 0;
     const total = tutorial.steps.length;
     return {
@@ -560,7 +562,7 @@ const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 interface TutorialStepContentProps {
   step: TutorialStep;
   isPlaying: boolean;
-  settings: any;
+  settings: unknown;
   onComplete: (score?: number) => void;
   onPlayPause: () => void;
 }
@@ -901,8 +903,8 @@ const TutorialResources: React.FC<TutorialResourcesProps> = ({
 
 // Tutorial Settings Component
 interface TutorialSettingsProps {
-  settings: any;
-  onSettingsChange: (settings: any) => void;
+  settings: unknown;
+  onSettingsChange: (settings: unknown) => void;
   onClose: () => void;
 }
 
@@ -1060,7 +1062,7 @@ const InteractiveElement: React.FC<InteractiveElementProps> = ({
 // Media Content Renderer
 interface MediaContentRendererProps {
   media: MediaContent;
-  settings: any;
+  settings: unknown;
 }
 
 const MediaContentRenderer: React.FC<MediaContentRendererProps> = ({

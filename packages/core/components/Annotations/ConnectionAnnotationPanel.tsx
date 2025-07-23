@@ -2,7 +2,7 @@
 // Epic 8.7 Task 4: Connection Label Editing Interface
 
 import React, { useState, useCallback } from 'react';
-import { Edge } from 'reactflow';
+// import { Edge } from 'reactflow';
 import { AnnotatedEdge, ConnectionLabelEditor } from './ConnectionAnnotations';
 import { connectionAnnotationPresets, labelTemplates } from '../../hooks/useConnectionAnnotations';
 

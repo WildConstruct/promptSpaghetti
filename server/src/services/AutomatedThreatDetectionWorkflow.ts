@@ -335,9 +335,9 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
    * Execute a single playbook step
    */
   private async executePlaybookStep(
-    step: any,
+    step: unknown,
     alert: ThreatDetectionAlert,
-    playbook: PlaybookDefinition
+    _____playbook: PlaybookDefinition
   ): Promise<void> {
     const startTime = Date.now();
     
@@ -461,7 +461,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
   /**
    * Get current threat detection statistics
    */
-  public getThreatStatistics(): any {
+  public getThreatStatistics(): unknown {
     const activeAlerts = Array.from(this.activeAlerts.values());
     const responses = Array.from(this.automatedResponses.values());
     
@@ -562,7 +562,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
            this.evaluatePlaybookConditions(playbook.triggers.conditions, alert);
   }
 
-  private evaluatePlaybookConditions(conditions: Record<string, any>, alert: ThreatDetectionAlert): boolean {
+  private evaluatePlaybookConditions(_____conditions: Record<string, any>, _____alert: ThreatDetectionAlert): boolean {
     // Simple condition evaluation - would be more sophisticated in practice
     return true;
   }
@@ -603,23 +603,23 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
   /**
    * Playbook step implementations
    */
-  private async executeAnalysisStep(step: any, alert: ThreatDetectionAlert): Promise<void> {
+  private async executeAnalysisStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
     // Implement analysis logic
   }
 
-  private async executeContainmentStep(step: any, alert: ThreatDetectionAlert): Promise<void> {
+  private async executeContainmentStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
     // Implement containment logic
   }
 
-  private async executeInvestigationStep(step: any, alert: ThreatDetectionAlert): Promise<void> {
+  private async executeInvestigationStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
     // Implement investigation logic
   }
 
-  private async executeNotificationStep(step: any, alert: ThreatDetectionAlert): Promise<void> {
+  private async executeNotificationStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
     // Implement notification logic
   }
 
-  private async executeRecoveryStep(step: any, alert: ThreatDetectionAlert): Promise<void> {
+  private async executeRecoveryStep(_____step: unknown, _____alert: ThreatDetectionAlert): Promise<void> {
     // Implement recovery logic
   }
 
@@ -633,7 +633,7 @@ export class AutomatedThreatDetectionWorkflow extends EventEmitter {
     feed.recordCount = Math.floor(Math.random() * 10000);
   }
 
-  private groupBy(array: any[], key: string): Record<string, number> {
+  private groupBy(array: unknown[], key: string): Record<string, number> {
     return array.reduce((result, item) => {
       const group = item[key];
       result[group] = (result[group] || 0) + 1;

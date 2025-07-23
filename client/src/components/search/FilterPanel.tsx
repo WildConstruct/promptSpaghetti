@@ -129,8 +129,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   }, [newSort, addSort]);
 
   // Handle filter value change based on field type
-  const handleFilterValueChange = useCallback((value: any, field: string, operator: FilterOperator) => {
-    const fieldConfig = getFieldConfig(field);
+  const handleFilterValueChange = useCallback((value: Error, field: string, operator: FilterOperator) => {
+    const ___fieldConfig = getFieldConfig(field);
     
     if (operator === 'between' || operator === 'in') {
       if (typeof value === 'string') {
@@ -148,8 +148,8 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
   const renderFilterValueInput = useCallback((
     field: string, 
     operator: FilterOperator, 
-    value: any, 
-    onChange: (value: any) => void
+    value: Error, 
+    onChange: (value: Error) => void
   ) => {
     const fieldConfig = getFieldConfig(field);
 

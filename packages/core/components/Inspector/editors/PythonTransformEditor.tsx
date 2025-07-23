@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { TextAreaEditor } from '../TextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
@@ -350,103 +350,103 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
         </div>
         
         <div style={{ marginBottom: 16 }}>
-        <div style={{ marginBottom: 12 }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 8
-          }}>
-            <label style={{ 
-              fontWeight: 500, 
-              color: '#e2e8f0',
-              fontSize: 12
-            }}>
-              Available Modules
-            </label>
-            <button
-              onClick={addCustomModule}
-              style={{
-                padding: '4px 8px',
-                fontSize: 10,
-                background: '#4299e1',
-                border: 'none',
-                borderRadius: 2,
-                color: 'white',
-                cursor: 'pointer'
-              }}
-            >
-              + Custom
-            </button>
-          </div>
-
           <div style={{ marginBottom: 12 }}>
-            <div style={{ fontSize: 10, color: '#a0aec0', marginBottom: 8 }}>
-              Common Modules:
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 8
+            }}>
+              <label style={{ 
+                fontWeight: 500, 
+                color: '#e2e8f0',
+                fontSize: 12
+              }}>
+              Available Modules
+              </label>
+              <button
+                onClick={addCustomModule}
+                style={{
+                  padding: '4px 8px',
+                  fontSize: 10,
+                  background: '#4299e1',
+                  border: 'none',
+                  borderRadius: 2,
+                  color: 'white',
+                  cursor: 'pointer'
+                }}
+              >
+              + Custom
+              </button>
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-              {COMMON_MODULES.map((module) => (
-                <button
-                  key={module}
-                  onClick={() => handleModuleToggle(module)}
-                  style={{
-                    padding: '2px 6px',
-                    fontSize: 10,
-                    background: allowedModules.includes(module) ? '#4299e1' : '#4a5568',
-                    border: 'none',
-                    borderRadius: 2,
-                    color: 'white',
-                    cursor: 'pointer',
-                    opacity: allowedModules.includes(module) ? 1 : 0.7
-                  }}
-                >
-                  {module}
-                </button>
-              ))}
-            </div>
-          </div>
 
-          <div>
-            <div style={{ fontSize: 10, color: '#a0aec0', marginBottom: 8 }}>
-              Currently Allowed:
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-              {allowedModules.map((module) => (
-                <div
-                  key={module}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4,
-                    padding: '2px 6px',
-                    background: '#2d3748',
-                    border: '1px solid #4a5568',
-                    borderRadius: 2,
-                    fontSize: 10,
-                    color: '#e2e8f0'
-                  }}
-                >
-                  {module}
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ fontSize: 10, color: '#a0aec0', marginBottom: 8 }}>
+              Common Modules:
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {COMMON_MODULES.map((module) => (
                   <button
-                    onClick={() => removeModule(module)}
+                    key={module}
+                    onClick={() => handleModuleToggle(module)}
                     style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#e53e3e',
-                      cursor: 'pointer',
+                      padding: '2px 6px',
                       fontSize: 10,
-                      padding: 0,
-                      width: 12,
-                      height: 12
+                      background: allowedModules.includes(module) ? '#4299e1' : '#4a5568',
+                      border: 'none',
+                      borderRadius: 2,
+                      color: 'white',
+                      cursor: 'pointer',
+                      opacity: allowedModules.includes(module) ? 1 : 0.7
                     }}
                   >
-                    ✕
+                    {module}
                   </button>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div style={{ fontSize: 10, color: '#a0aec0', marginBottom: 8 }}>
+              Currently Allowed:
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {allowedModules.map((module) => (
+                  <div
+                    key={module}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      padding: '2px 6px',
+                      background: '#2d3748',
+                      border: '1px solid #4a5568',
+                      borderRadius: 2,
+                      fontSize: 10,
+                      color: '#e2e8f0'
+                    }}
+                  >
+                    {module}
+                    <button
+                      onClick={() => removeModule(module)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#e53e3e',
+                        cursor: 'pointer',
+                        fontSize: 10,
+                        padding: 0,
+                        width: 12,
+                        height: 12
+                      }}
+                    >
+                    ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </ProgressiveDisclosureSection>
 
@@ -561,63 +561,63 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
         )}
         
         <div style={{ marginTop: 16 }}>
-        <div style={{
-          background: '#1a202c',
-          border: '1px solid #4a5568',
-          borderRadius: 4,
-          padding: 12,
-          fontSize: 12,
-          color: '#e2e8f0'
-        }}>
-          <div style={{ marginBottom: 8, fontWeight: 500 }}>
-            Python Execution Configuration:
-          </div>
-          
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Memory Limit:</span> {memoryLimit}
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Timeout:</span> {timeout} seconds
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Modules:</span> {allowedModules.join(', ')}
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Strict Mode:</span> {strictMode ? 'Enabled' : 'Disabled'}
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Caching:</span> {enableCaching ? 'Enabled' : 'Disabled'}
-          </div>
-          <div style={{ marginBottom: 4 }}>
-            <span style={{ color: '#a0aec0' }}>Fallback:</span> {fallbackBehavior}
-          </div>
-          
-          {executorUrl && (
-            <div style={{ marginBottom: 4 }}>
-              <span style={{ color: '#a0aec0' }}>Custom Executor:</span> {executorUrl}
-            </div>
-          )}
-
-          <div style={{ 
-            marginTop: 8, 
-            padding: 8, 
-            background: 'rgba(66, 153, 225, 0.1)',
-            borderRadius: 2
+          <div style={{
+            background: '#1a202c',
+            border: '1px solid #4a5568',
+            borderRadius: 4,
+            padding: 12,
+            fontSize: 12,
+            color: '#e2e8f0'
           }}>
-            <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
-              Code Preview:
+            <div style={{ marginBottom: 8, fontWeight: 500 }}>
+            Python Execution Configuration:
             </div>
+          
+            <div style={{ marginBottom: 4 }}>
+              <span style={{ color: '#a0aec0' }}>Memory Limit:</span> {memoryLimit}
+            </div>
+            <div style={{ marginBottom: 4 }}>
+              <span style={{ color: '#a0aec0' }}>Timeout:</span> {timeout} seconds
+            </div>
+            <div style={{ marginBottom: 4 }}>
+              <span style={{ color: '#a0aec0' }}>Modules:</span> {allowedModules.join(', ')}
+            </div>
+            <div style={{ marginBottom: 4 }}>
+              <span style={{ color: '#a0aec0' }}>Strict Mode:</span> {strictMode ? 'Enabled' : 'Disabled'}
+            </div>
+            <div style={{ marginBottom: 4 }}>
+              <span style={{ color: '#a0aec0' }}>Caching:</span> {enableCaching ? 'Enabled' : 'Disabled'}
+            </div>
+            <div style={{ marginBottom: 4 }}>
+              <span style={{ color: '#a0aec0' }}>Fallback:</span> {fallbackBehavior}
+            </div>
+          
+            {executorUrl && (
+              <div style={{ marginBottom: 4 }}>
+                <span style={{ color: '#a0aec0' }}>Custom Executor:</span> {executorUrl}
+              </div>
+            )}
+
             <div style={{ 
-              fontFamily: 'monospace', 
-              fontSize: 9, 
-              maxHeight: 100, 
-              overflow: 'auto',
-              whiteSpace: 'pre-wrap'
+              marginTop: 8, 
+              padding: 8, 
+              background: 'rgba(66, 153, 225, 0.1)',
+              borderRadius: 2
             }}>
-              {code.slice(0, 200)}{code.length > 200 ? '...' : ''}
+              <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
+              Code Preview:
+              </div>
+              <div style={{ 
+                fontFamily: 'monospace', 
+                fontSize: 9, 
+                maxHeight: 100, 
+                overflow: 'auto',
+                whiteSpace: 'pre-wrap'
+              }}>
+                {code.slice(0, 200)}{code.length > 200 ? '...' : ''}
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </ProgressiveDisclosureSection>
     </div>

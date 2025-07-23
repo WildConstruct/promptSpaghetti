@@ -38,7 +38,7 @@ export interface TemplateServiceOptions {
   getUserInfo?: (userId: string) => Promise<{ name: string; avatar?: string } | null>;
   checkWorkspaceAccess?: (workspaceId: string, userId: string, permission: number) => Promise<boolean>;
   generateThumbnail?: (templateData: Record<string, any>) => Promise<string>;
-  sendNotification?: (userId: string, notification: any) => Promise<void>;
+  sendNotification?: (userId: string, notification: unknown) => Promise<void>;
 }
 
 export class TemplateService {
@@ -259,7 +259,7 @@ export class TemplateService {
     customizations: Record<string, any>,
     projectData: { name: string; description?: string; workspace_id: string },
     userId: string
-  ): Promise<{ project: any; usage: TemplateUsage }> {
+  ): Promise<{ project: unknown; usage: TemplateUsage }> {
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
@@ -521,9 +521,9 @@ export class TemplateService {
   }
 
   private async recordTemplateDownload(
-    templateId: string,
-    userId: string,
-    format: 'json' | 'yaml' | 'zip'
+    _____templateId: string,
+    _____userId: string,
+    _____format: 'json' | 'yaml' | 'zip'
   ): Promise<void> {
     // This would be implemented to track downloads for analytics
     // For now, we'll skip the implementation

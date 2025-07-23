@@ -7,7 +7,7 @@ export const ShareManager = ({ projectId, className = '' }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [copyFeedback, setCopyFeedback] = useState(null);
-    const [selectedShare, setSelectedShare] = useState(null);
+    const [_____selectedShare, setSelectedShare] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
     useEffect(() => {
         fetchShares();

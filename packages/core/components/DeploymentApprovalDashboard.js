@@ -56,7 +56,7 @@ export const DeploymentApprovalDashboard = ({ workspaceId, currentUserId, mode =
             setLoading(false);
         }
     };
-    const getEnvironmentIcon = (env) => {
+    const _____getEnvironmentIcon = (env) => {
         switch (env) {
             case 'production': return _jsx(ServerStackIcon, { className: "h-4 w-4 text-red-500" });
             case 'staging': return _jsx(ComputerDesktopIcon, { className: "h-4 w-4 text-yellow-500" });
@@ -65,7 +65,7 @@ export const DeploymentApprovalDashboard = ({ workspaceId, currentUserId, mode =
             default: return _jsx(GlobeAltIcon, { className: "h-4 w-4 text-gray-500" });
         }
     };
-    const getEnvironmentBadgeColor = (env) => {
+    const _____getEnvironmentBadgeColor = (env) => {
         switch (env) {
             case 'production': return 'bg-red-100 text-red-800 border-red-200';
             case 'staging': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
@@ -74,7 +74,7 @@ export const DeploymentApprovalDashboard = ({ workspaceId, currentUserId, mode =
             default: return 'bg-gray-100 text-gray-800 border-gray-200';
         }
     };
-    const getStatusIcon = (status) => {
+    const _____getStatusIcon = (status) => {
         switch (status) {
             case 'approved':
             case 'auto_approved':
@@ -88,7 +88,7 @@ export const DeploymentApprovalDashboard = ({ workspaceId, currentUserId, mode =
                 return _jsx(ExclamationTriangleIcon, { className: "h-5 w-5 text-gray-500" });
         }
     };
-    const getCriterionIcon = (type) => {
+    const _____getCriterionIcon = (type) => {
         switch (type) {
             case 'security-review': return _jsx(ShieldCheckIcon, { className: "h-4 w-4 text-blue-500" });
             case 'performance-impact': return _jsx(BoltIcon, { className: "h-4 w-4 text-yellow-500" });
@@ -139,7 +139,7 @@ export const DeploymentApprovalDashboard = ({ workspaceId, currentUserId, mode =
                                 : `No ${activeTab} deployment requests found.` })] })) : (filteredRequests.map(request => (_jsx(DeploymentRequestCard, { request: request, onSelect: setSelectedRequest, currentUserId: currentUserId }, request.id)))) }), selectedRequest && (_jsx(DeploymentRequestDetail, { request: selectedRequest, onClose: () => setSelectedRequest(null), currentUserId: currentUserId, onUpdate: fetchDeploymentRequests }))] }));
 };
 // Component for individual deployment request cards
-const DeploymentRequestCard = ({ request, onSelect, currentUserId }) => {
+const DeploymentRequestCard = ({ request, onSelect, _____currentUserId }) => {
     const getEnvironmentIcon = (env) => {
         switch (env) {
             case 'production': return _jsx(ServerStackIcon, { className: "h-4 w-4 text-red-500" });
@@ -195,7 +195,7 @@ const DeploymentRequestCard = ({ request, onSelect, currentUserId }) => {
                                 : 'bg-gray-100 text-gray-800 border border-gray-200'}`, children: [getCriterionIcon(criterion.type), _jsx("span", { children: criterion.type.replace('-', ' ').toUpperCase() }), criterion.status === 'approved' && _jsx(CheckCircleIcon, { className: "h-3 w-3" }), criterion.status === 'rejected' && _jsx(XCircleIcon, { className: "h-3 w-3" })] }, criterion.type))) }) }), _jsxs("div", { className: "flex items-center justify-between text-xs text-gray-600 border-t pt-3", children: [_jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("span", { children: ["Coverage: ", request.metadata.test_coverage, "%"] }), _jsxs("span", { children: ["Security: ", request.metadata.security_scan_status] }), request.metadata.breaking_changes && (_jsx("span", { className: "text-orange-600", children: "\u26A0 Breaking Changes" }))] }), _jsxs("button", { onClick: () => onSelect(request), className: "flex items-center space-x-1 text-blue-600 hover:text-blue-800", children: [_jsx("span", { children: "View Details" }), _jsx(ChevronRightIcon, { className: "h-3 w-3" })] })] })] }));
 };
 // Detailed view component (placeholder - would be expanded with full details)
-const DeploymentRequestDetail = ({ request, onClose, currentUserId, onUpdate }) => {
+const DeploymentRequestDetail = ({ _____request, onClose, _____currentUserId, _____onUpdate }) => {
     return (_jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4", children: _jsxs("div", { className: "bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto", children: [_jsxs("div", { className: "sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between", children: [_jsx("h2", { className: "text-xl font-semibold", children: "Deployment Details" }), _jsx("button", { onClick: onClose, className: "text-gray-400 hover:text-gray-600", children: _jsx(XCircleIcon, { className: "h-6 w-6" }) })] }), _jsxs("div", { className: "p-6", children: [_jsx("p", { className: "text-gray-600", children: "Detailed deployment approval interface would be implemented here with:" }), _jsxs("ul", { className: "mt-4 list-disc list-inside space-y-2 text-gray-600", children: [_jsx("li", { children: "Full deployment metadata and change details" }), _jsx("li", { children: "Approval workflow progress and history" }), _jsx("li", { children: "Individual reviewer assignments and status" }), _jsx("li", { children: "Validation step results and automated checks" }), _jsx("li", { children: "Comments and discussion thread" }), _jsx("li", { children: "Action buttons for approve/reject/escalate" }), _jsx("li", { children: "Real-time updates and notifications" })] })] })] }) }));
 };
 export default DeploymentApprovalDashboard;

@@ -31,26 +31,26 @@ export interface ModalProps {
 const modalSizes = {
   sm: {
     maxWidth: '24rem', // 384px
-    width: '90vw',
+    width: '90vw'
   },
   md: {
     maxWidth: '32rem', // 512px
-    width: '90vw',
+    width: '90vw'
   },
   lg: {
     maxWidth: '48rem', // 768px
-    width: '90vw',
+    width: '90vw'
   },
   xl: {
     maxWidth: '64rem', // 1024px
-    width: '95vw',
+    width: '95vw'
   },
   full: {
     maxWidth: '100vw',
     width: '100vw',
     height: '100vh',
-    borderRadius: '0',
-  },
+    borderRadius: '0'
+  }
 } as const;
 
 // Close icon component
@@ -147,7 +147,7 @@ export const Modal: React.FC<ModalProps> = ({
   overlayStyle,
   contentStyle,
   'aria-labelledby': ariaLabelledBy,
-  'aria-describedby': ariaDescribedBy,
+  'aria-describedby': ariaDescribedBy
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -194,7 +194,7 @@ export const Modal: React.FC<ModalProps> = ({
     padding: '1rem',
     zIndex: 1000,
     animation: 'modalOverlayFadeIn 0.2s ease-out',
-    ...overlayStyle,
+    ...overlayStyle
   };
   
   const modalStyles: React.CSSProperties = {
@@ -208,7 +208,7 @@ export const Modal: React.FC<ModalProps> = ({
     display: 'flex',
     flexDirection: 'column',
     animation: 'modalContentSlideIn 0.2s ease-out',
-    ...contentStyle,
+    ...contentStyle
   };
   
   const headerStyles: React.CSSProperties = {
@@ -218,13 +218,13 @@ export const Modal: React.FC<ModalProps> = ({
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    gap: '1rem',
+    gap: '1rem'
   };
   
   const bodyStyles: React.CSSProperties = {
     padding: '1.5rem',
     flex: 1,
-    overflow: 'auto',
+    overflow: 'auto'
   };
   
   const titleStyles: React.CSSProperties = {
@@ -232,14 +232,14 @@ export const Modal: React.FC<ModalProps> = ({
     fontWeight: '600',
     lineHeight: '1.5',
     color: colors.semantic.text.primary,
-    margin: 0,
+    margin: 0
   };
   
   const descriptionStyles: React.CSSProperties = {
     fontSize: '0.875rem',
     color: colors.semantic.text.secondary,
     marginTop: '0.25rem',
-    margin: 0,
+    margin: 0
   };
   
   const closeButtonStyles: React.CSSProperties = {
@@ -252,7 +252,7 @@ export const Modal: React.FC<ModalProps> = ({
     transition: 'color 0.2s ease-in-out',
     flexShrink: 0,
     marginTop: '-0.5rem',
-    marginRight: '-0.5rem',
+    marginRight: '-0.5rem'
   };
   
   return (
@@ -293,7 +293,7 @@ export const Modal: React.FC<ModalProps> = ({
           className={`ui-modal-content ${contentClassName}`}
           style={{
             ...modalStyles,
-            ...style,
+            ...style
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -365,7 +365,7 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({
   children,
   justify = 'end',
   className = '',
-  style,
+  style
 }) => {
   const footerStyles: React.CSSProperties = {
     padding: '1rem 1.5rem',
@@ -374,11 +374,11 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({
     gap: '0.75rem',
     justifyContent: justify === 'start' ? 'flex-start' 
       : justify === 'center' ? 'center' 
-      : justify === 'end' ? 'flex-end' 
-      : 'space-between',
+        : justify === 'end' ? 'flex-end' 
+          : 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
-    ...style,
+    ...style
   };
   
   return (
@@ -402,7 +402,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
   showCloseButton = true,
   onClose,
   className = '',
-  style,
+  style
 }) => {
   const headerStyles: React.CSSProperties = {
     padding: '1.5rem 1.5rem 1rem 1.5rem',
@@ -411,7 +411,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     gap: '1rem',
-    ...style,
+    ...style
   };
   
   const closeButtonStyles: React.CSSProperties = {
@@ -424,7 +424,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
     transition: 'color 0.2s ease-in-out',
     flexShrink: 0,
     marginTop: '-0.5rem',
-    marginRight: '-0.5rem',
+    marginRight: '-0.5rem'
   };
   
   return (

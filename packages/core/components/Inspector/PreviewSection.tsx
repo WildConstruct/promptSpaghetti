@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { CollapsibleSection } from './CollapsibleSection';
-import { getRandomVariation, hasVariations } from '../../utils/nodeDataUtils';
+import { hasVariations } from '../../utils/nodeDataUtils';
 
 export interface PreviewSectionProps {
-  node: any;
+  node: Error;
 }
 
 interface PreviewExample {

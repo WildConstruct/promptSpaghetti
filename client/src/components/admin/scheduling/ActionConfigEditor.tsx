@@ -29,12 +29,12 @@ import {
 } from '@mui/icons-material';
 
 export interface ActionConfig {
-  targetValue?: any;
+  targetValue?: unknown;
   rolloutPercentage?: number;
   conditions?: Array<{
     attribute: string;
     operator: string;
-    value: any;
+    value: Error;
   }>;
   gradualRollout?: {
     startPercentage: number;
@@ -104,7 +104,7 @@ export const ActionConfigEditor: React.FC<ActionConfigEditorProps> = ({
     onChange(newConfig);
   };
 
-  const handleConditionChange = (index: number, field: string, newValue: any) => {
+  const handleConditionChange = (index: number, field: string, newValue: Error) => {
     const conditions = [...(config.conditions || [])];
     conditions[index] = { ...conditions[index], [field]: newValue };
     handleConfigChange({ conditions });
@@ -138,7 +138,7 @@ export const ActionConfigEditor: React.FC<ActionConfigEditorProps> = ({
     });
   };
 
-  const renderValueInput = (condition: any, index: number) => {
+  const renderValueInput = (condition: unknown, index: number) => {
     const attribute = COMMON_ATTRIBUTES.find(attr => attr.value === condition.attribute);
     const type = attribute?.type || 'string';
 

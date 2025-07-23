@@ -87,7 +87,7 @@ export const NUMERIC_LIMITS = {
 /**
  * Validates numeric input for safety
  */
-function validateNumericInput(value: any, functionName: string): number {
+function validateNumericInput(value: Error, functionName: string): number {
   // Type check
   if (typeof value !== 'number') {
     const error = `Math.${functionName} expects a number, got ${typeof value}`;
@@ -146,7 +146,7 @@ function validateNumericInput(value: any, functionName: string): number {
 /**
  * Validates array of numeric inputs
  */
-function validateNumericArray(values: any[], functionName: string): number[] {
+function validateNumericArray(values: unknown[], functionName: string): number[] {
   if (!Array.isArray(values)) {
     throw new TypeError(`Math.${functionName} expects arguments, got ${typeof values}`);
   }
@@ -165,7 +165,7 @@ function validateNumericArray(values: any[], functionName: string): number[] {
 /**
  * Safe implementation of Math.min
  */
-function safeMin(...values: any[]): number {
+function safeMin(...values: unknown[]): number {
   const validated = validateNumericArray(values, 'min');
   return Math.min(...validated);
 }
@@ -173,7 +173,7 @@ function safeMin(...values: any[]): number {
 /**
  * Safe implementation of Math.max
  */
-function safeMax(...values: any[]): number {
+function safeMax(...values: unknown[]): number {
   const validated = validateNumericArray(values, 'max');
   return Math.max(...validated);
 }
@@ -181,7 +181,7 @@ function safeMax(...values: any[]): number {
 /**
  * Safe implementation of Math.floor
  */
-function safeFloor(value: any): number {
+function safeFloor(value: Error): number {
   const validated = validateNumericInput(value, 'floor');
   return Math.floor(validated);
 }
@@ -189,7 +189,7 @@ function safeFloor(value: any): number {
 /**
  * Safe implementation of Math.ceil
  */
-function safeCeil(value: any): number {
+function safeCeil(value: Error): number {
   const validated = validateNumericInput(value, 'ceil');
   return Math.ceil(validated);
 }
@@ -197,7 +197,7 @@ function safeCeil(value: any): number {
 /**
  * Safe implementation of Math.round
  */
-function safeRound(value: any): number {
+function safeRound(value: Error): number {
   const validated = validateNumericInput(value, 'round');
   return Math.round(validated);
 }
@@ -205,7 +205,7 @@ function safeRound(value: any): number {
 /**
  * Safe implementation of Math.abs
  */
-function safeAbs(value: any): number {
+function safeAbs(value: Error): number {
   const validated = validateNumericInput(value, 'abs');
   return Math.abs(validated);
 }
@@ -213,7 +213,7 @@ function safeAbs(value: any): number {
 /**
  * Safe implementation of Math.sign
  */
-function safeSign(value: any): number {
+function safeSign(value: Error): number {
   const validated = validateNumericInput(value, 'sign');
   return Math.sign(validated);
 }
@@ -221,7 +221,7 @@ function safeSign(value: any): number {
 /**
  * Safe implementation of Math.trunc
  */
-function safeTrunc(value: any): number {
+function safeTrunc(value: Error): number {
   const validated = validateNumericInput(value, 'trunc');
   return Math.trunc(validated);
 }
@@ -439,7 +439,7 @@ export function isInSafeRange(value: number): boolean {
 /**
  * Utility to safely coerce a value to number
  */
-export function safeNumberCoercion(value: any): number {
+export function safeNumberCoercion(value: Error): number {
   // Strict number check
   if (typeof value === 'number') {
     return validateNumericInput(value, 'coercion');

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ZodSchema, ZodTypeAny } from 'zod';
-import { useUISettingsStore, shouldShowField, classifyField } from '../../stores/uiSettingsStore';
+import { shouldShowField, classifyField } from '../../stores/uiSettingsStore';
 
 // Convert technical error messages to filmmaker-friendly language
 const getFilmmakerFriendlyError = (message: string): string => {
@@ -36,7 +36,7 @@ const getFilmmakerFriendlyError = (message: string): string => {
 export interface BaseNodeEditorProps {
   nodeId: string;
   nodeData: Record<string, unknown>;
-  schema: ZodSchema<any>;
+  schema: ZodSchema<unknown>;
   onChange: (partial: Record<string, unknown>) => void;
   className?: string;
   children?: React.ReactNode;
@@ -77,7 +77,7 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
     // Validate single field via schema
     if (schema) {
       try {
-        const fieldSchema: any = (schema as any).shape?.[key] ?? (schema as any)._def?.shape?.()[key];
+        const fieldSchema: unknown = (schema as any).shape?.[key] ?? (schema as any)._def?.shape?.()[key];
         if (fieldSchema) {
           const parsed = fieldSchema.safeParse(val);
           setFieldErrors((prev) => ({ 
@@ -98,7 +98,7 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
     if (!schema) return null;
     
     try {
-      const shape: any = (schema as any).shape;
+      const shape: Error = (schema as any).shape;
       if (typeof shape === 'function') {
         return shape()[key] || null;
       } else if (shape) {
@@ -191,7 +191,7 @@ export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
       let shape: Record<string, ZodTypeAny> = {};
       
       if ((schema as any).shape) {
-        const maybeShape: any = (schema as any).shape;
+        const maybeShape: Error = (schema as any).shape;
         if (typeof maybeShape === 'function') {
           shape = maybeShape();
         } else if (maybeShape) {

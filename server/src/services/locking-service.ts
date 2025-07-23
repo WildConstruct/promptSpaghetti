@@ -702,7 +702,7 @@ export class LockingService {
     ]);
   }
 
-  private async escalateLockConflict(conflict: LockConflict, policy: LockPolicy | null): Promise<void> {
+  private async escalateLockConflict(_____conflict: LockConflict, _____policy: LockPolicy | null): Promise<void> {
     // Implementation would escalate to administrators or managers
     // This is a placeholder for escalation logic
   }

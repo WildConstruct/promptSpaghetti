@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { VariationList } from '../VariationList';
 import { WeightSlider } from '../WeightSlider';

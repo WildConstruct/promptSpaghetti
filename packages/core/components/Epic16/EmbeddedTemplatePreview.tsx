@@ -37,7 +37,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 // Import existing types and components we'll extend
-import { Template, TemplateRating, TemplateAuthor } from './TemplatePreviewModal';
+import { Template } from './TemplatePreviewModal';
 import { EmbedConfiguration, EmbedTheme, EmbedSize, EmbedFeatures } from '../embed/EmbeddableContent';
 
 // Enhanced types for embedded template previews
@@ -121,7 +121,7 @@ export interface PreviewSize {
   width: number;
   height: number;
   label: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
   description: string;
 }
 
@@ -156,8 +156,8 @@ export const EmbedCodeGenerator: React.FC<{
     });
 
     switch (activeTab) {
-      case 'iframe':
-        return `<iframe
+    case 'iframe':
+      return `<iframe
   src="${baseUrl}?${params}"
   width="${customization.size.width}"
   height="${customization.size.height}"
@@ -168,8 +168,8 @@ export const EmbedCodeGenerator: React.FC<{
   title="${template.title} - Template Preview"
 ></iframe>`;
 
-      case 'javascript':
-        return `<div id="template-embed-${template.id}"></div>
+    case 'javascript':
+      return `<div id="template-embed-${template.id}"></div>
 <script>
 (function() {
   const embed = document.createElement('iframe');
@@ -186,8 +186,8 @@ export const EmbedCodeGenerator: React.FC<{
 })();
 </script>`;
 
-      case 'react':
-        return `import { EmbeddedTemplatePreview } from '@promptspaghetti/components';
+    case 'react':
+      return `import { EmbeddedTemplatePreview } from '@promptspaghetti/components';
 
 <EmbeddedTemplatePreview
   template={{
@@ -208,8 +208,8 @@ export const EmbedCodeGenerator: React.FC<{
   showSocialActions={true}
 />`;
 
-      default:
-        return '';
+    default:
+      return '';
     }
   }, [template, customization, activeTab]);
 
@@ -640,14 +640,14 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
 
   const getVariantStyles = () => {
     switch (variant) {
-      case 'compact':
-        return 'p-3 text-sm';
-      case 'detailed':
-        return 'p-6 text-base';
-      case 'showcase':
-        return 'p-8 text-lg';
-      default:
-        return 'p-4 text-sm';
+    case 'compact':
+      return 'p-3 text-sm';
+    case 'detailed':
+      return 'p-6 text-base';
+    case 'showcase':
+      return 'p-8 text-lg';
+    default:
+      return 'p-4 text-sm';
     }
   };
 

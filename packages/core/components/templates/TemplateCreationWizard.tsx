@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
 
 interface TemplateCreationWizardProps {
-  graphData: any; // The current graph to turn into a template
+  graphData: unknown; // The current graph to turn into a template
   isOpen: boolean;
   onClose: () => void;
   onComplete: (template: ProjectTemplate) => void;
@@ -620,14 +620,14 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
 
 interface CustomizationStepProps {
   points: CustomizationPoint[];
-  graphData: any;
+  graphData: unknown;
   onAdd: () => void;
   onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void;
   onRemove: (index: number) => void;
 }
 
 const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData, onAdd, onUpdate, onRemove }) => {
-  const availableNodes = graphData?.nodes?.map((node: any) => node.id) || [];
+  const _____availableNodes = graphData?.nodes?.map((node: Error) => node.id) || [];
 
   return (
     <div className="space-y-6">

@@ -12,7 +12,7 @@
  * - Batch operation management
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { 
   OperationType, 
   OperationParameter, 
@@ -86,7 +86,7 @@ export const OperationUI: React.FC<OperationUIProps> = ({
   }, [operationType.parameters]);
 
   // Handle parameter changes
-  const handleParameterChange = useCallback((name: string, value: any) => {
+  const handleParameterChange = useCallback((name: string, value: Error) => {
     const newParameters = { ...parameters, [name]: value };
     setParameters(newParameters);
     onParametersChange?.(newParameters);
@@ -189,7 +189,7 @@ const OperationHeader: React.FC<OperationHeaderProps> = ({
   onToggleParameters,
   showParameters
 }) => {
-  const getRiskLevelColor = (risk: RiskLevel) => {
+  const _____getRiskLevelColor = (risk: RiskLevel) => {
     switch (risk) {
     case RiskLevel.LOW: return 'green';
     case RiskLevel.MEDIUM: return 'yellow';
@@ -240,7 +240,7 @@ interface OperationParametersFormProps {
   parameters: OperationParameter[];
   values: Record<string, any>;
   errors: Record<string, string>;
-  onChange: (name: string, value: any) => void;
+  onChange: (name: string, value: Error) => void;
   readonly: boolean;
   showAdvanced: boolean;
 }
@@ -316,9 +316,9 @@ const OperationParametersForm: React.FC<OperationParametersFormProps> = ({
 // Individual Parameter Input Component
 interface ParameterInputProps {
   parameter: OperationParameter;
-  value: any;
+  value: Error;
   error?: string;
-  onChange: (value: any) => void;
+  onChange: (value: Error) => void;
   readonly: boolean;
 }
 
@@ -395,7 +395,7 @@ const ParameterInput: React.FC<ParameterInputProps> = ({
                   if (e.target.checked) {
                     onChange([...currentValues, option.value]);
                   } else {
-                    onChange(currentValues.filter((v: any) => v !== option.value));
+                    onChange(currentValues.filter((v: unknown) => v !== option.value));
                   }
                 }}
                 disabled={readonly || option.disabled}
@@ -687,7 +687,7 @@ const OperationProgress: React.FC<OperationProgressProps> = ({
 };
 
 // Utility functions
-function validateParameterType(value: any, type: ParameterType): boolean {
+function validateParameterType(value: Error, type: ParameterType): boolean {
   switch (type) {
   case ParameterType.STRING:
     return typeof value === 'string';
@@ -704,7 +704,7 @@ function validateParameterType(value: any, type: ParameterType): boolean {
   }
 }
 
-function validateConstraint(value: any, constraint: any): { isValid: boolean; message: string } {
+function validateConstraint(_____value: Error, _____constraint: unknown): { isValid: boolean; message: string } {
   // Implementation would match the server-side validation
   return { isValid: true, message: '' };
 }

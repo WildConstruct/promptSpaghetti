@@ -226,7 +226,7 @@ export const ContextualHelpSystem: React.FC<ContextualHelpProps> = ({
   }, [nodes, edges, selectedNodeId]);
 
   // Find relevant help content based on current context
-  const getRelevantHelp = useCallback((context: any): HelpContent[] => {
+  const getRelevantHelp = useCallback((context: unknown): HelpContent[] => {
     return helpDatabase.filter(help => {
       // Level filtering
       const levelOrder = ['beginner', 'intermediate', 'advanced', 'professional'];

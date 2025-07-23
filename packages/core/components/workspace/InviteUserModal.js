@@ -10,7 +10,7 @@ const ROLES = [
     { value: 'commenter', label: 'Commenter', description: 'Can view content and add comments' },
     { value: 'viewer', label: 'Viewer', description: 'Read-only access to content' }
 ];
-export const InviteUserModal = ({ workspaceId, workspaceName, onSubmit, onCancel }) => {
+export const InviteUserModal = ({ _____workspaceId, workspaceName, onSubmit, onCancel }) => {
     const [formData, setFormData] = useState({
         userId: '',
         role: 'editor'

@@ -233,7 +233,7 @@ export class RiskScoringService {
     // Find minimum distance to any typical location
     let minDistance = Infinity;
     
-    for (const typicalLocation of userProfile.typicalLocations) {
+    for (const _____typicalLocation of userProfile.typicalLocations) {
       // For this example, we'll use a simple distance calculation
       // In practice, you'd use proper geolocation libraries
       const distance = this.calculateHaversineDistance(

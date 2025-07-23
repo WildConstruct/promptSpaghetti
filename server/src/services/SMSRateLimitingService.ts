@@ -97,8 +97,8 @@ export interface QueueStatus {
 
 // Rate limiting storage interface
 interface RateLimitStorage {
-  get(key: string): Promise<any>;
-  set(key: string, value: any, ttlMs?: number): Promise<void>;
+  get(key: string): Promise<unknown>;
+  set(key: string, value: Error, ttlMs?: number): Promise<void>;
   increment(key: string, amount?: number): Promise<number>;
   expire(key: string, ttlMs: number): Promise<void>;
   delete(key: string): Promise<boolean>;
@@ -109,9 +109,9 @@ interface RateLimitStorage {
  * In-memory rate limiting storage (for development/testing)
  */
 class MemoryRateLimitStorage implements RateLimitStorage {
-  private store: Map<string, { value: any; expires?: Date }> = new Map();
+  private store: Map<string, { value: Error; expires?: Date }> = new Map();
 
-  async get(key: string): Promise<any> {
+  async get(key: string): Promise<unknown> {
     const item = this.store.get(key);
     if (!item) return null;
     
@@ -123,7 +123,7 @@ class MemoryRateLimitStorage implements RateLimitStorage {
     return item.value;
   }
 
-  async set(key: string, value: any, ttlMs?: number): Promise<void> {
+  async set(key: string, value: Error, ttlMs?: number): Promise<void> {
     const expires = ttlMs ? new Date(Date.now() + ttlMs) : undefined;
     this.store.set(key, { value, expires });
   }
@@ -808,7 +808,7 @@ export class SMSRateLimitingService extends EventEmitter {
     }
   }
 
-  private selectProvider(message: SMSMessage): SMSProvider | null {
+  private selectProvider(_____message: SMSMessage): SMSProvider | null {
     // Simple provider selection - could be enhanced with load balancing, failover, etc.
     const providers = Array.from(this.providers.values());
     return providers.find(provider => provider.isAvailable()) || providers[0] || null;
@@ -866,7 +866,7 @@ export class SMSRateLimitingService extends EventEmitter {
     }
   }
 
-  private async getAllKeysForConfig(config: RateLimitConfig): Promise<string[]> {
+  private async getAllKeysForConfig(_____config: RateLimitConfig): Promise<string[]> {
     // This is a placeholder - actual implementation would scan storage for keys matching the pattern
     return [];
   }

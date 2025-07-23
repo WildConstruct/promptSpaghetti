@@ -89,8 +89,8 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({
   const [activeAnnotationType, setActiveAnnotationType] = useState<ReviewAnnotation['type'] | null>(null);
   const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
   const [reviewDecisions, setReviewDecisions] = useState<Record<string, boolean | null>>({});
-  const [isCreatingAnnotation, setIsCreatingAnnotation] = useState(false);
-  const [selectedText, setSelectedText] = useState('');
+  const [_____isCreatingAnnotation, _____setIsCreatingAnnotation] = useState(false);
+  const [_____selectedText, _____setSelectedText] = useState('');
 
   const currentDocument = documents[currentDocumentIndex];
 

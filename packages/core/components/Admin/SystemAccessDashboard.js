@@ -33,7 +33,7 @@ const STATUS_CONFIG = {
     pending: { color: 'text-yellow-600 bg-yellow-100', icon: Clock },
     deactivated: { color: 'text-gray-600 bg-gray-100', icon: UserMinus }
 };
-export const SystemAccessDashboard = ({ className = '', userId, userRole }) => {
+export const SystemAccessDashboard = ({ className = '', userId, _____userRole }) => {
     const [activeTab, setActiveTab] = useState('users');
     const [users, setUsers] = useState([]);
     const [accessRequests, setAccessRequests] = useState([]);
@@ -41,7 +41,7 @@ export const SystemAccessDashboard = ({ className = '', userId, userRole }) => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     // Filters
-    const [userFilter, setUserFilter] = useState({});
+    const [_____userFilter, _____setUserFilter] = useState({});
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [accessLevelFilter, setAccessLevelFilter] = useState('all');
@@ -100,7 +100,7 @@ export const SystemAccessDashboard = ({ className = '', userId, userRole }) => {
     const handleCreateUser = async () => {
         // Mock user creation
         try {
-            const newUser = await systemAccessManager.createUser({
+            const _____newUser = await systemAccessManager.createUser({
                 username: 'newuser',
                 email: 'new@example.com',
                 displayName: 'New User',
@@ -421,7 +421,7 @@ export const SystemAccessDashboard = ({ className = '', userId, userRole }) => {
         }
       ` })] }));
 };
-const UserCard = ({ user, onSelect, onAssignRole, onRevokeRole, currentUserId }) => {
+const UserCard = ({ user, onSelect, onAssignRole, _____onRevokeRole, _____currentUserId }) => {
     const statusConfig = STATUS_CONFIG[user.status];
     const accessConfig = ACCESS_LEVEL_CONFIG[user.systemAccess];
     const StatusIcon = statusConfig.icon;
@@ -573,7 +573,7 @@ const AccessRequestCard = ({ request, onApprove, onReject }) => {
         }
       ` })] }));
 };
-const UserDetailModal = ({ user, onClose, onUpdate, currentUserId }) => {
+const UserDetailModal = ({ user, onClose, onUpdate, _____currentUserId }) => {
     return (_jsxs("div", { className: "modal-overlay", children: [_jsxs("div", { className: "modal-content", children: [_jsxs("div", { className: "modal-header", children: [_jsxs("h2", { children: ["User Details: ", user.displayName] }), _jsx(Button, { onClick: onClose, variant: "outline", size: "sm", children: "\u2715" })] }), _jsx("div", { className: "modal-body", children: _jsxs("div", { className: "user-details-grid", children: [_jsxs("div", { className: "detail-section", children: [_jsx("h3", { children: "Basic Information" }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Display Name:" }), _jsx("span", { children: user.displayName })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Username:" }), _jsx("span", { children: user.username })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Email:" }), _jsx("span", { children: user.email })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Status:" }), _jsx(Badge, { className: STATUS_CONFIG[user.status].color, children: user.status })] })] }), _jsxs("div", { className: "detail-section", children: [_jsx("h3", { children: "Access Control" }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "System Access:" }), _jsx(Badge, { className: ACCESS_LEVEL_CONFIG[user.systemAccess].color, children: user.systemAccess })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Security Clearance:" }), _jsx("span", { children: user.securityClearance })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "MFA Enabled:" }), _jsx(Badge, { className: user.mfaEnabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800', children: user.mfaEnabled ? 'Yes' : 'No' })] })] }), _jsxs("div", { className: "detail-section", children: [_jsx("h3", { children: "Roles" }), _jsx("div", { className: "roles-list", children: user.roles.map(role => (_jsxs("div", { className: "role-item", children: [_jsx("span", { children: role.roleName }), _jsxs("span", { className: "role-date", children: ["Assigned: ", role.assignedAt.toLocaleDateString()] })] }, role.id))) })] }), _jsxs("div", { className: "detail-section", children: [_jsx("h3", { children: "Activity" }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Last Login:" }), _jsx("span", { children: user.lastLoginAt
                                                         ? user.lastLoginAt.toLocaleString()
                                                         : 'Never' })] }), _jsxs("div", { className: "detail-item", children: [_jsx("label", { children: "Last Activity:" }), _jsx("span", { children: user.lastActivityAt

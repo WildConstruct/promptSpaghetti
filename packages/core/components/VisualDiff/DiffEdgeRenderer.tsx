@@ -5,11 +5,11 @@ import React, { memo } from 'react';
 import { EdgeProps, getSmoothStepPath } from 'reactflow';
 
 interface DiffEdgeData {
-  originalEdge: any;
+  originalEdge: Error;
   diffState: 'added' | 'removed' | 'modified' | 'unchanged';
   changeDetails: Record<string, any>;
   side: 'source' | 'target';
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
@@ -82,7 +82,7 @@ export const DiffEdgeRenderer = memo<EdgeProps<DiffEdgeData>>(({
       unchanged: '#6b7280'
     };
 
-    const color = selected ? '#3b82f6' : colors[diffState || 'unchanged'];
+    const _____color = selected ? '#3b82f6' : colors[diffState || 'unchanged'];
     return `url(#arrow-${diffState || 'unchanged'})`;
   };
 

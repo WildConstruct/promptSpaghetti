@@ -56,7 +56,7 @@ export interface GenerationField {
     maxLength?: number;
     pattern?: RegExp;
   };
-  defaultValue?: any;
+  defaultValue?: unknown;
 }
 
 export interface CommandPaletteProps {
@@ -381,7 +381,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [_____activeCategory, _____setActiveCategory] = useState<string | null>(null);
   const [showGenerationWizard, setShowGenerationWizard] = useState(false);
   const [activeGenerationFlow, setActiveGenerationFlow] = useState<GenerationFlow | null>(null);
   const [generationParams, setGenerationParams] = useState<Record<string, any>>({});
@@ -790,24 +790,24 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       if (!isOpen) return;
 
       switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          setSelectedIndex(prev => Math.min(prev + 1, filteredActions.length - 1));
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          setSelectedIndex(prev => Math.max(prev - 1, 0));
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (filteredActions[selectedIndex]) {
-            executeAction(filteredActions[selectedIndex]);
-          }
-          break;
-        case 'Escape':
-          e.preventDefault();
-          onClose();
-          break;
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex(prev => Math.min(prev + 1, filteredActions.length - 1));
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex(prev => Math.max(prev - 1, 0));
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (filteredActions[selectedIndex]) {
+          executeAction(filteredActions[selectedIndex]);
+        }
+        break;
+      case 'Escape':
+        e.preventDefault();
+        onClose();
+        break;
       }
     };
 

@@ -761,8 +761,8 @@ export class AnalyticsDAO {
   /**
    * Build parameters array for WHERE clause
    */
-  private buildWhereParams(filters: AnalyticsFilters): any[] {
-    const params: any[] = [];
+  private buildWhereParams(filters: AnalyticsFilters): unknown[] {
+    const params: unknown[] = [];
     
     if (filters.startTime !== undefined) params.push(filters.startTime);
     if (filters.endTime !== undefined) params.push(filters.endTime);

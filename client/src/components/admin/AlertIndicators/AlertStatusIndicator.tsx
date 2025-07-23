@@ -13,7 +13,7 @@ import {
   CheckCircle, AlertTriangle, AlertCircle, Info, Zap, 
   Shield, Activity, AlertOctagon, Eye, EyeOff 
 } from 'lucide-react';
-import { AlertCount, AlertSeverity } from './AlertIndicatorBadge';
+import { AlertCount } from './AlertIndicatorBadge';
 
 export type AlertSystemStatus = 'healthy' | 'warning' | 'critical' | 'maintenance' | 'unknown';
 

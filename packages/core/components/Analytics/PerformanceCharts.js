@@ -51,7 +51,7 @@ const TimeSeriesChart = ({ data, title, metric, unit, color, loading, error }) =
 /**
  * Performance charts component
  */
-export const PerformanceCharts = ({ analyticsClient, timeRange, userId, organizationId }) => {
+export const PerformanceCharts = ({ analyticsClient, timeRange, _____userId, _____organizationId }) => {
     const [state, setState] = useState({
         executionsData: [],
         tokensData: [],

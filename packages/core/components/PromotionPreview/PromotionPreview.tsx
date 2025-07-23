@@ -43,9 +43,9 @@ import {
 } from '@ant-design/icons';
 import { useTemplatePreview } from '../../hooks/useTemplatePreview';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text, _Paragraph } = Typography;
 const { TabPane } = Tabs;
-const { Option } = Select;
+const { _Option } = Select;
 
 // Types for promotion preview
 interface PromotionSlot {
@@ -114,7 +114,7 @@ interface PerformancePrediction {
 
 export interface PromotionPreviewProps {
   promotionData?: PromotionPreviewData;
-  onUpdateRotation?: (config: any) => void;
+  onUpdateRotation?: (config: unknown) => void;
   onStartPreview?: () => void;
   onStopPreview?: () => void;
   isLive?: boolean;

@@ -35,7 +35,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
   const [analytics, setAnalytics] = useState<SentimentAnalytics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTimeRange, setSelectedTimeRange] = useState(timeRange || {
+  const [selectedTimeRange, _____setSelectedTimeRange] = useState(timeRange || {
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
     end: new Date()
   });
@@ -74,9 +74,9 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
 
   const getSentimentColor = (sentiment: SentimentType) => {
     switch (sentiment) {
-      case 'positive': return '#059669';
-      case 'negative': return '#dc2626';
-      default: return '#6b7280';
+    case 'positive': return '#059669';
+    case 'negative': return '#dc2626';
+    default: return '#6b7280';
     }
   };
 
@@ -96,11 +96,11 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
 
   const getToxicityColor = (level: ToxicityLevel) => {
     switch (level) {
-      case 'severe': return '#dc2626';
-      case 'high': return '#ea580c';
-      case 'medium': return '#d97706';
-      case 'low': return '#facc15';
-      default: return '#059669';
+    case 'severe': return '#dc2626';
+    case 'high': return '#ea580c';
+    case 'medium': return '#d97706';
+    case 'low': return '#facc15';
+    default: return '#059669';
     }
   };
 
@@ -112,7 +112,7 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
     if (!analytics) return null;
 
     const { sentimentDistribution } = analytics;
-    const total = sentimentDistribution.positive.count + 
+    const _____total = sentimentDistribution.positive.count + 
                  sentimentDistribution.neutral.count + 
                  sentimentDistribution.negative.count;
 
@@ -396,9 +396,9 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
         {/* Overall Toxicity Level */}
         <div style={{
           backgroundColor: toxicityAnalytics.overallLevel === 'none' ? '#f0fdf4' : 
-                         toxicityAnalytics.overallLevel === 'low' ? '#fefce8' :
-                         toxicityAnalytics.overallLevel === 'medium' ? '#fef3c7' :
-                         toxicityAnalytics.overallLevel === 'high' ? '#fef2f2' : '#fecaca',
+            toxicityAnalytics.overallLevel === 'low' ? '#fefce8' :
+              toxicityAnalytics.overallLevel === 'medium' ? '#fef3c7' :
+                toxicityAnalytics.overallLevel === 'high' ? '#fef2f2' : '#fecaca',
           border: `1px solid ${getToxicityColor(toxicityAnalytics.overallLevel)}40`,
           borderRadius: '8px',
           padding: '12px',
@@ -717,11 +717,11 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                   style={{
                     padding: '8px',
                     backgroundColor: rec.priority === 'critical' ? '#fef2f2' :
-                                   rec.priority === 'high' ? '#fef3c7' :
-                                   rec.priority === 'medium' ? '#eff6ff' : '#f9fafb',
+                      rec.priority === 'high' ? '#fef3c7' :
+                        rec.priority === 'medium' ? '#eff6ff' : '#f9fafb',
                     border: `1px solid ${rec.priority === 'critical' ? '#fecaca' :
-                                       rec.priority === 'high' ? '#fed7aa' :
-                                       rec.priority === 'medium' ? '#bfdbfe' : '#e5e7eb'}`,
+                      rec.priority === 'high' ? '#fed7aa' :
+                        rec.priority === 'medium' ? '#bfdbfe' : '#e5e7eb'}`,
                     borderRadius: '6px',
                     fontSize: '12px'
                   }}
@@ -735,8 +735,8 @@ export const SentimentDashboard: React.FC<SentimentDashboardProps> = ({
                     <span style={{
                       fontWeight: '600',
                       color: rec.priority === 'critical' ? '#dc2626' :
-                             rec.priority === 'high' ? '#d97706' :
-                             rec.priority === 'medium' ? '#2563eb' : '#374151',
+                        rec.priority === 'high' ? '#d97706' :
+                          rec.priority === 'medium' ? '#2563eb' : '#374151',
                       textTransform: 'capitalize'
                     }}>
                       {rec.type.replace('_', ' ')}

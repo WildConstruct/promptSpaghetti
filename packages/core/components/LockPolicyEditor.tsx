@@ -64,7 +64,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({
     return errors;
   };
 
-  const handleInputChange = (field: keyof LockPolicy, value: any) => {
+  const handleInputChange = (field: keyof LockPolicy, value: Error) => {
     if (!editingPolicy) return;
 
     const updatedPolicy = { ...editingPolicy, [field]: value };

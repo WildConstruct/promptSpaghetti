@@ -18,7 +18,7 @@ import {
 } from '../../types/DataClassification';
 
 interface ClassificationTaggingUIProps {
-  dataElement: any;
+  dataElement: unknown;
   dataId: string;
   existingClassification?: DataClassification;
   context?: ClassificationContext;
@@ -117,7 +117,7 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
     onValidationChange?.(newValidation);
   }, [formData, onValidationChange]);
 
-  const handleFieldChange = (field: keyof ClassificationFormData, value: any) => {
+  const handleFieldChange = (field: keyof ClassificationFormData, value: Error) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

@@ -154,7 +154,7 @@ export class PolicyVersionService {
     return updatedVersion;
   }
 
-  async deletePolicyVersion(versionId: string, userId: string): Promise<void> {
+  async deletePolicyVersion(versionId: string, _____userId: string): Promise<void> {
     const version = await this.getPolicyVersion(versionId);
     
     if (version.status !== 'draft') {
@@ -319,7 +319,7 @@ export class PolicyVersionService {
     return changes;
   }
 
-  private calculateSectionImpact(section: any): DiffImpact {
+  private calculateSectionImpact(section: unknown): DiffImpact {
     const content = section.content || '';
     const hasLegalKeywords = /\b(must|shall|required|prohibited|forbidden|mandatory)\b/i.test(content);
     

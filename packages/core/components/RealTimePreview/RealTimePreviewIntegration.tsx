@@ -15,7 +15,7 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Node, Edge } from 'reactflow';
 import { EnhancedPreviewModal, EnhancedPreviewResult } from '../PreviewModal/EnhancedPreviewModal';
-import { useEnhancedPreview, VarianceAnalysis } from '../../hooks/useEnhancedPreview';
+import { useEnhancedPreview } from '../../hooks/useEnhancedPreview';
 import { useRealTimePreview, PreviewVariant, RealTimePreviewConfig } from '../../hooks/useRealTimePreview';
 
 interface RealTimePreviewIntegrationProps {

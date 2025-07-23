@@ -147,10 +147,10 @@ const MetricCard: React.FC<MetricCardProps> = ({
  * Metrics overview props
  */
 export interface MetricsOverviewProps {
-  summary: any;
-  dashboardData: any;
-  conversionData?: any;
-  performanceData?: any;
+  summary: unknown;
+  dashboardData: unknown;
+  conversionData?: unknown;
+  performanceData?: unknown;
   loading: boolean;
 }
 
@@ -356,7 +356,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {performanceMetrics.keyMetrics.map((metric: any, index: number) => (
+              {performanceMetrics.keyMetrics.map((metric: unknown, _____index: number) => (
                 <div key={metric.name} className="performance-metric-card">
                   <div className="metric-header">
                     <span className="metric-name">{metric.name.replace('-', ' ')}</span>
@@ -384,7 +384,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {usage.popularNodes.slice(0, 5).map((node: any, index: number) => (
+              {usage.popularNodes.slice(0, 5).map((node: Error, index: number) => (
                 <div key={node.type} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Badge variant="outline">{index + 1}</Badge>
@@ -398,7 +398,7 @@ export const MetricsOverview: React.FC<MetricsOverviewProps> = ({
                         style={{ 
                           width: `${Math.min(
                             100,
-                            (node.count / Math.max(...usage.popularNodes.map((n: any
+                            (node.count / Math.max(...usage.popularNodes.map((n: unknown
                             ) => n.count))) * 100)}%` 
                         }}
                       />

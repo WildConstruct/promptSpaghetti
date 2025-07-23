@@ -277,7 +277,7 @@ export class Epic17PerformanceMonitoringService {
   /**
    * Map route to admin operation
    */
-  private mapRouteToAdminOperation(route: string, method: string): any {
+  private mapRouteToAdminOperation(route: string, _____method: string): unknown {
     const routeMap: Record<string, any> = {
       '/api/v1/auth/login': 'user_management',
       '/api/v1/auth/register': 'user_management',
@@ -307,7 +307,7 @@ export class Epic17PerformanceMonitoringService {
   /**
    * Map route to admin category
    */
-  private mapRouteToAdminCategory(route: string): any {
+  private mapRouteToAdminCategory(route: string): unknown {
     if (route.includes('/auth/')) return 'authentication';
     if (route.includes('/roles') || route.includes('/permissions')) return 'authorization';
     if (route.includes('/users')) return 'user_lifecycle';
@@ -323,7 +323,7 @@ export class Epic17PerformanceMonitoringService {
   /**
    * Map route to backstage component
    */
-  private mapRouteToBackstageComponent(route: string): any {
+  private mapRouteToBackstageComponent(route: string): unknown {
     if (route.includes('/auth/')) return 'admin_portal';
     if (route.includes('/users')) return 'user_management';
     if (route.includes('/roles')) return 'role_management';
@@ -339,7 +339,7 @@ export class Epic17PerformanceMonitoringService {
   /**
    * Map route to configuration area
    */
-  private mapRouteToConfigurationArea(route: string): any {
+  private mapRouteToConfigurationArea(route: string): unknown {
     if (route.includes('/auth/')) return 'authentication';
     if (route.includes('/roles') || route.includes('/permissions')) return 'authorization';
     if (route.includes('/audit')) return 'logging';
@@ -354,7 +354,7 @@ export class Epic17PerformanceMonitoringService {
   /**
    * Map route to system integration
    */
-  private mapRouteToSystemIntegration(route: string): any {
+  private mapRouteToSystemIntegration(route: string): unknown {
     if (route.includes('/ldap') || route.includes('/ad')) return 'ldap_active_directory';
     if (route.includes('/saml')) return 'saml_sso';
     if (route.includes('/oauth')) return 'oauth_provider';
@@ -371,7 +371,7 @@ export class Epic17PerformanceMonitoringService {
   /**
    * Determine impact scope based on route and status
    */
-  private determineImpactScope(route: string, statusCode: number): any {
+  private determineImpactScope(route: string, statusCode: number): unknown {
     if (statusCode >= 500) return 'system_wide';
     if (route.includes('/admin/')) return 'organization';
     if (route.includes('/users/')) return 'user_group';
@@ -382,7 +382,7 @@ export class Epic17PerformanceMonitoringService {
   /**
    * Determine compliance level
    */
-  private determineComplianceLevel(route: string): any {
+  private determineComplianceLevel(route: string): unknown {
     if (route.includes('/auth/') || route.includes('/security/')) return 'critical';
     if (route.includes('/audit/') || route.includes('/compliance/')) return 'high';
     if (route.includes('/admin/')) return 'standard';
@@ -393,7 +393,7 @@ export class Epic17PerformanceMonitoringService {
   /**
    * Determine performance impact level
    */
-  private determinePerformanceImpact(duration: number): any {
+  private determinePerformanceImpact(duration: number): unknown {
     if (duration > 5000) return 'critical';
     if (duration > 2000) return 'high';
     if (duration > 1000) return 'moderate';

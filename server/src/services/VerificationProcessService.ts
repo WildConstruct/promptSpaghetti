@@ -46,8 +46,8 @@ export interface VerificationRequest {
   reviewed_by?: string;
   expiry_date: Date;
   metadata: {
-    user_info?: any;
-    business_info?: any;
+    user_info?: unknown;
+    business_info?: unknown;
     documents?: VerificationDocument[];
     notes?: string;
   };
@@ -179,7 +179,7 @@ export class VerificationProcessService {
   async submitVerificationRequest(
     userId: string,
     verificationType: VerificationType,
-    metadata: any = {}
+    metadata: Record<string, unknown> = {}
   ): Promise<VerificationRequest> {
     // Check for existing pending request
     const existingRequest = await this.getUserActiveRequest(userId, verificationType);
@@ -305,7 +305,7 @@ export class VerificationProcessService {
     } = filters;
 
     let whereClause = '1=1';
-    const queryParams: any[] = [];
+    const queryParams: unknown[] = [];
     let paramCount = 0;
 
     if (status) {
@@ -578,7 +578,7 @@ export class VerificationProcessService {
     );
   }
 
-  private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: any }): Promise<void> {
+  private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: unknown }): Promise<void> {
     await client.query(
       `INSERT INTO audit_logs (action, user_id, details, ip_address, user_agent, created_at)
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,

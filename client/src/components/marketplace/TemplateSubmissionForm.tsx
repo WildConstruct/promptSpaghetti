@@ -87,7 +87,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [isDraft, setIsDraft] = useState(true);
+  const [___isDraft, setIsDraft] = useState(true);
   const [submissionId, setSubmissionId] = useState<string | null>(null);
   const [graphJsonString, setGraphJsonString] = useState('{}');
   const [tagInput, setTagInput] = useState('');
@@ -140,7 +140,7 @@ export const TemplateSubmissionForm: React.FC<TemplateSubmissionFormProps> = ({
     }
   };
 
-  const handleInputChange = (field: keyof SubmissionData, value: any) => {
+  const handleInputChange = (field: keyof SubmissionData, value: Error) => {
     setSubmissionData(prev => ({
       ...prev,
       [field]: value

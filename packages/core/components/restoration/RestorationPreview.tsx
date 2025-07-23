@@ -138,7 +138,7 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
       title: 'Properties',
       dataIndex: 'properties',
       key: 'properties',
-      render: (properties: any) => (
+      render: (properties: unknown) => (
         <Text type="secondary">
           {properties ? Object.keys(properties).length : 0} properties
         </Text>
@@ -261,14 +261,14 @@ export const RestorationPreview: React.FC<RestorationPreviewProps> = ({
   ];
 
   const allNodeChanges = [
-    ...preview.preview.nodesToAdd.map((node: any) => ({ ...node, action: 'add' })),
-    ...preview.preview.nodesToUpdate.map((node: any) => ({ ...node, action: 'update' })),
+    ...preview.preview.nodesToAdd.map((node: Error) => ({ ...node, action: 'add' })),
+    ...preview.preview.nodesToUpdate.map((node: Error) => ({ ...node, action: 'update' })),
     ...preview.preview.nodesToDelete.map((id: string) => ({ id, action: 'delete' }))
   ];
 
   const allEdgeChanges = [
-    ...preview.preview.edgesToAdd.map((edge: any) => ({ ...edge, action: 'add' })),
-    ...preview.preview.edgesToUpdate.map((edge: any) => ({ ...edge, action: 'update' })),
+    ...preview.preview.edgesToAdd.map((edge: Error) => ({ ...edge, action: 'add' })),
+    ...preview.preview.edgesToUpdate.map((edge: Error) => ({ ...edge, action: 'update' })),
     ...preview.preview.edgesToDelete.map((id: string) => ({ id, action: 'delete' }))
   ];
 

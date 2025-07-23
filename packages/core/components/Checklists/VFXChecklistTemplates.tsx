@@ -474,7 +474,7 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({
   const [showOnlyPublic, setShowOnlyPublic] = useState(false);
   const [showOnlyMine, setShowOnlyMine] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [_____showCreateForm, setShowCreateForm] = useState(false);
 
   // Combine built-in and user templates
   const allTemplates = useMemo(() => {

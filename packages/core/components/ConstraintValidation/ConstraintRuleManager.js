@@ -100,7 +100,7 @@ export const ConstraintRuleManager = ({ validator, onConstraintsChange, onClose 
             return false;
         return true;
     });
-    const getEnforcementIcon = (enforcement) => {
+    const _____getEnforcementIcon = (enforcement) => {
         switch (enforcement) {
             case 'strict': return _jsx(AlertTriangle, { size: 16, className: "text-red-500" });
             case 'warning': return _jsx(Info, { size: 16, className: "text-yellow-500" });

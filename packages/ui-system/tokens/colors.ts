@@ -20,7 +20,7 @@ export const baseColors = {
     600: '#4B5563',
     700: '#374151',
     800: '#1F2937',
-    900: '#111827',
+    900: '#111827'
   },
   
   // Primary brand colors
@@ -34,7 +34,7 @@ export const baseColors = {
     600: '#2563EB',
     700: '#1D4ED8',
     800: '#1E40AF',
-    900: '#1E3A8A',
+    900: '#1E3A8A'
   },
   
   // Secondary colors
@@ -48,7 +48,7 @@ export const baseColors = {
     600: '#4F46E5',
     700: '#4338CA',
     800: '#3730A3',
-    900: '#312E81',
+    900: '#312E81'
   },
   
   // Success colors
@@ -62,7 +62,7 @@ export const baseColors = {
     600: '#16A34A',
     700: '#15803D',
     800: '#166534',
-    900: '#14532D',
+    900: '#14532D'
   },
   
   // Warning colors
@@ -76,7 +76,7 @@ export const baseColors = {
     600: '#D97706',
     700: '#B45309',
     800: '#92400E',
-    900: '#78350F',
+    900: '#78350F'
   },
   
   // Error colors
@@ -90,7 +90,7 @@ export const baseColors = {
     600: '#DC2626',
     700: '#B91C1C',
     800: '#991B1B',
-    900: '#7F1D1D',
+    900: '#7F1D1D'
   },
   
   // Info colors
@@ -104,7 +104,7 @@ export const baseColors = {
     600: '#0891B2',
     700: '#0E7490',
     800: '#155E75',
-    900: '#164E63',
+    900: '#164E63'
   },
   
   // Sharing-specific accent colors
@@ -118,7 +118,7 @@ export const baseColors = {
     600: '#9333EA',
     700: '#7C3AED',
     800: '#6B21A8',
-    900: '#581C87',
+    900: '#581C87'
   },
   
   pink: {
@@ -131,8 +131,8 @@ export const baseColors = {
     600: '#DB2777',
     700: '#BE185D',
     800: '#9D174D',
-    900: '#831843',
-  },
+    900: '#831843'
+  }
 } as const;
 
 // Semantic color mappings
@@ -148,7 +148,7 @@ export const semanticColors = {
     600: baseColors.blue[600],
     700: baseColors.blue[700],
     800: baseColors.blue[800],
-    900: baseColors.blue[900],
+    900: baseColors.blue[900]
   },
   
   // Secondary brand
@@ -162,7 +162,7 @@ export const semanticColors = {
     600: baseColors.indigo[600],
     700: baseColors.indigo[700],
     800: baseColors.indigo[800],
-    900: baseColors.indigo[900],
+    900: baseColors.indigo[900]
   },
   
   // Status colors
@@ -177,7 +177,7 @@ export const semanticColors = {
     paper: baseColors.gray[50],
     card: baseColors.white,
     overlay: 'rgba(0, 0, 0, 0.6)',
-    modal: baseColors.white,
+    modal: baseColors.white
   },
   
   // Text colors
@@ -188,7 +188,7 @@ export const semanticColors = {
     disabled: baseColors.gray[400],
     inverse: baseColors.white,
     link: baseColors.blue[600],
-    linkHover: baseColors.blue[800],
+    linkHover: baseColors.blue[800]
   },
   
   // Border colors
@@ -199,7 +199,7 @@ export const semanticColors = {
     error: baseColors.red[500],
     success: baseColors.green[500],
     warning: baseColors.amber[500],
-    disabled: baseColors.gray[200],
+    disabled: baseColors.gray[200]
   },
   
   // Sharing-specific colors
@@ -208,8 +208,8 @@ export const semanticColors = {
     restricted: baseColors.amber[500],
     private: baseColors.red[500],
     collaboration: baseColors.purple[500],
-    analytics: baseColors.cyan[500],
-  },
+    analytics: baseColors.cyan[500]
+  }
 } as const;
 
 // Component-specific color tokens
@@ -224,7 +224,7 @@ export const componentColors = {
       text: baseColors.white,
       textDisabled: baseColors.gray[500],
       border: 'transparent',
-      borderFocus: semanticColors.primary[500],
+      borderFocus: semanticColors.primary[500]
     },
     secondary: {
       background: baseColors.white,
@@ -235,7 +235,7 @@ export const componentColors = {
       textDisabled: baseColors.gray[500],
       border: baseColors.gray[300],
       borderHover: baseColors.gray[400],
-      borderFocus: semanticColors.primary[500],
+      borderFocus: semanticColors.primary[500]
     },
     ghost: {
       background: 'transparent',
@@ -245,7 +245,7 @@ export const componentColors = {
       text: baseColors.gray[900],
       textDisabled: baseColors.gray[500],
       border: 'transparent',
-      borderFocus: semanticColors.primary[500],
+      borderFocus: semanticColors.primary[500]
     },
     destructive: {
       background: semanticColors.error[500],
@@ -255,8 +255,8 @@ export const componentColors = {
       text: baseColors.white,
       textDisabled: baseColors.gray[500],
       border: 'transparent',
-      borderFocus: semanticColors.error[500],
-    },
+      borderFocus: semanticColors.error[500]
+    }
   },
   
   // Input colors
@@ -269,7 +269,7 @@ export const componentColors = {
     borderError: semanticColors.error[500],
     text: baseColors.gray[900],
     textDisabled: baseColors.gray[500],
-    placeholder: baseColors.gray[400],
+    placeholder: baseColors.gray[400]
   },
   
   // Modal colors
@@ -277,7 +277,7 @@ export const componentColors = {
     background: baseColors.white,
     overlay: 'rgba(0, 0, 0, 0.6)',
     border: baseColors.gray[200],
-    shadow: 'rgba(0, 0, 0, 0.1)',
+    shadow: 'rgba(0, 0, 0, 0.1)'
   },
   
   // Card colors
@@ -287,7 +287,7 @@ export const componentColors = {
     border: baseColors.gray[200],
     borderHover: baseColors.gray[300],
     shadow: 'rgba(0, 0, 0, 0.1)',
-    shadowHover: 'rgba(0, 0, 0, 0.15)',
+    shadowHover: 'rgba(0, 0, 0, 0.15)'
   },
   
   // Toast/notification colors
@@ -296,33 +296,33 @@ export const componentColors = {
       background: semanticColors.success[50],
       border: semanticColors.success[200],
       text: semanticColors.success[800],
-      icon: semanticColors.success[600],
+      icon: semanticColors.success[600]
     },
     warning: {
       background: semanticColors.warning[50],
       border: semanticColors.warning[200],
       text: semanticColors.warning[800],
-      icon: semanticColors.warning[600],
+      icon: semanticColors.warning[600]
     },
     error: {
       background: semanticColors.error[50],
       border: semanticColors.error[200],
       text: semanticColors.error[800],
-      icon: semanticColors.error[600],
+      icon: semanticColors.error[600]
     },
     info: {
       background: semanticColors.info[50],
       border: semanticColors.info[200],
       text: semanticColors.info[800],
-      icon: semanticColors.info[600],
-    },
+      icon: semanticColors.info[600]
+    }
   },
   
   // Progress colors
   progress: {
     background: baseColors.gray[200],
     fill: semanticColors.primary[500],
-    text: baseColors.gray[700],
+    text: baseColors.gray[700]
   },
   
   // Badge colors
@@ -330,28 +330,28 @@ export const componentColors = {
     default: {
       background: baseColors.gray[100],
       text: baseColors.gray[800],
-      border: baseColors.gray[200],
+      border: baseColors.gray[200]
     },
     primary: {
       background: semanticColors.primary[100],
       text: semanticColors.primary[800],
-      border: semanticColors.primary[200],
+      border: semanticColors.primary[200]
     },
     success: {
       background: semanticColors.success[100],
       text: semanticColors.success[800],
-      border: semanticColors.success[200],
+      border: semanticColors.success[200]
     },
     warning: {
       background: semanticColors.warning[100],
       text: semanticColors.warning[800],
-      border: semanticColors.warning[200],
+      border: semanticColors.warning[200]
     },
     error: {
       background: semanticColors.error[100],
       text: semanticColors.error[800],
-      border: semanticColors.error[200],
-    },
+      border: semanticColors.error[200]
+    }
   },
   
   // Sharing-specific component colors
@@ -360,44 +360,44 @@ export const componentColors = {
       background: semanticColors.success[100],
       text: semanticColors.success[800],
       icon: semanticColors.success[600],
-      border: semanticColors.success[200],
+      border: semanticColors.success[200]
     },
     restricted: {
       background: semanticColors.warning[100],
       text: semanticColors.warning[800],
       icon: semanticColors.warning[600],
-      border: semanticColors.warning[200],
+      border: semanticColors.warning[200]
     },
     private: {
       background: semanticColors.error[100],
       text: semanticColors.error[800],
       icon: semanticColors.error[600],
-      border: semanticColors.error[200],
-    },
+      border: semanticColors.error[200]
+    }
   },
   
   collaboratorRole: {
     view: {
       background: baseColors.blue[100],
       text: baseColors.blue[800],
-      icon: baseColors.blue[600],
+      icon: baseColors.blue[600]
     },
     comment: {
       background: baseColors.cyan[100],
       text: baseColors.cyan[800],
-      icon: baseColors.cyan[600],
+      icon: baseColors.cyan[600]
     },
     edit: {
       background: baseColors.purple[100],
       text: baseColors.purple[800],
-      icon: baseColors.purple[600],
+      icon: baseColors.purple[600]
     },
     admin: {
       background: baseColors.pink[100],
       text: baseColors.pink[800],
-      icon: baseColors.pink[600],
-    },
-  },
+      icon: baseColors.pink[600]
+    }
+  }
 } as const;
 
 // Dark theme color overrides
@@ -407,7 +407,7 @@ export const darkThemeColors = {
     paper: baseColors.gray[800],
     card: baseColors.gray[800],
     overlay: 'rgba(0, 0, 0, 0.8)',
-    modal: baseColors.gray[800],
+    modal: baseColors.gray[800]
   },
   
   text: {
@@ -417,7 +417,7 @@ export const darkThemeColors = {
     disabled: baseColors.gray[600],
     inverse: baseColors.gray[900],
     link: baseColors.blue[400],
-    linkHover: baseColors.blue[300],
+    linkHover: baseColors.blue[300]
   },
   
   border: {
@@ -427,7 +427,7 @@ export const darkThemeColors = {
     error: baseColors.red[400],
     success: baseColors.green[400],
     warning: baseColors.amber[400],
-    disabled: baseColors.gray[700],
+    disabled: baseColors.gray[700]
   },
   
   card: {
@@ -436,8 +436,8 @@ export const darkThemeColors = {
     border: baseColors.gray[700],
     borderHover: baseColors.gray[600],
     shadow: 'rgba(0, 0, 0, 0.3)',
-    shadowHover: 'rgba(0, 0, 0, 0.4)',
-  },
+    shadowHover: 'rgba(0, 0, 0, 0.4)'
+  }
 } as const;
 
 // Color utility functions
@@ -449,10 +449,10 @@ export const colorUtils = {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
-        }
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      }
       : null;
   },
   
@@ -483,7 +483,7 @@ export const colorUtils = {
     return colorUtils.getContrastRatio(backgroundColor, baseColors.white) > 3
       ? baseColors.white
       : baseColors.gray[900];
-  },
+  }
 } as const;
 
 // Export all color tokens
@@ -492,7 +492,7 @@ export const colors = {
   semantic: semanticColors,
   component: componentColors,
   darkTheme: darkThemeColors,
-  utils: colorUtils,
+  utils: colorUtils
 } as const;
 
 export type ColorScale = typeof baseColors.gray;

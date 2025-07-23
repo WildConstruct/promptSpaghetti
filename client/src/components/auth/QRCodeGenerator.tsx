@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Alert, AlertDescription } from '../ui/Alert';
@@ -111,7 +111,7 @@ export function QRCodeGenerator({
   showSecretDetails = true,
   className = ''
 }: QRCodeGeneratorProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ___canvasRef = useRef<HTMLCanvasElement>(null);
   const [state, setState] = useState<GeneratorState>({
     style: DEFAULT_STYLE,
     showAdvanced: false,

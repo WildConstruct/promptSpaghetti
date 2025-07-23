@@ -13,7 +13,7 @@ const defaultFilters = {
     compatibility: [],
     sortBy: 'relevance'
 };
-export const MarketplaceSearch = ({ onSearch, onFiltersChange, availableTags = [], availableCreators = [], availableModels = ['claude-3-haiku', 'claude-3-sonnet', 'claude-3-opus'], searchSuggestions = [], isLoading = false, resultCount, className = '' }) => {
+export const MarketplaceSearch = ({ onSearch, onFiltersChange, _____availableTags = [], availableCreators = [], availableModels = ['claude-3-haiku', 'claude-3-sonnet', 'claude-3-opus'], searchSuggestions = [], isLoading = false, resultCount, className = '' }) => {
     const [query, setQuery] = useState('');
     const [filters, setFilters] = useState(defaultFilters);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -84,7 +84,7 @@ export const MarketplaceSearch = ({ onSearch, onFiltersChange, availableTags = [
     const removeTag = (tagToRemove) => {
         updateFilters({ tags: filters.tags.filter(tag => tag !== tagToRemove) });
     };
-    const formatPrice = (cents) => {
+    const _____formatPrice = (cents) => {
         return `$${(cents / 100).toFixed(0)}`;
     };
     const activeFilterCount = useMemo(() => {

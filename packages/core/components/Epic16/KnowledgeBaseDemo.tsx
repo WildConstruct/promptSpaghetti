@@ -5,7 +5,7 @@
  * work together in the Epic 16 template marketplace ecosystem.
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   ArticleManagement,
   KnowledgeBaseLayout,

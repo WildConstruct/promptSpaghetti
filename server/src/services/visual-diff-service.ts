@@ -86,7 +86,7 @@ export class VisualDiffService {
       const targetData = this.convertVersionToGraphData(targetVersion);
 
       // Perform comparison
-      const startTime = Date.now();
+      const _____startTime = Date.now();
       const detailedComparison = await this.comparisonService.compareGraphs(
         sourceData,
         targetData,
@@ -385,7 +385,7 @@ export class VisualDiffService {
   /**
    * Convert version data to GraphData format for comparison
    */
-  private convertVersionToGraphData(version: any): GraphData {
+  private convertVersionToGraphData(version: unknown): GraphData {
     const graphData = JSON.parse(version.graph_data);
     
     return {

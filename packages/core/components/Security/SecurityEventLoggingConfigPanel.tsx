@@ -66,7 +66,7 @@ interface AlertRule {
 interface AlertCondition {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex';
-  value: any;
+  value: Error;
   logic?: 'and' | 'or';
 }
 
@@ -477,14 +477,19 @@ const LogDestinationManager: React.FC<{
   destinations: LoggingDestination[];
   onDestinationsChange: (destinations: LoggingDestination[]) => void;
 }> = ({ destinations, onDestinationsChange }) => {
-  const [editingDestination, setEditingDestination] = useState<LoggingDestination | null>(null);
-  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [_editingDestination, setEditingDestination] = useState<LoggingDestination | null>(null);
+  const [_showAddDialog, setShowAddDialog] = useState(false);
 
-      onDestinationsChange([...destinations, newDestination]);
+  const _handleAddDestination = (newDestination: LoggingDestination) => {
+    onDestinationsChange([...destinations, newDestination]);
     setShowAddDialog(false);
   };
 
-      onDestinationsChange(updated);
+  const _handleUpdateDestination = (updated: LoggingDestination) => {
+    const updatedDestinations = destinations.map(dest => 
+      dest.id === updated.id ? updated : dest
+    );
+    onDestinationsChange(updatedDestinations);
     setEditingDestination(null);
   };
 
@@ -871,7 +876,7 @@ const PerformanceSettingsPanel: React.FC<{
   settings: PerformanceSettings;
   onSettingsChange: (settings: PerformanceSettings) => void;
 }> = ({ settings, onSettingsChange }) => {
-  const updateSetting = (key: keyof PerformanceSettings, value: any) => {
+  const updateSetting = (key: keyof PerformanceSettings, value: Error) => {
     onSettingsChange({ ...settings, [key]: value });
   };
 
@@ -1222,7 +1227,7 @@ async function saveSecurityLoggingConfig(config: SecurityLoggingConfig): Promise
   console.log('Saved configuration:', config);
 }
 
-async function testSecurityLoggingConfig(config: SecurityLoggingConfig): Promise<any> {
+async function testSecurityLoggingConfig(_config: SecurityLoggingConfig): Promise<unknown> {
   // Simulate configuration test
   await new Promise(resolve => setTimeout(resolve, 2000));
   return {

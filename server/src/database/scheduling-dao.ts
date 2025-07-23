@@ -257,7 +257,7 @@ export class SchedulingDAO {
       this.db.get(
         'SELECT * FROM feature_toggle_schedules WHERE id = ?',
         [id],
-        (err, row: any) => {
+        (err, row: unknown) => {
           if (err) {
             reject(err);
           } else if (!row) {
@@ -275,7 +275,7 @@ export class SchedulingDAO {
       this.db.all(
         'SELECT * FROM feature_toggle_schedules WHERE toggle_id = ? ORDER BY priority DESC, start_time ASC',
         [toggleId],
-        (err, rows: any[]) => {
+        (err, rows: unknown[]) => {
           if (err) {
             reject(err);
           } else {
@@ -289,7 +289,7 @@ export class SchedulingDAO {
   async querySchedules(query: ScheduleQuery): Promise<{ schedules: FeatureToggleSchedule[]; total: number }> {
     let sql = 'SELECT * FROM feature_toggle_schedules WHERE 1=1';
     let countSql = 'SELECT COUNT(*) as total FROM feature_toggle_schedules WHERE 1=1';
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     // Build WHERE clause
     if (query.toggleId) {
@@ -341,13 +341,13 @@ export class SchedulingDAO {
 
     const [schedules, total] = await Promise.all([
       new Promise<FeatureToggleSchedule[]>((resolve, reject) => {
-        this.db.all(sql, finalParams, (err, rows: any[]) => {
+        this.db.all(sql, finalParams, (err, rows: unknown[]) => {
           if (err) reject(err);
           else resolve(rows.map(row => this.mapRowToSchedule(row)));
         });
       }),
       new Promise<number>((resolve, reject) => {
-        this.db.get(countSql, params, (err, row: any) => {
+        this.db.get(countSql, params, (err, row: unknown) => {
           if (err) reject(err);
           else resolve(row.total);
         });
@@ -362,7 +362,7 @@ export class SchedulingDAO {
     if (!existing) return null;
 
     const updates: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     Object.entries(request).forEach(([key, value]) => {
       if (key === 'id' || value === undefined) return;
@@ -465,7 +465,7 @@ export class SchedulingDAO {
       this.db.all(
         'SELECT * FROM schedule_executions WHERE schedule_id = ? ORDER BY execution_time DESC LIMIT ?',
         [scheduleId, limit],
-        (err, rows: any[]) => {
+        (err, rows: unknown[]) => {
           if (err) reject(err);
           else resolve(rows.map(row => this.mapRowToExecution(row)));
         }
@@ -515,7 +515,7 @@ export class SchedulingDAO {
     return new Promise((resolve, reject) => {
       this.db.all(
         'SELECT * FROM schedule_conflicts WHERE resolved_at IS NULL ORDER BY severity DESC, detected_at ASC',
-        (err, rows: any[]) => {
+        (err, rows: unknown[]) => {
           if (err) reject(err);
           else resolve(rows.map(row => this.mapRowToConflict(row)));
         }
@@ -525,7 +525,7 @@ export class SchedulingDAO {
 
   // Analytics
   async getScheduleAnalytics(startDate?: Date, endDate?: Date): Promise<ScheduleAnalytics> {
-    const params: any[] = [];
+    const params: unknown[] = [];
     let timeFilter = '';
 
     if (startDate) {
@@ -562,7 +562,7 @@ export class SchedulingDAO {
 
     const [scheduleStats, executionStats, actionStats] = await Promise.all(
       queries.map(query => 
-        new Promise<any>((resolve, reject) => {
+        new Promise<unknown>((resolve, reject) => {
           if (query.includes('GROUP BY')) {
             this.db.all(query, params, (err, rows) => {
               if (err) reject(err);
@@ -593,7 +593,7 @@ export class SchedulingDAO {
       conflictsDetected: 0, // TODO: Query conflicts table
       conflictsResolved: 0,
       autoResolvedConflicts: 0,
-      mostUsedActions: actionStats.map((stat: any) => ({
+      mostUsedActions: actionStats.map((stat: unknown) => ({
         action: stat.action as ScheduleAction,
         count: stat.count
       })),
@@ -603,7 +603,7 @@ export class SchedulingDAO {
   }
 
   // Helper methods
-  private mapRowToSchedule(row: any): FeatureToggleSchedule {
+  private mapRowToSchedule(row: unknown): FeatureToggleSchedule {
     return {
       id: row.id,
       toggleId: row.toggle_id,
@@ -631,7 +631,7 @@ export class SchedulingDAO {
     };
   }
 
-  private mapRowToExecution(row: any): ScheduleExecution {
+  private mapRowToExecution(row: unknown): ScheduleExecution {
     return {
       id: row.id,
       scheduleId: row.schedule_id,
@@ -650,7 +650,7 @@ export class SchedulingDAO {
     };
   }
 
-  private mapRowToConflict(row: any): ScheduleConflict {
+  private mapRowToConflict(row: unknown): ScheduleConflict {
     return {
       id: row.id,
       toggleId: row.toggle_id,

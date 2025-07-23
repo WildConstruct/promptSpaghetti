@@ -4,10 +4,10 @@
  * Part of Epic 19 - Security & Compliance Framework
  */
 
-import { AuditWorkflowService, WorkflowFinding, WorkflowExecution } from './AuditWorkflowService';
+import { AuditWorkflowService, WorkflowFinding, // WorkflowExecution // Unused import } from './AuditWorkflowService';
 import { ComplianceReportingService } from './ComplianceReportingService';
 import { AuditTeamCollaborationService } from './AuditTeamCollaborationService';
-import { DataProtectionEventLogger, DataProtectionEventType, ComplianceFramework } from '../../packages/core/security/DataProtectionEventLogger';
+import { DataProtectionEventLogger, DataProtectionEventType, // ComplianceFramework // Unused import } from '../../packages/core/security/DataProtectionEventLogger';
 
 export enum FindingTrackingStatus {
   NEW = 'new',
@@ -888,13 +888,13 @@ export class AuditFindingTrackingService {
     }
   }
 
-  private async buildFindingTimeline(findingId: string): Promise<FindingTimelineEntry[]> {
+  private async buildFindingTimeline(__findingId: string): Promise<FindingTimelineEntry[]> {
     // Would build from audit logs and tracking history
     return [];
   }
 
   private calculateFindingMetrics(finding: AuditFindingTracker): FindingMetrics {
-    const now = new Date();
+    const __now = new Date();
     const acknowledgedTime = finding.slaDetails.acknowledgedAt;
     const resolvedTime = finding.slaDetails.resolvedAt;
 
@@ -921,7 +921,7 @@ export class AuditFindingTrackingService {
            finding.slaDetails.resolutionStatus !== SLAStatus.OVERDUE;
   }
 
-  private calculateStakeholderEngagement(finding: AuditFindingTracker): number {
+  private calculateStakeholderEngagement(__finding: AuditFindingTracker): number {
     // Calculate engagement score based on responses and acknowledgments
     return 0; // Placeholder implementation
   }

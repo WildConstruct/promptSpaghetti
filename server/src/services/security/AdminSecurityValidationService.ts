@@ -9,11 +9,11 @@
  * Epic: 17 - Backstage Admin Controls
  */
 
-import { Pool, PoolClient } from 'pg';
+import { Pool } from 'pg';
 import { Logger } from '@nestjs/common';
 import { AccessControlFramework, Permission, Resource, Action, Context } from './AccessControlFramework.js';
 import { SecurityScanningService } from './SecurityScanningService.js';
-import crypto from 'crypto';
+// import crypto from 'crypto';
 import validator from 'validator';
 
 // =============================================================================
@@ -29,7 +29,7 @@ export interface SecurityValidationContext {
   operation: AdminOperation;
   resourceType: string;
   resourceId?: string;
-  requestData?: any;
+  requestData?: unknown;
   metadata?: Record<string, any>;
 }
 
@@ -881,7 +881,7 @@ export class AdminSecurityValidationService {
     return levels[level] || 0;
   }
 
-  private getFieldValue(data: any, field: string): any {
+  private getFieldValue(data: Record<string, unknown>, field: string): unknown {
     const path = field.split('.');
     let value = data;
     for (const key of path) {
@@ -894,7 +894,7 @@ export class AdminSecurityValidationService {
     return value;
   }
 
-  private async validateFieldValue(value: any, rule: ValidationRule): Promise<string | null> {
+  private async validateFieldValue(value: Error, rule: ValidationRule): Promise<string | null> {
     const stringValue = value.toString();
 
     // Type validation
@@ -1092,7 +1092,7 @@ export class AdminSecurityValidationService {
     // This would include behavioral analysis, anomaly detection, etc.
   }
 
-  private async detectSuspiciousPatterns(context: SecurityValidationContext): Promise<Partial<SecurityValidationResult>> {
+  private async detectSuspiciousPatterns(____context: SecurityValidationContext): Promise<Partial<SecurityValidationResult>> {
     // Placeholder for suspicious pattern detection
     return {
       violations: [],
@@ -1101,7 +1101,7 @@ export class AdminSecurityValidationService {
     };
   }
 
-  private async applySecurityPolicies(context: SecurityValidationContext): Promise<Partial<SecurityValidationResult>> {
+  private async applySecurityPolicies(____context: SecurityValidationContext): Promise<Partial<SecurityValidationResult>> {
     // Placeholder for security policy application
     return {
       violations: [],

@@ -35,7 +35,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ onBack, onSuccess })
     country: 'US'
   });
   const [paymentIntent, setPaymentIntent] = useState<PaymentIntent | null>(null);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, ___setErrors] = useState<Record<string, string>>({});
   const [processing, setProcessing] = useState(false);
 
   const { cart } = useMarketplace();
@@ -361,7 +361,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         save_payment_method: savePaymentMethod
       });
       onPaymentIntentCreated(intent);
-    } catch (err: any) {
+    } catch (err: Error) {
       setError(err.message || 'Failed to prepare payment');
     } finally {
       setProcessing(false);
@@ -420,7 +420,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
       onSuccess(order.id);
 
-    } catch (err: any) {
+    } catch (err: Error) {
       setError(err.message || 'Payment processing failed');
     } finally {
       setProcessing(false);
@@ -532,7 +532,7 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
 
 // Order Summary Component
 interface OrderSummaryProps {
-  cart: any; // ShoppingCart type
+  cart: unknown; // ShoppingCart type
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({ cart }) => {
@@ -540,7 +540,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ cart }) => {
     return null;
   }
 
-  const subtotal = cart.items.reduce((sum: number, item: any) => 
+  const subtotal = cart.items.reduce((sum: number, item: unknown) => 
     sum + (item.unit_price_cents * item.quantity), 0
   );
 
@@ -549,7 +549,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ cart }) => {
       <h3>Order Summary</h3>
       
       <div className="summary-items">
-        {cart.items.map((item: any) => (
+        {cart.items.map((item: unknown) => (
           <div key={item.id} className="summary-item">
             <div className="item-details">
               <div className="item-name">Template {item.template_id.slice(0, 8)}</div>

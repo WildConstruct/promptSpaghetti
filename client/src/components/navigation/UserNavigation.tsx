@@ -11,7 +11,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
-import { User, ChevronDown, Settings, Shield, Users, FileText } from 'lucide-react';
+import { User, ChevronDown, Settings, Shield, Users, // FileText // Unused import } from 'lucide-react';
 
 interface UserNavigationProps {
   className?: string;

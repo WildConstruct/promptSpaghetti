@@ -44,7 +44,7 @@ export interface RouteAccessRequirements {
   /** Required permissions (user must have all) */
   requiredPermissions?: Permission[];
   /** Custom access checker function */
-  customCheck?: (user: any) => boolean | Promise<boolean>;
+  customCheck?: (user: unknown) => boolean | Promise<boolean>;
   /** Redirect destination for unauthorized access */
   unauthorizedRedirect?: string;
   /** Redirect destination for unauthenticated access */
@@ -200,7 +200,7 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
   } = useAuthStore();
   
   const [accessCheckStatus, setAccessCheckStatus] = useState<'checking' | 'granted' | 'denied' | 'unauthenticated'>('checking');
-  const [customCheckResult, setCustomCheckResult] = useState<boolean | null>(null);
+  const [___customCheckResult, setCustomCheckResult] = useState<boolean | null>(null);
 
   // Determine access requirements for current route
   const routeAccess = access || DEFAULT_ROUTE_ACCESS[location.pathname] || { requireAuth: true };

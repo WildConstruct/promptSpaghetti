@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Card, 
   Avatar, 
@@ -43,7 +43,7 @@ import {
 import { useAttribution } from '../../hooks/useAttribution';
 import { ContributorVisualization } from './ContributorVisualization';
 
-const { Text, Title } = Typography;
+const { Text, _____Title } = Typography;
 
 interface AttributionPanelProps {
   projectId: string;
@@ -298,7 +298,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({
           </div>
           {Object.entries(groupedAttributions).map(([resourceKey, resourceAttributions]) => {
             const [resourceType, resourceId] = resourceKey.split(':');
-            const latestAttribution = resourceAttributions[0];
+            const _____latestAttribution = resourceAttributions[0];
             
             return (
               <Card 

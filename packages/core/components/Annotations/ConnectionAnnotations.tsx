@@ -2,7 +2,7 @@
 // Epic 8.7 Task 4: Connection Annotations System
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { Edge, EdgeText, getBezierPath, EdgeProps } from 'reactflow';
+import { Edge, getBezierPath, EdgeProps } from 'reactflow';
 
 // Enhanced Edge interface with label support
 export interface AnnotatedEdge extends Edge {
@@ -474,7 +474,7 @@ export const toggleEdgeLabel = (
   );
 };
 
-export const getEdgeCenter = (edge: Edge): { x: number; y: number } => {
+export const getEdgeCenter = (_____edge: Edge): { x: number; y: number } => {
   // This would need access to node positions to calculate properly
   // For now, return a placeholder - would be calculated in the actual component
   return { x: 0, y: 0 };

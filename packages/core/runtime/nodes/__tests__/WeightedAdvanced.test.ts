@@ -12,7 +12,7 @@ import { AdvancedExecutionUtils } from '../../advanced';
 
 describe('WeightedAdvanced Node', () => {
   let node: WeightedAdvancedNode;
-  let context: any;
+  let context: unknown;
 
   beforeEach(() => {
     const choices: WeightedChoice[] = [

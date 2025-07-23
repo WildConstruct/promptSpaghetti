@@ -5,12 +5,12 @@ import React, { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 
 interface DiffNodeData {
-  originalNode: any;
+  originalNode: Error;
   diffState: 'added' | 'removed' | 'modified' | 'unchanged';
   changeDetails: Record<string, any>;
   showMetadata: boolean;
   side: 'source' | 'target';
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const DiffNodeRenderer = memo<NodeProps<DiffNodeData>>(({ data, selected }) => {

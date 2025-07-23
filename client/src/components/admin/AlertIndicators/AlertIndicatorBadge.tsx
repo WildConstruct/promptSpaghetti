@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { AlertTriangle, AlertCircle, Info, Shield, Zap } from 'lucide-react';
+import { AlertTriangle, AlertCircle, Info, Zap } from 'lucide-react';
 
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 

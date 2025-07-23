@@ -57,7 +57,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
   showFavorites = true,
   className = ''
 }) => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { ___user, isAuthenticated } = useAuthStore();
   const [recentFiles, setRecentFiles] = useState<RecentFileEntry[]>([]);
   const [favoriteFiles, setFavoriteFiles] = useState<FileItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +74,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({
       // Load from localStorage first for immediate display
       const localRecent = localStorage.getItem('fileBrowserRecent');
       if (localRecent) {
-        const parsed = JSON.parse(localRecent).map((item: any) => ({
+        const parsed = JSON.parse(localRecent).map((item: unknown) => ({
           ...item,
           lastAccessed: new Date(item.lastAccessed),
           lastModified: new Date(item.lastModified),
@@ -523,7 +523,7 @@ export const addFileToRecent = (file: FileItem): void => {
     const recentFiles = existing ? JSON.parse(existing) : [];
     
     // Remove existing entry
-    const filtered = recentFiles.filter((item: any) => item.id !== file.id);
+    const filtered = recentFiles.filter((item: unknown) => item.id !== file.id);
     
     // Add to beginning and limit
     const updated = [recentEntry, ...filtered].slice(0, 20);

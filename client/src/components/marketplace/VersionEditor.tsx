@@ -150,7 +150,7 @@ export const VersionEditor: React.FC = () => {
     }
   };
 
-  const handleInputChange = (field: keyof VersionData, value: any) => {
+  const handleInputChange = (field: keyof VersionData, value: Error) => {
     setVersionData(prev => ({
       ...prev,
       [field]: value
@@ -282,7 +282,7 @@ export const VersionEditor: React.FC = () => {
         throw new Error(errorData.error || 'Failed to save version');
       }
 
-      const result = await response.json();
+      const ___result = await response.json();
       navigate(`/marketplace/templates/${templateId}/versions`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save version');

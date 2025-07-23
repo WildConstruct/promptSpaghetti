@@ -59,8 +59,8 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
     hasMore: false
   });
   
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [metrics, setMetrics] = useState<any>(null);
+  const [_____showCreateModal, setShowCreateModal] = useState(false);
+  const [metrics, setMetrics] = useState<unknown>(null);
 
   // Load tickets
   const loadTickets = useCallback(async () => {

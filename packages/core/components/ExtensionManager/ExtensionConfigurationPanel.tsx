@@ -17,10 +17,10 @@ interface ConfigField {
   label: string;
   type: 'string' | 'number' | 'boolean' | 'select' | 'json' | 'array';
   description?: string;
-  defaultValue?: any;
-  options?: { label: string; value: any }[];
+  defaultValue?: unknown;
+  options?: { label: string; value: Error }[];
   required?: boolean;
-  validation?: (value: any) => string | null;
+  validation?: (value: Error) => string | null;
 }
 
 export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelProps> = ({
@@ -110,7 +110,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
     setConfig(initialConfig);
   }, []);
 
-  const validateField = (field: ConfigField, value: any): string | null => {
+  const validateField = (field: ConfigField, value: Error): string | null => {
     if (field.required && (value === undefined || value === null || value === '')) {
       return 'This field is required';
     }
@@ -138,7 +138,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
     return null;
   };
 
-  const handleFieldChange = (fieldKey: string, value: any) => {
+  const handleFieldChange = (fieldKey: string, value: Error) => {
     const field = configSchema.find(f => f.key === fieldKey);
     if (!field) return;
 

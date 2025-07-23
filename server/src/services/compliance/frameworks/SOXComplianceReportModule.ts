@@ -353,7 +353,7 @@ export class SOXComplianceReportModule {
   async generateSOXReport(
     reportType: ComplianceReportType,
     period: ReportingPeriod,
-    includeDetails: boolean = true
+    _____includeDetails: boolean = true
   ): Promise<SOXComplianceReport> {
     console.log(`🏛️ Generating SOX compliance report for period ${period.startDate} to ${period.endDate}`);
 
@@ -458,7 +458,7 @@ export class SOXComplianceReportModule {
    * Generate COSO internal controls assessment
    */
   private async generateInternalControlsReport(period: ReportingPeriod): Promise<InternalControlsReport> {
-    const cosoAssessment = await this.getCOSOAssessment(period);
+    const _____cosoAssessment = await this.getCOSOAssessment(period);
     
     return {
       frameworkUsed: 'COSO_2013',
@@ -499,7 +499,7 @@ export class SOXComplianceReportModule {
    * Generate financial reporting controls assessment
    */
   private async generateFinancialReportingControlsReport(period: ReportingPeriod): Promise<FinancialReportingControlsReport> {
-    const processControls = await this.getFinancialProcessControls(period);
+    const _____processControls = await this.getFinancialProcessControls(period);
     
     return {
       revenueControls: await this.assessProcessControls('revenue', period),
@@ -518,7 +518,7 @@ export class SOXComplianceReportModule {
   /**
    * Generate IT general controls assessment
    */
-  private async generateITGeneralControlsReport(period: ReportingPeriod): Promise<ITGeneralControlsReport> {
+  private async generateITGeneralControlsReport(_____period: ReportingPeriod): Promise<ITGeneralControlsReport> {
     return {
       accessControls: {
         userAccessManagement: await this.assessITControl('user_access_mgmt'),
@@ -548,7 +548,7 @@ export class SOXComplianceReportModule {
   }
 
   // Helper methods for data gathering and assessment
-  private async getManagementAssertionData(period: ReportingPeriod): Promise<any> {
+  private async getManagementAssertionData(_____period: ReportingPeriod): Promise<unknown> {
     // Implementation would query management assertion database
     return {
       ceo: {
@@ -607,7 +607,7 @@ export class SOXComplianceReportModule {
     };
   }
 
-  private async assessProcessControls(process: string, period: ReportingPeriod): Promise<ProcessControlReport> {
+  private async assessProcessControls(process: string, _____period: ReportingPeriod): Promise<ProcessControlReport> {
     // Implementation would assess specific financial process controls
     return {
       processName: process,
@@ -641,22 +641,22 @@ export class SOXComplianceReportModule {
   }
 
   // Additional helper methods would be implemented...
-  private async getMaterialWeaknesses(period: ReportingPeriod): Promise<MaterialWeakness[]> { return []; }
-  private async getSignificantDeficiencies(period: ReportingPeriod): Promise<SignificantDeficiency[]> { return []; }
-  private async getCompensatingControls(period: ReportingPeriod): Promise<CompensatingControl[]> { return []; }
-  private async getDesignChanges(period: ReportingPeriod): Promise<ControlChange[]> { return []; }
-  private async getOperatingChanges(period: ReportingPeriod): Promise<ControlChange[]> { return []; }
-  private async getSubsequentEvents(period: ReportingPeriod): Promise<SubsequentEvent[]> { return []; }
-  private async getCOSOAssessment(period: ReportingPeriod): Promise<any> { return {}; }
-  private async getFinancialProcessControls(period: ReportingPeriod): Promise<any> { return {}; }
-  private async generateApplicationControlsReport(period: ReportingPeriod): Promise<ApplicationControlsReport> { return {} as ApplicationControlsReport; }
-  private async generateEntityLevelControlsReport(period: ReportingPeriod): Promise<EntityLevelControlsReport> { return {} as EntityLevelControlsReport; }
-  private async generateDisclosureControlsReport(period: ReportingPeriod): Promise<DisclosureControlsReport> { return {} as DisclosureControlsReport; }
-  private async generateChangeManagementReport(period: ReportingPeriod): Promise<ChangeManagementReport> { return {} as ChangeManagementReport; }
-  private async generateAccessControlsReport(period: ReportingPeriod): Promise<AccessControlsReport> { return {} as AccessControlsReport; }
-  private async generateAuditEvidenceReport(period: ReportingPeriod): Promise<AuditEvidenceReport> { return {} as AuditEvidenceReport; }
-  private async generateDeficiencyReport(period: ReportingPeriod): Promise<DeficiencyReport> { return {} as DeficiencyReport; }
-  private async generateRemediationReport(period: ReportingPeriod): Promise<RemediationReport> { return {} as RemediationReport; }
+  private async getMaterialWeaknesses(_____period: ReportingPeriod): Promise<MaterialWeakness[]> { return []; }
+  private async getSignificantDeficiencies(_____period: ReportingPeriod): Promise<SignificantDeficiency[]> { return []; }
+  private async getCompensatingControls(_____period: ReportingPeriod): Promise<CompensatingControl[]> { return []; }
+  private async getDesignChanges(_____period: ReportingPeriod): Promise<ControlChange[]> { return []; }
+  private async getOperatingChanges(_____period: ReportingPeriod): Promise<ControlChange[]> { return []; }
+  private async getSubsequentEvents(_____period: ReportingPeriod): Promise<SubsequentEvent[]> { return []; }
+  private async getCOSOAssessment(_____period: ReportingPeriod): Promise<unknown> { return {}; }
+  private async getFinancialProcessControls(_____period: ReportingPeriod): Promise<unknown> { return {}; }
+  private async generateApplicationControlsReport(_____period: ReportingPeriod): Promise<ApplicationControlsReport> { return {} as ApplicationControlsReport; }
+  private async generateEntityLevelControlsReport(_____period: ReportingPeriod): Promise<EntityLevelControlsReport> { return {} as EntityLevelControlsReport; }
+  private async generateDisclosureControlsReport(_____period: ReportingPeriod): Promise<DisclosureControlsReport> { return {} as DisclosureControlsReport; }
+  private async generateChangeManagementReport(_____period: ReportingPeriod): Promise<ChangeManagementReport> { return {} as ChangeManagementReport; }
+  private async generateAccessControlsReport(_____period: ReportingPeriod): Promise<AccessControlsReport> { return {} as AccessControlsReport; }
+  private async generateAuditEvidenceReport(_____period: ReportingPeriod): Promise<AuditEvidenceReport> { return {} as AuditEvidenceReport; }
+  private async generateDeficiencyReport(_____period: ReportingPeriod): Promise<DeficiencyReport> { return {} as DeficiencyReport; }
+  private async generateRemediationReport(_____period: ReportingPeriod): Promise<RemediationReport> { return {} as RemediationReport; }
 }
 
 // Supporting interfaces for SOX-specific reporting

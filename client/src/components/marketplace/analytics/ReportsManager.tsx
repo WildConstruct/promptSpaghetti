@@ -106,7 +106,7 @@ export const ReportsManager: React.FC<ReportsManagerProps> = ({
       (report.description && report.description.toLowerCase().includes(searchQuery.toLowerCase()))
     )
     .sort((a, b) => {
-      let aValue: any, bValue: any;
+      let aValue: Error, bValue: Error;
 
       switch (sortBy) {
       case 'name':

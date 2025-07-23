@@ -467,7 +467,7 @@ export class ModelEvaluationTriggerService {
     return match ? match[1] : null;
   }
 
-  private groupBy(items: any[], key: string): Record<string, number> {
+  private groupBy(items: unknown[], key: string): Record<string, number> {
     const result: Record<string, number> = {};
     items.forEach(item => {
       const value = String(item[key]);

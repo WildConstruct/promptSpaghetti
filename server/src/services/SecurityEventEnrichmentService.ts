@@ -440,7 +440,7 @@ export class SecurityEventEnrichmentService {
   /**
    * Enrich with time-based context
    */
-  private enrichWithTimeContext(timestamp: Date): any {
+  private enrichWithTimeContext(timestamp: Date): unknown {
     const hour = timestamp.getHours();
     const day = timestamp.getDay();
     const date = timestamp.getDate();
@@ -466,7 +466,7 @@ export class SecurityEventEnrichmentService {
   /**
    * Classify the security event
    */
-  private classifyEvent(event: SecurityEvent): any {
+  private classifyEvent(event: SecurityEvent): unknown {
     const classifications = [];
     
     // Authentication-related events
@@ -500,7 +500,7 @@ export class SecurityEventEnrichmentService {
   /**
    * Analyze potential attack patterns
    */
-  private async analyzeAttackPatterns(event: SecurityEvent): Promise<any> {
+  private async analyzeAttackPatterns(event: SecurityEvent): Promise<unknown> {
     const patterns = [];
     
     // Check for common attack patterns
@@ -530,7 +530,7 @@ export class SecurityEventEnrichmentService {
   /**
    * Calculate overall threat level based on all enrichment data
    */
-  private calculateOverallThreatLevel(enrichmentData: any): string {
+  private calculateOverallThreatLevel(enrichmentData: unknown): string {
     let score = 0;
     let factors = 0;
     
@@ -570,13 +570,13 @@ export class SecurityEventEnrichmentService {
   /**
    * Helper methods (would be implemented with real data sources)
    */
-  private assessLocationThreatLevel(location: any): 'low' | 'medium' | 'high' | 'critical' {
+  private assessLocationThreatLevel(location: unknown): 'low' | 'medium' | 'high' | 'critical' {
     if (location.isTor || location.isVPN) return 'high';
     if (location.isProxy) return 'medium';
     return 'low';
   }
 
-  private parseUserAgent(userAgent: string): any {
+  private parseUserAgent(_____userAgent: string): unknown {
     // Mock implementation - would use a proper user agent parser
     return {
       browser: 'Unknown',
@@ -590,22 +590,22 @@ export class SecurityEventEnrichmentService {
     };
   }
 
-  private async isKnownDevice(fingerprintId: string, userId?: string): Promise<boolean> {
+  private async isKnownDevice(_____fingerprintId: string, userId?: string): Promise<boolean> {
     // Mock implementation - would check device history
     return false;
   }
 
-  private async calculateDeviceTrustLevel(fingerprintId: string, userId?: string): Promise<number> {
+  private async calculateDeviceTrustLevel(_____fingerprintId: string, userId?: string): Promise<number> {
     // Mock implementation - would calculate based on device history
     return 50;
   }
 
-  private async getDeviceFirstSeen(fingerprintId: string): Promise<Date> {
+  private async getDeviceFirstSeen(_____fingerprintId: string): Promise<Date> {
     // Mock implementation
     return new Date();
   }
 
-  private async analyzeUserBehavior(userId: string): Promise<any> {
+  private async analyzeUserBehavior(_____userId: string): Promise<unknown> {
     // Mock implementation - would analyze historical behavior
     return {
       avgSessionDuration: 30,
@@ -619,12 +619,12 @@ export class SecurityEventEnrichmentService {
     };
   }
 
-  private calculateBehaviorAnomalyScore(analysis: any, eventTime: Date): number {
+  private calculateBehaviorAnomalyScore(_____analysis: Event, _____eventTime: Date): number {
     // Mock implementation - would calculate behavioral anomaly score
     return 50;
   }
 
-  private generateBehaviorFlags(analysis: any, eventTime: Date): string[] {
+  private generateBehaviorFlags(analysis: Event, eventTime: Date): string[] {
     const flags = [];
     const hour = eventTime.getHours();
     const day = eventTime.getDay();
@@ -640,7 +640,7 @@ export class SecurityEventEnrichmentService {
     return flags;
   }
 
-  private async getIPReputation(ipAddress: string): Promise<any> {
+  private async getIPReputation(_____ipAddress: string): Promise<unknown> {
     // Mock implementation - would query threat intelligence feeds
     return {
       score: 75,
@@ -650,7 +650,7 @@ export class SecurityEventEnrichmentService {
     };
   }
 
-  private async checkKnownAttackPatterns(ipAddress: string): Promise<any> {
+  private async checkKnownAttackPatterns(_____ipAddress: string): Promise<unknown> {
     // Mock implementation - would check against known attack patterns
     return {
       matches: [],
@@ -659,7 +659,7 @@ export class SecurityEventEnrichmentService {
     };
   }
 
-  private async checkCompromisedCredentials(ipAddress: string): Promise<any> {
+  private async checkCompromisedCredentials(_____ipAddress: string): Promise<unknown> {
     // Mock implementation - would check breach databases
     return {
       isCompromised: false,
@@ -667,7 +667,7 @@ export class SecurityEventEnrichmentService {
     };
   }
 
-  private async getSessionData(sessionId: string): Promise<any> {
+  private async getSessionData(_____sessionId: string): Promise<unknown> {
     // Mock implementation - would get session analytics
     return {
       startTime: Date.now() - 1800000, // 30 minutes ago
@@ -681,7 +681,7 @@ export class SecurityEventEnrichmentService {
     };
   }
 
-  private calculateClassificationConfidence(event: SecurityEvent): number {
+  private calculateClassificationConfidence(_____event: SecurityEvent): number {
     // Mock implementation - would calculate classification confidence
     return 0.8;
   }
@@ -696,7 +696,7 @@ export class SecurityEventEnrichmentService {
     return tags;
   }
 
-  private async isFromSuspiciousLocation(ipAddress: string): Promise<boolean> {
+  private async isFromSuspiciousLocation(_____ipAddress: string): Promise<boolean> {
     // Mock implementation - would check against suspicious location database
     return false;
   }

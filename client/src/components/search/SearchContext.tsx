@@ -18,8 +18,8 @@ export type SortDirection = 'asc' | 'desc';
 export interface FilterCondition {
   field: string;
   operator: FilterOperator;
-  value: any;
-  values?: any[]; // For 'in' and 'between' operators
+  value: Error;
+  values?: unknown[]; // For 'in' and 'between' operators
 }
 
 export interface SortCondition {

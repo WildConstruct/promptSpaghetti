@@ -47,7 +47,7 @@ interface PermissionEditorProps {
   userId?: string;
   roleId?: string;
   mode: 'user' | 'role' | 'resource';
-  onSave?: (changes: any) => void;
+  onSave?: (changes: unknown) => void;
   onCancel?: () => void;
   className?: string;
 }
@@ -235,7 +235,7 @@ export const PermissionEditor: React.FC<PermissionEditorProps> = ({
   onCancel,
   className = ''
 }) => {
-  const { user: currentUser } = useAuthStore();
+  const { user: ___currentUser } = useAuthStore();
   const [state, setState] = useState<PermissionEditorState>({
     availablePermissions: mockPermissions,
     availableRoles: mockRoles,

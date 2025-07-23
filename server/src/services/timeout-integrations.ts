@@ -9,8 +9,8 @@ import { Database } from 'better-sqlite3';
 import { RedisService } from '../auth/database/RedisService';
 import { getTimeoutManager, OperationResult } from './TimeoutManager';
 import nodemailer from 'nodemailer';
-import fetch, { Response } from 'node-fetch';
-import { createWriteStream, createReadStream } from 'fs';
+import fetch from 'node-fetch';
+import { createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 
 /**
@@ -26,7 +26,7 @@ export class DatabaseTimeoutIntegration {
    */
   async query<T = any>(
     sql: string,
-    params?: any[],
+    params?: unknown[],
     operationId?: string
   ): Promise<OperationResult<T[]>> {
     return this.timeoutManager.executeWithTimeout(
@@ -45,7 +45,7 @@ export class DatabaseTimeoutIntegration {
    */
   async queryWithFallback<T = any>(
     sql: string,
-    params?: any[],
+    params?: unknown[],
     readOnlyDb?: Database
   ): Promise<OperationResult<T[]>> {
     if (!readOnlyDb) {
@@ -128,9 +128,9 @@ export class RedisTimeoutIntegration {
    * Redis pipeline with timeout
    */
   async pipeline(
-    operations: (redis: RedisService) => Promise<any>,
+    operations: (redis: RedisService) => Promise<unknown>,
     operationId?: string
-  ): Promise<OperationResult<any>> {
+  ): Promise<OperationResult<unknown>> {
     return this.timeoutManager.executeWithTimeout(
       () => operations(this.redis),
       'redis',
@@ -213,9 +213,9 @@ export class AuthTimeoutIntegration {
    * Login operation with timeout
    */
   async login(
-    loginOperation: () => Promise<any>,
+    loginOperation: () => Promise<unknown>,
     operationId?: string
-  ): Promise<OperationResult<any>> {
+  ): Promise<OperationResult<unknown>> {
     return this.timeoutManager.executeWithTimeout(
       loginOperation,
       'auth',
@@ -228,9 +228,9 @@ export class AuthTimeoutIntegration {
    * Registration with timeout
    */
   async register(
-    registerOperation: () => Promise<any>,
+    registerOperation: () => Promise<unknown>,
     operationId?: string
-  ): Promise<OperationResult<any>> {
+  ): Promise<OperationResult<unknown>> {
     return this.timeoutManager.executeWithTimeout(
       registerOperation,
       'auth',
@@ -243,9 +243,9 @@ export class AuthTimeoutIntegration {
    * Password reset with timeout
    */
   async passwordReset(
-    resetOperation: () => Promise<any>,
+    resetOperation: () => Promise<unknown>,
     operationId?: string
-  ): Promise<OperationResult<any>> {
+  ): Promise<OperationResult<unknown>> {
     return this.timeoutManager.executeWithTimeout(
       resetOperation,
       'auth',
@@ -258,9 +258,9 @@ export class AuthTimeoutIntegration {
    * Token refresh with timeout
    */
   async refreshToken(
-    refreshOperation: () => Promise<any>,
+    refreshOperation: () => Promise<unknown>,
     operationId?: string
-  ): Promise<OperationResult<any>> {
+  ): Promise<OperationResult<unknown>> {
     return this.timeoutManager.executeWithTimeout(
       refreshOperation,
       'auth',
@@ -311,9 +311,9 @@ export class FileTimeoutIntegration {
    * File upload with timeout and progress tracking
    */
   async upload(
-    uploadOperation: () => Promise<any>,
+    uploadOperation: () => Promise<unknown>,
     operationId?: string
-  ): Promise<OperationResult<any>> {
+  ): Promise<OperationResult<unknown>> {
     return this.timeoutManager.executeWithTimeout(
       uploadOperation,
       'file',
@@ -354,9 +354,9 @@ export class FileTimeoutIntegration {
    * File processing with timeout
    */
   async process(
-    processingOperation: () => Promise<any>,
+    processingOperation: () => Promise<unknown>,
     operationId?: string
-  ): Promise<OperationResult<any>> {
+  ): Promise<OperationResult<unknown>> {
     return this.timeoutManager.executeWithTimeout(
       processingOperation,
       'file',
@@ -472,9 +472,9 @@ export class APITimeoutIntegration {
    */
   async webhook(
     url: string,
-    payload: any,
+    payload: unknown,
     operationId?: string
-  ): Promise<OperationResult<any>> {
+  ): Promise<OperationResult<unknown>> {
     return this.apiCall(
       url,
       {
@@ -493,8 +493,8 @@ export class APITimeoutIntegration {
   async notificationWithFallback(
     primaryUrl: string,
     fallbackUrl: string,
-    payload: any
-  ): Promise<OperationResult<any>> {
+    payload: unknown
+  ): Promise<OperationResult<unknown>> {
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -582,7 +582,7 @@ export class HealthCheckTimeoutIntegration {
     database: OperationResult<boolean>;
     redis: OperationResult<boolean>;
     externalServices: { [url: string]: OperationResult<boolean> };
-    timeoutManagerHealth: any;
+    timeoutManagerHealth: unknown;
   }> {
     const [dbResult, redisResult] = await Promise.all([
       this.checkDatabase(db),

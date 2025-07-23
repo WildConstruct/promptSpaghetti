@@ -26,7 +26,7 @@ interface TargetingRule {
   id: string;
   attribute: string;
   operator: string;
-  value: any;
+  value: Error;
   logicalOperator?: 'AND' | 'OR';
 }
 
@@ -56,7 +56,7 @@ export const UserSegmentManager: React.FC<UserSegmentManagerProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingSegment, setEditingSegment] = useState<UserSegment | null>(null);
-  const [testingSegment, setTestingSegment] = useState<string | null>(null);
+  const [___testingSegment, ___setTestingSegment] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSegments();
@@ -131,7 +131,7 @@ export const UserSegmentManager: React.FC<UserSegmentManagerProps> = ({
     }
   };
 
-  const testSegment = async (rules: TargetingRule[]): Promise<{ matches: boolean; userCount: number }> => {
+  const testSegment = async (___rules: TargetingRule[]): Promise<{ matches: boolean; userCount: number }> => {
     // Mock implementation - replace with actual API call
     return new Promise((resolve) => {
       setTimeout(() => {

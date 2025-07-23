@@ -19,8 +19,8 @@ interface Epic16LearningPathsProps {
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
   userTier: 'free' | 'premium' | 'enterprise';
-  onAnalytics?: (analytics: any) => void;
-  onCertification?: (certification: any) => void;
+  onAnalytics?: (analytics: unknown) => void;
+  onCertification?: (certification: unknown) => void;
 }
 
 export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({

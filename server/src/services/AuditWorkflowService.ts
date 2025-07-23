@@ -672,7 +672,7 @@ export class AuditWorkflowService {
       SELECT * FROM audit_workflows 
       WHERE status = $1
     `;
-    const params: any[] = [WorkflowStatus.ACTIVE];
+    const params: unknown[] = [WorkflowStatus.ACTIVE];
 
     if (filters?.workflowType) {
       query += ` AND workflow_type = $${params.length + 1}`;
@@ -846,7 +846,7 @@ export class AuditWorkflowService {
     return this.mapToAuditWorkflow(result.rows[0]);
   }
 
-  private mapToAuditWorkflow(row: any): AuditWorkflow {
+  private mapToAuditWorkflow(row: unknown): AuditWorkflow {
     return {
       id: row.workflow_id,
       name: row.name,
@@ -866,7 +866,7 @@ export class AuditWorkflowService {
     };
   }
 
-  private mapToWorkflowExecution(row: any): WorkflowExecution {
+  private mapToWorkflowExecution(row: unknown): WorkflowExecution {
     return {
       executionId: row.execution_id,
       workflowId: row.workflow_id,

@@ -13,10 +13,10 @@ export const ApprovalWorkflowManager = ({ workspaceId, currentUserId, userRole }
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [showReviewInterface, setShowReviewInterface] = useState(false);
     const [showCriteriaModal, setShowCriteriaModal] = useState(false);
-    const [showRuleModal, setShowRuleModal] = useState(false);
+    const [_____showRuleModal, setShowRuleModal] = useState(false);
     const [editingCriteria, setEditingCriteria] = useState(null);
-    const [editingRule, setEditingRule] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [_____editingRule, setEditingRule] = useState(null);
+    const [_____loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     // Determine dashboard mode based on user role
     const dashboardMode = userRole === 'admin' ? 'admin' : 'reviewer';
@@ -94,7 +94,7 @@ export const ApprovalWorkflowManager = ({ workspaceId, currentUserId, userRole }
             setError('Failed to delete criteria');
         }
     };
-    const handleCreateRule = async (data) => {
+    const _____handleCreateRule = async (data) => {
         try {
             const response = await fetch('/api/approval/rules', {
                 method: 'POST',

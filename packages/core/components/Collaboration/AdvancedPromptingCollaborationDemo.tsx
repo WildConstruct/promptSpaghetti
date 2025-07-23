@@ -5,7 +5,7 @@
  * collaboration features into the Wild Construct film industry demo.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AdvancedPromptingCollaborationPanel } from './AdvancedPromptingCollaborationPanel';
 import { useAdvancedPromptingCollaboration } from '../../hooks/useAdvancedPromptingCollaboration';
 import { 
@@ -22,7 +22,7 @@ interface AdvancedPromptingCollaborationDemoProps {
 export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingCollaborationDemoProps> = ({ className }) => {
   const [showPanel, setShowPanel] = useState(false);
   const [demoStep, setDemoStep] = useState(0);
-  const [exportData, setExportData] = useState<any>(null);
+  const [exportData, setExportData] = useState<unknown>(null);
 
   const collaboration = useAdvancedPromptingCollaboration();
 
@@ -116,7 +116,7 @@ export const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingColla
     setDemoStep(prev => Math.max(prev, 3));
   };
 
-  const handleVFXExport = (data: any) => {
+  const handleVFXExport = (data: Record<string, unknown>) => {
     setExportData(data);
     setDemoStep(prev => Math.max(prev, 4));
     console.log('VFX export generated in demo:', data);

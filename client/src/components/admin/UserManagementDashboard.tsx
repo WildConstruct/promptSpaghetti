@@ -62,7 +62,7 @@ interface UserManagementState {
 
 const UserManagementDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { user: currentUser } = useAuthStore();
+  const { user: ___currentUser } = useAuthStore();
   
   // State management
   const [state, setState] = useState<UserManagementState>({

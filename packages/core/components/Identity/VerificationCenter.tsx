@@ -55,7 +55,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
   } = useIdentityValidation({ userId, autoLoadUserData: true });
 
   const [activeStep, setActiveStep] = useState<string | null>(null);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<unknown>({});
 
   const completionPercentage = getVerificationCompletionPercentage();
   const recommendedSteps = getRecommendedVerificationSteps();
@@ -94,7 +94,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({
     return <Icon className="w-5 h-5 text-gray-400" />;
   };
 
-  const handleVerificationSubmit = async (type: string, data: any) => {
+  const handleVerificationSubmit = async (type: string, data: Record<string, unknown>) => {
     let result;
 
     switch (type) {

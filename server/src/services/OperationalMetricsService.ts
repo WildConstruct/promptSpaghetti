@@ -7,7 +7,7 @@ import { logger } from '../utils/logger';
 import { ErrorCategory, ErrorSeverity, BaseError } from '../types/errors';
 import { healthMonitoringService, HealthStatus } from './HealthMonitoringService';
 import { circuitBreakerService } from './CircuitBreakerService';
-import { retryService } from './RetryService';
+// import { retryService } from './RetryService'; // Unused import removed
 
 export interface SystemMetrics {
   timestamp: number;
@@ -477,5 +477,4 @@ class OperationalMetricsService extends EventEmitter {
 }
 
 // Export singleton instance
-export 
 export default OperationalMetricsService;

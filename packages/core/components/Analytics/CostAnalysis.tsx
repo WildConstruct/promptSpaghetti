@@ -2,23 +2,22 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Input } from '../ui/Input';
 import { Label } from '../ui/Label';
 import { Progress } from '../ui/Progress';
 import { Alert, AlertDescription } from '../ui/Alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { AnalyticsClient } from '../../analytics/AnalyticsClient';
-import { DollarSign, TrendingUp, TrendingDown, AlertCircle, Target, Zap, PieChart, BarChart3 } from 'lucide-react';
-import { PieChart as RechartsPieChart, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, Legend } from 'recharts';
+import { DollarSign, TrendingUp, AlertCircle, PieChart, BarChart3 } from 'lucide-react';
+import { PieChart as RechartsPieChart, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 /**
  * Budget card props
  */
 interface BudgetCardProps {
-  budget: any;
-  usage: any;
-  onUpdate: (budgetId: string, updates: any) => void;
+  budget: unknown;
+  usage: Error;
+  onUpdate: (budgetId: string, updates: unknown) => void;
 }
 
 /**
@@ -150,7 +149,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({ budget, usage, onUpdate }) => {
  * Cost forecast chart props
  */
 interface CostForecastChartProps {
-  forecastData: any;
+  forecastData: unknown;
   loading: boolean;
 }
 
@@ -280,11 +279,11 @@ export interface CostAnalysisProps {
  */
 interface CostAnalysisState {
   loading: boolean;
-  costSummary: any;
-  forecast: any;
-  budgets: any[];
+  costSummary: unknown;
+  forecast: unknown;
+  budgets: unknown[];
   budgetUsage: Map<string, any>;
-  recommendations: any[];
+  recommendations: unknown[];
   error: string | null;
 }
 
@@ -362,7 +361,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
   /**
    * Create new budget
    */
-  const handleCreateBudget = useCallback(async (budgetData: any) => {
+  const handleCreateBudget = useCallback(async (budgetData: unknown) => {
     try {
       const response = await analyticsClient.createBudget(budgetData);
       if (response.success) {
@@ -376,7 +375,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
   /**
    * Update budget
    */
-  const handleUpdateBudget = useCallback(async (budgetId: string, updates: any) => {
+  const handleUpdateBudget = useCallback(async (budgetId: string, updates: unknown) => {
     try {
       const response = await analyticsClient.updateBudget(budgetId, updates);
       if (response.success) {
@@ -545,7 +544,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {(costSummary.topModels || []).slice(0, 5).map((model: any, index: number) => (
+                  {(costSummary.topModels || []).slice(0, 5).map((model: HTMLElement, index: number) => (
                     <div key={model.model} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline">{index + 1}</Badge>
@@ -588,7 +587,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {state.budgets.map((budget: any) => (
+            {state.budgets.map((budget: unknown) => (
               <BudgetCard
                 key={budget.id}
                 budget={budget}
@@ -614,7 +613,7 @@ export const CostAnalysis: React.FC<CostAnalysisProps> = ({
 
         <TabsContent value="recommendations" className="space-y-6">
           <div className="space-y-4">
-            {state.recommendations.map((rec: any, index: number) => (
+            {state.recommendations.map((rec: unknown, index: number) => (
               <Card key={index}>
                 <CardHeader>
                   <div className="flex items-center justify-between">

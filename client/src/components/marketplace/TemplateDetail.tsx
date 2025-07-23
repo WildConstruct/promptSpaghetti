@@ -20,7 +20,7 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
   templateId,
   className = ''
 }) => {
-  const [template, setTemplate] = useState<any>(null);
+  const [template, setTemplate] = useState<unknown>(null);
   const [similarTemplates, setSimilarTemplates] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +29,7 @@ export const TemplateDetail: React.FC<TemplateDetailProps> = ({
   const [showPurchase, setShowPurchase] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'reviews' | 'versions'>('overview');
 
-  const { getTemplate, previewTemplate, purchaseTemplate } = useMarketplace();
+  const { getTemplate, ___previewTemplate, ___purchaseTemplate } = useMarketplace();
 
   useEffect(() => {
     loadTemplateData();

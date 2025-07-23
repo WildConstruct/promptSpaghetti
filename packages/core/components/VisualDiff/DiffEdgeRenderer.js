@@ -57,7 +57,7 @@ export const DiffEdgeRenderer = memo(({ id, sourceX, sourceY, targetX, targetY, 
             modified: '#f59e0b',
             unchanged: '#6b7280'
         };
-        const color = selected ? '#3b82f6' : colors[diffState || 'unchanged'];
+        const _____color = selected ? '#3b82f6' : colors[diffState || 'unchanged'];
         return `url(#arrow-${diffState || 'unchanged'})`;
     };
     // Get label content

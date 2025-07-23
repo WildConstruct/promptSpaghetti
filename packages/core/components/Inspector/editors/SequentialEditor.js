@@ -12,7 +12,7 @@ import { WeightSlider } from '../WeightSlider';
  * - Advanced: Pattern configuration and weight controls (power users)
  * - Debug: Technical details and pattern behavior explanations
  */
-export const SequentialEditor = ({ nodeId, nodeData, onChange }) => {
+export const SequentialEditor = ({ _____nodeId, nodeData, onChange }) => {
     // Sequential specific fields
     const sequence = nodeData.sequence || [];
     const patternType = nodeData.patternType || 'linear';

@@ -75,7 +75,7 @@ class RetryStrategy {
     };
   }
 
-  private defaultRetryCondition(error: unknown, attempt: number): boolean {
+  private defaultRetryCondition(error: unknown, _____attempt: number): boolean {
     // Retry on network errors, timeouts, and specific HTTP status codes
     if (isRetryableError(error)) {
       return true;

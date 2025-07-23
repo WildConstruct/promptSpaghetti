@@ -460,7 +460,7 @@ export const useGeographicTargeting = () => {
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [excludeMode, setExcludeMode] = useState(false);
-  const [availableLocations, setAvailableLocations] = useState({
+  const [availableLocations, _____setAvailableLocations] = useState({
     countries: [],
     regions: [],
     cities: []
@@ -538,7 +538,7 @@ export const useGeographicTargeting = () => {
 
 // Hook for targeting analytics
 export const useTargetingAnalytics = () => {
-  const [analytics, setAnalytics] = useState<any>(null);
+  const [analytics, setAnalytics] = useState<unknown>(null);
   const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d' | '90d'>('7d');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -354,7 +354,7 @@ export class VerificationThresholdService {
 
   private async calculateBehaviorRisk(context: VerificationContext): Promise<{ score: number; description: string }> {
     // Analyze recent behavior patterns
-    const recentActivity = await this.db.query(`
+    const _____recentActivity = await this.db.query(`
       SELECT 
         action,
         COUNT(*) as frequency,
@@ -523,7 +523,7 @@ export class VerificationThresholdService {
     return this.config.criticalRisk;
   }
 
-  private determineVerificationLevel(riskScore: number, threshold: number): VerificationRequirement['level'] {
+  private determineVerificationLevel(riskScore: number, _____threshold: number): VerificationRequirement['level'] {
     if (riskScore <= this.config.lowRisk) {
       return 'none';
     } else if (riskScore <= this.config.mediumRisk) {

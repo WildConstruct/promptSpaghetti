@@ -179,7 +179,7 @@ export const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({
     }));
   };
 
-  const updateAssignment = (index: number, field: string, value: any) => {
+  const updateAssignment = (index: number, field: string, value: Error) => {
     setFormData(prev => ({
       ...prev,
       assignments: prev.assignments.map((assignment, i) =>

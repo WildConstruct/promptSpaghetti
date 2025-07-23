@@ -68,7 +68,7 @@ export class WorkflowDAO {
       SELECT * FROM workflow_states
       WHERE 1=1
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (filter.workspace_id) {
@@ -319,7 +319,7 @@ export class WorkflowDAO {
       JOIN resources r ON wa.resource_id = r.id
       WHERE 1=1
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (filter.workspace_id) {
@@ -477,7 +477,7 @@ export class WorkflowDAO {
       JOIN resources r ON wl.resource_id = r.id
       WHERE 1=1
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (filter.workspace_id) {
@@ -549,7 +549,7 @@ export class WorkflowDAO {
   // WORKFLOW HISTORY OPERATIONS
   // =============================================================================
 
-  private async logWorkflowHistory(client: any, data: Partial<WorkflowHistoryEntry>): Promise<any> {
+  private async logWorkflowHistory(client: unknown, data: Partial<WorkflowHistoryEntry>): Promise<unknown> {
     return client.query(`
       INSERT INTO workflow_history (
         workspace_id, resource_id, action_type, previous_state_id, new_state_id,
@@ -580,7 +580,7 @@ export class WorkflowDAO {
       LEFT JOIN workflow_states ns ON wh.new_state_id = ns.id
       WHERE 1=1
     `;
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (filter.workspace_id) {

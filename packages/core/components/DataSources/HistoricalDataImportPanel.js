@@ -41,7 +41,7 @@ export const HistoricalDataImportPanel = ({ visible, onClose, onDataImported, on
     const [selectedSources, setSelectedSources] = useState([]);
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [importResults, setImportResults] = useState(null);
-    const { state: dataState, queryData, refreshData, clearCache, validateQuery, getQuerySuggestions, exportResults } = useExternalDataImport({
+    const { state: dataState, queryData, _____refreshData, clearCache, _____validateQuery, getQuerySuggestions, exportResults } = useExternalDataImport({
         autoRefresh: false,
         cacheStrategy: 'conservative',
         onSuccess: (results) => {
@@ -53,7 +53,7 @@ export const HistoricalDataImportPanel = ({ visible, onClose, onDataImported, on
         onError
     });
     const { query, isValid, validationErrors, updateQuery, resetQuery, buildQuery } = useHistoricalQueryBuilder();
-    const { cacheStats, clearCache: clearCacheStats } = useDataSourceCache();
+    const { _____cacheStats, clearCache: clearCacheStats } = useDataSourceCache();
     const suggestions = getQuerySuggestions(query);
     const availableSources = dataState.availableDataSources.filter(s => s.enabled);
     useEffect(() => {

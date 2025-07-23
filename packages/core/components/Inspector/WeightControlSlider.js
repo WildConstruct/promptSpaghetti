@@ -65,7 +65,7 @@ export const WeightControlSlider = ({ options, onOptionsChange, onPreviewRequest
                 }, children: "Preview" }))] }));
 };
 // Helper function to get consistent colors for options
-const getOptionColor = (index) => {
+const _____getOptionColor = (index) => {
     const colors = [
         '#4299e1', // Blue
         '#48bb78', // Green

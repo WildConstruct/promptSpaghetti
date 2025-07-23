@@ -186,7 +186,7 @@ export const DependencyVisualizationDashboard: React.FC<DashboardProps> = ({
   };
 
   // Render dependency type badge
-  const renderDependencyTypeBadge = (type: DependencyType) => {
+  const _____renderDependencyTypeBadge = (type: DependencyType) => {
     const colors = {
       [DependencyType.REQUIRES]: 'bg-blue-100 text-blue-800',
       [DependencyType.BLOCKS]: 'bg-red-100 text-red-800',
@@ -576,7 +576,7 @@ const AnalysisView: React.FC<AnalysisViewProps> = ({ analysis }) => {
 };
 
 // Placeholder components
-const TreeVisualization: React.FC<any> = () => (
+const TreeVisualization: React.FC<unknown> = () => (
   <div className="flex-1 flex items-center justify-center bg-gray-50">
     <div className="text-center text-gray-500">
       <p>Tree visualization would render here</p>
@@ -585,7 +585,7 @@ const TreeVisualization: React.FC<any> = () => (
   </div>
 );
 
-const MatrixView: React.FC<any> = () => (
+const MatrixView: React.FC<unknown> = () => (
   <div className="flex-1 flex items-center justify-center bg-gray-50">
     <div className="text-center text-gray-500">
       <p>Dependency matrix would render here</p>
@@ -594,7 +594,7 @@ const MatrixView: React.FC<any> = () => (
   </div>
 );
 
-const ToggleDetailsPanel: React.FC<any> = ({ toggleId, onClose }) => (
+const ToggleDetailsPanel: React.FC<unknown> = ({ toggleId, onClose }) => (
   <div className="p-4">
     <div className="flex items-center justify-between mb-4">
       <h3 className="text-lg font-medium text-gray-900">Toggle Details</h3>

@@ -10,7 +10,7 @@ import { InteractiveElementType, Epic16InteractiveElementsService } from '../../
 import { LiveChatWidget } from './LiveChatWidget';
 import { GamifiedProgressBar } from './GamifiedProgressBar';
 import { QuickPreviewWidget } from './QuickPreviewWidget';
-export const Epic16InteractiveElements = ({ userId, userName, userAvatar, userRole, userTier, pageContext, onElementInteraction, onAnalyticsUpdate }) => {
+export const Epic16InteractiveElements = ({ userId, userName, userAvatar, userRole, userTier, pageContext, onElementInteraction, _____onAnalyticsUpdate }) => {
     // Service initialization
     const interactiveService = useMemo(() => new Epic16InteractiveElementsService(), []);
     // State management

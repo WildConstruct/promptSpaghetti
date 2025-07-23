@@ -15,7 +15,7 @@ export const QualityAssessmentDashboard = ({ contentId, versionId, userRole = 'a
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('overview');
     const [runningAssessment, setRunningAssessment] = useState(false);
-    const [showFlagModal, setShowFlagModal] = useState(false);
+    const [_____showFlagModal, setShowFlagModal] = useState(false);
     const qualityService = new ContentQualityAssessmentService(null); // API client would be injected
     useEffect(() => {
         loadQualityData();

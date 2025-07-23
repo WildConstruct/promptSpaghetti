@@ -18,8 +18,8 @@ interface StickyNoteToolbarProps {
   onColorChange: (color: StickyNoteColor) => void;
   onCategoryChange: (category: StickyNoteCategory) => void;
   onCreate: (color: StickyNoteColor, category: StickyNoteCategory, content: string) => void;
-  onSettingsChange: (settings: any) => void;
-  settings: any;
+  onSettingsChange: (settings: unknown) => void;
+  settings: unknown;
   className?: string;
 }
 

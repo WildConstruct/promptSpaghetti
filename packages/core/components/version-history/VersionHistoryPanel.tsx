@@ -8,7 +8,7 @@ import { VersionHistoryManager, VersionSnapshot, Branch, ChangeEvent, VersionAnn
 
 interface VersionHistoryPanelProps {
   versionManager: VersionHistoryManager;
-  currentGraphData: any;
+  currentGraphData: unknown;
   onRestoreVersion: (snapshotId: string) => void;
   onCompareVersions: (fromId: string, toId: string) => void;
   isOpen: boolean;
@@ -37,7 +37,7 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({
   const [selectedSnapshots, setSelectedSnapshots] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
   const [dateFilter, setDateFilter] = useState<'all' | 'week' | 'month' | 'quarter'>('all');
-  const [authorFilter, setAuthorFilter] = useState<string>('');
+  const [authorFilter, _____setAuthorFilter] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {

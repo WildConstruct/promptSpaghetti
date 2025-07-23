@@ -99,7 +99,7 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({
   // UI state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showBulkActions, setShowBulkActions] = useState(false);
+  const [_____showBulkActions, _____setShowBulkActions] = useState(false);
   const [expandedThreads, setExpandedThreads] = useState<Set<string>>(new Set());
 
   // Load comments based on filters
@@ -623,7 +623,7 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({
   };
 
   const toxicityColor = moderationData.toxicity > 0.2 ? '#dc2626' : 
-                       moderationData.toxicity > 0.1 ? '#d97706' : '#059669';
+    moderationData.toxicity > 0.1 ? '#d97706' : '#059669';
 
   return (
     <div
@@ -778,7 +778,7 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({
 };
 
 // Helper functions for mock data
-async function generateMockComments(filters: CommentModerationFilters): Promise<TrendingComment[]> {
+async function generateMockComments(_____filters: CommentModerationFilters): Promise<TrendingComment[]> {
   // Generate mock comments based on filters
   const count = Math.floor(Math.random() * 20) + 5;
   const comments: TrendingComment[] = [];
@@ -815,20 +815,20 @@ async function generateMockComments(filters: CommentModerationFilters): Promise<
 
 function generateMockCommentContent(): string {
   const contents = [
-    "This template is really helpful, thanks for sharing!",
-    "I found a bug in this implementation, can you fix it?",
-    "Great work! This solved my problem perfectly.",
-    "This is spam content that should be moderated",
-    "The documentation could be better explained",
-    "Excellent template, very well designed!",
-    "Not sure this is working correctly for me",
-    "This is inappropriate content that violates guidelines"
+    'This template is really helpful, thanks for sharing!',
+    'I found a bug in this implementation, can you fix it?',
+    'Great work! This solved my problem perfectly.',
+    'This is spam content that should be moderated',
+    'The documentation could be better explained',
+    'Excellent template, very well designed!',
+    'Not sure this is working correctly for me',
+    'This is inappropriate content that violates guidelines'
   ];
   
   return contents[Math.floor(Math.random() * contents.length)];
 }
 
-function generateMockScore(): any {
+function generateMockScore(): unknown {
   return {
     scores: {
       trendingScore: Math.random() * 100,

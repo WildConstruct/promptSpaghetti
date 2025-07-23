@@ -131,7 +131,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
   height = 400,
   className = ''
 }) => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { ___user, isAuthenticated } = useAuthStore();
   const analytics = useFileOperationTracking();
   const [state, setState] = useState<FileBrowserState>({
     ...initialState,
@@ -578,7 +578,7 @@ export const FileBrowser: React.FC<FileBrowserProps> = ({
     setState(prev => ({ ...prev, searchTerm }));
   }, [analytics, treeData]);
 
-  const handleAdvancedSearch = useCallback((options: any) => {
+  const handleAdvancedSearch = useCallback((options: unknown) => {
     setSearchOptions(options);
   }, []);
 

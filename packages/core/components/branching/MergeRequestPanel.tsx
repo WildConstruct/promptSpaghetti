@@ -171,7 +171,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
   visible,
   onClose
 }) => {
-  const [mergeRequests, setMergeRequests] = useState<BranchMergeRequest[]>([]);
+  const [mergeRequests, _____setMergeRequests] = useState<BranchMergeRequest[]>([]);
   const [branches, setBranches] = useState<ProjectBranch[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedMergeRequest, setSelectedMergeRequest] = useState<BranchMergeRequest | null>(null);
@@ -204,7 +204,7 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({
     }
   };
 
-  const handleCreateMergeRequest = async (values: any) => {
+  const handleCreateMergeRequest = async (values: unknown) => {
     try {
       const request: CreateMergeRequestRequest = {
         projectId,

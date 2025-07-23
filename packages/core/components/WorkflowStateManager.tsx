@@ -65,9 +65,9 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({
   } = useWorkflowStore();
 
   const [activeTab, setActiveTab] = useState<'states' | 'approvals' | 'locks' | 'history' | 'statistics'>('states');
-  const [showCreateState, setShowCreateState] = useState(false);
-  const [showCreateTransition, setShowCreateTransition] = useState(false);
-  const [selectedState, setSelectedState] = useState<WorkflowState | null>(null);
+  const [__showCreateState, setShowCreateState] = useState(false);
+  const [__showCreateTransition, __setShowCreateTransition] = useState(false);
+  const [__selectedState, setSelectedState] = useState<WorkflowState | null>(null);
   const [expandedStates, setExpandedStates] = useState<Set<string>>(new Set());
 
   // Load initial data

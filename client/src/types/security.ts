@@ -24,7 +24,7 @@ export interface SecurityEvent {
   resource: string;
   action: string;
   outcome: 'success' | 'failure' | 'blocked';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SecurityAlert {
@@ -37,7 +37,7 @@ export interface SecurityAlert {
   source: string;
   status: 'unread' | 'read' | 'acknowledged' | 'dismissed';
   actions?: AlertAction[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   escalation_level: number;
 }
 

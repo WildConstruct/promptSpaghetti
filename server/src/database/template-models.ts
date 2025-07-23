@@ -306,12 +306,12 @@ export interface CustomizationField {
   label: string;
   description?: string;
   required?: boolean;
-  default_value?: any;
+  default_value?: unknown;
   validation?: {
     min?: number;
     max?: number;
     pattern?: string;
-    options?: Array<{ value: any; label: string }>;
+    options?: Array<{ value: Error; label: string }>;
   };
   help_text?: string;
   group?: string;
@@ -483,7 +483,7 @@ export function applyTemplateCustomizations(
   // Apply customizations to the template data
   // This is a simplified version - in practice, you'd need more sophisticated
   // template variable replacement logic
-  function replaceInObject(obj: any, replacements: Record<string, any>): any {
+  function replaceInObject(obj: unknown, replacements: Record<string, any>): unknown {
     if (typeof obj === 'string') {
       let result = obj;
       for (const [key, value] of Object.entries(replacements)) {
@@ -494,7 +494,7 @@ export function applyTemplateCustomizations(
     } else if (Array.isArray(obj)) {
       return obj.map(item => replaceInObject(item, replacements));
     } else if (obj && typeof obj === 'object') {
-      const newObj: any = {};
+      const newObj: unknown = {};
       for (const [key, value] of Object.entries(obj)) {
         newObj[key] = replaceInObject(value, replacements);
       }

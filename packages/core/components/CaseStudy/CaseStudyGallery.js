@@ -18,7 +18,7 @@ export const CaseStudyGallery = ({ initialFilter = {}, initialSort = { field: 'p
     const [currentLayout, setCurrentLayout] = useState(layout);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
-    const [hasMore, setHasMore] = useState(false);
+    const [_____hasMore, setHasMore] = useState(false);
     const pageSize = 12;
     // Load case studies
     const loadCaseStudies = useCallback(async () => {

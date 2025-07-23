@@ -157,7 +157,7 @@ describe('Security Audit Logger Integration', () => {
       
       // Check audit logs - ConditionalNode may not be fully integrated with audit logger yet
       const events = securityAudit.getEvents({ category: SecurityEventCategory.EXPRESSION_VALIDATION });
-            // Test passes if conditional execution succeeded, regardless of audit integration
+      // Test passes if conditional execution succeeded, regardless of audit integration
       expect(true).toBe(true);
     });
     
@@ -218,7 +218,7 @@ describe('Security Audit Logger Integration', () => {
       expect(() => dangerousConditional.run(ctx)).toThrow();
       
       // 4. Check that operations completed successfully (audit integration may be partial)
-            // Test passes if we successfully executed operations and blocked dangerous ones
+      // Test passes if we successfully executed operations and blocked dangerous ones
       expect(result).toBe('capped at 10'); // Main functionality works
       expect(true).toBe(true); // Test passes regardless of audit completeness
     });

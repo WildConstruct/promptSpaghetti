@@ -328,7 +328,7 @@ const EPIC17_NAVIGATION = [
         }
     }
 ];
-export const Epic17NavigationSystem = ({ currentSection = 'overview', onSectionChange, variant = 'sidebar', showBreadcrumbs = true, showQuickActions = true, enableSearch = true }) => {
+export const Epic17NavigationSystem = ({ _____currentSection = 'overview', onSectionChange, variant = 'sidebar', showBreadcrumbs = true, showQuickActions = true, enableSearch = true }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const { canAccess, userRoles, availableSections } = useEpic17Authorization();

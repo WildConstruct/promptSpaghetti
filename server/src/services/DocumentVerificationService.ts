@@ -1,6 +1,6 @@
-import { Pool, PoolClient } from 'pg';
+import { Pool, // PoolClient // Unused import } from 'pg';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import crypto from 'crypto';
+import // crypto // Unused import from 'crypto';
 import sharp from 'sharp';
 import { PDFDocument } from 'pdf-lib';
 import * as fs from 'fs';
@@ -464,7 +464,7 @@ export class DocumentVerificationService {
     }
   }
 
-  private async simulateOCR(imageBuffer: Buffer): Promise<OCRResult> {
+  private async simulateOCR(__imageBuffer: Buffer): Promise<OCRResult> {
     // Simulate OCR processing - in production, use Tesseract.js or cloud OCR service
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing time
     
@@ -484,7 +484,7 @@ export class DocumentVerificationService {
   private async analyzeIdentityDocument(
     documentId: string,
     ocrResult: OCRResult,
-    filePath: string
+    __filePath: string
   ): Promise<DocumentAnalysis> {
     const analysis: DocumentAnalysis = {
       document_id: documentId,
@@ -541,7 +541,7 @@ export class DocumentVerificationService {
   private async analyzeBusinessDocument(
     documentId: string,
     ocrResult: OCRResult,
-    filePath: string
+    __filePath: string
   ): Promise<DocumentAnalysis> {
     const analysis: DocumentAnalysis = {
       document_id: documentId,
@@ -591,8 +591,8 @@ export class DocumentVerificationService {
 
   private async analyzeAddressDocument(
     documentId: string,
-    ocrResult: OCRResult,
-    filePath: string
+    __ocrResult: OCRResult,
+    __filePath: string
   ): Promise<DocumentAnalysis> {
     // Similar implementation for address document analysis
     return {
@@ -609,8 +609,8 @@ export class DocumentVerificationService {
 
   private async analyzeFinancialDocument(
     documentId: string,
-    ocrResult: OCRResult,
-    filePath: string
+    __ocrResult: OCRResult,
+    __filePath: string
   ): Promise<DocumentAnalysis> {
     // Similar implementation for financial document analysis
     return {

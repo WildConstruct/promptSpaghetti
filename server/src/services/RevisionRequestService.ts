@@ -115,7 +115,7 @@ export class RevisionRequestService {
   ): Promise<RevisionRequest> {
     // Build dynamic update query
     const updateFields: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     Object.entries(updates).forEach(([key, value]) => {
@@ -778,9 +778,9 @@ export class RevisionRequestService {
   // Helper Methods and Data Mapping
   // ============================================================================
 
-  private buildWhereClause(query: RevisionRequestSearchQuery): { whereClause: string; params: any[] } {
+  private buildWhereClause(query: RevisionRequestSearchQuery): { whereClause: string; params: unknown[] } {
     const conditions: string[] = ['1=1'];
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (query.status && query.status.length > 0) {
@@ -921,7 +921,7 @@ export class RevisionRequestService {
     };
   }
 
-  private buildAppliedFilters(query: RevisionRequestSearchQuery): any {
+  private buildAppliedFilters(query: RevisionRequestSearchQuery): unknown {
     const filters = [];
     
     if (query.status && query.status.length > 0) {
@@ -945,7 +945,7 @@ export class RevisionRequestService {
     return { count: filters.length, filters };
   }
 
-  private mapRowToRevisionRequest(row: any): RevisionRequest {
+  private mapRowToRevisionRequest(row: unknown): RevisionRequest {
     return {
       id: row.id,
       requesterId: row.requester_id,
@@ -985,7 +985,7 @@ export class RevisionRequestService {
     };
   }
 
-  private mapRowToRevisionEvidence(row: any): RevisionEvidence {
+  private mapRowToRevisionEvidence(row: unknown): RevisionEvidence {
     return {
       id: row.id,
       revisionRequestId: row.revision_request_id,
@@ -1003,7 +1003,7 @@ export class RevisionRequestService {
     };
   }
 
-  private mapRowToEvidenceAnnotation(row: any): EvidenceAnnotation {
+  private mapRowToEvidenceAnnotation(row: unknown): EvidenceAnnotation {
     return {
       id: row.id,
       evidenceId: row.evidence_id,
@@ -1023,7 +1023,7 @@ export class RevisionRequestService {
     };
   }
 
-  private mapRowToRevisionTimelineEvent(row: any): RevisionTimelineEvent {
+  private mapRowToRevisionTimelineEvent(row: Event): RevisionTimelineEvent {
     return {
       id: row.id,
       revisionRequestId: row.revision_request_id,
@@ -1038,7 +1038,7 @@ export class RevisionRequestService {
     };
   }
 
-  private mapRowToRevisionComment(row: any): RevisionComment {
+  private mapRowToRevisionComment(row: unknown): RevisionComment {
     return {
       id: row.id,
       revisionRequestId: row.revision_request_id,
@@ -1074,7 +1074,7 @@ export class RevisionRequestService {
     return csvRows.join('\n');
   }
 
-  private generateJSON(requests: RevisionRequest[], request: RevisionRequestExportRequest): string {
+  private generateJSON(requests: RevisionRequest[], _____request: RevisionRequestExportRequest): string {
     return JSON.stringify({
       exported_at: new Date().toISOString(),
       total_records: requests.length,
@@ -1082,12 +1082,12 @@ export class RevisionRequestService {
     }, null, 2);
   }
 
-  private generateExcel(requests: RevisionRequest[], fields?: string[]): string {
+  private generateExcel(_____requests: RevisionRequest[], fields?: string[]): string {
     throw new Error('Excel export not yet implemented');
   }
 
   // Placeholder methods for analytics
-  private async getAnalyticsOverview(startDate: Date, endDate: Date): Promise<any> {
+  private async getAnalyticsOverview(_____startDate: Date, _____endDate: Date): Promise<unknown> {
     return {
       totalRequests: 0,
       completedRequests: 0,
@@ -1104,7 +1104,7 @@ export class RevisionRequestService {
     };
   }
 
-  private async getAnalyticsPerformance(startDate: Date, endDate: Date): Promise<any> {
+  private async getAnalyticsPerformance(_____startDate: Date, _____endDate: Date): Promise<unknown> {
     return {
       reviewerPerformance: {},
       contentTypePerformance: {},
@@ -1117,7 +1117,7 @@ export class RevisionRequestService {
     };
   }
 
-  private async getAnalyticsTrends(startDate: Date, endDate: Date): Promise<any> {
+  private async getAnalyticsTrends(_____startDate: Date, _____endDate: Date): Promise<unknown> {
     return {
       requestVolume: [],
       completionTrends: [],
@@ -1125,11 +1125,11 @@ export class RevisionRequestService {
     };
   }
 
-  private async generateInsights(startDate: Date, endDate: Date): Promise<any[]> {
+  private async generateInsights(_____startDate: Date, _____endDate: Date): Promise<any[]> {
     return [];
   }
 
-  private async generateRecommendations(startDate: Date, endDate: Date): Promise<any[]> {
+  private async generateRecommendations(_____startDate: Date, _____endDate: Date): Promise<any[]> {
     return [];
   }
 }

@@ -134,7 +134,7 @@ export class ExportService {
   } = {}): Promise<ExportTemplate[]> {
     try {
       let query = 'SELECT * FROM export_templates WHERE project_id = $1';
-      const params: any[] = [projectId];
+      const params: unknown[] = [projectId];
       let paramIndex = 2;
 
       if (options.format) {
@@ -365,7 +365,7 @@ export class ExportService {
   } = {}): Promise<ExportJob[]> {
     try {
       let query = 'SELECT * FROM export_jobs WHERE project_id = $1';
-      const params: any[] = [projectId];
+      const params: unknown[] = [projectId];
       let paramIndex = 2;
 
       if (options.status) {
@@ -675,7 +675,7 @@ export class ExportService {
     return extensions[format] || 'txt';
   }
 
-  private formatExportData(data: any, format: ExportFormat): string {
+  private formatExportData(data: Record<string, unknown>, format: ExportFormat): string {
     switch (format) {
     case 'json':
       return JSON.stringify(data, null, 2);

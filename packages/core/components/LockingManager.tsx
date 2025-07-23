@@ -2,7 +2,7 @@
 // Main UI component for managing locks in the workspace
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Lock, Unlock, Clock, AlertTriangle, Users, X, Settings, Filter, Search } from 'lucide-react';
+import { Lock, Unlock, AlertTriangle, X, Filter, Search } from 'lucide-react';
 import { useLockingStore } from '../stores/lockingStore';
 import { LockIndicator } from './LockIndicator';
 import { LockRequestDialog } from './LockRequestDialog';

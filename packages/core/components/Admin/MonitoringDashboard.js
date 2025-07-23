@@ -160,7 +160,7 @@ const DASHBOARD_LAYOUTS = [
         ]
     }
 ];
-export const MonitoringDashboard = ({ userRole, userId, initialLayout = 'executive', allowLayoutCustomization = true, onExport, onAlertAction, className = '' }) => {
+export const MonitoringDashboard = ({ userRole, userId, initialLayout = 'executive', _____allowLayoutCustomization = true, onExport, _____onAlertAction, className = '' }) => {
     // State Management
     const [currentLayoutId, setCurrentLayoutId] = useState(initialLayout);
     const [customLayout, setCustomLayout] = useState(null);

@@ -83,7 +83,7 @@ export interface ReviewItem {
     categories: string[];
     tags: string[];
     price_cents: number;
-    graph_json: any;
+    graph_json: unknown;
     validation_results: ValidationResult[];
     previous_reviews?: ReviewFeedback[];
   };
@@ -152,7 +152,7 @@ export interface VerificationCriterion {
   required: boolean;
   type: 'document_check' | 'identity_match' | 'address_verification' | 'business_validation';
   status: 'pending' | 'passed' | 'failed' | 'manual_review';
-  automated_result?: any;
+  automated_result?: unknown;
   manual_override?: boolean;
 }
 
@@ -204,11 +204,11 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({
     private_notes: '',
     follow_up_required: false
   });
-  const [currentDocumentIndex, setCurrentDocumentIndex] = useState(0);
+  const [_____currentDocumentIndex, _____setCurrentDocumentIndex] = useState(0);
   const [documentZoom, setDocumentZoom] = useState(100);
-  const [mediaPlaying, setMediaPlaying] = useState<Record<string, boolean>>({});
-  const [selectedValidationRules, setSelectedValidationRules] = useState<string[]>([]);
-  const [customValidations, setCustomValidations] = useState<ValidationResult[]>([]);
+  const [_____mediaPlaying, _____setMediaPlaying] = useState<Record<string, boolean>>({});
+  const [_____selectedValidationRules, _____setSelectedValidationRules] = useState<string[]>([]);
+  const [_____customValidations, _____setCustomValidations] = useState<ValidationResult[]>([]);
 
   // Load any existing draft
   useEffect(() => {

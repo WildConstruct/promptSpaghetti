@@ -9,11 +9,10 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
-import { conversionTracker } from '../../analytics/ConversionTracker';
 
 export interface DirectorAnalyticsViewProps {
-  conversionData: any;
-  performanceData: any;
+  conversionData: unknown;
+  performanceData: unknown;
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   loading: boolean;
@@ -164,7 +163,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({
     <div className="workflow-insights">
       <h4>Director Workflow Insights</h4>
       <div className="insights-list">
-        {workflowInsights.map((insight: any, index) => (
+        {workflowInsights.map((insight: unknown, index) => (
           <div key={index} className={`insight-card ${insight.impact}`}>
             <div className="insight-header">
               <div className="insight-title">{insight.title}</div>
@@ -188,7 +187,7 @@ export const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps> = ({
     <div className="template-recommendations">
       <h4>Recommended Templates</h4>
       <div className="templates-grid">
-        {recommendedTemplates.map((template: any) => (
+        {recommendedTemplates.map((template: Error) => (
           <div key={template.id} className="template-card">
             <div className="template-header">
               <div className="template-name">{template.name}</div>

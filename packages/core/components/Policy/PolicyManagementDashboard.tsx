@@ -85,9 +85,9 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
   });
 
   const [activeTab, setActiveTab] = useState('overview');
-  const [selectedPolicy, setSelectedPolicy] = useState<UnifiedPolicy | null>(null);
-  const [isCreatingPolicy, setIsCreatingPolicy] = useState(false);
-  const [isEditingPolicy, setIsEditingPolicy] = useState(false);
+  const [__selectedPolicy, setSelectedPolicy] = useState<UnifiedPolicy | null>(null);
+  const [__isCreatingPolicy, setIsCreatingPolicy] = useState(false);
+  const [__isEditingPolicy, setIsEditingPolicy] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [domainFilter, setDomainFilter] = useState<PolicyDomain | 'ALL'>('ALL');
   const [statusFilter, setStatusFilter] = useState<PolicyStatus | 'ALL'>('ALL');
@@ -143,13 +143,17 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     }
   };
 
-        setIsCreatingPolicy(false);
+  const __handleCreatePolicy = async () => {
+    try {
+      setIsCreatingPolicy(false);
     } catch (err) {
       console.error('Failed to create policy:', err);
     }
   };
 
-        setIsEditingPolicy(false);
+  const __handleUpdatePolicy = async () => {
+    try {
+      setIsEditingPolicy(false);
       setSelectedPolicy(null);
     } catch (err) {
       console.error('Failed to update policy:', err);

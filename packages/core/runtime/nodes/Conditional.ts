@@ -39,7 +39,7 @@ export interface ConditionalConfig {
   /** Whether to enable strict mode (throws on undefined variables) */
   strictMode?: boolean;
   /** Custom functions available in expressions */
-  customFunctions?: Record<string, (...args: any[]) => any>;
+  customFunctions?: Record<string, (...args: unknown[]) => any>;
 }
 
 /**
@@ -225,7 +225,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
   /**
    * Get effective branches from constructor data or dynamic inputs
    */
-  private getEffectiveBranches(ctx: AdvancedExecutionContext): ConditionalBranch[] {
+  private getEffectiveBranches(_______ctx: AdvancedExecutionContext): ConditionalBranch[] {
     // For now, use constructor branches
     // In full implementation, would merge with dynamic inputs from I/O system
     return this.branches;
@@ -322,7 +322,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
   /**
    * Safely evaluate an expression with limited scope
    */
-  private safeEvaluate(expression: string, context: Record<string, any>): any {
+  private safeEvaluate(expression: string, context: Record<string, any>): unknown {
     // First sanitize the expression to check for dangerous patterns
     this.sanitizeExpression(expression);
     
@@ -434,6 +434,6 @@ export class ConditionalBuilder {
 /**
  * Fluent API for building conditional nodes
  */
-export function conditional(id: string): ConditionalBuilder {
+export function conditional(_______id: string): ConditionalBuilder {
   return new ConditionalBuilder();
 }

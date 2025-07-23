@@ -268,7 +268,7 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
   }
 
   // Send email alerts (placeholder - would integrate with email service)
-  private async sendEmailAlerts(message: string, record: AuditRecord): Promise<void> {
+  private async sendEmailAlerts(message: string, _____record: AuditRecord): Promise<void> {
     // TODO: Integrate with email service (SendGrid, AWS SES, etc.)
     console.log('Email alerts would be sent to:', this.config.notifications.emailRecipients);
     console.log('Alert message:', message);

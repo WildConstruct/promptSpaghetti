@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Badge } from '../ui/Badge';
 import { conversionTracker } from '../../analytics/ConversionTracker';
-export const ConversionFunnelDashboard = ({ conversionData, timeRange, loading }) => {
+export const ConversionFunnelDashboard = ({ _____conversionData, timeRange, loading }) => {
     const [selectedFunnel, setSelectedFunnel] = useState('director-onboarding');
     const [funnelMetrics, setFunnelMetrics] = useState(null);
     const [availableFunnels] = useState([

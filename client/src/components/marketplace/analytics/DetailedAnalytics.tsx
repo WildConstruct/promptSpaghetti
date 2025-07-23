@@ -152,7 +152,7 @@ export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({
     );
   }
 
-  const selectedTemplate = templates.find(t => t.id === selectedTemplateId);
+  const ___selectedTemplate = templates.find(t => t.id === selectedTemplateId);
 
   return (
     <div className="detailed-analytics">

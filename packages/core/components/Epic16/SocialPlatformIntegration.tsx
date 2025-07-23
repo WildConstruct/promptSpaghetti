@@ -33,8 +33,8 @@ import {
   RocketLaunchIcon
 } from '@heroicons/react/24/outline';
 
-import { Template, TemplateAuthor } from './TemplatePreviewModal';
-import { ShareTrackingManager } from './ShareTrackingManager';
+import { Template } from './TemplatePreviewModal';
+// ShareTrackingManager import removed
 
 // Social Platform Interfaces
 export interface SocialPlatformIntegrationProps {
@@ -52,7 +52,7 @@ export interface SocialPlatform {
   id: string;
   name: string;
   displayName: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
   color: string;
   description: string;
   enabled: boolean;
@@ -649,7 +649,7 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
 
   const enabledPlatforms = useMemo(() => 
     platforms.filter(platform => platform.enabled), 
-    [platforms]
+  [platforms]
   );
 
   const totalAnalytics = useMemo(() => ({

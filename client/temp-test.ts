@@ -1,1 +1,1 @@
-import "./src/hooks/usePerformanceProfiler.ts";
+import './src/hooks/usePerformanceProfiler.ts';

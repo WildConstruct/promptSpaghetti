@@ -4,8 +4,8 @@
 
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
-import { ConsentData, GranularConsent } from './PolicyAcceptanceTrackingService';
-import { DataProtectionRule, RuleEvaluationContext } from '../types/DataProtectionRuleSchema';
+import { ConsentData, // GranularConsent // Unused import } from './PolicyAcceptanceTrackingService';
+import { // DataProtectionRule // Unused import, // RuleEvaluationContext // Unused import } from '../types/DataProtectionRuleSchema';
 
 export interface FilterRequest {
   userId: string;
@@ -117,7 +117,7 @@ export class ConsentBasedDataFilterService {
     );
   }
 
-  private evaluateFilters(filters: ConsentFilter[], request: FilterRequest): Omit<FilterResult, 'auditEventId'> {
+  private evaluateFilters(filters: ConsentFilter[], __request: FilterRequest): Omit<FilterResult, 'auditEventId'> {
     const applicableConsents = filters.map(f => f.purpose);
     
     // Check for required consents that are not granted

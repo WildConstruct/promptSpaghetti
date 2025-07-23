@@ -56,7 +56,7 @@ interface EnforcementAction {
   severity: 'low' | 'medium' | 'high' | 'critical';
   reason: string;
   triggeredBy: 'trust_score' | 'risk_factor' | 'fraud_detection' | 'policy_violation' | 'manual_review';
-  triggerDetails: any;
+  triggerDetails: unknown;
   autoApplied: boolean;
   actionTaken: boolean;
   actionTimestamp?: Date;

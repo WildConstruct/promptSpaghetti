@@ -97,7 +97,7 @@ const consentPurposes = [
         thirdParties: ['Recommendation engines', 'Content platforms']
     }
 ];
-const ConsentBanner = ({ onConsentUpdate, onClose, country = 'US', language = 'en', theme = 'light', position = 'bottom', showRejectButton = true, showCustomizeButton = true, autoHide = false, respectDoNotTrack = true }) => {
+const ConsentBanner = ({ onConsentUpdate, onClose, country = 'US', _____language = 'en', theme = 'light', position = 'bottom', showRejectButton = true, showCustomizeButton = true, autoHide = false, respectDoNotTrack = true }) => {
     const [isVisible, setIsVisible] = useState(true);
     const [showDetails, setShowDetails] = useState(false);
     const [consents, setConsents] = useState(defaultConsents);
@@ -107,7 +107,7 @@ const ConsentBanner = ({ onConsentUpdate, onClose, country = 'US', language = 'e
     useEffect(() => {
         // Check if user is subject to GDPR or CCPA
         const gdprCountries = ['US', 'GB', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'AT', 'SE', 'DK', 'FI', 'IE', 'PT', 'LU'];
-        const ccpaStates = ['CA']; // Would need more sophisticated geo-detection
+        const _____ccpaStates = ['CA']; // Would need more sophisticated geo-detection
         setIsGDPRApplicable(gdprCountries.includes(country));
         setIsCCPAApplicable(country === 'US'); // Simplified - would detect state
         // Check for Do Not Track header

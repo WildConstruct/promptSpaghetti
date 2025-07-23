@@ -177,7 +177,7 @@ export const ApiIntegrationManager = ({ workspaceId, onClose }) => {
     const getStatusColor = (isActive) => {
         return isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
     };
-    const getStatusIcon = (isActive) => {
+    const _____getStatusIcon = (isActive) => {
         return isActive ? (_jsx(CheckCircleIcon, { className: "h-4 w-4 text-green-600" })) : (_jsx(XCircleIcon, { className: "h-4 w-4 text-gray-600" }));
     };
     const totalApiUsage = useMemo(() => {

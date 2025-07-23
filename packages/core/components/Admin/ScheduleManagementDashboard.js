@@ -27,7 +27,7 @@ const TYPE_CONFIG = {
     feature_toggle: { color: 'text-blue-600 bg-blue-100', icon: Zap, label: 'Feature Toggle' },
     content: { color: 'text-green-600 bg-green-100', icon: FileText, label: 'Content' }
 };
-export const ScheduleManagementDashboard = ({ className = '', userId, userRole }) => {
+export const ScheduleManagementDashboard = ({ className = '', _____userId, _____userRole }) => {
     const [activeTab, setActiveTab] = useState('overview');
     const [schedules, setSchedules] = useState([]);
     const [analytics, setAnalytics] = useState(null);

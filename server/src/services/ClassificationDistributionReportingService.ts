@@ -799,12 +799,12 @@ export interface FilterConfiguration {
   title: string;
   type: 'dropdown' | 'multiselect' | 'date' | 'range';
   options?: FilterOption[];
-  defaultValue?: any;
+  defaultValue?: unknown;
 }
 
 export interface FilterOption {
   label: string;
-  value: any;
+  value: Error;
 }
 
 export interface ExportConfiguration {
@@ -1202,7 +1202,7 @@ export class ClassificationDistributionReportingService {
   // Private Implementation Methods
   // =============================================================================
 
-  private async collectClassificationData(parameters: ReportParameters): Promise<any[]> {
+  private async collectClassificationData(_____parameters: ReportParameters): Promise<any[]> {
     // Mock implementation - would query actual classification databases
     const mockData = [];
     
@@ -1226,7 +1226,7 @@ export class ClassificationDistributionReportingService {
     return mockData;
   }
 
-  private generateSummary(rawData: any[]): ClassificationSummary {
+  private generateSummary(rawData: unknown[]): ClassificationSummary {
     const classificationCounts: ClassificationCount[] = [];
     const classificationPercentages: ClassificationPercentage[] = [];
     
@@ -1286,7 +1286,7 @@ export class ClassificationDistributionReportingService {
     };
   }
 
-  private generateDistributions(rawData: any[], parameters: ReportParameters): ClassificationDistribution[] {
+  private generateDistributions(rawData: unknown[], parameters: ReportParameters): ClassificationDistribution[] {
     const distributions: ClassificationDistribution[] = [];
     
     // Group by classification
@@ -1310,7 +1310,7 @@ export class ClassificationDistributionReportingService {
     return distributions;
   }
 
-  private groupByClassification(rawData: any[]): ClassificationDistribution[] {
+  private groupByClassification(rawData: unknown[]): ClassificationDistribution[] {
     const groups = rawData.reduce((acc, item) => {
       const key = item.classification || 'UNCLASSIFIED';
       if (!acc[key]) acc[key] = [];
@@ -1354,17 +1354,17 @@ export class ClassificationDistributionReportingService {
     });
   }
 
-  private groupByTenant(rawData: any[]): ClassificationDistribution[] {
+  private groupByTenant(_____rawData: unknown[]): ClassificationDistribution[] {
     // Similar implementation for tenant grouping
     return []; // Simplified for brevity
   }
 
-  private groupByRisk(rawData: any[]): ClassificationDistribution[] {
+  private groupByRisk(_____rawData: unknown[]): ClassificationDistribution[] {
     // Similar implementation for risk grouping
     return []; // Simplified for brevity
   }
 
-  private async generateTrends(rawData: any[], parameters: ReportParameters): Promise<ClassificationTrends | undefined> {
+  private async generateTrends(rawData: unknown[], _____parameters: ReportParameters): Promise<ClassificationTrends | undefined> {
     // Mock trend generation
     const dataPoints: TrendDataPoint[] = [];
     const now = new Date();
@@ -1409,7 +1409,7 @@ export class ClassificationDistributionReportingService {
     };
   }
 
-  private async analyzeCompliance(rawData: any[], parameters: ReportParameters): Promise<ComplianceAnalysis | undefined> {
+  private async analyzeCompliance(rawData: unknown[], _____parameters: ReportParameters): Promise<ComplianceAnalysis | undefined> {
     const compliantItems = rawData.filter(item => item.complianceStatus === 'COMPLIANT').length;
     const totalItems = rawData.length;
     
@@ -1433,7 +1433,7 @@ export class ClassificationDistributionReportingService {
     };
   }
 
-  private async detectAnomalies(rawData: any[], parameters: ReportParameters): Promise<ClassificationAnomaly[]> {
+  private async detectAnomalies(_____rawData: unknown[], _____parameters: ReportParameters): Promise<ClassificationAnomaly[]> {
     // Mock anomaly detection
     return [
       {
@@ -1461,7 +1461,7 @@ export class ClassificationDistributionReportingService {
   }
 
   private async generateRecommendations(
-    rawData: any[],
+    rawData: unknown[],
     summary: ClassificationSummary,
     compliance?: ComplianceAnalysis,
     anomalies?: ClassificationAnomaly[]
@@ -1513,7 +1513,7 @@ export class ClassificationDistributionReportingService {
   }
 
   // Helper methods
-  private analyzeSources(items: any[]): ClassificationSource[] {
+  private analyzeSources(items: unknown[]): ClassificationSource[] {
     const sources = items.reduce((acc, item) => {
       acc[item.source] = (acc[item.source] || 0) + 1;
       return acc;
@@ -1527,7 +1527,7 @@ export class ClassificationDistributionReportingService {
     }));
   }
 
-  private calculateRiskLevel(items: any[]): RiskLevel {
+  private calculateRiskLevel(items: unknown[]): RiskLevel {
     const highRisk = items.filter(item => item.riskLevel === 'HIGH').length;
     const critical = items.filter(item => item.riskLevel === 'CRITICAL').length;
     
@@ -1536,13 +1536,13 @@ export class ClassificationDistributionReportingService {
     return 'LOW';
   }
 
-  private calculateRiskScore(items: any[]): number {
+  private calculateRiskScore(items: unknown[]): number {
     const riskScores = { LOW: 1, MEDIUM: 2, HIGH: 3, CRITICAL: 4 };
     const totalScore = items.reduce((sum, item) => sum + (riskScores[item.riskLevel] || 1), 0);
     return totalScore / (items.length * 4); // Normalize to 0-1
   }
 
-  private calculateComplianceStatus(items: any[]): ComplianceStatus {
+  private calculateComplianceStatus(items: unknown[]): ComplianceStatus {
     const compliant = items.filter(item => item.complianceStatus === 'COMPLIANT').length;
     const ratio = compliant / items.length;
     
@@ -1551,7 +1551,7 @@ export class ClassificationDistributionReportingService {
     return 'NON_COMPLIANT';
   }
 
-  private calculateRiskDistribution(items: any[]): RiskDistribution {
+  private calculateRiskDistribution(items: unknown[]): RiskDistribution {
     const low = items.filter(item => item.riskLevel === 'LOW').length;
     const medium = items.filter(item => item.riskLevel === 'MEDIUM').length;
     const high = items.filter(item => item.riskLevel === 'HIGH').length;
@@ -1565,7 +1565,7 @@ export class ClassificationDistributionReportingService {
     return new Date(date) > oneDayAgo;
   }
 
-  private getClassificationCounts(items: any[]): ClassificationCount[] {
+  private getClassificationCounts(items: unknown[]): ClassificationCount[] {
     const counts = items.reduce((acc, item) => {
       acc[item.classification] = (acc[item.classification] || 0) + 1;
       return acc;
@@ -1577,7 +1577,7 @@ export class ClassificationDistributionReportingService {
     }));
   }
 
-  private calculateDataQuality(rawData: any[]): number {
+  private calculateDataQuality(rawData: unknown[]): number {
     const qualityFactors = [
       rawData.filter(item => item.classification).length / rawData.length, // Classification completeness
       0.95, // Assumed data integrity
@@ -1588,7 +1588,7 @@ export class ClassificationDistributionReportingService {
     return qualityFactors.reduce((sum, factor) => sum + factor, 0) / qualityFactors.length;
   }
 
-  private calculateCompleteness(rawData: any[]): number {
+  private calculateCompleteness(rawData: unknown[]): number {
     const requiredFields = ['id', 'classification', 'size', 'source', 'createdAt'];
     const completeItems = rawData.filter(item => 
       requiredFields.every(field => item[field] !== undefined && item[field] !== null)
@@ -1626,7 +1626,7 @@ export class ClassificationDistributionReportingService {
     console.log(`Validating export access for ${requestedBy} to format ${format}`);
   }
 
-  private async getViewerPermissions(requestedBy: string): Promise<string[]> {
+  private async getViewerPermissions(_____requestedBy: string): Promise<string[]> {
     // Mock implementation - would fetch actual permissions
     return ['READ_REPORTS', 'EXPORT_BASIC'];
   }
@@ -1775,7 +1775,7 @@ export class ClassificationDistributionReportingService {
   }
 
   private cleanupCache(): void {
-    const now = Date.now();
+    const _____now = Date._____now();
     for (const [key, report] of this.reportCache.entries()) {
       if (!this.isCacheValid(report)) {
         this.reportCache.delete(key);

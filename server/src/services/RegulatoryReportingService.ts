@@ -56,13 +56,13 @@ export interface ReportSection {
 export interface ReportData {
   category: string;
   metrics: Record<string, any>;
-  details: any[];
+  details: unknown[];
 }
 
 export interface ChartData {
   type: 'bar' | 'line' | 'pie' | 'table';
   title: string;
-  data: any[];
+  data: Record<string, unknown>[];
 }
 
 export interface SectionCompliance {
@@ -342,9 +342,9 @@ export class RegulatoryReportingService {
 
   private async generateKeyFindings(
     regulation: ComplianceRegulation,
-    reportType: ReportType,
-    periodStart: Date,
-    periodEnd: Date
+    _____reportType: ReportType,
+    _____periodStart: Date,
+    _____periodEnd: Date
   ): Promise<string[]> {
     const findings: string[] = [];
     
@@ -455,27 +455,27 @@ export class RegulatoryReportingService {
   }
 
   // Placeholder methods for specific data retrieval
-  private async getConsentData(periodStart: Date, periodEnd: Date): Promise<any> {
+  private async getConsentData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
     // Implementation would retrieve actual consent data
     return { total: 0, valid: 0, expired: 0, withdrawn: 0, details: [] };
   }
 
-  private async getDataSubjectRightsData(periodStart: Date, periodEnd: Date): Promise<any> {
+  private async getDataSubjectRightsData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
     // Implementation would retrieve data subject rights request data
     return { access: 0, deletion: 0, portability: 0, avgResponseTime: 0, details: [] };
   }
 
-  private async getCCPAConsumerRightsData(periodStart: Date, periodEnd: Date): Promise<any> {
+  private async getCCPAConsumerRightsData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
     // Implementation would retrieve CCPA-specific data
     return { metrics: {}, details: [] };
   }
 
-  private async getPHIAccessData(periodStart: Date, periodEnd: Date): Promise<any> {
+  private async getPHIAccessData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
     // Implementation would retrieve HIPAA PHI access data
     return { metrics: {}, details: [] };
   }
 
-  private async assessGDPRConsentCompliance(data: any): Promise<SectionCompliance> {
+  private async assessGDPRConsentCompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
     return {
       status: ComplianceStatus.COMPLIANT,
       score: 95,
@@ -483,7 +483,7 @@ export class RegulatoryReportingService {
     };
   }
 
-  private async assessRightsCompliance(data: any): Promise<SectionCompliance> {
+  private async assessRightsCompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
     return {
       status: ComplianceStatus.COMPLIANT,
       score: 90,
@@ -491,7 +491,7 @@ export class RegulatoryReportingService {
     };
   }
 
-  private async assessCCPACompliance(data: any): Promise<SectionCompliance> {
+  private async assessCCPACompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
     return {
       status: ComplianceStatus.COMPLIANT,
       score: 88,
@@ -499,7 +499,7 @@ export class RegulatoryReportingService {
     };
   }
 
-  private async assessHIPAACompliance(data: any): Promise<SectionCompliance> {
+  private async assessHIPAACompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
     return {
       status: ComplianceStatus.COMPLIANT,
       score: 92,

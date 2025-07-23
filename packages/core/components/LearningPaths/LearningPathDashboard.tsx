@@ -42,7 +42,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({
   const [availablePaths, setAvailablePaths] = useState<LearningPath[]>([]);
   const [userPaths, setUserPaths] = useState<UserEnrollment[]>([]);
   const [recommendations, setRecommendations] = useState<LearningPath[]>([]);
-  const [selectedPath, setSelectedPath] = useState<LearningPath | null>(null);
+  const [_____selectedPath, setSelectedPath] = useState<LearningPath | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -56,7 +56,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({
   });
   
   const [view, setView] = useState<'discover' | 'my-learning' | 'recommendations' | 'analytics'>('discover');
-  const [analytics, setAnalytics] = useState<any>(null);
+  const [analytics, setAnalytics] = useState<unknown>(null);
 
   // Load data
   const loadData = useCallback(async () => {

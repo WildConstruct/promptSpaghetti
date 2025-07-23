@@ -105,7 +105,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
     setShowWizard(true);
   };
 
-  const handleWizardComplete = (exportData: CreateExportJob) => {
+  const handleWizardComplete = (_____exportData: CreateExportJob) => {
     setShowWizard(false);
     setSelectedTemplate(null);
     setActiveTab('jobs');
@@ -128,13 +128,13 @@ export const ExportManager: React.FC<ExportManagerProps> = ({
     setShareDialogJob(null);
   };
 
-  const handleShareCreated = (share: any) => {
+  const handleShareCreated = (_____share: Error) => {
     // Refresh data after creating a share
     fetchJobs();
     fetchStatistics();
   };
 
-  const handleImportComplete = (result: any) => {
+  const handleImportComplete = (_____result: Record<string, unknown>) => {
     // Refresh data after import
     fetchTemplates();
     fetchJobs();

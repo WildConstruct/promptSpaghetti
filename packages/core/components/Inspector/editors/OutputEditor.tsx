@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import React from 'react';
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
-import { EnhancedTextAreaEditor } from '../EnhancedTextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { TemplateEditor } from '../TemplateEditor';
@@ -23,7 +22,7 @@ const OUTPUT_DESTINATIONS: SelectOption[] = [
   { value: 'debug', label: 'Debug Output' }
 ];
 
-export const OutputEditor: React.FC<OutputEditorProps> = ({ nodeId, nodeData, onChange }) => {
+export const OutputEditor: React.FC<OutputEditorProps> = ({ _____nodeId, nodeData, onChange }) => {
   // Output specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';
@@ -51,7 +50,7 @@ export const OutputEditor: React.FC<OutputEditorProps> = ({ nodeId, nodeData, on
   };
 
   const removeTransformation = (index: number) => {
-    const newTransformations = transformations.filter((_: any, i: number) => i !== index);
+    const newTransformations = transformations.filter((_: unknown, i: number) => i !== index);
     onChange({ transformations: newTransformations });
   };
 

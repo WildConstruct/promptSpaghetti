@@ -520,9 +520,9 @@ export class TransactionTrackingService {
   // Helper Methods
   // ============================================================================
 
-  private buildWhereClause(query: TransactionSearchQuery): { whereClause: string; params: any[] } {
+  private buildWhereClause(query: TransactionSearchQuery): { whereClause: string; params: unknown[] } {
     const conditions: string[] = ['1=1'];
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (query.status && query.status.length > 0) {
@@ -603,7 +603,7 @@ export class TransactionTrackingService {
     return `ORDER BY ${column} ${order}`;
   }
 
-  private async getTransactionAggregations(query: TransactionSearchQuery): Promise<TransactionAggregations> {
+  private async getTransactionAggregations(_____query: TransactionSearchQuery): Promise<TransactionAggregations> {
     // Implementation would build aggregation queries based on the search criteria
     // This is a simplified version
     return {
@@ -633,7 +633,7 @@ export class TransactionTrackingService {
     return { count: filters.length, filters };
   }
 
-  private mapRowToTrackedTransaction(row: any): TrackedTransaction {
+  private mapRowToTrackedTransaction(row: unknown): TrackedTransaction {
     // This would map database row to TrackedTransaction interface
     // Simplified implementation
     return {
@@ -717,7 +717,7 @@ export class TransactionTrackingService {
     return 'low';
   }
 
-  private calculateRiskDistribution(rows: any[]): Record<string, number> {
+  private calculateRiskDistribution(rows: unknown[]): Record<string, number> {
     const distribution = { low: 0, medium: 0, high: 0, critical: 0 };
     
     for (const row of rows) {
@@ -728,7 +728,7 @@ export class TransactionTrackingService {
     return distribution;
   }
 
-  private mapRowToAdminNote(row: any): AdminNote {
+  private mapRowToAdminNote(row: unknown): AdminNote {
     return {
       id: row.id,
       authorId: row.author_id,
@@ -741,7 +741,7 @@ export class TransactionTrackingService {
     };
   }
 
-  private mapRowToAdminFlag(row: any): AdminFlag {
+  private mapRowToAdminFlag(row: unknown): AdminFlag {
     return {
       type: row.type,
       priority: row.priority,
@@ -777,7 +777,7 @@ export class TransactionTrackingService {
     return csvRows.join('\n');
   }
 
-  private generateJSON(transactions: TrackedTransaction[], request: TransactionExportRequest): string {
+  private generateJSON(transactions: TrackedTransaction[], _____request: TransactionExportRequest): string {
     return JSON.stringify({
       exported_at: new Date().toISOString(),
       total_records: transactions.length,
@@ -785,13 +785,13 @@ export class TransactionTrackingService {
     }, null, 2);
   }
 
-  private generateExcel(transactions: TrackedTransaction[], fields?: string[]): string {
+  private generateExcel(_____transactions: TrackedTransaction[], fields?: string[]): string {
     // Would implement Excel generation using a library like xlsx
     throw new Error('Excel export not yet implemented');
   }
 
   // Placeholder methods for complex analytics
-  private async getTransactionPatterns(startDate: Date, endDate: Date) {
+  private async getTransactionPatterns(_____startDate: Date, _____endDate: Date) {
     return {
       temporalPatterns: [],
       geographicPatterns: [],
@@ -800,7 +800,7 @@ export class TransactionTrackingService {
     };
   }
 
-  private async getTransactionForecast(startDate: Date, endDate: Date) {
+  private async getTransactionForecast(_____startDate: Date, _____endDate: Date) {
     return {
       period: '30_days',
       predictedVolume: 0,
@@ -811,7 +811,7 @@ export class TransactionTrackingService {
     };
   }
 
-  private async getTransactionRecommendations(startDate: Date, endDate: Date) {
+  private async getTransactionRecommendations(_____startDate: Date, _____endDate: Date) {
     return [];
   }
 }

@@ -13,7 +13,7 @@ import { useUISettingsStore } from '../../../stores/uiSettingsStore';
 interface VisualHierarchyDemoEditorProps {
   nodeId: string;
   nodeType: string;
-  data: any;
+  data: Record<string, unknown>;
   onChange: (updates: Record<string, any>) => void;
 }
 

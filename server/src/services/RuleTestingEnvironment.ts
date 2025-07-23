@@ -21,7 +21,7 @@ import {
 import { RuleTestingFramework, TestSuite, TestResult, RuleTestType, TestReport } from './RuleTestingFramework';
 // ValidationRulesEngine integration (to be implemented when available)
 interface ValidationRulesEngine {
-  validateRules: (rules: any[]) => Promise<{ isValid: boolean; errors: string[] }>;
+  validateRules: (rules: unknown[]) => Promise<{ isValid: boolean; errors: string[] }>;
   getValidationReport: () => Promise<{ passed: number; failed: number }>;
 }
 
@@ -71,8 +71,8 @@ export interface TestScenario {
   description: string;
   framework: ComplianceFramework;
   rules: RuleDefinition[];
-  testData: any[];
-  expectedResults: any[];
+  testData: unknown[];
+  expectedResults: unknown[];
   performance?: {
     maxExecutionTime: number;
     expectedRulesPerSecond: number;
@@ -601,32 +601,32 @@ export class RuleTestingEnvironment {
     return [];
   }
 
-  private async executeIntegrationScenario(scenario: TestScenario): Promise<TestResult[]> {
+  private async executeIntegrationScenario(_____scenario: TestScenario): Promise<TestResult[]> {
     // Implementation for executing integration scenarios
     return [];
   }
 
-  private async generatePerformanceTestRules(count: number): Promise<RuleDefinition[]> {
+  private async generatePerformanceTestRules(_____count: number): Promise<RuleDefinition[]> {
     // Implementation for generating performance test rules
     return [];
   }
 
-  private async executeBenchmark(rules: RuleDefinition[], testData: any[], scenario: any): Promise<any> {
+  private async executeBenchmark(_____rules: RuleDefinition[], _____testData: unknown[], _____scenario: unknown): Promise<unknown> {
     // Implementation for executing performance benchmarks
     return { success: true, memoryUsage: 0, cpuUsage: 0 };
   }
 
-  private calculateAverageRulesPerSecond(results: TestResult[]): number {
+  private calculateAverageRulesPerSecond(_____results: TestResult[]): number {
     // Implementation for calculating average rules per second
     return 0;
   }
 
-  private generatePerformanceRecommendations(results: TestResult[]): string[] {
+  private generatePerformanceRecommendations(_____results: TestResult[]): string[] {
     // Implementation for generating performance recommendations
     return [];
   }
 
-  private async generateConflictingRules(conflictType: string): Promise<RuleDefinition[]> {
+  private async generateConflictingRules(_____conflictType: string): Promise<RuleDefinition[]> {
     // Implementation for generating conflicting rules for testing
     return [];
   }

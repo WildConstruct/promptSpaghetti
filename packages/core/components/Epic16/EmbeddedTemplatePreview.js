@@ -17,7 +17,7 @@ export const PREVIEW_SIZES = [
     { width: 800, height: 400, label: 'Banner', icon: PhotoIcon, description: 'Header banner' }
 ];
 // Embed code generation component
-export const EmbedCodeGenerator = ({ template, customization, onCustomizationChange }) => {
+export const EmbedCodeGenerator = ({ template, customization, _____onCustomizationChange }) => {
     const [activeTab, setActiveTab] = useState('iframe');
     const [copied, setCopied] = useState(false);
     const embedCode = useMemo(() => {
@@ -170,7 +170,7 @@ export const EmbedCustomizationPanel = ({ customization, onCustomizationChange, 
                                 ].map((option) => (_jsxs("label", { className: "flex items-center gap-3", children: [_jsx("input", { type: "checkbox", checked: customization.branding[option.key], onChange: (e) => updateBranding({ [option.key]: e.target.checked }), className: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" }), _jsx("span", { className: "text-sm text-gray-700", children: option.label })] }, option.key))) })] }))] })] }));
 };
 // Main embedded template preview component
-export const EmbeddedTemplatePreview = ({ template, embedConfig, showCustomization = false, onCustomize, onShare, onPreview, onPurchase, onLike, onRate, className = '', variant = 'standard', interactive = true, autoPlay = false, showMetrics = true, showSocialActions = true, showPurchaseButton = true, maxWidth, maxHeight }) => {
+export const EmbeddedTemplatePreview = ({ template, embedConfig, showCustomization = false, onCustomize, onShare, onPreview, onPurchase, onLike, _____onRate, className = '', variant = 'standard', interactive = true, _____autoPlay = false, showMetrics = true, showSocialActions = true, showPurchaseButton = true, maxWidth, maxHeight }) => {
     const [isCustomizing, setIsCustomizing] = useState(false);
     const [previewSize, setPreviewSize] = useState(PREVIEW_SIZES[1]); // Default to tablet
     const [customization, setCustomization] = useState({

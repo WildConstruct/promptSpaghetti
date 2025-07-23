@@ -4,8 +4,8 @@
 
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
-import { DataLifecycleAutomationService, LifecycleStage } from './DataLifecycleAutomationService';
-import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
+import { DataLifecycleAutomationService, // LifecycleStage // Unused import } from './DataLifecycleAutomationService';
+import { DataCategory, // Jurisdiction // Unused import } from '../types/DataRetentionPeriods';
 
 export interface DataAgingRecord {
   agingId: string;
@@ -872,7 +872,7 @@ export class DataAgingTrackingService {
     return record.predictiveAnalytics;
   }
 
-  private async createDefaultAlerts(category: DataCategory): Promise<AgingAlert[]> {
+  private async createDefaultAlerts(__category: DataCategory): Promise<AgingAlert[]> {
     const alerts: AgingAlert[] = [];
     
     // Age threshold alert
@@ -893,7 +893,7 @@ export class DataAgingTrackingService {
     return alerts;
   }
 
-  private async assessBusinessValue(category: DataCategory, dataType: string): Promise<BusinessValueMetrics> {
+  private async assessBusinessValue(__category: DataCategory, __dataType: string): Promise<BusinessValueMetrics> {
     // Implementation would assess actual business value
     return {
       revenue: { directRevenue: 0, indirectRevenue: 0, potentialLoss: 0, impactLevel: ImpactLevel.LOW },
@@ -904,7 +904,7 @@ export class DataAgingTrackingService {
     };
   }
 
-  private async assessTechnicalValue(category: DataCategory, dataType: string): Promise<TechnicalValueMetrics> {
+  private async assessTechnicalValue(__category: DataCategory, __dataType: string): Promise<TechnicalValueMetrics> {
     // Implementation would assess technical characteristics
     return {
       dataQuality: { completeness: 80, accuracy: 80, consistency: 80, timeliness: 80, validity: 80, overall: 80 },
@@ -1041,27 +1041,27 @@ export class DataAgingTrackingService {
     };
   }
 
-  private async calculateAgeDistribution(records: DataAgingRecord[]): Promise<any> {
+  private async calculateAgeDistribution(__records: DataAgingRecord[]): Promise<any> {
     return {};
   }
 
-  private async performRiskAnalysis(records: DataAgingRecord[]): Promise<any> {
+  private async performRiskAnalysis(__records: DataAgingRecord[]): Promise<any> {
     return {};
   }
 
-  private async generateAgingRecommendations(records: DataAgingRecord[]): Promise<any[]> {
+  private async generateAgingRecommendations(__records: DataAgingRecord[]): Promise<any[]> {
     return [];
   }
 
-  private async calculateAgingTrends(records: DataAgingRecord[]): Promise<any[]> {
+  private async calculateAgingTrends(__records: DataAgingRecord[]): Promise<any[]> {
     return [];
   }
 
-  private async calculateAgingCosts(records: DataAgingRecord[]): Promise<any> {
+  private async calculateAgingCosts(__records: DataAgingRecord[]): Promise<any> {
     return {};
   }
 
-  private async saveAgingReport(report: AgingReport): Promise<void> {
+  private async saveAgingReport(__report: AgingReport): Promise<void> {
     // Implementation would save aging report
   }
 }

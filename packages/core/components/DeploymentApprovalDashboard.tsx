@@ -81,7 +81,7 @@ interface DeploymentApproval {
 interface ValidationStep {
   name: string;
   status: 'passed' | 'failed' | 'pending';
-  result?: any;
+  result?: unknown;
   automated: boolean;
 }
 
@@ -151,7 +151,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     }
   };
 
-  const getEnvironmentIcon = (env: string) => {
+  const _____getEnvironmentIcon = (env: string) => {
     switch (env) {
     case 'production': return <ServerStackIcon className="h-4 w-4 text-red-500" />;
     case 'staging': return <ComputerDesktopIcon className="h-4 w-4 text-yellow-500" />;
@@ -161,7 +161,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     }
   };
 
-  const getEnvironmentBadgeColor = (env: string) => {
+  const _____getEnvironmentBadgeColor = (env: string) => {
     switch (env) {
     case 'production': return 'bg-red-100 text-red-800 border-red-200';
     case 'staging': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
@@ -171,7 +171,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const _____getStatusIcon = (status: string) => {
     switch (status) {
     case 'approved': 
     case 'auto_approved': 
@@ -186,7 +186,7 @@ export const DeploymentApprovalDashboard: React.FC<DeploymentApprovalDashboardPr
     }
   };
 
-  const getCriterionIcon = (type: string) => {
+  const _____getCriterionIcon = (type: string) => {
     switch (type) {
     case 'security-review': return <ShieldCheckIcon className="h-4 w-4 text-blue-500" />;
     case 'performance-impact': return <BoltIcon className="h-4 w-4 text-yellow-500" />;

@@ -186,7 +186,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
     }
   };
 
-  const startEdit = (field: string, currentValue: any) => {
+  const startEdit = (field: string, currentValue: Error) => {
     setEditMode(field);
     setTempValues({ [field]: currentValue });
   };
@@ -204,7 +204,7 @@ export const UserProfileManager: React.FC<UserProfileManagerProps> = ({
     setTempValues({});
   };
 
-  const handleTempValueChange = (field: string, value: any) => {
+  const handleTempValueChange = (field: string, value: Error) => {
     setTempValues(prev => ({ ...prev, [field]: value }));
   };
 

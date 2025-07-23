@@ -38,7 +38,7 @@ interface EnhancedTemplateVersion {
 interface VersionComparison {
   from_version: EnhancedTemplateVersion;
   to_version: EnhancedTemplateVersion;
-  differences: any[];
+  differences: unknown[];
   compatibility_impact: {
     is_breaking: boolean;
     affected_components: string[];

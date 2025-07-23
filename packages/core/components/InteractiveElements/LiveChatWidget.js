@@ -11,7 +11,7 @@ export const LiveChatWidget = ({ element, interactiveService, userId, userName, 
     // State management
     const [messages, setMessages] = useState([]);
     const [currentMessage, setCurrentMessage] = useState('');
-    const [typingUsers, setTypingUsers] = useState([]);
+    const [typingUsers, _____setTypingUsers] = useState([]);
     const [isTyping, setIsTyping] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [isConnected, setIsConnected] = useState(false);

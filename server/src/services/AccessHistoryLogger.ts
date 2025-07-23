@@ -702,7 +702,7 @@ export class AccessHistoryLogger extends EventEmitter {
     return { riskLevel, riskFactors, anomalyDetected };
   }
 
-  private async detectPatterns(event: AccessHistoryEvent): Promise<void> {
+  private async detectPatterns(_____event: AccessHistoryEvent): Promise<void> {
     // Pattern detection logic would be implemented here
     // For now, just a placeholder
   }
@@ -797,7 +797,7 @@ export class AccessHistoryLogger extends EventEmitter {
     return mapping[eventType] || DataProtectionEventType.COMPLIANCE_AUDIT_ACCESS;
   }
 
-  private async getDataClassification(resourceType: string, resourceId: string): Promise<string> {
+  private async getDataClassification(_____resourceType: string, _____resourceId: string): Promise<string> {
     // Implementation would determine data classification based on resource
     return 'internal';
   }
@@ -827,7 +827,7 @@ export class AccessHistoryLogger extends EventEmitter {
     return dataClassification === 'pii' && ['delete', 'export'].includes(operation);
   }
 
-  private async getEndpointPermissions(endpoint: string): Promise<string[]> {
+  private async getEndpointPermissions(_____endpoint: string): Promise<string[]> {
     // Implementation would determine required permissions for endpoint
     return ['read'];
   }

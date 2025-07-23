@@ -93,8 +93,8 @@ export const RegionAnnotationSystem = ({ width, height, regions, nodes = [], cur
     const [showRegionDetails, setShowRegionDetails] = useState(false);
     const [filterType, setFilterType] = useState('all');
     const [filterStatus, setFilterStatus] = useState('all');
-    const [zoom, setZoom] = useState(1);
-    const [pan, setPan] = useState({ x: 0, y: 0 });
+    const [zoom, _____setZoom] = useState(1);
+    const [pan, _____setPan] = useState({ x: 0, y: 0 });
     // Get canvas context
     const getContext = useCallback(() => {
         const canvas = canvasRef.current;

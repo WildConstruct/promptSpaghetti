@@ -16,7 +16,7 @@ import SearchResults from './SearchResults';
 
 interface UnifiedSearchSystemProps<T = any> {
   // Data and search
-  searchFunction?: (query: any) => Promise<{ items: T[], totalCount: number, facets?: Record<string, Array<{ value: string; count: number }>> }>;
+  searchFunction?: (query: unknown) => Promise<{ items: T[], totalCount: number, facets?: Record<string, Array<{ value: string; count: number }>> }>;
   initialData?: T[];
   
   // Field configuration
@@ -38,7 +38,7 @@ interface UnifiedSearchSystemProps<T = any> {
   // Event handlers
   onItemClick?: (item: T, index: number) => void;
   onItemDoubleClick?: (item: T, index: number) => void;
-  onSearchComplete?: (results: any) => void;
+  onSearchComplete?: (results: unknown) => void;
   
   // Custom renderers
   renderItem?: (item: T, index: number) => React.ReactNode;

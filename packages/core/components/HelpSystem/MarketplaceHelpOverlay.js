@@ -14,7 +14,7 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * - Community features guidance
  */
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-export const MarketplaceHelpOverlay = ({ currentPage = 'marketplace', userRole = 'new-user', selectedTemplate, cartItems = 0, purchaseStage = 'browsing', forumContext, showMarketplaceHelp = true, enableGuidedTours = true, helpComplexity = 'beginner', coreHelpManager, onHelpInteraction, onTourCompleted, onFeedbackSubmitted }) => {
+export const MarketplaceHelpOverlay = ({ currentPage = 'marketplace', userRole = 'new-user', selectedTemplate, cartItems = 0, purchaseStage = 'browsing', forumContext, showMarketplaceHelp = true, enableGuidedTours = true, helpComplexity = 'beginner', _____coreHelpManager, onHelpInteraction, onTourCompleted, onFeedbackSubmitted }) => {
     // State management
     const [activeOverlay, setActiveOverlay] = useState(null);
     const [overlayPosition, setOverlayPosition] = useState({ x: 0, y: 0 });

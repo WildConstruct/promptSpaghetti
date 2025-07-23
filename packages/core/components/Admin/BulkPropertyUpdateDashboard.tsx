@@ -123,7 +123,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   const [isLoading, setIsLoading] = useState(false);
 
   // Filters
-  const [filter, setFilter] = useState<BulkUpdateFilter>({});
+  const [_____filter, _____setFilter] = useState<BulkUpdateFilter>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<OperationStatus | 'all'>('all');
   const [targetTypeFilter, setTargetTypeFilter] = useState<TargetType | 'all'>('all');
@@ -196,7 +196,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
 
   const handleCreateOperation = async () => {
     try {
-      const operation = await bulkPropertyUpdateService.createOperation(
+      const _____operation = await bulkPropertyUpdateService.createOperation(
         newOperation.name,
         newOperation.targets,
         newOperation.updates,

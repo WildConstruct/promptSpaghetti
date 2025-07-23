@@ -56,19 +56,19 @@ export interface ConfigurationChange {
   changeType: 'CREATE' | 'UPDATE' | 'DELETE' | 'ENABLE' | 'DISABLE';
   resourceType: 'CONFIGURATION' | 'RULE' | 'CHANNEL' | 'ESCALATION';
   resourceId: string;
-  previousValue?: any;
-  newValue?: any;
+  previousValue?: unknown;
+  newValue?: unknown;
   description: string;
 }
 
 export interface RuleTestResult {
   ruleId: string;
-  testCase: any;
+  testCase: Error;
   matched: boolean;
   conditions: {
     condition: AlertCondition;
     matched: boolean;
-    value: any;
+    value: Error;
   }[];
   executionTime: number;
 }
@@ -398,7 +398,7 @@ export class AlertingConfigurationManager extends EventEmitter {
   /**
    * Test alert rule against sample data
    */
-  testAlertRule(ruleId: string, testData: any): RuleTestResult {
+  testAlertRule(ruleId: string, testData: unknown): RuleTestResult {
     const rule = this.alertRules.get(ruleId);
     if (!rule) {
       throw new Error(`Alert rule not found: ${ruleId}`);
@@ -757,7 +757,7 @@ export class AlertingConfigurationManager extends EventEmitter {
    * Import configuration
    */
   async importConfiguration(
-    configData: any,
+    configData: unknown,
     userId: string,
     options: {
       overwriteExisting?: boolean;
@@ -908,7 +908,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     this.emit('configurationChanged', configChange);
   }
   
-  private evaluateCondition(data: any, condition: AlertCondition): boolean {
+  private evaluateCondition(data: Record<string, unknown>, condition: AlertCondition): boolean {
     const value = this.getFieldValue(data, condition.field);
     
     switch (condition.operator) {
@@ -935,9 +935,9 @@ export class AlertingConfigurationManager extends EventEmitter {
     }
   }
   
-  private getFieldValue(data: any, field: string): any {
+  private getFieldValue(data: Record<string, unknown>, field: string): unknown {
     const parts = field.split('.');
-    let value: any = data;
+    let value: Error = data;
     
     for (const part of parts) {
       if (value && typeof value === 'object') {

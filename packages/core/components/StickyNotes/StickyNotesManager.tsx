@@ -160,7 +160,7 @@ export const StickyNotesManager: React.FC<StickyNotesManagerProps> = ({
   ]);
 
   // Note event handlers
-  const handleNoteUpdate = useCallback((id: string, updates: any) => {
+  const handleNoteUpdate = useCallback((id: string, updates: unknown) => {
     updateNote(id, updates);
   }, [updateNote]);
 

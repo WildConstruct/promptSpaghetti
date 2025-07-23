@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor } from '../SelectEditor';
@@ -21,7 +21,7 @@ export interface WeightedAdvancedEditorProps extends Omit<BaseNodeEditorProps, '
  * - Debug: Technical details, visualization, and raw data (developers)
  */
 
-export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ nodeId, nodeData, onChange }) => {
+export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ _____nodeId, nodeData, onChange }) => {
   // WeightedAdvanced specific fields
   const choices = (nodeData.choices as WeightedChoice[]) || [];
   const distributionType = (nodeData.distributionType as WeightDistributionType) || 'linear';

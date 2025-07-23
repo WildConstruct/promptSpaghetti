@@ -320,24 +320,24 @@ class MockReferralDetectionService {
     const rewardId = crypto.randomUUID();
     
     switch (campaign.rewardType) {
-      case 'percentage':
-        rewardAmount = (referral.conversionValue * campaign.rewardValue) / 100;
-        break;
-      case 'fixed_amount':
-        rewardAmount = campaign.rewardValue;
-        break;
-      case 'tiered':
-        // Simplified tiered calculation
-        if (referral.conversionValue >= 100) {
-          rewardAmount = 50;
-        } else if (referral.conversionValue >= 50) {
-          rewardAmount = 25;
-        } else {
-          rewardAmount = 10;
-        }
-        break;
-      default:
-        rewardAmount = 0;
+    case 'percentage':
+      rewardAmount = (referral.conversionValue * campaign.rewardValue) / 100;
+      break;
+    case 'fixed_amount':
+      rewardAmount = campaign.rewardValue;
+      break;
+    case 'tiered':
+      // Simplified tiered calculation
+      if (referral.conversionValue >= 100) {
+        rewardAmount = 50;
+      } else if (referral.conversionValue >= 50) {
+        rewardAmount = 25;
+      } else {
+        rewardAmount = 10;
+      }
+      break;
+    default:
+      rewardAmount = 0;
     }
 
     // Apply attribution model weight
@@ -384,17 +384,17 @@ class MockReferralDetectionService {
   async calculateAttributionWeight(referralId, model) {
     // Simplified attribution calculation
     switch (model) {
-      case 'first_touch':
-      case 'last_touch':
-        return 1.0;
-      case 'linear':
-        return 1.0; // Would divide by number of touchpoints in real implementation
-      case 'time_decay':
-        return 0.8; // Mock decay factor
-      case 'position_based':
-        return 1.0; // Simplified for single touchpoint
-      default:
-        return 1.0;
+    case 'first_touch':
+    case 'last_touch':
+      return 1.0;
+    case 'linear':
+      return 1.0; // Would divide by number of touchpoints in real implementation
+    case 'time_decay':
+      return 0.8; // Mock decay factor
+    case 'position_based':
+      return 1.0; // Simplified for single touchpoint
+    default:
+      return 1.0;
     }
   }
 
@@ -646,26 +646,26 @@ class ReferralDetectionCLI {
       let result;
       
       switch (command) {
-        case 'track':
-          result = await this.trackCommand(args, options);
-          break;
-        case 'campaign':
-          result = await this.campaignCommand(args, options);
-          break;
-        case 'fraud':
-          result = await this.fraudCommand(args, options);
-          break;
-        case 'rewards':
-          result = await this.rewardsCommand(args, options);
-          break;
-        case 'analytics':
-          result = await this.analyticsCommand(args, options);
-          break;
-        case 'health':
-          result = await this.healthCommand(args, options);
-          break;
-        default:
-          throw new Error(`Unknown command: ${command}`);
+      case 'track':
+        result = await this.trackCommand(args, options);
+        break;
+      case 'campaign':
+        result = await this.campaignCommand(args, options);
+        break;
+      case 'fraud':
+        result = await this.fraudCommand(args, options);
+        break;
+      case 'rewards':
+        result = await this.rewardsCommand(args, options);
+        break;
+      case 'analytics':
+        result = await this.analyticsCommand(args, options);
+        break;
+      case 'health':
+        result = await this.healthCommand(args, options);
+        break;
+      default:
+        throw new Error(`Unknown command: ${command}`);
       }
 
       const duration = Date.now() - startTime;
@@ -740,58 +740,58 @@ class ReferralDetectionCLI {
     const action = args[0] || 'list';
     
     switch (action) {
-      case 'create':
-        log('info', `Creating new referral campaign: ${options.name}`);
+    case 'create':
+      log('info', `Creating new referral campaign: ${options.name}`);
         
-        const campaign = await this.service.createCampaign({
-          name: options.name || 'New Campaign',
-          description: options.description,
-          campaignType: options.type || 'affiliate',
-          rewardType: options.rewardType || 'percentage',
-          rewardValue: parseFloat(options.rewardValue) || 10.0,
-          rewardCurrency: options.currency || 'USD',
-          maxRewardPerReferrer: options.maxReward ? parseFloat(options.maxReward) : undefined,
-          minimumConversionValue: options.minConversion ? parseFloat(options.minConversion) : 0
+      const campaign = await this.service.createCampaign({
+        name: options.name || 'New Campaign',
+        description: options.description,
+        campaignType: options.type || 'affiliate',
+        rewardType: options.rewardType || 'percentage',
+        rewardValue: parseFloat(options.rewardValue) || 10.0,
+        rewardCurrency: options.currency || 'USD',
+        maxRewardPerReferrer: options.maxReward ? parseFloat(options.maxReward) : undefined,
+        minimumConversionValue: options.minConversion ? parseFloat(options.minConversion) : 0
+      });
+        
+      log('success', `Campaign created: ${campaign.id}`);
+        
+      return {
+        command: 'campaign',
+        action: 'create',
+        campaign
+      };
+        
+    case 'list':
+      log('info', 'Listing all referral campaigns');
+        
+      const campaigns = Array.from(this.service.campaigns.values());
+        
+      console.log('\n' + colorize('📊 Referral Campaigns', 'bright'));
+      console.log('======================');
+        
+      if (campaigns.length === 0) {
+        console.log('No campaigns found.');
+      } else {
+        campaigns.forEach(campaign => {
+          console.log(`\n${colorize(campaign.name, 'cyan')} (${campaign.id})`);
+          console.log(`  Type: ${campaign.campaignType}`);
+          console.log(`  Status: ${colorize(campaign.status, campaign.status === 'active' ? 'green' : 'yellow')}`);
+          console.log(`  Reward: ${campaign.rewardValue}${campaign.rewardType === 'percentage' ? '%' : ` ${campaign.rewardCurrency}`}`);
+          console.log(`  Referrals: ${campaign.totalReferrals}`);
+          console.log(`  Conversions: ${campaign.successfulConversions}`);
+          console.log(`  Rewards Paid: ${campaign.totalRewardPaid} ${campaign.rewardCurrency}`);
         });
+      }
         
-        log('success', `Campaign created: ${campaign.id}`);
+      return {
+        command: 'campaign',
+        action: 'list',
+        campaigns
+      };
         
-        return {
-          command: 'campaign',
-          action: 'create',
-          campaign
-        };
-        
-      case 'list':
-        log('info', 'Listing all referral campaigns');
-        
-        const campaigns = Array.from(this.service.campaigns.values());
-        
-        console.log('\n' + colorize('📊 Referral Campaigns', 'bright'));
-        console.log('======================');
-        
-        if (campaigns.length === 0) {
-          console.log('No campaigns found.');
-        } else {
-          campaigns.forEach(campaign => {
-            console.log(`\n${colorize(campaign.name, 'cyan')} (${campaign.id})`);
-            console.log(`  Type: ${campaign.campaignType}`);
-            console.log(`  Status: ${colorize(campaign.status, campaign.status === 'active' ? 'green' : 'yellow')}`);
-            console.log(`  Reward: ${campaign.rewardValue}${campaign.rewardType === 'percentage' ? '%' : ` ${campaign.rewardCurrency}`}`);
-            console.log(`  Referrals: ${campaign.totalReferrals}`);
-            console.log(`  Conversions: ${campaign.successfulConversions}`);
-            console.log(`  Rewards Paid: ${campaign.totalRewardPaid} ${campaign.rewardCurrency}`);
-          });
-        }
-        
-        return {
-          command: 'campaign',
-          action: 'list',
-          campaigns
-        };
-        
-      default:
-        throw new Error(`Unknown campaign action: ${action}`);
+    default:
+      throw new Error(`Unknown campaign action: ${action}`);
     }
   }
 
@@ -871,70 +871,70 @@ class ReferralDetectionCLI {
     const action = args[0] || 'calculate';
     
     switch (action) {
-      case 'calculate':
-        log('info', 'Calculating referral rewards');
+    case 'calculate':
+      log('info', 'Calculating referral rewards');
         
-        const eligibleReferrals = Array.from(this.service.referrals.values()).filter(r => 
-          r.status === 'verified' && r.conversionValue && !Array.from(this.service.rewards.values()).find(reward => reward.referralId === r.id)
-        );
+      const eligibleReferrals = Array.from(this.service.referrals.values()).filter(r => 
+        r.status === 'verified' && r.conversionValue && !Array.from(this.service.rewards.values()).find(reward => reward.referralId === r.id)
+      );
         
-        const rewardResults = [];
+      const rewardResults = [];
         
-        for (const referral of eligibleReferrals) {
-          const reward = await this.service.calculateReward(referral.id);
-          if (reward) {
-            rewardResults.push({
-              referralId: referral.id,
-              rewardId: reward.id,
-              referrerId: reward.referrerId,
-              amount: reward.finalAmount,
-              currency: reward.currency,
-              status: reward.status
-            });
-            
-            log('success', `Reward calculated: ${reward.finalAmount} ${reward.currency} for referral ${referral.id}`);
-          }
-        }
-        
-        return {
-          command: 'rewards',
-          action: 'calculate',
-          summary: {
-            eligible: eligibleReferrals.length,
-            calculated: rewardResults.length,
-            totalAmount: rewardResults.reduce((sum, r) => sum + r.amount, 0)
-          },
-          results: rewardResults
-        };
-        
-      case 'list':
-        log('info', 'Listing all referral rewards');
-        
-        const rewards = Array.from(this.service.rewards.values());
-        
-        console.log('\n' + colorize('💰 Referral Rewards', 'bright'));
-        console.log('===================');
-        
-        if (rewards.length === 0) {
-          console.log('No rewards found.');
-        } else {
-          rewards.forEach(reward => {
-            const statusColor = reward.status === 'paid' ? 'green' : reward.status === 'pending' ? 'yellow' : 'red';
-            console.log(`${reward.id}: ${colorize(reward.finalAmount.toString(), 'green')} ${reward.currency} - ${colorize(reward.status, statusColor)}`);
-            console.log(`  Referral: ${reward.referralId}`);
-            console.log(`  Referrer: ${reward.referrerId}`);
-            console.log(`  Earned: ${reward.earnedAt.toISOString()}`);
+      for (const referral of eligibleReferrals) {
+        const reward = await this.service.calculateReward(referral.id);
+        if (reward) {
+          rewardResults.push({
+            referralId: referral.id,
+            rewardId: reward.id,
+            referrerId: reward.referrerId,
+            amount: reward.finalAmount,
+            currency: reward.currency,
+            status: reward.status
           });
+            
+          log('success', `Reward calculated: ${reward.finalAmount} ${reward.currency} for referral ${referral.id}`);
         }
+      }
         
-        return {
-          command: 'rewards',
-          action: 'list',
-          rewards
-        };
+      return {
+        command: 'rewards',
+        action: 'calculate',
+        summary: {
+          eligible: eligibleReferrals.length,
+          calculated: rewardResults.length,
+          totalAmount: rewardResults.reduce((sum, r) => sum + r.amount, 0)
+        },
+        results: rewardResults
+      };
         
-      default:
-        throw new Error(`Unknown rewards action: ${action}`);
+    case 'list':
+      log('info', 'Listing all referral rewards');
+        
+      const rewards = Array.from(this.service.rewards.values());
+        
+      console.log('\n' + colorize('💰 Referral Rewards', 'bright'));
+      console.log('===================');
+        
+      if (rewards.length === 0) {
+        console.log('No rewards found.');
+      } else {
+        rewards.forEach(reward => {
+          const statusColor = reward.status === 'paid' ? 'green' : reward.status === 'pending' ? 'yellow' : 'red';
+          console.log(`${reward.id}: ${colorize(reward.finalAmount.toString(), 'green')} ${reward.currency} - ${colorize(reward.status, statusColor)}`);
+          console.log(`  Referral: ${reward.referralId}`);
+          console.log(`  Referrer: ${reward.referrerId}`);
+          console.log(`  Earned: ${reward.earnedAt.toISOString()}`);
+        });
+      }
+        
+      return {
+        command: 'rewards',
+        action: 'list',
+        rewards
+      };
+        
+    default:
+      throw new Error(`Unknown rewards action: ${action}`);
     }
   }
 
@@ -1034,17 +1034,17 @@ class ReferralDetectionCLI {
     let content;
     
     switch (format) {
-      case 'json':
-        content = JSON.stringify(data, null, 2);
-        break;
-      case 'csv':
-        content = this.convertToCSV(data);
-        break;
-      case 'html':
-        content = this.convertToHTML(data);
-        break;
-      default:
-        content = JSON.stringify(data, null, 2);
+    case 'json':
+      content = JSON.stringify(data, null, 2);
+      break;
+    case 'csv':
+      content = this.convertToCSV(data);
+      break;
+    case 'html':
+      content = this.convertToHTML(data);
+      break;
+    default:
+      content = JSON.stringify(data, null, 2);
     }
     
     fs.writeFileSync(outputFile, content, 'utf8');

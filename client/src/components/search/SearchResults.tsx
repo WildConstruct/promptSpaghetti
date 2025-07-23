@@ -8,7 +8,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { useSearch, SearchResult } from './SearchContext';
+import { useSearch, // SearchResult // Unused import } from './SearchContext';
 
 interface SearchResultsProps<T = any> {
   renderItem?: (item: T, index: number) => React.ReactNode;

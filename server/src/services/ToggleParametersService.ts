@@ -7,7 +7,8 @@
  */
 
 import { Database } from '../database/connection';
-import { RetryUtils, retryableDatabase } from '../utils/RetryUtils';
+import { retryableDatabase } from '../utils/RetryUtils';
+// import { RetryUtils } from '../utils/RetryUtils';
 import { 
   FeatureToggle, 
   ToggleType, 
@@ -49,8 +50,8 @@ export interface ParameterChangeLog {
   id: string;
   toggleId: string;
   fieldName: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: Error;
+  newValue: Error;
   reason?: string;
   changedBy: string;
   changedAt: Date;
@@ -350,7 +351,7 @@ export class ToggleParametersService {
     tags?: string[]
   ): Promise<ParameterPreset[]> {
     let query = 'SELECT * FROM toggle_parameter_presets WHERE 1=1';
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     if (toggleType) {
@@ -443,7 +444,7 @@ export class ToggleParametersService {
   // ==========================================
 
   private validatePercentageRolloutParameters(
-    params: any,
+    params: unknown,
     errors: string[],
     warnings: string[]
   ): void {
@@ -463,7 +464,7 @@ export class ToggleParametersService {
   }
 
   private validateMultivariateParameters(
-    params: any,
+    params: unknown,
     errors: string[],
     warnings: string[]
   ): void {
@@ -472,15 +473,15 @@ export class ToggleParametersService {
       return;
     }
 
-    const enabledVariants = params.variants.filter((v: any) => v.enabled);
-    const totalPercentage = enabledVariants.reduce((sum: number, v: any) => sum + (v.percentage || 0), 0);
+    const enabledVariants = params.variants.filter((v: unknown) => v.enabled);
+    const totalPercentage = enabledVariants.reduce((sum: number, v: unknown) => sum + (v.percentage || 0), 0);
 
     if (Math.abs(totalPercentage - 100) > 0.01) {
       errors.push(`Total variant percentages must equal 100% (currently ${totalPercentage.toFixed(1)}%)`);
     }
 
     // Check for duplicate variant keys
-    const variantKeys = enabledVariants.map((v: any) => v.key);
+    const variantKeys = enabledVariants.map((v: unknown) => v.key);
     const uniqueKeys = new Set(variantKeys);
     if (variantKeys.length !== uniqueKeys.size) {
       errors.push('Variant keys must be unique');
@@ -492,7 +493,7 @@ export class ToggleParametersService {
   }
 
   private validateScheduledParameters(
-    params: any,
+    params: unknown,
     errors: string[],
     warnings: string[]
   ): void {
@@ -515,7 +516,7 @@ export class ToggleParametersService {
   }
 
   private validateSegmentationParameters(
-    params: any,
+    params: unknown,
     errors: string[],
     warnings: string[]
   ): void {
@@ -542,7 +543,7 @@ export class ToggleParametersService {
   // Parameter evaluation methods
   private evaluateBooleanToggle(
     toggle: FeatureToggle,
-    context: ToggleEvaluationContext
+    ____context: ToggleEvaluationContext
   ): ToggleEvaluationResult {
     const enabled = toggle.value?.enabled === true;
     
@@ -586,7 +587,7 @@ export class ToggleParametersService {
   ): ToggleEvaluationResult {
     const params = toggle.value;
     const variants = params.variants || [];
-    const enabledVariants = variants.filter((v: any) => v.enabled);
+    const enabledVariants = variants.filter((v: unknown) => v.enabled);
 
     if (enabledVariants.length === 0) {
       return {
@@ -748,15 +749,15 @@ export class ToggleParametersService {
   }
 
   // Utility methods
-  private hasNestedProperty(obj: any, path: string): boolean {
+  private hasNestedProperty(obj: unknown, path: string): boolean {
     return this.getNestedProperty(obj, path) !== undefined;
   }
 
-  private getNestedProperty(obj: any, path: string): any {
+  private getNestedProperty(obj: unknown, path: string): unknown {
     return path.split('.').reduce((curr, prop) => curr?.[prop], obj);
   }
 
-  private validateFieldValue(value: any, rule: string): boolean {
+  private validateFieldValue(value: Error, rule: string): boolean {
     const [ruleType, ...ruleParams] = rule.split(':');
 
     switch (ruleType) {
@@ -796,12 +797,12 @@ export class ToggleParametersService {
     return Math.abs(hash);
   }
 
-  private checkRecurrence(date: Date, recurrence: any, timezone: string): boolean {
+  private checkRecurrence(____date: Date, ____recurrence: Error, ____timezone: string): boolean {
     // Simplified recurrence checking - would need full implementation
     return true; // TODO: Implement proper recurrence logic
   }
 
-  private evaluateSegmentationRule(rule: any, context: ToggleEvaluationContext): boolean {
+  private evaluateSegmentationRule(rule: Error, context: ToggleEvaluationContext): boolean {
     const contextValue = this.getNestedProperty(context, rule.attribute);
     const ruleValue = rule.value;
 
@@ -867,10 +868,10 @@ export class ToggleParametersService {
     }
   }
 
-  private compareParameterObjects(oldObj: any, newObj: any, prefix: string = ''): Array<{
+  private compareParameterObjects(oldObj: unknown, newObj: unknown, prefix: string = ''): Array<{
     field: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: Error;
+    newValue: Error;
   }> {
     const changes = [];
     const allKeys = new Set([...Object.keys(oldObj || {}), ...Object.keys(newObj || {})]);
@@ -898,7 +899,7 @@ export class ToggleParametersService {
   }
 
   // Mapping methods
-  private mapToggleFromDB(row: any): FeatureToggle {
+  private mapToggleFromDB(row: unknown): FeatureToggle {
     return {
       id: row.id,
       key: row.key,
@@ -919,7 +920,7 @@ export class ToggleParametersService {
     };
   }
 
-  private mapParameterPresetFromDB(row: any): ParameterPreset {
+  private mapParameterPresetFromDB(row: unknown): ParameterPreset {
     return {
       id: row.id,
       name: row.name,
@@ -933,7 +934,7 @@ export class ToggleParametersService {
     };
   }
 
-  private mapParameterChangeLogFromDB(row: any): ParameterChangeLog {
+  private mapParameterChangeLogFromDB(row: unknown): ParameterChangeLog {
     return {
       id: row.id,
       toggleId: row.toggle_id,

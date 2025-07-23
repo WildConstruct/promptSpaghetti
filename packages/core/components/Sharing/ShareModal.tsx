@@ -7,7 +7,7 @@
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ShareableResourceType,
   ShareTarget,

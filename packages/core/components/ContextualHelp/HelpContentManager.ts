@@ -12,7 +12,7 @@
  * - Progressive learning path management
  */
 
-import { HelpContent, HelpContentType } from './ContextualHelpSystem';
+import { HelpContent } from './ContextualHelpSystem';
 
 export interface UserProfile {
   id: string;

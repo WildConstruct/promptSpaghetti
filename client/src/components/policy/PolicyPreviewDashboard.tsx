@@ -164,9 +164,9 @@ const PolicyPreviewDashboard: React.FC = () => {
   const [deployments, setDeployments] = useState<StagingDeployment[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('previews');
-  const [selectedPreview, setSelectedPreview] = useState<PolicyPreview | null>(null);
-  const [validationResults, setValidationResults] = useState<ValidationResult[]>([]);
-  const [userFeedback, setUserFeedback] = useState<UserFeedback[]>([]);
+  const [___selectedPreview, ___setSelectedPreview] = useState<PolicyPreview | null>(null);
+  const [validationResults, ___setValidationResults] = useState<ValidationResult[]>([]);
+  const [userFeedback, ___setUserFeedback] = useState<UserFeedback[]>([]);
 
   // Fetch data
   const fetchPreviews = useCallback(async () => {

@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Card, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
@@ -41,7 +41,7 @@ import {
   Award,
   Zap
 } from 'lucide-react';
-import { defaultEpic16Theme, Epic16DesignTokens } from './index';
+// Epic 16 theme imports removed
 
 export interface TutorialStep {
   id: string;

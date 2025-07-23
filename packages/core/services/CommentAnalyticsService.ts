@@ -254,7 +254,7 @@ export class CommentAnalyticsService {
   ): Promise<void> {
     try {
       await this.db.query(
-        `SELECT update_comment_analytics_daily($1, $2, $3)`,
+        'SELECT update_comment_analytics_daily($1, $2, $3)',
         [resourceId, resourceType, date.toISOString().split('T')[0]]
       );
 
@@ -335,13 +335,13 @@ export class CommentAnalyticsService {
       breakdowns.totalEngagements += count;
       
       switch (row.engagement_type) {
-        case 'like': breakdowns.likes = count; break;
-        case 'reply': breakdowns.replies = count; break;
-        case 'share': breakdowns.shares = count; break;
-        case 'view': breakdowns.views = count; break;
-        case 'helpful': breakdowns.helpful = count; break;
-        case 'dislike': breakdowns.dislikes = count; break;
-        case 'report': breakdowns.reports = count; break;
+      case 'like': breakdowns.likes = count; break;
+      case 'reply': breakdowns.replies = count; break;
+      case 'share': breakdowns.shares = count; break;
+      case 'view': breakdowns.views = count; break;
+      case 'helpful': breakdowns.helpful = count; break;
+      case 'dislike': breakdowns.dislikes = count; break;
+      case 'report': breakdowns.reports = count; break;
       }
     });
 

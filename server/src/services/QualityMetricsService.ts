@@ -810,7 +810,7 @@ export class QualityMetricsService extends EventEmitter {
   ): Promise<QualityRecommendation[]> {
     try {
       let query = 'SELECT * FROM quality_recommendations WHERE status != $1';
-      const params: any[] = ['dismissed'];
+      const params: unknown[] = ['dismissed'];
       
       if (category) {
         query += ' AND category = $2';
@@ -1470,7 +1470,7 @@ export class QualityMetricsService extends EventEmitter {
     return sources;
   }
   
-  private mapRowToRecommendation = (row: any): QualityRecommendation => {
+  private mapRowToRecommendation = (row: unknown): QualityRecommendation => {
     return {
       id: row.id,
       category: row.category,
@@ -1489,7 +1489,7 @@ export class QualityMetricsService extends EventEmitter {
     };
   };
   
-  private mapRowToAlert = (row: any): QualityAlert => {
+  private mapRowToAlert = (row: unknown): QualityAlert => {
     return {
       id: row.id,
       type: row.type,
@@ -1510,7 +1510,7 @@ export class QualityMetricsService extends EventEmitter {
   };
   
   // Additional helper methods would be implemented here...
-  private async readCoverageData(): Promise<any> {
+  private async readCoverageData(): Promise<unknown> {
     try {
       const coveragePath = path.join(process.cwd(), 'coverage', 'coverage-summary.json');
       const data = await fs.readFile(coveragePath, 'utf-8');
@@ -1520,7 +1520,7 @@ export class QualityMetricsService extends EventEmitter {
     }
   }
   
-  private extractPackageCoverage(coverageData: any): PackageCoverageMetrics[] {
+  private extractPackageCoverage(_____coverageData: unknown): PackageCoverageMetrics[] {
     // Extract package-level coverage from Jest coverage data
     return [
       { name: 'packages/core', percentage: 85, linesTotal: 1200, linesCovered: 1020 },
@@ -1529,14 +1529,14 @@ export class QualityMetricsService extends EventEmitter {
     ];
   }
   
-  private extractComponentCoverage(coverageData: any): ComponentCoverageMetrics[] {
+  private extractComponentCoverage(_____coverageData: unknown): ComponentCoverageMetrics[] {
     return [
       { name: 'GraphEditor', type: 'component', percentage: 75, criticalPaths: 12, uncoveredPaths: 3 },
       { name: 'QualityMetricsService', type: 'service', percentage: 90, criticalPaths: 8, uncoveredPaths: 1 }
     ];
   }
   
-  private async getCoverageTrends(): Promise<any> {
+  private async getCoverageTrends(): Promise<unknown> {
     return {
       last7Days: [82, 83, 82, 84, 83, 85, 84],
       last30Days: [78, 79, 80, 81, 82, 83, 84, 85],
@@ -1545,14 +1545,14 @@ export class QualityMetricsService extends EventEmitter {
     };
   }
   
-  private identifyUncoveredCriticalPaths(coverageData: any): string[] {
+  private identifyUncoveredCriticalPaths(_____coverageData: unknown): string[] {
     return [
       'packages/core/runtime/advanced.ts:342-358',
       'server/src/auth/AuthService.ts:125-140'
     ];
   }
   
-  private identifyCoverageHotspots(coverageData: any): CoverageHotspot[] {
+  private identifyCoverageHotspots(_____coverageData: unknown): CoverageHotspot[] {
     return [
       {
         file: 'packages/core/runtime/advanced.ts',
@@ -1633,7 +1633,7 @@ export class QualityMetricsService extends EventEmitter {
     return this.getEmptyTrends();
   }
   
-  private async generateRecommendations(metrics: any): Promise<QualityRecommendation[]> {
+  private async generateRecommendations(metrics: unknown): Promise<QualityRecommendation[]> {
     const recommendations: QualityRecommendation[] = [];
     
     // Generate recommendations based on metrics
@@ -1667,7 +1667,7 @@ export class QualityMetricsService extends EventEmitter {
     return recommendations;
   }
   
-  private async checkForAlerts(metrics: any): Promise<QualityAlert[]> {
+  private async checkForAlerts(metrics: unknown): Promise<QualityAlert[]> {
     const alerts: QualityAlert[] = [];
     
     // Check for threshold breaches
@@ -1688,12 +1688,12 @@ export class QualityMetricsService extends EventEmitter {
     return alerts;
   }
   
-  private aggregateMetricsByGranularity(metrics: QualityMetrics[], granularity: 'hour' | 'day' | 'week'): QualityMetrics[] {
+  private aggregateMetricsByGranularity(metrics: QualityMetrics[], _____granularity: 'hour' | 'day' | 'week'): QualityMetrics[] {
     // For now, return as-is. In a real implementation, this would aggregate data points
     return metrics;
   }
   
-  private calculateTrendsFromHistorical(metrics: QualityMetrics[]): QualityTrends {
+  private calculateTrendsFromHistorical(_____metrics: QualityMetrics[]): QualityTrends {
     return this.getEmptyTrends();
   }
   

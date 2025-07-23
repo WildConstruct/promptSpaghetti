@@ -9,10 +9,10 @@
  */
 
 import { AuditService } from '../auth/services/AuditService';
-import { AccessControlFramework, AccessControlContext, AccessDecision } from './AccessControlFramework';
-import { EvidenceVersioningService, EvidenceVersion } from './EvidenceVersioningService';
+import { AccessControlFramework, AccessControlContext } from './AccessControlFramework';
+import { EvidenceVersioningService } from './EvidenceVersioningService';
 import { DatabaseService } from '../auth/database/DatabaseService';
-import { UserAccessTransparency, DataPoint } from '../../packages/core/security/UserAccessTransparency';
+import { UserAccessTransparency } from '../../packages/core/security/UserAccessTransparency';
 import crypto from 'crypto';
 
 // Core audit trail data structures
@@ -301,7 +301,7 @@ export class EvidenceAccessAuditService {
     
     try {
       let whereClause = '1=1';
-      const params: any[] = [];
+      const params: unknown[] = [];
       
       if (query.evidenceId) {
         whereClause += ' AND evidence_id = $' + (params.length + 1);
@@ -408,7 +408,7 @@ export class EvidenceAccessAuditService {
 
   // Private helper methods
 
-  private async getEvidenceMetadata(evidenceId: string): Promise<any> {
+  private async getEvidenceMetadata(____evidenceId: string): Promise<unknown> {
     // Integrate with existing evidence services
     return {
       currentVersion: '1.0',
@@ -423,7 +423,7 @@ export class EvidenceAccessAuditService {
 
   private async assessAccessRisk(
     context: AccessControlContext,
-    evidenceMetadata: any,
+    evidenceMetadata: Record<string, unknown>,
     action: EvidenceAccessAction
   ): Promise<EvidenceAccessAuditEntry['risk']> {
     let riskScore = 0;
@@ -464,7 +464,7 @@ export class EvidenceAccessAuditService {
     return { level, score: riskScore, factors, mitigations };
   }
 
-  private async createContentHash(data: any): Promise<string> {
+  private async createContentHash(data: Record<string, unknown>): Promise<string> {
     const content = JSON.stringify(data, Object.keys(data).sort());
     return crypto.createHash('sha256').update(content).digest('hex');
   }
@@ -576,7 +576,7 @@ export class EvidenceAccessAuditService {
     return (baseRetention[classification] || 365) * (riskMultiplier[riskLevel] || 1);
   }
 
-  private determineComplianceFlags(evidenceMetadata: any, action: EvidenceAccessAction): string[] {
+  private determineComplianceFlags(evidenceMetadata: Record<string, unknown>, action: EvidenceAccessAction): string[] {
     const flags: string[] = [];
     
     if (evidenceMetadata.complianceFrameworks?.includes('GDPR')) {
@@ -590,7 +590,7 @@ export class EvidenceAccessAuditService {
     return flags;
   }
 
-  private mapRowToAuditEntry(row: any): EvidenceAccessAuditEntry {
+  private mapRowToAuditEntry(row: unknown): EvidenceAccessAuditEntry {
     // Map database row to audit entry object
     return {
       id: row.id,

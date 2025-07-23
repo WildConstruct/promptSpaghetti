@@ -65,7 +65,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
   // State management
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
-  const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
+  const [typingUsers, ___setTypingUsers] = useState<TypingUser[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [isConnected, setIsConnected] = useState(false);

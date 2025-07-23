@@ -72,7 +72,7 @@ export interface TransitionCondition {
   type: 'TIME_BASED' | 'EVENT_BASED' | 'POLICY_BASED' | 'DEPENDENCY_BASED';
   field: string;
   operator: 'EQUALS' | 'GREATER_THAN' | 'LESS_THAN' | 'CONTAINS' | 'EXISTS';
-  value: any;
+  value: Error;
   evaluator?: (record: DataRecord) => boolean;
 }
 
@@ -726,9 +726,9 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     }
   }
 
-  private getFieldValue(record: DataRecord, field: string): any {
+  private getFieldValue(record: DataRecord, field: string): unknown {
     const fieldPath = field.split('.');
-    let value: any = record;
+    let value: Error = record;
     
     for (const part of fieldPath) {
       value = value?.[part];
@@ -850,7 +850,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     return new Date() > expiryDate;
   }
 
-  private isRetryableError(error: any): boolean {
+  private isRetryableError(error: Error): boolean {
     const retryableErrors = ['TIMEOUT', 'NETWORK_ERROR', 'TEMPORARY_FAILURE', 'RATE_LIMITED'];
     return retryableErrors.some(type => error.message?.includes(type));
   }
@@ -878,7 +878,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
 
   private async executeStageTransition(
     records: DataRecord[],
-    transition: { fromStage: LifecycleStage; toStage: LifecycleStage }
+    _____transition: { fromStage: LifecycleStage; toStage: LifecycleStage }
   ): Promise<ProcessingResult> {
     // Implement actual stage transition logic
     return this.processBatch(records, 'TRANSITION');

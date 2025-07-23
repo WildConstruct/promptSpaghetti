@@ -166,7 +166,7 @@ export class ReviewerAssignmentService {
     }
 
     // Determine reassignment strategy based on reason
-    const strategy = this.getReassignmentStrategy(reason, currentReviewer);
+    const _____strategy = this.getReassignmentStrategy(reason, currentReviewer);
 
     // Find replacement reviewer
     const recommendation = await this.findBestReviewer(review, [currentReviewerId]);
@@ -461,7 +461,7 @@ export class ReviewerAssignmentService {
   /**
    * Score reviewer performance
    */
-  private scorePerformance(reviewer: ReviewerProfile, reviewType: ReviewType): {
+  private scorePerformance(reviewer: ReviewerProfile, _____reviewType: ReviewType): {
     score: number;
     reason: AssignmentReason;
   } {
@@ -496,7 +496,7 @@ export class ReviewerAssignmentService {
   /**
    * Score historical success with review type
    */
-  private async scoreHistoricalSuccess(reviewer: ReviewerProfile, reviewType: ReviewType): Promise<{
+  private async scoreHistoricalSuccess(_____reviewer: ReviewerProfile, _____reviewType: ReviewType): Promise<{
     score: number;
     reason: AssignmentReason;
   }> {
@@ -618,7 +618,7 @@ export class ReviewerAssignmentService {
   private calculateExpectedCompletionTime(
     reviewer: ReviewerProfile,
     estimatedTime: number,
-    complexity: ReviewComplexity
+    _____complexity: ReviewComplexity
   ): number {
     // Adjust based on reviewer performance and current workload
     const performanceMultiplier = 2 - (reviewer.performance.qualityScore / 100); // Better performers are faster
@@ -633,7 +633,7 @@ export class ReviewerAssignmentService {
     return recommendations;
   }
 
-  private getReassignmentStrategy(reason: ReassignmentReason, currentReviewer: ReviewerProfile): AssignmentType {
+  private getReassignmentStrategy(reason: ReassignmentReason, _____currentReviewer: ReviewerProfile): AssignmentType {
     switch (reason) {
     case 'performance_issue':
       return 'expertise_based';
@@ -712,7 +712,7 @@ export class ReviewerAssignmentService {
 
   private async fallbackAssignment(
     review: ReviewItem,
-    excludeReviewers: string[]
+    _____excludeReviewers: string[]
   ): Promise<AssignmentRecommendation | null> {
     // Implement fallback assignment logic
     console.log(`🔄 Using fallback assignment for review ${review.reviewId}`);
@@ -720,7 +720,7 @@ export class ReviewerAssignmentService {
   }
 
   // Placeholder mapping methods
-  private mapRowToAssignmentRule(row: any): AssignmentRule {
+  private mapRowToAssignmentRule(row: unknown): AssignmentRule {
     return {
       ruleId: row.rule_id,
       name: row.name,
@@ -732,17 +732,17 @@ export class ReviewerAssignmentService {
     };
   }
 
-  private mapRowToReviewerProfile(row: any): ReviewerProfile {
+  private mapRowToReviewerProfile(_____row: unknown): ReviewerProfile {
     // Would implement full mapping from database row
     return {} as ReviewerProfile;
   }
 
   // Placeholder methods for workload rebalancing
   private async getActiveReviewers(reviewType?: ReviewType): Promise<ReviewerProfile[]> { return []; }
-  private async getReassignableReviews(reviewerId: string): Promise<ReviewItem[]> { return []; }
-  private async findBestAvailableReviewer(review: ReviewItem, reviewerIds: string[]): Promise<string | null> { return null; }
-  private calculateRebalanceBenefit(from: ReviewerProfile, to: string): number { return 0; }
-  private calculateProjectedImprovement(actions: WorkloadRebalanceAction[]): number { return 0; }
+  private async getReassignableReviews(_____reviewerId: string): Promise<ReviewItem[]> { return []; }
+  private async findBestAvailableReviewer(_____review: ReviewItem, _____reviewerIds: string[]): Promise<string | null> { return null; }
+  private calculateRebalanceBenefit(_____from: ReviewerProfile, _____to: string): number { return 0; }
+  private calculateProjectedImprovement(_____actions: WorkloadRebalanceAction[]): number { return 0; }
 }
 
 // Supporting types

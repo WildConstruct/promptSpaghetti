@@ -11,7 +11,7 @@ import { conversionTracker } from '../../analytics/ConversionTracker';
 import { performanceMonitor } from '../../utils/PerformanceMonitor';
 
 export interface RealTimeMetricsProps {
-  metrics: any;
+  metrics: unknown;
   loading: boolean;
 }
 
@@ -25,7 +25,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
     recentEvents: []
   });
 
-  const [updateCount, setUpdateCount] = useState(0);
+  const [_____updateCount, setUpdateCount] = useState(0);
 
   useEffect(() => {
     if (metrics) {

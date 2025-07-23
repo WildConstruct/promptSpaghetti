@@ -11,7 +11,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import { EvidenceClassificationService, DataClassification } from './EvidenceClassificationService';
 import * as crypto from 'crypto';
-import { promisify } from 'util';
+import { // promisify // Unused import } from 'util';
 
 // =============================================================================
 // Evidence Versioning Interfaces
@@ -852,7 +852,7 @@ export class EvidenceVersioningService {
     try {
       const data = JSON.parse(encryptedContent);
       const key = Buffer.from(data.key, 'base64');
-      const iv = Buffer.from(data.iv, 'base64');
+      const __iv = Buffer.from(data.__iv, 'base64');
       const authTag = Buffer.from(data.authTag, 'base64');
       
       const decipher = crypto.createDecipherGCM('aes-256-gcm', key);

@@ -71,7 +71,7 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({
   const [reviewerAssignments, setReviewerAssignments] = useState<Record<string, ReviewerAssignment[]>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedRequest, setSelectedRequest] = useState<ApprovalRequest | null>(null);
+  const [_____selectedRequest, setSelectedRequest] = useState<ApprovalRequest | null>(null);
   const [activeTab, setActiveTab] = useState<'pending' | 'completed' | 'all'>('pending');
   const [expandedRequests, setExpandedRequests] = useState<Set<string>>(new Set());
 

@@ -13,7 +13,7 @@ import { Workflow, Play, Pause, CheckCircle, XCircle, Users, FileText, ArrowRigh
 export const PolicyEnforcementWorkflow = ({ className = '' }) => {
     const [activeTab, setActiveTab] = useState('workflows');
     const [selectedWorkflow, setSelectedWorkflow] = useState(null);
-    const [isDesignerOpen, setIsDesignerOpen] = useState(false);
+    const [_____isDesignerOpen, setIsDesignerOpen] = useState(false);
     // Mock enforcement actions
     const [enforcementActions] = useState([
         {

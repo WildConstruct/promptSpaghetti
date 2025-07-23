@@ -12,7 +12,7 @@
  * - Risk assessment display components
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   AlertTriangle, 
   Zap, 
@@ -30,23 +30,23 @@ import {
 // Types from our enhanced services
 interface EnhancedEvaluationResult {
   enabled: boolean;
-  value: any;
+  value: Error;
   reason: string;
   evaluationTime: number;
   cacheHit: boolean;
   ruleName?: string;
   dependencyStatus?: {
     checked: boolean;
-    violations: any[];
-    warnings: any[];
+    violations: unknown[];
+    warnings: unknown[];
     blockers: string[];
     requirements: string[];
     canActivate: boolean;
   };
-  cascadeEffects?: any[];
+  cascadeEffects?: unknown[];
   riskAssessment?: {
     riskScore: number;
-    factors: any[];
+    factors: unknown[];
     mitigation: string[];
     recommendation: 'proceed' | 'caution' | 'review' | 'block';
   };
@@ -61,21 +61,21 @@ interface EnhancedEvaluationResult {
 
 interface OperationEnforcement {
   allowed: boolean;
-  blockers: any[];
-  warnings: any[];
-  cascadeActions: any[];
-  impactAssessment: any;
+  blockers: unknown[];
+  warnings: unknown[];
+  cascadeActions: unknown[];
+  impactAssessment: unknown;
   riskScore: number;
-  recommendation: any;
-  rollbackPlan?: any;
+  recommendation: unknown;
+  rollbackPlan?: unknown;
 }
 
 interface ImpactPreview {
-  operation: any;
-  directImpact: any[];
-  indirectImpact: any[];
-  cascadePreview: any[];
-  riskFactors: any[];
+  operation: unknown;
+  directImpact: unknown[];
+  indirectImpact: unknown[];
+  cascadePreview: unknown[];
+  riskFactors: unknown[];
   overallRiskScore: number;
   estimatedAffectedUsers: number;
   estimatedExecutionTime: number;
@@ -203,12 +203,12 @@ export const useOperationEnforcement = () => {
       targetToggleId: string;
       reason: string;
       newState?: boolean;
-      newValue?: any;
+      newValue?: unknown;
     },
     context: {
       requestSource: 'admin_dashboard';
       urgencyLevel: 'low' | 'normal' | 'high' | 'emergency';
-      approvals?: any[];
+      approvals?: unknown[];
       rolloutStrategy?: 'immediate' | 'gradual' | 'scheduled';
     }
   ): Promise<OperationEnforcement | null> => {
@@ -249,9 +249,9 @@ export const useOperationEnforcement = () => {
   }, []);
 
   const executeOperation = useCallback(async (
-    operation: any,
+    operation: unknown,
     enforcement: OperationEnforcement,
-    context: any
+    context: unknown
   ): Promise<boolean> => {
     setLoading(true);
     setError(null);
@@ -364,7 +364,7 @@ export const RiskAssessmentBadge: React.FC<{
 }> = ({ riskAssessment }) => {
   if (!riskAssessment) return null;
 
-  const { riskScore, recommendation } = riskAssessment;
+  const { riskScore, ___recommendation } = riskAssessment;
   
   const getRiskColor = () => {
     if (riskScore >= 0.8) return 'text-red-600 bg-red-50 border-red-200';
@@ -486,8 +486,8 @@ export const PerformanceMetrics: React.FC<{
 export const DependencyStatusIndicator: React.FC<{
   dependencyStatus?: {
     checked: boolean;
-    violations: any[];
-    warnings: any[];
+    violations: unknown[];
+    warnings: unknown[];
     blockers: string[];
     canActivate: boolean;
   };
@@ -532,7 +532,7 @@ export const DependencyStatusIndicator: React.FC<{
  * Cascade Effects Preview Component
  */
 export const CascadeEffectsPreview: React.FC<{
-  cascadeEffects?: any[];
+  cascadeEffects?: unknown[];
   compact?: boolean;
 }> = ({ cascadeEffects, compact = false }) => {
   if (!cascadeEffects || cascadeEffects.length === 0) return null;

@@ -12,7 +12,7 @@ import { WeightVisualizationPanel } from '../../WeightVisualization';
  * - Advanced: Distribution algorithms, weight controls, and normalization (power users)
  * - Debug: Technical details, visualization, and raw data (developers)
  */
-export const WeightedAdvancedEditor = ({ nodeId, nodeData, onChange }) => {
+export const WeightedAdvancedEditor = ({ _____nodeId, nodeData, onChange }) => {
     // WeightedAdvanced specific fields
     const choices = nodeData.choices || [];
     const distributionType = nodeData.distributionType || 'linear';

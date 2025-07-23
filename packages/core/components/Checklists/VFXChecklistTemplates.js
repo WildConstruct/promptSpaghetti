@@ -418,7 +418,7 @@ export const VFXChecklistTemplates = ({ templates = [], currentUser, onTemplateS
     const [showOnlyPublic, setShowOnlyPublic] = useState(false);
     const [showOnlyMine, setShowOnlyMine] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
-    const [showCreateForm, setShowCreateForm] = useState(false);
+    const [_____showCreateForm, setShowCreateForm] = useState(false);
     // Combine built-in and user templates
     const allTemplates = useMemo(() => {
         return [...BUILTIN_TEMPLATES, ...templates];

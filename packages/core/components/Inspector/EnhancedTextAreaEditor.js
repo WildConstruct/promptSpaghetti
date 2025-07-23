@@ -1,13 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useCorrectionsStore } from '../../correctionsStore';
-export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, rows = 4, maxLength, minLength, autoResize = false, showWordCount = false, enableInlineCorrections = true, autoApplyCorrections = false, showCorrectionHighlights = true }) => {
+export const EnhancedTextAreaEditor = ({ label, value, fieldKey, error, onChange, placeholder, disabled = false, rows = 4, maxLength, minLength, autoResize = false, showWordCount = false, enableInlineCorrections = true, autoApplyCorrections = false, _____showCorrectionHighlights = true }) => {
     const [localValue, setLocalValue] = useState(String(value ?? ''));
     const [isFocused, setIsFocused] = useState(false);
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [selectedSuggestion, setSelectedSuggestion] = useState(null);
-    const [cursorPosition, setCursorPosition] = useState(0);
+    const [_____selectedSuggestion, _____setSelectedSuggestion] = useState(null);
+    const [_____cursorPosition, setCursorPosition] = useState(0);
     const textareaRef = useRef(null);
     const suggestionsRef = useRef(null);
     const { getActiveRules, applyCorrections, addNotification } = useCorrectionsStore();

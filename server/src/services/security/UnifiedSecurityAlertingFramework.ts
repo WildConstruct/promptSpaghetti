@@ -20,9 +20,9 @@
 import { EventEmitter } from 'events';
 import { logger } from '../../utils/logger';
 import { SecurityAlertingAnalytics, SecurityAlertingConfig } from '../../../packages/core/security/SecurityAlertingAnalytics';
-import { ProjectHealthAlertService, ProjectHealthAlert } from '../project-health-alert-service';
+import { ProjectHealthAlertService } from '../project-health-alert-service';
 import { HealthMonitoringService, SystemHealthSummary, HealthStatus } from '../HealthMonitoringService';
-import { SecurityAlert } from '../../../packages/core/security/CentralizedAccessControlService';
+// import { SecurityAlert } from '../../../packages/core/security/CentralizedAccessControlService';
 
 export enum AlertPriority {
   LOW = 'LOW',
@@ -101,7 +101,7 @@ export interface UnifiedAlert {
   assignedAt?: Date;
   
   // Original alert data
-  originalAlert?: any;
+  originalAlert?: unknown;
   correlatedAlerts: string[];
   
   // Response tracking
@@ -132,7 +132,7 @@ export interface AlertResponseAction {
   result?: {
     success: boolean;
     message: string;
-    details?: any;
+    details?: unknown;
   };
 }
 
@@ -188,7 +188,7 @@ export interface AlertRule {
 export interface AlertCondition {
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'GREATER_THAN' | 'LESS_THAN' | 'IN' | 'NOT_IN' | 'REGEX';
-  value: any;
+  value: Error;
   weight: number; // 0-1, importance of this condition
 }
 
@@ -201,7 +201,7 @@ export interface RuleAction {
 
 export interface ActionCondition {
   condition: string;
-  value: any;
+  value: Error;
   operator: string;
 }
 
@@ -255,7 +255,7 @@ export interface NotificationChannel {
 export interface ChannelCondition {
   field: string;
   operator: string;
-  value: any;
+  value: Error;
 }
 
 export interface EscalationRule {
@@ -268,7 +268,7 @@ export interface EscalationRule {
 
 export interface EscalationCondition {
   condition: string;
-  value: any;
+  value: Error;
 }
 
 export interface AlertMetrics {
@@ -1008,10 +1008,10 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     }
   }
   
-  private getAlertFieldValue(alert: UnifiedAlert, field: string): any {
+  private getAlertFieldValue(alert: UnifiedAlert, field: string): unknown {
     // Navigate nested fields like 'originalAlert.type'
     const parts = field.split('.');
-    let value: any = alert;
+    let value: Error = alert;
     
     for (const part of parts) {
       if (value && typeof value === 'object') {
@@ -1058,7 +1058,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     }
   }
   
-  private async checkEscalationConditions(alert: UnifiedAlert): Promise<void> {
+  private async checkEscalationConditions(____alert: UnifiedAlert): Promise<void> {
     // Escalation logic would be implemented here
   }
   
@@ -1093,22 +1093,22 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   
   private async performResponseAction(
     actionType: AlertResponseAction['actionType'],
-    parameters: Record<string, any>,
-    alert: UnifiedAlert
-  ): Promise<{ success: boolean; message: string; details?: any }> {
+    ____parameters: Record<string, any>,
+    ____alert: UnifiedAlert
+  ): Promise<{ success: boolean; message: string; details?: unknown }> {
     // Response action implementation would go here
     return { success: true, message: `${actionType} executed successfully` };
   }
   
-  private async sendEmailNotification(alert: UnifiedAlert, parameters: any): Promise<void> {
+  private async sendEmailNotification(____alert: UnifiedAlert, ____parameters: unknown): Promise<void> {
     // Email notification implementation
   }
   
-  private async sendWebhookNotification(alert: UnifiedAlert, parameters: any): Promise<void> {
+  private async sendWebhookNotification(____alert: UnifiedAlert, ____parameters: unknown): Promise<void> {
     // Webhook notification implementation
   }
   
-  private generateTrendAnalysis(): any {
+  private generateTrendAnalysis(): unknown {
     return {
       alertVolume: [],
       resolutionTimes: [],
@@ -1116,7 +1116,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     };
   }
   
-  private generateRecommendations(): any[] {
+  private generateRecommendations(): unknown[] {
     return [];
   }
   

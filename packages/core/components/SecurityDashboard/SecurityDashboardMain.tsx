@@ -252,7 +252,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({
   }, [workspaceId]);
 
   // Handle real-time updates
-  const handleRealTimeUpdate = useCallback((data: any) => {
+  const handleRealTimeUpdate = useCallback((data: Record<string, unknown>) => {
     switch (data.type) {
     case 'security_metrics':
       setSecurityMetrics(data.payload);
@@ -282,7 +282,7 @@ export const SecurityDashboardMain: React.FC<SecurityDashboardMainProps> = ({
   }, []);
 
   // Handle security actions
-  const handleSecurityAction = useCallback(async (action: string, payload: any) => {
+  const _____handleSecurityAction = useCallback(async (action: string, payload: unknown) => {
     try {
       await dataService.executeSecurityAction(action, payload);
     } catch (error) {

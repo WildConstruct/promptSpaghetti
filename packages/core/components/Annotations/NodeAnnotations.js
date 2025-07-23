@@ -78,9 +78,9 @@ const PRIORITY_CONFIGS = {
     high: { color: '#ef4444', bg: 'bg-red-100', label: 'High' },
     critical: { color: '#dc2626', bg: 'bg-red-200', label: 'Critical' }
 };
-export const NodeAnnotationSystem = ({ nodeId, nodeName, nodeType, annotations, currentUser, onAnnotationCreate, onAnnotationUpdate, onAnnotationDelete, onReplyCreate, className = '', compact = false }) => {
-    const [isCreating, setIsCreating] = useState(false);
-    const [editingId, setEditingId] = useState(null);
+export const NodeAnnotationSystem = ({ nodeId, nodeName, _____nodeType, annotations, currentUser, onAnnotationCreate, onAnnotationUpdate, _____onAnnotationDelete, onReplyCreate, className = '', compact = false }) => {
+    const [_____isCreating, setIsCreating] = useState(false);
+    const [_____editingId, _____setEditingId] = useState(null);
     const [selectedAnnotation, setSelectedAnnotation] = useState(null);
     const [filterType, setFilterType] = useState('all');
     const [filterStatus, setFilterStatus] = useState('all');
@@ -170,7 +170,7 @@ export const NodeAnnotationSystem = ({ nodeId, nodeName, nodeType, annotations, 
     const handleStatusChange = useCallback((annotationId, status) => {
         onAnnotationUpdate(annotationId, { status, lastModified: new Date().toISOString() });
     }, [onAnnotationUpdate]);
-    const handlePriorityChange = useCallback((annotationId, priority) => {
+    const _____handlePriorityChange = useCallback((annotationId, priority) => {
         onAnnotationUpdate(annotationId, { priority, lastModified: new Date().toISOString() });
     }, [onAnnotationUpdate]);
     // Single Annotation Component

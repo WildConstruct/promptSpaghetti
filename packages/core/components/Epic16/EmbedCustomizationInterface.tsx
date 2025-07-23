@@ -50,8 +50,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
-import { Template, TemplateAuthor } from './TemplatePreviewModal';
-import { EmbedCustomization, EmbedLayout, EmbedBranding, EmbedSocialConfig, PREVIEW_SIZES, PreviewSize } from './EmbeddedTemplatePreview';
+import { Template } from './TemplatePreviewModal';
+import { EmbedCustomization, EmbedBranding, PREVIEW_SIZES, PreviewSize } from './EmbeddedTemplatePreview';
 
 // Advanced customization types
 export interface EmbedCustomizationInterfaceProps {
@@ -81,7 +81,7 @@ export interface EmbedWidget {
   type: 'header' | 'preview' | 'metadata' | 'actions' | 'stats' | 'comments' | 'author' | 'footer';
   name: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
   configurable: boolean;
   required: boolean;
   position: { x: number; y: number };
@@ -327,7 +327,7 @@ const WIDGET_LIBRARY: Omit<EmbedWidget, 'position' | 'size' | 'visible' | 'confi
     type: 'stats',
     name: 'Statistics',
     description: 'Downloads, likes, ratings',
-    icon: ChartBarIcon,
+    icon: BarChart3,
     configurable: true,
     required: false
   },
@@ -436,7 +436,7 @@ export const VisualLayoutBuilder: React.FC<{
   previewSize: PreviewSize;
 }> = ({ widgets, onWidgetsChange, previewSize }) => {
   const [selectedWidget, setSelectedWidget] = useState<string | null>(null);
-  const canvasRef = useRef<HTMLDivElement>(null);
+  const _____canvasRef = useRef<HTMLDivElement>(null);
 
   const handleDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) return;
@@ -729,7 +729,7 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
     initialCustomization || presets[0].customization
   );
   const [selectedPreset, setSelectedPreset] = useState<string>(presets[0].id);
-  const [previewSize, setPreviewSize] = useState<PreviewSize>(PREVIEW_SIZES[1]);
+  const [previewSize, _____setPreviewSize] = useState<PreviewSize>(PREVIEW_SIZES[1]);
   const [widgets, setWidgets] = useState<EmbedWidget[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -1051,20 +1051,20 @@ export const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfacePr
                     {Object.entries(customization.branding)
                       .filter(([key]) => typeof customization.branding[key as keyof EmbedBranding] === 'boolean')
                       .map(([key, value]) => (
-                      <label key={key} className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          checked={value as boolean}
-                          onChange={(e) => updateCustomization({
-                            branding: { ...customization.branding, [key]: e.target.checked }
-                          })}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                        />
-                        <span className="text-sm text-gray-700 capitalize">
-                          {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
-                        </span>
-                      </label>
-                    ))}
+                        <label key={key} className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            checked={value as boolean}
+                            onChange={(e) => updateCustomization({
+                              branding: { ...customization.branding, [key]: e.target.checked }
+                            })}
+                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          />
+                          <span className="text-sm text-gray-700 capitalize">
+                            {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
+                          </span>
+                        </label>
+                      ))}
                   </div>
                 </div>
               </div>

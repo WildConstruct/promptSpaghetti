@@ -7,7 +7,7 @@
  * Task: E23-1753115279521-7A79DE - Design workspace data model
  */
 
-import { Workspace, Project, Resource, User, Role, Permission } from './workspace-models';
+import { Workspace, // Project // Unused import, Resource, // User // Unused import, Role, Permission } from './workspace-models';
 
 // =============================================================================
 // COLLABORATIVE PERMISSIONS SYSTEM
@@ -250,8 +250,8 @@ export interface ConflictMarker {
   resource_id: string;
   conflict_type: 'content' | 'structure' | 'metadata';
   location: CursorPosition['position'];
-  local_version: any;
-  remote_version: any;
+  local_version: unknown;
+  remote_version: unknown;
   created_at: Date;
   resolved_at?: Date;
   resolved_by?: string;

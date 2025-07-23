@@ -5,7 +5,7 @@
  * with excellent UX for discovery and reading across the template marketplace ecosystem.
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { 
   DocumentIcon,
   BookOpenIcon,

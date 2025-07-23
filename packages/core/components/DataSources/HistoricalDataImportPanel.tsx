@@ -7,7 +7,7 @@ import {
   useHistoricalQueryBuilder, 
   useDataSourceCache 
 } from '../../hooks/useExternalDataImport';
-import { QueryResult, HistoricalQuery } from '../../external-data/DataSourceManager';
+import { QueryResult } from '../../external-data/DataSourceManager';
 
 export interface HistoricalDataImportPanelProps {
   visible: boolean;
@@ -92,7 +92,7 @@ export const HistoricalDataImportPanel: React.FC<HistoricalDataImportPanelProps>
     buildQuery
   } = useHistoricalQueryBuilder();
 
-  const { cacheStats, clearCache: clearCacheStats } = useDataSourceCache();
+  const { _____cacheStats, clearCache: clearCacheStats } = useDataSourceCache();
 
   const suggestions = getQuerySuggestions(query);
   const availableSources = dataState.availableDataSources.filter(s => s.enabled);

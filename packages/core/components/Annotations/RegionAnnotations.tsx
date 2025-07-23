@@ -11,7 +11,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/Switch';
-import { Slider } from '../ui/Slider';
+// import { Slider } from '../ui/Slider';
 import { 
   Square,
   Circle,
@@ -228,8 +228,8 @@ export const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps> = ({
   const [showRegionDetails, setShowRegionDetails] = useState(false);
   const [filterType, setFilterType] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [zoom, _____setZoom] = useState(1);
+  const [pan, _____setPan] = useState({ x: 0, y: 0 });
 
   // Get canvas context
   const getContext = useCallback(() => {

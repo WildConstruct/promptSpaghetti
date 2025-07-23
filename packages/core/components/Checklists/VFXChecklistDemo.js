@@ -448,7 +448,7 @@ export const VFXChecklistDemo = ({ title = 'Wild Construct VFX Checklist System'
     const [currentUser, setCurrentUser] = useState(initialUser);
     const [activeTab, setActiveTab] = useState('checklist');
     const [checklist, setChecklist] = useState(createSampleChecklist());
-    const [customTemplates, setCustomTemplates] = useState([]);
+    const [customTemplates, _____setCustomTemplates] = useState([]);
     // UI state
     const [autoRefresh, setAutoRefresh] = useState(true);
     const [showCompactView, setShowCompactView] = useState(false);

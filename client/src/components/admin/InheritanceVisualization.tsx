@@ -7,7 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   PolicyAssignment, 
   AssignmentTargetType,
@@ -62,7 +62,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
 
   useEffect(() => {
     buildInheritanceTree();
-  }, [assignments, options]);
+  }, [assignments, options, buildInheritanceTree]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -77,7 +77,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const buildInheritanceTree = () => {
+  const buildInheritanceTree = useCallback(() => {
     const filteredAssignments = assignments.filter(assignment => {
       if (!options.showInactive && assignment.status !== AssignmentStatus.ACTIVE) {
         return false;
@@ -151,7 +151,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
     // Calculate positions
     calculateLayout(finalTree);
     setInheritanceTree(finalTree);
-  };
+  }, [assignments, options]);
 
   const isChildOf = (child: InheritanceNode, parent: InheritanceNode): boolean => {
     // Simplified inheritance logic - in reality this would be more complex

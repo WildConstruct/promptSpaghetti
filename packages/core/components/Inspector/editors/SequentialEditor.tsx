@@ -20,7 +20,7 @@ export interface SequentialEditorProps extends Omit<BaseNodeEditorProps, 'childr
  * - Debug: Technical details and pattern behavior explanations
  */
 
-export const SequentialEditor: React.FC<SequentialEditorProps> = ({ nodeId, nodeData, onChange }) => {
+export const SequentialEditor: React.FC<SequentialEditorProps> = ({ _____nodeId, nodeData, onChange }) => {
   // Sequential specific fields
   const sequence = (nodeData.sequence as string[]) || [];
   const patternType = (nodeData.patternType as string) || 'linear';

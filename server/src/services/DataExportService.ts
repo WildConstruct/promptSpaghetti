@@ -6,7 +6,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DataAccessControlService } from './DataAccessControlService';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as csv from 'csv-writer';
+import * as // csv // Unused import from 'csv-writer';
 
 export interface ExportRequest {
   requestId?: string;
@@ -581,27 +581,27 @@ export class DataExportService {
   }
 
   // Placeholder methods for data extraction - would be implemented based on specific requirements
-  private async extractUserData(request: ExportRequest): Promise<any[]> { return []; }
-  private async extractAccessLogs(request: ExportRequest): Promise<any[]> { return []; }
-  private async extractAuditTrail(request: ExportRequest): Promise<any[]> { return []; }
-  private async extractSystemLogs(request: ExportRequest): Promise<any[]> { return []; }
-  private async extractComplianceData(request: ExportRequest): Promise<any[]> { return []; }
-  private async extractSecurityEvents(request: ExportRequest): Promise<any[]> { return []; }
-  private async applyFilters(data: any[], filters: ExportFilters): Promise<any[]> { return data; }
-  private async anonymizeData(data: any[], categories: string[]): Promise<any[]> { return data; }
+  private async extractUserData(__request: ExportRequest): Promise<any[]> { return []; }
+  private async extractAccessLogs(__request: ExportRequest): Promise<any[]> { return []; }
+  private async extractAuditTrail(__request: ExportRequest): Promise<any[]> { return []; }
+  private async extractSystemLogs(__request: ExportRequest): Promise<any[]> { return []; }
+  private async extractComplianceData(__request: ExportRequest): Promise<any[]> { return []; }
+  private async extractSecurityEvents(__request: ExportRequest): Promise<any[]> { return []; }
+  private async applyFilters(data: any[], __filters: ExportFilters): Promise<any[]> { return data; }
+  private async anonymizeData(data: any[], __categories: string[]): Promise<any[]> { return data; }
   private async sanitizeData(data: any[]): Promise<any[]> { return data; }
-  private async writeJsonFile(filePath: string, data: any[]): Promise<void> { }
-  private async writeCsvFile(filePath: string, data: any[]): Promise<void> { }
-  private async writeXmlFile(filePath: string, data: any[]): Promise<void> { }
+  private async writeJsonFile(__filePath: string, __data: any[]): Promise<void> { }
+  private async writeCsvFile(__filePath: string, __data: any[]): Promise<void> { }
+  private async writeXmlFile(__filePath: string, __data: any[]): Promise<void> { }
   private async encryptFile(filePath: string): Promise<string> { return filePath; }
-  private async calculateChecksum(filePath: string): Promise<string> { return ''; }
-  private async getDataClassifications(data: any[]): Promise<string[]> { return []; }
-  private async createExportJob(jobId: string, requestId: string, request: ExportRequest): Promise<ExportJob> { return {} as ExportJob; }
-  private async queueExportJob(job: ExportJob): Promise<void> { }
-  private async calculateEstimatedTime(request: ExportRequest): Promise<string> { return '5-10 minutes'; }
-  private async getExportJob(jobId: string): Promise<ExportJob | null> { return null; }
-  private async getExportRequest(requestId: string): Promise<ExportRequest | null> { return null; }
-  private async updateJobStatus(jobId: string, status: ExportJobStatus, progress: number, errorMessage?: string): Promise<void> { }
-  private async updateJobCompletion(jobId: string, outputPath: string, recordCount: number, manifest: ExportManifest): Promise<void> { }
-  private async notifyExportCompletion(userId: string, jobId: string, outputPath: string): Promise<void> { }
+  private async calculateChecksum(__filePath: string): Promise<string> { return ''; }
+  private async getDataClassifications(__data: any[]): Promise<string[]> { return []; }
+  private async createExportJob(__jobId: string, __requestId: string, __request: ExportRequest): Promise<ExportJob> { return {} as ExportJob; }
+  private async queueExportJob(__job: ExportJob): Promise<void> { }
+  private async calculateEstimatedTime(__request: ExportRequest): Promise<string> { return '5-10 minutes'; }
+  private async getExportJob(__jobId: string): Promise<ExportJob | null> { return null; }
+  private async getExportRequest(__requestId: string): Promise<ExportRequest | null> { return null; }
+  private async updateJobStatus(__jobId: string, __status: ExportJobStatus, __progress: number, errorMessage?: string): Promise<void> { }
+  private async updateJobCompletion(__jobId: string, __outputPath: string, __recordCount: number, __manifest: ExportManifest): Promise<void> { }
+  private async notifyExportCompletion(__userId: string, __jobId: string, __outputPath: string): Promise<void> { }
 }

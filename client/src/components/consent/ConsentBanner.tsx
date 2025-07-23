@@ -45,7 +45,7 @@ export const ConsentBanner: React.FC<ConsentBannerProps> = ({
     error: undefined
   });
 
-  const [config, setConfig] = useState<ConsentConfiguration | null>(null);
+  const [config, ___setConfig] = useState<ConsentConfiguration | null>(null);
 
   useEffect(() => {
     // Load configuration and check if banner should be shown
@@ -149,7 +149,7 @@ export const ConsentBanner: React.FC<ConsentBannerProps> = ({
     setBannerState(prev => ({ ...prev, showPreferences: false }));
   };
 
-  const handleSavePreferences = async (updatedPreferences: any) => {
+  const handleSavePreferences = async (updatedPreferences: unknown) => {
     setBannerState(prev => ({ ...prev, isLoading: true }));
     
     try {

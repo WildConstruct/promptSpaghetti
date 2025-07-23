@@ -254,7 +254,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     }
   }
 
-  private isDeviceExpired(device: any): boolean {
+  private isDeviceExpired(device: Error): boolean {
     const gracePeriod = this.policy.verification.gracePeriodHours * 60 * 60 * 1000;
     const lastAccessed = new Date(device.lastAccessed).getTime();
     return Date.now() - lastAccessed > gracePeriod;
@@ -262,7 +262,7 @@ export class NewDeviceDetectionService extends EventEmitter {
 
   private async detectSuspiciousChanges(
     context: NewDeviceContext,
-    existingDevice: any
+    existingDevice: Error
   ): Promise<{ suspicious: boolean; reasons: string[] }> {
     const reasons: string[] = [];
 
@@ -302,7 +302,7 @@ export class NewDeviceDetectionService extends EventEmitter {
 
   private async findSimilarDevices(
     fingerprint: string,
-    userDevices: any[]
+    userDevices: unknown[]
   ): Promise<Array<{ fingerprint: string; similarity: number; lastSeen: Date }>> {
     const similar: Array<{ fingerprint: string; similarity: number; lastSeen: Date }> = [];
 
@@ -328,7 +328,7 @@ export class NewDeviceDetectionService extends EventEmitter {
 
   private async calculateRiskScore(
     context: NewDeviceContext,
-    similarDevices: any[]
+    similarDevices: unknown[]
   ): Promise<number> {
     let riskScore = this.policy.riskAssessment.newDeviceBaseRisk;
 
@@ -418,7 +418,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   private generateRecommendations(
     context: NewDeviceContext,
     riskLevel: string,
-    similarDevices: any[]
+    similarDevices: unknown[]
   ): string[] {
     const recommendations: string[] = [];
 
@@ -530,7 +530,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     return result.rows[0]?.breach_count > 0;
   }
 
-  private async assessLocationRisk(userId: string, location: any): Promise<number> {
+  private async assessLocationRisk(userId: string, location: unknown): Promise<number> {
     // This would integrate with LocationDetectionService
     // For now, simple implementation
     let risk = 0;
@@ -577,7 +577,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     return (common / total) * 100;
   }
 
-  private isUnusualLocation(location: any): boolean {
+  private isUnusualLocation(location: unknown): boolean {
     // Simple check - could be enhanced
     return location.country === 'Unknown' || location.city === 'Unknown';
   }
@@ -856,7 +856,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     detectedAt: Date;
     approved: boolean;
     riskLevel: string;
-    location?: any;
+    location?: unknown;
   }>> {
     try {
       const result = await this.db.query(`

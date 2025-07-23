@@ -26,7 +26,7 @@ export const HelpRequestDashboard = ({ helpService, userId, userRole, onRequestS
         total: 0,
         hasMore: false
     });
-    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [_____showCreateModal, setShowCreateModal] = useState(false);
     const [analytics, setAnalytics] = useState(null);
     const [knowledgeBase, setKnowledgeBase] = useState([]);
     // Load help requests
@@ -201,7 +201,7 @@ export const HelpRequestDashboard = ({ helpService, userId, userRole, onRequestS
                                             onRequestSelect?.(request);
                                         }, onStatusUpdate: handleStatusUpdate, onEscalate: handleEscalation, currentUserId: userId, userRole: userRole, selected: selectedRequest?.id === request.id, renderStatusBadge: renderStatusBadge, renderPriorityBadge: renderPriorityBadge }, request.id))) })) }), pagination.total > pagination.limit && (_jsx("div", { className: "bg-white border-t border-gray-200 px-4 py-3", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("button", { onClick: () => setPagination(prev => ({ ...prev, page: Math.max(0, prev.page - 1) })), disabled: pagination.page === 0, className: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50", children: "Previous" }), _jsxs("span", { className: "text-sm text-gray-700", children: ["Page ", pagination.page + 1, " of ", Math.ceil(pagination.total / pagination.limit)] }), _jsx("button", { onClick: () => setPagination(prev => ({ ...prev, page: prev.page + 1 })), disabled: !pagination.hasMore, className: "px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50", children: "Next" })] }) }))] })] })] }));
 };
-const HelpRequestListItem = ({ request, onSelect, onStatusUpdate, onEscalate, currentUserId, userRole, selected, renderStatusBadge, renderPriorityBadge }) => {
+const HelpRequestListItem = ({ request, onSelect, onStatusUpdate, onEscalate, _____currentUserId, userRole, selected, renderStatusBadge, renderPriorityBadge }) => {
     const [showActions, setShowActions] = useState(false);
     const canModify = userRole === 'admin' || userRole === 'agent';
     const isOverdue = request.sla.responseTime.deadline < new Date() && !request.firstResponseAt;

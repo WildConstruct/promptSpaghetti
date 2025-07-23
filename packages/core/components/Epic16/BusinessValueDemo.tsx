@@ -7,7 +7,7 @@
  */
 
 import React, { useState } from 'react';
-import { Calculator, PiggyBank, TrendingUp, BarChart3, FileText, Download } from 'lucide-react';
+import { Calculator, PiggyBank, TrendingUp, BarChart3, Download } from 'lucide-react';
 import { ROICalculator } from './ROICalculator';
 import { SavingsEstimation } from './SavingsEstimation';
 
@@ -31,8 +31,8 @@ export const BusinessValueDemo: React.FC<BusinessValueDemoProps> = ({
   }
 }) => {
   const [activeTab, setActiveTab] = useState<'roi' | 'savings' | 'summary'>('roi');
-  const [roiResults, setROIResults] = useState<any>(null);
-  const [savingsResults, setSavingsResults] = useState<any>(null);
+  const [roiResults, setROIResults] = useState<unknown>(null);
+  const [savingsResults, setSavingsResults] = useState<unknown>(null);
   const [industryPreset, setIndustryPreset] = useState<string>('startup');
 
   const formatCurrency = (amount: number) => {

@@ -522,7 +522,7 @@ export class AppealProcessService {
    */
   async listAppeals(filters: AppealFilters = {}): Promise<{ appeals: Appeal[]; total: number }> {
     let whereClause = '';
-    const params: any[] = [];
+    const params: unknown[] = [];
     const conditions: string[] = [];
 
     if (filters.status) {
@@ -578,7 +578,7 @@ export class AppealProcessService {
    */
   async getAppealStatistics(timeRange?: { start: Date; end: Date }): Promise<AppealStatistics> {
     let dateFilter = '';
-    const params: any[] = [];
+    const params: unknown[] = [];
     
     if (timeRange) {
       dateFilter = 'WHERE submitted_at BETWEEN $1 AND $2';
@@ -694,7 +694,7 @@ export class AppealProcessService {
     ]);
   }
 
-  private mapRowToAppeal(row: any): Appeal {
+  private mapRowToAppeal(row: unknown): Appeal {
     return {
       appeal_id: row.appeal_id,
       appellant_id: row.appellant_id,
@@ -759,7 +759,7 @@ export class AppealProcessService {
     return 'medium';
   }
 
-  private async determineReviewComplexity(appealData: any): Promise<'simple' | 'standard' | 'complex' | 'critical'> {
+  private async determineReviewComplexity(appealData: unknown): Promise<'simple' | 'standard' | 'complex' | 'critical'> {
     // Simple logic - would be more sophisticated in practice
     if (appealData.category === 'other') return 'simple';
     if (appealData.category === 'enforcement_action') return 'complex';
@@ -796,7 +796,7 @@ export class AppealProcessService {
     ];
   }
 
-  private async executeDecisionActions(appealId: string, decision: AppealDecision, appeal: Appeal): Promise<void> {
+  private async executeDecisionActions(appealId: string, decision: AppealDecision, _____appeal: Appeal): Promise<void> {
     // If appeal approved, would reverse or modify original enforcement action
     if (decision === 'approve' || decision === 'partially_approve') {
       console.log(`Executing reversal actions for approved appeal: ${appealId}`);

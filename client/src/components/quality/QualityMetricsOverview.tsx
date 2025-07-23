@@ -55,7 +55,7 @@ export const QualityMetricsOverview: React.FC<QualityMetricsOverviewProps> = ({
   };
   
   // Helper function to get progress color
-  const getProgressColor = (score: number): string => {
+  const ___getProgressColor = (score: number): string => {
     if (score >= 90) return 'bg-green-500';
     if (score >= 80) return 'bg-blue-500';
     if (score >= 70) return 'bg-yellow-500';

@@ -29,7 +29,7 @@ import {
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { Calendar, TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
+import { // Calendar // Unused import, TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 import { QualityTrends } from '../../hooks/useQualityMetrics';
 
 // =============================================================================
@@ -57,7 +57,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
   const chartData = useMemo(() => {
     if (!trends) return [];
     
-    const getDataForRange = (trendData: any) => {
+    const getDataForRange = (trendData: unknown) => {
       switch (selectedTimeRange) {
       case 'daily':
         return trendData.daily || [];
@@ -82,7 +82,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
     );
     
     return Array.from({ length: maxLength }, (_, index) => {
-      const getValueAtIndex = (trendData: any, idx: number) => {
+      const getValueAtIndex = (trendData: unknown, idx: number) => {
         const data = getDataForRange(trendData);
         return data[idx] || data[data.length - 1] || 0;
       };
@@ -177,7 +177,7 @@ export const QualityTrendsChart: React.FC<QualityTrendsChartProps> = ({
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-medium text-gray-900 mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: unknown, index: number) => (
             <div key={index} className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-2">
                 <div 

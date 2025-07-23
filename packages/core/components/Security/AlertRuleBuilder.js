@@ -73,7 +73,7 @@ const ACTION_TYPES = [
  * Main Alert Rule Builder Component
  */
 export const AlertRuleBuilder = ({ alertRules, onRulesChange }) => {
-    const [selectedRule, setSelectedRule] = useState(null);
+    const [_____selectedRule, setSelectedRule] = useState(null);
     const [showCreateDialog, setShowCreateDialog] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(null);
     const [editingRule, setEditingRule] = useState(null);
@@ -126,7 +126,7 @@ export const AlertRuleBuilder = ({ alertRules, onRulesChange }) => {
 /**
  * Individual Alert Rule Card Component
  */
-const RuleCard = ({ rule, onEdit, onToggle, onDelete, onSelect }) => {
+const RuleCard = ({ rule, onEdit, onToggle, onDelete, _____onSelect }) => {
     return (_jsxs(Card, { className: `rule-card ${!rule.enabled ? 'disabled' : ''}`, children: [_jsxs("div", { className: "rule-header", children: [_jsxs("div", { className: "rule-info", children: [_jsx("h3", { className: "rule-name", children: rule.name }), _jsx("p", { className: "rule-description", children: rule.description || 'No description' })] }), _jsx("div", { className: "rule-status", children: _jsx(Badge, { variant: rule.enabled ? 'success' : 'secondary', children: rule.enabled ? 'Active' : 'Disabled' }) })] }), _jsxs("div", { className: "rule-details", children: [_jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "detail-label", children: "Event Types:" }), _jsx("span", { className: "detail-value", children: rule.event_types.length > 0
                                     ? `${rule.event_types.length} types`
                                     : 'All types' })] }), _jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "detail-label", children: "Severity:" }), _jsxs("span", { className: "detail-value", children: [rule.severity_threshold.toUpperCase(), " and above"] })] }), _jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "detail-label", children: "Conditions:" }), _jsxs("span", { className: "detail-value", children: [rule.conditions.length, " conditions"] })] }), _jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "detail-label", children: "Actions:" }), _jsxs("span", { className: "detail-value", children: [rule.actions.length, " actions"] })] })] }), _jsxs("div", { className: "rule-actions", children: [_jsx(Button, { variant: "outline", size: "sm", onClick: onEdit, children: "Edit" }), _jsx(Button, { variant: rule.enabled ? 'outline' : 'secondary', size: "sm", onClick: onToggle, children: rule.enabled ? 'Disable' : 'Enable' }), _jsx(Button, { variant: "outline", size: "sm", onClick: onDelete, children: "Delete" })] })] }));
@@ -232,7 +232,7 @@ const ActionConfigForm = ({ action, onUpdate }) => {
 /**
  * Notification Settings Tab
  */
-const NotificationSettings = ({ rule, onUpdate }) => {
+const NotificationSettings = ({ _____rule, _____onUpdate }) => {
     return (_jsxs("div", { className: "notification-settings", children: [_jsx("p", { children: "Configure notification channels for this alert rule." }), _jsx("div", { className: "placeholder-content", children: _jsx("p", { children: "Notification channel configuration will be implemented based on the existing notification system." }) })] }));
 };
 // Utility functions

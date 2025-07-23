@@ -13,7 +13,7 @@ import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 /**
  * Enhanced WeightedChoice editor with professional drag-to-reorder interface
  */
-export const DragReorderWeightedChoiceEditor = ({ data, onChange, nodeId = 'drag-reorder-weighted-choice', disabled = false, theme = 'cinema', showPreview = true, showAnalytics = true }) => {
+export const DragReorderWeightedChoiceEditor = ({ data, onChange, _____nodeId = 'drag-reorder-weighted-choice', disabled = false, theme = 'cinema', showPreview = true, showAnalytics = true }) => {
     const [isAddingChoice, setIsAddingChoice] = useState(false);
     const [newChoiceText, setNewChoiceText] = useState('');
     const [previewCount, setPreviewCount] = useState(10);
@@ -55,7 +55,7 @@ export const DragReorderWeightedChoiceEditor = ({ data, onChange, nodeId = 'drag
         setIsAddingChoice(false);
     }, [data.choices, newChoiceText, onChange]);
     // Remove choice
-    const removeChoice = useCallback((index) => {
+    const _____removeChoice = useCallback((index) => {
         const currentChoices = data.choices || [];
         const newChoices = currentChoices.filter((_, i) => i !== index);
         onChange({ choices: newChoices });

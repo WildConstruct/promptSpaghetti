@@ -20,8 +20,8 @@ export const DocumentReviewInterface = ({ documents, requestId, userId, document
     const [activeAnnotationType, setActiveAnnotationType] = useState(null);
     const [reviewNotes, setReviewNotes] = useState({});
     const [reviewDecisions, setReviewDecisions] = useState({});
-    const [isCreatingAnnotation, setIsCreatingAnnotation] = useState(false);
-    const [selectedText, setSelectedText] = useState('');
+    const [_____isCreatingAnnotation, _____setIsCreatingAnnotation] = useState(false);
+    const [_____selectedText, _____setSelectedText] = useState('');
     const currentDocument = documents[currentDocumentIndex];
     const handleZoomIn = () => {
         setZoom(prev => Math.min(prev + 25, 300));

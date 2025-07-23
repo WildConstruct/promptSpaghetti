@@ -334,13 +334,17 @@ export class ZustandEventAdapter {
 /**
  * Factory function to create Zustand event middleware
  */
-export   return adapter.middleware;
+export const createZustandEventMiddleware = () => {
+  const adapter = new ZustandEventAdapter();
+  return adapter.middleware;
 };
 
 /**
  * Enhanced Zustand store creator with event integration
  */
-export   return adapter.middleware(stateCreator);
+export const createEventEnabledStore = <T>(stateCreator: StateCreator<T>) => {
+  const adapter = new ZustandEventAdapter();
+  return adapter.middleware(stateCreator);
 };
 
 /**
@@ -394,6 +398,6 @@ export const ZustandEventUtils = {
 /**
  * Pre-configured adapters for common stores
  */
-export 
-export 
-export });
+export const graphStoreAdapter = new ZustandEventAdapter();
+export const uiStoreAdapter = new ZustandEventAdapter();
+export const previewStoreAdapter = new ZustandEventAdapter();

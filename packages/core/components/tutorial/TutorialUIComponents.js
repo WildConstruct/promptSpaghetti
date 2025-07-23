@@ -1,5 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /**
+import { Plus } from 'lucide-react';
+
  * Tutorial UI Components (Epic 16)
  *
  * DEPLOYMENT BLOCKER FIX: Comprehensive tutorial UI components for creating
@@ -22,7 +24,7 @@ import { Play, Pause, Square, ChevronLeft, ChevronRight, Book, BookOpen, Target,
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
-export const TutorialPlayer = ({ tutorial, progress, onStepComplete, onTutorialComplete, onProgressSave, onExit, className = '' }) => {
+export const TutorialPlayer = ({ tutorial, progress, onStepComplete, onTutorialComplete, _____onProgressSave, onExit, className = '' }) => {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [showStepList, setShowStepList] = useState(false);
@@ -37,7 +39,7 @@ export const TutorialPlayer = ({ tutorial, progress, onStepComplete, onTutorialC
     const currentStep = tutorial.steps[currentStepIndex];
     const isFirstStep = currentStepIndex === 0;
     const isLastStep = currentStepIndex === tutorial.steps.length - 1;
-    const tutorialProgress = useMemo(() => {
+    const _____tutorialProgress = useMemo(() => {
         const completed = progress?.completedSteps.length || 0;
         const total = tutorial.steps.length;
         return {

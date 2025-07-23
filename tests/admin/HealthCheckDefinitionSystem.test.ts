@@ -246,31 +246,31 @@ describe('Health Check Definition System', () => {
           dependencies: [],
           timeout: 500, // Too low
           retries: {
-          maxAttempts: 3,
-          backoffStrategy: 'exponential',
-          initialDelay: 1000
-        }
+            maxAttempts: 3,
+            backoffStrategy: 'exponential',
+            initialDelay: 1000
+          }
         },
         validation: {
           input: { required: [], customValidators: [] },
           output: {
-          expectedFormat: 'json',
-          successConditions: [],
-          warningConditions: [],
-          errorConditions: []
-        },
+            expectedFormat: 'json',
+            successConditions: [],
+            warningConditions: [],
+            errorConditions: []
+          },
           runtime: {
-          maxExecutionTime: 1000,
-          networkAccessRequired: false,
-          fileSystemAccessRequired: false,
-          privilegedAccessRequired: false
-        }, // Greater than timeout
+            maxExecutionTime: 1000,
+            networkAccessRequired: false,
+            fileSystemAccessRequired: false,
+            privilegedAccessRequired: false
+          }, // Greater than timeout
           security: {
-          requiresAuthentication: false,
-          requiredPermissions: [],
-          sensitiveDataHandling: 'none',
-          auditLevel: 'basic'
-        }
+            requiresAuthentication: false,
+            requiredPermissions: [],
+            sensitiveDataHandling: 'none',
+            auditLevel: 'basic'
+          }
         },
         execution: undefined,
         alerting: undefined,

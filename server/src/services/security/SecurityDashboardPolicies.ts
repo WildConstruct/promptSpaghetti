@@ -122,7 +122,7 @@ export interface ContentFilter {
   type: 'FIELD' | 'VALUE' | 'REGEX' | 'CLASSIFICATION' | 'KEYWORD';
   field?: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'MATCHES' | 'GREATER_THAN' | 'LESS_THAN';
-  value: any;
+  value: Error;
   action: 'HIDE' | 'MASK' | 'REDACT' | 'AGGREGATE';
   maskingPattern?: string; // e.g., '***' or 'X' repeated
 }
@@ -138,7 +138,7 @@ export interface PolicyCondition {
   type: 'USER_ATTRIBUTE' | 'TIME' | 'LOCATION' | 'DEVICE' | 'CONTEXT' | 'RISK_SCORE';
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'IN' | 'NOT_IN' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN';
-  value: any;
+  value: Error;
   weight: number; // 0-1
 }
 
@@ -238,7 +238,7 @@ export interface ComplianceEvidence {
   type: 'AUDIT_LOG' | 'CONFIGURATION' | 'SCREENSHOT' | 'DOCUMENT';
   source: string;
   timestamp: Date;
-  data: any;
+  data: Record<string, unknown>;
   hash: string; // For integrity verification
 }
 
@@ -560,10 +560,10 @@ export class SecurityDashboardPolicies extends EventEmitter {
    * Apply data classification filters
    */
   applyDataFilters(
-    data: any,
+    data: Record<string, unknown>,
     filters: ContentFilter[],
     userContext: PolicyEvaluationContext
-  ): any {
+  ): unknown {
     let filteredData = JSON.parse(JSON.stringify(data)); // Deep copy
     
     for (const filter of filters) {
@@ -678,7 +678,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     condition: PolicyCondition,
     context: PolicyEvaluationContext
   ): Promise<boolean> {
-    let contextValue: any;
+    let contextValue: Error;
     
     switch (condition.type) {
     case 'USER_ATTRIBUTE':
@@ -706,7 +706,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     return this.compareValues(contextValue, condition.operator, condition.value);
   }
   
-  private compareValues(actual: any, operator: string, expected: any): boolean {
+  private compareValues(actual: unknown, operator: string, expected: unknown): boolean {
     switch (operator) {
     case 'EQUALS':
       return actual === expected;
@@ -869,10 +869,10 @@ export class SecurityDashboardPolicies extends EventEmitter {
   }
   
   private applyContentFilter(
-    data: any,
+    data: Record<string, unknown>,
     filter: ContentFilter,
     context: PolicyEvaluationContext
-  ): any {
+  ): unknown {
     if (!data || typeof data !== 'object') return data;
     
     switch (filter.type) {
@@ -889,7 +889,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     }
   }
   
-  private applyFieldFilter(data: any, filter: ContentFilter): any {
+  private applyFieldFilter(data: Record<string, unknown>, filter: ContentFilter): unknown {
     if (!filter.field) return data;
     
     const result = { ...data };
@@ -913,21 +913,21 @@ export class SecurityDashboardPolicies extends EventEmitter {
     return result;
   }
   
-  private applyValueFilter(data: any, filter: ContentFilter): any {
+  private applyValueFilter(data: Record<string, unknown>, _____filter: ContentFilter): unknown {
     // Implementation would recursively search for values to filter
     return data;
   }
   
   private applyClassificationFilter(
-    data: any,
-    filter: ContentFilter,
-    context: PolicyEvaluationContext
-  ): any {
+    data: Record<string, unknown>,
+    _____filter: ContentFilter,
+    _____context: PolicyEvaluationContext
+  ): unknown {
     // Implementation would filter based on data classification levels
     return data;
   }
   
-  private applyKeywordFilter(data: any, filter: ContentFilter): any {
+  private applyKeywordFilter(data: Record<string, unknown>, _____filter: ContentFilter): unknown {
     // Implementation would filter based on sensitive keywords
     return data;
   }
@@ -1016,7 +1016,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
   
   private generateComplianceRecommendations(
     findings: ComplianceFinding[],
-    framework: string
+    _____framework: string
   ): ComplianceRecommendation[] {
     const recommendations: ComplianceRecommendation[] = [];
     
@@ -1167,12 +1167,12 @@ export class SecurityDashboardPolicies extends EventEmitter {
   }
   
   // Mock methods for external integrations
-  private async getUserRoles(userId: string): Promise<DashboardRole[]> {
+  private async getUserRoles(_____userId: string): Promise<DashboardRole[]> {
     // In real implementation, this would query user management system
     return [DashboardRole.VIEWER];
   }
   
-  private async getUserAttributes(userId: string): Promise<Record<string, any>> {
+  private async getUserAttributes(_____userId: string): Promise<Record<string, any>> {
     // In real implementation, this would fetch user attributes
     return {};
   }

@@ -23,10 +23,10 @@ type PolicyStatus =
 type ChangeImpact = 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 interface PolicyConfigurationInterfaceProps {
-  onPolicyCreate?: (policy: any) => void;
-  onPolicyUpdate?: (policy: any) => void;
-  onPolicyDeploy?: (deployment: any) => void;
-  initialPolicy?: any;
+  onPolicyCreate?: (policy: unknown) => void;
+  onPolicyUpdate?: (policy: unknown) => void;
+  onPolicyDeploy?: (deployment: unknown) => void;
+  initialPolicy?: unknown;
   mode?: 'create' | 'edit' | 'view';
   complianceFrameworks?: string[];
   jurisdictions?: string[];
@@ -46,7 +46,7 @@ interface TemplateVariable {
   name: string;
   type: 'TEXT' | 'EMAIL' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'LIST';
   required: boolean;
-  defaultValue?: any;
+  defaultValue?: unknown;
   description?: string;
 }
 
@@ -66,7 +66,7 @@ interface PolicyCustomization {
   customizationId: string;
   type: 'BRANDING' | 'CONTENT' | 'STRUCTURE' | 'VARIABLES' | 'STYLING';
   target: string;
-  value: any;
+  value: Error;
   priority: number;
   enabled: boolean;
 }
@@ -328,7 +328,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
   }, [errors, formData]);
 
   // Helper functions for form inputs
-  const updateFormField = useCallback((field: keyof PolicyFormData, value: any) => {
+  const updateFormField = useCallback((field: keyof PolicyFormData, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   }, []);
 
@@ -347,7 +347,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
     }));
   }, []);
 
-  const updateCustomization = useCallback((index: number, field: keyof PolicyCustomization, value: any) => {
+  const updateCustomization = useCallback((index: number, field: keyof PolicyCustomization, value: Error) => {
     setFormData(prev => ({
       ...prev,
       customizations: prev.customizations.map((cust, i) => 

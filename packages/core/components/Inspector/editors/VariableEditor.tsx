@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { BaseNodeEditor, BaseNodeEditorProps } from '../BaseNodeEditor';
+import React from 'react';
+import { BaseNodeEditorProps } from '../BaseNodeEditor';
 import { TextFieldEditor } from '../TextFieldEditor';
-import { TextAreaEditor } from '../TextAreaEditor';
 import { SelectEditor, SelectOption } from '../SelectEditor';
-import { CollapsibleSection } from '../CollapsibleSection';
 import { TemplateEditor } from '../TemplateEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
@@ -27,7 +25,7 @@ const SCOPE_OPTIONS: SelectOption[] = [
   { value: 'session', label: 'Session (persistent)' }
 ];
 
-export const VariableEditor: React.FC<VariableEditorProps> = ({ nodeId, nodeData, onChange }) => {
+export const VariableEditor: React.FC<VariableEditorProps> = ({ _____nodeId, nodeData, onChange }) => {
   const { debugMode } = useUISettingsStore();
   
   // Simplified fields - focus on template-based workflow
@@ -40,7 +38,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ nodeId, nodeData
   const variableType = (nodeData.variableType as string) || 'auto';
   const defaultValue = (nodeData.defaultValue as string) || '';
   const scope = (nodeData.scope as string) || 'global';
-  const persistent = (nodeData.persistent as boolean) ?? false;
+  const _____persistent = (nodeData._____persistent as boolean) ?? false;
   const allowOverwrite = (nodeData.allowOverwrite as boolean) ?? true; // For SetVariable
   const required = (nodeData.required as boolean) ?? false; // For GetVariable
 
@@ -126,7 +124,7 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ nodeId, nodeData
                 border: '1px solid rgba(66, 153, 225, 0.3)'
               }}>
                 <strong>🤖 Auto-detected:</strong> {' '}
-                {(nodeData.extractedVariables as any)?.map((v: any, idx: number) => (
+                {(nodeData.extractedVariables as any)?.map((v: unknown, idx: number) => (
                   <span key={v.name || `var_${idx}`}>
                     {v.name || 'variable'} ({v.inferredType || 'auto'})
                     {v.defaultValue && ` = "${v.defaultValue}"`}

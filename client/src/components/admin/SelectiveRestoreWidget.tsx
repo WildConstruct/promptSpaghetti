@@ -10,7 +10,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Card, Form, Select, Checkbox, Input, DatePicker, Alert, Tabs, Progress, Modal, Table, Tag, Space } from 'antd';
+import { Button, Card, Form, Select, Input, Alert, Tabs, Progress, Table, Tag, Space } from 'antd';
 import { DatabaseOutlined, FilterOutlined, HistoryOutlined, PlayCircleOutlined, StopOutlined, ReloadOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
@@ -98,10 +98,10 @@ export const SelectiveRestoreWidget: React.FC<SelectiveRestoreWidgetProps> = ({
   const [activeTab, setActiveTab] = useState('configure');
   const [recoveryPoints, setRecoveryPoints] = useState<RecoveryPoint[]>([]);
   const [availableTables, setAvailableTables] = useState<string[]>([]);
-  const [restoreRequest, setRestoreRequest] = useState<Partial<RestoreRequest>>({});
+  const [___restoreRequest, ___setRestoreRequest] = useState<Partial<RestoreRequest>>({});
   const [activeRestores, setActiveRestores] = useState<RestoreProgress[]>([]);
   const [loading, setLoading] = useState(false);
-  const [previewData, setPreviewData] = useState<any>(null);
+  const [previewData, setPreviewData] = useState<unknown>(null);
   
   // Load initial data
   useEffect(() => {

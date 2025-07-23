@@ -293,7 +293,7 @@ export class AuditDAO {
   async queryAuditEvents(query: AuditEventQuery): Promise<AuditEventResponse> {
     let sql = 'SELECT * FROM audit_events WHERE 1=1';
     let countSql = 'SELECT COUNT(*) as total FROM audit_events WHERE 1=1';
-    const params: any[] = [];
+    const params: unknown[] = [];
 
     // Build WHERE clause
     if (query.startDate) {
@@ -363,13 +363,13 @@ export class AuditDAO {
 
     const [events, total] = await Promise.all([
       new Promise<AuditEvent[]>((resolve, reject) => {
-        this.db.all(sql, finalParams, (err, rows: any[]) => {
+        this.db.all(sql, finalParams, (err, rows: unknown[]) => {
           if (err) reject(err);
           else resolve(rows.map(row => this.mapRowToAuditEvent(row)));
         });
       }),
       new Promise<number>((resolve, reject) => {
-        this.db.get(countSql, params, (err, row: any) => {
+        this.db.get(countSql, params, (err, row: unknown) => {
           if (err) reject(err);
           else resolve(row.total);
         });
@@ -393,7 +393,7 @@ export class AuditDAO {
 
   // Get audit statistics
   async getAuditStatistics(startDate?: Date, endDate?: Date): Promise<AuditStatistics> {
-    const params: any[] = [];
+    const params: unknown[] = [];
     let timeFilter = '';
 
     if (startDate) {
@@ -428,7 +428,7 @@ export class AuditDAO {
       topUsers
     ] = await Promise.all(
       queries.map(query => 
-        new Promise<any>((resolve, reject) => {
+        new Promise<unknown>((resolve, reject) => {
           if (query.includes('GROUP BY')) {
             this.db.all(query, params, (err, rows) => {
               if (err) reject(err);
@@ -465,7 +465,7 @@ export class AuditDAO {
       eventsThisWeek,
       eventsThisMonth,
       uniqueUsers: uniqueUsersResult.unique_users || 0,
-      topUsers: topUsers.map((user: any) => ({
+      topUsers: topUsers.map((user: unknown) => ({
         userId: user.actor_id,
         userEmail: user.actor_email,
         eventCount: user.event_count
@@ -684,7 +684,7 @@ export class AuditDAO {
 
   private async getAuditConfiguration(): Promise<AuditConfiguration | null> {
     return new Promise((resolve, reject) => {
-      this.db.get('SELECT * FROM audit_configuration ORDER BY created_at DESC LIMIT 1', (err, row: any) => {
+      this.db.get('SELECT * FROM audit_configuration ORDER BY created_at DESC LIMIT 1', (err, row: unknown) => {
         if (err) reject(err);
         else if (!row) resolve(null);
         else resolve(this.mapRowToConfiguration(row));
@@ -697,7 +697,7 @@ export class AuditDAO {
       this.db.get(
         'SELECT COUNT(*) as count FROM audit_events WHERE timestamp >= ?',
         [startDate.toISOString()],
-        (err, row: any) => {
+        (err, row: unknown) => {
           if (err) reject(err);
           else resolve(row.count || 0);
         }
@@ -705,7 +705,7 @@ export class AuditDAO {
     });
   }
 
-  private arrayToRecord(array: any[], keyField: string): Record<string, number> {
+  private arrayToRecord(array: unknown[], keyField: string): Record<string, number> {
     const record: Record<string, number> = {};
     array.forEach(item => {
       record[item[keyField]] = item.count;
@@ -736,7 +736,7 @@ export class AuditDAO {
     };
   }
 
-  private detectComplianceViolations(events: AuditEvent[], standard: ComplianceStandard): ComplianceReport['violations'] {
+  private detectComplianceViolations(___events: AuditEvent[], ___standard: ComplianceStandard): ComplianceReport['violations'] {
     const violations: ComplianceReport['violations'] = [];
 
     // TODO: Implement compliance-specific violation detection
@@ -745,7 +745,7 @@ export class AuditDAO {
     return violations;
   }
 
-  private mapRowToAuditEvent(row: any): AuditEvent {
+  private mapRowToAuditEvent(row: Event): AuditEvent {
     return {
       id: row.id,
       eventType: row.event_type as AuditEventType,
@@ -783,7 +783,7 @@ export class AuditDAO {
     };
   }
 
-  private mapRowToConfiguration(row: any): AuditConfiguration {
+  private mapRowToConfiguration(row: unknown): AuditConfiguration {
     return {
       id: row.id,
       enabledEventTypes: JSON.parse(row.enabled_event_types),

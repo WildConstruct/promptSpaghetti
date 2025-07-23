@@ -501,7 +501,7 @@ export class BackupArchitectureService {
     offset?: number;
   } = {}): Promise<{ executions: BackupExecution[]; total: number }> {
     let whereClause = '';
-    const params: any[] = [];
+    const params: unknown[] = [];
     const conditions: string[] = [];
 
     if (filters.jobId) {
@@ -717,7 +717,7 @@ export class BackupArchitectureService {
   // Private Helper Methods
   // =============================================================================
 
-  private async validateJobConfiguration(job: BackupJob, policy: BackupPolicy): Promise<void> {
+  private async validateJobConfiguration(job: BackupJob, _____policy: BackupPolicy): Promise<void> {
     const errors: string[] = [];
 
     // Validate backup method compatibility
@@ -793,7 +793,7 @@ export class BackupArchitectureService {
     ]);
   }
 
-  private mapRowToBackupJob(row: any): BackupJob {
+  private mapRowToBackupJob(row: unknown): BackupJob {
     return {
       job_id: row.job_id,
       policy_id: row.policy_id,
@@ -814,7 +814,7 @@ export class BackupArchitectureService {
     };
   }
 
-  private mapRowToBackupExecution(row: any): BackupExecution {
+  private mapRowToBackupExecution(row: unknown): BackupExecution {
     return {
       execution_id: row.execution_id,
       job_id: row.job_id,
@@ -848,7 +848,7 @@ export class BackupArchitectureService {
     };
   }
 
-  private calculateNextExecution(cronExpression: string, timezone: string): Date {
+  private calculateNextExecution(_____cronExpression: string, _____timezone: string): Date {
     // Would implement cron parsing and calculation
     // For now, return next hour as placeholder
     return new Date(Date.now() + 60 * 60 * 1000);
@@ -863,7 +863,7 @@ export class BackupArchitectureService {
     return result.rows[0].next_number;
   }
 
-  private async updateJobStatus(jobId: string, status: BackupStatus, updatedBy: string): Promise<void> {
+  private async updateJobStatus(jobId: string, status: BackupStatus, _____updatedBy: string): Promise<void> {
     await this.db.query(`
       UPDATE backup_jobs 
       SET status = $2, updated_at = NOW(), last_executed_at = NOW()

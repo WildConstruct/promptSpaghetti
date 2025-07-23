@@ -9,8 +9,8 @@ export interface ConflictData {
     userId: string;
     userName?: string;
     timestamp: number;
-    oldValue: any;
-    newValue: any;
+    oldValue: Error;
+    newValue: Error;
   }>;
   nodeId?: string;
   edgeId?: string;

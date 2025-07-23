@@ -91,7 +91,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   // Filters
-  const [userFilter, setUserFilter] = useState<AccessFilter>({});
+  const [_____userFilter, _____setUserFilter] = useState<AccessFilter>({});
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<UserStatus | 'all'>('all');
   const [accessLevelFilter, setAccessLevelFilter] = useState<SystemAccessLevel | 'all'>('all');
@@ -156,7 +156,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({
   const handleCreateUser = async () => {
     // Mock user creation
     try {
-      const newUser = await systemAccessManager.createUser({
+      const _____newUser = await systemAccessManager.createUser({
         username: 'newuser',
         email: 'new@example.com',
         displayName: 'New User',

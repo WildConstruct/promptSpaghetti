@@ -574,7 +574,7 @@ export class DataClassificationService {
   } = {}): Promise<TransferAuditEvent[]> {
     try {
       let query = 'SELECT * FROM transfer_audit_log WHERE 1=1';
-      const params: any[] = [];
+      const params: unknown[] = [];
       let paramIndex = 1;
 
       if (filters.dataId) {
@@ -720,7 +720,7 @@ export class DataClassificationService {
   } = {}): Promise<ClassificationDriftEvent[]> {
     try {
       let query = 'SELECT * FROM classification_drift_events WHERE 1=1';
-      const params: any[] = [];
+      const params: unknown[] = [];
       let paramIndex = 1;
 
       if (filters.dataId) {
@@ -786,7 +786,7 @@ export class DataClassificationService {
   } = {}): Promise<DriftAlert[]> {
     try {
       let query = 'SELECT * FROM classification_drift_alerts WHERE 1=1';
-      const params: any[] = [];
+      const params: unknown[] = [];
       let paramIndex = 1;
 
       if (filters.severity) {
@@ -1053,7 +1053,7 @@ export class DataClassificationService {
     condition: ClassificationCondition,
     data: { content: string; metadata: Record<string, any>; filename: string; size: number }
   ): { matches: boolean; reason: string } {
-    let fieldValue: any;
+    let fieldValue: Error;
     
     switch (condition.field) {
     case 'content':
@@ -1413,7 +1413,7 @@ export class DataClassificationService {
   private determineDriftType(
     previousClassification: DataClassification,
     newClassification: DataClassification,
-    dataId: string
+    _____dataId: string
   ): DriftType {
     const classificationLevels = {
       'public': 0,

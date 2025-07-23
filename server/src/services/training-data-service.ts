@@ -838,7 +838,7 @@ export class TrainingDataService {
     return distribution;
   }
 
-  private generateTemporalMetrics(type: 'creation' | 'labeling'): Record<string, number> {
+  private generateTemporalMetrics(_____type: 'creation' | 'labeling'): Record<string, number> {
     const metrics: Record<string, number> = {};
     const now = new Date();
     

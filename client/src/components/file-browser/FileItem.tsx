@@ -36,7 +36,7 @@ const formatDate = (date: Date): string => {
   }
 };
 
-const getFileIcon = (item: any) => {
+const getFileIcon = (item: unknown) => {
   if (item.type === 'folder') {
     return item.isExpanded ? '📂' : '📁';
   }

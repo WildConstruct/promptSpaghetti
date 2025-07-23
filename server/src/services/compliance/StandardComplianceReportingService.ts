@@ -592,7 +592,7 @@ export class StandardComplianceReportingService {
 
   private getRetentionPolicy(
     framework: ComplianceFramework,
-    reportType: ComplianceReportType
+    _____reportType: ComplianceReportType
   ): RetentionPolicy {
     // Framework-specific retention periods
     const retentionPeriods = {
@@ -649,7 +649,7 @@ export class StandardComplianceReportingService {
   }
 
   // Additional helper methods would be implemented here...
-  private calculateOverallScore(data: ComplianceData): number {
+  private calculateOverallScore(_____data: ComplianceData): number {
     // Implementation for score calculation
     return 94.2; // Placeholder
   }
@@ -662,26 +662,26 @@ export class StandardComplianceReportingService {
   }
 
   // Export methods
-  private async exportToPDF(report: StandardComplianceReport, options: ExportOptions): Promise<Buffer> {
+  private async exportToPDF(_____report: StandardComplianceReport, _____options: ExportOptions): Promise<Buffer> {
     // PDF export implementation
     return Buffer.from('PDF content placeholder');
   }
 
-  private async exportToExcel(report: StandardComplianceReport, options: ExportOptions): Promise<Buffer> {
+  private async exportToExcel(_____report: StandardComplianceReport, _____options: ExportOptions): Promise<Buffer> {
     // Excel export implementation
     return Buffer.from('Excel content placeholder');
   }
 
-  private async exportToJSON(report: StandardComplianceReport, options: ExportOptions): Promise<string> {
+  private async exportToJSON(report: StandardComplianceReport, _____options: ExportOptions): Promise<string> {
     return JSON.stringify(report, null, 2);
   }
 
-  private async exportToHTML(report: StandardComplianceReport, options: ExportOptions): Promise<string> {
+  private async exportToHTML(_____report: StandardComplianceReport, _____options: ExportOptions): Promise<string> {
     // HTML export implementation
     return '<html><body>HTML content placeholder</body></html>';
   }
 
-  private async exportToDocx(report: StandardComplianceReport, options: ExportOptions): Promise<Buffer> {
+  private async exportToDocx(_____report: StandardComplianceReport, _____options: ExportOptions): Promise<Buffer> {
     // DOCX export implementation
     return Buffer.from('DOCX content placeholder');
   }
@@ -733,10 +733,10 @@ interface ReportSchedule {
 }
 
 interface ComplianceData {
-  monitoring: any;
-  baselines: any;
-  audits: any[];
-  lifecycle: any;
+  monitoring: unknown;
+  baselines: unknown;
+  audits: unknown[];
+  lifecycle: Error;
   period: ReportingPeriod;
 }
 

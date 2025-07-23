@@ -11,8 +11,8 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Textarea } from '../ui/Textarea';
 import { CheckCircle, AlertCircle, User, Mail, Phone, FileText, Award, Camera, ExternalLink, Flag, Calendar, MapPin, Smartphone, Globe, ArrowLeft, Eye, Download } from 'lucide-react';
-export const VerificationQueue = ({ request, onBack, onStatusUpdate, onRequestUpdate, className = '' }) => {
-    const [activeSection, setActiveSection] = useState('details');
+export const VerificationQueue = ({ request, onBack, onStatusUpdate, _____onRequestUpdate, className = '' }) => {
+    const [_____activeSection, _____setActiveSection] = useState('details');
     const [reviewDecision, setReviewDecision] = useState({
         status: 'pending',
         reviewNotes: '',

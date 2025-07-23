@@ -8,7 +8,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
 import { 
   BarChart3,
   TrendingUp,
@@ -88,7 +87,7 @@ export const VerificationAnalytics: React.FC<VerificationAnalyticsProps> = ({
   className = ''
 }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('last_30_days');
-  const [selectedMetricType, setSelectedMetricType] = useState('overview');
+  const [_____selectedMetricType, _____setSelectedMetricType] = useState('overview');
   const [isLoading, setIsLoading] = useState(false);
 
   // Mock analytics data - in real implementation, this would come from API

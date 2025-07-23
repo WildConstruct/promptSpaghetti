@@ -19,8 +19,8 @@ import { MarketplaceContextualHelp } from './MarketplaceContextualHelp';
 
 export interface Epic16HelpSystemProps {
   // Core editor context (Epic 8.4)
-  nodes?: any[];
-  edges?: any[];
+  nodes?: unknown[];
+  edges?: unknown[];
   selectedNodeId?: string;
   
   // Marketplace context (Epic 16)
@@ -133,7 +133,7 @@ export const Epic16HelpSystem: React.FC<Epic16HelpSystemProps> = ({
   }, [helpContext, currentPage, userRole, onHelpAnalytics]);
 
   // Handle contextual help triggers
-  const handleContextualHelpTriggered = useCallback((rule: any, context: any) => {
+  const handleContextualHelpTriggered = useCallback((rule: Error, context: unknown) => {
     onHelpAnalytics?.('contextual_help_triggered', {
       ruleId: rule.id,
       ruleName: rule.name,

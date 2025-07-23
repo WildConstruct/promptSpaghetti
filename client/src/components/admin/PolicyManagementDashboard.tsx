@@ -46,7 +46,6 @@ import {
   BellOutlined,
   ReloadOutlined
 } from '@ant-design/icons';
-import { Line, Pie, Column } from '@ant-design/plots';
 
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -66,10 +65,10 @@ interface PolicyStats {
 
 interface PolicyDashboardData {
   statistics: PolicyStats;
-  recent_activities: any[];
+  recent_activities: unknown[];
   policy_compliance_scores: Record<string, number>;
-  enforcement_metrics: any;
-  trending_violations: any[];
+  enforcement_metrics: unknown;
+  trending_violations: unknown[];
 }
 
 interface Policy {
@@ -105,7 +104,7 @@ export const PolicyManagementDashboard: React.FC = () => {
   const [selectedViolation, setSelectedViolation] = useState<Violation | null>(null);
   const [policyModalVisible, setPolicyModalVisible] = useState(false);
   const [violationDrawerVisible, setViolationDrawerVisible] = useState(false);
-  const [filters, setFilters] = useState({
+  const [___filters, setFilters] = useState({
     dateRange: null as any,
     policyType: null as string | null,
     violationStatus: null as string | null
@@ -443,7 +442,7 @@ export const PolicyManagementDashboard: React.FC = () => {
                 <Card title="Recent Activities" style={{ marginBottom: '16px' }}>
                   <List
                     dataSource={dashboardData?.recent_activities?.slice(0, 5) || []}
-                    renderItem={(item: any) => (
+                    renderItem={(item: unknown) => (
                       <List.Item>
                         <List.Item.Meta
                           avatar={<Avatar icon={<BellOutlined />} />}

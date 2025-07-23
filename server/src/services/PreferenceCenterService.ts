@@ -3,7 +3,7 @@
 
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
-import { PolicyAcceptanceTrackingService, ConsentData, GranularConsent } from './PolicyAcceptanceTrackingService';
+import { PolicyAcceptanceTrackingService } from './PolicyAcceptanceTrackingService';
 import { EventEmitter } from 'events';
 
 export interface UserPreferenceCenter {
@@ -1483,8 +1483,8 @@ export interface CustomPreference {
   name: string;
   description: string;
   type: PreferenceType;
-  value: any;
-  defaultValue: any;
+  value: Error;
+  defaultValue: Error;
   options?: PreferenceOption[];
   validation?: PreferenceValidation;
   metadata: Record<string, any>;
@@ -1507,7 +1507,7 @@ export enum PreferenceType {
 }
 
 export interface PreferenceOption {
-  value: any;
+  value: Error;
   label: string;
   description?: string;
   disabled?: boolean;
@@ -1556,8 +1556,8 @@ export interface PreferenceMigration {
 
 export interface PreferenceChange {
   field: string;
-  oldValue: any;
-  newValue: any;
+  oldValue: Error;
+  newValue: Error;
   reason: string;
   timestamp: Date;
 }
@@ -2774,15 +2774,15 @@ export class PreferenceCenterService extends EventEmitter {
   }
 
   private async syncConsentWithPolicies(
-    userId: string,
-    consentSettings: ConsentPreferences,
-    context: OperationContext
+    ___userId: string,
+    ___consentSettings: ConsentPreferences,
+    ___context: OperationContext
   ): Promise<void> {
     // This would sync consent preferences with existing policy acceptances
     // Implementation would depend on specific policy requirements
   }
 
-  private prepareExportData(preferences: UserPreferenceCenter): any {
+  private prepareExportData(preferences: UserPreferenceCenter): unknown {
     // Remove sensitive data and prepare for export
     const exportData = { ...preferences };
     
@@ -2801,11 +2801,11 @@ export class PreferenceCenterService extends EventEmitter {
     return exportData;
   }
 
-  private convertToCSV(data: any): string {
+  private convertToCSV(data: Record<string, unknown>): string {
     // Implementation would flatten the nested preference structure to CSV
     // This is a simplified version
-    const flattenObject = (obj: any, prefix = ''): any => {
-      const flattened: any = {};
+    const flattenObject = (obj: unknown, prefix = ''): any => {
+      const flattened: unknown = {};
       for (const key in obj) {
         if (obj[key] !== null && typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
           Object.assign(flattened, flattenObject(obj[key], `${prefix}${key}.`));
@@ -2825,7 +2825,7 @@ export class PreferenceCenterService extends EventEmitter {
     return `${headers}\n${values}`;
   }
 
-  private convertToXML(data: any): string {
+  private convertToXML(data: Record<string, unknown>): string {
     // Implementation would convert the preference structure to XML
     // This is a simplified version
     const xmlEscape = (str: string): string => {
@@ -2841,7 +2841,7 @@ export class PreferenceCenterService extends EventEmitter {
       });
     };
 
-    const objectToXML = (obj: any, indent = 0): string => {
+    const objectToXML = (obj: unknown, indent = 0): string => {
       const spaces = ' '.repeat(indent);
       let xml = '';
 

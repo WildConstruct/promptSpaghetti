@@ -9,7 +9,6 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
-import { Textarea } from '../ui/Textarea';
 import { 
   Settings,
   Shield,
@@ -63,7 +62,7 @@ export const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps> = (
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('creator');
   const [editingTemplate, setEditingTemplate] = useState<MarketplacePolicyTemplate | null>(null);
-  const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [_____isCreatingNew, setIsCreatingNew] = useState(false);
 
   // Marketplace-specific policy templates
   const [policyTemplates] = useState<MarketplacePolicyTemplate[]>([

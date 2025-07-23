@@ -261,7 +261,7 @@ export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({
 };
 
 // Debounce utility function
-function debounce<T extends (...args: any[]) => any>(
+function debounce<T extends (...args: unknown[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {

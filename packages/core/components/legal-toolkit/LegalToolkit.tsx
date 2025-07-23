@@ -507,7 +507,7 @@ export const LegalToolkit: React.FC<LegalToolkitProps> = ({
           {currentView === 'analyze' && document && (
             <ContractAnalyzer
               document={document}
-              onClauseIdentified={(clauses: ContractClause[]) => {}}
+              onClauseIdentified={(_____clauses: ContractClause[]) => {}}
               onAnalysisComplete={handleAnalysisComplete}
               analysisType="comprehensive"
             />

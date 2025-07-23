@@ -19,7 +19,7 @@ export interface ConditionalConfig {
     /** Whether to enable strict mode (throws on undefined variables) */
     strictMode?: boolean;
     /** Custom functions available in expressions */
-    customFunctions?: Record<string, (...args: any[]) => any>;
+    customFunctions?: Record<string, (...args: unknown[]) => any>;
 }
 /**
  * Advanced conditional node with expression-based branching logic

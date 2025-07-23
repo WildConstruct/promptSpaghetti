@@ -244,7 +244,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showMergeRequestPanel, setShowMergeRequestPanel] = useState(false);
-  const [selectedBranch, setSelectedBranch] = useState<ProjectBranch | null>(null);
+  const [_____selectedBranch, setSelectedBranch] = useState<ProjectBranch | null>(null);
   const [editingBranch, setEditingBranch] = useState<ProjectBranch | null>(null);
   const [parentBranchId, setParentBranchId] = useState<string | null>(null);
   const [form] = Form.useForm();
@@ -276,7 +276,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
     }
   };
 
-  const handleCreateBranch = async (values: any) => {
+  const handleCreateBranch = async (values: unknown) => {
     try {
       const request: CreateBranchRequest = {
         projectId,
@@ -302,7 +302,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({
     }
   };
 
-  const handleUpdateBranch = async (values: any) => {
+  const handleUpdateBranch = async (values: unknown) => {
     if (!editingBranch) return;
 
     try {

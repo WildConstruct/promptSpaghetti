@@ -68,8 +68,8 @@ export const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps> =
   className = ''
 }) => {
   const [timeRange, setTimeRange] = useState<string>('7d');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [isLoading, setIsLoading] = useState(false);
+  const [_____selectedCategory, _____setSelectedCategory] = useState<string>('all');
+  const [_____isLoading, _____setIsLoading] = useState(false);
 
   // Mock analytics data - in real implementation, this would come from PolicyManagementService
   const [analyticsData] = useState<PolicyAnalyticsMetrics>({

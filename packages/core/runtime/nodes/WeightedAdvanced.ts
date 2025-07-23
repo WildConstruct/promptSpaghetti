@@ -211,7 +211,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   /**
    * Get effective choices from constructor data or dynamic inputs
    */
-  private getEffectiveChoices(ctx: AdvancedExecutionContext): WeightedChoice[] {
+  private getEffectiveChoices(______ctx: AdvancedExecutionContext): WeightedChoice[] {
     // For now, use constructor choices
     // In full implementation, would merge with dynamic inputs from I/O system
     return this.choices;
@@ -299,7 +299,7 @@ export class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
   /**
    * Custom distribution - apply user-defined transformation
    */
-  private applyCustomDistribution(choices: WeightedChoice[], parameters: Record<string, number>): WeightedChoice[] {
+  private applyCustomDistribution(choices: WeightedChoice[], ______parameters: Record<string, number>): WeightedChoice[] {
     // Placeholder for custom distribution logic
     // In full implementation, would support user-defined functions
     return choices;

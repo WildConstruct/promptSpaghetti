@@ -79,7 +79,7 @@ export const ReviewSystem: React.FC<ReviewSystemProps> = ({
   userHasPurchased = false
 }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [metrics, setMetrics] = useState<any>(null);
+  const [metrics, setMetrics] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -115,7 +115,7 @@ export const ReviewSystem: React.FC<ReviewSystemProps> = ({
     }
   };
 
-  const handleReviewSubmit = async (reviewData: any) => {
+  const handleReviewSubmit = async (reviewData: unknown) => {
     try {
       const response = await fetch('/api/marketplace/reviews', {
         method: 'POST',
@@ -563,7 +563,7 @@ interface ReviewModalProps {
   templateId: string;
   templateTitle: string;
   editingReview?: Review | null;
-  onSubmit: (reviewData: any) => void;
+  onSubmit: (reviewData: unknown) => void;
   onClose: () => void;
 }
 

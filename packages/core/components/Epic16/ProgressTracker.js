@@ -12,7 +12,7 @@ import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Trophy, Star, Award, Target, Users, Download, Eye, Heart, BookOpen, CheckCircle, Calendar, PlusCircle, Zap, Crown, Flame } from 'lucide-react';
-export const ProgressTracker = ({ userId, variant = 'full', showDetailedMetrics = true, enableAnimations = true, onMilestoneComplete, onLevelUp, className = '' }) => {
+export const ProgressTracker = ({ userId, variant = 'full', showDetailedMetrics = true, _____enableAnimations = true, _____onMilestoneComplete, _____onLevelUp, className = '' }) => {
     const [userProgress, setUserProgress] = useState(null);
     const [metrics, setMetrics] = useState(null);
     const [milestones, setMilestones] = useState([]);

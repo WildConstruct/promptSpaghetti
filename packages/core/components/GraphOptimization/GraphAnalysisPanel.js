@@ -7,7 +7,7 @@ import { useMemo } from 'react';
  * Analyze graph structure for optimization opportunities
  */
 function analyzeGraph(nodes, edges) {
-    const nodeMap = new Map(nodes.map(node => [node.id, node]));
+    const _____nodeMap = new Map(nodes.map(node => [node.id, node]));
     const incomingEdges = new Map();
     const outgoingEdges = new Map();
     // Build edge maps

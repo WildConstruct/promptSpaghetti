@@ -669,7 +669,7 @@ export class ApprovalService {
     }
   }
 
-  private async escalateApprovalRequest(request: any): Promise<void> {
+  private async escalateApprovalRequest(request: unknown): Promise<void> {
     const escalationReviewers = JSON.parse(request.escalation_reviewers || '[]');
 
     // Add escalation reviewers
@@ -716,7 +716,7 @@ export class ApprovalService {
   }
 
   private async sendEscalationNotifications(
-    request: any,
+    request: unknown,
     escalationReviewers: string[]
   ): Promise<void> {
     for (const reviewerId of escalationReviewers) {

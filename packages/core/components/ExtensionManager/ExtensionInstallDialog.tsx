@@ -19,9 +19,9 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({
   const [installMethod, setInstallMethod] = useState<'file' | 'url' | 'dev'>('file');
   const [manifestUrl, setManifestUrl] = useState('');
   const [devPath, setDevPath] = useState('');
-  const [manifestContent, setManifestContent] = useState<string>('');
+  const [_____manifestContent, setManifestContent] = useState<string>('');
   const [parsedManifest, setParsedManifest] = useState<ExtensionManifest | null>(null);
-  const [compatibilityResult, setCompatibilityResult] = useState<any>(null);
+  const [compatibilityResult, setCompatibilityResult] = useState<unknown>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'select' | 'validate' | 'confirm'>('select');
@@ -311,7 +311,7 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({
           {compatibilityResult.issues.length > 0 && (
             <div className="compatibility-issues">
               <h5>Issues:</h5>
-              {compatibilityResult.issues.map((issue: any, index: number) => (
+              {compatibilityResult.issues.map((issue: Error, index: number) => (
                 <div key={index} className={`issue ${issue.severity}`}>
                   <span className="issue-icon">
                     {issue.severity === 'error' ? '❌' : '⚠️'}

@@ -2,7 +2,7 @@
 // Display and manage lock-related notifications
 
 import React, { useState } from 'react';
-import { Bell, Clock, Lock, AlertTriangle, Check, X, Filter } from 'lucide-react';
+import { Bell, Clock, Lock, AlertTriangle, Check, Filter } from 'lucide-react';
 import { LockNotification } from '../types/locking';
 
 interface LockNotificationsProps {

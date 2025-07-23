@@ -46,7 +46,7 @@ export const SaveTemplateDialog: React.FC<SaveTemplateDialogProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = useCallback((field: keyof TemplateSaveData, value: any) => {
+  const handleInputChange = useCallback((field: keyof TemplateSaveData, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setError(null);
   }, []);

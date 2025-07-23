@@ -648,7 +648,7 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({
   onRate
 }) => {
   const [rating, setRating] = useState(0);
-  const [showActions, setShowActions] = useState(false);
+  const [_____showActions, _____setShowActions] = useState(false);
 
   return (
     <div 

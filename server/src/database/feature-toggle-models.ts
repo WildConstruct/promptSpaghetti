@@ -99,7 +99,7 @@ export interface PercentageRolloutValue {
 export interface MultivariateValue {
   variants: Array<{
     key: string;
-    value: any;
+    value: Error;
     percentage: number;
   }>;
 }
@@ -119,10 +119,10 @@ export interface SegmentationValue {
   rules: Array<{
     attribute: string;
     operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'contains';
-    value: any;
+    value: Error;
     logicalOperator?: 'AND' | 'OR';
   }>;
-  defaultValue: any;
+  defaultValue: Error;
 }
 
 // Evaluation context for toggle resolution
@@ -139,7 +139,7 @@ export interface ToggleEvaluationContext {
 // Toggle evaluation result
 export interface ToggleEvaluationResult {
   enabled: boolean;
-  value: any;
+  value: Error;
   variantKey?: string;
   reason: string;
   ruleMatched?: string;
@@ -224,7 +224,7 @@ export interface ToggleSnapshot {
   orgId?: string;
   toggles: Record<string, {
     type: ToggleType;
-    value: any;
+    value: Error;
     enabled: boolean;
     rules: Array<Record<string, any>>;
   }>;

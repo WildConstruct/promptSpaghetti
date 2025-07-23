@@ -124,7 +124,7 @@ export const RollbackManager: React.FC = () => {
     }
   };
 
-  const handleInputChange = (field: keyof RollbackData, value: any) => {
+  const handleInputChange = (field: keyof RollbackData, value: Error) => {
     setRollbackData(prev => ({
       ...prev,
       [field]: value

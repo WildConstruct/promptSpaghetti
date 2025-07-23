@@ -130,7 +130,7 @@ export const FieldImportanceStyles = {
         opacity: 0.8
     }
 };
-export const classifyFieldPriority = (fieldName, nodeType) => {
+export const classifyFieldPriority = (fieldName, _____nodeType) => {
     const lowerName = fieldName.toLowerCase();
     // Critical fields - always essential for node function
     const criticalPatterns = ['template', 'text', 'content', 'name', 'choices', 'output'];

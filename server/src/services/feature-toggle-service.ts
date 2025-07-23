@@ -106,14 +106,14 @@ export class FeatureToggleService {
   }
 
   // Generate toggle snapshot for distribution
-  async generateSnapshot(orgId?: string): Promise<any> {
+  async generateSnapshot(orgId?: string): Promise<unknown> {
     const { toggles } = await this.dao.listToggles({ 
       orgId, 
       enabled: true,
       limit: 1000 
     });
 
-    const snapshot: any = {
+    const snapshot: unknown = {
       version: this.generateSnapshotVersion(),
       timestamp: new Date().toISOString(),
       orgId,
@@ -177,7 +177,7 @@ export class FeatureToggleService {
 
   private async evaluateToggleWithRules(
     toggle: FeatureToggle,
-    scopes: any[],
+    scopes: unknown[],
     context: ToggleEvaluationContext
   ): Promise<ToggleEvaluationResult> {
     // Check if any scoping rules apply
@@ -397,7 +397,7 @@ export class FeatureToggleService {
     };
   }
 
-  private evaluateRule(rule: any, context: ToggleEvaluationContext): { matches: boolean; reason: string } {
+  private evaluateRule(rule: Error, context: ToggleEvaluationContext): { matches: boolean; reason: string } {
     const attributeValue = this.getAttributeValue(rule.attribute, context);
     
     if (attributeValue === undefined) {
@@ -460,7 +460,7 @@ export class FeatureToggleService {
     }
   }
 
-  private getAttributeValue(attribute: string, context: ToggleEvaluationContext): any {
+  private getAttributeValue(attribute: string, context: ToggleEvaluationContext): unknown {
     switch (attribute) {
     case 'user_id':
       return context.userId;
@@ -477,7 +477,7 @@ export class FeatureToggleService {
     }
   }
 
-  private validateToggleValue(type: ToggleType, value: any): void {
+  private validateToggleValue(type: ToggleType, value: Error): void {
     switch (type) {
     case ToggleType.BOOLEAN:
       if (typeof value.enabled !== 'boolean') {
@@ -495,7 +495,7 @@ export class FeatureToggleService {
       if (!Array.isArray(value.variants)) {
         throw new Error('Multivariate toggle must have variants array');
       }
-      const totalPercentage = value.variants.reduce((sum: number, v: any) => sum + (v.percentage || 0), 0);
+      const totalPercentage = value.variants.reduce((sum: number, v: unknown) => sum + (v.percentage || 0), 0);
       if (totalPercentage > 100) {
         throw new Error('Multivariate variant percentages cannot exceed 100%');
       }
@@ -552,7 +552,7 @@ export class FeatureToggleService {
     return `${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
   }
 
-  private generateChecksum(data: any): string {
+  private generateChecksum(data: Record<string, unknown>): string {
     const jsonString = JSON.stringify(data, Object.keys(data).sort());
     return createHash('sha256').update(jsonString).digest('hex').substring(0, 16);
   }

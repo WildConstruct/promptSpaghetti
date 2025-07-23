@@ -109,8 +109,8 @@ interface ReputationDashboardData {
   };
   metrics: ReputationMetrics;
   alerts: ReputationAlert[];
-  recentActivity: any[];
-  systemHealth: any;
+  recentActivity: unknown[];
+  systemHealth: unknown;
   lastUpdated: Date;
 }
 
@@ -138,7 +138,7 @@ export const ReputationDashboard: React.FC<ReputationDashboardProps> = ({
   });
   
   // Selected user for detailed view
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [___selectedUser, setSelectedUser] = useState<string | null>(null);
   
   // Leaderboard data
   const [leaderboard, setLeaderboard] = useState<any[]>([]);

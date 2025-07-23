@@ -11,10 +11,10 @@ import { useState, useEffect, useMemo } from 'react';
 import { Card, Row, Col, Button, Select, Tabs, Tag, Statistic, Timeline, Progress, Space, Typography, Alert, Badge, Tooltip, Carousel, Radio, Switch, Slider } from 'antd';
 import { PlayCircleOutlined, PauseCircleOutlined, EyeOutlined, ClockCircleOutlined, TrophyOutlined, ThunderboltOutlined, ExperimentOutlined, SettingOutlined } from '@ant-design/icons';
 import { useTemplatePreview } from '../../hooks/useTemplatePreview';
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text, _____Paragraph } = Typography;
 const { TabPane } = Tabs;
-const { Option } = Select;
-export const PromotionPreview = ({ promotionData, onUpdateRotation, onStartPreview, onStopPreview, isLive = false, className = '' }) => {
+const { _____Option } = Select;
+export const PromotionPreview = ({ promotionData, _____onUpdateRotation, onStartPreview, onStopPreview, isLive = false, className = '' }) => {
     // State management
     const [activeTab, setActiveTab] = useState('preview');
     const [selectedVariant, setSelectedVariant] = useState('control');
@@ -23,7 +23,7 @@ export const PromotionPreview = ({ promotionData, onUpdateRotation, onStartPrevi
     const [currentContentIndex, setCurrentContentIndex] = useState(0);
     const [isRotating, setIsRotating] = useState(false);
     // Template preview integration
-    const { generateVariants, performance: previewPerformance, isGenerating } = useTemplatePreview({
+    const { _____generateVariants, performance: _____previewPerformance, _____isGenerating } = useTemplatePreview({
         enablePerformanceTracking: true,
         maxVariants: 5,
         autoRefresh: true

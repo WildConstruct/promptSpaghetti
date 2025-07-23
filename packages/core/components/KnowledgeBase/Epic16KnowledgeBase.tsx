@@ -21,7 +21,7 @@ interface Epic16KnowledgeBaseProps {
   userRole: 'user' | 'creator' | 'admin';
   initialView?: 'search' | 'browse' | 'article';
   initialArticleId?: string;
-  onAnalytics?: (analytics: any) => void;
+  onAnalytics?: (analytics: unknown) => void;
 }
 
 interface KnowledgeBaseState {
@@ -157,7 +157,7 @@ export const Epic16KnowledgeBase: React.FC<Epic16KnowledgeBaseProps> = ({
   }, [knowledgeService, userId]);
 
   // Handle search performed
-  const handleSearchPerformed = useCallback((query: string, resultCount: number) => {
+  const handleSearchPerformed = useCallback((query: string, _____resultCount: number) => {
     setKbState(prev => ({ ...prev, searchQuery: query }));
   }, []);
 

@@ -1129,7 +1129,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     return `PEC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private async initializeAdoptionMetrics(_policyId: string): Promise<AdoptionMetrics> {
+  private async initializeAdoptionMetrics(______policyId: string): Promise<AdoptionMetrics> {
     // Implementation would fetch current adoption data
     return {
       totalUsers: 0,
@@ -1155,7 +1155,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     };
   }
 
-  private async initializeComplianceMetrics(_policyId: string): Promise<ComplianceMetrics> {
+  private async initializeComplianceMetrics(______policyId: string): Promise<ComplianceMetrics> {
     return {
       overallCompliance: 0,
       complianceByFramework: [],
@@ -1181,7 +1181,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     };
   }
 
-  private async initializeUserBehaviorMetrics(_policyId: string): Promise<UserBehaviorMetrics> {
+  private async initializeUserBehaviorMetrics(______policyId: string): Promise<UserBehaviorMetrics> {
     return {
       averageReadTime: 0,
       comprehensionRate: 0,
@@ -1217,7 +1217,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     };
   }
 
-  private async initializeBusinessImpactMetrics(_policyId: string): Promise<BusinessImpactMetrics> {
+  private async initializeBusinessImpactMetrics(______policyId: string): Promise<BusinessImpactMetrics> {
     return {
       operationalEfficiency: 0,
       processImprovements: [],
@@ -1241,7 +1241,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     };
   }
 
-  private async initializeGoalAchievementMetrics(_policyId: string): Promise<GoalAchievementMetrics> {
+  private async initializeGoalAchievementMetrics(______policyId: string): Promise<GoalAchievementMetrics> {
     return {
       primaryObjectives: [],
       secondaryObjectives: [],
@@ -1606,37 +1606,37 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
 
   // Additional helper methods would be implemented here...
   private async generateReportSummary(
-    _metrics: PolicyEffectivenessMetrics
+    ______metrics: PolicyEffectivenessMetrics
   ): Promise<Record<string, unknown>> {
     return {};
   }
 
   private async generateKeyFindings(
-    _metrics: PolicyEffectivenessMetrics
+    ______metrics: PolicyEffectivenessMetrics
   ): Promise<Array<Record<string, unknown>>> {
     return [];
   }
 
   private async generateAppendices(
-    _metrics: PolicyEffectivenessMetrics
+    ______metrics: PolicyEffectivenessMetrics
   ): Promise<Record<string, unknown>> {
     return {};
   }
 
   private async generateRankings(
-    _comparisons: PolicyComparison[]
+    ______comparisons: PolicyComparison[]
   ): Promise<Record<string, unknown>> {
     return {};
   }
 
   private async generateComparisonInsights(
-    _comparisons: PolicyComparison[]
+    ______comparisons: PolicyComparison[]
   ): Promise<Array<Record<string, unknown>>> {
     return [];
   }
 
   private async generateComparisonRecommendations(
-    _comparisons: PolicyComparison[]
+    ______comparisons: PolicyComparison[]
   ): Promise<Array<Record<string, unknown>>> {
     return [];
   }

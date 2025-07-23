@@ -132,7 +132,7 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
     onReviewSubmit(selectedDecision, reviewComment, criteriaEvaluations);
   };
 
-  const handleCriteriaEvaluation = (criteriaId: string, field: string, value: any) => {
+  const handleCriteriaEvaluation = (criteriaId: string, field: string, value: Error) => {
     setCriteriaEvaluations(prev => ({
       ...prev,
       [criteriaId]: {

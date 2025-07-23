@@ -1,6 +1,6 @@
 import { Pool, PoolClient } from 'pg';
-import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
-import crypto from 'crypto';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+// import crypto from 'crypto'; // Unused import removed
 
 // Marketplace-specific policy types
 export enum MarketplacePolicyType {
@@ -82,8 +82,8 @@ export interface PolicySection {
 export interface PolicyVariable {
   name: string;
   type: 'text' | 'number' | 'date' | 'boolean' | 'list';
-  value: any;
-  default_value: any;
+  value: Error;
+  default_value: Error;
   description: string;
   scope: 'global' | 'section' | 'conditional';
   validation_rules: ValidationRule[];
@@ -91,7 +91,7 @@ export interface PolicyVariable {
 
 export interface ValidationRule {
   type: 'required' | 'min_length' | 'max_length' | 'pattern' | 'range';
-  value: any;
+  value: Error;
   error_message: string;
 }
 
@@ -123,7 +123,7 @@ export interface LocalizationConfig {
 export interface DisplayCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than';
-  value: any;
+  value: Error;
   logical_operator?: 'and' | 'or';
 }
 
@@ -259,7 +259,7 @@ export interface DetectionRule {
 export interface RuleCondition {
   field: string;
   operator: string;
-  value: any;
+  value: Error;
   logical_operator?: 'and' | 'or';
 }
 
@@ -874,7 +874,7 @@ export class MarketplacePolicyPublishingService {
     console.log(`Publishing policy ${policy.id} to channels: ${channels.join(', ')}`);
   }
 
-  private async executePhasedRollout(policy: MarketplacePolicy, strategy: RolloutStrategy): Promise<void> {
+  private async executePhasedRollout(policy: MarketplacePolicy, ___strategy: RolloutStrategy): Promise<void> {
     // Implementation would execute phased rollout based on phases configuration
     console.log(`Starting phased rollout for policy ${policy.id}`);
   }
@@ -905,7 +905,7 @@ export class MarketplacePolicyPublishingService {
     console.log(`Creating announcement banner for policy ${policy.id}: ${announcement.title}`);
   }
 
-  private calculateComplianceScore(analytics: any): number {
+  private calculateComplianceScore(analytics: unknown): number {
     // Simple compliance score calculation
     const acknowledgmentRate = analytics.acknowledgments / Math.max(analytics.views, 1);
     const violationRate = analytics.violations / Math.max(analytics.acknowledgments, 1);
@@ -916,7 +916,7 @@ export class MarketplacePolicyPublishingService {
     ));
   }
 
-  private mapToMarketplacePolicy(row: any): MarketplacePolicy {
+  private mapToMarketplacePolicy(row: unknown): MarketplacePolicy {
     return {
       id: row.id,
       policy_type: row.policy_type,
@@ -936,7 +936,7 @@ export class MarketplacePolicyPublishingService {
     };
   }
 
-  private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: any }): Promise<void> {
+  private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: unknown }): Promise<void> {
     await client.query(
       `INSERT INTO audit_logs (action, user_id, details, ip_address, user_agent, created_at)
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,

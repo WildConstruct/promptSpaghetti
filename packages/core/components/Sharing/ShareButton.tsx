@@ -19,7 +19,7 @@ interface ShareButtonProps {
   variant?: 'primary' | 'secondary' | 'icon';
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
-  onShareCreated?: (shareResponse: any) => void;
+  onShareCreated?: (shareResponse: Error) => void;
 }
 
 export const ShareButton: React.FC<ShareButtonProps> = ({
@@ -44,7 +44,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
     setIsModalOpen(false);
   };
 
-  const handleShareCreated = (shareResponse: any) => {
+  const handleShareCreated = (shareResponse: Error) => {
     onShareCreated?.(shareResponse);
     // Keep modal open to show share results
   };
@@ -103,9 +103,9 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
 
   const getIconSize = () => {
     switch (size) {
-      case 'small': return '14px';
-      case 'large': return '20px';
-      default: return '16px';
+    case 'small': return '14px';
+    case 'large': return '20px';
+    default: return '16px';
     }
   };
 

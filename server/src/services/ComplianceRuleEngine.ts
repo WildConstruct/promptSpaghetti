@@ -58,7 +58,7 @@ export interface ApplicabilityCondition {
   conditionId: string;
   type: ConditionType;
   operator: ComparisonOperator;
-  value: any;
+  value: Error;
   context: ConditionContext;
   weight: number;
   required: boolean;
@@ -165,7 +165,7 @@ export interface RuleCondition {
 export interface ConditionOperand {
   operandId: string;
   type: OperandType;
-  value: any;
+  value: Error;
   source: OperandSource;
   transformation: DataTransformation[];
   validation: OperandValidation;
@@ -815,12 +815,12 @@ export class ComplianceRuleEngine {
     return this.isRuleApplicableToContext(rule, context);
   }
 
-  private isRuleApplicableToContext(rule: ComplianceRule, context: RuleEvaluationContext): boolean {
+  private isRuleApplicableToContext(_____rule: ComplianceRule, _____context: RuleEvaluationContext): boolean {
     // Simplified applicability check
     return true; // In a real implementation, this would check scope conditions
   }
 
-  private async evaluateConditions(conditions: RuleCondition[], context: RuleEvaluationContext): Promise<any[]> {
+  private async evaluateConditions(conditions: RuleCondition[], _____context: RuleEvaluationContext): Promise<any[]> {
     // Simplified condition evaluation
     return conditions.map(condition => ({
       conditionId: condition.conditionId,
@@ -829,7 +829,7 @@ export class ComplianceRuleEngine {
     }));
   }
 
-  private determineRuleOutcome(rule: ComplianceRule, conditionResults: any[]): EvaluationOutcome {
+  private determineRuleOutcome(rule: ComplianceRule, conditionResults: unknown[]): EvaluationOutcome {
     // Simplified outcome determination
     const allPassed = conditionResults.every(result => result.result === true);
     
@@ -845,24 +845,24 @@ export class ComplianceRuleEngine {
   }
 
   private async executeRuleActions(
-    rule: ComplianceRule,
-    context: RuleEvaluationContext,
-    outcome: EvaluationOutcome
+    _____rule: ComplianceRule,
+    _____context: RuleEvaluationContext,
+    _____outcome: EvaluationOutcome
   ): Promise<any[]> {
     // Simplified action execution
     return [];
   }
 
   private collectEvaluationEvidence(
-    rule: ComplianceRule,
-    context: RuleEvaluationContext,
-    conditionResults: any[]
-  ): any[] {
+    _____rule: ComplianceRule,
+    _____context: RuleEvaluationContext,
+    _____conditionResults: unknown[]
+  ): unknown[] {
     // Simplified evidence collection
     return [];
   }
 
-  private calculateConfidence(conditionResults: any[]): number {
+  private calculateConfidence(_____conditionResults: unknown[]): number {
     // Simplified confidence calculation
     return 0.95;
   }
@@ -900,7 +900,7 @@ export class ComplianceRuleEngine {
     };
   }
 
-  private createErrorResult(rule: ComplianceRule, context: RuleEvaluationContext, error: any): RuleEvaluationResult {
+  private createErrorResult(rule: ComplianceRule, context: RuleEvaluationContext, error: Error): RuleEvaluationResult {
     return {
       resultId: `ERROR-${Date.now()}`,
       ruleId: rule.ruleId,
@@ -929,7 +929,7 @@ export class ComplianceRuleEngine {
     };
   }
 
-  private async executeImmediateActions(result: RuleEvaluationResult): Promise<void> {
+  private async executeImmediateActions(_____result: RuleEvaluationResult): Promise<void> {
     // Implementation for immediate action execution
   }
 
@@ -950,26 +950,26 @@ export class ComplianceRuleEngine {
     // Load and validate rule dependencies
   }
 
-  private updateRuleIndexes(rule: ComplianceRule): void {
+  private updateRuleIndexes(_____rule: ComplianceRule): void {
     // Update rule indexes when new rule is added
   }
 
-  private detectCircularDependencies(rule: ComplianceRule): string[] {
+  private detectCircularDependencies(_____rule: ComplianceRule): string[] {
     // Detect circular dependencies
     return [];
   }
 
-  private checkScopeOverlap(scope1: RuleScope, scope2: RuleScope): boolean {
+  private checkScopeOverlap(_____scope1: RuleScope, _____scope2: RuleScope): boolean {
     // Check if two rule scopes overlap
     return true; // Simplified
   }
 
-  private checkActionConflicts(actions1: RuleAction[], actions2: RuleAction[]): any[] {
+  private checkActionConflicts(_____actions1: RuleAction[], _____actions2: RuleAction[]): unknown[] {
     // Check for conflicting actions
     return [];
   }
 
-  private determineConflictSeverity(rule1: ComplianceRule, rule2: ComplianceRule): ConflictSeverity {
+  private determineConflictSeverity(_____rule1: ComplianceRule, _____rule2: ComplianceRule): ConflictSeverity {
     // Determine severity of conflict between rules
     return 'MEDIUM';
   }

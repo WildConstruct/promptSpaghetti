@@ -87,58 +87,58 @@ export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> =
 
   const renderCurrentView = () => {
     switch (currentView) {
-      case 'dashboard':
+    case 'dashboard':
+      return (
+        <SecurityDashboard 
+          onIncidentClick={handleIncidentClick}
+          onThreatClick={handleThreatClick}
+        />
+      );
+      
+    case 'events':
+      return (
+        <SecurityEventLog 
+          onEventClick={(event) => console.log('Event clicked:', event)}
+        />
+      );
+      
+    case 'threats':
+      return (
+        <ThreatDetectionVisualizer 
+          onThreatClick={handleThreatClick}
+          refreshInterval={30000}
+        />
+      );
+      
+    case 'incidents':
+      if (selectedIncidentId) {
         return (
-          <SecurityDashboard 
-            onIncidentClick={handleIncidentClick}
-            onThreatClick={handleThreatClick}
+          <IncidentResponsePanel 
+            incidentId={selectedIncidentId}
+            onIncidentUpdate={(incident) => console.log('Incident updated:', incident)}
+            onClose={() => setSelectedIncidentId(null)}
           />
         );
+      }
+      return (
+        <div className="incident-list-placeholder">
+          <AlertTriangle className="h-12 w-12 text-gray-400" />
+          <h3>Incident Management</h3>
+          <p>Click on an incident from the dashboard to view details</p>
+        </div>
+      );
       
-      case 'events':
-        return (
-          <SecurityEventLog 
-            onEventClick={(event) => console.log('Event clicked:', event)}
-          />
-        );
+    case 'alerts':
+      return (
+        <SecurityAlerts 
+          onAlertAction={handleAlertAction}
+          maxVisible={100}
+          showDismissed={false}
+        />
+      );
       
-      case 'threats':
-        return (
-          <ThreatDetectionVisualizer 
-            onThreatClick={handleThreatClick}
-            refreshInterval={30000}
-          />
-        );
-      
-      case 'incidents':
-        if (selectedIncidentId) {
-          return (
-            <IncidentResponsePanel 
-              incidentId={selectedIncidentId}
-              onIncidentUpdate={(incident) => console.log('Incident updated:', incident)}
-              onClose={() => setSelectedIncidentId(null)}
-            />
-          );
-        }
-        return (
-          <div className="incident-list-placeholder">
-            <AlertTriangle className="h-12 w-12 text-gray-400" />
-            <h3>Incident Management</h3>
-            <p>Click on an incident from the dashboard to view details</p>
-          </div>
-        );
-      
-      case 'alerts':
-        return (
-          <SecurityAlerts 
-            onAlertAction={handleAlertAction}
-            maxVisible={100}
-            showDismissed={false}
-          />
-        );
-      
-      default:
-        return <SecurityDashboard />;
+    default:
+      return <SecurityDashboard />;
     }
   };
 

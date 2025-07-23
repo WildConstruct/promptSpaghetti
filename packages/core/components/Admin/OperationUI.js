@@ -92,7 +92,7 @@ export const OperationUI = ({ operationType, initialParameters = {}, onExecute, 
     return (_jsxs("div", { className: "operation-ui", children: [_jsx(OperationHeader, { operationType: operationType, execution: execution, onToggleParameters: () => setShowParameters(!showParameters), showParameters: showParameters }), showParameters && (_jsx(OperationParametersForm, { parameters: operationType.parameters, values: parameters, errors: validationErrors, onChange: handleParameterChange, readonly: readonly, showAdvanced: showAdvanced })), _jsx(OperationActions, { operationType: operationType, canExecute: canExecute, isExecuting: isExecuting, execution: execution, onExecute: handleExecute, onCancel: handleCancel }), execution && (_jsx(OperationProgress, { execution: execution, operationType: operationType, onCancel: handleCancel }))] }));
 };
 const OperationHeader = ({ operationType, execution, onToggleParameters, showParameters }) => {
-    const getRiskLevelColor = (risk) => {
+    const _____getRiskLevelColor = (risk) => {
         switch (risk) {
             case RiskLevel.LOW: return 'green';
             case RiskLevel.MEDIUM: return 'yellow';
@@ -193,7 +193,7 @@ const OperationActions = ({ operationType, canExecute, isExecuting, execution, o
     return (_jsxs("div", { className: "operation-actions", children: [_jsxs("div", { className: "primary-actions", children: [!execution && (_jsx("button", { className: `execute-btn risk-${operationType.riskLevel}`, onClick: handleExecute, disabled: !canExecute, children: isExecuting ? 'Executing...' : `Execute ${operationType.displayName}` })), execution && execution.status === ExecutionStatus.RUNNING && operationType.uiConfig.allowCancel && (_jsx("button", { className: "cancel-btn", onClick: onCancel, children: "Cancel Operation" }))] }), _jsxs("div", { className: "secondary-actions", children: [_jsx("button", { className: "template-btn", children: "Save as Template" }), _jsx("button", { className: "schedule-btn", children: "Schedule" }), _jsx("button", { className: "dry-run-btn", children: "Dry Run" })] }), showConfirmation && (_jsx("div", { className: "confirmation-modal", children: _jsxs("div", { className: "confirmation-content", children: [_jsx("h4", { children: "Confirm Operation" }), _jsx("p", { children: operationType.uiConfig.confirmationMessage ||
                                 `Are you sure you want to execute ${operationType.displayName}?` }), _jsxs("div", { className: "confirmation-actions", children: [_jsx("button", { onClick: () => setShowConfirmation(false), children: "Cancel" }), _jsx("button", { className: `confirm-btn risk-${operationType.riskLevel}`, onClick: confirmExecution, children: "Execute" })] })] }) }))] }));
 };
-const OperationProgress = ({ execution, operationType, onCancel }) => {
+const OperationProgress = ({ execution, operationType, _____onCancel }) => {
     const formatDuration = (ms) => {
         const seconds = Math.floor(ms / 1000);
         const minutes = Math.floor(seconds / 60);

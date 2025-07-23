@@ -101,7 +101,7 @@ export const EncryptionStatusIcon = ({ encryptionState, onClick }) => {
     return (_jsxs("div", { className: "cursor-pointer flex items-center space-x-1", onClick: onClick, title: `Encryption: ${encryptionState.status}${encryptionState.algorithm ? ` (${encryptionState.algorithm})` : ''}${encryptionState.error ? ` - ${encryptionState.error}` : ''}`, children: [_jsx("span", { className: "text-sm", children: statusIcon }), _jsx("svg", { width: "8", height: "8", viewBox: "0 0 8 8", fill: statusColor, className: encryptionState.status === 'encrypting' || encryptionState.status === 'decrypting' ? 'animate-pulse' : '', children: _jsx("circle", { cx: "4", cy: "4", r: "3" }) })] }));
 };
 // Encryption details modal/dropdown content
-export const EncryptionDetails = ({ encryptionState, onEncrypt, onDecrypt, onChangeAlgorithm }) => {
+export const EncryptionDetails = ({ encryptionState, onEncrypt, onDecrypt, _____onChangeAlgorithm }) => {
     const isEncrypted = encryptionState.status === 'encrypted';
     const isProcessing = encryptionState.status === 'encrypting' || encryptionState.status === 'decrypting';
     const canEncrypt = encryptionState.status === 'not_encrypted' && !isProcessing;

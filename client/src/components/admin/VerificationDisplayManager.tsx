@@ -17,7 +17,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Switch } from '../ui/switch';
-import { Textarea } from '../ui/textarea';
 import { 
   Shield, 
   Award, 
@@ -91,6 +90,28 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
   const [activeTab, setActiveTab] = useState('display-config');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Configuration state
+  const [config, setConfig] = useState<VerificationDisplayConfig>({
+    showTrustScores: true,
+    showBadgeCount: true,
+    showVerificationLevel: true,
+    showReputation: true,
+    badgeStyle: 'compact',
+    trustIndicatorSize: 'medium',
+    colorScheme: 'default',
+    animationsEnabled: true,
+    publicDisplaySettings: {
+      unverifiedUsers: true,
+      lowReputationUsers: true,
+      flaggedUsers: false
+    },
+    displayThresholds: {
+      minTrustScore: 0,
+      minBadgeCount: 0,
+      hideUnverified: false
+    }
+  });
 
   // Load preview data
   const loadPreviewData = async () => {
@@ -101,7 +122,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
       const result = await response.json();
       
       if (result.success) {
-        const mappedData = result.data.map((user: any) => ({
+        const mappedData = result.data.map((user: unknown) => ({
           userId: user.userId,
           username: user.username,
           trustScore: user.overallTrustScore,
@@ -311,7 +332,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <label className="font-medium">Badge Style</label>
                   <Select 
                     value={config.badgeStyle} 
-                    onValueChange={(value: any) => 
+                    onValueChange={(value: Error) => 
                       setConfig(prev => ({ ...prev, badgeStyle: value }))
                     }
                   >
@@ -330,7 +351,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <label className="font-medium">Trust Indicator Size</label>
                   <Select 
                     value={config.trustIndicatorSize} 
-                    onValueChange={(value: any) => 
+                    onValueChange={(value: Error) => 
                       setConfig(prev => ({ ...prev, trustIndicatorSize: value }))
                     }
                   >
@@ -349,7 +370,7 @@ export const VerificationDisplayManager: React.FC<VerificationDisplayManagerProp
                   <label className="font-medium">Color Scheme</label>
                   <Select 
                     value={config.colorScheme} 
-                    onValueChange={(value: any) => 
+                    onValueChange={(value: Error) => 
                       setConfig(prev => ({ ...prev, colorScheme: value }))
                     }
                   >

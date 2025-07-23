@@ -569,11 +569,11 @@ export class UserFlaggingService {
     status: 'clean' | 'under_review' | 'violations_found' | 'content_removed'
   ): 'none' | 'pending' | 'reviewed' | 'resolved' | 'dismissed' {
     switch (status) {
-      case 'clean': return 'none';
-      case 'under_review': return 'pending';
-      case 'violations_found': return 'resolved';
-      case 'content_removed': return 'resolved';
-      default: return 'none';
+    case 'clean': return 'none';
+    case 'under_review': return 'pending';
+    case 'violations_found': return 'resolved';
+    case 'content_removed': return 'resolved';
+    default: return 'none';
     }
   }
 

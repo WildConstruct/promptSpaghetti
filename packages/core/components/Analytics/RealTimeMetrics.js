@@ -18,7 +18,7 @@ export const RealTimeMetrics = ({ metrics, loading }) => {
         topConvertingFunnel: '',
         recentEvents: []
     });
-    const [updateCount, setUpdateCount] = useState(0);
+    const [_____updateCount, setUpdateCount] = useState(0);
     useEffect(() => {
         if (metrics) {
             setLiveData(prev => ({

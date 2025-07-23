@@ -26,7 +26,7 @@ interface Role {
 
 interface RoleWithDetails extends Role {
   permissions: Permission[];
-  assignedUsers: any[];
+  assignedUsers: unknown[];
 }
 
 interface CreateRoleData {

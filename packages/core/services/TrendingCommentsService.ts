@@ -376,24 +376,24 @@ export class TrendingCommentsService {
       metrics.uniqueEngagers.add(engagement.userId);
       
       switch (engagement.engagementType) {
-        case 'like':
-          metrics.totalLikes++;
-          break;
-        case 'dislike':
-          metrics.totalDislikes++;
-          break;
-        case 'reply':
-          metrics.totalReplies++;
-          break;
-        case 'share':
-          metrics.totalShares++;
-          break;
-        case 'helpful':
-          metrics.totalHelpfulVotes++;
-          break;
-        case 'report':
-          metrics.totalReports++;
-          break;
+      case 'like':
+        metrics.totalLikes++;
+        break;
+      case 'dislike':
+        metrics.totalDislikes++;
+        break;
+      case 'reply':
+        metrics.totalReplies++;
+        break;
+      case 'share':
+        metrics.totalShares++;
+        break;
+      case 'helpful':
+        metrics.totalHelpfulVotes++;
+        break;
+      case 'report':
+        metrics.totalReports++;
+        break;
       }
     });
 
@@ -580,18 +580,18 @@ export class TrendingCommentsService {
 
   private sortComments(comments: TrendingComment[], sortOrder: CommentSortOrder): TrendingComment[] {
     switch (sortOrder) {
-      case 'trending':
-        return comments.sort((a, b) => b.score.scores.trendingScore - a.score.scores.trendingScore);
-      case 'recent':
-        return comments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-      case 'top_rated':
-        return comments.sort((a, b) => b.score.scores.engagementScore - a.score.scores.engagementScore);
-      case 'controversial':
-        return comments.sort((a, b) => b.score.scores.controversyScore - a.score.scores.controversyScore);
-      case 'oldest':
-        return comments.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-      default:
-        return comments;
+    case 'trending':
+      return comments.sort((a, b) => b.score.scores.trendingScore - a.score.scores.trendingScore);
+    case 'recent':
+      return comments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    case 'top_rated':
+      return comments.sort((a, b) => b.score.scores.engagementScore - a.score.scores.engagementScore);
+    case 'controversial':
+      return comments.sort((a, b) => b.score.scores.controversyScore - a.score.scores.controversyScore);
+    case 'oldest':
+      return comments.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    default:
+      return comments;
     }
   }
 
@@ -820,14 +820,14 @@ export class TrendingCommentsService {
 
   private generateMockCommentContent(): string {
     const contents = [
-      "This template is incredibly useful! I've been looking for something like this for weeks.",
-      "Great work on the design. The user experience is smooth and intuitive.",
-      "Has anyone tried implementing this with the new API changes?",
-      "I found a small bug in the validation logic. Should we open an issue?",
-      "Perfect timing! This solves exactly the problem I was working on.",
-      "The documentation could be improved, but the core functionality is solid.",
-      "This is a game-changer for our workflow. Thank you for sharing!",
-      "I made some modifications for our use case. Happy to share if interested."
+      'This template is incredibly useful! I\'ve been looking for something like this for weeks.',
+      'Great work on the design. The user experience is smooth and intuitive.',
+      'Has anyone tried implementing this with the new API changes?',
+      'I found a small bug in the validation logic. Should we open an issue?',
+      'Perfect timing! This solves exactly the problem I was working on.',
+      'The documentation could be improved, but the core functionality is solid.',
+      'This is a game-changer for our workflow. Thank you for sharing!',
+      'I made some modifications for our use case. Happy to share if interested.'
     ];
     
     return contents[Math.floor(Math.random() * contents.length)];

@@ -32,8 +32,8 @@ export const InspectorPanel = ({ node, schema, onChange, onClose, onGlobalPrevie
     const [showPreferences, setShowPreferences] = useState(false);
     const [width, setWidth] = useState(initialWidth);
     const resizeRef = useRef(null);
-    const { isAnimating: isCollapseAnimating, startAnimation: startCollapseAnimation } = useAnimation();
-    const { debugMode, setDebugMode, shouldShowTechnicalFields, complexityLevel, setComplexityLevel, shouldShowAdvancedFeatures, globalDisclosureLevel, setGlobalDisclosureLevel } = useUISettingsStore();
+    const { isAnimating: _____isCollapseAnimating, startAnimation: startCollapseAnimation } = useAnimation();
+    const { _____debugMode, _____setDebugMode, _____shouldShowTechnicalFields, complexityLevel, setComplexityLevel, _____shouldShowAdvancedFeatures, _____globalDisclosureLevel, _____setGlobalDisclosureLevel } = useUISettingsStore();
     const nodeId = node?.id;
     const nodeType = node?.data?.nodeType || node?.type;
     const handleMouseDown = useCallback((e) => {

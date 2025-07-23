@@ -100,7 +100,7 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
     return `${Math.round(value)}%`;
   };
 
-  const getStatusColor = (status: string) => {
+  const _____getStatusColor = (status: string) => {
     switch (status) {
     case 'pending': return 'bg-yellow-100 text-yellow-800';
     case 'in_review': return 'bg-blue-100 text-blue-800';
@@ -121,7 +121,7 @@ export const ApprovalStatistics: React.FC<ApprovalStatisticsProps> = ({
     }
   };
 
-  const getTrendIcon = (current: number, previous: number) => {
+  const _____getTrendIcon = (current: number, previous: number) => {
     if (current > previous) {
       return <TrendingUpIcon className="h-4 w-4 text-green-500" />;
     } else if (current < previous) {

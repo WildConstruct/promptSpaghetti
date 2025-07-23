@@ -296,7 +296,7 @@ export class DataRetentionAuditService {
     complianceFramework?: string
   ): Promise<DataRetentionAuditSummary[]> {
     let query = 'SELECT * FROM data_retention_audit_summary WHERE 1=1';
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     if (startDate) {
@@ -328,7 +328,7 @@ export class DataRetentionAuditService {
     endDate?: Date
   ): Promise<DataSubjectRightsSummary[]> {
     let query = 'SELECT * FROM data_subject_rights_summary WHERE 1=1';
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     if (startDate) {
@@ -435,7 +435,7 @@ export class DataRetentionAuditService {
         error_message ILIKE $1
       )
     `;
-    const values: any[] = [`%${searchTerm}%`];
+    const values: unknown[] = [`%${searchTerm}%`];
     let paramIndex = 2;
 
     if (operationType) {

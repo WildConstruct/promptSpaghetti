@@ -393,7 +393,7 @@ export class PromotionSchedulingService {
       WHERE 1=1
     `;
     
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     if (filters.status) {
@@ -456,7 +456,7 @@ export class PromotionSchedulingService {
       WHERE t.status = 'active' AND t.is_published = true
     `;
 
-    const params: any[] = [];
+    const params: unknown[] = [];
     let paramIndex = 1;
 
     // Apply filters
@@ -596,9 +596,9 @@ export class PromotionSchedulingService {
   }
 
   private applyDiversificationRules(
-    content: any[], 
+    content: unknown[], 
     rules: DiversificationRule[]
-  ): any[] {
+  ): unknown[] {
     if (!rules.length) return content;
 
     const result = [...content];
@@ -677,7 +677,7 @@ export class PromotionSchedulingService {
     ]);
   }
 
-  private mapRowToSchedule(row: any): PromotionSchedule {
+  private mapRowToSchedule(row: unknown): PromotionSchedule {
     return {
       id: row.id,
       title: row.title,

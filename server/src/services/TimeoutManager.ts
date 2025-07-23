@@ -196,7 +196,7 @@ export class TimeoutManager extends EventEmitter {
   /**
    * Deep merge configuration objects
    */
-  private mergeDeep(target: any, source: any): any {
+  private mergeDeep(target: unknown, source: Error): unknown {
     const result = { ...target };
     
     for (const key in source) {

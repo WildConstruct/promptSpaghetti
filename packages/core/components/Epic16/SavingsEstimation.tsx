@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { PiggyBank, Clock, Zap, TrendingDown, BarChart3, Calculator, Target, ArrowRight } from 'lucide-react';
+import { PiggyBank, Clock, Zap, Target, ArrowRight } from 'lucide-react';
 
 interface SavingsInputs {
   // Usage patterns

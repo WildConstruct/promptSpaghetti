@@ -44,7 +44,7 @@ import {
   SparklesIcon
 } from '@heroicons/react/24/outline';
 
-import { ShareRecord, ShareAnalytics, DemographicData, PerformanceMetrics } from './SocialPlatformIntegration';
+import { ShareRecord } from './SocialPlatformIntegration';
 import { Template } from './TemplatePreviewModal';
 
 // Share Tracking Interfaces
@@ -323,14 +323,14 @@ export const ShareTrackingUtils = {
 
   formatMetric: (value: number, type: 'currency' | 'percentage' | 'number'): string => {
     switch (type) {
-      case 'currency':
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
-      case 'percentage':
-        return `${value.toFixed(1)}%`;
-      case 'number':
-        return value.toLocaleString();
-      default:
-        return value.toString();
+    case 'currency':
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+    case 'percentage':
+      return `${value.toFixed(1)}%`;
+    case 'number':
+      return value.toLocaleString();
+    default:
+      return value.toString();
     }
   }
 };
@@ -348,7 +348,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({
 }) => {
   const [trackingData, setTrackingData] = useState<ShareTrackingData | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'platforms' | 'demographics' | 'funnel' | 'alerts'>('overview');
-  const [filters, setFilters] = useState<ShareTrackingFilters>({
+  const [filters, _____setFilters] = useState<ShareTrackingFilters>({
     dateRange: { start: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), end: new Date() },
     platforms: [],
     shareTypes: [],
@@ -404,7 +404,7 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({
     setDismissedAlerts(prev => [...prev, alertId]);
   }, []);
 
-  const filteredShares = useMemo(() => {
+  const _____filteredShares = useMemo(() => {
     return shares.filter(share => {
       const inDateRange = share.timestamp >= filters.dateRange.start && share.timestamp <= filters.dateRange.end;
       const matchesPlatform = filters.platforms.length === 0 || filters.platforms.includes(share.platform);
@@ -471,8 +471,8 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({
           <div className="space-y-2">
             {activeAlerts.slice(0, 3).map(alert => {
               const AlertIcon = alert.type === 'success' ? CheckCircleIcon :
-                              alert.type === 'warning' ? ExclamationTriangleIcon :
-                              alert.type === 'error' ? XCircleIcon : InformationCircleIcon;
+                alert.type === 'warning' ? ExclamationTriangleIcon :
+                  alert.type === 'error' ? XCircleIcon : InformationCircleIcon;
               
               const alertColors = {
                 success: 'text-green-600 bg-green-100',
@@ -619,8 +619,8 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({
                         <div className="flex items-center gap-2 mb-2">
                           <span className={`px-2 py-1 text-xs rounded-full ${
                             rec.priority === 'high' ? 'bg-red-100 text-red-700' :
-                            rec.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-blue-100 text-blue-700'
+                              rec.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-blue-100 text-blue-700'
                           }`}>
                             {rec.priority} priority
                           </span>
@@ -653,11 +653,11 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({
                     <h5 className="font-medium text-gray-900 capitalize">{platform.platform}</h5>
                     <div className={`flex items-center gap-1 text-xs ${
                       platform.trends.direction === 'up' ? 'text-green-600' :
-                      platform.trends.direction === 'down' ? 'text-red-600' :
-                      'text-gray-600'
+                        platform.trends.direction === 'down' ? 'text-red-600' :
+                          'text-gray-600'
                     }`}>
                       {platform.trends.direction === 'up' ? <TrendingUpIcon className="h-3 w-3" /> :
-                       platform.trends.direction === 'down' ? <TrendingDownIcon className="h-3 w-3" /> : null}
+                        platform.trends.direction === 'down' ? <TrendingDownIcon className="h-3 w-3" /> : null}
                       {platform.trends.percentage.toFixed(1)}%
                     </div>
                   </div>
@@ -832,8 +832,8 @@ export const ShareTrackingManager: React.FC<ShareTrackingManagerProps> = ({
             <div className="space-y-4">
               {trackingData.alerts.map(alert => {
                 const AlertIcon = alert.type === 'success' ? CheckCircleIcon :
-                                alert.type === 'warning' ? ExclamationTriangleIcon :
-                                alert.type === 'error' ? XCircleIcon : InformationCircleIcon;
+                  alert.type === 'warning' ? ExclamationTriangleIcon :
+                    alert.type === 'error' ? XCircleIcon : InformationCircleIcon;
                 
                 const alertColors = {
                   success: 'border-green-200 bg-green-50 text-green-800',

@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
-import { ExtensionManagerStore, useExtensionManagerStore } from './ExtensionManagerStore';
+import { useExtensionManagerStore } from './ExtensionManagerStore';
 import { ExtensionListView } from './ExtensionListView';
 import { ExtensionDetailView } from './ExtensionDetailView';
 import { ExtensionSearchFilter } from './ExtensionSearchFilter';

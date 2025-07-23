@@ -68,8 +68,8 @@ interface RefundRequest {
   updatedAt: Date;
   dueDate?: Date;
   approvedBy?: string;
-  workflowHistory: any[];
-  notes: any[];
+  workflowHistory: unknown[];
+  notes: unknown[];
 }
 
 interface RefundStats {
@@ -110,7 +110,7 @@ export const RefundProcessingDashboard: React.FC<RefundProcessingDashboardProps>
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedPriority, setSelectedPriority] = useState('');
-  const [selectedReason, setSelectedReason] = useState('');
+  const [___selectedReason, setSelectedReason] = useState('');
   const [dateRange, setDateRange] = useState('7d');
   
   // Manual refund state

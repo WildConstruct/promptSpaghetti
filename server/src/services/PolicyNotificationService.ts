@@ -100,7 +100,7 @@ export interface ChannelPreference {
 export interface ChannelCondition {
   conditionType: 'SEVERITY' | 'POLICY_TYPE' | 'TIME' | 'URGENCY' | 'COMPLIANCE';
   operator: 'EQUALS' | 'NOT_EQUALS' | 'GREATER_THAN' | 'LESS_THAN' | 'IN' | 'NOT_IN';
-  value: any;
+  value: Error;
 }
 
 export interface FrequencyPreference {
@@ -185,7 +185,7 @@ export interface NotificationSubscription {
 export interface SubscriptionFilter {
   filterType: 'POLICY_ID' | 'POLICY_TYPE' | 'JURISDICTION' | 'FRAMEWORK' | 'AUTHOR' | 'AUDIENCE';
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'STARTS_WITH' | 'IN' | 'NOT_IN';
-  value: any;
+  value: Error;
   caseSensitive: boolean;
 }
 
@@ -200,7 +200,7 @@ export interface AudienceFilter {
 export interface FilterCriteria {
   field: string;
   operator: string;
-  value: any;
+  value: Error;
   dataType: 'STRING' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'ARRAY';
 }
 
@@ -437,10 +437,10 @@ export interface TemplateVariable {
   name: string;
   type: 'STRING' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'OBJECT' | 'ARRAY';
   required: boolean;
-  defaultValue?: any;
+  defaultValue?: unknown;
   validation: VariableValidation;
   description: string;
-  examples: any[];
+  examples: unknown[];
 }
 
 export interface VariableValidation {
@@ -449,7 +449,7 @@ export interface VariableValidation {
   maxLength?: number;
   minValue?: number;
   maxValue?: number;
-  allowedValues?: any[];
+  allowedValues?: unknown[];
   customValidator?: string;
 }
 
@@ -685,7 +685,7 @@ export interface HealthCheckConfiguration {
   interval: number; // seconds
   timeout: number; // seconds
   endpoint?: string;
-  expectedResponse: any;
+  expectedResponse: Error;
   healthyThreshold: number;
   unhealthyThreshold: number;
 }
@@ -741,7 +741,7 @@ export interface LogDestination {
 export interface LogFilter {
   field: string;
   operator: string;
-  value: any;
+  value: Error;
   action: 'INCLUDE' | 'EXCLUDE';
 }
 
@@ -1080,7 +1080,7 @@ export interface PersonalizationRule {
 export interface PersonalizationAction {
   type: 'REPLACE_CONTENT' | 'ADD_CONTENT' | 'REMOVE_CONTENT' | 'MODIFY_STYLING' | 'CHANGE_CHANNEL';
   target: string;
-  value: any;
+  value: Error;
   conditions: string[];
 }
 
@@ -1154,7 +1154,7 @@ export interface InvalidationTrigger {
 
 export interface ContentFallback {
   enabled: boolean;
-  fallbackContent: any;
+  fallbackContent: unknown;
   conditions: FallbackCondition[];
   timeout: number; // milliseconds
 }
@@ -1369,7 +1369,7 @@ export interface ComplianceNotificationRequirement {
 export interface ComplianceEvidence {
   evidenceId: string;
   type: 'CONSENT_RECORD' | 'DELIVERY_RECEIPT' | 'AUDIT_LOG' | 'USER_ACTION' | 'SYSTEM_LOG';
-  data: any;
+  data: Record<string, unknown>;
   timestamp: Date;
   source: string;
   integrity: EvidenceIntegrity;
@@ -1453,7 +1453,7 @@ export interface DeliveryAttempt {
 export interface AttemptResponse {
   statusCode?: number;
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   externalId?: string;
   trackingInfo?: Record<string, any>;
 }
@@ -1461,7 +1461,7 @@ export interface AttemptResponse {
 export interface AttemptError {
   errorCode: string;
   errorMessage: string;
-  errorDetails?: any;
+  errorDetails?: unknown;
   retryable: boolean;
   category: ErrorCategory;
 }
@@ -1479,7 +1479,7 @@ export interface UserInteraction {
   interactionType: InteractionType;
   timestamp: Date;
   channel: string;
-  data?: any;
+  data?: unknown;
   location?: UserLocation;
   device?: DeviceInfo;
 }
@@ -1873,7 +1873,7 @@ export class PolicyNotificationService extends EventEmitter {
   /**
    * Get notification analytics and reporting
    */
-  async getNotificationAnalytics(filters: NotificationAnalyticsFilters): Promise<NotificationAnalytics> {
+  async getNotificationAnalytics(_____filters: NotificationAnalyticsFilters): Promise<NotificationAnalytics> {
     // Implementation would aggregate notification data for analytics
     return {
       summary: {
@@ -2050,7 +2050,7 @@ export class PolicyNotificationService extends EventEmitter {
   private async sendViaChannel(
     notification: PolicyNotification,
     channel: NotificationChannel,
-    channelConfig: NotificationChannel
+    _____channelConfig: NotificationChannel
   ): Promise<AttemptResponse> {
     // Mock implementation - would integrate with actual channel providers
     switch (channel.type) {
@@ -2077,7 +2077,7 @@ export class PolicyNotificationService extends EventEmitter {
     }
   }
 
-  private calculateDeliveryCost(channel: NotificationChannel, channelConfig: NotificationChannel): number {
+  private calculateDeliveryCost(channel: NotificationChannel, _____channelConfig: NotificationChannel): number {
     // Mock cost calculation
     const baseCosts: Record<string, number> = {
       'EMAIL': 0.001,
@@ -2129,7 +2129,7 @@ export class PolicyNotificationService extends EventEmitter {
 
   private async applyAudienceFilters(
     targets: NotificationTarget[],
-    filters: AudienceFilter[]
+    _____filters: AudienceFilter[]
   ): Promise<NotificationTarget[]> {
     // Implementation would apply audience filters
     return targets;
@@ -2137,7 +2137,7 @@ export class PolicyNotificationService extends EventEmitter {
 
   private async applySegmentation(
     targets: NotificationTarget[],
-    segmentation: AudienceSegmentation
+    _____segmentation: AudienceSegmentation
   ): Promise<NotificationTarget[]> {
     // Implementation would apply audience segmentation
     return targets;
@@ -2145,7 +2145,7 @@ export class PolicyNotificationService extends EventEmitter {
 
   private async applyExclusions(
     targets: NotificationTarget[],
-    exclusions: NotificationExclusion[]
+    _____exclusions: NotificationExclusion[]
   ): Promise<NotificationTarget[]> {
     // Implementation would apply exclusions
     return targets;
@@ -2153,8 +2153,8 @@ export class PolicyNotificationService extends EventEmitter {
 
   private async applyPersonalization(
     notification: PolicyNotification,
-    target: NotificationTarget,
-    personalization: NotificationPersonalization
+    _____target: NotificationTarget,
+    _____personalization: NotificationPersonalization
   ): Promise<{ title: string; message: string; detailedMessage?: string }> {
     // Implementation would apply personalization rules
     return {
@@ -2168,7 +2168,7 @@ export class PolicyNotificationService extends EventEmitter {
     return `${notification.metadata.priority}-${notification.scheduling.immediate ? 'immediate' : 'scheduled'}`;
   }
 
-  private async validatePreferences(preferences: NotificationPreferences): Promise<void> {
+  private async validatePreferences(_____preferences: NotificationPreferences): Promise<void> {
     // Implementation would validate user preferences
   }
 
@@ -2180,7 +2180,7 @@ export class PolicyNotificationService extends EventEmitter {
     return preferences;
   }
 
-  private async getNotification(notificationId: string): Promise<PolicyNotification> {
+  private async getNotification(_____notificationId: string): Promise<PolicyNotification> {
     // Implementation would fetch notification from storage
     throw new Error('Not implemented');
   }

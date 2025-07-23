@@ -6,7 +6,7 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 import './PurchaseModal.css';
 
 interface PurchaseModalProps {
-  template: any;
+  template: Error;
   onClose: () => void;
   onComplete: (success: boolean) => void;
   className?: string;
@@ -29,9 +29,9 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   const [step, setStep] = useState<'confirm' | 'payment' | 'processing' | 'success' | 'error'>('confirm');
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
-  const [loading, setLoading] = useState(false);
+  const [___loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [purchaseId, setPurchaseId] = useState<string | null>(null);
+  const [___purchaseId, setPurchaseId] = useState<string | null>(null);
 
   useEffect(() => {
     if (template.price_cents > 0) {
@@ -121,7 +121,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
     }
   };
 
-  const processPayment = async (purchase: any) => {
+  const processPayment = async (___purchase: Error) => {
     // This would integrate with Stripe or other payment processor
     // For now, we'll simulate payment processing
     

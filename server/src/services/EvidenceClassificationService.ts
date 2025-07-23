@@ -10,8 +10,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import { DataClassificationService, DataClassification } from './DataClassificationService';
-import { AuditEvidenceMapper, EvidenceType, ComplianceFramework } from './AuditEvidenceMapper';
-import * as crypto from 'crypto';
+import { AuditEvidenceMapper, EvidenceType, // ComplianceFramework // Unused import } from './AuditEvidenceMapper';
+import * as // crypto // Unused import from 'crypto';
 
 // =============================================================================
 // Evidence Classification Interfaces
@@ -825,7 +825,7 @@ export class EvidenceClassificationService {
     return evidenceType.sensitivity as DataClassification || 'internal';
   }
 
-  private getAuditRequirementClassification(requirementId: string): DataClassification {
+  private getAuditRequirementClassification(__requirementId: string): DataClassification {
     // This would typically query the audit requirements
     return 'internal'; // Default
   }
@@ -835,7 +835,7 @@ export class EvidenceClassificationService {
     return evidenceTypeObj?.sensitivity as DataClassification || 'internal';
   }
 
-  private async loadEvidence(evidenceId: string): Promise<EvidenceItem | null> {
+  private async loadEvidence(__evidenceId: string): Promise<EvidenceItem | null> {
     // This would load from database
     // Implementation depends on evidence storage schema
     return null;

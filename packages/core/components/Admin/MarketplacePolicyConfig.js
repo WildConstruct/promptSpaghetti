@@ -13,7 +13,7 @@ import { Settings, Shield, Users, ShoppingCart, FileText, DollarSign, CheckCircl
 export const MarketplacePolicyConfig = ({ className = '' }) => {
     const [selectedCategory, setSelectedCategory] = useState('creator');
     const [editingTemplate, setEditingTemplate] = useState(null);
-    const [isCreatingNew, setIsCreatingNew] = useState(false);
+    const [_____isCreatingNew, setIsCreatingNew] = useState(false);
     // Marketplace-specific policy templates
     const [policyTemplates] = useState([
         {

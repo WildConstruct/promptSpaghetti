@@ -50,7 +50,7 @@ export interface ConsentRecord {
   version: string;
   ipAddress: string;
   userAgent: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Configuration types
@@ -125,7 +125,7 @@ export interface ContextCondition {
   type: 'user_property' | 'session_property' | 'page_property' | 'time_based';
   property: string;
   operator: 'equals' | 'contains' | 'starts_with' | 'greater_than' | 'less_than';
-  value: any;
+  value: unknown;
 }
 
 export interface JustInTimeAppearance {
@@ -282,7 +282,7 @@ export interface ConsentInteraction {
   action: 'view_banner' | 'accept_all' | 'reject_all' | 'customize' | 'just_in_time_prompt' | 'grant_consent' | 'withdraw_consent';
   consentType?: ConsentType;
   source: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // API types
@@ -313,7 +313,7 @@ export interface ConsentRecordRequest {
   consentType: ConsentType;
   status: ConsentStatus;
   source: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ConsentRecordResponse {
@@ -352,7 +352,7 @@ export interface ConsentEvent {
   consentType?: ConsentType;
   source: string;
   timestamp: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Validation types

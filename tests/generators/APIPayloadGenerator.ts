@@ -17,7 +17,7 @@ export interface APITestPayload {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   endpoint: string;
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   queryParams?: Record<string, string>;
   expectedStatus: number;
   expectedBehavior: 'success' | 'error' | 'timeout' | 'rate_limit';
@@ -70,7 +70,7 @@ export interface RuleManagementPayload {
       end: string;
     };
   };
-  bulkData?: any[];
+  bulkData?: unknown[];
 }
 
 export class APIPayloadGenerator {
@@ -277,7 +277,7 @@ export class APIPayloadGenerator {
         endpoint: '/api/auth/login',
         headers: { 'Content-Type': 'application/json' },
         body: {
-          email: \"admin'; DROP TABLE users; --\",
+          email: 'admin\'; DROP TABLE users; --',
           password: 'password'
         },
         expectedStatus: 400,
@@ -652,7 +652,7 @@ export class APIPayloadGenerator {
 
   private generateComplexGraph(nodeCount: number): Graph {
     const nodes: Node[] = [];
-    const edges: any[] = [];
+    const edges: unknown[] = [];
 
     // Create nodes
     for (let i = 0; i < nodeCount; i++) {
@@ -709,7 +709,7 @@ export class APIPayloadGenerator {
     performancePayloads: APITestPayload[];
     edgeCasePayloads: APITestPayload[];
     authenticationPayloads: AuthenticationPayload[];
-  } {
+    } {
     return {
       validPayloads: this.generateValidPayloads(),
       invalidPayloads: this.generateInvalidPayloads(),

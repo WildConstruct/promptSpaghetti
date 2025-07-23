@@ -35,7 +35,7 @@ interface SecurityInsights {
     multipleLocations: boolean;
     unusualDevices: boolean;
     suspiciousLocations: string[];
-    newDevices: any[];
+    newDevices: unknown[];
   };
   recommendations: string[];
 }
@@ -192,7 +192,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
     }
   };
 
-  const getDeviceIcon = (deviceInfo: any) => {
+  const getDeviceIcon = (deviceInfo: unknown) => {
     const platform = deviceInfo.platform?.toLowerCase();
     if (platform?.includes('mobile') || platform?.includes('android') || platform?.includes('ios')) {
       return '📱';
@@ -206,7 +206,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
     return '💻';
   };
 
-  const getDeviceDescription = (deviceInfo: any) => {
+  const getDeviceDescription = (deviceInfo: unknown) => {
     const platform = deviceInfo.platform || 'Unknown';
     const browser = deviceInfo.browser || 'Unknown Browser';
     const version = deviceInfo.version || '';

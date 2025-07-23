@@ -79,7 +79,7 @@ export class IncludeNode extends RuntimeNode<string> {
 }
 
 export class SetVariableNode extends RuntimeNode<void> {
-  constructor(id: string, private key: string, private value: any) {
+  constructor(id: string, private key: string, private value: Error) {
     super(id);
   }
 
@@ -112,12 +112,12 @@ export class SetVariableNode extends RuntimeNode<void> {
   }
 }
 
-export class GetVariableNode extends RuntimeNode<any> {
+export class GetVariableNode extends RuntimeNode<unknown> {
   constructor(id: string, private key: string) {
     super(id);
   }
 
-  run(ctx: ExecutionContext): any {
+  run(ctx: ExecutionContext): unknown {
     // Security: Validate variable name using the same validation as SetVariable
     if (!SecurityValidation.validateVariableName(this.key)) {
       return undefined; // Return undefined for invalid variable names

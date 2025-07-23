@@ -43,7 +43,7 @@ export interface PolicyCustomization {
   customizationId: string;
   type: 'BRANDING' | 'CONTENT' | 'STRUCTURE' | 'VARIABLES' | 'STYLING';
   target: string;
-  value: any;
+  value: Error;
   condition?: CustomizationCondition;
   priority: number;
   enabled: boolean;
@@ -53,7 +53,7 @@ export interface CustomizationCondition {
   conditionId: string;
   type: 'JURISDICTION' | 'AUDIENCE' | 'FRAMEWORK' | 'DATE' | 'CUSTOM';
   operator: 'EQUALS' | 'CONTAINS' | 'NOT_EQUALS' | 'GREATER_THAN' | 'LESS_THAN';
-  value: any;
+  value: Error;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
 }
 
@@ -72,8 +72,8 @@ export interface PolicyChange {
   type: ChangeType;
   location: string;
   description: string;
-  oldValue?: any;
-  newValue?: any;
+  oldValue?: unknown;
+  newValue?: unknown;
   impact: ChangeImpact;
   requiresReacceptance: boolean;
   metadata?: ChangeMetadata;
@@ -267,7 +267,7 @@ export interface SectionVariable {
   variableId: string;
   name: string;
   type: 'TEXT' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'LIST' | 'CUSTOM';
-  value: any;
+  value: Error;
   required: boolean;
   validation: VariableValidation;
 }
@@ -281,7 +281,7 @@ export interface VariableValidation {
 export interface ValidationRule {
   ruleId: string;
   type: 'LENGTH' | 'PATTERN' | 'RANGE' | 'FORMAT' | 'CUSTOM';
-  constraint: any;
+  constraint: unknown;
   message: string;
 }
 
@@ -295,15 +295,15 @@ export interface ConditionalLogic {
 export interface LogicCondition {
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'GREATER_THAN' | 'LESS_THAN';
-  value: any;
+  value: Error;
 }
 
 export interface PolicyVariable {
   variableId: string;
   name: string;
   type: 'TEXT' | 'EMAIL' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'LIST' | 'COMPLEX';
-  value: any;
-  defaultValue: any;
+  value: Error;
+  defaultValue: Error;
   required: boolean;
   scope: 'GLOBAL' | 'SECTION' | 'CONDITIONAL';
   validation: VariableValidation;
@@ -427,7 +427,7 @@ export interface LifecycleTransition {
 export interface TransitionCondition {
   conditionId: string;
   type: 'APPROVAL' | 'TIME' | 'EVENT' | 'METRIC';
-  requirement: any;
+  requirement: unknown;
   status: 'PENDING' | 'MET' | 'FAILED';
 }
 
@@ -759,7 +759,7 @@ export class PolicyAuthoringService {
   /**
    * Validate policy compliance
    */
-  async validateCompliance(policyId: string, frameworks: string[]): Promise<any> {
+  async validateCompliance(policyId: string, frameworks: string[]): Promise<unknown> {
     const policy = this.policies.get(policyId);
     if (!policy) {
       throw new Error(`Policy ${policyId} not found`);
@@ -786,7 +786,7 @@ export class PolicyAuthoringService {
   /**
    * Compare policy versions
    */
-  async compareVersions(policyId: string, version1: string, version2: string): Promise<any> {
+  async compareVersions(policyId: string, version1: string, _____version2: string): Promise<unknown> {
     // Simplified implementation - would compare actual version content
     return {
       previousVersion: version1,
@@ -817,7 +817,7 @@ export class PolicyAuthoringService {
     policyId: string,
     version: string,
     format: string,
-    options: any
+    _____options: unknown
   ): Promise<{ downloadUrl: string; size: number }> {
     const policy = this.policies.get(policyId);
     if (!policy) {
@@ -1014,7 +1014,7 @@ export class PolicyAuthoringService {
     }));
   }
 
-  private async executeDeployment(deployment: PolicyDeployment, request: PolicyDeploymentRequest): Promise<void> {
+  private async executeDeployment(deployment: PolicyDeployment, _____request: PolicyDeploymentRequest): Promise<void> {
     // Simplified implementation - would execute actual deployment
     console.log(`Executing deployment ${deployment.deploymentId}`);
   }
@@ -1045,7 +1045,7 @@ export class PolicyAuthoringService {
     }));
   }
 
-  private async validateFrameworkCompliance(policy: PolicyDocument, framework: string): Promise<any> {
+  private async validateFrameworkCompliance(policy: PolicyDocument, framework: string): Promise<unknown> {
     // Simplified implementation - would perform actual compliance validation
     return {
       framework,
@@ -1059,7 +1059,7 @@ export class PolicyAuthoringService {
     };
   }
 
-  private generateComplianceRecommendations(results: any[]): string[] {
+  private generateComplianceRecommendations(_____results: unknown[]): string[] {
     return [
       'Review data processing purposes section',
       'Ensure all legal bases are clearly stated',

@@ -14,8 +14,8 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { ContextualHelpSystem, HelpContent, HelpContentType } from '../ContextualHelp/ContextualHelpSystem';
-import { HelpContentManager, UserProfile } from '../ContextualHelp/HelpContentManager';
+import { HelpContent, HelpContentType } from '../ContextualHelp/ContextualHelpSystem';
+import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 
 // Epic 16 marketplace-specific help content types
 export type MarketplaceHelpContentType = 
@@ -336,7 +336,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({
   }, [currentPage, userRole, selectedTemplate, cartItems, purchaseStage, forumContext]);
 
   // Find relevant marketplace help content based on context
-  const getRelevantMarketplaceHelp = useCallback((context: any): MarketplaceHelpContent[] => {
+  const getRelevantMarketplaceHelp = useCallback((context: unknown): MarketplaceHelpContent[] => {
     return marketplaceHelpDatabase.filter(help => {
       const marketplaceCtx = help.marketplaceContext;
       

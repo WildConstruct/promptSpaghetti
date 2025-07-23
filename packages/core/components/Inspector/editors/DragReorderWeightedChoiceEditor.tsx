@@ -16,7 +16,7 @@ export interface WeightedChoiceData {
     text: string;
     weight: number;
   }>;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface DragReorderWeightedChoiceEditorProps {
@@ -89,7 +89,7 @@ export const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoice
   }, [data.choices, newChoiceText, onChange]);
 
   // Remove choice
-  const removeChoice = useCallback((index: number) => {
+  const _____removeChoice = useCallback((index: number) => {
     const currentChoices = data.choices || [];
     const newChoices = currentChoices.filter((_, i) => i !== index);
     onChange({ choices: newChoices });

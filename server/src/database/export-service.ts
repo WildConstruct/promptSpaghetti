@@ -418,7 +418,7 @@ export class ExportService {
   /**
    * Get available correction sets
    */
-  getCorrectionSets(userId: number, includePublic: boolean = true): any[] {
+  getCorrectionSets(userId: number, includePublic: boolean = true): unknown[] {
     const db = getDatabase();
     
     let whereClause = 'WHERE created_by = ?';
@@ -445,7 +445,7 @@ export class ExportService {
   /**
    * Get correction set by ID
    */
-  getCorrectionSetById(setId: number, userId: number): any {
+  getCorrectionSetById(setId: number, userId: number): unknown {
     const db = getDatabase();
     
     const stmt = db.prepare(`

@@ -181,7 +181,7 @@ function calculateWeightStatistics(options) {
         weightDistribution
     };
 }
-export const DragReorderWeightManager = ({ options, onChange, disabled = false, showWeights = true, showPercentages = true, allowWeightEditing = true, allowLocking = false, minWeight = 0, maxWeight = 100, totalWeight, onWeightChange, className = '', style, theme = 'dark', showVisualWeights = true, animationDuration = 200, snapToGrid = false, enableCategories = false, enableBulkOperations = false, enablePresets = false, showStatistics = false }) => {
+export const DragReorderWeightManager = ({ options, onChange, _____disabled = false, showWeights = true, showPercentages = true, allowWeightEditing = true, allowLocking = false, minWeight = 0, maxWeight = 100, totalWeight, onWeightChange, className = '', style, theme = 'dark', _____showVisualWeights = true, animationDuration = 200, _____snapToGrid = false, _____enableCategories = false, enableBulkOperations = false, _____enablePresets = false, showStatistics = false }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [draggedItemId, setDraggedItemId] = useState(null);
     const [selectedItems, setSelectedItems] = useState(new Set());

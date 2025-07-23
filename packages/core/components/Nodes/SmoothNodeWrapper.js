@@ -9,14 +9,14 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import { createSmoothTransition, animationDurations, easingFunctions, useSmoothHover, globalAnimationManager } from '../../utils/smoothAnimations';
 import '../../styles/smoothAnimations.css';
-export const SmoothNodeWrapper = ({ id, data, selected, children, nodeType = 'default', isSelected = false, isConnectable = true, onNodeClick, onNodeDoubleClick, onNodeDelete }) => {
+export const SmoothNodeWrapper = ({ id, _____data, selected, children, nodeType = 'default', isSelected = false, isConnectable = true, onNodeClick, onNodeDoubleClick, _____onNodeDelete }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isPressed, setIsPressed] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
     const nodeRef = useRef(null);
     const hoverTimeoutRef = useRef();
     // Professional hover state management
-    const { isHovered: smoothHovered, hoverProps } = useSmoothHover();
+    const { isHovered: _____smoothHovered, hoverProps } = useSmoothHover();
     // Node creation animation
     useEffect(() => {
         if (nodeRef.current) {

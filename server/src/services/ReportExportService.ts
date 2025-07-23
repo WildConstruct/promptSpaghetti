@@ -50,7 +50,7 @@ export interface ReportData {
   charts?: Array<{
     type: 'line' | 'bar' | 'pie' | 'area';
     title: string;
-    data: any[];
+    data: Record<string, unknown>[];
     options?: Record<string, any>;
   }>;
   customSections?: Array<{
@@ -301,7 +301,7 @@ export class ReportExportService extends EventEmitter {
   /**
    * Export to PDF format
    */
-  private async exportToPDF(reportData: ReportData, config: ExportConfig): Promise<Buffer> {
+  private async exportToPDF(reportData: ReportData, _____config: ExportConfig): Promise<Buffer> {
     // Mock PDF generation - in production, use libraries like puppeteer, pdfkit, or jsPDF
         
     // This would use a real PDF generation library
@@ -357,7 +357,7 @@ startxref
   /**
    * Export to CSV format
    */
-  private exportToCSV(reportData: ReportData, config: ExportConfig): string {
+  private exportToCSV(reportData: ReportData, _____config: ExportConfig): string {
     if (!reportData.data || reportData.data.length === 0) {
       return 'No data available';
     }
@@ -565,7 +565,7 @@ startxref
   /**
    * Encrypt content (mock implementation)
    */
-  private async encryptContent(content: Buffer | string, password: string): Promise<Buffer> {
+  private async encryptContent(content: Buffer | string, _____password: string): Promise<Buffer> {
     // Mock encryption - in production, use crypto module
     const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
     // Simulate encryption by returning the same content (real implementation would encrypt)

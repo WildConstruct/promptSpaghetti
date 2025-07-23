@@ -106,8 +106,8 @@ interface PolicyExecutionResult {
 
 const DataRetentionManager: React.FC = () => {
   const [policies, setPolicies] = useState<RetentionPolicy[]>([]);
-  const [templates, setTemplates] = useState<PolicyTemplate[]>([]);
-  const [executionResults, setExecutionResults] = useState<PolicyExecutionResult[]>([]);
+  const [___templates, setTemplates] = useState<PolicyTemplate[]>([]);
+  const [___executionResults, setExecutionResults] = useState<PolicyExecutionResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -116,16 +116,16 @@ const DataRetentionManager: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [frameworkFilter, setFrameworkFilter] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'name' | 'created' | 'execution' | 'affected'>('name');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortBy, ___setSortBy] = useState<'name' | 'created' | 'execution' | 'affected'>('name');
+  const [sortOrder, ___setSortOrder] = useState<'asc' | 'desc'>('asc');
   
   // Modal states
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showTemplateModal, setShowTemplateModal] = useState(false);
-  const [selectedPolicy, setSelectedPolicy] = useState<RetentionPolicy | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<PolicyTemplate | null>(null);
-  const [showBulkActions, setShowBulkActions] = useState(false);
-  const [selectedPolicies, setSelectedPolicies] = useState<Set<string>>(new Set());
+  const [___showCreateModal, setShowCreateModal] = useState(false);
+  const [___showTemplateModal, setShowTemplateModal] = useState(false);
+  const [___selectedPolicy, setSelectedPolicy] = useState<RetentionPolicy | null>(null);
+  const [___selectedTemplate, ___setSelectedTemplate] = useState<PolicyTemplate | null>(null);
+  const [___showBulkActions, ___setShowBulkActions] = useState(false);
+  const [___selectedPolicies, ___setSelectedPolicies] = useState<Set<string>>(new Set());
 
   // Form state for policy creation/editing
   const [policyForm, setPolicyForm] = useState<Partial<RetentionPolicy>>({
@@ -272,7 +272,7 @@ const DataRetentionManager: React.FC = () => {
       }
     });
 
-  const handleCreatePolicy = async () => {
+  const ___handleCreatePolicy = async () => {
     try {
       const response = await fetch('/api/data-retention/policies', {
         method: 'POST',

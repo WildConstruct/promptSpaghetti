@@ -4,7 +4,7 @@
  */
 
 import { Database } from 'sqlite3';
-import { WorkspaceDAO, ProjectWithStats, ActivityEvent } from '../database/workspace-dao';
+import { WorkspaceDAO, ProjectWithStats } from '../database/workspace-dao';
 import { AttributionService } from './attribution-service';
 import { AnalyticsDAO } from '../database/analytics-dao';
 

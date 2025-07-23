@@ -36,7 +36,7 @@ interface TemplateImportExportDialogProps {
   mode: 'import' | 'export';
   template?: ProjectTemplate;
   onImportComplete?: (result: TemplateImportResult) => void;
-  onExportComplete?: (result: any) => void;
+  onExportComplete?: (result: Record<string, unknown>) => void;
   className?: string;
 }
 
@@ -78,8 +78,8 @@ export const TemplateImportExportDialog: React.FC<TemplateImportExportDialogProp
   });
   
   // Export state
-  const [exportStep, setExportStep] = useState<ExportStep>('format');
-  const [exportFormat, setExportFormat] = useState<'json' | 'yaml' | 'zip' | 'template_bundle'>('json');
+  const [_____exportStep, setExportStep] = useState<ExportStep>('format');
+  const [_____exportFormat, _____setExportFormat] = useState<'json' | 'yaml' | 'zip' | 'template_bundle'>('json');
   const [selectedVersionId, setSelectedVersionId] = useState<string>('');
   
   // Common state

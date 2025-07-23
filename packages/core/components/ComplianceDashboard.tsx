@@ -5,8 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { enhancedComplianceMonitor, EnhancedComplianceDashboard } from '../services/ComplianceMonitor';
-import { complianceBaselineTracker, BaselineTrend } from '../services/ComplianceBaselineTracker';
-import { complianceHistoricalAnalyzer, ComplianceTrendReport } from '../services/ComplianceHistoricalAnalyzer';
+import { ComplianceTrendReport } from '../services/ComplianceHistoricalAnalyzer';
 
 interface ComplianceDashboardProps {
   className?: string;

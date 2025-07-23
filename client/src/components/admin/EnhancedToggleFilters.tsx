@@ -757,7 +757,7 @@ const SaveFilterModal: React.FC<SaveFilterModalProps> = ({ onSave, onCancel }) =
 };
 
 // Debounce utility function
-function debounce<T extends (...args: any[]) => void>(
+function debounce<T extends (...args: unknown[]) => void>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {

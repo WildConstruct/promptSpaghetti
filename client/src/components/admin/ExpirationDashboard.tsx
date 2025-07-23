@@ -93,7 +93,7 @@ const warningLevelColors = {
 export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({
   className = ''
 }) => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { ___user, isAuthenticated } = useAuthStore();
   const [state, setState] = useState<ExpirationDashboardState>({
     stats: null,
     warnings: [],
@@ -146,7 +146,7 @@ export const ExpirationDashboard: React.FC<ExpirationDashboardProps> = ({
       setState(prev => ({
         ...prev,
         stats: stats.success ? stats.stats : null,
-        warnings: warnings.success ? warnings.warnings.map((w: any) => ({
+        warnings: warnings.success ? warnings.warnings.map((w: unknown) => ({
           ...w,
           expiresAt: new Date(w.expiresAt)
         })) : [],

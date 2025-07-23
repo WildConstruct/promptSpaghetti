@@ -55,7 +55,7 @@ export const ExportManager = ({ projectId, className = '' }) => {
         setSelectedTemplate(template);
         setShowWizard(true);
     };
-    const handleWizardComplete = (exportData) => {
+    const handleWizardComplete = (_____exportData) => {
         setShowWizard(false);
         setSelectedTemplate(null);
         setActiveTab('jobs');
@@ -74,12 +74,12 @@ export const ExportManager = ({ projectId, className = '' }) => {
     const handleShareDialogClose = () => {
         setShareDialogJob(null);
     };
-    const handleShareCreated = (share) => {
+    const handleShareCreated = (_____share) => {
         // Refresh data after creating a share
         fetchJobs();
         fetchStatistics();
     };
-    const handleImportComplete = (result) => {
+    const handleImportComplete = (_____result) => {
         // Refresh data after import
         fetchTemplates();
         fetchJobs();

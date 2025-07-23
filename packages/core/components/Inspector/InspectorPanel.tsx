@@ -4,7 +4,6 @@ import { PropertiesSection } from './PropertiesSection';
 import { PreviewSection } from './PreviewSection';
 import { PreferenceControls } from './PreferenceControls';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
-import { useNodeDisclosure } from '../../hooks/useNodeDisclosure';
 import { useAnimation, animationDurations, easingFunctions } from '../../utils/smoothAnimations';
 
 // Map technical node types to filmmaker-friendly names
@@ -31,8 +30,8 @@ const getFilmmakerFriendlyName = (nodeType: string): string => {
 };
 
 export interface InspectorPanelProps {
-  node: any | null;
-  schema: ZodSchema<any> | null;
+  node: Error | null;
+  schema: ZodSchema<unknown> | null;
   onChange: (partial: Record<string, unknown>) => void;
   onClose?: () => void;
   onGlobalPreviewRequest?: () => void;
@@ -56,7 +55,7 @@ export const InspectorPanel = ({
   const [showPreferences, setShowPreferences] = useState(false);
   const [width, setWidth] = useState(initialWidth);
   const resizeRef = useRef<HTMLDivElement>(null);
-  const { isAnimating: isCollapseAnimating, startAnimation: startCollapseAnimation } = useAnimation();
+  const { isAnimating: _____isCollapseAnimating, startAnimation: startCollapseAnimation } = useAnimation();
   const { 
     debugMode, 
     setDebugMode, 

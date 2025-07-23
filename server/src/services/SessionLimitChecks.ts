@@ -7,7 +7,7 @@
 
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
-import { SessionLimitConfig, SessionEnforcementAction } from './SessionLimitManager';
+import { SessionLimitConfig } from './SessionLimitManager';
 
 export interface LimitCheckResult {
   allowed: boolean;
@@ -297,7 +297,7 @@ export class SessionLimitChecks {
   async checkBusinessHoursLimits(
     config: SessionLimitConfig, 
     isAdmin: boolean = false, 
-    isPremium: boolean = false
+    ___isPremium: boolean = false
   ): Promise<LimitCheckResult> {
     if (!config.enableBusinessHoursLimits) {
       return { allowed: true };
@@ -317,7 +317,7 @@ export class SessionLimitChecks {
         config.businessHoursEnd
       );
       
-      const maxSessions = isBusinessHours 
+      const ___maxSessions = isBusinessHours 
         ? config.businessHoursMaxSessions 
         : config.offHoursMaxSessions;
       
@@ -394,7 +394,7 @@ export class SessionLimitChecks {
    */
   async checkSuspiciousActivity(
     userId: string, 
-    sessionData: any, 
+    sessionData: unknown, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
     if (!config.enableSuspiciousActivityDetection) {
@@ -476,7 +476,7 @@ export class SessionLimitChecks {
    */
   private async checkSuspiciousLocationChange(
     userId: string, 
-    sessionData: any, 
+    sessionData: unknown, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
     if (!sessionData.country) {
@@ -528,8 +528,8 @@ export class SessionLimitChecks {
    */
   private async checkUnusualDevice(
     userId: string, 
-    sessionData: any, 
-    config: SessionLimitConfig
+    sessionData: unknown, 
+    ___config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
     if (!sessionData.userAgent && !sessionData.deviceFingerprint) {
       return { allowed: true };
@@ -573,7 +573,7 @@ export class SessionLimitChecks {
    */
   private async checkTimeBasedAnomalies(
     userId: string, 
-    sessionData: any
+    ___sessionData: unknown
   ): Promise<LimitCheckResult> {
     // Get user's typical session timing patterns
     const result = await this.dbService.query(`
@@ -634,7 +634,7 @@ export class SessionLimitChecks {
     return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
   }
   
-  private async getCountryFromIP(ipAddress: string): Promise<string> {
+  private async getCountryFromIP(___ipAddress: string): Promise<string> {
     // In production, this would use a GeoIP service
     // For now, return a placeholder
     return 'US';

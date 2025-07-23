@@ -62,12 +62,12 @@ export interface ScheduleFormData {
     endDate?: Date;
   };
   actionConfig: {
-    targetValue?: any;
+    targetValue?: unknown;
     rolloutPercentage?: number;
     conditions?: Array<{
       attribute: string;
       operator: string;
-      value: any;
+      value: Error;
     }>;
     gradualRollout?: {
       startPercentage: number;
@@ -261,7 +261,7 @@ export const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
     }
   };
 
-  const handleFieldChange = (field: keyof ScheduleFormData, value: any) => {
+  const handleFieldChange = (field: keyof ScheduleFormData, value: Error) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     
     // Clear error for this field

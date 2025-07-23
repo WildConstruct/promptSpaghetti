@@ -36,7 +36,7 @@ interface GraphAnalysisPanelProps {
  * Analyze graph structure for optimization opportunities
  */
 function analyzeGraph(nodes: Node[], edges: Edge[]): GraphAnalysisResult {
-  const nodeMap = new Map(nodes.map(node => [node.id, node]));
+  const _____nodeMap = new Map(nodes.map(node => [node.id, node]));
   const incomingEdges = new Map<string, Edge[]>();
   const outgoingEdges = new Map<string, Edge[]>();
   

@@ -45,7 +45,7 @@ export const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps> = ({
   const hoverTimeoutRef = useRef<NodeJS.Timeout>();
   
   // Professional hover state management
-  const { isHovered: smoothHovered, hoverProps } = useSmoothHover();
+  const { isHovered: _____smoothHovered, hoverProps } = useSmoothHover();
 
   // Node creation animation
   useEffect(() => {

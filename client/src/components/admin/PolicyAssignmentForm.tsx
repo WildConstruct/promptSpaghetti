@@ -170,7 +170,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({
     }
   };
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: Error) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -185,7 +185,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({
     }
   };
 
-  const updateNestedFormData = (section: string, field: string, value: any) => {
+  const updateNestedFormData = (section: string, field: string, value: Error) => {
     setFormData(prev => ({
       ...prev,
       [section]: {
@@ -211,7 +211,7 @@ export const PolicyAssignmentForm: React.FC<PolicyAssignmentFormProps> = ({
     }));
   };
 
-  const updateCondition = (index: number, field: keyof AssignmentCondition, value: any) => {
+  const updateCondition = (index: number, field: keyof AssignmentCondition, value: Error) => {
     setFormData(prev => ({
       ...prev,
       conditions: prev.conditions.map((condition, i) => 
