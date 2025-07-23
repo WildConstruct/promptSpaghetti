@@ -17,7 +17,11 @@ interface DemoReadyModeProps {
   onToggle?: (enabled: boolean) => void;
 }
 
-export 
+export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({ 
+  children, 
+  enabled = false, 
+  onToggle 
+}) => {
   const [screenSize, setScreenSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -311,7 +315,9 @@ export
 };
 
 // Utility hook for demo mode state
-export 
+export const useDemoMode = () => {
+  const [enabled, setEnabled] = useState(false);
+  
   const toggle = () => setEnabled(!enabled);
   
   const enable = () => setEnabled(true);
@@ -325,3 +331,5 @@ export
     disable
   };
 };
+
+export default DemoReadyMode;

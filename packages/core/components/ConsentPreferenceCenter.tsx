@@ -123,7 +123,7 @@ interface DataRightRequest {
 
 type DataRequestType = 'ACCESS' | 'PORTABILITY' | 'RECTIFICATION' | 'ERASURE' | 'RESTRICTION' | 'OBJECTION';
 
-const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
+export const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
   userId,
   onConsentUpdate,
   onDataRequest,

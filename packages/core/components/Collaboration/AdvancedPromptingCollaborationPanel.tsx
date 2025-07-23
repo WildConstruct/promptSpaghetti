@@ -924,3 +924,5 @@ export const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingColl
     </div>
   );
 };
+
+export default AdvancedPromptingCollaborationPanel;
