@@ -3,7 +3,7 @@
  * Defines the contract for creating custom nodes and extensions
  */
 
-import type { AdvancedExecutionContext, AdvancedNodeConfig } from '@prompt-spaghetti/graph-core';
+import type { AdvancedExecutionContext, AdvancedNodeConfig } from '@promptscape/core';
 
 /**
  * Validation result for custom node operations

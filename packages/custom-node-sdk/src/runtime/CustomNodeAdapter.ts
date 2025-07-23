@@ -7,7 +7,7 @@ import {
   AdvancedRuntimeNode,
   AdvancedExecutionContext,
   AdvancedNodeConfig
-} from '@prompt-spaghetti/graph-core';
+} from '@promptscape/core';
 import { 
   CustomNodeBase, 
   CustomNodeConfig, 

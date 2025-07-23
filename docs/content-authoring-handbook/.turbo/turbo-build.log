@@ -1,0 +1,6 @@
+
+> content-authoring-handbook@1.0.0 build /Users/brianbehm/CascadeProjects/prompt-spaghetti/docs/content-authoring-handbook
+> node assets/tools/build-handbook.js
+
+📚 Building Content Authoring Handbook (all)...
+📖 Loading chapters...

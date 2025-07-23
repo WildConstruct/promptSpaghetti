@@ -190,7 +190,7 @@ export class RateLimitMiddleware {
         userId,
         sessionId,
         organizationId,
-        endpoint: request.routerPath || request.url,
+        endpoint: request.routeOptions?.url || request.url,
         method: request.method,
         path: request.url,
         userAgent: request.headers['user-agent'],
@@ -363,7 +363,7 @@ export class RateLimitMiddleware {
         methods.forEach(method => {
           fastify.addHook('preHandler', async (request, reply) => {
             if (request.method === method.toUpperCase() && 
-                (request.routerPath === endpoint.path || request.url.startsWith(endpoint.path))) {
+                (request.routeOptions?.url === endpoint.path || request.url.startsWith(endpoint.path))) {
               await middleware(request, reply);
             }
           });
@@ -371,7 +371,7 @@ export class RateLimitMiddleware {
       } else {
         // Register for all methods
         fastify.addHook('preHandler', async (request, reply) => {
-          if (request.routerPath === endpoint.path || request.url.startsWith(endpoint.path)) {
+          if (request.routeOptions?.url === endpoint.path || request.url.startsWith(endpoint.path)) {
             await middleware(request, reply);
           }
         });

@@ -423,10 +423,10 @@ export async function jwtAuthMiddleware(fastify: FastifyInstance) {
     ];
 
     const isPublicRoute = publicRoutes.some(route => 
-      request.routerPath === route || request.routerPath?.startsWith(route)
+      request.routeOptions?.url === route || request.routeOptions?.url?.startsWith(route)
     );
 
-    if (isPublicRoute || !request.routerPath?.startsWith('/')) {
+    if (isPublicRoute || !request.routeOptions?.url?.startsWith('/')) {
       return;
     }
 

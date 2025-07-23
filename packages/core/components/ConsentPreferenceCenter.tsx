@@ -437,8 +437,6 @@ const ConsentPreferenceCenter: React.FC<ConsentPreferenceCenterProps> = ({
     }));
   };
 
-    };
-
   const getSectionIcon = (section: string) => {
     switch (section) {
     case 'overview': return <Settings className="w-5 h-5" />;

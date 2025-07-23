@@ -238,7 +238,7 @@ export class Epic17PerformanceMonitoringService {
       if (!startTime) return;
 
       const duration = Date.now() - startTime;
-      const route = request.routerPath || request.url;
+      const route = request.routeOptions?.url || request.url;
       const method = request.method;
       const statusCode = reply.statusCode;
 

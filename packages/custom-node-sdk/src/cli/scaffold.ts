@@ -546,11 +546,7 @@ const node = new ${config.displayName.replace(/[^a-zA-Z0-9]/g, '')}('my-node', {
 ## Inputs
 
 ${config.inputs.map(
-    input => `- **${input.name}** (
-      ${input.type}${input.required ? ',
-      required' : ',
-      optional'}
-    ): ${input.description || 'No description'}`
+    input => `- **${input.name}** (${input.type}${input.required ? ', required' : ', optional'}): ${input.description || 'No description'}`
   ).join('\n')}
 
 ## Outputs

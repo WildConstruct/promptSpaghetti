@@ -71,7 +71,7 @@ export class UnifiedAuthenticationMiddleware {
     return async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         // Check if path should bypass authentication
-        if (bypassForPaths.some(path => request.routerPath?.includes(path))) {
+        if (bypassForPaths.some(path => request.routeOptions?.url?.includes(path))) {
           (request as any).authContext = this.createUnauthenticatedContext(request);
           return;
         }
@@ -394,7 +394,7 @@ export class UnifiedAuthenticationMiddleware {
     }
 
     // Try to extract from path
-    const path = request.routerPath || request.url;
+    const path = request.routeOptions?.url || request.url;
     for (const provider of allowWebhookProviders) {
       if (path.includes(`/webhooks/${provider}`) || path.includes(`webhook-${provider}`)) {
         return provider;

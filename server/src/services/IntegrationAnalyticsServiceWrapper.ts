@@ -290,7 +290,7 @@ export class IntegrationAnalyticsServiceWrapper {
       if (!startTime) return;
 
       const responseTime = Date.now() - startTime;
-      const route = request.routerPath || request.url;
+      const route = request.routeOptions?.url || request.url;
       const success = reply.statusCode < 400;
 
       // Track different types of integrations based on route patterns

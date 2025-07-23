@@ -2,54 +2,8 @@
 > @prompt-spaghetti/custom-node-sdk@0.1.0 typecheck /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/custom-node-sdk
 > tsc --noEmit
 
-src/runtime/CustomNodeAdapter.ts(7,3): error TS2305: Module '"@prompt-spaghetti/graph-core"' has no exported member 'AdvancedRuntimeNode'.
-src/runtime/CustomNodeAdapter.ts(9,3): error TS2305: Module '"@prompt-spaghetti/graph-core"' has no exported member 'AdvancedNodeConfig'.
-src/runtime/CustomNodeAdapter.ts(32,35): error TS2339: Property 'deterministic' does not exist on type 'CustomNodeConfig'.
-src/runtime/CustomNodeAdapter.ts(33,31): error TS2339: Property 'cacheable' does not exist on type 'CustomNodeConfig'.
-src/runtime/CustomNodeAdapter.ts(34,30): error TS2339: Property 'stateful' does not exist on type 'CustomNodeConfig'.
-src/runtime/CustomNodeAdapter.ts(35,38): error TS2339: Property 'performanceHints' does not exist on type 'CustomNodeConfig'.
-src/runtime/CustomNodeAdapter.ts(48,15): error TS2304: Cannot find name 'ValidationResult'.
-src/runtime/CustomNodeAdapter.ts(163,25): error TS2339: Property 'id' does not exist on type 'CustomNodeAdapter'.
-src/runtime/CustomNodeAdapter.ts(173,37): error TS2322: Type 'import("/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/graph-core/dist/validation").ValidationResult' is not assignable to type 'import("/Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/custom-node-sdk/src/types").ValidationResult'.
-  Types of property 'errors' are incompatible.
-    Type 'ValidationError[]' is not assignable to type 'string[]'.
-      Type 'ValidationError' is not assignable to type 'string'.
-src/runtime/CustomNodeAdapter.ts(214,44): error TS2339: Property 'id' does not exist on type 'CustomNodeAdapter'.
-src/runtime/CustomNodeAdapter.ts(226,28): error TS2339: Property 'id' does not exist on type 'CustomNodeAdapter'.
-src/runtime/CustomNodeAdapter.ts(234,22): error TS2339: Property 'id' does not exist on type 'CustomNodeAdapter'.
-src/runtime/NodeRegistry.ts(162,55): error TS18046: 'error' is of type 'unknown'.
-src/runtime/SecurityManager.ts(57,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
-  Type 'string' is not assignable to type 'ValidationError'.
-src/runtime/SecurityManager.ts(58,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
-  Type 'string' is not assignable to type 'ValidationWarning'.
-src/runtime/SecurityManager.ts(189,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
-  Type 'string' is not assignable to type 'ValidationError'.
-src/runtime/SecurityManager.ts(190,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
-  Type 'string' is not assignable to type 'ValidationWarning'.
-src/runtime/ValidationEngine.ts(86,48): error TS18046: 'error' is of type 'unknown'.
-src/runtime/ValidationEngine.ts(91,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
-  Type 'string' is not assignable to type 'ValidationError'.
-src/runtime/ValidationEngine.ts(92,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
-  Type 'string' is not assignable to type 'ValidationWarning'.
-src/runtime/ValidationEngine.ts(122,72): error TS18046: 'validationError' is of type 'unknown'.
-src/runtime/ValidationEngine.ts(137,47): error TS18046: 'error' is of type 'unknown'.
-src/runtime/ValidationEngine.ts(142,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
-  Type 'string' is not assignable to type 'ValidationError'.
-src/runtime/ValidationEngine.ts(143,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
-  Type 'string' is not assignable to type 'ValidationWarning'.
-src/runtime/ValidationEngine.ts(171,72): error TS18046: 'validationError' is of type 'unknown'.
-src/runtime/ValidationEngine.ts(185,48): error TS18046: 'error' is of type 'unknown'.
-src/runtime/ValidationEngine.ts(190,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
-  Type 'string' is not assignable to type 'ValidationError'.
-src/runtime/ValidationEngine.ts(191,7): error TS2322: Type 'string[]' is not assignable to type 'ValidationWarning[]'.
-  Type 'string' is not assignable to type 'ValidationWarning'.
-src/runtime/ValidationEngine.ts(211,32): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
-  Type 'string' is not assignable to type 'ValidationError'.
-src/runtime/ValidationEngine.ts(213,41): error TS18046: 'error' is of type 'unknown'.
-src/runtime/ValidationEngine.ts(358,21): error TS2322: Type 'string[]' is not assignable to type 'ValidationError[]'.
-  Type 'string' is not assignable to type 'ValidationError'.
-src/testing/index.ts(6,15): error TS2307: Cannot find module './TestHarness' or its corresponding type declarations.
-src/testing/index.ts(8,15): error TS2307: Cannot find module './TestHelpers' or its corresponding type declarations.
-src/testing/MockContext.ts(45,5): error TS2739: Type '{ variables: Map<string, any>; prng: PRNG; nodeStates: Map<string, any>; evaluationDepth: number; cache: Map<any, any>; executionMeta: { startTime: number; nodeStats: Map<...>; errors: never[]; warnings: never[]; } | undefined; ... 10 more ...; decrementDepth: () => void; }' is missing the following properties from type 'AdvancedExecutionContext': performanceCache, executionTrace, seed
-src/types.ts(6,41): error TS2305: Module '"@prompt-spaghetti/graph-core"' has no exported member 'AdvancedNodeConfig'.
- ELIFECYCLE  Command failed with exit code 2.
+../core/components/Inspector/editors/WeightedChoiceEditor.tsx(440,5): error TS1005: ')' expected.
+../core/hooks/useEnhancedPreview.ts(561,1): error TS1128: Declaration or statement expected.
+../core/hooks/useRealTimePreview.ts(303,1): error TS1128: Declaration or statement expected.
+../core/stores/uiSettingsStore.ts(320,1): error TS1128: Declaration or statement expected.
+ ELIFECYCLE  Command failed with exit code 1.

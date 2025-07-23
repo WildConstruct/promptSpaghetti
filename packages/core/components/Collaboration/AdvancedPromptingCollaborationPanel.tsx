@@ -41,6 +41,7 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
   const [isCreatingSession, setIsCreatingSession] = useState(false);
   const [newSessionTitle, setNewSessionTitle] = useState('');
   const [selectedMethodology, setSelectedMethodology] = useState<PromptingMethodology>('hybrid');
+  const [activeTab, setActiveTab] = useState<'sessions' | 'mars' | 'zada' | 'workflows' | 'export'>('sessions');
 
   // Initialize data on mount
   useEffect(() => {
@@ -148,7 +149,17 @@ const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborati
     return colors[methodology];
   };
 
-      return compatibility[role]?.includes(methodology) || false;
+  const isMethodologyCompatible = (role: FilmIndustryRole, methodology: PromptingMethodology): boolean => {
+    const compatibility: Record<FilmIndustryRole, PromptingMethodology[]> = {
+      director: ['hybrid', 'zada', 'custom'],
+      vfx_supervisor: ['mars', 'hybrid', 'custom'],
+      pipeline_td: ['mars', 'hybrid'],
+      vfx_artist: ['zada', 'hybrid'],
+      cinematographer: ['zada', 'hybrid'],
+      producer: ['hybrid', 'custom'],
+      script_supervisor: ['zada', 'hybrid']
+    };
+    return compatibility[role]?.includes(methodology) || false;
   };
 
   const SessionsTab = () => (

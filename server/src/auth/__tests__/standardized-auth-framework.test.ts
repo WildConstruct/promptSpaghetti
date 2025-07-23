@@ -256,7 +256,7 @@ describe('Standardized Authentication Framework', () => {
       mockRequest = {
         headers: {},
         ip: '127.0.0.1',
-        routerPath: '/test',
+        routeOptions: { url: '/test' },
         params: {}
       };
 
@@ -417,7 +417,7 @@ describe('Standardized Authentication Framework', () => {
     });
 
     test('should bypass authentication for specified paths', async () => {
-      mockRequest.routerPath = '/health/status';
+      mockRequest.routeOptions = { url: '/health/status' };
 
       const middleware = unifiedAuthMiddleware.createMiddleware({
         required: true,
@@ -506,7 +506,7 @@ describe('Standardized Authentication Framework', () => {
       const jwtRequest: Partial<FastifyRequest> = {
         headers: { 'authorization': 'Bearer jwt-token' },
         ip: '127.0.0.1',
-        routerPath: '/test'
+        routeOptions: { url: '/test' }
       };
 
       const jwtMiddleware = unifiedAuthMiddleware.createMiddleware({
@@ -520,7 +520,7 @@ describe('Standardized Authentication Framework', () => {
       const apiKeyRequest: Partial<FastifyRequest> = {
         headers: { 'x-api-key': 'sk_test_key' },
         ip: '127.0.0.1',
-        routerPath: '/test'
+        routeOptions: { url: '/test' }
       };
 
       const apiKeyMiddleware = unifiedAuthMiddleware.createMiddleware({
@@ -541,7 +541,7 @@ describe('Standardized Authentication Framework', () => {
       const webhookRequest: Partial<FastifyRequest> = {
         headers: { 'x-hub-signature-256': signature },
         ip: '127.0.0.1',
-        routerPath: '/webhooks/github',
+        routeOptions: { url: '/webhooks/github' },
         params: { providerId: 'github' },
         body: payload
       };

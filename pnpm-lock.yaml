@@ -489,9 +489,9 @@ importers:
 
   packages/custom-node-sdk:
     dependencies:
-      '@prompt-spaghetti/graph-core':
+      '@promptscape/core':
         specifier: workspace:*
-        version: link:../graph-core
+        version: link:../core
       chalk:
         specifier: ^5.3.0
         version: 5.4.1

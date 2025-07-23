@@ -47,7 +47,7 @@ describe('ContextValidationFramework', () => {
       const result = await framework.validateContext(context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain(expect.stringContaining('Missing PRNG function'));
+      expect(result.errors.some(error => error.includes('Missing PRNG function'))).toBe(true);
       expect(result.score).toBeLessThan(50);
     });
 
@@ -59,7 +59,7 @@ describe('ContextValidationFramework', () => {
       const result = await framework.validateContext(context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain(expect.stringContaining('PRNG returns invalid values'));
+      expect(result.errors.some(error => error.includes('PRNG returns invalid values'))).toBe(true);
     });
 
     it('should warn about missing execution metadata', async () => {
@@ -70,7 +70,7 @@ describe('ContextValidationFramework', () => {
       const result = await framework.validateContext(context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain(expect.stringContaining('Missing execution metadata'));
+      expect(result.errors.some(error => error.includes('Missing execution metadata'))).toBe(true);
     });
 
     it('should detect too many variables', async () => {
@@ -84,7 +84,7 @@ describe('ContextValidationFramework', () => {
       const result = await framework.validateContext(context);
 
       expect(result.valid).toBe(true); // Should pass but with warnings
-      expect(result.warnings).toContain(expect.stringContaining('Too many variables'));
+      expect(result.warnings.some(warning => warning.includes('Too many variables'))).toBe(true);
     });
 
     it('should detect excessive evaluation depth', async () => {
@@ -95,7 +95,7 @@ describe('ContextValidationFramework', () => {
       const result = await framework.validateContext(context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain(expect.stringContaining('state consistency issues'));
+      expect(result.errors.some(error => error.includes('state consistency issues'))).toBe(true);
     });
 
     it('should detect large cache size', async () => {
@@ -108,7 +108,7 @@ describe('ContextValidationFramework', () => {
 
       const result = await framework.validateContext(context);
 
-      expect(result.warnings).toContain(expect.stringContaining('Cache size exceeds limit'));
+      expect(result.warnings.some(warning => warning.includes('Cache size exceeds limit'))).toBe(true);
     });
 
     it('should handle circular references in variables', async () => {
@@ -122,7 +122,7 @@ describe('ContextValidationFramework', () => {
       const result = await framework.validateContext(context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain(expect.stringContaining('variable type issues'));
+      expect(result.errors.some(error => error.includes('variable type issues'))).toBe(true);
     });
 
     it('should detect undefined variables', async () => {
@@ -132,7 +132,7 @@ describe('ContextValidationFramework', () => {
       const result = await framework.validateContext(context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain(expect.stringContaining('variable type issues'));
+      expect(result.errors.some(error => error.includes('variable type issues'))).toBe(true);
     });
 
     it('should provide recommendations for low scores', async () => {
@@ -147,7 +147,7 @@ describe('ContextValidationFramework', () => {
       const result = await framework.validateContext(context);
 
       expect(result.recommendations.length).toBeGreaterThan(0);
-      expect(result.recommendations).toContain(expect.stringContaining('optimizing context'));
+      expect(result.recommendations.some(rec => rec.includes('optimizing context'))).toBe(true);
     });
   });
 

@@ -58,6 +58,9 @@ describe('AuditLogger', () => {
         { recordCount: 100 }
       );
       
+      // Flush buffered logs before querying
+      await logger.flush();
+      
       const logs = await logger.query({});
       expect(logs).toHaveLength(1);
       expect(logs[0]).toMatchObject({
@@ -86,6 +89,9 @@ describe('AuditLogger', () => {
         resourceId: 'test2'
       });
       
+      // Flush buffered logs before querying
+      await logger.flush();
+      
       const logs = await logger.query({});
       expect(logs).toHaveLength(2);
       expect(logs[0].id).not.toBe(logs[1].id);
@@ -103,6 +109,9 @@ describe('AuditLogger', () => {
           resourceId: 'test123'
         });
       }
+      
+      // Flush buffered logs before querying
+      await logger.flush();
       
       const logs = await logger.query({});
       expect(logs).toHaveLength(operations.length);
@@ -126,6 +135,9 @@ describe('AuditLogger', () => {
         ipAddress: '192.168.1.100',
         sessionId: 'session-secret-123'
       });
+      
+      // Flush buffered logs before querying
+      await secureLogger.flush();
       
       const logs = await secureLogger.query({});
       expect(logs[0].ipAddress).not.toBe('192.168.1.100');

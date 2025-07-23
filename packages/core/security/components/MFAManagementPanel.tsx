@@ -319,7 +319,9 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
     }
   };
 
-      try {
+  const handleSetupSMS = async (phoneNumber: string) => {
+    setLoading(true);
+    try {
       // API call to setup SMS verification
       const newMethod: MFAMethod = {
         id: `sms-${Date.now()}`,
@@ -393,7 +395,10 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({
     return Math.random().toString(36).substring(2, 11).toUpperCase();
   };
 
-        case 'medium': return 'text-yellow-600';
+  const getSeverityColor = (riskLevel: string): string => {
+    switch (riskLevel) {
+      case 'high': return 'text-red-600';
+      case 'medium': return 'text-yellow-600';
       case 'low': return 'text-green-600';
       default: return 'text-gray-600';
     }

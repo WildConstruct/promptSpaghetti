@@ -46,9 +46,12 @@ export interface AdvancedExecutionContext extends ExecutionContext {
   evaluationDepth: number;
   /** Performance cache for expensive operations (key -> result) */
   cache: Map<string, any>;
+  /** Pseudorandom number generator function for deterministic execution */
+  prng: () => number;
   /** Execution metadata and debugging info */
   executionMeta: {
     startTime: number;
+    executionId: string;
     nodeExecutionOrder: string[];
     performanceMetrics: Map<string, number>;
   };

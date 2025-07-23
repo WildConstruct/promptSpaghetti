@@ -76,7 +76,7 @@ export async function policyRoutes(fastify: FastifyInstance) {
   // Add authentication hook
   fastify.addHook('preHandler', async (request: FastifyRequest, reply: FastifyReply) => {
     // Skip auth for health check
-    if (request.routerPath === '/health') return;
+    if (request.routeOptions?.url === '/health') return;
     
     // In production, implement proper authentication
     const authHeader = request.headers.authorization;

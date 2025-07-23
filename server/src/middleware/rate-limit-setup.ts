@@ -62,7 +62,7 @@ export async function setupRateLimiting(
       userId: request.userId?.toString(),
       sessionId: request.sessionId,
       organizationId: request.organizationId,
-      endpoint: request.routerPath || request.url,
+      endpoint: request.routeOptions?.url || request.url,
       method: request.method,
       path: request.url,
       userAgent: request.headers['user-agent'],

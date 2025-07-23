@@ -821,8 +821,6 @@ const InspectorPanel: React.FC<{
           </div>
 
           <div style={{ 
-            maxHeight: '300px', 
-            overflowY: 'auto',
             border: `1px solid ${professionalColors.ui.border}`,
             borderRadius: '6px',
             background: professionalColors.background.primary,
@@ -846,36 +844,21 @@ const InspectorPanel: React.FC<{
                     <input
                       type="text"
                       value={option.label}
-                      onChange={(e) => updateOption(index, 'label', e.target.value)}
-                      onBlur={handleSave}
-                      placeholder="Option label"
-                      style={{
-                        width: '100%',
-                        padding: '6px 8px',
-                        background: professionalColors.background.secondary,
-                        border: `1px solid ${professionalColors.ui.border}`,
-                        borderRadius: '4px',
-                        color: professionalColors.text.primary,
-                        fontSize: '13px',
-                        outline: 'none',
+                      onChange={(e) => {
+                        // Keep value in sync with label for simplicity
+                        updateOption(index, 'label', e.target.value);
+                        updateOption(index, 'value', e.target.value);
                       }}
-                    />
-                  </div>
-                  <div style={{ marginBottom: '8px' }}>
-                    <input
-                      type="text"
-                      value={option.value}
-                      onChange={(e) => updateOption(index, 'value', e.target.value)}
                       onBlur={handleSave}
-                      placeholder="Option value"
+                      placeholder="Option text (e.g., 'Scratched Panel')"
                       style={{
                         width: '100%',
-                        padding: '6px 8px',
+                        padding: '8px 12px',
                         background: professionalColors.background.secondary,
                         border: `1px solid ${professionalColors.ui.border}`,
                         borderRadius: '4px',
                         color: professionalColors.text.primary,
-                        fontSize: '13px',
+                        fontSize: '14px',
                         outline: 'none',
                       }}
                     />
@@ -1066,7 +1049,7 @@ const defaultNodes: Node[] = [
   {
     id: "start-1",
     type: "text",
-    position: { x: 100, y: 100 },
+    position: { x: 200, y: 100 },
     data: {
       label: "Tech Panel Generator",
       description: "Anachronistic Tech Panel Generator - Creates retro-futuristic interface prompts",
@@ -1076,7 +1059,7 @@ const defaultNodes: Node[] = [
   {
     id: "archetype-2", 
     type: "logic",
-    position: { x: 350, y: 50 },
+    position: { x: 500, y: 50 },
     data: {
       label: "Panel Archetype",
       description: "Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.",
@@ -1096,7 +1079,7 @@ const defaultNodes: Node[] = [
   {
     id: "aesthetic-3",
     type: "logic", 
-    position: { x: 350, y: 150 },
+    position: { x: 500, y: 200 },
     data: {
       label: "Aesthetic Influence",
       description: "Style: Star Wars, Cassette Futurism, Dieselpunk, Atompunk, etc.",
@@ -1116,7 +1099,7 @@ const defaultNodes: Node[] = [
   {
     id: "faction-4",
     type: "logic",
-    position: { x: 600, y: 50 },
+    position: { x: 800, y: 50 },
     data: {
       label: "Faction Alignment", 
       description: "Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.",
@@ -1126,7 +1109,7 @@ const defaultNodes: Node[] = [
   {
     id: "wear-5",
     type: "transform",
-    position: { x: 600, y: 150 },
+    position: { x: 800, y: 200 },
     data: {
       label: "Wear Level",
       description: "Condition: Pristine, Lightly Used, Battle-Scarred, etc.",
@@ -1144,7 +1127,7 @@ const defaultNodes: Node[] = [
   {
     id: "colors-6",
     type: "transform",
-    position: { x: 350, y: 250 },
+    position: { x: 500, y: 350 },
     data: {
       label: "Color Palette",
       description: "Dark Grays & Blues, Military Greens, Chrome & Pastels, etc.",
@@ -1154,7 +1137,7 @@ const defaultNodes: Node[] = [
   {
     id: "materials-7",
     type: "transform",
-    position: { x: 600, y: 250 },
+    position: { x: 800, y: 350 },
     data: {
       label: "Key Materials",
       description: "Painted Metal, Bakelite, Aged Plastic, Cast Iron, etc.",
@@ -1164,7 +1147,7 @@ const defaultNodes: Node[] = [
   {
     id: "screen-8",
     type: "logic",
-    position: { x: 100, y: 200 },
+    position: { x: 200, y: 250 },
     data: {
       label: "Screen Type",
       description: "CRT, Vector Display, Nixie Tubes, LED Segments, etc.",
@@ -1174,7 +1157,7 @@ const defaultNodes: Node[] = [
   {
     id: "controls-9",
     type: "logic",
-    position: { x: 100, y: 300 },
+    position: { x: 200, y: 400 },
     data: {
       label: "Controls",
       description: "Toggle Switches, Chunky Buttons, Rotary Dials, etc.",
@@ -1184,7 +1167,7 @@ const defaultNodes: Node[] = [
   {
     id: "greeble-10",
     type: "transform",
-    position: { x: 350, y: 350 },
+    position: { x: 500, y: 500 },
     data: {
       label: "Detail Density",
       description: "Greeble level: None, Low, Medium, High, Extreme",
@@ -1194,7 +1177,7 @@ const defaultNodes: Node[] = [
   {
     id: "labeling-11",
     type: "variable",
-    position: { x: 600, y: 350 },
+    position: { x: 800, y: 500 },
     data: {
       label: "Labeling Style",
       description: "Stenciled, Engraved, Dymo Tape, Alien Glyphs, etc.",
@@ -1204,7 +1187,7 @@ const defaultNodes: Node[] = [
   {
     id: "lighting-12",
     type: "variable",
-    position: { x: 100, y: 400 },
+    position: { x: 200, y: 550 },
     data: {
       label: "Panel Lighting",
       description: "Dimly Lit, Harsh Industrial, Soft Glow, Flickering, etc.",
@@ -1214,7 +1197,7 @@ const defaultNodes: Node[] = [
   {
     id: "function-13",
     type: "variable",
-    position: { x: 350, y: 450 },
+    position: { x: 500, y: 650 },
     data: {
       label: "Tech Function",
       description: "Navigation Computer, Weapons Control, Life Support, etc.",
@@ -1224,7 +1207,7 @@ const defaultNodes: Node[] = [
   {
     id: "output-final",
     type: "output",
-    position: { x: 600, y: 500 },
+    position: { x: 800, y: 700 },
     data: {
       label: "Generated Prompt",
       description: "Final detailed prompt for retro-futuristic tech panel",
@@ -1332,6 +1315,8 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [executionResults, setExecutionResults] = useState<{ [key: string]: string } | null>(null);
   const [showOutput, setShowOutput] = useState(false);
+  const [showAnnotations, setShowAnnotations] = useState(false);
+  const [stickyNotesVisible, setStickyNotesVisible] = useState(false);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition } = useReactFlow();
 
@@ -1466,6 +1451,84 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
         />
         
         <div ref={reactFlowWrapper} style={{ flex: 1, height: '100%', position: 'relative' }}>
+          {/* Professional Toolbar */}
+          <div style={{
+            position: 'absolute',
+            top: '16px',
+            right: '16px',
+            zIndex: 1000,
+            display: 'flex',
+            gap: '8px',
+          }}>
+            <button
+              onClick={handleRunGraph}
+              style={{
+                background: professionalColors.accent.green + '20',
+                border: `1px solid ${professionalColors.accent.green}`,
+                color: professionalColors.accent.green,
+                padding: '8px 16px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: professionalShadows.node.default,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = professionalColors.accent.green + '30';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = professionalColors.accent.green + '20';
+              }}
+            >
+              ⚡ Run Graph
+            </button>
+            
+            <button
+              onClick={() => setStickyNotesVisible(!stickyNotesVisible)}
+              style={{
+                background: stickyNotesVisible ? professionalColors.accent.orange + '30' : professionalColors.background.secondary,
+                border: `1px solid ${stickyNotesVisible ? professionalColors.accent.orange : professionalColors.ui.border}`,
+                color: stickyNotesVisible ? professionalColors.accent.orange : professionalColors.text.primary,
+                padding: '8px 16px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: professionalShadows.node.default,
+              }}
+              title="Toggle Sticky Notes"
+            >
+              📝 Notes
+            </button>
+            
+            <button
+              onClick={() => setShowAnnotations(!showAnnotations)}
+              style={{
+                background: showAnnotations ? professionalColors.accent.purple + '30' : professionalColors.background.secondary,
+                border: `1px solid ${showAnnotations ? professionalColors.accent.purple : professionalColors.ui.border}`,
+                color: showAnnotations ? professionalColors.accent.purple : professionalColors.text.primary,
+                padding: '8px 16px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: professionalShadows.node.default,
+              }}
+              title="Toggle Annotations"
+            >
+              💬 Annotations
+            </button>
+          </div>
+          
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -1513,6 +1576,194 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
               color={professionalColors.ui.border}
             />
           </ReactFlow>
+          
+          {/* Sticky Notes Overlay */}
+          {stickyNotesVisible && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+              zIndex: 999,
+            }}>
+              {/* Simple sticky notes implementation */}
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '100px',
+                  left: '200px',
+                  width: '200px',
+                  height: '150px',
+                  background: '#ffffaa',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                  padding: '10px',
+                  fontSize: '14px',
+                  fontFamily: 'Arial',
+                  pointerEvents: 'auto',
+                  cursor: 'move',
+                  border: '1px solid #d4d4aa',
+                }}
+                onDoubleClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (target.contentEditable !== 'true') {
+                    target.contentEditable = 'true';
+                    target.focus();
+                  }
+                }}
+                onBlur={(e) => {
+                  const target = e.target as HTMLElement;
+                  target.contentEditable = 'false';
+                }}
+              >
+                Double-click to edit this note. This is a demo sticky note for the graph editor.
+              </div>
+              
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '300px',
+                  left: '400px',
+                  width: '180px',
+                  height: '120px',
+                  background: '#aaffaa',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                  padding: '10px',
+                  fontSize: '14px',
+                  fontFamily: 'Arial',
+                  pointerEvents: 'auto',
+                  cursor: 'move',
+                  border: '1px solid #aaddaa',
+                }}
+                onDoubleClick={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (target.contentEditable !== 'true') {
+                    target.contentEditable = 'true';
+                    target.focus();
+                  }
+                }}
+                onBlur={(e) => {
+                  const target = e.target as HTMLElement;
+                  target.contentEditable = 'false';
+                }}
+              >
+                Green note: Check panel weight distribution for better randomization.
+              </div>
+            </div>
+          )}
+          
+          {/* Node Annotations Panel */}
+          {showAnnotations && selectedNode && (
+            <div style={{
+              position: 'absolute',
+              top: '60px',
+              right: '16px',
+              width: '300px',
+              maxHeight: '400px',
+              background: professionalColors.background.secondary,
+              border: `1px solid ${professionalColors.ui.border}`,
+              borderRadius: '8px',
+              boxShadow: professionalShadows.node.default,
+              zIndex: 1001,
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                padding: '12px 16px',
+                borderBottom: `1px solid ${professionalColors.ui.border}`,
+                background: professionalColors.background.tertiary,
+              }}>
+                <div style={{
+                  color: professionalColors.text.primary,
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}>
+                  💬 Node Annotations
+                  <button
+                    onClick={() => setShowAnnotations(false)}
+                    style={{
+                      marginLeft: 'auto',
+                      background: 'transparent',
+                      border: 'none',
+                      color: professionalColors.text.secondary,
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+                <div style={{
+                  color: professionalColors.text.secondary,
+                  fontSize: '12px',
+                  marginTop: '4px',
+                }}>
+                  {selectedNode.data?.label || selectedNode.id}
+                </div>
+              </div>
+              
+              <div style={{
+                padding: '16px',
+                maxHeight: '300px',
+                overflowY: 'auto',
+              }}>
+                <div style={{
+                  marginBottom: '16px',
+                }}>
+                  <div style={{
+                    color: professionalColors.text.primary,
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    marginBottom: '8px',
+                  }}>
+                    Add Annotation
+                  </div>
+                  <textarea
+                    placeholder="Add a note about this node..."
+                    style={{
+                      width: '100%',
+                      height: '80px',
+                      padding: '8px',
+                      background: professionalColors.background.primary,
+                      border: `1px solid ${professionalColors.ui.border}`,
+                      borderRadius: '4px',
+                      color: professionalColors.text.primary,
+                      fontSize: '13px',
+                      resize: 'vertical',
+                      outline: 'none',
+                    }}
+                  />
+                  <button
+                    style={{
+                      marginTop: '8px',
+                      padding: '6px 12px',
+                      background: professionalColors.accent.blue + '20',
+                      border: `1px solid ${professionalColors.accent.blue}`,
+                      color: professionalColors.accent.blue,
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '12px',
+                    }}
+                  >
+                    Add Note
+                  </button>
+                </div>
+                
+                <div style={{
+                  color: professionalColors.text.secondary,
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  textAlign: 'center',
+                  padding: '20px 0',
+                }}>
+                  Demo annotation system - notes would be saved with the graph
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
         <InspectorPanel
