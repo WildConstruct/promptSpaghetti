@@ -19,7 +19,7 @@ import {
 import { Database } from '../../../database';
 
 // Mock dependencies
-jest.mock('../../../database');
+jest.mock('../../../database/connection');
 
 describe('PolicyDataModel', () => {
   let policyService: PolicyDataService;

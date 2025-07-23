@@ -651,23 +651,23 @@ export const useResultManagementStore = create<ResultManagementState>()(
           let aVal: any, bVal: any;
           
           switch (sortBy) {
-            case 'createdAt':
-              aVal = a.metadata?.createdAt || a.savedAt;
-              bVal = b.metadata?.createdAt || b.savedAt;
-              break;
-            case 'rating':
-              aVal = a.metadata?.rating || 0;
-              bVal = b.metadata?.rating || 0;
-              break;
-            case 'wordCount':
-              aVal = a.metadata?.wordCount || 0;
-              bVal = b.metadata?.wordCount || 0;
-              break;
-            case 'lastModified':
-            default:
-              aVal = a.lastModified;
-              bVal = b.lastModified;
-              break;
+          case 'createdAt':
+            aVal = a.metadata?.createdAt || a.savedAt;
+            bVal = b.metadata?.createdAt || b.savedAt;
+            break;
+          case 'rating':
+            aVal = a.metadata?.rating || 0;
+            bVal = b.metadata?.rating || 0;
+            break;
+          case 'wordCount':
+            aVal = a.metadata?.wordCount || 0;
+            bVal = b.metadata?.wordCount || 0;
+            break;
+          case 'lastModified':
+          default:
+            aVal = a.lastModified;
+            bVal = b.lastModified;
+            break;
           }
 
           if (sortOrder === 'desc') {

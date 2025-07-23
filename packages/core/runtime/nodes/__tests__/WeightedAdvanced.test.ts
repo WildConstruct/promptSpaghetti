@@ -7,8 +7,8 @@ import {
   WeightDistributionConfig,
   createWeightedAdvancedNode,
   DistributionPresets
-} from '../WeightedAdvanced.js';
-import { AdvancedExecutionUtils } from '../../advanced.js';
+} from '../WeightedAdvanced';
+import { AdvancedExecutionUtils } from '../../advanced';
 
 describe('WeightedAdvanced Node', () => {
   let node: WeightedAdvancedNode;

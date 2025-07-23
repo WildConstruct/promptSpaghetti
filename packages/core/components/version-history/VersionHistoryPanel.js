@@ -1,0 +1,276 @@
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+/**
+ * Epic 9.3.1 - Version History Panel Component
+ * UI for browsing, comparing, and managing version snapshots and branches
+ */
+import { useState, useEffect, useMemo } from 'react';
+export const VersionHistoryPanel = ({ versionManager, currentGraphData, onRestoreVersion, onCompareVersions, isOpen, onClose, className = '' }) => {
+    const [viewMode, setViewMode] = useState('timeline');
+    const [snapshots, setSnapshots] = useState([]);
+    const [branches, setBranches] = useState([]);
+    const [changeEvents, setChangeEvents] = useState([]);
+    const [annotations, setAnnotations] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedBranch, setSelectedBranch] = useState('main');
+    const [selectedSnapshots, setSelectedSnapshots] = useState(new Set());
+    const [searchQuery, setSearchQuery] = useState('');
+    const [dateFilter, setDateFilter] = useState('all');
+    const [authorFilter, setAuthorFilter] = useState('');
+    useEffect(() => {
+        if (isOpen) {
+            loadData();
+        }
+    }, [isOpen, viewMode, selectedBranch]);
+    const loadData = async () => {
+        try {
+            setLoading(true);
+            switch (viewMode) {
+                case 'timeline':
+                    await loadSnapshots();
+                    break;
+                case 'branches':
+                    await loadBranches();
+                    await loadSnapshots();
+                    break;
+                case 'changes':
+                    await loadChangeEvents();
+                    break;
+                case 'annotations':
+                    await loadAnnotations();
+                    break;
+            }
+        }
+        catch (error) {
+            console.error('Failed to load version history data:', error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+    const loadSnapshots = async () => {
+        const filter = {
+            branch_name: selectedBranch,
+            limit: 50,
+            include_annotations: true
+        };
+        // Apply date filter
+        if (dateFilter !== 'all') {
+            const days = dateFilter === 'week' ? 7 : dateFilter === 'month' ? 30 : 90;
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - days);
+            filter.start_date = startDate.toISOString();
+        }
+        if (authorFilter) {
+            filter.author_id = authorFilter;
+        }
+        const result = await versionManager.getSnapshots(filter);
+        setSnapshots(result.snapshots);
+    };
+    const loadBranches = async () => {
+        const branchList = await versionManager.getBranches();
+        setBranches(branchList);
+    };
+    const loadChangeEvents = async () => {
+        const filter = {
+            limit: 100,
+            author_id: authorFilter || undefined
+        };
+        if (dateFilter !== 'all') {
+            const days = dateFilter === 'week' ? 7 : dateFilter === 'month' ? 30 : 90;
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - days);
+            filter.start_date = startDate.toISOString();
+        }
+        const result = await versionManager.getChangeEvents(filter);
+        setChangeEvents(result.events);
+    };
+    const loadAnnotations = async () => {
+        // Load annotations for all snapshots
+        const allAnnotations = [];
+        for (const snapshot of snapshots.slice(0, 20)) { // Limit to recent snapshots
+            try {
+                const snapshotAnnotations = await versionManager.getAnnotations(snapshot.id);
+                allAnnotations.push(...snapshotAnnotations);
+            }
+            catch (error) {
+                console.error(`Failed to load annotations for snapshot ${snapshot.id}:`, error);
+            }
+        }
+        setAnnotations(allAnnotations);
+    };
+    const handleCreateSnapshot = async () => {
+        try {
+            setLoading(true);
+            const title = prompt('Enter snapshot title:');
+            if (!title)
+                return;
+            const description = prompt('Enter snapshot description (optional):') || undefined;
+            await versionManager.createSnapshot(currentGraphData, {
+                title,
+                description,
+                snapshot_type: 'manual'
+            });
+            await loadSnapshots();
+        }
+        catch (error) {
+            console.error('Failed to create snapshot:', error);
+            alert('Failed to create snapshot. Please try again.');
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+    const handleSnapshotSelect = (snapshotId, selected) => {
+        const newSelection = new Set(selectedSnapshots);
+        if (selected) {
+            newSelection.add(snapshotId);
+        }
+        else {
+            newSelection.delete(snapshotId);
+        }
+        setSelectedSnapshots(newSelection);
+    };
+    const handleCompareSelected = () => {
+        const selected = Array.from(selectedSnapshots);
+        if (selected.length === 2) {
+            onCompareVersions(selected[0], selected[1]);
+        }
+        else {
+            alert('Please select exactly 2 snapshots to compare.');
+        }
+    };
+    const filteredSnapshots = useMemo(() => {
+        if (!searchQuery)
+            return snapshots;
+        const query = searchQuery.toLowerCase();
+        return snapshots.filter(snapshot => snapshot.title?.toLowerCase().includes(query) ||
+            snapshot.description?.toLowerCase().includes(query) ||
+            snapshot.changelog?.toLowerCase().includes(query) ||
+            snapshot.version_tag?.toLowerCase().includes(query));
+    }, [snapshots, searchQuery]);
+    const formatTimeAgo = (dateString) => {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+        if (diffMins < 1)
+            return 'Just now';
+        if (diffMins < 60)
+            return `${diffMins}m ago`;
+        if (diffHours < 24)
+            return `${diffHours}h ago`;
+        if (diffDays < 7)
+            return `${diffDays}d ago`;
+        return date.toLocaleDateString();
+    };
+    const getSnapshotTypeIcon = (type) => {
+        switch (type) {
+            case 'manual': return '📝';
+            case 'auto': return '🤖';
+            case 'milestone': return '🏆';
+            case 'backup': return '💾';
+            default: return '📄';
+        }
+    };
+    const getSnapshotTypeColor = (type) => {
+        switch (type) {
+            case 'manual': return 'bg-blue-100 text-blue-800';
+            case 'auto': return 'bg-gray-100 text-gray-800';
+            case 'milestone': return 'bg-yellow-100 text-yellow-800';
+            case 'backup': return 'bg-green-100 text-green-800';
+            default: return 'bg-gray-100 text-gray-800';
+        }
+    };
+    if (!isOpen)
+        return null;
+    return (_jsxs("div", { className: `version-history-panel ${className} fixed right-0 top-0 h-full w-96 bg-white shadow-xl border-l border-gray-200 z-50 flex flex-col`, children: [_jsxs("div", { className: "p-4 border-b border-gray-200", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900", children: "Version History" }), _jsx("button", { onClick: onClose, className: "text-gray-400 hover:text-gray-500 transition-colors", children: _jsx("svg", { className: "h-5 w-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }) }) })] }), _jsx("div", { className: "flex space-x-1 bg-gray-100 rounded-lg p-1 mb-4", children: [
+                            { key: 'timeline', label: 'Timeline', icon: '📋' },
+                            { key: 'branches', label: 'Branches', icon: '🌿' },
+                            { key: 'changes', label: 'Changes', icon: '📝' },
+                            { key: 'annotations', label: 'Notes', icon: '💭' }
+                        ].map(tab => (_jsxs("button", { onClick: () => setViewMode(tab.key), className: `flex-1 flex items-center justify-center px-2 py-1 text-xs font-medium rounded transition-colors ${viewMode === tab.key
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'text-gray-600 hover:text-gray-900'}`, children: [_jsx("span", { className: "mr-1", children: tab.icon }), tab.label] }, tab.key))) }), _jsxs("div", { className: "space-y-3", children: [_jsx("input", { type: "text", placeholder: "Search versions...", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), className: "w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent" }), _jsxs("div", { className: "flex space-x-2", children: [_jsxs("select", { value: dateFilter, onChange: (e) => setDateFilter(e.target.value), className: "flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { value: "all", children: "All time" }), _jsx("option", { value: "week", children: "Past week" }), _jsx("option", { value: "month", children: "Past month" }), _jsx("option", { value: "quarter", children: "Past quarter" })] }), viewMode === 'timeline' && (_jsxs("select", { value: selectedBranch, onChange: (e) => setSelectedBranch(e.target.value), className: "flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { value: "main", children: "Main branch" }), branches.filter(b => b.name !== 'main').map(branch => (_jsx("option", { value: branch.name, children: branch.name }, branch.id)))] }))] })] }), _jsxs("div", { className: "flex space-x-2 mt-4", children: [_jsx("button", { onClick: handleCreateSnapshot, disabled: loading, className: "flex-1 px-3 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors disabled:opacity-50", children: "Create Snapshot" }), selectedSnapshots.size === 2 && (_jsx("button", { onClick: handleCompareSelected, className: "px-3 py-2 text-xs border border-gray-300 rounded-md hover:bg-gray-50 transition-colors", children: "Compare" }))] })] }), _jsx("div", { className: "flex-1 overflow-y-auto", children: loading ? (_jsx("div", { className: "flex justify-center items-center py-8", children: _jsx("div", { className: "animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500" }) })) : (_jsxs(_Fragment, { children: [viewMode === 'timeline' && (_jsx(SnapshotTimeline, { snapshots: filteredSnapshots, selectedSnapshots: selectedSnapshots, onSnapshotSelect: handleSnapshotSelect, onRestore: onRestoreVersion, formatTimeAgo: formatTimeAgo, getSnapshotTypeIcon: getSnapshotTypeIcon, getSnapshotTypeColor: getSnapshotTypeColor })), viewMode === 'branches' && (_jsx(BranchView, { branches: branches, snapshots: snapshots, selectedBranch: selectedBranch, onBranchSelect: setSelectedBranch, formatTimeAgo: formatTimeAgo })), viewMode === 'changes' && (_jsx(ChangeEventsList, { events: changeEvents, formatTimeAgo: formatTimeAgo })), viewMode === 'annotations' && (_jsx(AnnotationsList, { annotations: annotations, formatTimeAgo: formatTimeAgo }))] })) })] }));
+};
+const SnapshotTimeline = ({ snapshots, selectedSnapshots, onSnapshotSelect, onRestore, formatTimeAgo, getSnapshotTypeIcon, getSnapshotTypeColor }) => {
+    return (_jsx("div", { className: "p-4", children: snapshots.length === 0 ? (_jsxs("div", { className: "text-center py-8 text-gray-500", children: [_jsx("div", { className: "text-4xl mb-2", children: "\uD83D\uDCCB" }), _jsx("h3", { className: "font-medium text-gray-900 mb-1", children: "No snapshots yet" }), _jsx("p", { className: "text-sm", children: "Create your first snapshot to track changes." })] })) : (_jsx("div", { className: "space-y-3", children: snapshots.map(snapshot => (_jsx("div", { className: `border rounded-lg p-3 transition-colors ${selectedSnapshots.has(snapshot.id)
+                    ? 'border-blue-300 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'}`, children: _jsxs("div", { className: "flex items-start space-x-3", children: [_jsx("input", { type: "checkbox", checked: selectedSnapshots.has(snapshot.id), onChange: (e) => onSnapshotSelect(snapshot.id, e.target.checked), className: "mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsxs("div", { className: "flex items-center space-x-2 mb-1", children: [_jsxs("span", { className: `text-xs px-2 py-1 rounded-full ${getSnapshotTypeColor(snapshot.snapshot_type)}`, children: [getSnapshotTypeIcon(snapshot.snapshot_type), " ", snapshot.snapshot_type] }), snapshot.version_tag && (_jsx("span", { className: "text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full", children: snapshot.version_tag }))] }), _jsx("h4", { className: "text-sm font-medium text-gray-900 truncate", children: snapshot.title || `Version ${snapshot.version_number}` }), snapshot.description && (_jsx("p", { className: "text-xs text-gray-600 mt-1 line-clamp-2", children: snapshot.description })), _jsxs("div", { className: "flex items-center justify-between mt-2 text-xs text-gray-500", children: [_jsx("span", { children: formatTimeAgo(snapshot.created_at) }), _jsxs("span", { children: [snapshot.node_count, " nodes"] })] })] }), _jsx("div", { className: "flex flex-col space-y-1", children: _jsx("button", { onClick: () => onRestore(snapshot.id), className: "text-xs px-2 py-1 text-blue-600 hover:bg-blue-100 rounded transition-colors", title: "Restore this version", children: "Restore" }) })] }) }, snapshot.id))) })) }));
+};
+const BranchView = ({ branches, snapshots, selectedBranch, onBranchSelect, formatTimeAgo }) => {
+    const getBranchIcon = (type) => {
+        switch (type) {
+            case 'main': return '🌳';
+            case 'feature': return '🌿';
+            case 'hotfix': return '🔥';
+            case 'experiment': return '🧪';
+            case 'archive': return '📦';
+            default: return '🌿';
+        }
+    };
+    return (_jsx("div", { className: "p-4", children: _jsx("div", { className: "space-y-3", children: branches.map(branch => (_jsxs("div", { className: `border rounded-lg p-3 cursor-pointer transition-colors ${selectedBranch === branch.name
+                    ? 'border-blue-300 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'}`, onClick: () => onBranchSelect(branch.name), children: [_jsxs("div", { className: "flex items-center justify-between mb-2", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("span", { className: "text-lg", children: getBranchIcon(branch.branch_type) }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900", children: branch.name }), _jsx("p", { className: "text-xs text-gray-500", children: branch.branch_type })] })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "text-xs text-gray-500", children: [branch.total_commits, " commits"] }), _jsx("div", { className: "text-xs text-gray-400", children: formatTimeAgo(branch.updated_at) })] })] }), branch.description && (_jsx("p", { className: "text-xs text-gray-600 mb-2", children: branch.description })), _jsxs("div", { className: "flex items-center space-x-2", children: [branch.is_protected && (_jsx("span", { className: "text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded", children: "Protected" })), !branch.is_active && (_jsx("span", { className: "text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded", children: "Archived" }))] })] }, branch.id))) }) }));
+};
+const ChangeEventsList = ({ events, formatTimeAgo }) => {
+    const getEventIcon = (eventType) => {
+        if (eventType.includes('node'))
+            return '🔵';
+        if (eventType.includes('edge'))
+            return '🔗';
+        if (eventType.includes('property'))
+            return '⚙️';
+        if (eventType.includes('snapshot'))
+            return '📸';
+        if (eventType.includes('branch'))
+            return '🌿';
+        return '📝';
+    };
+    const getEventDescription = (event) => {
+        const { event_type, event_data } = event;
+        switch (event_type) {
+            case 'node_added':
+                return `Added ${event_data.node_count || 1} node(s)`;
+            case 'node_removed':
+                return `Removed ${event_data.node_count || 1} node(s)`;
+            case 'node_modified':
+                return `Modified ${event_data.node_count || 1} node(s)`;
+            case 'property_changed':
+                return `Changed ${event_data.property_name || 'properties'}`;
+            case 'snapshot_created':
+                return `Created snapshot: ${event_data.snapshot_type || 'manual'}`;
+            case 'branch_created':
+                return `Created branch: ${event_data.branch_name}`;
+            case 'branch_switched':
+                return `Switched to branch: ${event_data.branch_name}`;
+            case 'branch_merged':
+                return 'Merged branches';
+            default:
+                return event_type.replace(/_/g, ' ');
+        }
+    };
+    return (_jsx("div", { className: "p-4", children: events.length === 0 ? (_jsxs("div", { className: "text-center py-8 text-gray-500", children: [_jsx("div", { className: "text-4xl mb-2", children: "\uD83D\uDCDD" }), _jsx("h3", { className: "font-medium text-gray-900 mb-1", children: "No changes recorded" }), _jsx("p", { className: "text-sm", children: "Changes will appear here as you work." })] })) : (_jsx("div", { className: "space-y-2", children: events.map(event => (_jsxs("div", { className: "flex items-start space-x-3 p-2 hover:bg-gray-50 rounded", children: [_jsx("span", { className: "text-lg mt-0.5", children: getEventIcon(event.event_type) }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsx("p", { className: "text-sm text-gray-900", children: getEventDescription(event) }), _jsxs("div", { className: "flex items-center space-x-2 mt-1 text-xs text-gray-500", children: [_jsxs("span", { children: ["by ", event.author_name || event.author_id] }), _jsx("span", { children: "\u2022" }), _jsx("span", { children: formatTimeAgo(event.occurred_at) }), event.change_magnitude > 0 && (_jsxs(_Fragment, { children: [_jsx("span", { children: "\u2022" }), _jsxs("span", { children: ["Impact: ", Math.round(event.change_magnitude), "/10"] })] }))] }), event.affected_nodes.length > 0 && (_jsxs("div", { className: "mt-1 text-xs text-gray-400", children: ["Affected ", event.affected_nodes.length, " node(s)"] }))] })] }, event.id))) })) }));
+};
+const AnnotationsList = ({ annotations, formatTimeAgo }) => {
+    const getAnnotationIcon = (type) => {
+        switch (type) {
+            case 'comment': return '💬';
+            case 'review': return '👀';
+            case 'approval': return '✅';
+            case 'flag': return '🚩';
+            default: return '💭';
+        }
+    };
+    const getPriorityColor = (priority) => {
+        switch (priority) {
+            case 'critical': return 'text-red-600';
+            case 'high': return 'text-orange-600';
+            case 'normal': return 'text-gray-600';
+            case 'low': return 'text-gray-400';
+            default: return 'text-gray-600';
+        }
+    };
+    return (_jsx("div", { className: "p-4", children: annotations.length === 0 ? (_jsxs("div", { className: "text-center py-8 text-gray-500", children: [_jsx("div", { className: "text-4xl mb-2", children: "\uD83D\uDCAD" }), _jsx("h3", { className: "font-medium text-gray-900 mb-1", children: "No annotations yet" }), _jsx("p", { className: "text-sm", children: "Add comments and reviews to collaborate." })] })) : (_jsx("div", { className: "space-y-3", children: annotations.map(annotation => (_jsxs("div", { className: "border border-gray-200 rounded-lg p-3", children: [_jsxs("div", { className: "flex items-start space-x-2 mb-2", children: [_jsx("span", { className: "text-lg", children: getAnnotationIcon(annotation.annotation_type) }), _jsxs("div", { className: "flex-1", children: [annotation.title && (_jsx("h5", { className: "text-sm font-medium text-gray-900 mb-1", children: annotation.title })), _jsx("p", { className: "text-sm text-gray-700", children: annotation.content_markdown })] }), _jsx("span", { className: `text-xs ${getPriorityColor(annotation.priority)}`, children: annotation.priority })] }), _jsxs("div", { className: "flex items-center justify-between text-xs text-gray-500", children: [_jsxs("span", { children: ["by ", annotation.author_id] }), _jsx("span", { children: formatTimeAgo(annotation.created_at) })] }), annotation.status === 'resolved' && (_jsxs("div", { className: "mt-2 text-xs text-green-600", children: ["\u2713 Resolved ", annotation.resolved_at && `on ${formatTimeAgo(annotation.resolved_at)}`] }))] }, annotation.id))) })) }));
+};

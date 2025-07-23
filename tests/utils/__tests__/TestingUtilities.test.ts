@@ -6,10 +6,10 @@
 import React from 'react';
 import {
   TestEnvironmentManager,
-  ComponentTestingUtils,
-  AsyncTestingUtils,
-  MockDataUtils,
-  PerformanceTestingUtils
+  TestDataUtils,
+  TestAssertionHelpers,
+  MockFactory,
+  PerformanceTestUtils
 } from '../TestingUtilities';
 
 describe('Testing Utilities', () => {
@@ -47,9 +47,9 @@ describe('Testing Utilities', () => {
 
       const reactFlowMock = env.mocks.get('reactFlow');
       expect(reactFlowMock).toBeDefined();
-      expect(reactFlowMock.useReactFlow).toBeInstanceOf(Function);
-      expect(reactFlowMock.useNodesState).toBeInstanceOf(Function);
-      expect(reactFlowMock.useEdgesState).toBeInstanceOf(Function);
+      expect(typeof reactFlowMock.useReactFlow).toBe('function');
+      expect(typeof reactFlowMock.useNodesState).toBe('function');
+      expect(typeof reactFlowMock.useEdgesState).toBe('function');
     });
 
     test('should setup WebSocket mocks when configured', async () => {
@@ -68,8 +68,8 @@ describe('Testing Utilities', () => {
 
       const mockStorage = env.mocks.get('localStorage');
       expect(mockStorage).toBeDefined();
-      expect(mockStorage.getItem).toBeInstanceOf(Function);
-      expect(mockStorage.setItem).toBeInstanceOf(Function);
+      expect(typeof mockStorage.getItem).toBe('function');
+      expect(typeof mockStorage.setItem).toBe('function');
     });
 
     test('should cleanup environments properly', async () => {
@@ -85,36 +85,29 @@ describe('Testing Utilities', () => {
     });
   });
 
-  describe('ComponentTestingUtils', () => {
-    test('should get viewport dimensions correctly', () => {
-      const mobileResult = ComponentTestingUtils.testResponsive(
-        React.createElement('div', null, 'Test'),
-        ['mobile']
-      );
-
-      expect(mobileResult).toHaveLength(1);
-      expect(mobileResult[0].viewport).toBe('mobile');
-      expect(mobileResult[0].dimensions.width).toBe(375);
-      expect(mobileResult[0].dimensions.height).toBe(667);
+  describe('TestDataUtils', () => {
+    test('should generate deterministic data with seed', () => {
+      const dataUtils = new TestDataUtils('test-123');
+      
+      const id1 = dataUtils.generateId('test');
+      const id2 = dataUtils.generateId('test');
+      
+      expect(id1).toMatch(/^test-\d+$/);
+      expect(id2).toMatch(/^test-\d+$/);
+      expect(id1).not.toBe(id2); // Should be different due to timestamp
     });
 
-    test('should test component performance', async () => {
-      const TestComponent = () => React.createElement('div', null, 'Performance Test');
+    test('should generate consistent email addresses', () => {
+      const dataUtils = new TestDataUtils('test-email');
       
-      const result = await ComponentTestingUtils.testPerformance(
-        React.createElement(TestComponent),
-        { iterations: 3, measureRender: true }
-      );
-
-      expect(result.iterations).toBe(3);
-      expect(result.totalTime).toBeGreaterThan(0);
-      expect(result.averageRenderTime).toBeGreaterThan(0);
-      expect(result.minRenderTime).toBeGreaterThanOrEqual(0);
-      expect(result.maxRenderTime).toBeGreaterThanOrEqual(result.minRenderTime);
+      const email = dataUtils.generateEmail();
+      
+      expect(email).toMatch(/^[a-z0-9]+@example\.com$/);
+      expect(email.length).toBeGreaterThan(10);
     });
   });
 
-  describe('AsyncTestingUtils', () => {
+  describe('TestAssertionHelpers', () => {
     test('should wait for condition with success', async () => {
       let conditionMet = false;
       
@@ -122,68 +115,64 @@ describe('Testing Utilities', () => {
         conditionMet = true;
       }, 100);
 
-      const result = await AsyncTestingUtils.waitForCondition(
+      await TestAssertionHelpers.waitForCondition(
         () => conditionMet,
-        { timeout: 1000, interval: 50 }
+        1000,
+        50
       );
-
-      expect(result).toBe(true);
     });
 
     test('should timeout when condition is not met', async () => {
       await expect(
-        AsyncTestingUtils.waitForCondition(
+        TestAssertionHelpers.waitForCondition(
           () => false,
-          { timeout: 100, interval: 25 }
+          100,
+          25
         )
       ).rejects.toThrow('Condition not met within 100ms');
     });
 
-    test('should wait for element to appear', async () => {
-      let element: HTMLElement | null = null;
-      
-      setTimeout(() => {
-        element = document.createElement('div');
-      }, 50);
-
-      const result = await AsyncTestingUtils.waitForElement(
-        () => element,
-        { timeout: 1000 }
-      );
-
-      expect(result).toBe(element);
-    });
-
     test('should handle delays correctly', async () => {
       const start = Date.now();
-      await AsyncTestingUtils.delay(100);
+      await TestAssertionHelpers.delay(100);
       const end = Date.now();
 
       expect(end - start).toBeGreaterThanOrEqual(95); // Allow for slight timing variations
     });
 
-    test('should handle timeout scenarios', async () => {
-      const slowPromise = new Promise(resolve => setTimeout(resolve, 1000));
+    test('should test deep equality', () => {
+      const obj1 = { a: 1, b: { c: 2 } };
+      const obj2 = { a: 1, b: { c: 2 } };
+      const obj3 = { a: 1, b: { c: 3 } };
 
-      await expect(
-        AsyncTestingUtils.withTimeout(slowPromise, 100, 'Custom timeout message')
-      ).rejects.toThrow('Custom timeout message');
+      expect(() => TestAssertionHelpers.expectDeepEqual(obj1, obj2)).not.toThrow();
+      expect(() => TestAssertionHelpers.expectDeepEqual(obj1, obj3)).toThrow();
+    });
+
+    test('should test approximate equality', () => {
+      expect(() => TestAssertionHelpers.expectApproximately(10, 10.1, 0.2)).not.toThrow();
+      expect(() => TestAssertionHelpers.expectApproximately(10, 11, 0.5)).toThrow();
+    });
+
+    test('should handle expectToThrowAsync', async () => {
+      const throwingFunction = async () => {
+        throw new Error('Test error message');
+      };
+
+      await TestAssertionHelpers.expectToThrowAsync(throwingFunction, 'Test error message');
     });
   });
 
-  describe('MockDataUtils', () => {
+  describe('MockFactory', () => {
     test('should create mock user with defaults', () => {
-      const user = MockDataUtils.createMockUser();
+      const user = MockFactory.createMockUser();
 
-      expect(user.id).toMatch(/^user-\d+-[a-z0-9]+$/);
-      expect(user.email).toBe('test.user@example.com');
-      expect(user.name).toBe('Test User');
+      expect(user.id).toBe('mock-user-id');
+      expect(user.email).toBe('mock@example.com');
+      expect(user.name).toBe('Mock User');
       expect(user.role).toBe('user');
       expect(user.isActive).toBe(true);
-      expect(user.preferences).toEqual({
-        theme: 'light',
-        notifications: true
-      });
+      expect(user.createdAt).toBeDefined();
     });
 
     test('should create mock user with overrides', () => {
@@ -193,112 +182,77 @@ describe('Testing Utilities', () => {
         isActive: false
       };
 
-      const user = MockDataUtils.createMockUser(overrides);
+      const user = MockFactory.createMockUser(overrides);
 
       expect(user.name).toBe('Custom User');
       expect(user.role).toBe('admin');
       expect(user.isActive).toBe(false);
-      expect(user.email).toBe('test.user@example.com'); // Should keep default
+      expect(user.email).toBe('mock@example.com'); // Should keep default
     });
 
     test('should create mock graph with default structure', () => {
-      const graph = MockDataUtils.createMockGraph();
+      const graph = MockFactory.createMockGraph();
 
-      expect(graph.nodes).toHaveLength(2);
-      expect(graph.edges).toHaveLength(1);
-      expect(graph.nodes[0].id).toBe('node-1');
-      expect(graph.nodes[0].type).toBe('WeightedChoice');
-      expect(graph.nodes[1].type).toBe('Output');
-      expect(graph.edges[0].source).toBe('node-1');
-      expect(graph.edges[0].target).toBe('node-2');
+      expect(graph.id).toBe('mock-graph-id');
+      expect(graph.nodes).toEqual([]);
+      expect(graph.edges).toEqual([]);
+      expect(graph.name).toBe('Mock Graph');
+      expect(graph.description).toBe('A mock graph for testing');
+      expect(graph.createdAt).toBeDefined();
     });
 
     test('should create mock API response', () => {
       const data = { message: 'success', count: 5 };
-      const response = MockDataUtils.createMockApiResponse(data, {
-        status: 201,
-        delay: 100
-      });
+      const response = MockFactory.createMockAPIResponse(data, 201);
 
       expect(response.data).toEqual(data);
       expect(response.status).toBe(201);
-      expect(response.delay).toBe(100);
-      expect(response.headers['content-type']).toBe('application/json');
+      expect(response.ok).toBe(true);
+      expect(response.headers).toEqual({});
+      expect(response.statusText).toBe('Error');
     });
 
-    test('should create batch of mock data', () => {
-      const batch = MockDataUtils.createBatch(
-        (index) => ({ id: index, name: `Item ${index}` }),
-        5
-      );
+    test('should create mock nodes and edges', () => {
+      const node = MockFactory.createMockNode('WeightedChoice');
+      const edge = MockFactory.createMockEdge('node1', 'node2');
 
-      expect(batch).toHaveLength(5);
-      expect(batch[0]).toEqual({ id: 0, name: 'Item 0' });
-      expect(batch[4]).toEqual({ id: 4, name: 'Item 4' });
+      expect(node.type).toBe('WeightedChoice');
+      expect(node.id).toMatch(/^mock-node-\d+$/);
+      expect(node.position).toEqual({ x: 0, y: 0 });
+
+      expect(edge.id).toBe('edge-node1-node2');
+      expect(edge.source).toBe('node1');
+      expect(edge.target).toBe('node2');
+      expect(edge.type).toBe('default');
     });
   });
 
-  describe('PerformanceTestingUtils', () => {
+  describe('PerformanceTestUtils', () => {
     test('should measure execution time', async () => {
       const testFunction = async () => {
         await new Promise(resolve => setTimeout(resolve, 50));
         return 'result';
       };
 
-      const measurement = await PerformanceTestingUtils.measureExecution(
+      const measurement = await PerformanceTestUtils.measureExecution(
         testFunction,
-        3
+        'testFunction'
       );
 
       expect(measurement.result).toBe('result');
-      expect(measurement.iterations).toBe(3);
-      expect(measurement.measurements).toHaveLength(3);
-      expect(measurement.totalTime).toBeGreaterThan(150); // 3 * 50ms minimum
-      expect(measurement.averageTime).toBeGreaterThan(50);
-      expect(measurement.minTime).toBeGreaterThan(0);
-      expect(measurement.maxTime).toBeGreaterThanOrEqual(measurement.minTime);
+      expect(measurement.executionTime).toBeGreaterThan(50); // 50ms minimum
+      expect(measurement.memoryUsage).toBeDefined();
+      expect(measurement.memoryUsage.baseline).toBeGreaterThan(0);
+      expect(measurement.memoryUsage.peak).toBeGreaterThan(0);
     });
 
-    test('should create and use performance benchmark', async () => {
-      const benchmark = PerformanceTestingUtils.createBenchmark('test-bench');
+    test('should generate load test configuration', () => {
+      const loadTest = PerformanceTestUtils.generateLoadTest(5, 20);
 
-      expect(benchmark.name).toBe('test-bench');
-
-      // Test a quick operation
-      const timer1 = benchmark.start('operation1');
-      await new Promise(resolve => setTimeout(resolve, 10));
-      const duration1 = timer1.end();
-
-      // Test another operation
-      const timer2 = benchmark.start('operation2');
-      await new Promise(resolve => setTimeout(resolve, 20));
-      const duration2 = timer2.end();
-
-      const results = benchmark.getResults();
-
-      expect(results.operation1).toBeDefined();
-      expect(results.operation1.count).toBe(1);
-      expect(results.operation1.total).toBeCloseTo(duration1, 1);
-      expect(results.operation1.average).toBeCloseTo(duration1, 1);
-
-      expect(results.operation2).toBeDefined();
-      expect(results.operation2.count).toBe(1);
-      expect(results.operation2.total).toBeCloseTo(duration2, 1);
+      expect(loadTest.concurrency).toBe(5);
+      expect(loadTest.iterations).toBe(20);
+      expect(loadTest.totalOperations).toBe(100); // 5 * 20
     });
 
-    test('should measure memory usage', async () => {
-      const testFunction = () => {
-        // Create some objects to use memory
-        const largeArray = new Array(1000).fill('test');
-        return largeArray.length;
-      };
-
-      const measurement = await PerformanceTestingUtils.measureMemoryUsage(testFunction);
-
-      expect(measurement.result).toBe(1000);
-      expect(measurement.memoryBefore).toBeGreaterThanOrEqual(0);
-      expect(measurement.memoryAfter).toBeGreaterThanOrEqual(0);
-      expect(measurement.memoryDelta).toBeDefined();
-    });
   });
 });

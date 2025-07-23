@@ -162,8 +162,8 @@ export const DemoReadyMode: React.FC<DemoReadyModeProps> = ({
             <span>FPS:</span>
             <span style={{ 
               color: performanceMetrics.fps >= 55 ? professionalColors.accent.green : 
-                     performanceMetrics.fps >= 30 ? professionalColors.accent.yellow : 
-                     professionalColors.accent.red 
+                performanceMetrics.fps >= 30 ? professionalColors.accent.yellow : 
+                  professionalColors.accent.red 
             }}>
               {performanceMetrics.fps}
             </span>

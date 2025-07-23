@@ -242,8 +242,8 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                 const percentage = effectiveWeights.length > 0
                   ? Math.round(
                     effectiveWeight * (normalize ? 100 : effectiveWeights.reduce((sum,
-                    w
-                  ) => sum + w, 0) > 0 ? 100 / effectiveWeights.reduce((sum, w) => sum + w, 0) : 0))
+                      w
+                    ) => sum + w, 0) > 0 ? 100 / effectiveWeights.reduce((sum, w) => sum + w, 0) : 0))
                   : Math.round(100 / choices.length);
 
                 return (
@@ -276,7 +276,7 @@ export const WeightedAdvancedEditor: React.FC<WeightedAdvancedEditorProps> = ({ 
                           color: '#e2e8f0',
                           fontSize: 11
                         }}
-                        placeholder={`e.g., "Suspenseful", "Lighthearted", "Intense"`}
+                        placeholder={'e.g., "Suspenseful", "Lighthearted", "Intense"'}
                       />
                       
                       <button

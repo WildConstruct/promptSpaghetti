@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface EpicComponent {
   name: string;
@@ -30,7 +30,12 @@ const EPIC_ANALYSIS: Record<string, EpicData> = {
     impact: 'HIGH',
     components: [
       { name: 'Runtime Implementation', status: 'complete', progress: 100, location: 'packages/core/runtime/nodes/' },
-      { name: 'GraphEditor Integration', status: 'complete', progress: 100, location: 'packages/core/GraphEditor.tsx:129-164' },
+      { 
+        name: 'GraphEditor Integration', 
+        status: 'complete', 
+        progress: 100, 
+        location: 'packages/core/GraphEditor.tsx:129-164' 
+      },
       { name: 'Palette Categories', status: 'complete', progress: 100, location: 'packages/core/Palette.tsx:100-109' },
       { name: 'Node Editors', status: 'missing', progress: 0, task: 'Create specialized editors for advanced nodes' },
       { name: 'Test Coverage', status: 'complete', progress: 90, location: 'packages/core/runtime/__tests__/' }

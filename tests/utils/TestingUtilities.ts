@@ -23,6 +23,67 @@ export class TestEnvironmentManager {
     }
   }
 
+  static async createEnvironment(name: string, config: Record<string, any>): Promise<any> {
+    // Create comprehensive environment object with mocks and fixtures
+    const environment = {
+      name,
+      config,
+      fixtures: new Map(),
+      mocks: new Map(),
+      cleanup: async () => {
+        await this.cleanupEnvironment(name);
+      },
+      createdAt: Date.now()
+    };
+
+    // Setup ReactFlow mocks if configured
+    if (config.mockReactFlow) {
+      environment.mocks.set('reactFlow', {
+        useReactFlow: jest.fn(() => ({
+          getNode: jest.fn(),
+          getNodes: jest.fn(() => []),
+          getEdges: jest.fn(() => []),
+          setNodes: jest.fn(),
+          setEdges: jest.fn()
+        })),
+        useNodesState: jest.fn(() => [[], jest.fn()]),
+        useEdgesState: jest.fn(() => [[], jest.fn()])
+      });
+    }
+
+    // Setup WebSocket mocks if configured
+    if (config.mockWebSocket) {
+      const WebSocketMock = jest.fn().mockImplementation(() => ({
+        send: jest.fn(),
+        close: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn()
+      }));
+      
+      environment.mocks.set('WebSocket', WebSocketMock);
+      Object.defineProperty(global, 'WebSocket', { value: WebSocketMock });
+    }
+
+    // Setup localStorage mocks if configured
+    if (config.mockLocalStorage) {
+      const localStorageMock = {
+        getItem: jest.fn(),
+        setItem: jest.fn(),
+        removeItem: jest.fn(),
+        clear: jest.fn()
+      };
+      environment.mocks.set('localStorage', localStorageMock);
+      Object.defineProperty(global, 'localStorage', { value: localStorageMock });
+    }
+
+    this.environments.set(name, environment);
+    return environment;
+  }
+
+  static getEnvironment(name: string): any {
+    return this.environments.get(name);
+  }
+
   static async cleanupEnvironment(name: string): Promise<void> {
     const cleanup = this.cleanup.get(name);
     if (cleanup) {
@@ -63,6 +124,7 @@ export class TestEnvironmentManager {
  */
 export class TestDataUtils {
   private seed: string;
+  private counter: number = 0;
   
   constructor(seed: string = 'test-seed-123') {
     this.seed = seed;
@@ -73,8 +135,8 @@ export class TestDataUtils {
   }
 
   generateId(prefix: string = 'test'): string {
-    const timestamp = Date.now();
-    const hash = this.simpleHash(this.seed + timestamp);
+    this.counter++;
+    const hash = this.simpleHash(this.seed + this.counter);
     return `${prefix}-${hash}`;
   }
 

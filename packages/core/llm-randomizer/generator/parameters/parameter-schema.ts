@@ -216,6 +216,7 @@ export class ParameterValidator {
     temperature?: number;
     focusAreas?: string[];
   } {
+    console.log('getSuggestions called with parameters:', parameters);
     const suggestions: any = {};
 
     // Suggest node count based on complexity
@@ -230,7 +231,11 @@ export class ParameterValidator {
 
     // Suggest node types based on purpose
     if (parameters.purpose && (!parameters.nodeTypes || parameters.nodeTypes.length === 0)) {
+      console.log('About to call suggestNodeTypes with purpose:', parameters.purpose);
       suggestions.nodeTypes = this.suggestNodeTypes(parameters.purpose);
+      console.log('suggestNodeTypes returned:', suggestions.nodeTypes);
+    } else {
+      console.log('Skipping nodeTypes suggestion. purpose:', parameters.purpose, 'nodeTypes:', parameters.nodeTypes);
     }
 
     // Suggest temperature based on style
@@ -248,45 +253,43 @@ export class ParameterValidator {
       suggestions.focusAreas = this.suggestFocusAreas(parameters.domain);
     }
 
+    console.log('Final suggestions:', suggestions);
     return suggestions;
   }
 
   /**
    * Suggest appropriate node types based on purpose
    */
-  private static suggestNodeTypes(purpose: string): string[] {
-    const purposeLower = purpose.toLowerCase();
-    const suggestions: string[] = [];
+  static suggestNodeTypes(purpose: string): string[] {
+    const lower = purpose.toLowerCase();
+    const nodeTypes: string[] = [];
 
-    // Content generation patterns
-    if (purposeLower.includes('content') || purposeLower.includes('text') || purposeLower.includes('writing')) {
-      suggestions.push('WeightedChoice', 'Concat', 'Sequential');
+    // Check each pattern and add appropriate node types
+    if (lower.includes('content') || lower.includes('text') || lower.includes('writing')) {
+      nodeTypes.push('WeightedChoice', 'Concat', 'Sequential');
     }
-
-    // Decision making patterns
-    if (purposeLower.includes('decision') || purposeLower.includes('choice') || purposeLower.includes('branch')) {
-      suggestions.push('Conditional', 'WeightedChoice');
+    
+    if (lower.includes('decision') || lower.includes('choice') || lower.includes('branch')) {
+      nodeTypes.push('Conditional', 'WeightedChoice');
     }
-
-    // Data processing patterns
-    if (purposeLower.includes('data') || purposeLower.includes('process') || purposeLower.includes('transform')) {
-      suggestions.push('PythonTransform', 'Conditional', 'Sequential');
+    
+    if (lower.includes('data') || lower.includes('process') || lower.includes('transform')) {
+      nodeTypes.push('PythonTransform', 'Conditional', 'Sequential');
     }
-
-    // Interactive patterns
-    if (purposeLower.includes('interactive') || purposeLower.includes('user') || purposeLower.includes('response')) {
-      suggestions.push('GetVariable', 'SetVariable', 'Conditional');
+    
+    if (lower.includes('interactive') || lower.includes('user') || lower.includes('response')) {
+      nodeTypes.push('GetVariable', 'SetVariable', 'Conditional');
     }
-
-    // Story/narrative patterns
-    if (purposeLower.includes('story') || purposeLower.includes('narrative') || purposeLower.includes('plot')) {
-      suggestions.push('Markov', 'Sequential', 'WeightedChoice');
+    
+    if (lower.includes('story') || lower.includes('narrative') || lower.includes('plot')) {
+      nodeTypes.push('Markov', 'Sequential', 'WeightedChoice');
     }
-
-    // Always include Output for completeness
-    suggestions.push('Output');
-
-    return [...new Set(suggestions)]; // Remove duplicates
+    
+    // Always add Output
+    nodeTypes.push('Output');
+    
+    // Remove duplicates and return
+    return Array.from(new Set(nodeTypes));
   }
 
   /**
@@ -317,26 +320,101 @@ export class ParameterValidator {
 /**
  * Default parameter presets
  */
-export const defaultPresets = {
-  creative: {
-    id: 'creative',
-    name: 'Creative',
-    temperature: 0.9,
-    complexity: 'medium' as const,
-    style: 'creative'
+export const defaultPresets: ParameterPreset[] = [
+  {
+    id: 'simple-greeting',
+    name: 'Simple Greeting Generator',
+    description: 'A basic greeting system that personalizes messages for users',
+    category: 'Getting Started',
+    parameters: {
+      purpose: 'Create a personalized greeting system for users',
+      complexity: 'simple',
+      nodeCount: 3,
+      style: 'balanced',
+      provider: 'openai',
+      temperature: 0.7,
+      maxRetries: 3,
+      nodeTypes: [],
+      specificRequirements: ['Include user name', 'Time-based greetings'],
+      constraints: ['Keep messages under 50 characters'],
+      focusAreas: ['personalization'],
+      includeMetadata: true,
+      validateOutput: true,
+      enablePreview: true,
+      preferredPatterns: [],
+      avoidPatterns: [],
+      qualityLevel: 'standard',
+      diversityScore: 0.5,
+      outputFormat: 'both',
+      includeExplanation: false
+    },
+    tags: ['beginner', 'greeting', 'simple'],
+    isDefault: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
-  balanced: {
-    id: 'balanced',
-    name: 'Balanced',
-    temperature: 0.7,
-    complexity: 'medium' as const,
-    style: 'balanced'
+  {
+    id: 'creative-storyteller',
+    name: 'Creative Storyteller',
+    description: 'Generate dynamic story elements with creative branching',
+    category: 'Creative Writing',
+    parameters: {
+      purpose: 'Create dynamic story generation with multiple plot branches',
+      complexity: 'moderate',
+      nodeCount: 8,
+      style: 'creative',
+      provider: 'openai',
+      temperature: 0.9,
+      maxRetries: 3,
+      nodeTypes: [],
+      specificRequirements: ['Character development', 'Plot twists', 'Multiple endings'],
+      constraints: ['Family-friendly content', 'Maximum 500 words per branch'],
+      focusAreas: ['narrative', 'creativity'],
+      includeMetadata: true,
+      validateOutput: true,
+      enablePreview: true,
+      preferredPatterns: [],
+      avoidPatterns: [],
+      qualityLevel: 'standard',
+      diversityScore: 0.5,
+      outputFormat: 'both',
+      includeExplanation: true
+    },
+    tags: ['creative', 'storytelling', 'branching'],
+    isDefault: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
-  precise: {
-    id: 'precise',
-    name: 'Precise',
-    temperature: 0.3,
-    complexity: 'simple' as const,
-    style: 'technical'
+  {
+    id: 'technical-docs',
+    name: 'Technical Documentation',
+    description: 'Generate structured technical documentation with precise formatting',
+    category: 'Professional',
+    parameters: {
+      purpose: 'Create comprehensive technical documentation with structured format',
+      complexity: 'complex',
+      nodeCount: 12,
+      style: 'logical',
+      provider: 'openai',
+      temperature: 0.3,
+      maxRetries: 3,
+      nodeTypes: [],
+      specificRequirements: ['Code examples', 'Step-by-step instructions', 'Error handling'],
+      constraints: ['Technical accuracy', 'Consistent formatting', 'Clear structure'],
+      focusAreas: ['documentation', 'technical-writing'],
+      includeMetadata: true,
+      validateOutput: true,
+      enablePreview: true,
+      preferredPatterns: [],
+      avoidPatterns: [],
+      qualityLevel: 'high',
+      diversityScore: 0.3,
+      outputFormat: 'both',
+      includeExplanation: true
+    },
+    tags: ['technical', 'documentation', 'structured'],
+    isDefault: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   }
-} as const;
+];

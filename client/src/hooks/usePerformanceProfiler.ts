@@ -7,8 +7,48 @@
  * Task: T-1752989144295-168 - Profile server and client performance under load
  */
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { clientProfiler, ClientPerformanceProfiler } from '../utils/clientPerformanceProfiler';
+
+// Import PerformanceSnapshot type from the profiler
+type PerformanceSnapshot = {
+  timestamp: number;
+  render: {
+    componentCount: number;
+    renderTime: number;
+    reRenderCount: number;
+    mountTime: number;
+    updateTime: number;
+  };
+  memory: {
+    usedJSHeapSize: number;
+    totalJSHeapSize: number;
+    jsHeapSizeLimit: number;
+    heapUtilization: number;
+  };
+  network: {
+    requestCount: number;
+    totalTransferSize: number;
+    averageResponseTime: number;
+    errorCount: number;
+    cacheHitRate: number;
+  };
+  interactions: {
+    clickCount: number;
+    scrollEvents: number;
+    inputEvents: number;
+    navigationCount: number;
+    averageInteractionTime: number;
+  };
+  vitals: {
+    FCP: number;
+    LCP: number;
+    FID: number;
+    CLS: number;
+    TTFB: number;
+  };
+  customMetrics: Record<string, any>;
+};
 
 interface UsePerformanceProfilerOptions {
   autoStart?: boolean;
@@ -207,7 +247,7 @@ export function withPerformanceTracking<P extends object>(
       addCustomMetric
     } as P;
 
-    return <WrappedComponent {...enhancedProps} />;
+    return React.createElement(WrappedComponent, enhancedProps);
   };
 }
 
@@ -405,9 +445,9 @@ export function PerformanceProvider({ children }: { children: React.ReactNode })
     stopGlobalProfiling
   };
 
-  return (
-    <PerformanceContext.Provider value={value}>
-      {children}
-    </PerformanceContext.Provider>
+  return React.createElement(
+    PerformanceContext.Provider,
+    { value },
+    children
   );
 }

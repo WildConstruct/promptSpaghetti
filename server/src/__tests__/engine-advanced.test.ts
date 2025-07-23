@@ -31,10 +31,10 @@ describe('Engine Advanced Node Integration', () => {
         seed: 12345
       };
 
-      const results = await executeGraph(graph);
+      const result = await executeGraph(graph);
       
-      expect(results).toHaveLength(1);
-      expect(['apple', 'banana', 'cherry']).toContain(results[0]);
+      expect(result.outputs).toHaveLength(1);
+      expect(['apple', 'banana', 'cherry']).toContain(result.outputs[0]);
     });
 
     test('should execute WeightedAdvanced node with exponential distribution', async () => {
@@ -62,10 +62,10 @@ describe('Engine Advanced Node Integration', () => {
         seed: 54321
       };
 
-      const results = await executeGraph(graph);
+      const result = await executeGraph(graph);
       
-      expect(results).toHaveLength(1);
-      expect(['common', 'rare']).toContain(results[0]);
+      expect(result.outputs).toHaveLength(1);
+      expect(['common', 'rare']).toContain(result.outputs[0]);
     });
 
     test('should execute WeightedAdvanced node with gaussian distribution', async () => {
@@ -94,10 +94,10 @@ describe('Engine Advanced Node Integration', () => {
         seed: 9999
       };
 
-      const results = await executeGraph(graph);
+      const result = await executeGraph(graph);
       
-      expect(results).toHaveLength(1);
-      expect(['first', 'second', 'third']).toContain(results[0]);
+      expect(result.outputs).toHaveLength(1);
+      expect(['first', 'second', 'third']).toContain(result.outputs[0]);
     });
 
     test('should handle WeightedAdvanced node with default configuration', async () => {
@@ -117,10 +117,10 @@ describe('Engine Advanced Node Integration', () => {
         seed: 1111
       };
 
-      const results = await executeGraph(graph);
+      const result = await executeGraph(graph);
       
-      expect(results).toHaveLength(1);
-      expect(results[0]).toBe(''); // Empty choices should return empty string
+      expect(result.outputs).toHaveLength(1);
+      expect(result.outputs[0]).toBe(''); // Empty choices should return empty string
     });
 
     test('should be deterministic with same seed', async () => {
@@ -144,10 +144,10 @@ describe('Engine Advanced Node Integration', () => {
         seed: 42
       };
 
-      const results1 = await executeGraph(graph);
-      const results2 = await executeGraph(graph);
+      const result1 = await executeGraph(graph);
+      const result2 = await executeGraph(graph);
       
-      expect(results1).toEqual(results2);
+      expect(result1.outputs).toEqual(result2.outputs);
     });
 
     test('should produce different results with different seeds', async () => {
@@ -171,14 +171,6 @@ describe('Engine Advanced Node Integration', () => {
         seed: 100
       };
 
-      const graph2: Graph = {
-        ...graph1,
-        seed: 200
-      };
-
-      const results1 = await executeGraph(graph1);
-      const results2 = await executeGraph(graph2);
-      
       // With 3 equal-weight choices, there's a good chance they'll be different
       // But we'll run multiple times to increase confidence
       const allResults1: string[] = [];
@@ -187,8 +179,8 @@ describe('Engine Advanced Node Integration', () => {
       for (let i = 0; i < 10; i++) {
         const g1 = { ...graph1, seed: 100 + i };
         const g2 = { ...graph1, seed: 500 + i };
-        allResults1.push((await executeGraph(g1))[0]);
-        allResults2.push((await executeGraph(g2))[0]);
+        allResults1.push((await executeGraph(g1)).outputs[0]);
+        allResults2.push((await executeGraph(g2)).outputs[0]);
       }
       
       // At least some results should be different
@@ -234,10 +226,10 @@ describe('Engine Advanced Node Integration', () => {
         seed: 7777
       };
 
-      const results = await executeGraph(graph);
+      const result = await executeGraph(graph);
       
-      expect(results).toHaveLength(1);
-      expect(results[0]).toMatch(/^(basic1|basic2)(advanced1|advanced2)$/);
+      expect(result.outputs).toHaveLength(1);
+      expect(result.outputs[0]).toMatch(/^(basic1|basic2)(advanced1|advanced2)$/);
     });
 
     test('should handle complex graph with variables and advanced nodes', async () => {
@@ -282,10 +274,10 @@ describe('Engine Advanced Node Integration', () => {
         seed: 3333
       };
 
-      const results = await executeGraph(graph);
+      const result = await executeGraph(graph);
       
-      expect(results).toHaveLength(1);
-      expect(results[0]).toMatch(/^happy(smile|laugh|grin)$/);
+      expect(result.outputs).toHaveLength(1);
+      expect(result.outputs[0]).toMatch(/^happy(smile|laugh|grin)$/);
     });
   });
 
@@ -310,10 +302,10 @@ describe('Engine Advanced Node Integration', () => {
       };
 
       // Should not throw, but handle gracefully
-      const results = await executeGraph(graph);
-      expect(results).toHaveLength(1);
+      const result = await executeGraph(graph);
+      expect(result.outputs).toHaveLength(1);
       // Should still return a result (the node handles negative weights)
-      expect(results[0]).toBe('test');
+      expect(result.outputs[0]).toBe('test');
     });
   });
 
@@ -352,12 +344,12 @@ describe('Engine Advanced Node Integration', () => {
       };
 
       const startTime = performance.now();
-      const results = await executeGraph(graph);
+      const result = await executeGraph(graph);
       const endTime = performance.now();
       const executionTime = endTime - startTime;
 
-      expect(results).toHaveLength(1);
-      expect(results[0]).toMatch(/^option-0-[abc]$/);
+      expect(result.outputs).toHaveLength(1);
+      expect(result.outputs[0]).toMatch(/^option-0-[abc]$/);
       expect(executionTime).toBeLessThan(100); // Should complete in <100ms
     });
   });
@@ -380,8 +372,8 @@ describe('Engine Advanced Node Integration', () => {
         seed: 5555
       };
 
-      const results = await executeGraph(graph);
-      expect(results).toEqual(['basic']);
+      const result = await executeGraph(graph);
+      expect(result.outputs).toEqual(['basic']);
     });
 
     test('should use advanced context for graphs with advanced nodes', async () => {
@@ -401,8 +393,8 @@ describe('Engine Advanced Node Integration', () => {
         seed: 6666
       };
 
-      const results = await executeGraph(graph);
-      expect(results).toEqual(['advanced']);
+      const result = await executeGraph(graph);
+      expect(result.outputs).toEqual(['advanced']);
     });
   });
 });

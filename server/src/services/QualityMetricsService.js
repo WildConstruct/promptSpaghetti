@@ -730,9 +730,9 @@ export class QualityMetricsService extends EventEmitter {
         acknowledged_at TIMESTAMP,
         resolved_at TIMESTAMP
       )`,
-            `CREATE INDEX IF NOT EXISTS idx_quality_metrics_timestamp ON quality_metrics(timestamp)`,
-            `CREATE INDEX IF NOT EXISTS idx_quality_recommendations_category ON quality_recommendations(category)`,
-            `CREATE INDEX IF NOT EXISTS idx_quality_alerts_status ON quality_alerts(status)`
+            'CREATE INDEX IF NOT EXISTS idx_quality_metrics_timestamp ON quality_metrics(timestamp)',
+            'CREATE INDEX IF NOT EXISTS idx_quality_recommendations_category ON quality_recommendations(category)',
+            'CREATE INDEX IF NOT EXISTS idx_quality_alerts_status ON quality_alerts(status)'
         ];
         for (const query of queries) {
             await this.databaseService.query(query);

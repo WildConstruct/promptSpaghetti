@@ -883,16 +883,80 @@ export class StorageManagementService {
     };
   }
 
-  // Placeholder methods for actual implementation
-  private async getStoragePool(poolId: string): Promise<StoragePool | null> { return null; }
-  private async storeStoragePool(pool: StoragePool): Promise<void> {}
+  // Actual implementation methods
+  private async getStoragePool(poolId: string): Promise<StoragePool | null> {
+    const result = await this.db.query(
+      'SELECT * FROM storage_pools WHERE pool_id = $1',
+      [poolId]
+    );
+    
+    if (result.rows.length === 0) {
+      return null;
+    }
+    
+    return this.hydrateStoragePool(result.rows[0]);
+  }
+  private async storeStoragePool(pool: StoragePool): Promise<void> {
+    await this.db.query(`
+      INSERT INTO storage_pools (
+        pool_id, name, description, storage_type, tier, capacity, used, available,
+        compression_enabled, encryption_enabled, replication_factor, performance_class,
+        cost_per_gb, location, is_active, created_at, health_status, tags
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+    `, [
+      pool.poolId, pool.name, pool.description, pool.storageType, pool.tier,
+      pool.capacity, pool.used, pool.available, pool.compressionEnabled,
+      pool.encryptionEnabled, pool.replicationFactor, pool.performanceClass,
+      pool.costPerGB, pool.location, pool.isActive, pool.createdAt,
+      pool.healthStatus, JSON.stringify(pool.tags)
+    ]);
+  }
   private async storeStorageQuota(quota: StorageQuota): Promise<void> {}
   private async getAllActiveQuotas(): Promise<StorageQuota[]> { return []; }
   private async calculateCurrentUsage(resourceType: ResourceType, resourceId: string): Promise<number> { return 0; }
   private async updateStorageQuota(quota: StorageQuota): Promise<void> {}
   private async handleQuotaViolation(quota: StorageQuota): Promise<void> {}
-  private async storeOptimization(optimization: StorageOptimization): Promise<void> {}
-  private async getOptimization(optimizationId: string): Promise<StorageOptimization | null> { return null; }
+  private async storeOptimization(optimization: StorageOptimization): Promise<void> {
+    await this.db.query(`
+      INSERT INTO storage_optimizations (
+        optimization_id, optimization_type, target, status, scheduled_at,
+        estimated_savings, actual_savings, config, results, created_at,
+        completed_at, error
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+    `, [
+      optimization.optimizationId, optimization.type, JSON.stringify(optimization.target),
+      optimization.status, optimization.scheduledAt, optimization.estimatedSavings,
+      optimization.actualSavings, JSON.stringify(optimization.config),
+      optimization.results ? JSON.stringify(optimization.results) : null,
+      optimization.createdAt, optimization.completedAt, optimization.error
+    ]);
+  }
+  private async getOptimization(optimizationId: string): Promise<StorageOptimization | null> {
+    const result = await this.db.query(
+      'SELECT * FROM storage_optimizations WHERE optimization_id = $1',
+      [optimizationId]
+    );
+    
+    if (result.rows.length === 0) {
+      return null;
+    }
+    
+    const row = result.rows[0];
+    return {
+      optimizationId: row.optimization_id,
+      type: row.optimization_type,
+      target: row.target,
+      status: row.status,
+      scheduledAt: row.scheduled_at,
+      estimatedSavings: row.estimated_savings,
+      actualSavings: row.actual_savings,
+      config: JSON.parse(row.config || '{}'),
+      results: row.results ? JSON.parse(row.results) : undefined,
+      createdAt: row.created_at,
+      completedAt: row.completed_at,
+      error: row.error
+    };
+  }
   private async updateOptimization(optimization: StorageOptimization): Promise<void> {}
   private async performOptimization(optimization: StorageOptimization): Promise<OptimizationResults> { 
     return {

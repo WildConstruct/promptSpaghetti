@@ -1,5 +1,6 @@
 // Epic 11 Audit Service
 // Security audit logging and compliance tracking
+import { retryableDatabase } from '../../utils/RetryUtils';
 export class AuditService {
     db;
     config;
@@ -7,6 +8,7 @@ export class AuditService {
         this.config = config;
         this.db = db;
     }
+    @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
     async logEvent(event) {
         try {
             await this.db.query(`

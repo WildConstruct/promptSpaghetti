@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "name": "promptscape-api-minimal",
+  "functions": {
+    "api/health.js": {
+      "maxDuration": 10
+    },
+    "api/preview-minimal.js": {
+      "maxDuration": 30
+    },
+    "api/export-minimal.js": {
+      "maxDuration": 30
+    },
+    "api/deployment-gate.js": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/preview",
+      "dest": "/api/preview-minimal.js"
+    },
+    {
+      "src": "/api/export", 
+      "dest": "/api/export-minimal.js"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/api/health.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

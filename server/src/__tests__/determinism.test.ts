@@ -79,13 +79,13 @@ describe('Determinism Test Matrix', () => {
     };
     
     // Execute the graph
-    const outputs = await executeGraph(graphWithSeed);
+    const result = await executeGraph(graphWithSeed);
     
     // Expect exactly one output
-    expect(outputs).toHaveLength(1);
+    expect(result.outputs).toHaveLength(1);
     
     // Compare against snapshot
-    expect(outputs[0]).toMatchSnapshot(`seed-${seed}`);
+    expect(result.outputs[0]).toMatchSnapshot(`seed-${seed}`);
   });
   
   // Test that different seeds produce different outputs
@@ -100,8 +100,8 @@ describe('Determinism Test Matrix', () => {
         seed
       };
       
-      const outputs = await executeGraph(graphWithSeed);
-      results.add(outputs[0]);
+      const result = await executeGraph(graphWithSeed);
+      results.add(result.outputs[0]);
     }
     
     // Expect at least 3 different outputs from 5 seeds
@@ -119,10 +119,10 @@ describe('Determinism Test Matrix', () => {
     };
     
     // Run twice
-    const outputs1 = await executeGraph(graphWithSeed);
-    const outputs2 = await executeGraph(graphWithSeed);
+    const result1 = await executeGraph(graphWithSeed);
+    const result2 = await executeGraph(graphWithSeed);
     
     // Should be identical
-    expect(outputs1[0]).toBe(outputs2[0]);
+    expect(result1.outputs[0]).toBe(result2.outputs[0]);
   });
 });

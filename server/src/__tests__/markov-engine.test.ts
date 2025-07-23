@@ -29,7 +29,7 @@ describe('Markov Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['on']); // First execution returns initial state
+    expect(results.outputs).toEqual(['on']); // First execution returns initial state
   });
 
   test('should execute Markov node with probabilistic transitions', async () => {
@@ -61,8 +61,8 @@ describe('Markov Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toHaveLength(1);
-    expect(['A', 'B', 'C']).toContain(results[0]);
+    expect(results.outputs).toHaveLength(1);
+    expect(['A', 'B', 'C']).toContain(results.outputs[0]);
   });
 
   test('should handle Markov node with termination conditions', async () => {
@@ -93,7 +93,7 @@ describe('Markov Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['running']);
+    expect(results.outputs).toEqual(['running']);
   });
 
   test('should handle Markov node with default configuration', async () => {
@@ -114,7 +114,7 @@ describe('Markov Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['default']); // Empty states get default configuration
+    expect(results.outputs).toEqual(['default']); // Empty states get default configuration
   });
 
   test('should execute multiple Markov nodes independently', async () => {
@@ -157,7 +157,7 @@ describe('Markov Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['first1', 'second1']);
+    expect(results.outputs).toEqual(['first1', 'second1']);
   });
 
   test('should handle complex Markov chain with absorbing states', async () => {
@@ -190,7 +190,7 @@ describe('Markov Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['start']);
+    expect(results.outputs).toEqual(['start']);
   });
 
   test('should produce deterministic results with same seed', async () => {
@@ -220,7 +220,7 @@ describe('Markov Node Engine Integration', () => {
     const results1 = await executeGraph(createGraph());
     const results2 = await executeGraph(createGraph());
     
-    expect(results1).toEqual(results2);
+    expect(results1.outputs).toEqual(results2.outputs);
   });
 
   test('should handle Markov node in complex graph', async () => {
@@ -262,7 +262,7 @@ describe('Markov Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toHaveLength(1);
-    expect(results[0]).toMatch(/^(path1|path2)step1$/);
+    expect(results.outputs).toHaveLength(1);
+    expect(results.outputs[0]).toMatch(/^(path1|path2)step1$/);
   });
 });

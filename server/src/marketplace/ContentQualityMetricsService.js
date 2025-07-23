@@ -117,7 +117,7 @@ export class ContentQualityMetricsService {
      * Generate marketplace-wide quality insights
      */
     async getMarketplaceQualityInsights(timeRange = TimeRange.LAST_30D) {
-        console.log(`🌐 Generating marketplace quality insights`);
+        console.log('🌐 Generating marketplace quality insights');
         const [overallMetrics, categoryBreakdown, qualityDistribution, trends, topPerformers, qualityFactors] = await Promise.all([
             this.calculateMarketplaceOverallMetrics(timeRange),
             this.calculateCategoryQualityBreakdown(timeRange),
@@ -295,7 +295,7 @@ export class ContentQualityMetricsService {
         const evolution = {
             adaptability: await this.assessAdaptability(templateId),
             extensibility: await this.assessExtensibility(templateId),
-            "backwards compatibility": await this.assessBackwardsCompatibility(templateId),
+            'backwards compatibility': await this.assessBackwardsCompatibility(templateId),
             migrationSupport: await this.assessMigrationSupport(templateId)
         };
         const support = {

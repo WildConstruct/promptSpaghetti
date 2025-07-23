@@ -87,7 +87,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
         bottom: 0,
         background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 50%, rgba(0, 0, 0, 0.05) 100%)',
         borderRadius: 'inherit',
-        pointerEvents: 'none',
+        pointerEvents: 'none'
       }
     };
 
@@ -105,14 +105,14 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
       // Subtle text shadow for better readability
       textShadow: '0 1px 2px rgba(0,0,0,0.3)',
       // Inner highlight for professional appearance
-      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)',
+      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)'
     };
 
     const contentStyle: React.CSSProperties = {
       padding: `${professionalSpacing[3]} ${professionalSpacing[3]}`,
       color: professionalColors.text.primary,
       minHeight: '50px',
-      background: 'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)',
+      background: 'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)'
     };
 
     const titleStyle: React.CSSProperties = {
@@ -123,15 +123,15 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
       lineHeight: 1.3,
       // Subtle glow for selected state
       ...(selected && {
-        textShadow: `0 0 8px ${professionalColors.accent.orange}40`,
-      }),
+        textShadow: `0 0 8px ${professionalColors.accent.orange}40`
+      })
     };
 
     const propertiesStyle: React.CSSProperties = {
       fontSize: 'var(--font-size-xs)',
       color: professionalColors.text.secondary,
       lineHeight: 1.4,
-      fontFamily: 'var(--font-mono)', // Use monospace for technical properties
+      fontFamily: 'var(--font-mono)' // Use monospace for technical properties
     };
 
     const handleBaseStyle: React.CSSProperties = {
@@ -142,7 +142,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
       cursor: 'crosshair',
       zIndex: 10,
       transition: 'all 0.2s ease',
-      boxShadow: professionalShadows.elevation.sm,
+      boxShadow: professionalShadows.elevation.sm
     };
 
     const inputHandleStyle: React.CSSProperties = {
@@ -151,7 +151,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
       '&:hover': {
         background: professionalColors.ui.borderHover,
         transform: 'scale(1.1)',
-        boxShadow: professionalShadows.elevation.md,
+        boxShadow: professionalShadows.elevation.md
       }
     };
 
@@ -161,7 +161,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
       '&:hover': {
         background: categoryColor,
         transform: 'scale(1.1)',
-        boxShadow: `${professionalShadows.elevation.md}, 0 0 12px ${categoryColor}40`,
+        boxShadow: `${professionalShadows.elevation.md}, 0 0 12px ${categoryColor}40`
       }
     };
 
@@ -178,7 +178,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
       fontSize: 10,
       fontWeight: 'bold',
       boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
-      transition: 'all 0.2s ease',
+      transition: 'all 0.2s ease'
     };
 
     return (
@@ -307,7 +307,7 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
           justifyContent: 'center',
           fontFamily: 'var(--font-primary)',
           boxShadow: professionalShadows.elevation.md,
-          textAlign: 'center',
+          textAlign: 'center'
         }}
       >
         <div>

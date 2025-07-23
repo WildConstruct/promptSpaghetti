@@ -66,7 +66,7 @@ export class ParameterManager {
    * Load default presets
    */
   private loadDefaultPresets(): void {
-    for (const [key, preset] of Object.entries(defaultPresets)) {
+    for (const preset of defaultPresets) {
       this.presets.set(preset.id, preset);
     }
   }
@@ -257,7 +257,7 @@ export class ParameterManager {
    * Get parameter history
    */
   getHistory(): ParameterHistory[] {
-    return [...this.history].reverse(); // Most recent first
+    return [...this.history]; // Already in most recent first order (unshift puts new items at start)
   }
 
   /**

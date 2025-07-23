@@ -22,7 +22,22 @@ import {
   RiskLevel,
   UpdatePriority,
   VersionStatus
-} from '../../server/src/services/PolicyUpdateWorkflowService';
+} from '../../../server/src/services/PolicyUpdateWorkflowService.ts';
+
+// Re-export for tests
+export {
+  PolicyType,
+  PolicyUpdateRequest,
+  PolicyVersion,
+  PolicyDeployment,
+  DeploymentType,
+  DeploymentStatus,
+  ValidationType,
+  ValidationStatus,
+  RiskLevel,
+  UpdatePriority,
+  VersionStatus
+};
 
 export interface PolicyPreviewConfig {
   enableStagingEnvironments: boolean;

@@ -802,6 +802,20 @@ export const createExampleHealthChecks = (): HealthCheckDefinition[] => {
         custom: {}
       }
     })
+    .validation({
+      output: {
+        expectedFormat: 'json',
+        successConditions: [
+          { field: 'health_check', operator: ComparisonOperator.EQUALS, value: 1, description: 'Database returns health check result' }
+        ]
+      },
+      runtime: {
+        maxExecutionTime: 4000,
+        networkAccessRequired: false,
+        fileSystemAccessRequired: false,
+        privilegedAccessRequired: false
+      }
+    })
     .build();
 
   // API endpoint check
@@ -830,6 +844,12 @@ export const createExampleHealthChecks = (): HealthCheckDefinition[] => {
         successConditions: [
           { field: 'status', operator: ComparisonOperator.EQUALS, value: 'healthy', description: 'API reports healthy status' }
         ]
+      },
+      runtime: {
+        maxExecutionTime: 8000,
+        networkAccessRequired: true,
+        fileSystemAccessRequired: false,
+        privilegedAccessRequired: false
       }
     })
     .build();

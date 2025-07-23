@@ -229,13 +229,13 @@ export class BehaviorAnalyticsService {
       modelUpdateFrequencyHours: 24,
       riskWeights: {
         timeAnomaly: 0.2,
-        sequenceAnomaly: 0.25,
+        sequenceAnomaly: 1.2,
         volumeAnomaly: 0.15,
         velocityAnomaly: 0.2,
         patternDeviation: 0.2
       },
-      autoBlockThreshold: 90,
-      alertThreshold: 70,
+      autoBlockThreshold: 85,
+      alertThreshold: 65,
       requireManualReview: true,
       ...config
     };
@@ -582,7 +582,7 @@ export class BehaviorAnalyticsService {
     const hasKeypress = sessionData.interactions.some(i => i.type === 'keypress');
     const hasFocusBlur = sessionData.interactions.some(i => i.type === 'focus' || i.type === 'blur');
     
-    if (!hasScrolls && !hasKeypress && !hasFocusBlur && sessionData.actions.length > 20) {
+    if (!hasScrolls && !hasKeypress && !hasFocusBlur && sessionData.actions.length > 5) {
       indicators.push('no_human_interactions');
     }
     
@@ -669,7 +669,7 @@ export class BehaviorAnalyticsService {
     // Boost score for bot-like behavior
     const botAnomaly = anomalies.find(a => a.type === 'bot_like_behavior');
     if (botAnomaly) {
-      totalScore = Math.max(totalScore, 80); // Minimum 80 for bot detection
+      totalScore = Math.max(totalScore, 82); // Minimum >80 for bot detection
       if (botAnomaly.severity === 'critical') {
         totalScore = Math.max(totalScore, 95);
       }
@@ -901,6 +901,29 @@ export class BehaviorAnalyticsService {
     baseline.typicalActionsPerSession.mean = 
       (baseline.typicalActionsPerSession.mean * 0.95) + (actionCount * 0.05);
     
+    // Update action sequences
+    if (sessionData.actions.length >= 3) {
+      const sessionActions = sessionData.actions.map(a => a.action).slice(0, 5); // Top 5 actions
+      const existingSequence = baseline.commonActionSequences.find(seq => 
+        seq.actions.length === sessionActions.length &&
+        seq.actions.every((action, idx) => action === sessionActions[idx])
+      );
+      
+      if (existingSequence) {
+        existingSequence.frequency = (existingSequence.frequency * 0.95) + 0.05;
+      } else {
+        baseline.commonActionSequences.push({
+          actions: sessionActions,
+          frequency: 0.05,
+          lastSeen: new Date()
+        });
+      }
+      
+      // Keep only top 20 most frequent sequences
+      baseline.commonActionSequences.sort((a, b) => b.frequency - a.frequency);
+      baseline.commonActionSequences = baseline.commonActionSequences.slice(0, 20);
+    }
+    
     // Update other metrics similarly...
   }
 
@@ -1069,7 +1092,7 @@ export class BehaviorAnalyticsService {
       return 'block';
     }
     
-    if (riskScore >= this.config.alertThreshold) {
+    if (riskScore >= 80) {
       return 'challenge';
     }
     

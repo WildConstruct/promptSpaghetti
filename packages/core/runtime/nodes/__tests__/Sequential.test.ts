@@ -11,8 +11,8 @@ import {
   WeightedPattern,
   SequentialPresets,
   SequenceState
-} from '../Sequential.js';
-import { AdvancedExecutionUtils } from '../../advanced.js';
+} from '../Sequential';
+import { AdvancedExecutionUtils } from '../../advanced';
 import type { AdvancedExecutionContext } from '../../advanced';
 
 describe('Sequential Node', () => {

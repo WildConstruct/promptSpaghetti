@@ -20,7 +20,7 @@ import { Database } from '../../../database';
 import { AuditService } from '../../../auth/services/AuditService';
 
 // Mock dependencies
-jest.mock('../../../database');
+jest.mock('../../../database/connection');
 jest.mock('../../../auth/services/AuditService');
 
 describe('AppealProcessService', () => {

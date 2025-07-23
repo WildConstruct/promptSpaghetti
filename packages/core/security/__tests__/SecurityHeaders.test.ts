@@ -310,7 +310,7 @@ describe('Security Headers Test Suite', () => {
           'violated-directive': 'script-src',
           'effective-directive': 'script-src',
           'original-policy': 'default-src \'self\'; script-src \'self\'',
-          'blocked-uri': 'https://evil.com/script.js',
+          'blocked-uri': 'https://evil.com/script',
           'status-code': 200
         }
       };

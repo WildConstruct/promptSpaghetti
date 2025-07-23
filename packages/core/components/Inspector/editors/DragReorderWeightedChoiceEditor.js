@@ -1,0 +1,334 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/**
+ * Drag-to-Reorder Weighted Choice Editor
+ * Epic 8.3 Task 3 - Integration with Weighted Choice Nodes (E8.3-3-drag-reorder)
+ * Epic 8.4 - Three-Tier Progressive Disclosure System
+ *
+ * Professional weighted choice editor with drag-and-drop weight management
+ * and three-tier progressive disclosure for filmmaker-friendly UI
+ */
+import { useState, useCallback, useMemo } from 'react';
+import { DragReorderWeightManager } from '../WeightManagement/DragReorderWeightManager';
+import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+/**
+ * Enhanced WeightedChoice editor with professional drag-to-reorder interface
+ */
+export const DragReorderWeightedChoiceEditor = ({ data, onChange, nodeId = 'drag-reorder-weighted-choice', disabled = false, theme = 'cinema', showPreview = true, showAnalytics = true }) => {
+    const [isAddingChoice, setIsAddingChoice] = useState(false);
+    const [newChoiceText, setNewChoiceText] = useState('');
+    const [previewCount, setPreviewCount] = useState(10);
+    const [previewResults, setPreviewResults] = useState([]);
+    // Convert data to WeightedOption format
+    const options = useMemo(() => {
+        if (!data.choices || !Array.isArray(data.choices)) {
+            return [];
+        }
+        return data.choices.map((choice, index) => ({
+            id: `choice-${index}`,
+            text: choice.text || `Choice ${index + 1}`,
+            weight: choice.weight || 1,
+            category: 'choice'
+        }));
+    }, [data.choices]);
+    // Handle options change from drag-reorder component
+    const handleOptionsChange = useCallback((newOptions) => {
+        const newChoices = newOptions.map(option => ({
+            text: option.text,
+            weight: option.weight
+        }));
+        onChange({ choices: newChoices });
+    }, [onChange]);
+    // Add new choice
+    const handleAddChoice = useCallback(() => {
+        if (!newChoiceText.trim())
+            return;
+        const currentChoices = data.choices || [];
+        const newChoices = [
+            ...currentChoices,
+            {
+                text: newChoiceText.trim(),
+                weight: 1
+            }
+        ];
+        onChange({ choices: newChoices });
+        setNewChoiceText('');
+        setIsAddingChoice(false);
+    }, [data.choices, newChoiceText, onChange]);
+    // Remove choice
+    const removeChoice = useCallback((index) => {
+        const currentChoices = data.choices || [];
+        const newChoices = currentChoices.filter((_, i) => i !== index);
+        onChange({ choices: newChoices });
+    }, [data.choices, onChange]);
+    // Generate preview
+    const generatePreview = useCallback(() => {
+        if (!data.choices || data.choices.length === 0) {
+            setPreviewResults([]);
+            return;
+        }
+        const totalWeight = data.choices.reduce((sum, choice) => sum + choice.weight, 0);
+        if (totalWeight <= 0) {
+            setPreviewResults([]);
+            return;
+        }
+        const results = [];
+        for (let i = 0; i < previewCount; i++) {
+            let random = Math.random() * totalWeight;
+            for (const choice of data.choices) {
+                random -= choice.weight;
+                if (random <= 0) {
+                    results.push(choice.text);
+                    break;
+                }
+            }
+        }
+        setPreviewResults(results);
+    }, [data.choices, previewCount]);
+    // Calculate choice statistics
+    const choiceStats = useMemo(() => {
+        if (!data.choices || data.choices.length === 0) {
+            return { totalWeight: 0, mostLikely: null, leastLikely: null };
+        }
+        const totalWeight = data.choices.reduce((sum, choice) => sum + choice.weight, 0);
+        const sortedChoices = [...data.choices].sort((a, b) => b.weight - a.weight);
+        return {
+            totalWeight,
+            mostLikely: sortedChoices[0],
+            leastLikely: sortedChoices[sortedChoices.length - 1]
+        };
+    }, [data.choices]);
+    // Theme styles
+    const getThemeStyles = () => {
+        const themes = {
+            light: {
+                background: '#ffffff',
+                secondary: '#f8fafc',
+                border: '#e5e7eb',
+                text: '#374151',
+                accent: '#3b82f6',
+                success: '#10b981',
+                warning: '#f59e0b',
+                error: '#ef4444'
+            },
+            dark: {
+                background: '#1f2937',
+                secondary: '#111827',
+                border: '#4b5563',
+                text: '#f9fafb',
+                accent: '#60a5fa',
+                success: '#34d399',
+                warning: '#fbbf24',
+                error: '#f87171'
+            },
+            cinema: {
+                background: '#1a1a1a',
+                secondary: '#0d1117',
+                border: '#ff7c00',
+                text: '#ffffff',
+                accent: '#ff7c00',
+                success: '#00d084',
+                warning: '#ffb700',
+                error: '#ff6b6b'
+            }
+        };
+        return themes[theme];
+    };
+    const styles = getThemeStyles();
+    return (_jsxs("div", { className: "drag-reorder-weighted-choice-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Choice Management", level: "basic", description: "Drag and drop to reorder weighted story choices", defaultExpanded: true, priority: "critical", fieldName: "choices", children: [_jsxs("div", { style: {
+                            background: styles.background,
+                            color: styles.text,
+                            fontFamily: 'Inter, system-ui, sans-serif',
+                            padding: '16px',
+                            borderRadius: '8px'
+                        }, children: [_jsxs("div", { style: {
+                                    marginBottom: '16px',
+                                    paddingBottom: '12px',
+                                    borderBottom: `1px solid ${styles.border}`
+                                }, children: [_jsx("h4", { style: {
+                                            margin: 0,
+                                            fontSize: '16px',
+                                            fontWeight: 600,
+                                            color: styles.text
+                                        }, children: "\uD83C\uDFB2 Weighted Story Choices" }), _jsx("p", { style: {
+                                            margin: '4px 0 0 0',
+                                            fontSize: '12px',
+                                            opacity: 0.7
+                                        }, children: "Drag to reorder by importance, adjust weights for probability control" })] }), _jsxs("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: [_jsxs("span", { style: {
+                                            fontSize: '12px',
+                                            padding: '4px 8px',
+                                            background: styles.secondary,
+                                            border: `1px solid ${styles.border}`,
+                                            borderRadius: '6px',
+                                            opacity: 0.8
+                                        }, children: [options.length, " ", options.length === 1 ? 'choice' : 'choices'] }), !disabled && (_jsx("button", { onClick: () => setIsAddingChoice(true), style: {
+                                            background: styles.accent,
+                                            color: styles.background,
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            padding: '6px 12px',
+                                            fontSize: '12px',
+                                            fontWeight: 600,
+                                            cursor: 'pointer',
+                                            transition: 'transform 0.2s ease',
+                                            boxShadow: `0 2px 8px ${styles.accent}40`
+                                        }, onMouseOver: (e) => e.currentTarget.style.transform = 'translateY(-1px)', onMouseOut: (e) => e.currentTarget.style.transform = 'translateY(0)', children: "\uFF0B Add Choice" }))] })] }), showAnalytics && options.length > 0 && (_jsxs("div", { style: {
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                            gap: '16px',
+                            marginBottom: '24px',
+                            padding: '16px',
+                            background: styles.secondary,
+                            border: `1px solid ${styles.border}`,
+                            borderRadius: '8px'
+                        }, children: [_jsxs("div", { style: { textAlign: 'center' }, children: [_jsx("div", { style: {
+                                            fontSize: '24px',
+                                            fontWeight: 700,
+                                            color: styles.accent,
+                                            marginBottom: '4px'
+                                        }, children: choiceStats.totalWeight.toFixed(1) }), _jsx("div", { style: { fontSize: '12px', opacity: 0.7 }, children: "Total Weight" })] }), choiceStats.mostLikely && (_jsxs("div", { style: { textAlign: 'center' }, children: [_jsx("div", { style: {
+                                            fontSize: '16px',
+                                            fontWeight: 600,
+                                            color: styles.success,
+                                            marginBottom: '4px',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis'
+                                        }, children: choiceStats.mostLikely.text }), _jsxs("div", { style: { fontSize: '12px', opacity: 0.7 }, children: ["Most Likely (", ((choiceStats.mostLikely.weight / choiceStats.totalWeight) * 100).toFixed(1), "%)"] })] })), choiceStats.leastLikely && choiceStats.leastLikely !== choiceStats.mostLikely && (_jsxs("div", { style: { textAlign: 'center' }, children: [_jsx("div", { style: {
+                                            fontSize: '16px',
+                                            fontWeight: 600,
+                                            color: styles.warning,
+                                            marginBottom: '4px',
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis'
+                                        }, children: choiceStats.leastLikely.text }), _jsxs("div", { style: { fontSize: '12px', opacity: 0.7 }, children: ["Least Likely (", ((choiceStats.leastLikely.weight / choiceStats.totalWeight) * 100).toFixed(1), "%)"] })] }))] })), isAddingChoice && (_jsx("div", { style: {
+                            background: styles.secondary,
+                            border: `1px solid ${styles.border}`,
+                            borderRadius: '8px',
+                            padding: '16px',
+                            marginBottom: '20px'
+                        }, children: _jsxs("div", { style: { display: 'flex', gap: '12px', alignItems: 'center' }, children: [_jsx("input", { type: "text", value: newChoiceText, onChange: (e) => setNewChoiceText(e.target.value), placeholder: "Enter choice text...", autoFocus: true, style: {
+                                        flex: 1,
+                                        padding: '8px 12px',
+                                        border: `1px solid ${styles.border}`,
+                                        borderRadius: '6px',
+                                        background: styles.background,
+                                        color: styles.text,
+                                        fontSize: '14px'
+                                    }, onKeyPress: (e) => {
+                                        if (e.key === 'Enter')
+                                            handleAddChoice();
+                                        if (e.key === 'Escape')
+                                            setIsAddingChoice(false);
+                                    } }), _jsx("button", { onClick: handleAddChoice, disabled: !newChoiceText.trim(), style: {
+                                        background: styles.success,
+                                        color: styles.background,
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        padding: '8px 16px',
+                                        fontSize: '14px',
+                                        fontWeight: 600,
+                                        cursor: newChoiceText.trim() ? 'pointer' : 'not-allowed',
+                                        opacity: newChoiceText.trim() ? 1 : 0.5
+                                    }, children: "Add" }), _jsx("button", { onClick: () => {
+                                        setIsAddingChoice(false);
+                                        setNewChoiceText('');
+                                    }, style: {
+                                        background: 'transparent',
+                                        color: styles.text,
+                                        border: `1px solid ${styles.border}`,
+                                        borderRadius: '6px',
+                                        padding: '8px 16px',
+                                        fontSize: '14px',
+                                        cursor: 'pointer'
+                                    }, children: "Cancel" })] }) })), _jsx(DragReorderWeightManager, { options: options, onChange: handleOptionsChange, disabled: disabled, theme: theme, showWeights: true, showPercentages: true, allowWeightEditing: !disabled, allowLocking: false, enableBulkOperations: !disabled, showStatistics: true, showVisualWeights: true, style: {
+                            background: 'transparent',
+                            border: 'none',
+                            padding: 0
+                        } }), options.length === 0 && (_jsxs("div", { style: {
+                            textAlign: 'center',
+                            padding: '60px 20px',
+                            background: styles.secondary,
+                            border: `2px dashed ${styles.border}`,
+                            borderRadius: '12px',
+                            color: styles.text,
+                            opacity: 0.7
+                        }, children: [_jsx("div", { style: { fontSize: '48px', marginBottom: '16px' }, children: "\uD83C\uDFB2" }), _jsx("h4", { style: { margin: '0 0 8px 0', fontSize: '18px', fontWeight: 600 }, children: "No Choices Yet" }), _jsx("p", { style: { margin: '0 0 20px 0', fontSize: '14px' }, children: "Add some choices to get started with weighted random selection" }), !disabled && (_jsx("button", { onClick: () => setIsAddingChoice(true), style: {
+                                    background: styles.accent,
+                                    color: styles.background,
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    padding: '12px 24px',
+                                    fontSize: '14px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    boxShadow: `0 4px 12px ${styles.accent}30`
+                                }, children: "\uFF0B Add Your First Choice" }))] })), showPreview && options.length > 0 && (_jsxs("div", { style: {
+                            marginTop: '32px',
+                            padding: '20px',
+                            background: styles.secondary,
+                            border: `1px solid ${styles.border}`,
+                            borderRadius: '12px'
+                        }, children: [_jsxs("div", { style: {
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginBottom: '16px'
+                                }, children: [_jsx("h4", { style: {
+                                            margin: 0,
+                                            fontSize: '16px',
+                                            fontWeight: 600,
+                                            color: styles.accent
+                                        }, children: "\uD83C\uDFAF Preview Results" }), _jsxs("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: [_jsx("label", { style: { fontSize: '12px', opacity: 0.7 }, children: "Sample size:" }), _jsx("input", { type: "number", value: previewCount, onChange: (e) => setPreviewCount(Math.max(1, Math.min(100, parseInt(e.target.value) || 10))), min: 1, max: 100, style: {
+                                                    width: '60px',
+                                                    padding: '4px 6px',
+                                                    border: `1px solid ${styles.border}`,
+                                                    borderRadius: '4px',
+                                                    background: styles.background,
+                                                    color: styles.text,
+                                                    fontSize: '12px'
+                                                } }), _jsx("button", { onClick: generatePreview, style: {
+                                                    background: styles.accent,
+                                                    color: styles.background,
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    padding: '6px 12px',
+                                                    fontSize: '12px',
+                                                    fontWeight: 600,
+                                                    cursor: 'pointer'
+                                                }, children: "Generate" })] })] }), previewResults.length > 0 && (_jsxs("div", { children: [_jsx("div", { style: {
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            gap: '6px',
+                                            marginBottom: '12px'
+                                        }, children: previewResults.map((result, index) => (_jsx("span", { style: {
+                                                padding: '4px 8px',
+                                                background: styles.accent + '20',
+                                                border: `1px solid ${styles.accent}40`,
+                                                borderRadius: '4px',
+                                                fontSize: '12px',
+                                                color: styles.accent,
+                                                fontWeight: 500
+                                            }, children: result }, index))) }), _jsxs("div", { style: {
+                                            padding: '12px',
+                                            background: styles.background,
+                                            border: `1px solid ${styles.border}`,
+                                            borderRadius: '6px',
+                                            fontSize: '12px',
+                                            opacity: 0.8
+                                        }, children: [_jsx("strong", { children: "Distribution:" }), ' ', Array.from(new Set(previewResults)).map(unique => {
+                                                const count = previewResults.filter(r => r === unique).length;
+                                                const percentage = (count / previewResults.length) * 100;
+                                                return `${unique} (${count}×, ${percentage.toFixed(1)}%)`;
+                                            }).join(' • ')] })] }))] }))] }), _jsxs("div", { style: {
+                    marginTop: '24px',
+                    paddingTop: '16px',
+                    borderTop: `1px solid ${styles.border}`,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    fontSize: '12px',
+                    opacity: 0.6
+                }, children: [_jsx("div", { children: "Wild Construct \u2022 Weighted Choice Editor" }), _jsx("div", { children: theme === 'cinema' && '🎬 Cinema Mode Enabled' })] })] }));
+};
+export default DragReorderWeightedChoiceEditor;

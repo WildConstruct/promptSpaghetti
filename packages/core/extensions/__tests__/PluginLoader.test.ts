@@ -41,7 +41,7 @@ const mockPluginManifest = {
   name: 'Test Plugin',
   version: '1.0.0',
   description: 'Test plugin for unit testing',
-  main: 'index.js',
+  main: 'index',
   dependencies: {},
   engines: {
     node: '>=14.0.0'
@@ -77,7 +77,7 @@ describe('Epic 24.2 - PluginLoader Unit Tests', () => {
     mockFs.readFile.mockResolvedValue(Buffer.from(mockPluginCode as unknown as unknown));
     mockFs.readdir.mockResolvedValue(['plugin1', 'plugin2'] as any as unknown as unknown);
     mockFs.stat.mockResolvedValue({ 
-      isDirectory: ( as unknown as unknown) => true, 
+      isDirectory: () => true, 
       isFile: () => false 
     } as any);
     mockFs.mkdir.mockResolvedValue(undefined as unknown as unknown);

@@ -21,7 +21,7 @@ import {
 } from '../../../../packages/core/types/TrustTypes';
 
 // Mock dependencies
-jest.mock('../../../database');
+jest.mock('../../../database/connection');
 jest.mock('../TrustScoreService');
 jest.mock('../../auth/services/AuditService');
 

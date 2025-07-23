@@ -375,12 +375,7 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
             }
           }
         );
-        throw ErrorFactory.createValidationError(
-          'expression',
-          expression,
-          'safe expression without dangerous patterns',
-          { operation: 'security_validation' }
-        );
+        throw new Error(`Dangerous pattern detected: ${pattern.source}`);
       }
     }
     return sanitized;

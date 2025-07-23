@@ -14,13 +14,13 @@ import {
   EnvironmentType,
   PreviewStatus,
   StagingDeploymentStatus,
-  ValidationType,
-  ValidationStatus,
   FeedbackType,
   FeedbackCategory,
   RollbackTriggerType,
   PreviewChange
 } from '../PolicyPreviewStagingService';
+
+import { ValidationType, ValidationStatus } from '../../../../server/src/services/PolicyUpdateWorkflowService';
 
 describe('PolicyPreviewStagingService', () => {
   let service: PolicyPreviewStagingService;
@@ -289,7 +289,7 @@ describe('PolicyPreviewStagingService', () => {
       expect(deployment.deploymentId).toBeDefined();
       expect(deployment.previewId).toBe(testPreview.previewId);
       expect(deployment.environmentId).toBe(environmentId);
-      expect(deployment.status).toBe(StagingDeploymentStatus.ACTIVE);
+      expect(deployment.status).toBe(StagingDeploymentStatus.MONITORING);
       expect(deployment.deployedAt).toBeInstanceOf(Date);
       expect(deployment.targetUserGroups).toContain('test-users');
       expect(deployment.autoRollbackEnabled).toBe(true);

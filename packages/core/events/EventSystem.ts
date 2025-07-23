@@ -402,18 +402,32 @@ export class EventBus extends EventEmitter {
 }
 
 // Global event bus instance
-export 
-// Event factory functions for common event types
-export 
-// Middleware functions
-export   next();
-};
+export const globalEventBus = new EventBus();
 
-export   }
+// Event factory functions for common event types
+export const createNodeEvent = (nodeId: string, eventType: string, data?: any) => ({
+  id: `${nodeId}-${Date.now()}`,
+  type: eventType,
+  nodeId,
+  data,
+  timestamp: Date.now()
+});
+
+// Middleware functions
+export const createLoggingMiddleware = () => (event: any, next: () => void) => {
+  console.log(`Event: ${event.type}`, event);
   next();
 };
 
-export   const eventCounts = new Map<string, { count: number; resetTime: number }>();
+export const createValidationMiddleware = () => (event: any, next: () => void) => {
+  if (!event.type || !event.id) {
+    throw new Error('Event must have type and id');
+  }
+  next();
+};
+
+export const createRateLimitMiddleware = (maxEvents: number = 100, timeWindow: number = 1000) => {
+  const eventCounts = new Map<string, { count: number; resetTime: number }>();
   
   return (event, next) => {
     const now = Date.now();

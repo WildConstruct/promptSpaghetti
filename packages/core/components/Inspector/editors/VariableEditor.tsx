@@ -57,18 +57,18 @@ export const VariableEditor: React.FC<VariableEditorProps> = ({ nodeId, nodeData
       <ProgressiveDisclosureSection
         title="Variable Settings"
         level="basic"
-        description={isSetVariable ? "Define what value to store" : "Retrieve stored values"}
+        description={isSetVariable ? 'Define what value to store' : 'Retrieve stored values'}
         defaultExpanded={true}
         priority="critical"
-        fieldName={isSetVariable ? "value" : "variableName"}
+        fieldName={isSetVariable ? 'value' : 'variableName'}
       >
         <TextFieldEditor
-          label={isSetVariable ? "Store As" : "Retrieve Variable"}
+          label={isSetVariable ? 'Store As' : 'Retrieve Variable'}
           value={variableName || label}
-          fieldKey={isSetVariable ? "label" : "variableName"}
+          fieldKey={isSetVariable ? 'label' : 'variableName'}
           zodType={null as any}
           onChange={(value) => handleFieldChange(isSetVariable ? 'label' : 'variableName', value)}
-          placeholder={isSetVariable ? "Name for this stored value..." : "Variable name to retrieve..."}
+          placeholder={isSetVariable ? 'Name for this stored value...' : 'Variable name to retrieve...'}
         />
 
         {isSetVariable && (

@@ -111,7 +111,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         id: pluginId,
         name: 'Sample Plugin',
         version: '1.0.0',
-        main: 'index.js'
+        main: 'index'
       }));
 
       // Mock integrated workflow
@@ -176,7 +176,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
         id: 'test-plugin',
         name: 'Test Plugin',
         version: '1.0.0',
-        main: 'index.js',
+        main: 'index',
         description: 'Test plugin for integration testing'
       };
       
@@ -186,7 +186,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
       );
       
       await fs.writeFile(
-        path.join(pluginDir, 'index.js'),
+        path.join(pluginDir, 'index'),
         `
         module.exports = {
           activate() {
@@ -203,7 +203,7 @@ describe('Epic 24.2 - Plugin Loader Integration Tests', () => {
       pluginSystem.loader.loadPlugin.mockImplementationOnce(async (source: string) => {
         // Verify files exist
         await fs.access(path.join(source, 'package.json'));
-        await fs.access(path.join(source, 'index.js'));
+        await fs.access(path.join(source, 'index'));
         
         const manifestContent = await fs.readFile(
           path.join(source, 'package.json'), 

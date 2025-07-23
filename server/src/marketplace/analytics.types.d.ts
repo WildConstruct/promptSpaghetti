@@ -315,15 +315,15 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
         min_value: z.ZodOptional<z.ZodNumber>;
         max_value: z.ZodOptional<z.ZodNumber>;
     }, "strip", z.ZodTypeAny, {
+        user_segments?: string[] | undefined;
         countries?: string[] | undefined;
         device_types?: string[] | undefined;
-        user_segments?: string[] | undefined;
         min_value?: number | undefined;
         max_value?: number | undefined;
     }, {
+        user_segments?: string[] | undefined;
         countries?: string[] | undefined;
         device_types?: string[] | undefined;
-        user_segments?: string[] | undefined;
         min_value?: number | undefined;
         max_value?: number | undefined;
     }>>;
@@ -342,17 +342,17 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     limit: number;
     offset: number;
-    metric_types: MetricType[];
     time_range: TimeRange;
+    metric_types: MetricType[];
     aggregation: AggregationType;
     sort?: {
         field: string;
         direction: "asc" | "desc";
     } | undefined;
     filters?: {
+        user_segments?: string[] | undefined;
         countries?: string[] | undefined;
         device_types?: string[] | undefined;
-        user_segments?: string[] | undefined;
         min_value?: number | undefined;
         max_value?: number | undefined;
     } | undefined;
@@ -362,8 +362,8 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
     template_ids?: string[] | undefined;
     creator_id?: string | undefined;
 }, {
-    metric_types: MetricType[];
     time_range: TimeRange;
+    metric_types: MetricType[];
     aggregation: AggregationType;
     sort?: {
         field: string;
@@ -372,9 +372,9 @@ export declare const AnalyticsQuerySchema: z.ZodObject<{
     limit?: number | undefined;
     offset?: number | undefined;
     filters?: {
+        user_segments?: string[] | undefined;
         countries?: string[] | undefined;
         device_types?: string[] | undefined;
-        user_segments?: string[] | undefined;
         min_value?: number | undefined;
         max_value?: number | undefined;
     } | undefined;
@@ -404,15 +404,15 @@ export declare const CustomReportSchema: z.ZodObject<{
                 min_value: z.ZodOptional<z.ZodNumber>;
                 max_value: z.ZodOptional<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
+                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
-                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             }, {
+                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
-                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             }>>;
@@ -431,17 +431,17 @@ export declare const CustomReportSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             limit: number;
             offset: number;
-            metric_types: MetricType[];
             time_range: TimeRange;
+            metric_types: MetricType[];
             aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
             } | undefined;
             filters?: {
+                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
-                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
@@ -451,8 +451,8 @@ export declare const CustomReportSchema: z.ZodObject<{
             template_ids?: string[] | undefined;
             creator_id?: string | undefined;
         }, {
-            metric_types: MetricType[];
             time_range: TimeRange;
+            metric_types: MetricType[];
             aggregation: AggregationType;
             sort?: {
                 field: string;
@@ -461,9 +461,9 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit?: number | undefined;
             offset?: number | undefined;
             filters?: {
+                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
-                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
@@ -504,17 +504,17 @@ export declare const CustomReportSchema: z.ZodObject<{
         query: {
             limit: number;
             offset: number;
-            metric_types: MetricType[];
             time_range: TimeRange;
+            metric_types: MetricType[];
             aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
             } | undefined;
             filters?: {
+                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
-                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
@@ -534,8 +534,8 @@ export declare const CustomReportSchema: z.ZodObject<{
             color_scheme?: string | undefined;
         };
         query: {
-            metric_types: MetricType[];
             time_range: TimeRange;
+            metric_types: MetricType[];
             aggregation: AggregationType;
             sort?: {
                 field: string;
@@ -544,9 +544,9 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit?: number | undefined;
             offset?: number | undefined;
             filters?: {
+                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
-                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
@@ -585,17 +585,17 @@ export declare const CustomReportSchema: z.ZodObject<{
         query: {
             limit: number;
             offset: number;
-            metric_types: MetricType[];
             time_range: TimeRange;
+            metric_types: MetricType[];
             aggregation: AggregationType;
             sort?: {
                 field: string;
                 direction: "asc" | "desc";
             } | undefined;
             filters?: {
+                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
-                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;
@@ -625,8 +625,8 @@ export declare const CustomReportSchema: z.ZodObject<{
             color_scheme?: string | undefined;
         };
         query: {
-            metric_types: MetricType[];
             time_range: TimeRange;
+            metric_types: MetricType[];
             aggregation: AggregationType;
             sort?: {
                 field: string;
@@ -635,9 +635,9 @@ export declare const CustomReportSchema: z.ZodObject<{
             limit?: number | undefined;
             offset?: number | undefined;
             filters?: {
+                user_segments?: string[] | undefined;
                 countries?: string[] | undefined;
                 device_types?: string[] | undefined;
-                user_segments?: string[] | undefined;
                 min_value?: number | undefined;
                 max_value?: number | undefined;
             } | undefined;

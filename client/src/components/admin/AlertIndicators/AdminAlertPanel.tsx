@@ -10,9 +10,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { 
-  ChevronDown, ChevronUp, AlertTriangle, Clock, User, 
-  ExternalLink, RefreshCw, Settings, Eye, Filter,
-  Zap, Shield, Info, CheckCircle, XCircle
+  ChevronDown, ChevronUp, AlertTriangle, User, 
+  ExternalLink, RefreshCw, Settings,
+  Zap, CheckCircle
 } from 'lucide-react';
 import AlertIndicatorBadge, { AlertCount, AlertSeverity } from './AlertIndicatorBadge';
 import AlertStatusIndicator from './AlertStatusIndicator';

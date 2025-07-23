@@ -76,12 +76,12 @@ export declare const PresenceUpdatePayloadSchema: z.ZodObject<{
         y: z.ZodNumber;
         nodeId: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        y: number;
         x: number;
+        y: number;
         nodeId?: string | undefined;
     }, {
-        y: number;
         x: number;
+        y: number;
         nodeId?: string | undefined;
     }>>;
     selection: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -92,8 +92,8 @@ export declare const PresenceUpdatePayloadSchema: z.ZodObject<{
     userId: string;
     lastSeen: number;
     cursor?: {
-        y: number;
         x: number;
+        y: number;
         nodeId?: string | undefined;
     } | undefined;
     userName?: string | undefined;
@@ -103,8 +103,8 @@ export declare const PresenceUpdatePayloadSchema: z.ZodObject<{
     userId: string;
     lastSeen: number;
     cursor?: {
-        y: number;
         x: number;
+        y: number;
         nodeId?: string | undefined;
     } | undefined;
     userName?: string | undefined;

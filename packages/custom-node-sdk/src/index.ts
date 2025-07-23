@@ -13,6 +13,7 @@ export * from './runtime';
 export * from './testing';
 
 // Version and metadata
-export export 
+export const SDK_VERSION = '0.1.0';
+
 // SDK information
 export } as const;

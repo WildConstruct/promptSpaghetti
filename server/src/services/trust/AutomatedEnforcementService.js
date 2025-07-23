@@ -246,7 +246,7 @@ export class AutomatedEnforcementService {
                 appliedActions.push(action);
             }
             catch (error) {
-                console.error(`❌ Failed to apply enforcement action:`, error);
+                console.error('❌ Failed to apply enforcement action:', error);
                 // Log the error but continue with other actions
                 await this.auditService.logEvent({
                     userId: 'system',
@@ -570,7 +570,7 @@ export class AutomatedEnforcementService {
     `;
         const params = [entityType, entityId];
         if (!includeExpired) {
-            query += ` AND (expires_at IS NULL OR expires_at > NOW())`;
+            query += ' AND (expires_at IS NULL OR expires_at > NOW())';
         }
         query += ` ORDER BY created_at DESC LIMIT $${params.length + 1}`;
         params.push(limit);

@@ -2,9 +2,9 @@
 // Story 12.1 - Serialization Format Design
 // Comprehensive test cases for format validation and serialization
 
-import { GraphSerializer, SerializationMetadata } from '../serialization/serializer.js';
-import { FormatValidator, validateFormat, isValidFormat } from '../serialization/validator.js';
-import { Graph, Node } from '../../graphSchema.js';
+import { GraphSerializer, SerializationMetadata } from '../serialization/serializer';
+import { FormatValidator, validateFormat, isValidFormat } from '../serialization/validator';
+import { Graph, Node } from '../../graphSchema';
 
 describe('Epic 12 - LLM Serialization Format', () => {
   describe('GraphSerializer', () => {

@@ -28,7 +28,7 @@ describe('Sequential Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['first']);
+    expect(results.outputs).toEqual(['first']);
   });
 
   test('should execute Sequential node with cyclical pattern', async () => {
@@ -54,7 +54,7 @@ describe('Sequential Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['A']);
+    expect(results.outputs).toEqual(['A']);
   });
 
   test('should execute Sequential node with weighted pattern', async () => {
@@ -82,8 +82,8 @@ describe('Sequential Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toHaveLength(1);
-    expect(['heavy', 'light']).toContain(results[0]);
+    expect(results.outputs).toHaveLength(1);
+    expect(['heavy', 'light']).toContain(results.outputs[0]);
   });
 
   test('should handle Sequential node with default configuration', async () => {
@@ -104,7 +104,7 @@ describe('Sequential Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['']); // Empty sequence returns empty string
+    expect(results.outputs).toEqual(['']); // Empty sequence returns empty string
   });
 
   test('should execute multiple Sequential nodes independently', async () => {
@@ -139,6 +139,6 @@ describe('Sequential Node Engine Integration', () => {
     };
 
     const results = await executeGraph(graph);
-    expect(results).toEqual(['first1', 'second1']);
+    expect(results.outputs).toEqual(['first1', 'second1']);
   });
 });

@@ -43,6 +43,12 @@ export type {
   OptimizationResult 
 } from './PerformanceOptimizer';
 
+// Internal imports for PerformanceSystem class
+import { MetricsCollector } from './MetricsCollector';
+import { PerformanceDashboard } from './PerformanceDashboard';
+import { LoadTestRunner } from './LoadTestRunner';
+import { PerformanceOptimizer } from './PerformanceOptimizer';
+
 /**
  * Complete performance testing and optimization system
  */

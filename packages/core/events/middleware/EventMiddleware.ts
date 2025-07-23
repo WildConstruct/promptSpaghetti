@@ -254,7 +254,10 @@ export const createRateLimitMiddleware = (options: {
 /**
  * Event transformation middleware
  */
-export     transform: (event: BaseEvent) => BaseEvent;
+export const createTransformMiddleware = (options: {
+  transforms: Array<{
+    condition: (event: BaseEvent) => boolean;
+    transform: (event: BaseEvent) => BaseEvent;
   }>;
 }): EventMiddleware => {
   return (event: BaseEvent, next: () => void) => {

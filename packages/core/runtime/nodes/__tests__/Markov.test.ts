@@ -1,8 +1,8 @@
 // packages/core/runtime/nodes/__tests__/Markov.test.ts
 // Comprehensive test suite for Markov node
 
-import { MarkovNode, StandardTransitionMatrix, MarkovPresets, createMarkovNode, createTransitionMatrix } from '../Markov.js';
-import { AdvancedExecutionContext, AdvancedExecutionUtils } from '../../advanced.js';
+import { MarkovNode, StandardTransitionMatrix, MarkovPresets, createMarkovNode, createTransitionMatrix } from '../Markov';
+import { AdvancedExecutionContext, AdvancedExecutionUtils } from '../../advanced';
 
 describe('MarkovNode', () => {
   let ctx: AdvancedExecutionContext;

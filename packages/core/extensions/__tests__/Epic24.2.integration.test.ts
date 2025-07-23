@@ -134,7 +134,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
         name: 'Sample Extension',
         version: '1.0.0',
         description: 'Sample extension for integration testing',
-        main: 'index.js',
+        main: 'index',
         dependencies: {
           'base-utils': '^1.0.0'
         },
@@ -148,7 +148,7 @@ describe('Epic 24.2 - Complete Extension Framework Integration Tests', () => {
       );
       
       await fs.writeFile(
-        path.join(extensionSource, 'index.js'),
+        path.join(extensionSource, 'index'),
         `
         module.exports = {
           activate(context) {

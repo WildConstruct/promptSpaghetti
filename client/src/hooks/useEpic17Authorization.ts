@@ -6,7 +6,7 @@
  * checking, and resource authorization for admin controls.
  */
 
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import {
   Epic17AuthorizationService,
@@ -442,7 +442,7 @@ export const Epic17ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredResource,
   requiredAction,
   resourceId,
-  fallback = <div>Access Denied</div>
+  fallback = React.createElement('div', null, 'Access Denied')
 }) => {
   const { hasPermission, isAuthorizing } = useEpic17Authorization();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
@@ -457,15 +457,21 @@ export const Epic17ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }, [hasPermission, requiredResource, requiredAction, resourceId]);
 
   if (isAuthorizing || hasAccess === null) {
-    return (
-      <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-        <span className="ml-2 text-gray-600">Checking permissions...</span>
-      </div>
+    return React.createElement('div', 
+      { className: 'flex items-center justify-center p-8' },
+      React.createElement('div', 
+        { className: 'animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600' }
+      ),
+      React.createElement('span', 
+        { className: 'ml-2 text-gray-600' },
+        'Checking permissions...'
+      )
     );
   }
 
-  return hasAccess ? <>{children}</> : <>{fallback}</>;
+  return hasAccess 
+    ? React.createElement(React.Fragment, null, children) 
+    : React.createElement(React.Fragment, null, fallback);
 };
 
 export default useEpic17Authorization;

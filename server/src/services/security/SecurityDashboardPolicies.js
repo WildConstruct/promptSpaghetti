@@ -444,7 +444,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
         const mergedWarnings = [];
         let auditRequired = false;
         let minSessionTimeout;
-        let primaryPolicy = results[0].policy;
+        const primaryPolicy = results[0].policy;
         for (const result of results) {
             result.permissions.forEach(p => mergedPermissions.add(p));
             mergedFilters.push(...result.contentFilters);

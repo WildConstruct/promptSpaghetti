@@ -4,13 +4,13 @@ module.exports = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>'],
   testMatch: [
-    '**/__tests__/**/*.(spec|test).[tj]s?(x)',
-    '**/?(*.)+(spec|test).[tj]s?(x)',
-    '**/tests/documentation/**/*.(spec|test).[tj]s?(x)',
-    '**/tests/infrastructure/**/*.(spec|test).[tj]s?(x)',
-    '**/tests/**/*.(spec|test).[tj]s?(x)'
+    '**/__tests__/**/*.(spec|test).ts?(x)',
+    '**/?(*.)+(spec|test).ts?(x)',
+    '**/tests/documentation/**/*.(spec|test).ts?(x)',
+    '**/tests/infrastructure/**/*.(spec|test).ts?(x)',
+    '**/tests/**/*.(spec|test).ts?(x)'
   ],
-  testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*\\.spec\\.jsx$'],
+  testPathIgnorePatterns: ['/node_modules/', 'tests/performance/', '.*\\.spec\\.jsx$', '.*\\.js$'],
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'packages/**/*.{ts,tsx}',
@@ -39,41 +39,11 @@ module.exports = {
     '<rootDir>/tests/utils/axeSetup.ts',
     '@testing-library/jest-dom'
   ],
-  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   transform: {
-    '^.+\\.(ts|tsx)$': [
-      'ts-jest',
-      {
-        useESM: true
-      }
-    ],
-    '^.+\\.(js|jsx)$': [
-      'babel-jest',
-      {
-        presets: [
-          [
-            '@babel/preset-env',
-            {
-              targets: { node: 'current' },
-              modules: 'commonjs'
-            }
-          ],
-          [
-            '@babel/preset-react',
-            {
-              runtime: 'automatic'
-            }
-          ],
-          [
-            '@babel/preset-typescript',
-            {
-              isTSX: true,
-              allExtensions: true
-            }
-          ]
-        ]
-      }
-    ]
+    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.tsx$': 'ts-jest',
+    '^.+\\.js$': 'babel-jest',
+    '^.+\\.jsx$': 'babel-jest'
   },
   coverageThreshold: {
     global: {
