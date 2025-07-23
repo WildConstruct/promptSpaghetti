@@ -5,81 +5,8 @@ import EpicDashboard from './components/EpicDashboard';
 import 'reactflow/dist/style.css';
 import './randomizer.css';
 
-// Dynamic import with fallback for deployment
-let GraphEditor: React.ComponentType<any>;
-let RandomizerPanel: React.ComponentType<any>;
-
-try {
-  // Attempt to import core components
-  const coreComponents = require('./core');
-  GraphEditor = coreComponents.GraphEditor;
-  RandomizerPanel = coreComponents.RandomizerPanel;
-} catch (error) {
-  console.warn('Core components not available, using placeholders');
-  
-  // Fallback placeholder components for deployment
-  GraphEditor = ({ initialNodes, initialEdges }: any) => (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      height: '100%', 
-      backgroundColor: '#f8f9fa',
-      flexDirection: 'column',
-      padding: '40px'
-    }}>
-      <div style={{ 
-        fontSize: '24px', 
-        fontWeight: 'bold', 
-        marginBottom: '16px',
-        color: '#6c757d'
-      }}>
-        🚧 Graph Editor
-      </div>
-      <div style={{ 
-        fontSize: '16px', 
-        color: '#6c757d',
-        textAlign: 'center',
-        maxWidth: '500px',
-        lineHeight: 1.5
-      }}>
-        The graph editor is temporarily unavailable in this deployment. 
-        This is a minimal build for demonstration purposes.
-      </div>
-    </div>
-  );
-  
-  RandomizerPanel = ({ onGraphGenerated, onError }: any) => (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      height: '100%', 
-      backgroundColor: '#f8f9fa',
-      flexDirection: 'column',
-      padding: '40px'
-    }}>
-      <div style={{ 
-        fontSize: '24px', 
-        fontWeight: 'bold', 
-        marginBottom: '16px',
-        color: '#6c757d'
-      }}>
-        🎲 LLM Randomizer
-      </div>
-      <div style={{ 
-        fontSize: '16px', 
-        color: '#6c757d',
-        textAlign: 'center',
-        maxWidth: '500px',
-        lineHeight: 1.5
-      }}>
-        The LLM randomizer is temporarily unavailable in this deployment. 
-        This is a minimal build for demonstration purposes.
-      </div>
-    </div>
-  );
-}
+// Import core components directly - this will work in development
+import { GraphEditor, RandomizerPanel } from './core';
 
 /**
  * Main application interface with tab navigation.
