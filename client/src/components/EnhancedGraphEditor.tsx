@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 import ReactFlow, {
   Node,
   Edge,
@@ -11,6 +11,10 @@ import ReactFlow, {
   Background,
   BackgroundVariant,
   NodeTypes,
+  Handle,
+  Position,
+  useReactFlow,
+  ReactFlowProvider,
 } from 'reactflow';
 
 // Professional Design System
@@ -118,7 +122,18 @@ const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => 
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
+    position: 'relative',
   }}>
+    <Handle
+      type="target"
+      position={Position.Left}
+      style={{
+        background: professionalColors.nodes.text,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
     <div style={{ 
       display: 'flex', 
       alignItems: 'center', 
@@ -137,6 +152,16 @@ const TextNode = ({ data, selected }: { data: NodeData; selected: boolean }) => 
     }}>
       {data.description || 'Text manipulation and processing'}
     </div>
+    <Handle
+      type="source"
+      position={Position.Right}
+      style={{
+        background: professionalColors.nodes.text,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
   </div>
 );
 
@@ -151,7 +176,18 @@ const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) =>
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
+    position: 'relative',
   }}>
+    <Handle
+      type="target"
+      position={Position.Left}
+      style={{
+        background: professionalColors.nodes.logic,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
     <div style={{ 
       display: 'flex', 
       alignItems: 'center', 
@@ -170,6 +206,16 @@ const LogicNode = ({ data, selected }: { data: NodeData; selected: boolean }) =>
     }}>
       {data.description || 'Logic and flow control'}
     </div>
+    <Handle
+      type="source"
+      position={Position.Right}
+      style={{
+        background: professionalColors.nodes.logic,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
   </div>
 );
 
@@ -184,7 +230,18 @@ const OutputNode = ({ data, selected }: { data: NodeData; selected: boolean }) =
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
+    position: 'relative',
   }}>
+    <Handle
+      type="target"
+      position={Position.Left}
+      style={{
+        background: professionalColors.nodes.output,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
     <div style={{ 
       display: 'flex', 
       alignItems: 'center', 
@@ -217,7 +274,18 @@ const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean })
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
+    position: 'relative',
   }}>
+    <Handle
+      type="target"
+      position={Position.Left}
+      style={{
+        background: professionalColors.nodes.variable,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
     <div style={{ 
       display: 'flex', 
       alignItems: 'center', 
@@ -236,6 +304,16 @@ const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean })
     }}>
       {data.description || 'Variable storage and retrieval'}
     </div>
+    <Handle
+      type="source"
+      position={Position.Right}
+      style={{
+        background: professionalColors.nodes.variable,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
   </div>
 );
 
@@ -250,7 +328,18 @@ const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }
     boxShadow: selected ? professionalShadows.node.selected : professionalShadows.node.default,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     backdropFilter: 'blur(8px)',
+    position: 'relative',
   }}>
+    <Handle
+      type="target"
+      position={Position.Left}
+      style={{
+        background: professionalColors.nodes.transform,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
     <div style={{ 
       display: 'flex', 
       alignItems: 'center', 
@@ -269,6 +358,16 @@ const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }
     }}>
       {data.description || 'Data transformation and processing'}
     </div>
+    <Handle
+      type="source"
+      position={Position.Right}
+      style={{
+        background: professionalColors.nodes.transform,
+        border: `2px solid ${professionalColors.background.primary}`,
+        width: '12px',
+        height: '12px',
+      }}
+    />
   </div>
 );
 
@@ -300,9 +399,14 @@ const nodeCategories = {
 const ProfessionalPalette: React.FC<{
   collapsed: boolean;
   onToggle: () => void;
-  onAddNode: (type: string) => void;
-}> = ({ collapsed, onToggle, onAddNode }) => (
-  <aside style={{
+}> = ({ collapsed, onToggle }) => {
+  const onDragStart = (event: React.DragEvent, nodeType: string) => {
+    event.dataTransfer.setData('application/reactflow', nodeType);
+    event.dataTransfer.effectAllowed = 'move';
+  };
+
+  return (
+    <aside style={{
     width: collapsed ? 56 : 240,
     background: professionalColors.background.secondary,
     borderRight: `1px solid ${professionalColors.ui.border}`,
@@ -342,7 +446,8 @@ const ProfessionalPalette: React.FC<{
         Object.values(nodeCategories).flat().map((node) => (
           <div
             key={node.id}
-            onClick={() => onAddNode(node.id)}
+            draggable
+            onDragStart={(event) => onDragStart(event, node.id)}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -350,7 +455,7 @@ const ProfessionalPalette: React.FC<{
               padding: '12px 0',
               marginBottom: '4px',
               borderRadius: '6px',
-              cursor: 'pointer',
+              cursor: 'grab',
               transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
               fontSize: '20px',
             }}
@@ -382,14 +487,15 @@ const ProfessionalPalette: React.FC<{
             {nodes.map((node) => (
               <div
                 key={node.id}
-                onClick={() => onAddNode(node.id)}
+                draggable
+                onDragStart={(event) => onDragStart(event, node.id)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   padding: '10px 12px',
                   marginBottom: '6px',
                   borderRadius: '6px',
-                  cursor: 'pointer',
+                  cursor: 'grab',
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                   border: `1px solid transparent`,
                 }}
@@ -426,8 +532,9 @@ const ProfessionalPalette: React.FC<{
         ))
       )}
     </div>
-  </aside>
-);
+    </aside>
+  );
+};
 
 // Inspector Panel Component
 const InspectorPanel: React.FC<{
@@ -789,7 +896,7 @@ const defaultEdges: Edge[] = [
   { id: 'e2-3', source: '2', target: '3', type: 'smoothstep' },
 ];
 
-export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
+const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
   initialNodes = [],
   initialEdges = []
 }) => {
@@ -802,6 +909,8 @@ export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
   
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const { project, screenToFlowPosition } = useReactFlow();
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({
@@ -819,23 +928,38 @@ export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
     []
   );
 
-  const addNode = useCallback((type: string) => {
+  const onDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const onDrop = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+
+    const type = event.dataTransfer.getData('application/reactflow');
+    if (typeof type === 'undefined' || !type) {
+      return;
+    }
+
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+
     const nodeConfig = Object.values(nodeCategories).flat().find(n => n.id === type);
     const newNode: Node = {
       id: `node_${Date.now()}`,
       type,
-      position: { 
-        x: Math.random() * 400 + 200, 
-        y: Math.random() * 300 + 150 
-      },
+      position,
       data: { 
         label: nodeConfig?.label || `New ${type}`,
         description: nodeConfig?.description || `${type} node created ${new Date().toLocaleTimeString()}`,
         category: type
       },
     };
+
     setNodes((nds) => [...nds, newNode]);
-  }, [setNodes]);
+  }, [screenToFlowPosition, setNodes]);
 
   const saveGraph = useCallback(() => {
     const graphData = { nodes, edges, timestamp: new Date().toISOString() };
@@ -910,10 +1034,9 @@ export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
         <ProfessionalPalette
           collapsed={paletteCollapsed}
           onToggle={() => setPaletteCollapsed(!paletteCollapsed)}
-          onAddNode={addNode}
         />
         
-        <div style={{ flex: 1, height: '100%', position: 'relative' }}>
+        <div ref={reactFlowWrapper} style={{ flex: 1, height: '100%', position: 'relative' }}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -921,6 +1044,8 @@ export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onNodeClick={onNodeClick}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
             nodeTypes={nodeTypes}
             fitView
             style={{ background: professionalColors.background.primary }}
@@ -978,5 +1103,12 @@ export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = ({
     </div>
   );
 };
+
+// Wrapper with ReactFlowProvider
+export const EnhancedGraphEditor: React.FC<EnhancedGraphEditorProps> = (props) => (
+  <ReactFlowProvider>
+    <EnhancedGraphEditorInner {...props} />
+  </ReactFlowProvider>
+);
 
 export default EnhancedGraphEditor;
