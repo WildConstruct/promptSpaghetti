@@ -9,7 +9,7 @@ import { Button } from '../ui/Button';
 import { Alert, AlertDescription } from '../ui/Alert';
 import { Badge } from '../ui/Badge';
 import { Switch } from '../ui/Switch';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, // DialogTrigger // Unused import } from '../ui/Dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/Dialog';
 import { 
   Shield, 
   Smartphone, 

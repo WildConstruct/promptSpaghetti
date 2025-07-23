@@ -6,6 +6,7 @@ import 'reactflow/dist/style.css';
 import './randomizer.css';
 
 import BrowserSafeGraphEditor from './components/BrowserSafeGraphEditor';
+import EnhancedGraphEditor from './components/EnhancedGraphEditor';
 
 interface GraphEditorProps {
   initialNodes?: unknown[];
@@ -18,8 +19,8 @@ interface RandomizerPanelProps {
   className?: string;
 }
 
-// Enhanced import approach - try full core, fallback to browser-safe editor
-let GraphEditor: React.ComponentType<GraphEditorProps> = BrowserSafeGraphEditor;
+// Enhanced import approach - try full core, fallback to enhanced editor, then basic
+let GraphEditor: React.ComponentType<GraphEditorProps> = EnhancedGraphEditor;
 let RandomizerPanel: React.ComponentType<RandomizerPanelProps>;
 let isEnhancedMode = false;
 
@@ -172,7 +173,7 @@ function MainApp() {
           
           {/* Status indicator */}
           <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: '#666', fontSize: '14px' }}>
-            {isEnhancedMode ? '🚀 Enhanced Mode' : '🌐 Browser-Safe Mode'} | Auth Disabled
+            {isEnhancedMode ? '🚀 Core Enhanced' : '🎨 Professional Mode'} | Auth Disabled
           </div>
         </div>
 

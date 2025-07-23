@@ -18,7 +18,7 @@ import {
   ChevronDown,
   ExternalLink
 } from 'lucide-react';
-import { format, // parseISO // Unused import } from 'date-fns';
+import { format } from 'date-fns';
 
 interface SecurityEvent {
   id: string;

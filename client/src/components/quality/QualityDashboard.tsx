@@ -8,7 +8,7 @@
  * Task: E18-1753114562561-695DBB - Create quality dashboards
  */
 
-import React, { useState, // useEffect // Unused import, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -19,7 +19,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Alert } from '../ui/Alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { RefreshCw, TrendingUp, TrendingDown, AlertTriangle, // CheckCircle // Unused import, Clock, // Zap // Unused import } from 'lucide-react';
+import { RefreshCw, TrendingUp, TrendingDown, AlertTriangle, Clock } from 'lucide-react';
 import { QualityMetricsOverview } from './QualityMetricsOverview';
 import { QualityTrendsChart } from './QualityTrendsChart';
 import { QualityAlertsPanel } from './QualityAlertsPanel';

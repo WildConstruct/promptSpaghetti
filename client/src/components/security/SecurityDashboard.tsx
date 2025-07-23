@@ -16,7 +16,7 @@ import {
   XCircle,
   AlertCircle
 } from 'lucide-react';
-import { // SecurityMetric // Unused import } from '../../types/security';
+// SecurityMetric type was removed as unused
 import { formatDistanceToNow } from 'date-fns';
 import './SecurityDashboard.css';
 
