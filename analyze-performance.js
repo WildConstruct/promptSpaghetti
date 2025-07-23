@@ -30,10 +30,10 @@ class MockBasicNode {
   
   async execute(context) {
     // Simulate basic node execution
-    const start = performance.now();
+    // Performance timing removed for benchmark
     
     switch(this.type) {
-    case 'WeightedChoice':
+    case 'WeightedChoice': {
       // Simulate weighted random selection
       const choices = ['A', 'B', 'C'];
       const weights = [0.5, 0.3, 0.2];
@@ -45,22 +45,25 @@ class MockBasicNode {
         r -= weights[i];
       }
       return choices[choices.length - 1];
+    }
         
-    case 'Concat':
+    case 'Concat': {
       // Simulate string concatenation
       const parts = ['Hello', ' ', 'World'];
       return parts.join('');
+    }
         
     case 'Output':
       // Simulate output passthrough
       return 'output-value';
         
-    case 'SetVariable':
+    case 'SetVariable': {
       // Simulate variable setting with security validation
       const value = 'test-value';
       // Simulate JSON deep clone for security
       context.variables['testKey'] = JSON.parse(JSON.stringify(value));
       return;
+    }
         
     case 'GetVariable':
       // Simulate variable retrieval with validation
@@ -79,10 +82,11 @@ class MockAdvancedNode {
   }
   
   async execute(context) {
-    const start = performance.now();
+    // Performance timing removed for benchmark
+    // const start = performance.now(); // Performance timing removed
     
     switch(this.type) {
-    case 'WeightedAdvanced':
+    case 'WeightedAdvanced': {
       // Simulate advanced weighted distribution calculation
       const choices = ['choice1', 'choice2', 'choice3', 'choice4'];
       const weights = [1, 2, 3, 4];
@@ -100,25 +104,28 @@ class MockAdvancedNode {
         r -= normalizedWeights[i];
       }
       return choices[choices.length - 1];
+    }
         
-    case 'Conditional':
+    case 'Conditional': {
       // Simulate expression evaluation
-      const condition = 'getValue("counter") > 5';
+      // const condition = 'getValue("counter") > 5'; // REMOVED: unused variable
       // Simulate parsing and evaluation overhead
       const counter = context.variables.counter || 0;
       const result = counter > 5;
       return result ? 'true-branch' : 'false-branch';
+    }
         
-    case 'Sequential':
+    case 'Sequential': {
       // Simulate stateful sequence processing
       const sequence = ['seq1', 'seq2', 'seq3', 'seq4'];
       const index = (context.variables.sequenceIndex || 0) % sequence.length;
       context.variables.sequenceIndex = index + 1;
       return sequence[index];
+    }
         
-    case 'Markov':
+    case 'Markov': {
       // Simulate matrix transition calculation
-      const states = ['state1', 'state2', 'state3'];
+      // const states = ['state1', 'state2', 'state3']; // REMOVED: unused variable
       const currentState = context.variables.markovState || 'state1';
         
       // Simulate transition matrix lookup and calculation
@@ -140,6 +147,7 @@ class MockAdvancedNode {
       }
         
       return currentState;
+    }
         
     default:
       return 'unknown-advanced';
@@ -269,7 +277,8 @@ async function analyzeNodePerformance() {
     });
     
     const opsPerSec = (graphSize * 1000) / duration;
-    console.log(`  ${graphSize.toString().padEnd(3)} nodes: ${duration.toFixed(2)}ms total, ${opsPerSec.toFixed(0)} ops/sec`);
+    const nodeStr = graphSize.toString().padEnd(3);
+    console.log(`  ${nodeStr} nodes: ${duration.toFixed(2)}ms total, ${opsPerSec.toFixed(0)} ops/sec`);
   }
   
   // Performance bottleneck analysis

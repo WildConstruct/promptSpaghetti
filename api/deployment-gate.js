@@ -3,7 +3,7 @@
  * Vercel serverless function for validating deployment approvals
  */
 
-import { AnalyticsDAO } from '../server/src/database/analytics-dao.js';
+// import { AnalyticsDAO } from '../server/src/database/analytics-dao.js'; // Unused import
 import { getDatabase } from '../server/src/database/connection.js';
 
 // Environment-specific approval requirements
@@ -264,7 +264,7 @@ async function getApprovalStatus(deploymentId, environment) {
 }
 
 // Helper functions for auto-approval checks
-async function getTestCoverage(sha) {
+async function getTestCoverage(_sha) {
   try {
     // In a real implementation, this would query CI/CD results or coverage reports
     // For now, return a mock value based on environment
@@ -277,7 +277,7 @@ async function getTestCoverage(sha) {
   }
 }
 
-async function getSecurityScanStatus(sha) {
+async function getSecurityScanStatus(_sha) {
   try {
     // In a real implementation, this would check security scan results
     // For now, return 'passed' for most cases
@@ -288,7 +288,7 @@ async function getSecurityScanStatus(sha) {
   }
 }
 
-async function checkPerformanceRegression(sha) {
+async function checkPerformanceRegression(_sha) {
   try {
     // In a real implementation, this would compare performance metrics
     // For now, return false (no regression)
@@ -299,7 +299,7 @@ async function checkPerformanceRegression(sha) {
   }
 }
 
-async function checkBreakingChanges(sha) {
+async function checkBreakingChanges(_sha) {
   try {
     // In a real implementation, this would analyze API changes, schema changes, etc.
     // For now, return false (no breaking changes)

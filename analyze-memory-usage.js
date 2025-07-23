@@ -5,7 +5,7 @@
  * Analyzes memory consumption patterns and optimization opportunities
  */
 
-const { performance } = require('perf_hooks');
+// const { performance } = require('perf_hooks'); // Unused import
 
 function formatMemory(bytes) {
   const mb = bytes / 1024 / 1024;
@@ -237,7 +237,7 @@ async function analyzeMemoryUsage() {
   
   for (let cycle = 0; cycle < 10; cycle++) {
     if (global.gc) global.gc();
-    const beforeCycle = getMemorySnapshot();
+    // const beforeCycle = getMemorySnapshot(); // Unused variable
     
     // Create and execute a graph, then discard it
     const tempGraph = new MockGraph(100, nodeTypes);
