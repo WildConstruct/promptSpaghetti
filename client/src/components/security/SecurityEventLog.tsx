@@ -45,7 +45,9 @@ interface SecurityEventLogProps {
   };
 }
 
-export   const [isLoading, setIsLoading] = useState(true);
+export const SecurityEventLog: React.FC<SecurityEventLogProps> = ({ onEventClick, initialFilters }) => {
+  const [events, setEvents] = useState<SecurityEvent[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSeverity, setSelectedSeverity] = useState<string[]>(initialFilters?.severity || []);
   const [selectedCategory, setSelectedCategory] = useState<string[]>(initialFilters?.category || []);

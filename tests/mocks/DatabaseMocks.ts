@@ -69,18 +69,18 @@ export class DatabaseMockService {
    * Create a mock database connection
    */
   createConnection(_connectionId: string, config: DatabaseConnection): unknown {
-    this.connections.set(connectionId, config);
+    this.connections.set(_connectionId, config);
     
     const connection = {
-      id: connectionId,
+      id: _connectionId,
       type: config.type,
       connected: true,
       
       // Query methods
-      query: async (_sql: string, params?: unknown[]) => this.executeQuery(connectionId, sql, params),
+      query: async (_sql: string, params?: unknown[]) => this.executeQuery(_connectionId, _sql, params),
       
       // Transaction methods
-      beginTransaction: async (isolation?: string) => this.beginTransaction(connectionId, isolation),
+      beginTransaction: async (isolation?: string) => this.beginTransaction(_connectionId, isolation),
       commit: async (transactionId: string) => this.commitTransaction(transactionId),
       rollback: async (transactionId: string) => this.rollbackTransaction(transactionId),
       savepoint: async (transactionId: string, name: string) => this.createSavepoint(transactionId, name),
@@ -88,8 +88,8 @@ export class DatabaseMockService {
       
       // Utility methods
       ping: async () => ({ success: true, latency: Math.floor(this.rng() * 10) + 1 }),
-      close: async () => this.closeConnection(connectionId),
-      getStats: () => this.getConnectionStats(connectionId),
+      close: async () => this.closeConnection(_connectionId),
+      getStats: () => this.getConnectionStats(_connectionId),
       
       // Table operations
       createTable: async (name: string, schema: unknown) => this.createTable(name, schema),
@@ -116,13 +116,13 @@ export class DatabaseMockService {
         this.createIndex(table, columns, name),
       
       // Redis-specific operations (if type is redis)
-      ...(config.type === 'redis' ? this.createRedisOperations(connectionId) : {}),
+      ...(config.type === 'redis' ? this.createRedisOperations(_connectionId) : {}),
       
       // PostgreSQL-specific operations
-      ...(config.type === 'postgres' ? this.createPostgresOperations(connectionId) : {})
+      ...(config.type === 'postgres' ? this.createPostgresOperations(_connectionId) : {})
     };
 
-    console.log(`🔌 Created ${config.type} database connection: ${connectionId}`);
+    console.log(`🔌 Created ${config.type} database connection: ${_connectionId}`);
     return connection;
   }
 
@@ -139,14 +139,14 @@ export class DatabaseMockService {
     
     // Log the query
     this.queryLog.push({
-      sql,
-      params,
+      _sql: _sql,
+      params: _params,
       timestamp: new Date(),
       duration: executionTime
     });
 
     // Parse and execute the SQL (simplified mock implementation)
-    const result = this.parseSQLAndExecute(sql, params);
+    const result = this.parseSQLAndExecute(_sql, _params);
     
     return {
       ...result,
@@ -700,16 +700,16 @@ export class DatabaseMockService {
 
   private parseSQLAndExecute(_sql: string, _params: unknown[] = []): QueryResult {
     // Simplified SQL parser for common operations
-    sql = sql.trim().toLowerCase();
+    const sql = _sql.trim().toLowerCase();
     
     if (sql.startsWith('select')) {
-      return this.mockSelectQuery(sql, params);
+      return this.mockSelectQuery(sql, _params);
     } else if (sql.startsWith('insert')) {
-      return this.mockInsertQuery(sql, params);
+      return this.mockInsertQuery(sql, _params);
     } else if (sql.startsWith('update')) {
-      return this.mockUpdateQuery(sql, params);
+      return this.mockUpdateQuery(sql, _params);
     } else if (sql.startsWith('delete')) {
-      return this.mockDeleteQuery(sql, params);
+      return this.mockDeleteQuery(sql, _params);
     } else {
       // Return a generic successful result for other queries
       return {
@@ -722,7 +722,7 @@ export class DatabaseMockService {
 
   private mockSelectQuery(_sql: string, _params: unknown[]): QueryResult {
     // Extract table name (very simplified)
-    const tableMatch = sql.match(/from\s+(\w+)/);
+    const tableMatch = _sql.match(/from\s+(\w+)/);
     const tableName = tableMatch ? tableMatch[1] : 'users';
     
     const table = this.tables.get(tableName);
@@ -739,7 +739,7 @@ export class DatabaseMockService {
   }
 
   private mockInsertQuery(_sql: string, _params: unknown[]): QueryResult {
-    const tableMatch = sql.match(/into\s+(\w+)/);
+    const tableMatch = _sql.match(/into\s+(\w+)/);
     const tableName = tableMatch ? tableMatch[1] : 'users';
     
     const id = this.generateId();

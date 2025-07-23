@@ -19,7 +19,7 @@ import {
 // Mock database setup
 const mockDb = {
   prepare: jest.fn<unknown[], unknown>().mockReturnValue({
-    run: jest.fn<unknown[], unknown>( as unknown),
+    run: jest.fn<unknown[], unknown>(),
     get: jest.fn<unknown[], unknown>(),
     all: jest.fn<unknown[], unknown>()
   }),
@@ -86,7 +86,7 @@ describe('Workspace Integration Tests', () => {
         id: 'session-123',
         user_id: mockUser.id,
         session_token: 'mock-token',
-        expires_at: new Date(Date.now( as unknown) + 86400000),
+        expires_at: new Date(Date.now() + 86400000),
         created_at: new Date(),
         last_active_at: new Date()
       });
@@ -156,7 +156,7 @@ describe('Workspace Integration Tests', () => {
           description: 'Viewer role',
           permissions: ROLE_PERMISSIONS.VIEWER,
           is_system_role: true,
-          created_at: new Date( as unknown),
+          created_at: new Date(),
           updated_at: new Date()
         }]
       });
@@ -227,7 +227,7 @@ describe('Workspace Integration Tests', () => {
         actor_id: mockUser,
         event_type: 'workspace.created',
         event_data: {},
-        created_at: new Date( as unknown)
+        created_at: new Date()
       });
     });
 
@@ -456,7 +456,7 @@ describe('Workspace Integration Tests', () => {
           actor_id: mockUser,
           event_type: 'workspace.updated',
           event_data: {},
-          created_at: new Date( as unknown),
+          created_at: new Date(),
           actor_name: 'Test User',
           actor_avatar: undefined
         }],
@@ -510,7 +510,7 @@ describe('Workspace Integration Tests', () => {
         description: 'Editor role',
         permissions: ROLE_PERMISSIONS.EDITOR,
         is_system_role: true,
-        created_at: new Date( as unknown),
+        created_at: new Date(),
         updated_at: new Date()
       });
       jest.spyOn(workspaceDAO, 'createUserMembership').mockResolvedValue({
@@ -519,7 +519,7 @@ describe('Workspace Integration Tests', () => {
         workspace_id: workspaceId,
         status: 'active',
         invited_by: mockUser,
-        joined_at: new Date( as unknown),
+        joined_at: new Date(),
         last_active_at: new Date()
       });
       jest.spyOn(workspaceDAO, 'createACLAssignment').mockResolvedValue({
@@ -529,7 +529,7 @@ describe('Workspace Integration Tests', () => {
         scope_type: 'workspace',
         scope_id: workspaceId,
         granted_by: mockUser,
-        granted_at: new Date( as unknown)
+        granted_at: new Date()
       });
       jest.spyOn(workspaceDAO, 'createActivityEvent').mockResolvedValue({
         id: 'activity-123',
@@ -537,7 +537,7 @@ describe('Workspace Integration Tests', () => {
         actor_id: mockUser,
         event_type: 'user.invited',
         event_data: { invited_user: inviteeId, role: 'editor' },
-        created_at: new Date( as unknown)
+        created_at: new Date()
       });
     });
 
@@ -587,7 +587,4 @@ describe('Workspace Integration Tests', () => {
   });
 });
 
-// Test helper functions
-export 
-export 
-export });
+// Test helper functions - no exports needed for test file

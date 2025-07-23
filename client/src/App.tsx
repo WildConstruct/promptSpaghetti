@@ -1,22 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { ReactFlowProvider } from 'reactflow';
+import { GraphEditor, RandomizerPanel } from './core';
 import EpicDashboard from './components/EpicDashboard';
 import 'reactflow/dist/style.css';
 import './randomizer.css';
-
-// Temporary placeholder components while core components have syntax errors
-const GraphEditor: React.FC<{ initialNodes?: any[], initialEdges?: any[] }> = () => (
-  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', fontSize: '18px', color: '#666' }}>
-    Graph Editor - Temporarily disabled due to syntax errors
-  </div>
-);
-
-const RandomizerPanel: React.FC<{ onGraphGenerated?: any, onError?: any, className?: string }> = () => (
-  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', fontSize: '18px', color: '#666' }}>
-    LLM Randomizer Panel - Temporarily disabled due to syntax errors
-  </div>
-);
 
 /**
  * Main application interface with tab navigation.

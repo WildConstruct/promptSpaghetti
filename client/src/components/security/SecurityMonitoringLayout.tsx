@@ -28,7 +28,12 @@ interface SecurityMonitoringLayoutProps {
   compactMode?: boolean;
 }
 
-export   const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
+export const SecurityMonitoringLayout: React.FC<SecurityMonitoringLayoutProps> = ({
+  initialView = 'dashboard',
+  compactMode = false
+}) => {
+  const [currentView, setCurrentView] = useState<SecurityView>(initialView);
+  const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 

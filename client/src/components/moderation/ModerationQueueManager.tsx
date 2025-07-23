@@ -269,7 +269,7 @@ export const ModerationQueueManager: React.FC<ModerationQueueManagerProps> = ({
             <option value="all">All Risk Levels</option>
             <option value="high">High Risk (70+)</option>
             <option value="medium">Medium Risk (40-69)</option>
-            <option value="low">Low Risk (<40)</option>
+            <option value="low">Low Risk (&lt;40)</option>
           </select>
 
           <select 

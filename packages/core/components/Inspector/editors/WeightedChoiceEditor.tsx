@@ -432,7 +432,7 @@ export const WeightedChoiceEditor: React.FC<WeightedChoiceEditorProps> = ({
                 );
               })}
             </div>
-          )}
+          ))}
         </div>
       </ProgressiveDisclosureSection>
     </div>

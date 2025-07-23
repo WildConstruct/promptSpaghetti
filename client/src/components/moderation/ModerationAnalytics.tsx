@@ -295,7 +295,7 @@ export const ModerationAnalytics: React.FC = () => {
               <div className="kpi-progress">
                 <div className="progress-bar warning" style={{ width: `${metrics.escalationRate * 10}%` }}></div>
               </div>
-              <div className="kpi-target">Target: <5%</div>
+              <div className="kpi-target">Target: &lt;5%</div>
             </div>
             
             <div className="kpi-card">

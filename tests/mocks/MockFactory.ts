@@ -63,7 +63,7 @@ export class MockFactory extends EventEmitter {
       enableLogging: false,
       persistence: false,
       environment: 'test',
-      ...config
+      ..._config
     };
     
     this.rng = seedrandom(this.globalConfig.seed?.toString() || '12345');
@@ -286,21 +286,21 @@ export class MockFactory extends EventEmitter {
   private createSpecificMock<T>(type: MockType, id: string, _config: MockConfig): T {
     switch (type) {
     case 'api':
-      return this.createAPIMock(id, config) as T;
+      return this.createAPIMock(id, _config) as T;
     case 'database':
-      return this.createDatabaseMock(id, config) as T;
+      return this.createDatabaseMock(id, _config) as T;
     case 'service':
-      return this.createServiceMock(id, config) as T;
+      return this.createServiceMock(id, _config) as T;
     case 'component':
-      return this.createComponentMock(id, config) as T;
+      return this.createComponentMock(id, _config) as T;
     case 'filesystem':
-      return this.createFilesystemMock(id, config) as T;
+      return this.createFilesystemMock(id, _config) as T;
     case 'network':
-      return this.createNetworkMock(id, config) as T;
+      return this.createNetworkMock(id, _config) as T;
     case 'auth':
-      return this.createAuthMock(id, config) as T;
+      return this.createAuthMock(id, _config) as T;
     case 'analytics':
-      return this.createAnalyticsMock(id, config) as T;
+      return this.createAnalyticsMock(id, _config) as T;
     default:
       throw new Error(`Unknown mock type: ${type}`);
     }

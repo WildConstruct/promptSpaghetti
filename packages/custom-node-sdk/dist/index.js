@@ -10,10 +10,5 @@ export * from './runtime';
 export * from './testing';
 // Version and metadata
 export const SDK_VERSION = '0.1.0';
-// SDK information
-export const SDK_INFO = {
-    name: '@prompt-spaghetti/custom-node-sdk',
-    version: SDK_VERSION,
-    description: 'TypeScript SDK for creating custom nodes and extensions'
-};
+// SDK information - no additional constants to export
 //# sourceMappingURL=index.js.map

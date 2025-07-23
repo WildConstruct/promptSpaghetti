@@ -15,5 +15,4 @@ export * from './testing';
 // Version and metadata
 export const SDK_VERSION = '0.1.0';
 
-// SDK information
-export } as const;
+// SDK information - no additional constants to export

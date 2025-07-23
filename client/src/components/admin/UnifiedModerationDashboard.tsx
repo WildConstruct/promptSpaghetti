@@ -106,7 +106,9 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
     }
   }, [dashboard, moderatorId]);
 
-  
+  const handleAdvancedSearch = async (query: AdvancedSearchQuery) => {
+    if (!dashboard) return;
+    
     setLoading(true);
     try {
       const results = await dashboard.advancedSearch(query, moderatorId);
@@ -119,7 +121,9 @@ export const UnifiedModerationDashboardComponent: React.FC<UnifiedModerationDash
     }
   };
 
-  
+  const handleBulkAction = async (action: Omit<BulkModerationAction, 'itemIds'>) => {
+    if (!dashboard || selectedItems.length === 0) return;
+    
     setLoading(true);
     try {
       const bulkAction: BulkModerationAction = {

@@ -50,7 +50,9 @@ interface SecurityAlertsProps {
   showDismissed?: boolean;
 }
 
-export   const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([]);
+export const SecurityAlerts: React.FC<SecurityAlertsProps> = ({ onAlertAction, maxVisible = 10, showDismissed = false }) => {
+  const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
+  const [filteredAlerts, setFilteredAlerts] = useState<SecurityAlert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'timestamp' | 'severity'>('timestamp');

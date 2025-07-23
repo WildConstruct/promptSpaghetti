@@ -214,7 +214,7 @@ describe('Mock System Infrastructure', () => {
       
       const queryLog = dbMock.getQueryLog();
       expect(queryLog).toHaveLength(2);
-      expect(queryLog[0]).toHaveProperty('sql');
+      expect(queryLog[0]).toHaveProperty('_sql');
       expect(queryLog[0]).toHaveProperty('timestamp');
     });
   });

@@ -82,9 +82,27 @@ describe('Health Check Definition System', () => {
         .alerting({
           enabled: true,
           thresholds: {
-            responseTime: { warning: 2000, critical: 5000, unit: 'ms', evaluationWindow: 300, evaluationMethod: 'average' },
-            errorRate: { warning: 5, critical: 10, unit: '%', evaluationWindow: 300, evaluationMethod: 'average' },
-            availability: { warning: 99, critical: 95, unit: '%', evaluationWindow: 300, evaluationMethod: 'average' },
+            responseTime: {
+              warning: 2000,
+              critical: 5000,
+              unit: 'ms',
+              evaluationWindow: 300,
+              evaluationMethod: 'average'
+            },
+            errorRate: {
+              warning: 5,
+              critical: 10,
+              unit: '%',
+              evaluationWindow: 300,
+              evaluationMethod: 'average'
+            },
+            availability: {
+              warning: 99,
+              critical: 95,
+              unit: '%',
+              evaluationWindow: 300,
+              evaluationMethod: 'average'
+            },
             custom: {}
           }
         })
@@ -92,7 +110,12 @@ describe('Health Check Definition System', () => {
           output: {
             expectedFormat: 'json',
             successConditions: [
-              { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'API returns healthy status' }
+              {
+                field: 'status',
+                operator: ComparisonOperator.EQUALS,
+                value: 'ok',
+                description: 'API returns healthy status'
+              }
             ]
           }
         })
@@ -117,7 +140,8 @@ describe('Health Check Definition System', () => {
         .tags('database', 'infrastructure')
         .databaseQuery({
           database: 'main',
-          query: 'SELECT COUNT(*) as count FROM health_check_table WHERE status = $1',
+          query:
+            'SELECT COUNT(*) as count FROM health_check_table WHERE status = $1',
           timeout: 3000,
           expectedResults: {
             minRows: 1,
@@ -221,13 +245,32 @@ describe('Health Check Definition System', () => {
           parameters: {},
           dependencies: [],
           timeout: 500, // Too low
-          retries: { maxAttempts: 3, backoffStrategy: 'exponential', initialDelay: 1000 }
+          retries: {
+          maxAttempts: 3,
+          backoffStrategy: 'exponential',
+          initialDelay: 1000
+        }
         },
         validation: {
           input: { required: [], customValidators: [] },
-          output: { expectedFormat: 'json', successConditions: [], warningConditions: [], errorConditions: [] },
-          runtime: { maxExecutionTime: 1000, networkAccessRequired: false, fileSystemAccessRequired: false, privilegedAccessRequired: false }, // Greater than timeout
-          security: { requiresAuthentication: false, requiredPermissions: [], sensitiveDataHandling: 'none', auditLevel: 'basic' }
+          output: {
+          expectedFormat: 'json',
+          successConditions: [],
+          warningConditions: [],
+          errorConditions: []
+        },
+          runtime: {
+          maxExecutionTime: 1000,
+          networkAccessRequired: false,
+          fileSystemAccessRequired: false,
+          privilegedAccessRequired: false
+        }, // Greater than timeout
+          security: {
+          requiresAuthentication: false,
+          requiredPermissions: [],
+          sensitiveDataHandling: 'none',
+          auditLevel: 'basic'
+        }
         },
         execution: undefined,
         alerting: undefined,
@@ -263,7 +306,12 @@ describe('Health Check Definition System', () => {
           output: {
             expectedFormat: 'json',
             successConditions: [
-              { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Cron test health check' }
+              {
+                field: 'status',
+                operator: ComparisonOperator.EQUALS,
+                value: 'ok',
+                description: 'Cron test health check'
+              }
             ]
           },
           runtime: {
@@ -312,7 +360,12 @@ describe('Health Check Definition System', () => {
             output: {
               expectedFormat: 'json',
               successConditions: [
-                { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Service test health check' }
+                {
+                  field: 'status',
+                  operator: ComparisonOperator.EQUALS,
+                  value: 'ok',
+                  description: 'Service test health check'
+                }
               ]
             },
             runtime: {
@@ -353,7 +406,12 @@ describe('Health Check Definition System', () => {
             output: {
               expectedFormat: 'json',
               successConditions: [
-                { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Duplicate test check' }
+                {
+                  field: 'status',
+                  operator: ComparisonOperator.EQUALS,
+                  value: 'ok',
+                  description: 'Duplicate test check'
+                }
               ]
             },
             runtime: {
@@ -437,7 +495,12 @@ describe('Health Check Definition System', () => {
             output: {
               expectedFormat: 'json',
               successConditions: [
-                { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Delete test check' }
+                {
+                  field: 'status',
+                  operator: ComparisonOperator.EQUALS,
+                  value: 'ok',
+                  description: 'Delete test check'
+                }
               ]
             },
             runtime: {
@@ -480,7 +543,12 @@ describe('Health Check Definition System', () => {
               output: {
                 expectedFormat: 'json',
                 successConditions: [
-                  { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Check status is ok' }
+                  {
+                    field: 'status',
+                    operator: ComparisonOperator.EQUALS,
+                    value: 'ok',
+                    description: 'Check status is ok'
+                  }
                 ]
               },
               runtime: {
@@ -506,7 +574,12 @@ describe('Health Check Definition System', () => {
               output: {
                 expectedFormat: 'json',
                 successConditions: [
-                  { field: 'result', operator: ComparisonOperator.EQUALS, value: 1, description: 'Check database result is 1' }
+                  {
+                    field: 'result',
+                    operator: ComparisonOperator.EQUALS,
+                    value: 1,
+                    description: 'Check database result is 1'
+                  }
                 ]
               },
               runtime: {

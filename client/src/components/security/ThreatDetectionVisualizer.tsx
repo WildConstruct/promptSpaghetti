@@ -45,7 +45,12 @@ interface ThreatDetectionVisualizerProps {
   refreshInterval?: number;
 }
 
-export   const [stats, setStats] = useState<ThreatStats | null>(null);
+export const ThreatDetectionVisualizer: React.FC<ThreatDetectionVisualizerProps> = ({
+  onThreatClick,
+  refreshInterval = 30000
+}) => {
+  const [threats, setThreats] = useState<ThreatData[]>([]);
+  const [stats, setStats] = useState<ThreatStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'realtime' | 'trends' | 'geo'>('realtime');
   const [autoRefresh, setAutoRefresh] = useState(true);

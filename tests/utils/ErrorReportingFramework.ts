@@ -24,7 +24,7 @@ export interface ErrorDetails {
   message: string;
   stack?: string;
   innerError?: ErrorDetails;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ErrorReport {
@@ -226,7 +226,7 @@ export class EnhancedErrorReporter {
     } = {}
   ): ErrorReport {
     if (!this.reportingEnabled) {
-      return null as any;
+      return null as unknown;
     }
 
     const errorType = ErrorClassifier.classifyError(error);
@@ -441,16 +441,16 @@ export class EnhancedErrorReporter {
     return [headers, ...rows].map(row => row.join(',')).join('\n');
   }
 
-  private convertToXML(data: any): string {
+  private convertToXML(data: unknown): string {
     const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>\n';
     const xmlContent = this.objectToXML(data, 'errorExport');
     return xmlHeader + xmlContent;
   }
 
-  private objectToXML(obj: any, rootName = 'root'): string {
+  private objectToXML(obj: Record<string, unknown>, rootName = 'root'): string {
     const indent = '  ';
     
-    const toXML = (value: any, key: string, level = 0): string => {
+    const toXML = (value: unknown, key: string, level = 0): string => {
       const indentation = indent.repeat(level);
       
       if (Array.isArray(value)) {
@@ -495,14 +495,14 @@ export class EnhancedErrorReporter {
     const reporter = new EnhancedErrorReporter(outputDir);
     
     // Add to global test environment
-    (global as any).__errorReporter = reporter;
+    (global as Record<string, unknown>).__errorReporter = reporter;
     
     return reporter;
   }
 
   // Helper method for test assertions
   static expectNoErrors(testSuite: string): void {
-    const reporter = (global as any).__errorReporter as EnhancedErrorReporter;
+    const reporter = (global as Record<string, unknown>).__errorReporter as EnhancedErrorReporter;
     if (!reporter) return;
 
     const errors = reporter.getReports().filter(

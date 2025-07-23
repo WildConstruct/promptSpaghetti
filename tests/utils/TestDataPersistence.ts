@@ -21,7 +21,7 @@ export interface PersistenceConfig {
 export interface StoredTestData {
   id: string;
   key: string;
-  data: any;
+  data: unknown;
   metadata: {
     createdAt: string;
     updatedAt: string;
@@ -68,7 +68,7 @@ export class TestDataPersistence {
   /**
    * Store test data
    */
-  async store(key: string, data: any, options: { tags?: string[]; ttl?: number } = {}): Promise<string> {
+  async store(key: string, data: unknown, options: { tags?: string[]; ttl?: number } = {}): Promise<string> {
     const id = this.generateId();
     const now = new Date().toISOString();
     const serializedData = this.serialize(data);
@@ -148,7 +148,7 @@ export class TestDataPersistence {
   /**
    * Update existing test data
    */
-  async update(key: string, data: any, options: { tags?: string[] } = {}): Promise<boolean> {
+  async update(key: string, data: unknown, options: { tags?: string[] } = {}): Promise<boolean> {
     const existing = await this.getStoredData(key);
     if (!existing) {
       return false;
@@ -345,7 +345,7 @@ export class TestDataPersistence {
     return `td_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private serialize(data: any): string {
+  private serialize(data: unknown): string {
     const serialized = JSON.stringify(data);
     if (this.config.compression) {
       // In a real implementation, you'd use a compression library like zlib
@@ -354,7 +354,7 @@ export class TestDataPersistence {
     return serialized;
   }
 
-  private deserialize(data: string): any {
+  private deserialize(data: string): unknown {
     if (this.config.compression) {
       // In a real implementation, you'd decompress first
     }
@@ -500,7 +500,7 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return null;
 
     const get = promisify(this.sqliteDb.get.bind(this.sqliteDb));
-    const row = await get('SELECT * FROM test_data WHERE key = ?', [key]) as any;
+    const row = await get('SELECT * FROM test_data WHERE key = ?', [key]) as unknown;
 
     if (!row) return null;
 
@@ -528,7 +528,7 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return false;
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
-    const result = await run('DELETE FROM test_data WHERE key = ?', [key]) as any;
+    const result = await run('DELETE FROM test_data WHERE key = ?', [key]) as unknown;
     return result.changes > 0;
   }
 
@@ -536,7 +536,7 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return [];
 
     const all = promisify(this.sqliteDb.all.bind(this.sqliteDb));
-    const rows = await all('SELECT * FROM test_data') as any[];
+    const rows = await all('SELECT * FROM test_data') as unknown[];
 
     return rows.map(row => ({
       id: row.id,

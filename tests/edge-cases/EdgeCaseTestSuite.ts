@@ -74,7 +74,7 @@ export class EdgeCaseTestSuite {
           // Test should handle empty graph gracefully
           await retry.test(async () => {
             const executeGraph = await import('../../server/src/engine');
-            const result = await executeGraph.executeGraph(emptyGraph as any);
+            const result = await executeGraph.executeGraph(emptyGraph as unknown);
             expect(result).toBeDefined();
           }, 'empty-graph-execution');
         }
@@ -101,7 +101,7 @@ export class EdgeCaseTestSuite {
             // Should either detect cycle or timeout gracefully
             const startTime = Date.now();
             try {
-              await executeGraph.executeGraph(circularGraph as any);
+              await executeGraph.executeGraph(circularGraph as unknown);
             } catch (error) {
               const duration = Date.now() - startTime;
               expect(duration).toBeLessThan(5000); // Should not hang indefinitely
@@ -130,7 +130,7 @@ export class EdgeCaseTestSuite {
             const executeGraph = await import('../../server/src/engine');
             
             const startMemory = process.memoryUsage().heapUsed;
-            const result = await executeGraph.executeGraph(largeGraph as any);
+            const result = await executeGraph.executeGraph(largeGraph as unknown);
             const endMemory = process.memoryUsage().heapUsed;
             
             expect(result).toBeDefined();
@@ -158,7 +158,7 @@ export class EdgeCaseTestSuite {
             const executeGraph = await import('../../server/src/engine');
             
             // Test should not cause stack overflow
-            const result = await executeGraph.executeGraph(deepGraph as any);
+            const result = await executeGraph.executeGraph(deepGraph as unknown);
             expect(result).toBeDefined();
           }, 'deeply-nested-graph-execution');
         }
@@ -250,7 +250,7 @@ export class EdgeCaseTestSuite {
           
           for (const header of malformedHeaders) {
             await retry.test(async () => {
-              const headers: any = {};
+              const headers: Record<string, unknown> = {};
               if (header !== null && header !== undefined) {
                 headers['Authorization'] = header;
               }
@@ -409,7 +409,7 @@ export class EdgeCaseTestSuite {
             
             const startTime = Date.now();
             try {
-              await executeGraph.executeGraph(graph as any);
+              await executeGraph.executeGraph(graph as unknown);
             } catch (error) {
               const duration = Date.now() - startTime;
               expect(duration).toBeLessThan(10000); // Should timeout within 10s
@@ -440,7 +440,7 @@ export class EdgeCaseTestSuite {
             const startMemory = process.memoryUsage().heapUsed;
             
             try {
-              await executeGraph.executeGraph(memoryIntensiveGraph as any);
+              await executeGraph.executeGraph(memoryIntensiveGraph as unknown);
             } catch (error) {
               // Should fail gracefully rather than crash
               expect(error).toBeDefined();
@@ -486,7 +486,7 @@ export class EdgeCaseTestSuite {
             };
             
             const executeGraph = await import('../../server/src/engine');
-            const result = await executeGraph.executeGraph(graph as any);
+            const result = await executeGraph.executeGraph(graph as unknown);
             
             // Should handle gracefully with default value
             expect(result).toBeDefined();
@@ -546,7 +546,7 @@ export class EdgeCaseTestSuite {
               };
               
               const executeGraph = await import('../../server/src/engine');
-              const result = await executeGraph.executeGraph(graph as any);
+              const result = await executeGraph.executeGraph(graph as unknown);
               
               expect(result).toBeDefined();
             }, `special-characters-${testString.substring(0, 10)}`);

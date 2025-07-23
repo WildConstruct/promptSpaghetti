@@ -17,7 +17,7 @@ const createMockApp = () => {
   app.use(express.urlencoded({ extended: true }));
   
   // Mock routes
-  app.post('/api/preview', async (req: any, res: any) => {
+  app.post('/api/preview', async (req: unknown, res: unknown) => {
     try {
       const { graph, count = 3, seed = 0 } = req.body;
       
@@ -57,7 +57,7 @@ const createMockApp = () => {
     }
   });
   
-  app.post('/api/export', async (req: any, res: any) => {
+  app.post('/api/export', async (req: unknown, res: unknown) => {
     try {
       const { graph, format = 'json' } = req.body;
       
@@ -86,7 +86,7 @@ const createMockApp = () => {
   });
   
   // Health check endpoint
-  app.get('/api/health', (req: any, res: any) => {
+  app.get('/api/health', (req: unknown, res: unknown) => {
     if (req.headers['x-simulate-unhealthy']) {
       return res.status(503).json({ 
         status: 'unhealthy',
@@ -98,7 +98,7 @@ const createMockApp = () => {
   });
   
   // Authentication endpoint
-  app.post('/api/auth', (req: any, res: any) => {
+  app.post('/api/auth', (req: unknown, res: unknown) => {
     const { username, password, token } = req.body;
     
     // Token refresh scenario
@@ -129,7 +129,7 @@ const createMockApp = () => {
   });
   
   // Rate limiting test endpoint
-  app.get('/api/limited', (req: any, res: any) => {
+  app.get('/api/limited', (req: unknown, res: unknown) => {
     const callCount = parseInt(req.headers['x-call-count'] || '0');
     
     if (callCount >= 10) {
@@ -146,8 +146,8 @@ const createMockApp = () => {
 };
 
 describe('API Error Scenarios', () => {
-  let app: any;
-  let testEnv: any;
+  let app: unknown;
+  let testEnv: unknown;
 
   beforeEach(async () => {
     testEnv = await TestEnvironmentManager.createEnvironment('api-errors', {

@@ -42,7 +42,9 @@ interface TabConfig {
   description: string;
 }
 
-export   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
+export const PreferenceCenter: React.FC<PreferenceCenterProps> = ({ userId, onClose, initialTab = 'privacy' }) => {
+  const [activeTab, setActiveTab] = useState<PreferenceTab>(initialTab);
+  const [preferences, setPreferences] = useState<UserPreferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);

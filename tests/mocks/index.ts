@@ -280,6 +280,57 @@ export function createMockSystem(config: MockConfig = {}): ComprehensiveMockSyst
 }
 
 /**
- * Utility function to create mock system presets
+ * Predefined mock system configurations for different environments
  */
-export };
+export const MockSystemPresets = {
+  /**
+   * Testing preset - optimized for unit tests with fast responses and deterministic behavior
+   */
+  testing(): ComprehensiveMockSystem {
+    return createMockSystem({
+      seed: 12345,
+      deterministic: true,
+      enableLogging: false,
+      environment: 'test',
+      performance: {
+        defaultDelay: 10,
+        errorRate: 0
+      }
+    });
+  },
+
+  /**
+   * Development preset - optimized for development with realistic delays and some errors
+   */
+  development(): ComprehensiveMockSystem {
+    return createMockSystem({
+      seed: Date.now(),
+      deterministic: false,
+      enableLogging: true,
+      environment: 'development',
+      performance: {
+        defaultDelay: 100,
+        errorRate: 0.1
+      }
+    });
+  },
+
+  /**
+   * Performance preset - optimized for performance testing with configurable load
+   */
+  performance(): ComprehensiveMockSystem {
+    return createMockSystem({
+      seed: 98765,
+      deterministic: true,
+      enableLogging: false,
+      environment: 'performance',
+      performance: {
+        defaultDelay: 0,
+        errorRate: 0,
+        maxConcurrency: 1000
+      }
+    });
+  }
+};
+
+// Main system exports available: ComprehensiveMockSystem, createMockSystem, MockSystemPresets

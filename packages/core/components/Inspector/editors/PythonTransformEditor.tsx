@@ -447,6 +447,7 @@ export const PythonTransformEditor: React.FC<PythonTransformEditorProps> = (prop
             </div>
           </div>
         </div>
+        </div>
       </ProgressiveDisclosureSection>
 
       {/* DEBUG LEVEL: Technical settings and configuration */}

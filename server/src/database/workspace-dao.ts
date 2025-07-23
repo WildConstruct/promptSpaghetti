@@ -123,7 +123,7 @@ export class WorkspaceDAO {
         invited_by TEXT,
         joined_at TEXT DEFAULT CURRENT_TIMESTAMP,
         last_active_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        status TEXT DEFAULT 'active' CHECK (status IN ('invited', 'active', 'suspended', 'removed'))
+        status TEXT DEFAULT 'active' CHECK (status IN ('invited', 'active', 'suspended', 'removed', 'left'))
       );
 
       CREATE TABLE IF NOT EXISTS activity_events (
@@ -140,11 +140,14 @@ export class WorkspaceDAO {
 
       CREATE TABLE IF NOT EXISTS comments (
         id TEXT PRIMARY KEY,
-        resource_id TEXT NOT NULL REFERENCES resources(id) ON DELETE CASCADE,
-        author_id TEXT NOT NULL,
         workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+        project_id TEXT REFERENCES projects(id) ON DELETE CASCADE,
+        resource_id TEXT REFERENCES resources(id) ON DELETE CASCADE,
+        author_id TEXT NOT NULL,
         content TEXT NOT NULL,
-        content_markdown TEXT,
+        target_type TEXT,
+        target_id TEXT,
+        metadata TEXT DEFAULT '{}',
         parent_comment_id TEXT REFERENCES comments(id) ON DELETE CASCADE,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -172,6 +175,45 @@ export class WorkspaceDAO {
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         last_active_at TEXT DEFAULT CURRENT_TIMESTAMP,
         expires_at TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        email TEXT UNIQUE NOT NULL,
+        name TEXT,
+        avatar TEXT,
+        password_hash TEXT,
+        auth_provider TEXT DEFAULT 'local',
+        auth_provider_id TEXT,
+        email_verified INTEGER DEFAULT 0,
+        mfa_enabled INTEGER DEFAULT 0,
+        mfa_secret TEXT,
+        backup_codes TEXT,
+        last_login_at TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        deactivated_at TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS oauth_states (
+        id TEXT PRIMARY KEY,
+        state TEXT UNIQUE NOT NULL,
+        provider TEXT NOT NULL,
+        redirect_uri TEXT NOT NULL,
+        workspace_id TEXT,
+        expires_at TEXT NOT NULL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS security_audit_log (
+        id TEXT PRIMARY KEY,
+        user_id TEXT,
+        event_type TEXT NOT NULL,
+        details TEXT DEFAULT '{}',
+        ip_address TEXT,
+        user_agent TEXT,
+        workspace_id TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
       );
 
       -- Create indexes for performance
@@ -472,7 +514,7 @@ export class WorkspaceDAO {
         MAX(ae.created_at) as last_activity
       FROM projects p
       LEFT JOIN resources r ON r.project_id = p.id
-      LEFT JOIN comments c ON c.resource_id = r.id AND c.status = 'active'
+      LEFT JOIN comments c ON c.resource_id = r.id AND c.deleted_at IS NULL
       LEFT JOIN activity_events ae ON ae.project_id = p.id
       ${whereClause}
       GROUP BY p.id
@@ -1021,7 +1063,7 @@ export class WorkspaceDAO {
         c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
         c.author_id, c.content, c.target_type, c.target_id, c.metadata,
         c.created_at, c.updated_at, c.deleted_at,
-        u.username as author_name, u.email as author_email,
+        u.name as author_name, u.email as author_email,
         COUNT(replies.id) as reply_count
       FROM comments c
       LEFT JOIN users u ON c.author_id = u.id
@@ -1143,7 +1185,7 @@ export class WorkspaceDAO {
         c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
         c.author_id, c.content, c.target_type, c.target_id, c.metadata,
         c.created_at, c.updated_at,
-        u.username as author_name, u.email as author_email,
+        u.name as author_name, u.email as author_email,
         COUNT(replies.id) as reply_count
       FROM comments c
       LEFT JOIN users u ON c.author_id = u.id
@@ -1217,7 +1259,7 @@ export class WorkspaceDAO {
         c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
         c.author_id, c.content, c.target_type, c.target_id, c.metadata,
         c.created_at, c.updated_at,
-        u.username as author_name, u.email as author_email,
+        u.name as author_name, u.email as author_email,
         0 as reply_count
       FROM comments c
       LEFT JOIN users u ON c.author_id = u.id
@@ -1282,7 +1324,7 @@ export class WorkspaceDAO {
         c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
         c.author_id, c.content, c.target_type, c.target_id, c.metadata,
         c.created_at, c.updated_at,
-        u.username as author_name, u.email as author_email,
+        u.name as author_name, u.email as author_email,
         COUNT(replies.id) as reply_count
       FROM comments c
       LEFT JOIN users u ON c.author_id = u.id

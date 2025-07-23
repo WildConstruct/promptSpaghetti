@@ -44,10 +44,10 @@ export interface PerformanceTestResult {
   duration: number;
   passed: boolean;
   results: {
-    loadTests?: any;
-    infrastructureScenarios?: any;
-    userWorkflows?: any;
-    orchestration?: any;
+    loadTests?: unknown;
+    infrastructureScenarios?: unknown;
+    userWorkflows?: unknown;
+    orchestration?: unknown;
   };
   thresholdViolations: string[];
   recommendations: string[];

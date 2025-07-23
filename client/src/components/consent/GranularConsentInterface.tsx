@@ -26,7 +26,16 @@ interface CategoryState {
   someEnabled: boolean;
 }
 
-export   const [categories, setCategories] = useState<ConsentCategory[]>([]);
+export const GranularConsentInterface: React.FC<GranularConsentInterfaceProps> = ({ 
+  userId, 
+  onSave, 
+  onCancel, 
+  initialPreferences = [], 
+  readOnly = false, 
+  complianceMode = 'GDPR' 
+}) => {
+  const [preferences, setPreferences] = useState<ConsentPreference[]>(initialPreferences);
+  const [categories, setCategories] = useState<ConsentCategory[]>([]);
   const [categoryStates, setCategoryStates] = useState<Record<string, CategoryState>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
