@@ -334,3 +334,5 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({
 });
 
 ProfessionalNodeRenderer.displayName = 'ProfessionalNodeRenderer';
+
+export default ProfessionalNodeRenderer;

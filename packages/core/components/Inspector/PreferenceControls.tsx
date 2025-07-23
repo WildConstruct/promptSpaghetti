@@ -299,3 +299,5 @@ export
     </div>
   );
 };
+
+export default PreferenceControls;

@@ -242,3 +242,5 @@ export   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
     </div>
   );
 };
+
+export default ProgressiveDisclosureSection;
