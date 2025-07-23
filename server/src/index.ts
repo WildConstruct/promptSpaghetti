@@ -16,6 +16,7 @@ import lockingRoutes from './routes/locking';
 import { randomizerRoutes } from './routes/randomizer';
 import { analyticsRoutes } from './routes/analytics';
 import { registerFileBrowserAnalyticsRoutes } from './routes/file-browser-analytics';
+import { registerFileSystemRoutes } from './routes/file-system';
 import { ticketRoutes } from './routes/tickets';
 import { registerVerificationRoutes } from './routes/verification-requests';
 import { registerPolicyVersioningRoutes } from './routes/policy-versioning';
@@ -1395,6 +1396,9 @@ server.register(revisionRequestRoutes, { prefix: '/api' });
 
 // Register file browser analytics routes
 server.register(registerFileBrowserAnalyticsRoutes);
+
+// Register file system routes
+server.register(registerFileSystemRoutes);
 
 // Register analytics routes
 if (analyticsDashboard && costTracker) {

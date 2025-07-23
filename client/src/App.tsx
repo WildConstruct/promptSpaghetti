@@ -5,6 +5,7 @@ import './randomizer.css';
 
 import BrowserSafeGraphEditor from './components/BrowserSafeGraphEditor';
 import EnhancedGraphEditor from './components/EnhancedGraphEditor';
+import FileBrowser from './components/file-browser/FileBrowser';
 
 interface GraphEditorProps {
   initialNodes?: unknown[];
@@ -91,12 +92,18 @@ function MainApp() {
   const [generatedGraph, setGeneratedGraph] = useState<unknown>(null);
 
   // Determine active tab based on current route (simplified, no auth)
-  const activeTab = location.pathname === '/randomizer' ? 'randomizer' : 'editor';
+  const getActiveTab = () => {
+    if (location.pathname === '/randomizer') return 'randomizer';
+    if (location.pathname === '/files') return 'files';
+    return 'editor';
+  };
+  const activeTab = getActiveTab();
 
-  const handleTabChange = useCallback((tab: 'editor' | 'randomizer') => {
+  const handleTabChange = useCallback((tab: 'editor' | 'randomizer' | 'files') => {
     const paths = {
       editor: '/',
-      randomizer: '/randomizer'
+      randomizer: '/randomizer',
+      files: '/files'
     };
     navigate(paths[tab] || '/');
   }, [navigate]);
@@ -110,6 +117,14 @@ function MainApp() {
     console.error('Randomizer error:', error);
     alert(`Generation failed: ${error.message}`);
   }, []);
+
+  const handleFileLoad = useCallback((fileData: unknown) => {
+    // Load graph data from file browser
+    if (fileData && typeof fileData === 'object' && 'nodes' in fileData && 'edges' in fileData) {
+      setGeneratedGraph(fileData);
+      navigate('/'); // Navigate to editor tab
+    }
+  }, [navigate]);
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column' }}>

@@ -108,6 +108,11 @@ interface NodeData {
   description?: string;
   category?: string;
   type?: string;
+  options?: Array<{
+    label: string;
+    value: string;
+    weight?: number;
+  }>;
 }
 
 // Professional Node Components
@@ -544,7 +549,7 @@ const ProfessionalPalette: React.FC<{
   );
 };
 
-// Inspector Panel Component
+// Enhanced Inspector Panel Component with Variable Editing
 const InspectorPanel: React.FC<{
   selectedNode: Node | null;
   onUpdateNode: (nodeId: string, updates: Partial<NodeData>) => void;
@@ -552,17 +557,33 @@ const InspectorPanel: React.FC<{
 }> = ({ selectedNode, onUpdateNode, onDeleteNode }) => {
   const [label, setLabel] = useState(selectedNode?.data?.label || '');
   const [description, setDescription] = useState(selectedNode?.data?.description || '');
+  const [options, setOptions] = useState<Array<{label: string, value: string, weight?: number}>>(selectedNode?.data?.options || []);
 
   React.useEffect(() => {
     setLabel(selectedNode?.data?.label || '');
     setDescription(selectedNode?.data?.description || '');
+    setOptions(selectedNode?.data?.options || []);
   }, [selectedNode]);
 
   const handleSave = useCallback(() => {
     if (selectedNode) {
-      onUpdateNode(selectedNode.id, { label, description });
+      onUpdateNode(selectedNode.id, { label, description, options });
     }
-  }, [selectedNode, label, description, onUpdateNode]);
+  }, [selectedNode, label, description, options, onUpdateNode]);
+
+  const addOption = useCallback(() => {
+    setOptions(prev => [...prev, { label: 'New Option', value: 'new-option', weight: 1 }]);
+  }, []);
+
+  const updateOption = useCallback((index: number, field: 'label' | 'value' | 'weight', value: string | number) => {
+    setOptions(prev => prev.map((opt, i) => 
+      i === index ? { ...opt, [field]: value } : opt
+    ));
+  }, []);
+
+  const removeOption = useCallback((index: number) => {
+    setOptions(prev => prev.filter((_, i) => i !== index));
+  }, []);
 
   if (!selectedNode) {
     return (
@@ -760,6 +781,158 @@ const InspectorPanel: React.FC<{
         </div>
       </div>
 
+      {/* Variable Options Editor for Logic/Transform/Variable nodes */}
+      {(selectedNode.type === 'logic' || selectedNode.type === 'transform' || selectedNode.type === 'variable') && (
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '12px',
+          }}>
+            <label style={{
+              color: professionalColors.text.primary,
+              fontSize: '13px',
+              fontWeight: 500,
+            }}>
+              Options ({options.length})
+            </label>
+            <button
+              onClick={addOption}
+              style={{
+                padding: '4px 8px',
+                background: professionalColors.accent.blue + '20',
+                border: `1px solid ${professionalColors.accent.blue}`,
+                borderRadius: '4px',
+                color: professionalColors.accent.blue,
+                fontSize: '12px',
+                cursor: 'pointer',
+                outline: 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = professionalColors.accent.blue + '30';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = professionalColors.accent.blue + '20';
+              }}
+            >
+              + Add
+            </button>
+          </div>
+
+          <div style={{ 
+            maxHeight: '300px', 
+            overflowY: 'auto',
+            border: `1px solid ${professionalColors.ui.border}`,
+            borderRadius: '6px',
+            background: professionalColors.background.primary,
+          }}>
+            {options.length === 0 ? (
+              <div style={{
+                padding: '20px',
+                textAlign: 'center',
+                color: professionalColors.text.secondary,
+                fontSize: '13px',
+              }}>
+                No options defined. Click "Add" to create options.
+              </div>
+            ) : (
+              options.map((option, index) => (
+                <div key={index} style={{
+                  padding: '12px',
+                  borderBottom: index < options.length - 1 ? `1px solid ${professionalColors.ui.border}` : 'none',
+                }}>
+                  <div style={{ marginBottom: '8px' }}>
+                    <input
+                      type="text"
+                      value={option.label}
+                      onChange={(e) => updateOption(index, 'label', e.target.value)}
+                      onBlur={handleSave}
+                      placeholder="Option label"
+                      style={{
+                        width: '100%',
+                        padding: '6px 8px',
+                        background: professionalColors.background.secondary,
+                        border: `1px solid ${professionalColors.ui.border}`,
+                        borderRadius: '4px',
+                        color: professionalColors.text.primary,
+                        fontSize: '13px',
+                        outline: 'none',
+                      }}
+                    />
+                  </div>
+                  <div style={{ marginBottom: '8px' }}>
+                    <input
+                      type="text"
+                      value={option.value}
+                      onChange={(e) => updateOption(index, 'value', e.target.value)}
+                      onBlur={handleSave}
+                      placeholder="Option value"
+                      style={{
+                        width: '100%',
+                        padding: '6px 8px',
+                        background: professionalColors.background.secondary,
+                        border: `1px solid ${professionalColors.ui.border}`,
+                        borderRadius: '4px',
+                        color: professionalColors.text.primary,
+                        fontSize: '13px',
+                        outline: 'none',
+                      }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{
+                        display: 'block',
+                        color: professionalColors.text.secondary,
+                        fontSize: '11px',
+                        marginBottom: '4px',
+                      }}>
+                        Weight
+                      </label>
+                      <input
+                        type="number"
+                        value={option.weight || 1}
+                        onChange={(e) => updateOption(index, 'weight', parseFloat(e.target.value) || 1)}
+                        onBlur={handleSave}
+                        min="0"
+                        step="0.1"
+                        style={{
+                          width: '100%',
+                          padding: '4px 6px',
+                          background: professionalColors.background.secondary,
+                          border: `1px solid ${professionalColors.ui.border}`,
+                          borderRadius: '4px',
+                          color: professionalColors.text.primary,
+                          fontSize: '12px',
+                          outline: 'none',
+                        }}
+                      />
+                    </div>
+                    <button
+                      onClick={() => removeOption(index)}
+                      style={{
+                        padding: '4px 6px',
+                        background: 'transparent',
+                        border: `1px solid ${professionalColors.accent.red}`,
+                        borderRadius: '4px',
+                        color: professionalColors.accent.red,
+                        fontSize: '11px',
+                        cursor: 'pointer',
+                        marginTop: '16px',
+                      }}
+                      title="Remove option"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
       <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
         <button
           onClick={() => onDeleteNode(selectedNode.id)}
@@ -797,7 +970,8 @@ const StatusBar: React.FC<{
   onSave: () => void;
   onLoad: () => void;
   onClear: () => void;
-}> = ({ nodeCount, edgeCount, onSave, onLoad, onClear }) => (
+  onRun: () => void;
+}> = ({ nodeCount, edgeCount, onSave, onLoad, onClear, onRun }) => (
   <div style={{
     height: '40px',
     background: professionalColors.background.tertiary,
@@ -861,6 +1035,28 @@ const StatusBar: React.FC<{
       >
         🗑️ Clear
       </button>
+      <button
+        onClick={onRun}
+        style={{
+          background: professionalColors.accent.green + '20',
+          border: `1px solid ${professionalColors.accent.green}`,
+          color: professionalColors.accent.green,
+          padding: '4px 12px',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontSize: '11px',
+          fontWeight: 600,
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = professionalColors.accent.green + '30';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = professionalColors.accent.green + '20';
+        }}
+      >
+        ▶️ Run
+      </button>
     </div>
   </div>
 );
@@ -884,7 +1080,17 @@ const defaultNodes: Node[] = [
     data: {
       label: "Panel Archetype",
       description: "Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.",
-      category: "logic"
+      category: "logic",
+      options: [
+        { label: "Cockpit Control Surface (Fighter, Shuttle)", value: "Cockpit Control Surface", weight: 1 },
+        { label: "Bridge/Command Console (Capital Ship, Ops)", value: "Bridge/Command Center Console", weight: 1 },
+        { label: "Machinery/Engineering Panel (Engine Room, Reactor)", value: "Machinery/Engineering Panel", weight: 1 },
+        { label: "Data Terminal Interface (Info Access, Logs)", value: "Data Terminal Interface", weight: 1 },
+        { label: "Handheld Device (Scanner, Commlink, Tricorder-like)", value: "Handheld Device", weight: 1 },
+        { label: "Wall-Mounted Utility Panel (Life Support, Door Control)", value: "Wall-Mounted Utility Panel", weight: 1 },
+        { label: "Mainframe Access Station (Bulky Computer Interface)", value: "Mainframe Access Station", weight: 1 },
+        { label: "Laboratory Equipment Interface (Scientific Instruments)", value: "Laboratory Equipment Interface", weight: 1 }
+      ]
     }
   },
   {
@@ -894,7 +1100,17 @@ const defaultNodes: Node[] = [
     data: {
       label: "Aesthetic Influence",
       description: "Style: Star Wars, Cassette Futurism, Dieselpunk, Atompunk, etc.",
-      category: "logic"
+      category: "logic",
+      options: [
+        { label: "Star Wars Core (Used Future, 70s Analog)", value: "Star Wars Core", weight: 1 },
+        { label: "Cassette Futurism (Alien, Blade Runner - 70s/80s CRTs)", value: "Cassette Futurism", weight: 1 },
+        { label: "Dieselpunk (Fallout, Sky Captain - Interwar/WWII, Gritty)", value: "Dieselpunk", weight: 1 },
+        { label: "Atompunk/Raygun Gothic (Jetsons, Forbidden Planet - 50s/60s)", value: "Atompunk/Raygun Gothic", weight: 1 },
+        { label: "Decopunk (Bioshock - Art Deco, Luxurious Machines)", value: "Decopunk", weight: 1 },
+        { label: "Soviet Retrofuturism (Constructivist, Monumental)", value: "Soviet Retrofuturism", weight: 1 },
+        { label: "Valvepunk/Clockpunk (Early Industrial, Brass, Valves)", value: "Valvepunk/Clockpunk", weight: 1 },
+        { label: "Formica Futurism (Googie, Populuxe - Late 50s/Early 60s)", value: "Formica Futurism", weight: 1 }
+      ]
     }
   },
   {
@@ -914,7 +1130,15 @@ const defaultNodes: Node[] = [
     data: {
       label: "Wear Level",
       description: "Condition: Pristine, Lightly Used, Battle-Scarred, etc.",
-      category: "transform"
+      category: "transform",
+      options: [
+        { label: "Pristine (New Old Stock - retro design, mint condition)", value: "Pristine (New Old Stock)", weight: 1 },
+        { label: "Lightly Used (Minor scuffs, dust, fingerprints)", value: "Lightly Used", weight: 2 },
+        { label: "Moderately Worn (Visible scratches, grime, faded labels)", value: "Moderately Worn", weight: 3 },
+        { label: "Heavily Used / Jury-Rigged (Damage, patches, makeshift repairs)", value: "Heavily Used / Jury-Rigged", weight: 2 },
+        { label: "Battle-Scarred / Field Repaired (Impact marks, welds)", value: "Battle-Scarred / Field Repaired", weight: 1.5 },
+        { label: "Overgrown / Reclaimed by Nature (Dust, vines, rust, decay)", value: "Overgrown / Reclaimed by Nature", weight: 0.5 }
+      ]
     }
   },
   {
@@ -1028,6 +1252,71 @@ const defaultEdges: Edge[] = [
   { id: "e13-final", source: "function-13", target: "output-final", type: "smoothstep" }
 ];
 
+// Graph execution engine
+function executeGraph(nodes: Node[], edges: Edge[]): { [key: string]: string } {
+  const results: { [key: string]: string } = {};
+  
+  // Helper function to get weighted random choice
+  const getWeightedChoice = (options: Array<{label: string, value: string, weight?: number}>): string => {
+    if (options.length === 0) return "No options defined";
+    
+    const totalWeight = options.reduce((sum, opt) => sum + (opt.weight || 1), 0);
+    let random = Math.random() * totalWeight;
+    
+    for (const option of options) {
+      random -= (option.weight || 1);
+      if (random <= 0) {
+        return option.value;
+      }
+    }
+    
+    return options[0].value; // Fallback
+  };
+
+  // Execute nodes based on their type
+  nodes.forEach(node => {
+    const nodeData = node.data as NodeData;
+    
+    switch (node.type) {
+      case 'text':
+        results[node.id] = nodeData.label || 'Start';
+        break;
+        
+      case 'logic':
+      case 'transform':
+      case 'variable':
+        if (nodeData.options && nodeData.options.length > 0) {
+          results[node.id] = getWeightedChoice(nodeData.options);
+        } else {
+          results[node.id] = nodeData.label || 'No options';
+        }
+        break;
+        
+      case 'output':
+        // Combine all inputs for the output
+        const inputNodes = edges
+          .filter(edge => edge.target === node.id)
+          .map(edge => edge.source);
+        
+        if (inputNodes.length > 0) {
+          const inputValues = inputNodes
+            .map(nodeId => results[nodeId])
+            .filter(val => val && val !== 'Start')
+            .join(', ');
+          results[node.id] = inputValues || 'No inputs connected';
+        } else {
+          results[node.id] = 'Final output (no inputs)';
+        }
+        break;
+        
+      default:
+        results[node.id] = nodeData.label || 'Unknown';
+    }
+  });
+  
+  return results;
+}
+
 const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
   initialNodes = [],
   initialEdges = []
@@ -1041,8 +1330,16 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
   
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const [executionResults, setExecutionResults] = useState<{ [key: string]: string } | null>(null);
+  const [showOutput, setShowOutput] = useState(false);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition } = useReactFlow();
+
+  const handleRunGraph = useCallback(() => {
+    const results = executeGraph(nodes, edges);
+    setExecutionResults(results);
+    setShowOutput(true);
+  }, [nodes, edges]);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({
@@ -1231,7 +1528,190 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
         onSave={saveGraph}
         onLoad={loadGraph}
         onClear={clearGraph}
+        onRun={handleRunGraph}
       />
+      
+      {/* Output Modal */}
+      {showOutput && executionResults && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+        }}>
+          <div style={{
+            background: professionalColors.background.secondary,
+            border: `1px solid ${professionalColors.ui.border}`,
+            borderRadius: '8px',
+            width: '90%',
+            maxWidth: '800px',
+            maxHeight: '80%',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)',
+          }}>
+            <div style={{
+              padding: '20px',
+              borderBottom: `1px solid ${professionalColors.ui.border}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+              <h2 style={{
+                color: professionalColors.text.primary,
+                fontSize: '18px',
+                fontWeight: 600,
+                margin: 0,
+              }}>
+                🎲 Generated Output
+              </h2>
+              <button
+                onClick={() => setShowOutput(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: professionalColors.text.secondary,
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  padding: '4px',
+                }}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div style={{
+              padding: '20px',
+              overflow: 'auto',
+              flex: 1,
+            }}>
+              {/* Final Output */}
+              {executionResults['output-final'] && (
+                <div style={{
+                  background: professionalColors.accent.green + '10',
+                  border: `1px solid ${professionalColors.accent.green}`,
+                  borderRadius: '6px',
+                  padding: '16px',
+                  marginBottom: '24px',
+                }}>
+                  <h3 style={{
+                    color: professionalColors.accent.green,
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    margin: '0 0 12px 0',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                  }}>
+                    🎯 Final Generated Prompt
+                  </h3>
+                  <div style={{
+                    color: professionalColors.text.primary,
+                    fontSize: '16px',
+                    lineHeight: 1.6,
+                    fontWeight: 500,
+                  }}>
+                    {executionResults['output-final']}
+                  </div>
+                </div>
+              )}
+              
+              {/* Individual Node Results */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: '16px',
+              }}>
+                {Object.entries(executionResults)
+                  .filter(([nodeId]) => nodeId !== 'output-final' && nodeId !== 'start-1')
+                  .map(([nodeId, result]) => {
+                    const node = nodes.find(n => n.id === nodeId);
+                    const nodeType = node?.type || 'unknown';
+                    const nodeLabel = node?.data?.label || nodeId;
+                    
+                    return (
+                      <div
+                        key={nodeId}
+                        style={{
+                          background: professionalColors.background.primary,
+                          border: `1px solid ${professionalColors.ui.border}`,
+                          borderRadius: '6px',
+                          padding: '12px',
+                        }}
+                      >
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginBottom: '8px',
+                        }}>
+                          <div style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            backgroundColor: professionalColors.nodes[nodeType as keyof typeof professionalColors.nodes] || professionalColors.ui.border,
+                            marginRight: '8px',
+                          }} />
+                          <div style={{
+                            color: professionalColors.text.secondary,
+                            fontSize: '12px',
+                            fontWeight: 500,
+                          }}>
+                            {nodeLabel}
+                          </div>
+                        </div>
+                        <div style={{
+                          color: professionalColors.text.primary,
+                          fontSize: '14px',
+                          lineHeight: 1.4,
+                        }}>
+                          {result}
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+              
+              <div style={{
+                marginTop: '24px',
+                padding: '16px',
+                background: professionalColors.background.primary,
+                border: `1px solid ${professionalColors.ui.border}`,
+                borderRadius: '6px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+                <div style={{
+                  color: professionalColors.text.secondary,
+                  fontSize: '12px',
+                }}>
+                  Generated at: {new Date().toLocaleTimeString()}
+                </div>
+                <button
+                  onClick={handleRunGraph}
+                  style={{
+                    background: professionalColors.accent.blue + '20',
+                    border: `1px solid ${professionalColors.accent.blue}`,
+                    color: professionalColors.accent.blue,
+                    padding: '6px 12px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '12px',
+                    fontWeight: 500,
+                  }}
+                >
+                  🎲 Generate Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
