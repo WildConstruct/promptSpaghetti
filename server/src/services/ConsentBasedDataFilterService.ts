@@ -4,8 +4,8 @@
 
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
-import { ConsentData, // GranularConsent // Unused import } from './PolicyAcceptanceTrackingService';
-import { // DataProtectionRule // Unused import, // RuleEvaluationContext // Unused import } from '../types/DataProtectionRuleSchema';
+import { ConsentData, GranularConsent } from './PolicyAcceptanceTrackingService';
+import { DataProtectionRule, RuleEvaluationContext } from '../types/DataProtectionRuleSchema';
 
 export interface FilterRequest {
   userId: string;

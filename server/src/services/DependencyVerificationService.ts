@@ -11,12 +11,12 @@
 
 import { Pool, PoolClient } from 'pg';
 import { Logger } from '@nestjs/common';
-import { HealthMonitoringService, // SystemHealth // Unused import, // HealthCheckResult // Unused import } from './health/HealthMonitoringService.js';
+import { HealthMonitoringService, SystemHealth, HealthCheckResult } from './health/HealthMonitoringService.js';
 import { SecurityScanningService } from './security/SecurityScanningService.js';
 import http from 'http';
 import https from 'https';
 import fs from 'fs/promises';
-import // semver // Unused import from 'semver';
+import semver from 'semver';
 
 // =============================================================================
 // Dependency Verification Types
@@ -576,15 +576,12 @@ export class DependencyVerificationService {
     // This is a simplified example
     
     try {
-      const __testKey = `health_check_${Date.now()}`;
-      const __testValue = 'test_value';
-      
+                  
       // Test write
       // await cache.set(testKey, testValue, 10); // 10 second expiry
       
       // Test read
-      // const retrievedValue = await cache.get(testKey);
-      
+      //       
       const responseTime = Date.now() - startTime;
       
       return {

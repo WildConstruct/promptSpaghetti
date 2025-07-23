@@ -64,7 +64,7 @@ program
       console.log(chalk.gray('  3. npm test'));
       console.log(chalk.gray('  4. Edit the generated files to implement your node logic'));
     } catch (error) {
-      console.error(chalk.red('❌ Error:'), error.message);
+      console.error(chalk.red('❌ Error:'), (error as Error).message);
       process.exit(1);
     }
   });
@@ -546,7 +546,11 @@ const node = new ${config.displayName.replace(/[^a-zA-Z0-9]/g, '')}('my-node', {
 ## Inputs
 
 ${config.inputs.map(
-    input => `- **${input.name}** (${input.type}${input.required ? ', required' : ', optional'}): ${input.description || 'No description'}`
+    input => `- **${input.name}** (
+      ${input.type}${input.required ? ',
+      required' : ',
+      optional'}
+    ): ${input.description || 'No description'}`
   ).join('\n')}
 
 ## Outputs

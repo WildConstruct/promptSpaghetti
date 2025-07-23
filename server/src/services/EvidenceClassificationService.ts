@@ -10,8 +10,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import { DataClassificationService, DataClassification } from './DataClassificationService';
-import { AuditEvidenceMapper, EvidenceType, // ComplianceFramework // Unused import } from './AuditEvidenceMapper';
-import * as // crypto // Unused import from 'crypto';
+import { AuditEvidenceMapper, EvidenceType, ComplianceFramework } from './AuditEvidenceMapper';
+import * as crypto from 'crypto';
 
 // =============================================================================
 // Evidence Classification Interfaces
@@ -283,7 +283,10 @@ export class EvidenceClassificationService {
   /**
    * Add new classification rule
    */
-  async addClassificationRule(rule: Omit<EvidenceClassificationRule, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async addClassificationRule(
+    rule: Omit<EvidenceClassificationRule,
+    'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<string> {
     const newRule: EvidenceClassificationRule = {
       ...rule,
       id: this.generateRuleId(),

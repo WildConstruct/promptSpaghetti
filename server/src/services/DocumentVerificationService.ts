@@ -1,6 +1,6 @@
-import { Pool, // PoolClient // Unused import } from 'pg';
+import { Pool, PoolClient } from 'pg';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import // crypto // Unused import from 'crypto';
+import crypto from 'crypto';
 import sharp from 'sharp';
 import { PDFDocument } from 'pdf-lib';
 import * as fs from 'fs';

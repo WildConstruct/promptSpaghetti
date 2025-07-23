@@ -26,7 +26,7 @@ interface AdvancedPromptingCollaborationPanelProps {
   className?: string;
 }
 
-export const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps> = ({ 
+const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps> = ({ 
   currentUser,
   onMARSRegionCreate, 
   onZadaPatternCreate,

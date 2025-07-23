@@ -28,7 +28,15 @@ export interface VisualDiffPanelProps {
   className?: string;
 }
 
-export   const [targetVersionId, setTargetVersionId] = useState<string>(initialTargetVersionId || '');
+const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ 
+  graphId, 
+  sourceVersionId, 
+  initialSourceVersionId, 
+  initialTargetVersionId, 
+  onClose, 
+  className = '' 
+}) => {
+  const [targetVersionId, setTargetVersionId] = useState<string>(initialTargetVersionId || '');
   const [viewMode, setViewMode] = useState<ViewMode>('side-by-side');
   const [highlightMode, setHighlightMode] = useState<HighlightMode>('changes');
   const [showUnchanged, setShowUnchanged] = useState(true);
@@ -491,3 +499,5 @@ export   const [targetVersionId, setTargetVersionId] = useState<string>(initialT
     </div>
   );
 };
+
+export default VisualDiffPanel;

@@ -4,8 +4,8 @@
 
 import { EventEmitter } from 'events';
 import { logger } from '../utils/logger';
-import { // circuitBreakerService // Unused import } from './CircuitBreakerService';
-import { // retryService // Unused import } from './RetryService';
+import { circuitBreakerService } from './CircuitBreakerService';
+import { retryService } from './RetryService';
 
 export enum HealthStatus {
   HEALTHY = 'healthy',

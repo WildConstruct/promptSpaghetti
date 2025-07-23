@@ -105,36 +105,14 @@ export const useKeyboardShortcuts = ({
 /**
  * Hook for command palette specific shortcuts
  */
-export const useCommandPaletteShortcuts = () => {
-  const shortcuts = [
-    { key: 'k', ctrlKey: true, action: 'openCommandPalette' },
-    { key: 'p', ctrlKey: true, action: 'openCommandPalette' },
-    { key: 'Escape', action: 'closeCommandPalette' }
-  ];
-  
+export   
   return useKeyboardShortcuts({ shortcuts, enabled: true });
 };
 
 /**
  * Default keyboard shortcuts for the graph editor
  */
-export const createDefaultShortcuts = ({
-  onUndo,
-  onRedo,
-  onSave,
-  onCopy,
-  onPaste,
-  onDelete,
-  onSelectAll,
-  onDuplicate,
-  onFitView,
-  onZoomIn,
-  onZoomOut,
-  onNewNode,
-  onExport
-}: {
-  onUndo?: () => void;
-  onRedo?: () => void;
+export   onRedo?: () => void;
   onSave?: () => void;
   onCopy?: () => void;
   onPaste?: () => void;
@@ -291,8 +269,7 @@ export const createDefaultShortcuts = ({
 /**
  * Format keyboard shortcut for display
  */
-export   
-  const isMac = navigator.platform.includes('Mac');
+export   const isMac = navigator.platform.includes('Mac');
   
   if (shortcut.ctrl && !shortcut.cmd) {
     parts.push(isMac ? '⌃' : 'Ctrl');
@@ -338,15 +315,7 @@ export
 /**
  * Check if a keyboard shortcut conflicts with browser shortcuts
  */
-export const conflictsWithBrowser = (shortcut: KeyboardShortcut): boolean => {
-  const browserShortcuts = [
-    { key: 't', cmd: true }, // New tab
-    { key: 'w', cmd: true }, // Close tab
-    { key: 'r', cmd: true }, // Reload
-    { key: 'f', cmd: true }, // Find
-    { key: 'l', cmd: true }, // Address bar
-  ];
-  
+export   
   return browserShortcuts.some(browser => 
     browser.key === shortcut.key.toLowerCase() && 
     !!browser.cmd === !!shortcut.cmd &&

@@ -30,7 +30,24 @@ export interface ProgressiveDisclosureSectionProps {
  * - Advanced: Power user options with collapsible sections
  * - Debug: All technical details visible
  */
-export   const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
+const ProgressiveDisclosureSection: React.FC<ProgressiveDisclosureSectionProps> = ({ 
+  title, 
+  level, 
+  children, 
+  description, 
+  defaultExpanded = false, 
+  icon, 
+  className = '', 
+  priority: explicitPriority, 
+  fieldName 
+}) => {
+  const { 
+    complexityLevel, 
+    shouldShowAdvancedFeatures, 
+    shouldShowTechnicalFields 
+  } = useUISettingsStore();
+
+  const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
   
   // Determine field priority using hierarchy design system
   const priority = explicitPriority || (fieldName ? classifyFieldPriority(fieldName) : 'standard');

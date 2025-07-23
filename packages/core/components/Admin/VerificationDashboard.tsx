@@ -57,7 +57,7 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
   flagged: boolean;
 }
 
-export const VerificationDashboard: React.FC<VerificationDashboardProps> = ({
+const VerificationDashboard: React.FC<VerificationDashboardProps> = ({
   className = '',
   onRequestSelect
 }) => {
@@ -127,8 +127,6 @@ export const VerificationDashboard: React.FC<VerificationDashboardProps> = ({
       )
     );
   };
-
-    };
 
   const getStatusColor = (status: ValidationStatus) => {
     switch (status) {

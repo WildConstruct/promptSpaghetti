@@ -53,7 +53,7 @@ export interface TargetingCondition {
   type: 'attribute' | 'behavior' | 'segment' | 'geography' | 'device' | 'time';
   field: string;
   operator: string;
-  value: Error;
+  value: any;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
   weight?: number;
   isEnabled: boolean;
@@ -287,9 +287,9 @@ interface AdvancedConditionBuilderProps {
   showVisualBuilder?: boolean;
 }
 
-export   const [preview, setPreview] = useState<TargetingPreview | null>(null);
-  const [previewLoading, setPreviewLoading] = useState(false);
+export   const [previewLoading, setPreviewLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [draggedCondition, setDraggedCondition] = useState<string | null>(null);
 
   const addCondition = (type: TargetingCondition['type'] = 'attribute') => {
     const newCondition: TargetingCondition = {
@@ -769,7 +769,7 @@ interface SegmentManagementProps {
   onDuplicateSegment: (id: string) => void;
 }
 
-export   const [__editingSegment, setEditingSegment] = useState<string | null>(null);
+export   const [editingSegment, setEditingSegment] = useState<string | null>(null);
 
   return (
     <div className="segment-management">
@@ -973,8 +973,6 @@ interface TargetingAnalyticsProps {
   timeRange: '24h' | '7d' | '30d' | '90d';
   onTimeRangeChange: (range: '24h' | '7d' | '30d' | '90d') => void;
 }
-
-export };
 
 // Export all components
 export {

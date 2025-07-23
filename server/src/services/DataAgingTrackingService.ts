@@ -4,8 +4,8 @@
 
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
-import { DataLifecycleAutomationService, // LifecycleStage // Unused import } from './DataLifecycleAutomationService';
-import { DataCategory, // Jurisdiction // Unused import } from '../types/DataRetentionPeriods';
+import { DataLifecycleAutomationService, LifecycleStage } from './DataLifecycleAutomationService';
+import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
 export interface DataAgingRecord {
   agingId: string;

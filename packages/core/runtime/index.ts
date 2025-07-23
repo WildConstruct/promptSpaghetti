@@ -9,6 +9,7 @@ import { ExecutionContext, RuntimeNode } from './types';
 
 // Re-export types
 export { ExecutionContext, RuntimeNode } from './types';
+export { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } from './advanced';
 
 /* ------------------------- Core node runtimes ------------------------- */
 

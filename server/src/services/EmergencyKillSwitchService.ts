@@ -7,7 +7,7 @@
  */
 
 import { Database } from '../database/connection';
-import { // RetryUtils // Unused import, retryableDatabase } from '../utils/RetryUtils';
+import { RetryUtils, retryableDatabase } from '../utils/RetryUtils';
 
 export interface EmergencyKillSwitchConfig {
   id: string;
@@ -73,7 +73,10 @@ export class EmergencyKillSwitchService {
   // ==========================================
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 500 })
-  async createKillSwitch(config: Omit<EmergencyKillSwitchConfig, 'id' | 'createdAt' | 'activationCount'>): Promise<string> {
+  async createKillSwitch(
+    config: Omit<EmergencyKillSwitchConfig,
+    'id' | 'createdAt' | 'activationCount'>
+  ): Promise<string> {
     const killSwitchId = `ks_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
 
@@ -621,7 +624,10 @@ export class EmergencyKillSwitchService {
     }, delay);
   }
 
-  private async sendEmergencyNotification(killSwitch: EmergencyKillSwitchConfig, activation: KillSwitchActivation): Promise<void> {
+  private async sendEmergencyNotification(
+    killSwitch: EmergencyKillSwitchConfig,
+    activation: KillSwitchActivation
+  ): Promise<void> {
     // Implementation would send notifications via email, Slack, etc.
     console.warn('🚨 EMERGENCY NOTIFICATION SENT:');
     console.warn(`   Kill Switch: ${killSwitch.name}`);
@@ -630,7 +636,12 @@ export class EmergencyKillSwitchService {
     console.warn(`   Activated By: ${activation.activatedBy}`);
   }
 
-  private async auditKillSwitchAction(action: string, killSwitchId: string, userId: string, details: any): Promise<void> {
+  private async auditKillSwitchAction(
+    action: string,
+    killSwitchId: string,
+    userId: string,
+    details: any
+  ): Promise<void> {
     await this.db.query(`
       INSERT INTO audit_logs (
         user_id, action, resource_type, resource_id, details, severity, created_at

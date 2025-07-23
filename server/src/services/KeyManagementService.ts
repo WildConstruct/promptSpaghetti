@@ -5,7 +5,7 @@
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
-import { AccessControlManager, AccessContext, KeyOperation, // AccessDecision // Unused import } from './AccessControlManager';
+import { AccessControlManager, AccessContext, KeyOperation, AccessDecision } from './AccessControlManager';
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 

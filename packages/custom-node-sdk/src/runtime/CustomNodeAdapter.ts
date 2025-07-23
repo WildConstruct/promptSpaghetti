@@ -6,8 +6,7 @@
 import { 
   AdvancedRuntimeNode,
   AdvancedExecutionContext,
-  AdvancedNodeConfig,
-  ValidationResult
+  AdvancedNodeConfig
 } from '@prompt-spaghetti/graph-core';
 import { 
   CustomNodeBase, 
@@ -30,9 +29,9 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
   constructor(id: string, customNode: CustomNodeBase, customConfig: CustomNodeConfig) {
     // Convert CustomNodeConfig to AdvancedNodeConfig
     const advancedConfig: AdvancedNodeConfig = {
-      deterministic: customConfig.deterministic,
-      cacheable: customConfig.cacheable,
-      stateful: customConfig.stateful,
+      deterministic: customConfig.deterministic ?? true,
+      cacheable: customConfig.cacheable ?? true,
+      stateful: customConfig.stateful ?? false,
       performanceHints: customConfig.performanceHints
     };
 
@@ -74,7 +73,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
     } catch (error) {
       return {
         valid: false,
-        errors: [`Validation failed: ${error.message}`],
+        errors: [`Validation failed: ${(error as Error).message}`],
         warnings: []
       };
     }
@@ -129,7 +128,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
 
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logExecutionError(ctx, error, executionTime);
+      this.logExecutionError(ctx, error as Error, executionTime);
       throw error;
     }
   }
@@ -161,7 +160,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
    * Create a CustomNodeRuntime instance for the custom node
    */
   private createCustomRuntime(ctx: AdvancedExecutionContext, inputs: Record<string, any>): CustomNodeRuntime {
-    const nodeId = this.nodeId;
+    const nodeId = this.id;
     
     return {
       context: ctx,
@@ -212,7 +211,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
         ctx.executionMeta.nodeStats = new Map();
       }
       
-      ctx.executionMeta.nodeStats.set(this.nodeId, {
+      ctx.executionMeta.nodeStats.set(this.id, {
         executionTime,
         memoryUsed: metadata?.memoryUsed || 0,
         customMetrics: metadata?.metrics || {}
@@ -224,7 +223,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
    * Log execution errors with context
    */
   private logExecutionError(ctx: AdvancedExecutionContext, error: Error, executionTime: number): void {
-    console.error(`[${this.nodeId}] Execution failed after ${executionTime}ms:`, error);
+    console.error(`[${this.id}] Execution failed after ${executionTime}ms:`, error);
     
     if (ctx.executionMeta) {
       if (!ctx.executionMeta.errors) {
@@ -232,7 +231,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       }
       
       ctx.executionMeta.errors.push({
-        nodeId: this.nodeId,
+        nodeId: this.id,
         error: error.message,
         timestamp: new Date().toISOString(),
         executionTime

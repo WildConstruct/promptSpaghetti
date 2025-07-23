@@ -21,7 +21,24 @@ const INHERITANCE_MODES: SelectOption[] = [
   { value: 'individual', label: 'Individual - Custom preference per element' }
 ];
 
-export 
+const PreferenceControls: React.FC<PreferenceControlsProps> = (
+  { nodeId,
+  nodeType,
+  showNodeSpecificControls = true,
+  compact = false }
+) => {
+  const {
+    globalDisclosureLevel,
+    preferenceInheritance,
+    setGlobalDisclosureLevel,
+    setNodeDisclosureLevel,
+    setNodeUseGlobalDefault,
+    setPreferenceInheritance,
+    getNodeDisclosureLevel,
+    getEffectiveNodePreferences,
+    clearNodePreferences
+  } = useUISettingsStore();
+
   const effectiveLevel = nodeId ? getNodeDisclosureLevel(nodeId, nodeType) : globalDisclosureLevel;
   const nodePrefs = nodeId ? getEffectiveNodePreferences(nodeId, nodeType) : null;
 

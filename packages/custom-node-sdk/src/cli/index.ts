@@ -4,4 +4,3 @@
  */
 
 export * from './scaffold';
-export * from './validate';

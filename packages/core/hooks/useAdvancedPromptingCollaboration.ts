@@ -65,9 +65,7 @@ const DEFAULT_CONFIG: AdvancedCollaborationConfig = {
  * prompt development workflows, integrating MARS framework, Zada patterns,
  * and VFX pipeline export capabilities.
  */
-export 
-  const configRef = useRef<AdvancedCollaborationConfig>(DEFAULT_CONFIG);
-  const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
+export   const autoSaveTimeoutRef = useRef<NodeJS.Timeout>();
 
   // Initialize collaboration service
   const initializeCollaboration = useCallback(async (

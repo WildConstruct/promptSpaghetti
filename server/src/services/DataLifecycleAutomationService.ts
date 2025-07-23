@@ -4,7 +4,7 @@
 
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
-import { DataRetentionFrameworkService, // RetentionRecord // Unused import } from './DataRetentionFrameworkService';
+import { DataRetentionFrameworkService, RetentionRecord } from './DataRetentionFrameworkService';
 import { RetentionEnforcementService } from './RetentionEnforcementService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 

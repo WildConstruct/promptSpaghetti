@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import ReactFlow, {
   Node,
   Edge,
@@ -265,7 +265,11 @@ const OutputNode = ({ data, selected }: { data: NodeData; selected: boolean }) =
 
 const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
-    background: `linear-gradient(135deg, ${professionalColors.nodes.variable}15, ${professionalColors.nodes.variable}25)`,
+    background: `linear-gradient(
+      135deg,
+      ${professionalColors.nodes.variable}15,
+      ${professionalColors.nodes.variable}25
+    )`,
     border: `2px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.variable}`,
     borderRadius: '8px',
     padding: '12px 16px',
@@ -319,7 +323,11 @@ const VariableNode = ({ data, selected }: { data: NodeData; selected: boolean })
 
 const TransformNode = ({ data, selected }: { data: NodeData; selected: boolean }) => (
   <div style={{
-    background: `linear-gradient(135deg, ${professionalColors.nodes.transform}15, ${professionalColors.nodes.transform}25)`,
+    background: `linear-gradient(
+      135deg,
+      ${professionalColors.nodes.transform}15,
+      ${professionalColors.nodes.transform}25
+    )`,
     border: `2px solid ${selected ? professionalColors.ui.borderActive : professionalColors.nodes.transform}`,
     borderRadius: '8px',
     padding: '12px 16px',
@@ -857,43 +865,167 @@ const StatusBar: React.FC<{
   </div>
 );
 
-// Default professional graph
+// Techpanel Demo Graph - Anachronistic Tech Panel Generator
 const defaultNodes: Node[] = [
   {
-    id: '1',
-    type: 'text',
-    position: { x: 300, y: 100 },
-    data: { 
-      label: 'Welcome', 
-      description: 'Starting point for your graph',
-      category: 'content'
-    },
+    id: "start-1",
+    type: "text",
+    position: { x: 100, y: 100 },
+    data: {
+      label: "Tech Panel Generator",
+      description: "Anachronistic Tech Panel Generator - Creates retro-futuristic interface prompts",
+      category: "content"
+    }
   },
   {
-    id: '2',
-    type: 'logic',
-    position: { x: 300, y: 250 },
-    data: { 
-      label: 'Process', 
-      description: 'Main processing logic',
-      category: 'logic'
-    },
+    id: "archetype-2", 
+    type: "logic",
+    position: { x: 350, y: 50 },
+    data: {
+      label: "Panel Archetype",
+      description: "Choose panel type: Cockpit, Bridge Console, Engineering Panel, etc.",
+      category: "logic"
+    }
   },
   {
-    id: '3',
-    type: 'output',
-    position: { x: 300, y: 400 },
-    data: { 
-      label: 'Result', 
-      description: 'Final output display',
-      category: 'content'
-    },
+    id: "aesthetic-3",
+    type: "logic", 
+    position: { x: 350, y: 150 },
+    data: {
+      label: "Aesthetic Influence",
+      description: "Style: Star Wars, Cassette Futurism, Dieselpunk, Atompunk, etc.",
+      category: "logic"
+    }
   },
+  {
+    id: "faction-4",
+    type: "logic",
+    position: { x: 600, y: 50 },
+    data: {
+      label: "Faction Alignment", 
+      description: "Empire/Corporate, Rebel/Resistance, Civilian/Smuggler, etc.",
+      category: "logic"
+    }
+  },
+  {
+    id: "wear-5",
+    type: "transform",
+    position: { x: 600, y: 150 },
+    data: {
+      label: "Wear Level",
+      description: "Condition: Pristine, Lightly Used, Battle-Scarred, etc.",
+      category: "transform"
+    }
+  },
+  {
+    id: "colors-6",
+    type: "transform",
+    position: { x: 350, y: 250 },
+    data: {
+      label: "Color Palette",
+      description: "Dark Grays & Blues, Military Greens, Chrome & Pastels, etc.",
+      category: "transform"
+    }
+  },
+  {
+    id: "materials-7",
+    type: "transform",
+    position: { x: 600, y: 250 },
+    data: {
+      label: "Key Materials",
+      description: "Painted Metal, Bakelite, Aged Plastic, Cast Iron, etc.",
+      category: "transform"
+    }
+  },
+  {
+    id: "screen-8",
+    type: "logic",
+    position: { x: 100, y: 200 },
+    data: {
+      label: "Screen Type",
+      description: "CRT, Vector Display, Nixie Tubes, LED Segments, etc.",
+      category: "logic"
+    }
+  },
+  {
+    id: "controls-9",
+    type: "logic",
+    position: { x: 100, y: 300 },
+    data: {
+      label: "Controls",
+      description: "Toggle Switches, Chunky Buttons, Rotary Dials, etc.",
+      category: "logic"
+    }
+  },
+  {
+    id: "greeble-10",
+    type: "transform",
+    position: { x: 350, y: 350 },
+    data: {
+      label: "Detail Density",
+      description: "Greeble level: None, Low, Medium, High, Extreme",
+      category: "transform"
+    }
+  },
+  {
+    id: "labeling-11",
+    type: "variable",
+    position: { x: 600, y: 350 },
+    data: {
+      label: "Labeling Style",
+      description: "Stenciled, Engraved, Dymo Tape, Alien Glyphs, etc.",
+      category: "variable"
+    }
+  },
+  {
+    id: "lighting-12",
+    type: "variable",
+    position: { x: 100, y: 400 },
+    data: {
+      label: "Panel Lighting",
+      description: "Dimly Lit, Harsh Industrial, Soft Glow, Flickering, etc.",
+      category: "variable"
+    }
+  },
+  {
+    id: "function-13",
+    type: "variable",
+    position: { x: 350, y: 450 },
+    data: {
+      label: "Tech Function",
+      description: "Navigation Computer, Weapons Control, Life Support, etc.",
+      category: "variable"
+    }
+  },
+  {
+    id: "output-final",
+    type: "output",
+    position: { x: 600, y: 500 },
+    data: {
+      label: "Generated Prompt",
+      description: "Final detailed prompt for retro-futuristic tech panel",
+      category: "content"
+    }
+  }
 ];
 
 const defaultEdges: Edge[] = [
-  { id: 'e1-2', source: '1', target: '2', type: 'smoothstep' },
-  { id: 'e2-3', source: '2', target: '3', type: 'smoothstep' },
+  { id: "e1-2", source: "start-1", target: "archetype-2", type: "smoothstep" },
+  { id: "e1-3", source: "start-1", target: "aesthetic-3", type: "smoothstep" },
+  { id: "e1-8", source: "start-1", target: "screen-8", type: "smoothstep" },
+  { id: "e2-4", source: "archetype-2", target: "faction-4", type: "smoothstep" },
+  { id: "e3-5", source: "aesthetic-3", target: "wear-5", type: "smoothstep" },
+  { id: "e3-6", source: "aesthetic-3", target: "colors-6", type: "smoothstep" },
+  { id: "e4-7", source: "faction-4", target: "materials-7", type: "smoothstep" },
+  { id: "e5-7", source: "wear-5", target: "materials-7", type: "smoothstep" },
+  { id: "e6-10", source: "colors-6", target: "greeble-10", type: "smoothstep" },
+  { id: "e7-11", source: "materials-7", target: "labeling-11", type: "smoothstep" },
+  { id: "e8-9", source: "screen-8", target: "controls-9", type: "smoothstep" },
+  { id: "e9-12", source: "controls-9", target: "lighting-12", type: "smoothstep" },
+  { id: "e10-13", source: "greeble-10", target: "function-13", type: "smoothstep" },
+  { id: "e11-final", source: "labeling-11", target: "output-final", type: "smoothstep" },
+  { id: "e12-13", source: "lighting-12", target: "function-13", type: "smoothstep" },
+  { id: "e13-final", source: "function-13", target: "output-final", type: "smoothstep" }
 ];
 
 const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
@@ -910,7 +1042,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const { project, screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition } = useReactFlow();
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({
@@ -987,7 +1119,7 @@ const EnhancedGraphEditorInner: React.FC<EnhancedGraphEditorProps> = ({
             const data = JSON.parse(e.target?.result as string);
             if (data.nodes) setNodes(data.nodes);
             if (data.edges) setEdges(data.edges);
-          } catch (error) {
+          } catch {
             alert('Invalid graph file');
           }
         };

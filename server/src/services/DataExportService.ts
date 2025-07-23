@@ -6,7 +6,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DataAccessControlService } from './DataAccessControlService';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as // csv // Unused import from 'csv-writer';
+import * as csv from 'csv-writer';
 
 export interface ExportRequest {
   requestId?: string;
@@ -596,12 +596,26 @@ export class DataExportService {
   private async encryptFile(filePath: string): Promise<string> { return filePath; }
   private async calculateChecksum(__filePath: string): Promise<string> { return ''; }
   private async getDataClassifications(__data: any[]): Promise<string[]> { return []; }
-  private async createExportJob(__jobId: string, __requestId: string, __request: ExportRequest): Promise<ExportJob> { return {} as ExportJob; }
+  private async createExportJob(
+    __jobId: string,
+    __requestId: string,
+    __request: ExportRequest
+  ): Promise<ExportJob> { return {} as ExportJob; }
   private async queueExportJob(__job: ExportJob): Promise<void> { }
   private async calculateEstimatedTime(__request: ExportRequest): Promise<string> { return '5-10 minutes'; }
   private async getExportJob(__jobId: string): Promise<ExportJob | null> { return null; }
   private async getExportRequest(__requestId: string): Promise<ExportRequest | null> { return null; }
-  private async updateJobStatus(__jobId: string, __status: ExportJobStatus, __progress: number, errorMessage?: string): Promise<void> { }
-  private async updateJobCompletion(__jobId: string, __outputPath: string, __recordCount: number, __manifest: ExportManifest): Promise<void> { }
+  private async updateJobStatus(
+    __jobId: string,
+    __status: ExportJobStatus,
+    __progress: number,
+    errorMessage?: string
+  ): Promise<void> { }
+  private async updateJobCompletion(
+    __jobId: string,
+    __outputPath: string,
+    __recordCount: number,
+    __manifest: ExportManifest
+  ): Promise<void> { }
   private async notifyExportCompletion(__userId: string, __jobId: string, __outputPath: string): Promise<void> { }
 }

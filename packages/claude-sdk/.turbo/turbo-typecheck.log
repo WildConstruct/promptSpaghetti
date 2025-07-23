@@ -1,0 +1,4 @@
+
+> @prompt-spaghetti/claude-sdk@0.1.0 typecheck /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/claude-sdk
+> tsc --noEmit
+

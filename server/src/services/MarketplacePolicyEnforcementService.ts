@@ -1,5 +1,5 @@
 import { Pool, PoolClient } from 'pg';
-import { BadRequestException, // ForbiddenException // Unused import, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 
 // Violation and enforcement types
 export enum ViolationType {

@@ -60,15 +60,6 @@ interface EnhancedPreviewState {
 }
 
 export 
-  const [state, setState] = useState<EnhancedPreviewState>({
-    loading: false,
-    error: null,
-    results: [],
-    selectedResultIds: new Set(),
-    performanceStats: null,
-    varianceAnalysis: null
-  });
-
   const abortRef = useRef<AbortController | null>(null);
   const resultManagement = useResultManagementStore();
 

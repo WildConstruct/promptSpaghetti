@@ -11,7 +11,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import { EvidenceClassificationService, DataClassification } from './EvidenceClassificationService';
 import * as crypto from 'crypto';
-import { // promisify // Unused import } from 'util';
+import { promisify } from 'util';
 
 // =============================================================================
 // Evidence Versioning Interfaces

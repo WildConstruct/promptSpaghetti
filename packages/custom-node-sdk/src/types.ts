@@ -3,7 +3,19 @@
  * Defines the contract for creating custom nodes and extensions
  */
 
-import type { AdvancedExecutionContext, AdvancedNodeConfig, AdvancedNodeData, ValidationResult } from '@prompt-spaghetti/graph-core';
+import type { AdvancedExecutionContext, AdvancedNodeConfig } from '@prompt-spaghetti/graph-core';
+
+/**
+ * Validation result for custom node operations
+ */
+export interface ValidationResult {
+  /** Whether validation passed */
+  valid: boolean;
+  /** Validation error messages */
+  errors: string[];
+  /** Validation warning messages */
+  warnings: string[];
+}
 
 /**
  * Custom node metadata that describes the node's capabilities

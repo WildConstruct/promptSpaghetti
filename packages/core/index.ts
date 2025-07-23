@@ -238,3 +238,12 @@ export type {
 export {
   HISTORICAL_ERAS
 } from './types/UTDG';
+
+// Runtime system exports
+export { 
+  ExecutionContext, 
+  RuntimeNode, 
+  AdvancedRuntimeNode, 
+  AdvancedExecutionContext,
+  AdvancedNodeConfig
+} from './runtime';
