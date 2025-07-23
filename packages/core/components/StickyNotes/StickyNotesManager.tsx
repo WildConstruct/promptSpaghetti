@@ -11,10 +11,10 @@
  */
 
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useStickyNotesStore } from 'from '../../stores/stickyNotesStore';';
+import { useStickyNotesStore } from '../../stores/stickyNotesStore';
 import { StickyNote } from './StickyNote';
 import { StickyNoteToolbar } from './StickyNoteToolbar';
-import { StickyNoteColor, StickyNoteCategory } from 'from '../../types/StickyNotes';';
+import { StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes';
 
 interface StickyNotesManagerProps {
   canvasRef?: React.RefObject<HTMLElement>;
@@ -103,43 +103,43 @@ export const StickyNotesManager: React.FC<StickyNotesManagerProps> = ({
       const cmdKey = isMac ? e.metaKey : e.ctrlKey;
 
       switch (e.key) {
-        case 'n':
-          if (cmdKey) {
-            e.preventDefault();
-            const position = { x: 100, y: 100 };
-            const noteId = createNote(position);
-            startEditing(noteId);
-          }
-          break;
-          
-        case 'd':
-          if (cmdKey && selection.length > 0) {
-            e.preventDefault();
-            selection.forEach(id => duplicateNote(id));
-          }
-          break;
-          
-        case 'Delete':
-        case 'Backspace':
-          if (selection.length > 0 && !activeNote) {
-            e.preventDefault();
-            selection.forEach(id => deleteNote(id));
-            clearSelection();
-          }
-          break;
-          
-        case 'Escape':
+      case 'n':
+        if (cmdKey) {
           e.preventDefault();
-          stopEditing();
-          clearSelection();
-          break;
+          const position = { x: 100, y: 100 };
+          const noteId = createNote(position);
+          startEditing(noteId);
+        }
+        break;
           
-        case 'a':
-          if (cmdKey) {
-            e.preventDefault();
-            Object.keys(notes).forEach(id => selectNote(id, true));
-          }
-          break;
+      case 'd':
+        if (cmdKey && selection.length > 0) {
+          e.preventDefault();
+          selection.forEach(id => duplicateNote(id));
+        }
+        break;
+          
+      case 'Delete':
+      case 'Backspace':
+        if (selection.length > 0 && !activeNote) {
+          e.preventDefault();
+          selection.forEach(id => deleteNote(id));
+          clearSelection();
+        }
+        break;
+          
+      case 'Escape':
+        e.preventDefault();
+        stopEditing();
+        clearSelection();
+        break;
+          
+      case 'a':
+        if (cmdKey) {
+          e.preventDefault();
+          Object.keys(notes).forEach(id => selectNote(id, true));
+        }
+        break;
       }
     };
 
