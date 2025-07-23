@@ -40,7 +40,7 @@ const ACTION_TYPES: SelectOption[] = [
   { value: 'linking', label: 'Linking Verb (is, seems)', group: 'Grammar' }
 ];
 
-export   
+export const ActionEditor: React.FC<ActionEditorProps> = ({ nodeId, nodeData, onChange }) => {
   // Action specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';
@@ -542,3 +542,5 @@ export
     </div>
   );
 };
+
+export default ActionEditor;

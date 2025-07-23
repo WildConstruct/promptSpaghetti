@@ -53,7 +53,16 @@ export interface EditorFieldProps {
   disabled?: boolean;
 }
 
-export   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
+export const BaseNodeEditor: React.FC<BaseNodeEditorProps> = ({
+  nodeId,
+  nodeData,
+  schema,
+  onChange,
+  className = '',
+  children
+}) => {
+  const [values, setValues] = React.useState<Record<string, unknown>>(nodeData || {});
+  const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
   
   // Update local state when nodeData changes
   React.useEffect(() => {
@@ -226,3 +235,5 @@ export   const [fieldErrors, setFieldErrors] = React.useState<Record<string, str
     </div>
   );
 };
+
+export default BaseNodeEditor;

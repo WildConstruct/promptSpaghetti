@@ -27,7 +27,7 @@ const JOIN_MODES: SelectOption[] = [
   { value: 'last-n', label: 'Join Last N Inputs' }
 ];
 
-export   
+export const ConcatEditor: React.FC<ConcatEditorProps> = ({ nodeId, nodeData, onChange }) => {
   // Concat specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';
@@ -335,3 +335,5 @@ export
     </div>
   );
 };
+
+export default ConcatEditor;
