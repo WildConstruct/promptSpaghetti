@@ -23,7 +23,7 @@ const OUTPUT_DESTINATIONS: SelectOption[] = [
   { value: 'debug', label: 'Debug Output' }
 ];
 
-export   
+export const OutputEditor: React.FC<OutputEditorProps> = ({ nodeId, nodeData, onChange }) => {
   // Output specific fields
   const label = (nodeData.label as string) || '';
   const template = (nodeData.template as string) || '';
@@ -365,3 +365,5 @@ export
     </div>
   );
 };
+
+export default OutputEditor;

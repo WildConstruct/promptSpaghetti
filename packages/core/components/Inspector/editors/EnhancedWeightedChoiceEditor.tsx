@@ -17,7 +17,7 @@ export interface EnhancedWeightedChoiceEditorProps extends Omit<BaseNodeEditorPr
  * - Advanced: Weight controls and randomization settings
  * - Debug: Node IDs, technical configurations, execution statistics
  */
-export   
+export const EnhancedWeightedChoiceEditor: React.FC<EnhancedWeightedChoiceEditorProps> = ({ nodeId, nodeData, onChange }) => {
   // WeightedChoice specific fields
   const choices = (nodeData.choices as string[]) || [];
   const weights = (nodeData.weights as number[]) || [];
@@ -223,3 +223,5 @@ export
     </div>
   );
 };
+
+export default EnhancedWeightedChoiceEditor;
