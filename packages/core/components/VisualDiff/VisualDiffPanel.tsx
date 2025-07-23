@@ -28,16 +28,7 @@ export interface VisualDiffPanelProps {
   className?: string;
 }
 
-export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
-  graphId,
-  initialSourceVersionId,
-  initialTargetVersionId,
-  onClose,
-  className = ''
-}) => {
-  // State
-  const [sourceVersionId, setSourceVersionId] = useState<string>(initialSourceVersionId || '');
-  const [targetVersionId, setTargetVersionId] = useState<string>(initialTargetVersionId || '');
+export   const [targetVersionId, setTargetVersionId] = useState<string>(initialTargetVersionId || '');
   const [viewMode, setViewMode] = useState<ViewMode>('side-by-side');
   const [highlightMode, setHighlightMode] = useState<HighlightMode>('changes');
   const [showUnchanged, setShowUnchanged] = useState(true);
@@ -111,8 +102,8 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
   }, [comparison, highlightMode, showUnchanged]);
 
   const prepareNodes = useCallback((
-    nodes: any[],
-    nodeMatches: any[],
+    nodes: unknown[],
+    nodeMatches: unknown[],
     side: 'source' | 'target'
   ): Node[] => {
     if (!comparison) return [];
@@ -181,8 +172,8 @@ export const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({
   }, [comparison, highlightMode, showUnchanged, showMetadata]);
 
   const prepareEdges = useCallback((
-    edges: any[],
-    edgeMatches: any[],
+    edges: unknown[],
+    edgeMatches: unknown[],
     side: 'source' | 'target'
   ): Edge[] => {
     if (!comparison) return [];

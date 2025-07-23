@@ -109,7 +109,7 @@ function SortableWeightItem({
   allowLocking: boolean;
   minWeight: number;
   maxWeight: number;
-  themeStyles: any;
+  themeStyles: unknown;
   animationDuration: number;
   onWeightChange: (optionId: string, weight: number) => void;
   onLockToggle: (optionId: string) => void;

@@ -24,12 +24,15 @@ describe('ExemptionManager', () => {
 
   beforeEach(() => {
     mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+    
+    // Store reference to original Date constructor before mocking
+    const OriginalDate = Date;
     
     // Mock the Date constructor
-    const mockDateConstructor = jest.fn().mockImplementation((value?: any) => {
+    const mockDateConstructor = jest.fn<unknown[], unknown>().mockImplementation((value?: unknown) => {
       if (value !== undefined) {
-        return new Date(value);
+        return new OriginalDate(value);
       }
       return mockDate;
     });

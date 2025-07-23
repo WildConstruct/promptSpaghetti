@@ -53,7 +53,7 @@ export interface TargetingCondition {
   type: 'attribute' | 'behavior' | 'segment' | 'geography' | 'device' | 'time';
   field: string;
   operator: string;
-  value: any;
+  value: Error;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
   weight?: number;
   isEnabled: boolean;
@@ -112,18 +112,7 @@ interface AudienceSelectorProps {
   compact?: boolean;
 }
 
-export const AudienceSelector: React.FC<AudienceSelectorProps> = ({
-  audiences,
-  selectedAudience,
-  onSelect,
-  onCreate,
-  onEdit,
-  onDelete,
-  showAnalytics = true,
-  compact = false
-}) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name');
+export   const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name');
 
   const filteredAudiences = useMemo(() => {
     const filtered = audiences.filter(audience =>
@@ -292,21 +281,13 @@ interface AdvancedConditionBuilderProps {
     label: string;
     type: string;
     category: string;
-    options?: any[];
+    options?: unknown[];
   }>;
   onPreview?: (conditions: TargetingCondition[]) => Promise<TargetingPreview>;
   showVisualBuilder?: boolean;
 }
 
-export const AdvancedConditionBuilder: React.FC<AdvancedConditionBuilderProps> = ({
-  conditions,
-  onChange,
-  availableFields,
-  onPreview,
-  showVisualBuilder = true
-}) => {
-  const [draggedCondition, setDraggedCondition] = useState<string | null>(null);
-  const [preview, setPreview] = useState<TargetingPreview | null>(null);
+export   const [preview, setPreview] = useState<TargetingPreview | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
@@ -671,18 +652,7 @@ interface GeographicTargetingProps {
   onExcludeModeChange?: (exclude: boolean) => void;
 }
 
-export const GeographicTargeting: React.FC<GeographicTargetingProps> = ({
-  selectedCountries,
-  selectedRegions,
-  selectedCities,
-  onCountriesChange,
-  onRegionsChange,
-  onCitiesChange,
-  excludeMode = false,
-  onExcludeModeChange
-}) => {
-  const [activeTab, setActiveTab] = useState<'countries' | 'regions' | 'cities'>('countries');
-  const [searchTerm, setSearchTerm] = useState('');
+export   const [searchTerm, setSearchTerm] = useState('');
 
   // Mock data - in real implementation, this would come from props or API
   const countries = [
@@ -799,15 +769,7 @@ interface SegmentManagementProps {
   onDuplicateSegment: (id: string) => void;
 }
 
-export const SegmentManagement: React.FC<SegmentManagementProps> = ({
-  segments,
-  onCreateSegment,
-  onUpdateSegment,
-  onDeleteSegment,
-  onDuplicateSegment
-}) => {
-  const [expandedSegment, setExpandedSegment] = useState<string | null>(null);
-  const [__editingSegment, setEditingSegment] = useState<string | null>(null);
+export   const [__editingSegment, setEditingSegment] = useState<string | null>(null);
 
   return (
     <div className="segment-management">
@@ -1012,110 +974,7 @@ interface TargetingAnalyticsProps {
   onTimeRangeChange: (range: '24h' | '7d' | '30d' | '90d') => void;
 }
 
-export const TargetingAnalytics: React.FC<TargetingAnalyticsProps> = ({
-  analytics,
-  timeRange,
-  onTimeRangeChange
-}) => {
-  return (
-    <div className="targeting-analytics">
-      <div className="analytics-header">
-        <div className="header-title">
-          <BarChart3 size={20} />
-          <h3>Targeting Performance</h3>
-        </div>
-        
-        <div className="time-range-selector">
-          {(['24h', '7d', '30d', '90d'] as const).map(range => (
-            <button
-              key={range}
-              className={`time-btn ${timeRange === range ? 'active' : ''}`}
-              onClick={() => onTimeRangeChange(range)}
-            >
-              {range}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="analytics-overview">
-        <div className="metric-cards">
-          <div className="metric-card">
-            <div className="metric-icon">
-              <Users size={24} />
-            </div>
-            <div className="metric-content">
-              <div className="metric-value">{analytics.totalUsers.toLocaleString()}</div>
-              <div className="metric-label">Total Users</div>
-            </div>
-          </div>
-          
-          <div className="metric-card">
-            <div className="metric-icon">
-              <Target size={24} />
-            </div>
-            <div className="metric-content">
-              <div className="metric-value">{analytics.activeTargeting.toLocaleString()}</div>
-              <div className="metric-label">Active Targeting</div>
-            </div>
-          </div>
-          
-          <div className="metric-card">
-            <div className="metric-icon">
-              <TrendingUp size={24} />
-            </div>
-            <div className="metric-content">
-              <div className="metric-value">{(analytics.conversionRate * 100).toFixed(1)}%</div>
-              <div className="metric-label">Conversion Rate</div>
-            </div>
-          </div>
-          
-          <div className="metric-card">
-            <div className="metric-icon">
-              <Eye size={24} />
-            </div>
-            <div className="metric-content">
-              <div className="metric-value">{analytics.impressions.toLocaleString()}</div>
-              <div className="metric-label">Impressions</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="analytics-charts">
-        <div className="chart-section">
-          <h4>Top Performing Segments</h4>
-          <div className="segments-performance">
-            {analytics.topSegments.map(segment => (
-              <div key={segment.id} className="segment-performance">
-                <div className="segment-name">{segment.name}</div>
-                <div className="performance-bar">
-                  <div
-                    className="performance-fill"
-                    style={{ width: `${segment.performance}%` }}
-                  />
-                </div>
-                <div className="segment-users">{segment.users.toLocaleString()}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        <div className="chart-section">
-          <h4>Geographic Distribution</h4>
-          <div className="geographic-chart">
-            {Object.entries(analytics.geographicBreakdown).map(([country, count]) => (
-              <div key={country} className="geo-item">
-                <span className="country-name">{country}</span>
-                <span className="user-count">{count.toLocaleString()}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+export };
 
 // Export all components
 export {

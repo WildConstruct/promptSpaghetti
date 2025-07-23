@@ -5,8 +5,82 @@ import EpicDashboard from './components/EpicDashboard';
 import 'reactflow/dist/style.css';
 import './randomizer.css';
 
-// Import core components directly - this will work in development
-import { GraphEditor, RandomizerPanel } from './core';
+import BrowserSafeGraphEditor from './components/BrowserSafeGraphEditor';
+
+interface GraphEditorProps {
+  initialNodes?: unknown[];
+  initialEdges?: unknown[];
+}
+
+interface RandomizerPanelProps {
+  onGraphGenerated?: (graph: unknown) => void;
+  onError?: (error: Error) => void;
+  className?: string;
+}
+
+// Enhanced import approach - try full core, fallback to browser-safe editor
+let GraphEditor: React.ComponentType<GraphEditorProps> = BrowserSafeGraphEditor;
+let RandomizerPanel: React.ComponentType<RandomizerPanelProps>;
+let isEnhancedMode = false;
+
+try {
+  // Try to import full core components (works in development)
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const coreModule = require('./core');
+  if (coreModule.GraphEditor && coreModule.RandomizerPanel) {
+    GraphEditor = coreModule.GraphEditor;
+    RandomizerPanel = coreModule.RandomizerPanel;
+    isEnhancedMode = true;
+    console.log('✅ Enhanced core components loaded successfully');
+  } else {
+    throw new Error('Core components not fully available');
+  }
+} catch {
+  console.warn('⚠️ Using browser-safe components for deployment compatibility');
+  
+  // Browser-safe RandomizerPanel for deployment
+  const BrowserSafeRandomizerPanel: React.FC<RandomizerPanelProps> = () => (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      backgroundColor: '#f8f9fa',
+      flexDirection: 'column',
+      padding: '40px'
+    }}>
+      <div style={{
+        fontSize: '32px',
+        fontWeight: 'bold',
+        marginBottom: '20px',
+        color: '#2c3e50'
+      }}>
+        🎲 LLM Randomizer
+      </div>
+      <div style={{
+        fontSize: '18px',
+        color: '#7f8c8d',
+        textAlign: 'center',
+        maxWidth: '600px',
+        lineHeight: 1.6,
+        marginBottom: '20px'
+      }}>
+        The AI-powered prompt randomizer is currently being optimized for deployment.
+        The graph editor below is fully functional.
+      </div>
+      <div style={{
+        fontSize: '14px',
+        color: '#95a5a6',
+        textAlign: 'center',
+        fontStyle: 'italic'
+      }}>
+        Create and edit graphs using the Graph Editor tab for now.
+      </div>
+    </div>
+  );
+  
+  RandomizerPanel = BrowserSafeRandomizerPanel;
+}
 
 /**
  * Main application interface with tab navigation.
@@ -98,7 +172,7 @@ function MainApp() {
           
           {/* Status indicator */}
           <div style={{ display: 'flex', alignItems: 'center', paddingRight: '20px', color: '#666', fontSize: '14px' }}>
-            Authentication Disabled (Dev Mode)
+            {isEnhancedMode ? '🚀 Enhanced Mode' : '🌐 Browser-Safe Mode'} | Auth Disabled
           </div>
         </div>
 
@@ -106,8 +180,8 @@ function MainApp() {
         <div style={{ flex: 1, overflow: 'hidden' }}>
           {activeTab === 'editor' ? (
             <GraphEditor 
-              initialNodes={generatedGraph?.nodes || []}
-              initialEdges={generatedGraph?.edges || []}
+              initialNodes={(generatedGraph as { nodes?: unknown[] })?.nodes || []}
+              initialEdges={(generatedGraph as { edges?: unknown[] })?.edges || []}
             />
           ) : activeTab === 'randomizer' ? (
             <div style={{ 

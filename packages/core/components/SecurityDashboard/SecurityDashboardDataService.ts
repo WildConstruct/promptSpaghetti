@@ -23,7 +23,7 @@ import { SecurityMetrics, SecurityAlert, ComplianceStatus, ResponseAction } from
 
 export interface SecurityAction {
   type: string;
-  payload: any;
+  payload: unknown;
   timestamp: Date;
   executedBy: string;
 }
@@ -50,7 +50,7 @@ export interface ApiResponse<T> {
 export class SecurityDashboardDataService {
   private workspaceId: string;
   private config: DataServiceConfig;
-  private cache: Map<string, { data: any; expires: number }> = new Map();
+  private cache: Map<string, { data: Record<string, unknown>; expires: number }> = new Map();
   private ws: WebSocket | null = null;
   private listeners: Map<string, Function[]> = new Map();
 
@@ -197,7 +197,7 @@ export class SecurityDashboardDataService {
   /**
    * Execute a security action
    */
-  async executeSecurityAction(actionType: string, payload: any): Promise<void> {
+  async executeSecurityAction(actionType: string, payload: unknown): Promise<void> {
     try {
       const action: SecurityAction = {
         type: actionType,
@@ -286,7 +286,7 @@ export class SecurityDashboardDataService {
   /**
    * Emit events to subscribers
    */
-  private emit(event: string, data: any): void {
+  private emit(event: string, data: Record<string, unknown>): void {
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
       eventListeners.forEach(callback => {
@@ -347,7 +347,7 @@ export class SecurityDashboardDataService {
   /**
    * Handle incoming WebSocket messages
    */
-  private handleWebSocketMessage(data: any): void {
+  private handleWebSocketMessage(data: Record<string, unknown>): void {
     switch (data.type) {
     case 'security_metrics_update':
       this.invalidateCache(`security-metrics-${this.workspaceId}`);
@@ -449,7 +449,7 @@ export class SecurityDashboardDataService {
   /**
    * Cache management
    */
-  private setCache(key: string, data: any, ttlSeconds: number): void {
+  private setCache(key: string, data: Record<string, unknown>, ttlSeconds: number): void {
     this.cache.set(key, {
       data,
       expires: Date.now() + (ttlSeconds * 1000)

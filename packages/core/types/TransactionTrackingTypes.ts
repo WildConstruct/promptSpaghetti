@@ -592,5 +592,3 @@ export interface TransactionTrackingConfig {
     crm: boolean;
   };
 }
-
-export };

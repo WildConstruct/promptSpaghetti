@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "cycle": 1,
+    "updated": "2025-07-23T16:11:36.766Z"
+  },
+  "tasks": {
+    "micro-timing-task-0": {
+      "id": "micro-timing-task-0",
+      "title": "Micro Timing Task 0",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:31.246Z",
+      "updated": "2025-07-23T16:11:31.247Z",
+      "assignee": "agent-0",
+      "startedAt": "2025-07-23T16:11:31.247Z"
+    },
+    "micro-timing-task-3": {
+      "id": "micro-timing-task-3",
+      "title": "Micro Timing Task 3",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:31.349Z",
+      "updated": "2025-07-23T16:11:31.350Z",
+      "assignee": "agent-3",
+      "startedAt": "2025-07-23T16:11:31.352Z"
+    },
+    "micro-timing-task-4": {
+      "id": "micro-timing-task-4",
+      "title": "Micro Timing Task 4",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:31.549Z",
+      "updated": "2025-07-23T16:11:31.550Z",
+      "assignee": "agent-4",
+      "startedAt": "2025-07-23T16:11:31.552Z"
+    },
+    "micro-timing-task-6": {
+      "id": "micro-timing-task-6",
+      "title": "Micro Timing Task 6",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:31.551Z",
+      "updated": "2025-07-23T16:11:31.551Z",
+      "assignee": "agent-6",
+      "startedAt": "2025-07-23T16:11:31.652Z"
+    },
+    "micro-timing-task-36": {
+      "id": "micro-timing-task-36",
+      "title": "Micro Timing Task 36",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:31.551Z",
+      "updated": "2025-07-23T16:11:31.552Z",
+      "assignee": "agent-36",
+      "startedAt": "2025-07-23T16:11:31.552Z"
+    },
+    "micro-timing-task-1": {
+      "id": "micro-timing-task-1",
+      "title": "Micro Timing Task 1",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:31.953Z",
+      "updated": "2025-07-23T16:11:31.953Z",
+      "assignee": "agent-1",
+      "startedAt": "2025-07-23T16:11:31.954Z"
+    },
+    "micro-timing-task-2": {
+      "id": "micro-timing-task-2",
+      "title": "Micro Timing Task 2",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:32.755Z",
+      "updated": "2025-07-23T16:11:32.756Z",
+      "assignee": "agent-2",
+      "startedAt": "2025-07-23T16:11:32.756Z"
+    },
+    "micro-timing-task-5": {
+      "id": "micro-timing-task-5",
+      "title": "Micro Timing Task 5",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:33.757Z",
+      "updated": "2025-07-23T16:11:33.758Z",
+      "assignee": "agent-5",
+      "startedAt": "2025-07-23T16:11:33.760Z"
+    },
+    "micro-timing-task-9": {
+      "id": "micro-timing-task-9",
+      "title": "Micro Timing Task 9",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:34.760Z",
+      "updated": "2025-07-23T16:11:34.761Z",
+      "assignee": "agent-9",
+      "startedAt": "2025-07-23T16:11:34.763Z"
+    },
+    "micro-timing-task-12": {
+      "id": "micro-timing-task-12",
+      "title": "Micro Timing Task 12",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:35.761Z",
+      "updated": "2025-07-23T16:11:35.761Z",
+      "assignee": "agent-12",
+      "startedAt": "2025-07-23T16:11:35.765Z"
+    },
+    "micro-timing-task-7": {
+      "id": "micro-timing-task-7",
+      "title": "Micro Timing Task 7",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:35.764Z",
+      "updated": "2025-07-23T16:11:35.764Z",
+      "assignee": "agent-7",
+      "startedAt": "2025-07-23T16:11:35.765Z"
+    },
+    "micro-timing-task-13": {
+      "id": "micro-timing-task-13",
+      "title": "Micro Timing Task 13",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:36.762Z",
+      "updated": "2025-07-23T16:11:36.762Z",
+      "assignee": "agent-13",
+      "startedAt": "2025-07-23T16:11:36.764Z"
+    },
+    "micro-timing-task-17": {
+      "id": "micro-timing-task-17",
+      "title": "Micro Timing Task 17",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:36.763Z",
+      "updated": "2025-07-23T16:11:36.763Z",
+      "assignee": "agent-17",
+      "startedAt": "2025-07-23T16:11:36.764Z"
+    },
+    "micro-timing-task-29": {
+      "id": "micro-timing-task-29",
+      "title": "Micro Timing Task 29",
+      "status": "IN_PROGRESS",
+      "epic": "E18",
+      "created": "2025-07-23T16:11:36.765Z",
+      "updated": "2025-07-23T16:11:36.765Z",
+      "assignee": "agent-29",
+      "startedAt": "2025-07-23T16:11:36.766Z"
+    }
+  },
+  "assignments": {}
+}

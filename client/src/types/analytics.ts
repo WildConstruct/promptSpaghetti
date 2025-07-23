@@ -264,6 +264,6 @@ export interface AnalyticsService {
   queryAnalytics(query: AnalyticsQuery): Promise<any[]>;
   createCustomReport(report: Partial<CustomReport>): Promise<CustomReport>;
   getCustomReports(creatorId: string): Promise<CustomReport[]>;
-  generateReport(reportId: string): Promise<any>;
+  generateReport(reportId: string): Promise<unknown>;
   generateInsights(creatorId: string, templateIds?: string[]): Promise<AnalyticsInsight[]>;
 }

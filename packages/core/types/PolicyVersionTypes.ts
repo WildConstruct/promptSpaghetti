@@ -389,5 +389,3 @@ export interface PolicyVersionConfig {
   enableAutomaticVersioning: boolean;
   versionNumberingStrategy: 'semantic' | 'sequential' | 'timestamp';
 }
-
-export };

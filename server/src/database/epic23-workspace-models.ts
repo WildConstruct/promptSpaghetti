@@ -7,7 +7,7 @@
  * Task: E23-1753115279521-7A79DE - Design workspace data model
  */
 
-import { Workspace, // Project // Unused import, Resource, // User // Unused import, Role, Permission } from './workspace-models';
+import { Workspace, Project, Resource, User, Role, Permission } from './workspace-models';
 
 // =============================================================================
 // COLLABORATIVE PERMISSIONS SYSTEM
@@ -136,45 +136,7 @@ export interface CollaborativeRole extends Role {
 /**
  * Predefined collaborative system roles
  */
-export const COLLABORATIVE_SYSTEM_ROLES = {
-  COLLABORATIVE_ADMIN: {
-    name: 'Collaborative Admin',
-    permissions: COLLABORATIVE_PERMISSIONS.ALL_COLLABORATIVE,
-    collaboration_settings: {
-      max_concurrent_edits: -1, // Unlimited
-      priority_level: 'critical' as const,
-      auto_save_enabled: true,
-      session_duration_minutes: 480 // 8 hours
-    }
-  },
-  
-  COLLABORATIVE_EDITOR: {
-    name: 'Collaborative Editor',
-    permissions: COLLABORATIVE_PERMISSIONS.REAL_TIME_EDIT | 
-                COLLABORATIVE_PERMISSIONS.PRESENCE_VIEW | 
-                COLLABORATIVE_PERMISSIONS.CURSOR_VIEW,
-    collaboration_settings: {
-      max_concurrent_edits: 5,
-      priority_level: 'normal' as const,
-      auto_save_enabled: true,
-      session_duration_minutes: 240 // 4 hours
-    }
-  },
-  
-  COLLABORATIVE_REVIEWER: {
-    name: 'Collaborative Reviewer',
-    permissions: COLLABORATIVE_PERMISSIONS.PRESENCE_VIEW | 
-                COLLABORATIVE_PERMISSIONS.CONFLICT_RESOLVE | 
-                COLLABORATIVE_PERMISSIONS.MERGE_APPROVE,
-    collaboration_settings: {
-      max_concurrent_edits: 0, // Read-only real-time access
-      priority_level: 'high' as const,
-      auto_save_enabled: false,
-      session_duration_minutes: 120 // 2 hours
-    }
-  }
-} as const;
-
+export 
 // =============================================================================
 // ENHANCED RESOURCE MODEL
 // =============================================================================

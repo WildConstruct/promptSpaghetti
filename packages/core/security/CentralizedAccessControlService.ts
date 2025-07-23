@@ -183,7 +183,7 @@ export class CentralizedAccessControlService extends EventEmitter {
       }
 
       // Combine decisions
-      const finalDecision = await this.combineDe cisions(
+      const finalDecision = await this.combineDecisions(
         request,
         rbacDecision,
         abacDecision,

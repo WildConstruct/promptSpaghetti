@@ -4,10 +4,13 @@
  * Part of Epic 19 - Security & Compliance Framework
  */
 
-import { AuditWorkflowService, WorkflowFinding, // WorkflowExecution // Unused import } from './AuditWorkflowService';
+import { AuditWorkflowService, WorkflowFinding } from './AuditWorkflowService';
 import { ComplianceReportingService } from './ComplianceReportingService';
 import { AuditTeamCollaborationService } from './AuditTeamCollaborationService';
-import { DataProtectionEventLogger, DataProtectionEventType, // ComplianceFramework // Unused import } from '../../packages/core/security/DataProtectionEventLogger';
+import { 
+  DataProtectionEventLogger,
+  DataProtectionEventType
+} from '../../packages/core/security/DataProtectionEventLogger';
 
 export enum FindingTrackingStatus {
   NEW = 'new',
@@ -529,7 +532,11 @@ export class AuditFindingTrackingService {
   /**
    * Escalate finding based on trigger conditions
    */
-  async escalateFinding(findingId: string, escalationType: EscalationTrigger, escalationLevel: number = 1): Promise<void> {
+  async escalateFinding(
+    findingId: string,
+    escalationType: EscalationTrigger,
+    escalationLevel: number = 1
+  ): Promise<void> {
     const finding = this.findings.get(findingId);
     if (!finding) {
       throw new Error(`Finding ${findingId} not found`);
@@ -894,8 +901,7 @@ export class AuditFindingTrackingService {
   }
 
   private calculateFindingMetrics(finding: AuditFindingTracker): FindingMetrics {
-    const __now = new Date();
-    const acknowledgedTime = finding.slaDetails.acknowledgedAt;
+        const acknowledgedTime = finding.slaDetails.acknowledgedAt;
     const resolvedTime = finding.slaDetails.resolvedAt;
 
     return {

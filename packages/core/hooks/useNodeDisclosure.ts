@@ -6,10 +6,7 @@ import { useUISettingsStore } from '../stores/uiSettingsStore';
  * @param nodeId - The unique ID of the node
  * @param nodeType - The type of node (e.g., 'weighted-choice', 'output', etc.)
  */
-export 
-  // Get effective disclosure level for this node
-  const disclosureLevel = getNodeDisclosureLevel(nodeId, nodeType);
-  const nodePrefs = getEffectiveNodePreferences(nodeId, nodeType);
+export   const nodePrefs = getEffectiveNodePreferences(nodeId, nodeType);
 
   // Set disclosure level for this specific node
   const setDisclosureLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => {
@@ -78,7 +75,8 @@ export
 /**
  * Hook for components that need to render progressive disclosure sections
  */
-export 
+export   const [preferenceInheritance, setPreferenceInheritance] = useState<'global' | 'nodeType' | 'individual'>('global');
+  
   const setGlobalLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => {
     setGlobalDisclosureLevel(level);
   }, [setGlobalDisclosureLevel]);

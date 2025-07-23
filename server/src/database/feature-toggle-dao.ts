@@ -1,6 +1,6 @@
 // Epic 17.1 - Feature Toggle System Data Access Layer
 
-import { Pool, // PoolClient // Unused import } from 'pg';
+import { Pool } from 'pg';
 import {
   FeatureToggle,
   ToggleScope,
@@ -435,7 +435,13 @@ export class FeatureToggleDAO {
     }
   }
 
-  async setCachedEvaluation(toggleId: string, cacheKey: string, result: Record<string, unknown>, ttlSeconds = 300): Promise<void> {
+  async setCachedEvaluation(
+    toggleId: string,
+    cacheKey: string,
+    result: Record<string,
+    unknown>,
+    ttlSeconds = 300
+  ): Promise<void> {
     const client = await this.pool.connect();
     try {
       const expiresAt = new Date(Date.now() + ttlSeconds * 1000);

@@ -493,7 +493,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     const allSuggestions = this.getSuggestions();
     
     // Apply personalization algorithm
-    const personalizedSuggestions = this.personalizeS uggestions(
+    const personalizedSuggestions = this.personalizeSuggestions(
       allSuggestions,
       userBehavior,
       userContext
@@ -828,7 +828,10 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     };
   }
 
-  private async generateSuggestionsFromAnalysis(analysis: any, context: AnalysisContext): Promise<ImprovementSuggestion[]> {
+  private async generateSuggestionsFromAnalysis(
+    analysis: any,
+    context: AnalysisContext
+  ): Promise<ImprovementSuggestion[]> {
     const suggestions: ImprovementSuggestion[] = [];
 
     for (const opportunity of analysis.opportunities || []) {
@@ -839,7 +842,11 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     return suggestions;
   }
 
-  private async createSuggestionFromOpportunity(opportunity: any, analysis: any, context: AnalysisContext): Promise<ImprovementSuggestion> {
+  private async createSuggestionFromOpportunity(
+    opportunity: any,
+    analysis: any,
+    context: AnalysisContext
+  ): Promise<ImprovementSuggestion> {
     const suggestionId = `suggestion_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     return {
@@ -869,7 +876,10 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     };
   }
 
-  private async filterSuggestions(suggestions: ImprovementSuggestion[], filters: AnalysisFilters): Promise<ImprovementSuggestion[]> {
+  private async filterSuggestions(
+    suggestions: ImprovementSuggestion[],
+    filters: AnalysisFilters
+  ): Promise<ImprovementSuggestion[]> {
     let filtered = suggestions;
 
     // Apply confidence threshold
@@ -1041,7 +1051,7 @@ export class ImprovementSuggestionsSystem extends EventEmitter {
     };
   }
 
-  private personalizeS uggestions(
+  private personalizeSuggestions(
     suggestions: ImprovementSuggestion[],
     userBehavior: UserBehaviorData,
     context: AnalysisContext
